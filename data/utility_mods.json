@@ -1,0 +1,5498 @@
+{
+  "schemaVersion": 1,
+  "buildLabel": "2026.08.13.13.24",
+  "drainSemantics": "maximum-rank capacity cost; rank is the maximum rank",
+  "counts": {
+    "mods": 80,
+    "isUtility": 74,
+    "tennokai": 6,
+    "catalogJoined": 74,
+    "skipped": 1
+  },
+  "mods": [
+    {
+      "path": "/Lotus/Upgrades/EmpoweredHeavyMelee/CertainStrike",
+      "nameEn": "Discipline's Merit",
+      "nameZh": "纪律之功",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "启用 Tenno 气解。每 <LOWER_IS_BETTER>4 次近战攻击显现机遇，而非随机出现。",
+      "effectsZh": [
+        "启用 Tenno 气解。每 <LOWER_IS_BETTER>4 次近战攻击显现机遇，而非随机出现。"
+      ],
+      "effectsZhByRank": [
+        [
+          "启用 Tenno 气解。每 <LOWER_IS_BETTER>7 次近战攻击显现机遇，而非随机出现。"
+        ],
+        [
+          "启用 Tenno 气解。每 <LOWER_IS_BETTER>6 次近战攻击显现机遇，而非随机出现。"
+        ],
+        [
+          "启用 Tenno 气解。每 <LOWER_IS_BETTER>5 次近战攻击显现机遇，而非随机出现。"
+        ],
+        [
+          "启用 Tenno 气解。每 <LOWER_IS_BETTER>4 次近战攻击显现机遇，而非随机出现。"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Melee/Tennokai/CertainStrike.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/CertainStrike.png",
+      "sourceKind": "tennokai",
+      "catalogJoined": false
+    },
+    {
+      "path": "/Lotus/Upgrades/EmpoweredHeavyMelee/CursedSyndicateEmpoweredHeavyMeleeMod",
+      "nameEn": "Truth's Flame",
+      "nameZh": "真相之焰",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "启用 Tenno 气解。\\n使用 Tenno 气解进行击杀可获得额外 4 秒 Tenno 气解机遇窗口，并使 Tenno 气解伤害提高 120%。\\n\\n诅咒：每秒承受 100 <DT_FIRE_COLOR>火焰伤害，持续 6 秒。\\n；+1 '真相'",
+      "effectsZh": [
+        "启用 Tenno 气解。\\n使用 Tenno 气解进行击杀可获得额外 4 秒 Tenno 气解机遇窗口，并使 Tenno 气解伤害提高 120%。\\n\\n诅咒：每秒承受 100 <DT_FIRE_COLOR>火焰伤害，持续 6 秒。\\n",
+        "+1 '真相'"
+      ],
+      "effectsZhByRank": [
+        [
+          "启用 Tenno 气解。\\n使用 Tenno 气解进行击杀可获得额外 4 秒 Tenno 气解机遇窗口，并使 Tenno 气解伤害提高 30%。\\n\\n诅咒：每秒承受 25 <DT_FIRE_COLOR>火焰伤害，持续 6 秒。\\n",
+          "+0.3 '真相'"
+        ],
+        [
+          "启用 Tenno 气解。\\n使用 Tenno 气解进行击杀可获得额外 4 秒 Tenno 气解机遇窗口，并使 Tenno 气解伤害提高 40%。\\n\\n诅咒：每秒承受 35 <DT_FIRE_COLOR>火焰伤害，持续 6 秒。\\n",
+          "+0.5 '真相'"
+        ],
+        [
+          "启用 Tenno 气解。\\n使用 Tenno 气解进行击杀可获得额外 4 秒 Tenno 气解机遇窗口，并使 Tenno 气解伤害提高 60%。\\n\\n诅咒：每秒承受 50 <DT_FIRE_COLOR>火焰伤害，持续 6 秒。\\n",
+          "+0.8 '真相'"
+        ],
+        [
+          "启用 Tenno 气解。\\n使用 Tenno 气解进行击杀可获得额外 4 秒 Tenno 气解机遇窗口，并使 Tenno 气解伤害提高 120%。\\n\\n诅咒：每秒承受 100 <DT_FIRE_COLOR>火焰伤害，持续 6 秒。\\n",
+          "+1 '真相'"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Melee/Tennokai/CursedSyndicateEmpoweredHeavyMeleeMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/CursedSyndicateEmpoweredHeavyMeleeMod.png",
+      "sourceKind": "tennokai",
+      "catalogJoined": false
+    },
+    {
+      "path": "/Lotus/Upgrades/EmpoweredHeavyMelee/FocusedAttack",
+      "nameEn": "Dreamer's Wrath",
+      "nameZh": "梦者之怒",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "启用 Tenno 气解。机遇几率增加 50%，Tenno 气解的暴击伤害提升 32%。",
+      "effectsZh": [
+        "启用 Tenno 气解。机遇几率增加 50%，Tenno 气解的暴击伤害提升 32%。"
+      ],
+      "effectsZhByRank": [
+        [
+          "启用 Tenno 气解。机遇几率增加 12.5%，Tenno 气解的暴击伤害提升 8%。"
+        ],
+        [
+          "启用 Tenno 气解。机遇几率增加 25%，Tenno 气解的暴击伤害提升 16%。"
+        ],
+        [
+          "启用 Tenno 气解。机遇几率增加 37.5%，Tenno 气解的暴击伤害提升 24%。"
+        ],
+        [
+          "启用 Tenno 气解。机遇几率增加 50%，Tenno 气解的暴击伤害提升 32%。"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Melee/Tennokai/FocusedAttack.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/FocusedAttack.png",
+      "sourceKind": "tennokai",
+      "catalogJoined": false
+    },
+    {
+      "path": "/Lotus/Upgrades/EmpoweredHeavyMelee/HeavyAgression",
+      "nameEn": "Master's Edge",
+      "nameZh": "宗师锐势",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "启用 Tenno 气解。Tenno 气解伤害增加 60%。",
+      "effectsZh": [
+        "启用 Tenno 气解。Tenno 气解伤害增加 60%。"
+      ],
+      "effectsZhByRank": [
+        [
+          "启用 Tenno 气解。Tenno 气解伤害增加 10%。"
+        ],
+        [
+          "启用 Tenno 气解。Tenno 气解伤害增加 20%。"
+        ],
+        [
+          "启用 Tenno 气解。Tenno 气解伤害增加 30%。"
+        ],
+        [
+          "启用 Tenno 气解。Tenno 气解伤害增加 40%。"
+        ],
+        [
+          "启用 Tenno 气解。Tenno 气解伤害增加 50%。"
+        ],
+        [
+          "启用 Tenno 气解。Tenno 气解伤害增加 60%。"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Melee/Tennokai/HeavyAggression.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/HeavyAggression.png",
+      "sourceKind": "tennokai",
+      "catalogJoined": false
+    },
+    {
+      "path": "/Lotus/Upgrades/EmpoweredHeavyMelee/PerfectCondition",
+      "nameEn": "Condition's Perfection",
+      "nameZh": "极致境地",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "UNCOMMON",
+      "description": "启用 Tenno 气解。Tenno 气解攻击的触发几率提升 +100%。",
+      "effectsZh": [
+        "启用 Tenno 气解。Tenno 气解攻击的触发几率提升 +100%。"
+      ],
+      "effectsZhByRank": [
+        [
+          "启用 Tenno 气解。Tenno 气解攻击的触发几率提升 +25%。"
+        ],
+        [
+          "启用 Tenno 气解。Tenno 气解攻击的触发几率提升 +50%。"
+        ],
+        [
+          "启用 Tenno 气解。Tenno 气解攻击的触发几率提升 +75%。"
+        ],
+        [
+          "启用 Tenno 气解。Tenno 气解攻击的触发几率提升 +100%。"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Melee/Tennokai/PerfectCondition.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/PerfectCondition.png",
+      "sourceKind": "tennokai",
+      "catalogJoined": false
+    },
+    {
+      "path": "/Lotus/Upgrades/EmpoweredHeavyMelee/PerfectReach",
+      "nameEn": "Opportunity's Reach",
+      "nameZh": "机遇所至",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "启用 Tenno 气解。机遇窗口增加至 4.0 秒，Tenno 气解的近战范围提升 3 米。",
+      "effectsZh": [
+        "启用 Tenno 气解。机遇窗口增加至 4.0 秒，Tenno 气解的近战范围提升 3 米。"
+      ],
+      "effectsZhByRank": [
+        [
+          "启用 Tenno 气解。机遇窗口增加至 2.8 秒，Tenno 气解的近战范围提升 0.75 米。"
+        ],
+        [
+          "启用 Tenno 气解。机遇窗口增加至 3.2 秒，Tenno 气解的近战范围提升 1.5 米。"
+        ],
+        [
+          "启用 Tenno 气解。机遇窗口增加至 3.6 秒，Tenno 气解的近战范围提升 2.25 米。"
+        ],
+        [
+          "启用 Tenno 气解。机遇窗口增加至 4.0 秒，Tenno 气解的近战范围提升 3 米。"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Melee/Tennokai/PerfectReach.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/PerfectReach.png",
+      "sourceKind": "tennokai",
+      "catalogJoined": false
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Channel/ChannelArmourMod",
+      "nameEn": "Focused Defense",
+      "nameZh": "重点防御",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "COMMON",
+      "description": "+20 招架角度",
+      "effectsZh": [
+        "+20 招架角度"
+      ],
+      "effectsZhByRank": [
+        [
+          "+5 招架角度"
+        ],
+        [
+          "+10 招架角度"
+        ],
+        [
+          "+15 招架角度"
+        ],
+        [
+          "+20 招架角度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PARRY_ANGLE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 5
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingArmour.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingArmour.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Event/ProjectNightwatch/AckBruntNightwatchMod",
+      "nameEn": "Electromagnetic Shielding",
+      "nameZh": "电磁屏障",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "UNCOMMON",
+      "description": "格挡时将范围内队友所受伤害的 50% 转移到自身，有效范围 12 米。",
+      "effectsZh": [
+        "格挡时将范围内队友所受伤害的 50% 转移到自身，有效范围 12 米。"
+      ],
+      "effectsZhByRank": [
+        [
+          "格挡时将范围内队友所受伤害的 25% 转移到自身，有效范围 2 米。"
+        ],
+        [
+          "格挡时将范围内队友所受伤害的 30% 转移到自身，有效范围 4 米。"
+        ],
+        [
+          "格挡时将范围内队友所受伤害的 35% 转移到自身，有效范围 6 米。"
+        ],
+        [
+          "格挡时将范围内队友所受伤害的 40% 转移到自身，有效范围 8 米。"
+        ],
+        [
+          "格挡时将范围内队友所受伤害的 45% 转移到自身，有效范围 10 米。"
+        ],
+        [
+          "格挡时将范围内队友所受伤害的 50% 转移到自身，有效范围 12 米。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetLoc",
+            "Script": "/Lotus/Scripts/Mods/LinkAlliesOnChannel.lua",
+            "_auraType": "",
+            "_baseAuraRange": 2,
+            "_baseDamageTransferPct": 25,
+            "_damageTransferPctScaling": 5
+          },
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "NONE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Melee/AckBruntNightwatchMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/AckBruntNightwatchMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/MoveSpeedOnChannelKillMod",
+      "nameEn": "Dispatch Overdrive",
+      "nameZh": "超速击杀",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "重击命中后：\\n+60% 移动速度，持续 15 秒",
+      "effectsZh": [
+        "重击命中后：\\n+60% 移动速度，持续 15 秒"
+      ],
+      "effectsZhByRank": [
+        [
+          "重击命中后：\\n+10% 移动速度，持续 3 秒"
+        ],
+        [
+          "重击命中后：\\n+20% 移动速度，持续 5 秒"
+        ],
+        [
+          "重击命中后：\\n+30% 移动速度，持续 8 秒"
+        ],
+        [
+          "重击命中后：\\n+40% 移动速度，持续 10 秒"
+        ],
+        [
+          "重击命中后：\\n+50% 移动速度，持续 13 秒"
+        ],
+        [
+          "重击命中后：\\n+60% 移动速度，持续 15 秒"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [
+        {
+          "applyUpgradesByDefault": 0,
+          "conditionTag": "/Lotus/Language/Upgrades/OnMeleeHeavyAttackHitDesc",
+          "conditions": [
+            "/Lotus/Upgrades/Mods/Aura/FairyQuest/OnMeleeChargeAttackCondition"
+          ],
+          "duration": 2.5,
+          "effects": [
+            {
+              "autoType": 0,
+              "checkTypeOnInstall": 0,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "operation": "STACKING_MULTIPLY",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "AVATAR_MOVEMENT_SPEED",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0.1
+            }
+          ],
+          "maxStacks": null,
+          "sourcePath": "/Lotus/Upgrades/Mods/Melee/MoveSpeedOnChannelKillMod",
+          "stackMode": null
+        }
+      ],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Melee/MoveSpeedOnChannelKillMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/MoveSpeedOnChannelKillMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/WeaponBlockingTauntMod",
+      "nameEn": "Guardian Derision",
+      "nameZh": "奚落守护",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "RARE",
+      "description": "格挡会嘲讽 15 米内的敌人，使你代替队友成为被攻击目标。；格挡时有 +30% 连击数几率",
+      "effectsZh": [
+        "格挡会嘲讽 15 米内的敌人，使你代替队友成为被攻击目标。",
+        "格挡时有 +30% 连击数几率"
+      ],
+      "effectsZhByRank": [
+        [
+          "格挡会嘲讽 6 米内的敌人，使你代替队友成为被攻击目标。",
+          "格挡时有 +5% 连击数几率"
+        ],
+        [
+          "格挡会嘲讽 7 米内的敌人，使你代替队友成为被攻击目标。",
+          "格挡时有 +10% 连击数几率"
+        ],
+        [
+          "格挡会嘲讽 8 米内的敌人，使你代替队友成为被攻击目标。",
+          "格挡时有 +15% 连击数几率"
+        ],
+        [
+          "格挡会嘲讽 10 米内的敌人，使你代替队友成为被攻击目标。",
+          "格挡时有 +20% 连击数几率"
+        ],
+        [
+          "格挡会嘲讽 12 米内的敌人，使你代替队友成为被攻击目标。",
+          "格挡时有 +25% 连击数几率"
+        ],
+        [
+          "格挡会嘲讽 15 米内的敌人，使你代替队友成为被攻击目标。",
+          "格挡时有 +30% 连击数几率"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "WeaponBlockingTaunt.lua"
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "NONE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0
+        },
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_MELEE_COMBO_GAIN_EXTRA_CHANCE",
+          "validModifiers": [
+            "PM_PARRY"
+          ],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 11,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Melee/WeaponBlockingTauntMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/WeaponBlockingTauntMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/WeaponGlaiveSpeedMod",
+      "nameEn": "Whirlwind",
+      "nameZh": "旋风",
+      "slotKind": "melee",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "+180% 投射物速度",
+      "effectsZh": [
+        "+180% 投射物速度"
+      ],
+      "effectsZhByRank": [
+        [
+          "+30% 投射物速度"
+        ],
+        [
+          "+60% 投射物速度"
+        ],
+        [
+          "+90% 投射物速度"
+        ],
+        [
+          "+120% 投射物速度"
+        ],
+        [
+          "+150% 投射物速度"
+        ],
+        [
+          "+180% 投射物速度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PROJECTILE_SPEED",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "/Lotus/Weapons/Tenno/Melee/LotusGlaiveWeaponBase",
+          "valuePerRank": 0.30000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Unique/GlaiveWhirlwindMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Unique/GlaiveWhirlwindMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/OrokinChallenge/OrokinChallengeModAgility",
+      "nameEn": "Agility Drift",
+      "nameZh": "矫捷窜升",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "RARE",
+      "description": "在空中时受到的伤害降低 12%；敌人瞄准战甲时降低 <LOWER_IS_BETTER>-6% 精准度",
+      "effectsZh": [
+        "在空中时受到的伤害降低 12%",
+        "敌人瞄准战甲时降低 <LOWER_IS_BETTER>-6% 精准度"
+      ],
+      "effectsZhByRank": [
+        [
+          "在空中时受到的伤害降低 2%",
+          "敌人瞄准战甲时降低 <LOWER_IS_BETTER>-1% 精准度"
+        ],
+        [
+          "在空中时受到的伤害降低 4%",
+          "敌人瞄准战甲时降低 <LOWER_IS_BETTER>-2% 精准度"
+        ],
+        [
+          "在空中时受到的伤害降低 6%",
+          "敌人瞄准战甲时降低 <LOWER_IS_BETTER>-3% 精准度"
+        ],
+        [
+          "在空中时受到的伤害降低 8%",
+          "敌人瞄准战甲时降低 <LOWER_IS_BETTER>-4% 精准度"
+        ],
+        [
+          "在空中时受到的伤害降低 10%",
+          "敌人瞄准战甲时降低 <LOWER_IS_BETTER>-5% 精准度"
+        ],
+        [
+          "在空中时受到的伤害降低 12%",
+          "敌人瞄准战甲时降低 <LOWER_IS_BETTER>-6% 精准度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/ModDescriptionStats.lua",
+            "_absoluteValue": [
+              0
+            ],
+            "_addPlusses": [
+              0
+            ],
+            "_displayAsPercent": [
+              1
+            ],
+            "_maxDecimals": [
+              -1
+            ],
+            "_multiplyDown": [
+              1
+            ]
+          },
+          "operation": "MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_DAMAGE_TAKEN",
+          "validModifiers": [
+            "PM_IN_AIR"
+          ],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.98000002
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_DAMAGE_TAKEN",
+          "validModifiers": [
+            "PM_AIRBORNE"
+          ],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.98000002
+        },
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_EVADE_NPC_BULLET",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.0099999998
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModAgility.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModAgility.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/OrokinChallenge/OrokinChallengeModCollaboration",
+      "nameEn": "Coaction Drift",
+      "nameZh": "协力窜升",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "小队从光环中获得的增益增加 +15%；你从光环中获得额外 +15% 增益",
+      "effectsZh": [
+        "小队从光环中获得的增益增加 +15%",
+        "你从光环中获得额外 +15% 增益"
+      ],
+      "effectsZhByRank": [
+        [
+          "小队从光环中获得的增益增加 +2.5%",
+          "你从光环中获得额外 +2.5% 增益"
+        ],
+        [
+          "小队从光环中获得的增益增加 +5%",
+          "你从光环中获得额外 +5% 增益"
+        ],
+        [
+          "小队从光环中获得的增益增加 +7.5%",
+          "你从光环中获得额外 +7.5% 增益"
+        ],
+        [
+          "小队从光环中获得的增益增加 +10%",
+          "你从光环中获得额外 +10% 增益"
+        ],
+        [
+          "小队从光环中获得的增益增加 +12.5%",
+          "你从光环中获得额外 +12.5% 增益"
+        ],
+        [
+          "小队从光环中获得的增益增加 +15%",
+          "你从光环中获得额外 +15% 增益"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_AURA_STRENGTH",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.025
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_AURA_EFFECTIVENESS_ON_ME",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.025
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModCollaboration.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModCollaboration.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/OrokinChallenge/OrokinChallengeModCunning",
+      "nameEn": "Cunning Drift",
+      "nameZh": "狡诈窜升",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "+12% 滑行；-30% 摩擦力；+15% 技能范围",
+      "effectsZh": [
+        "+12% 滑行",
+        "-30% 摩擦力",
+        "+15% 技能范围"
+      ],
+      "effectsZhByRank": [
+        [
+          "+2% 滑行",
+          "-5% 摩擦力",
+          "+2.5% 技能范围"
+        ],
+        [
+          "+4% 滑行",
+          "-10% 摩擦力",
+          "+5% 技能范围"
+        ],
+        [
+          "+6% 滑行",
+          "-15% 摩擦力",
+          "+7.5% 技能范围"
+        ],
+        [
+          "+8% 滑行",
+          "-20% 摩擦力",
+          "+10% 技能范围"
+        ],
+        [
+          "+10% 滑行",
+          "-25% 摩擦力",
+          "+12.5% 技能范围"
+        ],
+        [
+          "+12% 滑行",
+          "-30% 摩擦力",
+          "+15% 技能范围"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SLIDE_BOOST",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.02
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SLIDE_BOOST",
+          "validModifiers": [
+            "PM_IN_AIR"
+          ],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.050000001
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SLIDE_FRICTION",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.050000001
+        },
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "warframe"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_ABILITY_RANGE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.025
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModCunning.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModCunning.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/OrokinChallenge/OrokinChallengeModEndurance",
+      "nameEn": "Endurance Drift",
+      "nameZh": "坚忍窜升",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_POWER",
+      "rarity": "RARE",
+      "description": "+10% 最大能量；+12% 跑酷速度",
+      "effectsZh": [
+        "+10% 最大能量",
+        "+12% 跑酷速度"
+      ],
+      "effectsZhByRank": [
+        [
+          "+1.7% 最大能量",
+          "+2% 跑酷速度"
+        ],
+        [
+          "+3.3% 最大能量",
+          "+4% 跑酷速度"
+        ],
+        [
+          "+5% 最大能量",
+          "+6% 跑酷速度"
+        ],
+        [
+          "+6.7% 最大能量",
+          "+8% 跑酷速度"
+        ],
+        [
+          "+8.3% 最大能量",
+          "+10% 跑酷速度"
+        ],
+        [
+          "+10% 最大能量",
+          "+12% 跑酷速度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_POWER_MAX",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.01667
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_PARKOUR_BOOST",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.02
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModEndurance.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModEndurance.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/OrokinChallenge/OrokinChallengeModPower",
+      "nameEn": "Power Drift",
+      "nameZh": "力量窜升",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_POWER",
+      "rarity": "RARE",
+      "description": "+15% 技能强度；+30% 几率抵抗击倒",
+      "effectsZh": [
+        "+15% 技能强度",
+        "+30% 几率抵抗击倒"
+      ],
+      "effectsZhByRank": [
+        [
+          "+2.5% 技能强度",
+          "+5% 几率抵抗击倒"
+        ],
+        [
+          "+5% 技能强度",
+          "+10% 几率抵抗击倒"
+        ],
+        [
+          "+7.5% 技能强度",
+          "+15% 几率抵抗击倒"
+        ],
+        [
+          "+10% 技能强度",
+          "+20% 几率抵抗击倒"
+        ],
+        [
+          "+12.5% 技能强度",
+          "+25% 几率抵抗击倒"
+        ],
+        [
+          "+15% 技能强度",
+          "+30% 几率抵抗击倒"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "warframe"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_ABILITY_STRENGTH",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.025
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_STAGGERED",
+          "upgradeType": "AVATAR_INJURY_BLOCK_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_BIG_STAGGER",
+          "upgradeType": "AVATAR_INJURY_BLOCK_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_STUNNED",
+          "upgradeType": "AVATAR_INJURY_BLOCK_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_KNOCKED_DOWN",
+          "upgradeType": "AVATAR_INJURY_BLOCK_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModPower.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModPower.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/OrokinChallenge/OrokinChallengeModSpeed",
+      "nameEn": "Speed Drift",
+      "nameZh": "速度窜升",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "+12% 冲刺速度；+15% 施放速度",
+      "effectsZh": [
+        "+12% 冲刺速度",
+        "+15% 施放速度"
+      ],
+      "effectsZhByRank": [
+        [
+          "+2% 冲刺速度",
+          "+2.5% 施放速度"
+        ],
+        [
+          "+4% 冲刺速度",
+          "+5% 施放速度"
+        ],
+        [
+          "+6% 冲刺速度",
+          "+7.5% 施放速度"
+        ],
+        [
+          "+8% 冲刺速度",
+          "+10% 施放速度"
+        ],
+        [
+          "+10% 冲刺速度",
+          "+12.5% 施放速度"
+        ],
+        [
+          "+12% 冲刺速度",
+          "+15% 施放速度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SPRINT_SPEED",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.02
+        },
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_CASTING_SPEED",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.025
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModSpeed.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModSpeed.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/OrokinChallenge/OrokinChallengeModStealth",
+      "nameEn": "Stealth Drift",
+      "nameZh": "匿踪窜升",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "+18 米侦敌雷达；+12% 飞身瞄准/壁面攀附持续时间",
+      "effectsZh": [
+        "+18 米侦敌雷达",
+        "+12% 飞身瞄准/壁面攀附持续时间"
+      ],
+      "effectsZhByRank": [
+        [
+          "+3 米侦敌雷达",
+          "+2% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+6 米侦敌雷达",
+          "+4% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+9 米侦敌雷达",
+          "+6% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+12 米侦敌雷达",
+          "+8% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+15 米侦敌雷达",
+          "+10% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+18 米侦敌雷达",
+          "+12% 飞身瞄准/壁面攀附持续时间"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_ENEMY_RADAR",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 3
+        },
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_PARKOUR_GLIDE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.02
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModStealth.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModStealth.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Event/AccuracyWhileAimingPistolMod",
+      "nameEn": "Targeting Subsystem",
+      "nameZh": "定位辅助",
+      "slotKind": "secondary",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "击中后：\\n瞄准时精准度 +30%，持续 9 秒",
+      "effectsZh": [
+        "击中后：\\n瞄准时精准度 +30%，持续 9 秒"
+      ],
+      "effectsZhByRank": [
+        [
+          "击中后：\\n瞄准时精准度 +5%，持续 2 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +10%，持续 3 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +15%，持续 5 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +20%，持续 6 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +25%，持续 8 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +30%，持续 9 秒"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [
+        {
+          "applyUpgradesByDefault": 0,
+          "conditionTag": "/Lotus/Language/Upgrades/OnHitCondition_Description",
+          "conditions": [
+            "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitPistolCondition"
+          ],
+          "duration": 1.5,
+          "effects": [
+            {
+              "autoType": 1,
+              "checkTypeOnInstall": 0,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "operation": "STACKING_MULTIPLY",
+              "supported": true,
+              "supportedBy": [
+                "weapon"
+              ],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_SPREAD",
+              "validModifiers": [
+                "PM_AIM"
+              ],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": -0.050000001
+            }
+          ],
+          "maxStacks": null,
+          "sourcePath": "/Lotus/Upgrades/Mods/Pistol/Event/AccuracyWhileAimingPistolMod",
+          "stackMode": null
+        }
+      ],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pistol/AccuracyWhileAiming.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/AccuracyWhileAiming.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Event/ShootPickUpPistolMod",
+      "nameEn": "Energizing Shot",
+      "nameZh": "充沛射击",
+      "slotKind": "secondary",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "通过射击能量球来捡取它们，并获得 +110% 的额外效果。",
+      "effectsZh": [
+        "通过射击能量球来捡取它们，并获得 +110% 的额外效果。"
+      ],
+      "effectsZhByRank": [
+        [
+          "通过射击能量球来捡取它们，并获得 +10% 的额外效果。"
+        ],
+        [
+          "通过射击能量球来捡取它们，并获得 +20% 的额外效果。"
+        ],
+        [
+          "通过射击能量球来捡取它们，并获得 +30% 的额外效果。"
+        ],
+        [
+          "通过射击能量球来捡取它们，并获得 +40% 的额外效果。"
+        ],
+        [
+          "通过射击能量球来捡取它们，并获得 +50% 的额外效果。"
+        ],
+        [
+          "通过射击能量球来捡取它们，并获得 +60% 的额外效果。"
+        ],
+        [
+          "通过射击能量球来捡取它们，并获得 +70% 的额外效果。"
+        ],
+        [
+          "通过射击能量球来捡取它们，并获得 +80% 的额外效果。"
+        ],
+        [
+          "通过射击能量球来捡取它们，并获得 +90% 的额外效果。"
+        ],
+        [
+          "通过射击能量球来捡取它们，并获得 +100% 的额外效果。"
+        ],
+        [
+          "通过射击能量球来捡取它们，并获得 +110% 的额外效果。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PICKUP_SHOOT_BONUS",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.1
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 10,
+      "rank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Pistol/ShootPickupPistolMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/ShootPickupPistolMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponAmmoMaxMod",
+      "nameEn": "Trick Mag",
+      "nameZh": "戏法增幅",
+      "slotKind": "secondary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "COMMON",
+      "description": "+90% 弹药最大值",
+      "effectsZh": [
+        "+90% 弹药最大值"
+      ],
+      "effectsZhByRank": [
+        [
+          "+15% 弹药最大值"
+        ],
+        [
+          "+30% 弹药最大值"
+        ],
+        [
+          "+45% 弹药最大值"
+        ],
+        [
+          "+60% 弹药最大值"
+        ],
+        [
+          "+75% 弹药最大值"
+        ],
+        [
+          "+90% 弹药最大值"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "weapon"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_AMMO_MAX",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pistol/PistolAmmoMaxMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/PistolAmmoMaxMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponBeamDistanceMod",
+      "nameEn": "Ruinous Extension",
+      "nameZh": "毁灭扩展",
+      "slotKind": "secondary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "+8 米光束范围",
+      "effectsZh": [
+        "+8 米光束范围"
+      ],
+      "effectsZhByRank": [
+        [
+          "+2 米光束范围"
+        ],
+        [
+          "+4 米光束范围"
+        ],
+        [
+          "+6 米光束范围"
+        ],
+        [
+          "+8 米光束范围"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_RANGE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 2
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 5,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pistol/WeaponBeamDistancePistolMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/WeaponBeamDistancePistolMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponNoiseReductionMod",
+      "nameEn": "Suppress",
+      "nameZh": "消音",
+      "slotKind": "secondary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "COMMON",
+      "description": "降低 100% 敌人听见枪声的几率",
+      "effectsZh": [
+        "降低 100% 敌人听见枪声的几率"
+      ],
+      "effectsZhByRank": [
+        [
+          "降低 25% 敌人听见枪声的几率"
+        ],
+        [
+          "降低 50% 敌人听见枪声的几率"
+        ],
+        [
+          "降低 75% 敌人听见枪声的几率"
+        ],
+        [
+          "降低 100% 敌人听见枪声的几率"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/ModDescriptionStats.lua",
+            "_absoluteValue": [
+              0
+            ],
+            "_addPlusses": [
+              0
+            ],
+            "_displayAsPercent": [
+              1
+            ],
+            "_maxDecimals": [
+              -1
+            ],
+            "_multiplyDown": [
+              1
+            ]
+          },
+          "operation": "MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_NOISE_REDUCTION",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.75
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 5,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pistol/PistolSilencerMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/PistolSilencerMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponPistolConvertAmmoMod",
+      "nameEn": "Pistol Ammo Mutation",
+      "nameZh": "手枪弹药转换",
+      "slotKind": "secondary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "将拾取的主要武器弹药转换为 50% 弹药拾取。",
+      "effectsZh": [
+        "将拾取的主要武器弹药转换为 50% 弹药拾取。"
+      ],
+      "effectsZhByRank": [
+        [
+          "将拾取的主要武器弹药转换为 8% 弹药拾取。"
+        ],
+        [
+          "将拾取的主要武器弹药转换为 16% 弹药拾取。"
+        ],
+        [
+          "将拾取的主要武器弹药转换为 25% 弹药拾取。"
+        ],
+        [
+          "将拾取的主要武器弹药转换为 33% 弹药拾取。"
+        ],
+        [
+          "将拾取的主要武器弹药转换为 42% 弹药拾取。"
+        ],
+        [
+          "将拾取的主要武器弹药转换为 50% 弹药拾取。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_CONVERT_AMMO",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.083999999
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pistol/PistolAmmoMutatorMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/PistolAmmoMutatorMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponPistolZoomFovMod",
+      "nameEn": "Hawk Eye",
+      "nameZh": "隼目",
+      "slotKind": "secondary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "+80% 变焦",
+      "effectsZh": [
+        "+80% 变焦"
+      ],
+      "effectsZhByRank": [
+        [
+          "+20% 变焦"
+        ],
+        [
+          "+40% 变焦"
+        ],
+        [
+          "+60% 变焦"
+        ],
+        [
+          "+80% 变焦"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_ZOOM",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.2
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pistol/PistolZoomMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/PistolZoomMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponProjectileSpeedMod",
+      "nameEn": "Lethal Momentum",
+      "nameZh": "致命动量",
+      "slotKind": "secondary",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "+40% 投射物速度",
+      "effectsZh": [
+        "+40% 投射物速度"
+      ],
+      "effectsZhByRank": [
+        [
+          "+10% 投射物速度"
+        ],
+        [
+          "+20% 投射物速度"
+        ],
+        [
+          "+30% 投射物速度"
+        ],
+        [
+          "+40% 投射物速度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PROJECTILE_SPEED",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.1
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pistol/WeaponProjectileSpeedPistolMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/WeaponProjectileSpeedPistolMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponRecoilReductionMod",
+      "nameEn": "Steady Hands",
+      "nameZh": "稳定枪手",
+      "slotKind": "secondary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "-60% 武器后坐力",
+      "effectsZh": [
+        "-60% 武器后坐力"
+      ],
+      "effectsZhByRank": [
+        [
+          "-15% 武器后坐力"
+        ],
+        [
+          "-30% 武器后坐力"
+        ],
+        [
+          "-45% 武器后坐力"
+        ],
+        [
+          "-60% 武器后坐力"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "weapon"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_RECOIL",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.15000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pistol/PistolRecoilReductionMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/PistolRecoilReductionMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedRecoilFireRateRifle",
+      "nameEn": "Vile Precision",
+      "nameZh": "极恶精准",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "-90% 武器后坐力；-36% 射速（弓类武器效果加倍）",
+      "effectsZh": [
+        "-90% 武器后坐力",
+        "-36% 射速（弓类武器效果加倍）"
+      ],
+      "effectsZhByRank": [
+        [
+          "-15% 武器后坐力",
+          "-6% 射速（弓类武器效果加倍）"
+        ],
+        [
+          "-30% 武器后坐力",
+          "-12% 射速（弓类武器效果加倍）"
+        ],
+        [
+          "-45% 武器后坐力",
+          "-18% 射速（弓类武器效果加倍）"
+        ],
+        [
+          "-60% 武器后坐力",
+          "-24% 射速（弓类武器效果加倍）"
+        ],
+        [
+          "-75% 武器后坐力",
+          "-30% 射速（弓类武器效果加倍）"
+        ],
+        [
+          "-90% 武器后坐力",
+          "-36% 射速（弓类武器效果加倍）"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "weapon"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_RECOIL",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.15000001
+        },
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "weapon"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.059999999
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "weapon"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "/Lotus/Weapons/Tenno/Bows/LotusBow",
+          "valuePerRank": -0.059999999
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/CorruptedRecoilForFireRateMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/CorruptedRecoilForFireRateMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Event/AccuracyWhileAimingRifleMod",
+      "nameEn": "Guided Ordnance",
+      "nameZh": "制导弹药",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "击中后：\\n瞄准时精准度 +30%，持续 9 秒",
+      "effectsZh": [
+        "击中后：\\n瞄准时精准度 +30%，持续 9 秒"
+      ],
+      "effectsZhByRank": [
+        [
+          "击中后：\\n瞄准时精准度 +5%，持续 2 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +10%，持续 3 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +15%，持续 5 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +20%，持续 6 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +25%，持续 8 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +30%，持续 9 秒"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [
+        {
+          "applyUpgradesByDefault": 0,
+          "conditionTag": "/Lotus/Language/Upgrades/OnHitCondition_Description",
+          "conditions": [
+            "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitRifleCondition"
+          ],
+          "duration": 1.5,
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "operation": "STACKING_MULTIPLY",
+              "supported": true,
+              "supportedBy": [
+                "weapon"
+              ],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_SPREAD",
+              "validModifiers": [
+                "PM_AIM"
+              ],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": -0.050000001
+            }
+          ],
+          "maxStacks": null,
+          "sourcePath": "/Lotus/Upgrades/Mods/Rifle/Event/AccuracyWhileAimingRifleMod",
+          "stackMode": null
+        }
+      ],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/AccuracyWhileAiming.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/AccuracyWhileAiming.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Event/Arbitration/JumpRefreshOnKillRifleMod",
+      "nameEn": "Aerial Ace",
+      "nameZh": "空中制霸",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "击杀时：\\n在空中时，重置二段跳，最多可达 6 次。",
+      "effectsZh": [
+        "击杀时：\\n在空中时，重置二段跳，最多可达 6 次。"
+      ],
+      "effectsZhByRank": [
+        [
+          "击杀时：\\n在空中时，重置二段跳，最多可达 1 次。"
+        ],
+        [
+          "击杀时：\\n在空中时，重置二段跳，最多可达 2 次。"
+        ],
+        [
+          "击杀时：\\n在空中时，重置二段跳，最多可达 3 次。"
+        ],
+        [
+          "击杀时：\\n在空中时，重置二段跳，最多可达 4 次。"
+        ],
+        [
+          "击杀时：\\n在空中时，重置二段跳，最多可达 5 次。"
+        ],
+        [
+          "击杀时：\\n在空中时，重置二段跳，最多可达 6 次。"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [
+        {
+          "applyUpgradesByDefault": 0,
+          "conditionTag": "/Lotus/Language/Upgrades/OnKillCondition_Description",
+          "conditions": [
+            "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillRifleCondition"
+          ],
+          "duration": null,
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetDescription",
+                "Script": "/Lotus/Scripts/Mods/JumpRefresh.lua",
+                "_activatedEffect": ""
+              },
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "NONE",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0
+            }
+          ],
+          "maxStacks": null,
+          "runtimeScripts": {
+            "apply": {
+              "Function": "OnProc",
+              "Script": "/Lotus/Scripts/Mods/JumpRefresh.lua",
+              "_activatedEffect": "/Lotus/Fx/Weapons/UniqueMods/JumpRefresh"
+            }
+          },
+          "sourcePath": "/Lotus/Upgrades/Mods/Rifle/Event/Arbitration/JumpRefreshOnKillRifleMod",
+          "stackMode": null
+        }
+      ],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/JumpRefreshOnKillRifleMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/JumpRefreshOnKillRifleMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Event/Arbitration/ShootPickUpRifleMod",
+      "nameEn": "Mending Shot",
+      "nameZh": "补愈射击",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "通过射击生命球来捡取它们，并获得 +110% 的额外效果。",
+      "effectsZh": [
+        "通过射击生命球来捡取它们，并获得 +110% 的额外效果。"
+      ],
+      "effectsZhByRank": [
+        [
+          "通过射击生命球来捡取它们，并获得 +10% 的额外效果。"
+        ],
+        [
+          "通过射击生命球来捡取它们，并获得 +20% 的额外效果。"
+        ],
+        [
+          "通过射击生命球来捡取它们，并获得 +30% 的额外效果。"
+        ],
+        [
+          "通过射击生命球来捡取它们，并获得 +40% 的额外效果。"
+        ],
+        [
+          "通过射击生命球来捡取它们，并获得 +50% 的额外效果。"
+        ],
+        [
+          "通过射击生命球来捡取它们，并获得 +60% 的额外效果。"
+        ],
+        [
+          "通过射击生命球来捡取它们，并获得 +70% 的额外效果。"
+        ],
+        [
+          "通过射击生命球来捡取它们，并获得 +80% 的额外效果。"
+        ],
+        [
+          "通过射击生命球来捡取它们，并获得 +90% 的额外效果。"
+        ],
+        [
+          "通过射击生命球来捡取它们，并获得 +100% 的额外效果。"
+        ],
+        [
+          "通过射击生命球来捡取它们，并获得 +110% 的额外效果。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PICKUP_SHOOT_BONUS",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.1
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 10,
+      "rank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/ShootPickupRifleMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/ShootPickupRifleMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Event/CorpusArena/PentaCorpusArenaMod",
+      "nameEn": "Tether Grenades",
+      "nameZh": "系绳榴弹",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "榴弹会系上 9 米内的 5 名敌人。",
+      "effectsZh": [
+        "榴弹会系上 9 米内的 5 名敌人。"
+      ],
+      "effectsZhByRank": [
+        [
+          "榴弹会系上 4 米内的 2 名敌人。"
+        ],
+        [
+          "榴弹会系上 5 米内的 3 名敌人。"
+        ],
+        [
+          "榴弹会系上 6 米内的 3 名敌人。"
+        ],
+        [
+          "榴弹会系上 7 米内的 4 名敌人。"
+        ],
+        [
+          "榴弹会系上 8 米内的 4 名敌人。"
+        ],
+        [
+          "榴弹会系上 9 米内的 5 名敌人。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetLoc",
+            "Script": "/Lotus/Scripts/Mods/PentaTetherMine.lua",
+            "_faction": "",
+            "_triggerType": ""
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "TetherMine",
+          "upgradeType": "WEAPON_AUGMENT",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 1
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/PentaCorpusArenaMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/PentaCorpusArenaMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Event/CorpusArena/TetraCorpusArenaMod",
+      "nameEn": "Kinetic Ricochet",
+      "nameZh": "动力回弹",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "子弹现在可至多弹跳 6 次并且增加 30% 飞行距离",
+      "effectsZh": [
+        "子弹现在可至多弹跳 6 次并且增加 30% 飞行距离"
+      ],
+      "effectsZhByRank": [
+        [
+          "子弹现在可至多弹跳 1 次并且增加 5% 飞行距离"
+        ],
+        [
+          "子弹现在可至多弹跳 2 次并且增加 10% 飞行距离"
+        ],
+        [
+          "子弹现在可至多弹跳 3 次并且增加 15% 飞行距离"
+        ],
+        [
+          "子弹现在可至多弹跳 4 次并且增加 20% 飞行距离"
+        ],
+        [
+          "子弹现在可至多弹跳 5 次并且增加 25% 飞行距离"
+        ],
+        [
+          "子弹现在可至多弹跳 6 次并且增加 30% 飞行距离"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/ModDescriptionStats.lua",
+            "_absoluteValue": [
+              0
+            ],
+            "_addPlusses": [
+              0
+            ],
+            "_displayAsPercent": [
+              0,
+              1
+            ],
+            "_maxDecimals": [
+              -1
+            ],
+            "_multiplyDown": [
+              0
+            ]
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PROJECTILE_BOUNCES",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 1
+        },
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_RANGE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/TetraCorpusArenaMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/TetraCorpusArenaMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Event/ParisHealOnStatusMod",
+      "nameEn": "Bhisaj-Bal",
+      "nameZh": "治愈羽箭",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "每 3 个异常状态恢复 300 生命。；+90% 触发几率",
+      "effectsZh": [
+        "每 3 个异常状态恢复 300 生命。",
+        "+90% 触发几率"
+      ],
+      "effectsZhByRank": [
+        [
+          "每 3 个异常状态恢复 50 生命。",
+          "+15% 触发几率"
+        ],
+        [
+          "每 3 个异常状态恢复 100 生命。",
+          "+30% 触发几率"
+        ],
+        [
+          "每 3 个异常状态恢复 150 生命。",
+          "+45% 触发几率"
+        ],
+        [
+          "每 3 个异常状态恢复 200 生命。",
+          "+60% 触发几率"
+        ],
+        [
+          "每 3 个异常状态恢复 250 生命。",
+          "+75% 触发几率"
+        ],
+        [
+          "每 3 个异常状态恢复 300 生命。",
+          "+90% 触发几率"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "weapon"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PROC_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        }
+      ],
+      "conditionalEffects": [
+        {
+          "applyUpgradesByDefault": 0,
+          "conditionTag": null,
+          "conditions": [
+            "ParisHealOnStatusModChallenge"
+          ],
+          "duration": null,
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetModDescriptionInfo",
+                "Script": "/Lotus/Scripts/Mods/ParisHealOnStatus.lua",
+                "_hudBuffType": ""
+              },
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "NONE",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0
+            }
+          ],
+          "maxStacks": null,
+          "runtimeScripts": {
+            "apply": {
+              "Function": "ApplyUpgrade",
+              "Script": "/Lotus/Scripts/Mods/ParisHealOnStatus.lua",
+              "_hudBuffType": "ParisHealOnStatusHudBuff"
+            }
+          },
+          "sourcePath": "/Lotus/Upgrades/Mods/Rifle/Event/ParisHealOnStatusSubUpgrade",
+          "stackMode": null
+        }
+      ],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Unique/ParisPrimeStatusHealMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Unique/ParisPrimeStatusHealMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponAmmoMaxMod",
+      "nameEn": "Ammo Drum",
+      "nameZh": "弹鼓",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "COMMON",
+      "description": "+90% 弹药最大值",
+      "effectsZh": [
+        "+90% 弹药最大值"
+      ],
+      "effectsZhByRank": [
+        [
+          "+15% 弹药最大值"
+        ],
+        [
+          "+30% 弹药最大值"
+        ],
+        [
+          "+45% 弹药最大值"
+        ],
+        [
+          "+60% 弹药最大值"
+        ],
+        [
+          "+75% 弹药最大值"
+        ],
+        [
+          "+90% 弹药最大值"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "weapon"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_AMMO_MAX",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/RifleAmmoMaxMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/RifleAmmoMaxMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponBeamDistanceMod",
+      "nameEn": "Sinister Reach",
+      "nameZh": "凶恶延伸",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "+12 米光束范围",
+      "effectsZh": [
+        "+12 米光束范围"
+      ],
+      "effectsZhByRank": [
+        [
+          "+3 米光束范围"
+        ],
+        [
+          "+6 米光束范围"
+        ],
+        [
+          "+9 米光束范围"
+        ],
+        [
+          "+12 米光束范围"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_RANGE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 3
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 5,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/WeaponBeamDistanceRifleMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/WeaponBeamDistanceRifleMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponBowConvertAmmoMod",
+      "nameEn": "Arrow Mutation",
+      "nameZh": "箭矢转换",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "将拾取的次要武器弹药转换为 50% 弹药拾取。",
+      "effectsZh": [
+        "将拾取的次要武器弹药转换为 50% 弹药拾取。"
+      ],
+      "effectsZhByRank": [
+        [
+          "将拾取的次要武器弹药转换为 8% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 16% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 33% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 42% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 50% 弹药拾取。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_CONVERT_AMMO",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.083999999
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/BowAmmoMutatorMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/BowAmmoMutatorMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponGrenadeStickyMod",
+      "nameEn": "Adhesive Blast",
+      "nameZh": "凝胶爆破",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "榴弹有 100% 的几率粘在物体表面。",
+      "effectsZh": [
+        "榴弹有 100% 的几率粘在物体表面。"
+      ],
+      "effectsZhByRank": [
+        [
+          "榴弹有 17% 的几率粘在物体表面。"
+        ],
+        [
+          "榴弹有 33% 的几率粘在物体表面。"
+        ],
+        [
+          "榴弹有 50% 的几率粘在物体表面。"
+        ],
+        [
+          "榴弹有 67% 的几率粘在物体表面。"
+        ],
+        [
+          "榴弹有 83% 的几率粘在物体表面。"
+        ],
+        [
+          "榴弹有 100% 的几率粘在物体表面。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/ModDescriptionStats.lua",
+            "_absoluteValue": [
+              1
+            ],
+            "_addPlusses": [
+              0
+            ],
+            "_displayAsPercent": [
+              1
+            ],
+            "_maxDecimals": [
+              -1
+            ],
+            "_multiplyDown": [
+              0
+            ]
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_GRENADE_STICKY",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.16666667
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Unique/WeaponGrenadeStickyMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Unique/WeaponGrenadeStickyMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponNoiseReductionMod",
+      "nameEn": "Hush",
+      "nameZh": "消音器",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "COMMON",
+      "description": "降低 100% 敌人听见枪声的几率",
+      "effectsZh": [
+        "降低 100% 敌人听见枪声的几率"
+      ],
+      "effectsZhByRank": [
+        [
+          "降低 25% 敌人听见枪声的几率"
+        ],
+        [
+          "降低 50% 敌人听见枪声的几率"
+        ],
+        [
+          "降低 75% 敌人听见枪声的几率"
+        ],
+        [
+          "降低 100% 敌人听见枪声的几率"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/ModDescriptionStats.lua",
+            "_absoluteValue": [
+              0
+            ],
+            "_addPlusses": [
+              0
+            ],
+            "_displayAsPercent": [
+              1
+            ],
+            "_maxDecimals": [
+              -1
+            ],
+            "_multiplyDown": [
+              1
+            ]
+          },
+          "operation": "MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_NOISE_REDUCTION",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.75
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 5,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/RifleSilencerMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/RifleSilencerMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponProjectileSpeedMod",
+      "nameEn": "Terminal Velocity",
+      "nameZh": "极限速度",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "+60% 投射物速度",
+      "effectsZh": [
+        "+60% 投射物速度"
+      ],
+      "effectsZhByRank": [
+        [
+          "+15% 投射物速度"
+        ],
+        [
+          "+30% 投射物速度"
+        ],
+        [
+          "+45% 投射物速度"
+        ],
+        [
+          "+60% 投射物速度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PROJECTILE_SPEED",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/WeaponProjectileSpeedRifleMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/WeaponProjectileSpeedRifleMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponRecoilReductionMod",
+      "nameEn": "Stabilizer",
+      "nameZh": "稳定",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "-60% 武器后坐力",
+      "effectsZh": [
+        "-60% 武器后坐力"
+      ],
+      "effectsZhByRank": [
+        [
+          "-15% 武器后坐力"
+        ],
+        [
+          "-30% 武器后坐力"
+        ],
+        [
+          "-45% 武器后坐力"
+        ],
+        [
+          "-60% 武器后坐力"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "weapon"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_RECOIL",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.15000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/RifleRecoilReductionMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/RifleRecoilReductionMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponResistSelfDamageMod",
+      "nameEn": "Cautious Shot",
+      "nameZh": "谨慎射击",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "+100% 的几率减少从应用于自身的范围攻击中受到失衡效果",
+      "effectsZh": [
+        "+100% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+      ],
+      "effectsZhByRank": [
+        [
+          "+9.1% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ],
+        [
+          "+18.2% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ],
+        [
+          "+27.3% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ],
+        [
+          "+36.4% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ],
+        [
+          "+45.5% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ],
+        [
+          "+54.5% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ],
+        [
+          "+63.6% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ],
+        [
+          "+72.7% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ],
+        [
+          "+81.8% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ],
+        [
+          "+90.9% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ],
+        [
+          "+100% 的几率减少从应用于自身的范围攻击中受到失衡效果"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PROC_SELF_CC_REDUCTION_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.090899996
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 10,
+      "rank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/WeaponResistSelfDamageMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/WeaponResistSelfDamageMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponRifleConvertAmmoMod",
+      "nameEn": "Rifle Ammo Mutation",
+      "nameZh": "步枪弹药转换",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "将拾取的次要武器弹药转换为 50% 弹药拾取。",
+      "effectsZh": [
+        "将拾取的次要武器弹药转换为 50% 弹药拾取。"
+      ],
+      "effectsZhByRank": [
+        [
+          "将拾取的次要武器弹药转换为 8% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 16% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 33% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 42% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 50% 弹药拾取。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_CONVERT_AMMO",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.083999999
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/RifleAmmoMutatorMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/RifleAmmoMutatorMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponSnipersConvertAmmoMod",
+      "nameEn": "Sniper Ammo Mutation",
+      "nameZh": "狙击枪弹药转换",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "将拾取的次要武器弹药转换为 50% 弹药拾取。",
+      "effectsZh": [
+        "将拾取的次要武器弹药转换为 50% 弹药拾取。"
+      ],
+      "effectsZhByRank": [
+        [
+          "将拾取的次要武器弹药转换为 8% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 16% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 33% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 42% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 50% 弹药拾取。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_CONVERT_AMMO",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.083999999
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/SniperAmmoMutatorMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/SniperAmmoMutatorMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponZoomFovMod",
+      "nameEn": "Eagle Eye",
+      "nameZh": "鹰眼",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "+40% 变焦",
+      "effectsZh": [
+        "+40% 变焦"
+      ],
+      "effectsZhByRank": [
+        [
+          "+10% 变焦"
+        ],
+        [
+          "+20% 变焦"
+        ],
+        [
+          "+30% 变焦"
+        ],
+        [
+          "+40% 变焦"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_ZOOM",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.1
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Rifle/RifleZoomMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/RifleZoomMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Amar/AmarExilusMod",
+      "nameEn": "Amar's Anguish",
+      "nameZh": "欺谋狼主之苦",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "COMMON",
+      "description": "+15% 跑酷速度；+15% 冲刺速度",
+      "effectsZh": [
+        "+15% 跑酷速度",
+        "+15% 冲刺速度"
+      ],
+      "effectsZhByRank": [
+        [
+          "+2.5% 跑酷速度",
+          "+2.5% 冲刺速度"
+        ],
+        [
+          "+5% 跑酷速度",
+          "+5% 冲刺速度"
+        ],
+        [
+          "+7.5% 跑酷速度",
+          "+7.5% 冲刺速度"
+        ],
+        [
+          "+10% 跑酷速度",
+          "+10% 冲刺速度"
+        ],
+        [
+          "+12.5% 跑酷速度",
+          "+12.5% 冲刺速度"
+        ],
+        [
+          "+15% 跑酷速度",
+          "+15% 冲刺速度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_PARKOUR_BOOST",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.025
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SPRINT_SPEED",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.025
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Amar/AmarExilusMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Amar/AmarExilusMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Boreal/BorealExilusMod",
+      "nameEn": "Boreal's Anguish",
+      "nameZh": "诡文枭主之苦",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "COMMON",
+      "description": "飞身瞄准时重力变为 -75%；+60% 飞身瞄准/壁面攀附持续时间",
+      "effectsZh": [
+        "飞身瞄准时重力变为 -75%",
+        "+60% 飞身瞄准/壁面攀附持续时间"
+      ],
+      "effectsZhByRank": [
+        [
+          "飞身瞄准时重力变为 -12.5%",
+          "+10% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "飞身瞄准时重力变为 -25%",
+          "+20% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "飞身瞄准时重力变为 -37.5%",
+          "+30% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "飞身瞄准时重力变为 -50%",
+          "+40% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "飞身瞄准时重力变为 -62.5%",
+          "+50% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "飞身瞄准时重力变为 -75%",
+          "+60% 飞身瞄准/壁面攀附持续时间"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_PARKOUR_GRAVITY",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.125
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_PARKOUR_GLIDE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.1
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Boreal/BorealExilusMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Boreal/BorealExilusMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Hawk/HawkModA",
+      "nameEn": "Aero Vantage",
+      "nameZh": "空飞 俯瞰",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "飞身瞄准时重力变为 -100%",
+      "effectsZh": [
+        "飞身瞄准时重力变为 -100%"
+      ],
+      "effectsZhByRank": [
+        [
+          "飞身瞄准时重力变为 -25%"
+        ],
+        [
+          "飞身瞄准时重力变为 -50%"
+        ],
+        [
+          "飞身瞄准时重力变为 -75%"
+        ],
+        [
+          "飞身瞄准时重力变为 -100%"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_PARKOUR_GRAVITY",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.25
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Hawk/HawksVantage.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Hawk/HawksVantage.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Hawk/HawkModC",
+      "nameEn": "Aero Periphery",
+      "nameZh": "空飞 边际",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "COMMON",
+      "description": "飞身瞄准时 -50% 变焦",
+      "effectsZh": [
+        "飞身瞄准时 -50% 变焦"
+      ],
+      "effectsZhByRank": [
+        [
+          "飞身瞄准时 -12.5% 变焦"
+        ],
+        [
+          "飞身瞄准时 -25% 变焦"
+        ],
+        [
+          "飞身瞄准时 -37.5% 变焦"
+        ],
+        [
+          "飞身瞄准时 -50% 变焦"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_ZOOM",
+          "validModifiers": [
+            "PM_AIM",
+            "PM_IN_AIR"
+          ],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.125
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 5,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Hawk/HawksPeriphery.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Hawk/HawksPeriphery.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Nira/NiraExilusMod",
+      "nameEn": "Nira's Anguish",
+      "nameZh": "混沌蛇主之苦",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "COMMON",
+      "description": "+15% 跑酷速度；+15% 飞身瞄准/壁面攀附持续时间",
+      "effectsZh": [
+        "+15% 跑酷速度",
+        "+15% 飞身瞄准/壁面攀附持续时间"
+      ],
+      "effectsZhByRank": [
+        [
+          "+2.5% 跑酷速度",
+          "+2.5% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+5% 跑酷速度",
+          "+5% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+7.5% 跑酷速度",
+          "+7.5% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+10% 跑酷速度",
+          "+10% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+12.5% 跑酷速度",
+          "+12.5% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+15% 跑酷速度",
+          "+15% 飞身瞄准/壁面攀附持续时间"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_PARKOUR_BOOST",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.025
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_PARKOUR_GLIDE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.025
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Nira/NiraExilusMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Nira/NiraExilusMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Raptor/RaptorModA",
+      "nameEn": "Motus Signal",
+      "nameZh": "跃动 信号",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "COMMON",
+      "description": "提升 +200% 二段跳强度。",
+      "effectsZh": [
+        "提升 +200% 二段跳强度。"
+      ],
+      "effectsZhByRank": [
+        [
+          "提升 +50% 二段跳强度。"
+        ],
+        [
+          "提升 +100% 二段跳强度。"
+        ],
+        [
+          "提升 +150% 二段跳强度。"
+        ],
+        [
+          "提升 +200% 二段跳强度。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_AIR_JUMP_HEIGHT",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.5
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Raptor/RaptorsFrenzy.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Raptor/RaptorsFrenzy.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Spider/SpiderModA",
+      "nameEn": "Proton Pulse",
+      "nameZh": "质子 脉动",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "COMMON",
+      "description": "+100% 壁面攀附后旋身飞跃的速度。",
+      "effectsZh": [
+        "+100% 壁面攀附后旋身飞跃的速度。"
+      ],
+      "effectsZhByRank": [
+        [
+          "+25% 壁面攀附后旋身飞跃的速度。"
+        ],
+        [
+          "+50% 壁面攀附后旋身飞跃的速度。"
+        ],
+        [
+          "+75% 壁面攀附后旋身飞跃的速度。"
+        ],
+        [
+          "+100% 壁面攀附后旋身飞跃的速度。"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [
+        {
+          "applyUpgradesByDefault": 0,
+          "conditionTag": "/Lotus/Language/Upgrades/AfterWallLatch_Description",
+          "conditions": [
+            "/Lotus/Upgrades/CosmeticEnhancers/Utility/AfterWallLatchCondition"
+          ],
+          "duration": 1,
+          "effects": [
+            {
+              "autoType": 0,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetDescriptionInfo",
+                "Script": "/Lotus/Scripts/Mods/SpidersLeap.lua",
+                "_challenge": "",
+                "_multipliers": [
+                  0.25,
+                  0.5,
+                  0.75,
+                  1
+                ]
+              },
+              "operation": "STACKING_MULTIPLY",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "AVATAR_PARKOUR_BOOST",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0.25
+            }
+          ],
+          "maxStacks": null,
+          "runtimeScripts": {
+            "apply": {
+              "Function": "StartMod",
+              "Script": "/Lotus/Scripts/Mods/SpidersLeap.lua",
+              "_challenge": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AfterWallLatchCondition",
+              "_multipliers": [
+                0.5,
+                1,
+                1.5,
+                2
+              ]
+            }
+          },
+          "sourcePath": "/Lotus/Upgrades/Mods/Sets/Spider/SpiderModA",
+          "stackMode": null
+        }
+      ],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Spider/SpiderLeap.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Spider/SpiderLeap.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Synth/WarframeSynthReflexMod",
+      "nameEn": "Synth Reflex",
+      "nameZh": "合成 反射",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "装备时：\\n+40% 旋身飞跃速度，持续 2 秒",
+      "effectsZh": [
+        "装备时：\\n+40% 旋身飞跃速度，持续 2 秒"
+      ],
+      "effectsZhByRank": [
+        [
+          "装备时：\\n+10% 旋身飞跃速度，持续 2 秒"
+        ],
+        [
+          "装备时：\\n+20% 旋身飞跃速度，持续 2 秒"
+        ],
+        [
+          "装备时：\\n+30% 旋身飞跃速度，持续 2 秒"
+        ],
+        [
+          "装备时：\\n+40% 旋身飞跃速度，持续 2 秒"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescription",
+            "Script": "/Lotus/Scripts/Mods/AvatarHolsterBulletJump.lua"
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "NONE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Synth/WarframeSynthReflexMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Synth/WarframeSynthReflexMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+      "nameEn": "Vigilante Supplies",
+      "nameZh": "私法 补给",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "将拾取的次要武器弹药转换为 30% 弹药拾取。",
+      "effectsZh": [
+        "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+      ],
+      "effectsZhByRank": [
+        [
+          "将拾取的次要武器弹药转换为 5% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 10% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 15% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 20% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_CONVERT_AMMO",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/WarframeVigilantePursuitMod",
+      "nameEn": "Vigilante Pursuit",
+      "nameZh": "私法 追踪",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "+30 米侦敌雷达",
+      "effectsZh": [
+        "+30 米侦敌雷达"
+      ],
+      "effectsZhByRank": [
+        [
+          "+5 米侦敌雷达"
+        ],
+        [
+          "+10 米侦敌雷达"
+        ],
+        [
+          "+15 米侦敌雷达"
+        ],
+        [
+          "+20 米侦敌雷达"
+        ],
+        [
+          "+25 米侦敌雷达"
+        ],
+        [
+          "+30 米侦敌雷达"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_ENEMY_RADAR",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 5
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilantePursuit.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilantePursuit.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Event/AccuracyWhileAimingShotgunMod",
+      "nameEn": "Narrow Barrel",
+      "nameZh": "狭窄枪膛",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "击中后：\\n瞄准时精准度 +30%，持续 9 秒",
+      "effectsZh": [
+        "击中后：\\n瞄准时精准度 +30%，持续 9 秒"
+      ],
+      "effectsZhByRank": [
+        [
+          "击中后：\\n瞄准时精准度 +5%，持续 2 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +10%，持续 3 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +15%，持续 5 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +20%，持续 6 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +25%，持续 8 秒"
+        ],
+        [
+          "击中后：\\n瞄准时精准度 +30%，持续 9 秒"
+        ]
+      ],
+      "effects": [],
+      "conditionalEffects": [
+        {
+          "applyUpgradesByDefault": 0,
+          "conditionTag": "/Lotus/Language/Upgrades/OnHitCondition_Description",
+          "conditions": [
+            "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitShotgunCondition"
+          ],
+          "duration": 1.5,
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "operation": "STACKING_MULTIPLY",
+              "supported": true,
+              "supportedBy": [
+                "weapon"
+              ],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_SPREAD",
+              "validModifiers": [
+                "PM_AIM"
+              ],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": -0.050000001
+            }
+          ],
+          "maxStacks": null,
+          "sourcePath": "/Lotus/Upgrades/Mods/Shotgun/Event/AccuracyWhileAimingShotgunMod",
+          "stackMode": null
+        }
+      ],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Shotgun/AccuracyWhileAiming.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/AccuracyWhileAiming.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Event/ProjectNightwatch/DrakgoonNightwatchMod",
+      "nameEn": "Fomorian Accelerant",
+      "nameZh": "巨人促进剂",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "高射炮弹片将反弹至多 4 次 并且速度加快 60%。",
+      "effectsZh": [
+        "高射炮弹片将反弹至多 4 次 并且速度加快 60%。"
+      ],
+      "effectsZhByRank": [
+        [
+          "高射炮弹片将反弹至多 1 次 并且速度加快 15%。"
+        ],
+        [
+          "高射炮弹片将反弹至多 2 次 并且速度加快 30%。"
+        ],
+        [
+          "高射炮弹片将反弹至多 3 次 并且速度加快 45%。"
+        ],
+        [
+          "高射炮弹片将反弹至多 4 次 并且速度加快 60%。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/ModDescriptionStats.lua",
+            "_absoluteValue": [
+              0
+            ],
+            "_addPlusses": [
+              0
+            ],
+            "_displayAsPercent": [
+              0,
+              1
+            ],
+            "_maxDecimals": [
+              -1
+            ],
+            "_multiplyDown": [
+              0
+            ]
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PROJECTILE_BOUNCES",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 1
+        },
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PROJECTILE_SPEED",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        },
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PROJECTILE_ELASTICITY",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Shotgun/DrakgoonNightwatchMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/DrakgoonNightwatchMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Event/ProjectNightwatch/WeaponNoiseReductionMod",
+      "nameEn": "Silent Battery",
+      "nameZh": "寂静炮组",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "降低 100% 敌人听见枪声的几率",
+      "effectsZh": [
+        "降低 100% 敌人听见枪声的几率"
+      ],
+      "effectsZhByRank": [
+        [
+          "降低 25% 敌人听见枪声的几率"
+        ],
+        [
+          "降低 50% 敌人听见枪声的几率"
+        ],
+        [
+          "降低 75% 敌人听见枪声的几率"
+        ],
+        [
+          "降低 100% 敌人听见枪声的几率"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/ModDescriptionStats.lua",
+            "_absoluteValue": [
+              0
+            ],
+            "_addPlusses": [
+              0
+            ],
+            "_displayAsPercent": [
+              1
+            ],
+            "_maxDecimals": [
+              -1
+            ],
+            "_multiplyDown": [
+              1
+            ]
+          },
+          "operation": "MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_NOISE_REDUCTION",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.75
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 5,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Shotgun/WeaponNoiseReductionMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/WeaponNoiseReductionMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponAmmoMaxMod",
+      "nameEn": "Shell Compression",
+      "nameZh": "压缩弹药",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "+90% 弹药最大值",
+      "effectsZh": [
+        "+90% 弹药最大值"
+      ],
+      "effectsZhByRank": [
+        [
+          "+15% 弹药最大值"
+        ],
+        [
+          "+30% 弹药最大值"
+        ],
+        [
+          "+45% 弹药最大值"
+        ],
+        [
+          "+60% 弹药最大值"
+        ],
+        [
+          "+75% 弹药最大值"
+        ],
+        [
+          "+90% 弹药最大值"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "weapon"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_AMMO_MAX",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Shotgun/ShotgunAmmoMaxMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/ShotgunAmmoMaxMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponProjectileSpeedMod",
+      "nameEn": "Fatal Acceleration",
+      "nameZh": "致死加速",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "+40% 投射物速度",
+      "effectsZh": [
+        "+40% 投射物速度"
+      ],
+      "effectsZhByRank": [
+        [
+          "+10% 投射物速度"
+        ],
+        [
+          "+20% 投射物速度"
+        ],
+        [
+          "+30% 投射物速度"
+        ],
+        [
+          "+40% 投射物速度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PROJECTILE_SPEED",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.1
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Shotgun/WeaponProjectileSpeedShotgunMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/WeaponProjectileSpeedShotgunMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponRecoilReductionMod",
+      "nameEn": "Counterbalance",
+      "nameZh": "制衡",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "-60% 武器后坐力",
+      "effectsZh": [
+        "-60% 武器后坐力"
+      ],
+      "effectsZhByRank": [
+        [
+          "-15% 武器后坐力"
+        ],
+        [
+          "-30% 武器后坐力"
+        ],
+        [
+          "-45% 武器后坐力"
+        ],
+        [
+          "-60% 武器后坐力"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": true,
+          "supportedBy": [
+            "weapon"
+          ],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_RECOIL",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.15000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Shotgun/WeaponRecoilShotgunMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/WeaponRecoilShotgunMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponShotgunConvertAmmoMod",
+      "nameEn": "Shotgun Ammo Mutation",
+      "nameZh": "霰弹枪弹药转换",
+      "slotKind": "primary",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "将拾取的次要武器弹药转换为 50% 弹药拾取。",
+      "effectsZh": [
+        "将拾取的次要武器弹药转换为 50% 弹药拾取。"
+      ],
+      "effectsZhByRank": [
+        [
+          "将拾取的次要武器弹药转换为 8% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 16% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 33% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 42% 弹药拾取。"
+        ],
+        [
+          "将拾取的次要武器弹药转换为 50% 弹药拾取。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_CONVERT_AMMO",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.083999999
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Shotgun/ShotgunAmmoMutatorMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/ShotgunAmmoMutatorMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarChanceToLoot",
+      "nameEn": "Master Thief",
+      "nameZh": "盗贼大师",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "+40% 几率打开锁住的储物柜",
+      "effectsZh": [
+        "+40% 几率打开锁住的储物柜"
+      ],
+      "effectsZhByRank": [
+        [
+          "+10% 几率打开锁住的储物柜"
+        ],
+        [
+          "+20% 几率打开锁住的储物柜"
+        ],
+        [
+          "+30% 几率打开锁住的储物柜"
+        ],
+        [
+          "+40% 几率打开锁住的储物柜"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_LOOT_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.1
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 13,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/AvatarChanceToLootMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarChanceToLootMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarDamageReductionInAir",
+      "nameEn": "Aviator",
+      "nameZh": "飞行员",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "COMMON",
+      "description": "在空中时受到的伤害降低 40%",
+      "effectsZh": [
+        "在空中时受到的伤害降低 40%"
+      ],
+      "effectsZhByRank": [
+        [
+          "在空中时受到的伤害降低 10%"
+        ],
+        [
+          "在空中时受到的伤害降低 20%"
+        ],
+        [
+          "在空中时受到的伤害降低 30%"
+        ],
+        [
+          "在空中时受到的伤害降低 40%"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/ModDescriptionStats.lua",
+            "_absoluteValue": [
+              1
+            ],
+            "_addPlusses": [
+              0
+            ],
+            "_displayAsPercent": [
+              1
+            ],
+            "_maxDecimals": [
+              -1
+            ],
+            "_multiplyDown": [
+              1
+            ]
+          },
+          "operation": "MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_DAMAGE_TAKEN",
+          "validModifiers": [
+            "PM_IN_AIR"
+          ],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.89999998
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_DAMAGE_TAKEN",
+          "validModifiers": [
+            "PM_AIRBORNE"
+          ],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.89999998
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/AvatarDamageReductionInAir.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarDamageReductionInAir.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarEnemyRadarMod",
+      "nameEn": "Enemy Sense",
+      "nameZh": "敌人感应",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "+30 米侦敌雷达",
+      "effectsZh": [
+        "+30 米侦敌雷达"
+      ],
+      "effectsZhByRank": [
+        [
+          "+5 米侦敌雷达"
+        ],
+        [
+          "+10 米侦敌雷达"
+        ],
+        [
+          "+15 米侦敌雷达"
+        ],
+        [
+          "+20 米侦敌雷达"
+        ],
+        [
+          "+25 米侦敌雷达"
+        ],
+        [
+          "+30 米侦敌雷达"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_ENEMY_RADAR",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 5
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/EnemyRadarMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/EnemyRadarMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarFallingImpactMod",
+      "nameEn": "Heavy Impact",
+      "nameZh": "震地冲击",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "从高处着地将会产生 6 米的范围震波，造成 300 伤害并震倒敌人。",
+      "effectsZh": [
+        "从高处着地将会产生 6 米的范围震波，造成 300 伤害并震倒敌人。"
+      ],
+      "effectsZhByRank": [
+        [
+          "从高处着地将会产生 1 米的范围震波，造成 50 伤害并震倒敌人。"
+        ],
+        [
+          "从高处着地将会产生 2 米的范围震波，造成 100 伤害并震倒敌人。"
+        ],
+        [
+          "从高处着地将会产生 3 米的范围震波，造成 150 伤害并震倒敌人。"
+        ],
+        [
+          "从高处着地将会产生 4 米的范围震波，造成 200 伤害并震倒敌人。"
+        ],
+        [
+          "从高处着地将会产生 5 米的范围震波，造成 250 伤害并震倒敌人。"
+        ],
+        [
+          "从高处着地将会产生 6 米的范围震波，造成 300 伤害并震倒敌人。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/ModDescriptionStats.lua",
+            "_absoluteValue": [
+              0
+            ],
+            "_addPlusses": [
+              0
+            ],
+            "_displayAsPercent": [],
+            "_maxDecimals": [
+              -1
+            ],
+            "_multiplyDown": [
+              0
+            ]
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_FALL_IMPACT_RADIUS",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 1
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_FALL_IMPACT_AMOUNT",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 50
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/AvatarHeavyImpactMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarHeavyImpactMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarKnockdownRecoveryMod",
+      "nameEn": "Handspring",
+      "nameZh": "翻筋斗",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "+160% 倒地恢复",
+      "effectsZh": [
+        "+160% 倒地恢复"
+      ],
+      "effectsZhByRank": [
+        [
+          "+40% 倒地恢复"
+        ],
+        [
+          "+80% 倒地恢复"
+        ],
+        [
+          "+120% 倒地恢复"
+        ],
+        [
+          "+160% 倒地恢复"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_KNOCKDOWN_RECOVERY_SPEED",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.40000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/NinjaRecoveryMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/NinjaRecoveryMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarKnockdownResistanceMod",
+      "nameEn": "Sure Footed",
+      "nameZh": "顶天立地",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "RARE",
+      "description": "+60% 几率抵抗击倒",
+      "effectsZh": [
+        "+60% 几率抵抗击倒"
+      ],
+      "effectsZhByRank": [
+        [
+          "+15% 几率抵抗击倒"
+        ],
+        [
+          "+30% 几率抵抗击倒"
+        ],
+        [
+          "+45% 几率抵抗击倒"
+        ],
+        [
+          "+60% 几率抵抗击倒"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_STAGGERED",
+          "upgradeType": "AVATAR_INJURY_BLOCK_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_BIG_STAGGER",
+          "upgradeType": "AVATAR_INJURY_BLOCK_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_STUNNED",
+          "upgradeType": "AVATAR_INJURY_BLOCK_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_KNOCKED_DOWN",
+          "upgradeType": "AVATAR_INJURY_BLOCK_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_RAGDOLL",
+          "upgradeType": "AVATAR_INJURY_BLOCK_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/AvatarSureFootedMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarSureFootedMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarLootRadarMod",
+      "nameEn": "Thief's Wit",
+      "nameZh": "盗贼天赋",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "COMMON",
+      "description": "+42 米寻物雷达",
+      "effectsZh": [
+        "+42 米寻物雷达"
+      ],
+      "effectsZhByRank": [
+        [
+          "+7 米寻物雷达"
+        ],
+        [
+          "+14 米寻物雷达"
+        ],
+        [
+          "+21 米寻物雷达"
+        ],
+        [
+          "+28 米寻物雷达"
+        ],
+        [
+          "+35 米寻物雷达"
+        ],
+        [
+          "+42 米寻物雷达"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_LOOT_RADAR",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 7
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/LootRadarMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/LootRadarMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarMissionSpecificResistanceIce",
+      "nameEn": "Warm Coat",
+      "nameZh": "保温服",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "COMMON",
+      "description": "+12% 抵挡环境冰冻事故护盾抗性",
+      "effectsZh": [
+        "+12% 抵挡环境冰冻事故护盾抗性"
+      ],
+      "effectsZhByRank": [
+        [
+          "+3% 抵挡环境冰冻事故护盾抗性"
+        ],
+        [
+          "+6% 抵挡环境冰冻事故护盾抗性"
+        ],
+        [
+          "+9% 抵挡环境冰冻事故护盾抗性"
+        ],
+        [
+          "+12% 抵挡环境冰冻事故护盾抗性"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "NONE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.029999999
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/AvatarMissionSpecificResistanceIce.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarMissionSpecificResistanceIce.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarParryMeleeMod",
+      "nameEn": "Parry",
+      "nameZh": "招架",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "COMMON",
+      "description": "战甲近战格挡后，有 +96% 几率使敌人进入可被处决的状态",
+      "effectsZh": [
+        "战甲近战格挡后，有 +96% 几率使敌人进入可被处决的状态"
+      ],
+      "effectsZhByRank": [
+        [
+          "战甲近战格挡后，有 +16% 几率使敌人进入可被处决的状态"
+        ],
+        [
+          "战甲近战格挡后，有 +32% 几率使敌人进入可被处决的状态"
+        ],
+        [
+          "战甲近战格挡后，有 +48% 几率使敌人进入可被处决的状态"
+        ],
+        [
+          "战甲近战格挡后，有 +64% 几率使敌人进入可被处决的状态"
+        ],
+        [
+          "战甲近战格挡后，有 +80% 几率使敌人进入可被处决的状态"
+        ],
+        [
+          "战甲近战格挡后，有 +96% 几率使敌人进入可被处决的状态"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_PARRY_COUNTER_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.16
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingParryMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingParryMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarRevengeDamageMelee",
+      "nameEn": "Retribution",
+      "nameZh": "惩戒",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_DEFENSE",
+      "rarity": "RARE",
+      "description": "+60% 几率护盾被敌人近战打中时，造成电击伤害；+80 <DT_ELECTRICITY_COLOR>电击伤害",
+      "effectsZh": [
+        "+60% 几率护盾被敌人近战打中时，造成电击伤害",
+        "+80 <DT_ELECTRICITY_COLOR>电击伤害"
+      ],
+      "effectsZhByRank": [
+        [
+          "+15% 几率护盾被敌人近战打中时，造成电击伤害",
+          "+20 <DT_ELECTRICITY_COLOR>电击伤害"
+        ],
+        [
+          "+30% 几率护盾被敌人近战打中时，造成电击伤害",
+          "+40 <DT_ELECTRICITY_COLOR>电击伤害"
+        ],
+        [
+          "+45% 几率护盾被敌人近战打中时，造成电击伤害",
+          "+60 <DT_ELECTRICITY_COLOR>电击伤害"
+        ],
+        [
+          "+60% 几率护盾被敌人近战打中时，造成电击伤害",
+          "+80 <DT_ELECTRICITY_COLOR>电击伤害"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_REVENGE_DAMAGE_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.15000001
+        },
+        {
+          "autoType": 1,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_REVENGE_DAMAGE_AMOUNT",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 20
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/ShockingBarrierMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/ShockingBarrierMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarSlideBoostMod",
+      "nameEn": "Maglev",
+      "nameZh": "磁浮",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "30% 滑行；30% 摩擦力",
+      "effectsZh": null,
+      "effectsZhByRank": null,
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SLIDE_BOOST",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SLIDE_BOOST",
+          "validModifiers": [
+            "PM_IN_AIR"
+          ],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.050000001
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SLIDE_FRICTION",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.050000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 11,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/SlideResistanceDecreaseMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/SlideResistanceDecreaseMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarSpawnEnergyMod",
+      "nameEn": "Preparation",
+      "nameZh": "有备而来",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_POWER",
+      "rarity": "RARE",
+      "description": "进入任务时获得 +100% 最大能量",
+      "effectsZh": [
+        "进入任务时获得 +100% 最大能量"
+      ],
+      "effectsZhByRank": [
+        [
+          "进入任务时获得 +9% 最大能量"
+        ],
+        [
+          "进入任务时获得 +18% 最大能量"
+        ],
+        [
+          "进入任务时获得 +27% 最大能量"
+        ],
+        [
+          "进入任务时获得 +36% 最大能量"
+        ],
+        [
+          "进入任务时获得 +45% 最大能量"
+        ],
+        [
+          "进入任务时获得 +55% 最大能量"
+        ],
+        [
+          "进入任务时获得 +64% 最大能量"
+        ],
+        [
+          "进入任务时获得 +73% 最大能量"
+        ],
+        [
+          "进入任务时获得 +82% 最大能量"
+        ],
+        [
+          "进入任务时获得 +91% 最大能量"
+        ],
+        [
+          "进入任务时获得 +100% 最大能量"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_ENERGY_SPAWN_PERCENT",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.090910003
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 12,
+      "rank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/AvatarSpawnEnergyMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarSpawnEnergyMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/AvatarSprintSpeedMod",
+      "nameEn": "Rush",
+      "nameZh": "冲刺",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "+30% 冲刺速度",
+      "effectsZh": [
+        "+30% 冲刺速度"
+      ],
+      "effectsZhByRank": [
+        [
+          "+5% 冲刺速度"
+        ],
+        [
+          "+10% 冲刺速度"
+        ],
+        [
+          "+15% 冲刺速度"
+        ],
+        [
+          "+20% 冲刺速度"
+        ],
+        [
+          "+25% 冲刺速度"
+        ],
+        [
+          "+30% 冲刺速度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SPRINT_SPEED",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 11,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/SprintSpeedMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/SprintSpeedMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/DualStat/HolsterSpeedSlideBoostMod",
+      "nameEn": "Streamlined Form",
+      "nameZh": "流线外形",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "+30% 滑行；-30% 摩擦力",
+      "effectsZh": [
+        "+30% 滑行",
+        "-30% 摩擦力"
+      ],
+      "effectsZhByRank": [
+        [
+          "+5% 滑行",
+          "-5% 摩擦力"
+        ],
+        [
+          "+10% 滑行",
+          "-10% 摩擦力"
+        ],
+        [
+          "+15% 滑行",
+          "-15% 摩擦力"
+        ],
+        [
+          "+20% 滑行",
+          "-20% 摩擦力"
+        ],
+        [
+          "+25% 滑行",
+          "-25% 摩擦力"
+        ],
+        [
+          "+30% 滑行",
+          "-30% 摩擦力"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SLIDE_BOOST",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        },
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SLIDE_BOOST",
+          "validModifiers": [
+            "PM_IN_AIR"
+          ],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.050000001
+        },
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_SLIDE_FRICTION",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.050000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/HolsterSpeedSlideBoostMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/HolsterSpeedSlideBoostMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/Events/AvatarStaggerRecoveryMod",
+      "nameEn": "Pain Threshold",
+      "nameZh": "痛苦阈值",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "+160% 更快的失衡恢复速度",
+      "effectsZh": [
+        "+160% 更快的失衡恢复速度"
+      ],
+      "effectsZhByRank": [
+        [
+          "+40% 更快的失衡恢复速度"
+        ],
+        [
+          "+80% 更快的失衡恢复速度"
+        ],
+        [
+          "+120% 更快的失衡恢复速度"
+        ],
+        [
+          "+160% 更快的失衡恢复速度"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_BIG_STAGGER",
+          "upgradeType": "AVATAR_INJURY_ANIM_RATE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.40000001
+        },
+        {
+          "autoType": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "PT_STAGGERED",
+          "upgradeType": "AVATAR_INJURY_ANIM_RATE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.40000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 9,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/AvatarMods/AvatarStaggerRecoveryMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarStaggerRecoveryMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/ParkourTwoMod",
+      "nameEn": "Mobilize",
+      "nameZh": "全面驱动",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "+20% 跑酷速度；+20% 飞身瞄准/壁面攀附持续时间",
+      "effectsZh": [
+        "+20% 跑酷速度",
+        "+20% 飞身瞄准/壁面攀附持续时间"
+      ],
+      "effectsZhByRank": [
+        [
+          "+5% 跑酷速度",
+          "+5% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+10% 跑酷速度",
+          "+10% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+15% 跑酷速度",
+          "+15% 飞身瞄准/壁面攀附持续时间"
+        ],
+        [
+          "+20% 跑酷速度",
+          "+20% 飞身瞄准/壁面攀附持续时间"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_PARKOUR_BOOST",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        },
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_PARKOUR_GLIDE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.050000001
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 5,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Parkour/StaggerParkourTwoMod.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Parkour/StaggerParkourTwoMod.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/WarframeCatMod",
+      "nameEn": "Kavat's Grace",
+      "nameZh": "库娃的优雅",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "落地导致硬着陆的可能性降低 100%。",
+      "effectsZh": [
+        "落地导致硬着陆的可能性降低 100%。"
+      ],
+      "effectsZhByRank": [
+        [
+          "落地导致硬着陆的可能性降低 25%。"
+        ],
+        [
+          "落地导致硬着陆的可能性降低 50%。"
+        ],
+        [
+          "落地导致硬着陆的可能性降低 75%。"
+        ],
+        [
+          "落地导致硬着陆的可能性降低 100%。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "localizationScript": {
+            "Function": "GetDescriptionInfo",
+            "Script": "/Lotus/Scripts/Mods/CatModDescription.lua",
+            "_baseValue": 0,
+            "_perLevelValues": [
+              25,
+              50,
+              75,
+              100
+            ]
+          },
+          "operation": "ADD",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_HEAVY_LAND_RESIST_CHANCE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.25
+        }
+      ],
+      "conditionalEffects": [],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Parkour/KavatsGrace.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Parkour/KavatsGrace.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Warframe/WarframeMightyKickMod",
+      "nameEn": "Gale Kick",
+      "nameZh": "狂风猛踢",
+      "slotKind": "warframe",
+      "exilus": true,
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "转换 +100% 的近战伤害至飞踢的<DT_IMPACT_COLOR>冲击伤害，击杀时击倒周围的敌人。",
+      "effectsZh": [
+        "转换 +100% 的近战伤害至飞踢的<DT_IMPACT_COLOR>冲击伤害，击杀时击倒周围的敌人。"
+      ],
+      "effectsZhByRank": [
+        [
+          "转换 +25% 的近战伤害至飞踢的<DT_IMPACT_COLOR>冲击伤害，击杀时击倒周围的敌人。"
+        ],
+        [
+          "转换 +50% 的近战伤害至飞踢的<DT_IMPACT_COLOR>冲击伤害，击杀时击倒周围的敌人。"
+        ],
+        [
+          "转换 +75% 的近战伤害至飞踢的<DT_IMPACT_COLOR>冲击伤害，击杀时击倒周围的敌人。"
+        ],
+        [
+          "转换 +100% 的近战伤害至飞踢的<DT_IMPACT_COLOR>冲击伤害，击杀时击倒周围的敌人。"
+        ]
+      ],
+      "effects": [
+        {
+          "autoType": 0,
+          "checkTypeOnInstall": 0,
+          "damageType": "DT_ANY",
+          "invalidModifiers": [],
+          "operation": "STACKING_MULTIPLY",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "AVATAR_MELEE_DAMAGE_TO_JUMP_KICK",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": 0.25
+        }
+      ],
+      "conditionalEffects": [
+        {
+          "applyUpgradesByDefault": 0,
+          "conditionTag": null,
+          "conditions": [
+            "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnKillCondition"
+          ],
+          "duration": null,
+          "effects": [
+            {
+              "autoType": 1,
+              "checkTypeOnInstall": 0,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "NONE",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0
+            }
+          ],
+          "maxStacks": null,
+          "runtimeScripts": {
+            "apply": {
+              "Function": "StartMod",
+              "Script": "/Lotus/Scripts/Mods/MightyKickKnockdown.lua",
+              "_knockDownDamage": 50,
+              "_knockDownFx": "/Lotus/Fx/Gameplay/Mods/MightyKickBlast",
+              "_knockDownImpulse": 10,
+              "_knockDownRadius": 7
+            }
+          },
+          "sourcePath": "/Lotus/Upgrades/Mods/Warframe/WarframeMightyKickSubUpgrade",
+          "stackMode": null
+        }
+      ],
+      "drain": 7,
+      "rank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Parkour/GaleKick.png",
+      "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Parkour/GaleKick.png",
+      "sourceKind": "isUtility",
+      "catalogJoined": true
+    }
+  ],
+  "skipped": [
+    {
+      "path": "/Lotus/Upgrades/Mods/WeaponStatOverride/WeaponStatOverrideBaseMod",
+      "reason": "not selectable in portable mods export"
+    }
+  ]
+}

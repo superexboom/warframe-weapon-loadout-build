@@ -1,0 +1,264 @@
+{
+  "schemaVersion": 1,
+  "activeBuild": "2026.08.13.13.24",
+  "policy": {
+    "runtimeNetworkAccess": false,
+    "sameBuildRequired": [
+      "weapons",
+      "warframes",
+      "mods",
+      "enemies",
+      "arcanes",
+      "kitguns",
+      "zaws",
+      "incarnonStrings",
+      "warframeBuildData"
+    ],
+    "authoritativeOrder": [
+      "game-packages",
+      "official-languages",
+      "official-export",
+      "wiki-snapshot",
+      "community-structured",
+      "manual-audited"
+    ]
+  },
+  "sources": [
+    {
+      "id": "packages",
+      "kind": "game-packages",
+      "path": "../WF_Rever/wf-arsenal/data/raw/{build}/Packages.bin",
+      "sha256": "c2cdc05477b37dd78054194e5601619defe59433fd136252829e247096fd605b",
+      "pinnedBuild": "2026.08.13.13.24",
+      "required": true,
+      "usedBy": [
+        "weapons",
+        "dispositions",
+        "mods",
+        "arcanes",
+        "warframes",
+        "abilities",
+        "helminth",
+        "invigorations",
+        "shards",
+        "enemies",
+        "kitguns"
+      ]
+    },
+    {
+      "id": "languages-en",
+      "kind": "official-languages",
+      "path": "../WF_Rever/research/wf-arsenal-external-sources/work/warframe-languages-bin-data/en.json",
+      "sha256": "398383aee2a90104f7c98448e309797816f55ee0c4e0b196025abd733f15d762",
+      "revision": "2f100cf248802f75ff2b8a209bdcc27dea4d0648",
+      "required": true,
+      "usedBy": [
+        "all-localized-records"
+      ]
+    },
+    {
+      "id": "languages-zh",
+      "kind": "official-languages",
+      "path": "../WF_Rever/research/wf-arsenal-external-sources/work/warframe-languages-bin-data/zh.json",
+      "sha256": "dcfe1b92e7bfb89c2298b518146c436fff38fc950ff10a6f1f9f641a751c42c7",
+      "revision": "2f100cf248802f75ff2b8a209bdcc27dea4d0648",
+      "required": true,
+      "usedBy": [
+        "all-localized-records",
+        "incarnonStrings"
+      ]
+    },
+    {
+      "id": "wfarsenal-export",
+      "kind": "official-export",
+      "path": "../WF_Rever/wf-arsenal/data/export/{build}/manifest.json",
+      "required": true,
+      "usedBy": [
+        "weapons",
+        "mods",
+        "arcanes",
+        "warframes",
+        "enemies"
+      ]
+    },
+    {
+      "id": "warframe-items",
+      "kind": "community-structured",
+      "path": "../WF_Rever/research/wf-arsenal-external-sources/work/warframe-items/data",
+      "revision": "6c90d27600ad98a47a4d4e99bb7550bddfea2217",
+      "required": true,
+      "usedBy": [
+        "warframe-catalog",
+        "ability-list",
+        "mod-level-text",
+        "arcane-text",
+        "icons"
+      ]
+    },
+    {
+      "id": "wiki-abilities",
+      "kind": "wiki-snapshot",
+      "path": "../WarframeWikiKnowledgeRunner/rollback-cleaning-20260829-014123/work/cleaned",
+      "pageCount": 10686,
+      "required": true,
+      "usedBy": [
+        "ability-rank-vectors",
+        "ability-misc",
+        "helminth-native",
+        "enemy-rules"
+      ]
+    },
+    {
+      "id": "overframe-abilitystats",
+      "kind": "community-structured",
+      "path": "data/overframe_abilitystats.json",
+      "url": "https://static.overframe.gg/_next/static/chunks/db/abilitystats.9ea999d1b387ea33.js",
+      "sha256": "9f21b3088ed833ba9d395c7d8eb22ffd492170c806ab781ad45249f62d93ebe5",
+      "required": true,
+      "usedBy": [
+        "warframe-ability-field-schema"
+      ]
+    },
+    {
+      "id": "game-font-luau-ability-sidecar",
+      "kind": "derived-game-font-luau",
+      "path": "data/ability_runtime_fields.json",
+      "sha256": "a4195168040c48d9856a322681393da33529f1607a5fb46799d77edc98f13d97",
+      "pinnedBuild": "2026.08.13.13.24",
+      "required": true,
+      "derivedFrom": [
+        "packages",
+        "languages-en",
+        "languages-zh",
+        "wiki-abilities"
+      ],
+      "parser": "tools/extract_ability_luau_ir.py",
+      "parserSha256": "6ace01baae8c09eac110db05da13a11145f46d8b1a742a87cd97238e1f215bcb",
+      "usedBy": [
+        "warframe-ability-field-decoder",
+        "ability-schema-diff"
+      ]
+    },
+    {
+      "id": "game-font-luau-ability-diff",
+      "kind": "derived-game-font-luau",
+      "path": "data/ability_runtime_diff.json",
+      "sha256": "4093ec631c5dcaeafa0d828ffddaf77c330ade016c384ad9d65bfed117d7d0eb",
+      "pinnedBuild": "2026.08.13.13.24",
+      "required": true,
+      "derivedFrom": [
+        "game-font-luau-ability-sidecar",
+        "warframeBuildData"
+      ],
+      "parser": "tools/diff_ability_runtime_fields.py",
+      "parserSha256": "2d28bf8b774c32891efacc634e7fec724d4d584fe330c0b08290c6e84fa9dc55",
+      "usedBy": [
+        "ability-schema-diff",
+        "ability-source-migration"
+      ]
+    },
+    {
+      "id": "overframe-incarnon-policy",
+      "kind": "community-policy",
+      "path": "data/export/{build}/incarnon_defaults.json",
+      "sha256": "36aa9c0a6fecfd7125c3a95713bd6dbf26f7a462c1f0136fc26955511f4a8451",
+      "pinnedBuild": "2026.08.13.13.24",
+      "required": false,
+      "usedBy": [
+        "incarnon-default-route"
+      ]
+    },
+    {
+      "id": "wiki-stances",
+      "kind": "wiki-snapshot",
+      "path": "data/sources/wiki/stance_data_2026-08-23.lua",
+      "sha256": "154f3f38bdacbdc0484ae2567d6028733c86f997919ce1929d0148f68a2ae967",
+      "required": true,
+      "usedBy": [
+        "stance-combos",
+        "stance-duration",
+        "stance-compatibility"
+      ]
+    },
+    {
+      "id": "wiki-zaws",
+      "kind": "manual-audited",
+      "path": "data/export/{build}/zaws.json",
+      "sha256": "935b04b7ca3822cf1f4a2d98af38f87d34ab33a2ef278a92e4928b7b2d29ca56",
+      "pinnedBuild": "2026.08.13.13.24",
+      "required": true,
+      "usedBy": [
+        "zaw-parts",
+        "zaw-dispositions"
+      ]
+    },
+    {
+      "id": "blackcat-mods",
+      "kind": "official-asset-index",
+      "path": "../黑猫4.0-5.0/dist/WRData/data/v2_mods.json",
+      "sha256": "7a6dfa83689b78a24d519e5338d2c84fa48bd16f73666ec6ab4deb97f06497ce",
+      "required": true,
+      "usedBy": [
+        "stance-metadata",
+        "mod-art-join"
+      ]
+    },
+    {
+      "id": "blackcat-weapons",
+      "kind": "official-asset-index",
+      "path": "../黑猫4.0-5.0/dist/WRData/data/v2_weapons.json",
+      "sha256": "66ec61bde94294c7ce3b85f9328dc9acee898ab2947ad926b742df0767e6d9b7",
+      "required": true,
+      "usedBy": [
+        "exalted-weapon-parent-chain",
+        "kitgun-localized-names"
+      ]
+    },
+    {
+      "id": "public-export-plus-enemies",
+      "kind": "community-structured",
+      "path": "../WarframeRabbit4.0-deploy-20260724/WRData/git/warframe_public_export_plus/ExportEnemies.json",
+      "sha256": "c7f291f672ff623bec4fe2bb7a73ab3e2d43a2b9848ae4954373c141fe395224",
+      "required": true,
+      "usedBy": [
+        "enemy-defense-overlay"
+      ]
+    },
+    {
+      "id": "official-companion-assets",
+      "kind": "official-assets",
+      "path": "../WF_Rever/warframe-companion-5.3.5.0/work/apk/base/assets/Resources/common/mods",
+      "revision": "5.3.5.0",
+      "required": true,
+      "usedBy": [
+        "mod-frame-layers",
+        "rank-assets",
+        "polarity-assets"
+      ]
+    }
+  ],
+  "overframeExclusiveData": [
+    {
+      "dataset": "warframeAbilityFieldSchema",
+      "records": 267,
+      "rawFields": 2377,
+      "finalFields": 2245,
+      "note": "保留字段名称、顺序、分组和未被 query 覆盖的机制；863 个唯一匹配字段已由同 build Font/Wiki/Packages 数值 promotion 覆盖"
+    },
+    {
+      "dataset": "incarnonDefaultRoutes",
+      "records": 45,
+      "buildReferences": 57,
+      "note": "只影响默认分支选择，不影响灵化分支数值或伤害公式"
+    }
+  ],
+  "manualReview": [
+    "generated RandomModRare Riven template and eligibility diff",
+    "new weapon compatibility tags and stance weapon types",
+    "new or removed ability IDs against Overframe/Wiki coverage",
+    "unknown UpgradeType/runtimeScripts",
+    "Warframe MOD path joins, Arcane name joins and missing assets",
+    "Zaw component stats and dispositions",
+    "Incarnon default route policy"
+  ]
+}

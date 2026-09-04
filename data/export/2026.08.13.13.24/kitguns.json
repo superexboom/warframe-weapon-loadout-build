@@ -1,0 +1,1794 @@
+{
+ "barrels": {
+  "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelBeam/InfModularBarrelBeamPart": {
+   "barrelType": "BT_AUTO_HITSCAN",
+   "compatTags": [
+    "BEAM"
+   ],
+   "gunType": "GT_BEAM",
+   "nameEn": "Vermisplicer",
+   "nameZh": "虫置",
+   "omegaAttenuation": 1.15,
+   "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelBeam/InfModularBarrelBeamPart",
+   "primaryModes": [
+    {
+     "ammoCost": 0.5,
+     "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "procChance": 0,
+      "shares": {
+       "DT_IMPACT": 0.162162,
+       "DT_POISON": 0.351351,
+       "DT_PUNCTURE": 0.189189,
+       "DT_SLASH": 0.297297
+      },
+      "total": 37.0,
+      "types": {
+       "DT_IMPACT": 6.0,
+       "DT_POISON": 13.0,
+       "DT_PUNCTURE": 7.0,
+       "DT_SLASH": 11.0
+      }
+     },
+     "fireRate": 8.0,
+     "fireRateRaw": 480,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerContinous",
+     "unsupported": [
+      "kitgun-chain-damage-unapplied"
+     ]
+    }
+   ],
+   "primaryOmegaAttenuation": 0.89999998,
+   "primeOmegaAttenuation": 0.89999998,
+   "secondaryModes": [
+    {
+     "ammoCost": 0.5,
+     "ammoType": "/Lotus/Weapons/Ammo/PistolAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "procChance": 0,
+      "shares": {
+       "DT_IMPACT": 0.125,
+       "DT_POISON": 0.3125,
+       "DT_PUNCTURE": 0.25,
+       "DT_SLASH": 0.3125
+      },
+      "total": 16.0,
+      "types": {
+       "DT_IMPACT": 2.0,
+       "DT_POISON": 5.0,
+       "DT_PUNCTURE": 4.0,
+       "DT_SLASH": 5.0
+      }
+     },
+     "fireRate": 12.0,
+     "fireRateRaw": 720,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerContinous",
+     "unsupported": [
+      "kitgun-chain-damage-unapplied"
+     ]
+    }
+   ]
+  },
+  "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/InfModularBarrelEggPart": {
+   "barrelType": "BT_SEMI_PROJECTILE",
+   "compatTags": [
+    "MODULAR_GUN",
+    "SEMI_AUTO"
+   ],
+   "gunType": "GT_SHOTGUN",
+   "nameEn": "Sporelacer",
+   "nameZh": "孢射",
+   "omegaAttenuation": 0.60000002,
+   "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/InfModularBarrelEggPart",
+   "primaryModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "flightSpeed": 50,
+      "procChance": 0,
+      "projectile": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/EggWavePrimaryProj",
+      "radial": {
+       "falloff": 0.2,
+       "procChance": 0,
+       "radius": 2.0999999,
+       "shares": {
+        "DT_POISON": 1.0
+       },
+       "total": 93.0,
+       "types": {
+        "DT_POISON": 93.0
+       }
+      },
+      "shares": {
+       "DT_IMPACT": 1.0
+      },
+      "total": 45.0,
+      "types": {
+       "DT_IMPACT": 45.0
+      }
+     },
+     "fireRate": 1.5,
+     "fireRateRaw": 90,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto",
+     "unsupported": []
+    }
+   ],
+   "primaryOmegaAttenuation": 1.15,
+   "primeOmegaAttenuation": 1.15,
+   "secondaryModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/Lotus/Weapons/Ammo/PistolAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "flightSpeed": 57,
+      "procChance": 0,
+      "projectile": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/EggClusterProjectile",
+      "radial": {
+       "falloff": 0.5,
+       "procChance": 0,
+       "radius": 4.6999998,
+       "shares": {
+        "DT_POISON": 1.0
+       },
+       "total": 199.0,
+       "types": {
+        "DT_POISON": 199.0
+       }
+      },
+      "shares": {
+       "DT_IMPACT": 1.0
+      },
+      "total": 57.0,
+      "types": {
+       "DT_IMPACT": 57.0
+      }
+     },
+     "fireRate": 1.5,
+     "fireRateRaw": 90,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 3,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+     "unsupported": [
+      "kitgun-cluster-damage-unapplied"
+     ]
+    }
+   ]
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelAPart": {
+   "barrelType": "BT_SEMI_PROJECTILE",
+   "compatTags": [
+    "MODULAR_GUN",
+    "SEMI_AUTO"
+   ],
+   "gunType": "GT_SHOTGUN",
+   "nameEn": "Catchmoon",
+   "nameZh": "捕月",
+   "omegaAttenuation": 0.75,
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelAPart",
+   "primaryModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "flightSpeed": 100,
+      "procChance": 0,
+      "projectile": "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Barrel/BarrelAPrimaryWaveProj",
+      "shares": {
+       "DT_FIRE": 0.634328,
+       "DT_IMPACT": 0.365672
+      },
+      "total": 134.0,
+      "types": {
+       "DT_FIRE": 85.0,
+       "DT_IMPACT": 49.0
+      }
+     },
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto",
+     "unsupported": []
+    }
+   ],
+   "primaryOmegaAttenuation": 1.1,
+   "primeOmegaAttenuation": 1.1,
+   "secondaryModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/Lotus/Weapons/Ammo/PistolAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "flightSpeed": 100,
+      "procChance": 0,
+      "projectile": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/BarrelAWaveProj",
+      "shares": {
+       "DT_FIRE": 0.652344,
+       "DT_IMPACT": 0.347656
+      },
+      "total": 256.0,
+      "types": {
+       "DT_FIRE": 167.0,
+       "DT_IMPACT": 89.0
+      }
+     },
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 3,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+     "unsupported": []
+    }
+   ]
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelBPart": {
+   "barrelType": "BT_SEMI_PROJECTILE",
+   "compatTags": [
+    "PROJECTILE",
+    "AOE",
+    "MODULAR_GUN",
+    "SEMI_AUTO"
+   ],
+   "gunType": "GT_RIFLE",
+   "nameEn": "Tombfinger",
+   "nameZh": "墓指",
+   "omegaAttenuation": 0.85000002,
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelBPart",
+   "primaryModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
+     "chargeTime": 0.80000001,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "flightSpeed": 180,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "procChance": 0,
+      "projectile": "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Barrel/BarrelBPrimaryEnergyProj",
+      "radial": {
+       "falloff": 0.25,
+       "procChance": 0,
+       "radius": 1.7,
+       "shares": {
+        "DT_RADIATION": 1.0
+       },
+       "total": 50.0,
+       "types": {
+        "DT_RADIATION": 50.0
+       }
+      },
+      "shares": {
+       "DT_IMPACT": 0.362069,
+       "DT_PUNCTURE": 0.327586,
+       "DT_RADIATION": 0.310345
+      },
+      "total": 58.0,
+      "types": {
+       "DT_IMPACT": 21.0,
+       "DT_PUNCTURE": 19.0,
+       "DT_RADIATION": 18.0
+      }
+     },
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+     "unsupported": []
+    },
+    {
+     "ammoCost": 1,
+     "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
+     "chargeTime": 0.80000001,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "flightSpeed": 90,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "procChance": 0,
+      "projectile": "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Barrel/BarrelBPrimaryEnergyChargedProj",
+      "radial": {
+       "falloff": 0.69999999,
+       "procChance": 0,
+       "radius": 6.1999998,
+       "shares": {
+        "DT_RADIATION": 1.0
+       },
+       "total": 432.0,
+       "types": {
+        "DT_RADIATION": 432.0
+       }
+      },
+      "shares": {
+       "DT_IMPACT": 0.689655,
+       "DT_RADIATION": 0.310345
+      },
+      "total": 58.0,
+      "types": {
+       "DT_IMPACT": 40.0,
+       "DT_RADIATION": 18.0
+      }
+     },
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 1,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+     "unsupported": []
+    }
+   ],
+   "primaryOmegaAttenuation": null,
+   "primeOmegaAttenuation": null,
+   "secondaryModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/Lotus/Weapons/Ammo/PistolAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "flightSpeed": 180,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "procChance": 0,
+      "projectile": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/BarrelBEnergyProj",
+      "radial": {
+       "falloff": 0.30000001,
+       "procChance": 0,
+       "radius": 1.9,
+       "shares": {
+        "DT_RADIATION": 1.0
+       },
+       "total": 41.0,
+       "types": {
+        "DT_RADIATION": 41.0
+       }
+      },
+      "shares": {
+       "DT_IMPACT": 0.372093,
+       "DT_PUNCTURE": 0.209302,
+       "DT_RADIATION": 0.418605
+      },
+      "total": 43.0,
+      "types": {
+       "DT_IMPACT": 16.0,
+       "DT_PUNCTURE": 9.0,
+       "DT_RADIATION": 18.0
+      }
+     },
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 3,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+     "unsupported": []
+    }
+   ]
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelCPart": {
+   "barrelType": "BT_AUTO_HITSCAN",
+   "compatTags": [],
+   "gunType": "GT_RIFLE",
+   "nameEn": "Rattleguts",
+   "nameZh": "响胆",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelCPart",
+   "primaryModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "procChance": 0,
+      "shares": {
+       "DT_IMPACT": 0.105263,
+       "DT_PUNCTURE": 0.263158,
+       "DT_RADIATION": 0.473684,
+       "DT_SLASH": 0.157895
+      },
+      "total": 19.0,
+      "types": {
+       "DT_IMPACT": 2.0,
+       "DT_PUNCTURE": 5.0,
+       "DT_RADIATION": 9.0,
+       "DT_SLASH": 3.0
+      }
+     },
+     "fireRate": 5.666666666666667,
+     "fireRateRaw": 340,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1.5,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto",
+     "unsupported": []
+    }
+   ],
+   "primaryOmegaAttenuation": null,
+   "primeOmegaAttenuation": null,
+   "secondaryModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/Lotus/Weapons/Ammo/PistolAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "procChance": 0,
+      "shares": {
+       "DT_IMPACT": 0.060606,
+       "DT_PUNCTURE": 0.30303,
+       "DT_RADIATION": 0.393939,
+       "DT_SLASH": 0.242424
+      },
+      "total": 33.0,
+      "types": {
+       "DT_IMPACT": 2.0,
+       "DT_PUNCTURE": 10.0,
+       "DT_RADIATION": 13.0,
+       "DT_SLASH": 8.0
+      }
+     },
+     "fireRate": 5.666666666666667,
+     "fireRateRaw": 340,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1.5,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto",
+     "unsupported": []
+    }
+   ]
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelDPart": {
+   "barrelType": "BT_AUTO_HITSCAN",
+   "compatTags": [
+    "BEAM"
+   ],
+   "gunType": "GT_BEAM",
+   "nameEn": "Gaze",
+   "nameZh": "凝目",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelDPart",
+   "primaryModes": [
+    {
+     "ammoCost": 0.5,
+     "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "procChance": 0,
+      "shares": {
+       "DT_RADIATION": 1.0
+      },
+      "total": 33.0,
+      "types": {
+       "DT_RADIATION": 33.0
+      }
+     },
+     "fireRate": 8.0,
+     "fireRateRaw": 480,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerContinous",
+     "unsupported": [
+      "kitgun-chain-damage-unapplied"
+     ]
+    }
+   ],
+   "primaryOmegaAttenuation": 1.1,
+   "primeOmegaAttenuation": 1.1,
+   "secondaryModes": [
+    {
+     "ammoCost": 0.5,
+     "ammoType": "/Lotus/Weapons/Ammo/PistolAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 1.0,
+      "procChance": 0,
+      "shares": {
+       "DT_PUNCTURE": 0.388889,
+       "DT_RADIATION": 0.611111
+      },
+      "total": 18.0,
+      "types": {
+       "DT_PUNCTURE": 7.0,
+       "DT_RADIATION": 11.0
+      }
+     },
+     "fireRate": 12.0,
+     "fireRateRaw": 720,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerContinous",
+     "unsupported": [
+      "kitgun-chain-damage-unapplied"
+     ]
+    }
+   ]
+  }
+ },
+ "buildLabel": "2026.08.13.13.24",
+ "clips": {
+  "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart": {
+   "nameEn": "Macro Thymoid",
+   "nameZh": "巨匣 抑脓",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.23999999,
+     "critMultiplier": 2,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 23,
+     "procChance": 0.23999999,
+     "reloadTime": 2.9000001
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.27000001,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 35,
+     "procChance": 0.27000001,
+     "reloadTime": 2.9000001
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.22,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 111,
+     "procChance": 0.22,
+     "reloadTime": 2.9000001
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.28,
+     "critMultiplier": 2,
+     "gunType": "GT_BEAM",
+     "magazineSize": 85,
+     "procChance": 0.28,
+     "reloadTime": 2.9000001
+    }
+   ],
+   "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart"
+  },
+  "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigPart": {
+   "nameEn": "Macro Arcroid",
+   "nameZh": "巨匣 弃脓",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.20999999,
+     "critMultiplier": 2,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 39,
+     "procChance": 0.20999999,
+     "reloadTime": 3.0999999
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.23999999,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 49,
+     "procChance": 0.23999999,
+     "reloadTime": 3.0999999
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.19,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 153,
+     "procChance": 0.19,
+     "reloadTime": 3.0999999
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.25,
+     "critMultiplier": 2,
+     "gunType": "GT_BEAM",
+     "magazineSize": 113,
+     "procChance": 0.25,
+     "reloadTime": 3.0999999
+    }
+   ],
+   "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigPart"
+  },
+  "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfSmallClip/InfModularClipSmallCritStatPart": {
+   "nameEn": "Arcroid",
+   "nameZh": "弃脓",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.23999999,
+     "critMultiplier": 2,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 9,
+     "procChance": 0.23999999,
+     "reloadTime": 1.5
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.27000001,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 19,
+     "procChance": 0.27000001,
+     "reloadTime": 1.5
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.22,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 57,
+     "procChance": 0.22,
+     "reloadTime": 1.5
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.28,
+     "critMultiplier": 2,
+     "gunType": "GT_BEAM",
+     "magazineSize": 37,
+     "procChance": 0.28,
+     "reloadTime": 1.5
+    }
+   ],
+   "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfSmallClip/InfModularClipSmallCritStatPart"
+  },
+  "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfSmallClip/InfModularClipSmallPart": {
+   "nameEn": "Thymoid",
+   "nameZh": "抑脓",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.20999999,
+     "critMultiplier": 2,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 17,
+     "procChance": 0.20999999,
+     "reloadTime": 2.3
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.23999999,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 31,
+     "procChance": 0.23999999,
+     "reloadTime": 2.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.19,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 75,
+     "procChance": 0.19,
+     "reloadTime": 2.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.25,
+     "critMultiplier": 2,
+     "gunType": "GT_BEAM",
+     "magazineSize": 49,
+     "procChance": 0.25,
+     "reloadTime": 2.3
+    }
+   ],
+   "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfSmallClip/InfModularClipSmallPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCapIClipPart": {
+   "nameEn": "Deepbreath",
+   "nameZh": "深息",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.20999999,
+     "critMultiplier": 2,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 11,
+     "procChance": 0.20999999,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.23999999,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 23,
+     "procChance": 0.23999999,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.19,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 67,
+     "procChance": 0.19,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.25,
+     "critMultiplier": 2,
+     "gunType": "GT_BEAM",
+     "magazineSize": 43,
+     "procChance": 0.25,
+     "reloadTime": 1.7
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCapIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCapIIClipPart": {
+   "nameEn": "Bellows",
+   "nameZh": "风箱",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.20999999,
+     "critMultiplier": 2,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 13,
+     "procChance": 0.20999999,
+     "reloadTime": 2.0999999
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.23999999,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 29,
+     "procChance": 0.23999999,
+     "reloadTime": 2.0999999
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.19,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 83,
+     "procChance": 0.19,
+     "reloadTime": 2.0999999
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.25,
+     "critMultiplier": 2,
+     "gunType": "GT_BEAM",
+     "magazineSize": 51,
+     "procChance": 0.25,
+     "reloadTime": 2.0999999
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCapIIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritICapIClipPart": {
+   "nameEn": "Bashrack",
+   "nameZh": "狂虐",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.28,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 11,
+     "procChance": 0.17,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.31,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 23,
+     "procChance": 0.2,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.25999999,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 67,
+     "procChance": 0.15000001,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.31999999,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_BEAM",
+     "magazineSize": 43,
+     "procChance": 0.20999999,
+     "reloadTime": 1.7
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritICapIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritICapIIClipPart": {
+   "nameEn": "Stitch",
+   "nameZh": "穿纫",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.28,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 13,
+     "procChance": 0.17,
+     "reloadTime": 2.0999999
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.31,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 29,
+     "procChance": 0.2,
+     "reloadTime": 2.0999999
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.25999999,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 83,
+     "procChance": 0.15000001,
+     "reloadTime": 2.0999999
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.31999999,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_BEAM",
+     "magazineSize": 51,
+     "procChance": 0.20999999,
+     "reloadTime": 2.0999999
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritICapIIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPart": {
+   "nameEn": "Splat",
+   "nameZh": "溅击",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.34999999,
+     "critMultiplier": 2.3,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 11,
+     "procChance": 0.13,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.38,
+     "critMultiplier": 2.3,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 23,
+     "procChance": 0.16,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.33000001,
+     "critMultiplier": 2.3,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 67,
+     "procChance": 0.11,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.38999999,
+     "critMultiplier": 2.3,
+     "gunType": "GT_BEAM",
+     "magazineSize": 43,
+     "procChance": 0.17,
+     "reloadTime": 1.7
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIIReloadIClipPart": {
+   "nameEn": "Killstream",
+   "nameZh": "连杀",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.34999999,
+     "critMultiplier": 2.3,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 7,
+     "procChance": 0.13,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.38,
+     "critMultiplier": 2.3,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 15,
+     "procChance": 0.16,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.33000001,
+     "critMultiplier": 2.3,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 45,
+     "procChance": 0.11,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.38999999,
+     "critMultiplier": 2.3,
+     "gunType": "GT_BEAM",
+     "magazineSize": 31,
+     "procChance": 0.17,
+     "reloadTime": 1.3
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIIReloadIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIReloadIClipPart": {
+   "nameEn": "Slapneedle",
+   "nameZh": "拍针",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.28,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 7,
+     "procChance": 0.17,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.31,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 15,
+     "procChance": 0.2,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.25999999,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 45,
+     "procChance": 0.15000001,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.31999999,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_BEAM",
+     "magazineSize": 31,
+     "procChance": 0.20999999,
+     "reloadTime": 1.3
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIReloadIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIReloadIIClipPart": {
+   "nameEn": "Zipneedle",
+   "nameZh": "速针",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.28,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 5,
+     "procChance": 0.17,
+     "reloadTime": 0.89999998
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.31,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 9,
+     "procChance": 0.2,
+     "reloadTime": 0.89999998
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.25999999,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 29,
+     "procChance": 0.15000001,
+     "reloadTime": 0.89999998
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.31999999,
+     "critMultiplier": 2.0999999,
+     "gunType": "GT_BEAM",
+     "magazineSize": 23,
+     "procChance": 0.20999999,
+     "reloadTime": 0.89999998
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIReloadIIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularReloadIClipPart": {
+   "nameEn": "Slap",
+   "nameZh": "掌击",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.20999999,
+     "critMultiplier": 2,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 7,
+     "procChance": 0.20999999,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.23999999,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 15,
+     "procChance": 0.23999999,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.19,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 45,
+     "procChance": 0.19,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.25,
+     "critMultiplier": 2,
+     "gunType": "GT_BEAM",
+     "magazineSize": 31,
+     "procChance": 0.25,
+     "reloadTime": 1.3
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularReloadIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularReloadIIClipPart": {
+   "nameEn": "Zip",
+   "nameZh": "速力",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.20999999,
+     "critMultiplier": 2,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 5,
+     "procChance": 0.20999999,
+     "reloadTime": 0.89999998
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.23999999,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 9,
+     "procChance": 0.23999999,
+     "reloadTime": 0.89999998
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.19,
+     "critMultiplier": 2,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 29,
+     "procChance": 0.19,
+     "reloadTime": 0.89999998
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.25,
+     "critMultiplier": 2,
+     "gunType": "GT_BEAM",
+     "magazineSize": 23,
+     "procChance": 0.25,
+     "reloadTime": 0.89999998
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularReloadIIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatICapIClipPart": {
+   "nameEn": "Sparkfire",
+   "nameZh": "花火",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.17,
+     "critMultiplier": 1.9,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 11,
+     "procChance": 0.28,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.2,
+     "critMultiplier": 1.9,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 23,
+     "procChance": 0.31,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.15000001,
+     "critMultiplier": 1.9,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 67,
+     "procChance": 0.25999999,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.20999999,
+     "critMultiplier": 1.9,
+     "gunType": "GT_BEAM",
+     "magazineSize": 43,
+     "procChance": 0.31999999,
+     "reloadTime": 1.7
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatICapIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatICapIIClipPart": {
+   "nameEn": "Thunderdrum",
+   "nameZh": "雷鼓",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.17,
+     "critMultiplier": 1.9,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 13,
+     "procChance": 0.28,
+     "reloadTime": 2.0999999
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.2,
+     "critMultiplier": 1.9,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 29,
+     "procChance": 0.31,
+     "reloadTime": 2.0999999
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.15000001,
+     "critMultiplier": 1.9,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 83,
+     "procChance": 0.25999999,
+     "reloadTime": 2.0999999
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.20999999,
+     "critMultiplier": 1.9,
+     "gunType": "GT_BEAM",
+     "magazineSize": 51,
+     "procChance": 0.31999999,
+     "reloadTime": 2.0999999
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatICapIIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIICapIClipPart": {
+   "nameEn": "Ramflare",
+   "nameZh": "猛光",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.13,
+     "critMultiplier": 1.7,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 11,
+     "procChance": 0.34999999,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.16,
+     "critMultiplier": 1.7,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 23,
+     "procChance": 0.38,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.11,
+     "critMultiplier": 1.7,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 67,
+     "procChance": 0.33000001,
+     "reloadTime": 1.7
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.17,
+     "critMultiplier": 1.7,
+     "gunType": "GT_BEAM",
+     "magazineSize": 43,
+     "procChance": 0.38999999,
+     "reloadTime": 1.7
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIICapIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIIReloadIClipPart": {
+   "nameEn": "Flutterfire",
+   "nameZh": "激火",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.13,
+     "critMultiplier": 1.7,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 7,
+     "procChance": 0.34999999,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.16,
+     "critMultiplier": 1.7,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 15,
+     "procChance": 0.38,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.11,
+     "critMultiplier": 1.7,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 45,
+     "procChance": 0.33000001,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.17,
+     "critMultiplier": 1.7,
+     "gunType": "GT_BEAM",
+     "magazineSize": 31,
+     "procChance": 0.38999999,
+     "reloadTime": 1.3
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIIReloadIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIReloadIClipPart": {
+   "nameEn": "Swiftfire",
+   "nameZh": "颤火",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.17,
+     "critMultiplier": 1.9,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 7,
+     "procChance": 0.28,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.2,
+     "critMultiplier": 1.9,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 15,
+     "procChance": 0.31,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.15000001,
+     "critMultiplier": 1.9,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 45,
+     "procChance": 0.25999999,
+     "reloadTime": 1.3
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.20999999,
+     "critMultiplier": 1.9,
+     "gunType": "GT_BEAM",
+     "magazineSize": 31,
+     "procChance": 0.31999999,
+     "reloadTime": 1.3
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIReloadIClipPart"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIReloadIIClipPart": {
+   "nameEn": "Zipfire",
+   "nameZh": "速火",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.17,
+     "critMultiplier": 1.9,
+     "gunType": "GT_SHOTGUN",
+     "magazineSize": 5,
+     "procChance": 0.28,
+     "reloadTime": 0.89999998
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "critChance": 0.2,
+     "critMultiplier": 1.9,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 9,
+     "procChance": 0.31,
+     "reloadTime": 0.89999998
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.15000001,
+     "critMultiplier": 1.9,
+     "gunType": "GT_RIFLE",
+     "magazineSize": 29,
+     "procChance": 0.25999999,
+     "reloadTime": 0.89999998
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "critChance": 0.20999999,
+     "critMultiplier": 1.9,
+     "gunType": "GT_BEAM",
+     "magazineSize": 23,
+     "procChance": 0.31999999,
+     "reloadTime": 0.89999998
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIReloadIIClipPart"
+  }
+ },
+ "handles": {
+  "/Lotus/Weapons/Infested/Pistols/InfKitGun/Handles/InfPrimaryHandle/InfModularPrimaryHandlePart": {
+   "nameEn": "Palmaris",
+   "nameZh": "掌筋",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": -18,
+     "fireRate": 310,
+     "gunType": "GT_SHOTGUN",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": -15,
+     "fireRate": 207,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": -1.5,
+     "fireRate": 930,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": -3,
+     "fireRate": 480,
+     "gunType": "GT_BEAM",
+     "traceDistance": 28
+    }
+   ],
+   "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Handles/InfPrimaryHandle/InfModularPrimaryHandlePart",
+   "slot": "primary"
+  },
+  "/Lotus/Weapons/Infested/Pistols/InfKitGun/Handles/InfSecondaryHandle/InfModularSecondaryHandlePart": {
+   "nameEn": "Ulnaris",
+   "nameZh": "尺骨",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": 34,
+     "fireRate": 110,
+     "gunType": "GT_SHOTGUN",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": 8,
+     "fireRate": 170,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": 6,
+     "fireRate": 400,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": 0,
+     "fireRate": 720,
+     "gunType": "GT_BEAM",
+     "traceDistance": 30
+    }
+   ],
+   "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Handles/InfSecondaryHandle/InfModularSecondaryHandlePart",
+   "slot": "secondary"
+  },
+  "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleAPart": {
+   "nameEn": "Brash",
+   "nameZh": "急躁",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": -24,
+     "fireRate": 340,
+     "gunType": "GT_SHOTGUN",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": -20,
+     "fireRate": 226,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": -2,
+     "fireRate": 1020,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": -4,
+     "fireRate": 480,
+     "gunType": "GT_BEAM",
+     "traceDistance": 30
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleAPart",
+   "slot": "primary"
+  },
+  "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleBPart": {
+   "nameEn": "Shrewd",
+   "nameZh": "精明",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": -12,
+     "fireRate": 280,
+     "gunType": "GT_SHOTGUN",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": -10,
+     "fireRate": 188,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": -1,
+     "fireRate": 840,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": -2,
+     "fireRate": 480,
+     "gunType": "GT_BEAM",
+     "traceDistance": 26
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleBPart",
+   "slot": "primary"
+  },
+  "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleCPart": {
+   "nameEn": "Steadyslam",
+   "nameZh": "稳击",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": 41,
+     "fireRate": 200,
+     "gunType": "GT_SHOTGUN",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": 29,
+     "fireRate": 139,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": 9,
+     "fireRate": 600,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": 2,
+     "fireRate": 480,
+     "gunType": "GT_BEAM",
+     "traceDistance": 20
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleCPart",
+   "slot": "primary"
+  },
+  "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleDPart": {
+   "nameEn": "Tremor",
+   "nameZh": "震颤",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": 82,
+     "fireRate": 180,
+     "gunType": "GT_SHOTGUN",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": 58,
+     "fireRate": 128,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": 18,
+     "fireRate": 540,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": 4,
+     "fireRate": 480,
+     "gunType": "GT_BEAM",
+     "traceDistance": 16
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleDPart",
+   "slot": "primary"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleAPart": {
+   "nameEn": "Ramble",
+   "nameZh": "漫游",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": -48,
+     "fireRate": 150,
+     "gunType": "GT_SHOTGUN",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": -12,
+     "fireRate": 220,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": -6,
+     "fireRate": 530,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": -1,
+     "fireRate": 720,
+     "gunType": "GT_BEAM",
+     "traceDistance": 37
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleAPart",
+   "slot": "secondary"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleBPart": {
+   "nameEn": "Lovetap",
+   "nameZh": "爱击",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": 102,
+     "fireRate": 90,
+     "gunType": "GT_SHOTGUN",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": 24,
+     "fireRate": 150,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": 19,
+     "fireRate": 310,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": 1,
+     "fireRate": 720,
+     "gunType": "GT_BEAM",
+     "traceDistance": 24
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleBPart",
+   "slot": "secondary"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart": {
+   "nameEn": "Haymaker",
+   "nameZh": "重拳",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": 204,
+     "fireRate": 70,
+     "gunType": "GT_SHOTGUN",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": 48,
+     "fireRate": 130,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": 38,
+     "fireRate": 220,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": 2,
+     "fireRate": 720,
+     "gunType": "GT_BEAM",
+     "traceDistance": 21
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart",
+   "slot": "secondary"
+  },
+  "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleDPart": {
+   "nameEn": "Gibber",
+   "nameZh": "碎语",
+   "overrides": [
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": -96,
+     "fireRate": 190,
+     "gunType": "GT_SHOTGUN",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_SEMI_PROJECTILE",
+     "damage": -24,
+     "fireRate": 270,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": -12,
+     "fireRate": 660,
+     "gunType": "GT_RIFLE",
+     "traceDistance": 0
+    },
+    {
+     "barrelType": "BT_AUTO_HITSCAN",
+     "damage": -2,
+     "fireRate": 720,
+     "gunType": "GT_BEAM",
+     "traceDistance": 40
+    }
+   ],
+   "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleDPart",
+   "slot": "secondary"
+  }
+ },
+ "schemaVersion": 1,
+ "wpepWeaponsSha256": "66ec61bde94294c7ce3b85f9328dc9acee898ab2947ad926b742df0767e6d9b7"
+}

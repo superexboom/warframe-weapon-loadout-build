@@ -1,0 +1,613 @@
+{
+  "schemaVersion": 2,
+  "buildLabel": "2026.08.13.13.24",
+  "detection": "direct MeleeTreeType Powersuits roots resolved through exact v2_weapons Parent ancestry; portable joins require exact path or ancestry evidence",
+  "counts": {
+    "sourceRoots": 12,
+    "weapons": 23,
+    "resolvedRoots": 11,
+    "unresolvedRoots": 1,
+    "portableJoins": 0,
+    "portableUnresolved": 23,
+    "builtInStanceNames": 11
+  },
+  "weapons": [
+    {
+      "path": "/Lotus/Powersuits/Berserker/BerserkerMelee",
+      "name": "Valkyr Talons",
+      "nameEn": "Valkyr Talons",
+      "nameZh": "Valkyr 的利爪",
+      "sourcePath": "/Lotus/Powersuits/Berserker/BerserkerMelee",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Berserker/BerserkerMelee",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree",
+      "builtInStanceName": "Hysteria",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/BerskerMelee.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Berserker/BerserkerMeleePrime",
+      "name": "Valkyr Prime Talons",
+      "nameEn": "Valkyr Prime Talons",
+      "nameZh": "Valkyr Prime 之爪",
+      "sourcePath": "/Lotus/Powersuits/Berserker/BerserkerMelee",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Berserker/BerserkerMelee",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree",
+      "builtInStanceName": "Hysteria",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/BerskerMelee.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Brawler/AtlasPunchWeapon",
+      "name": "Landslide Fists",
+      "nameEn": "Landslide Fists",
+      "nameZh": "土石坍方",
+      "sourcePath": "/Lotus/Powersuits/Brawler/AtlasPunchWeapon",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Brawler/AtlasPunchWeapon",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON",
+        "POWER_WEAPON_LITE",
+        "NO_FINISHER",
+        "NO_SLIDE",
+        "NO_ATTACK_SPEED"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/Abilities/AtlasRockPunch.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Brawler/AtlasPunchWeaponPrime",
+      "name": "Landslide Fists Prime",
+      "nameEn": "Landslide Fists Prime",
+      "nameZh": "土石坍方 Prime",
+      "sourcePath": "/Lotus/Powersuits/Brawler/AtlasPunchWeapon",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Brawler/AtlasPunchWeapon",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON",
+        "POWER_WEAPON_LITE",
+        "NO_FINISHER",
+        "NO_SLIDE",
+        "NO_ATTACK_SPEED"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/Abilities/AtlasRockPunch.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Excalibur/DoomSword",
+      "name": "Exalted Blade",
+      "nameEn": "Exalted Blade",
+      "nameZh": "显赫刀剑",
+      "sourcePath": "/Lotus/Powersuits/Excalibur/DoomSword",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Excalibur/DoomSword",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+      "builtInStanceName": "Exalted Blade",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/ExaltedBlade.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Excalibur/DoomSwordPrime",
+      "name": "Exalted Prime Blade",
+      "nameEn": "Exalted Prime Blade",
+      "nameZh": "显赫刀剑 Prime",
+      "sourcePath": "/Lotus/Powersuits/Excalibur/DoomSword",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Excalibur/DoomSword",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+      "builtInStanceName": "Exalted Blade",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/ExaltedBladePrime.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Excalibur/DoomSwordUmbra",
+      "name": "Exalted Umbra Blade",
+      "nameEn": "Exalted Umbra Blade",
+      "nameZh": "显赫刀剑 Umbra",
+      "sourcePath": "/Lotus/Powersuits/Excalibur/DoomSword",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Excalibur/DoomSword",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+      "builtInStanceName": "Exalted Blade",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_VARIANT",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/ExcaliburUmbraDoomSword.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Fairy/FlightSword",
+      "name": "Diwata",
+      "nameEn": "Diwata",
+      "nameZh": "仙女",
+      "sourcePath": "/Lotus/Powersuits/Fairy/BaseFlightSword",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Fairy/BaseFlightSword",
+      "builtInStancePath": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON",
+        "NO_SLIDE",
+        "NO_HEAVY_ATTACK",
+        "NO_FINISHER"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/FlightSword.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Fairy/PrimeFlightSword",
+      "name": "Diwata Prime",
+      "nameEn": "Diwata Prime",
+      "nameZh": "仙女 Prime",
+      "sourcePath": "/Lotus/Powersuits/Fairy/BaseFlightSword",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Fairy/BaseFlightSword",
+      "builtInStancePath": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON",
+        "NO_SLIDE",
+        "NO_HEAVY_ATTACK",
+        "NO_FINISHER"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/DiwataPrime.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Garuda/GarudaClaws",
+      "name": "Garuda Talons",
+      "nameEn": "Garuda Talons",
+      "nameZh": "Garuda 之爪",
+      "sourcePath": "/Lotus/Powersuits/Garuda/GarudaBaseClaws",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Garuda/GarudaBaseClaws",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawMeleeTree",
+      "compatTags": [
+        "CLAWS_STANCE_STANCE"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/MeleeWeapons/Weapons/GarudaMeleeClaws.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Garuda/GarudaPrimeClaws",
+      "name": "Garuda Prime Talons",
+      "nameEn": "Garuda Prime Talons",
+      "nameZh": "Garuda Prime 之爪",
+      "sourcePath": "/Lotus/Powersuits/Garuda/GarudaBaseClaws",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Garuda/GarudaBaseClaws",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawMeleeTree",
+      "compatTags": [
+        "CLAWS_STANCE_STANCE"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/GarudaPrimeClaws.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Glass/GaraShankWeapon",
+      "name": "Shattered Lash",
+      "nameEn": "Shattered Lash",
+      "nameZh": "琉璃碎击",
+      "sourcePath": "/Lotus/Powersuits/Glass/GaraShankWeapon",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Glass/GaraShankWeapon",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON",
+        "POWER_WEAPON_LITE",
+        "NO_FINISHER",
+        "NO_SLIDE",
+        "NO_ATTACK_SPEED"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/Abilities/GlassShank.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Glass/GaraShankWeaponPrime",
+      "name": "Shattered Lash Prime",
+      "nameEn": "Shattered Lash Prime",
+      "nameZh": "琉璃碎击 Prime",
+      "sourcePath": "/Lotus/Powersuits/Glass/GaraShankWeapon",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Glass/GaraShankWeapon",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON",
+        "POWER_WEAPON_LITE",
+        "NO_FINISHER",
+        "NO_SLIDE",
+        "NO_ATTACK_SPEED"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/Abilities/GlassShank.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Khora/KhoraWhipclawWeapon",
+      "name": "Whipclaw",
+      "nameEn": "Whipclaw",
+      "nameZh": "长鞭利爪",
+      "sourcePath": "/Lotus/Powersuits/Khora/KhoraWhipclawWeapon",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Khora/KhoraWhipclawWeapon",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON",
+        "POWER_WEAPON_LITE",
+        "NO_FINISHER",
+        "NO_SLIDE",
+        "NO_ATTACK_SPEED"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/Abilities/KhoraCrack.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Khora/KhoraWhipclawWeaponPrime",
+      "name": "Whipclaw Prime",
+      "nameEn": "Whipclaw Prime",
+      "nameZh": "长鞭利爪 Prime",
+      "sourcePath": "/Lotus/Powersuits/Khora/KhoraWhipclawWeapon",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Khora/KhoraWhipclawWeapon",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON",
+        "POWER_WEAPON_LITE",
+        "NO_FINISHER",
+        "NO_SLIDE",
+        "NO_ATTACK_SPEED"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/Abilities/KhoraCrack.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/MonkeyKing/MonkeyKingStaff",
+      "name": "Iron Staff",
+      "nameEn": "Iron Staff",
+      "nameZh": "定海神针",
+      "sourcePath": "/Lotus/Powersuits/MonkeyKing/MonkeyKingStaffBase",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/MonkeyKing/MonkeyKingStaffBase",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework",
+      "builtInStanceName": "Primal Fury",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/MonkeyKingStaff.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/MonkeyKing/WukongPrimeStaff",
+      "name": "Iron Staff Prime",
+      "nameEn": "Iron Staff Prime",
+      "nameZh": "定海神针 Prime",
+      "sourcePath": "/Lotus/Powersuits/MonkeyKing/MonkeyKingStaffBase",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/MonkeyKing/MonkeyKingStaffBase",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework",
+      "builtInStanceName": "Primal Fury",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/WukongPrimeStaff.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Ninja/NinjaStormWeapon",
+      "name": "Shadow Clones",
+      "nameEn": "Shadow Clones",
+      "nameZh": "影分身",
+      "sourcePath": "/Lotus/Powersuits/Ninja/NinjaStormWeapon",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Ninja/NinjaStormWeapon",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON",
+        "POWER_WEAPON_LITE",
+        "NO_SLIDE"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/Abilities/NinjaStorm.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Ninja/NinjaStormWeaponPrime",
+      "name": "Shadow Clones Prime",
+      "nameEn": "Shadow Clones Prime",
+      "nameZh": "影分身 Prime",
+      "sourcePath": "/Lotus/Powersuits/Ninja/NinjaStormWeapon",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Ninja/NinjaStormWeapon",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree",
+      "builtInStanceName": null,
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON",
+        "POWER_WEAPON_LITE",
+        "NO_SLIDE"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/Abilities/NinjaStorm.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Pacifist/PacifistFist",
+      "name": "Desert Wind",
+      "nameEn": "Desert Wind",
+      "nameZh": "沙漠之风",
+      "sourcePath": "/Lotus/Powersuits/Pacifist/PacifistFist",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Pacifist/PacifistFist",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree",
+      "builtInStanceName": "Serene Storm",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/PacifistFistWeapon.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Pacifist/PacifistFistPrime",
+      "name": "Desert Wind Prime",
+      "nameEn": "Desert Wind Prime",
+      "nameZh": "沙漠之风 Prime",
+      "sourcePath": "/Lotus/Powersuits/Pacifist/PacifistFist",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Pacifist/PacifistFist",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree",
+      "builtInStanceName": "Serene Storm",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/PacifistFistWeapon.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Wraith/ReaperMeleeWeapon",
+      "name": "Shadow Claws",
+      "nameEn": "Shadow Claws",
+      "nameZh": "幽影之爪",
+      "sourcePath": "/Lotus/Powersuits/Wraith/ReaperMeleeWeapon",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Wraith/ReaperMeleeWeapon",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree",
+      "builtInStanceName": "Ravenous Wraith",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_NORMAL",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/WraithReaperClaws.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    },
+    {
+      "path": "/Lotus/Powersuits/Wraith/SevagothShadowPrimeClawsWeapon",
+      "name": "Shadow Claws Prime",
+      "nameEn": "Shadow Claws Prime",
+      "nameZh": "幽影之爪 Prime",
+      "sourcePath": "/Lotus/Powersuits/Wraith/ReaperMeleeWeapon",
+      "source": "v2_weapons Parent chain from Packages.bin:/Lotus/Powersuits/Wraith/ReaperMeleeWeapon",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree",
+      "builtInStanceName": "Ravenous Wraith",
+      "builtInStance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree",
+      "compatTags": [
+        "POWER_WEAPON"
+      ],
+      "noExternalStance": true,
+      "variantType": "VT_PRIME",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/SevagothShadowPrimeClaws.png",
+      "portablePath": null,
+      "portablePaths": [],
+      "portableResolution": {
+        "status": "unresolved",
+        "reason": "portable weapons export has no exact path or ancestry match for this actual weapon path"
+      },
+      "resolutionSource": "blackcat-v2-weapons-parent-chain"
+    }
+  ],
+  "unresolved": [
+    {
+      "sourcePath": "/Lotus/Powersuits/Sandman/SandCloneFist",
+      "name": "SandCloneFist",
+      "nameZh": "SandCloneFist",
+      "builtInStancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/SandCloneMeleeTree",
+      "compatTags": [],
+      "noExternalStance": true,
+      "reason": "no v2_weapons row descends from this Powersuits source path, and the portable weapons export has no exact path or ancestry match"
+    }
+  ]
+}

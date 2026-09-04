@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 2,
+  "sourceRevision": "2026.08.13.13.24",
+  "pipeline": {
+    "summary": "Archon (Kahl) frames are FlashProcedurals shader renders with no static textures. Frame chrome is extracted from the game's own full-card UI renders (wiki <ModName>Mod.png): a per-pixel consensus mask separates the static top/bottom chrome; the semi-transparent side border is extracted from consensus-trusted rows only, with each column vertically interpolated across art-contaminated rows (a plain median bakes the five artworks into mottled mosaic patches); the wiki renders' anti-aliased black card edge is stripped; the bottom dark plate is flattened to a uniform opaque panel (sampled color) so content beneath the expanded card cannot bleed through; the card background tint is alpha-flattened opaque.",
+    "consensusCards": [
+      "tools/archon_frame_source/wiki_cards/wiki_ArchonContinuityMod.png",
+      "tools/archon_frame_source/wiki_cards/wiki_ArchonFlowMod.png",
+      "tools/archon_frame_source/wiki_cards/wiki_ArchonIntensifyMod.png",
+      "tools/archon_frame_source/wiki_cards/wiki_ArchonStretchMod.png",
+      "tools/archon_frame_source/wiki_cards/wiki_ArchonVitalityMod.png"
+    ],
+    "cardSpace": [
+      254,
+      373
+    ],
+    "regions": {
+      "topBand": [
+        0,
+        0,
+        254,
+        34
+      ],
+      "bottomBand": [
+        0,
+        296,
+        254,
+        373
+      ],
+      "tabRect": [
+        24,
+        302,
+        230,
+        334
+      ],
+      "tabTextRect": [
+        73,
+        308,
+        183,
+        330
+      ],
+      "pipZone": [
+        45,
+        349,
+        210,
+        365
+      ],
+      "railLeft": [
+        0,
+        0,
+        15,
+        373
+      ],
+      "railRight": [
+        239,
+        0,
+        254,
+        373
+      ],
+      "railMid": [
+        0,
+        90,
+        15,
+        278
+      ],
+      "railMidRight": [
+        239,
+        90,
+        254,
+        278
+      ]
+    },
+    "notes": [
+      "Bottom band ships with the tab rect made transparent (the app draws its own localized tab), the dark plate flattened to an opaque sampled panel, and the rank pip row replaced by a uniform groove fill (the app draws rank pips).",
+      "Side rails ship as mid-band strips (card rows 34-296) shown with object-fit:fill bridging the top/bottom bands, so the border stays closed at any card height; ArchonSideMidHD.png is pre-mirrored for the CSS scaleX(-1) left rail.",
+      "CSS locks ARCHON expanded card height to 270px (= 373 * 184/254) so bands and rails share one scale factor and stay pixel-aligned."
+    ],
+    "outputs": {
+      "top": "frontend/assets/mods/frame/ArchonFrameTopHD.png",
+      "bottom": "frontend/assets/mods/frame/ArchonFrameBottomHD.png",
+      "railLeft": "frontend/assets/mods/frame/ArchonSideMidHD.png",
+      "railRight": "frontend/assets/mods/frame/ArchonSideMidRightHD.png",
+      "lowerTab": "frontend/assets/mods/frame/ArchonLowerTabHD.png",
+      "background": "frontend/assets/mods/frame/ArchonBackgroundHD.png",
+      "topRightBacker": "frontend/assets/mods/frame/ArchonTopRightBackerHD.png",
+      "rankActive": "frontend/assets/mods/frame/ArchonRankSlotActiveHD.png",
+      "rankEmpty": "frontend/assets/mods/frame/ArchonRankSlotEmptyHD.png",
+      "rankComplete": "frontend/assets/mods/frame/ArchonRankCompleteLineHD.png"
+    }
+  },
+  "legacyShaderRecon": {
+    "comment": "Superseded shader-approximation inputs, kept for reference.",
+    "sourcePaths": {
+      "topMask": "/Lotus/Interface/Graphics/Mods/KahlModFrameTopMask.png",
+      "topNormal": "/Lotus/Interface/Graphics/Mods/KahlModFrameTop_n.png",
+      "bottomMask": "/Lotus/Interface/Graphics/Mods/KahlModFrameBottomMask.png",
+      "bottomNormal": "/Lotus/Interface/Graphics/Mods/KahlModFrameBottom_n.png",
+      "cubeMapSource": "/EE/Editor/Darkitect/Materials/IBL/StudioD_cross.hdr",
+      "topMaterial": "/Lotus/Interface/Materials/ModMaterials/KahlTopFrameProcedural",
+      "bottomMaterial": "/Lotus/Interface/Materials/ModMaterials/KahlBottomFrameProcedural",
+      "shader": "/EE/Shaders/FlashProcedurals.hlsl"
+    }
+  }
+}

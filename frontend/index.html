@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#090b10">
+  <meta name="description" content="Warframe 紫卡、武器与战甲离线配装工具">
+  <link rel="icon" href="/assets/riven/riven-icon.ico">
+  <title>Warframe &amp; Weapon Loadout Build</title>
+<link rel="stylesheet" href="/app.css?v=20260902a">
+<script src="/app.js?v=20260902a" defer></script>
+</head>
+<body>
+  <div class="boot-screen" id="boot-screen" aria-live="polite">
+    <div class="boot-mark" aria-hidden="true"><img src="/assets/riven/riven-icon.png" alt=""></div>
+    <p>正在加载本地武器档案</p>
+    <span class="boot-track"><i></i></span>
+  </div>
+
+  <div class="app-shell" id="app-shell" hidden>
+    <section class="app-main">
+      <header class="topbar">
+        <div class="topbar-leading">
+          <div class="brand-mark" aria-hidden="true"><img src="/assets/riven/riven-icon.png" alt=""></div>
+          <div><p class="eyebrow">TENNO FIELD SYSTEM</p><h1 id="page-title">紫卡分析</h1></div>
+        </div>
+        <div class="topbar-meta" aria-label="数据状态">
+          <span><b id="weapon-count">--</b> 武器</span><span><b id="coverage-count">--</b> 可分析</span>
+          <span class="engine-status"><span class="status-dot" id="health-dot" aria-hidden="true"></span><b id="health-label">本地引擎连接中</b></span>
+          <span id="build-label">OFFLINE CORE</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" id="theme-toggle" type="button" title="切换日间 / 夜间模式" aria-label="切换日间 / 夜间模式">☀</button>
+          <button class="button button-quiet" id="sample-button" type="button" title="载入可运行示例">示例</button>
+          <button class="button button-quiet" id="reset-button" type="button" title="重置输入">重置</button>
+          <button class="icon-button" id="export-button" type="button" title="导出分析 JSON" aria-label="导出分析 JSON" disabled>⇩</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <div class="tab-strip" role="tablist" aria-label="分析工具">
+          <button class="tool-tab is-active" id="analysis-tab" role="tab" aria-selected="true" aria-controls="analysis-tool" data-tab="analysis" type="button">
+            <img src="/assets/riven/riven-icon.png" alt=""><span>紫卡分析</span>
+          </button>
+          <button class="tool-tab" id="build-tab" role="tab" aria-selected="false" aria-controls="build-tool" data-tab="build" type="button">
+            <span class="tab-glyph" aria-hidden="true">◇</span><span>武器配装</span>
+          </button>
+          <button class="tool-tab" id="warframe-tab" role="tab" aria-selected="false" aria-controls="warframe-tool" data-tab="warframe" type="button">
+            <span class="tab-glyph" aria-hidden="true">⬡</span><span>战甲配装</span>
+          </button>
+          <div class="tab-context"><span class="context-light" aria-hidden="true"></span>所有计算均在本机完成</div>
+        </div>
+
+        <div class="tool-layout" id="analysis-tool" role="tabpanel" aria-labelledby="analysis-tab">
+          <form class="input-pane" id="riven-form" novalidate>
+            <div class="pane-heading">
+              <div><span class="section-index">01</span><h2>紫卡录入</h2></div>
+              <span class="pane-badge">LIVE PREVIEW</span>
+            </div>
+
+            <section class="weapon-picker">
+              <label class="field field-wide">
+                <span>紫卡武器</span>
+                <input id="weapon" name="weapon" autocomplete="off" placeholder="点击选择武器（分类 / 搜索）" readonly required>
+                <small id="weapon-caption">从本地 604 把武器档案中选择</small>
+              </label>
+              <div class="disposition-readout" aria-label="当前武器倾向">
+                <span>倾向</span>
+                <strong id="disposition-value">--</strong>
+                <i id="disposition-dots" aria-hidden="true">○○○○○</i>
+              </div>
+            </section>
+
+            <div class="assembly-host" id="analysis-assembly-slot"></div>
+
+            <div class="weapon-issue" id="weapon-issue" role="alert" hidden>
+              <strong>该武器暂不可分析</strong><span id="weapon-issue-text"></span>
+            </div>
+
+            <div class="riven-composer">
+              <div class="riven-stage" id="riven-stage">
+                <article class="riven-card" id="riven-card" aria-label="紫卡实时预览">
+                  <div class="riven-drain" aria-label="容量 18">
+                    <b>18</b><img id="card-polarity" src="/assets/polarities/madurai.png" alt="Madurai 极性">
+                  </div>
+                  <div class="riven-card-content">
+                    <strong id="card-name">未命名紫卡</strong>
+                    <div class="card-stats" id="card-stats"><span class="card-empty">等待录入词条</span></div>
+                  </div>
+                  <div class="riven-card-meta">
+                    <span>MR <b id="card-mr">8</b></span>
+                    <span class="reroll-mark" aria-label="循环次数"><i aria-hidden="true">⟳</i><b id="card-rerolls">0</b></span>
+                  </div>
+                  <span class="card-sheen" aria-hidden="true"></span>
+                </article>
+                <div class="stage-shadow" aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <div class="stat-editor">
+              <div class="subheading">
+                <div><h3>词条数值</h3><span>滑块范围随武器倾向和词条结构实时解算</span></div>
+                <button class="text-button" id="add-stat" type="button"><span aria-hidden="true">＋</span> 添加词条</button>
+              </div>
+              <div class="stat-rows" id="stat-rows"></div>
+            </div>
+
+            <div class="form-message" id="form-message" role="alert" hidden></div>
+            <div class="submit-row">
+              <div class="calculation-note"><span aria-hidden="true">◎</span><span>按所选武器当前倾向评分并重新优化 8 槽配装</span></div>
+              <button class="button button-primary" id="analyze-button" type="submit">
+                <span class="button-label">开始分析</span><span class="button-loading" aria-hidden="true"><i></i> 计算中</span>
+              </button>
+            </div>
+          </form>
+
+          <section class="result-pane" aria-labelledby="result-title">
+            <div class="pane-heading result-heading">
+              <div><span class="section-index">02</span><h2 id="result-title">分析结果</h2></div>
+              <span class="pane-badge pane-badge-muted" id="result-badge">WAITING</span>
+            </div>
+
+            <div class="result-state result-idle" id="result-idle">
+              <div class="idle-sigil" aria-hidden="true"><img src="/assets/riven/riven-icon.png" alt=""><span></span></div>
+              <h3>等待第一次分析</h3>
+              <p>选择武器并调整词条滑块，评分、T0–T3 推荐与包含当前紫卡的 8 槽配装会显示在这里。</p>
+              <div class="idle-features" aria-hidden="true"><span>T0–T3</span><i></i><span>战斗评分</span><i></i><span>配装优化</span></div>
+            </div>
+
+            <div class="result-state result-loading" id="result-loading" hidden aria-live="polite">
+              <div class="scan-core" aria-hidden="true"><i></i><b></b></div>
+              <h3>正在解算紫卡</h3><p id="loading-copy">比对武器档案与词条贡献</p>
+              <div class="skeleton-grid" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+
+            <div class="result-state result-error" id="result-error" hidden role="alert">
+              <div class="error-symbol" aria-hidden="true">!</div><h3>本次分析未完成</h3>
+              <p id="error-message">请检查录入内容后重试。</p>
+              <button class="button button-outline" id="retry-button" type="button">重新分析</button>
+            </div>
+
+            <div class="result-content" id="result-content" hidden aria-live="polite">
+              <section class="score-band">
+                <div class="score-orbit" id="score-orbit">
+                  <svg viewBox="0 0 120 120" aria-hidden="true">
+                    <circle class="orbit-track" cx="60" cy="60" r="51"></circle>
+                    <circle class="orbit-value" id="orbit-value" cx="60" cy="60" r="51"></circle>
+                  </svg>
+                  <div><strong id="score-value">0.0</strong><span>综合评分</span></div>
+                </div>
+                <div class="grade-block"><span>评级</span><strong id="grade-value">--</strong><small id="weapon-result-name">--</small></div>
+                <div class="score-metrics">
+                  <div><span>实际提升</span><strong id="actual-gain">--</strong></div>
+                  <div><span>理论上限</span><strong id="optimal-gain">--</strong></div>
+                  <div><span>数值质量</span><strong id="roll-quality">--</strong></div>
+                  <div><span>武器倾向</span><strong id="result-disposition">--</strong></div>
+                </div>
+              </section>
+
+              <section class="result-section contribution-section">
+                <div class="result-section-title">
+                  <div><span>IMPACT TRACE</span><h3>词条贡献</h3></div><small>相对同一配装移除该词条</small>
+                </div>
+                <div class="contribution-list" id="contribution-list"></div>
+              </section>
+
+              <section class="result-section tier-section">
+                <div class="result-section-title">
+                  <div><span>AFFIX PRIORITY</span><h3>推荐词条</h3></div><small>8 槽预留紫卡位 · 每级最多 3 条，无正收益即停止</small>
+                </div>
+                <div class="tier-filters" id="tier-filters" hidden>
+                  <div class="segmented-control" id="tier-route" role="group" aria-label="推荐路线">
+                    <button class="is-active" type="button" data-route="status" aria-pressed="true">触发</button>
+                    <button type="button" data-route="direct" aria-pressed="false">直伤</button>
+                  </div>
+                  <p class="tier-route-note" id="tier-route-note" hidden></p>
+                </div>
+                <div class="tier-list" id="tier-list"></div>
+                <div class="recommendation-foot">
+                  <div><span>推荐负面</span><p id="recommended-negative">--</p></div>
+                  <div class="fatal-box" id="fatal-box"><span>致命负面</span><p id="fatal-negative">无</p></div>
+                </div>
+              </section>
+
+              <section class="result-section build-section">
+                <div class="build-titlebar">
+                  <div><span>LOADOUT WORKBENCH</span><h3>包含当前紫卡的最佳配装</h3></div>
+                  <div class="segmented-control" id="build-mode" role="group" aria-label="配装方案">
+                    <button class="is-active" type="button" data-mode="actual" aria-pressed="true">当前数值</button>
+                    <button type="button" data-mode="optimal" aria-pressed="false">理论上限</button>
+                  </div>
+                </div>
+                <div class="build-identity">
+                  <div><span id="build-slot">WEAPON BUILD</span><strong id="build-weapon-name">--</strong></div>
+                  <div><span>当前解算模式</span><strong id="build-fire-mode">--</strong></div>
+                  <div><span>优化指标</span><strong id="build-metric">--</strong></div>
+                </div>
+                <div class="damage-metrics" id="damage-metrics"></div>
+                <div class="fire-mode-strip" id="fire-mode-strip" hidden></div>
+                <p class="fire-mode-strip-note" id="fire-mode-strip-note" hidden>其他射击模式 · 点击按该模式重新解算（当前解算模式见上方卡头）</p>
+                <div class="mod-grid-row">
+                  <div class="mod-grid" id="mod-grid"></div>
+                  <aside class="analysis-stance" id="analysis-stance" hidden aria-label="本次解算使用的架势"></aside>
+                </div>
+                <div class="build-legend"><span><i class="legend-riven"></i>当前紫卡</span><span><i class="legend-mod"></i>本地真实 MOD 素材</span><span class="legend-forma" id="build-forma" hidden></span><b>8 / 8 SLOTS</b></div>
+              </section>
+
+              <details class="diagnostics" id="diagnostics">
+                <summary><span>计算诊断</span><b id="diagnostic-count">0</b></summary>
+                <div id="diagnostic-list"></div>
+              </details>
+            </div>
+          </section>
+        </div>
+
+        <section class="build-workspace" id="build-tool" role="tabpanel" aria-labelledby="build-tab" hidden>
+          <form class="build-control-pane" id="weapon-build-form" novalidate>
+            <div class="pane-heading">
+              <div><span class="section-index">01</span><h2>配装条件</h2></div>
+              <span class="pane-badge">LOCAL OPTIMIZER</span>
+            </div>
+
+            <div class="build-control-fields">
+              <label class="field">
+                <span>武器</span>
+                <input id="build-weapon" autocomplete="off" placeholder="点击选择武器（分类 / 搜索）" readonly required>
+                <small id="build-weapon-caption">正在读取本地配装覆盖</small>
+              </label>
+
+              <div class="assembly-host" id="build-assembly-slot">
+                <section class="kitgun-assembly" id="kitgun-assembly" hidden aria-label="组合武器装配">
+                  <div class="kitgun-assembly-head">
+                    <strong id="kitgun-assembly-title">组合枪装配</strong>
+                    <span class="kitgun-assembly-summary">选择腔体 / 握把 / 装填器各一件完成组装</span>
+                  </div>
+                  <div class="kitgun-assembly-body"></div>
+                </section>
+              </div>
+
+              <label class="field">
+                <span>武器版本</span>
+                <select id="build-variant-select"></select>
+                <small id="build-variant-caption">选择同一基型的普通、Prime 或集团版本</small>
+              </label>
+
+              <div class="build-disposition-card">
+                <span>当前倾向</span><strong id="build-disposition">--</strong><i id="build-disposition-dots">○○○○○</i>
+              </div>
+
+              <label class="field">
+                <span>攻击模式</span>
+                <select id="build-fire-mode-select"></select>
+                <small>副模式会在结果区单独列出</small>
+              </label>
+
+              <label class="field">
+                <span>优化目标</span>
+                <select id="build-metric-select"></select>
+                <small>枪械与近战使用各自的伤害指标</small>
+              </label>
+
+              <label class="field">
+                <span>元素限制</span>
+                <div class="element-select-wrap"><img id="build-element-icon" class="element-control-icon" alt=""><select id="build-element-select"><option value="">不限定元素</option></select></div>
+                <small>默认不锁元素；选择后只接受含目标元素的方案</small>
+              </label>
+
+              <label class="field" id="build-innate-element-field" hidden>
+                <span>自带元素</span>
+                <div class="element-select-wrap"><img id="build-innate-element-icon" class="element-control-icon" alt=""><select id="build-innate-element-select"><option value="DT_FIRE">火焰</option></select></div>
+                <small>赤毒、信条、终幕：选择先祖元素后参与配装与伤害计算</small>
+              </label>
+
+              <label class="slot-count-field" id="build-innate-element-value-field" hidden>
+                <span><b>自带元素强度</b><output id="build-innate-element-output">60%</output></span>
+                <input id="build-innate-element-value" type="range" min="25" max="60" step="1" value="60">
+                <small>游戏内先祖元素范围：25%–60%</small>
+              </label>
+
+              <label class="slot-count-field">
+                <span><b>MOD 槽位</b><output id="build-slot-output">8</output></span>
+                <input id="build-slot-count" type="range" min="4" max="8" step="1" value="8">
+                <small>按 60 容量、催化剂与匹配极性解算</small>
+              </label>
+
+              <section class="incarnon-panel" id="build-incarnon-panel" hidden aria-label="灵化进化路线">
+                <details class="fold" open>
+                  <summary class="fold-head"><strong>灵化路线</strong><span>进化 II / III / IV 使用冻结游戏数据</span></summary>
+                  <div class="fold-body">
+                    <div class="incarnon-tiers" id="build-incarnon-tiers"></div>
+                  </div>
+                </details>
+              </section>
+            </div>
+
+            <div class="weapon-issue build-weapon-issue" id="build-weapon-issue" role="alert" hidden>
+              <strong>该武器暂不可配装</strong><span id="build-weapon-issue-text"></span>
+            </div>
+            <div class="form-message" id="build-form-message" role="alert" hidden></div>
+          </form>
+
+          <div class="mod-picker" id="arcane-picker" role="dialog" aria-modal="true" aria-labelledby="arcane-picker-title" hidden>
+            <div class="mod-picker-shell">
+              <div class="mod-picker-head">
+                <div class="mod-picker-title">
+                  <span class="section-index">A</span>
+                  <div><h3 id="arcane-picker-title">选择赋能</h3><small id="arcane-picker-sub">武器赋能</small></div>
+                </div>
+                <div class="mod-picker-tools">
+                  <label class="field mod-picker-search"><span class="sr-only">搜索赋能</span><input id="arcane-picker-search" type="search" autocomplete="off" placeholder="中文、英文或内部名称"></label>
+                  <button class="icon-button" id="arcane-picker-close" type="button" title="关闭" aria-label="关闭赋能选择器">×</button>
+                </div>
+              </div>
+              <div class="mod-picker-body">
+                <div class="mod-picker-grid is-arcane-list" id="arcane-picker-list" role="listbox" aria-label="可选赋能"></div>
+              </div>
+            </div>
+          </div>
+
+          <section class="build-result-pane" aria-labelledby="build-result-title">
+            <h2 id="build-result-title" class="sr-only">武器配装</h2>
+            <div class="live-hud" id="live-hud">
+              <div class="live-hud-head">
+                <div class="live-hud-title"><span id="weapon-build-type">WEAPON BUILD</span><strong id="weapon-build-name">--</strong></div>
+                <div class="live-hud-meta">
+                  <span><b id="weapon-build-fire-mode">--</b>模式</span>
+                  <span id="weapon-build-archetype" hidden></span>
+                  <span class="live-hud-pulse" id="live-hud-pulse" aria-hidden="true"><i></i>实时</span>
+                </div>
+              </div>
+              <div class="live-hud-metrics" id="live-hud-metrics">
+                <div class="live-metric"><span>面板伤害</span><strong data-live="totalDamage">--</strong></div>
+                <div class="live-metric"><span>平均命中</span><strong data-live="averageHit">--</strong></div>
+                <div class="live-metric"><span>持续 DPS</span><strong data-live="sustainedDps">--</strong></div>
+                <div class="live-metric"><span>暴击几率</span><strong data-live="critChance">--</strong></div>
+                <div class="live-metric"><span>触发几率</span><strong data-live="statusChance">--</strong></div>
+                <div class="live-metric"><span>射击速度</span><strong data-live="fireRate">--</strong></div>
+              </div>
+            </div>
+
+            <div class="build-setup-folds" id="build-setup-folds">
+              <details class="fold build-scenario-fold" id="build-scenario-fold">
+                <summary class="fold-head"><strong>战斗场景</strong><span>目标 / 强化 / 削甲 / 爆头率 / 距离</span></summary>
+                <div class="fold-body">
+                  <div class="scenario-group">
+                    <div class="scenario-fields">
+                      <div class="enemy-picker">
+                        <button class="enemy-target" id="build-enemy-open" type="button" title="打开目标选择器">
+                          <span class="enemy-target-copy">
+                            <span class="enemy-target-label">幻影装置目标</span>
+                            <strong id="build-enemy-current">--</strong>
+                            <small id="build-enemy-current-meta">点击选择目标</small>
+                          </span>
+                          <span class="enemy-target-action">更换目标</span>
+                        </button>
+                        <input id="build-enemy-select" type="hidden">
+                      </div>
+                      <label class="field"><span>伤害模型</span><select id="build-damage-model"><option value="panel">面板</option><option value="target">指定目标</option><option value="custom">自定义防御快照</option></select></label>
+                      <label class="field"><span>目标等级</span><input id="build-enemy-level" type="number" min="0" max="9999" step="1" value="160"></label>
+                      <label class="check-field"><input id="build-steel-path" type="checkbox"><span>钢铁之路</span></label>
+                    </div>
+                  </div>
+                  <div class="scenario-group">
+                    <div class="scenario-group-title">敌人强化<small>卓越者 / 科研词条 · 数值取自 wiki 与难度表快照</small></div>
+                    <div class="scenario-fields">
+                      <label class="check-field"><input id="build-enemy-eximus" type="checkbox"><span>卓越者变体</span></label>
+                      <label class="check-field"><input id="build-enemy-empowered" type="checkbox"><span>敌人强化</span></label>
+                      <label class="field field-compact"><span>小队人数</span><select id="build-enemy-player-count" disabled><option value="1" selected>1 人</option><option value="2">2 人</option><option value="3">3 人</option><option value="4">4 人</option></select></label>
+                      <label class="check-field" title="深层科研「强化好战分子」词条：超宏护盾 += 最大生命的 50%"><input id="build-enemy-archimedea" type="checkbox"><span>科研超宏词条</span></label>
+                    </div>
+                  </div>
+                  <div class="enemy-stats-panel" id="build-enemy-stats" hidden>
+                    <div class="enemy-stats-head"><strong>敌人当前数据</strong><span id="build-enemy-stats-context">--</span></div>
+                    <div class="enemy-stats-grid">
+                      <div class="enemy-stat"><span>生命值</span><strong data-enemy-stat="health">--</strong></div>
+                      <div class="enemy-stat"><span>护盾</span><strong data-enemy-stat="shield">--</strong></div>
+                      <div class="enemy-stat"><span>护甲</span><strong data-enemy-stat="armour">--</strong></div>
+                      <div class="enemy-stat"><span>减伤</span><strong data-enemy-stat="reduction">--</strong></div>
+                      <div class="enemy-stat"><span>超宏护盾</span><strong data-enemy-stat="overguard">--</strong></div>
+                      <div class="enemy-stat is-total"><span>等效生命值</span><strong data-enemy-stat="ehp">--</strong></div>
+                    </div>
+                  </div>
+                  <div class="scenario-group">
+                    <div class="scenario-group-title">交战修正</div>
+                    <div class="scenario-fields">
+                      <label class="field"><span>普通削甲</span><input id="build-armour-strip" type="range" min="0" max="1" step="0.05" value="0"><output id="build-armour-strip-output">0%</output></label>
+                      <label class="field"><span>爆头率</span><input id="build-headshot-chance" type="range" min="0" max="1" step="0.01" value="0"><output id="build-headshot-output">0%</output></label>
+                      <label class="field"><span>距离</span><input id="build-distance" type="number" min="0" max="1000" step="1" value="0"><small>0 表示不应用距离衰减</small></label>
+                      <label class="field melee-only-field"><span>近战连击层数</span><input id="build-combo-tier" type="number" min="0" max="11" step="1" value="0"></label>
+                      <label class="check-field melee-only-field"><input id="build-heavy-attack" type="checkbox"><span>重击场景</span></label>
+                    </div>
+                  </div>
+                  <div class="custom-defense-fields" id="custom-defense-fields" hidden>
+                    <label class="field"><span>自定义生命值</span><input id="build-custom-health" type="number" min="1" step="1" value="100000"></label>
+                    <label class="field"><span>自定义护甲</span><input id="build-custom-armor" type="number" min="0" step="1" value="0"></label>
+                    <label class="field"><span>自定义护盾</span><input id="build-custom-shield" type="number" min="0" step="1" value="0"></label>
+                    <label class="field"><span>生命类型</span><input id="build-custom-health-type" value="RK_CLONED_FLESH"></label>
+                    <label class="field"><span>护甲类型</span><select id="build-custom-armor-type" required aria-required="true"><option value="RK_NONE">RK_NONE</option><option value="RK_ARMOR" selected>RK_ARMOR</option><option value="RK_HULKING_ARMOR">RK_HULKING_ARMOR</option><option value="RK_INFESTED_ARMOUR">RK_INFESTED_ARMOUR</option></select></label>
+                    <label class="field"><span>护盾类型</span><select id="build-custom-shield-type" required aria-required="true"><option value="RK_NONE">RK_NONE</option><option value="RK_SHIELD">RK_SHIELD</option><option value="RK_HEAVY_SHIELD" selected>RK_HEAVY_SHIELD</option><option value="RK_PROTO_SHIELD">RK_PROTO_SHIELD</option><option value="RK_SENTIENT_SHIELD">RK_SENTIENT_SHIELD</option><option value="RK_TENNO_SHIELD">RK_TENNO_SHIELD</option></select></label>
+                    <p class="field-note" id="custom-defense-note">后端未声明支持时该模型不可提交。</p>
+                  </div>
+                </div>
+              </details>
+
+              <details class="fold external-buff-panel" aria-label="外部加成">
+                <summary class="fold-head"><strong>外部加成</strong><span>技能 / 被动 / 学派增幅 · 数值经官方 wiki 核对</span></summary>
+                <div class="fold-body">
+                  <div class="external-buff-list" id="external-buff-list"></div>
+                  <p class="field-note">勾选后立即参与实时解算；受强度加成的项可调数值。</p>
+                </div>
+              </details>
+            </div>
+
+            <div class="build-result-state" id="weapon-build-idle">
+              <div class="build-idle-sigil" aria-hidden="true">◇</div>
+              <h3>选择武器后开始配装</h3>
+              <p>离线优化器会从冻结数据中搜索真实 MOD 组合；任何参数修改都会实时刷新上方仪表盘。</p>
+            </div>
+            <div class="build-result-state" id="weapon-build-loading" hidden>
+              <div class="scan-core" aria-hidden="true"><i></i><b></b></div>
+              <h3>正在搜索 MOD 组合</h3><p>比较候选卡片与容量约束</p>
+            </div>
+            <div class="build-result-state build-result-error" id="weapon-build-error" hidden role="alert">
+              <div class="error-symbol" aria-hidden="true">!</div><h3>本次配装未完成</h3><p id="weapon-build-error-message"></p>
+            </div>
+
+            <div class="weapon-build-content" id="weapon-build-content" hidden>
+              <section class="build-config-strip" aria-label="A / B / C 配置槽">
+                <div class="config-strip-row">
+                  <strong class="config-strip-label">配置槽</strong>
+                  <div class="segmented-control config-tabs" id="build-config-tabs" role="tablist" aria-label="配置槽位">
+                    <button class="is-active" type="button" data-config="A" aria-selected="true">A</button>
+                    <button type="button" data-config="B" aria-selected="false">B</button>
+                    <button type="button" data-config="C" aria-selected="false">C</button>
+                  </div>
+                  <span class="config-strip-status" id="build-config-status">当前配置自动保存到本机</span>
+                  <div class="build-config-actions">
+                    <button class="button button-quiet" id="build-config-copy" type="button">复制</button>
+                    <button class="button button-quiet" id="build-config-compare" type="button">比较</button>
+                    <div class="config-action-menu">
+                      <button class="button button-quiet config-action-trigger" id="build-config-import" type="button" aria-haspopup="menu" aria-expanded="false">导入 <span aria-hidden="true">⌄</span></button>
+                      <div class="config-action-options" role="menu" aria-label="武器配装导入格式">
+                        <button id="build-config-import-json" type="button" role="menuitem">JSON 文件</button>
+                        <button id="build-config-import-rabbit" type="button" role="menuitem">Warframe Rabbit</button>
+                      </div>
+                    </div>
+                    <div class="config-action-menu">
+                      <button class="button button-quiet config-action-trigger" id="build-config-export" type="button" aria-haspopup="menu" aria-expanded="false">导出 <span aria-hidden="true">⌄</span></button>
+                      <div class="config-action-options" role="menu" aria-label="武器配装导出格式">
+                        <button id="build-config-export-json" type="button" role="menuitem">JSON 文件</button>
+                        <button id="build-config-export-rabbit" type="button" role="menuitem">Warframe Rabbit</button>
+                      </div>
+                    </div>
+                    <input id="build-config-import-file" type="file" accept="application/json,.json" hidden>
+                  </div>
+                </div>
+                <pre class="build-config-compare" id="build-config-compare-output" hidden></pre>
+              </section>
+
+              <section class="build-bench" id="build-bench">
+                <div class="build-bench-toolbar">
+                  <div class="bench-toolbar-left">
+                    <div class="segmented-control">
+                      <button class="is-active" type="button" data-build-mode="manual" aria-pressed="true">手动配卡</button>
+                      <button type="button" data-build-mode="auto" aria-pressed="false">自动配置</button>
+                    </div>
+                    <button class="button button-fill" id="fill-optimal-button" type="button" title="用离线优化器搜索当前条件下的最优 MOD 组合并回填">⚡ 填充最优</button>
+                    <label class="forma-counter" id="forma-counter" title="已使用的极化次数（Forma）">
+                      <span>极化</span>
+                      <button type="button" id="forma-decrease" aria-label="减少极化次数">−</button>
+                      <b id="forma-count">0</b>
+                      <button type="button" id="forma-increase" aria-label="增加极化次数">＋</button>
+                    </label>
+                    <span class="forma-needed" id="forma-needed" hidden></span>
+                  </div>
+                  <div class="capacity-bar-block">
+                    <div class="capacity-bar" id="capacity-bar" role="progressbar" aria-label="MOD 容量"></div>
+                    <span class="capacity-readout" id="capacity-readout">-- / 60</span>
+                  </div>
+                  <div class="bench-toolbar-right">
+                    <span id="manual-build-summary">点击空槽选择 MOD</span>
+                    <button class="button button-quiet" id="manual-clear" type="button" title="清空当前武器的 8 个 MOD 槽">清空配卡</button>
+                    <button class="button button-danger" id="build-reset-all" type="button" title="清除所有武器的已保存配置与本机缓存">清空全部</button>
+                  </div>
+                </div>
+                <div class="slot-polarity-hint">点击槽位右上角极性图标可切换极化</div>
+                <div class="manual-slots" id="manual-slots" aria-label="手动 MOD 槽位"></div>
+                <section class="special-loadout" id="special-loadout" aria-label="专用 MOD 与赋能槽位">
+                  <div class="special-loadout-head"><strong>专用槽</strong><span>架势 / 功能槽 / 赋能</span></div>
+                  <div class="special-mod-slots" id="special-mod-slots"></div>
+                  <div class="arcane-workbench-slots" id="build-arcane-list" aria-live="polite"></div>
+                </section>
+                <div class="build-legend"><span><i class="legend-riven"></i>当前紫卡</span><span><i class="legend-mod"></i>本地真实 MOD 素材</span><b id="weapon-build-slot-summary">8 SLOTS</b><b id="weapon-build-build-label">OFFLINE</b></div>
+              </section>
+
+              <section class="build-detail">
+                <div class="weapon-stat-band" id="weapon-build-stat-band"></div>
+                <div class="damage-metrics standalone-damage-metrics" id="weapon-build-damage-metrics"></div>
+                <section class="damage-composition">
+                  <div class="result-section-title"><div><span>DAMAGE PROFILE</span><h3>伤害构成</h3></div><small id="weapon-build-element-note">未限定元素</small></div>
+                  <div class="damage-type-list" id="weapon-build-damage-types"></div>
+                </section>
+                <div class="fire-mode-strip standalone-fire-modes" id="weapon-build-fire-modes" hidden></div>
+                <section class="manual-results" id="manual-results" hidden>
+                  <div class="manual-result-grid" id="manual-result-grid"></div>
+                  <div class="probability-panel" id="probability-panel"><h3>异常状态</h3><div id="probability-content"></div></div>
+                  <div class="timeline-panel" id="timeline-panel"><h3>赋能 / 时间线</h3><div id="timeline-content"></div></div>
+                </section>
+              </section>
+
+              <details class="diagnostics" id="weapon-build-diagnostics">
+                <summary><span>计算诊断</span><b id="weapon-build-diagnostic-count">0</b></summary>
+                <div id="weapon-build-diagnostic-list"></div>
+              </details>
+            </div>
+          </section>
+        </section>
+
+        <section class="warframe-workspace" id="warframe-tool" role="tabpanel" aria-labelledby="warframe-tab" hidden>
+          <aside class="warframe-control-pane">
+            <div class="pane-heading">
+              <div><span class="section-index">01</span><h2>战甲配置</h2></div>
+              <span class="pane-badge" id="warframe-catalog-status">LAZY LOAD</span>
+            </div>
+            <div class="warframe-control-fields">
+              <label class="field">
+                <span>战甲</span>
+                <input id="warframe-frame-select" type="hidden" value="">
+                <button class="warframe-selector-trigger" id="warframe-frame-open" type="button" aria-label="选择战甲">
+                  <span class="warframe-selector-visual" id="warframe-frame-select-visual"><i>W</i></span>
+                  <span class="warframe-selector-copy"><small>WARFRAME</small><strong id="warframe-frame-select-name">选择战甲</strong><em id="warframe-frame-select-description">进入选择器查看冻结档案</em></span>
+                  <b aria-hidden="true">›</b>
+                </button>
+                <small id="warframe-frame-caption">固定满级 30</small>
+              </label>
+              <section class="warframe-profile" aria-live="polite">
+                <img id="warframe-portrait" alt="" hidden>
+                <div><span>WARFRAME</span><strong id="warframe-profile-name">--</strong><p id="warframe-profile-description">选择战甲后显示档案。</p></div>
+              </section>
+              <section class="warframe-passive">
+                <span>被动</span><p id="warframe-passive">--</p>
+              </section>
+              <label class="check-field warframe-conditional"><input id="warframe-apply-conditionals" type="checkbox"><span>应用触发类效果（满层 / 完整效果）</span></label>
+              <div class="warframe-helminth-fields">
+                <label class="field"><span>替换技能槽</span>
+                  <input id="warframe-helminth-slot" type="hidden" value="">
+                  <button class="warframe-selector-trigger is-compact" id="warframe-helminth-slot-open" type="button" aria-label="选择替换技能槽"><span class="warframe-selector-visual" id="warframe-helminth-slot-visual"><i>—</i></span><span class="warframe-selector-copy"><small>原技能</small><strong id="warframe-helminth-slot-name">不替换</strong><em id="warframe-helminth-slot-description">保留战甲原本的四个主动技能</em></span><b aria-hidden="true">›</b></button>
+                </label>
+                <label class="field"><span>Helminth 技能</span>
+                  <input id="warframe-helminth-ability" type="hidden" value="">
+                  <button class="warframe-selector-trigger is-compact" id="warframe-helminth-ability-open" type="button" aria-label="选择 Helminth 技能" disabled><span class="warframe-selector-visual" id="warframe-helminth-ability-visual"><i>H</i></span><span class="warframe-selector-copy"><small>技能来源</small><strong id="warframe-helminth-ability-name">选择技能</strong><em id="warframe-helminth-ability-source">先选择替换技能槽</em></span><b aria-hidden="true">›</b></button>
+                </label>
+              </div>
+              <p class="warframe-source-description" id="warframe-helminth-description">未替换技能。</p>
+              <button class="warframe-image-select" id="warframe-invigoration-open" type="button">
+                <span class="warframe-image-select-icon" aria-hidden="true">＋</span>
+                <span><small>活化增幅</small><strong id="warframe-invigoration-name">未选择</strong><em id="warframe-invigoration-description">一项攻势 + 一项辅助</em></span>
+              </button>
+              <p class="form-message" id="warframe-message" role="alert" hidden></p>
+            </div>
+          </aside>
+
+          <section class="warframe-result-pane" aria-label="战甲配装结果">
+            <header class="warframe-hud">
+              <div><span>WARFRAME BUILD · RANK 30</span><strong id="warframe-result-name">--</strong></div>
+              <div class="warframe-capacity"><span>容量</span><strong id="warframe-capacity-readout">-- / 60</strong><i id="warframe-capacity-bar"></i></div>
+              <div><span>极化</span><strong id="warframe-forma-readout">--</strong></div>
+            </header>
+            <div class="warframe-result-state" id="warframe-loading"><div class="scan-core" aria-hidden="true"><i></i><b></b></div><p>进入此页后读取冻结战甲目录</p></div>
+            <div class="warframe-build-content" id="warframe-build-content" hidden>
+              <section class="warframe-mod-bench">
+                <section class="build-config-strip warframe-build-config-strip" aria-label="战甲 A / B / C 配置槽">
+                  <div class="config-strip-row">
+                    <strong class="config-strip-label">配置槽</strong>
+                    <div class="segmented-control config-tabs" id="warframe-config-tabs" role="tablist" aria-label="战甲配置槽">
+                      <button class="is-active" type="button" data-warframe-config="A" aria-selected="true">A</button>
+                      <button type="button" data-warframe-config="B" aria-selected="false">B</button>
+                      <button type="button" data-warframe-config="C" aria-selected="false">C</button>
+                    </div>
+                    <span class="config-strip-status" id="warframe-config-status">当前配置自动保存到本机</span>
+                    <div class="build-config-actions">
+                      <button class="button button-quiet" id="warframe-config-copy" type="button">复制</button>
+                      <div class="config-action-menu">
+                        <button class="button button-quiet config-action-trigger" id="warframe-config-import" type="button" aria-haspopup="menu" aria-expanded="false">导入 <span aria-hidden="true">⌄</span></button>
+                        <div class="config-action-options" role="menu" aria-label="战甲配装导入格式">
+                          <button id="warframe-config-import-json" type="button" role="menuitem">JSON 文件</button>
+                          <button id="warframe-config-import-rabbit" type="button" role="menuitem">Warframe Rabbit</button>
+                        </div>
+                      </div>
+                      <div class="config-action-menu">
+                        <button class="button button-quiet config-action-trigger" id="warframe-config-export" type="button" aria-haspopup="menu" aria-expanded="false">导出 <span aria-hidden="true">⌄</span></button>
+                        <div class="config-action-options" role="menu" aria-label="战甲配装导出格式">
+                          <button id="warframe-config-export-json" type="button" role="menuitem">JSON 文件</button>
+                          <button id="warframe-config-export-rabbit" type="button" role="menuitem">Warframe Rabbit</button>
+                        </div>
+                      </div>
+                      <button class="button button-quiet" id="warframe-clear" type="button">清空配装</button>
+                      <input id="warframe-config-import-file" type="file" accept="application/json,.json" hidden>
+                    </div>
+                  </div>
+                </section>
+                <div class="result-section-title"><div><span>LOADOUT</span><h3>MOD 配装</h3></div><small>光环 / 战甲特殊槽 / 8 个普通槽</small></div>
+                <div class="warframe-special-slots" id="warframe-special-slots"></div>
+                <div class="warframe-normal-slots" id="warframe-normal-slots"></div>
+              </section>
+              <section class="warframe-equipment-band">
+                <div>
+                  <div class="result-section-title"><div><span>ARCANES</span><h3>战甲赋能</h3></div><small>最多 2 个</small></div>
+                  <div class="warframe-arcane-slots" id="warframe-arcane-slots"></div>
+                </div>
+                <div>
+                  <div class="result-section-title"><div><span>ARCHON SHARDS</span><h3>执刑官源力石</h3></div><small>普通 / Tau · 5 槽</small></div>
+                  <div class="warframe-shard-slots" id="warframe-shard-slots"></div>
+                </div>
+              </section>
+              <section class="warframe-panel-section">
+                <div class="result-section-title"><div><span>RANK 30 PANEL</span><h3>战甲面板</h3></div><small id="warframe-effect-status">触发效果关闭</small></div>
+                <div class="warframe-panel-grid" id="warframe-panel-grid"></div>
+                <div class="warframe-active-effects" id="warframe-active-effects"></div>
+              </section>
+              <section class="warframe-ability-section">
+                <div class="result-section-title"><div><span>ABILITY SCALING</span><h3>技能缩放</h3></div><small>强度 / 持续 / 范围 / 效率</small></div>
+                <div class="warframe-ability-grid" id="warframe-ability-grid"></div>
+              </section>
+              <details class="diagnostics" id="warframe-diagnostics">
+                <summary><span>资料与计算诊断</span><b id="warframe-diagnostic-count">0</b></summary>
+                <div id="warframe-diagnostic-list"></div>
+              </details>
+            </div>
+          </section>
+        </section>
+
+        <div class="mod-picker-scrim" id="mod-picker-scrim" hidden></div>
+        <div class="rabbit-dialog-scrim" id="rabbit-dialog-scrim" hidden></div>
+        <div class="rabbit-dialog" id="rabbit-dialog" role="dialog" aria-modal="true" aria-labelledby="rabbit-dialog-title" hidden>
+          <section class="rabbit-dialog-shell">
+            <header class="rabbit-dialog-head">
+              <div><span>WARFRAME RABBIT</span><h3 id="rabbit-dialog-title">导出到 Warframe Rabbit</h3></div>
+              <button class="icon-button" id="rabbit-dialog-close" type="button" title="关闭" aria-label="关闭 Warframe Rabbit 配装窗口">×</button>
+            </header>
+            <form class="rabbit-export-form" id="rabbit-export-form">
+              <label class="field"><span>当前配装</span><input id="rabbit-target" type="text" readonly></label>
+              <label class="field"><span>流派</span><select id="rabbit-archetype" required></select></label>
+              <label class="field rabbit-field-wide"><span>配装标题</span><input id="rabbit-build-title" type="text" maxlength="120" required></label>
+              <label class="field rabbit-field-wide"><span>玩法摘要</span><textarea id="rabbit-summary" rows="3" maxlength="600" required></textarea></label>
+              <label class="field"><span>使用要点（每行一条）</span><textarea id="rabbit-usage" rows="5" maxlength="800" required></textarea></label>
+              <label class="field"><span>替换与注意事项（每行一条）</span><textarea id="rabbit-cautions" rows="5" maxlength="800" required></textarea></label>
+              <div class="rabbit-dialog-actions rabbit-field-wide">
+                <span id="rabbit-export-status" role="status"></span>
+                <button class="button button-primary" id="rabbit-generate" type="submit">生成上传指令</button>
+              </div>
+              <section class="rabbit-code-result rabbit-field-wide" id="rabbit-code-result" hidden>
+                <div><strong>Rabbit 上传指令</strong><span id="rabbit-code-count">0 / 2900</span></div>
+                <textarea id="rabbit-code" rows="6" readonly spellcheck="false"></textarea>
+                <button class="button button-fill" id="rabbit-copy" type="button">复制指令</button>
+              </section>
+            </form>
+            <section class="rabbit-import-panel" id="rabbit-import-panel" hidden>
+              <label class="field"><span>Rabbit 配装码或上传指令</span><textarea id="rabbit-import-code" rows="10" spellcheck="false"></textarea></label>
+              <div class="rabbit-dialog-actions">
+                <span id="rabbit-import-status" role="status"></span>
+                <button class="button button-primary" id="rabbit-import-apply" type="button">导入当前配置槽</button>
+              </div>
+            </section>
+          </section>
+        </div>
+        <div class="mod-picker" id="warframe-picker" role="dialog" aria-modal="true" aria-labelledby="warframe-picker-title" hidden>
+          <div class="mod-picker-shell">
+            <div class="mod-picker-head">
+              <div class="mod-picker-title"><span class="section-index">W</span><div><h3 id="warframe-picker-title">选择</h3><small id="warframe-picker-sub">战甲配置</small></div></div>
+              <div class="mod-picker-tools">
+                <label class="field mod-picker-search"><span class="sr-only">搜索</span><input id="warframe-picker-search" type="search" autocomplete="off" placeholder="中文 / 英文 / 描述"></label>
+                <button class="icon-button" id="warframe-picker-close" type="button" title="关闭" aria-label="关闭选择器">×</button>
+              </div>
+            </div>
+            <div class="mod-picker-body">
+              <div class="manual-mod-categories" id="warframe-picker-categories" role="toolbar" aria-label="战甲 MOD 分类" hidden></div>
+              <div class="mod-picker-grid" id="warframe-picker-list" role="listbox"></div>
+            </div>
+          </div>
+        </div>
+        <div class="mod-picker" id="weapon-picker" role="dialog" aria-modal="true" aria-labelledby="weapon-picker-title" hidden>
+          <div class="mod-picker-shell">
+            <div class="mod-picker-head">
+              <div class="mod-picker-title">
+                <span class="section-index">W</span>
+                <div><h3 id="weapon-picker-title">选择武器</h3><small id="weapon-picker-sub">604 把可配装武器</small></div>
+              </div>
+              <div class="mod-picker-tools">
+                <label class="field mod-picker-search"><span class="sr-only">搜索武器</span><input id="weapon-picker-search" type="search" autocomplete="off" placeholder="中文 / 英文 / 内部名"></label>
+                <button class="icon-button" id="weapon-picker-close" type="button" title="关闭" aria-label="关闭武器选择器">×</button>
+              </div>
+            </div>
+            <div class="mod-picker-body">
+              <div class="manual-mod-categories" id="weapon-picker-categories" role="toolbar" aria-label="武器分类"></div>
+              <div class="mod-picker-grid is-weapon-list" id="weapon-picker-list" role="listbox" aria-label="可选武器"></div>
+            </div>
+          </div>
+        </div>
+        <div class="mod-picker" id="enemy-picker" role="dialog" aria-modal="true" aria-labelledby="enemy-picker-title" hidden>
+          <div class="mod-picker-shell">
+            <div class="mod-picker-head">
+              <div class="mod-picker-title">
+                <span class="section-index">E</span>
+                <div><h3 id="enemy-picker-title">选择幻影装置目标</h3><small id="enemy-picker-sub">按派系筛选，或搜索名称 / 派系克制 / 爆头；「数值缺失」目标默认隐藏</small></div>
+              </div>
+              <div class="mod-picker-tools">
+                <label class="field mod-picker-search"><span class="sr-only">搜索目标</span><input id="build-enemy-search" type="search" autocomplete="off" placeholder="名称、派系克制或爆头"></label>
+                <button class="icon-button" id="enemy-picker-close" type="button" title="关闭" aria-label="关闭目标选择器">×</button>
+              </div>
+            </div>
+            <div class="mod-picker-body">
+              <div class="manual-mod-categories enemy-picker-filterbar">
+                <div id="build-enemy-factions" class="enemy-factions" role="toolbar" aria-label="目标派系筛选"></div>
+                <button class="enemy-missing-toggle" id="build-enemy-show-missing" type="button" aria-pressed="false" title="显示缺少等级缩放锚点的目标，默认隐藏；无独立弱点区目标仍可选">数值缺失 <b id="build-enemy-missing-count">0</b></button>
+                <span id="build-enemy-count" class="enemy-picker-count"></span>
+              </div>
+              <div class="mod-picker-grid is-weapon-list" id="build-enemy-list" role="listbox" aria-label="幻影装置目标"></div>
+            </div>
+          </div>
+        </div>
+        <div class="mod-picker" id="mod-picker" role="dialog" aria-modal="true" aria-labelledby="mod-picker-title" hidden>
+          <div class="mod-picker-shell">
+          <div class="mod-picker-head">
+            <div class="mod-picker-title">
+              <span class="section-index">M</span>
+              <div><h3 id="mod-picker-title">选择 MOD</h3><small id="mod-picker-sub">填充到槽位 --</small></div>
+            </div>
+            <div class="mod-picker-tools">
+              <label class="field mod-picker-search"><span class="sr-only">搜索 MOD</span><input id="manual-mod-search" type="search" autocomplete="off" placeholder="搜索中文、英文或内部名称"></label>
+              <div class="segmented-control" id="mod-picker-view" role="group" aria-label="视图切换">
+                <button class="is-active" type="button" data-view="grid" aria-pressed="true" title="卡图视图">▦</button>
+                <button type="button" data-view="list" aria-pressed="false" title="列表视图">☰</button>
+              </div>
+              <button class="icon-button" id="mod-picker-close" type="button" title="关闭" aria-label="关闭选择器">×</button>
+            </div>
+          </div>
+          <div class="mod-picker-body">
+            <div class="manual-mod-categories" id="manual-mod-categories" role="toolbar" aria-label="MOD 分类"></div>
+            <div class="mod-picker-grid" id="manual-mod-list" role="listbox" aria-label="可选 MOD"></div>
+          </div>
+          <div class="mod-picker-foot">
+            <label class="check-field"><input id="manual-level-toggle" type="checkbox" checked><span>启用等级调节</span></label>
+            <span class="mod-picker-hint">点击卡片立即填入并实时结算 · ESC 关闭</span>
+          </div>
+          </div>
+        </div>
+
+        <footer class="app-footer"><span>WARFRAME RIVEN WORKSHOP</span><span id="footer-schema">SCHEMA --</span><span>LOCALHOST · NO CLOUD</span></footer>
+      </main>
+    </section>
+  </div>
+
+  <datalist id="weapon-options"></datalist>
+  <datalist id="build-weapon-options"></datalist>
+
+  <template id="stat-row-template">
+    <div class="stat-row">
+      <div class="stat-row-head">
+        <button class="sign-toggle is-positive" type="button" aria-label="切换正负词条" aria-pressed="false">+</button>
+        <label><span class="sr-only">词条</span><select class="stat-code" required></select></label>
+        <label class="stat-number-shell"><span class="sr-only">词条数值</span><input class="stat-number stat-output" type="number" step="0.1" inputmode="decimal" required><span class="stat-unit" aria-hidden="true"></span></label>
+        <button class="remove-stat" type="button" aria-label="删除词条" title="删除词条">×</button>
+      </div>
+      <div class="slider-shell">
+        <span class="range-min">--</span>
+        <input class="stat-value" type="range" min="0" max="1" step="0.1" value="0.5" aria-label="词条数值">
+        <span class="range-max">--</span>
+      </div>
+    </div>
+  </template>
+
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

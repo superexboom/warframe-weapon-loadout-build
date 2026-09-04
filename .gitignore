@@ -1,0 +1,41 @@
+# Local-only archive, caches, audits, and build output
+/.local/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Fallback output paths
+/build/
+/dist/
+/release/
+*.spec
+
+# Temporary, test, and regression artifacts created outside .local
+/.tmp*
+/tmp/
+/Extracted/
+/test_*.py
+/tests/
+/qa-*.png
+/screenshots/
+/test-results/
+/playwright-report/
+/data/cache/
+/data/source-audit.json
+*.log
+*.tmp
+*.out
+
+# Local configuration and editor files
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini

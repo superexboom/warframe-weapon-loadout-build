@@ -1,0 +1,1121 @@
+{
+  "schemaVersion": 1,
+  "counts": {
+    "assets": 184,
+    "stanceCards": 58,
+    "utilityCards": 80,
+    "arcaneIcons": 36
+  },
+  "assets": [
+    {
+      "asset": "/assets/arcanes/ArcaneEnergise.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "b624cd823a83219cc03d1e9f8d2d258c2e2f47f3f337f4e0d1e0f76762b6fb4f"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionAB.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "0d4503547f41b5b774544ccd0d07303564e6d482a85d9c0ba6fc40a2af4d184b"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionAL.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "26b607adbfbb50524ea004dffd4fcb566a050414aeca62f99712fbdb6ecf3dcf"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionAM.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "003701261b1a021aa74f49b87f0af97894125d22ffc2b196527eab4319e42763"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionAN.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "42497e12c3ba34a588866559ebe8c2ce9d2d3719dc99214ec0829c9f31662355"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionAS.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "c8847b6925c703b28fa0d55df692b799d73386070e2cdc0550d5f33ebbb01adc"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionBC.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "8c96373a21764f94c2716f96b40c70d2c37db8eb6bd73889dc954ed5d6123808"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionBD.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "64628f0bb36b0b9dfd88a84c477145c8c80ec3fe8e9120621059b0a51ddb5487"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionBE.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "f4bb5bb1d83b91e5d9f17e049d3f578d60ac261575bcdea0365792eef75eb223"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionBF.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "8cdf2fee7721ddb932f5bae3da901710a66c81464df66958668f7b2aeb3c0430"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionBG.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "c0dc68d012923094264309efd349e50c507770530f7dcdc396ab76630658c4b6"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionBO.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "5d3c34f8f7ba097850aa8c3f9fd471d625ed931d958d8132d071ec1ec9dd5737"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionBP.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "5d2e669b2fde392c398a15ae2d53f6829f9f8eb7648ae04da761cac0d4f095cc"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionBY.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "7a1270f872bf852b50039aaa04626bd10f257e048f74d6da958cbe397dad0669"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionCB.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "f288dd784abc3b67bf321e7db9e5398998e98bee2ee6f0a4ae909029c582de30"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionCC.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "051c3c4ba35614f03556e01833cef817d232c6e9c5367b72e104ed2a700aa969"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionCD.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "d9f5739cae6f8c1e11f37c0ba35be4b5fd04f1b9b3f5669c64301e9b8cbb5920"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionCO.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "81a8d459fc39b8407718afd98275ad0900fdb149bbe33966db18345ee33a75f6"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionCS.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "fe14d82ec2a84462dfc924c9db017b1354cd1a4be1b771b970185a81d7200ed5"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionDS.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "dda31474bf3e2ab6ae4eacb6da4f3961b8a809e75b6410b39bb05f8b40ab6ce0"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionMeleeDmgOnRifleKill.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "32843bc3cf02ec83ed99a83b965d8bf3e563eb61f7a44e544e6e54259b0dbee6"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionPrimaryDmgOnMeleeKill.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "fef1524df49cb9576d6df8e79e6f853bebebf5aac334fd24f4fdfe83d5cfdfa2"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionSteelPathMeleeToolsA.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "af1d14566f63839916f8138e5140f102e5e21460d1bd1d8f1a710afb95b0010d"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionSteelPathMeleeToolsB.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "1e0d5c0cf120d5cc5b5f55da9f7598146aee473c9a71188906afd64f1b2275c3"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionSteelPathPrecisionHeadshotA.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "da70f0c823785ebd93a184a6d5185d3d9b0283df00867e483caafa66536fddc3"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionSteelPathPrecisionHeadshotB.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "8c15943bef1aa5addacc4932e4c637b841c66abd4c3dd50d4d536a9a12dca887"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionSteelPathWarcrimesA.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "3a63a2e66abb19415036d2badf09b57951ec983c103a5202f84b254a82021128"
+    },
+    {
+      "asset": "/assets/arcanes/ArcaneProjectionSteelPathWarcrimesB.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "4d835a3d5d0173a1bc7400afa283ef7cf5f85c2c24dfe44d49af193fc7437fff"
+    },
+    {
+      "asset": "/assets/arcanes/AttackSpeedOnKill.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "e46dda983f7160797f61345b1a0272afe76e0031c2baf9f421e04415d6f0cf9e"
+    },
+    {
+      "asset": "/assets/arcanes/CriticalChanceOnHeadshot.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "c1393c200abde8efe08532d47d8979cfeff4b41047ceaa6e365dd12f3e9fc917"
+    },
+    {
+      "asset": "/assets/arcanes/IncreasedCriticalDamageOnCriticalStrike.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "cf6a56b18e7f680b29076fea03b293768f0f60c44ade9ee9fc0741701527e5e8"
+    },
+    {
+      "asset": "/assets/arcanes/IncreasedDamageOnStatusProc.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "afeefd5b9d8350657a6fe262b88a2a229d1ac59768219f2169b628884dc9ba24"
+    },
+    {
+      "asset": "/assets/arcanes/MeleeArcaneShieldBreakMeleeUp.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "0d69185c33d3c7cae9a6352712f219b6ca1590da57393b38056779e7ef1dd2ce"
+    },
+    {
+      "asset": "/assets/arcanes/NoArcaneIcon.png",
+      "width": 422,
+      "height": 273,
+      "sha256": "b27bed7e7acc1c7fda66554e7ca4d1efc5fff0b6b1178f89b4a25990d9866b62"
+    },
+    {
+      "asset": "/assets/arcanes/SolarisBulletToBattery.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "28f08bfec42b7e0adc1e49354c7fd871566ec2589b80fd6651002312c47356b1"
+    },
+    {
+      "asset": "/assets/arcanes/StatusChanceOnHeadshot.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "7d2115ad7ed1d3046a07d0f9d56f3758de9137c129037fed3d7b80fa7129fe29"
+    },
+    {
+      "asset": "/assets/game/formas/StanceForma.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "94965c715f05fd90114cc75e824160686007f617671c106ae140f294afd2bb62"
+    },
+    {
+      "asset": "/assets/game/formas/UmbraForma.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "9854b78ff905e40904376ccb8a25275132260b2d9ac04e30feebd7355256286b"
+    },
+    {
+      "asset": "/assets/game/slots/CosmeticEnhancer.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "a6ccdb517a6147097e1b7c026340d33f24a82502626e278af79d50da6448c8f5"
+    },
+    {
+      "asset": "/assets/game/slots/IconArcane.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "eaf563069023d757c43821824c0e0d09dfadc58779d05bb6aca53197e9cb94c6"
+    },
+    {
+      "asset": "/assets/game/slots/IconExilus.png",
+      "width": 128,
+      "height": 128,
+      "sha256": "1a58a3b5ac8144eee78ba6788c851e62f9908127242f9d95f352f3f28ef27431"
+    },
+    {
+      "asset": "/assets/game/slots/IconStance.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "23900c0d0b782620fafdf6d12040b31e388fd0fbf218b1d89d42675aa75a695a"
+    },
+    {
+      "asset": "/assets/game/slots/WeaponsArcaneSlotAdapter.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "851bbe077d11d47e79c68bf267cca951926e2fceb74138e2db00aad20a49c6a5"
+    },
+    {
+      "asset": "/assets/game/slots/icon-aura.png",
+      "width": 64,
+      "height": 64,
+      "sha256": "75c6994392deffee51f716e27ddd3dc4d72e837a697ecbd0f73b041faf220847"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarChanceToLootMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "6e0acb85fa25005b3bb16df08c9622b6daafdb9f3148ccbe72310e36df38b7eb"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarDamageReductionInAir.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "dbd2584738114541c057e57e8297b309d2b3cd6c5609b8781dd285e4b80facf6"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarHeavyImpactMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "9a25321308130c0593be0e01f8134d809c893ee1cfc51b43f0c75553388d81f1"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarMissionSpecificResistanceIce.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "b6f74da49cc8356a4188a13802b3597d05ea73bc013f6f07b362b74c27e336a3"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarSpawnEnergyMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "587667c7be9db58253d06f567fc75464c0d3af46e839671daf715f4287980807"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarStaggerRecoveryMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "676af1612cd3b484652e2023bea18950997f2ab0897127e11905b12a4224e917"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/AvatarSureFootedMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "9de3baf278efb9ee65d0413c509729f8aa5415351b9a0421eee78d8ef93bd2ac"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/EnemyRadarMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "b028ac39e8848aa8880f894acd711f3f754b597ef4aa1959a1a841876424a834"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/HolsterSpeedSlideBoostMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "962a856d5fc30168320f251554ed4173365e86d9cb534d37320cb93d2a666606"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/LootRadarMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "f2d0c9659108f112a016d0d56a3e10e56f527fa64fad51da7c0b24da966c2170"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/NinjaRecoveryMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "8c9e1ecb5eb367452827813b83d3c603d26a61d591adc74bdc71c57536b84ee6"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/ShockingBarrierMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "7d7e8bab12c759922da4bbff8496a62fca50b0137287b8c94ede04a465b4d86e"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/SlideResistanceDecreaseMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "30b87d19aadfe99dd9cd818adb07ce68eb2286d3b7f2f9cea6f613bbb8004eff"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/AvatarMods/SprintSpeedMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "942126a0afda4555f80f71f8b36855f7fff34ced5a26553d9591bbc9a2d1c4fc"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/AckBruntNightwatchMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "3eef770f5e5aa361dcda2b7c25df9de3deff60166a7035b0696eab623498efab"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/MoveSpeedOnChannelKillMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "acd8a781c532c72b408e08fd95cfd153c6287921af1c220f9346a0c5ba1ed624"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/CertainStrike.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "f76745c6ab573bba7af69f30b184982f716403a3240b5ebf28559f75a998ed05"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/CursedSyndicateEmpoweredHeavyMeleeMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "f5a95fc0dd61c8e11ca78c28b275a2ca875bb07160d19f24f261db75c11d2d5d"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/FocusedAttack.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "31c9bf10d20950f9ebda5f80a88d5e2bac1598c19f3d2d52e720b97b159fcf15"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/HeavyAggression.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "a90f1b28bba929c46ccfd49e9a91d1afb0f569c642ff97f83b7ba850a5effffc"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/PerfectCondition.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "2cc07f8a9c7b8676ff6bb36c442c92b26617d687fa114f8fff3dceaa5deead40"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/Tennokai/PerfectReach.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "3619a4c19a3120a2a5b39d02e06ebcf4d863fa80b1d05896fb0c4151a18312eb"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/WeaponBlockingTauntMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "45e245e0b173f50336c162ed5e582c004ade4fab86226878c58e7792e0a25af7"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingArmour.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "15b3479135b25979f374da40f5ac79dbd7320d0f0de54733bf1d8fded8d0f0d9"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingParryMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "0c877021fd1cc31fd9c5d5b34dd2b672c74f667c23bfeb1d17e15f3f47e5732a"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModAgility.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "84e9ab087b1bc8242a5d7a9808a261710773e5c0efb4dba66aed5f8131396e90"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModCollaboration.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "0631a8abbc743412da06bd189490a23f94e178a2a0fbfe476650443aa5aa4bf6"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModCunning.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "5803bab63eac944d92e0b6a996e0fe55ce6d47e9148a9068c007eabbcc61e1a4"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModEndurance.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "962677f96d6e90e05e42193363b26240f832e61c84b3097c291ab3d468e39475"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModPower.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "7af5800ec21eab10bbc9a43dee580d000e4107f365f57a87b7530c9361cb6911"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModSpeed.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "5426cade2c640a6d6386df1b801456e95fa5151fbcea952cb62080db7f4c3ac8"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/OrokinMoonChallenges/OrokinChallengeModStealth.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "db76236f32b4af6e26ddb9ac6251476a0b1eab0a95f9e46d397a4a6ecb446c9e"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Parkour/GaleKick.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "21b94f82df82a7278fbcf9b4be9a13b937ada5dc93a3e84cf60a33a354387f6f"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Parkour/KavatsGrace.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "b59dea8c8ea160d3fa2774733b59a2af252eaa0fdf4f7fb06d9679bba13836f3"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Parkour/StaggerParkourTwoMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "dad6912c38ded23251352b3b706d49ec788e0cb3cc5311d2ad891aae2de4f95d"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/AccuracyWhileAiming.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "a6bf8c7500f85c8ba606d4eb802f2ee7e40937ee1b7500680e6a141bf0a861ec"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/PistolAmmoMaxMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "b4a49be67acb9a4be4d28bbda2c13473c1b42965b6995171626b6e095dd0dfa6"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/PistolAmmoMutatorMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "b50b080069568acc22cfff5356170c54f2ce347c0f1d21ed654bba21f43f89be"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/PistolRecoilReductionMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "479617597f6270e55cdfef177f80ebfeb71095038a9206498b312e1240ebc780"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/PistolSilencerMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "315f53eeef2d4f40f69aaef60aa7c96a8366ae9bc99d00838881b2beb30a2567"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/PistolZoomMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "69efbcdde1969d71756306c60cc548bf4ad00a1dd50c12dbf9e55b4fa52d615a"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/ShootPickupPistolMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "7a4eccbc716ab037590e0629b9ff75619775a8d5d19c1be09fea5c61857582aa"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/WeaponBeamDistancePistolMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "c575875344c98aead08c8c8f6e8c5924012716ac5ca494bd880ff3870ab145d4"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/WeaponProjectileSpeedPistolMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "34032f0bb5b019a7e44ea62cfb4c622a2bee54a413edeba6d6cf04677ff501c6"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/AccuracyWhileAiming.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "e9dd08a3871bae0246e0e8ca16f9495b325be1749fef48ad3953ef56a53fb448"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/BowAmmoMutatorMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "2db95be876c23fa891eae4c15548cc1ec3dceb47e9bdface80f2d9f9cdd268d6"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/CorruptedRecoilForFireRateMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "1936476c32dc554f1296a908884d80bce72153636ec2da9f01d337653420da38"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/JumpRefreshOnKillRifleMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "01c224ccef93a989ee48c6e896aa10a43c40f03d48a47a7747684580ce96025a"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/PentaCorpusArenaMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "3d0af12c1d3c61e169a44179348b71be12b9e1cc13f73b17d14cc65b2ce2e4e5"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/RifleAmmoMaxMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "ee4f1ae42cb2838a9aff22daaa26075f18839c4f3edf2075566a855b149c603f"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/RifleAmmoMutatorMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "fd58579452db1bdf8940e86d3dc7ded125b9f8087d7409af74d56241accbc0b6"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/RifleRecoilReductionMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "2f99b5f1dc74dbb70851866f5d72c11327a6e29b16718ee3adb526991d61bf83"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/RifleSilencerMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "fea0e93a2aa805c84fb4ba78536467a77a23bbfc65f6ac9feb29872ab1c48f4f"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/RifleZoomMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "cbfe4b319cefb6bf95f097eb790e961bea98079b654ea914ac215a912b19bb1b"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/ShootPickupRifleMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "c2eee8b0fb9aaed9e1b3fb4421de73641dd514ece46cb83da98df0de14e407a8"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/SniperAmmoMutatorMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "add1c0c85cca88851654a6e6a371145514f7e80537bd581f89d2aa8e93a37091"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/TetraCorpusArenaMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "434d21d8a0c6eeb4dc10bd22d19c0d8461c0c9068206e6002bb93db94f0318bf"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/WeaponBeamDistanceRifleMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "589b6d00614bdcc6b6bcd358f42243c65c96b4813c28382e9b6910a4e055549a"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/WeaponProjectileSpeedRifleMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "4903a459706f91f9cbf1cd0e630a404341875d536398dcd0ffedc221ec165897"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/WeaponResistSelfDamageMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "70c6f90324d93a9b3c6d52440f7da5e8e32ff833f45195c672f7125b01baa066"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Amar/AmarExilusMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "66800771af965d94a9bd524ef1e7666d00fe9d67992e5eb2d48aaf8c0ddd845d"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Boreal/BorealExilusMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "127c3480d8b69be29b787c84ca267b0d3d7aebc692f80708d1a4668884a34d3b"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Hawk/HawksPeriphery.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "c1a6f91aa1a69347be67079289fec87b155d32b671048f4b67423c9628e9c7c5"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Hawk/HawksVantage.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "64680dbd55016ad4743fc1b156ae64d746da351320a3fe9dd8e4e9d551b22d83"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Nira/NiraExilusMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "a687903b400e3902bdfbcb1249f6859271323503e7ee54fe7857b58aee8ec9fa"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Raptor/RaptorsFrenzy.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "26683479b17a0bd8df1c72bb64a28ed13cc4fefd50091a2061c17d4ad5c9ec8f"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Spider/SpiderLeap.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "fc1430514c3fdef466b89e51787d0ddf1e3c5f0f623a6191d850efd6b11149de"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Synth/WarframeSynthReflexMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "6c77f5ebb5acf5bb5d5d0741d8d17e68324c4cf8de31e054df6ce6001caf3f6d"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilantePursuit.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "427d1a914580cba5877bfee9222491b4c023c6a34697b594de04e6a85d860505"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "5477af5eb90ae41dfc81ed6f478d9027579a1f5f0856c40797aa9816056c1c4a"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/AccuracyWhileAiming.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "dfbe3d6d9fe577ee260a2d8f1d85632847ae256d1521af5e1238c72d71e1a070"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/DrakgoonNightwatchMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "ff50f5581f10a19ca89707052e8ca126256de2713ae98da861e7d778300e50f5"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/ShotgunAmmoMaxMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "85307ea22f2a6a7a5656fe831a95852b4ef6c5fbe73209c5080751565a517b77"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/ShotgunAmmoMutatorMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "935fd834e26f2543a4eab1b5bc0cc8ebab0035530ca37d7dbd1ef4a81c68d610"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/WeaponNoiseReductionMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "78bfae4afa3845593fd50fa52746546ba0a4c1e043d59104950a532f62075fda"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/WeaponProjectileSpeedShotgunMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "179b4228014ad66f4d01c0c5d0259048adb941870178ba42bf60c65b27b56874"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/WeaponRecoilShotgunMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "c7bc95455a3e80209f9772ec598a4f8a2dffc3fc491b53cc04b7caf94df43ea0"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Unique/GlaiveWhirlwindMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "7c454dd377e0703d8d25ae7b7b434fd6008a9114be51747ab4c0d71bed2b8996"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Unique/ParisPrimeStatusHealMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "3edc88adfa163d1be75648c7985102f8f2d4c64ee0238a09be9e7870825ecd80"
+    },
+    {
+      "asset": "/assets/mods/art/Lotus/Interface/Cards/Images/Unique/WeaponGrenadeStickyMod.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "ab9b153f0e5cee95b0b55e1a1067480dd771106b5da4d16532e63d1b2748a0a6"
+    },
+    {
+      "asset": "/assets/polarities/aura.png",
+      "width": 128,
+      "height": 128,
+      "sha256": "054a18728197d1581dc6d52621ae404f595a261544067de096df6323ca96fc56"
+    },
+    {
+      "asset": "/assets/polarities/umbra.png",
+      "width": 128,
+      "height": 128,
+      "sha256": "2dc8a48d0e675a4848f40def002b199a1e015ca71d8cb0372b804f222d080e0f"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/AstralTwilight.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "eec24479f423b12beb19190115ba57a51db621f5de53e72ad4206c531859f19c"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/AxeCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "902644b4b14b27c8376ee348c00d4528987b7be1bef73ab659165a1e5a531890"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/AxeCombo2a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "9c3d5775a74b15eea3f3ca2d849cdaec7ae46b80343522d9db6426dfe5f97b7c"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/BayonetCmbOneMelee.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "8615d6bf71a42632073ec40975824afa22dd53aa30e8bda4fa1fd959b3fbc7f6"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/BulletDance.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "97e5501703a69302263ab57a65089711baac405fab8c4cd52ae3c0a379c0446b"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/ClawsCombo1b.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "919c9f1a30f7a998efb6e651b4d27b41ac6725b9d4537a0709976396575b9cb4"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/CrimsonDervish1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "1edbf0c5eeaffb77f965c0c5095f9723cbe8631a8a9859dab12150a41b8add63"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DaggerCmbThree.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "6cbf5de80d000b34349fdb79e8e331a534e1376771b6d3b5533a41a8adde547f"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DaggerCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "e06cdfc38dc137d4e370da4cc6682fc021f53f2d7523fd0be1ac8adc01173cab"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DaggerCombo2a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "158b9ef6173b6adb267e8f7487e4475d4538ee17e7412aec285f70da6d0b402a"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualDaggerCmbThree.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "37bd4a8a4a487d8011bdc556304cc213f7fc5202ee106daa8c86e337257331da"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualDaggerCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "4dcfa66a259540cef088320d5de77123b275dcc7b71184d4540c958a0c331c18"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualDaggerCombo2c.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "fc4ec6b586adc5615309befb47b297574a2a5c9ec1b506bc91acd722c56b33fc"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualKatanaCmbOne.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "6ec0956b04f37a9783d7b61d2e46427042b8bb8d734b1a625007da308571dc93"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualSwordCmbThree.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "e80e17b9ce24b48c6ca7434bd8361c150feaba55e1cc96f63139b40bf72160ce"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualSwordCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "0e11b0e2f00b6b32b63ecbe203720d44763bdca560314c98c6e0e14488761e64"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualSwordCombo1b.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "378b44f4e3507566cef4412e607aa8364abb8823ea37f583f98ea2cbfd922d1f"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/FistCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "5f39cd9c05fcc3459361098786bd774290e1643e54baf6e9f4f156308d131ad2"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/FistCombo2a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "f54e777e42ca7b6c9da2f0008d3b7372e94e2e66911fa3badfc595c5eaa1f693"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/FourRiders.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "cc3e316462aab3f22d6d0558ecd2d18efb5d0813c4c12bdc4a3c179087e8f49b"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/GaiasTragedy.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "f31c9abb2b97dc55bf9b26eafc11e485681e2b355a36d55c41236fecde892c23"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/GlaiveCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "a3c6ffa1c2cf552ee2db72a80f8884f99c18be7febe677353bce9c60de18f02e"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/HammerCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "fb7882395094692effe21a72ff0ddb832a3a19565d10b360365f14cba4f7c836"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/HammerCombo2b.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "5b4154d26101eca49f55488f2c47482002ddc27cbba06c5ce87d6d4295d6e910"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/HeavyScytheMeleeTreeA.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "5a9775a6d490cdb7470eb0626692c08b6f564d7099961170c45015c5381b17d4"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/HighNoon.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "f898455d338f0e975118e468bd993884cb53e584a94d4976ade39c58b046a373"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/IronPhoenix1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "26a0f074fdbf4c463c0ee19aea44c24151ce876e2e580b58233f78e3a36affae"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/KatanaCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "3061fbd6557925702d0b8de3e02559cb3abb7a427f4f8c95354a3246e7d3f454"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/KatanaCombo1b.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "b4b181993bfc2939cf959ec2d810da8d0fb322c8c95815a817f81efca6b39adc"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/KatanaZatoCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "6e9e3499e17f2b503c8594265a608ddb1fc26a0cfe3b67ed85d1c8965be756dc"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/LongKatanaCmbOne.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "5777785aee9d0eb2f7bfe19f4ba5d9c8b994841ad25ec8f95e6ba8c94de65920"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/Machete1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "1d70abd228a5e538defdb91b74579fc829af61367679f88b5b8e1b6154027048"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/MacheteStanceB.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "edccba2f17c1bd701da05618172db32fb47b86028fffa398ea0971cae28b292c"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/MiosStanceA.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "9e3c5548278a9cea343101e26901eb9487a86ab815360a097406e3d91de7988a"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/NunchakuComboOne.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "96d83e8804ab093c6c07b109f03d29c46621f09fcca06fd5fa40766ce4e76b3c"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/PolearmCmbThree.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "851a4a2e412985756066d192e43776bee2eb365b66152a5891871b43e105493b"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/PolearmCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "ee28bdb3f453f515ad2ad670dd5b00656fc308e15181cfb0f42d0eab63436a59"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/PolearmCombo2a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "7172805220e25225e31bd5ddb6d649defb4fc42882f5b9ec32236b3486af70c3"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/PunchKickCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "697222d011506f6c8ca20c56e5cdc967d3437b30f547939de6670ad6afea6a39"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/PunchKickCombo2b.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "b60a7083e8465fa624d2be2164099acf8c46ce4af91768deffd422152f1a936b"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/RapierCmbOneMeleeTree.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "00d02080e606f54ed87071e8ac35b81902b10a08c9f793e19071187ccd92a82f"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/RegorSwordShieldMeleeTree.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "d394054063b8ee91362846a115dab6d1f5c01e6aa0813c4d90d76fa3a610cbc9"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/SawBladeCmbOne.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "151947fc61b188ce7bd102c22a4dfd5d396eab257174962765556fe3e0068fdb"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/ScytheCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "e7b12fea4c04fb5a1beacff45c4b94f9fab2b00f5d33824780483891d4d188c6"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/ScytheCombo2a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "24def7f3e391eef78fac31d13299e279d0c17f6134eb5ad83efbc2a3d7aa2692"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/StaffCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "0f5a2d831c4da263e2ef0d6bd36cd72d3cc5ab8a7dd808bd7656f2c9387176c0"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/StaffCombo2a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "57ac71c988fabb7d1190ebf5b088b1de9e3c3bcd718076e9929bb55f3cfa69e5"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/StalkerSwordStance.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "0638ca702b15f9d163e10e4cb16c3e13b2ebd70d28a2291f082a2ad72c3c89f7"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/SwordCmbTwo.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "f1e5d1106f97419f3b01da3c7dddde6aeb877e4eed7e931571878ca06705a93d"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/SwordShieldCombo1.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "de58f372d5828a1af3190999a6f1aff04e6669582e52268b71cf752debe7575b"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/TempoRoyale.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "38b019d1fb6fadc72ff79a901650a1cd5241827b0d564738194f415196c0c680"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/TonfaB.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "6882b7090ca68d251da250f88ab48e06fab4524c53f6c310e8aa6f5ab9107043"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/TonfaCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "e4e8e29f964bcd26bc66cd5ec21130d1d750864d95da95b0b6c7340b4284a3ae"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/VermillionStorm.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "3e22bdb998dc05b43c524efe12f7dde6e924023b5e7d4ed409cf38620cdf3594"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/WarfanCmbOne.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "0fa485a9fbc771baa54ab78db3aa3fdc0f927dd3359443faba885d38a0dc293f"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/WarfanCmbTwo.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "32d44964166a3af2d1527ef1c2505494b15dde1624870d93299178fca42d6694"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/WhipCombo1a.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "552bf89f481419f0c12f8d4aa3d00db5684fe5685f2d7b1714f13d4bfaee1205"
+    },
+    {
+      "asset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/WhipCombo2b.png",
+      "width": 256,
+      "height": 256,
+      "sha256": "cc57dd38859f6f2ea8ab95975bd7e7d1f7834ef633796ed57593b63aec657a20"
+    }
+  ],
+  "missing": [
+    {
+      "asset": "ArcaneSlot.png",
+      "reason": "no exact local source; WeaponsArcaneSlotAdapter is preserved under its real name"
+    }
+  ]
+}

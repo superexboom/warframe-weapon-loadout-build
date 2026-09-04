@@ -1,0 +1,30 @@
+{
+ "buildLabel": "2026.08.13.13.24",
+ "counts": {
+  "arcanes": 182,
+  "enemies": 1861,
+  "mods": 1442,
+  "warframes": 127,
+  "weapons": 659
+ },
+ "generatedAtUtc": "2026-08-20T15:55:34.023565Z",
+ "provenance": {
+  "localizationCatalogs": {
+   "en": {
+    "hash": "398383aee2a90104f7c98448e309797816f55ee0c4e0b196025abd733f15d762",
+    "source": "en.json",
+    "version": null
+   },
+   "zh": {
+    "hash": "dcfe1b92e7bfb89c2298b518146c436fff38fc950ff10a6f1f9f641a751c42c7",
+    "source": "zh.json",
+    "version": null
+   }
+  },
+  "packagesBin": {
+   "hash": "c2cdc05477b37dd78054194e5601619defe59433fd136252829e247096fd605b",
+   "source": "Packages.bin"
+  }
+ },
+ "schemaVersion": 3
+}

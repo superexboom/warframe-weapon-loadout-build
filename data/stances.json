@@ -1,0 +1,3231 @@
+{
+  "schemaVersion": 1,
+  "buildLabel": "2026.08.13.13.24",
+  "sources": [
+    "stance_data_2026-08-23.lua",
+    "v2_mods.json",
+    "warframe-items Mods.json",
+    "Languages.bin zh.json"
+  ],
+  "counts": {
+    "stances": 58,
+    "combos": 231,
+    "missingDurations": 1,
+    "gaps": 5
+  },
+  "excluded": {
+    "ConclaveOnly": 21,
+    "StancelessStance": 28,
+    "UniqueToWeapon": 22
+  },
+  "compatMappings": {
+    "weaponTypeToCompatTag": {
+      "Assault Saw": "BLADESAW_STANCE",
+      "Bayonet": "BAYONET",
+      "Blade and Whip": "BLADE_AND_WHIP_STANCE",
+      "Claws": "CLAWS_STANCE_STANCE",
+      "Dagger": "DAGGERS_STANCE",
+      "Dual Daggers": "DUAL_DAGGERS_STANCE",
+      "Dual Nikanas": "DUAL_KATANAS_STANCE",
+      "Dual Swords": "DUAL_SWORDS_STANCE",
+      "Fist": "FIST_STANCE",
+      "Glaive": "GLAIVES_STANCE",
+      "Gunblade": "GUNBLADE_STANCE",
+      "Hammer": "HAMMERS_STANCE",
+      "Heavy Blade": "HEAVY_BLADE_STANCE",
+      "Heavy Scythe": "HEAVY SCYTHE_STANCE",
+      "Machete": "MACHETES_STANCE",
+      "Nikana": "NIKANAS_STANCE",
+      "Nunchaku": "NUNCHAKU_STANCE",
+      "Polearm": "POLEARMS_STANCE",
+      "Rapier": "RAPIER_STANCE",
+      "Scythe": "SCYTHES_STANCE",
+      "Sparring": "SPARRING_STANCE",
+      "Staff": "STAVES_STANCE",
+      "Sword": "SWORDS_STANCE",
+      "Sword and Shield": "SWORDS_AND_SHIELD_STANCE",
+      "Tonfa": "TONFA_STANCE",
+      "Two-Handed Nikana": "LONG_KATANA_STANCE",
+      "Warfan": "WARFAN_STANCE",
+      "Whip": "WHIPS_STANCE"
+    },
+    "compatNameToCompatTag": {
+      "Assault Saw": "BLADESAW_STANCE",
+      "Bayonet": "BAYONET",
+      "Blade And Whip": "BLADE_AND_WHIP_STANCE",
+      "Claws": "CLAWS_STANCE_STANCE",
+      "Daggers": "DAGGERS_STANCE",
+      "Dual Daggers": "DUAL_DAGGERS_STANCE",
+      "Dual Nikanas": "DUAL_KATANAS_STANCE",
+      "Dual Swords": "DUAL_SWORDS_STANCE",
+      "Fists": "FIST_STANCE",
+      "Glaives": "GLAIVES_STANCE",
+      "Gunblade": "GUNBLADE_STANCE",
+      "Hammers": "HAMMERS_STANCE",
+      "Heavy Blade": "HEAVY_BLADE_STANCE",
+      "Heavy Scythe": "HEAVY SCYTHE_STANCE",
+      "Machetes": "MACHETES_STANCE",
+      "Nikanas": "NIKANAS_STANCE",
+      "Nunchaku": "NUNCHAKU_STANCE",
+      "Polearms": "POLEARMS_STANCE",
+      "Rapiers": "RAPIER_STANCE",
+      "Scythes": "SCYTHES_STANCE",
+      "Sparring": "SPARRING_STANCE",
+      "Staff": "STAVES_STANCE",
+      "Staves": "STAVES_STANCE",
+      "Sword And Shield": "SWORDS_AND_SHIELD_STANCE",
+      "Swords": "SWORDS_STANCE",
+      "Tonfas": "TONFA_STANCE",
+      "Two-Handed Nikana": "LONG_KATANA_STANCE",
+      "Warfans": "WARFAN_STANCE",
+      "Whips": "WHIPS_STANCE"
+    }
+  },
+  "stances": [
+    {
+      "nameEn": "Butcher's Revelry",
+      "nameZh": "屠戮盛宴",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/SawBladeCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/SawBladeCmbOne.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/SawBladeCmbOne.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "采用这种突击锯架势来撕裂并锯碎你的敌人。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Assault Saw",
+      "compatName": "Assault Saw",
+      "compatTag": "BLADESAW_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Rictus' Wrath",
+          "totalMultiplier": 11.0,
+          "hitCount": 4.0,
+          "duration": 4.93,
+          "dpsMultiplier": 2.231237,
+          "statusRateMultiplier": 0.811359
+        },
+        {
+          "kind": "Forward",
+          "name": "Ghoul Rush",
+          "totalMultiplier": 4.0,
+          "hitCount": 4.0,
+          "duration": 2.83,
+          "dpsMultiplier": 1.413428,
+          "statusRateMultiplier": 1.413428
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Rip 'N Ride",
+          "totalMultiplier": 7.0,
+          "hitCount": 4.0,
+          "duration": 3.8,
+          "dpsMultiplier": 1.842105,
+          "statusRateMultiplier": 1.052632
+        },
+        {
+          "kind": "Block",
+          "name": "Reciprocator",
+          "totalMultiplier": 17.0,
+          "hitCount": 10.0,
+          "duration": 5.75,
+          "dpsMultiplier": 2.956522,
+          "statusRateMultiplier": 1.73913
+        }
+      ],
+      "bestCombo": "Block"
+    },
+    {
+      "nameEn": "Harrowing Spire",
+      "nameZh": "胆寒尖刺",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BayonetCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/BayonetCmbOneMelee.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/BayonetCmbOneMelee.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "持续不断的戳刺和强劲有力的横扫式冲刺。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Bayonet",
+      "compatName": "Bayonet",
+      "compatTag": "BAYONET",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Rennen",
+          "totalMultiplier": 7.0,
+          "hitCount": 4.0,
+          "duration": 2.1,
+          "dpsMultiplier": 3.333333,
+          "statusRateMultiplier": 1.904762
+        },
+        {
+          "kind": "Forward",
+          "name": "Piercing Advance",
+          "totalMultiplier": 8.0,
+          "hitCount": 5.0,
+          "duration": 2.27,
+          "dpsMultiplier": 3.524229,
+          "statusRateMultiplier": 2.202643
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Relentless Onset",
+          "totalMultiplier": 13.0,
+          "hitCount": 5.0,
+          "duration": 3.03,
+          "dpsMultiplier": 4.290429,
+          "statusRateMultiplier": 1.650165
+        },
+        {
+          "kind": "Block",
+          "name": "Vamplate Levée",
+          "totalMultiplier": 6.0,
+          "hitCount": 2.0,
+          "duration": 1.55,
+          "dpsMultiplier": 3.870968,
+          "statusRateMultiplier": 1.290323
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Defiled Snapdragon",
+      "nameZh": "积秽骁龙",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/SwordWhipCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/MiosStanceA.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/MiosStanceA.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "迅如闪电的鞭笞，致命般的砍击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Blade and Whip",
+      "compatName": "Blade And Whip",
+      "compatTag": "BLADE_AND_WHIP_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Claws of the Drake",
+          "totalMultiplier": 23.0,
+          "hitCount": 10.0,
+          "duration": 4.25,
+          "dpsMultiplier": 5.411765,
+          "statusRateMultiplier": 2.352941
+        },
+        {
+          "kind": "Forward",
+          "name": "Soul of the Leviathan",
+          "totalMultiplier": 20.0,
+          "hitCount": 16.0,
+          "duration": 4.1,
+          "dpsMultiplier": 4.878049,
+          "statusRateMultiplier": 3.902439
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Heart of the Naga",
+          "totalMultiplier": 13.0,
+          "hitCount": 8.0,
+          "duration": 4.35,
+          "dpsMultiplier": 2.988506,
+          "statusRateMultiplier": 1.83908
+        },
+        {
+          "kind": "Block",
+          "name": "Fangs of the Lindwurm",
+          "totalMultiplier": 5.0,
+          "hitCount": 1.0,
+          "duration": 1.35,
+          "dpsMultiplier": 3.703704,
+          "statusRateMultiplier": 0.740741
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Four Riders",
+      "nameZh": "天启异象",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawCmbThreeMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/FourRiders.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/FourRiders.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "快速的打击与强烈猛击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Claws",
+      "compatName": "Claws",
+      "compatTag": "CLAWS_STANCE_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Aggravated Swarm",
+          "totalMultiplier": 13.0,
+          "hitCount": 5.0,
+          "duration": 2.3,
+          "dpsMultiplier": 5.652174,
+          "statusRateMultiplier": 2.173913
+        },
+        {
+          "kind": "Forward",
+          "name": "Hungering Encroachment",
+          "totalMultiplier": 7.0,
+          "hitCount": 5.0,
+          "duration": 1.7,
+          "dpsMultiplier": 4.117647,
+          "statusRateMultiplier": 2.941176
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Raging Conflict",
+          "totalMultiplier": 15.0,
+          "hitCount": 8.0,
+          "duration": 3.0,
+          "dpsMultiplier": 5.0,
+          "statusRateMultiplier": 2.666667
+        },
+        {
+          "kind": "Block",
+          "name": "Eternal Fall",
+          "totalMultiplier": 16.0,
+          "hitCount": 5.0,
+          "duration": 2.1,
+          "dpsMultiplier": 7.619048,
+          "statusRateMultiplier": 2.380952
+        }
+      ],
+      "bestCombo": "Block"
+    },
+    {
+      "nameEn": "Malicious Raptor",
+      "nameZh": "恶毒猛禽",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/ClawsCombo1b.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/ClawsCombo1b.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "穿刺攻击和快速的切割。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Claws",
+      "compatName": "Claws",
+      "compatTag": "CLAWS_STANCE_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Jagged Gash",
+          "totalMultiplier": 19.0,
+          "hitCount": 11.0,
+          "duration": 3.35,
+          "dpsMultiplier": 5.671642,
+          "statusRateMultiplier": 3.283582
+        },
+        {
+          "kind": "Forward",
+          "name": "Wicked Slash",
+          "totalMultiplier": 9.0,
+          "hitCount": 6.0,
+          "duration": 1.8,
+          "dpsMultiplier": 5.0,
+          "statusRateMultiplier": 3.333333
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Lethal Clash",
+          "totalMultiplier": 13.0,
+          "hitCount": 8.0,
+          "duration": 3.7,
+          "dpsMultiplier": 3.513514,
+          "statusRateMultiplier": 2.162162
+        },
+        {
+          "kind": "Block",
+          "name": "Venging Thrash",
+          "totalMultiplier": 12.0,
+          "hitCount": 5.0,
+          "duration": 2.95,
+          "dpsMultiplier": 4.067797,
+          "statusRateMultiplier": 1.694915
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Vermillion Storm",
+      "nameZh": "朱红暴风",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/VermillionStorm.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/VermillionStorm.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "在旋转的切斩之中组合了踢击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Claws",
+      "compatName": "Claws",
+      "compatTag": "CLAWS_STANCE_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Flurry Rose",
+          "totalMultiplier": 26.0,
+          "hitCount": 12.0,
+          "duration": 3.95,
+          "dpsMultiplier": 6.582278,
+          "statusRateMultiplier": 3.037975
+        },
+        {
+          "kind": "Forward",
+          "name": "Crimson Hurricane",
+          "totalMultiplier": 9.0,
+          "hitCount": 7.0,
+          "duration": 1.9,
+          "dpsMultiplier": 4.736842,
+          "statusRateMultiplier": 3.684211
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Cardinal Breeze",
+          "totalMultiplier": 16.0,
+          "hitCount": 20.0,
+          "duration": 3.4,
+          "dpsMultiplier": 4.705882,
+          "statusRateMultiplier": 5.882353
+        },
+        {
+          "kind": "Block",
+          "name": "Ruby Wind",
+          "totalMultiplier": 13.0,
+          "hitCount": 7.0,
+          "duration": 2.5,
+          "dpsMultiplier": 5.2,
+          "statusRateMultiplier": 2.8
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Homing Fang",
+      "nameZh": "连牙追袭",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DaggerCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/DaggerCombo2a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DaggerCombo2a.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "命中多次的快速打击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Dagger",
+      "compatName": "Daggers",
+      "compatTag": "DAGGERS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Cutting Arches",
+          "totalMultiplier": 17.0,
+          "hitCount": 7.0,
+          "duration": 2.8,
+          "dpsMultiplier": 6.071429,
+          "statusRateMultiplier": 2.5
+        },
+        {
+          "kind": "Forward",
+          "name": "Life Eater",
+          "totalMultiplier": 4.0,
+          "hitCount": 4.0,
+          "duration": 1.4,
+          "dpsMultiplier": 2.857143,
+          "statusRateMultiplier": 2.857143
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Lashing Forward",
+          "totalMultiplier": 8.0,
+          "hitCount": 5.0,
+          "duration": 1.7,
+          "dpsMultiplier": 4.705882,
+          "statusRateMultiplier": 2.941176
+        },
+        {
+          "kind": "Block",
+          "name": "Cutting Arches",
+          "totalMultiplier": 17.0,
+          "hitCount": 7.0,
+          "duration": 2.8,
+          "dpsMultiplier": 6.071429,
+          "statusRateMultiplier": 2.5
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Pointed Wind",
+      "nameZh": "尖锐之风",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DaggerCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/DaggerCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DaggerCombo1a.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "旋转打击，不断上升的连段。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Dagger",
+      "compatName": "Daggers",
+      "compatTag": "DAGGERS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Parting Edge",
+          "totalMultiplier": 12.0,
+          "hitCount": 5.0,
+          "duration": 1.55,
+          "dpsMultiplier": 7.741935,
+          "statusRateMultiplier": 3.225806
+        },
+        {
+          "kind": "Forward",
+          "name": "Viper's Bite",
+          "totalMultiplier": 7.0,
+          "hitCount": 4.0,
+          "duration": 1.25,
+          "dpsMultiplier": 5.6,
+          "statusRateMultiplier": 3.2
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Viper's Bite",
+          "totalMultiplier": 7.0,
+          "hitCount": 4.0,
+          "duration": 1.25,
+          "dpsMultiplier": 5.6,
+          "statusRateMultiplier": 3.2
+        },
+        {
+          "kind": "Block",
+          "name": "Parting Edge",
+          "totalMultiplier": 12.0,
+          "hitCount": 5.0,
+          "duration": 1.55,
+          "dpsMultiplier": 7.741935,
+          "statusRateMultiplier": 3.225806
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Stinging Thorn",
+      "nameZh": "螫刺狂棘",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DaggerCmbThreeMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/DaggerCmbThree.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DaggerCmbThree.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "带有强力刺击的凶猛挥砍",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Dagger",
+      "compatName": "Daggers",
+      "compatTag": "DAGGERS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Carving Spike",
+          "totalMultiplier": 22.0,
+          "hitCount": 10.0,
+          "duration": 3.95,
+          "dpsMultiplier": 5.56962,
+          "statusRateMultiplier": 2.531646
+        },
+        {
+          "kind": "Forward",
+          "name": "Piercing Horn",
+          "totalMultiplier": 8.0,
+          "hitCount": 5.0,
+          "duration": 1.8,
+          "dpsMultiplier": 4.444444,
+          "statusRateMultiplier": 2.777778
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Lacerating Spine",
+          "totalMultiplier": 12.0,
+          "hitCount": 6.0,
+          "duration": 2.7,
+          "dpsMultiplier": 4.444444,
+          "statusRateMultiplier": 2.222222
+        },
+        {
+          "kind": "Block",
+          "name": "Impaling Quill",
+          "totalMultiplier": 12.0,
+          "hitCount": 5.0,
+          "duration": 2.35,
+          "dpsMultiplier": 5.106383,
+          "statusRateMultiplier": 2.12766
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Gnashing Payara",
+      "nameZh": "狼鱼咬咬",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DualDaggerCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/DualDaggerCombo2c.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualDaggerCombo2c.png",
+      "polarity": "AP_WARD",
+      "rarity": "RARE",
+      "description": "以贯通螺旋刺穿。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Dual Daggers",
+      "compatName": "Dual Daggers",
+      "compatTag": "DUAL_DAGGERS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Pincer Strike",
+          "totalMultiplier": 14.0,
+          "hitCount": 5.0,
+          "duration": 2.5,
+          "dpsMultiplier": 5.6,
+          "statusRateMultiplier": 2.0
+        },
+        {
+          "kind": "Forward",
+          "name": "Cheetah's Guile",
+          "totalMultiplier": 5.0,
+          "hitCount": 4.0,
+          "duration": 1.15,
+          "dpsMultiplier": 4.347826,
+          "statusRateMultiplier": 3.478261
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Flash Flurry",
+          "totalMultiplier": 11.0,
+          "hitCount": 4.0,
+          "duration": 1.55,
+          "dpsMultiplier": 7.096774,
+          "statusRateMultiplier": 2.580645
+        },
+        {
+          "kind": "Block",
+          "name": "Pincer Strike",
+          "totalMultiplier": 14.0,
+          "hitCount": 5.0,
+          "duration": 2.5,
+          "dpsMultiplier": 5.6,
+          "statusRateMultiplier": 2.0
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Sinking Talon",
+      "nameZh": "沉没之爪",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DualDaggerCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/DualDaggerCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualDaggerCombo1a.png",
+      "polarity": "AP_POWER",
+      "rarity": "UNCOMMON",
+      "description": "强劲，多段命中的旋转集中攻击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Dual Daggers",
+      "compatName": "Dual Daggers",
+      "compatTag": "DUAL_DAGGERS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Lashing Panther",
+          "totalMultiplier": 4.0,
+          "hitCount": 4.0,
+          "duration": 1.15,
+          "dpsMultiplier": 3.478261,
+          "statusRateMultiplier": 3.478261
+        },
+        {
+          "kind": "Forward",
+          "name": "Lashing Panther",
+          "totalMultiplier": 4.0,
+          "hitCount": 4.0,
+          "duration": 1.15,
+          "dpsMultiplier": 3.478261,
+          "statusRateMultiplier": 3.478261
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Rising Lion",
+          "totalMultiplier": 16.0,
+          "hitCount": 10.0,
+          "duration": 3.05,
+          "dpsMultiplier": 5.245902,
+          "statusRateMultiplier": 3.278689
+        },
+        {
+          "kind": "Block",
+          "name": "Lashing Panther",
+          "totalMultiplier": 4.0,
+          "hitCount": 4.0,
+          "duration": 1.15,
+          "dpsMultiplier": 3.478261,
+          "statusRateMultiplier": 3.478261
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Spinning Needle",
+      "nameZh": "旋压刺针",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DualDaggerCmbThreeMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/DualDaggerCmbThree.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualDaggerCmbThree.png",
+      "polarity": "AP_DEFENSE",
+      "rarity": "RARE",
+      "description": "迅速刺击，扭转切割",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Dual Daggers",
+      "compatName": "Dual Daggers",
+      "compatTag": "DUAL_DAGGERS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "True Kiss",
+          "totalMultiplier": 11.0,
+          "hitCount": 4.0,
+          "duration": 1.85,
+          "dpsMultiplier": 5.945946,
+          "statusRateMultiplier": 2.162162
+        },
+        {
+          "kind": "Forward",
+          "name": "Accursed Whispers",
+          "totalMultiplier": 13.0,
+          "hitCount": 10.0,
+          "duration": 2.15,
+          "dpsMultiplier": 6.046512,
+          "statusRateMultiplier": 4.651163
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Fey Intervention",
+          "totalMultiplier": 14.0,
+          "hitCount": 8.0,
+          "duration": 2.5,
+          "dpsMultiplier": 5.6,
+          "statusRateMultiplier": 3.2
+        },
+        {
+          "kind": "Block",
+          "name": "Fey Intervention",
+          "totalMultiplier": 7.0,
+          "hitCount": 3.0,
+          "duration": 1.1,
+          "dpsMultiplier": 6.363636,
+          "statusRateMultiplier": 2.727273
+        }
+      ],
+      "bestCombo": "Block"
+    },
+    {
+      "nameEn": "Mountain's Edge",
+      "nameZh": "山之锋芒",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DualKatanaCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/DualKatanaCmbOne.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualKatanaCmbOne.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "UNCOMMON",
+      "description": "动作迅猛、打击面广。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Dual Nikanas",
+      "compatName": "Dual Nikanas",
+      "compatTag": "DUAL_KATANAS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Rise and Fall",
+          "totalMultiplier": 21.0,
+          "hitCount": 7.0,
+          "duration": 2.8,
+          "dpsMultiplier": 7.5,
+          "statusRateMultiplier": 2.5
+        },
+        {
+          "kind": "Forward",
+          "name": "Loyal Blades",
+          "totalMultiplier": 10.0,
+          "hitCount": 9.0,
+          "duration": 2.7,
+          "dpsMultiplier": 3.703704,
+          "statusRateMultiplier": 3.333333
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Steel Eclipse",
+          "totalMultiplier": 22.0,
+          "hitCount": 10.0,
+          "duration": 3.9,
+          "dpsMultiplier": 5.641026,
+          "statusRateMultiplier": 2.564103
+        },
+        {
+          "kind": "Block",
+          "name": "Rise and Fall",
+          "totalMultiplier": 21.0,
+          "hitCount": 7.0,
+          "duration": 2.8,
+          "dpsMultiplier": 7.5,
+          "statusRateMultiplier": 2.5
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Carving Mantis",
+      "nameZh": "雕斩螳螂",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DualSwordCmbThreeMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/DualSwordCmbThree.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualSwordCmbThree.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "强力的斩击和快速的戳刺，保持向前的动量。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Dual Swords",
+      "compatName": "Dual Swords",
+      "compatTag": "DUAL_SWORDS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Rapid Incisions",
+          "totalMultiplier": 19.0,
+          "hitCount": 8.0,
+          "duration": 3.9,
+          "dpsMultiplier": 4.871795,
+          "statusRateMultiplier": 2.051282
+        },
+        {
+          "kind": "Forward",
+          "name": "Ambush Predator",
+          "totalMultiplier": 11.0,
+          "hitCount": 8.0,
+          "duration": 2.35,
+          "dpsMultiplier": 4.680851,
+          "statusRateMultiplier": 3.404255
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Dire Courtship",
+          "totalMultiplier": 8.0,
+          "hitCount": 4.0,
+          "duration": 1.2,
+          "dpsMultiplier": 6.666667,
+          "statusRateMultiplier": 3.333333
+        },
+        {
+          "kind": "Block",
+          "name": "Biting Mandibles",
+          "totalMultiplier": 12.0,
+          "hitCount": 7.0,
+          "duration": 2.45,
+          "dpsMultiplier": 4.897959,
+          "statusRateMultiplier": 2.857143
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Crossing Snakes",
+      "nameZh": "双蛇牙突",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DualSwordCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/DualSwordCombo1b.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualSwordCombo1b.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "多重角度攻击和致命刺击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Dual Swords",
+      "compatName": "Dual Swords",
+      "compatTag": "DUAL_SWORDS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "East to West",
+          "totalMultiplier": 9.0,
+          "hitCount": 5.0,
+          "duration": 1.35,
+          "dpsMultiplier": 6.666667,
+          "statusRateMultiplier": 3.703704
+        },
+        {
+          "kind": "Forward",
+          "name": "Lacerating Leap",
+          "totalMultiplier": 9.0,
+          "hitCount": 7.0,
+          "duration": 1.85,
+          "dpsMultiplier": 4.864865,
+          "statusRateMultiplier": 3.783784
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Northern Coil",
+          "totalMultiplier": 10.0,
+          "hitCount": 6.0,
+          "duration": 2.2,
+          "dpsMultiplier": 4.545455,
+          "statusRateMultiplier": 2.727273
+        },
+        {
+          "kind": "Block",
+          "name": "Twin Fang",
+          "totalMultiplier": 8.0,
+          "hitCount": 6.0,
+          "duration": 2.4,
+          "dpsMultiplier": 3.333333,
+          "statusRateMultiplier": 2.5
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Swirling Tiger",
+      "nameZh": "旋风虎击",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DualSwordCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/DualSwordCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/DualSwordCombo1a.png",
+      "polarity": "AP_POWER",
+      "rarity": "UNCOMMON",
+      "description": "扇动，多段命中的攻击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Dual Swords",
+      "compatName": "Dual Swords",
+      "compatTag": "DUAL_SWORDS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Winding Claws",
+          "totalMultiplier": 11.0,
+          "hitCount": 9.0,
+          "duration": 2.05,
+          "dpsMultiplier": 5.365854,
+          "statusRateMultiplier": 4.390244
+        },
+        {
+          "kind": "Forward",
+          "name": "Raking Flesh",
+          "totalMultiplier": 9.0,
+          "hitCount": 8.0,
+          "duration": 1.6,
+          "dpsMultiplier": 5.625,
+          "statusRateMultiplier": 5.0
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Dancing Hunter",
+          "totalMultiplier": 14.0,
+          "hitCount": 10.0,
+          "duration": 2.3,
+          "dpsMultiplier": 6.086957,
+          "statusRateMultiplier": 4.347826
+        },
+        {
+          "kind": "Block",
+          "name": "Winding Claws",
+          "totalMultiplier": 11.0,
+          "hitCount": 9.0,
+          "duration": 2.05,
+          "dpsMultiplier": 5.365854,
+          "statusRateMultiplier": 4.390244
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Fracturing Wind",
+      "nameZh": "破碎之风",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/FistCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/FistCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/FistCombo1a.png",
+      "polarity": "AP_WARD",
+      "rarity": "UNCOMMON",
+      "description": "快速，多次命中的打击与强力的处决攻击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Fist",
+      "compatName": "Fists",
+      "compatTag": "FIST_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Rolling Gale",
+          "totalMultiplier": 9.0,
+          "hitCount": 3.0,
+          "duration": 1.55,
+          "dpsMultiplier": 5.806452,
+          "statusRateMultiplier": 1.935484
+        },
+        {
+          "kind": "Forward",
+          "name": "Gaining Humility",
+          "totalMultiplier": 7.0,
+          "hitCount": 4.0,
+          "duration": 1.8,
+          "dpsMultiplier": 3.888889,
+          "statusRateMultiplier": 2.222222
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Trailing Doom",
+          "totalMultiplier": 12.0,
+          "hitCount": 6.0,
+          "duration": 1.9,
+          "dpsMultiplier": 6.315789,
+          "statusRateMultiplier": 3.157895
+        },
+        {
+          "kind": "Block",
+          "name": "Rising Wind",
+          "totalMultiplier": 10.0,
+          "hitCount": 4.0,
+          "duration": 1.45,
+          "dpsMultiplier": 6.896552,
+          "statusRateMultiplier": 2.758621
+        }
+      ],
+      "bestCombo": "Block"
+    },
+    {
+      "nameEn": "Gaia's Tragedy",
+      "nameZh": "母神悲歌",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/FistCmbThreeMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/GaiasTragedy.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/GaiasTragedy.png",
+      "polarity": "AP_DEFENSE",
+      "rarity": "RARE",
+      "description": "缓慢而沉重的打击",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Fist",
+      "compatName": "Fists",
+      "compatTag": "FIST_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "River's Grief",
+          "totalMultiplier": 18.0,
+          "hitCount": 6.0,
+          "duration": 3.65,
+          "dpsMultiplier": 4.931507,
+          "statusRateMultiplier": 1.643836
+        },
+        {
+          "kind": "Forward",
+          "name": "Ocean's Contempt",
+          "totalMultiplier": 7.0,
+          "hitCount": 6.0,
+          "duration": 1.65,
+          "dpsMultiplier": 4.242424,
+          "statusRateMultiplier": 3.636364
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Mountain's Rage",
+          "totalMultiplier": 15.0,
+          "hitCount": 7.0,
+          "duration": 2.3,
+          "dpsMultiplier": 6.521739,
+          "statusRateMultiplier": 3.043478
+        },
+        {
+          "kind": "Block",
+          "name": "Forest's Remorse",
+          "totalMultiplier": 15.0,
+          "hitCount": 8.0,
+          "duration": 3.8,
+          "dpsMultiplier": 3.947368,
+          "statusRateMultiplier": 2.105263
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Seismic Palm",
+      "nameZh": "震撼冲拳",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/FistCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/FistCombo2a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/FistCombo2a.png",
+      "polarity": "AP_DEFENSE",
+      "rarity": "RARE",
+      "description": "有条不紊的近距离组合攻击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Fist",
+      "compatName": "Fists",
+      "compatTag": "FIST_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Quaking Touch",
+          "totalMultiplier": 13.0,
+          "hitCount": 5.0,
+          "duration": 1.55,
+          "dpsMultiplier": 8.387097,
+          "statusRateMultiplier": 3.225806
+        },
+        {
+          "kind": "Forward",
+          "name": "Erupting Vulcan",
+          "totalMultiplier": 7.0,
+          "hitCount": 4.0,
+          "duration": 1.35,
+          "dpsMultiplier": 5.185185,
+          "statusRateMultiplier": 2.962963
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Sudden Rockfall",
+          "totalMultiplier": 11.0,
+          "hitCount": 5.0,
+          "duration": 1.7,
+          "dpsMultiplier": 6.470588,
+          "statusRateMultiplier": 2.941176
+        },
+        {
+          "kind": "Block",
+          "name": "Echoing Hands",
+          "totalMultiplier": 13.0,
+          "hitCount": 6.0,
+          "duration": 2.05,
+          "dpsMultiplier": 6.341463,
+          "statusRateMultiplier": 2.926829
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Astral Twilight",
+      "nameZh": "星界微光",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GlaiveCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/AstralTwilight.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/AstralTwilight.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "周身环绕的切斩与甩击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Glaive",
+      "compatName": "Glaives",
+      "compatTag": "GLAIVES_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Morning Sun",
+          "totalMultiplier": 22.0,
+          "hitCount": 10.0,
+          "duration": 4.25,
+          "dpsMultiplier": 5.176471,
+          "statusRateMultiplier": 2.352941
+        },
+        {
+          "kind": "Forward",
+          "name": "Midnight Cloud",
+          "totalMultiplier": 6.0,
+          "hitCount": 5.0,
+          "duration": 3.4,
+          "dpsMultiplier": 1.764706,
+          "statusRateMultiplier": 1.470588
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Falling Star",
+          "totalMultiplier": 12.0,
+          "hitCount": 8.0,
+          "duration": 3.2,
+          "dpsMultiplier": 3.75,
+          "statusRateMultiplier": 2.5
+        },
+        {
+          "kind": "Block",
+          "name": "Rising Moon",
+          "totalMultiplier": 16.0,
+          "hitCount": 7.0,
+          "duration": 3.5,
+          "dpsMultiplier": 4.571429,
+          "statusRateMultiplier": 2.0
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Gleaming Talon",
+      "nameZh": "微光利爪",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GlaiveCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/GlaiveCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/GlaiveCombo1a.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "快速的飞弧攻击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Glaive",
+      "compatName": "Glaives",
+      "compatTag": "GLAIVES_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Mercury Vortex",
+          "totalMultiplier": 21.0,
+          "hitCount": 8.0,
+          "duration": 4.3,
+          "dpsMultiplier": 4.883721,
+          "statusRateMultiplier": 1.860465
+        },
+        {
+          "kind": "Forward",
+          "name": "Ruin",
+          "totalMultiplier": 6.0,
+          "hitCount": 5.0,
+          "duration": 2.0,
+          "dpsMultiplier": 3.0,
+          "statusRateMultiplier": 2.5
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Silver Reach",
+          "totalMultiplier": 13.0,
+          "hitCount": 7.0,
+          "duration": 2.6,
+          "dpsMultiplier": 5.0,
+          "statusRateMultiplier": 2.692308
+        },
+        {
+          "kind": "Block",
+          "name": "Ruin",
+          "totalMultiplier": 13.0,
+          "hitCount": 4.0,
+          "duration": null,
+          "dpsMultiplier": null,
+          "statusRateMultiplier": null
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Bullet Dance",
+      "nameZh": "刀锋弹舞",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GunbladeCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/BulletDance.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/BulletDance.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "枪火与刀锋交织的华丽漫舞。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Gunblade",
+      "compatName": "Gunblade",
+      "compatTag": "GUNBLADE_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Automatic Rhumba",
+          "totalMultiplier": 19.0,
+          "hitCount": 11.0,
+          "duration": 4.5,
+          "dpsMultiplier": 4.222222,
+          "statusRateMultiplier": 2.444444
+        },
+        {
+          "kind": "Forward",
+          "name": "Magnum Mambo",
+          "totalMultiplier": 10.0,
+          "hitCount": 6.0,
+          "duration": 3.0,
+          "dpsMultiplier": 3.333333,
+          "statusRateMultiplier": 2.0
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Lead Tango",
+          "totalMultiplier": 13.0,
+          "hitCount": 7.0,
+          "duration": 2.8,
+          "dpsMultiplier": 4.642857,
+          "statusRateMultiplier": 2.5
+        },
+        {
+          "kind": "Block",
+          "name": "Samba Slash",
+          "totalMultiplier": 8.0,
+          "hitCount": 6.0,
+          "duration": 3.0,
+          "dpsMultiplier": 2.666667,
+          "statusRateMultiplier": 2.0
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "High Noon",
+      "nameZh": "正午",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GunbladeCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/HighNoon.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/HighNoon.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "在连续的凶狠斩击之间开火射击",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Gunblade",
+      "compatName": "Gunblade",
+      "compatTag": "GUNBLADE_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Final Showdown",
+          "totalMultiplier": 13.0,
+          "hitCount": 8.0,
+          "duration": 3.25,
+          "dpsMultiplier": 4.0,
+          "statusRateMultiplier": 2.461538
+        },
+        {
+          "kind": "Forward",
+          "name": "Vagabond Blitz",
+          "totalMultiplier": 8.0,
+          "hitCount": 6.0,
+          "duration": 2.5,
+          "dpsMultiplier": 3.2,
+          "statusRateMultiplier": 2.4
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Desperado Zeal",
+          "totalMultiplier": 6.0,
+          "hitCount": 6.0,
+          "duration": 1.85,
+          "dpsMultiplier": 3.243243,
+          "statusRateMultiplier": 3.243243
+        },
+        {
+          "kind": "Block",
+          "name": "Tomahawk Double-Tap",
+          "totalMultiplier": 16.0,
+          "hitCount": 5.0,
+          "duration": 1.75,
+          "dpsMultiplier": 9.142857,
+          "statusRateMultiplier": 2.857143
+        }
+      ],
+      "bestCombo": "Block"
+    },
+    {
+      "nameEn": "Crushing Ruin",
+      "nameZh": "月落乌啼",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/HammerCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/HammerCombo2b.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/HammerCombo2b.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "空中攻击具备群体控制的攻击连段。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Hammer",
+      "compatName": "Hammers",
+      "compatTag": "HAMMERS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Raging Whirlwind",
+          "totalMultiplier": 15.0,
+          "hitCount": 5.0,
+          "duration": 3.0,
+          "dpsMultiplier": 5.0,
+          "statusRateMultiplier": 1.666667
+        },
+        {
+          "kind": "Forward",
+          "name": "Tidal Force",
+          "totalMultiplier": 8.0,
+          "hitCount": 5.0,
+          "duration": 2.6,
+          "dpsMultiplier": 3.076923,
+          "statusRateMultiplier": 1.923077
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Shattered Village",
+          "totalMultiplier": 18.0,
+          "hitCount": 9.0,
+          "duration": 4.25,
+          "dpsMultiplier": 4.235294,
+          "statusRateMultiplier": 2.117647
+        },
+        {
+          "kind": "Block",
+          "name": "Winding Temper",
+          "totalMultiplier": 10.0,
+          "hitCount": 4.0,
+          "duration": 2.25,
+          "dpsMultiplier": 4.444444,
+          "statusRateMultiplier": 1.777778
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Shattering Storm",
+      "nameZh": "云暴山碎",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/HammerCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/HammerCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/HammerCombo1a.png",
+      "polarity": "AP_DEFENSE",
+      "rarity": "UNCOMMON",
+      "description": "流畅打击和高冲击的连段。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Hammer",
+      "compatName": "Hammers",
+      "compatTag": "HAMMERS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Falling Rock",
+          "totalMultiplier": 25.0,
+          "hitCount": 10.0,
+          "duration": 4.9,
+          "dpsMultiplier": 5.102041,
+          "statusRateMultiplier": 2.040816
+        },
+        {
+          "kind": "Forward",
+          "name": "Pounding Smite",
+          "totalMultiplier": 9.0,
+          "hitCount": 4.0,
+          "duration": 2.6,
+          "dpsMultiplier": 3.461538,
+          "statusRateMultiplier": 1.538462
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Smashing Fury",
+          "totalMultiplier": 19.0,
+          "hitCount": 7.0,
+          "duration": 3.55,
+          "dpsMultiplier": 5.352113,
+          "statusRateMultiplier": 1.971831
+        },
+        {
+          "kind": "Block",
+          "name": "Rising Thunder",
+          "totalMultiplier": 12.0,
+          "hitCount": 4.0,
+          "duration": 3.3,
+          "dpsMultiplier": 3.636364,
+          "statusRateMultiplier": 1.212121
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Cleaving Whirlwind",
+      "nameZh": "弧刃回天",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AxeCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/AxeCombo2a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/AxeCombo2a.png",
+      "polarity": "AP_DEFENSE",
+      "rarity": "RARE",
+      "description": "弧切与回旋斩。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Heavy Blade",
+      "compatName": "Heavy Blade",
+      "compatTag": "HEAVY_BLADE_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Crowd Fall",
+          "totalMultiplier": 13.0,
+          "hitCount": 4.0,
+          "duration": 2.25,
+          "dpsMultiplier": 5.777778,
+          "statusRateMultiplier": 1.777778
+        },
+        {
+          "kind": "Forward",
+          "name": "Broken Bull",
+          "totalMultiplier": 15.0,
+          "hitCount": 11.0,
+          "duration": 5.7,
+          "dpsMultiplier": 2.631579,
+          "statusRateMultiplier": 1.929825
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Sundered Tusk",
+          "totalMultiplier": 19.0,
+          "hitCount": 9.0,
+          "duration": 2.7,
+          "dpsMultiplier": 7.037037,
+          "statusRateMultiplier": 3.333333
+        },
+        {
+          "kind": "Block",
+          "name": "Drifting Stampede",
+          "totalMultiplier": 10.0,
+          "hitCount": 3.0,
+          "duration": 1.9,
+          "dpsMultiplier": 5.263158,
+          "statusRateMultiplier": 1.578947
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Rending Crane",
+      "nameZh": "撕裂鹤击",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AxeCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/AxeCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/AxeCombo1a.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "下砍附带冲击的连段。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Heavy Blade",
+      "compatName": "Heavy Blade",
+      "compatTag": "HEAVY_BLADE_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Skull Splitter",
+          "totalMultiplier": 11.0,
+          "hitCount": 4.0,
+          "duration": 1.85,
+          "dpsMultiplier": 5.945946,
+          "statusRateMultiplier": 2.162162
+        },
+        {
+          "kind": "Forward",
+          "name": "Lashing Tempest",
+          "totalMultiplier": 10.0,
+          "hitCount": 5.0,
+          "duration": 2.35,
+          "dpsMultiplier": 4.255319,
+          "statusRateMultiplier": 2.12766
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Rampaging Boar",
+          "totalMultiplier": 12.0,
+          "hitCount": 6.0,
+          "duration": 2.3,
+          "dpsMultiplier": 5.217391,
+          "statusRateMultiplier": 2.608696
+        },
+        {
+          "kind": "Block",
+          "name": "Landing Dragon",
+          "totalMultiplier": 5.0,
+          "hitCount": 1.0,
+          "duration": 1.05,
+          "dpsMultiplier": 4.761905,
+          "statusRateMultiplier": 0.952381
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Tempo Royale",
+      "nameZh": "皇家节奏",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AxeCmbThreeMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/TempoRoyale.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/TempoRoyale.png",
+      "polarity": "AP_DEFENSE",
+      "rarity": "RARE",
+      "description": "扫荡般的挥击与曲斜的斩击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Heavy Blade",
+      "compatName": "Heavy Blade",
+      "compatTag": "HEAVY_BLADE_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "August Mesto",
+          "totalMultiplier": 21.0,
+          "hitCount": 9.0,
+          "duration": 4.65,
+          "dpsMultiplier": 4.516129,
+          "statusRateMultiplier": 1.935484
+        },
+        {
+          "kind": "Forward",
+          "name": "Majestic Abandon",
+          "totalMultiplier": 8.0,
+          "hitCount": 6.0,
+          "duration": 3.4,
+          "dpsMultiplier": 2.352941,
+          "statusRateMultiplier": 1.764706
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Resplendent Calma",
+          "totalMultiplier": 11.0,
+          "hitCount": 4.0,
+          "duration": 2.1,
+          "dpsMultiplier": 5.238095,
+          "statusRateMultiplier": 1.904762
+        },
+        {
+          "kind": "Block",
+          "name": "Bold Reprise",
+          "totalMultiplier": 7.0,
+          "hitCount": 2.0,
+          "duration": 1.8,
+          "dpsMultiplier": 3.888889,
+          "statusRateMultiplier": 1.111111
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Galeforce Dawn",
+      "nameZh": "狂风压境",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/HeavyScytheCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/HeavyScytheMeleeTreeA.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/HeavyScytheMeleeTreeA.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "横扫切割与重型打击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Heavy Scythe",
+      "compatName": "Heavy Scythe",
+      "compatTag": "HEAVY SCYTHE_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Stormreaper",
+          "totalMultiplier": 9.0,
+          "hitCount": 3.0,
+          "duration": 3.06,
+          "dpsMultiplier": 2.941176,
+          "statusRateMultiplier": 0.980392
+        },
+        {
+          "kind": "Forward",
+          "name": "Bleak Winnowing",
+          "totalMultiplier": 6.0,
+          "hitCount": 6.0,
+          "duration": 2.66,
+          "dpsMultiplier": 2.255639,
+          "statusRateMultiplier": 2.255639
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Thundering Peaks",
+          "totalMultiplier": 14.0,
+          "hitCount": 8.0,
+          "duration": 4.86,
+          "dpsMultiplier": 2.880658,
+          "statusRateMultiplier": 1.646091
+        },
+        {
+          "kind": "Block",
+          "name": "Stormreaper",
+          "totalMultiplier": 9.0,
+          "hitCount": 3.0,
+          "duration": 3.06,
+          "dpsMultiplier": 2.941176,
+          "statusRateMultiplier": 0.980392
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Cyclone Kraken",
+      "nameZh": "飓风海怪",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MacheteCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/MacheteStanceB.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/MacheteStanceB.png",
+      "polarity": "AP_POWER",
+      "rarity": "RARE",
+      "description": "带有灵巧移动的残暴攻击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Machete",
+      "compatName": "Machetes",
+      "compatTag": "MACHETES_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Gale Triton",
+          "totalMultiplier": 17.0,
+          "hitCount": 7.0,
+          "duration": 4.1,
+          "dpsMultiplier": 4.146341,
+          "statusRateMultiplier": 1.707317
+        },
+        {
+          "kind": "Forward",
+          "name": "Leviathan Rain",
+          "totalMultiplier": 5.0,
+          "hitCount": 5.0,
+          "duration": 1.95,
+          "dpsMultiplier": 2.564103,
+          "statusRateMultiplier": 2.564103
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Lightning Siren",
+          "totalMultiplier": 11.0,
+          "hitCount": 5.0,
+          "duration": 2.3,
+          "dpsMultiplier": 4.782609,
+          "statusRateMultiplier": 2.173913
+        },
+        {
+          "kind": "Block",
+          "name": "Thunder Hydra",
+          "totalMultiplier": 11.0,
+          "hitCount": 4.0,
+          "duration": 2.3,
+          "dpsMultiplier": 4.782609,
+          "statusRateMultiplier": 1.73913
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Sundering Weave",
+      "nameZh": "分裂编织",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MacheteCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/Machete1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/Machete1a.png",
+      "polarity": "AP_POWER",
+      "rarity": "UNCOMMON",
+      "description": "造成集中伤害的沉稳切击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Machete",
+      "compatName": "Machetes",
+      "compatTag": "MACHETES_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Rapid Current",
+          "totalMultiplier": 9.0,
+          "hitCount": 3.0,
+          "duration": 1.7,
+          "dpsMultiplier": 5.294118,
+          "statusRateMultiplier": 1.764706
+        },
+        {
+          "kind": "Forward",
+          "name": "Cresting Surf",
+          "totalMultiplier": 5.0,
+          "hitCount": 3.0,
+          "duration": 2.0,
+          "dpsMultiplier": 2.5,
+          "statusRateMultiplier": 1.5
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Flash Flood",
+          "totalMultiplier": 9.0,
+          "hitCount": 5.0,
+          "duration": 2.4,
+          "dpsMultiplier": 3.75,
+          "statusRateMultiplier": 2.083333
+        },
+        {
+          "kind": "Block",
+          "name": "Coming Tide",
+          "totalMultiplier": 5.0,
+          "hitCount": 1.0,
+          "duration": 1.2,
+          "dpsMultiplier": 4.166667,
+          "statusRateMultiplier": 0.833333
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Blind Justice",
+      "nameZh": "无明制裁",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KatanaCmbThreeMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/KatanaZatoCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/KatanaZatoCombo1a.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "反握的持刀风格，强调其猛烈的斩击以及刺击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Nikana",
+      "compatName": "Nikanas",
+      "compatTag": "NIKANAS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Guiding Light",
+          "totalMultiplier": 19.0,
+          "hitCount": 8.0,
+          "duration": 2.6,
+          "dpsMultiplier": 7.307692,
+          "statusRateMultiplier": 3.076923
+        },
+        {
+          "kind": "Forward",
+          "name": "Zatōs Creed",
+          "totalMultiplier": 13.0,
+          "hitCount": 7.0,
+          "duration": 3.05,
+          "dpsMultiplier": 4.262295,
+          "statusRateMultiplier": 2.295082
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Heeding Call",
+          "totalMultiplier": 15.0,
+          "hitCount": 9.0,
+          "duration": 2.45,
+          "dpsMultiplier": 6.122449,
+          "statusRateMultiplier": 3.673469
+        },
+        {
+          "kind": "Block",
+          "name": "Destined Path",
+          "totalMultiplier": 12.0,
+          "hitCount": 6.0,
+          "duration": 1.7,
+          "dpsMultiplier": 7.058824,
+          "statusRateMultiplier": 3.529412
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Decisive Judgement",
+      "nameZh": "果断裁决",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KatanaCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/KatanaCombo1b.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/KatanaCombo1b.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "凶猛的双持打击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Nikana",
+      "compatName": "Nikanas",
+      "compatTag": "NIKANAS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Swift Retribution",
+          "totalMultiplier": 14.0,
+          "hitCount": 5.0,
+          "duration": 2.65,
+          "dpsMultiplier": 5.283019,
+          "statusRateMultiplier": 1.886792
+        },
+        {
+          "kind": "Forward",
+          "name": "Windless Cuts",
+          "totalMultiplier": 3.0,
+          "hitCount": 2.0,
+          "duration": 0.9,
+          "dpsMultiplier": 3.333333,
+          "statusRateMultiplier": 2.222222
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Consent Decree",
+          "totalMultiplier": 10.0,
+          "hitCount": 4.0,
+          "duration": 1.65,
+          "dpsMultiplier": 6.060606,
+          "statusRateMultiplier": 2.424242
+        },
+        {
+          "kind": "Block",
+          "name": "Silent Acumen",
+          "totalMultiplier": 8.0,
+          "hitCount": 2.0,
+          "duration": 1.55,
+          "dpsMultiplier": 5.16129,
+          "statusRateMultiplier": 1.290323
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Tranquil Cleave",
+      "nameZh": "秋风落叶",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KatanaCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/KatanaCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/KatanaCombo1a.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "强力弧斩附带疯狂的连段。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Nikana",
+      "compatName": "Nikanas",
+      "compatTag": "NIKANAS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Breathless Lunge",
+          "totalMultiplier": 13.0,
+          "hitCount": 6.0,
+          "duration": 3.8,
+          "dpsMultiplier": 3.421053,
+          "statusRateMultiplier": 1.578947
+        },
+        {
+          "kind": "Forward",
+          "name": "Windless Cut",
+          "totalMultiplier": 7.0,
+          "hitCount": 4.0,
+          "duration": 1.9,
+          "dpsMultiplier": 3.684211,
+          "statusRateMultiplier": 2.105263
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Beyond Reproach",
+          "totalMultiplier": 9.0,
+          "hitCount": 3.0,
+          "duration": 2.6,
+          "dpsMultiplier": 3.461538,
+          "statusRateMultiplier": 1.153846
+        },
+        {
+          "kind": "Block",
+          "name": "Hook and Eye",
+          "totalMultiplier": 8.0,
+          "hitCount": 2.0,
+          "duration": 1.2,
+          "dpsMultiplier": 6.666667,
+          "statusRateMultiplier": 1.666667
+        }
+      ],
+      "bestCombo": "Block"
+    },
+    {
+      "nameEn": "Atlantis Vulcan",
+      "nameZh": "深渊之火",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NunchakuCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/NunchakuComboOne.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/NunchakuComboOne.png",
+      "polarity": "AP_DEFENSE",
+      "rarity": "UNCOMMON",
+      "description": "虚实难辨、动作快速的打击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Nunchaku",
+      "compatName": "Nunchaku",
+      "compatTag": "NUNCHAKU_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Molten Whirlpool",
+          "totalMultiplier": 10.5,
+          "hitCount": 16.0,
+          "duration": 3.45,
+          "dpsMultiplier": 3.043478,
+          "statusRateMultiplier": 4.637681
+        },
+        {
+          "kind": "Forward",
+          "name": "Searing Undertow",
+          "totalMultiplier": 7.5,
+          "hitCount": 10.0,
+          "duration": 3.25,
+          "dpsMultiplier": 2.307692,
+          "statusRateMultiplier": 3.076923
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Blazing Vortex",
+          "totalMultiplier": 15.5,
+          "hitCount": 18.0,
+          "duration": 4.1,
+          "dpsMultiplier": 3.780488,
+          "statusRateMultiplier": 4.390244
+        },
+        {
+          "kind": "Block",
+          "name": "Infernal Maelstrom",
+          "totalMultiplier": 15.5,
+          "hitCount": 18.0,
+          "duration": 3.35,
+          "dpsMultiplier": 4.626866,
+          "statusRateMultiplier": 5.373134
+        }
+      ],
+      "bestCombo": "Block"
+    },
+    {
+      "nameEn": "Bleeding Willow",
+      "nameZh": "血色万柳",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PolearmCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/PolearmCombo2a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/PolearmCombo2a.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "强大的和快速攻击与跳跃组合。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Polearm",
+      "compatName": "Polearms",
+      "compatTag": "POLEARMS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Lethal Gust",
+          "totalMultiplier": 5.0,
+          "hitCount": 4.0,
+          "duration": 0.95,
+          "dpsMultiplier": 5.263158,
+          "statusRateMultiplier": 4.210526
+        },
+        {
+          "kind": "Forward",
+          "name": "Lethal Gust",
+          "totalMultiplier": 5.0,
+          "hitCount": 4.0,
+          "duration": 0.95,
+          "dpsMultiplier": 5.263158,
+          "statusRateMultiplier": 4.210526
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Drifting Steel",
+          "totalMultiplier": 16.0,
+          "hitCount": 8.0,
+          "duration": 3.5,
+          "dpsMultiplier": 4.571429,
+          "statusRateMultiplier": 2.285714
+        },
+        {
+          "kind": "Block",
+          "name": "Lethal Gust",
+          "totalMultiplier": 5.0,
+          "hitCount": 4.0,
+          "duration": 0.95,
+          "dpsMultiplier": 5.263158,
+          "statusRateMultiplier": 4.210526
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Shimmering Blight",
+      "nameZh": "飞光荒疫",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PolearmCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/PolearmCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/PolearmCombo1a.png",
+      "polarity": "AP_POWER",
+      "rarity": "UNCOMMON",
+      "description": "快速旋转攻击和惊人的突击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Polearm",
+      "compatName": "Polearms",
+      "compatTag": "POLEARMS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Slashing Wind",
+          "totalMultiplier": 5.0,
+          "hitCount": 4.0,
+          "duration": 0.95,
+          "dpsMultiplier": 5.263158,
+          "statusRateMultiplier": 4.210526
+        },
+        {
+          "kind": "Forward",
+          "name": "Slashing Wind",
+          "totalMultiplier": 5.0,
+          "hitCount": 4.0,
+          "duration": 0.95,
+          "dpsMultiplier": 5.263158,
+          "statusRateMultiplier": 4.210526
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Howling Gale",
+          "totalMultiplier": 13.0,
+          "hitCount": 9.0,
+          "duration": 2.55,
+          "dpsMultiplier": 5.098039,
+          "statusRateMultiplier": 3.529412
+        },
+        {
+          "kind": "Block",
+          "name": "Slashing Wind",
+          "totalMultiplier": 5.0,
+          "hitCount": 4.0,
+          "duration": 0.95,
+          "dpsMultiplier": 5.263158,
+          "statusRateMultiplier": 4.210526
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Twirling Spire",
+      "nameZh": "回转尖峰",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PolearmCmbThreeMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/PolearmCmbThree.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/PolearmCmbThree.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "大范围的扫打与精准打击的混合。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Polearm",
+      "compatName": "Polearms",
+      "compatTag": "POLEARMS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Cresting Peak",
+          "totalMultiplier": 14.0,
+          "hitCount": 5.0,
+          "duration": 3.3,
+          "dpsMultiplier": 4.242424,
+          "statusRateMultiplier": 1.515152
+        },
+        {
+          "kind": "Forward",
+          "name": "Spiraling Pinnacle",
+          "totalMultiplier": 11.0,
+          "hitCount": 9.0,
+          "duration": 2.5,
+          "dpsMultiplier": 4.4,
+          "statusRateMultiplier": 3.6
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Vaulting Apex",
+          "totalMultiplier": 8.0,
+          "hitCount": 3.0,
+          "duration": 1.75,
+          "dpsMultiplier": 4.571429,
+          "statusRateMultiplier": 1.714286
+        },
+        {
+          "kind": "Block",
+          "name": "Summit Plunge",
+          "totalMultiplier": 12.0,
+          "hitCount": 8.0,
+          "duration": 2.0,
+          "dpsMultiplier": 6.0,
+          "statusRateMultiplier": 4.0
+        }
+      ],
+      "bestCombo": "Block"
+    },
+    {
+      "nameEn": "Vulpine Mask",
+      "nameZh": "狡狐诈面",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/RapierCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/RapierCmbOneMeleeTree.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/RapierCmbOneMeleeTree.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "快速切割，刺穿攻击",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Rapier",
+      "compatName": "Rapiers",
+      "compatTag": "RAPIER_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Assailant Guise",
+          "totalMultiplier": 16.0,
+          "hitCount": 7.0,
+          "duration": 3.0,
+          "dpsMultiplier": 5.333333,
+          "statusRateMultiplier": 2.333333
+        },
+        {
+          "kind": "Forward",
+          "name": "Duel Secrets",
+          "totalMultiplier": 8.0,
+          "hitCount": 7.0,
+          "duration": 3.0,
+          "dpsMultiplier": 2.666667,
+          "statusRateMultiplier": 2.333333
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Hidden Flourish",
+          "totalMultiplier": 14.0,
+          "hitCount": 7.0,
+          "duration": 2.5,
+          "dpsMultiplier": 5.6,
+          "statusRateMultiplier": 2.8
+        },
+        {
+          "kind": "Block",
+          "name": "Deceptive Lunge",
+          "totalMultiplier": 9.0,
+          "hitCount": 3.0,
+          "duration": 1.45,
+          "dpsMultiplier": 6.206897,
+          "statusRateMultiplier": 2.068966
+        }
+      ],
+      "bestCombo": "Block"
+    },
+    {
+      "nameEn": "Reaping Spiral",
+      "nameZh": "收割螺旋",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ScytheCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/ScytheCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/ScytheCombo1a.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "大范围的挥动攻击与多次命中的连段。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Scythe",
+      "compatName": "Scythes",
+      "compatTag": "SCYTHES_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Eternal Nocturne",
+          "totalMultiplier": 16.0,
+          "hitCount": 5.0,
+          "duration": 2.9,
+          "dpsMultiplier": 5.517241,
+          "statusRateMultiplier": 1.724138
+        },
+        {
+          "kind": "Forward",
+          "name": "Reclamation",
+          "totalMultiplier": 6.0,
+          "hitCount": 3.0,
+          "duration": 1.85,
+          "dpsMultiplier": 3.243243,
+          "statusRateMultiplier": 1.621622
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Abyssal Automaton",
+          "totalMultiplier": 9.0,
+          "hitCount": 4.0,
+          "duration": 2.1,
+          "dpsMultiplier": 4.285714,
+          "statusRateMultiplier": 1.904762
+        },
+        {
+          "kind": "Block",
+          "name": "Eternal Nocturne",
+          "totalMultiplier": 16.0,
+          "hitCount": 5.0,
+          "duration": 2.9,
+          "dpsMultiplier": 5.517241,
+          "statusRateMultiplier": 1.724138
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Stalking Fan",
+      "nameZh": "缠旋风切",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ScytheCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/ScytheCombo2a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/ScytheCombo2a.png",
+      "polarity": "AP_POWER",
+      "rarity": "RARE",
+      "description": "毁灭性的冲刺螺旋连段。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Scythe",
+      "compatName": "Scythes",
+      "compatTag": "SCYTHES_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Shadow Wing",
+          "totalMultiplier": 15.0,
+          "hitCount": 5.0,
+          "duration": 4.9,
+          "dpsMultiplier": 3.061224,
+          "statusRateMultiplier": 1.020408
+        },
+        {
+          "kind": "Forward",
+          "name": "Many Tears",
+          "totalMultiplier": 4.0,
+          "hitCount": 2.0,
+          "duration": 1.25,
+          "dpsMultiplier": 3.2,
+          "statusRateMultiplier": 1.6
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Dying Light",
+          "totalMultiplier": 10.0,
+          "hitCount": 5.0,
+          "duration": 2.4,
+          "dpsMultiplier": 4.166667,
+          "statusRateMultiplier": 2.083333
+        },
+        {
+          "kind": "Block",
+          "name": "Shadow Wing",
+          "totalMultiplier": 15.0,
+          "hitCount": 5.0,
+          "duration": 4.9,
+          "dpsMultiplier": 3.061224,
+          "statusRateMultiplier": 1.020408
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Brutal Tide",
+      "nameZh": "残暴浪潮",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PunchKickCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/PunchKickCombo2b.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/PunchKickCombo2b.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "回旋踢和飞越拳击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Sparring",
+      "compatName": "Sparring",
+      "compatTag": "SPARRING_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Inferno",
+          "totalMultiplier": 14.0,
+          "hitCount": 8.0,
+          "duration": 2.15,
+          "dpsMultiplier": 6.511628,
+          "statusRateMultiplier": 3.72093
+        },
+        {
+          "kind": "Forward",
+          "name": "Inferno",
+          "totalMultiplier": 14.0,
+          "hitCount": 8.0,
+          "duration": 2.15,
+          "dpsMultiplier": 6.511628,
+          "statusRateMultiplier": 3.72093
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Rushing Fire",
+          "totalMultiplier": 18.0,
+          "hitCount": 9.0,
+          "duration": 3.85,
+          "dpsMultiplier": 4.675325,
+          "statusRateMultiplier": 2.337662
+        },
+        {
+          "kind": "Block",
+          "name": "Inferno",
+          "totalMultiplier": 14.0,
+          "hitCount": 8.0,
+          "duration": 2.15,
+          "dpsMultiplier": 6.511628,
+          "statusRateMultiplier": 3.72093
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Grim Fury",
+      "nameZh": "冷面狂怒",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PunchKickCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/PunchKickCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/PunchKickCombo1a.png",
+      "polarity": "AP_WARD",
+      "rarity": "UNCOMMON",
+      "description": "闪电般迅速的连击和重击组合。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Sparring",
+      "compatName": "Sparring",
+      "compatTag": "SPARRING_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Fanning Flame",
+          "totalMultiplier": 13.0,
+          "hitCount": 5.0,
+          "duration": 1.9,
+          "dpsMultiplier": 6.842105,
+          "statusRateMultiplier": 2.631579
+        },
+        {
+          "kind": "Forward",
+          "name": "Bright Blaze",
+          "totalMultiplier": 10.0,
+          "hitCount": 6.0,
+          "duration": 1.75,
+          "dpsMultiplier": 5.714286,
+          "statusRateMultiplier": 3.428571
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Burning Desire",
+          "totalMultiplier": 6.0,
+          "hitCount": 2.0,
+          "duration": 1.4,
+          "dpsMultiplier": 4.285714,
+          "statusRateMultiplier": 1.428571
+        },
+        {
+          "kind": "Block",
+          "name": "Fanning Flame",
+          "totalMultiplier": 13.0,
+          "hitCount": 5.0,
+          "duration": 1.9,
+          "dpsMultiplier": 6.842105,
+          "statusRateMultiplier": 2.631579
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Clashing Forest",
+      "nameZh": "巨林冲击",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/StaffCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/StaffCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/StaffCombo1a.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "弧线攻击与集中的连段",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Staff",
+      "compatName": "Staff",
+      "compatTag": "STAVES_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Resolute Flurry",
+          "totalMultiplier": 13.5,
+          "hitCount": 8.0,
+          "duration": 1.95,
+          "dpsMultiplier": 6.923077,
+          "statusRateMultiplier": 4.102564
+        },
+        {
+          "kind": "Forward",
+          "name": "Skyward Limb",
+          "totalMultiplier": 5.0,
+          "hitCount": 4.0,
+          "duration": 2.05,
+          "dpsMultiplier": 2.439024,
+          "statusRateMultiplier": 1.95122
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Battering Roots",
+          "totalMultiplier": 10.0,
+          "hitCount": 4.0,
+          "duration": 2.1,
+          "dpsMultiplier": 4.761905,
+          "statusRateMultiplier": 1.904762
+        },
+        {
+          "kind": "Block",
+          "name": "Resolute Flurry",
+          "totalMultiplier": 13.5,
+          "hitCount": 8.0,
+          "duration": 1.95,
+          "dpsMultiplier": 6.923077,
+          "statusRateMultiplier": 4.102564
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Flailing Branch",
+      "nameZh": "多流抽击",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/StaffCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/StaffCombo2a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/StaffCombo2a.png",
+      "polarity": "AP_WARD",
+      "rarity": "RARE",
+      "description": "上升打击和旋风的连段。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Staff",
+      "compatName": "Staves",
+      "compatTag": "STAVES_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Rising Falls",
+          "totalMultiplier": 9.0,
+          "hitCount": 3.0,
+          "duration": 2.35,
+          "dpsMultiplier": 3.829787,
+          "statusRateMultiplier": 1.276596
+        },
+        {
+          "kind": "Forward",
+          "name": "Battered Thread",
+          "totalMultiplier": 10.0,
+          "hitCount": 4.0,
+          "duration": 1.85,
+          "dpsMultiplier": 5.405405,
+          "statusRateMultiplier": 2.162162
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Autumn Leaf",
+          "totalMultiplier": 9.0,
+          "hitCount": 4.0,
+          "duration": 2.05,
+          "dpsMultiplier": 4.390244,
+          "statusRateMultiplier": 1.95122
+        },
+        {
+          "kind": "Block",
+          "name": "Rising Falls",
+          "totalMultiplier": 9.0,
+          "hitCount": 3.0,
+          "duration": 2.35,
+          "dpsMultiplier": 3.829787,
+          "statusRateMultiplier": 1.276596
+        }
+      ],
+      "bestCombo": "Forward"
+    },
+    {
+      "nameEn": "Crimson Dervish",
+      "nameZh": "赤红狂舞",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/CrimsonDervishMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/CrimsonDervish1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/CrimsonDervish1a.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "有如旋风般的强烈攻击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Sword",
+      "compatName": "Swords",
+      "compatTag": "SWORDS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Twisting Flurry",
+          "totalMultiplier": 14.0,
+          "hitCount": 5.0,
+          "duration": 2.0,
+          "dpsMultiplier": 7.0,
+          "statusRateMultiplier": 2.5
+        },
+        {
+          "kind": "Forward",
+          "name": "Crimson Orbit",
+          "totalMultiplier": 6.0,
+          "hitCount": 4.0,
+          "duration": 2.0,
+          "dpsMultiplier": 3.0,
+          "statusRateMultiplier": 2.0
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Coiling Impale",
+          "totalMultiplier": 8.0,
+          "hitCount": 3.0,
+          "duration": 1.5,
+          "dpsMultiplier": 5.333333,
+          "statusRateMultiplier": 2.0
+        },
+        {
+          "kind": "Block",
+          "name": "Twisting Flurry",
+          "totalMultiplier": 14.0,
+          "hitCount": 5.0,
+          "duration": 2.0,
+          "dpsMultiplier": 7.0,
+          "statusRateMultiplier": 2.5
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Iron Phoenix",
+      "nameZh": "钢铁凤凰",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/IronPhoenixMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/IronPhoenix1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/IronPhoenix1a.png",
+      "polarity": "AP_WARD",
+      "rarity": "RARE",
+      "description": "快速切割攻击用穿刺完结。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Sword",
+      "compatName": "Swords",
+      "compatTag": "SWORDS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Wings and Beak",
+          "totalMultiplier": 7.0,
+          "hitCount": 3.0,
+          "duration": 1.35,
+          "dpsMultiplier": 5.185185,
+          "statusRateMultiplier": 2.222222
+        },
+        {
+          "kind": "Forward",
+          "name": "Double Slash",
+          "totalMultiplier": 3.0,
+          "hitCount": 2.0,
+          "duration": 0.65,
+          "dpsMultiplier": 4.615385,
+          "statusRateMultiplier": 3.076923
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Taking Flight",
+          "totalMultiplier": 9.0,
+          "hitCount": 4.0,
+          "duration": 1.8,
+          "dpsMultiplier": 5.0,
+          "statusRateMultiplier": 2.222222
+        },
+        {
+          "kind": "Block",
+          "name": "Wings and Beak",
+          "totalMultiplier": 7.0,
+          "hitCount": 3.0,
+          "duration": 1.35,
+          "dpsMultiplier": 5.185185,
+          "statusRateMultiplier": 2.222222
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Swooping Falcon",
+      "nameZh": "猎鹰俯击",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/SwordCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/SwordCmbTwo.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/SwordCmbTwo.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "旋转突刺中的快速斩击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Sword",
+      "compatName": "Swords",
+      "compatTag": "SWORDS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Diving Kestrel",
+          "totalMultiplier": 12.0,
+          "hitCount": 5.0,
+          "duration": 2.0,
+          "dpsMultiplier": 6.0,
+          "statusRateMultiplier": 2.5
+        },
+        {
+          "kind": "Forward",
+          "name": "Swift Pursuit",
+          "totalMultiplier": 6.0,
+          "hitCount": 4.0,
+          "duration": 1.95,
+          "dpsMultiplier": 3.076923,
+          "statusRateMultiplier": 2.051282
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Slicing Talon",
+          "totalMultiplier": 10.0,
+          "hitCount": 4.0,
+          "duration": 2.05,
+          "dpsMultiplier": 4.878049,
+          "statusRateMultiplier": 1.95122
+        },
+        {
+          "kind": "Block",
+          "name": "Keen Broadwing",
+          "totalMultiplier": 12.0,
+          "hitCount": 4.0,
+          "duration": 2.75,
+          "dpsMultiplier": 4.363636,
+          "statusRateMultiplier": 1.454545
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Vengeful Revenant",
+      "nameZh": "复仇亡灵",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/StalkerSwordMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/StalkerSwordStance.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/StalkerSwordStance.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "RARE",
+      "description": "憎恨……恐惧……绝望……",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Sword",
+      "compatName": "Swords",
+      "compatTag": "SWORDS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Impending Dread",
+          "totalMultiplier": 14.0,
+          "hitCount": 5.0,
+          "duration": 3.15,
+          "dpsMultiplier": 4.444444,
+          "statusRateMultiplier": 1.587302
+        },
+        {
+          "kind": "Forward",
+          "name": "Lone Vengeance",
+          "totalMultiplier": 6.0,
+          "hitCount": 4.0,
+          "duration": 1.55,
+          "dpsMultiplier": 3.870968,
+          "statusRateMultiplier": 2.580645
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Drowning Despair",
+          "totalMultiplier": 11.0,
+          "hitCount": 6.0,
+          "duration": 2.3,
+          "dpsMultiplier": 4.782609,
+          "statusRateMultiplier": 2.608696
+        },
+        {
+          "kind": "Block",
+          "name": "Rising Hate",
+          "totalMultiplier": 11.0,
+          "hitCount": 5.0,
+          "duration": 3.0,
+          "dpsMultiplier": 3.666667,
+          "statusRateMultiplier": 1.666667
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Eleventh Storm",
+      "nameZh": "终焉风暴",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/SwordShieldCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/SwordShieldCombo1.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/SwordShieldCombo1.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "使用剑和盾的快速攻击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Sword and Shield",
+      "compatName": "Sword And Shield",
+      "compatTag": "SWORDS_AND_SHIELD_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Striking Thunder",
+          "totalMultiplier": 19.0,
+          "hitCount": 7.0,
+          "duration": 3.5,
+          "dpsMultiplier": 5.428571,
+          "statusRateMultiplier": 2.0
+        },
+        {
+          "kind": "Forward",
+          "name": "Devouring Beast",
+          "totalMultiplier": 5.0,
+          "hitCount": 3.0,
+          "duration": 1.15,
+          "dpsMultiplier": 4.347826,
+          "statusRateMultiplier": 2.608696
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Bide and Bleed",
+          "totalMultiplier": 9.0,
+          "hitCount": 5.0,
+          "duration": 1.8,
+          "dpsMultiplier": 5.0,
+          "statusRateMultiplier": 2.777778
+        },
+        {
+          "kind": "Block",
+          "name": "Diamond Deus",
+          "totalMultiplier": 10.0,
+          "hitCount": 6.0,
+          "duration": 2.0,
+          "dpsMultiplier": 5.0,
+          "statusRateMultiplier": 3.0
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Final Harbinger",
+      "nameZh": "最终先驱",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/RegorSwordShieldMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/RegorSwordShieldMeleeTree.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/RegorSwordShieldMeleeTree.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "强力的斩切与盾牌攻击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Sword and Shield",
+      "compatName": "Sword And Shield",
+      "compatTag": "SWORDS_AND_SHIELD_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Null Warning",
+          "totalMultiplier": 21.0,
+          "hitCount": 11.0,
+          "duration": 3.05,
+          "dpsMultiplier": 6.885246,
+          "statusRateMultiplier": 3.606557
+        },
+        {
+          "kind": "Forward",
+          "name": "Impending Battery",
+          "totalMultiplier": 15.0,
+          "hitCount": 10.0,
+          "duration": 2.65,
+          "dpsMultiplier": 5.660377,
+          "statusRateMultiplier": 3.773585
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Dark Light",
+          "totalMultiplier": 20.0,
+          "hitCount": 14.0,
+          "duration": 4.05,
+          "dpsMultiplier": 4.938272,
+          "statusRateMultiplier": 3.45679
+        },
+        {
+          "kind": "Block",
+          "name": "Systemic Shred",
+          "totalMultiplier": 10.0,
+          "hitCount": 5.0,
+          "duration": 1.8,
+          "dpsMultiplier": 5.555556,
+          "statusRateMultiplier": 2.777778
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Gemini Cross",
+      "nameZh": "纵横双子",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/TonfaCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/TonfaCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/TonfaCombo1a.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "一种扫荡般的切斩以及戳刺攻击方式。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Tonfa",
+      "compatName": "Tonfas",
+      "compatTag": "TONFA_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Vagrant Blight",
+          "totalMultiplier": 21.5,
+          "hitCount": 18.0,
+          "duration": 4.6,
+          "dpsMultiplier": 4.673913,
+          "statusRateMultiplier": 3.913043
+        },
+        {
+          "kind": "Forward",
+          "name": "Cold Vendetta",
+          "totalMultiplier": 4.0,
+          "hitCount": 3.0,
+          "duration": 1.2,
+          "dpsMultiplier": 3.333333,
+          "statusRateMultiplier": 2.5
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Baleful Sin",
+          "totalMultiplier": 13.0,
+          "hitCount": 7.0,
+          "duration": 2.3,
+          "dpsMultiplier": 5.652174,
+          "statusRateMultiplier": 3.043478
+        },
+        {
+          "kind": "Block",
+          "name": "Blind Tormentor",
+          "totalMultiplier": 17.0,
+          "hitCount": 11.0,
+          "duration": 2.85,
+          "dpsMultiplier": 5.964912,
+          "statusRateMultiplier": 3.859649
+        }
+      ],
+      "bestCombo": "Block"
+    },
+    {
+      "nameEn": "Sovereign Outcast",
+      "nameZh": "至尊浪人",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/TonfaCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/TonfaB.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/TonfaB.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "有着连绵不绝攻击手段的诡异风格。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Tonfa",
+      "compatName": "Tonfas",
+      "compatTag": "TONFA_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Rogue Edict",
+          "totalMultiplier": 22.0,
+          "hitCount": 15.0,
+          "duration": 2.85,
+          "dpsMultiplier": 7.719298,
+          "statusRateMultiplier": 5.263158
+        },
+        {
+          "kind": "Forward",
+          "name": "Vagrant Behest",
+          "totalMultiplier": 9.0,
+          "hitCount": 9.0,
+          "duration": 1.75,
+          "dpsMultiplier": 5.142857,
+          "statusRateMultiplier": 5.142857
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Villain Rule",
+          "totalMultiplier": 15.0,
+          "hitCount": 12.0,
+          "duration": 3.0,
+          "dpsMultiplier": 5.0,
+          "statusRateMultiplier": 4.0
+        },
+        {
+          "kind": "Block",
+          "name": "Scout Command",
+          "totalMultiplier": 9.0,
+          "hitCount": 3.0,
+          "duration": 1.25,
+          "dpsMultiplier": 7.2,
+          "statusRateMultiplier": 2.4
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Wise Razor",
+      "nameZh": "慧黠斩剃",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/LongKatanaCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/LongKatanaCmbOne.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/LongKatanaCmbOne.png",
+      "polarity": "AP_ATTACK",
+      "rarity": "UNCOMMON",
+      "description": "灵巧般完成扫荡和斩击",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Two-Handed Nikana",
+      "compatName": "Two-Handed Nikana",
+      "compatTag": "LONG_KATANA_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Threshing Grain",
+          "totalMultiplier": 17.0,
+          "hitCount": 6.0,
+          "duration": 4.4,
+          "dpsMultiplier": 3.863636,
+          "statusRateMultiplier": 1.363636
+        },
+        {
+          "kind": "Forward",
+          "name": "Cutting Thrice",
+          "totalMultiplier": 8.0,
+          "hitCount": 3.0,
+          "duration": 2.55,
+          "dpsMultiplier": 3.137255,
+          "statusRateMultiplier": 1.176471
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Calling Thunder",
+          "totalMultiplier": 15.0,
+          "hitCount": 6.0,
+          "duration": 3.5,
+          "dpsMultiplier": 4.285714,
+          "statusRateMultiplier": 1.714286
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Slicing Feathers",
+      "nameZh": "割裂羽翼",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/WarfanCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/WarfanCmbOne.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/WarfanCmbOne.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "旋转、杂技般的挥砍，配合着精妙的点睛招式。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Warfan",
+      "compatName": "Warfans",
+      "compatTag": "WARFAN_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Scathing Plume",
+          "totalMultiplier": 19.0,
+          "hitCount": 8.0,
+          "duration": 3.6,
+          "dpsMultiplier": 5.277778,
+          "statusRateMultiplier": 2.222222
+        },
+        {
+          "kind": "Forward",
+          "name": "Razor Fin",
+          "totalMultiplier": 10.0,
+          "hitCount": 7.0,
+          "duration": 1.65,
+          "dpsMultiplier": 6.060606,
+          "statusRateMultiplier": 4.242424
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Serrated Crest",
+          "totalMultiplier": 18.0,
+          "hitCount": 13.0,
+          "duration": 3.55,
+          "dpsMultiplier": 5.070423,
+          "statusRateMultiplier": 3.661972
+        },
+        {
+          "kind": "Block",
+          "name": "Cutting Fringe",
+          "totalMultiplier": 8.0,
+          "hitCount": 3.0,
+          "duration": 2.15,
+          "dpsMultiplier": 3.72093,
+          "statusRateMultiplier": 1.395349
+        }
+      ],
+      "bestCombo": "Forward"
+    },
+    {
+      "nameEn": "Votive Onslaught",
+      "nameZh": "埋首猛击",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/WarfanCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/WarfanCmbTwo.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/WarfanCmbTwo.png",
+      "polarity": "AP_TACTIC",
+      "rarity": "RARE",
+      "description": "精确、集中的弧切，不带一丝怜悯。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Warfan",
+      "compatName": "Warfans",
+      "compatTag": "WARFAN_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Purging Drive",
+          "totalMultiplier": 20.0,
+          "hitCount": 10.0,
+          "duration": 2.57,
+          "dpsMultiplier": 7.782101,
+          "statusRateMultiplier": 3.891051
+        },
+        {
+          "kind": "Forward",
+          "name": "Clarion Rush",
+          "totalMultiplier": 10.0,
+          "hitCount": 10.0,
+          "duration": 1.84,
+          "dpsMultiplier": 5.434783,
+          "statusRateMultiplier": 5.434783
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Rending Lamentation",
+          "totalMultiplier": 19.0,
+          "hitCount": 10.0,
+          "duration": 2.78,
+          "dpsMultiplier": 6.834532,
+          "statusRateMultiplier": 3.597122
+        },
+        {
+          "kind": "Block",
+          "name": "Penitent Offering",
+          "totalMultiplier": 16.0,
+          "hitCount": 8.0,
+          "duration": 2.67,
+          "dpsMultiplier": 5.992509,
+          "statusRateMultiplier": 2.996255
+        }
+      ],
+      "bestCombo": "Neutral"
+    },
+    {
+      "nameEn": "Burning Wasp",
+      "nameZh": "炙热黄蜂",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/WhipCmbOneMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/WhipCombo1a.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/WhipCombo1a.png",
+      "polarity": "AP_DEFENSE",
+      "rarity": "UNCOMMON",
+      "description": "施展连环鞭击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Whip",
+      "compatName": "Whips",
+      "compatTag": "WHIPS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Sparking Torture",
+          "totalMultiplier": 6.0,
+          "hitCount": 2.0,
+          "duration": 1.9,
+          "dpsMultiplier": 3.157895,
+          "statusRateMultiplier": 1.052632
+        },
+        {
+          "kind": "Forward",
+          "name": "Buzzing Sting",
+          "totalMultiplier": 5.0,
+          "hitCount": 4.0,
+          "duration": 3.0,
+          "dpsMultiplier": 1.666667,
+          "statusRateMultiplier": 1.333333
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Guided Claw",
+          "totalMultiplier": 6.0,
+          "hitCount": 2.0,
+          "duration": 1.8,
+          "dpsMultiplier": 3.333333,
+          "statusRateMultiplier": 1.111111
+        },
+        {
+          "kind": "Block",
+          "name": "Sparking Torture",
+          "totalMultiplier": 6.0,
+          "hitCount": 2.0,
+          "duration": 1.9,
+          "dpsMultiplier": 3.157895,
+          "statusRateMultiplier": 1.052632
+        }
+      ],
+      "bestCombo": "Forward Block"
+    },
+    {
+      "nameEn": "Coiling Viper",
+      "nameZh": "毒蛇螺旋",
+      "path": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/WhipCmbTwoMeleeTree",
+      "icon": "/Lotus/Interface/Cards/Images/Stances/WhipCombo2b.png",
+      "iconAsset": "/assets/stances/art/Lotus/Interface/Cards/Images/Stances/WhipCombo2b.png",
+      "polarity": "AP_POWER",
+      "rarity": "RARE",
+      "description": "带着强力翻转的弧状攻击。",
+      "baseDrain": -2,
+      "maxRank": 3,
+      "weaponType": "Whip",
+      "compatName": "Whips",
+      "compatTag": "WHIPS_STANCE",
+      "combos": [
+        {
+          "kind": "Neutral",
+          "name": "Whistling Wind",
+          "totalMultiplier": 10.0,
+          "hitCount": 5.0,
+          "duration": 2.7,
+          "dpsMultiplier": 3.703704,
+          "statusRateMultiplier": 1.851852
+        },
+        {
+          "kind": "Forward",
+          "name": "Whistling Wind",
+          "totalMultiplier": 10.0,
+          "hitCount": 5.0,
+          "duration": 2.7,
+          "dpsMultiplier": 3.703704,
+          "statusRateMultiplier": 1.851852
+        },
+        {
+          "kind": "Forward Block",
+          "name": "Tumbling King",
+          "totalMultiplier": 5.0,
+          "hitCount": 2.0,
+          "duration": 2.3,
+          "dpsMultiplier": 2.173913,
+          "statusRateMultiplier": 0.869565
+        },
+        {
+          "kind": "Block",
+          "name": "Whistling Wind",
+          "totalMultiplier": 10.0,
+          "hitCount": 5.0,
+          "duration": 2.7,
+          "dpsMultiplier": 3.703704,
+          "statusRateMultiplier": 1.851852
+        }
+      ],
+      "bestCombo": "Neutral"
+    }
+  ],
+  "gaps": [
+    {
+      "name": "Exalted Blade",
+      "reason": "missing v2_mods stance metadata"
+    },
+    {
+      "name": "Hysteria",
+      "reason": "unmapped weaponType: Valkyr Talons"
+    },
+    {
+      "name": "Primal Fury",
+      "reason": "unmapped weaponType: Iron Staff"
+    },
+    {
+      "name": "Ravenous Wraith",
+      "reason": "unmapped weaponType: Shadow Claws"
+    },
+    {
+      "name": "Serene Storm",
+      "reason": "unmapped weaponType: Desert Wind"
+    }
+  ]
+}
