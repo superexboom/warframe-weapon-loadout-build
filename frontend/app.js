@@ -790,7 +790,9 @@ function rabbitCompactDetails(meta) {
       // values[5] carries the weapon arcane description (v2.3+).
       String(weapon.weapon_arcane?.description || "") || null,
       // values[6] carries the post-build damage type distribution (v2.4+).
-      (weapon.damage_types || []).length ? (weapon.damage_types || []).map((row) => [row.damage_type || "", Number(row.percent || 0)]) : null];
+      (weapon.damage_types || []).length ? (weapon.damage_types || []).map((row) => [row.damage_type || "", Number(row.percent || 0)]) : null,
+      // values[7] carries the full slot polarity layout with native flags (v2.5+).
+      (weapon.slot_polarities || []).length ? (weapon.slot_polarities || []).map((row) => [row.slot === "stance" ? 8 : row.slot === "exilus" ? 9 : Number(row.slot), rabbitWirePolarity(row.polarity), row.native ? 1 : 0]) : null];
   }
   const frame = meta.details?.warframe || {};
   const panel = frame.panel || {};
@@ -809,12 +811,19 @@ function rabbitCompactDetails(meta) {
       const cost = rabbitCompactAbilityCost(ability.energyCost);
       const icon = String(ability.icon || "");
       const description = String(ability.description || "");
-      // Positional tails (v2.1 cost at row[5], v2.2 icon at row[6] and
-      // description at row[7]): keep earlier slots present so older readers
-      // stop cleanly at the length they know.
-      if (cost || icon || description) row.push(cost || null);
-      if (icon || description) row.push(icon);
-      if (description) row.push(description);
+      // Baseline fields (v2.5+): row[8] baseline scalars, row[9] baseline
+      // activation cost, so the Bot can color changed values. Earlier slots
+      // stay present so older readers stop cleanly at the length they know.
+      const baseScalars = (ability.base_scalars || []).map((scalar) => [scalar.label || "", scalar.value || "", scalar.group || ""]);
+      const baseActivation = ability.base_activation;
+      const hasBaseline = baseScalars.length > 0 || baseActivation !== null && baseActivation !== undefined;
+      if (cost || icon || description || hasBaseline) row.push(cost || null);
+      if (icon || description || hasBaseline) row.push(icon);
+      if (description || hasBaseline) row.push(description);
+      if (hasBaseline) {
+        row.push(baseScalars);
+        if (baseActivation !== null && baseActivation !== undefined) row.push(baseActivation);
+      }
       return row;
     }),
     (frame.forma_slots || []).map((row) => [row.slot === "aura" ? 8 : row.slot === "exilus" ? 9 : Number(row.slot), rabbitWirePolarity(row.polarity)]),
@@ -824,6 +833,10 @@ function rabbitCompactDetails(meta) {
       const descriptions = (frame.arcanes || []).filter(Boolean).map((item) => String(item.description || ""));
       return descriptions.some(Boolean) ? descriptions : null;
     })(),
+    // values[8] carries the full slot polarity layout with native flags (v2.5+).
+    (frame.slot_polarities || []).length ? (frame.slot_polarities || []).map((row) => [row.slot === "aura" ? 8 : row.slot === "exilus" ? 9 : Number(row.slot), rabbitWirePolarity(row.polarity), row.native ? 1 : 0]) : null,
+    // values[9] carries the unmodded baseline panel for value coloring (v2.5+).
+    (() => { const base = frame.panel_base || {}; return [base.health || 0, base.shield || 0, base.armor || 0, base.energy || 0, base.abilityStrength ?? 1, base.abilityDuration ?? 1, base.abilityRange ?? 1, base.abilityEfficiency ?? 1]; })(),
   ];
 }
 
@@ -1058,6 +1071,32 @@ function rabbitWarframeFormaRows() {
   return result;
 }
 
+// 全槽位极性明细（含原生/未极化槽位）：Bot 端展示所有槽位并区分原生/被极化（v2.5+）。
+function rabbitWeaponSlotPolarityRows() {
+  const rows = [];
+  const stanceIndex = specialSlotIndex("stance");
+  if (stanceIndex !== null) rows.push({ slot: "stance", polarity: weaponSpecialSlotPolarity("stance") || "", native: !Object.hasOwn(state.formaSlots, stanceIndex) });
+  rows.push({ slot: "exilus", polarity: weaponSpecialSlotPolarity("exilus") || "", native: !Object.hasOwn(state.formaSlots, specialSlotIndex("exilus")) });
+  weaponSlotPolarities().forEach((polarity, slot) => {
+    rows.push({ slot, polarity: polarity || "", native: !Object.hasOwn(state.formaSlots, slot) });
+  });
+  return rows;
+}
+
+function rabbitWarframeSlotPolarityRows() {
+  const build = state.warframeBuild;
+  const native = frameSlotPolarities(build.frame);
+  const rows = [];
+  for (const kind of ["aura", "exilus"]) {
+    const polarity = build.slotPolarities[kind] || null;
+    rows.push({ slot: kind, polarity: polarity || "", native: (polarity || null) === (native[kind] || null) });
+  }
+  build.slotPolarities.normal.forEach((polarity, slot) => {
+    rows.push({ slot, polarity: polarity || "", native: (polarity || null) === (native.normal[slot] || null) });
+  });
+  return rows;
+}
+
 function rabbitWarframeAbilityRows(result) {
   const build = state.warframeBuild;
   const source = Array.isArray(build.frame?.abilities) ? build.frame.abilities : [];
@@ -1083,6 +1122,12 @@ function rabbitWarframeAbilityRows(result) {
       slot, id: warframeId(visible), name: warframeName(visible), replaced: Boolean(replaced),
       replaces: replaced ? warframeName(original) : "", scalars, energyCost: visible.energyCost || null,
       icon: rabbitWireIconBase(visible.iconAsset || visible.icon), description: cleanOfficialText(visible.description || ""),
+      // 基准（无 MOD）数值：渲染端据此给变动数值着色（v2.5+）。基准标量是
+      // 目录形态（parts/base），用 warframeScalarBaseText 而不是结果形态的取值。
+      base_scalars: (Array.isArray(original.scalars) ? original.scalars : []).map((scalar) => ({
+        label: warframeScalarLabel(scalar), value: warframeScalarBaseText(scalar), group: scalar.group || "",
+      })),
+      base_activation: finite(original.energyCost?.activation),
     };
   });
 }
@@ -1134,6 +1179,7 @@ async function rabbitWeaponMeta(fields) {
         exilus: rabbitItem(state.exilusSelection),
         weapon_arcane: rabbitArcaneDetail(state.weaponArcane),
         damage_types: rabbitDamageTypeRows(result),
+        slot_polarities: rabbitWeaponSlotPolarityRows(),
         innate_element: innateElement ? {
           damage_type: innateElement,
           value: Number(ui["build-innate-element-value"]?.value || 60) / 100,
@@ -1175,6 +1221,13 @@ async function rabbitWarframeMeta(fields) {
         abilities: rabbitWarframeAbilityRows(result),
         // 赋能描述注解：按配置槽顺序（紧凑线 values[7] 与之对齐，v2.3+）
         arcanes: build.arcanes.map((item) => (item ? { description: arcaneDescription(item) } : null)),
+        // 全槽位极性（v2.5+）与无 MOD 基准面板（用于变动数值着色）
+        slot_polarities: rabbitWarframeSlotPolarityRows(),
+        panel_base: {
+          health: Number(build.frame?.basePanel?.health || 0), shield: Number(build.frame?.basePanel?.shield || 0),
+          armor: Number(build.frame?.basePanel?.armor || 0), energy: Number(build.frame?.basePanel?.energy || 0),
+          abilityStrength: 1, abilityDuration: 1, abilityRange: 1, abilityEfficiency: 1,
+        },
       },
     },
   };
