@@ -18,17 +18,19 @@ from typing import Any, Mapping
 from urllib.parse import unquote, urlsplit
 import webbrowser
 
-from data_sources import export_dir as active_export_dir
+from data_sources import active_build, dataset_root, load_source_lock
 
 ROOT = Path(__file__).resolve().parent
 VENDOR_DIR = ROOT / "vendor"
-EXPORT_DIR = active_export_dir(ROOT)
+SOURCE_LOCK = load_source_lock(ROOT)
+DATASET_ROOT = dataset_root(ROOT, SOURCE_LOCK)
+EXPORT_DIR = DATASET_ROOT / "data" / "export" / active_build(ROOT, SOURCE_LOCK)
 ENEMY_OVERRIDE_PATH = EXPORT_DIR / "enemy_overrides.json"
 INCARNON_STRINGS_PATH = EXPORT_DIR / "incarnon_strings.json"
-STANCE_DATA_PATH = ROOT / "data" / "stances.json"
-UTILITY_MOD_DATA_PATH = ROOT / "data" / "utility_mods.json"
-EXALTED_WEAPON_DATA_PATH = ROOT / "data" / "exalted_weapons.json"
-WARFRAME_DATA_PATH = ROOT / "data" / "warframe_build_data.json"
+STANCE_DATA_PATH = DATASET_ROOT / "data" / "stances.json"
+UTILITY_MOD_DATA_PATH = DATASET_ROOT / "data" / "utility_mods.json"
+EXALTED_WEAPON_DATA_PATH = DATASET_ROOT / "data" / "exalted_weapons.json"
+WARFRAME_DATA_PATH = DATASET_ROOT / "data" / "warframe_build_data.json"
 FRONTEND_DIR = ROOT / "frontend"
 MAX_REQUEST_BYTES = 128 * 1024
 RIVEN_SLOTS = {"primary", "secondary", "melee"}
@@ -206,6 +208,7 @@ def _stances_fingerprint() -> str:
 
 def _analysis_inputs_fingerprint() -> str:
     digest = hashlib.sha1()
+    digest.update(str(SOURCE_LOCK.get("snapshotId") or SOURCE_LOCK.get("snapshotRoot") or "legacy").encode("utf-8"))
     for path in (EXPORT_DIR / "weapons.json", EXPORT_DIR / "mods.json", STANCE_DATA_PATH, Path(optimizer.__file__)):
         try:
             digest.update(path.name.encode("utf-8"))
@@ -3796,6 +3799,7 @@ class PortableHandler(BaseHTTPRequestHandler):
         elif request_path in {"/app.css", "/app.js"}:
             relative = Path(request_path.removeprefix("/"))
         elif request_path.startswith("/assets/"):
+            static_root = DATASET_ROOT / "frontend"
             relative = Path(unquote(request_path.removeprefix("/")))
         elif request_path in {
             "/docs/README.md", "/docs/README.en.md", "/docs/LICENSE", "/docs/THIRD_PARTY_NOTICES.md",

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "activeBuild": "2026.08.13.13.24",
   "policy": {
     "runtimeNetworkAccess": false,
@@ -27,7 +27,7 @@
     {
       "id": "packages",
       "kind": "game-packages",
-      "path": "../WF_Rever/wf-arsenal/data/raw/{build}/Packages.bin",
+      "path": "inputs/packages",
       "sha256": "c2cdc05477b37dd78054194e5601619defe59433fd136252829e247096fd605b",
       "pinnedBuild": "2026.08.13.13.24",
       "required": true,
@@ -43,35 +43,38 @@
         "shards",
         "enemies",
         "kitguns"
-      ]
+      ],
+      "input": true
     },
     {
       "id": "languages-en",
       "kind": "official-languages",
-      "path": "../WF_Rever/research/wf-arsenal-external-sources/work/warframe-languages-bin-data/en.json",
+      "path": "inputs/languages-en",
       "sha256": "398383aee2a90104f7c98448e309797816f55ee0c4e0b196025abd733f15d762",
       "revision": "2f100cf248802f75ff2b8a209bdcc27dea4d0648",
       "required": true,
       "usedBy": [
         "all-localized-records"
-      ]
+      ],
+      "input": true
     },
     {
       "id": "languages-zh",
       "kind": "official-languages",
-      "path": "../WF_Rever/research/wf-arsenal-external-sources/work/warframe-languages-bin-data/zh.json",
+      "path": "inputs/languages-zh",
       "sha256": "dcfe1b92e7bfb89c2298b518146c436fff38fc950ff10a6f1f9f641a751c42c7",
       "revision": "2f100cf248802f75ff2b8a209bdcc27dea4d0648",
       "required": true,
       "usedBy": [
         "all-localized-records",
         "incarnonStrings"
-      ]
+      ],
+      "input": true
     },
     {
       "id": "wfarsenal-export",
       "kind": "official-export",
-      "path": "../WF_Rever/wf-arsenal/data/export/{build}/manifest.json",
+      "path": "data/export/{build}/manifest.json",
       "required": true,
       "usedBy": [
         "weapons",
@@ -84,7 +87,7 @@
     {
       "id": "warframe-items",
       "kind": "community-structured",
-      "path": "../WF_Rever/research/wf-arsenal-external-sources/work/warframe-items/data",
+      "path": "inputs/warframe-items",
       "revision": "6c90d27600ad98a47a4d4e99bb7550bddfea2217",
       "required": true,
       "usedBy": [
@@ -93,12 +96,13 @@
         "mod-level-text",
         "arcane-text",
         "icons"
-      ]
+      ],
+      "input": true
     },
     {
       "id": "wiki-abilities",
       "kind": "wiki-snapshot",
-      "path": "../WarframeWikiKnowledgeRunner/rollback-cleaning-20260829-014123/work/cleaned",
+      "path": "inputs/wiki-abilities",
       "pageCount": 10686,
       "required": true,
       "usedBy": [
@@ -106,7 +110,8 @@
         "ability-misc",
         "helminth-native",
         "enemy-rules"
-      ]
+      ],
+      "input": true
     },
     {
       "id": "overframe-abilitystats",
@@ -195,46 +200,50 @@
     {
       "id": "blackcat-mods",
       "kind": "official-asset-index",
-      "path": "../黑猫4.0-5.0/dist/WRData/data/v2_mods.json",
+      "path": "inputs/blackcat-mods",
       "sha256": "7a6dfa83689b78a24d519e5338d2c84fa48bd16f73666ec6ab4deb97f06497ce",
       "required": true,
       "usedBy": [
         "stance-metadata",
         "mod-art-join"
-      ]
+      ],
+      "input": true
     },
     {
       "id": "blackcat-weapons",
       "kind": "official-asset-index",
-      "path": "../黑猫4.0-5.0/dist/WRData/data/v2_weapons.json",
+      "path": "inputs/blackcat-weapons",
       "sha256": "66ec61bde94294c7ce3b85f9328dc9acee898ab2947ad926b742df0767e6d9b7",
       "required": true,
       "usedBy": [
         "exalted-weapon-parent-chain",
         "kitgun-localized-names"
-      ]
+      ],
+      "input": true
     },
     {
       "id": "public-export-plus-enemies",
       "kind": "community-structured",
-      "path": "../WarframeRabbit4.0-deploy-20260724/WRData/git/warframe_public_export_plus/ExportEnemies.json",
+      "path": "inputs/public-export-plus-enemies",
       "sha256": "c7f291f672ff623bec4fe2bb7a73ab3e2d43a2b9848ae4954373c141fe395224",
       "required": true,
       "usedBy": [
         "enemy-defense-overlay"
-      ]
+      ],
+      "input": true
     },
     {
       "id": "official-companion-assets",
       "kind": "official-assets",
-      "path": "../WF_Rever/warframe-companion-5.3.5.0/work/apk/base/assets/Resources/common/mods",
+      "path": "inputs/official-companion-assets",
       "revision": "5.3.5.0",
       "required": true,
       "usedBy": [
         "mod-frame-layers",
         "rank-assets",
         "polarity-assets"
-      ]
+      ],
+      "input": true
     }
   ],
   "overframeExclusiveData": [

@@ -52,12 +52,12 @@ The executable is written to `.local/artifacts/release/Warframe-Weapon-Loadout-B
 
 ## Data Refresh
 
-Weapon, mod, Arcane, enemy, Warframe, and ability data must be refreshed as one version-locked set. Do not mix outputs from different game builds. See [DATA_PIPELINE.md](DATA_PIPELINE.md) for the source lock, generation order, and strict audit process.
+Weapon, mod, Arcane, enemy, Warframe, and ability data are generated as a version-locked snapshot and activated only after validation. Extraction and generation modules are included; local JSON configuration supplies input paths without requiring another project's source or export directory. See [DATA_PIPELINE.md](DATA_PIPELINE.md) for inputs, candidate packaging, activation, and rollback.
 
-Audit all sources without replacing data (requires the original inputs listed in the source lock; running and packaging do not):
+Validate the current frozen data and assets without the original inputs:
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\update-data.ps1
+python tools/data_pipeline.py check
 ```
 
 ## Repository Layout

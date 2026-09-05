@@ -158,20 +158,6 @@ SET_DISPLAY_VALUES = {
     "VigilanteSetMod": {"STAT1": [5, 10, 15, 20, 25, 30]},
 }
 
-# The Wiki crawler is an optional build-time source.  It is never read by the
-# running application; the generated sidecar keeps the extracted values and
-# provenance only.  Pick the newest recovered snapshot so regeneration does
-# not silently bind to an old dated directory.
-def default_wiki_snapshot(documents: Path) -> Path:
-    root = documents / "WarframeWikiKnowledgeRunner"
-    candidates = sorted(
-        (path for path in root.glob("rollback-cleaning-*/work/cleaned") if path.is_dir()),
-        key=lambda path: path.stat().st_mtime,
-        reverse=True,
-    )
-    return candidates[0] if candidates else root / "cleaned"
-
-
 _WIKI_PREFIX = "https___wiki_warframe_com_w_"
 _WIKI_HASH_RE = re.compile(r"_[0-9a-f]{8,}$", re.I)
 _WIKI_NUMBER = r"[+-]?(?:\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?|\.\d+)"
@@ -1428,28 +1414,18 @@ _ABILITY_COST_SPECS = {
 
 
 def args() -> argparse.Namespace:
-    documents = ROOT.parent
-    reverse = documents / "WF_Rever"
-    # Use the international client language dump.  The separate
-    # wf-cn-localization package is the Tencent mainland client and must not
-    # replace the canonical international names in this build.
-    global_localization = reverse / "research" / "wf-arsenal-external-sources" / "work" / "warframe-languages-bin-data" / "zh.json"
     parser = argparse.ArgumentParser(description="Generate the frozen Warframe build sidecar")
     parser.add_argument("--build", default=BUILD)
     parser.add_argument("--export-dir", type=Path)
-    parser.add_argument("--raw", type=Path)
-    parser.add_argument("--items", type=Path, default=documents / "WF_Rever" / "research" / "wf-arsenal-external-sources" / "work" / "warframe-items" / "data")
-    parser.add_argument("--localization", type=Path, default=global_localization)
-    rabbit_default = documents / "\u9ed1\u732b4.0-5.0" / "dist" / "WRData" / "icon" / "OfficialWarframe"
-    if not rabbit_default.is_dir():
-        # Compatibility with the mojibake path in older checkouts.
-        rabbit_default = documents / "\u69db\u620f4.0-5.0" / "dist" / "WRData" / "icon" / "OfficialWarframe"
-    parser.add_argument("--rabbit-assets", type=Path, default=rabbit_default)
-    parser.add_argument("--wiki", type=Path, default=default_wiki_snapshot(documents))
+    parser.add_argument("--raw", type=Path, required=True)
+    parser.add_argument("--items", type=Path, required=True)
+    parser.add_argument("--localization", type=Path, required=True)
+    parser.add_argument("--rabbit-assets", type=Path, required=True)
+    parser.add_argument("--rabbit-mods", type=Path, required=True)
+    parser.add_argument("--wiki", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=OUTPUT)
     result = parser.parse_args()
     result.export_dir = result.export_dir or ROOT / "data" / "export" / result.build
-    result.raw = result.raw or documents / "WF_Rever" / "wf-arsenal" / "data" / "raw" / result.build / "packages"
     return result
 
 
@@ -2517,11 +2493,11 @@ def main() -> int:
     parser_hash = sha256(Path(__file__).resolve())
     meta = {
         "buildLabel": manifest["buildLabel"],
-        "sourceUrl": f"frozen://data/export/{options.build} + raw://WF_Rever/Packages + lang://WF_Rever/warframe-languages-bin-data",
+        "sourceUrl": f"frozen://data/export/{options.build} + input://packages + input://languages",
         "fetchedAt": manifest.get("generatedAtUtc") or datetime.now(timezone.utc).isoformat(),
         "parserHash": parser_hash,
         "localizationHash": sha256(options.localization),
-        "localizationSource": "WF_Rever/research/wf-arsenal-external-sources/work/warframe-languages-bin-data/zh.json",
+        "localizationSource": "input://languages-zh",
         "wikiSnapshot": provenance_path(options.wiki) if wiki.root else None,
         "overframeAbilityStats": {
             "path": provenance_path(OVERFRAME_ABILITY_STATS),
@@ -2532,7 +2508,7 @@ def main() -> int:
     item_json = options.items / "json"
     image_root = options.items / "img"
     i18n = load(item_json / "i18n.json")
-    rabbit_metadata = options.rabbit_assets.parents[1] / "data" / "v2_mods.json"
+    rabbit_metadata = options.rabbit_mods
     rabbit_mods = {str(row.get("RabbitID") or ""): row for row in load(rabbit_metadata)}
     missing: list[str] = []
     frames, abilities, audit = build_frames(rows(options.export_dir / "warframes.json"), rows(item_json / "Warframes.json"), options.raw, image_root, localization, meta, missing, wiki)

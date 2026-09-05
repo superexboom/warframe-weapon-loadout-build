@@ -7,12 +7,13 @@ import sys
 from collections import Counter
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from data_sources import active_build, load_source_lock, provenance_path, resolve_source_path  # noqa: E402
+from data_sources import active_build, dataset_root, load_source_lock, provenance_path, validate_build  # noqa: E402
 
 
 def _sha256(path: Path) -> str:
@@ -37,18 +38,39 @@ def _rows(payload: Any) -> list[Any]:
     return payload if isinstance(payload, list) else []
 
 
-def audit(build: str) -> dict[str, Any]:
-    lock = load_source_lock(ROOT)
+def _asset_references(value: Any):
+    if isinstance(value, dict):
+        for child in value.values():
+            yield from _asset_references(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from _asset_references(child)
+    elif isinstance(value, str) and value.startswith("/assets/"):
+        yield value
+
+
+def audit(build: str, *, root: Path = ROOT, source_paths: dict[str, Path] | None = None,
+          lock_override: dict[str, Any] | None = None) -> dict[str, Any]:
+    validate_build(build)
+    lock = lock_override if lock_override is not None else load_source_lock(root)
+    content_root = dataset_root(root, lock)
     errors: list[str] = []
     warnings: list[str] = []
     source_rows = []
     for source in lock.get("sources") or []:
-        path = resolve_source_path(str(source["path"]), root=ROOT, build=build)
+        path = (content_root / str(source["path"]).replace("{build}", build)).resolve()
+        external = bool(source.get("input")) or not path.is_relative_to(content_root)
+        if external and source_paths is None:
+            source_rows.append({"id": source["id"], "required": bool(source.get("required")), "exists": False, "checked": False})
+            continue
+        if external:
+            path = (source_paths or {}).get(source["id"], content_root / ".missing-input" / source["id"])
         exists = path.exists()
         row = {
             "id": source["id"],
             "kind": source["kind"],
-            "path": provenance_path(path),
+            "path": source["path"],
+            "checked": True,
             "required": bool(source.get("required")),
             "exists": exists,
         }
@@ -63,9 +85,10 @@ def audit(build: str) -> dict[str, Any]:
             errors.append(f"required source missing: {source['id']} -> {path}")
         source_rows.append(row)
 
-    export_root = ROOT / "data" / "export" / build
+    export_root = content_root / "data" / "export" / build
     output_specs = {
         "weapons": (export_root / "weapons.json", True),
+        "manifest": (export_root / "manifest.json", True),
         "warframes": (export_root / "warframes.json", True),
         "mods": (export_root / "mods.json", True),
         "enemies": (export_root / "enemies.json", True),
@@ -76,15 +99,17 @@ def audit(build: str) -> dict[str, Any]:
         "enemyOverrides": (export_root / "enemy_overrides.json", True),
         "incarnonDefaults": (export_root / "incarnon_defaults.json", False),
         "incarnonStrings": (export_root / "incarnon_strings.json", True),
-        "stances": (ROOT / "data" / "stances.json", True),
-        "utilityMods": (ROOT / "data" / "utility_mods.json", True),
-        "exaltedWeapons": (ROOT / "data" / "exalted_weapons.json", True),
-        "warframeBuildData": (ROOT / "data" / "warframe_build_data.json", True),
-        "abilityRuntimeFields": (ROOT / "data" / "ability_runtime_fields.json", True),
-        "abilityRuntimeDiff": (ROOT / "data" / "ability_runtime_diff.json", True),
-        "modAssets": (ROOT / "frontend" / "assets" / "mods" / "index.json", True),
+        "stances": (content_root / "data" / "stances.json", True),
+        "utilityMods": (content_root / "data" / "utility_mods.json", True),
+        "exaltedWeapons": (content_root / "data" / "exalted_weapons.json", True),
+        "warframeBuildData": (content_root / "data" / "warframe_build_data.json", True),
+        "abilityRuntimeFields": (content_root / "data" / "ability_runtime_fields.json", True),
+        "abilityRuntimeDiff": (content_root / "data" / "ability_runtime_diff.json", True),
+        "modAssets": (content_root / "frontend" / "assets" / "mods" / "index.json", True),
     }
     output_rows = []
+    assets = set()
+    core_counts = {}
     for name, (path, required) in output_specs.items():
         row: dict[str, Any] = {"id": name, "path": provenance_path(path), "required": required, "exists": path.is_file()}
         if not path.is_file():
@@ -92,10 +117,19 @@ def audit(build: str) -> dict[str, Any]:
             output_rows.append(row)
             continue
         payload = _load(path)
+        assets.update(_asset_references(payload))
         label = payload.get("buildLabel") or payload.get("gameBuild") if isinstance(payload, dict) else None
         row["buildLabel"] = label
         data = payload.get("data") if isinstance(payload, dict) else None
         row["count"] = len(data) if isinstance(data, (list, dict)) else len(_rows(payload))
+        if name in {"weapons", "warframes", "mods", "arcanes", "enemies"}:
+            if not isinstance(data, list) or not data or payload.get("count") != len(data):
+                errors.append(f"core record count invalid: {name}")
+            elif len({record.get("path") for record in data}) != len(data) or any(not record.get("path") for record in data):
+                errors.append(f"core record IDs invalid: {name}")
+            core_counts[name] = row["count"]
+            if label != build:
+                errors.append(f"core build label missing or invalid: {name}")
         if isinstance(payload, dict) and payload.get("missingTags"):
             warnings.append(f"{name} missing localized tags: {len(payload['missingTags'])}")
         if isinstance(payload, dict) and isinstance(payload.get("counts"), dict):
@@ -104,14 +138,23 @@ def audit(build: str) -> dict[str, Any]:
             errors.append(f"output build mismatch: {name}={label}, expected {build}")
         output_rows.append(row)
 
-    overframe_path = ROOT / "data" / "overframe_abilitystats.json"
+    manifest_path = export_root / "manifest.json"
+    if manifest_path.is_file() and _load(manifest_path).get("counts") != core_counts:
+        errors.append("core manifest counts do not match exports")
+    frontend = (content_root / "frontend").resolve()
+    for asset in sorted(assets):
+        path = (frontend / unquote(urlsplit(asset).path).lstrip("/")).resolve()
+        if not path.is_relative_to(frontend) or not path.is_file() or path.stat().st_size == 0:
+            errors.append(f"referenced asset missing or invalid: {asset}")
+
+    overframe_path = content_root / "data" / "overframe_abilitystats.json"
     overframe = _load(overframe_path) if overframe_path.is_file() else {}
-    warframe_path = ROOT / "data" / "warframe_build_data.json"
+    warframe_path = content_root / "data" / "warframe_build_data.json"
     warframe = _load(warframe_path) if warframe_path.is_file() else {}
     unique_abilities = {row["id"]: row for row in warframe.get("abilities") or [] if row.get("id")}
     ability_fields = [field for row in unique_abilities.values() for field in row.get("scalars") or []]
     field_sources = Counter(str(field.get("sourceKind") or "unknown") for field in ability_fields)
-    runtime_path = ROOT / "data" / "ability_runtime_fields.json"
+    runtime_path = content_root / "data" / "ability_runtime_fields.json"
     runtime = _load(runtime_path) if runtime_path.is_file() else {}
     runtime_summary = runtime.get("summary") if isinstance(runtime, dict) else {}
     parser_path = ROOT / "tools" / "extract_ability_luau_ir.py"
@@ -226,7 +269,7 @@ def audit(build: str) -> dict[str, Any]:
         required_tokens = runtime_summary.get("requiredTokenCoverage") if isinstance(runtime_summary, dict) else {}
         if any(value != runtime_coverage["uniqueScripts"] for value in required_tokens.values()):
             errors.append("ability runtime sidecar query token coverage is incomplete")
-    runtime_diff_path = ROOT / "data" / "ability_runtime_diff.json"
+    runtime_diff_path = content_root / "data" / "ability_runtime_diff.json"
     runtime_diff = _load(runtime_diff_path) if runtime_diff_path.is_file() else {}
     runtime_diff_summary = runtime_diff.get("summary") if isinstance(runtime_diff, dict) else {}
     if runtime_diff:
@@ -264,7 +307,8 @@ def audit(build: str) -> dict[str, Any]:
     return {
         "schemaVersion": 1,
         "build": build,
-        "activeBuild": active_build(ROOT),
+        "activeBuild": lock["activeBuild"],
+        "scope": "sources-and-frozen" if source_paths is not None else "frozen",
         "status": "ready" if not errors else "invalid",
         "sources": source_rows,
         "outputs": output_rows,
@@ -293,16 +337,26 @@ def audit(build: str) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit the frozen data pipeline and source lock")
-    parser.add_argument("--build", default=active_build(ROOT))
+    parser.add_argument("--build")
+    parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--sources", action="store_true")
+    parser.add_argument("--source-path", action="append", default=[], metavar="ID=PATH")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--strict", action="store_true")
     args = parser.parse_args()
-    report = audit(args.build)
+    source_paths = {} if args.sources else None
+    for spec in args.source_path:
+        key, separator, value = spec.partition("=")
+        if not args.sources or not separator or not key or not value:
+            parser.error("--source-path requires --sources and ID=PATH")
+        source_paths[key] = Path(value).resolve()
+    report = audit(args.build or active_build(args.root), root=args.root, source_paths=source_paths)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"build: {report['build']} ({report['status']})")
-    print(f"sources: {sum(row['exists'] for row in report['sources'])}/{len(report['sources'])}")
+    checked = [row for row in report['sources'] if row.get('checked')]
+    print(f"scope: {report['scope']}; checked sources: {sum(row['exists'] for row in checked)}/{len(checked)}")
     required_outputs = [row for row in report["outputs"] if row["required"]]
     print(f"outputs: {sum(row['exists'] for row in required_outputs)}/{len(required_outputs)} required")
     overframe = report["coverage"]["overframe"]

@@ -19,14 +19,6 @@ from data_sources import export_dir as active_export_dir
 
 ROOT = Path(__file__).resolve().parent
 EXPORT_DIR = active_export_dir(ROOT)
-DEFAULT_RAW = (
-    ROOT.parent
-    / "WarframeRabbit4.0-deploy-20260724"
-    / "WRData"
-    / "git"
-    / "warframe_public_export_plus"
-    / "ExportEnemies.json"
-)
 
 
 def _wiki_slug(name: str) -> str:
@@ -404,7 +396,7 @@ def build(raw_path: Path, export_dir: Path = EXPORT_DIR, wiki_head_index: dict[s
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--raw", type=Path, default=DEFAULT_RAW)
+    parser.add_argument("--raw", type=Path, required=True)
     parser.add_argument("--export-dir", type=Path, default=EXPORT_DIR)
     parser.add_argument("--output", type=Path)
     parser.add_argument(

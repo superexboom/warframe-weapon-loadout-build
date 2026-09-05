@@ -1,109 +1,128 @@
 # 数据维护指南
 
-## 选择操作
+## 常用命令
 
-| 操作 | 所需输入 | 入口 |
-|---|---|---|
-| 运行现有数据 | 仓库自带的 `data/`、`frontend/` 和计算内核 | `python app.py` |
-| 构建 Windows EXE | 同上，加 PyInstaller | `build-portable.ps1` |
-| 审计来源与产物 | 冻结数据及来源锁列出的全部原始输入 | `tools/update-data.ps1`，不加 `-Apply` |
-| 更新游戏数据 | 同一客户端 build 的原始输入、上游核心导出及补充数据 | 配置来源后执行 `tools/update-data.ps1 -Apply` |
-
-运行和构建不需要重新提取客户端，也不需要其他项目目录。完整数据更新仍依赖外部提取器和素材输入；本仓库没有从游戏安装目录自动获取全部输入的入口。
-
-## 数据布局
-
-- `data/source-lock.json`：`activeBuild`、来源位置、版本、哈希和派生器哈希。
-- `data/export/<build>/`：武器、战甲、MOD、敌人、赋能、模块化武器和补充导出。
-- `data/*.json`：架势、功能槽、显赫武器、战甲技能及技能字段派生数据。
-- `frontend/assets/`：界面需要的图片和素材索引。
-- `.local/`：本地输入、暂存输出和审计报告，不提交到仓库。
-
-核心导出与根目录派生数据必须属于同一 build。`WF_RIVEN_BUILD` 只选择核心导出目录，不会切换根目录派生数据或素材，不能用它代替完整数据集升级或回滚。
-
-## 来源审计
-
-在仓库根目录运行：
+在仓库根目录运行，要求 Python 3.11+。运行现成数据和构建 EXE 不需要原始输入，也不依赖其他源码仓库。
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\update-data.ps1
+# 验证当前冻结数据、版本和引用的素材
+python tools/data_pipeline.py check
+
+# 安装仅用于数据重建的图像依赖
+python -m pip install -r tools/requirements-pipeline.txt
+
+# 创建本地输入配置，然后填写实际输入位置
+Copy-Item tools/pipeline-inputs.example.json .local/pipeline-inputs.json
+
+# 生成并验收候选快照，不切换当前数据
+python tools/data_pipeline.py prepare --config .local/pipeline-inputs.json
 ```
 
-该命令不替换数据，但会写入 `.local/audit/source-audit.json`。审计包括来源是否存在、锁定哈希、产物 build、技能字段覆盖及派生器一致性。
+首次创建配置前可用 `New-Item -ItemType Directory -Path .local -Force` 创建目录。已有配置不要重复覆盖。`tools/update-data.ps1` 是同一入口的 PowerShell 包装，默认执行 `check`。
 
-也可指定 build 和报告位置：
+## 输入约定
 
-```powershell
-python tools/audit_data_pipeline.py --build <build> --output .local/audit/source-audit.json --strict
-```
+配置中的 `build` 是整套输入所属的游戏 build。`inputs` 的相对路径以配置文件所在目录为基准；也可使用绝对路径。本地配置和原始输入放在忽略提交的 `.local/` 中。
 
-以退出码和报告的 `errors` 为准。没有原始输入的普通克隆会出现 `required source missing`，这不表示随仓库提供的程序无法运行。不要通过删除必需来源或修改哈希来消除审计错误；先核对输入及版本。
-
-## 准备更新输入
-
-Python 3.11+ 用于数据脚本，卡框图像生成另需 Pillow 和 NumPy。准备以下输入后再执行更新：
-
-| 输入 | 要求 |
+| 输入键 | 内容 |
 |---|---|
-| 核心导出 | `weapons.json`、`warframes.json`、`mods.json`、`enemies.json`、`arcanes.json`、`manifest.json`、`zaws.json`，build 标签一致 |
-| Packages | 同一 build 的 `Packages.bin` 和展开的 `packages/` 树 |
-| 官方本地化 | 国际服 `en.json`、`zh.json`，保留原始版本信息 |
-| Font 脚本 | 同一客户端 `B.Font/H.Font` 导出的技能脚本及配对头文件，保留资源目录结构 |
-| 社区结构化输入 | warframe-items 的 `data/`、Wiki 清洗快照、敌人补充导出、武器及 MOD 素材索引 |
-| 图像输入 | 官方战甲和 MOD 图像、Companion 卡框素材、补充卡框图层 |
-| 冻结补充表 | 技能字段 schema、架势表、Zaw 部件及可选灵化默认路线策略 |
+| `rawRoot` | 目录名等于 build，含 `Packages.bin`、`packages/` 和 `dump.json`；后者的 `buildLabel` 必须一致 |
+| `languages` | 国际服 `en.json`、`zh.json`，格式为本地化键到字符串的 JSON 对象 |
+| `fontRoot` | 同一 build 的技能 `.lua_B` 与 `.lua_H` 导出，保留资源目录结构 |
+| `wikiSnapshot` | Wiki 页面 JSON 快照，含正文及标题或原始 URL |
+| `warframeItems` | warframe-items 的 `data/`，含 `json/Mods.json`、`Warframes.json`、`Arcanes.json`、`i18n.json` 和 `img/` |
+| `modIndex` | MOD 元数据 JSON 数组，使用 `RabbitID`、`UniqueName`、`NameEn`、`NameZh`、`Type`、`Polarity`、`Image` 等字段 |
+| `weaponIndex` | 武器及部件元数据 JSON 数组，使用 `UniqueName`、`NameEn`、`NameZh`、`VariantType` 等字段 |
+| `enemyExport` | Public Export Plus 的 `ExportEnemies.json` |
+| `artRoot` | 官方图像树，保留 `Lotus/...` 相对路径 |
+| `completeArtRoot` | 完整官方图像树，含槽位、适配器和 Forma 图标；完整时可与 `artRoot` 相同 |
+| `menuIcons` | 含 `IconStance.png`、`IconExilus.png`、`IconArcane.png` 的目录 |
+| `umbraForma` | Umbra Forma PNG 文件 |
+| `companionMods` | Companion 的 `Resources/common/mods/`；同级 `icons/polarityIcons/` 也需保留 |
+| `modframeRoot` | 补充卡框图层目录 |
+| `zaws` | 已核对当前 build 的 Zaw 部件表，必须含匹配的 `buildLabel` 或 `gameBuild` |
+| `incarnonDefaults` | 可选，已核对当前 build 的灵化默认路线表 |
+| `overframeSchema` | 可选，替换随仓库提供的技能字段 schema |
+| `stanceTable` | 可选，替换随仓库提供的 Wiki 架势 Lua 表 |
 
-上游核心提取器必须提供 `wfarsenal.packages`、`wfarsenal.extract` 及其依赖。`tools/generate_kitguns.py --source-root` 接收这个提取器项目根目录，并读取其 `src/` 和 `data/raw/<build>/`。仓库内的 `vendor/wfarsenal` 是运行时计算内核，不能替代该提取器。
+这些是文件输入，不是对某个工程目录布局的要求。元数据索引需保留完整字段，不要仅从上表挑选字段重新生成。
 
-不要混用不同客户端版本的 Packages、Languages 和 Font。社区快照固定到具体版本或哈希；游戏数值、字段模式和默认路线策略分别核对，不将社区默认配装当成游戏基础数值。
+Packages 和 Font 的客户端容器提取由 Warframe-Exporter-CLI 等提取工具完成；本入口消费已提取的原始数据，不负责安装游戏、下载社区快照或运行外部提取器。核心导出、继承解析、本地化合并和 Kitgun 生成模块已随仓库提供，无需预先生成另一工程的 `data/export/`。
 
-## 配置输入位置
+客户端文件、语言表和 Font 必须来自同一 build，不能通过改目录名或标签混用。社区快照固定版本后再运行，生成过程中保持输入不变。来源锁保存逻辑输入名和哈希，不保存机器目录。
 
-`tools/update-data.ps1` 当前使用维护环境的默认目录，不提供统一的输入根目录参数。在独立工作副本中执行完整更新前，需调整脚本中的 `$wfArsenal`、`$sourceExport`、`$rawPackages`、`$languages`、`$warframeItems` 和 `$blackcat` 绑定，并同步检查 `data/source-lock.json` 中的来源位置。
+## 生成与检查
 
-显式参数只能覆盖以下输入：
+`prepare` 的执行顺序：
 
-| 参数 | 含义 |
-|---|---|
-| `-Build` | 待生成的新 build；目标导出目录必须不存在 |
-| `-FontRoot` | Font 导出根目录，更新时必填 |
-| `-WikiSnapshot` | Wiki 清洗快照目录 |
-| `-EnemyExport` | 敌人补充导出 JSON |
-| `-SkipAssets` | 跳过最后的 MOD 素材同步阶段，不等于禁用所有图片写入 |
-| `-Apply` | 生成产物并更新活动数据；不加时只审计 |
+1. 检查配置、原始输入和版本，创建独立暂存目录。
+2. 从 Packages 生成武器、战甲、MOD、赋能、敌人和核心 manifest。
+3. 生成 Kitgun、Riven 模板、敌人补充数据、灵化文本、架势和功能槽数据。
+4. 生成战甲技能数据，提取 Font 字段，计算差异并合并可确认数值。
+5. 生成卡框并同步素材。
+6. 更新候选来源锁，验证来源、导出记录、版本、技能字段、素材引用及运行时计算。
+7. 为整套数据和素材生成 `snapshot.json`，将候选标记为可启用。
 
-还需向下游调用传入实际素材路径：`generate_warframe_data.py` 的 `--rabbit-assets`，以及 `sync_mod_assets.py` 的 `--rabbit-root`、`--companion-mods`、`--warframe-items`、`--warframe-items-img`、`--i18n`、`--lang`、`--modframe-root`。只修改来源锁不会自动重定向这些生成器。各脚本的 `--help` 列出接受的参数。
+成功时输出 `Prepared: <候选目录>`。候选位于 `.local/pipeline/`，日志位于候选目录的 `.local/logs/`，完整审计报告为 `.local/source-audit.json`。
 
-本地输入目录不要提交；来源记录使用可移植路径，避免写入用户名或绝对机器路径。
+任一步失败，退出码非 0，当前活动数据不变。修正输入后重新执行 `prepare`；失败目录仅用于检查，不要手动补齐 `snapshot.json` 或将其启用。
 
-## 执行更新
-
-在独立工作副本中操作，保留上一版完整数据和素材。当前更新入口会在最终审计前复制部分派生数据并修改活动 build，失败时不会自动回滚，不要直接对正在运行的分发目录执行。
-
-配置完来源后，从该工作副本根目录运行：
+检查候选产物：
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\update-data.ps1 `
-    -Build <new-build> -Apply `
-    -FontRoot <font-export-root> `
-    -WikiSnapshot <cleaned-wiki-root> `
-    -EnemyExport <enemy-export-json>
+python tools/data_pipeline.py --root <候选目录> check
 ```
 
-脚本的处理顺序：
+检查当前数据及其原始来源：
 
-1. 检查输入及 build，复制核心导出和可选灵化策略。
-2. 生成 Kitgun、Riven 模板、敌人补充数据和灵化文本。
-3. 生成架势、功能槽、显赫武器及战甲数据。
-4. 提取技能字段，生成差异，再将唯一匹配的数值写入战甲数据。
-5. 同步素材，更新来源锁和派生器哈希，执行严格审计。
+```powershell
+python tools/data_pipeline.py check --sources .local/pipeline-inputs.json
+```
 
-任一步失败就停止发布，检查错误及 `.local/temp/data-update-<build>/` 的输出。不要只改 `activeBuild` 或反复覆盖新 build 目录继续发布。
+普通 `check` 不要求原始输入。`check --sources` 额外检查配置中的来源及锁定哈希，不会自动更新来源锁。审计通过也不等于所有游戏机制均已实现；未知字段和未覆盖机制保留诊断。
 
-## 验收与发布
+## 试用、启用与回滚
 
-1. 严格审计退出码为 0，检查报告中的警告、缺失字段、未知升级类型和关联失败。
-2. 对比新旧记录 ID、中文名称、武器开火模式、Riven 资格与倾向、技能等级数值、模块化部件和图片索引。未覆盖的机制保留明确诊断。
-3. 在候选副本运行 `python app.py --port 0`，检查紫卡分析、武器配装和战甲配装，确认素材可加载。
-4. 执行 `build-portable.ps1`，将生成的 EXE 单独放入空目录启动，核对目录 API、计算结果及静态素材。
-5. 将 `data/`、`frontend/assets/` 和来源锁作为同一个版本提交并发布。回滚时恢复上一版完整数据与素材，或直接使用上一版 EXE。
+先将候选打包到独立输出目录，无需启用它：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build-portable.ps1 -Snapshot <候选目录> -OutputDirectory .local/artifacts/candidate
+```
+
+试用候选 EXE，检查紫卡分析、武器配装、战甲配装和图片。确认后启用：
+
+```powershell
+python tools/data_pipeline.py activate <候选目录>
+```
+
+启用前会重新验证完整文件清单、内容哈希和产物一致性。数据与素材复制到 `data/snapshots/<版本标识>/` 后，才原子替换根目录的 `data/source-lock.json`。旧数据不删除；写入失败不会切换到半套数据。多个启用或回滚操作互斥。
+
+命令输出 `Rollback file: <备份文件>`。需要恢复时：
+
+```powershell
+python tools/data_pipeline.py rollback <备份文件>
+```
+
+备份位于 `.local/pipeline/backups/`。回滚同样验证目标数据后再切换，并生成撤销此次回滚的备份。
+
+**启用或回滚后重启应用。** 已运行的进程继续使用启动时选定的数据和素材，不做热切换。`WF_RIVEN_BUILD` 不再允许选择与活动快照不同的导出目录。
+
+## 构建与发布
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build-portable.ps1
+```
+
+构建前自动验证并整理选定快照，只打包该版本的数据和素材，不包含原始输入、回滚备份或其他历史快照。默认输出为 `.local/artifacts/release/Warframe-Weapon-Loadout-Build-win-x64.exe` 及其校验文件。
+
+发布源代码时，活动来源锁与其引用的 `data/snapshots/<版本标识>/` 必须一同提供；初始平铺数据布局仍可运行。不要只提交活动指针而遗漏快照。不要手改已经验收的快照，修改数据应重新准备候选。
+
+## 回归检查
+
+```powershell
+python -m unittest discover -s tools -p test_data_pipeline.py -v
+python tools/data_pipeline.py check
+python tools/check_runtime.py
+```
+
+检查覆盖输入格式、版本路径、候选篡改拒绝、指针写入失败、启用、回滚及单版本打包。测试使用临时工作副本，不切换当前项目数据。

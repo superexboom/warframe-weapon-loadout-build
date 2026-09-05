@@ -47,8 +47,6 @@ WEAPON_TYPE_TO_COMPAT_TAG = {
 
 
 def _args() -> argparse.Namespace:
-    documents = ROOT.parent
-    reverse_root = documents / "WF_Rever"
     parser = argparse.ArgumentParser(description="Generate portable stance and slot data")
     parser.add_argument("--build", default=BUILD)
     parser.add_argument(
@@ -57,98 +55,48 @@ def _args() -> argparse.Namespace:
     parser.add_argument(
         "--rabbit-mods",
         type=Path,
-        default=documents / "\u9ed1\u732b4.0-5.0" / "dist" / "WRData" / "data" / "v2_mods.json",
+        required=True,
     )
     parser.add_argument(
         "--rabbit-weapons",
         type=Path,
-        default=documents / "\u9ed1\u732b4.0-5.0" / "dist" / "WRData" / "data" / "v2_weapons.json",
+        required=True,
     )
     parser.add_argument(
         "--warframe-items",
         type=Path,
-        default=(
-            reverse_root
-            / "research"
-            / "wf-arsenal-external-sources"
-            / "work"
-            / "warframe-items"
-            / "data"
-            / "json"
-            / "Mods.json"
-        ),
+        required=True,
     )
     parser.add_argument(
         "--item-i18n",
         type=Path,
-        default=(
-            reverse_root
-            / "research"
-            / "wf-arsenal-external-sources"
-            / "work"
-            / "warframe-items"
-            / "data"
-            / "json"
-            / "i18n.json"
-        ),
+        required=True,
     )
     parser.add_argument(
         "--languages",
         type=Path,
-        default=(
-            reverse_root
-            / "research"
-            / "wf-arsenal-external-sources"
-            / "work"
-            / "warframe-languages-bin-data"
-        ),
+        required=True,
     )
     parser.add_argument(
-        "--raw-packages", type=Path,
+        "--raw-packages", type=Path, required=True,
     )
     parser.add_argument("--export-dir", type=Path)
     parser.add_argument("--output-dir", type=Path, default=ROOT / "data")
     result = parser.parse_args()
-    result.raw_packages = result.raw_packages or reverse_root / "wf-arsenal" / "data" / "raw" / result.build / "packages"
     result.export_dir = result.export_dir or ROOT / "data" / "export" / result.build
     return result
 
 
 def _load_export(path: Path) -> list[dict[str, Any]]:
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    payload = json.loads(path.read_text(encoding="utf-8-sig"))
     rows = payload.get("data", payload) if isinstance(payload, dict) else payload
-    if not isinstance(rows, list):
-        raise ValueError(f"expected an array export: {path}")
+    if not isinstance(rows, list) or not all(isinstance(row, dict) for row in rows):
+        raise ValueError(f"expected an array of objects: {path}")
     return rows
 
 
 def _rabbit_rows(path: Path) -> list[dict[str, Any]]:
-    """Read the useful flat rows from the legacy, partially corrupt JSON file."""
-    rows: list[dict[str, Any]] = []
-    current: list[str] | None = None
-    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
-        if line == "\t{":
-            current = []
-            continue
-        if current is None:
-            continue
-        if line in {"\t},", "\t}"}:
-            row: dict[str, Any] = {}
-            for item in current:
-                match = re.match(r'^\s*"([^"]+)"\s*:\s*(.*?)\s*,?$', item)
-                if not match:
-                    continue
-                key, value = match.groups()
-                try:
-                    row[key] = json.loads(value)
-                except json.JSONDecodeError:
-                    continue
-            if row:
-                rows.append(row)
-            current = None
-            continue
-        current.append(line)
-    return rows
+    return _load_export(path)
 
 
 _TOKEN = re.compile(

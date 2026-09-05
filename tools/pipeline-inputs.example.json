@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "build": "2026.08.13.13.24",
+  "inputs": {
+    "rawRoot": "inputs/raw/2026.08.13.13.24",
+    "languages": "inputs/languages",
+    "fontRoot": "inputs/font/2026.08.13.13.24",
+    "wikiSnapshot": "inputs/wiki",
+    "warframeItems": "inputs/warframe-items/data",
+    "modIndex": "inputs/index/v2_mods.json",
+    "weaponIndex": "inputs/index/v2_weapons.json",
+    "enemyExport": "inputs/ExportEnemies.json",
+    "artRoot": "inputs/art/OfficialWarframe",
+    "completeArtRoot": "inputs/art/OfficialWarframe",
+    "menuIcons": "inputs/art/menu",
+    "umbraForma": "inputs/art/umbra-forma.png",
+    "companionMods": "inputs/companion/common/mods",
+    "modframeRoot": "inputs/modframe",
+    "zaws": "inputs/manual/zaws.json",
+    "incarnonDefaults": "inputs/manual/incarnon_defaults.json"
+  }
+}

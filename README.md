@@ -52,12 +52,12 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build-portable.ps1
 
 ## 数据更新
 
-武器、MOD、赋能、敌人、战甲和技能数据必须从同一游戏 build 整体刷新，不能混用不同版本。来源锁、生成顺序和严格审计说明见 [DATA_PIPELINE.md](DATA_PIPELINE.md)。
+武器、MOD、赋能、敌人、战甲和技能数据按同一游戏 build 生成独立快照，验收后整体启用。提取与生成模块随仓库提供，输入位置由本地 JSON 配置指定，不依赖其他工程的源码或 export 目录。输入要求、试用候选、启用和回滚说明见 [DATA_PIPELINE.md](DATA_PIPELINE.md)。
 
-完整来源审计（需要来源锁列出的原始输入；运行和打包不需要这些输入）：
+验证当前冻结数据和素材，不需要原始输入：
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\update-data.ps1
+python tools/data_pipeline.py check
 ```
 
 ## 项目结构

@@ -29,97 +29,19 @@ RANK_PARTS = ("RankCompleteLine.png", "RankSlotActive.png", "RankSlotEmpty.png")
 
 
 def _args() -> argparse.Namespace:
-    documents = ROOT.parent
     parser = argparse.ArgumentParser(description="Copy the MOD art used by the offline optimizer")
     parser.add_argument("--export-dir", type=Path, default=EXPORT_DIR)
-    parser.add_argument(
-        "--rabbit-root",
-        type=Path,
-        default=documents / "\u9ed1\u732b4.0-5.0",
-        help="WarframeRabbit checkout containing dist/WRData",
-    )
-    parser.add_argument(
-        "--companion-mods",
-        type=Path,
-        default=(
-            documents
-            / "WF_Rever"
-            / "warframe-companion-5.3.5.0"
-            / "work"
-            / "apk"
-            / "base"
-            / "assets"
-            / "Resources"
-            / "common"
-            / "mods"
-        ),
-        help="Extracted official Companion common/mods directory",
-    )
-    parser.add_argument(
-        "--warframe-items",
-        type=Path,
-        default=(
-            documents
-            / "WF_Rever"
-            / "research"
-            / "wf-arsenal-external-sources"
-            / "work"
-            / "warframe-items"
-            / "data"
-        ),
-        help="Local warframe-items data directory used only for missing art",
-    )
-    parser.add_argument(
-        "--warframe-items-img",
-        type=Path,
-        default=(
-            documents
-            / "WF_Rever"
-            / "research"
-            / "wf-arsenal-external-sources"
-            / "work"
-            / "warframe-items"
-            / "data"
-            / "img"
-        ),
-        help="Local warframe-items transparent arcane icon directory",
-    )
-    parser.add_argument(
-        "--i18n",
-        type=Path,
-        default=(
-            documents
-            / "WF_Rever"
-            / "research"
-            / "wf-arsenal-external-sources"
-            / "work"
-            / "warframe-items"
-            / "data"
-            / "json"
-            / "i18n.json"
-        ),
-        help="warframe-items i18n.json with per-language levelStats",
-    )
-    parser.add_argument(
-        "--lang",
-        type=Path,
-        default=(
-            documents
-            / "WF_Rever"
-            / "research"
-            / "wf-arsenal-external-sources"
-            / "work"
-            / "warframe-languages-bin-data"
-            / "zh.json"
-        ),
-        help="Official Languages.bin dump (zh) for set-bonus and condition text",
-    )
-    parser.add_argument(
-        "--modframe-root",
-        type=Path,
-        default=documents / "\u9ed1\u732b4.0-5.0" / "feature" / "local" / "assets" / "modframe",
-        help="Compact MOD frame layer library (Amalgam/Galvanized pieces)",
-    )
+    parser.add_argument("--mod-index", type=Path, required=True)
+    parser.add_argument("--art-root", type=Path, required=True)
+    parser.add_argument("--complete-art-root", type=Path, required=True)
+    parser.add_argument("--menu-icons", type=Path, required=True)
+    parser.add_argument("--umbra-forma", type=Path, required=True)
+    parser.add_argument("--companion-mods", type=Path, required=True)
+    parser.add_argument("--warframe-items", type=Path, required=True)
+    parser.add_argument("--warframe-items-img", type=Path, required=True)
+    parser.add_argument("--i18n", type=Path, required=True)
+    parser.add_argument("--lang", type=Path, required=True)
+    parser.add_argument("--modframe-root", type=Path, required=True)
     parser.add_argument("--stances", type=Path, default=ROOT / "data" / "stances.json")
     parser.add_argument("--utility-mods", type=Path, default=ROOT / "data" / "utility_mods.json")
     parser.add_argument("--arcanes", type=Path, default=EXPORT_DIR / "arcanes.json")
@@ -258,10 +180,9 @@ def _rows(payload: Any) -> list[dict[str, Any]]:
 
 def main() -> int:
     args = _args()
-    rabbit_data = args.rabbit_root / "dist" / "WRData"
-    metadata_path = rabbit_data / "data" / "v2_mods.json"
-    art_root = rabbit_data / "icon" / "OfficialWarframe"
-    complete_art_root = args.rabbit_root / "dist" / "icon" / "OfficialWarframe"
+    metadata_path = args.mod_index
+    art_root = args.art_root
+    complete_art_root = args.complete_art_root
     items_path = args.warframe_items / "json" / "Mods.json"
     items_art = args.warframe_items / "img"
     for required in (
@@ -557,7 +478,7 @@ def main() -> int:
         asset = "/assets/arcanes/" + name
         _copy_checked(source, ASSET_ROOT / "arcanes" / name, asset, auxiliary)
 
-    menu_root = rabbit_data / "icon" / "menu"
+    menu_root = args.menu_icons
     polarity_root = args.companion_mods.parent / "icons" / "polarityIcons"
     special = {
         "/assets/game/slots/CosmeticEnhancer.png": complete_art_root
@@ -569,8 +490,7 @@ def main() -> int:
         "/assets/game/slots/IconArcane.png": menu_root / "IconArcane.png",
         "/assets/game/formas/StanceForma.png": complete_art_root
         / "Lotus/Interface/Icons/StoreIcons/Resources/CraftingComponents/StanceForma.png",
-        "/assets/game/formas/UmbraForma.png": args.rabbit_root
-        / "dist/icon/item/umbra-forma.png",
+        "/assets/game/formas/UmbraForma.png": args.umbra_forma,
         "/assets/polarities/umbra.png": polarity_root / "PolarityUmbra.png",
         "/assets/polarities/aura.png": polarity_root / "PolarityAura.png",
     }

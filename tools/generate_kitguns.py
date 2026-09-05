@@ -36,7 +36,7 @@ GUN_TYPES = {
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source-root", type=Path, required=True)
+    parser.add_argument("--raw-root", type=Path, required=True, help="same-build directory containing Packages.bin and packages/")
     parser.add_argument("--build-label", default="2026.08.13.13.24")
     parser.add_argument("--localization", type=Path, required=True)
     parser.add_argument(
@@ -62,11 +62,11 @@ def localized_names(path: Path) -> dict[str, tuple[str, str]]:
 
 def main() -> int:
     args = parse_args()
-    sys.path.insert(0, str(args.source_root / "src"))
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "vendor"))
     from wfarsenal import packages
     from wfarsenal.extract import _attack_data, _damage_block, _sub_behaviour
 
-    index = packages.load(args.source_root / "data" / "raw" / args.build_label)
+    index = packages.load(args.raw_root)
     names = localized_names(args.localization)
 
     def identity(path: str) -> dict[str, Any]:

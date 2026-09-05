@@ -12,7 +12,6 @@ ROOT = Path(__file__).resolve().parent
 
 
 def main() -> None:
-    documents = ROOT.parent
     build = active_build(ROOT)
     parser = argparse.ArgumentParser(description="Freeze Incarnon and trigger text from the international Languages.bin dump")
     parser.add_argument("--build", default=build)
@@ -20,7 +19,7 @@ def main() -> None:
     parser.add_argument(
         "--localization",
         type=Path,
-        default=documents / "WF_Rever" / "research" / "wf-arsenal-external-sources" / "work" / "warframe-languages-bin-data" / "zh.json",
+        required=True,
     )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()

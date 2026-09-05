@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from pathlib import Path
 from typing import Any
 
@@ -18,12 +19,36 @@ def load_source_lock(root: Path = ROOT) -> dict[str, Any]:
     return payload
 
 
-def active_build(root: Path = ROOT) -> str:
-    return os.environ.get("WF_RIVEN_BUILD") or str(load_source_lock(root)["activeBuild"])
+def active_build(root: Path = ROOT, lock: dict[str, Any] | None = None) -> str:
+    build = str((lock if lock is not None else load_source_lock(root))["activeBuild"])
+    override = os.environ.get("WF_RIVEN_BUILD")
+    if override and override != build:
+        raise ValueError("WF_RIVEN_BUILD cannot mix exports with another snapshot; activate a complete snapshot")
+    return validate_build(build)
+
+
+def validate_build(build: str) -> str:
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,79}", build) or ".." in build:
+        raise ValueError("build must be a single version label without path separators")
+    return build
+
+
+def dataset_root(root: Path = ROOT, lock: dict[str, Any] | None = None) -> Path:
+    root = root.resolve()
+    lock = lock if lock is not None else load_source_lock(root)
+    snapshot = lock.get("snapshotRoot")
+    if not snapshot:
+        return root
+    path = (root / str(snapshot)).resolve()
+    snapshots = (root / "data" / "snapshots").resolve()
+    if not path.is_relative_to(snapshots) or path == snapshots or not path.is_dir():
+        raise ValueError("snapshotRoot must name an existing directory under data/snapshots")
+    return path
 
 
 def export_dir(root: Path = ROOT, build: str | None = None) -> Path:
-    return root / "data" / "export" / (build or active_build(root))
+    lock = load_source_lock(root)
+    return dataset_root(root, lock) / "data" / "export" / validate_build(build or active_build(root, lock))
 
 
 def resolve_source_path(template: str, *, root: Path = ROOT, build: str | None = None) -> Path:
