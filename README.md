@@ -35,6 +35,12 @@ python app.py --port 0
 
 ## Windows 便携包
 
+从仓库 Releases 下载 `Warframe-Weapon-Loadout-Build-win-x64.exe`，双击启动。无需安装 Python，也无需在 EXE 旁放置数据或依赖目录；界面使用系统默认浏览器。退出时在服务窗口按 `Ctrl+C`。
+
+程序启动时会释放内嵌资源到系统临时目录，正常退出后清理。持久计算缓存位于 `%LOCALAPPDATA%\Warframe-Weapon-Loadout-Build\cache`；配装和主题仍保存在浏览器本地存储中，跨机器迁移配装请使用导入/导出。不要依靠复制 EXE 迁移浏览器数据。
+
+服务窗口提供内置说明、许可证和第三方声明的本地链接，默认分别为 `/docs/README.md`、`/docs/LICENSE` 和 `/docs/THIRD_PARTY_NOTICES.md`。
+
 打包需要 PyInstaller：
 
 ```powershell
@@ -42,13 +48,13 @@ python -m pip install pyinstaller
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build-portable.ps1
 ```
 
-输出位于 `.local/artifacts/release/Warframe-Weapon-Loadout-Build-win-x64.zip`，同目录会生成 SHA-256 校验文件。`.local/` 只保存本机构建、缓存、审计与归档材料，不会提交到 Git。
+输出位于 `.local/artifacts/release/Warframe-Weapon-Loadout-Build-win-x64.exe`，同目录生成 `.exe.sha256` 校验文件。分发时只需 EXE，校验文件供核对下载完整性。`.local/` 保存本机构建、缓存、审计与归档材料，不会提交到 Git。
 
 ## 数据更新
 
 武器、MOD、赋能、敌人、战甲和技能数据必须从同一游戏 build 整体刷新，不能混用不同版本。来源锁、生成顺序和严格审计说明见 [DATA_PIPELINE.md](DATA_PIPELINE.md)。
 
-只审计当前冻结数据：
+完整来源审计（需要来源锁列出的原始输入；运行和打包不需要这些输入）：
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\update-data.ps1

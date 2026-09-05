@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 import mimetypes
+import os
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -188,6 +189,11 @@ UTILITY_MOD_PATHS = set(UTILITY_MOD_BY_PATH)
 # 推荐候选恒为理论满数值口径，不随单张紫卡变化；底层数据（导出快照或架势
 # 表）变动时整个文件作废重算。缓存格式升级时递增版本号即可全量失效。
 ANALYSIS_STATICS_CACHE_PATH = ROOT / ".local" / "cache" / "riven-analysis-statics.json"
+if getattr(sys, "frozen", False):
+    ANALYSIS_STATICS_CACHE_PATH = (
+        Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
+        / "Warframe-Weapon-Loadout-Build" / "cache" / "riven-analysis-statics.json"
+    )
 ANALYSIS_STATICS_CACHE_VERSION = 2
 
 
@@ -3784,18 +3790,24 @@ class PortableHandler(BaseHTTPRequestHandler):
         self._send_json(HTTPStatus.OK, result, cache="no-store")
 
     def _serve_static(self, request_path: str) -> None:
+        static_root = FRONTEND_DIR
         if request_path == "/":
             relative = Path("index.html")
         elif request_path in {"/app.css", "/app.js"}:
             relative = Path(request_path.removeprefix("/"))
         elif request_path.startswith("/assets/"):
             relative = Path(unquote(request_path.removeprefix("/")))
+        elif request_path in {
+            "/docs/README.md", "/docs/README.en.md", "/docs/LICENSE", "/docs/THIRD_PARTY_NOTICES.md",
+        }:
+            static_root = ROOT
+            relative = Path(request_path.removeprefix("/docs/"))
         else:
             self._send_error(HTTPStatus.NOT_FOUND, "not_found", "resource not found")
             return
 
-        frontend_root = FRONTEND_DIR.resolve()
-        target = (FRONTEND_DIR / relative).resolve()
+        frontend_root = static_root.resolve()
+        target = (static_root / relative).resolve()
         try:
             target.relative_to(frontend_root)
         except ValueError:
@@ -3814,6 +3826,8 @@ class PortableHandler(BaseHTTPRequestHandler):
             )
             return
         content_type = mimetypes.guess_type(target.name)[0] or "application/octet-stream"
+        if static_root == ROOT:
+            content_type = "text/plain"
         if content_type.startswith("text/") or content_type in {
             "application/javascript",
             "application/json",
@@ -3900,6 +3914,8 @@ def main(argv: list[str] | None = None) -> int:
     host, port = server.server_address[:2]
     url = f"http://{host}:{port}/"
     print(f"Warframe & Weapon Loadout Build is running at {url}")
+    print(f"Documentation: {url}docs/README.md")
+    print(f"License: {url}docs/LICENSE | Notices: {url}docs/THIRD_PARTY_NOTICES.md")
     if not args.no_browser:
         threading.Timer(0.25, webbrowser.open, args=(url,)).start()
     try:

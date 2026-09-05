@@ -35,6 +35,12 @@ On Windows, `run-dev.cmd` provides the same startup path.
 
 ## Windows Portable Build
 
+Download `Warframe-Weapon-Loadout-Build-win-x64.exe` from the repository Releases and double-click it. Python and adjacent data or dependency folders are not required. The interface opens in the system browser. Press `Ctrl+C` in the server console to exit.
+
+Bundled resources are extracted to a temporary directory at startup and removed on normal exit. Persistent calculation caches use `%LOCALAPPDATA%\Warframe-Weapon-Loadout-Build\cache`. Loadouts and the theme remain in browser local storage; use import/export to move loadouts between computers. Copying the EXE does not copy browser data.
+
+The server console prints local links to the bundled documentation, license and notices at `/docs/README.md`, `/docs/LICENSE` and `/docs/THIRD_PARTY_NOTICES.md`.
+
 Packaging requires PyInstaller:
 
 ```powershell
@@ -42,13 +48,13 @@ python -m pip install pyinstaller
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build-portable.ps1
 ```
 
-The package is written to `.local/artifacts/release/Warframe-Weapon-Loadout-Build-win-x64.zip` together with a SHA-256 checksum. `.local/` contains machine-local builds, caches, audits, and archived development material and is never committed.
+The executable is written to `.local/artifacts/release/Warframe-Weapon-Loadout-Build-win-x64.exe` with an `.exe.sha256` checksum. Only the EXE is required to run; the checksum is provided to verify the download. `.local/` contains machine-local builds, caches, audits, and archived development material and is never committed.
 
 ## Data Refresh
 
 Weapon, mod, Arcane, enemy, Warframe, and ability data must be refreshed as one version-locked set. Do not mix outputs from different game builds. See [DATA_PIPELINE.md](DATA_PIPELINE.md) for the source lock, generation order, and strict audit process.
 
-Audit the current frozen data without replacing it:
+Audit all sources without replacing data (requires the original inputs listed in the source lock; running and packaging do not):
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\update-data.ps1
