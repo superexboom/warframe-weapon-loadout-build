@@ -28,7 +28,7 @@
 | Double Tap | 防错完成、机制未完成 | 可见、可审计、`mod-gains` 对未建模机制返回空收益而非假收益 | 命中叠层、失误重置、弹丸顺序、灵化直击/径向分歧未进入正式评分 |
 | 非功能槽/专属 MOD 静态审计 | 第一轮完成 | 已扫描武器兼容、条件效果、runtime script、特殊 upgradeType | 审计条目尚未逐一映射到运行时消费点；未知项必须保持 fail-closed |
 | 搜索质量 | 部分完成 | fast/standard/deep 档位、beam/hill 和约束上下文已区分；结果明确标记 `best-known-search-result` | 多起点、联合紫卡+普通 MOD、双槽交换、有限空间穷举基准未完成 |
-| 缓存 | 已有旧版静态缓存，暂不重建 | 旧记录为 fast/standard 共 1664 条、版本 8、带 fingerprint/contextHash | 新事件语义未验收前不得宣称全量缓存可信；deep 未烘焙 |
+| 缓存 | 旧文件存在但当前代码已自动拒绝加载 | 文件仍是 fast/standard 共 1664 条、版本 8、带 fingerprint/contextHash；当前 `ANALYSIS_STATICS_CACHE` 加载条目为 0（optimizer 指纹变更） | 不重建、不删除旧文件；新事件语义未验收前不得宣称全量缓存可信；deep 未烘焙 |
 
 ## 本阶段执行顺序
 
