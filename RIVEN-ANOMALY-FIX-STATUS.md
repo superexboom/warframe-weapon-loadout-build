@@ -1,12 +1,13 @@
 # 紫卡收益异常修复追踪
 
-更新时间：2026-09-22
+更新时间：2026-09-22（Round 4 后）
 工作分支：`codex/riven-anomaly-fix-20260922`
+审核基线：`a8e92c3644e39f5e92c360fad8486c7ed9d16549`（本阶段三个修复提交之上）
 缓存策略：本阶段禁止烘焙/重建静态缓存；只有完成引擎回归并得到明确指示后才执行。
 
 ## 验收口径
 
-本任务把“能显示结果”“能算出一个数”和“结果可作为紫卡推荐依据”分开。每个阶段都要同时记录：
+本任务把「能显示结果」「能算出一个数」和「结果可作为紫卡推荐依据」分开。每个阶段都要同时记录：
 
 - 公式/机制是否已实现；
 - 是否接入真实紫卡分析入口；
@@ -15,43 +16,70 @@
 
 单元测试通过不等于真实分析路径完成；缓存存在也不等于缓存结果在新计算语义下可信。
 
-## 当前状态
+## 本阶段修复（审计 F01–F17 落地）
 
-| 领域 | 状态 | 已确认 | 未完成/限制 |
-|---|---|---|---|
-| 紫卡贡献指标 | 部分完成 | Pistol Elementalist 的状态伤害已进入贡献指标，未知贡献不再伪造 0% | 仍需抽样更多状态/换弹/弹射专属卡 |
-| 连续窗口与升靶 | 部分完成 | 有事件时间诊断、请求/评价靶等级和上下文哈希；KPM 饱和时不再强行给 100% | 主窗口仍是连续伤害率积分，尚未成为完整离散攻击事件回放 |
-| 攻击事件账本 | 部分完成 | `windowed_status_damage` 真实输出已带 direct ledger；能在真实优化入口观察攻击次数、击杀、stale component 和目标代次 | 连续 DoT/区域事件仍未与同一账本共同结算，当前 direct ledger 仍标记为 diagnostic |
-| Torid / 区域与持续伤害 | 未完成、已阻止假精确 | 直击、区域/投射物静态事件可被列出；缺 field 时评分返回 `unresolved-model-partial` | 区域生成、持续跳伤、区域跨目标生命周期仍未完整回放 |
-| Opticor / 径向 | 部分完成、已阻止假精确 | 静态 projectile event 可报告贡献范围；缺 radial 时评分返回 `unresolved-model-partial` | 爆炸时序、同次攻击目标归属和多目标覆盖未完整建模 |
-| Latron 灵化状态 | 部分完成 | 普通/灵化 fire mode 与 Double Tap 差异已列入 sidecar；未验证部分 fail-closed | 灵化直击/径向分别吃词条的事件状态机尚未实现 |
-| Double Tap | 防错完成、机制未完成 | 可见、可审计、`mod-gains` 对未建模机制返回空收益而非假收益 | 命中叠层、失误重置、弹丸顺序、灵化直击/径向分歧未进入正式评分 |
-| 非功能槽/专属 MOD 静态审计 | 第一轮完成 | 已扫描武器兼容、条件效果、runtime script、特殊 upgradeType | 审计条目尚未逐一映射到运行时消费点；未知项必须保持 fail-closed |
-| 搜索质量 | 部分完成 | fast/standard/deep 档位、beam/hill 和约束上下文已区分；结果明确标记 `best-known-search-result` | 多起点、联合紫卡+普通 MOD、双槽交换、有限空间穷举基准未完成 |
-| 缓存 | 旧文件存在但当前代码已自动拒绝加载 | 文件仍是 fast/standard 共 1664 条、版本 8、带 fingerprint/contextHash；当前 `ANALYSIS_STATICS_CACHE` 加载条目为 0（optimizer 指纹变更） | 不重建、不删除旧文件；新事件语义未验收前不得宣称全量缓存可信；deep 未烘焙 |
+详细执行记录见 `RIVEN-AUDIT-REMEDIATION-PROGRESS.md`。摘要：
 
-## 本阶段执行顺序
+| 编号 | 状态 | 交付 |
+|---|---|---|
+| F01 | 已端到端完成 | 主循环直伤离散攻击事件结算（`hybrid-event-settled-v2`），与 direct ledger 同一调度；审计反例（1 Hz/30 s/10×超杀=300 杀）修正为 30/15/3 杀与 ledger 一致 |
+| F02 | 已端到端完成 | DoT 生产者/消费者显式合同（seedPerSecondPerProc 等），触发数正确缩放主项，累加项不再双重计费 |
+| F03 | 已端到端完成 | durationSeconds 最终时长合同，删除第二次 ×duration_scale |
+| F04 | 已端到端完成 | 目标代次生命周期（ramp 时钟/Heat Inherit/DoT 云死亡清理），`_settle_death` 统一重建 |
+| F05 | 已端到端完成 | windowedDps 质量阶段三曲线重绑统一 EvaluationRecord（评分/展示/贡献/缓存同源，S03 重放合同） |
+| F06 | 已端到端完成 | 结构系数按实际 positive_count（2+0 的 D high=233.6，旧 177.0） |
+| F07 | 已端到端完成 | `validate_build()` 统一可行域验证器覆盖必选/禁选/数量/容量，全部搜索阶段 + floor + 最终输出 |
+| F08 | 已端到端完成 | `ablationDelta`（同配卡消融）与 `reoptimizedDelta`（重优化）分离；主 delta=消融口径 |
+| F09 | 已端到端完成 | 搜索后升靶重搜闭环（预算内逐级升靶 → 冻结上下文重跑三曲线 → 再验压力） |
+| F10 | 已端到端完成 | `targetCalibrated`/`targetStatus`/`scoreStatusReason` 原因码合同；前端按原因区分展示 |
+| F11 | 已端到端完成 | 升靶缓存回退全战斗上下文逐字段匹配 |
+| F12 | 已端到端完成 | mod-gains 会话缓存键补完整紫卡 |
+| F13 | 已端到端完成 | 指纹补 app.py/combat_events.py；依赖缺失显式失败（不降级空指纹） |
+| F14 | 已端到端完成 | bake worker 进程级持久化开关（结构封死间接写路径）；默认模式镜像分析器；失败退出码 |
+| F15 | 已完成 | 有序去重（保元素顺序）+ 槽位保持 Swap + 贪心多起点 + deep 档双槽成对交换 |
+| F16 | 已端到端完成 | sidecar schema v2（证据类型/五态/固定来源/参考比例免责）+ 审计计数分母合同 + extract.py 双 bug 修复 |
+| F17 | 已端到端完成 | tests/ 入库（33 用例），`.gitignore` 修掉 |
 
-1. **已完成（部分接入）**：将直接攻击事件账本接入真实 `windowed_status_damage` 输出，保留连续 DoT/区域模型的明确限制标记。
-2. **已完成**：真实窗口入口回归覆盖 1 Hz 单发必杀、同一攻击组件不攻击重生目标、积分步多杀不靠一击上限截断。
-3. **已完成（第一轮）**：升靶压力判断不再单独依赖 `maxKillsPerStep`；保留多杀字段作为诊断，并根据攻击周期区分积分网格问题。
-4. **已完成**：结果补齐 `scoreBasis`、`modelStatus`、`targetStatus`、`searchStatus`，前端显示“best-known/未证明全局最优”。
-5. **已完成（第一轮）**：静态 MOD 审计报告已生成；抽样覆盖 Pistol Elementalist、Double Tap、Latron、Torid、Opticor，发现 552 条需审计条目，其中 347 条存在兼容路径但 weapon support 缺失。
-6. **本阶段保持**：只跑代码/回归/静态检查，不烘焙缓存。缓存重建作为后续独立阶段，需用户明确指示。
+## 静态分析补全（subagent：zhipu/glm-5.3 max）
+
+产出 `.local/research/*.json`（不入库，结论已并入 sidecar）：
+
+- **Torid**：毒云=投射物 `EmbedAttack`（40 DT_POISON/proc 0.25/r3m/10s）；tick 间隔静态不存在（wfsim 实测 1/s 标记 cross-reference）；Incarnon 光束 51 DT_POISON 无场。
+- **Opticor/Vandal**：径向在原始导出 impact 块（磁力 200/100，r6/4.6，fallOff 0.6，每发触发，吃基伤不吃多重，蓄力 ×2）；compact 导出因 extract.py 只读 projectileType 分支而丢弃（65 把 hitscan 武器）——已修 extract.py。
+- **Latron/Double Tap**：mod=5% 下一发乘数/0.5s 窗口（非旧登记的 0.2/20 层/2.0s）；唯一 PvE 可用 PvP mod；灵化直击 supported、径向 unknown；灵化径向伤害确认（Prime 140/Wraith 100，r4m）。
+- 另发现 `chargeTime` 大小写导出 bug（65 把蓄力武器 null）——已修 extract.py。
+
+## 回归证据
+
+- `python -m pytest tests/` → **33 passed（7 subtests）**：
+  - `test_riven_calibration.py`（8）：原有账本/上下文/mod-gains/Double Tap fail-closed 合同（eventModel 断言升级到 v2）。
+  - `test_windowed_damage_contract.py`（10+3 subtests）：D01/D02（DoT 数量与时长合同）、E01 三档超杀、E02 stale 组件、E03 同片双杀、E05 代次清理、E07 分箱无关、N01 生产接线负向测试。
+  - `test_optimizer_contracts.py`（15）：S01 四结构、S02 验证器+必选存活、C01 回退上下文、C02 紫卡缓存键、C03 指纹、C04 worker 隔离+模式镜像、U01 原因码、S04 消融分离。
+- `node .local/wfsim-converge/converge-check.mjs .local/wfsim-converge/result-golden.json` → **43/43 全收敛**（面板口径公式未受影响）。
+- `py_compile`（app/extract/optimizer/audit/bake）× 通过；`node --check frontend/app.js` 通过；`git diff --check` 干净。
+- 端到端冒烟：Braton Prime fast 档三正卡 111 s / 两正卡 79 s 正常解算，`ablationDelta` 与 `reoptimizedDelta` 分离正确，校准闭环与原因码字段齐备。
+
+## 明确未实现 / 保持 fail-closed
+
+- Latron 灵化径向的 Double Tap 适用性：无静态证据（ExplosiveAttack 无脚本钩子）——unknown。
+- Torid 场 tick 间隔、Double Tap 消费语义（重置/衰减）、失误重置条件：静态不可验证——需要游戏内实测；在取得实测前不实现。
+- Torid/Opticor 的场/径向伤害本体实现：伤害合同已登记（sidecar v2），但 compact 导出数据源尚未重建（需要用修复后的 extract.py 重跑导出管线）——在重建+验收前保持 `weapon-radial-or-field-damage-not-in-export` 诊断路径。
+- wfsim 目录中 Opticor Vandal 径向 300 与原始数据 100 不符（1.5×）——以原始导出为准，差异登记 openQuestions。
+- 弹匣/装填/蓄力的精确开火调度（E04）：当前 `sustained_attack_rate` 平均口径仍是模型近似（attackRateSource 字段如实标注）。
+- 搜索全局最优性：仍是 beam+爬山+多起点+双槽交换的 best-known（`scoreBasis: best-known-search-result`），不宣称全局证明。
 
 ## 缓存准入条件（后续）
 
 只有下列条件同时满足，才允许重新烘焙：
 
-- 真实窗口事件回归通过；
+- 真实窗口事件回归通过（本轮 33 项已过，后续引擎改动仍需全绿）；
 - Torid/Opticor/Latron 的未建模机制在输出中可见且不会进入假精确评分；
 - 搜索与评分使用同一 `contextHash` 和同一评价靶；
-- cold/hot/bake 三路缓存测试通过；
+- cold/hot/bake 三路缓存测试通过（临时目录，C04 隔离已结构化保证）；
 - 烘焙报告列出 profile、条目数、指纹、失败 shard、`qualityCalibrated` 语义。
 
 ## 发布边界
 
 - 只提交本任务相关源码、数据 sidecar、追踪文档和必要回归；
-- 不提交无关 Markdown、临时报告、`.local` 产物或无关测试；
 - 推送到本分支，不合并到 `main`；
 - 推送前使用本机 SOCKS5 `127.0.0.1:10808` 做连通性验证。

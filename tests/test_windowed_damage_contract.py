@@ -282,6 +282,165 @@ class DirectLedgerAuthorityTests(unittest.TestCase):
         self.assertLessEqual(result["killEvents"], 30)
         self.assertLessEqual(result["killsPerMinute"], 60.0 + 1e-6)
 
+    def test_distinct_attacks_can_kill_respawned_target(self) -> None:
+        """E03: two attacks in one slice may each kill a respawned target.
+
+        A 1 Hz schedule inside a coarse 0.25 s grid produces one attack per
+        step; a 8 Hz schedule produces two attacks per 0.25 s step.  When each
+        attack one-shots the target, both attacks in the same integration
+        slice must settle their own kill against the respawned generation —
+        the old "one kill per step" caps and the continuous-rate leaks both
+        got this wrong in opposite directions.
+        """
+        stats = _braton_stats()
+        target = _neutral_target(1.0)
+        result = windowed_status_damage(
+            stats,
+            target,
+            attacks_per_second=8.0,
+            window_seconds=1.0,
+            level=1,
+            time_step=0.25,
+            status_rate_multiplier=0.0,
+            collect_timeline=False,
+        )
+        ledger = result["directEventLedger"]
+        self.assertEqual(ledger["attacks"], 8)
+        self.assertEqual(ledger["kills"], 8)
+        # Main loop agrees: 8 attacks, 8 kills, 480 KPM.
+        self.assertEqual(result["killEvents"], 8)
+        self.assertAlmostEqual(result["killsPerMinute"], 480.0, delta=1.0)
+
+    def test_generation_state_clears_on_death(self) -> None:
+        """E05 (subset): a death clears the generation's ramp clock.
+
+        With Slash DoTs active, the fresh target must not inherit the dead
+        generation's proc cloud: the DoT window total over a long fight with
+        frequent one-shot kills must be far below the no-death steady state.
+        """
+        optimizer = app.optimizer
+        weapon = optimizer.resolve_record(
+            app.EXPORTS["weapons"],
+            "/Lotus/Weapons/Tenno/Rifle/BratonPrime",
+            kind="weapon",
+        )
+        weapon, _ = optimizer._select_fire_mode(weapon, 0, weapon_type="rifle")
+        stats = optimizer.apply_mods(
+            weapon,
+            optimizer.synthetic_riven_effects(
+                [
+                    {"code": "2", "value": 180.0, "negative": False},
+                    {"code": "A", "value": 150.0, "negative": False},
+                ]
+            ),
+            scenario=optimizer._scenario("killsPerMinute"),
+        )
+        # Fragile target: dies to the first direct hit, so every generation
+        # starts from zero stacks and its DoT cloud is cleared at death.
+        fragile = _neutral_target(1.0)
+        result = windowed_status_damage(
+            stats,
+            fragile,
+            attacks_per_second=stats.sustained_attack_rate,
+            window_seconds=30.0,
+            level=1,
+            time_step=0.25,
+            collect_timeline=False,
+        )
+        self.assertGreater(result["killEvents"], 100)
+        # The generation counter advanced once per kill.
+        self.assertEqual(result["targetGeneration"], result["killEvents"])
+        # A long-lived target (no deaths) accumulates the full DoT ramp; the
+        # fragile fight's per-second DoT must be far below the steady state
+        # because every death wipes the cloud.
+        long_lived = _neutral_target(1e12)
+        steady = windowed_status_damage(
+            stats,
+            long_lived,
+            attacks_per_second=stats.sustained_attack_rate,
+            window_seconds=30.0,
+            level=1,
+            time_step=0.25,
+            collect_timeline=False,
+        )
+        self.assertLess(
+            result["dotWindow"] / 30.0,
+            steady["dotWindow"] / 30.0 * 0.5,
+            "generation deaths must clear the target-bound DoT cloud",
+        )
+
+
+class ProductionWiringNegativeTests(unittest.TestCase):
+    """N01: the production entry must actually consume the windowed model.
+
+    These are negative tests: they sabotage a production wiring point and
+    assert that the surfaced behavior CHANGES.  If a refactor silently
+    disconnects the engine (e.g. the optimizer scores from a cached panel
+    value instead of the windowed model), these tests fail instead of the
+    whole suite staying green against helpers.
+    """
+
+    def test_score_consumes_windowed_model(self) -> None:
+        """_score(killsPerMinute) must read windowed_status_damage output."""
+        optimizer = app.optimizer
+        stats = _braton_stats()
+        context = {
+            "target": _neutral_target(1e12),
+            "level": 1,
+            "windowSeconds": 5.0,
+        }
+        real = optimizer._score(stats, "killsPerMinute", target_context=context)
+        self.assertGreaterEqual(real, 0.0)
+        # Sabotage: patch windowed_status_damage to return a sentinel KPM.
+        # The production score must change accordingly (proving the call path
+        # is live); if _score ignored the windowed model, the sabotage would
+        # be invisible and this test fails.
+        sentinel_kpm = 4321.0
+
+        def _fake_windowed(*_args, **_kwargs):
+            return {"killsPerMinute": sentinel_kpm, "windowDps": 0.0, "totalWindowDamage": 0.0}
+
+        original = optimizer.windowed_status_damage
+        optimizer.windowed_status_damage = _fake_windowed
+        try:
+            sabotaged = optimizer._score(stats, "killsPerMinute", target_context=context)
+        finally:
+            optimizer.windowed_status_damage = original
+        self.assertEqual(sabotaged, sentinel_kpm)
+
+    def test_pressure_probe_consumes_windowed_model(self) -> None:
+        """The calibration probe must read the real windowed output."""
+        optimizer = app.optimizer
+        stats = _braton_stats()
+        context = {
+            "target": _neutral_target(1e12),
+            "level": 1,
+            "windowSeconds": 30.0,
+        }
+        probe = optimizer._window_pressure_probe(stats, context)
+        self.assertIsNotNone(probe)
+        self.assertIn("pressureReasons", probe)
+
+        def _fake_windowed(*_args, **_kwargs):
+            return {
+                "timeStep": 0.25,
+                "firstKillTime": 999.0,
+                "minKillInterval": None,
+                "maxKillsPerStep": 0,
+                "attacksPerSecond": 1.0,
+                "killsPerMinute": 0.0,
+                "directEventLedger": {"status": "unavailable"},
+            }
+
+        original = optimizer.windowed_status_damage
+        optimizer.windowed_status_damage = _fake_windowed
+        try:
+            sabotaged = optimizer._window_pressure_probe(stats, context)
+        finally:
+            optimizer.windowed_status_damage = original
+        # The sabotaged first kill (999 s) must surface in the probe fields.
+        self.assertEqual(sabotaged.get("firstKillTime"), 999.0)
+
 
 if __name__ == "__main__":
     unittest.main()

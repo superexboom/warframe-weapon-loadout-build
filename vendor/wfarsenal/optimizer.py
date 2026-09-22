@@ -1939,6 +1939,72 @@ def _optimize(
             if evaluated is not None and eligible(evaluated) and evaluated.score > best_score + 1e-9:
                 best, best_score = evaluated, evaluated.score
                 improved = True
+        # ── F15（双槽交换，deep 档）───────────────────────────────────────
+        # 成对协同替换：两个新卡必须一起换入才优于现状的组合（元素边界/容
+        # 量再分配）是单卡邻域的盲区。仅在 deep 档执行（成本 O(n²) 评估，
+        # 每轮最多 24 个最优对，预算受 climb_rounds 约束）。
+        if profile == "deep" and len(base_optional) >= 2:
+            pair_budget = 24
+            pair_candidates: list[tuple[float, list[_Card]]] = []
+            for first_pos in range(len(base_optional)):
+                for second_pos in range(first_pos + 1, len(base_optional)):
+                    dropped_a = base_optional[first_pos]
+                    dropped_b = base_optional[second_pos]
+                    for card_a in pool:
+                        if card_a.key in {c.key for c in base_cards}:
+                            continue
+                        for card_b in pool:
+                            if card_b.key in {c.key for c in base_cards} or card_b.key == card_a.key:
+                                continue
+                            if card_a.key == card_b.key:
+                                continue
+                            kept = [c for c in base_cards if c.key not in {dropped_a.key, dropped_b.key}]
+                            candidate_cards = [*kept, card_a, card_b]
+                            if _constraint_violation(candidate_cards):
+                                continue
+                            sig = tuple(c.key for c in candidate_cards)
+                            if sig in seen_keys:
+                                continue
+                            seen_keys.add(sig)
+                            evaluated = _evaluate(
+                                weapon,
+                                tuple(candidate_cards),
+                                riven,
+                                scenario=scenario,
+                                metric=metric,
+                                passives=passives,
+                                slot_limit=slot_count,
+                                capacity_limit=capacity_limit,
+                                target_context=target_context,
+                            )
+                            if evaluated is not None and eligible(evaluated):
+                                pair_candidates.append((evaluated.score, candidate_cards))
+                                if len(pair_candidates) >= pair_budget * 8:
+                                    break
+                        if len(pair_candidates) >= pair_budget * 8:
+                            break
+                    if len(pair_candidates) >= pair_budget * 8:
+                        break
+                if len(pair_candidates) >= pair_budget * 8:
+                    break
+            pair_candidates.sort(key=lambda item: (-item[0], tuple(c.key for c in item[1])))
+            for score_value, candidate_cards in pair_candidates[:pair_budget]:
+                if score_value > best_score + 1e-9:
+                    evaluated = _evaluate(
+                        weapon,
+                        tuple(candidate_cards),
+                        riven,
+                        scenario=scenario,
+                        metric=metric,
+                        passives=passives,
+                        slot_limit=slot_count,
+                        capacity_limit=capacity_limit,
+                        target_context=target_context,
+                    )
+                    if evaluated is not None and eligible(evaluated) and evaluated.score > best_score + 1e-9:
+                        best, best_score = evaluated, evaluated.score
+                        improved = True
+                        break
     # Fill otherwise-neutral slots as long as the loadout remains legal.  The
     # damage score alone cannot distinguish an empty slot from a useful utility
     # card whose modeled contribution is zero (range, ammo mutation, etc.).

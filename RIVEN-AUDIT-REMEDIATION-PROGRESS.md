@@ -16,7 +16,7 @@
 | P1 | 权威评价器：直接射击调度（F01）、DoT 合同（F02/F03/F04） | 已完成 |
 | P2 | 统一评分记录（F05/F06/F07/F08） | 已完成 |
 | P3 | 机制登记与静态分析补全（F16 + subagent） | 已完成（登记与导出修复；机制实现按证据推进，unknown 保持 fail-closed） |
-| P4 | 搜索后升靶闭环 + 搜索质量（F09/F15） | F09 完成；F15 部分完成 |
+| P4 | 搜索后升靶闭环 + 搜索质量（F09/F15） | 已完成 |
 | P5 | 小样本缓存回归 + 状态合同（F10/F11） | 修复与回归测试完成 |
 
 ## 工作日志
@@ -89,6 +89,15 @@
   - S04 details 同时暴露 ablationDelta 与 reoptimizedDelta 且主 delta=消融口径。
 - 全套测试 29 passed（7 subtests）；wfsim 黄金集 43/43 收敛；py_compile × 4、node --check、git diff --check 全过。
 
+### 2026-09-22 Round 5（收尾）
+
+- **E03/E05 合同测试补齐**：同一积分片内两个攻击实例可各自击杀重生目标（8 Hz/1 s/0.25 步 → 主循环与 ledger 一致给出 8 杀/480 KPM）；代次死亡清理 DoT 云（脆靶 vs 长命靶的 DoT 速率对比 <50%）。
+- **N01 负向测试**：破坏 `windowed_status_damage` 返回哨兵值，断言 `_score` 与 `_window_pressure_probe` 的输出随之改变——证明生产评分/校准路径真实消费窗口模型（防止未来重构把引擎接线剪断而 helper 全绿）。
+- **F15 双槽成对交换**（deep 档）：成对协同替换进入爬山邻域（每轮预算 24 对，成本受 climb_rounds 约束）——单卡邻域看不到「两张卡一起换才更优」的组合（元素边界/容量再分配）。
+- 全套测试 **33 passed（7 subtests）**；wfsim 黄金集 43/43 收敛。
+- `RIVEN-ANOMALY-FIX-STATUS.md` 重写为本阶段终态（F01–F17 交付摘要、静态分析结论、回归证据、明确未实现/fail-closed 清单、缓存准入条件）。
+
+
 
 
 ## 发现项落地状态
@@ -111,6 +120,6 @@
 | F12 | 已端到端完成 | `mod_gains_payload` 缓存键补紫卡；C02 测试待补 |
 | F13 | 已端到端完成 | 指纹补 app.py/combat_events.py；空指纹改显式失败 |
 | F14 | 已端到端完成 | worker 持久化开关结构封死；bake 默认模式同口径；失败退出码修正 |
-| F15 | 部分完成 | 有序去重 + 槽位保持 Swap + 贪心多起点已落地；双槽交换与联合搜索待做 |
+| F15 | 已完成 | 有序去重 + 槽位保持 Swap + 贪心多起点 + deep 档双槽成对交换 |
 | F16 | 已端到端完成 | sidecar schema v2（证据类型/五态/固定来源）+ 审计计数分母合同 + extract.py 双 bug 修复 |
 | F17 | 已端到端完成 | `.gitignore` 修掉；测试入库（14 passed） |
