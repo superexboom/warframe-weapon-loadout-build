@@ -2159,7 +2159,7 @@ function renderScore() {
   const search = state.result.searchStatus || {};
   const weaponMechanics = state.result.weaponMechanics || {};
   ui["score-value"].title = [
-    score === null ? `评分未归一化：${state.result.scoreStatus || "上下文/最优性未决"}` : null,
+    score === null ? `评分未归一化：${state.result.scoreStatusReason || state.result.scoreStatus || "上下文/最优性未决"}` : null,
     quality.scoreMetric ? `评分指标：${quality.scoreMetric}` : null,
     target.level != null ? `评价等级：${target.level}` : null,
     calibration.status ? `校准：${calibration.status}` : null,
@@ -2184,8 +2184,19 @@ function renderScore() {
     }
     if (search.status) bits.push(`搜索 ${search.status}`);
     if (state.result.scoreBasis) bits.push(`基准 ${state.result.scoreBasis}`);
+    // F10：按原因码区分「评分未归一化」的解释——模型缺失、目标过弱、
+    // 下界未证明各说各话，不再一律显示「未证明全局最优」。
     if (state.result.scoreStatus && state.result.scoreStatus !== "available") {
-      bits.push("当前结果未证明全局最优");
+      const reason = String(state.result.scoreStatusReason || "");
+      if (reason.startsWith("model-missing")) {
+        bits.push("评分未归一化：伤害模型有未建模机制");
+      } else if (reason === "target-pressure-insufficient") {
+        bits.push("评分未归一化：评价靶压力不足（目标过弱/饱和）");
+      } else if (reason === "optimizer-optimum-lower-bound") {
+        bits.push("评分未归一化：理论上限仍是下界（未证明全局最优）");
+      } else {
+        bits.push("评分未归一化：上下文未决");
+      }
     }
     contextNote.textContent = bits.join(" · ");
     contextNote.hidden = bits.length === 0;
@@ -2198,12 +2209,23 @@ function renderContributions() {
   const rows = details.map((detail) => {
     const negative = state.submittedStats.find((entry) => entry.code === detail.code)?.negative;
     const delta = finite(detail.delta) ?? 0;
+    const reoptimized = finite(detail.reoptimizedDelta);
     const row = create("article", `contribution-row${delta < 0 ? " is-harmful" : ""}`);
     const head = create("div", "contribution-head");
     const title = create("div");
     title.append(create("span", "contribution-sign", negative ? "−" : "+"), create("strong", "", detail.label || detail.code));
     const value = create("div", "contribution-values");
-    value.append(create("b", "", `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}%`), create("span", "", `数值 ${formatQuality(detail.quality)}`));
+    // F08：主数值是「同一配卡移除此词条」的消融口径；重优化收益（删词条
+    // 并重选 MOD）单独展示，两者不再混为一谈。
+    value.append(
+      create("b", "", `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}%`),
+      create("span", "", `数值 ${formatQuality(detail.quality)}`),
+    );
+    if (reoptimized !== null && Math.abs(reoptimized - delta) > 0.05) {
+      const tag = create("span", "contribution-reopt", `重优化 ${reoptimized >= 0 ? "+" : ""}${reoptimized.toFixed(1)}%`);
+      tag.title = "移除该词条并允许重选普通 MOD 后的目标指标变化（联合收益口径）";
+      value.append(tag);
+    }
     head.append(title, value);
     const track = create("div", "contribution-track");
     const fill = create("i");

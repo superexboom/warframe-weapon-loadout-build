@@ -1630,6 +1630,10 @@ def _optimize(
         fill_floor = 0
         optional_ceiling = slot_count
     required_cards = tuple(required_cards) + tuple(extra_required)
+    # ── F07（审计修复）：用户必选卡物化为 required=True ──────────────────
+    # 爬山的 Swap/Drop 阶段按 card.required 判定可移除集合；不标记的话
+    # beam 之后的局部搜索可能把用户必选卡删掉。
+    required_cards = _mark_required_cards(required_cards, required_mod_keys or ())
     candidates = tuple(
         card for card in candidates
         if not card.required and card.key not in {c.key for c in extra_required}
@@ -1688,6 +1692,54 @@ def _optimize(
 
     beam: list[tuple[tuple[int, ...], _Evaluation]] = [((), empty)]
     best = empty if eligible(empty) else None
+    # ── F15/S06（审计修复）：多起点——贪心种子先入 incumbent ─────────────
+    # beam 的层序选择是贪心的，但单层 beam 剪枝可能中途淘汰后续才显出协
+    # 同的路径。用「逐张取当前最优单卡」的贪心序列作第二个起点：它覆盖
+    # beam 剪枝漏掉的显见组合，且成本 O(limit × pool)。同时保证高档位
+    # 不劣于贪心口径（S07 的实际下界）。
+    greedy_cards: list[_Card] = []
+    greedy_used_families: set[str] = set()
+    for _ in range(limit):
+        greedy_pick: _Card | None = None
+        for card in pool:
+            if card.key in {c.key for c in greedy_cards}:
+                continue
+            if _mod_family(card) in greedy_used_families:
+                continue
+            greedy_pick = card
+            break
+        if greedy_pick is None:
+            break
+        candidate_cards = (*required_cards, *greedy_cards, greedy_pick)
+        if validate_build(
+            candidate_cards,
+            riven,
+            slot_count=slot_count,
+            capacity_limit=capacity_limit,
+            required_mod_keys=required_mod_keys,
+            forbidden_mod_keys=forbidden_mod_keys,
+            min_fill=min_fill,
+            max_fill=max_fill,
+        ) is not None:
+            break
+        greedy_cards.append(greedy_pick)
+        greedy_used_families.add(_mod_family(greedy_pick))
+    if greedy_cards:
+        greedy_eval = _evaluate(
+            weapon,
+            (*required_cards, *greedy_cards),
+            riven,
+            scenario=scenario,
+            metric=metric,
+            passives=passives,
+            slot_limit=slot_count,
+            capacity_limit=capacity_limit,
+            target_context=target_context,
+        )
+        if greedy_eval is not None and eligible(greedy_eval) and (
+            best is None or greedy_eval.score > best.score
+        ):
+            best = greedy_eval
     for _ in range(limit):
         expanded: list[tuple[tuple[int, ...], _Evaluation]] = []
         for selected, _previous in beam:
@@ -1763,16 +1815,36 @@ def _optimize(
     # 3000 evaluations for rank 10, because a beam's shortlist ordering is
     # greedy while a swap sees past it (the 8th-best card for the empty build
     # may be the best partner for the 7 already chosen).
-    seen_keys: set[tuple[str, ...]] = {tuple(sorted(card.key for card in best.cards))}
+    # ── F15（审计修复）：有序构建规范化去重 ──────────────────────────────
+    # 元素合成顺序有意义（项目口径）：同一组卡不同顺序不是等价构建。
+    # 旧实现 sig = tuple(sorted(card.key ...)) 把集合相同的顺序全部折叠，
+    # 爬山会跳过「同卡不同序」的真实候选。现在 sig 保留卡序（tuple 原序），
+    # 交换动作把新卡放进被移除卡的槽位（不再一律追加到末尾）。
+    seen_keys: set[tuple[str, ...]] = {tuple(card.key for card in best.cards)}
     improved = True
     climb_guard = 0
+
+    def _constraint_violation(candidate_cards: Sequence[_Card]) -> str | None:
+        """F07：邻域变动的统一约束验证（必选/禁选/数量/容量）。"""
+        return validate_build(
+            candidate_cards,
+            riven,
+            slot_count=slot_count,
+            capacity_limit=capacity_limit,
+            required_mod_keys=required_mod_keys,
+            forbidden_mod_keys=forbidden_mod_keys,
+            min_fill=min_fill,
+            max_fill=max_fill,
+        )
+
     while improved and climb_guard < climb_rounds:
         improved = False
         climb_guard += 1
         base_cards = list(best.cards)
         base_optional = [c for c in base_cards if not c.required]
         best_score = best.score
-        # Swap: replace one optional card with one pool card.
+        # Swap: replace one optional card with one pool card.  F15：新卡放进
+        # 被移除卡的槽位（保持元素边界，不追加到末尾）。
         for drop_pos, dropped in enumerate(base_optional):
             for card in pool:
                 if card.key in {c.key for c in base_cards}:
@@ -1781,10 +1853,12 @@ def _optimize(
                     _mod_family(c) for c in base_cards if c.key != dropped.key
                 }:
                     continue
-                candidate_cards = [
-                    c for c in base_cards if c.key != dropped.key
-                ] + [card]
-                sig = tuple(sorted(c.key for c in candidate_cards))
+                drop_index = base_cards.index(dropped)
+                candidate_cards = list(base_cards)
+                candidate_cards[drop_index] = card
+                if _constraint_violation(candidate_cards):
+                    continue
+                sig = tuple(c.key for c in candidate_cards)
                 if sig in seen_keys:
                     continue
                 seen_keys.add(sig)
@@ -1802,14 +1876,21 @@ def _optimize(
                 if evaluated is not None and eligible(evaluated) and evaluated.score > best_score + 1e-9:
                     best, best_score = evaluated, evaluated.score
                     improved = True
-        # Add: one more pool card while slots remain.
-        if len(best.cards) + (1 if riven else 0) < slot_count:
+        # Add: one more pool card while slots AND max_fill remain.
+        # ── F07（审计修复）：Add 同时检查 slot_count 与 max_fill（旧实现
+        # 只查 slot_count，beam 阶段的数量上限会被爬山的 Add 绕过）。
+        if len(best.cards) + (1 if riven else 0) < slot_count and (
+            max_fill is None
+            or len(best.cards) + (1 if riven else 0) < int(max_fill)
+        ):
             used_keys = {c.key for c in best.cards}
             used_families = {_mod_family(c) for c in best.cards}
             for card in pool:
                 if card.key in used_keys or _mod_family(card) in used_families:
                     continue
-                sig = tuple(sorted(c.key for c in (*best.cards, card)))
+                if _constraint_violation((*best.cards, card)):
+                    continue
+                sig = tuple(c.key for c in (*best.cards, card))
                 if sig in seen_keys:
                     continue
                 seen_keys.add(sig)
@@ -1830,11 +1911,14 @@ def _optimize(
                     break
         # Drop: remove one optional card (frees capacity for nothing — only
         # keeps builds whose score genuinely improves, e.g. set-bonus traps).
+        # ── F07（审计修复）：Drop 检查 min_fill（数量下限不被绕过）。
         for dropped in base_optional:
             candidate_cards = [c for c in best.cards if c.key != dropped.key]
             if not candidate_cards:
                 continue
-            sig = tuple(sorted(c.key for c in candidate_cards))
+            if _constraint_violation(candidate_cards):
+                continue
+            sig = tuple(c.key for c in candidate_cards)
             if sig in seen_keys:
                 continue
             seen_keys.add(sig)
@@ -1885,6 +1969,14 @@ def _optimize(
             used_families.add(family)
             if len(best.cards) + (1 if riven else 0) >= slot_count:
                 break
+    # ── F07（审计修复）：最终输出统一验证。任何阶段的旁路（缓存候选、
+    # beam、爬山、中性填充、floor）到这里都会被同一验证器拦截——不可行
+    # 的构建宁可报错也不返回。
+    final_violation = _constraint_violation(best.cards)
+    if final_violation is not None:
+        raise SimulationError(
+            f"optimizer produced an infeasible build ({final_violation})"
+        )
     return best
 
 
@@ -1923,6 +2015,71 @@ def _best_fixed(
         if evaluated:
             return max(evaluated, key=lambda value: value.score)
     raise SimulationError("no capacity-valid build can equip the Riven")
+
+
+def validate_build(
+    cards: Sequence[_Card],
+    riven: _Card | None,
+    *,
+    slot_count: int,
+    capacity_limit: int,
+    required_mod_keys: Sequence[str] | None = None,
+    forbidden_mod_keys: Sequence[str] | None = None,
+    min_fill: int | None = None,
+    max_fill: int | None = None,
+) -> str | None:
+    """F07（审计修复）：统一可行域校验器。
+
+    检查一份配卡（不含紫卡本体）是否满足请求的全部搜索约束：
+    必选卡在场、禁选卡不在场、配卡数量范围（含紫卡与必选）、槽位与
+    容量上限。返回 ``None`` 表示合法；返回字符串为拒绝原因。
+
+    所有搜索阶段（种子、缓存候选、邻域变动、floor 修正、最终输出）
+    都应通过同一验证器，约束不再依赖临时卡对象的 ``required`` 布尔
+    标记（旧实现里用户必选卡进 ``required_cards`` 后没有标
+    ``required=True``，爬山 Drop/Swap 仍可能把它当可移除卡删掉）。
+    """
+    keys = [card.key for card in cards]
+    key_set = set(keys)
+    if len(key_set) != len(keys):
+        return "duplicate-mod"
+    total = len(cards) + (1 if riven is not None else 0)
+    if total > slot_count:
+        return f"slot-count-{total}>{slot_count}"
+    required = {str(key) for key in (required_mod_keys or ()) if str(key)}
+    missing = required - key_set
+    if missing:
+        return "missing-required:" + ",".join(sorted(missing))
+    forbidden = {str(key) for key in (forbidden_mod_keys or ()) if str(key)}
+    present_forbidden = key_set & forbidden
+    if present_forbidden:
+        return "forbidden-mod:" + ",".join(sorted(present_forbidden))
+    if min_fill is not None and total < int(min_fill):
+        return f"under-min-fill-{total}<{int(min_fill)}"
+    if max_fill is not None and total > int(max_fill):
+        return f"over-max-fill-{total}>{int(max_fill)}"
+    capacity = _capacity(list(cards) + ([riven] if riven is not None else []))
+    if capacity > capacity_limit:
+        return f"over-capacity-{capacity}>{capacity_limit}"
+    return None
+
+
+def _mark_required_cards(
+    cards: Sequence[_Card], required_keys: Sequence[str]
+) -> tuple[_Card, ...]:
+    """F07：把用户必选卡物化为 ``required=True`` 的卡对象。
+
+    爬山的 Swap/Drop 阶段按 ``card.required`` 判定可移除集合；用户必选
+    卡必须进入该标记通道，否则 beam 之后的局部搜索可能把它删掉（旧
+    实现的旁路之一）。返回新元组，不修改原卡对象。
+    """
+    required = {str(key) for key in required_keys if str(key)}
+    if not required:
+        return tuple(cards)
+    return tuple(
+        replace(card, required=True) if card.key in required else card
+        for card in cards
+    )
 
 
 def theoretical_structure_scale(
@@ -3356,6 +3513,37 @@ def analyze_riven_request(
             # 升靶缓存命中：同武器曾因秒杀饱和升级评分靶（缓存键已迁移到
             # #bm{scoringLevel}）。本请求的 benchmark level 落后于记录时，
             # 直接沿用升级后的等级（同武器所有请求一致），从概念键取回。
+            # ── F11（审计修复）：回退查找必须匹配「除等级外的全部战斗上
+            # 下文」。旧实现只比 weapon/mode/profile/metric/capacity/
+            # disposition + 4 个派生字段——敌人、窗口、钢铁之路、卓越者、
+            # 削甲、爆头率任一不同都会命中同一旧条目，把别的场景的数值
+            # （quality 缓存）直接复用到本场景。现在整个 benchmark 子键
+            # （除 level）必须逐字段相等。
+            def _benchmark_matches_except_level(
+                key_benchmark: Any,
+            ) -> bool:
+                if not isinstance(key_benchmark, Mapping):
+                    return False
+                expected = dict(_bm)
+                for field, value in expected.items():
+                    if field == "level":
+                        continue
+                    if key_benchmark.get(field) != value:
+                        return False
+                # 反向：缓存键里多出的 benchmark 字段（旧版本写入的
+                # archimedea/empowered 等）也必须与本请求的默认值一致，
+                # 否则视为不同场景。本请求未提供的字段按 _bm 的默认口径
+                # 比较（缺失 = 与 None/默认不等即拒绝，宁缺勿错）。
+                for field in (
+                    "enemy", "steelPath", "eximus", "archimedea", "empowered",
+                    "armourStrip", "elementalArmourStrip", "headshotChance",
+                    "hitLocation", "stanceMultiplier", "statusRateMultiplier",
+                    "heavyAttack", "windowSeconds",
+                ):
+                    if field in key_benchmark and field not in expected:
+                        return False
+                return True
+
             cached_level = None
             for key, entry in statics_cache.items():
                 if not isinstance(key, str) or not isinstance(entry, dict):
@@ -3374,10 +3562,7 @@ def analyze_riven_request(
                     and parsed_key.get("metric") == objective_metric
                     and parsed_key.get("capacityLimit") == capacity_limit
                     and parsed_key.get("disposition") == round(float(disposition), 8)
-                    and parsed_key.get("benchmark", {}).get("hitLocation") == _bm.get("hitLocation")
-                    and parsed_key.get("benchmark", {}).get("stanceMultiplier") == _bm.get("stanceMultiplier")
-                    and parsed_key.get("benchmark", {}).get("statusRateMultiplier") == _bm.get("statusRateMultiplier")
-                    and parsed_key.get("benchmark", {}).get("heavyAttack") == _bm.get("heavyAttack")
+                    and _benchmark_matches_except_level(parsed_key.get("benchmark"))
                     and isinstance(entry.get("scoringLevel"), int)
                 ):
                     cached_level = entry["scoringLevel"]
@@ -3526,6 +3711,9 @@ def analyze_riven_request(
         # 显而易见的路径（部分配装在前几层协同未成形就被淘汰）。用它做下限，
         # 避免「带紫卡反而比不带差」的假性负收益。required 卡（剑风 Prime）
         # 不可被下限路径移除——floor 只从非必需卡中减一张。
+        # ── F07（审计修复）：floor 路径同样过统一可行域验证（必选卡必须
+        # 保留、数量范围不得越界）。旧实现只查容量，riven-floor 可以把用户
+        # 必选卡换掉或把配卡数压到 min_fill 之下。
         required_keys = {
             card.key for card in baseline.cards if card.required
         }
@@ -3539,6 +3727,17 @@ def analyze_riven_request(
             kept = tuple(
                 card for index, card in enumerate(baseline.cards) if index != drop
             ) if drop >= 0 else tuple(baseline.cards)
+            if validate_build(
+                kept,
+                riven_card,
+                slot_count=8,  # analyze_riven_request 固定 8 槽口径
+                capacity_limit=capacity_limit,
+                required_mod_keys=search_required_keys,
+                forbidden_mod_keys=search_forbidden_keys,
+                min_fill=search_min_fill,
+                max_fill=search_max_fill,
+            ) is not None:
+                continue
             evaluated = _evaluate(
                 weapon,
                 kept,
@@ -3763,23 +3962,27 @@ def analyze_riven_request(
 
     has_negative = any(line.negative for line in actual_lines)
     # ── 理论上限（恢复版：结构系数正确 + 全量缓存）──────────────────────
-    # 「3 正 + 1 负」/「3 正无负」两种结构按用户紫卡结构选择槽位
+    # 「N 正 + 1 负」/「N 正无负」结构按用户紫卡结构选择槽位
     # （optimalNeg/optimalClean），全量 _optimize + riven floor，进静态
     # 缓存（缓存键含武器/模式/靶/profile/词条数——同一游戏版本内不变，
     # 指纹失效时随导出更新整体重算）。
     # 结构系数（wiki 口径，与 app 层校验一致）：
-    #   optimalClean（3+0）：正面 × 0.757525 × 1.089 满值。
-    #   optimalNeg（3+1）：正面 × 0.757525 × 1.25 × 1.089；负面 × 0.757525 × 1.089。
+    #   optimalClean（N+0）：正面 × (N==3 ? 0.757525 : 1.0) × 1.089 满值。
+    #   optimalNeg（N+1）：正面 × (N==3 ? 0.757525 : 1.0) × 1.25 × 1.089；
+    #     负面 × (N==3 ? 0.757525 : 0.5) × 1.089。
     # 旧版的 bug：直接复用 recommended 的口径（漏带负 ×1.25），且
     # Clean/Neg 两槽位共用同一组数值。
+    # ── F06（审计修复）：结构系数从「规范化后的实际结构」统一传递——
+    # 两正紫卡（positive_count == 2）不再进入写死的三正系数（1.0 vs
+    # 0.757525 的分母差异直接改变评分上限）。
     optimal_structure_negative = has_negative and bool(recommended_negative)
     positive_candidates_neg, _ = _candidate_lines(
         weapon_type, disposition, (), negative=False, bases=template_bases,
-        structure_scale=theoretical_structure_scale(3, optimal_structure_negative),
+        structure_scale=theoretical_structure_scale(positive_count, optimal_structure_negative),
     )
     negative_candidates_neg, _ = _candidate_lines(
         weapon_type, disposition, (), negative=True, bases=template_bases,
-        structure_scale=theoretical_structure_scale(3, True, negative=True),
+        structure_scale=theoretical_structure_scale(positive_count, True, negative=True),
     )
     pos_by_code_neg = {line.code: line for line in positive_candidates_neg}
     neg_by_code_neg = {line.code: line for line in negative_candidates_neg}
@@ -3870,11 +4073,14 @@ def analyze_riven_request(
             optimal_lines = list(high_lines)
             optimal_card = high_card
 
-    # Post-search verification.  Calibration already happened before
-    # recommendations were ranked; if the final best candidate is still under
-    # pressure, expose that fact instead of silently jumping to a different
-    # target after the search (which would mix recommendation and score
-    # contexts).  A later request can continue from the recorded level.
+    # ── Post-search verification + 升靶重搜闭环（F09 审计修复）──────────
+    # Calibration already happened before recommendations were ranked; the
+    # formal search winner may nevertheless be pressure-insufficient against
+    # the calibrated target (the search found a stronger build than its seed).
+    # The old code stopped at "post-search-saturated" and returned — leaving
+    # the score in a known-bad context.  Now a budgeted outer loop escalates
+    # the target and re-runs the formal searches in the frozen final context,
+    # so baseline/actual/bestFound are all compared in one final scene.
     if benchmark_context is not None and objective_metric == "killsPerMinute":
         post_probe = _window_pressure_probe(optimal.stats, benchmark_context)
         target_calibration["postSearchProbe"] = {
@@ -3893,7 +4099,118 @@ def analyze_riven_request(
                 "directEventLedger",
             }
         }
-        if post_probe and post_probe.get("pressureInsufficient"):
+        if (
+            post_probe
+            and post_probe.get("pressureInsufficient")
+            and not request.get("_bakeStaticsOnly")
+        ):
+            # 预算内升靶：从当前等级逐级上行，直到赢家在该等级下不再秒杀
+            # 或到达迭代/等级上限。探测只算窗口（便宜），正式重搜每轮
+            # 最多一次。
+            escalation_record: list[dict[str, Any]] = []
+            escalation_budget = TARGET_CALIBRATION_MAX_ITERATIONS
+            escalated_context = benchmark_context
+            final_level = escalated_context.get("level")
+            for escalation_index in range(escalation_budget):
+                next_level = _next_calibration_level(escalated_context.get("level"))
+                if next_level is None:
+                    escalation_record.append(
+                        {
+                            "iteration": escalation_index,
+                            "level": escalated_context.get("level"),
+                            "outcome": "level-cap-reached",
+                        }
+                    )
+                    break
+                escalated_context = dict(escalated_context, level=next_level)
+                final_level = next_level
+                reprobe = _window_pressure_probe(optimal.stats, escalated_context)
+                still = bool(reprobe and reprobe.get("pressureInsufficient"))
+                escalation_record.append(
+                    {
+                        "iteration": escalation_index,
+                        "level": next_level,
+                        "outcome": "still-saturated" if still else "pressure-ok",
+                    }
+                )
+                if not still:
+                    break
+            target_calibration["postSearchEscalation"] = {
+                "iterations": escalation_record,
+                "finalLevel": final_level,
+            }
+            if final_level != benchmark_context.get("level"):
+                benchmark_context = escalated_context
+                target_calibration["evaluationLevel"] = final_level
+                target_calibration["status"] = "calibrated"
+                target_calibration["formalSearchLevel"] = final_level
+                # 冻结的最终上下文里重跑三条正式曲线（旧赢家作为搜索的
+                # 起点，数值不跨等级复用）。
+                baseline = _optimize_archetype(
+                    weapon,
+                    None,
+                    scenario=scenario,
+                    metric=objective_metric,
+                    passives=passives,
+                    capacity_limit=capacity_limit,
+                )
+                actual = _apply_riven_floor_profiled(
+                    _optimize_archetype(
+                        weapon,
+                        actual_card,
+                        scenario=scenario,
+                        metric=objective_metric,
+                        passives=passives,
+                        capacity_limit=capacity_limit,
+                    ),
+                    actual_card,
+                )
+                optimal = _apply_riven_floor_profiled(
+                    _optimize_archetype(
+                        weapon,
+                        optimal_card,
+                        scenario=scenario,
+                        metric=objective_metric,
+                        passives=passives,
+                        capacity_limit=capacity_limit,
+                    ),
+                    optimal_card,
+                )
+                baseline_fresh = True
+                optimal_fresh = True
+                _scoring_cache_migrate(int(final_level))
+                if statics is not None:
+                    statics["baselineCards"] = [card.key for card in baseline.cards]
+                skipped_early.append(
+                    f"target-calibration: post-search winner saturated; escalated to "
+                    f"Lv{final_level} and re-ran the formal baseline/actual/bestFound "
+                    "search in the frozen final context"
+                )
+                # 重搜后的赢家再验一次压力；仍不足则如实标记。
+                reprobe_final = _window_pressure_probe(optimal.stats, benchmark_context)
+                target_calibration["postSearchProbe"] = {
+                    field: value
+                    for field, value in (reprobe_final or {}).items()
+                    if field
+                    in {
+                        "killsPerMinute",
+                        "killsInWindow",
+                        "firstKillTime",
+                        "minKillInterval",
+                        "maxKillsPerStep",
+                        "pressureReasons",
+                        "pressureInsufficient",
+                        "pressureDiagnostics",
+                        "directEventLedger",
+                    }
+                }
+                if reprobe_final and reprobe_final.get("pressureInsufficient"):
+                    target_calibration["status"] = "post-search-saturated"
+                    unsupported.append("target-calibration-post-search-still-saturated")
+            else:
+                target_calibration["status"] = "post-search-saturated"
+                unsupported.append("target-calibration-post-search-still-saturated")
+        elif post_probe and post_probe.get("pressureInsufficient"):
             target_calibration["status"] = "post-search-saturated"
             unsupported.append("target-calibration-post-search-still-saturated")
 
@@ -4013,6 +4330,7 @@ def analyze_riven_request(
                 # pick an arbitrary elemental/utility line. Re-rank the
                 # theoretical positive set on the continuous metric before
                 # building its denominator.
+                quality_lines: list[_RivenLine] | None = None
                 try:
                     quality_recommended, _quality_recommendation, _quality_tiers = _recommend_positive(
                         weapon,
@@ -4114,10 +4432,41 @@ def analyze_riven_request(
                     key: evaluation.score
                     for key, evaluation in quality_evaluations.items()
                 }
+                # ── F05（审计修复）：DPS 重搜赢家绑定到最终展示配卡 ────────
+                # 旧实现：scoringValues 来自 quality_evaluations，但
+                # baseline/actual/bestFound 的 payload 仍用 KPM 阶段的评价
+                # 对象构建——「屏幕上这套配卡」与「评分分母用的那套」可能
+                # 不是同一份。现在三条曲线全部重绑到连续指标阶段的质量
+                # 记录（同一 EvaluationRecord：配卡 + 数值 + 指标 + 目标），
+                # 评分、展示、贡献明细和缓存全部引用同一记录。
+                baseline = quality_evaluations["baseline"]
+                actual = quality_evaluations["actual"]
+                optimal = quality_evaluations["optimal"]
+                # optimal_card 同步为质量阶段的赢家紫卡：优先用重排后的
+                # 推荐组合（quality_lines）；若 actual 反超则用 actual 的
+                # 提交词条。optimal_lines 与之一致。静态缓存回写因此写入
+                # 质量阶段的赢家（热缓存路径重建的配卡与缓存数值可互相
+                # 复现——S03 重放合同）。
+                if quality_lines:
+                    optimal_lines = list(quality_lines)
+                    optimal_card = _card_from_lines(optimal_lines)
+                if actual is quality_evaluations["optimal"]:
+                    optimal_lines = list(actual_lines)
+                    optimal_card = actual_quality_card
+                baseline_fresh = True   # 缓存回写用重绑后的质量赢家
+                optimal_fresh = True
+                # 推荐集合若被连续指标重排，同样以重排结果回写缓存（热路径
+                # 重建的推荐与评分口径一致）。
+                recommended_fresh = quality_lines is not None
             skipped_early.append(
-                "riven-score-fallback: KPM stepped metric saturated or tied; "
-                + ("reused baked target-window DPS values" if quality_cache_hit else "re-ranked the three builds by target-window DPS")
-                + "; combat KPI remains KPM"
+                "riven-score-fallback: KPM 评分切换到窗口 DPS（连续指标）"
+                + (
+                    "；KPM 平台化/触顶" if (kpm_plateau or kpm_at_ceiling) else ""
+                )
+                + (
+                    "；复用已烘焙数值" if quality_cache_hit else "；三曲线已按连续指标重搜并重绑"
+                )
+                + "; 战斗 KPI 仍为 KPM"
             )
 
     # 回写静态缓存（仅本次新算的部分；高数值/当前紫卡反超修正不影响缓存）。
@@ -4199,7 +4548,42 @@ def analyze_riven_request(
             delta = _percent_gain(quality_scores["actual"], removed_score)
             if score_metric != objective_metric:
                 quality_detail_cache[line.code] = delta
-        fatal = line.negative and delta < -5.0
+        # ── F08（审计修复）：词条贡献拆成两个明确口径 ─────────────────────
+        # ablationDelta —— 固定配卡消融：保持其他卡、槽位顺序、数值、目标
+        #   和指标完全不变，只把该词条从紫卡里移除后重放同一配卡。这是
+        #   「同一配卡移除此词条后的目标伤害变化」的字面合同。
+        # delta（保留字段，含义=重优化收益）—— 移除词条后允许重新搜配卡
+        #   （_best_fixed 子集枚举）的收益上限。用户需要区分「词条本身的
+        #   价值」与「删词条+换卡后的联合收益」。
+        # 旧实现只返回 delta 但解释文案写成消融口径——零作用词条可能因
+        #   子集重优化删掉其他 MOD 而显示巨大「贡献」。
+        without_line = _card_from_lines(
+            [item for item in actual_lines if item.code != line.code]
+        )
+        ablated = _evaluate(
+            weapon,
+            actual.cards,
+            without_line,
+            scenario=scenario,
+            metric=objective_metric,
+            passives=passives,
+            capacity_limit=capacity_limit,
+            target_context=benchmark_context,
+        )
+        if ablated is not None:
+            ablated_score = ablated.score
+            if score_metric != objective_metric:
+                ablated_score = _score(
+                    ablated.stats,
+                    score_metric,
+                    target_context=benchmark_context,
+                )
+            ablation_delta = _percent_gain(quality_scores["actual"], ablated_score)
+        else:
+            ablation_delta = None
+        fatal = line.negative and (
+            (ablation_delta if ablation_delta is not None else delta) < -5.0
+        )
         if (
             fatal
             and line.effect is not None
@@ -4221,13 +4605,21 @@ def analyze_riven_request(
                 "low": line.low,
                 "high": line.high,
                 "quality": _quality(line),
-                "delta": delta,
+                # F08：主口径改为固定配卡消融（字面合同：同一配卡移除此
+                # 词条）；重优化收益单独成字段。delta 保留为消融口径以
+                # 兼容旧前端，reoptimizedDelta 是「删词条后重搜配卡」的
+                # 联合收益上限。
+                "delta": ablation_delta if ablation_delta is not None else delta,
+                "ablationDelta": ablation_delta,
+                "reoptimizedDelta": delta,
                 "recommended": (
                     line.code in negative_codes if line.negative else line.code in recommended_codes
                 ),
                 "fatalNegative": fatal,
                 "explanation": (
-                    "同一配卡移除此词条后的目标伤害变化；负值代表该词条拖低目标指标"
+                    "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下"
+                    "移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条"
+                    "并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
                 ),
             }
         )
@@ -4314,13 +4706,20 @@ def analyze_riven_request(
         "targetCalibration": target_calibration,
     }
     context_hash = _evaluation_context_hash(context_payload)
+    # ── F10（审计修复）：三轴状态合同统一 ──────────────────────────────
+    # targetCalibrated 只在真正完成压力校准时为 true——capped-saturated
+    # （到达等级上限仍饱和）与 post-search-saturated（赢家仍饱和）都不算
+    # 已校准；skipped-by-request 也不算。旧实现把 capped-saturated 也标
+    # true，且 targetStatus 把「跳过校准」也显示成 calibrated。
+    calibration_status = str(target_calibration.get("status") or "")
     search_quality = {
         "objectiveMetric": objective_metric,
         "scoreMetric": score_metric,
         "fallbackReason": (
             "kpm-pressure-or-plateau" if score_metric != objective_metric else None
         ),
-        "targetCalibrated": target_calibration.get("status") in {"calibrated", "capped-saturated"},
+        "targetCalibrated": calibration_status == "calibrated",
+        "targetCalibrationStatus": calibration_status or None,
         "qualityCalibrated": (
             not bool(request.get("_bakeStaticsOnly"))
             and score_metric != objective_metric
@@ -4345,46 +4744,55 @@ def analyze_riven_request(
     }
     score_basis = "best-known-search-result"
     score_status = "available"
+    score_status_reason = "ok"
     if lower_bound:
         score_status = "unresolved-lower-bound"
-    elif target_calibration.get("status") in {
+        score_status_reason = "optimizer-optimum-lower-bound"
+    elif calibration_status in {
         "capped-saturated",
         "post-search-saturated",
     }:
         score_status = "unresolved-target-saturated"
-    model_uncertainty = any(
-        token in str(item).casefold()
-        for build in (baseline, actual, optimal)
-        for item in getattr(build.stats, "unsupported", ())
-        for token in (
-            "radial-or-field",
-            "projectile-component",
-            "event-mechanic",
-            "runtime",
-            "conditional",
-            "not-applied",
-            "not-evaluated",
-            "unmodeled",
-        )
+        score_status_reason = "target-pressure-insufficient"
+    model_uncertainty_tokens = (
+        "radial-or-field",
+        "projectile-component",
+        "event-mechanic",
+        "runtime",
+        "conditional",
+        "not-applied",
+        "not-evaluated",
+        "unmodeled",
     )
-    if model_uncertainty and score_status == "available":
+    model_uncertainty_reasons = sorted(
+        {
+            str(item)
+            for build in (baseline, actual, optimal)
+            for item in getattr(build.stats, "unsupported", ())
+            if any(token in str(item).casefold() for token in model_uncertainty_tokens)
+        }
+    )
+    if model_uncertainty_reasons and score_status == "available":
         score_status = "unresolved-model-partial"
+        score_status_reason = "model-missing:" + ",".join(
+            model_uncertainty_reasons[:3]
+        )
         unsupported.append("score-unresolved-model-partial")
     if score_status != "available":
         # Do not turn an unproven lower bound into a cosmetic 99.9/100 score.
         # Component values/gains remain available for diagnosis, while the
         # headline explicitly says that normalization is unresolved.
         score = None
-    target_status = (
-        "not-applicable"
-        if benchmark_context is None
-        else (
-            "saturated-unresolved"
-            if target_calibration.get("status")
-            in {"capped-saturated", "post-search-saturated"}
-            else "calibrated"
-        )
-    )
+    # targetStatus：区分 not-applicable（无靶）/ calibrated（压力验证通过）/
+    # saturated-unresolved（饱和未解）/ skipped（请求跳过校准）。
+    if benchmark_context is None:
+        target_status = "not-applicable"
+    elif calibration_status in {"capped-saturated", "post-search-saturated"}:
+        target_status = "saturated-unresolved"
+    elif calibration_status == "skipped-by-request":
+        target_status = "skipped"
+    else:
+        target_status = "calibrated"
     model_status = (
         "partial"
         if any(
@@ -4597,6 +5005,10 @@ def analyze_riven_request(
         "score": score,
         "grade": _grade(score) if isinstance(score, (int, float)) else "UNRESOLVED",
         "scoreStatus": score_status,
+        # F10：评分不可用时的原因码（ok / target-pressure-insufficient /
+        # model-missing:<tokens> / optimizer-optimum-lower-bound），前端按
+        # 原因区分展示，不再一律显示「未证明全局最优」。
+        "scoreStatusReason": score_status_reason,
         "actualGain": actual_gain,
         "optimalGain": optimal_gain,
         "rollQuality": roll_quality,

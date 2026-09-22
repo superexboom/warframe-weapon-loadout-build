@@ -339,6 +339,8 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .contribution-values b { color: var(--success); font-size: 11px; }
 .is-harmful .contribution-values b { color: var(--danger); }
 .contribution-values span { color: var(--muted-dark); font-size: 8px; }
+/* F08：重优化口径标签（删词条并重选 MOD 的联合收益） */
+.contribution-values .contribution-reopt { padding: 1px 4px; border: 1px solid var(--line-soft); border-radius: 3px; color: var(--muted); font-size: 8px; }
 .contribution-track { height: 2px; margin-top: 8px; overflow: hidden; background: #2c333f; }
 .contribution-track i { display: block; height: 100%; background: var(--success); transition: width .55s ease; }
 .is-harmful .contribution-track i { background: var(--danger); }
