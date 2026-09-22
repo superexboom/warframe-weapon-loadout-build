@@ -22,6 +22,7 @@ import sys
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -41,10 +42,20 @@ def _catalog_weapons() -> list[dict]:
 
 
 def _shard_worker(args: tuple[str, str, str, int]) -> dict:
-    """独立进程：算一批武器的 statics，写分片 JSON。"""
+    """独立进程：算一批武器的 statics，写分片 JSON。
+
+    F14（审计修复）：worker 进程入口即关闭共享主缓存持久化
+    （``_disable_analysis_statics_persistence()``）。此前 worker 只清空了
+    自己进程内的 ``ANALYSIS_STATICS_CACHE``，但 ``app.analyze_payload()``
+    内部仍会无条件调用 ``_persist_analysis_statics_cache()``——只要优化器
+    标脏，worker 仍会把条目间接写进共享主缓存文件。现在持久化开关在
+    worker 生命周期内整体关闭：worker 阶段对主缓存零写入，只有父进程在
+    合并阶段执行一次写入（见 main()）。
+    """
     shard_path, profile, weapon_path, fire_mode = args
     import app  # noqa: PLC0415
 
+    persistence_guard = app._disable_analysis_statics_persistence()
     app.ANALYSIS_STATICS_CACHE.clear()
     bases = app.RIVEN_BASE_VALUES.get(_weapon_type_of(weapon_path), {})
     stats = []
@@ -74,10 +85,21 @@ def _shard_worker(args: tuple[str, str, str, int]) -> dict:
         app.analyze_payload(request)
     except Exception as exc:  # noqa: BLE001
         return {"weapon": weapon_path, "ok": False, "error": str(exc)[:200]}
+    if not any(
+        isinstance(value, dict) for value in app.ANALYSIS_STATICS_CACHE.values()
+    ):
+        return {
+            "weapon": weapon_path,
+            "ok": False,
+            "error": "no statics entries produced (candidate generation failed)",
+        }
     # Workers must never write the shared main cache.  They only emit their
     # own shard; the parent process performs the single atomic merge after all
     # workers finish.  Concurrent replacement of the main JSON here could
     # discard another worker's entries or leave a truncated file on failure.
+    # The persistence guard above makes this structural: even the indirect
+    # write path through analyze_payload() is a no-op in this process.
+    assert not persistence_guard.enabled
     try:
         shard = Path(shard_path)
         shard.parent.mkdir(parents=True, exist_ok=True)
@@ -91,7 +113,7 @@ def _shard_worker(args: tuple[str, str, str, int]) -> dict:
                 {
                     "schemaVersion": SHARD_SCHEMA_VERSION,
                     "cacheVersion": app.ANALYSIS_STATICS_CACHE_VERSION,
-                    "inputs": app._analysis_inputs_fingerprint(),
+                    "inputs": _worker_inputs_fingerprint(app),
                     "profile": profile,
                     "entries": entries,
                 },
@@ -104,11 +126,46 @@ def _shard_worker(args: tuple[str, str, str, int]) -> dict:
     return {"weapon": weapon_path, "ok": True, "entries": len(app.ANALYSIS_STATICS_CACHE)}
 
 
+def _worker_inputs_fingerprint(app: Any) -> str:
+    """Shard fingerprint with the same fail-closed semantics as the loader.
+
+    F13: a missing dependency must not silently degrade to an empty
+    fingerprint (two different broken environments would then accept each
+    other's shards).  Record the failure explicitly in the shard so the
+    parent's merge step can reject it.
+    """
+    try:
+        return app._analysis_inputs_fingerprint()
+    except app.SimulationError:
+        return "__unreadable_inputs__"
+
+
 def _weapon_type_of(weapon_path: str) -> str:
     import app  # noqa: PLC0415
 
     weapon = app.CATALOG_WEAPONS_BY_PATH.get(weapon_path)
     return (weapon or {}).get("weaponType", "rifle")
+
+
+def _default_analysis_modes(raw_weapon: dict) -> list[int]:
+    """Mirror analyze_riven_request's default fire-mode policy (F14 boundary).
+
+    The portable analyzer defaults Incarnon weapons with multiple modes to the
+    LAST fire mode (the Incarnon form); everything else uses mode 0.  The bake
+    script previously baked only mode 0 unconditionally, so baked entries could
+    never be hit by a default (non-fireMode-override) request for an Incarnon
+    weapon — the classic "candidate cache masquerading as a hit" gap.
+    """
+    modes = [
+        int(mode.get("index", index))
+        for index, mode in enumerate(raw_weapon.get("fireModes") or ())
+        if isinstance(mode, dict) and isinstance(mode.get("damage"), dict)
+    ]
+    if not modes:
+        return []
+    if raw_weapon.get("isIncarnon") and len(modes) > 1:
+        return [modes[-1]]
+    return [modes[0]]
 
 
 def main() -> int:
@@ -117,13 +174,17 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 4) - 1))
     parser.add_argument("--weapon", action="append", default=None, help="只烘焙指定武器（可多次）")
     parser.add_argument("--limit", type=int, default=None, help="只烘焙前 N 把（冒烟用）")
-    parser.add_argument("--fire-modes", action="store_true", help="烘焙全部开火模式（默认只主模式）")
+    parser.add_argument("--fire-modes", action="store_true", help="烘焙全部开火模式（默认与普通分析同口径：灵化取末模式，其余取主模式）")
     args = parser.parse_args()
 
     import app
 
     cache_version = app.ANALYSIS_STATICS_CACHE_VERSION
-    input_fingerprint = app._analysis_inputs_fingerprint()
+    try:
+        input_fingerprint = app._analysis_inputs_fingerprint()
+    except app.SimulationError as exc:
+        print(f"cannot bake: {exc}")
+        return 2
     shard_dir = SHARD_ROOT / f"riven-statics-shards-{args.profile}"
 
     def shard_is_current(path: Path) -> bool:
@@ -168,7 +229,10 @@ def main() -> int:
         if args.fire_modes:
             modes = [int(mode.get("index", index)) for index, mode in enumerate(raw_modes)]
         else:
-            modes = [0] if any(int(mode.get("index", -1)) == 0 for mode in raw_modes) else []
+            modes = _default_analysis_modes(raw_weapon)
+            if not modes and raw_modes:
+                # 有开火模式但都缺 damage 数据：显式跳过并计数（不静默 0 模式）。
+                modes = []
         skipped_no_damage += max(0, len(weapon.get("fireModes") or ()) - len(raw_modes))
         for mode in modes:
             # 分片名用武器 path 哈希：与列表顺序解耦（--weapon 过滤/续跑稳定）。
@@ -202,23 +266,30 @@ def main() -> int:
 
     # 合并分片到主缓存
     # Preserve other profiles already baked into the main cache.
+    # F14：只有父进程执行这一次合并写入；worker 进程的持久化开关在各自
+    # 入口已关闭（见 _shard_worker）。带 "__unreadable_inputs__" 指纹的分片
+    # （依赖缺失时 worker 记录的失败标记）在合并阶段被拒绝，不会进入主缓存。
     merged: dict = {
         key: value
         for key, value in app.ANALYSIS_STATICS_CACHE.items()
         if isinstance(value, dict)
     }
+    rejected_shards = 0
     for shard in sorted(shard_dir.glob("*.json")):
         try:
             payload = json.loads(shard.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
+            rejected_shards += 1
             continue
         if (
             not isinstance(payload, dict)
             or payload.get("schemaVersion") != SHARD_SCHEMA_VERSION
             or payload.get("cacheVersion") != cache_version
             or payload.get("inputs") != input_fingerprint
+            or payload.get("inputs") == "__unreadable_inputs__"
             or payload.get("profile") != args.profile
         ):
+            rejected_shards += 1
             continue
         for key, value in (payload.get("entries") or {}).items():
             if isinstance(value, dict):
@@ -228,7 +299,16 @@ def main() -> int:
     app.ANALYSIS_STATICS_CACHE["__dirty__"] = True
     app._persist_analysis_statics_cache()
     print(f"merged {len(merged)} entries into main cache")
+    if rejected_shards:
+        print(f"rejected {rejected_shards} stale/unreadable shards")
     print(f"total {time.time()-started:.0f}s, {failed} failed of {len(tasks)}")
+    # F14 边界：有失败时不得报 0——「条目非空、worker 没抛异常」不等于
+    # 语义正确。失败数 > 0 时返回 1，让 CI/批处理能感知部分失败。
+    if failed:
+        return 1
+    if not tasks and not skipped:
+        print("nothing to bake (no weapons/modes selected)")
+        return 1
     return 0
 
 

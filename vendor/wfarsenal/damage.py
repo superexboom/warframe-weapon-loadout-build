@@ -2730,9 +2730,8 @@ def expected_dot_damage(
             )
             for weight, factor in seed_tiers
         ]
-        per_second = sum(weight * ps for weight, ps in per_second_by_tier) + (
-            accumulator * accumulator_multiplier
-        )
+        seed_per_second_no_acc = sum(weight * ps for weight, ps in per_second_by_tier)
+        per_second = seed_per_second_no_acc + (accumulator * accumulator_multiplier)
         damage = per_second * duration
         expected = damage * count
         breakdown[dtype] = {
@@ -2748,6 +2747,21 @@ def expected_dot_damage(
             ],
             "targetMultiplier": target_multiplier,
             "perSecond": per_second,
+            # ── F02/F03（审计修复）显式合同字段 ─────────────────────────
+            # 生产者在此一次性声明「单次 proc 的每秒种子伤害」与「+1 累加项
+            # 的每秒伤害」，消费端（windowed_status_damage）不再从已聚合的
+            # perSecond 反推。注意量纲合同：
+            #   seedPerSecondPerProc —— 每个 proc 的每秒种子伤害（不含 +1）。
+            #     per_second_by_tier 本身就是 per-proc 口径（不含 count），
+            #     这里直接透传，不再除以触发数。
+            #   accumulatorPerSecondPerAttack —— 一次攻击产生的全部 +1 累加项
+            #     的合计每秒伤害（共享 tick group = 1 份；独立 = 每期望 proc
+            #     一份，accumulator 变量已按 count 计）。
+            #   durationSeconds 已经是「基础时长 × proc_duration_multiplier」
+            #     的最终值（F03：消费端不得再乘一次）。
+            "seedPerSecondPerProc": seed_per_second_no_acc,
+            "accumulatorPerSecondPerAttack": accumulator * accumulator_multiplier,
+            "accumulatorSharedGroup": shared_group,
             "perProc": damage,
             "expectedDamage": expected,
         }
@@ -3400,48 +3414,46 @@ def windowed_status_damage(
         )
 
     # ── DoT per-type per-proc-second contributions (without pool/strip) ──────
-    # perSecond in the probe already folds coefficient × base × elemental ×
-    # crit × proc_damage × falloff × hit × target-static.  We need to re-derive
-    # the static target part out so live armour/pool can be applied per step;
-    # simpler: recompute the type payload from raw pieces here.
+    # ── F02/F03（审计修复）显式合同消费 ─────────────────────────────────
+    # 生产者（expected_dot_damage）现在按行输出：
+    #   seedPerSecondPerProc        —— 单次 proc 的每秒种子伤害（不含 +1 累加、
+    #                                 含 target_multiplier，下方再剥离静态部分）
+    #   accumulatorPerSecondPerAttack —— 一次攻击触发的全部 +1 累加项每秒伤害
+    #                                 （共享 tick group = 1 份；独立 tick = 每层一份）
+    #   accumulatorSharedGroup      —— 是否共享 tick group
+    #   durationSeconds             —— 最终时长（已含 proc_duration_multiplier，
+    #                                 消费端不再乘第二次：F03）
+    # 旧实现 perSeed = perSecondRaw / expectedProcs 把累加项一并除掉，且窗口
+    # 再追加一个 flat 累加项，非零触发数在主项中相互抵消（F02 表格的行为）。
     dot_payload: dict[str, dict[str, float]] = {}
     for dtype, row in ((probe.get("dot") or {}).get("perType") or {}).items():
-        per_second_one = max(float(row.get("perSecond") or 0.0), 0.0)
-        duration = max(float(row.get("durationSeconds") or 0.0), 0.0) * duration_scale
         expected_procs = max(float(row.get("expectedProcs") or 0.0), 0.0)
-        if per_second_one <= 0.0 or duration <= 0.0 or expected_procs <= 0.0:
+        # F03：durationSeconds 是生产者给定的最终时长（6 × 倍率），禁止再乘。
+        duration = max(float(row.get("durationSeconds") or 0.0), 0.0)
+        seed_rate = row.get("seedPerSecondPerProc")
+        acc_rate = row.get("accumulatorPerSecondPerAttack")
+        if not isinstance(seed_rate, (int, float)) or isinstance(seed_rate, bool):
+            # 旧版 probe（无显式合同字段）不进入窗口模型：宁可拒算也不反推。
+            continue
+        seed_rate = max(float(seed_rate), 0.0)
+        if isinstance(acc_rate, (int, float)) and not isinstance(acc_rate, bool):
+            acc_rate = max(float(acc_rate), 0.0)
+        else:
+            acc_rate = 0.0
+        shared_group = bool(row.get("accumulatorSharedGroup"))
+        if seed_rate <= 0.0 or duration <= 0.0 or expected_procs <= 0.0:
             continue
         # Strip the static target multiplier that expected_dot_damage baked in
-        # (faction deltas / armour at t=0 / magnetic at t=0) by recomputing it
-        # from the row's own fields: perSecond included target_multiplier, so
-        # divide it back out using the row's recorded value.
+        # (faction deltas / armour at t=0 / magnetic at t=0) so the live armour
+        # and pool state can be re-applied per step.
         static_target = max(float(row.get("targetMultiplier") or 1.0), 1e-9)
         dot_payload[dtype] = {
-            "perSecondRaw": per_second_one / static_target,
-            "duration": duration,
+            "seedPerProc": seed_rate / static_target,
+            "accumulatorRate": acc_rate / static_target,
             "expectedProcs": expected_procs,
-            "sharedGroup": stack_specs.get(
-                "heat" if dtype == "DT_FIRE" else dtype.removeprefix("DT_").lower(),
-                (None, None, None, False),
-            )[3] if dtype in {"DT_FIRE"} else dtype in {"DT_ELECTRICITY", "DT_GAS"},
+            "duration": duration,
+            "sharedGroup": shared_group,
         }
-
-    # +1 accumulator per *tick group* (Heat/Electricity/Gas consolidate; Slash
-    # and Toxin tick independently so each proc carries its own +1).  The +1
-    # rides the same coefficient × (elemental × proc_damage) shape as a seed of
-    # magnitude 1/coefficient of base — approximate it as one extra per-second
-    # unit of (coefficient × 1) since seeds sum before C×M (wfsim §5 M58).
-    dot_accumulator: dict[str, float] = {}
-    for dtype, payload in dot_payload.items():
-        coefficient = DOT_DAMAGE_COEFFICIENTS.get(dtype, 0.0)
-        # Element/proc-damage multipliers were baked into perSecondRaw's base;
-        # approximate the +1's own scaling by the same elemental/proc factors
-        # via the ratio perSecondRaw / (coefficient * dot_base_ref) is unsafe —
-        # instead carry it as perSecondRaw-per-seed + 1 raw damage per tick.
-        per_seed = payload["perSecondRaw"] / payload["expectedProcs"] if payload["expectedProcs"] > 0 else 0.0
-        payload["perSeed"] = per_seed
-        payload["flatPerTick"] = 1.0  # +1 accumulator (M58): raw flat per tick
-        dot_accumulator[dtype] = 1.0
 
     # ── non-DoT procs ride the direct schedule ────────────────────────────────
     non_dot_per_hit: dict[str, float] = {}
@@ -3494,6 +3506,13 @@ def windowed_status_damage(
     # Ramp clock: resets to zero on every kill (stacks live on the dead body;
     # the fresh target starts with none — wfsim InstantRespawn semantics).
     ramp_elapsed = 0.0
+    # ── F01/F04（审计修复）目标代次与 stale 组件计数 ──────────────────
+    # generation：目标代次（每次死亡 +1）。目标绑定的状态（DoT 层、Heat
+    # Inherit、ramp 时钟）随代次清理；stale_component_count：同次攻击的
+    # 组件在目标死亡后无法转杀重生目标的计数（E02 诊断，与 ledger 口径
+    # 一致）。
+    generation = 0
+    stale_component_count = 0
 
     # ── Heat Inherit 状态（warframe wiki · Heat Damage · "Heat Inherit" 节）─
     # 每个 heat proc 既加一层又刷新所有当前活跃层的持续时间（基础 6s ×
@@ -3566,7 +3585,10 @@ def windowed_status_damage(
         )
         direct_event_ledger.update(
             {
-                "status": "diagnostic",
+                # ── F01（审计修复）：主循环与账本共用同一开火调度与组件
+                # 口径，账本不再只是诊断——它是同一结算的独立复算（可交叉
+                # 验证）。字段名保持 status 以兼容旧消费方。
+                "status": "settled-authoritative",
                 "componentModel": component_model,
                 "perShotDamage": per_shot,
                 "multishot": multishot,
@@ -3595,8 +3617,9 @@ def windowed_status_damage(
         dt = min(step, window - elapsed)
         steps += 1
         levels = live_stacks(ramp_elapsed + dt * 0.5)  # midpoint sampling
-        # Advance the ramp clock with the step (a kill resets it above).
-        ramp_elapsed += dt
+        # Ramp clock: advanced at the END of the step body (below the event
+        # subloop) so kills inside the step can reset it to the post-death
+        # remainder first.  A kill resets it in _settle_death.
 
         # ── Heat Inherit 层数推进（本步区间 [elapsed, elapsed+dt]）──────
         # 步进语义（wiki Heat Damage · "Heat Inherit"）：本步 proc 速率 > 0
@@ -3738,27 +3761,62 @@ def windowed_status_damage(
         weighted = sum(
             float(v) * step_pool_multiplier(str(dt2)) for dt2, v in per_type.items()
         )
-        step_direct = (
+        # ── F01（审计修复）：直伤改为离散攻击事件结算 ─────────────────────
+        # 旧实现把直伤当连续流：step_direct = perShot × damage_rate × dt，
+        # 击杀数 = 伤害/EHP——超杀会泄漏到不存在的目标上（审计反例：1 Hz、
+        # 30 秒、10 倍超杀主循环算出 300 杀/600 KPM，物理上限只有 30 杀）。
+        # 现在主循环与 direct ledger 共用同一开火调度：本步区间
+        # [elapsed, elapsed+dt) 内的第 k 次攻击在 t = k/rate 落地。攻击与
+        # DoT 的连续流量在事件子循环里交错结算：攻击时刻把直伤按「组件」
+        # 逐个结算（同次攻击的剩余组件在目标死亡后 stale，不能转杀重生
+        # 目标，E02；不同攻击实例可以各自击杀重生目标，E03）；两个攻击
+        # 时刻之间按 DoT/非DoT 的连续流量推进（DoT tick 本来就是连续的）。
+        _multishot = max(float(getattr(stats, "multishot", 1.0) or 1.0), 1.0)
+        _rounded_multishot = int(round(_multishot))
+        _component_count = (
+            _rounded_multishot
+            if 1 <= _rounded_multishot <= 64
+            and abs(_multishot - _rounded_multishot) <= 1e-9
+            else 1
+        )
+        _per_attack = (
             float(direct.get("perShot") or 0.0)
             * (weighted / per_type_total)
-            * damage_rate
-            * dt
+            * max(float(damage_rate_multiplier), 0.0)
         )
+        _component_damage = _per_attack / _component_count
+        # 本步攻击事件：k 满足 elapsed ≤ k/rate < elapsed+dt（k ≥ 0，首
+        # 发 t=0）。注意首个步（elapsed=0）包含 k=0——首杀时刻为 0。
+        _first_k = max(0, int(math.ceil(elapsed * rate - 1e-9)))
+        _last_k = int(math.ceil((elapsed + dt) * rate - 1e-9)) - 1
+        _attack_times = [
+            _k / rate
+            for _k in range(_first_k, _last_k + 1)
+            if _k / rate < window - 1e-12
+        ]
 
         # DoT at this step: cloud mass alive = seeds applied within the last
         # `duration` seconds × their payload, amplified by the live pool/strip.
-        step_dot = 0.0
+        # ── F02/F04（审计修复）合同重写 ───────────────────────────────
+        # 活跃 proc 数：expectedProcs（每次攻击的期望触发数）× proc_rate
+        # （每秒攻击数）× 存活窗口。种子伤害按「每 proc」计价（生产者已拆
+        # 分），触发数变化现在正确进入主项。+1 累加项（M58）按 tick group
+        # 计价：共享组（Heat/Electricity/Gas）整个云只有一份；独立组
+        # （Slash/Toxin）每活跃 proc 一份——不再从聚合值反推，也不重复
+        # 计费。窗口存活时间用「本代次的重生时钟」（F04：目标绑定 DoT 不
+        # 继承到重生目标）。
+        dot_rate = 0.0
         for dtype, payload in dot_payload.items():
             duration = payload["duration"]
-            # Cloud mass at t: expected procs whose age < duration.
-            window_alive = min(elapsed + dt, duration)
+            # Cloud mass at t: expected procs whose age < duration.  ramp_elapsed
+            # is the current generation's clock (reset on death, F04).
+            window_alive = min(ramp_elapsed + dt * 0.5, duration)
             if window_alive <= 0.0:
                 continue
             cloud_procs = payload["expectedProcs"] * proc_rate * window_alive
             if dtype == "DT_GAS":
                 # Single-target cloud: one 10-slot cloud (see helper docstring).
-                cloud_procs = min(cloud_procs, 10.0 / max(payload["expectedProcs"], 1e-9) if payload["expectedProcs"] > 0 else 10.0)
-                cloud_procs = min(payload["expectedProcs"] * proc_rate * min(elapsed + dt, duration), 10.0)
+                cloud_procs = min(cloud_procs, 10.0)
             elif dtype == "DT_FIRE":
                 # Heat Inherit（wiki Heat Damage · "Heat Inherit" 节）：每个
                 # heat proc 加一层并刷新所有活跃层——只要攻击不断档，tick 用
@@ -3766,51 +3824,215 @@ def windowed_status_damage(
                 # 清零已在循环顶部的 heat_inherit 推进里处理。tick 伤害随
                 # 层数线性无限增长（无固定 cap）。
                 cloud_procs = heat_inherit_total
-            seed_payload = payload["perSeed"]
-            # +1 accumulator per tick group (consolidating) or per stack.
-            if payload.get("sharedGroup"):
-                accumulator = 1.0
+            seed_payload = payload["seedPerProc"]
+            # +1 accumulator per tick group (consolidating) or per live proc
+            # (independent stacks each carry their own).  accumulatorRate is
+            # the producer-declared per-attack rate; shared groups pay it once
+            # per cloud, independent groups pay per live proc (already scaled
+            # by expectedProcs inside the producer's accumulator count).
+            if payload["sharedGroup"]:
+                accumulator_rate = payload["accumulatorRate"]
             else:
-                accumulator = cloud_procs  # each independent stack carries +1
+                # Independent: accumulatorPerSecondPerAttack already counts
+                # one +1 per expected proc per attack; live fraction of those
+                # procs is cloud_procs / (expectedProcs × proc_rate × duration)
+                # ≈ window_alive / duration when the ramp has saturated.
+                live_fraction = (
+                    cloud_procs
+                    / (payload["expectedProcs"] * proc_rate * duration)
+                    if payload["expectedProcs"] * proc_rate * duration > 0.0
+                    else 0.0
+                )
+                accumulator_rate = payload["accumulatorRate"] * min(live_fraction, 1.0)
             interaction = "DT_CINEMATIC" if dtype == "DT_SLASH" else dtype
             live_target = step_target_multiplier(dtype)
-            step_dot += (
-                (cloud_procs * seed_payload + accumulator * 1.0)
+            dot_rate += (
+                (cloud_procs * seed_payload + accumulator_rate)
                 * step_pool_multiplier(interaction)
                 * live_target
-                * dt
             )
 
-        # Non-DoT procs.
-        step_non_dot = 0.0
+        # Non-DoT procs ride the direct attack schedule (per attack, not per
+        # second): their per-hit value multiplies the attack count.
+        non_dot_per_attack = 0.0
         for dtype, value in non_dot_per_hit.items():
             interaction = "DT_CINEMATIC" if dtype == "DT_SLASH" else dtype
-            step_non_dot += (
+            non_dot_per_attack += (
                 value
-                * damage_rate
-                * dt
                 * step_pool_multiplier(interaction)
                 * step_target_multiplier(interaction)
             )
 
+        # ── 事件子循环：攻击时刻与 DoT 连续流量交错结算 ──────────────────
+        # 时间轴：把本步 [elapsed, elapsed+dt) 切成「攻击时刻 + 攻击间隙」。
+        # 间隙里 DoT 以 dot_rate 连续流过；攻击时刻直伤按组件离散结算。
+        # 死亡（无论来源）即时重生并清理代次状态（F04）。
+        step_direct = 0.0
+        step_dot = 0.0
+        step_non_dot = 0.0
+        step_kills = 0
+        _cursor = elapsed
+
+        def _settle_death(kill_time: float) -> None:
+            """目标死亡 → 即时重生，代次状态清理（F04 合同）。"""
+            nonlocal kills_count, first_kill_time, last_kill_time, min_kill_interval
+            nonlocal overguard_left, shield_left, health_left
+            nonlocal heat_inherit_total, heat_inherit_last, ramp_elapsed
+            nonlocal step_kills, generation
+            kills_count += 1
+            step_kills += 1
+            if first_kill_time is None:
+                first_kill_time = kill_time
+            if last_kill_time is not None:
+                interval = kill_time - last_kill_time
+                min_kill_interval = (
+                    interval
+                    if min_kill_interval is None
+                    else min(min_kill_interval, interval)
+                )
+            last_kill_time = kill_time
+            overguard_left = total_overguard
+            shield_left = total_shield
+            health_left = total_health
+            # 代次状态：重生目标从零层开始（目标绑定 DoT/Heat Inherit/
+            # ramp 时钟不继承）。ramp 时钟推进到「重生时刻到步末」——
+            # 下一步的 live_stacks/cloud 以新代次的时间轴计算。
+            generation += 1
+            heat_inherit_total = 0.0
+            heat_inherit_last = 0.0
+            ramp_elapsed = max(elapsed + dt - kill_time, 0.0)
+
+        def _apply_continuous(rate_per_second: float, span: float) -> float:
+            """间隙内连续流量结算：返回实际入账伤害（不超杀）。"""
+            nonlocal overguard_left, shield_left, health_left
+            if rate_per_second <= 0.0 or span <= 0.0:
+                return 0.0
+            damage = rate_per_second * span
+            applied = 0.0
+            left = damage
+            guard = 0
+            # 同一步内连续流量最多击穿一次 EHP（跨代次的流量由外层事件
+            # 交错逐段结算，不存在一段间隙里杀两个代的物理事件源——
+            # DoT 流量对每个代次分别积分）。
+            current_ehp = max(overguard_left + shield_left + health_left, 0.0)
+            if current_ehp <= 1e-12:
+                return 0.0
+            applied = min(damage, current_ehp)
+            left = applied
+            if overguard_left > 0.0:
+                drained = min(overguard_left, left)
+                overguard_left -= drained
+                left -= drained
+            if left > 0.0 and shield_left > 0.0:
+                drained = min(shield_left, left)
+                shield_left -= drained
+                left -= drained
+            if left > 0.0 and health_left > 0.0:
+                drained = min(health_left, left)
+                health_left -= drained
+                left -= drained
+            guard += 1
+            if guard > 100:
+                return applied
+            return applied
+
+        for _fire_time in _attack_times:
+            # 攻击时刻前的间隙：DoT 连续流量结算。
+            gap = _fire_time - _cursor
+            if gap > 1e-12 and dot_rate > 0.0:
+                applied = _apply_continuous(dot_rate, gap)
+                step_dot += applied
+                _pre_death = (
+                    overguard_left + shield_left + health_left <= 1e-12
+                )
+                if _pre_death:
+                    _settle_death(_fire_time)
+            _cursor = _fire_time
+            # 攻击时刻：非DoT proc 的每击值 + 直伤组件离散结算。
+            if non_dot_per_attack > 0.0:
+                _nd_ehp = max(
+                    overguard_left + shield_left + health_left, 0.0
+                )
+                _nd_applied = min(non_dot_per_attack, _nd_ehp)
+                _left = _nd_applied
+                if overguard_left > 0.0:
+                    _drained = min(overguard_left, _left)
+                    overguard_left -= _drained
+                    _left -= _drained
+                if _left > 0.0 and shield_left > 0.0:
+                    _drained = min(shield_left, _left)
+                    shield_left -= _drained
+                    _left -= _drained
+                if _left > 0.0 and health_left > 0.0:
+                    _drained = min(health_left, _left)
+                    health_left -= _drained
+                    _left -= _drained
+                step_non_dot += _nd_applied
+                if overguard_left + shield_left + health_left <= 1e-12:
+                    _settle_death(_fire_time)
+            for _comp in range(_component_count):
+                _remaining_pools = max(
+                    overguard_left + shield_left + health_left, 0.0
+                )
+                if _remaining_pools <= 1e-12:
+                    # 目标已在本攻击的早前组件中死亡：剩余组件 stale，
+                    # 不能转杀重生目标（E02 合同，与 ledger 一致）。
+                    stale_component_count += 1
+                    continue
+                _applied = min(_component_damage, _remaining_pools)
+                _left = _applied
+                if overguard_left > 0.0:
+                    _drained = min(overguard_left, _left)
+                    overguard_left -= _drained
+                    _left -= _drained
+                if _left > 0.0 and shield_left > 0.0:
+                    _drained = min(shield_left, _left)
+                    shield_left -= _drained
+                    _left -= _drained
+                if _left > 0.0 and health_left > 0.0:
+                    _drained = min(health_left, _left)
+                    health_left -= _drained
+                    _left -= _drained
+                step_direct += _applied
+                if overguard_left + shield_left + health_left <= 1e-12:
+                    # 死亡在攻击时刻即时结算（InstantRespawn）。
+                    _settle_death(_fire_time)
+        # 步末残余间隙：DoT 连续流量结算。
+        gap = elapsed + dt - _cursor
+        if gap > 1e-12 and dot_rate > 0.0:
+            applied = _apply_continuous(dot_rate, gap)
+            step_dot += applied
+            if overguard_left + shield_left + health_left <= 1e-12:
+                _settle_death(elapsed + dt)
+        direct_total += step_direct
+        dot_total += step_dot
+        non_dot_total += step_non_dot
+        max_kills_per_step = max(max_kills_per_step, step_kills)
+        # 步末推进 ramp 时钟（本步无击杀时：整步时长累加；有击杀时
+        # _settle_death 已把时钟设为「重生时刻到步末」，不再重复加）。
+        if step_kills == 0:
+            ramp_elapsed += dt
+
         # ── 触发源层数推进（emergent）──────────────────────────────────
         # on-kill 源按本步期望击杀数（步伤害 / 当前身体 EHP）获得层数；
-        # on-hit/on-crit 按命中率×攻速近似。带 duration 的衰减线性近似。
-        # 击杀时 lose_one_and_reset 掉一层并刷新计时。
+        # on-hit/on-crit 按攻击数近似（每攻击一次命中）。带 duration 的
+        # 衰减线性近似。击杀时 lose_one_and_reset 掉一层并刷新计时。
         _body_ehp = max(total_ehp_ref, 1e-9)
-        # This is an *expected event count*, not a boolean.  The previous
-        # ``min(..., 1.0)`` silently assumed that a 250 ms integration slice
-        # could contain at most one death, which made the reported KPM cap a
-        # property of our time grid rather than of the weapon/target fight.
+        # This is an *expected event count*, not a boolean.  A 250 ms slice
+        # can legitimately contain several deaths now that attacks settle as
+        # discrete events; the expectation uses the applied damage (which is
+        # generation-capped, so the count cannot exceed attack-supported
+        # kills + DoT-supported kills).
         _step_kill_expectation = max(
             (step_direct + step_dot + step_non_dot) / _body_ehp, 0.0
         )
+        _attack_count = len(_attack_times)
         for spec in trigger_specs:
             kind = spec["kind"]
             if kind == "on-kill":
                 event_rate = _step_kill_expectation
             elif kind in ("on-hit", "on-crit"):
-                event_rate = damage_rate * dt
+                event_rate = _attack_count
             else:
                 event_rate = 0.0
             gained = event_rate * spec["perEvent"]
@@ -3820,130 +4042,6 @@ def windowed_status_damage(
                 spec["currentStacks"] = max(spec["currentStacks"] * (1.0 - decay_fraction), 0.0)
             if spec["series"] is not None:
                 spec["series"].append(round(spec["currentStacks"], 3))
-
-        # Drain pools with a continuous event-time loop.  KPM semantics: the
-        # target RESPAWNS at the exact death instant (wfsim's
-        # TargetMode::InstantRespawn).  A segment only consumes the damage
-        # delivered before that instant; any remaining time is evaluated
-        # against the fresh target.  Thus overkill never leaks into a corpse or
-        # a second target, while a genuinely very high sustained rate can
-        # produce more than one kill inside a coarse integration slice.
-        step_damage = step_direct + step_dot + step_non_dot
-        kill_in_step = False
-        step_kills = 0
-        if dt > 0.0 and step_damage > 1e-9 and total_ehp_ref > 0.0:
-            direct_rate = step_direct / dt
-            dot_rate = step_dot / dt
-            non_dot_rate = step_non_dot / dt
-            total_rate = direct_rate + dot_rate + non_dot_rate
-            remaining_time = dt
-            time_since_kill = ramp_elapsed
-            # A bounded guard protects against a malformed zero-EHP target or
-            # floating-point no-progress loop without imposing a gameplay kill
-            # cap.  The guard is deliberately proportional to the maximum
-            # physically possible number of EHP crossings in this slice.
-            guard = 0
-            while remaining_time > 1e-12 and total_rate > 1e-12:
-                guard += 1
-                if guard > 100000:
-                    break
-                current_ehp = max(
-                    overguard_left + shield_left + health_left, 0.0
-                )
-                if current_ehp <= 1e-12:
-                    # Defensive fallback for a zero-width pool transition.
-                    kills_count += 1
-                    kill_in_step = True
-                    step_kills += 1
-                    kill_time = elapsed + (dt - remaining_time)
-                    if first_kill_time is None:
-                        first_kill_time = kill_time
-                    if last_kill_time is not None:
-                        interval = kill_time - last_kill_time
-                        min_kill_interval = (
-                            interval
-                            if min_kill_interval is None
-                            else min(min_kill_interval, interval)
-                        )
-                    last_kill_time = kill_time
-                    overguard_left = total_overguard
-                    shield_left = total_shield
-                    health_left = total_health
-                    time_since_kill = 0.0
-                    heat_inherit_total = 0.0
-                    heat_inherit_last = 0.0
-                    continue
-                time_to_kill = current_ehp / total_rate
-                consumed = min(remaining_time, time_to_kill)
-                if consumed <= 1e-12:
-                    break
-                chunk_direct = direct_rate * consumed
-                chunk_dot = dot_rate * consumed
-                chunk_non_dot = non_dot_rate * consumed
-                chunk_damage = chunk_direct + chunk_dot + chunk_non_dot
-
-                # Damage settles once on the current target's ordered pools.
-                # Since consumed <= time_to_kill, this chunk cannot carry
-                # overkill into the next target.
-                left = chunk_damage
-                if overguard_left > 0.0:
-                    drained = min(overguard_left, left)
-                    overguard_left -= drained
-                    left -= drained
-                if left > 0.0 and shield_left > 0.0:
-                    drained = min(shield_left, left)
-                    shield_left -= drained
-                    left -= drained
-                if left > 0.0 and health_left > 0.0:
-                    drained = min(health_left, left)
-                    health_left -= drained
-                    left -= drained
-
-                direct_total += chunk_direct
-                dot_total += chunk_dot
-                non_dot_total += chunk_non_dot
-                remaining_time -= consumed
-                time_since_kill += consumed
-
-                # A death at the segment boundary respawns immediately.  The
-                # next loop iteration receives only the remaining time, not
-                # the previous segment's overkill.
-                if time_to_kill <= consumed + 1e-10 and (
-                    overguard_left + shield_left + health_left <= 1e-7
-                ):
-                    kills_count += 1
-                    kill_in_step = True
-                    step_kills += 1
-                    kill_time = elapsed + (dt - remaining_time)
-                    if first_kill_time is None:
-                        first_kill_time = kill_time
-                    if last_kill_time is not None:
-                        interval = kill_time - last_kill_time
-                        min_kill_interval = (
-                            interval
-                            if min_kill_interval is None
-                            else min(min_kill_interval, interval)
-                        )
-                    last_kill_time = kill_time
-                    overguard_left = total_overguard
-                    shield_left = total_shield
-                    health_left = total_health
-                    time_since_kill = 0.0
-                    heat_inherit_total = 0.0
-                    heat_inherit_last = 0.0
-            if kill_in_step:
-                # Preserve the time elapsed since the most recent respawn for
-                # the next integration slice.  This keeps the ramp clock and
-                # Heat Inherit state aligned with the event boundary.
-                ramp_elapsed = time_since_kill
-                if _heat_rate > 0.0 and time_since_kill > 0.0:
-                    heat_inherit_total = _heat_rate * time_since_kill
-                    heat_inherit_last = elapsed + dt
-        else:
-            direct_total += step_direct
-            dot_total += step_dot
-            non_dot_total += step_non_dot
-        max_kills_per_step = max(max_kills_per_step, step_kills)
 
         for k, v in levels.items():
             averaged[k] += v * dt
@@ -4034,8 +4132,15 @@ def windowed_status_damage(
         "firstKillTime": first_kill_time,
         "minKillInterval": min_kill_interval,
         "maxKillsPerStep": max_kills_per_step,
+        "targetGeneration": generation,
+        "staleComponents": stale_component_count,
         "continuousKillEvents": True,
-        "eventModel": "hybrid-stepped-with-direct-ledger-diagnostic",
+        # ── F01（审计修复）：模型版本升级 ──────────────────────────────
+        # 主循环直伤现在按离散攻击事件结算（与 direct ledger 同一开火调
+        # 度）；DoT 在攻击间隙按连续流量结算，目标代次生命周期完整（F04）。
+        # eventModel 从 "hybrid-stepped-with-direct-ledger-diagnostic" 升级
+        # 为 "hybrid-event-settled-v2"——直伤不再是「另算一份的诊断账本」。
+        "eventModel": "hybrid-event-settled-v2",
         "directEventLedger": direct_event_ledger,
         "timeline": timeline,
         "perAttack": probe,

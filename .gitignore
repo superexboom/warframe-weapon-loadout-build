@@ -18,12 +18,12 @@ venv/
 /.tmp*
 /tmp/
 /Extracted/
-/test_*.py
-/tests/
-/qa-*.png
-/screenshots/
+# Regression tests ARE tracked (audit F17): only their runtime output is ignored.
+/.pytest_cache/
 /test-results/
 /playwright-report/
+/qa-*.png
+/screenshots/
 /data/cache/
 /data/source-audit.json
 *.log

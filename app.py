@@ -608,6 +608,13 @@ def _analysis_inputs_fingerprint() -> str:
     # change target damage, not only on the two catalog files used to build the
     # candidate pool.  Keep this list explicit so a local engine/data patch
     # invalidates old statics instead of silently serving stale recommendations.
+    # ── F13（审计修复）：
+    #  - app.py 自身负责运行时武器/敌人补丁、目标参数与分析入口行为
+    #    （_load_enemy_overrides / analyze_payload 的 benchmarkTarget 默认值），
+    #    它变更时缓存必须失效，不能当成无关展示层。
+    #  - combat_events.py 目前主要影响诊断，但其输出的事件版本
+    #    （eventModel/directEventLedger）与校准记录已依赖它；一旦升级为
+    #    权威事件源更不能遗漏。
     engine_paths = (
         EXPORT_DIR / "weapons.json",
         EXPORT_DIR / "mods.json",
@@ -626,13 +633,20 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("simulator.py"),
         Path(optimizer.__file__).with_name("projectile_events.py"),
         Path(optimizer.__file__).with_name("runtime_adapters.py"),
+        Path(optimizer.__file__).with_name("combat_events.py"),
+        Path(__file__),  # app.py — 运行时补丁与分析入口语义
     )
     for path in engine_paths:
         try:
             digest.update(path.name.encode("utf-8"))
             digest.update(path.read_bytes())
         except OSError:
-            return ""
+            # F13：文件读取失败不得回退成空指纹——空指纹会与「另一个同样
+            # 读不到文件的进程」碰撞，让两份语义不同的缓存互相命中。缺失
+            # 依赖必须让缓存不可用：抛出由调用方决定加载空缓存。
+            raise SimulationError(
+                f"analysis input dependency unreadable: {path}"
+            ) from None
     return digest.hexdigest()[:16]
 
 
@@ -641,11 +655,16 @@ def _load_analysis_statics_cache() -> dict[str, Any]:
         payload = json.loads(ANALYSIS_STATICS_CACHE_PATH.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return {}
+    try:
+        inputs_fingerprint = _analysis_inputs_fingerprint()
+    except SimulationError:
+        # F13：依赖缺失 → 缓存整体不可用（加载空表），不把空指纹当正常版本。
+        return {}
     if (
         not isinstance(payload, dict)
         or payload.get("buildLabel") != EXPORTS.get("buildLabel")
         or payload.get("stances") != _stances_fingerprint()
-        or payload.get("inputs") != _analysis_inputs_fingerprint()
+        or payload.get("inputs") != inputs_fingerprint
         or payload.get("cacheVersion") != ANALYSIS_STATICS_CACHE_VERSION
     ):
         return {}
@@ -657,13 +676,30 @@ ANALYSIS_STATICS_CACHE: dict[str, Any] = _load_analysis_statics_cache()
 
 
 def _persist_analysis_statics_cache() -> None:
-    """缓存有新条目时落盘（原子替换，避免中断写坏）。"""
+    """缓存有新条目时落盘（原子替换，避免中断写坏）。
+
+    F14（审计修复）：持久化现在受 `_ANALYSIS_STATICS_PERSISTENCE` 开关控制。
+    烘焙 worker 通过 ``_disable_analysis_statics_persistence()`` 上下文把
+    共享主缓存的写路径整体关闭——worker 进程内的 ``analyze_payload()`` 不再
+    能间接把条目写进共享缓存文件（旧行为：worker 调用
+    ``app.analyze_payload`` → ``_persist_analysis_statics_cache()`` 无条件
+    落盘，绕过了「只写分片」的注释承诺）。只有父进程在显式合并阶段重新
+    打开持久化，单次写入主缓存。
+    """
+    if not ANALYSIS_STATICS_PERSISTENCE.enabled:
+        return
     if not ANALYSIS_STATICS_CACHE.pop("__dirty__", None):
+        return
+    try:
+        inputs_fingerprint = _analysis_inputs_fingerprint()
+    except SimulationError:
+        # 依赖缺失时既不能读旧缓存也不能写入新缓存：放弃本次持久化，
+        # 下次启动（依赖恢复后）自然整体失效重算。
         return
     payload = {
         "buildLabel": EXPORTS.get("buildLabel"),
         "stances": _stances_fingerprint(),
-        "inputs": _analysis_inputs_fingerprint(),
+        "inputs": inputs_fingerprint,
         "cacheVersion": ANALYSIS_STATICS_CACHE_VERSION,
         "entries": {key: value for key, value in ANALYSIS_STATICS_CACHE.items() if isinstance(value, dict)},
     }
@@ -674,6 +710,44 @@ def _persist_analysis_statics_cache() -> None:
         tmp.replace(ANALYSIS_STATICS_CACHE_PATH)
     except OSError:
         pass  # 缓存写不进去不影响解算，下次启动重算即可
+
+
+class _AnalysisStaticsPersistence:
+    """进程内开关：共享主缓存持久化是否可用（F14）。
+
+    默认开启（正常请求路径行为不变）。烘焙 worker 在进程入口处进入
+    ``_disable_analysis_statics_persistence()`` 上下文，此后该进程内所有
+    ``_persist_analysis_statics_cache()`` 调用都是 no-op。这不是线程锁——
+    worker 是独立进程，开关生命周期与进程一致。
+    """
+
+    def __init__(self) -> None:
+        self.enabled = True
+
+    def __enter__(self) -> "_AnalysisStaticsPersistence":
+        self.enabled = False
+        return self
+
+    def __exit__(self, *_exc: Any) -> None:
+        self.enabled = True
+
+
+ANALYSIS_STATICS_PERSISTENCE = _AnalysisStaticsPersistence()
+
+
+def _disable_analysis_statics_persistence() -> _AnalysisStaticsPersistence:
+    """Return the F14 persistence guard in its disabled (entered) state.
+
+    Bake workers call this once at process start::
+
+        guard = app._disable_analysis_statics_persistence()
+        ... run all app.analyze_payload() calls ...
+        # nothing is persisted by this process
+
+    The parent process never calls this; it performs the single merge write.
+    """
+    guard = _AnalysisStaticsPersistence()
+    return guard.__enter__()
 
 
 def _load_enemy_override_payload() -> Mapping[str, Any]:
@@ -4839,6 +4913,13 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
     # Session cache: identical (weapon, mods, scenario, candidates, slot, mode)
     # payloads skip re-simulation entirely — the picker re-queries on open and
     # on every category/search change with a mostly stable candidate list.
+    # ── F12（审计修复）：缓存键必须覆盖「实际被模拟消费」的完整请求语义。
+    # 旧键手工维护字段清单，漏掉了 payload.riven——下面的计算明确读取并
+    # 使用实际紫卡（build_passives 会注入 riven_effects），因此只改紫卡
+    # 数值而其余字段不变的两次请求会命中同一个会话缓存键，返回旧结果。
+    # 现改为：显式把规范化后的紫卡（含词条码、数值、正负与顺序）纳入键，
+    # 并把「其余已入键字段」维持原样，避免行为漂移。
+    _riven_cache_value = payload.get("riven") if isinstance(payload.get("riven"), Mapping) else None
     cache_key = json.dumps(
         {
             "weapon": payload.get("weapon"),
@@ -4860,6 +4941,22 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
             "scenario": payload.get("scenario"),
             "incarnonChoices": payload.get("incarnonChoices"),
             "arcanes": payload.get("arcanes"),
+            # 实际紫卡参与模拟：键必须随之变化（F12 回归 C02 的对象）。
+            "riven": (
+                {
+                    "stats": [
+                        {
+                            "code": str(stat.get("code") or ""),
+                            "value": stat.get("value"),
+                            "negative": bool(stat.get("negative")),
+                        }
+                        for stat in (_riven_cache_value.get("stats") or [])
+                        if isinstance(stat, Mapping)
+                    ],
+                }
+                if _riven_cache_value is not None
+                else None
+            ),
             "targetSlot": target_slot,
             "mode": mode,
             "candidates": sorted(candidates),
