@@ -15,9 +15,9 @@
 | P0 | 缓存安全边界（F12/F13/F14） | 已完成 |
 | P1 | 权威评价器：直接射击调度（F01）、DoT 合同（F02/F03/F04） | 已完成 |
 | P2 | 统一评分记录（F05/F06/F07/F08） | 已完成 |
-| P3 | 机制登记与静态分析补全（F16 + subagent） | 进行中 |
+| P3 | 机制登记与静态分析补全（F16 + subagent） | 已完成（登记与导出修复；机制实现按证据推进，unknown 保持 fail-closed） |
 | P4 | 搜索后升靶闭环 + 搜索质量（F09/F15） | F09 完成；F15 部分完成 |
-| P5 | 小样本缓存回归 + 状态合同（F10/F11） | 修复完成；回归测试补充中 |
+| P5 | 小样本缓存回归 + 状态合同（F10/F11） | 修复与回归测试完成 |
 
 ## 工作日志
 
@@ -63,6 +63,33 @@
 - 端到端冒烟（fast 档）：三正 D/2/6/F 卡 111.1 s 正常解算；两正 D/2 卡 79.2 s，score 22.1/E（合理：2 正无负的实际上限低于 3 正结构），`ablationDelta` 与 `reoptimizedDelta` 分离正确。
 - 14 项单测全通过；wfsim 黄金集保持 43/43 收敛。
 
+### 2026-09-22 Round 4
+
+- **F16 落地**：
+  - `data/weapon_mechanics_overrides.json` 升级 schema v2：evidenceSchema（supported/conditional-supported/unsupported/not-applicable/unknown 五态 + 证据类型标注 raw-export-field / raw-export-script-reference / cross-reference-wfsim / wiki / in-game-measurement）。
+  - Double Tap 参数按静态分析修正：`_bonusDamagePercent 0.05`（5%）+ `_multTimeWindow 0.5s` 下一发乘数（旧登记的 0.2/20 层/2.0s/resetOnMiss 无数据支持，已删）；`AvailableOnPve=1` 登记；灵化直击= supported（投射物接线证据）；灵化径向= unknown（fail-closed）。
+  - Torid 登记 fieldContract：毒云=投射物 EmbedAttack（40 DT_POISON/proc 0.25/r3m/10s），tick 间隔标注「不在导出内，wfsim 实测 1/s 为 cross-reference」；Incarnon 光束无场。
+  - Opticor/Vandal 登记 radialContract：磁力径向（本体 200 r6m fallOff0.6 / Vandal 100 r4.6m）、每发触发（命中或落空）、吃基伤不吃多重、蓄力 ×2；Vandal 径向暴击保留本体数值（原始数据不对称）。
+  - Latron Prime/Wraith 登记 incarnonRadialContract（Prime 140=火70+穿70 / Wraith 100，r4m fallOff0.2，MaxBounces 6）。
+  - `pipelineGaps` 段登记两个系统性导出缺口：hitscan-radial-dropped（extract.py 只从 projectileType 分支读径向，65 把 hitscan 武器被静默丢弃）与 chargeTime 大小写 bug。
+  - app.py 的 fail-closed 消费同时接受旧 `event-unmodeled` 与新 `unsupported` 状态。
+  - `tools/audit_weapon_mod_mechanics.py` schema v2：每个计数显式携带自己的筛选阶段与分母（weaponMods=878 全量、auditedRows=552、compatibilityWithoutWeaponSupport=347、eventUnmodeledCandidates=335），并加 coverageNote 声明「库存审计≠运行时消费覆盖证明」。
+- **extract.py 双 bug 修复**（静态分析发现，影响未来的 compact 导出重建）：
+  - hitscan 径向：impact 块的内联 RadialDamage 按 `_projectile_damage_components` 同口径提取进 components/radial。
+  - `chargeTime` → `ChargeTime`（大小写），65 把蓄力武器不再 null。
+- **min_fill/max_fill 边界修复**（F07 连带）：未设置的 min_fill 不再默认 slot_count（旧实现「只给 max_fill<8」直接报 min>max 错误）。
+- **F14 修正**：`_disable_analysis_statics_persistence()` 现在翻转进程级 `ANALYSIS_STATICS_PERSISTENCE` 开关本体（旧写法新建对象没有关闭全局开关——bake worker 实际未被保护）。
+- **新增回归套件 `tests/test_optimizer_contracts.py`**（S01/S02/C01/C02/C03/C04/U01/S04 共 15 用例）：
+  - S01 四结构系数表 + 两正端到端（high=233.6 vs 旧 177.0）。
+  - S02 验证器单元 + 必选卡在搜索中不被删除的端到端。
+  - C02 只改紫卡数值的两次 mod-gains 调用产生不同缓存键与不同 baseValue。
+  - C03 指纹稳定性 + 依赖缺失抛 SimulationError。
+  - C04 持久化开关关闭期间 `_persist` 为 no-op + bake 默认模式策略镜像分析器（灵化取末模式）。
+  - U01 结果携带 scoreStatus/targetStatus/targetCalibrationStatus 原因码。
+  - S04 details 同时暴露 ablationDelta 与 reoptimizedDelta 且主 delta=消融口径。
+- 全套测试 29 passed（7 subtests）；wfsim 黄金集 43/43 收敛；py_compile × 4、node --check、git diff --check 全过。
+
+
 
 ## 发现项落地状态
 
@@ -85,5 +112,5 @@
 | F13 | 已端到端完成 | 指纹补 app.py/combat_events.py；空指纹改显式失败 |
 | F14 | 已端到端完成 | worker 持久化开关结构封死；bake 默认模式同口径；失败退出码修正 |
 | F15 | 部分完成 | 有序去重 + 槽位保持 Swap + 贪心多起点已落地；双槽交换与联合搜索待做 |
-| F16 | 进行中 | 静态分析三路完成（.local/research/*.json）；sidecar/审计矩阵更新待做 |
+| F16 | 已端到端完成 | sidecar schema v2（证据类型/五态/固定来源）+ 审计计数分母合同 + extract.py 双 bug 修复 |
 | F17 | 已端到端完成 | `.gitignore` 修掉；测试入库（14 passed） |

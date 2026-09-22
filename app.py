@@ -736,9 +736,12 @@ ANALYSIS_STATICS_PERSISTENCE = _AnalysisStaticsPersistence()
 
 
 def _disable_analysis_statics_persistence() -> _AnalysisStaticsPersistence:
-    """Return the F14 persistence guard in its disabled (entered) state.
+    """Disable the shared persistence guard (F14) and return it.
 
-    Bake workers call this once at process start::
+    This flips the PROCESS-WIDE ``ANALYSIS_STATICS_PERSISTENCE`` flag off and
+    returns that same object, so every ``_persist_analysis_statics_cache()``
+    call in this process becomes a no-op.  Bake workers call this once at
+    process start::
 
         guard = app._disable_analysis_statics_persistence()
         ... run all app.analyze_payload() calls ...
@@ -746,8 +749,8 @@ def _disable_analysis_statics_persistence() -> _AnalysisStaticsPersistence:
 
     The parent process never calls this; it performs the single merge write.
     """
-    guard = _AnalysisStaticsPersistence()
-    return guard.__enter__()
+    ANALYSIS_STATICS_PERSISTENCE.enabled = False
+    return ANALYSIS_STATICS_PERSISTENCE
 
 
 def _load_enemy_override_payload() -> Mapping[str, Any]:
@@ -4044,7 +4047,10 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
             if isinstance(item, Mapping)
         )
         if path in WEAPON_MECHANICS_OVERRIDES.get("mods", {})
-        and WEAPON_MECHANICS_OVERRIDES["mods"][path].get("status") == "event-unmodeled"
+        and WEAPON_MECHANICS_OVERRIDES["mods"][path].get("status") in {
+            "event-unmodeled",
+            "unsupported",
+        }
     ]
     return {
         "common": common,
@@ -5021,7 +5027,12 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
     for path in candidates:
         arcane_removal = path.startswith("__arcane__:")
         mechanic_override = WEAPON_MECHANICS_OVERRIDES.get("mods", {}).get(path)
-        if isinstance(mechanic_override, Mapping) and mechanic_override.get("status") == "event-unmodeled":
+        # F16：sidecar schema v2 的统一口径——"event-unmodeled"（旧）与
+        # "unsupported"（新）都走 fail-closed（返回空收益而非假收益）。
+        if isinstance(mechanic_override, Mapping) and mechanic_override.get("status") in {
+            "event-unmodeled",
+            "unsupported",
+        }:
             gains[path] = {
                 "gainPercent": None,
                 "reason": "event-mechanic-unmodeled",

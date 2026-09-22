@@ -1616,7 +1616,10 @@ def _optimize(
         )
     if min_fill is not None or max_fill is not None:
         base_fill = len(required_cards) + len(extra_required) + (1 if riven else 0)
-        lo = slot_count if min_fill is None else min(max(int(min_fill), 0), slot_count)
+        # ── F07（审计修复）：未设置的边界不再默认 slot_count——
+        # 「只给 max_fill」应意味着下界 0（旧实现把 lo 默认成 8，与
+        # max_fill<8 的任何请求冲突直接报错）。
+        lo = 0 if min_fill is None else min(max(int(min_fill), 0), slot_count)
         hi = slot_count if max_fill is None else min(max(int(max_fill), 0), slot_count)
         if lo > hi:
             raise SimulationError("min_fill must not exceed max_fill")

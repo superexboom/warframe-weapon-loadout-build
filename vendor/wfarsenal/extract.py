@@ -613,7 +613,10 @@ def _extract_fire_modes(
             mode["fireRateRaw"] = state.get("fireRate")
             mode["reloadTime"] = state.get("reloadTime")
             mode["isAlternateFire"] = bool(state.get("IsAlternateFire"))
-            mode["chargeTime"] = state.get("chargeTime")
+            # ── F16/pipelineGaps[chargetime-case-bug]（审计修复）──────────
+            # 原始字段拼写是 ChargeTime（大写 C）；旧代码读 chargeTime，
+            # 全部蓄力武器的 compact 导出 chargeTime=null。
+            mode["chargeTime"] = state.get("ChargeTime", state.get("chargeTime"))
         if fire:
             mode["multishot"] = fire.get("fireIterations", 1)
             mode["ammoCost"] = fire.get("ammoRequirement")
@@ -1091,6 +1094,16 @@ def _resolve_damage(
     for source in (impact, fire):
         inline = _attack_data(source)
         if inline:
+            # ── F16/pipelineGaps[hitscan-radial-dropped]（审计修复）─────
+            # RadialOnMiss hitscan 武器（Opticor 类）把径向伤害直接放在
+            # impact 块的 RadialDamage 字段里；旧实现只从 projectileType
+            # 分支读取径向（_projectile_damage_components），impact 级的
+            # 内联径向被静默丢弃（约 65 把武器）。现在同口径提取并挂到
+            # components/radial，模拟器与 sidecar 都能看见缺口。
+            radial_components = _projectile_damage_components(source)
+            if radial_components:
+                inline["components"] = radial_components
+                inline["radial"] = radial_components[0]
             return inline
     return None
 

@@ -1,86 +1,228 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "buildLabel": "2026.08.13.13.24",
+  "evidenceSchema": {
+    "status": [
+      "supported",
+      "conditional-supported",
+      "unsupported",
+      "not-applicable",
+      "unknown"
+    ],
+    "evidenceTypes": [
+      "raw-export-field",
+      "raw-export-script-reference",
+      "cross-reference-wfsim",
+      "wiki",
+      "in-game-measurement"
+    ],
+    "note": "F16（审计修复）：schema v2 把「未知」与「已知不适用」分开表达；每条机制登记固定来源（raw 导出字段路径或脚本引用）、适用形态/组件与未决点。参考比例（fieldShareReference/radialShareReference）只是登记的社区参考，不得当作通用伤害补偿乘数。"
+  },
   "mods": {
     "/Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod": {
       "mechanicId": "latron-double-tap",
-      "status": "event-unmodeled",
-      "kind": "hit-stacking-next-shot-multiplier",
+      "status": "unsupported",
+      "kind": "next-shot-multiplier",
       "maxRank": 3,
       "stacking": {
-        "perHitMultiplier": 0.2,
-        "maxStacks": 20,
-        "durationSeconds": 2.0,
-        "resetOnMiss": true
+        "bonusDamagePercentPerWindow": 0.050000001,
+        "windowSeconds": 0.5
+      },
+      "pveAvailability": {
+        "availableOnPve": true,
+        "evidence": "raw-export-field: AvailableOnPve=1 (唯一非 0 的 PvPMods 条目)"
       },
       "modeRules": {
-        "baseDirect": "applies",
-        "incarnonDirect": "not-verified",
-        "incarnonRadial": "applies"
+        "baseDirect": "supported",
+        "incarnonDirect": "supported",
+        "incarnonRadial": "unknown"
       },
       "notes": [
-        "Requires an event ledger: successful hit, multishot/pellet stack order, miss reset, reload window.",
-        "Do not approximate as unconditional WEAPON_DAMAGE_AMOUNT.",
-        "Incarnon direct/radial split is intentionally fail-closed until golden tests are available."
+        "原始参数来自导出 mod JSON 的 Script 字段（UpgradeType NONE，数值全部在脚本参数）：_bonusDamagePercent 0.05（5%）、_multTimeWindow 0.5s。",
+        "机制为「下一发乘数」（BonusDamageOnNextHit.lua；HUD 图标 NextShotDamageMultiplier.png；Buff 描述 DoubleTapBuffDesc），不是持续时长增益。",
+        "旧登记的 0.2/每击、20 层上限、2.0s、resetOnMiss 均无静态数据支持，已删除。",
+        "灵化直击受支持：Latron 灵化波投射物自身接线 OnProjectileContactScript→BonusDamageOnNextHit.lua（LatronIncarnonAltFireWaveProj.json）。",
+        "灵化径向未决：ExplosiveAttack 块无脚本钩子、无 next-shot 标记——静态证据缺失，保持 unknown（fail-closed）。",
+        "重置条件（失误/装填/切形态）静态不可验证：导出无 .lua 文件。ClearChargesOnBehaviorChange 重置的是灵化充能，不是本增益。",
+        "AvailableOnPve=1：PvP 目录里唯一开放 PvE 的 mod（其余 93 条全为 0）。",
+        "消费语义（增益后完全重置还是衰减）静态不可验证：需要游戏内实测或脚本源码。"
       ],
       "sources": [
-        "https://warframe.fandom.com/wiki/Double_Tap",
-        "https://github.com/magenie33/wfsim"
+        "raw-export: Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod.json (Script._bonusDamagePercent, Script._multTimeWindow, AvailableOnPve)",
+        "raw-export: Lotus/Upgrades/CosmeticEnhancers/Offensive/BonusDamageOnNextHit.lua 引用",
+        "raw-export: Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/LatronIncarnonAltFireWaveProj.json (OnProjectileContactScript)",
+        "static-analysis: .local/research/latron-double-tap-static-analysis.json"
       ]
     }
   },
   "weapons": {
     "/Lotus/Weapons/ClanTech/Bio/BioWeapon": {
       "mechanicIds": ["torid-projectile-field"],
-      "status": "partial-event-model",
+      "status": "conditional-supported",
       "parts": {
-        "direct": "modeled-from-export",
-        "field": "missing-from-compact-export"
+        "direct": "supported",
+        "field": "conditional-supported"
+      },
+      "fieldContract": {
+        "damageType": "DT_POISON",
+        "damagePerTick": 40,
+        "procChance": 0.25,
+        "radius": 3.0,
+        "durationSeconds": 10.0,
+        "tickIntervalSeconds": null,
+        "tickIntervalNote": "tick 间隔不在任何静态导出内（全键位扫描零命中）；wfsim 实测 1/s（cross-reference，需游戏内确认）",
+        "evolutionRenewedHorror": "ToridEvoTier3B 将场时长 ×2（空仓装填后的第一发，脚本 ProjectileEmbedTimeOnCondition.lua，_embedDurationMultiplier=2）"
       },
       "fieldShareReference": 0.78,
       "notes": [
-        "The compact weapon export contains the projectile/direct poison hit but not the lingering field lifecycle.",
-        "Do not multiply the direct hit by a fixed compensation factor; field creation, tick cadence and target lifetime require events."
+        "毒云没有独立游戏对象：完整 Fx 链（ToxicGrenadePoisonCloudSpawner→Smoke/Spots/BioPoisonImpact/RangeDeco）全部是纯视觉；伤害合同就是投射物的 EmbedAttack。",
+        "直击 100 DT_POISON / proc 0.23 / 暴击 15%/×2 / DamageRadius 10 / CanStick / 强制 PT_STAGGERED+PT_BIG_STAGGER。",
+        "EmbedAttack 40 DT_POISON / proc 0.25 / EmbedDamageRadius 3 / EmbedTime [10,10]——这是场的伤害合同。",
+        "Incarnon 光束（Behaviors[1]）：51 DT_POISON / proc 0.39 / 暴击 29%/×3.1 / 8/s / 射程 37 / 光束半径 2.3 / 5 链×0.75@7m / 170 充能（+34/直击）——无场组件。",
+        "fieldShareReference 0.78 只是 wfsim 的社区参考比例，不得当作通用补偿乘率。",
+        "BioGrenade.lua（warframe-companion 反汇编副本）只播嵌入动画，无伤害逻辑。"
       ],
-      "sources": ["https://github.com/magenie33/wfsim"]
+      "sources": [
+        "raw-export: Lotus/Weapons/ClanTech/Bio/BioGrenadeProjectile.json (AttackData, EmbedAttack, EmbedDamageRadius, EmbedTime, EmbedEffect)",
+        "raw-export: Lotus/Weapons/ClanTech/Bio/BioWeapon.json (Behaviors[1] Incarnon beam)",
+        "cross-reference: wfsim field tick_rate 1/s (measured, labeled)",
+        "static-analysis: .local/research/torid-field-static-analysis.json"
+      ]
     },
     "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG": {
       "mechanicIds": ["opticor-radial"],
-      "status": "partial-event-model",
+      "status": "conditional-supported",
       "parts": {
-        "direct": "modeled-from-export",
-        "radial": "missing-from-compact-export"
+        "direct": "supported",
+        "radial": "conditional-supported"
       },
-      "radialShareReference": 0.32,
+      "radialContract": {
+        "damageType": "DT_MAGNETIC",
+        "damage": 200,
+        "critChance": 0.2,
+        "critMultiplier": 2.5,
+        "procChance": 0.2,
+        "radius": 6.0,
+        "fallOff": 0.6,
+        "chargeMultiplier": 2.0,
+        "chargeTimeSeconds": 2.0,
+        "appliesOn": "every-shot-hit-or-miss",
+        "scalesWithBaseDamageMods": true,
+        "scalesWithMultishot": false,
+        "pvpRadial": "disabled"
+      },
+      "radialShareReference": 0.4,
       "notes": [
-        "The compact weapon export does not carry the radial explosion component for the normal shot."
+        "径向伤害在原始导出 Behaviors[0]['impact:RadialOnMissImpactBehavior'].RadialDamage——compact 导出因 extract.py 只从 projectileType 分支读取径向而静默丢弃（影响全部 RadialOnMiss hitscan 武器，不只 Opticor）。",
+        "不存在零蓄力射击：charge-only，MinChargeRatio 0.4，MinDamageMultiplier 1；满蓄力 ×2（500 直击+200 径向 → 1000+400）。",
+        "径向在每次开火（命中或落空，ApplyRadialDamageOnHit=1 且 OnMiss=1）于弹道终点触发。",
+        "径向吃基伤 MOD（RadialDamageUpgradeType=WEAPON_DAMAGE_AMOUNT）不吃多重（MultiShotBuffsRadialDamage=0）。",
+        "强制 PT_STAGGERED/BIG_STAGGER/KNOCKED_DOWN；直击穿透 1m（tracePunctureDepth，compact 导出亦缺）。",
+        "radialShareReference 0.4 是社区参考比率；径向随蓄力倍率缩放由 wfsim 一致口径佐证（标记为 cross-reference）。"
       ],
-      "sources": ["https://github.com/magenie33/wfsim"]
+      "sources": [
+        "raw-export: Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG.json (impact:RadialOnMissImpactBehavior.RadialDamage, ChargeUp, ApplyRadialDamageOnHit/OnMiss)",
+        "cross-reference: wfsim charge/radial_share (labeled)",
+        "static-analysis: .local/research/opticor-radial-static-analysis.json"
+      ]
     },
     "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG": {
       "mechanicIds": ["opticor-radial"],
-      "status": "partial-event-model",
+      "status": "conditional-supported",
       "parts": {
-        "direct": "modeled-from-export",
-        "radial": "missing-from-compact-export"
+        "direct": "supported",
+        "radial": "conditional-supported"
       },
-      "radialShareReference": 0.32,
+      "radialContract": {
+        "damageType": "DT_MAGNETIC",
+        "damage": 100,
+        "critChance": 0.2,
+        "critMultiplier": 2.5,
+        "critChanceNote": "径向保留本体 Opticor 的暴击（非 Vandal 直击的 0.24/×2.6）——原始数据不对称",
+        "procChance": 0.3,
+        "radius": 4.6,
+        "fallOff": 0.6,
+        "chargeMultiplier": 2.0,
+        "chargeTimeSeconds": 0.6,
+        "appliesOn": "every-shot-hit-or-miss",
+        "scalesWithBaseDamageMods": true,
+        "scalesWithMultishot": false,
+        "pvpRadial": "disabled"
+      },
+      "radialShareReference": 0.5,
       "notes": [
-        "The compact weapon export does not carry the radial explosion component for the normal shot."
+        "与本体同构：径向在原始导出 impact 块，compact 导出丢弃。",
+        "wfsim 目录引用的 Vandal 径向 300（600 蓄力）与原始数据 100（200 蓄力）不符（1.5×）——以原始导出为准，差异已登记 openQuestions。",
+        "Vandal impact 块省略 MultiShotBuffsRadialDamage（本体显式 0）。"
       ],
-      "sources": ["https://github.com/magenie33/wfsim"]
+      "sources": [
+        "raw-export: Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG.json",
+        "static-analysis: .local/research/opticor-radial-static-analysis.json"
+      ]
     },
     "/Lotus/Weapons/Tenno/Rifle/LatronPrime": {
-      "mechanicIds": ["latron-double-tap"],
-      "incarnonDirectReceivesDoubleTap": false,
-      "incarnonRadialReceivesDoubleTap": true,
-      "status": "partial-event-model"
+      "mechanicIds": ["latron-double-tap", "latron-incarnon-radial"],
+      "incarnonDirectReceivesDoubleTap": true,
+      "incarnonRadialReceivesDoubleTap": "unknown",
+      "status": "conditional-supported",
+      "incarnonRadialContract": {
+        "damageType": "DT_EXPLOSION-mixed",
+        "damage": 140,
+        "split": {"DT_FIRE": 70, "DT_PUNCTURE": 70},
+        "radius": 4.0,
+        "fallOff": 0.2,
+        "explodeOn": ["impact", "lifeExpired"],
+        "maxBounces": 6
+      },
+      "notes": [
+        "灵化径向确认存在（Prime 140=火70+穿70，半径 4，fallOff 0.2，ExplosiveAttack，落点/到期爆炸，MaxBounces 6）。",
+        "灵化直击受 Double Tap 支持（投射物接线同一脚本）。",
+        "灵化径向是否受 Double Tap 影响：ExplosiveAttack 无脚本钩子——unknown，fail-closed。"
+      ],
+      "sources": [
+        "raw-export: Lotus/Weapons/Tenno/Rifle/LatronPrime.json + LatronIncarnonEvolutions/",
+        "static-analysis: .local/research/latron-double-tap-static-analysis.json"
+      ]
     },
     "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron": {
-      "mechanicIds": ["latron-double-tap"],
-      "incarnonDirectReceivesDoubleTap": false,
-      "incarnonRadialReceivesDoubleTap": true,
-      "status": "partial-event-model"
+      "mechanicIds": ["latron-double-tap", "latron-incarnon-radial"],
+      "incarnonDirectReceivesDoubleTap": true,
+      "incarnonRadialReceivesDoubleTap": "unknown",
+      "status": "conditional-supported",
+      "incarnonRadialContract": {
+        "damageType": "DT_EXPLOSION-mixed",
+        "damage": 100,
+        "split": {"DT_FIRE": 50, "DT_PUNCTURE": 50},
+        "radius": 4.0,
+        "fallOff": 0.2,
+        "explodeOn": ["impact", "lifeExpired"],
+        "maxBounces": 6
+      },
+      "notes": [
+        "Wraith 灵化径向 100（火50+穿50）。其余口径与 Prime 相同。"
+      ],
+      "sources": [
+        "raw-export: Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron.json + WraithLatronIncarnonEvolutions/",
+        "static-analysis: .local/research/latron-double-tap-static-analysis.json"
+      ]
     }
-  }
+  },
+  "pipelineGaps": [
+    {
+      "id": "hitscan-radial-dropped",
+      "severity": "high",
+      "description": "extract.py 只从 projectileType 分支读取径向（_projectile_damage_components 仅由 _resolve_damage 的投射物分支调用）；RadialOnMiss hitscan 武器的 impact 级内联 RadialDamage 被静默丢弃。",
+      "affectedWeapons": "全部 RadialOnMissTraceFireBehavior 武器（约 65 把，含 Opticor/Torid 类）",
+      "fix": "对 impact 块的 RadialOnMiss* 行为按 _projectile_damage_components 同口径提取（total/baseAmount/radius/fallOff/crit/proc/forcedSourceProcs/upgrade type）。",
+      "source": "static-analysis: .local/research/opticor-radial-static-analysis.json"
+    },
+    {
+      "id": "chargetime-case-bug",
+      "severity": "medium",
+      "description": "extract.py:610 读 state.get('chargeTime')（小写 c），原始字段是 'ChargeTime'（大写 C）——全部蓄力武器的 compact 导出 chargeTime=null。",
+      "affectedWeapons": "全部 charge-trigger 武器（约 65 把）",
+      "fix": "读 'ChargeTime'。",
+      "source": "static-analysis: .local/research/opticor-radial-static-analysis.json"
+    }
+  ]
 }

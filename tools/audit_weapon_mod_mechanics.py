@@ -4,6 +4,16 @@ The report is deliberately fail-closed: a MOD with runtime/conditional/script
 semantics is listed for review instead of being silently treated as a normal
 damage bucket.  It is an inventory tool, not a gameplay approximation.
 
+F16锛堝璁′慨澶嶏級璁℃暟鍚堝悓锛?
+- weaponMods              鈫?閫氳繃姝﹀櫒鍏煎绛涢€夛紙compatibility 鍚?/Weapons/锛夌殑
+                            鍏ㄩ儴 MOD 琛屾暟锛堝垎姣嶏細姝﹀櫒 MOD 鎬绘暟锛夈€?
+- auditedRows             鈫?杩涘叆瀹¤鏄庣粏鐨勮鏁帮紙鍚潯浠?鑴氭湰/鏈敮鎸?鐗规畩椤癸級銆?
+- compatibilityWithoutWeaponSupport 鈫?compatibility 鍛戒腑浣?support.weapon
+                            涓哄亣鐨勮鏁帮紙鍚屼竴鍒嗘瘝锛夈€?
+- eventUnmodeledCandidates 鈫?unsupported 鎴?scripts 闈炵┖鐨勮鏁帮紙鍚屼竴鍒嗘瘝锛夈€?
+- 鍚勮鏁版樉寮忔惡甯﹁嚜宸辩殑鍒嗘瘝锛屼笉鍐嶆妸涓嶅悓绛涢€夐樁娈电殑鏁板瓧褰撴垚鍚屽垎姣嶇殑
+  銆屾満鍒跺畬鎴愮巼銆嶃€?
+
 Usage:
     python tools/audit_weapon_mod_mechanics.py
     python tools/audit_weapon_mod_mechanics.py --output .local/reports/mod-mechanics.json
@@ -41,6 +51,7 @@ def _find_scripts(value: Any, out: set[str]) -> None:
 
 def audit() -> dict[str, Any]:
     mods = _records(EXPORT_DIR / "mods.json")
+    weapon_mod_total = 0
     rows: list[dict[str, Any]] = []
     compatibility_without_support = 0
     event_unmodeled_candidates = 0
@@ -52,6 +63,7 @@ def audit() -> dict[str, Any]:
         )
         if not weapon_compatible:
             continue
+        weapon_mod_total += 1
         if not bool(support.get("weapon")):
             compatibility_without_support += 1
         effects = [effect for effect in mod.get("effects") or () if isinstance(effect, Mapping)]
@@ -118,14 +130,24 @@ def audit() -> dict[str, Any]:
         )
     rows.sort(key=lambda row: (str(row.get("nameEn") or "").casefold(), str(row.get("path") or "")))
     return {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "buildLabel": "2026.08.13.13.24",
         "summary": {
-            "weaponMods": len(rows),
+            # F16锛氭瘡涓鏁版樉寮忓０鏄庤嚜宸辩殑绛涢€夐樁娈典笌鍒嗘瘝銆?
+            "weaponMods": weapon_mod_total,
+            "weaponModsDenominator": "compatibility 鍚?/Weapons/ 鐨勫叏閮?MOD",
+            "auditedRows": len(rows),
+            "auditedRowsDenominator": "weaponMods锛堣繘鍏ユ槑缁?鍚潯浠?鑴氭湰/鏈敮鎸?鐗规畩椤癸級",
             "runtimeOrConditional": sum(row["mechanicStatus"] == "runtime-or-conditional" for row in rows),
             "staticQualified": sum(row["mechanicStatus"] == "static-qualified" for row in rows),
             "compatibilityWithoutWeaponSupport": compatibility_without_support,
+            "compatibilityWithoutWeaponSupportDenominator": "weaponMods",
             "eventUnmodeledCandidates": event_unmodeled_candidates,
+            "eventUnmodeledCandidatesDenominator": "weaponMods锛坲nsupported 鎴?scripts 闈炵┖锛?,
+            "coverageNote": (
+                "杩欐槸搴撳瓨瀹¤鑰岄潪杩愯鏃舵秷璐硅鐩栬瘉鏄庯細auditedRows 鏄瓫閫夊悗鐨勮鏁帮紝"
+                "涓嶆槸鍏ㄩ儴 MOD 鐨勬満鍒跺畬鎴愮巼銆?
+            ),
         },
         "rows": rows,
     }
