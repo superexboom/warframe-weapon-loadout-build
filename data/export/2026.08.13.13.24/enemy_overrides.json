@@ -22518,8 +22518,11 @@
     "healthType": "neutral-inference",
     "armourType": "faction-inference",
     "shieldType": "zero-pool",
-    "usesNpcArmourCurve": "wiki-universal-armour-curve"
-   }
+    "usesNpcArmourCurve": "wiki-universal-armour-curve",
+    "overguard": "wiki-module-enemies-data"
+   },
+   "overguard": 15.0,
+   "hasOverguard": true
   },
   "/Lotus/Types/Enemies/Duviri/Avatars/DuviriRifleAvatar": {
    "baseLevel": 1.0,
@@ -22664,8 +22667,11 @@
     "healthType": "neutral-inference",
     "armourType": "faction-inference",
     "shieldType": "zero-pool",
-    "usesNpcArmourCurve": "wiki-universal-armour-curve"
-   }
+    "usesNpcArmourCurve": "wiki-universal-armour-curve",
+    "overguard": "wiki-module-enemies-data"
+   },
+   "overguard": 15.0,
+   "hasOverguard": true
   },
   "/Lotus/Types/Enemies/Duviri/Avatars/DuviriThraxRangedAvatar": {
    "baseLevel": 1.0,
@@ -22678,8 +22684,11 @@
     "healthType": "neutral-inference",
     "armourType": "zero-pool",
     "shieldType": "zero-pool",
-    "usesNpcArmourCurve": "wiki-universal-armour-curve"
-   }
+    "usesNpcArmourCurve": "wiki-universal-armour-curve",
+    "overguard": "wiki-module-enemies-data"
+   },
+   "overguard": 15.0,
+   "hasOverguard": true
   },
   "/Lotus/Types/Enemies/Duviri/Avatars/EclipseDuviriMeleeAvatar": {
    "baseLevel": 1.0,
@@ -22751,8 +22760,11 @@
     "healthType": "neutral-inference",
     "armourType": "faction-inference",
     "shieldType": "zero-pool",
-    "usesNpcArmourCurve": "wiki-universal-armour-curve"
-   }
+    "usesNpcArmourCurve": "wiki-universal-armour-curve",
+    "overguard": "wiki-module-enemies-data"
+   },
+   "overguard": 15.0,
+   "hasOverguard": true
   },
   "/Lotus/Types/Enemies/Duviri/Avatars/EclipseDuviriMeleeAvatarEasy": {
    "baseLevel": 1.0,
@@ -22824,8 +22836,11 @@
     "healthType": "neutral-inference",
     "armourType": "faction-inference",
     "shieldType": "zero-pool",
-    "usesNpcArmourCurve": "wiki-universal-armour-curve"
-   }
+    "usesNpcArmourCurve": "wiki-universal-armour-curve",
+    "overguard": "wiki-module-enemies-data"
+   },
+   "overguard": 15.0,
+   "hasOverguard": true
   },
   "/Lotus/Types/Enemies/Duviri/Avatars/EclipseDuviriRifleAvatar": {
    "baseLevel": 1.0,

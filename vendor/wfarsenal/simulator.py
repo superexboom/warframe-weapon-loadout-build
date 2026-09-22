@@ -1064,8 +1064,12 @@ def simulate(
     modded = asdict(stats)
     modded.update(
         {
-            "totalDamage": stats.total_damage,
-            "averageHit": stats.average_hit,
+            # wiki/面板口径的「总伤害」：每弹丸伤害 × 弹丸数（Hek 75×7=525，
+            # 与 wiki「Total Damage 525」一致）。perProjectileDamage 保留每弹丸
+            # 值供触发/DoT 管线内部消费（期望计算仍按 per-pellet×multishot）。
+            "totalDamage": stats.total_damage * max(stats.multishot, 1.0),
+            "perProjectileDamage": stats.total_damage,
+            "averageHit": stats.average_hit * max(stats.multishot, 1.0),
             "burstDps": stats.burst_dps,
             "sustainedDps": stats.sustained_dps,
             "damageTypes": dict(stats.damage_types),
@@ -1082,6 +1086,10 @@ def simulate(
             # 膛室家族首发加成（最终伤害乘区，弹匣第一发）。
             "firstShotDamageBonus": stats.first_shot_damage_bonus,
             "firstShotHit": stats.first_shot_hit,
+            # CO emergent 回放：面板预乘的 CO 因子与假定层数（窗口模型剥离
+            # 预乘并按每步实际活异常类型数重算）。
+            "statusConditionDamageMultiplier": stats.status_condition_damage_multiplier,
+            "coAssumedCount": getattr(stats, "co_assumed_count", 0.0),
         }
     )
     unsupported = sorted(

@@ -32,6 +32,7 @@ from dataclasses import dataclass, field, replace
 from types import MappingProxyType
 from typing import Any, Iterable, Mapping, Sequence
 
+from .combat_events import direct_fire_ledger
 from .runtime_adapters import RuntimeAdapter, resolve_runtime_adapter
 
 # -- constants not present in the extracted data --------------------------------------
@@ -189,6 +190,18 @@ DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES = frozenset(
 )
 DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES = frozenset({"DT_POISON", "DT_HEALTH_DRAIN"})
 
+# 已知「普通模式含 radial/field 部件但 Rabbit 2D 导出无数据」的武器清单
+# （wiki 交叉核对；wfsim 实测占比见值）。key = 导出 path，value = 部件类别。
+# 注意：components=True 的武器（Angstrum/Staticor/Kuva Bramma/Lenz 等）已走
+# projectile-component-damage-unapplied 诊断，不在此清单；这里只收「连
+# components 字段都没有」的。数据管线升级（wiki Lua 模块源）后清空。
+_KNOWN_MULTIPART_PATHS: dict[str, str] = {
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG": "radial",  # Opticor（wfsim: radial 占 32%）
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG": "radial",  # Opticor Vandal
+    "/Lotus/Weapons/ClanTech/Bio/BioWeapon": "field",  # Torid（wfsim: field 占 78%）
+    "/Lotus/Weapons/MachineGun/PistolGrenadeLauncher/PistolGrenadeLauncher": "radial",  # Angstrum 副模式
+}
+
 
 def _float32(value: float) -> float:
     """Apply the game's documented f32 rounding at formula boundaries."""
@@ -327,6 +340,11 @@ class Scenario:
     distance: float | None = None
     cloaked: bool = False
     nearest_enemy_distance: float | None = None
+    # 触发类效果策略（wfsim StackPolicy 的移植）：
+    #   assumed_max — 面板/优化器口径：on-kill/条件层数恒满（100% 触发）。
+    #   emergent    — 战斗口径：层数从零爬升，按触发率/衰减模拟（窗口模型）。
+    # 影响三处：mod conditional_stacks、赋能 stacks、灵化 on-kill 进化。
+    trigger_policy: str = "assumed_max"
 
     def __post_init__(self) -> None:
         if (
@@ -337,6 +355,8 @@ class Scenario:
             raise TypeError("aiming, heavy_attack and cloaked must be booleans")
         _require_int("combo_tier", self.combo_tier, maximum=11)
         _require_int("victim_status_count", self.victim_status_count)
+        if self.trigger_policy not in ("assumed_max", "emergent"):
+            raise TypeError("trigger_policy must be assumed_max or emergent")
         if self.distance is not None:
             object.__setattr__(
                 self,
@@ -774,6 +794,12 @@ class ModdedStats:
     double_crit_chance: float = 0.0
     # 膛室家族首发伤害加成（最终伤害乘区，只作用于弹匣第一发）。
     first_shot_damage_bonus: float = 0.0
+    # Per-trigger ammo cost in sustained rate（Twin Grakatas 类 ammoCost=2）
+    ammo_cost: float = 1.0
+    # CO bucket（对触发目标增伤，Galvanized Aptitude 类）：emergent 窗口模型
+    # 按每步实际活异常类型数重算。co_assumed_count 记录面板预乘时的层数。
+    co_bucket: list[ModEffect] = field(default_factory=list)
+    co_assumed_count: float = 0.0
 
     @property
     def total_damage(self) -> float:
@@ -818,11 +844,22 @@ class ModdedStats:
 
     @property
     def sustained_attack_rate(self) -> float:
-        """Trigger pulls per second including reload downtime."""
+        """Trigger pulls per second including reload downtime.
+
+        ammoCost>1 的模式（Twin Grakatas 类：每扳机耗 2 发弹药）按
+        ``triggers_per_mag = magazine / ammoCost`` 折算弹匣——wfsim
+        MECHANICS §「Continuous ammo cost」：ammo_cost 乘进弹匣消耗，改变
+        reload cadence（wiki Twin Grakatas：120 弹匣 / 2 = 60 扳机/匣，
+        wfsim 实测 413 shots / 6 reloads 吻合）。
+        """
         if not self.magazine or not self.fire_rate:
             return max(float(self.fire_rate), 0.0)
-        cycle = self.magazine / self.fire_rate + (self.reload_time or 0.0)
-        return max(float(self.magazine / cycle), 0.0) if cycle else 0.0
+        ammo_cost = max(float(getattr(self, "ammo_cost", 1.0) or 1.0), 1.0)
+        triggers = max(float(self.magazine) / ammo_cost, 0.0)
+        if triggers <= 0.0:
+            return 0.0
+        cycle = triggers / self.fire_rate + (self.reload_time or 0.0)
+        return max(float(triggers / cycle), 0.0) if cycle else 0.0
 
     @property
     def average_hit(self) -> float:
@@ -856,6 +893,68 @@ def effective_crit_multiplier(chance: float, multiplier: float) -> float:
     low = 1.0 + guaranteed * (multiplier - 1.0)
     high = 1.0 + (guaranteed + 1) * (multiplier - 1.0)
     return low * (1.0 - remainder) + high * remainder
+
+
+def crit_tier_seed_distribution(
+    crit_chance: float,
+    crit_multiplier: float,
+    noncrit_damage_multiplier: float = 1.0,
+    critical_multiplier_factor: float = 1.0,
+) -> list[tuple[float, float]]:
+    """Per-proc DoT seed distribution by crit tier (wfsim MECHANICS §6).
+
+    Every proc stores the damage snapshot of the hit that caused it — including
+    THAT hit's crit tier — and ticks read the seed, not the crit-averaged panel
+    (docs/MECHANICS.md §6 "Every DoT has a PARENT"; measured in wfsim via
+    a_hunter_munitions_bleed_is_indistinguishable_from_any_other_slash).
+
+    For an EXPECTED-VALUE model the seed distribution is the tier decomposition:
+    ``floor(cc)`` guaranteed tiers plus a fractional chance of one more, each
+    weighted by its probability.  Averaging the returned (weight, seed_factor)
+    pairs reproduces :func:`effective_hit_multiplier` exactly — the split only
+    matters downstream, where tier-dependent seeds meet NON-linear per-tick
+    amplifiers (live armour strip, viral ramp) and the average of products no
+    longer equals the product of averages.
+    """
+    if (
+        crit_chance <= 0.0
+        or (crit_multiplier * float(critical_multiplier_factor)) <= 1.0
+    ):
+        noncrit_chance = max(1.0 - crit_chance, 0.0)
+        noncrit_bonus = max(noncrit_damage_multiplier - 1.0, 0.0)
+        # cc<=0: every hit is noncrit; the bonus (if any) is uniform.
+        if crit_chance <= 0.0:
+            return [(1.0, 1.0 + noncrit_bonus)]
+        # cd<=1 with cc>0: crits exist but multiply by 1 — the hit factor is
+        # still cc-split for seed purposes (noncrit hits carry the proxy bonus).
+        if noncrit_bonus:
+            return [(noncrit_chance, 1.0 + noncrit_bonus), (crit_chance, 1.0)]
+        return [(1.0, 1.0)]
+    guaranteed = int(crit_chance)
+    remainder = crit_chance - guaranteed
+    cd = crit_multiplier * float(critical_multiplier_factor)
+    low = 1.0 + guaranteed * (cd - 1.0)
+    high = 1.0 + (guaranteed + 1) * (cd - 1.0)
+    noncrit_chance = max(1.0 - crit_chance, 0.0)
+    noncrit_bonus = max(noncrit_damage_multiplier - 1.0, 0.0)
+    pairs: list[tuple[float, float]] = []
+    if guaranteed == 0:
+        # No guaranteed tier: the noncrit branch carries its own bonus factor,
+        # the crit branch carries the tier-1 crit factor (the noncrit bonus
+        # does NOT ride crit hits — see effective_hit_multiplier's split).
+        pairs.append((noncrit_chance, 1.0 + noncrit_bonus))
+        pairs.append((crit_chance, high))
+    else:
+        if noncrit_chance > 0.0 and noncrit_bonus > 0.0:
+            pairs.append((noncrit_chance, 1.0 + noncrit_bonus))
+        pairs.append((crit_chance * (1.0 - remainder), low))
+        if remainder > 0.0:
+            pairs.append((crit_chance * remainder, high))
+    # Normalize away float dust; weights must sum to 1.
+    total_weight = sum(w for w, _ in pairs)
+    if total_weight <= 0.0:
+        return [(1.0, low)]
+    return [(w / total_weight, f) for w, f in pairs if w > 0.0]
 
 
 def effective_hit_multiplier(
@@ -1024,10 +1123,14 @@ def apply_mods(
         faction_damage_multipliers[""] = all_factions
 
     # Base damage scales as one pooled multiplier, then any separate factors.
+    # CO 类（Galvanized Aptitude 等对触发目标增伤）按 scenario.victim_status_count
+    # 折算。窗口模型需要按「每步实际活层数」重算 CO —— 把 CO 分量单独记录，
+    # windowed_status_damage 用它回退预乘再逐层重算（emergent 语义）。
     status_damage_effects = [
         _scale_effect(effect, scenario.victim_status_count)
         for effect in buckets["WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE"]
     ]
+    co_effects = list(buckets["WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE"])
     damage_scale = _combine(
         1.0, buckets["WEAPON_DAMAGE_AMOUNT"] + status_damage_effects
     )
@@ -1069,13 +1172,47 @@ def apply_mods(
             f"{weapon.get('path') or weapon.get('name') or '?'}: "
             "unsupported[projectile-component-damage-unapplied]"
         )
+    # ── 已知多部件武器的数据缺口标注（wiki 交叉核对清单）────────────────
+    # Rabbit 2D 导出不含普通模式的 radial/field 部件数据（Bramma/Ogris/Lenz
+    # 类武器有 components 字段走上面的诊断；Opticor/Torid 类连字段都没有）。
+    # 这些武器的「最终伤害」缺 radial/field 部分（wfsim 实测 Opticor radial
+    # 占 32%、Torid field 占 78%）——配装排序可用，绝对值偏低。按 wiki
+    # 已证实的清单打标，前端与报告可见。
+    if _KNOWN_MULTIPART_PATHS.get(str(weapon.get("path") or "")):
+        part = _KNOWN_MULTIPART_PATHS[str(weapon.get("path") or "")]
+        unsupported.add(f"weapon-radial-or-field-damage-not-in-export-{part}")
+        skipped.append(
+            f"{weapon.get('path') or weapon.get('name') or '?'}: "
+            f"unsupported[radial-or-field-damage-not-in-export:{part}]"
+        )
+    # ── Shotgun procChance 导出口径还原（wfsim 对齐）────────────────────
+    # DE 的导出里，多弹丸模式（霰弹枪）的 damage.procChance 是「每次射击的
+    # 期望触发总数」（Hek 0.75 = 10.7% × 7 弹丸），而单弹丸武器的 procChance
+    # 就是 per-pellet 几率。下游 expected_status_procs 按 per-pellet ×
+    # multishot 计算，若不还原会把霰弹枪的触发期望放大 pellets 倍
+    # （实测 Hek 5.25/shot，正确值 0.75/shot；wfsim wiki 口径 10.7%/弹丸）。
+    innate_multishot = float(mode.get("multishot") or 1)
+    exported_proc = float(damage.get("procChance", 0.0) or 0.0)
+    if innate_multishot > 1.0 and exported_proc > 0.0:
+        per_pellet_proc = exported_proc / innate_multishot
+    else:
+        per_pellet_proc = exported_proc
     return ModdedStats(
         damage_types=damage_types,
         crit_chance=_combine(damage.get("critChance", 0.0), buckets["WEAPON_CRIT_CHANCE"]),
-        crit_multiplier=_combine(
-            damage.get("critMultiplier", 1.0), buckets["WEAPON_CRIT_DAMAGE"]
-        ),
-        status_chance=_combine(damage.get("procChance", 0.0), buckets["WEAPON_PROC_CHANCE"]),
+        # 基础暴伤量化（wfsim §5）：flat CD 先加进基础值 → 量化到 32/4095
+        # 步长 → 相对 CD（%）后乘。旧的 _combine 单序列在 flat+relative 混合
+        # 时会以错误顺序合并（flat 落在量化之外或之内不定）。
+        crit_multiplier=(
+            lambda base, bucket: _combine(
+                quantize_base_crit_damage(
+                    base
+                    + sum(e.value for e in _split_crit_damage_bucket(bucket)[0])
+                ),
+                _split_crit_damage_bucket(bucket)[1],
+            )
+        )(damage.get("critMultiplier", 1.0), buckets["WEAPON_CRIT_DAMAGE"]),
+        status_chance=_combine(per_pellet_proc, buckets["WEAPON_PROC_CHANCE"]),
         multishot=_combine(
             float(mode.get("multishot") or 1), buckets["WEAPON_FIRE_ITERATIONS"]
         ),
@@ -1084,8 +1221,17 @@ def apply_mods(
             float(weapon.get("magazineSize") or 0), buckets["WEAPON_CLIP_MAX"]
         ),
         # A reload *speed* bonus shortens the reload, so it divides rather than scales.
-        reload_time=_divide(
-            mode.get("reloadTime") or 0.0, buckets["WEAPON_RELOAD_SPEED"]
+        # Incarnon charge-pool approximation (wfsim docs/MECHANICS.md §Incarnon):
+        # the Incarnon form draws from a 170-charge pool instead of the base
+        # magazine — there is no reload cycle while the pool holds (ammo is
+        # consumed at 0.5/shot and a 30 s benchmark window cannot exhaust 170
+        # charges at any exported fire rate).  The export lacks the pool field,
+        # so the tagged Incarnon form's reload is zeroed here; the base form
+        # keeps its normal magazine cycle.
+        reload_time=(
+            0.0
+            if weapon.get("isIncarnonForm")
+            else _divide(mode.get("reloadTime") or 0.0, buckets["WEAPON_RELOAD_SPEED"])
         ),
         # The compact weapon export does not yet carry native spread, recoil or
         # reserve-ammo bases.  These fields therefore expose the exact relative
@@ -1093,12 +1239,20 @@ def apply_mods(
         spread_multiplier=_combine(1.0, buckets["WEAPON_SPREAD"]),
         recoil_multiplier=_combine(1.0, buckets["WEAPON_RECOIL"]),
         ammo_max_multiplier=_combine(1.0, buckets["WEAPON_AMMO_MAX"]),
+        # 每扳机弹药消耗（Twin Grakatas 类）：sustained_attack_rate 折算用。
+        ammo_cost=max(float(mode.get("ammoCost") or 1), 1.0),
         headshot_bonus_multiplier=_combine(
             1.0, buckets["WEAPON_HEADSHOT_MULTIPLIER"]
         ),
         proc_damage_multiplier=_combine(1.0, buckets["WEAPON_PROC_DAMAGE"]),
         proc_duration_multiplier=_combine(1.0, buckets["WEAPON_PROC_TIME"]),
         status_condition_damage_multiplier=_combine(1.0, status_damage_effects),
+        # CO（对触发目标增伤）原始效果列表与预乘时的假定层数：窗口模型
+        # （windowed_status_damage）用它把 CO 从 damage_types 中剥离，按每步
+        # 实际活异常类型数重算（emergent 语义，wfsim M27：高级靶杀不动的
+        # 时候镀层 CO 接近无效）。
+        co_bucket=list(co_effects),
+        co_assumed_count=float(scenario.victim_status_count or 0),
         initial_combo=_combine(0.0, buckets["WEAPON_MELEE_COMBO_INITIAL_BONUS"]),
         combo_duration=_combine(
             BASE_MELEE_COMBO_DURATION if weapon.get("slot") in MELEE_SLOTS else 0.0,
@@ -1792,15 +1946,18 @@ def _eximus_shield_base(base: float, level: float) -> float:
 def _overguard_level_multiplier(level: float) -> float:
     """Evaluate the Eximus/Overguard absolute-level f32 smoothstep curve."""
     level = max(float(level), 1.0)
-    f1 = _float32(1.0 + 0.0015 * (level - 1.0) ** 4.0)
-    f2 = _float32(1.0 + 260.0 * (level - 1.0) ** 0.9)
+    # f64 全程计算，仅在最外层套一次 f32：级差 (level-1)**0.9 与 260× 的中间
+    # f32 截断在 9999 级会偏 1.3%（2^20 网格吸附），wfsim 的参照值
+    # （1034893.327 @9999）与 f64 精确值逐位一致，证明引擎侧不逐项 f32。
+    f1 = 1.0 + 0.0015 * (level - 1.0) ** 4.0
+    f2 = 1.0 + 260.0 * (level - 1.0) ** 0.9
     if level <= 45.0:
-        blend = 0.0
-    elif level >= 50.0:
-        blend = 1.0
-    else:
-        position = _float32((level - 45.0) / 5.0)
-        blend = _float32(3.0 * position * position - 2.0 * position * position * position)
+        return f1
+    if level >= 50.0:
+        return f2
+    # 45-50 之间的 smoothstep 过渡带：两个分支量级尚可（≤~8635），插值安全。
+    position = _float32((level - 45.0) / 5.0)
+    blend = _float32(3.0 * position * position - 2.0 * position * position * position)
     return _float32(f1 + _float32(_float32(f2 - f1) * blend))
 
 
@@ -1901,12 +2058,20 @@ def enemy_defenses(
 
     overguard = target.get("overguard")
     if isinstance(overguard, (int, float)) and not isinstance(overguard, bool) and overguard:
-        overguard = float(overguard)
+        # 天生超宏（Thrax 家族 15 基础等，wiki Module:Enemies/data）：应用与
+        # Eximus 相同的绝对等级曲线缩放（wfsim 实测对齐：15 × mult(9999) =
+        # 15,523,399.9）。基础值 0 但带 hasOverguard 标记的保持旧行为
+        # （数据缺失 → unsupported）。
+        overguard = float(overguard) * _overguard_level_multiplier(
+            float(level if level is not None else base_level if base_level is not None else 1.0)
+        )
     else:
         overguard = 0.0
     if standard_eximus:
         overguard = max(overguard, 12.0 * _overguard_level_multiplier(enhancement_level))
-    elif target.get("hasOverguard"):
+    elif target.get("hasOverguard") and overguard <= 0.0:
+        # 基础超宏缺失（数据没有具体数值）才标注 unsupported；已缩放的
+        # 天生超宏（overguard > 0）不再是缺口。
         unsupported.add("enemy-overguard")
     empowerment_multiplier = 1.0
     if enhancements["empowered"]:
@@ -1946,6 +2111,173 @@ def enemy_defenses(
         "empoweredMultiplier": empowerment_multiplier,
         "enhancements": enhancements,
         "unsupported": sorted(unsupported),
+    }
+
+
+def quantize_damage_vector(
+    damage_types: Mapping[str, float], modded_base: float
+) -> dict[str, float]:
+    """Per-hit damage-type quantization (wfsim MEASUREMENTS M57, AGPL-3.0).
+
+    The game serializes a hit as one integer total plus per-type 1/32
+    multiples: each type value snaps to ``round(v / (ModdedBase/32))`` units
+    of ``ModdedBase/32``.  THE DENOMINATOR IS ``ModdedBase`` — the base
+    damage scaled by base-damage mods, elemental portions EXCLUDED — not the
+    vector's own total: a non-elemental bonus scales numerator and
+    denominator alike and cancels, an elemental one does not (M57: Braton
+    Prime base 35 + Gas 63 snaps to 58 units of 35, giving 101.06→98 in the
+    measured example when the wrong denominator is used).
+
+    Applied BEFORE crit/type-modifier/faction multipliers — those multiply
+    the quantized values (wfsim docs/MECHANICS.md §5 Quantization).
+    """
+    modded_base = float(modded_base)
+    if modded_base <= 0.0:
+        return {k: float(v) for k, v in damage_types.items()}
+    unit = modded_base / 32.0
+    result: dict[str, float] = {}
+    for dtype, amount in damage_types.items():
+        value = float(amount)
+        result[dtype] = round(value / unit) * unit if unit > 0.0 else value
+    return result
+
+
+def quantize_base_crit_damage(cd: float) -> float:
+    """Base crit-damage quantization (wfsim MECHANICS §5 Quantization, AGPL-3.0).
+
+    ``quantized_base_cd = round(base_cd × 4095/32) × 32/4095`` — the game
+    serializes the base crit multiplier in steps of 32/4095.  FLAT/absolute
+    CD bonuses (Incarnon "Critical Parallel" +0.4) must add into the base
+    BEFORE quantization; RELATIVE (%) mods (Vital Sense) multiply AFTER.
+    """
+    step = 32.0 / 4095.0
+    return round(float(cd) / step) * step
+
+
+# 临界：flat CD（ADD/ADD_BASE 操作）与相对 CD（STACKING_MULTIPLY/MULTIPLY）
+# 必须在量化前后分层——wfsim §5：「flat/absolute CD bonuses add into base_cd
+# BEFORE quantization; relative (%) mods multiply AFTER」。_combine 把两类
+# 操作混进一个序列，所以这里先拆桶再按顺序合成。
+def _split_crit_damage_bucket(
+    effects: Sequence[ModEffect],
+) -> tuple[list[ModEffect], list[ModEffect]]:
+    flat: list[ModEffect] = []
+    relative: list[ModEffect] = []
+    for effect in effects:
+        if effect.operation in ("ADD", "ADD_BASE"):
+            flat.append(effect)
+        else:
+            relative.append(effect)
+    return flat, relative
+
+
+def damage_against_cached_armour(
+    stats: ModdedStats,
+    live_armour: float,
+    defenses_snapshot: Mapping[str, Any],
+    *,
+    level: int | None = None,
+    steel_path: bool = False,
+    enemy_enhancements: Mapping[str, Any] | None = None,
+    hit_location: str | None = None,
+    target: Mapping[str, Any] | None = None,
+    _target_cache: dict[str, Any] | None = None,
+    crit_chance_add: float = 0.0,
+    crit_multiplier_add: float = 0.0,
+) -> dict[str, Any]:
+    """Fast-path damage_against with a pre-computed defenses snapshot.
+
+    In the windowed model's step loop the only per-step variable is the LIVE
+    armour (corrosive/heat strip); health/shield/overguard/magnetic/eximus
+    are constant across the window.  This variant skips the full
+    ``enemy_defenses`` re-resolution (606k calls → 1) by accepting the
+    pre-computed snapshot and just overriding the armour field.
+    ``_target_cache`` optionally carries the target-derived constants
+    (hit_multiplier / faction_deltas / bypass sets) so repeated calls for
+    the same target skip that resolution too.
+    ``crit_chance_add`` / ``crit_multiplier_add`` apply the cold/puncture
+    per-step crit adjustments WITHOUT rebuilding the stats dataclass (the
+    step loop calls this thousands of times per evaluation).
+    """
+    target = target if isinstance(target, Mapping) else {}
+    magnetic_stacks = int(defenses_snapshot.get("magneticStacks") or 0)
+    overguard = float(defenses_snapshot.get("overguard") or 0.0)
+    if _target_cache is not None:
+        hit_multiplier = _target_cache["hit_multiplier"]
+        hit_critical_multiplier = _target_cache["hit_critical_multiplier"]
+        faction_deltas = _target_cache["faction_deltas"]
+        armour_bypass = _target_cache["armour_bypass"]
+        shield_bypass = _target_cache["shield_bypass"]
+        target_faction = _target_cache["target_faction"]
+    else:
+        location, hit_multiplier, hit_critical_multiplier, hit_unsupported, hit_metadata = _hit_location_info(
+            target, hit_location
+        )
+        faction_deltas = _faction_damage_deltas(target)
+        armour_bypass = _damage_type_set(
+            target.get("armourBypassDamageTypes"), DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES
+        )
+        shield_bypass = _damage_type_set(
+            target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
+        )
+        target_faction = str(target.get("faction") or "")
+
+    quantized_types = quantize_damage_vector(
+        stats.damage_types,
+        stats.dot_base_damage
+        if stats.dot_base_damage is not None
+        else sum(stats.damage_types.values()),
+    )
+
+    per_type: dict[str, float] = {}
+    shield_value = float(defenses_snapshot.get("shield") or 0.0)
+    for dtype, amount in quantized_types.items():
+        if overguard > 0.0:
+            value = _overguard_damage_multiplier(dtype, magnetic_stacks)
+        else:
+            value = _target_damage_multiplier(
+                dtype,
+                target,
+                armour=live_armour,
+                faction_deltas=faction_deltas,
+                armour_bypass=armour_bypass,
+                shield_bypass=shield_bypass,
+            )
+            if shield_value > 0.0 and dtype not in shield_bypass:
+                value *= _magnetic_defense_multiplier(magnetic_stacks)
+        value *= amount
+        per_type[dtype] = value * stats.falloff_multiplier
+
+    faction_multiplier = stats.faction_damage_multipliers.get("", 1.0)
+    if target_faction:
+        faction_multiplier *= stats.faction_damage_multipliers.get(target_faction, 1.0)
+    if faction_multiplier != 1.0:
+        per_type = {
+            damage_type: amount * faction_multiplier
+            for damage_type, amount in per_type.items()
+        }
+    if hit_multiplier != 1.0:
+        per_type = {
+            damage_type: amount * hit_multiplier
+            for damage_type, amount in per_type.items()
+        }
+    raw = sum(per_type.values()) * effective_hit_multiplier(
+        max(stats.crit_chance + crit_chance_add, 0.0) if crit_chance_add else stats.crit_chance,
+        max(stats.crit_multiplier + crit_multiplier_add, 1.0) if crit_multiplier_add else stats.crit_multiplier,
+        stats.noncrit_damage_multiplier,
+        hit_critical_multiplier,
+        double_crit_chance=stats.double_crit_chance,
+    )
+    return {
+        "health": float(defenses_snapshot.get("health") or 0.0),
+        "shield": shield_value,
+        "armour": live_armour,
+        "armourReduction": _armour_reduction(live_armour) if live_armour else 0.0,
+        "overguard": overguard,
+        "perType": per_type,
+        "perHit": raw,
+        "perShot": raw * max(stats.multishot, 1.0),
+        "dps": raw * max(stats.multishot, 1.0) * stats.sustained_attack_rate,
     }
 
 
@@ -1997,8 +2329,21 @@ def damage_against(
         target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
     )
 
+    # Per-hit quantization BEFORE crit/type/faction multipliers (M57): the
+    # denominator is ModdedBase (IPS-only scaled base — dot_base_damage), the
+    # elemental additions live only in the numerator.  A pure-IPS vector on a
+    # 1×-of-base grid snaps back to itself, so unmodded and single-bucket
+    # builds are unchanged; only mixed elemental compositions move, by ≤1/32
+    # of ModdedBase per type.
+    quantized_types = quantize_damage_vector(
+        stats.damage_types,
+        stats.dot_base_damage
+        if stats.dot_base_damage is not None
+        else sum(stats.damage_types.values()),
+    )
+
     per_type: dict[str, float] = {}
-    for dtype, amount in stats.damage_types.items():
+    for dtype, amount in quantized_types.items():
         if overguard > 0.0:
             value = _overguard_damage_multiplier(dtype, magnetic_stacks)
         else:
@@ -2312,13 +2657,22 @@ def expected_dot_damage(
     )
     dot_base = max(float(dot_base), 0.0)
     duration = DOT_BASE_DURATION_SECONDS * max(float(stats.proc_duration_multiplier), 0.0)
-    crit = effective_hit_multiplier(
+    # ── Per-proc DoT seeds by crit tier (wfsim MECHANICS §6, AGPL-3.0)─────
+    # A proc's tick reads the damage snapshot of the hit that CAUSED it —
+    # that hit's crit tier included — not the panel's crit-averaged damage.
+    # The tier decomposition below reproduces the same average as the old
+    # single `crit` factor (pinned by crit_tier_seed_distribution tests), but
+    # each tier group keeps its own seed so downstream per-tick amplifiers
+    # (live armour strip, viral ramp) see a real distribution instead of an
+    # average.  In the linear closed-form path the two agree exactly; the
+    # split matters for the stepped windowed model and future per-tick reads.
+    seed_tiers = crit_tier_seed_distribution(
         stats.crit_chance,
         stats.crit_multiplier,
         stats.noncrit_damage_multiplier,
         hit_critical_multiplier,
-        double_crit_chance=stats.double_crit_chance,
     )
+    crit = sum(weight * factor for weight, factor in seed_tiers)
     proc_damage = max(float(stats.proc_damage_multiplier), 0.0)
     target_faction = str(target.get("faction") or "")
     faction_mod = stats.faction_damage_multipliers.get("", 1.0)
@@ -2349,16 +2703,35 @@ def expected_dot_damage(
             if defenses["shield"] > 0.0 and interaction_type not in shield_bypass:
                 target_multiplier *= _magnetic_defense_multiplier(magnetic_stacks)
         elemental = stats.dot_elemental_multipliers.get(dtype, 1.0)
-        per_second = (
-            coefficient
-            * dot_base
-            * max(float(elemental), 0.0)
-            * crit
-            * proc_damage
-            * stats.falloff_multiplier
-            * hit_multiplier
-            * target_multiplier
-            * max(float(faction_mod), 0.0) ** 2
+        # +1 accumulator per tick group (wfsim MEASUREMENTS M58, AGPL-3.0):
+        # Heat/Electricity/Gas consolidate into ONE tick group sharing a single
+        # +1; Slash and Toxin tick independently so every live stack carries
+        # its own.  The +1 scales with the elemental/proc-damage multipliers
+        # (it rides the M bracket of the tick formula) but not with crit/base.
+        shared_group = dtype in {"DT_FIRE", "DT_ELECTRICITY", "DT_GAS"}
+        accumulator = 1.0 if shared_group else min(count, 10.0)
+        accumulator_multiplier = max(float(elemental), 0.0) * proc_damage
+        # Per-tier seed: each tier's procs tick at their own seed factor.
+        # The M58 +1 accumulator rides M (elemental/proc-damage), not the
+        # seed, so it is added once per tick group at the averaged tier only
+        # in the closed-form path (the stepped model re-derives it per step).
+        per_second_by_tier = [
+            (
+                weight,
+                coefficient
+                * dot_base
+                * max(float(elemental), 0.0)
+                * factor
+                * proc_damage
+                * stats.falloff_multiplier
+                * hit_multiplier
+                * target_multiplier
+                * max(float(faction_mod), 0.0) ** 2,
+            )
+            for weight, factor in seed_tiers
+        ]
+        per_second = sum(weight * ps for weight, ps in per_second_by_tier) + (
+            accumulator * accumulator_multiplier
         )
         damage = per_second * duration
         expected = damage * count
@@ -2368,6 +2741,11 @@ def expected_dot_damage(
             "durationSeconds": duration,
             "elementalMultiplier": max(float(elemental), 0.0),
             "critMultiplier": crit,
+            # 种子分层明细（供步进模型按 tier 重算 per-tick 放大器）：
+            # [(weight, per_second_excl_accumulator)] per crit tier。
+            "seedTiers": [
+                {"weight": weight, "perSecond": ps} for weight, ps in per_second_by_tier
+            ],
             "targetMultiplier": target_multiplier,
             "perSecond": per_second,
             "perProc": damage,
@@ -2787,6 +3165,881 @@ def sustained_status_damage(
         "magneticBreakPotential": magnetic_break_potential,
         "perAttack": status,
         "unsupported": sorted(set(direct.get("unsupported") or ()) | set(status.get("unsupported") or ())),
+    }
+
+
+def _windowed_average_stacks(
+    rate_per_second: float, duration: float, cap: float, window: float
+) -> float:
+    """Time-averaged live stack count over a window starting from zero stacks.
+
+    Stacks accumulate at ``rate_per_second`` and each application lives for
+    ``duration`` seconds (steady-state count = rate * duration, capped).  From
+    zero the count ramps linearly until it reaches that steady level at
+    t_settle = duration (or the window ends first).  The time-average is the
+    closed-form integral of that ramp — no per-step simulation needed.
+    """
+    steady = min(max(rate_per_second * duration, 0.0), cap)
+    if steady <= 0.0 or window <= 0.0:
+        return 0.0
+    t_settle = min(duration, window)
+    if t_settle >= window:
+        # Never reached steady state inside the window: average of a linear ramp.
+        return steady * (window / (2.0 * duration))
+    # Ramp for t_settle seconds then hold steady for the remainder.
+    ramp_integral = steady * t_settle / 2.0
+    return (ramp_integral + steady * (window - t_settle)) / window
+
+
+def _gas_single_target_dps(
+    row: Mapping[str, Any],
+    proc_rate: float,
+    damage_rate_multiplier: float,
+    status_rate_multiplier: float,
+) -> float:
+    """Single-target Gas cloud contribution per proc-second.
+
+    Gas (Status_Effect / wfsim MECHANICS §6) is a 10-slot cloud on the target:
+    procs feed cloud *stacks*, and against a lone target only the cloud's own
+    tick counts — not one full expected-proc payload per pellet.  Mirrors the
+    steady-state model's Gas handling (active cloud stacks capped at 10, hit
+    multiplier averaged by the damage/status rate ratio).
+    """
+    expected_procs = max(float(row.get("expectedProcs") or 0.0), 0.0)
+    per_second = max(float(row.get("perSecond") or 0.0), 0.0)
+    duration = max(float(row.get("durationSeconds") or 0.0), 0.0)
+    if expected_procs <= 0.0 or per_second <= 0.0 or duration <= 0.0:
+        return 0.0
+    active_cloud = min(expected_procs * proc_rate * duration, 10.0)
+    average_hit_multiplier = (
+        max(float(damage_rate_multiplier), 0.0) / max(float(status_rate_multiplier), 0.0)
+        if status_rate_multiplier
+        else 0.0
+    )
+    return per_second * active_cloud * average_hit_multiplier
+
+
+def windowed_status_damage(
+    stats: ModdedStats,
+    target: Mapping[str, Any] | None = None,
+    *,
+    attacks_per_second: float,
+    window_seconds: float = 5.0,
+    status_rate_multiplier: float = 1.0,
+    damage_rate_multiplier: float = 1.0,
+    forced_procs: Mapping[str, float] | None = None,
+    level: int | None = None,
+    armour_strip: float = 0.0,
+    elemental_armour_strip: float = 0.0,
+    steel_path: bool = False,
+    enemy_enhancements: Mapping[str, Any] | None = None,
+    time_step: float = 0.25,
+    trigger_sources: Sequence[Mapping[str, Any]] | None = None,
+    collect_timeline: bool = True,
+) -> dict[str, Any]:
+    """Startup-aware, pool-transition-aware damage model (stepped).
+
+    Advances the fight from zero stacks in ``time_step`` slices over
+    ``window_seconds``.  Each step: live stack levels (viral/magnetic ramp from
+    zero, corrosive/heat armour strip grows with the *current* step's stacks),
+    the target's current pool (overguard → shield → health as pools drain),
+    direct damage per shot with the step's pool amplifier, and DoT damage from
+    the cloud mass that is actually alive at that step.
+
+    Source of the corrections vs the earlier closed-form model (all mirrored
+    from wfsim MECHANICS.md, AGPL-3.0, see THIRD_PARTY_NOTICES.md):
+    - Stack ramp is *observed at each step*, not time-averaged — the first
+      second of a fight does not enjoy 8-stack amplifiers it has not built yet.
+    - Gas is a 10-slot single cloud against a lone target (§6 DoT table).
+    - Each DoT tick group carries a +1 flat accumulator (§5 M58):
+      ``tick = (Σ seeds + 1) × C × M`` — only Heat/Electricity/Gas share one
+      accumulator (they consolidate); Slash and Toxin carry one per stack.
+    - Pool transitions: when the overguard drains mid-window the remainder of
+      the window is amplified by *viral on health*, not magnetic — the
+      amplifiers are read at tick time, which is the live-pool rule (§6
+      snapshot-vs-live boundary).
+    - Heat ticks grow with the live armour strip (corrosive/heat) since armour
+      mitigation is a tick-time input (§6 boundary rule); Bleed stays armour-
+      blind (Cinematic).
+    """
+    target = target if isinstance(target, Mapping) else {}
+    rate = max(float(attacks_per_second), 0.0)
+    proc_rate = rate * max(float(status_rate_multiplier), 0.0)
+    damage_rate = rate * max(float(damage_rate_multiplier), 0.0)
+    window = max(float(window_seconds), 0.0)
+    step = min(max(float(time_step), 0.05), max(window, 0.05))
+    # 优化器热路径只需要 KPM/窗口伤害标量：跳过逐步 timeline 字典构造
+    # （每步 ~15 个 round() + dict），测量占窗口模型 ~30%。
+    emit_timeline = bool(collect_timeline)
+
+    # ── 触发源 emergent 模拟（wfsim BUFFS.md StackPolicy::Emergent）────────
+    # trigger_sources 由 app 层打包：每个源描述 {id, label, kind, perEvent,
+    # maxStacks, duration, decay}——on-kill/on-hit/on-crit 赋能、镀层 MOD、
+    # 灵化 on-kill 进化。emergent 时层数按事件率从零爬升（按 kill 率或
+    # 命中率），带 duration 衰减；assumed_max 恒满。每步层数写入 timeline
+    # 的 triggerStacks 字段，前端渲染覆盖率折线图。
+    trigger_specs: list[dict[str, Any]] = []
+    for raw in trigger_sources or ():
+        if not isinstance(raw, Mapping):
+            continue
+        trigger_specs.append({
+            "id": str(raw.get("id") or raw.get("path") or "?"),
+            "label": str(raw.get("label") or raw.get("nameZh") or raw.get("nameEn") or raw.get("id") or "?"),
+            "kind": str(raw.get("kind") or "on-kill"),
+            "perEvent": max(float(raw.get("perEvent") or 1.0), 0.0),
+            "maxStacks": max(float(raw.get("maxStacks") or 1.0), 1.0),
+            "duration": max(float(raw.get("duration") or 0.0), 0.0),
+            "decay": str(raw.get("decay") or "lose_one_and_reset"),
+            "currentStacks": 0.0,
+            "series": [] if collect_timeline else None,
+        })
+
+    # CO emergent 重算（wfsim M27：镀层 CO 在杀不动的高级靶上接近无效）。
+    # stats.damage_types 已按面板假定层数（victim_status_count）预乘 CO 乘区。
+    # 战斗口径下 CO 应读「当前时刻目标身上活着的异常类型数」——把 CO 从伤害
+    # 向量中剥离（按假定层数还原基伤乘区），每步按 live type count 重乘。
+    co_bucket = list(getattr(stats, "co_bucket", None) or [])
+    co_assumed = float(getattr(stats, "co_assumed_count", 0.0) or 0.0)
+    if co_bucket and co_assumed > 0:
+        assumed_scale = _combine(1.0, [_scale_effect(e, co_assumed) for e in co_bucket])
+        if assumed_scale > 1.0:
+            stats = replace(
+                stats,
+                damage_types={
+                    dtype: value / assumed_scale
+                    for dtype, value in stats.damage_types.items()
+                },
+                dot_base_damage=(
+                    stats.dot_base_damage / assumed_scale
+                    if stats.dot_base_damage is not None
+                    else None
+                ),
+            )
+
+    magazine = max(float(getattr(stats, "magazine", 0.0) or 0.0), 0.0)
+    first_shot_bonus = max(float(getattr(stats, "first_shot_damage_bonus", 0.0) or 0.0), 0.0)
+    if magazine > 0.0 and first_shot_bonus > 0.0 and damage_rate > 0.0:
+        damage_rate *= 1.0 + first_shot_bonus / magazine
+
+    target_kwargs = {
+        "level": level,
+        "armour_strip": armour_strip,
+        "steel_path": steel_path,
+        "enemy_enhancements": enemy_enhancements,
+    }
+    probe = expected_status_damage(
+        stats, target, forced_procs=forced_procs, **target_kwargs
+    )
+    procs = probe["expectedProcs"]
+    duration_scale = max(float(stats.proc_duration_multiplier), 0.0)
+
+    # Per-type stack specs: (duration seconds, in-game cap, tick-group shared?).
+    # NOTE heat: the cap below only bounds the armour-strip stack count (wiki:
+    # heat procs strip up to 50% armour via its own ramp) — heat's DoT tick
+    # damage is NOT capped this way: every heat proc both adds a layer AND
+    # refreshes every active layer's duration ("Heat Inherit", warframe wiki
+    # Heat Damage page, "Heat Inherit" section), so the tick damage grows
+    # linearly with the *cumulative* proc count while attacks keep landing
+    # (see heat_inherit tracking in the step loop).
+    stack_specs = {
+        "viral": ("DT_VIRAL", 6.0, 10.0, False),
+        "corrosive": ("DT_CORROSIVE", 8.0, 10.0, False),
+        "magnetic": ("DT_MAGNETIC", 6.0, 10.0, False),
+        "cold": ("DT_FREEZE", 6.0, 10.0, False),
+        "puncture": ("DT_PUNCTURE", 10.0, 5.0, False),
+        "heat": ("DT_FIRE", 6.0, 1.0, True),
+    }
+
+    # live_stacks 的窗口常量预展开：(key, ramp_rate=per_attack×proc_rate,
+    # 有效时长, cap)。每步循环直接读平铺元组，不查 dict/不乘 scale。
+    _live_stack_constants: list[tuple[str, float, float, float]] = [
+        (
+            key,
+            float(procs.get(_dtype) or 0.0) * proc_rate,
+            duration * duration_scale,
+            cap,
+        )
+        for key, (_dtype, duration, cap, _shared) in stack_specs.items()
+    ]
+
+    def vulnerability(count: float) -> float:
+        if count <= 0.0:
+            return 1.0
+        if count < 1.0:
+            return 1.0 + count
+        return min(2.0 + 0.25 * (count - 1.0), 4.25)
+
+    def live_stacks(elapsed: float) -> dict[str, float]:
+        """Stack levels alive at ``elapsed`` seconds from a zero start.
+
+        A proc at time u is alive at t while u + duration > t.  With a uniform
+        schedule at rate r the live count at t is r·min(t, duration) — capped
+        for stacking debuffs (replace-oldest) and uncapped for refresh-style
+        ones modelled through their caps anyway.
+
+        NOTE heat: the value returned here (capped by the spec above) feeds the
+        armour-strip / CO-type-count reads only.  Heat's DoT tick layers are
+        uncapped "Heat Inherit" accumulation tracked separately in the step
+        loop (see the heat_inherit state below).
+        """
+        # ── 性能：per_attack×proc_rate 与有效时长是窗口常量，预展开成
+        # 平铺序列；步循环百万次调用不再每步查 dict + 乘 duration_scale。
+        levels: dict[str, float] = {}
+        for key, ramp_rate, d, cap in _live_stack_constants:
+            if ramp_rate <= 0.0 or d <= 0.0:
+                levels[key] = 0.0
+                continue
+            levels[key] = min(ramp_rate * min(elapsed, d), cap)
+        return levels
+
+    def corrosive_strip_of(count: float) -> float:
+        return (
+            0.26 * count
+            if count < 1.0
+            else min(0.26 + 0.06 * (count - 1.0), 0.8)
+        )
+
+    # ── DoT per-type per-proc-second contributions (without pool/strip) ──────
+    # perSecond in the probe already folds coefficient × base × elemental ×
+    # crit × proc_damage × falloff × hit × target-static.  We need to re-derive
+    # the static target part out so live armour/pool can be applied per step;
+    # simpler: recompute the type payload from raw pieces here.
+    dot_payload: dict[str, dict[str, float]] = {}
+    for dtype, row in ((probe.get("dot") or {}).get("perType") or {}).items():
+        per_second_one = max(float(row.get("perSecond") or 0.0), 0.0)
+        duration = max(float(row.get("durationSeconds") or 0.0), 0.0) * duration_scale
+        expected_procs = max(float(row.get("expectedProcs") or 0.0), 0.0)
+        if per_second_one <= 0.0 or duration <= 0.0 or expected_procs <= 0.0:
+            continue
+        # Strip the static target multiplier that expected_dot_damage baked in
+        # (faction deltas / armour at t=0 / magnetic at t=0) by recomputing it
+        # from the row's own fields: perSecond included target_multiplier, so
+        # divide it back out using the row's recorded value.
+        static_target = max(float(row.get("targetMultiplier") or 1.0), 1e-9)
+        dot_payload[dtype] = {
+            "perSecondRaw": per_second_one / static_target,
+            "duration": duration,
+            "expectedProcs": expected_procs,
+            "sharedGroup": stack_specs.get(
+                "heat" if dtype == "DT_FIRE" else dtype.removeprefix("DT_").lower(),
+                (None, None, None, False),
+            )[3] if dtype in {"DT_FIRE"} else dtype in {"DT_ELECTRICITY", "DT_GAS"},
+        }
+
+    # +1 accumulator per *tick group* (Heat/Electricity/Gas consolidate; Slash
+    # and Toxin tick independently so each proc carries its own +1).  The +1
+    # rides the same coefficient × (elemental × proc_damage) shape as a seed of
+    # magnitude 1/coefficient of base — approximate it as one extra per-second
+    # unit of (coefficient × 1) since seeds sum before C×M (wfsim §5 M58).
+    dot_accumulator: dict[str, float] = {}
+    for dtype, payload in dot_payload.items():
+        coefficient = DOT_DAMAGE_COEFFICIENTS.get(dtype, 0.0)
+        # Element/proc-damage multipliers were baked into perSecondRaw's base;
+        # approximate the +1's own scaling by the same elemental/proc factors
+        # via the ratio perSecondRaw / (coefficient * dot_base_ref) is unsafe —
+        # instead carry it as perSecondRaw-per-seed + 1 raw damage per tick.
+        per_seed = payload["perSecondRaw"] / payload["expectedProcs"] if payload["expectedProcs"] > 0 else 0.0
+        payload["perSeed"] = per_seed
+        payload["flatPerTick"] = 1.0  # +1 accumulator (M58): raw flat per tick
+        dot_accumulator[dtype] = 1.0
+
+    # ── non-DoT procs ride the direct schedule ────────────────────────────────
+    non_dot_per_hit: dict[str, float] = {}
+    for dtype, row in ((probe.get("nonDot") or {}).get("perType") or {}).items():
+        static_target = max(float(row.get("targetMultiplier") or 1.0), 1e-9)
+        value = max(float(row.get("expectedDamage") or 0.0), 0.0)
+        if value > 0.0:
+            non_dot_per_hit[dtype] = value / static_target
+
+    defenses = enemy_defenses(target, **target_kwargs)
+    # defenses 快照供步循环的 fast-path damage_against_cached_armour 使用
+    # （跳过 60 万次 enemy_defenses 重算）。armour 每步由 live_armour 覆盖。
+    defenses_snapshot = dict(defenses)
+    # 目标派生常量缓存（hit/faction/bypass）：全窗口不变，算一次。
+    _target_cache = {
+        "hit_multiplier": 1.0,
+        "hit_critical_multiplier": 1.0,
+        "faction_deltas": _faction_damage_deltas(target),
+        "armour_bypass": _damage_type_set(
+            target.get("armourBypassDamageTypes"), DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES
+        ),
+        "shield_bypass": _damage_type_set(
+            target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
+        ),
+        "target_faction": str(target.get("faction") or ""),
+    }
+    _loc, _hm, _hcm, _hu, _hmd = _hit_location_info(target, None)
+    _target_cache["hit_multiplier"] = _hm
+    _target_cache["hit_critical_multiplier"] = _hcm
+    total_overguard = float(defenses.get("overguard") or 0.0)
+    total_shield = float(defenses.get("shield") or 0.0)
+    total_health = float(defenses.get("health") or 0.0)
+    shield_bypass = _damage_type_set(
+        target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
+    )
+    faction_deltas = _faction_damage_deltas(target)
+    armour_base = float(defenses.get("armour") or 0.0)
+    existing_magnetic = int((enemy_enhancements or {}).get("magneticStacks") or 0)
+
+    # Track pools as they drain across steps.
+    overguard_left = total_overguard
+    shield_left = total_shield
+    health_left = total_health
+    kills_count = 0
+    total_ehp_ref = total_overguard + total_shield + total_health
+    first_kill_time: float | None = None
+    last_kill_time: float | None = None
+    min_kill_interval: float | None = None
+    max_kills_per_step = 0
+    # Ramp clock: resets to zero on every kill (stacks live on the dead body;
+    # the fresh target starts with none — wfsim InstantRespawn semantics).
+    ramp_elapsed = 0.0
+
+    # ── Heat Inherit 状态（warframe wiki · Heat Damage · "Heat Inherit" 节）─
+    # 每个 heat proc 既加一层又刷新所有当前活跃层的持续时间（基础 6s ×
+    # 状态持续时间），所有层每秒合并为单一 tick：tick 伤害 = 已累积层数 ×
+    # 每层伤害。只要攻击不断档（6s 内持续刷新），层数 = 历史总 proc 数，
+    # tick 伤害随层数线性无限增长——没有固定 cap。断档（距最后一次 proc
+    # 超过有效时长）则全部层过期，从零重新累积。
+    # 注意口径区分：削甲用的 heat 活层（live_strip，上限 50%）仍走
+    # live_stacks 的 cap 口径；本状态只喂 DoT tick 伤害（cloud_procs）。
+    _heat_rate = float(procs.get("DT_FIRE") or 0.0) * proc_rate  # heat procs/s
+    _heat_duration = 6.0 * duration_scale
+    heat_inherit_total = 0.0  # 继承中的累计层数（断档/击杀清零）
+    heat_inherit_last = 0.0   # 最后一次 heat proc 的绝对时刻
+
+    direct_total = 0.0
+    dot_total = 0.0
+    non_dot_total = 0.0
+    # The stepped window remains the authoritative hybrid model for status/field
+    # damage, but direct attacks also get a real attack-instance ledger.  Keeping
+    # this next to the production window output makes the attack-count invariant
+    # observable at the optimizer entry point instead of only in helper tests.
+    # It is deliberately diagnostic until DoT/field events are scheduled against
+    # the same target-generation state machine.
+    direct_event_ledger: dict[str, Any] = {
+        "model": "direct-event-ledger-v1",
+        "status": "unavailable",
+        "componentModel": "none",
+        "limitations": [
+            "direct-only-diagnostic",
+            "continuous-dot-and-field-events-not-in-ledger",
+            "first-shot-and-dynamic-conditionals-not-in-ledger",
+        ],
+    }
+    if total_ehp_ref > 0.0 and rate > 0.0:
+        initial_direct = damage_against_cached_armour(
+            stats,
+            armour_base,
+            defenses_snapshot,
+            level=level,
+            steel_path=steel_path,
+            enemy_enhancements=enemy_enhancements,
+            target=target,
+            _target_cache=_target_cache,
+        )
+        per_shot = max(float(initial_direct.get("perShot") or 0.0), 0.0)
+        multishot = max(float(getattr(stats, "multishot", 1.0) or 1.0), 1.0)
+        rounded_multishot = int(round(multishot))
+        if (
+            rounded_multishot >= 1
+            and rounded_multishot <= 64
+            and abs(multishot - rounded_multishot) <= 1e-9
+        ):
+            pellet_damage = per_shot / rounded_multishot
+            components = [
+                (f"pellet-{index + 1}", pellet_damage * max(float(damage_rate_multiplier), 0.0))
+                for index in range(rounded_multishot)
+            ]
+            component_model = "integer-multishot-pellets"
+        else:
+            components = [
+                ("expected-shot", per_shot * max(float(damage_rate_multiplier), 0.0))
+            ]
+            component_model = "aggregated-expected-shot"
+        direct_event_ledger = direct_fire_ledger(
+            attacks_per_second=rate,
+            window_seconds=window,
+            target_ehp=total_ehp_ref,
+            component_damage=components,
+            collect_trace=emit_timeline,
+        )
+        direct_event_ledger.update(
+            {
+                "status": "diagnostic",
+                "componentModel": component_model,
+                "perShotDamage": per_shot,
+                "multishot": multishot,
+                "attackRateSource": "window-attacks-per-second",
+            }
+        )
+    timeline: list[dict[str, Any]] = []
+    averaged: dict[str, float] = {k: 0.0 for k in stack_specs}
+    steps = 0
+
+    # ── 步循环性能缓存（Boltor 89s → 目标 <20s）─────────────────────────
+    # 直伤每步的唯一输入是 (co_scale, pool, live_armour, cold_crit,
+    # puncture_crit)：全都不变时复用上一步的 damage_against_cached_armour
+    # 结果（数组/字典浅拷贝引用安全——下游只读）。cold/puncture 增量走
+    # crit 覆写参数，不再每步 replace() 重建整个 ModdedStats（4.5M 次
+    # dataclass 重建 → 0）。quantize 分母（dot_base_damage）也随 co_scale
+    # 缓存，避免重复量化。
+    _last_direct_key: tuple | None = None
+    _last_direct: dict[str, Any] | None = None
+    _last_crit_overrides: tuple[float, float] = (0.0, 0.0)
+    elapsed = 0.0
+    # CO scale 步间缓存（大多数步 co_scale 稳定后跳过 replace）。
+    _last_co_scale: list[float] = [-1.0]
+    _last_co_stats: list[Any] = [None]
+    while elapsed < window - 1e-9:
+        dt = min(step, window - elapsed)
+        steps += 1
+        levels = live_stacks(ramp_elapsed + dt * 0.5)  # midpoint sampling
+        # Advance the ramp clock with the step (a kill resets it above).
+        ramp_elapsed += dt
+
+        # ── Heat Inherit 层数推进（本步区间 [elapsed, elapsed+dt]）──────
+        # 步进语义（wiki Heat Damage · "Heat Inherit"）：本步 proc 速率 > 0
+        # → 视为持续刷新，累计层 += 速率×dt，并刷新「最后 proc 时刻」；速率
+        # == 0 且距最后 proc 超过有效时长（6s×状态持续时间）→ 断档，全部
+        # 继承层过期清零（清零后从下一次 proc 重新累积）。击杀清零在下方
+        # 泵池循环里（新目标不继承）。
+        if _heat_rate > 0.0:
+            heat_inherit_total += _heat_rate * dt
+            heat_inherit_last = elapsed + dt
+        elif (
+            heat_inherit_total > 0.0
+            and elapsed + dt - heat_inherit_last > _heat_duration
+        ):
+            heat_inherit_total = 0.0
+
+        # CO emergent：本步目标身上活着的异常「类型数」（wfsim §2 CO
+        # counting：distinct TYPES，含隐藏 Lifted/Knockdown；这里数建模
+        # 中的六类 + 非 DoT 触发类型，≥0.05 层视为在场）。
+        live_type_count = sum(
+            1 for value in levels.values() if value >= 0.05
+        ) + sum(
+            1
+            for dtype in non_dot_per_hit
+            if (procs.get(dtype) or 0.0) * proc_rate * min(ramp_elapsed, 6.0) >= 0.05
+        )
+        if co_bucket:
+            co_scale = _combine(1.0, [_scale_effect(e, live_type_count) for e in co_bucket])
+            # ── 性能：co_scale 与上一步相同（大多数步层数稳定后）时跳过
+            # replace。缓存的 _last_co_scale 初始为 -1 强制首步构建。
+            if co_scale != _last_co_scale[0]:
+                step_stats = replace(
+                    stats,
+                    damage_types={
+                        dtype: value * co_scale
+                        for dtype, value in stats.damage_types.items()
+                    },
+                    dot_base_damage=(
+                        stats.dot_base_damage * co_scale
+                        if stats.dot_base_damage is not None
+                        else None
+                    ),
+                )
+                _last_co_scale[0] = co_scale
+                _last_co_stats[0] = step_stats
+            else:
+                step_stats = _last_co_stats[0]
+        else:
+            step_stats = stats
+
+        # Live armour: base armour minus the corrosive/heat strip the stacks
+        # built so far (heat ticks grow as the strip deepens — live value).
+        live_strip = 1.0 - (
+            (1.0 - elemental_armour_strip)
+            * (1.0 - corrosive_strip_of(levels["corrosive"]))
+            * (1.0 - 0.5 * levels["heat"])
+        )
+        live_armour = armour_base * (1.0 - live_strip)
+
+        viral_mult = vulnerability(levels["viral"])
+        combined_magnetic = min(existing_magnetic + levels["magnetic"], 10.0)
+        magnetic_mult = vulnerability(combined_magnetic) / vulnerability(float(existing_magnetic))
+
+        # Pool state at this step.
+        if overguard_left > 0.0:
+            pool = "overguard"
+        elif shield_left > 0.0:
+            pool = "shield"
+        else:
+            pool = "health"
+
+        def step_pool_multiplier(dtype: str) -> float:
+            if pool == "overguard":
+                return magnetic_mult
+            if pool == "shield" and dtype not in shield_bypass:
+                return magnetic_mult
+            return viral_mult
+
+        def step_target_multiplier(dtype: str) -> float:
+            interaction = "DT_CINEMATIC" if dtype == "DT_SLASH" else dtype
+            value = max(0.0, 1.0 + faction_deltas.get(interaction, 0.0))
+            hits_health = pool != "shield" or interaction in shield_bypass
+            # Bleed (Cinematic) is armour-blind; heat/normal ticks read live armour.
+            if hits_health and live_armour > 0.0 and interaction not in (
+                "DT_CINEMATIC",
+            ):
+                value *= 1.0 - _armour_reduction(live_armour)
+            return value
+
+        # Cold/puncture crit adjustments at the current step.
+        # ── 性能：不再 replace() 整个 dataclass（39.5 万次 = 4.6s）——
+        # crit 增量作为覆写参数传给 fast-path，仅在缓存 miss 时使用。
+        cold_count = levels["cold"]
+        cold_crit = (
+            0.1 * cold_count
+            if cold_count < 1.0
+            else min(0.1 + 0.05 * (cold_count - 1.0), 0.5)
+        )
+        puncture_crit = min(0.05 * levels["puncture"], 0.25)
+        crit_overrides = (
+            puncture_crit if puncture_crit > 0.0 else 0.0,
+            cold_crit if cold_crit > 0.0 else 0.0,
+        )
+        # Live-pool per-shot direct damage: recompute the target interaction at
+        # the step's armour/pool.  damage_against on a synthesized record keeps
+        # level scaling identical (armour already level-scaled by defenses).
+        # ── 性能关键路径：damage_against 内部会完整重跑 enemy_defenses（等级
+        # 缩放/SP/eximus 全套），120 步 × ~5k 次评估 = 60 万次重复。改为步
+        # 循环前算一次「无护甲」的 defenses 快照（health/shield/overguard 等
+        # 常量），每步只重算护甲乘区（live_armour 已知）。
+        # ── 性能第二层：直伤的全部输入 (co_scale, pool, live_armour,
+        # crit_overrides) 稳定后（爬层期结束的绝大多数步）完全复用上一步
+        # 的结果——Boltor 场景 120 步里 ~95 步命中。
+        direct_key = (
+            _last_co_scale[0],
+            pool,
+            live_armour,
+            crit_overrides,
+        )
+        if direct_key == _last_direct_key and _last_direct is not None:
+            direct = _last_direct
+        else:
+            direct = damage_against_cached_armour(
+                step_stats,
+                live_armour,
+                defenses_snapshot,
+                level=level,
+                steel_path=steel_path,
+                enemy_enhancements=enemy_enhancements,
+                target=target,
+                _target_cache=_target_cache,
+                crit_chance_add=crit_overrides[0],
+                crit_multiplier_add=crit_overrides[1],
+            )
+            _last_direct_key = direct_key
+            _last_direct = direct
+        per_type = direct.get("perType") or {}
+        per_type_total = sum(float(v) for v in per_type.values()) or 1.0
+        weighted = sum(
+            float(v) * step_pool_multiplier(str(dt2)) for dt2, v in per_type.items()
+        )
+        step_direct = (
+            float(direct.get("perShot") or 0.0)
+            * (weighted / per_type_total)
+            * damage_rate
+            * dt
+        )
+
+        # DoT at this step: cloud mass alive = seeds applied within the last
+        # `duration` seconds × their payload, amplified by the live pool/strip.
+        step_dot = 0.0
+        for dtype, payload in dot_payload.items():
+            duration = payload["duration"]
+            # Cloud mass at t: expected procs whose age < duration.
+            window_alive = min(elapsed + dt, duration)
+            if window_alive <= 0.0:
+                continue
+            cloud_procs = payload["expectedProcs"] * proc_rate * window_alive
+            if dtype == "DT_GAS":
+                # Single-target cloud: one 10-slot cloud (see helper docstring).
+                cloud_procs = min(cloud_procs, 10.0 / max(payload["expectedProcs"], 1e-9) if payload["expectedProcs"] > 0 else 10.0)
+                cloud_procs = min(payload["expectedProcs"] * proc_rate * min(elapsed + dt, duration), 10.0)
+            elif dtype == "DT_FIRE":
+                # Heat Inherit（wiki Heat Damage · "Heat Inherit" 节）：每个
+                # heat proc 加一层并刷新所有活跃层——只要攻击不断档，tick 用
+                # 的层数是「历史累计 proc 数」而不是 6s 活窗口内的数量；断档
+                # 清零已在循环顶部的 heat_inherit 推进里处理。tick 伤害随
+                # 层数线性无限增长（无固定 cap）。
+                cloud_procs = heat_inherit_total
+            seed_payload = payload["perSeed"]
+            # +1 accumulator per tick group (consolidating) or per stack.
+            if payload.get("sharedGroup"):
+                accumulator = 1.0
+            else:
+                accumulator = cloud_procs  # each independent stack carries +1
+            interaction = "DT_CINEMATIC" if dtype == "DT_SLASH" else dtype
+            live_target = step_target_multiplier(dtype)
+            step_dot += (
+                (cloud_procs * seed_payload + accumulator * 1.0)
+                * step_pool_multiplier(interaction)
+                * live_target
+                * dt
+            )
+
+        # Non-DoT procs.
+        step_non_dot = 0.0
+        for dtype, value in non_dot_per_hit.items():
+            interaction = "DT_CINEMATIC" if dtype == "DT_SLASH" else dtype
+            step_non_dot += (
+                value
+                * damage_rate
+                * dt
+                * step_pool_multiplier(interaction)
+                * step_target_multiplier(interaction)
+            )
+
+        # ── 触发源层数推进（emergent）──────────────────────────────────
+        # on-kill 源按本步期望击杀数（步伤害 / 当前身体 EHP）获得层数；
+        # on-hit/on-crit 按命中率×攻速近似。带 duration 的衰减线性近似。
+        # 击杀时 lose_one_and_reset 掉一层并刷新计时。
+        _body_ehp = max(total_ehp_ref, 1e-9)
+        # This is an *expected event count*, not a boolean.  The previous
+        # ``min(..., 1.0)`` silently assumed that a 250 ms integration slice
+        # could contain at most one death, which made the reported KPM cap a
+        # property of our time grid rather than of the weapon/target fight.
+        _step_kill_expectation = max(
+            (step_direct + step_dot + step_non_dot) / _body_ehp, 0.0
+        )
+        for spec in trigger_specs:
+            kind = spec["kind"]
+            if kind == "on-kill":
+                event_rate = _step_kill_expectation
+            elif kind in ("on-hit", "on-crit"):
+                event_rate = damage_rate * dt
+            else:
+                event_rate = 0.0
+            gained = event_rate * spec["perEvent"]
+            spec["currentStacks"] = min(spec["currentStacks"] + gained, spec["maxStacks"])
+            if spec["duration"] > 0 and dt > 0:
+                decay_fraction = min(dt / spec["duration"], 1.0)
+                spec["currentStacks"] = max(spec["currentStacks"] * (1.0 - decay_fraction), 0.0)
+            if spec["series"] is not None:
+                spec["series"].append(round(spec["currentStacks"], 3))
+
+        # Drain pools with a continuous event-time loop.  KPM semantics: the
+        # target RESPAWNS at the exact death instant (wfsim's
+        # TargetMode::InstantRespawn).  A segment only consumes the damage
+        # delivered before that instant; any remaining time is evaluated
+        # against the fresh target.  Thus overkill never leaks into a corpse or
+        # a second target, while a genuinely very high sustained rate can
+        # produce more than one kill inside a coarse integration slice.
+        step_damage = step_direct + step_dot + step_non_dot
+        kill_in_step = False
+        step_kills = 0
+        if dt > 0.0 and step_damage > 1e-9 and total_ehp_ref > 0.0:
+            direct_rate = step_direct / dt
+            dot_rate = step_dot / dt
+            non_dot_rate = step_non_dot / dt
+            total_rate = direct_rate + dot_rate + non_dot_rate
+            remaining_time = dt
+            time_since_kill = ramp_elapsed
+            # A bounded guard protects against a malformed zero-EHP target or
+            # floating-point no-progress loop without imposing a gameplay kill
+            # cap.  The guard is deliberately proportional to the maximum
+            # physically possible number of EHP crossings in this slice.
+            guard = 0
+            while remaining_time > 1e-12 and total_rate > 1e-12:
+                guard += 1
+                if guard > 100000:
+                    break
+                current_ehp = max(
+                    overguard_left + shield_left + health_left, 0.0
+                )
+                if current_ehp <= 1e-12:
+                    # Defensive fallback for a zero-width pool transition.
+                    kills_count += 1
+                    kill_in_step = True
+                    step_kills += 1
+                    kill_time = elapsed + (dt - remaining_time)
+                    if first_kill_time is None:
+                        first_kill_time = kill_time
+                    if last_kill_time is not None:
+                        interval = kill_time - last_kill_time
+                        min_kill_interval = (
+                            interval
+                            if min_kill_interval is None
+                            else min(min_kill_interval, interval)
+                        )
+                    last_kill_time = kill_time
+                    overguard_left = total_overguard
+                    shield_left = total_shield
+                    health_left = total_health
+                    time_since_kill = 0.0
+                    heat_inherit_total = 0.0
+                    heat_inherit_last = 0.0
+                    continue
+                time_to_kill = current_ehp / total_rate
+                consumed = min(remaining_time, time_to_kill)
+                if consumed <= 1e-12:
+                    break
+                chunk_direct = direct_rate * consumed
+                chunk_dot = dot_rate * consumed
+                chunk_non_dot = non_dot_rate * consumed
+                chunk_damage = chunk_direct + chunk_dot + chunk_non_dot
+
+                # Damage settles once on the current target's ordered pools.
+                # Since consumed <= time_to_kill, this chunk cannot carry
+                # overkill into the next target.
+                left = chunk_damage
+                if overguard_left > 0.0:
+                    drained = min(overguard_left, left)
+                    overguard_left -= drained
+                    left -= drained
+                if left > 0.0 and shield_left > 0.0:
+                    drained = min(shield_left, left)
+                    shield_left -= drained
+                    left -= drained
+                if left > 0.0 and health_left > 0.0:
+                    drained = min(health_left, left)
+                    health_left -= drained
+                    left -= drained
+
+                direct_total += chunk_direct
+                dot_total += chunk_dot
+                non_dot_total += chunk_non_dot
+                remaining_time -= consumed
+                time_since_kill += consumed
+
+                # A death at the segment boundary respawns immediately.  The
+                # next loop iteration receives only the remaining time, not
+                # the previous segment's overkill.
+                if time_to_kill <= consumed + 1e-10 and (
+                    overguard_left + shield_left + health_left <= 1e-7
+                ):
+                    kills_count += 1
+                    kill_in_step = True
+                    step_kills += 1
+                    kill_time = elapsed + (dt - remaining_time)
+                    if first_kill_time is None:
+                        first_kill_time = kill_time
+                    if last_kill_time is not None:
+                        interval = kill_time - last_kill_time
+                        min_kill_interval = (
+                            interval
+                            if min_kill_interval is None
+                            else min(min_kill_interval, interval)
+                        )
+                    last_kill_time = kill_time
+                    overguard_left = total_overguard
+                    shield_left = total_shield
+                    health_left = total_health
+                    time_since_kill = 0.0
+                    heat_inherit_total = 0.0
+                    heat_inherit_last = 0.0
+            if kill_in_step:
+                # Preserve the time elapsed since the most recent respawn for
+                # the next integration slice.  This keeps the ramp clock and
+                # Heat Inherit state aligned with the event boundary.
+                ramp_elapsed = time_since_kill
+                if _heat_rate > 0.0 and time_since_kill > 0.0:
+                    heat_inherit_total = _heat_rate * time_since_kill
+                    heat_inherit_last = elapsed + dt
+        else:
+            direct_total += step_direct
+            dot_total += step_dot
+            non_dot_total += step_non_dot
+        max_kills_per_step = max(max_kills_per_step, step_kills)
+
+        for k, v in levels.items():
+            averaged[k] += v * dt
+        if emit_timeline:
+            timeline.append({
+                "time": round(elapsed + dt, 4),
+                "pool": pool,
+                "overguard": round(overguard_left, 2),
+                "shield": round(shield_left, 2),
+                "health": round(health_left, 2),
+                "stacks": {k: round(v, 2) for k, v in levels.items()},
+                "triggerStacks": {
+                    spec["id"]: round(spec["currentStacks"], 2) for spec in trigger_specs
+                } if trigger_specs else None,
+                "directDps": round(step_direct / dt, 2) if dt > 0 else 0.0,
+                "dotDps": round(step_dot / dt, 2) if dt > 0 else 0.0,
+                "stepDamage": round(step_direct + step_dot + step_non_dot, 2),
+            })
+        elapsed += dt
+
+    if window > 0.0:
+        for k in averaged:
+            averaged[k] /= window
+
+    total_window = direct_total + dot_total + non_dot_total
+    total_ehp = total_overguard + total_shield + total_health
+    # Kill score (wfsim UI.md): whole kills plus the fraction of the CURRENT
+    # body's pools already drained — grows with the engagement, reported as a
+    # per-minute rate (KPM) so different durations stay comparable.
+    if total_ehp > 0.0:
+        current_body_drained = (
+            (total_overguard - overguard_left)
+            + (total_shield - shield_left)
+            + (total_health - health_left)
+        ) / total_ehp
+        kills_in_window = kills_count + min(current_body_drained, 1.0)
+    else:
+        kills_in_window = 0.0
+    steady_counts = {
+        key: min(
+            max(float(procs.get(dtype) or 0.0) * proc_rate * duration * duration_scale, 0.0),
+            cap,
+        )
+        for key, (dtype, duration, cap, _shared) in stack_specs.items()
+    }
+
+    return {
+        "model": "windowed-stepped",
+        "windowSeconds": window,
+        "timeStep": step,
+        "attacksPerSecond": rate,
+        "statusEventsPerSecond": proc_rate,
+        "averagedStacks": averaged,
+        "steadyStacks": steady_counts,
+        # emergent 口径状态：CO（对触发目标增伤）已按每步活异常类型数重算；
+        # 触发源（赋能/镀层/灵化 on-kill）按 trigger_sources 参数模拟爬升。
+        "emergent": {
+            "conditionOverload": "per-step-live-types",
+            "onKillStacks": "trigger-sources-simulated" if trigger_specs else "panel-assumed-max",
+        },
+        # 触发源层数折线（前端覆盖率图）：每个源的 per-step 层数序列。
+        "triggerSeries": [
+            {
+                "id": spec["id"],
+                "label": spec["label"],
+                "kind": spec["kind"],
+                "maxStacks": spec["maxStacks"],
+                "series": spec["series"],
+                "avgStacks": sum(spec["series"]) / len(spec["series"]) if spec["series"] else 0.0,
+                "uptime": (
+                    sum(1 for v in spec["series"] if v >= 1.0) / len(spec["series"])
+                    if spec["series"]
+                    else 0.0
+                ),
+            }
+            for spec in trigger_specs
+        ],
+        "activePool": "overguard" if total_overguard > 0 else ("shield" if total_shield > 0 else "health"),
+        "directWindow": direct_total,
+        "dotWindow": dot_total,
+        "nonDotWindow": non_dot_total,
+        "totalWindowDamage": total_window,
+        "windowDps": total_window / window if window > 0.0 else 0.0,
+        "targetTotalEhp": total_ehp,
+        "killsInWindow": kills_in_window,
+        "killsPerMinute": kills_in_window * (60.0 / window) if window > 0.0 else 0.0,
+        "killEvents": kills_count,
+        "firstKillTime": first_kill_time,
+        "minKillInterval": min_kill_interval,
+        "maxKillsPerStep": max_kills_per_step,
+        "continuousKillEvents": True,
+        "eventModel": "hybrid-stepped-with-direct-ledger-diagnostic",
+        "directEventLedger": direct_event_ledger,
+        "timeline": timeline,
+        "perAttack": probe,
+        "unsupported": sorted(set(probe.get("unsupported") or ())),
     }
 
 

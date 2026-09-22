@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "buildLabel": "2026.08.13.13.24",
+  "mods": {
+    "/Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod": {
+      "mechanicId": "latron-double-tap",
+      "status": "event-unmodeled",
+      "kind": "hit-stacking-next-shot-multiplier",
+      "maxRank": 3,
+      "stacking": {
+        "perHitMultiplier": 0.2,
+        "maxStacks": 20,
+        "durationSeconds": 2.0,
+        "resetOnMiss": true
+      },
+      "modeRules": {
+        "baseDirect": "applies",
+        "incarnonDirect": "not-verified",
+        "incarnonRadial": "applies"
+      },
+      "notes": [
+        "Requires an event ledger: successful hit, multishot/pellet stack order, miss reset, reload window.",
+        "Do not approximate as unconditional WEAPON_DAMAGE_AMOUNT.",
+        "Incarnon direct/radial split is intentionally fail-closed until golden tests are available."
+      ],
+      "sources": [
+        "https://warframe.fandom.com/wiki/Double_Tap",
+        "https://github.com/magenie33/wfsim"
+      ]
+    }
+  },
+  "weapons": {
+    "/Lotus/Weapons/ClanTech/Bio/BioWeapon": {
+      "mechanicIds": ["torid-projectile-field"],
+      "status": "partial-event-model",
+      "parts": {
+        "direct": "modeled-from-export",
+        "field": "missing-from-compact-export"
+      },
+      "fieldShareReference": 0.78,
+      "notes": [
+        "The compact weapon export contains the projectile/direct poison hit but not the lingering field lifecycle.",
+        "Do not multiply the direct hit by a fixed compensation factor; field creation, tick cadence and target lifetime require events."
+      ],
+      "sources": ["https://github.com/magenie33/wfsim"]
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG": {
+      "mechanicIds": ["opticor-radial"],
+      "status": "partial-event-model",
+      "parts": {
+        "direct": "modeled-from-export",
+        "radial": "missing-from-compact-export"
+      },
+      "radialShareReference": 0.32,
+      "notes": [
+        "The compact weapon export does not carry the radial explosion component for the normal shot."
+      ],
+      "sources": ["https://github.com/magenie33/wfsim"]
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG": {
+      "mechanicIds": ["opticor-radial"],
+      "status": "partial-event-model",
+      "parts": {
+        "direct": "modeled-from-export",
+        "radial": "missing-from-compact-export"
+      },
+      "radialShareReference": 0.32,
+      "notes": [
+        "The compact weapon export does not carry the radial explosion component for the normal shot."
+      ],
+      "sources": ["https://github.com/magenie33/wfsim"]
+    },
+    "/Lotus/Weapons/Tenno/Rifle/LatronPrime": {
+      "mechanicIds": ["latron-double-tap"],
+      "incarnonDirectReceivesDoubleTap": false,
+      "incarnonRadialReceivesDoubleTap": true,
+      "status": "partial-event-model"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron": {
+      "mechanicIds": ["latron-double-tap"],
+      "incarnonDirectReceivesDoubleTap": false,
+      "incarnonRadialReceivesDoubleTap": true,
+      "status": "partial-event-model"
+    }
+  }
+}

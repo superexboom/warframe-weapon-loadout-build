@@ -232,7 +232,13 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .stat-rows { display: flex; flex-direction: column; gap: 7px; }
 .stat-row { padding: 8px 9px 9px; border: 1px solid var(--line-soft); background: #0d1117; transition: border-color .15s ease, background .15s ease; }
 .stat-row:focus-within { border-color: rgba(115,207,223,.38); background: #10151c; }
-.stat-row-head { display: grid; grid-template-columns: 32px minmax(0, 1fr) 108px 28px; align-items: center; gap: 7px; }
+.stat-row-head { display: grid; grid-template-columns: 32px minmax(0, 1fr) 108px 56px 28px; align-items: center; gap: 7px; }
+/* 词条中位指示器：相对当前范围中点的高/低百分比；高于中位（正向更好）绿、
+   低于红，负词条反向；±0.5% 内视为中位不显示。 */
+.stat-median-indicator { display: inline-flex; min-width: 0; height: 24px; align-items: center; justify-content: center; padding: 0 5px; border: 1px solid transparent; border-radius: 3px; color: var(--muted); font-size: 9px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stat-median-indicator[hidden] { display: none; }
+.stat-median-indicator.is-better { border-color: rgba(104,212,170,.4); color: var(--success); background: rgba(104,212,170,.08); }
+.stat-median-indicator.is-worse { border-color: rgba(239,113,131,.4); color: var(--danger); background: rgba(239,113,131,.08); }
 .sign-toggle { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid rgba(104,212,170,.35); border-radius: 3px; color: var(--success); background: rgba(104,212,170,.07); font-size: 17px; }
 .sign-toggle.is-negative { border-color: rgba(239,113,131,.35); color: var(--danger); background: rgba(239,113,131,.07); }
 .stat-row label { min-width: 0; }
@@ -259,6 +265,8 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .submit-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 18px 17px; border-top: 1px solid var(--line-soft); background: rgba(0,0,0,.12); }
 .calculation-note { display: flex; max-width: 235px; align-items: flex-start; gap: 6px; color: var(--muted-dark); font-size: 9px; }
 .calculation-note > span:first-child { color: var(--ice); }
+.profile-inline { display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; font-size: 10px; color: var(--muted); }
+.profile-inline select { min-height: 24px; padding: 2px 6px; border: 1px solid var(--line); border-radius: 4px; background: rgba(0,0,0,.3); color: var(--text); font-size: 10px; cursor: pointer; }
 .button-primary { min-width: 120px; min-height: 39px; border-color: rgba(181,128,225,.6); color: #fff; background: #7543a0; font-weight: 650; }
 .button-primary:not(:disabled):hover { border-color: var(--riven-bright); background: #8954b3; }
 .button-loading { display: none; align-items: center; gap: 7px; }
@@ -312,6 +320,7 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .score-metrics > div + div { border-left: 1px solid var(--line-soft); }
 .score-metrics span { display: block; color: var(--muted); font-size: 9px; }
 .score-metrics strong { display: block; overflow: hidden; margin-top: 3px; color: var(--text-soft); font-size: 14px; font-weight: 620; text-overflow: ellipsis; white-space: nowrap; }
+.score-context-note { grid-column: 1 / -1; margin: 8px 0 0; color: var(--muted); font-size: 11px; letter-spacing: .02em; }
 
 .result-section { padding: 21px 22px 23px; border-bottom: 1px solid var(--line-soft); }
 .result-section-title { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
@@ -367,6 +376,13 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .build-identity span { color: var(--muted-dark); font-size: 8px; }
 .build-identity strong { overflow: hidden; margin-top: 2px; color: var(--text-soft); font-size: 12px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .build-identity > div:first-child strong { color: var(--orokin); font-size: 15px; }
+/* 灵化路线徽标行：进化 N-分支 的形式标注本次解算基准（同武器不同路线差异巨大） */
+.analysis-incarnon-route { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 10px 16px 0; }
+.analysis-incarnon-route[hidden] { display: none; }
+.incarnon-route-head { color: var(--muted-dark); font-size: 9px; letter-spacing: .08em; }
+.incarnon-route-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border: 1px solid rgba(181,128,225,.4); border-radius: 3px; background: rgba(181,128,225,.07); }
+.incarnon-route-chip b { color: var(--riven-bright); font-size: 10px; font-weight: 700; }
+.incarnon-route-chip i { overflow: hidden; max-width: 180px; color: var(--muted); font-size: 9px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
 .damage-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); margin: 14px 16px 0; border: 1px solid var(--line-soft); background: rgba(7,9,13,.75); }
 .damage-metric { min-width: 0; padding: 11px 13px; }
 .damage-metric + .damage-metric { border-left: 1px solid var(--line-soft); }
@@ -591,6 +607,12 @@ button.fire-mode-item:hover, button.fire-mode-item:focus-visible { background: r
 .mod-slot:not(.is-compact) .game-mod-card:hover, .game-mod-card.is-expanded { height: 260px; transition: height .18s ease, transform .18s ease; }
 .game-mod-card.is-expanded { transform: scale(1.1); }
 .mod-slot:not(.is-compact) .game-mod-card:hover { transform: translateY(-85px) scale(1.1); }
+/* 拖拽进行中：冻结所有卡面悬停展开与倾斜（保留被拖源卡的虚线框）。
+   展开中的镀层卡 pointer-events:auto 会遮住上方槽位的命中区，导致
+   drop 高亮落错槽、松手后展开态残留；拖拽期间统一收起即可。 */
+body.is-mod-dragging .mod-slot:not(.is-compact) .game-mod-card:hover { height: 90px; transform: none; }
+body.is-mod-dragging .game-mod-card { pointer-events: none !important; }
+body.is-mod-dragging .mod-tilt { transform: none !important; }
 /* 例外：浮出预览弹窗里的卡也包在 .mod-slot 里且常挂 is-expanded——它是自由定位
    弹窗，悬停自身时绝不能参与位移，否则鼠标一挪上去整张卡会上跳 85px。 */
 .mod-preview-pop .mod-slot:not(.is-compact) .game-mod-card:hover { transform: scale(1.1); }
@@ -644,6 +666,28 @@ button.fire-mode-item:hover, button.fire-mode-item:focus-visible { background: r
 .segmented-control button { min-height: 26px; padding: 0 11px; border: 0; color: var(--muted); background: transparent; cursor: pointer; font-size: 10px; border-radius: 3px; transition: color .15s ease, background .15s ease; }
 .segmented-control button.is-active { color: #081015; background: var(--ice); }
 .incarnon-panel { border: 0; background: transparent; }
+/* 「限制」折叠面板（wfsim 优化器 scope 模型）：档位/数量范围/必选禁选 */
+.scope-panel .fold-body { display: grid; gap: 12px; }
+.fill-range-row { display: flex; align-items: center; gap: 8px; }
+.fill-range-row input { width: 52px; min-height: 26px; padding: 0 7px; border: 1px solid var(--line); border-radius: 4px; background: rgba(0,0,0,.3); color: var(--text); font-size: 11px; text-align: center; }
+.fill-range-row input:focus { border-color: var(--ice); outline: none; }
+.fill-range-row span { color: var(--muted); }
+.scope-panel .check-field { align-items: flex-start; white-space: normal; line-height: 1.5; }
+.scope-mod-lists { display: grid; gap: 8px; }
+.scope-mod-list { display: flex; flex-wrap: wrap; gap: 5px; min-height: 4px; }
+.scope-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 7px; border-radius: 3px; font-size: 10px; border: 1px solid var(--line); background: rgba(0,0,0,.22); color: var(--text-soft); }
+.scope-chip button { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 11px; padding: 0 1px; }
+.scope-chip button:hover { color: var(--danger); }
+.scope-chip.is-required { border-color: rgba(104,206,95,.55); background: rgba(104,206,95,.10); }
+.scope-chip.is-forbidden { border-color: rgba(224,118,134,.5); background: rgba(224,118,134,.10); }
+.scope-hint { margin: 0; color: var(--muted-dark); font-size: 9px; line-height: 1.6; }
+.scope-empty { color: var(--muted-dark); font-size: 10px; font-style: normal; }
+/* 右键/长按的必选禁选菜单 */
+.scope-context-menu { position: fixed; z-index: 220; display: grid; min-width: 150px; padding: 4px; border: 1px solid var(--line); border-radius: 4px; background: #0d1117; box-shadow: 0 8px 24px rgba(0,0,0,.5); }
+.scope-context-menu button { display: block; width: 100%; min-height: 30px; padding: 4px 10px; border: 0; border-radius: 3px; background: none; color: var(--text-soft); font-size: 11px; text-align: left; cursor: pointer; }
+.scope-context-menu button:hover { background: rgba(115,207,223,.12); }
+.manual-mod-option.is-scope-required { outline: 1px solid rgba(104,206,95,.65); outline-offset: -1px; }
+.manual-mod-option.is-scope-forbidden { outline: 1px solid rgba(224,118,134,.65); outline-offset: -1px; opacity: .75; }
 .mod-picker-grid.is-arcane-list { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px; }
 .arcane-option { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 8px 11px; border: 1px solid var(--line-soft); border-left: 2px solid var(--orokin); border-radius: 4px; color: var(--text-soft); background: rgba(0,0,0,.18); cursor: pointer; text-align: left; transition: border-color .15s ease, background .15s ease; }
 .arcane-option:hover { border-color: rgba(115,207,223,.5); background: rgba(115,207,223,.08); }
@@ -751,7 +795,10 @@ i.empty-slot-polarity { font-size: 13px; font-style: normal; line-height: 16px; 
 .external-buff-value { color: var(--orokin); font-size: 11px; font-variant-numeric: tabular-nums; text-align: right; }
 .build-config-actions { display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: 10px; }
 .config-action-menu { position: relative; }
-.config-action-menu::after { content: ""; position: absolute; z-index: 54; top: 100%; right: 0; width: 154px; height: 8px; }
+/* 悬停桥只盖住触发器自身宽度（下拉右对齐且更宽，正下方路径必然进入下拉）。
+   绝不能做成 154px 下拉宽：导出菜单的桥会盖到左边导入菜单的下拉上方，
+   悬停导入时鼠标掠过导出的隐形桥 → 导出下拉再次打开且盖住导入的下拉。 */
+.config-action-menu::after { content: ""; position: absolute; z-index: 54; top: 100%; right: 0; width: 100%; height: 8px; }
 .config-action-trigger { display: inline-flex; align-items: center; gap: 5px; }
 .config-action-trigger span { color: var(--muted-dark); font-size: 10px; }
 .config-action-options { position: absolute; z-index: 55; top: calc(100% + 6px); right: 0; display: none; min-width: 154px; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: #0d1219; box-shadow: 0 14px 34px rgba(0,0,0,.5); }
@@ -880,6 +927,11 @@ i.empty-slot-polarity { font-size: 13px; font-style: normal; line-height: 16px; 
 .special-slot-controls button:disabled, .arcane-slot-controls button:disabled { opacity: .35; cursor: default; }
 .special-slot-remove, .arcane-slot-remove { margin-left: auto; color: var(--riven-bright) !important; }
 .arcane-workbench-slots { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+/* 赋能槽贡献徽章：左上角胶囊（与 MOD 卡同语言），不拉伸 */
+.arcane-workbench-slot { position: relative; }
+.arcane-workbench-slot .arcane-gain-badge { position: absolute; z-index: 5; top: 6px; left: 8px; padding: 0 7px; color: #68ce5f; font-size: 11px; font-weight: 700; line-height: 15px; pointer-events: none; white-space: nowrap; }
+.arcane-workbench-slot .arcane-gain-badge.is-negative { color: #f73533; }
+.arcane-workbench-slot .arcane-gain-badge::after { position: absolute; z-index: -1; top: 0; right: 0; width: 100%; height: 15px; border: 1px solid currentColor; border-radius: 7.5px; background: rgba(0,0,0,.6); content: ""; }
 .arcane-workbench-slot { display: grid; min-width: 0; min-height: 132px; grid-template-columns: 160px minmax(0,1fr); grid-template-rows: minmax(90px,auto) auto; align-items: center; gap: 8px 10px; padding: 9px; border: 1px solid var(--line-soft); border-radius: 6px; color: var(--text-soft); background: rgba(8,11,16,.72); cursor: pointer; transition: border-color .15s ease,background .15s ease; }
 .arcane-workbench-slot:hover, .arcane-workbench-slot:focus-visible { border-color: rgba(229,207,145,.55); outline: 0; background: rgba(229,207,145,.05); }
 .arcane-slot-visual { position: relative; width: 160px; height: 90px; place-self: start center; }
@@ -959,7 +1011,11 @@ body.is-modal-open { overflow: hidden; }
 .mod-picker-grid { display: grid; grid-template-columns: repeat(5, 184px); justify-content: center; gap: 12px; padding: 14px 18px 16px; overflow-y: auto; align-content: start; }
 .mod-picker-grid.is-list { grid-template-columns: 1fr; gap: 6px; }
 .mod-picker-grid.is-weapon-list { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; }
-.weapon-option { display: block; min-width: 0; padding: 8px 11px; border: 1px solid var(--line-soft); border-left: 2px solid var(--ice); border-radius: 4px; color: var(--text-soft); background: rgba(0,0,0,.18); cursor: pointer; text-align: left; transition: border-color .15s ease, background .15s ease; }
+/* 武器选择器选项：仿战甲选择器——左缩略图 + 右信息列 */
+.weapon-option { display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 2px 10px; align-items: center; min-width: 0; padding: 9px 12px; border: 1px solid var(--line-soft); border-left: 2px solid var(--ice); border-radius: 5px; color: var(--text-soft); background: rgba(0,0,0,.18); cursor: pointer; text-align: left; transition: border-color .15s ease, background .15s ease; }
+.weapon-thumb { grid-row: 1 / -1; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 5px; background: linear-gradient(135deg, rgba(148,163,184,.12), rgba(148,163,184,.05)); overflow: hidden; }
+.weapon-thumb img { width: 40px; height: 40px; object-fit: contain; }
+.weapon-thumb-placeholder { width: 28px; height: 28px; border-radius: 4px; opacity: .5; }
 .weapon-option:hover { border-color: rgba(115,207,223,.5); background: rgba(115,207,223,.08); }
 .weapon-option.is-selected { border-color: var(--ice); background: rgba(115,207,223,.14); }
 .weapon-option:disabled { opacity: .45; cursor: not-allowed; }
@@ -988,6 +1044,30 @@ body.is-modal-open { overflow: hidden; }
 .riven-builder-actions { display: flex; align-items: center; gap: 10px; }
 .riven-builder-actions .button-primary { min-height: 34px; }
 .riven-builder-hint { margin-left: auto; color: var(--muted-dark); font-size: 9px; }
+/* ── 最优紫卡求解（预算驱动 top-10）────────────────────────────────── */
+.riven-solve { display: flex; align-items: center; gap: 6px; }
+.riven-solve-budget { height: 30px; padding: 0 6px; border: 1px solid var(--line); border-radius: 3px; background: #141922; color: var(--text); font-size: 11px; }
+[data-theme="light"] .riven-solve-budget { background: #f4f6f9; color: #24292f; border-color: #d0d7de; }
+.riven-solve-results { display: grid; gap: 8px; }
+.riven-solve-progress, .riven-solve-error { color: var(--muted); font-size: 11px; padding: 8px; border: 1px dashed var(--line-soft); }
+.riven-solve-error { color: var(--danger); }
+.riven-solve-head { display: flex; align-items: baseline; gap: 8px; }
+.riven-solve-head strong { color: var(--riven-bright); font-size: 12px; }
+.riven-solve-head small { color: var(--muted); font-size: 9px; }
+.riven-solve-list { display: grid; gap: 6px; max-height: 300px; overflow-y: auto; }
+.riven-solve-row { display: grid; grid-template-columns: 26px 1fr auto; align-items: center; gap: 10px; padding: 7px 9px; border: 1px solid var(--line-soft); background: rgba(0,0,0,.18); cursor: pointer; text-align: left; }
+.riven-solve-row:hover { border-color: rgba(115,207,223,.5); background: rgba(115,207,223,.06); }
+.riven-solve-row.is-top { border-color: rgba(104,212,170,.45); }
+.riven-solve-rank { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.riven-solve-row.is-top .riven-solve-rank { color: var(--success); font-weight: 700; }
+.riven-solve-stats { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.riven-solve-stats em { font-style: normal; font-size: 11px; color: var(--text-soft); }
+.riven-solve-stats em.is-negative { color: var(--danger); }
+.riven-solve-score { display: grid; gap: 1px; text-align: right; }
+.riven-solve-score b { font-size: 12px; color: var(--riven-bright); font-variant-numeric: tabular-nums; }
+.riven-solve-score i { font-style: normal; font-size: 10px; font-variant-numeric: tabular-nums; }
+.riven-solve-score i.is-positive { color: var(--success); }
+.riven-solve-score i.is-negative { color: var(--danger); }
 .mod-effect-line.is-negative { color: #efc9ed; }
 
 .manual-mod-option { display: block; min-width: 0; border: 1px solid transparent; border-radius: 6px; color: var(--text-soft); background: transparent; cursor: pointer; text-align: left; transition: border-color .15s ease, background .15s ease, transform .15s ease, box-shadow .15s ease; position: relative; }
@@ -1061,7 +1141,18 @@ body.is-modal-open { overflow: hidden; }
 .enemy-factions button.is-active { border-color: var(--ice); color: #081015; background: var(--ice); }
 .enemy-picker-filterbar { align-items: center; }
 .enemy-picker-count { margin-left: auto; color: var(--muted); font-size: 9px; white-space: nowrap; }
-.enemy-option { display: grid; gap: 3px; min-width: 0; padding: 9px 10px; border: 1px solid var(--line-soft); border-radius: 4px; color: var(--text-soft); background: rgba(0,0,0,.18); cursor: pointer; text-align: left; }
+/* 敌人选择器选项：仿战甲选择器——左缩略图槽（占位色块）+ 右信息列，整体放大 */
+.enemy-option { display: grid; grid-template-columns: 44px minmax(0,1fr); grid-template-rows: auto auto auto; gap: 2px 10px; align-items: center; min-width: 0; padding: 10px 12px; border: 1px solid var(--line-soft); border-radius: 5px; color: var(--text-soft); background: rgba(0,0,0,.18); cursor: pointer; text-align: left; transition: border-color .15s ease, background .15s ease; }
+.enemy-option:hover { border-color: rgba(115,207,223,.5); background: rgba(115,207,223,.06); }
+.enemy-option.is-selected { border-color: var(--ice); background: rgba(115,207,223,.1); }
+.enemy-thumb { grid-row: 1 / -1; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 5px; background: linear-gradient(135deg, rgba(148,163,184,.12), rgba(148,163,184,.05)); overflow: hidden; }
+.enemy-thumb img { width: 40px; height: 40px; object-fit: contain; }
+.enemy-thumb .enemy-thumb-placeholder { width: 28px; height: 28px; border-radius: 4px; opacity: .5; }
+.enemy-option strong { font-size: 12px; line-height: 1.3; }
+.enemy-option > span { font-size: 10px; color: var(--muted); }
+.enemy-option-info { display: grid; gap: 2px; min-width: 0; }
+.enemy-special-notes, .enemy-missing-badge { grid-column: 2; }
+.enemy-option .enemy-special-notes { grid-column: 2; grid-row: auto; }
 .enemy-option:hover, .enemy-option.is-selected { border-color: var(--ice); background: rgba(115,207,223,.1); }
 .enemy-option strong { overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
 .enemy-option span { color: var(--muted); font-size: 8px; }
@@ -1109,6 +1200,9 @@ body.is-modal-open { overflow: hidden; }
 .enemy-missing-toggle b { font-weight: 600; }
 .enemy-missing-toggle.is-active { border-style: solid; border-color: #d6a16d; color: #081015; background: #d6a16d; }
 .enemy-missing-badge { display: inline-block; width: fit-content; padding: 1px 6px; border: 1px solid rgba(214,161,109,.55); border-radius: 8px; color: #d6a16d; font-size: 8px; font-style: normal; }
+/* 敌人特殊机制标注（天生超宏/伤害衰减/异常免疫） */
+.enemy-special-notes { display: flex; flex-wrap: wrap; gap: 3px; }
+.enemy-special-badge { display: inline-block; width: fit-content; padding: 1px 6px; border: 1px solid rgba(233,120,145,.55); border-radius: 8px; color: #e97891; font-size: 8px; font-style: normal; background: rgba(233,120,145,.08); }
 
 /* 宽工作区：场景字段三列排布 */
 .build-scenario-fold .scenario-fields { grid-template-columns: repeat(3, minmax(0,1fr)); }
@@ -1121,12 +1215,40 @@ body.is-modal-open { overflow: hidden; }
 .scenario-fields .field, .scenario-fields .check-field { min-width: 0; }
 .scenario-fields output { display: block; color: var(--ice); font-size: 10px; margin-top: 3px; }
 .manual-results { display: grid; gap: 12px; padding: 16px; border-top: 1px solid var(--line-soft); }
-.manual-result-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; }
-.manual-result-item { padding: 9px; border-left: 2px solid var(--ice); background: rgba(115,207,223,.06); }
-.manual-result-item span { display: block; color: var(--muted); font-size: 9px; }
-.manual-result-item strong { display: block; margin-top: 3px; color: var(--text); font-size: 16px; }
 .probability-panel, .timeline-panel { padding: 11px; border: 1px solid var(--line-soft); background: rgba(0,0,0,.14); }
 .probability-panel h3, .timeline-panel h3 { margin: 0 0 8px; color: var(--text-soft); font-size: 12px; }
+/* 战斗演算块（独立于配装解算）：KPM 头条 + 逐条展开的图表组 */
+.combat-panel { padding: 0; border: 1px solid var(--line-soft); background: rgba(0,0,0,.14); }
+.combat-panel[hidden] { display: none; }
+.combat-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 11px 14px; border-bottom: 1px solid var(--line-soft); flex-wrap: wrap; }
+.combat-title span { display: block; color: var(--muted-dark); font-size: 9px; letter-spacing: .14em; }
+.combat-title h3 { margin: 2px 0 0; color: var(--text-soft); font-size: 13px; }
+.combat-title small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+.combat-actions { display: flex; align-items: center; gap: 8px; }
+.combat-actions .button { min-height: 28px; padding: 0 10px; font-size: 11px; }
+.trigger-policy-select { min-height: 28px; padding: 0 8px; border: 1px solid var(--line); border-radius: 3px; background: #0d1117; color: var(--text-soft); font-size: 10px; cursor: pointer; }
+.trigger-policy-select:focus { border-color: var(--riven); outline: none; }
+[data-theme="light"] .trigger-policy-select { background: #f4f6f9; color: #24292f; border-color: #d0d7de; }
+.combat-kpi { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.kpi-main { display: flex; align-items: baseline; gap: 5px; }
+.kpi-main strong { color: #73cfdf; font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.kpi-main span { color: var(--muted); font-size: 10px; }
+.kpi-sub { display: grid; gap: 1px; }
+.kpi-sub span { color: var(--muted-dark); font-size: 9px; }
+.kpi-sub b { color: var(--text-soft); font-size: 11px; font-variant-numeric: tabular-nums; }
+.combat-charts { position: relative; display: grid; gap: 6px; padding: 10px 14px 14px; }
+.combat-chart-row { border: 1px solid var(--line-soft); border-radius: 4px; background: rgba(0,0,0,.18); }
+.combat-chart-row[open] .combat-chart-head::after { transform: rotate(90deg); }
+.combat-chart-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 26px; padding: 3px 10px; cursor: pointer; list-style: none; }
+.combat-chart-head::-webkit-details-marker { display: none; }
+.combat-chart-head::after { color: var(--muted-dark); content: "▸"; font-size: 9px; transition: transform .15s ease; }
+.combat-chart-head strong { color: var(--muted); font-size: 10px; font-weight: 650; }
+.combat-chart-swatch { width: 14px; height: 3px; border-radius: 2px; }
+.combat-chart-svg { display: block; width: 100%; height: 110px; }
+.combat-chart-row:not([open]) .combat-chart-svg { display: none; }
+/* 每张图自己的气泡（贴近光标，防溢出翻转） */
+.combat-chart-tip { position: absolute; z-index: 8; top: 4px; left: 4px; min-width: 120px; max-width: 260px; pointer-events: none; }
+.combat-chart-row { position: relative; }
 .result-detail-list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; }
 .result-detail-list span { color: var(--muted); font-size: 10px; }
 .result-detail-list b { color: var(--ice); }
@@ -1139,6 +1261,7 @@ body.is-modal-open { overflow: hidden; }
 .probability-grid { display: grid; gap: 6px; }
 .status-breakdown { display: grid; gap: 5px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line-soft); }
 .status-breakdown-title { margin: 0 0 4px; color: var(--text-soft); font-size: 11px; }
+.status-breakdown-note { margin: 0 0 6px; color: var(--muted-dark); font-size: 9px; line-height: 1.5; }
 .status-row { display: grid; grid-template-columns: 14px minmax(64px,auto) 44px 1fr; align-items: center; gap: 8px; padding: 4px 6px; border-left: 2px solid var(--ice); background: rgba(115,207,223,.05); }
 .status-row-icon { display: inline-block; width: 14px; height: 14px; object-fit: contain; filter: brightness(1.15); }
 .status-row strong { color: var(--text-soft); font-size: 11px; }
@@ -1178,6 +1301,19 @@ body.is-modal-open { overflow: hidden; }
 .element-select-wrap select { padding-left: 36px !important; }
 .element-control-icon { position: absolute; z-index: 1; top: 50%; left: 10px; width: 18px; height: 18px; pointer-events: none; transform: translateY(-50%); object-fit: contain; }
 .element-control-icon[hidden] { display: none; }
+/* 分析页元素选择行：天生元素（赤毒/信条/终幕）——与配装页 element-select
+   同一套控件样式（暗底、图标左置、focus 紫晕） */
+.analysis-element-fields { display: grid; grid-template-columns: minmax(200px, 280px); gap: 10px; padding: 10px 0 0; }
+.analysis-element-fields[hidden] { display: none; }
+.analysis-element-fields .field select {
+  width: 100%; height: 38px; min-width: 0; padding: 0 11px 0 36px; border: 1px solid var(--line); border-radius: 3px; outline: 0;
+  background: #0d1117; color: var(--text); font-size: 12px; cursor: pointer; appearance: none; -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 16px) 16px, calc(100% - 11px) 16px; background-size: 5px 5px; background-repeat: no-repeat;
+}
+.analysis-element-fields .field select:focus { border-color: var(--riven); box-shadow: 0 0 0 3px rgba(181,128,225,.1); }
+.analysis-element-fields .element-select-wrap { position: relative; }
+.analysis-element-fields .element-control-icon { position: absolute; z-index: 1; top: 50%; left: 10px; width: 18px; height: 18px; pointer-events: none; transform: translateY(-50%); object-fit: contain; }
 .build-disposition-card { display: grid; min-height: 64px; grid-template-columns: 1fr auto; align-items: center; gap: 0 12px; padding: 9px 12px; border-left: 2px solid var(--orokin); background: #0d1117; }
 .build-disposition-card span { color: var(--muted); font-size: 10px; }
 .build-disposition-card strong { grid-row: span 2; color: var(--orokin); font-size: 26px; font-weight: 600; }
@@ -1230,10 +1366,9 @@ body.is-modal-open { overflow: hidden; }
 .warframe-conditional { min-height: 38px; padding: 0 10px; border: 1px solid var(--line); background: #0d1117; }
 .warframe-helminth-fields { display: grid; grid-template-columns: minmax(0,1fr); gap: 8px; }
 .warframe-source-description { padding: 8px 10px; border: 1px solid var(--line-soft); }
-.warframe-image-select { display: grid; grid-template-columns: 48px minmax(0,1fr); align-items: center; gap: 10px; min-height: 72px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; color: var(--text); background: rgba(0,0,0,.14); cursor: pointer; text-align: left; }
+.warframe-image-select { display: grid; grid-template-columns: minmax(0,1fr); align-items: center; gap: 10px; min-height: 72px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; color: var(--text); background: rgba(0,0,0,.14); cursor: pointer; text-align: left; }
 .warframe-image-select:hover { border-color: var(--ice); background: rgba(115,207,223,.05); }
-.warframe-image-select-icon { display: grid; width: 44px; height: 44px; place-items: center; border: 1px dashed var(--orokin); color: var(--orokin); font-size: 20px; }
-.warframe-image-select > span:last-child { display: grid; min-width: 0; gap: 2px; }
+.warframe-image-select > span { display: grid; min-width: 0; gap: 2px; }
 .warframe-image-select small { color: var(--muted); font-size: 8px; }
 .warframe-image-select strong { overflow: hidden; color: var(--text-soft); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
 .warframe-image-select em { display: -webkit-box; overflow: hidden; color: var(--muted); font-size: 8px; font-style: normal; line-height: 1.4; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
@@ -1281,7 +1416,9 @@ body.is-modal-open { overflow: hidden; }
 .warframe-panel-stat { display: grid; min-width: 0; gap: 2px; padding: 10px 11px; border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
 .warframe-panel-stat span, .warframe-panel-stat small { color: var(--muted); font-size: 8px; }
 .warframe-panel-stat strong { color: var(--text-soft); font-size: 14px; font-variant-numeric: tabular-nums; }
-.warframe-panel-stat.is-changed strong { color: var(--success); }
+/* 面板颜色语义：默认（不变）保持主题前景色；优于基础=绿，劣于基础=红 */
+.warframe-panel-stat.is-improved strong { color: var(--success); }
+.warframe-panel-stat.is-worse strong { color: var(--danger); }
 .warframe-active-effects { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
 .warframe-active-effect { padding: 4px 7px; border: 1px solid rgba(104,212,170,.25); color: var(--muted); background: rgba(104,212,170,.045); font-size: 8px; }
 .warframe-active-effect strong { color: var(--success); }
@@ -1298,16 +1435,19 @@ body.is-modal-open { overflow: hidden; }
 .warframe-ability-scalars > div { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 2px 6px; padding: 5px 6px; background: rgba(255,255,255,.025); }
 .warframe-ability-scalars > div.is-static { border-left: 2px solid rgba(229,207,145,.45); }
 .warframe-ability-energy { grid-column: 1 / -1; border-left: 2px solid rgba(115,207,223,.55); }
-.warframe-ability-scalars > div.is-energy strong, .warframe-ability-energy.is-energy strong { color: #eb4747; }
-.warframe-ability-scalars > div.is-range strong { color: #f4f36a; }
-.warframe-ability-scalars > div.is-static strong { color: var(--text-soft); }
-.warframe-ability-energy.is-shield strong, .warframe-ability-energy.is-health strong { color: #eb4747; }
+/* 数值文字颜色只表达「相对基础变好/变坏」：默认=主题前景（不变），
+   绿=更好，红=更差。类型差异（能量/固定值）由左边框颜色承担。 */
+.warframe-ability-scalars strong { color: var(--text-soft); font-size: 11px; }
+.warframe-ability-scalars > div.is-improved strong, .warframe-ability-energy.is-improved strong { color: var(--success); }
+.warframe-ability-scalars > div.is-worse strong, .warframe-ability-energy.is-worse strong { color: var(--danger); }
 .warframe-ability-energy strong { max-width: 72%; line-height: 1.35; overflow-wrap: anywhere; text-align: right; }
 .warframe-ability-scalars span, .warframe-ability-scalars small { color: var(--muted); font-size: 9px; }
-.warframe-ability-scalars strong { color: var(--success); font-size: 11px; }
 .warframe-ability-scalars small { grid-column: 1 / -1; }
 .warframe-ability-scalars > p, .warframe-ability-global { color: var(--muted-dark); font-size: 10px; }
-.warframe-ability-scalar-group { grid-column: 1 / -1; margin: 5px 0 -1px; padding: 4px 6px; border-top: 1px solid rgba(115,207,223,.24); color: var(--orokin) !important; font-size: 9px !important; font-weight: 700; }
+/* 多状态技能的分组标题：占满整行并加分隔线，视觉上把各状态块切开 */
+.warframe-ability-scalar-group { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; margin: 6px 0 -1px; padding: 4px 6px; border-top: 1px solid rgba(115,207,223,.24); border-left: 3px solid rgba(229,207,145,.55); color: var(--orokin) !important; font-size: 9px !important; font-weight: 700; letter-spacing: .04em; }
+.warframe-ability-scalar-group::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(229,207,145,.3), transparent); }
+.warframe-ability-scalar-group:first-child { margin-top: 0; }
 .warframe-ability-diagnostic { grid-column: 1 / -1; line-height: 1.45; }
 .warframe-ability-global { display: block; margin-top: 8px; }
 .mod-picker-grid.is-warframe-image-list { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
@@ -1339,7 +1479,6 @@ body.is-modal-open { overflow: hidden; }
 .weapon-stat-band > div + div { border-left: 1px solid var(--line-soft); }
 .weapon-stat-band span { display: block; overflow: hidden; color: var(--muted); font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
 .weapon-stat-band strong { display: block; overflow: hidden; margin-top: 2px; color: var(--orokin); font-size: 12px; font-weight: 620; text-overflow: ellipsis; white-space: nowrap; }
-.standalone-damage-metrics { margin-top: 18px; }
 .damage-composition { margin-top: 18px; padding: 17px 18px 18px; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); background: rgba(0,0,0,.09); }
 .damage-composition .result-section-title { margin-bottom: 10px; }
 .damage-type-list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; }
@@ -1354,9 +1493,15 @@ body.is-modal-open { overflow: hidden; }
 .build-result-error .error-symbol { margin-bottom: 7px; }
 
 .app-footer { display: flex; align-items: center; justify-content: space-between; padding: 16px 4px 0; color: var(--muted-dark); font-size: 8px; }
-.toast-region { position: fixed; z-index: 80; right: 18px; bottom: 18px; display: flex; width: min(340px,calc(100vw - 36px)); flex-direction: column; gap: 8px; pointer-events: none; }
-.toast { padding: 11px 13px; border-left: 2px solid var(--ice); color: var(--text-soft); background: #171d25; box-shadow: var(--shadow); font-size: 10px; opacity: 0; transform: translateY(7px); transition: opacity .2s ease,transform .2s ease; }
+/* Toast：顶部居中横幅。颜色全部走主题变量（深浅模式自动联动），
+   成功=浅绿边框、错误=警告红、信息=青色；字号 12px（原 10px）。 */
+.toast-region { position: fixed; z-index: 80; top: 14px; left: 50%; display: flex; width: min(460px, calc(100vw - 36px)); flex-direction: column; gap: 8px; transform: translateX(-50%); pointer-events: none; }
+.toast { padding: 13px 18px; border: 1px solid var(--line); border-left: 3px solid var(--ice); border-radius: 6px; color: var(--text); background: var(--panel-raised); box-shadow: 0 10px 30px rgba(0,0,0,.35); font-size: 12px; line-height: 1.5; opacity: 0; transform: translateY(-9px); transition: opacity .2s ease, transform .2s ease; }
 .toast.is-visible { opacity: 1; transform: translateY(0); }
+.toast.is-success { border-left-color: var(--success); }
+.toast.is-success::before { content: "✓ "; color: var(--success); font-weight: 700; }
+.toast.is-error { border-left-color: var(--danger); }
+.toast.is-error::before { content: "! "; color: var(--danger); font-weight: 700; }
 
 @media (max-width: 1180px) {
   .tool-layout { grid-template-columns: 1fr; }
@@ -1447,7 +1592,7 @@ body.is-modal-open { overflow: hidden; }
   .stat-editor { padding-right: 14px; padding-left: 14px; }
   .subheading { align-items: flex-start; padding: 8px 0; }
   .subheading > div > span { display: none; }
-  .stat-row-head { grid-template-columns: 32px minmax(0,1fr) 95px 25px; gap: 5px; }
+  .stat-row-head { grid-template-columns: 32px minmax(0,1fr) 95px 48px 25px; gap: 5px; }
   .slider-shell { grid-template-columns: 38px minmax(0,1fr) 38px; padding-left: 0; }
   .submit-row { align-items: stretch; flex-direction: column; padding-right: 14px; padding-left: 14px; }
   .calculation-note { max-width: none; }

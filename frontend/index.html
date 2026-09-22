@@ -74,6 +74,14 @@
 
             <div class="assembly-host" id="analysis-assembly-slot"></div>
 
+            <section class="analysis-element-fields" id="analysis-innate-element-field" hidden>
+              <label class="field">
+                <span>天生元素（赤毒/信条/终幕）</span>
+                <div class="element-select-wrap"><img id="analysis-innate-element-icon" class="element-control-icon" alt="" hidden><select id="analysis-innate-element-select"><option value="DT_POISON">毒素</option></select></div>
+                <small>先祖元素参与分析与配装计算 · 默认毒素 · 不记忆</small>
+              </label>
+            </section>
+
             <div class="weapon-issue" id="weapon-issue" role="alert" hidden>
               <strong>该武器暂不可分析</strong><span id="weapon-issue-text"></span>
             </div>
@@ -108,7 +116,18 @@
 
             <div class="form-message" id="form-message" role="alert" hidden></div>
             <div class="submit-row">
-              <div class="calculation-note"><span aria-hidden="true">◎</span><span>按所选武器当前倾向评分并重新优化 8 槽配装</span></div>
+              <div class="calculation-note">
+                <span aria-hidden="true">◎</span>
+                <span>按所选武器当前倾向评分并重新优化 8 槽配装</span>
+                <label class="profile-inline">
+                  <span>档位</span>
+                  <select id="analysis-profile-select" aria-label="解算档位">
+                    <option value="fast">快速</option>
+                    <option value="standard" selected>标准</option>
+                    <option value="deep">深度</option>
+                  </select>
+                </label>
+              </div>
               <button class="button button-primary" id="analyze-button" type="submit">
                 <span class="button-label">开始分析</span><span class="button-loading" aria-hidden="true"><i></i> 计算中</span>
               </button>
@@ -156,6 +175,7 @@
                   <div><span>数值质量</span><strong id="roll-quality">--</strong></div>
                   <div><span>武器倾向</span><strong id="result-disposition">--</strong></div>
                 </div>
+                <p class="score-context-note" id="score-context-note" hidden></p>
               </section>
 
               <section class="result-section contribution-section">
@@ -196,6 +216,7 @@
                   <div><span>当前解算模式</span><strong id="build-fire-mode">--</strong></div>
                   <div><span>优化指标</span><strong id="build-metric">--</strong></div>
                 </div>
+                <div class="analysis-incarnon-route" id="analysis-incarnon-route" hidden aria-label="本次解算使用的灵化进化路线"></div>
                 <div class="damage-metrics" id="damage-metrics"></div>
                 <div class="fire-mode-strip" id="fire-mode-strip" hidden></div>
                 <p class="fire-mode-strip-note" id="fire-mode-strip-note" hidden>其他射击模式 · 点击按该模式重新解算（当前解算模式见上方卡头）</p>
@@ -261,6 +282,16 @@
               </label>
 
               <label class="field">
+                <span>解算档位</span>
+                <select id="solve-profile-select">
+                  <option value="fast">快速 · 秒级预览</option>
+                  <option value="standard" selected>标准 · 平衡（推荐）</option>
+                  <option value="deep">深度 · 最优搜索</option>
+                </select>
+                <small>档位同时作用于紫卡分析与「填充最优」；本机记忆</small>
+              </label>
+
+              <label class="field">
                 <span>元素限制</span>
                 <div class="element-select-wrap"><img id="build-element-icon" class="element-control-icon" alt=""><select id="build-element-select"><option value="">不限定元素</option></select></div>
                 <small>默认不锁元素；选择后只接受含目标元素的方案</small>
@@ -283,6 +314,32 @@
                 <input id="build-slot-count" type="range" min="4" max="8" step="1" value="8">
                 <small>按 60 容量、催化剂与匹配极性解算</small>
               </label>
+
+              <section class="incarnon-panel scope-panel" aria-label="搜索约束">
+                <details class="fold" id="build-scope-fold">
+                  <summary class="fold-head"><strong>限制</strong><span>本次求解被允许做哪些假设</span></summary>
+                  <div class="fold-body">
+                    <label class="slot-count-field">
+                      <span><b>配卡数量</b><output id="build-fill-output">不限制</output></span>
+                      <div class="fill-range-row">
+                        <input id="build-min-fill" type="number" min="0" max="8" placeholder="0" aria-label="最少配卡数">
+                        <span>–</span>
+                        <input id="build-max-fill" type="number" min="0" max="8" placeholder="8" aria-label="最多配卡数">
+                      </div>
+                      <small>留空 = 不限制；0–0 即裸枪基线</small>
+                    </label>
+                    <label class="check-field">
+                      <input id="build-optimize-arcanes" type="checkbox" checked>
+                      <span>已配置赋能参与求解（按满层 / 100% 触发口径）</span>
+                    </label>
+                    <div class="scope-mod-lists">
+                      <div class="scope-mod-list" id="build-required-list" aria-label="必选 MOD"></div>
+                      <div class="scope-mod-list" id="build-forbidden-list" aria-label="禁选 MOD"></div>
+                    </div>
+                    <p class="scope-hint">在 MOD 选择器中长按（或右键）一张卡可加入必选/禁选清单；求解时这些约束会一并生效。</p>
+                  </div>
+                </details>
+              </section>
 
               <section class="incarnon-panel" id="build-incarnon-panel" hidden aria-label="灵化进化路线">
                 <details class="fold" open>
@@ -496,16 +553,36 @@
 
               <section class="build-detail">
                 <div class="weapon-stat-band" id="weapon-build-stat-band"></div>
-                <div class="damage-metrics standalone-damage-metrics" id="weapon-build-damage-metrics"></div>
                 <section class="damage-composition">
                   <div class="result-section-title"><div><span>DAMAGE PROFILE</span><h3>伤害构成</h3></div><small id="weapon-build-element-note">未限定元素</small></div>
                   <div class="damage-type-list" id="weapon-build-damage-types"></div>
                 </section>
                 <div class="fire-mode-strip standalone-fire-modes" id="weapon-build-fire-modes" hidden></div>
                 <section class="manual-results" id="manual-results" hidden>
-                  <div class="manual-result-grid" id="manual-result-grid"></div>
+                  <!-- 配装解算块：面板属性 / 异常分布（不含战斗演算） -->
                   <div class="probability-panel" id="probability-panel"><h3>异常状态</h3><div id="probability-content"></div></div>
-                  <div class="timeline-panel" id="timeline-panel"><h3>赋能 / 时间线</h3><div id="timeline-content"></div></div>
+                  <!-- 战斗演算块：独立工具栏 + KPM 头条 + 逐条展开的图表组。
+                       目标上下文 / 赋能 / 外部增益在上方配置区调整，这里只读。 -->
+                  <div class="combat-panel" id="combat-panel">
+                    <div class="combat-head">
+                      <div class="combat-title"><span>BENCHMARK</span><h3>战斗演算</h3><small id="combat-context-note">标准靶 · 170 级钢铁之路</small></div>
+                      <div class="combat-actions">
+                        <select id="trigger-policy-select" class="trigger-policy-select" title="触发类效果（镀层/赋能/灵化 on-kill）的层数口径">
+                          <option value="emergent" selected>emergent · 按实际爬升</option>
+                          <option value="assumed_max">assumed max · 恒满层</option>
+                        </select>
+                        <button class="button button-quiet" id="combat-replay-button" type="button" title="按当前配装与敌人设置重新演算一次战斗窗口">⟳ 重演</button>
+                      </div>
+                      <div class="combat-kpi" id="combat-kpi">
+                        <div class="kpi-main"><strong id="kpm-value">--</strong><span>KPM</span></div>
+                        <div class="kpi-sub"><span>窗口击杀</span><b id="kills-value">--</b></div>
+                        <div class="kpi-sub"><span>直伤 DPS</span><b id="direct-dps-value">--</b></div>
+                        <div class="kpi-sub"><span>DoT DPS</span><b id="dot-dps-value">--</b></div>
+                        <div class="kpi-sub"><span>目标 EHP</span><b id="target-ehp-value">--</b></div>
+                      </div>
+                    </div>
+                    <div class="combat-charts" id="combat-charts"></div>
+                  </div>
                 </section>
               </section>
 
@@ -554,7 +631,6 @@
               </div>
               <p class="warframe-source-description" id="warframe-helminth-description">未替换技能。</p>
               <button class="warframe-image-select" id="warframe-invigoration-open" type="button">
-                <span class="warframe-image-select-icon" aria-hidden="true">＋</span>
                 <span><small>活化增幅</small><strong id="warframe-invigoration-name">未选择</strong><em id="warframe-invigoration-description">一项攻势 + 一项辅助</em></span>
               </button>
               <p class="form-message" id="warframe-message" role="alert" hidden></p>
@@ -761,6 +837,7 @@
         <button class="sign-toggle is-positive" type="button" aria-label="切换正负词条" aria-pressed="false">+</button>
         <label><span class="sr-only">词条</span><select class="stat-code" required></select></label>
         <label class="stat-number-shell"><span class="sr-only">词条数值</span><input class="stat-number stat-output" type="number" step="0.1" inputmode="decimal" required><span class="stat-unit" aria-hidden="true"></span></label>
+        <span class="stat-median-indicator" aria-hidden="true"></span>
         <button class="remove-stat" type="button" aria-label="删除词条" title="删除词条">×</button>
       </div>
       <div class="slider-shell">

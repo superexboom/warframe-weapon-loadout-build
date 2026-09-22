@@ -50,6 +50,9 @@ const state = {
   incarnonChoices: {},
   manualModCategory: "all",
   enemyFaction: "all",
+  // 搜索约束（「限制」面板）：必选/禁选 mod path 集合 + 配卡数量范围。
+  requiredMods: [],
+  forbiddenMods: [],
   // 真正缺少等级缩放锚点的目标默认在选择器里隐藏；无独立弱点区的目标仍可选。
   enemyShowMissing: false,
   modPickerView: "grid",
@@ -97,16 +100,17 @@ const ui = Object.fromEntries([
   "footer-schema", "sample-button", "reset-button", "export-button", "riven-form",
   "weapon", "weapon-options", "build-weapon-options", "weapon-caption", "disposition-value", "disposition-dots",
   "weapon-issue", "weapon-issue-text", "stat-rows", "stat-row-template", "add-stat",
+  "analysis-innate-element-field", "analysis-innate-element-select", "analysis-innate-element-icon", "analysis-preferred-element-select", "analysis-preferred-element-icon",
   "form-message", "analyze-button", "riven-stage", "riven-card", "card-name",
   "card-polarity", "card-stats", "card-mr", "card-rerolls",
   "result-badge", "result-idle", "result-loading", "result-error", "result-content",
   "loading-copy", "error-message", "retry-button", "score-orbit", "orbit-value",
-  "score-value", "grade-value", "weapon-result-name", "actual-gain", "optimal-gain",
+  "score-value", "grade-value", "weapon-result-name", "actual-gain", "optimal-gain", "score-context-note",
   "roll-quality", "result-disposition", "contribution-list", "tier-list",
   "tier-filters", "tier-route", "tier-route-note",
   "recommended-negative", "fatal-negative", "fatal-box", "build-mode", "build-slot",
   "build-weapon-name", "build-fire-mode", "build-metric", "damage-metrics",
-  "fire-mode-strip", "fire-mode-strip-note", "mod-grid", "analysis-stance", "build-forma", "diagnostics", "diagnostic-count", "diagnostic-list",
+  "fire-mode-strip", "fire-mode-strip-note", "mod-grid", "analysis-stance", "analysis-incarnon-route", "build-forma", "diagnostics", "diagnostic-count", "diagnostic-list",
   "analysis-tool", "build-tool", "warframe-tool", "weapon-build-form", "build-weapon",
   "build-weapon-caption", "build-disposition", "build-disposition-dots",
   "build-variant-select", "build-variant-caption",
@@ -135,10 +139,10 @@ const ui = Object.fromEntries([
   "weapon-build-idle", "weapon-build-loading",
   "weapon-build-error", "weapon-build-error-message", "weapon-build-content",
   "weapon-build-type", "weapon-build-name", "weapon-build-fire-mode", "weapon-build-archetype",
-  "weapon-build-metric", "weapon-build-stat-band", "weapon-build-damage-metrics",
+  "weapon-build-metric", "weapon-build-stat-band",
   "weapon-build-element-note", "weapon-build-damage-types", "weapon-build-fire-modes",
   "weapon-build-slot-summary", "weapon-build-build-label",
-  "manual-results", "manual-result-grid", "probability-content", "timeline-content",
+  "manual-results", "probability-content", "timeline-content",
   "weapon-build-diagnostic-count", "weapon-build-diagnostic-list", "toast-region",
   "warframe-catalog-status", "warframe-frame-select", "warframe-frame-open", "warframe-frame-select-visual", "warframe-frame-select-name", "warframe-frame-select-description", "warframe-frame-caption", "warframe-portrait", "warframe-profile-name", "warframe-profile-description", "warframe-passive",
   "warframe-apply-conditionals", "warframe-helminth-slot", "warframe-helminth-slot-open", "warframe-helminth-slot-visual", "warframe-helminth-slot-name", "warframe-helminth-slot-description", "warframe-helminth-ability", "warframe-helminth-ability-open", "warframe-helminth-ability-visual", "warframe-helminth-ability-name", "warframe-helminth-ability-source", "warframe-helminth-description", "warframe-invigoration-open", "warframe-invigoration-name", "warframe-invigoration-description",
@@ -157,6 +161,7 @@ const METRIC_LABELS = {
   shotDamage: "单发伤害", burstDps: "爆发 DPS", sustainedDps: "持续 DPS",
   attackDps: "攻击 DPS", heavyDamage: "重击伤害", heavyAttackDps: "重击 DPS",
   statusSustainedDps: "持续 DPS（触发+直伤）", targetSustainedDps: "目标持续 DPS",
+  objectiveScore: "标准靶 KPM",
 };
 
 const METRIC_KEYS = ["shotDamage", "burstDps", "sustainedDps", "attackDps", "heavyDamage", "heavyAttackDps"];
@@ -298,6 +303,14 @@ function captureBuildConfig() {
     frameArcanes: state.frameArcanes.filter(Boolean).map(compactRankedSelection),
     externalBuffs: state.externalBuffs.map((buff) => ({ ...buff })),
     incarnonChoices: { ...state.incarnonChoices },
+    // 「限制」面板：搜索约束随配置槽持久化。
+    requiredMods: state.requiredMods.length ? [...state.requiredMods] : undefined,
+    forbiddenMods: state.forbiddenMods.length ? [...state.forbiddenMods] : undefined,
+    minFill: scopeFillValue("build-min-fill"),
+    maxFill: scopeFillValue("build-max-fill"),
+    optimizeWithArcanes: checked("build-optimize-arcanes") ? undefined : false,
+    // 最优紫卡求解的预算档位（10/20/30/60s）随配置持久化。
+    rivenSolveBudget: state.rivenSolveBudget || 10,
   };
 }
 
@@ -383,6 +396,12 @@ function applyBuildConfig(config) {
     state.manualSlots = Array.from({ length: 8 }, () => null);
     resetSpecialSelections();
     state.incarnonChoices = {};
+    state.requiredMods = [];
+    state.forbiddenMods = [];
+    setControlValue("build-min-fill", "");
+    setControlValue("build-max-fill", "");
+    if (ui["build-optimize-arcanes"]) ui["build-optimize-arcanes"].checked = true;
+    renderScopeLists();
     renderManualSlots();
     renderManualMods();
     renderSpecialSlots();
@@ -465,6 +484,14 @@ function applyBuildConfig(config) {
   if (ui["forma-count"]) ui["forma-count"].textContent = String(state.formaCount);
   state.rivenBuilderStats = Array.isArray(config.riven?.stats) ? config.riven.stats.map((s) => ({ ...s })) : [];
   state.incarnonChoices = config.incarnonChoices && typeof config.incarnonChoices === "object" ? { ...config.incarnonChoices } : {};
+  // 「限制」面板状态恢复。
+  state.requiredMods = Array.isArray(config.requiredMods) ? [...config.requiredMods] : [];
+  state.forbiddenMods = Array.isArray(config.forbiddenMods) ? [...config.forbiddenMods] : [];
+  setControlValue("build-min-fill", config.minFill ?? "");
+  setControlValue("build-max-fill", config.maxFill ?? "");
+  if (ui["build-optimize-arcanes"]) ui["build-optimize-arcanes"].checked = config.optimizeWithArcanes !== false;
+  state.rivenSolveBudget = [10, 20, 30, 60].includes(Number(config.rivenSolveBudget)) ? Number(config.rivenSolveBudget) : 10;
+  renderScopeLists();
   refreshScenarioLabels();
   setElementControlIcon(ui["build-element-select"], ui["build-element-icon"]);
   setElementControlIcon(ui["build-innate-element-select"], ui["build-innate-element-icon"]);
@@ -535,9 +562,9 @@ function importBuildConfig(file) {
       state.buildConfigs[state.activeConfig] = config;
       applyBuildConfig(config);
       persistActiveBuildConfig();
-      toast(`已导入配置 ${state.activeConfig}`);
+      toast(`已导入配置 ${state.activeConfig}`, "success");
     } catch (error) {
-      toast(error.message || "配置导入失败");
+      toast(error.message || "配置导入失败", "error");
     }
   });
   reader.readAsText(file);
@@ -1575,6 +1602,33 @@ function setSliderVisual(input) {
   input.style.setProperty("--progress", `${high === low ? 0 : ((value - low) / (high - low)) * 100}%`);
 }
 
+// 词条中位指示器：当前数值相对「当前武器+当前词条组合」范围中点的偏差。
+// 范围随武器倾向（disposition）与词条形态（3正/2正1负/2正…）缩放，这里直接
+// 用 deriveRange 的 low/high 取中点，负词条按「数值越低越好」反向标注。
+function updateMedianIndicator(row, entry, value) {
+  const indicator = row.querySelector(".stat-median-indicator");
+  if (!indicator) return;
+  const range = deriveRange(entry.definition, entry.negative);
+  const number = Number(value);
+  if (!range || !Number.isFinite(number) || number <= 0) {
+    indicator.hidden = true;
+    return;
+  }
+  const median = (range.low + range.high) / 2;
+  const deviation = (number / median - 1) * 100;
+  const tolerance = 0.5;
+  if (Math.abs(deviation) <= tolerance) {
+    indicator.hidden = true;
+    return;
+  }
+  const better = entry.negative ? deviation < 0 : deviation > 0;
+  indicator.hidden = false;
+  indicator.textContent = `${deviation > 0 ? "↑" : "↓"}${Math.abs(deviation).toFixed(1)}%`;
+  indicator.classList.toggle("is-better", better);
+  indicator.classList.toggle("is-worse", !better);
+  indicator.title = `相对中位数${deviation > 0 ? "高" : "低"} ${Math.abs(deviation).toFixed(1)}%（中位 ${median.toFixed(1)}）`;
+}
+
 function refreshRanges(preserveRatio = true) {
   for (const entry of activeStats()) {
     const input = entry.row.querySelector(".stat-value");
@@ -1588,6 +1642,8 @@ function refreshRanges(preserveRatio = true) {
       output.disabled = true;
       output.value = "";
       lowLabel.textContent = highLabel.textContent = "--";
+      const indicator = entry.row.querySelector(".stat-median-indicator");
+      if (indicator) indicator.hidden = true;
       continue;
     }
     const oldLow = finite(input.min);
@@ -1612,6 +1668,7 @@ function refreshRanges(preserveRatio = true) {
     output.value = faction ? factionRivenMultiplier(value, entry.negative).toFixed(2) : value.toFixed(1);
     output.classList.toggle("is-negative", entry.negative);
     if (unit) unit.textContent = faction ? "x" : "";
+    updateMedianIndicator(entry.row, entry, value);
     setSliderVisual(input);
   }
   updateCardPreview();
@@ -1688,6 +1745,7 @@ function addStat(preferredCode, preferredNegative = false) {
       ? factionRivenMultiplier(raw, entry.negative).toFixed(2)
       : raw.toFixed(1));
     number.classList.toggle("is-negative", Boolean(entry?.negative));
+    updateMedianIndicator(row, entry, raw);
     setSliderVisual(input);
     updateCardPreview();
   });
@@ -1700,6 +1758,7 @@ function addStat(preferredCode, preferredNegative = false) {
     const low = finite(input.min) ?? 0;
     const high = finite(input.max) ?? value;
     input.value = String(clamp(value, low, high));
+    updateMedianIndicator(row, entry, clamp(value, low, high));
     setSliderVisual(input);
     updateCardPreview();
   });
@@ -1715,6 +1774,7 @@ function addStat(preferredCode, preferredNegative = false) {
     number.value = isFactionRivenDefinition(entry?.definition)
       ? factionRivenMultiplier(value, entry.negative).toFixed(2)
       : value.toFixed(1);
+    updateMedianIndicator(row, entry, value);
     setSliderVisual(input);
     updateCardPreview();
   });
@@ -1756,6 +1816,60 @@ function removeStat(row) {
   refreshRanges(true);
 }
 
+// 偏好复合元素键 → 伤害类型（与后端 ELEMENT_TARGETS 同口径），仅用于图标显示。
+const ELEMENT_TARGET_TO_DAMAGE_TYPE = {
+  heat: "DT_FIRE", cold: "DT_FREEZE", electricity: "DT_ELECTRICITY", toxin: "DT_POISON",
+  blast: "DT_EXPLOSION", radiation: "DT_RADIATION", gas: "DT_GAS", magnetic: "DT_MAGNETIC",
+  viral: "DT_VIRAL", corrosive: "DT_CORROSIVE",
+};
+
+// 分析页元素选择：天生元素（赤毒/信条/终幕，默认毒、不记忆）。
+// 偏好复合元素已按用户要求移除（对赤毒/信条/终幕无意义——先祖元素
+// 天生参与组合，偏好约束反而经常不可达）。
+const ANALYSIS_PREFERRED_ELEMENT_KEY = "wf-riven-portable-analysis-preferred-element-v1";
+const PREFERRED_ELEMENT_OPTIONS = [
+  ["", "不限定"],
+  ["corrosive", "腐蚀"], ["viral", "病毒"], ["heat", "火焰"], ["cold", "冰冻"],
+  ["electricity", "电击"], ["toxin", "毒素"], ["radiation", "辐射"],
+  ["magnetic", "磁力"], ["gas", "毒气"], ["blast", "爆炸"],
+];
+function analysisPreferredElement() {
+  // 兼容旧 localStorage 残值：读到的值不再消费，恒返回空（不限定）。
+  return "";
+}
+function analysisInnateElementDefault(candidates) {
+  // 赤毒/信条/终幕的先祖元素：默认毒（DT_POISON），候选不含毒时取第一个。
+  return candidates.includes("DT_POISON") ? "DT_POISON" : (candidates[0] || "");
+}
+function refreshAnalysisElementFields() {
+  const field = ui["analysis-innate-element-field"];
+  const innateSelect = ui["analysis-innate-element-select"];
+  if (!field || !innateSelect) return;
+  const candidates = Array.isArray(state.weapon?.innateElementCandidates) ? state.weapon.innateElementCandidates : [];
+  field.hidden = !candidates.length;
+  if (candidates.length) {
+    const previous = innateSelect.value;
+    innateSelect.replaceChildren(...candidates.map((damageType) => {
+      const option = document.createElement("option");
+      option.value = damageType;
+      option.textContent = DAMAGE_TYPE_LABELS[damageType] || damageType;
+      return option;
+    }));
+    // 天生元素不记忆：换武器时重置为默认（毒）。
+    innateSelect.value = candidates.includes(previous) ? previous : analysisInnateElementDefault(candidates);
+  }
+  setAnalysisElementIcons();
+}
+function setAnalysisElementIcons() {
+  const innate = ui["analysis-innate-element-select"]?.value || "";
+  const innateIcon = ui["analysis-innate-element-icon"];
+  if (innateIcon) {
+    innateIcon.src = ELEMENT_ICONS[innate] || "";
+    innateIcon.hidden = !ELEMENT_ICONS[innate];
+    innateIcon.alt = DAMAGE_TYPE_LABELS[innate] || "";
+  }
+}
+
 function selectWeapon(weapon, writeInput = true) {
   const changed = weapon?.path !== state.weapon?.path;
   state.weapon = weapon;
@@ -1784,6 +1898,7 @@ function selectWeapon(weapon, writeInput = true) {
   ui["disposition-dots"].textContent = dispositionDots(weapon.disposition);
   ui["weapon-issue"].hidden = weapon.analysisAvailable !== false;
   ui["weapon-issue-text"].textContent = issueLabel(weapon.analysisIssue || weapon.issue);
+  refreshAnalysisElementFields();
   if (changed) {
     const previous = activeStats().map((entry) => ({ code: entry.code, negative: entry.negative }));
     ui["stat-rows"].replaceChildren();
@@ -1835,6 +1950,80 @@ function updateAnalyzeAvailability() {
   ui["add-stat"].disabled = shape.total >= 4 || !state.weapon;
 }
 
+function solveProfile() {
+  // 解算档位：两个选择器（分析页内联 / 配装页字段）共享 localStorage，
+  // 任一处改动即全局生效。
+  const value = window.localStorage.getItem("wf-solve-profile");
+  return ["fast", "standard", "deep"].includes(value) ? value : "standard";
+}
+
+function scopeFillValue(id) {
+  const raw = document.getElementById(id)?.value;
+  const parsed = Number(raw);
+  if (raw === "" || raw === undefined || raw === null || !Number.isFinite(parsed)) return undefined;
+  return clamp(Math.round(parsed), 0, 8);
+}
+
+function toggleScopeMod(path, kind) {
+  // kind: "required" | "forbidden" — 互斥：一张卡只能在其中一边。
+  const other = kind === "required" ? "forbiddenMods" : "requiredMods";
+  state[other] = state[other].filter((p) => p !== path);
+  const list = kind === "required" ? state.requiredMods : state.forbiddenMods;
+  const index = list.indexOf(path);
+  if (index >= 0) list.splice(index, 1);
+  else list.push(path);
+  renderScopeLists();
+  persistActiveBuildConfig();
+  scheduleLiveBuild();
+}
+
+function renderScopeLists() {
+  const required = document.getElementById("build-required-list");
+  const forbidden = document.getElementById("build-forbidden-list");
+  if (!required || !forbidden) return;
+  const chip = (path, kind) => {
+    const mod = state.modAssets?.mods?.[path] || { nameZh: path, nameEn: "" };
+    const node = create("span", `scope-chip is-${kind}`);
+    node.append(document.createTextNode(mod.nameZh || mod.nameEn || path));
+    const remove = create("button", "", "×");
+    remove.type = "button";
+    remove.setAttribute("aria-label", "移除");
+    remove.addEventListener("click", () => toggleScopeMod(path, kind));
+    node.append(remove);
+    return node;
+  };
+  required.replaceChildren(
+    create("span", "scope-empty", "必选："),
+    ...(state.requiredMods.length
+      ? state.requiredMods.map((p) => chip(p, "required"))
+      : [create("span", "scope-empty", "无（长按/右键 MOD 加入）")])
+  );
+  forbidden.replaceChildren(
+    create("span", "scope-empty", "禁选："),
+    ...(state.forbiddenMods.length
+      ? state.forbiddenMods.map((p) => chip(p, "forbidden"))
+      : [create("span", "scope-empty", "无")])
+  );
+  // 数量范围输出回显
+  const lo = scopeFillValue("build-min-fill");
+  const hi = scopeFillValue("build-max-fill");
+  const output = document.getElementById("build-fill-output");
+  if (output) {
+    output.textContent = lo === undefined && hi === undefined
+      ? "不限制"
+      : `${lo ?? 0} – ${hi ?? 8}`;
+  }
+}
+
+function setSolveProfile(profile) {
+  const next = ["fast", "standard", "deep"].includes(profile) ? profile : "standard";
+  window.localStorage.setItem("wf-solve-profile", next);
+  for (const id of ["analysis-profile-select", "solve-profile-select"]) {
+    const select = document.getElementById(id);
+    if (select) select.value = next;
+  }
+}
+
 function payloadFromForm() {
   if (!state.weapon) throw new Error("请从武器目录中选择一把武器");
   const isAssembly = state.assemblyFor === "analysis" && state.kitgunBase && state.kitgunBase.path === state.weapon.path;
@@ -1852,7 +2041,14 @@ function payloadFromForm() {
     if (!range || entry.value < range.low - 0.11 || entry.value > range.high + 0.11) throw new Error(`${entry.definition.label} 数值超出当前范围`);
     return { code: entry.code, value: Number(entry.value.toFixed(3)), negative: entry.negative };
   });
-  const payload = { weapon: state.weapon.path, disposition: state.weapon.disposition, stats };
+  const payload = { weapon: state.weapon.path, disposition: state.weapon.disposition, stats, profile: solveProfile() };
+  // 天生元素（赤毒/信条/终幕）：候选存在时随请求下发，参与分析与配装。
+  const innateCandidates = Array.isArray(state.weapon.innateElementCandidates) ? state.weapon.innateElementCandidates : [];
+  if (innateCandidates.length) {
+    const innate = ui["analysis-innate-element-select"]?.value || analysisInnateElementDefault(innateCandidates);
+    if (innate) payload.innateElement = innate;
+  }
+  // 偏好复合元素已移除（分析页不再下发 elementTarget）。
   if (typeof state.requestedFireMode === "number") payload.fireMode = state.requestedFireMode;
   if (isAssembly) {
     payload.kitgunParts = [state.kitgunParts.chamber, state.kitgunParts.grip, state.kitgunParts.loader];
@@ -1940,8 +2136,9 @@ function formatQuality(value) {
 }
 
 function renderScore() {
-  const score = clamp(finite(state.result.score) ?? 0, 0, 100);
-  ui["score-value"].textContent = score.toFixed(1);
+  const rawScore = finite(state.result.score);
+  const score = rawScore === null ? null : clamp(rawScore, 0, 100);
+  ui["score-value"].textContent = score === null ? "--" : score.toFixed(1);
   ui["grade-value"].textContent = state.result.grade || "--";
   const resultWeapon = state.result?.weapon;
   const displayWeapon = resultWeapon && (resultWeapon.nameZh || resultWeapon.nameEn) ? resultWeapon : state.weapon;
@@ -1952,8 +2149,47 @@ function renderScore() {
   ui["result-disposition"].textContent = formatDisposition(state.result.disposition);
   const circumference = 2 * Math.PI * 51;
   ui["orbit-value"].style.strokeDasharray = String(circumference);
-  ui["orbit-value"].style.strokeDashoffset = String(circumference * (1 - score / 100));
+  ui["orbit-value"].style.strokeDashoffset = String(
+    circumference * (score === null ? 1 : 1 - score / 100),
+  );
   ui["score-orbit"].dataset.grade = String(state.result.grade || "").charAt(0).toUpperCase();
+  const target = state.result.evaluationTarget || {};
+  const quality = state.result.searchQuality || {};
+  const calibration = state.result.targetCalibration || {};
+  const search = state.result.searchStatus || {};
+  const weaponMechanics = state.result.weaponMechanics || {};
+  ui["score-value"].title = [
+    score === null ? `评分未归一化：${state.result.scoreStatus || "上下文/最优性未决"}` : null,
+    quality.scoreMetric ? `评分指标：${quality.scoreMetric}` : null,
+    target.level != null ? `评价等级：${target.level}` : null,
+    calibration.status ? `校准：${calibration.status}` : null,
+    state.result.scoreBasis ? `评分基准：${state.result.scoreBasis}` : null,
+    state.result.modelStatus ? `模型：${state.result.modelStatus}` : null,
+    weaponMechanics.status ? `武器机制：${weaponMechanics.status}` : null,
+  ].filter(Boolean).join(" · ");
+  const contextNote = ui["score-context-note"];
+  if (contextNote) {
+    const bits = [];
+    if (target.level != null) bits.push(`评价 Lv${target.level}`);
+    if (quality.scoreMetric) bits.push(`指标 ${quality.scoreMetric}`);
+    if (calibration.status) bits.push(`校准 ${calibration.status}`);
+    if (state.result.targetStatus && state.result.targetStatus !== "not-applicable") {
+      bits.push(`目标 ${state.result.targetStatus}`);
+    }
+    if (state.result.modelStatus && state.result.modelStatus !== "modeled") {
+      bits.push(`模型 ${state.result.modelStatus}`);
+    }
+    if (weaponMechanics.status && weaponMechanics.status !== "modeled") {
+      bits.push(`武器机制 ${weaponMechanics.status}`);
+    }
+    if (search.status) bits.push(`搜索 ${search.status}`);
+    if (state.result.scoreBasis) bits.push(`基准 ${state.result.scoreBasis}`);
+    if (state.result.scoreStatus && state.result.scoreStatus !== "available") {
+      bits.push("当前结果未证明全局最优");
+    }
+    contextNote.textContent = bits.join(" · ");
+    contextNote.hidden = bits.length === 0;
+  }
 }
 
 function renderContributions() {
@@ -1986,6 +2222,16 @@ const DIAGNOSTIC_CODE_LABELS = {
   "loadout-over-capacity": "配装超出 60 容量上限",
 };
 
+// 多部件武器数据缺口（weapon-radial-or-field-damage-not-in-export-<part>）：
+// Rabbit 2D 导出不含这些武器的爆炸/残留场数据，最终伤害缺该部分（排序可用，绝对值偏低）。
+function multipartDiagnosticLabel(code) {
+  const match = String(code).match(/^weapon-radial-or-field-damage-not-in-export-(radial|field)$/);
+  if (!match) return null;
+  return match[1] === "radial"
+    ? "该武器的爆炸伤害部分不在离线数据内，最终伤害偏低（配装排序仍有效）"
+    : "该武器的残留场伤害部分不在离线数据内，最终伤害偏低（配装排序仍有效）";
+}
+
 // 灵化分支诊断码（incarnon-<分支id>-<原因>）翻译成人话，原因口径与后端注明一致。
 const INCARNON_DIAGNOSTIC_REASONS = {
   "runtime-scripts-not-applied": "含游戏内动态脚本效果（形态/叠层联动），该部分不参与解算",
@@ -2004,8 +2250,8 @@ function incarnonDiagnosticLabel(code) {
 function normalizeLabels(value) {
   if (!value) return [];
   if (Array.isArray(value)) return value.flatMap(normalizeLabels);
-  if (typeof value === "string") return [DIAGNOSTIC_CODE_LABELS[value] || incarnonDiagnosticLabel(value) || value];
-  if (typeof value === "object") return [value.label || value.nameZh || value.nameEn || DIAGNOSTIC_CODE_LABELS[value.code] || incarnonDiagnosticLabel(value.code) || value.code].filter(Boolean);
+  if (typeof value === "string") return [DIAGNOSTIC_CODE_LABELS[value] || incarnonDiagnosticLabel(value) || multipartDiagnosticLabel(value) || value];
+  if (typeof value === "object") return [value.label || value.nameZh || value.nameEn || DIAGNOSTIC_CODE_LABELS[value.code] || incarnonDiagnosticLabel(value.code) || multipartDiagnosticLabel(value.code) || value.code].filter(Boolean);
   return [String(value)];
 }
 
@@ -2067,10 +2313,12 @@ function formatMetric(value) {
 }
 
 function buildMetrics(build, weapon = state.weapon) {
+  // KPM 是解算的真实目标，永远排第一（后端 objectiveScore 字段；
+  // 旧响应无此字段时自动回落到既有指标）。
   const preferred = ["melee", "zaw"].includes(weapon?.weaponType)
-    ? ["attackDps", "heavyDamage", "heavyAttackDps", "shotDamage"]
-    : ["shotDamage", "burstDps", "sustainedDps"];
-  return preferred.filter((key) => finite(build?.[key]) !== null).slice(0, 4);
+    ? ["objectiveScore", "attackDps", "heavyDamage", "heavyAttackDps", "shotDamage"]
+    : ["objectiveScore", "shotDamage", "burstDps", "sustainedDps"];
+  return preferred.filter((key) => finite(build?.[key]) !== null).slice(0, 5);
 }
 
 function renderMetrics(build, target = ui["damage-metrics"], weapon = state.weapon) {
@@ -2252,8 +2500,8 @@ function renderEffectLines(mod, details = false) {
   if (details) {
     const setText = isSacrificeSetMod(mod) ? "" : modSetText(mod);
     if (setText) frag.append(create("p", "mod-effect-line is-set is-set-detail", setText));
-    const summary = modStackedSummary(mod);
-    if (summary) frag.append(create("p", "mod-effect-line is-calculated", summary));
+    // 镀层「实战满叠层」摘要不再渲染进卡面（会挤占卡面空间）——它保留在
+    // 悬停 title（modEffectText）里，鼠标悬停即可看到满层数值。
   }
   // A card with no public text remains visually empty; diagnostics belong in
   // the title/diagnostics panel, never as gray pseudo-effects on the artwork.
@@ -2324,15 +2572,22 @@ function renderRivenBuilder(target) {
     });
     const select = document.createElement("select");
     select.className = "riven-stat-code";
+    // 已被其他行占用的词条置灰（同一词条不能重复录入，与分析页同口径）。
+    const usedCodes = new Set(state.rivenBuilderStats.filter((_s, i) => i !== index).map((s) => s.code));
     defs.forEach((d) => {
       const option = document.createElement("option");
       option.value = d.code;
       option.textContent = d.label || d.code;
       option.selected = d.code === entry.code;
+      option.disabled = usedCodes.has(d.code);
       select.append(option);
     });
     select.value = entry.code;
-    select.addEventListener("change", () => { entry.code = select.value; renderManualMods(); });
+    select.addEventListener("change", () => {
+      if (usedCodes.has(select.value)) return toast("同一词条不能重复录入");
+      entry.code = select.value;
+      renderManualMods();
+    });
     const shape = state.rivenBuilderStats.filter((s) => s.negative).length;
     const positives = state.rivenBuilderStats.length - shape;
     const range = def ? rivenNominalRange(def, entry.negative, positives, shape) : null;
@@ -2374,12 +2629,36 @@ function renderRivenBuilder(target) {
     renderManualMods();
   });
   actions.append(add);
+  // ── 最优紫卡求解（anytime 预算驱动，后端 /api/recommend-riven）──────
+  const solveWrap = create("div", "riven-solve");
+  const budget = document.createElement("select");
+  budget.className = "riven-solve-budget";
+  budget.title = "求解预算：时间越长搜索越完整（结果随时可用）";
+  for (const seconds of [10, 20, 30, 60]) {
+    const option = document.createElement("option");
+    option.value = String(seconds);
+    option.textContent = `${seconds}s`;
+    option.selected = seconds === 10;
+    budget.append(option);
+  }
+  budget.value = String(state.rivenSolveBudget || 10);
+  budget.addEventListener("change", () => {
+    state.rivenSolveBudget = Number(budget.value);
+    persistActiveBuildConfig();
+  });
+  const solve = create("button", "button button-quiet", "◈ 计算最优");
+  solve.type = "button";
+  solve.title = "在当前配装语境下搜索 KPM 最高的紫卡词条组合（top 10）";
+  solve.addEventListener("click", () => requestRivenRecommendation(Number(budget.value), panel));
+  solveWrap.append(budget, solve);
+  actions.append(solveWrap);
   const insert = create("button", "button button-primary", "放入当前槽位");
   insert.type = "button";
   insert.addEventListener("click", () => {
     const slot = state.modPickerSlot;
     if (state.manualLocks[slot]) return toast("当前槽位已锁定");
     const stats = state.rivenBuilderStats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) }));
+    if (new Set(stats.map((s) => s.code)).size !== stats.length) return toast("同一词条不能重复录入");
     const negatives = stats.filter((s) => s.negative).length;
     const positives = stats.length - negatives;
     if (positives < 2 || positives > 3 || negatives > 1) return toast("需要 2–3 条正面词条，且最多 1 条负面");
@@ -2391,6 +2670,9 @@ function renderRivenBuilder(target) {
       maxRank: 8,
       rank: 8,
       stats,
+      // 紫卡落槽即掷出一个固定常规极性（游戏内 riven 洗卡极性随机且可用
+      // 极化卡改）：与本武器绑定、随配置持久化，之后不再受槽位极化影响。
+      rivenPolarity: state.manualSlots[slot]?.rivenPolarity || randomRegularPolarity(),
     };
     renderManualSlots();
     persistActiveBuildConfig();
@@ -2402,7 +2684,112 @@ function renderRivenBuilder(target) {
   const hint = create("small", "riven-builder-hint", "词条范围 = 官方 wiki 公式（倾向 × 基准 × 结构系数）；渲染使用 Omega 框系素材");
   actions.append(hint);
   panel.append(actions);
+  // 上一次求解结果（同一会话内重新打开面板时保留显示）。
+  if (state.rivenRecommendation) {
+    panel.append(renderRivenRecommendation(state.rivenRecommendation));
+  }
   target.replaceChildren(panel);
+}
+
+// ── 最优紫卡求解：请求 + 结果渲染 ──────────────────────────────────────
+async function requestRivenRecommendation(budgetSeconds, hostElement) {
+  if (state.rivenSolving) return toast("最优求解进行中，请稍候");
+  let payload;
+  try {
+    // 复用配装表单的全部语境（武器/敌人/约束/赋能/灵化/架势），与
+    // 「填充最优」同一套基准——最优紫卡是在当前限制下的最优配装之上定义的。
+    payload = buildPayloadFromForm();
+  } catch (error) {
+    return toast(error.message || "无法读取当前配装语境");
+  }
+  delete payload.riven;
+  payload.budgetSeconds = budgetSeconds;
+  payload.topLimit = 10;
+  state.rivenSolving = true;
+  const existing = hostElement.querySelector(".riven-solve-results");
+  const list = create("div", "riven-solve-results");
+  list.append(create("p", "riven-solve-progress", `正在搜索最优词条组合（预算 ${budgetSeconds} 秒，期间其他解算会排队）…`));
+  if (existing) existing.replaceWith(list);
+  else hostElement.append(list);
+  try {
+    const response = await fetch("/api/recommend-riven", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      const error = await response.json().catch(() => null);
+      throw new Error(error?.error?.message || `求解失败（${response.status}）`);
+    }
+    const result = await response.json();
+    state.rivenRecommendation = { ...result, budgetSeconds };
+    const fresh = renderRivenRecommendation(state.rivenRecommendation);
+    list.replaceWith(fresh);
+  } catch (error) {
+    list.replaceChildren(create("p", "riven-solve-error", error.message || "求解失败"));
+  } finally {
+    state.rivenSolving = false;
+  }
+}
+
+function renderRivenRecommendation(recommendation) {
+  // 返回带 .riven-solve-results 外框的完整节点（可直接 append 到面板）。
+  const wrap = create("div", "riven-solve-results");
+  const combos = recommendation.combos || [];
+  if (!combos.length) {
+    wrap.append(create("p", "riven-solve-error", "没有找到可行的词条组合"));
+    return wrap;
+  }
+  const head = create("div", "riven-solve-head");
+  head.append(
+    create("strong", "", "最优词条 TOP 10"),
+    create("small", "", `基准 KPM ${formatMetric(recommendation.baselineScore)} · 用时 ${recommendation.elapsed.toFixed(1)}s · ${recommendation.evaluations.toLocaleString()} 次评估 · 点击回填`),
+  );
+  wrap.append(head);
+  const rows = create("div", "riven-solve-list");
+  combos.forEach((combo, index) => {
+    const row = create("button", `riven-solve-row${index === 0 ? " is-top" : ""}`);
+    row.type = "button";
+    row.title = "点击将这组词条回填到上面的构建器（数值取理论满值区间内可调）";
+    const rank = create("span", "riven-solve-rank", String(index + 1));
+    const stats = create("div", "riven-solve-stats");
+    for (const stat of combo.stats) {
+      stats.append(create("em", stat.negative ? "is-negative" : "", `${stat.negative ? "−" : "+"}${stat.label} ${stat.value.toFixed(1)}${stat.unit === "percent" ? "%" : ""}`));
+    }
+    const score = create("span", "riven-solve-score");
+    score.append(
+      create("b", "", formatMetric(combo.score)),
+      create("i", combo.gain >= 0 ? "is-positive" : "is-negative", `${combo.gain >= 0 ? "+" : ""}${combo.gain.toFixed(1)}%`),
+    );
+    row.append(rank, stats, score);
+    row.addEventListener("click", () => applyRecommendedRiven(combo));
+    rows.append(row);
+  });
+  wrap.append(rows);
+  return wrap;
+}
+
+function applyRecommendedRiven(combo) {
+  const defs = rivenStatDefinitions();
+  const negatives = combo.stats.filter((s) => s.negative).length;
+  const positives = combo.stats.length - negatives;
+  if (positives < 2 || positives > 3 || negatives > 1) {
+    return toast("该组合词条结构无法回填");
+  }
+  state.rivenBuilderStats = combo.stats.map((stat) => {
+    const def = defs.find((d) => d.code === stat.code);
+    const entry = { code: stat.code, value: null, negative: Boolean(stat.negative) };
+    if (def) {
+      const range = rivenNominalRange(def, entry.negative, positives, negatives);
+      if (range) {
+        // 回填落在合法区间内的该词条理论值（超出区间时夹到边界）。
+        entry.value = Math.min(Math.max(stat.value, range.low), range.high);
+      }
+    }
+    return entry;
+  });
+  renderManualMods();
+  toast(`已回填第 ${state.rivenRecommendation?.combos?.indexOf(combo) + 1 || "?"} 名词条组合`);
 }
 
 function createCustomRivenSlotCard(mod, index, slotPolarity = null) {
@@ -2424,14 +2811,11 @@ function createCustomRivenSlotCard(mod, index, slotPolarity = null) {
   if (frames.lowerTab) compat.style.setProperty("--lower-tab", `url("${frames.lowerTab}")`);
   frame.append(compat);
   frame.append(rankPips(8, 8));
-  // 消耗/极性随槽位极化声明联动：formaSlots 声明非万能极性即视为紫卡匹配，
-  // 消耗减半（18→9），徽章显示声明的极性；未声明保持 18 与占位图标。
+  // 消耗/极性徽章：紫卡固定极性（落槽时掷出）与槽位极性比对——
+  // 匹配减半（18→9）/不匹配 ×1.25 / 槽位无极性全值；徽章显示紫卡固定极性。
   const rivenEffective = modEffectiveDrain(mod, slotPolarity, index);
-  const declaredPolarity = state.formaSlots?.[index] || null;
-  const badge = modCostBadge(rivenEffective.drain, declaredPolarity, "eager", " is-riven-drain", rivenEffective.relation === "match" ? "match" : "");
-  if (!declaredPolarity) {
-    badge.querySelector(".mod-drain").append(imageNode(POLARITY_IMAGES.AP_ATTACK, "mod-polarity", "紫卡极性", "eager"));
-  }
+  const rivenPol = rivenFixedPolarity(mod, index);
+  const badge = modCostBadge(rivenEffective.drain, rivenPol, "eager", " is-riven-drain", rivenEffective.relation === "match" ? "match" : rivenEffective.relation === "mismatch" ? "mismatch" : "");
   frame.append(badge);
   frame.append(...modFrameLayers(frames, "eager"));
   card.append(modTiltWrap(frame), create("span", "slot-number", String(index + 1).padStart(2, "0")));
@@ -2743,6 +3127,15 @@ function modCategory(mod) {
   return "utility";
 }
 
+// MOD 互斥家族键：modFamily + 武器兼容类别。镀层/普通/Prime/并合同名卡共享
+// modFamily 且兼容同一武器（如镀层步枪才能与步枪才能）——一张配装只能带一张；
+// 跨武器类别的同名家族（膛线=步枪 / 抵近射击=霰弹枪）互不冲突。
+function modExclusiveFamily(mod) {
+  const family = String(mod?.modFamily || mod?.nameTag || mod?.nameEn || mod?.nameInternal || mod?.path || "").toLocaleLowerCase();
+  const compatibility = String(mod?.compatibility || "").toLocaleLowerCase();
+  return `${family}#${compatibility}`;
+}
+
 function manualModRecords() {
   const weapon = state.buildWeapon;
   if (state.modPickerKind === "stance") {
@@ -2755,7 +3148,13 @@ function manualModRecords() {
   if (!Array.isArray(rows)) return [];
   const query = String(ui["manual-mod-search"]?.value || "").trim().toLocaleLowerCase();
   const used = new Set(state.manualSlots.filter(Boolean).map((item) => item.path));
+  // 已装备卡的互斥家族：同名（镀层/普通/Prime）卡在选择器中一并隐藏。
+  const usedFamilies = new Set(state.manualSlots.filter(Boolean).map((item) => modExclusiveFamily(item)).filter(Boolean));
   const filtered = rows.filter((mod) => {
+    // 派系增伤卡按目标派系弱点定向加成——配装页维持目标中立口径，不收录。
+    if (mod.factionDamage) return false;
+    const family = modExclusiveFamily(mod);
+    if (family && usedFamilies.has(family) && !used.has(mod.path)) return false;
     const effectText = modEffectText({ ...mod, rank: mod.maxRank ?? 0 });
     const haystack = [mod.nameZh, mod.nameEn, mod.nameInternal, mod.path, effectText].filter(Boolean).join(" ").toLocaleLowerCase();
     return (!query || haystack.includes(query)) && (state.manualModCategory === "all" || modCategory(mod) === state.manualModCategory) && !used.has(mod.path) && mod.selectable !== false && modMatchesBuildWeapon(mod);
@@ -2815,7 +3214,10 @@ function utilityCompatLabel(mod) {
 
 function createSpecialModCard(mod, kind, compact = false, slotPolarityOverride) {
   const maxRank = Number(mod.maxRank ?? mod.rank ?? 0);
-  const card = createNormalModCard({ ...mod, art: catalogIconAsset(mod), maxRank, rank: Number(mod.rank ?? maxRank) }, 0, {
+  // 卡面：目录 iconAsset 优先，缺失时从资源索引按路径解析（Prime 版与
+  // 普通版共用同一张官方卡面，导出记录不带 icon 字段）。
+  const art = catalogIconAsset(mod) || modAssetFields(mod).art || "";
+  const card = createNormalModCard({ ...mod, art, maxRank, rank: Number(mod.rank ?? maxRank) }, 0, {
     compact,
     compatLabel: kind === "stance" ? "架势" : utilityCompatLabel(mod),
     slotPolarity: slotPolarityOverride !== undefined ? slotPolarityOverride : weaponSpecialSlotPolarity(kind),
@@ -3070,10 +3472,14 @@ function utilityModRecords() {
   const records = new Map((state.catalog?.manualMods || []).map((mod) => [mod.path, mod]));
   return catalogRows(state.catalog?.utilityMods, "mods").map((mod) => {
     const joined = records.get(mod.path) || {};
-    const maxRank = Number(mod.maxRank ?? mod.rank ?? joined.maxRank ?? 0);
+    const asset = state.modAssets?.mods?.[mod.path] || {};
+    const maxRank = Number(mod.maxRank ?? mod.rank ?? joined.maxRank ?? asset.maxRank ?? 0);
     const description = cleanOfficialText(mod.description || joined.description || "");
     const effectsZhByRank = Array.isArray(mod.effectsZhByRank) ? mod.effectsZhByRank.map((rank) => (Array.isArray(rank) ? rank.map(cleanOfficialText) : rank)) : mod.effectsZhByRank;
-    return { ...joined, ...mod, maxRank, rank: Number(mod.selectedRank ?? maxRank), description, effectsZhByRank };
+    // 卡面兜底：目录行 iconAsset 缺失（export-fixup 补丁卡）时用资源索引的
+    // art（Prime 与普通版共用同一张官方卡面）。
+    const iconAsset = mod.iconAsset || asset.art || joined.iconAsset || null;
+    return { ...joined, ...mod, maxRank, rank: Number(mod.selectedRank ?? maxRank), description, effectsZhByRank, iconAsset, ...(iconAsset ? { art: iconAsset } : {}) };
   });
 }
 
@@ -3112,6 +3518,20 @@ function stanceMatchesBuildWeapon(stance) {
 }
 
 function utilityMatchesBuildWeapon(mod) {
+  // 与后端 optimizer._mod_matches_weapon 同口径的兼容判定：先看家族
+  // compatibility（基类 ancestry 匹配），再看 compatibilityTags /
+  // incompatibilityTags。数据来自冻结目录行（utilityMods 已并入这些字段），
+  // 避免「前端能选、后端报 exilus is not compatible」的断层。
+  const compat = String(mod?.compatibility || "").trim();
+  if (compat) {
+    const ancestry = new Set([...(state.buildWeapon?.ancestry || []), state.buildWeapon?.path].filter(Boolean).map((p) => String(p).replace(/\/+$/, "").toLocaleLowerCase()));
+    if (!ancestry.has(compat.replace(/\/+$/, "").toLocaleLowerCase())) return false;
+  }
+  const weaponTags = new Set((state.buildWeapon?.compatTags || []).map((tag) => String(tag).toLocaleLowerCase()));
+  const required = (mod?.compatibilityTags || []).map((tag) => String(tag).toLocaleLowerCase());
+  const blocked = (mod?.incompatibilityTags || []).map((tag) => String(tag).toLocaleLowerCase());
+  if (required.length && !required.some((tag) => weaponTags.has(tag))) return false;
+  if (blocked.some((tag) => weaponTags.has(tag))) return false;
   const slot = String(mod?.slotKind || "").toLocaleLowerCase();
   const weaponSlot = String(state.buildWeapon?.slot || "").toLocaleLowerCase();
   if (slot === "melee") return isMeleeBuild();
@@ -3255,7 +3675,17 @@ function warframeArcaneHint(arcane) {
   return bits.join(" · ") || arcaneEffectHint(arcane);
 }
 
+// 赋能描述：等级变化时优先取逐级效果行（effectsZhByRank[rank]），
+// 让描述与解算使用的等级同步；无逐级数据时退回目录静态描述。
 function arcaneDescription(arcane) {
+  const rank = arcane?.rank;
+  const byRank = Array.isArray(arcane?.effectsZhByRank) ? arcane.effectsZhByRank : [];
+  if (Number.isInteger(Number(rank)) && byRank.length) {
+    const line = byRank[Math.min(Math.max(Number(rank), 0), byRank.length - 1)];
+    const text = Array.isArray(line) ? line.join("\n") : String(line || "");
+    const cleaned = cleanOfficialText(text);
+    if (cleaned) return cleaned;
+  }
   return String(arcane?.description || arcane?.effect || arcaneEffectHint(arcane))
     .replace(/<\/?DT_[A-Z_]+_COLOR>/g, "");
 }
@@ -3383,6 +3813,23 @@ function weaponPickerRows() {
   );
 }
 
+// 武器 StoreIcon 匹配（frontend/assets/weapons/，80% 命中率）。
+// 构造候选文件名；img onerror 自然降级到类型色块占位。
+function weaponIconFile(weapon) {
+  const names = [String(weapon.nameEn || "")];
+  for (const n of names) {
+    if (!n) continue;
+    for (const pattern of [
+      n.replace(/ /g, ""),
+      n.replace(/ /g, "").replace(/'/g, ""),
+      n.replace(/ /g, "").replace(/-/g, ""),
+    ]) {
+      return `${pattern.replace(/^MK1(?=[A-Z])/, "Mk1")}.png`;
+    }
+  }
+  return null;
+}
+
 function renderWeaponPicker() {
   const list = ui["weapon-picker-list"];
   const cats = ui["weapon-picker-categories"];
@@ -3427,13 +3874,37 @@ function renderWeaponPicker() {
       const part = (partList || []).find((c) => c.path === state.kitgunParts.chamber);
       kitgunDispo = isZaw ? (part?.disposition ?? null) : (weapon.slot === "primary" ? (part?.primaryDisposition ?? part?.disposition ?? null) : (part?.disposition ?? null));
     }
+    // 武器缩略图（StoreIcons ~80% 命中率；miss 时 img onerror 降级到类型色块）。
+    const thumb = create("div", "weapon-thumb");
+    const typeColor = {
+      rifle: "#5b8dc9", shotgun: "#c05555", pistol: "#7db85b", melee: "#c9b05b",
+      bow: "#8d6fc9", zaw: "#c9b05b",
+    }[weapon.weaponType] || "rgba(148,163,184,.3)";
+    const iconFile = weaponIconFile(weapon);
+    if (iconFile) {
+      const img = create("img", "");
+      img.src = `/assets/weapons/${iconFile}`;
+      img.alt = "";
+      img.loading = "lazy";
+      img.addEventListener("error", () => {
+        img.remove();
+        const placeholder = create("div", "weapon-thumb-placeholder");
+        placeholder.style.background = typeColor;
+        thumb.append(placeholder);
+      });
+      thumb.append(img);
+    } else {
+      const placeholder = create("div", "weapon-thumb-placeholder");
+      placeholder.style.background = typeColor;
+      thumb.append(placeholder);
+    }
     copy.append(
       create("strong", "", isAssembly ? (isZaw ? "组合近战（Zaw · 装配）" : `组合枪（${weapon.slot === "primary" ? "主武器" : "副武器"} · 装配）`) : weaponName(weapon)),
       create("small", "", isAssembly
         ? `${isZaw ? "剑刃×握把×配重" : "腔体×握把×装填器"} · 倾向 ${kitgunDispo ? formatDisposition(kitgunDispo) : isZaw ? "跟剑刃" : "跟腔体"}${kitgunDispo ? " " + dispositionDots(kitgunDispo) : ""}`
         : `${TYPE_LABELS[weapon.weaponType] || weapon.weaponType} · 倾向 ${formatDisposition(weapon.disposition)} ${dispositionDots(weapon.disposition)}`),
     );
-    option.append(copy);
+    option.append(thumb, copy);
     if (weapon.buildAvailable === false && !isAssembly && !forAnalysis) {
       copy.append(create("em", "", `不可用 · ${issueLabel(weapon.buildIssue || weapon.issue)}`));
       option.disabled = true;
@@ -3997,10 +4468,14 @@ function externalBuffsPayload() {
 }
 
 function rivenPayload() {
-  const rivenSlot = state.manualSlots.find((mod) => mod && mod.__riven && Array.isArray(mod.stats) && mod.stats.length);
+  const rivenIndex = state.manualSlots.findIndex((mod) => mod && mod.__riven && Array.isArray(mod.stats) && mod.stats.length);
+  const rivenSlot = rivenIndex >= 0 ? state.manualSlots[rivenIndex] : null;
   if (!rivenSlot) return null;
   return {
     stats: rivenSlot.stats.map((stat) => ({ code: stat.code, value: Number(stat.value || 0), negative: Boolean(stat.negative) })),
+    // 后端容量校验用：紫卡固定极性 + 所占槽位（极性比对决定 18/9/22.5 消耗）。
+    polarity: rivenFixedPolarity(rivenSlot, rivenIndex),
+    slot: rivenIndex,
   };
 }
 
@@ -4108,6 +4583,8 @@ function renderArcaneSlot(kind, slotIndex, item) {
   const slot = create("article", `arcane-workbench-slot${record ? " is-filled" : ""}`);
   const rarity = String(record?.rarity || "").toUpperCase();
   slot.dataset.rarity = rarity || "EMPTY";
+  // 贡献徽章定位锚点（paintEquippedGains 按 __arcane__:<path> 查找）。
+  if (record) slot.dataset.arcanePath = record.path;
   const visual = create("div", "arcane-slot-visual");
   const frame = record ? (ARCANE_FRAMES[rarity] || ARCANE_FRAMES.COMMON) : "/assets/arcanes/NoArcaneIcon.png";
   visual.append(imageNode(frame, "arcane-slot-frame", "", "lazy"));
@@ -4699,6 +5176,22 @@ function polarityMatches(modPolarity, slotPolarity) {
   return modPolarity === "AP_ANY" || slotPolarity === "AP_ANY" || modPolarity === slotPolarity;
 }
 
+// 紫卡固定极性候选：只含常规六系（不含 Umbra/Precept/任意/通用），
+// 与游戏内紫卡可用极化范围一致。
+const RIVEN_POLARITY_CHOICES = ["AP_ATTACK", "AP_DEFENSE", "AP_TACTIC", "AP_POWER", "AP_WARD", "AP_PRECEPT"];
+function randomRegularPolarity() {
+  return RIVEN_POLARITY_CHOICES[Math.floor(Math.random() * RIVEN_POLARITY_CHOICES.length)];
+}
+// 取紫卡固定极性：无记录时（旧配置/极端路径）按稳定伪随机补一个，
+// 保证同一武器+同一槽位的旧数据渲染结果稳定。
+function rivenFixedPolarity(mod, slotIndex = 0) {
+  if (mod?.rivenPolarity && RIVEN_POLARITY_CHOICES.includes(mod.rivenPolarity)) return mod.rivenPolarity;
+  const seed = `${state.buildWeapon?.path || ""}#${slotIndex}`;
+  let hash = 0;
+  for (const ch of seed) hash = (hash * 31 + ch.codePointAt(0)) >>> 0;
+  return RIVEN_POLARITY_CHOICES[hash % RIVEN_POLARITY_CHOICES.length];
+}
+
 function modBaseDrain(mod) {
   if (mod?.__riven) return 18;
   const meta = state.modAssets?.mods?.[mod?.path] || {};
@@ -4715,11 +5208,13 @@ function modBaseDrain(mod) {
 function modEffectiveDrain(mod, slotPolarity, slotIndex) {
   const base = modBaseDrain(mod);
   if (mod?.__riven) {
-    // 紫卡自身极性由槽位极化声明：槽位已被 forma 极化（formaSlots 有记录）
-    // 即视为紫卡与该槽匹配，消耗减半；未极化保持中性全值。
-    const declared = Number.isInteger(slotIndex) ? state.formaSlots?.[slotIndex] : null;
-    if (declared && slotPolarity && slotPolarity !== "AP_UNIVERSAL") {
-      return { drain: Math.ceil(base / 2), relation: "match" };
+    // 紫卡拥有落槽时掷出的固定常规极性（rivenFixedPolarity）：与槽位极性
+    // 独立比对——匹配减半 / 不匹配 ×1.25 / 槽位无极性全值。槽位极化只改
+    // 变槽位极性本身，不再「声明」紫卡极性（紫卡极性不随极化变动）。
+    const rivenPol = rivenFixedPolarity(mod, slotIndex);
+    if (slotPolarity && slotPolarity !== "AP_UNIVERSAL") {
+      if (polarityMatches(rivenPol, slotPolarity)) return { drain: Math.ceil(base / 2), relation: "match" };
+      return { drain: Math.ceil(base * 1.25), relation: "mismatch" };
     }
     return { drain: base, relation: "neutral" };
   }
@@ -4877,7 +5372,8 @@ function slotPolarityChip(index, perSlotInfo) {
     chip.append(create("span", "slot-polarity-icon", ""));
   }
   const isRivenSlot = Boolean(state.manualSlots[index]?.__riven);
-  chip.title = `槽位 ${index + 1} 极性 · ${POLARITY_NAMES[pol] || pol}${info.forma ? "（已极化）" : ""}${info.relation === "mismatch" ? " · MOD 不匹配（消耗 ×1.25）" : info.relation === "match" ? " · 匹配（消耗减半）" : ""}${isRivenSlot ? " · 紫卡槽：极化即声明紫卡极性，匹配后消耗减半" : ""} · 点击切换极化`;
+  const rivenPol = isRivenSlot ? rivenFixedPolarity(state.manualSlots[index], index) : null;
+  chip.title = `槽位 ${index + 1} 极性 · ${POLARITY_NAMES[pol] || pol}${info.forma ? "（已极化）" : ""}${info.relation === "mismatch" ? " · MOD 不匹配（消耗 ×1.25）" : info.relation === "match" ? " · 匹配（消耗减半）" : ""}${isRivenSlot ? ` · 紫卡固定极性：${POLARITY_NAMES[rivenPol] || rivenPol}（不随极化变动）` : ""} · 点击切换极化`;
   chip.setAttribute("aria-label", chip.title);
   chip.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -4894,8 +5390,8 @@ function cycleSlotPolarity(index) {
   const order = [null, "AP_ATTACK", "AP_DEFENSE", "AP_TACTIC", "AP_UMBRA", "AP_POWER", "AP_WARD", "AP_PRECEPT", "AP_ANY"];
   const current = weaponSlotPolarities()[index] || null;
   if (!mod || mod.__riven) {
-    // 空槽与紫卡槽：自由循环极化极性。紫卡自身极性以槽位极化声明——
-    // 已极化的紫卡槽视为与紫卡匹配（消耗减半），与游戏内 forma 语义一致。
+    // 空槽与紫卡槽自由循环极化。紫卡自身极性固定（落槽时掷出），
+    // 槽位极化只改变槽位极性；紫卡按固定极性与槽位比对消耗。
     const currentIndex = Math.max(0, order.indexOf(current));
     const next = order[(currentIndex + 1) % order.length];
     setSlotPolarity(index, next);
@@ -4992,12 +5488,14 @@ function beginModDrag(kind, index, event, slot) {
   event.dataTransfer.setData("application/x-wf-slot", `${kind}:${index}`);
   event.dataTransfer.setData("text/plain", `${kind}:${index}`);
   slot.classList.add("is-dragging");
+  document.body.classList.add("is-mod-dragging");
   const ghost = createModDragGhost(slot);
   if (ghost) event.dataTransfer.setDragImage(ghost, ghost.offsetWidth / 2, Math.min(45, ghost.offsetHeight / 2));
 }
 function finishModDrag() {
   modDragSource = null;
   document.querySelectorAll(".is-dragging, .is-drop-target").forEach((node) => node.classList.remove("is-dragging", "is-drop-target"));
+  document.body.classList.remove("is-mod-dragging");
   removeModDragGhost();
 }
 function pointerDragTarget(kind, event) {
@@ -5016,6 +5514,10 @@ function startPointerModDrag(kind, index, event, slot) {
   modDragSource = { kind, index };
   pointerModDrag = { kind, index, slot, target: null };
   slot.classList.add("is-dragging");
+  // 拖拽期间冻结所有 MOD 卡的悬停展开：展开中的镀层/紫卡卡面会把上方
+  // 槽位的命中区域整个盖住（卡面 pointer-events:auto），既让 drop 高亮
+  // 落到错误的槽位，也会在松手后把展开态留在错误的卡上。
+  document.body.classList.add("is-mod-dragging");
   const ghost = createModDragGhost(slot);
   if (ghost) {
     ghost.classList.add("is-pointer-drag");
@@ -5100,7 +5602,7 @@ function manualSlotSignature(mod, index, slotPolarities, capacity) {
     ui["manual-level-toggle"]?.checked ? 1 : 0,
   ].join("|");
   if (!mod) return `empty|${common}`;
-  if (mod.__riven) return `riven|${mod.nameZh || ""}|${JSON.stringify(mod.stats || [])}|${common}`;
+  if (mod.__riven) return `riven|${mod.nameZh || ""}|${JSON.stringify(mod.stats || [])}|${mod.rivenPolarity || ""}|${common}`;
   return `mod|${mod.path}|${Number(mod.rank ?? mod.maxRank ?? 0)}|${common}|${modRuntimeText(mod)}`;
 }
 
@@ -5348,13 +5850,17 @@ async function scheduleEquippedGains() {
   const requestId = ++equippedGainsRequestId;
   const payload = modGainsPayload();
   if (!payload) return;
+  // 装备贡献候选：MOD + 紫卡 + 已配赋能（__arcane__:<path> 通道，后端移除
+  // 该赋能测损失）。赋能随 buildPayloadFromForm 的 arcanes 字段一起下发。
   const equipped = state.manualSlots.filter(Boolean).map((mod) => mod.__riven ? "__riven__" : mod.path);
-  if (!equipped.length) { state.equippedGains = null; paintEquippedGains(); return; }
+  const arcaneKeys = (payload.arcanes || []).filter(Boolean).map((item) => `__arcane__:${item.path}`);
+  const allCandidates = [...equipped, ...arcaneKeys];
+  if (!allCandidates.length) { state.equippedGains = null; paintEquippedGains(); return; }
   try {
     const response = await fetch("/api/mod-gains", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...payload, candidates: equipped, mode: "equipped" }),
+      body: JSON.stringify({ ...payload, candidates: allCandidates, mode: "equipped" }),
     });
     const body = await response.json();
     if (!response.ok || requestId !== equippedGainsRequestId) return;
@@ -5367,23 +5873,55 @@ async function scheduleEquippedGains() {
 
 function paintEquippedGains() {
   const gains = state.equippedGains || {};
+  const renderBadge = (host, info, { negate = true, capacityHint = false } = {}) => {
+    let badge = host.querySelector(".mod-gain-badge");
+    if (!badge) {
+      badge = create("div", "mod-gain-badge");
+      host.append(badge);
+    }
+    if (!info || info.gainPercent === null || info.gainPercent === undefined) {
+      // 有明确原因的（超容量等）显示短标签而不是隐藏——用户需要知道为什么没数字。
+      if (capacityHint && info?.reason === "over-capacity") {
+        badge.hidden = false;
+        badge.textContent = "超容量";
+        badge.classList.add("is-negative");
+        badge.title = `换入后容量 ${info.capacity} / ${info.capacityLimit}：装不下`;
+        return;
+      }
+      badge.hidden = true;
+      badge.removeAttribute("title");
+      return;
+    }
+    // equipped mode returns (without - with); contribution is the negation
+    const percent = negate ? -Number(info.gainPercent) : Number(info.gainPercent);
+    badge.hidden = false;
+    badge.textContent = `${percent >= 0 ? "+" : ""}${percent.toFixed(1)}%`;
+    badge.classList.toggle("is-negative", percent < 0);
+    badge.removeAttribute("title");
+  };
   document.querySelectorAll("#manual-slots .game-mod-card").forEach((card) => {
     const slot = card.closest(".manual-slot");
     const index = Number(slot?.dataset.slot);
     const mod = state.manualSlots[index];
     if (!mod) return;
     const key = mod.__riven ? "__riven__" : mod.path;
-    const info = gains[key];
-    let badge = card.querySelector(".mod-gain-badge");
+    renderBadge(card, gains[key], { negate: true });
+  });
+  // 赋能槽贡献徽章（__arcane__ 通道）：与 MOD 同一增益服务。
+  document.querySelectorAll("#build-arcane-list .arcane-option, #build-arcane-list [data-arcane-path]").forEach((node) => {
+    const path = node.dataset.arcanePath || node.closest("[data-arcane-path]")?.dataset.arcanePath;
+    if (!path) return;
+    const info = gains[`__arcane__:${path}`];
+    if (!info) return;
+    let badge = node.querySelector(".mod-gain-badge");
     if (!badge) {
-      badge = create("div", "mod-gain-badge");
-      card.append(badge);
+      badge = create("div", "mod-gain-badge arcane-gain-badge");
+      node.append(badge);
     }
-    if (!info || info.gainPercent === null || info.gainPercent === undefined) {
+    if (info.gainPercent === null || info.gainPercent === undefined) {
       badge.hidden = true;
       return;
     }
-    // equipped mode returns (without - with); contribution is the negation
     const percent = -Number(info.gainPercent);
     badge.hidden = false;
     badge.textContent = `${percent >= 0 ? "+" : ""}${percent.toFixed(1)}%`;
@@ -5405,13 +5943,22 @@ function paintModGains() {
       card.append(badge);
     }
     if (!gainInfo || gainInfo.gainPercent === null || gainInfo.gainPercent === undefined) {
+      if (gainInfo?.reason === "over-capacity") {
+        badge.hidden = false;
+        badge.textContent = "超容量";
+        badge.classList.add("is-negative");
+        badge.title = `换入后容量 ${gainInfo.capacity} / ${gainInfo.capacityLimit}：装不下`;
+        return;
+      }
       badge.hidden = true;
+      badge.removeAttribute("title");
       return;
     }
     const percent = Number(gainInfo.gainPercent);
     badge.hidden = false;
     badge.textContent = `${percent >= 0 ? "+" : ""}${percent.toFixed(1)}%`;
     badge.classList.toggle("is-negative", percent < 0);
+    badge.removeAttribute("title");
   });
 }
 
@@ -5483,6 +6030,13 @@ function applyModToPickerSlot(mod) {
   const slot = state.modPickerSlot;
   if (state.manualLocks[slot]) return toast("当前槽位已锁定");
   const candidate = { ...mod, rank: ui["manual-level-toggle"]?.checked === false ? 0 : (mod.rank ?? mod.maxRank ?? 0) };
+  // 同名互斥：镀层/普通/Prime 同家族卡（如镀层步枪才能与步枪才能）一张配装
+  // 只能带一张——选择器已隐藏，这里兜底拦截（防止填充/导入路径绕过）。
+  const candidateFamily = modExclusiveFamily(candidate);
+  if (candidateFamily) {
+    const conflict = state.manualSlots.some((item, index) => item && index !== slot && item.path !== candidate.path && modExclusiveFamily(item) === candidateFamily);
+    if (conflict) return toast("同名 MOD（镀层/普通/Prime）一张配装只能携带一张");
+  }
   const previous = state.manualSlots[slot] || null;
   state.manualSlots[slot] = candidate;
   const { fits, polarized } = ensureCapacityFit(slot);
@@ -5580,6 +6134,57 @@ function bindModPreview(option, mod, kind = state.modPickerKind) {
   option.addEventListener("blur", hideModPreview);
 }
 
+let scopeMenuElement = null;
+
+function closeScopeMenu() {
+  scopeMenuElement?.remove();
+  scopeMenuElement = null;
+}
+
+function bindScopeModMenu(option, mod) {
+  const open = (x, y) => {
+    closeScopeMenu();
+    hideModPreview();
+    const menu = create("div", "scope-context-menu");
+    const isRequired = state.requiredMods.includes(mod.path);
+    const isForbidden = state.forbiddenMods.includes(mod.path);
+    const reqButton = create("button", "", isRequired ? "✓ 必选（点击移除）" : "加入必选");
+    reqButton.type = "button";
+    reqButton.addEventListener("click", () => { toggleScopeMod(mod.path, "required"); closeScopeMenu(); });
+    const forbButton = create("button", "", isForbidden ? "✓ 禁选（点击移除）" : "加入禁选");
+    forbButton.type = "button";
+    forbButton.addEventListener("click", () => { toggleScopeMod(mod.path, "forbidden"); closeScopeMenu(); });
+    menu.append(reqButton, forbButton);
+    menu.style.left = `${Math.min(x, window.innerWidth - 170)}px`;
+    menu.style.top = `${Math.min(y, window.innerHeight - 90)}px`;
+    document.body.append(menu);
+    scopeMenuElement = menu;
+    // 点击任意处关闭
+    setTimeout(() => {
+      document.addEventListener("pointerdown", function handler(event) {
+        if (!menu.contains(event.target)) {
+          closeScopeMenu();
+          document.removeEventListener("pointerdown", handler);
+        }
+      }, { once: false });
+    }, 0);
+  };
+  option.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+    open(event.clientX, event.clientY);
+  });
+  // 长按（触屏）：500ms 未松手即打开
+  let pressTimer = null;
+  option.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse") return;
+    pressTimer = window.setTimeout(() => { pressTimer = null; open(event.clientX, event.clientY); }, 500);
+  });
+  const cancel = () => { if (pressTimer) { window.clearTimeout(pressTimer); pressTimer = null; } };
+  option.addEventListener("pointerup", cancel);
+  option.addEventListener("pointercancel", cancel);
+  option.addEventListener("pointerleave", cancel);
+}
+
 function renderManualMods() {
   // createNormalModCard remains the single source for card geometry/assets.
   renderManualModCategories();
@@ -5632,6 +6237,12 @@ function renderManualMods() {
     // extensions that monkey-patch the picker preview hook.
     // bindModPreview(option, mod);
     option.addEventListener("click", () => { hideModPreview(); applyModToPickerSlot(mod); });
+    if (state.modPickerKind === "normal") {
+      // 右键 / 长按 → 必选/禁选菜单（「限制」面板的入口）。
+      bindScopeModMenu(option, mod);
+      if (state.requiredMods.includes(mod.path)) option.classList.add("is-scope-required");
+      if (state.forbiddenMods.includes(mod.path)) option.classList.add("is-scope-forbidden");
+    }
     return option;
   });
   target.replaceChildren(...(nodes.length ? nodes : [create("p", "empty-copy", "没有符合条件的 MOD")]));
@@ -5782,6 +6393,13 @@ function renderStatusBreakdown(source) {
   const totalExpected = codes.reduce((sum, code) => sum + Math.max(Number(procs[code]) || 0, 0), 0);
   const wrap = create("div", "status-breakdown");
   wrap.append(create("h4", "status-breakdown-title", "异常触发与持续伤害"));
+  // 口径标注（R2 API 分层）：本块的「稳态」数字来自闭式稳态模型
+  // （sustained_status_damage），与战斗演算块的步进窗口模型
+  // （windowed_status_damage，KPM/回放数据源）口径不同——闭式假设触发
+  // 已满层，步进从零层爬升并逐 tick 重读护甲/病毒。排序参考一致，
+  // 绝对值以演算块为准。
+  const note = create("p", "status-breakdown-note", "稳态口径：假设触发满层（闭式）；战斗演算块为逐 tick 步进口径，绝对值以演算块为准");
+  wrap.append(note);
   const rows = codes.map((code) => {
     const chance = Number(procs[code]) || 0;
     const share = totalExpected > 0 ? (Math.max(chance, 0) / totalExpected) : 0;
@@ -5827,7 +6445,9 @@ function renderStatusBreakdown(source) {
 }
 
 function drawTimelineVisual(timeline, killTimeline) {
-  const target = ui["timeline-content"];
+  // Legacy 赋能时间线：渲染目标优先战斗演算块容器（结果区重构后
+  // timeline-content 已移入 combat-charts 的兜底节点）。
+  const target = document.getElementById("timeline-content") || document.getElementById("combat-charts");
   if (!target) return;
   const points = Array.isArray(timeline?.points) ? timeline.points : (Array.isArray(timeline) ? timeline : []);
   const kill = killTimeline && Array.isArray(killTimeline.points) ? killTimeline : null;
@@ -6006,17 +6626,265 @@ function renderManualResultVisual(result) {
       : mod);
     renderManualSlots();
   }
-  const stats = source?.moddedStats || source?.stats || {};
-  const metrics = source?.metrics || source?.build || source?.killMetrics || {};
-  const target = source?.targetDamage || {};
-  const stat = (camel, snake = camel) => stats[camel] ?? stats[snake];
-  const rows = [["面板伤害", stat("totalDamage", "total_damage")], ["平均命中", stat("averageHit", "average_hit")], ["单次伤害", target.perShot ?? metrics.shotDamage], ["持续 DPS", source?.totalSustainedDps ?? target.dps ?? stat("sustainedDps", "sustained_dps") ?? metrics.sustainedDps ?? metrics.attackDps], ["触发几率", stat("statusChance", "status_chance") == null ? null : `${(Number(stat("statusChance", "status_chance")) * 100).toFixed(1)}%`]].filter(([, value]) => value !== undefined && value !== null);
-  ui["manual-result-grid"].replaceChildren(...rows.map(([label, value]) => { const item = create("div", "manual-result-item"); item.append(create("span", "", label), create("strong", "", typeof value === "number" ? formatMetric(value) : String(value))); return item; }));
+  // 结果区两块（用户指定的分离布局）：配装解算块只放异常状态分布；
+  // 战斗演算块（KPM 头条 + 逐条展开的回放图组）在下方独立呈现。
   renderProbabilityVisual(source.probability || source.probabilityDistribution || {});
   renderStatusBreakdown(source);
-  drawTimelineVisual(source.timeline || [], source.killTimeline || null);
+  const hasBenchmark = Array.isArray(source.benchmarkTimeline?.points) && source.benchmarkTimeline.points.length > 1;
+  const combatPanel = document.getElementById("combat-panel");
+  if (combatPanel) combatPanel.hidden = !hasBenchmark;
+  if (hasBenchmark) {
+    drawBenchmarkReplay(source.benchmarkTimeline);
+  } else {
+    // 无标准靶数据（旧口径 / 解算失败兜底）：legacy 赋能时间线仍在演算块渲染。
+    const host = document.getElementById("combat-charts");
+    if (host) {
+      const legacy = document.getElementById("timeline-content") || create("div", "");
+      if (!legacy.isConnected) host.replaceChildren(legacy);
+      drawTimelineVisual(source.timeline || [], source.killTimeline || null);
+    }
+  }
   updateEnemyStatsPanel(result);
   ui["manual-results"].hidden = false;
+}
+
+// ── 标准靶 KPM 回放视图（wfsim UI.md「一行一条曲线」口径的移植）─────────
+// 窗口步进模型下发每步的池余量/异常层数/DPS 分量。原先一张大图叠 6 种异常
+// + 三段池 + 两个 DPS 分量根本没法看；现在拆成独立的图，每图一个 y 轴，
+// 全部默认展开、可单独折叠，共享同一条悬停光标与因子快照 tooltip：
+//   1. 三段池堆叠面积（超宏/护盾/生命）——目标死亡即刷新（InstantRespawn）
+//   2. DPS 分量（直伤面积 + DoT 线）
+//   3. 每种异常一条层数曲线（病毒/磁力/腐蚀/热/穿刺/冰）各自一行小图
+const BENCH_STACK_LABELS = {
+  viral: "病毒", magnetic: "磁力", corrosive: "腐蚀", heat: "热", puncture: "穿刺", cold: "冰冻",
+};
+const BENCH_STACK_COLORS = {
+  viral: "#f093b9", magnetic: "#9797e6", corrosive: "#93c203", heat: "#fb9733", puncture: "#c6b098", cold: "#5bbcec",
+};
+
+function drawBenchmarkReplay(bench) {
+  const host = document.getElementById("combat-charts");
+  if (!host) return;
+  const points = bench.points || [];
+  const tMax = Number(points.at(-1)?.time || bench.windowSeconds || 30);
+  const ehp = Number(bench.targetTotalEhp || 0) || 1;
+  const ctx = bench.context || {};
+  const svgNS = "http://www.w3.org/2000/svg";
+  // 固定视口 + CSS 等比缩放（preserveAspectRatio 默认），坐标不飘：
+  // 之前的 "none" 拉伸把 y 轴 0 点挤到中间。宽度用 100% 自适应，高度固定。
+  const W = 880, H = 110, pad = { l: 56, r: 18, t: 8, b: 16 };
+  const el = (tag, attrs = {}, text) => {
+    const node = document.createElementNS(svgNS, tag);
+    for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, String(v));
+    if (text != null) node.textContent = text;
+    return node;
+  };
+  const xOf = (t) => pad.l + (W - pad.l - pad.r) * (clamp(Number(t) || 0, 0, tMax) / tMax);
+
+  const activeStacks = Object.keys(BENCH_STACK_LABELS).filter((k) =>
+    points.some((p) => Number(p.stacks?.[k] || 0) > 0.05)
+  );
+  const maxDps = Math.max(...points.map((p) => Number(p.directDps || 0) + Number(p.dotDps || 0)), 1);
+  const maxStack = Math.max(10, ...points.flatMap((p) => activeStacks.map((k) => Number(p.stacks?.[k] || 0))));
+
+  // 击杀时刻（超宏从满格跌落的瞬间 = InstantRespawn 刷新）
+  const killTimes = [];
+  let prevFull = false;
+  points.forEach((p, i) => {
+    const full = Number(p.overguard || 0) >= ehp * 0.999;
+    if (prevFull && !full && i > 0) killTimes.push(Number(p.time));
+    prevFull = full;
+  });
+
+  const charts = [];
+
+  // 1. DPS 分量（放最上——最常看）
+  charts.push({
+    key: "dps",
+    label: "DPS（直伤面积 · DoT 虚线）",
+    render(svg) {
+      const y = (v) => pad.t + (H - pad.t - pad.b) * (1 - clamp(v / maxDps, 0, 1));
+      const directArea = points.map((p, i) => `${i === 0 ? "M" : "L"}${xOf(p.time).toFixed(1)} ${y(Number(p.directDps || 0)).toFixed(1)}`).join(" ")
+        + ` L${xOf(points.at(-1).time).toFixed(1)} ${H - pad.b} L${xOf(points[0].time).toFixed(1)} ${H - pad.b} Z`;
+      svg.append(el("path", { d: directArea, fill: "rgba(115,207,223,.22)" }));
+      const total = points.map((p, i) => `${i === 0 ? "M" : "L"}${xOf(p.time).toFixed(1)} ${y(Number(p.directDps || 0) + Number(p.dotDps || 0)).toFixed(1)}`).join(" ");
+      svg.append(el("path", { d: total, fill: "none", stroke: "#73cfdf", "stroke-width": 2, "stroke-linecap": "round" }));
+      const dot = points.map((p, i) => `${i === 0 ? "M" : "L"}${xOf(p.time).toFixed(1)} ${y(Number(p.dotDps || 0)).toFixed(1)}`).join(" ");
+      svg.append(el("path", { d: dot, fill: "none", stroke: "#f0c36b", "stroke-width": 1.4, "stroke-dasharray": "4 4" }));
+      return { axis: [formatMetric(maxDps), "", "0"], tooltip: (p) => `直伤 ${formatMetric(Number(p.directDps || 0))}/s · DoT ${formatMetric(Number(p.dotDps || 0))}/s` };
+    },
+  });
+
+  // 2. 目标剩余血量（当前身体三池的剩余百分比，从上到下耗尽后刷新）
+  charts.push({
+    key: "pools",
+    label: "目标剩余（击杀时刷新）",
+    render(svg) {
+      // 归一化到当前身体总 EHP：三条曲线分别是 超宏/护盾/生命 的剩余量，
+      // 全满 = 1.0（顶格），每次归零竖线处刷新。
+      const y = (v) => pad.t + (H - pad.t - pad.b) * (1 - clamp(v / ehp, 0, 1));
+      const line = (key, fill, stroke) => {
+        const d = points.map((p, i) => `${i === 0 ? "M" : "L"}${xOf(p.time).toFixed(1)} ${y(Number(p[key] || 0)).toFixed(1)}`).join(" ");
+        svg.append(el("path", { d, fill, stroke: "none", opacity: 0.45 }));
+        svg.append(el("path", { d, fill: "none", stroke, "stroke-width": 1.2, opacity: 0.9 }));
+      };
+      line("overguard", "rgba(217,166,255,.30)", "#d9a6ff");
+      line("shield", "rgba(91,188,236,.28)", "#5bbcec");
+      line("health", "rgba(120,160,200,.25)", "#78a0c8");
+      return {
+        axis: ["满", "", "0"],
+        tooltip: (p) => `剩余 超宏 ${formatMetric(Number(p.overguard || 0))} · 护盾 ${formatMetric(Number(p.shield || 0))} · 生命 ${formatMetric(Number(p.health || 0))}`,
+      };
+    },
+  });
+
+  // 3. 每种异常一行
+  for (const key of activeStacks) {
+    charts.push({
+      key: `stack-${key}`,
+      label: `${BENCH_STACK_LABELS[key]} 层数`,
+      color: BENCH_STACK_COLORS[key],
+      render(svg) {
+        const y = (v) => pad.t + (H - pad.t - pad.b) * (1 - clamp(v / maxStack, 0, 1));
+        const d = points.map((p, i) => `${i === 0 ? "M" : "L"}${xOf(p.time).toFixed(1)} ${y(Number(p.stacks?.[key] || 0)).toFixed(1)}`).join(" ");
+        svg.append(el("path", { d, fill: "none", stroke: BENCH_STACK_COLORS[key], "stroke-width": 1.6, "stroke-linecap": "round" }));
+        return { axis: [String(Math.round(maxStack)), "", "0"], tooltip: (p) => `${BENCH_STACK_LABELS[key]} ${Number(p.stacks?.[key] || 0).toFixed(1)} 层` };
+      },
+    });
+  }
+
+  // 4. 触发源覆盖率折线（triggerSeries：后端 emergent 模拟的赋能/镀层/灵化
+  //    on-kill 层数曲线）。每条曲线一张子图，标题带 avg/uptime 摘要。
+  const triggerSeriesData = Array.isArray(bench.triggerSeries) ? bench.triggerSeries : [];
+  const TRIGGER_COLORS = ["#e6c86e", "#8fd694", "#c792ea", "#6ec5e8", "#e69b6e", "#9be86e"];
+  triggerSeriesData.forEach((series, index) => {
+    const values = series.series || [];
+    if (!values.length || !values.some((v) => v > 0.05)) return;
+    const maxStacks = Math.max(1, Number(series.maxStacks) || 1, ...values);
+    const avg = Number(series.avgStacks || 0);
+    const uptime = Number(series.uptime || 0);
+    charts.push({
+      key: `trigger-${series.id}`,
+      label: `${series.label}（均值 ${avg.toFixed(1)} · 覆盖 ${(uptime * 100).toFixed(0)}%）`,
+      color: TRIGGER_COLORS[index % TRIGGER_COLORS.length],
+      render(svg) {
+        const y = (v) => pad.t + (H - pad.t - pad.b) * (1 - clamp(v / maxStacks, 0, 1));
+        const d = values.map((v, i) => `${i === 0 ? "M" : "L"}${xOf(points[i]?.time || i * tMax / values.length).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
+        svg.append(el("path", { d, fill: "none", stroke: TRIGGER_COLORS[index % TRIGGER_COLORS.length], "stroke-width": 1.6, "stroke-linecap": "round" }));
+        return { axis: [String(Math.round(maxStacks)), "", "0"], tooltip: (p, i) => `${series.label}：${(values[i] || 0).toFixed(1)} / ${Math.round(maxStacks)} 层` };
+      },
+    });
+  });
+
+  // 共享光标状态
+  const crossLines = [];
+  const sections = charts.map((chart) => {
+    const section = create("details", "combat-chart-row");
+    section.open = true;
+    const head = create("summary", "combat-chart-head");
+    head.append(create("strong", "", chart.label));
+    if (chart.color) {
+      const swatch = create("i", "combat-chart-swatch");
+      swatch.style.background = chart.color;
+      head.append(swatch);
+    }
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svg.setAttribute("class", "timeline-svg combat-chart-svg");
+    // preserveAspectRatio 默认（等比）——y 轴 0 在底、曲线不飘。
+    const { axis, tooltip } = chart.render(svg) || {};
+    // 网格 + y 轴标注（3 条线：顶/中/底）
+    for (let i = 0; i <= 2; i += 1) {
+      const yy = pad.t + (H - pad.t - pad.b) * (i / 2);
+      svg.append(el("line", { x1: pad.l, x2: W - pad.r, y1: yy, y2: yy, stroke: "rgba(148,163,184,.10)", "stroke-width": 1, "stroke-dasharray": i === 2 ? "" : "3 5" }));
+      if (axis && axis[i] !== undefined && axis[i] !== "") {
+        svg.append(el("text", { x: pad.l - 8, y: yy + 3.5, "text-anchor": "end", class: "tl-axis" }, String(axis[i])));
+      }
+    }
+    // 击杀竖线
+    for (const kt of killTimes) {
+      svg.append(el("line", { x1: xOf(kt), x2: xOf(kt), y1: pad.t, y2: H - pad.b, stroke: "#ef7183", "stroke-width": 1, "stroke-dasharray": "4 4", opacity: 0.55 }));
+    }
+    // 时间轴刻度（只在最后一行画）
+    if (chart === charts.at(-1)) {
+      for (let i = 0; i <= 6; i += 1) {
+        const t = tMax * i / 6;
+        svg.append(el("text", { x: xOf(t), y: H - pad.b + 13, "text-anchor": "middle", class: "tl-axis" }, `${t.toFixed(0)}s`));
+      }
+    }
+    // 光标
+    const hoverLayer = el("g", { style: "display:none" });
+    const crossLine = el("line", { y1: pad.t, y2: H - pad.b, stroke: "rgba(243,245,248,.6)", "stroke-width": 1, "stroke-dasharray": "2 3" });
+    hoverLayer.append(crossLine);
+    svg.append(hoverLayer);
+    crossLines.push({ layer: hoverLayer, line: crossLine });
+    // 悬停：光标全图同步；气泡跟随鼠标所在的那张图
+    const chartTip = create("div", "timeline-tip combat-chart-tip");
+    section.append(chartTip);
+    svg.addEventListener("mousemove", (evt) => {
+      const rect = svg.getBoundingClientRect();
+      const px = (evt.clientX - rect.left) * (W / rect.width);
+      const t = clamp((px - pad.l) / (W - pad.l - pad.r) * tMax, 0, tMax);
+      const x = xOf(t);
+      for (const entry of crossLines) {
+        entry.layer.style.display = "";
+        entry.line.setAttribute("x1", x);
+        entry.line.setAttribute("x2", x);
+      }
+      const nearest = points.reduce((best, q) => (Math.abs(q.time - t) < Math.abs(best.time - t) ? q : best), points[0]);
+      const idx = points.indexOf(nearest);
+      const tipLines = [
+        `t = ${Number(nearest.time).toFixed(2)}s · ${nearest.pool === "overguard" ? "超宏" : nearest.pool === "shield" ? "护盾" : "生命"}池`,
+      ];
+      if (tooltip) tipLines.push(tooltip(nearest, idx));
+      const stackBits = activeStacks.filter((k) => Number(nearest.stacks?.[k] || 0) > 0.05).map((k) => `${BENCH_STACK_LABELS[k]} ${Number(nearest.stacks[k]).toFixed(1)}`);
+      if (stackBits.length && chart.key !== "pools" && !chart.key.startsWith("stack-")) tipLines.push(stackBits.join(" · "));
+      chartTip.hidden = false;
+      chartTip.replaceChildren(...tipLines.map((l) => create("div", "", l)));
+      // 气泡贴近光标（视口坐标 → section 内相对坐标），左右翻转防溢出。
+      const sectionRect = section.getBoundingClientRect();
+      const relX = clamp(evt.clientX - sectionRect.left + 12, 4, Math.max(4, sectionRect.width - 180));
+      chartTip.style.left = `${relX}px`;
+      chartTip.style.top = "4px";
+    });
+    svg.addEventListener("mouseleave", () => {
+      for (const entry of crossLines) entry.layer.style.display = "none";
+      chartTip.hidden = true;
+    });
+    section.append(head, svg);
+    return section;
+  });
+
+  host.replaceChildren(...sections);
+
+  // KPI 头条（wfsim「the kill score is reported as a RATE」口径：率 + 总量并排）
+  const kpm = Number(bench.killsPerMinute || 0);
+  const kills = Number(bench.killsInWindow || 0);
+  const lastAvg = points.length ? points.reduce((sum, p) => sum + Number(p.directDps || 0), 0) / points.length : 0;
+  const dotAvg = points.length ? points.reduce((sum, p) => sum + Number(p.dotDps || 0), 0) / points.length : 0;
+  const kpmEl = document.getElementById("kpm-value");
+  const killsEl = document.getElementById("kills-value");
+  const directEl = document.getElementById("direct-dps-value");
+  const dotEl = document.getElementById("dot-dps-value");
+  const ehpEl = document.getElementById("target-ehp-value");
+  if (kpmEl) kpmEl.textContent = kpm.toFixed(2);
+  if (killsEl) killsEl.textContent = kills.toFixed(2);
+  if (directEl) directEl.textContent = formatMetric(lastAvg);
+  if (dotEl) dotEl.textContent = formatMetric(dotAvg);
+  if (ehpEl) ehpEl.textContent = formatMetric(ehp);
+  const note = document.getElementById("combat-context-note");
+  if (note) {
+    // 演算条件跟随实际选择（后端 context 回显）；无 context 时回退标准靶说明。
+    const parts = [];
+    if (ctx.enemyName) parts.push(String(ctx.enemyName));
+    if (ctx.level != null) parts.push(`${ctx.level} 级`);
+    if (ctx.steelPath) parts.push("钢铁之路");
+    const enh = ctx.enhancements || {};
+    if (enh.eximus) parts.push("卓越者");
+    if (enh.archimedea) parts.push("科研");
+    if (enh.empowered) parts.push("强化");
+    note.textContent = `${parts.join(" · ") || "标准靶"} · ${tMax.toFixed(0)}s 窗口`;
+  }
 }
 
 function renderBuild() {
@@ -6059,6 +6927,47 @@ function renderBuild() {
   renderFireModes(build, ui["fire-mode-strip"], { interactive: true });
   renderMods(build);
   renderAnalysisStance();
+  renderAnalysisIncarnonRoute();
+}
+
+// 灵化武器的最佳配装必须标注进化路线（Evo 2-X / 3-X / 4-X）：同把灵化武器
+// 不同路线的面板差异巨大，不标注就不知道配卡的基准是什么。
+function renderAnalysisIncarnonRoute() {
+  const target = ui["analysis-incarnon-route"];
+  if (!target) return;
+  const choices = state.result?.incarnonChoices;
+  const tiers = Array.isArray(state.weapon?.incarnon) ? state.weapon.incarnon : [];
+  if (!choices || typeof choices !== "object" || !Object.keys(choices).length || !tiers.length) {
+    target.hidden = true;
+    target.replaceChildren();
+    return;
+  }
+  const nodes = [];
+  for (const tier of tiers) {
+    const tierNumber = Number(tier.tier);
+    const selectedId = choices[`tier${tierNumber}`];
+    if (!selectedId) continue;
+    const option = (tier.options || []).find((row) => row.id === selectedId);
+    const branchIndex = option
+      ? String(option.index ?? ((tier.options || []).indexOf(option) + 1))
+      : "?";
+    const chip = create("span", "incarnon-route-chip");
+    chip.title = option?.description || "";
+    chip.append(
+      create("b", "", `进化 ${tierNumber}-${branchIndex}`),
+      create("i", "", option?.label || selectedId),
+    );
+    nodes.push(chip);
+  }
+  if (!nodes.length) {
+    target.hidden = true;
+    target.replaceChildren();
+    return;
+  }
+  const head = create("span", "incarnon-route-head", "灵化路线");
+  head.title = "本次解算使用的进化分支（Evo N-分支号）";
+  target.replaceChildren(head, ...nodes);
+  target.hidden = false;
 }
 
 const WARFRAME_CONFIG_STORAGE_KEY = "wf-riven-portable-warframe-configs-v1";
@@ -6096,6 +7005,20 @@ function warframeDescription(record) {
 function warframeLocalizedDescription(record, fallback = "官方中文资料暂缺") {
   const text = warframeDescription(record);
   return /[\u3400-\u9fff]/.test(text) ? text : fallback;
+}
+
+// 战甲赋能描述随等级变化：effectsZhByRank 是官方逐级文本（warframe_build_data
+// 冻结快照），rank 步进时取对应行；无逐级数据退回满级静态描述。
+function warframeArcaneDescription(item) {
+  const rank = Number(item?.rank);
+  const byRank = Array.isArray(item?.effectsZhByRank) ? item.effectsZhByRank : [];
+  if (Number.isInteger(rank) && byRank.length) {
+    const line = byRank[Math.min(Math.max(rank, 0), byRank.length - 1)];
+    const text = Array.isArray(line) ? line.join("\n") : String(line || "");
+    const cleaned = warframeDescription({ description: text });
+    if (cleaned) return cleaned;
+  }
+  return warframeLocalizedDescription(item);
 }
 
 function warframeSourceLabel(record) {
@@ -6319,9 +7242,9 @@ function importWarframeConfig(file) {
       applyWarframeConfig(config);
       persistWarframeConfig();
       if (ui["warframe-config-status"]) ui["warframe-config-status"].textContent = `已导入配置 ${active}`;
-      toast(`已导入 ${warframeName(frame)} 配置 ${active}`);
+      toast(`已导入 ${warframeName(frame)} 配置 ${active}`, "success");
     } catch (error) {
-      toast(error.message || "战甲配置导入失败");
+      toast(error.message || "战甲配置导入失败", "error");
     } finally {
       if (ui["warframe-config-import-file"]) ui["warframe-config-import-file"].value = "";
     }
@@ -6470,8 +7393,10 @@ function cycleWarframePolarity(kind, index = 0) {
   scheduleWarframeCalculation();
 }
 
-function modPolarityOf(mod) {
-  return mod?.__riven ? null : (mod?.polarity || state.modAssets?.mods?.[mod?.path]?.polarity || null);
+function modPolarityOf(mod, slotIndex = 0) {
+  // 紫卡返回落槽时掷出的固定常规极性：自动极化/槽位循环都能按它对齐。
+  if (mod?.__riven) return rivenFixedPolarity(mod, slotIndex);
+  return mod?.polarity || state.modAssets?.mods?.[mod?.path]?.polarity || null;
 }
 
 function warframeRankControls(item, onChange, onRemove, className = "manual-slot-actions") {
@@ -6671,7 +7596,7 @@ function renderWarframeArcaneSlot(index) {
   if (icon) visual.append(imageNode(icon, "arcane-slot-icon", warframeName(item), "lazy"));
   if (!item) visual.append(create("span", "arcane-slot-plus", "+"));
   const copy = create("div", "arcane-slot-copy");
-  copy.append(create("small", "arcane-slot-label", `战甲赋能 ${index + 1}`), create("strong", "", item ? warframeName(item) : "空槽位"), create("p", "arcane-slot-description", item ? warframeLocalizedDescription(item) : "未装备"));
+  copy.append(create("small", "arcane-slot-label", `战甲赋能 ${index + 1}`), create("strong", "", item ? warframeName(item) : "空槽位"), create("p", "arcane-slot-description", item ? warframeArcaneDescription(item) : "未装备"));
   if (item && warframeArcaneHint(item)) copy.append(create("p", "arcane-slot-description warframe-arcane-runtime", warframeArcaneHint(item)));
   slot.append(visual, copy);
   if (item) slot.append(warframeRankControls(item, (rank) => {
@@ -6949,6 +7874,10 @@ function renderWarframePicker() {
     const categories = new Set(state.warframeBuild.invigoration.map((row) => String(row.category || "").toLocaleLowerCase()));
     const pending = !categories.has("offensive") ? "还需选择攻势增幅" : !categories.has("utility") ? "还需选择辅助增幅" : "攻势与辅助均已选择";
     ui["warframe-picker-sub"].textContent = `${pending} · ${rows.length} 条可选记录`;
+  } else if (kind === "shard") {
+    // 组合源力石（翠绿/琥珀/紫红）说明：它们已在列表中，来源是 Helminth 的
+    // 聚变合成——绯红+碧蓝→紫红、金黄+碧蓝→翠绿、3×绯红→琥珀。
+    ui["warframe-picker-sub"].textContent = `${rows.length} 条 · 组合源力石由聚变合成：绯红+碧蓝→紫红 · 金黄+碧蓝→翠绿 · 3×绯红→琥珀`;
   } else ui["warframe-picker-sub"].textContent = `${rows.length} 条可选记录`;
 }
 
@@ -7097,6 +8026,33 @@ function warframeScalarScaleLabel(scale) {
   return ({ strength: "技能强度", duration: "技能持续", range: "技能范围", efficiency: "技能效率", drain: "效率 / 持续" })[scale] || "固定值";
 }
 
+// Overframe 多状态技能的状态分组名（如 Wisp 储能池的 Vitality/Haste/Shock）。
+// 冻结数据里 scalarGroups.labelZh 常为未翻译占位，这里在前端补一份译名；
+// 未收录的状态名按原样显示（英文），仍能区分状态归属。
+const WARFRAME_SCALAR_GROUP_ZH = {
+  "vitality": "活力", "haste": "急速", "shock": "震荡",
+  "day form": "昼形态", "night form": "夜形态",
+  "accuse": "指控", "deny": "否认", "gaze": "凝视", "sentry": "哨戒",
+  "cloak": "隐匿", "dashwire": "天索", "noise": "诱饵",
+  "maim": "创伤", "mend": "治疗", "pacify": "安抚", "provoke": "激怒",
+  "rage": "狂怒", "rest": "休眠", "sleep": "睡眠",
+  "protective": "防护", "targeted": "锁定",
+  "pageflight": "页面飞行", "tragedy": "悲剧", "triumph": "凯旋",
+  "wordwarden": "守护言语",
+  "tether-flechette orb": "束缚-飞镖球", "vector-overdrive pad": "矢量-超载台",
+  "merulina": "美露琳娜", "yareli": "Yareli", "chroma": "Chroma",
+};
+function warframeScalarGroupLabel(ability, scalar) {
+  const variant = String(scalar?.variant || "").trim();
+  if (!variant) return String(scalar?.group || "").trim() === "未分类字段" ? "" : String(scalar?.group || "").trim();
+  const groups = Array.isArray(ability?.scalarGroups) ? ability.scalarGroups : [];
+  const meta = groups.find((row) => String(row?.labelEn || "").toLocaleLowerCase() === variant.toLocaleLowerCase());
+  const zh = WARFRAME_SCALAR_GROUP_ZH[variant.toLocaleLowerCase()];
+  if (zh) return zh;
+  if (meta?.labelZh && meta.labelZh !== "未分类字段") return String(meta.labelZh);
+  return variant;
+}
+
 function warframeEffectLabel(effect) {
   const stat = String(effect?.stat || effect?.label || effect?.source || "");
   const labels = {
@@ -7141,6 +8097,39 @@ function warframeScalarBaseText(scalar) {
   const rendered = template.replace(/\{\}/g, () => warframeNumber(values[index++])) || values.map(warframeNumber).join(" / ");
   const unit = String(scalar?.unit || "");
   return unit && !rendered.endsWith(unit) ? `${rendered}${unit}` : rendered;
+}
+
+// 技能数值相对基础的变化方向：isEnergy 字段（能量类消耗）越低越好，
+// 其余字段（伤害/持续/范围等）越高越好。固定值（isStatic / scale none）
+// 或缺数据返回 ""（保持默认色）。
+function warframeScalarDelta(scalar) {
+  if (scalar?.isStatic || String(scalar?.scale || "none") === "none") return "";
+  const value = Number(scalar?.value);
+  const base = Number(scalar?.base);
+  if (!Number.isFinite(value) || !Number.isFinite(base) || !base) return "";
+  const tolerance = Math.abs(base) * 1e-6;
+  if (Math.abs(value - base) <= tolerance) return "";
+  const higher = value > base;
+  return scalar?.isEnergy ? (higher ? "worse" : "better") : (higher ? "better" : "worse");
+}
+
+// 能量/资源消耗行：任意计费字段相对基础的总体方向（低=好）。
+function warframeAbilityCostDelta(cost) {
+  const fields = ["activation", "airborneActivation", "drainPerSecond", "boostedDrainPerSecond", "perTarget", "perShot", "chargedShot", "perAllyPerSecond", "perEnemyPerSecond", "perAbilityPerSecond", "perDodge", "cooldownSeconds"];
+  let better = false;
+  let worse = false;
+  for (const field of fields) {
+    const value = Number(cost?.[field]);
+    const baseKey = `base${field[0].toUpperCase()}${field.slice(1)}`;
+    const base = Number(cost?.[baseKey]);
+    if (!Number.isFinite(value) || !Number.isFinite(base) || !base) continue;
+    const tolerance = Math.abs(base) * 1e-6;
+    if (value < base - tolerance) better = true;
+    else if (value > base + tolerance) worse = true;
+  }
+  if (better && !worse) return "better";
+  if (worse && !better) return "worse";
+  return "";
 }
 
 function warframeAbilityCost(cost) {
@@ -7202,6 +8191,16 @@ function renderWarframeResult(result) {
   ui["warframe-effect-status"].textContent = state.warframeBuild.applyConditionals ? "触发效果已按完整效果应用" : "触发效果关闭";
   const base = result.basePanel || {};
   const final = result.finalPanel || {};
+  // 派生项的基础值：后端只在 finalPanel 里给 damageReduction/ehp，
+  // 基础值按同一公式从基础护甲/生命值推导，保证颜色对比有意义。
+  const baseArmor = Number(base.armor ?? base.armour);
+  const baseHealth = Number(base.health);
+  if (Number.isFinite(baseArmor) && baseArmor > 0) {
+    base.damageReduction = baseArmor / (baseArmor + 300);
+    if (Number.isFinite(baseHealth) && baseHealth > 0) {
+      base.ehp = baseHealth / Math.max(1e-9, 1 - base.damageReduction);
+    }
+  }
   const stats = [
     ["health", "生命值"], ["shield", "护盾"], ["armor", "护甲"], ["energy", "能量"], ["sprint", "冲刺速度"],
     ["abilityStrength", "技能强度"], ["abilityDuration", "技能持续"], ["abilityRange", "技能范围"], ["abilityEfficiency", "技能效率"], ["damageReduction", "护甲减伤"], ["ehp", "生命等效 EHP"],
@@ -7209,9 +8208,19 @@ function renderWarframeResult(result) {
   ui["warframe-panel-grid"].replaceChildren(...stats.map(([key, label]) => {
     const cell = create("div", "warframe-panel-stat");
     const finalValue = warframePanelValue(key, final[key]);
-    const baseValue = ["abilityStrength", "abilityDuration", "abilityRange", "abilityEfficiency"].includes(key) ? "100%" : warframePanelValue(key, base[key]);
+    const isPercentStat = ["abilityStrength", "abilityDuration", "abilityRange", "abilityEfficiency"].includes(key);
+    const baseValue = isPercentStat ? "100%" : warframePanelValue(key, base[key]);
+    // 颜色语义：比基础更好=绿，更差=红，不变/缺数据=默认色。
+    // 所有面板项（含技能效率百分比）都是「数值越高越好」；能量消耗是
+    // 单独的技能卡行，不在此表内。
+    const finalNum = Number(final[key]);
+    const baseNum = isPercentStat ? 1 : Number(base[key]);
+    if (Number.isFinite(finalNum) && Number.isFinite(baseNum)) {
+      const tolerance = Math.abs(baseNum) * 1e-6;
+      if (finalNum > baseNum + tolerance) cell.classList.add("is-improved");
+      else if (finalNum < baseNum - tolerance) cell.classList.add("is-worse");
+    }
     cell.append(create("span", "", label), create("strong", "", finalValue), create("small", "", `基础 ${baseValue}`));
-    if (finalValue !== baseValue) cell.classList.add("is-changed");
     return cell;
   }));
   const effects = Array.isArray(result.activeEffects) ? result.activeEffects : [];
@@ -7242,18 +8251,34 @@ function renderWarframeResult(result) {
     if (!hasEnergyFields || hasExtraCostFields) {
       const costDisplay = warframeAbilityCost(cost);
       const costRow = create("div", `warframe-ability-energy is-${String(cost.resource || "energy").replace(/[^a-z]/gi, "")}`);
+      // 能量/资源消耗：数值越低越好——比基础低=绿（省），比基础高=红（贵）。
+      const costDelta = warframeAbilityCostDelta(cost);
+      if (costDelta === "better") costRow.classList.add("is-improved");
+      else if (costDelta === "worse") costRow.classList.add("is-worse");
       costRow.append(create("span", "", costDisplay.label), create("strong", "", costDisplay.text), create("small", "", costDisplay.note || (costDisplay.base ? `基础 ${costDisplay.base}` : "冻结官方资源规则")));
       scalarList.append(costRow);
     }
     let currentGroup = "";
     if (scalars.length) scalars.forEach((scalar) => {
       if (hasExtraCostFields && scalar.isEnergy && /energy cost/i.test(String(scalar.label || "")) && Number(scalar.value) === 0) return;
-      const group = String(scalar.group || "").trim();
+      // 多状态技能（如 Wisp 储能池的活力/急速/震荡）按 variant 分组展示；
+      // 旧数据的 group 字段常是未翻译占位（「未分类字段」），variant 才是
+      // Overframe 的原始状态名。scalarGroups 提供顺序与中文译名。
+      const group = warframeScalarGroupLabel(ability, scalar);
       if (group && group !== currentGroup) {
         scalarList.append(create("p", "warframe-ability-scalar-group", group));
         currentGroup = group;
+      } else if (group && group === currentGroup) {
+        // 同组延续：无需重复标题
+      } else if (!group && currentGroup) {
+        currentGroup = "";
       }
       const row = create("div", [scalar.isStatic || scalar.scale === "none" ? "is-static" : "", scalar.isEnergy ? "is-energy" : "", scalar.scale === "range" ? "is-range" : ""].filter(Boolean).join(" "));
+      // 数值颜色只按「相对基础变好/变坏/不变」区分：能量类字段越低越好，
+      // 其余（伤害/持续/范围等）越高越好；固定值保持默认色。
+      const delta = warframeScalarDelta(scalar);
+      if (delta === "better") row.classList.add("is-improved");
+      else if (delta === "worse") row.classList.add("is-worse");
       row.append(create("span", "", warframeScalarLabel(scalar)), create("strong", "", warframeScalarValueText(scalar)), create("small", "", `${warframeScalarScaleLabel(scalar.scale)} · 基础 ${warframeScalarBaseText(scalar)}`));
       scalarList.append(row);
     });
@@ -7589,6 +8614,14 @@ function buildPayloadFromForm() {
     weapon: weapon.path,
     fireMode: Number(ui["build-fire-mode-select"].value || 0),
     metric: ui["build-metric-select"].value,
+    profile: solveProfile(),
+    requiredMods: state.requiredMods.length ? [...state.requiredMods] : undefined,
+    forbiddenMods: state.forbiddenMods.length ? [...state.forbiddenMods] : undefined,
+    minFill: scopeFillValue("build-min-fill"),
+    maxFill: scopeFillValue("build-max-fill"),
+    optimizeWithArcanes: !ui["build-optimize-arcanes"]?.checked ? false : undefined,
+    // 触发类效果口径：emergent（按实际爬升，窗口模型模拟）/ assumed_max（恒满）。
+    triggerPolicy: document.getElementById("trigger-policy-select")?.value || "emergent",
     elementTarget: ui["build-element-select"].value || null,
     innateElement: ui["build-innate-element-select"]?.value || null,
     innateElementValue: Number(ui["build-innate-element-value"]?.value || 60) / 100,
@@ -7735,16 +8768,40 @@ function renderWeaponBuildDiagnostics(result) {
   ui["weapon-build-diagnostic-list"].replaceChildren(...(unique.length ? unique.map((line) => create("p", "", line)) : [create("p", "", "本次计算没有额外诊断项")]));
 }
 
+// 手动配装的构成标注：按已装备卡的词条构成分类——暴击类词条为直伤倾向，
+// 触发类词条为触发倾向，两类并存标「双修」（引擎按 KPM 全量求解，实战口径
+// 即双修混搭，此标注仅描述配装构成）。
+const ARCHETYPE_CRIT_TYPES = new Set(["WEAPON_CRIT_CHANCE", "WEAPON_CRIT_DAMAGE", "WEAPON_DOUBLE_CRIT_CHANCE"]);
+const ARCHETYPE_STATUS_TYPES = new Set(["WEAPON_PROC_CHANCE", "WEAPON_PROC_DAMAGE", "WEAPON_PROC_TIME", "WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE"]);
+function manualBuildArchetype() {
+  let crit = 0;
+  let status = 0;
+  for (const mod of state.manualSlots) {
+    if (!mod || mod.__riven) continue;
+    const types = new Set((mod.effects || []).map((e) => String(e?.upgradeType || "")));
+    if ([...types].some((t) => ARCHETYPE_CRIT_TYPES.has(t))) crit += 1;
+    if ([...types].some((t) => ARCHETYPE_STATUS_TYPES.has(t))) status += 1;
+  }
+  if (crit && status) return "双修";
+  if (crit) return "直伤";
+  if (status) return "触发";
+  return "";
+}
+
 function renderWeaponBuild(result) {
   const weapon = state.buildWeapon;
   const build = resultBuildView(result);
   ui["weapon-build-type"].textContent = `${TYPE_LABELS[weapon.weaponType] || weapon.weaponType} BUILD`;
   ui["weapon-build-name"].textContent = weaponName(weapon);
   ui["weapon-build-fire-mode"].textContent = ui["build-fire-mode-select"].selectedOptions[0]?.textContent || `模式 ${Number(result.fireMode) + 1}`;
-  const archetype = result.buildArchetype || build.buildArchetype || result.selection?.buildArchetype || "";
+  // 流派钳制已移除（实战双修口径）：自动模式统一标「双修」，手动模式按
+  // 装备构成标注（直伤/触发/双修）。
+  const archetype = state.buildInputMode === "manual"
+    ? manualBuildArchetype()
+    : (result.buildArchetype === "hybrid" || result.buildArchetype ? "双修" : "");
   if (ui["weapon-build-archetype"]) {
     ui["weapon-build-archetype"].hidden = !archetype;
-    ui["weapon-build-archetype"].textContent = archetype ? `流派 ${archetype}` : "";
+    ui["weapon-build-archetype"].textContent = archetype ? `构成 ${archetype}` : "";
   }
   const innate = result.innateElement;
   const innateText = innate ? `自带${DAMAGE_TYPE_LABELS[innate.damageType] || innate.damageType} ${(Number(innate.percent || innate.value * 100)).toFixed(0)}%` : "无自带元素";
@@ -7753,7 +8810,8 @@ function renderWeaponBuild(result) {
   ui["weapon-build-build-label"].textContent = result.buildLabel || "OFFLINE";
   updateLiveHud(result);
   renderWeaponStats(result.moddedStats);
-  renderMetrics(build, ui["weapon-build-damage-metrics"], weapon);
+  // 伤害数值只保留顶部随动 HUD 与面板属性带：原先这里的「单发/爆发/持续」
+  // 指标条与 HUD 完全重复，移除以节省纵向空间（用户要求）。
   renderDamageTypes(result);
   renderFireModes({ alternateModes: result.alternateModes }, ui["weapon-build-fire-modes"]);
   if (state.buildInputMode === "auto") {
@@ -7860,6 +8918,42 @@ function enemyMissingValues(enemy) {
   return missing;
 }
 
+// 敌人特殊机制标注（用户要求）：天生精英/BOSS 的 DoT 限制、超宏、伤害衰减
+// 等在选择器里写明。数据来自 enemy 记录的 overguardNote/damageAttenuation/
+// statusImmunities 等字段。
+function enemySpecialNotes(enemy) {
+  const notes = [];
+  if (!enemy) return notes;
+  // 天生超宏（凶魂家族等）
+  if (enemy.overguardNote === "innate-scaled" && Number(enemy.overguard) > 0) {
+    notes.push(`天生超宏 ${Number(enemy.overguard)} 基值（按等级曲线缩放）`);
+  }
+  if (enemy.overguardNote === "missing-value") {
+    notes.push("有超宏但数值缺失（解算不含超宏）");
+  }
+  // 伤害衰减（BOSS 类）
+  if (enemy.damageAttenuation || enemy.hasDamageAttenuation) {
+    notes.push("伤害衰减（BOSS 机制，高伤递减）");
+  }
+  if (enemy.dynamicDamageResistance) {
+    notes.push("动态抗性（受击后自适应");
+  }
+  // 状态免疫（wiki status_immunities 类——当前导出未带，未来接入）
+  const immunities = enemy.statusImmunities || enemy.nullifiedStatusEffects;
+  if (Array.isArray(immunities) && immunities.length) {
+    notes.push(`免疫异常：${immunities.map((t) => DAMAGE_TYPE_LABELS[t] || t).join("/")}`);
+  }
+  return notes;
+}
+
+function enemyNotesRow(enemy) {
+  const notes = enemySpecialNotes(enemy);
+  if (!notes.length) return null;
+  const row = create("span", "enemy-special-notes");
+  notes.forEach((note) => row.append(create("em", "enemy-special-badge", note)));
+  return row;
+}
+
 function enemyHeadshotText(enemy) {
   if (enemy?.hasHeadProxy && enemy?.headshotMultiplier) {
     return `爆头×${Number(enemy.headshotMultiplier).toFixed(1)}`;
@@ -7925,11 +9019,26 @@ function fillBuildEnemies() {
     const option = create("button", `enemy-option${ui["build-enemy-select"].value === enemy.path ? " is-selected" : ""}`);
     option.type = "button"; option.setAttribute("role", "option");
     option.title = `${defenseText}；${headText}${enemy.hasHeadProxy ? "" : "，爆头率只能为 0"}${missing.includes("数值缩放缺失") ? "；基准等级无官方记录，等级缩放不可靠" : ""}`;
-    option.append(
-      create("strong", "", enemy.displayName || enemy.nameZh || enemy.nameEn || enemy.nameInternal),
+    // 缩略图槽（本地素材暂无敌人 portrait——用派系色块占位，后续接 wiki 图）。
+    const thumb = create("div", "enemy-thumb");
+    const factionColor = {
+      Grineer: "#c05555", Corpus: "#5b8dc9", "感染体": "#7db85b", Orokin: "#c9b05b",
+      "合一众": "#8d6fc9", Sentient: "#c96f9e", Tenno: "#5bc9c0", "双衍王境": "#c98a5b",
+    }[factionGroup(enemy.faction)] || "rgba(148,163,184,.3)";
+    const placeholder = create("div", "enemy-thumb-placeholder");
+    placeholder.style.background = factionColor;
+    thumb.append(placeholder);
+    // 名称清理：只显示 zh/en 展示名，不显示 nameInternal（内部字段残余）。
+    const displayName = enemy.nameZh || enemy.nameEn || enemy.displayName || "";
+    const info = create("div", "enemy-option-info");
+    info.append(
+      create("strong", "", displayName),
       create("span", "", `${factionGroup(enemy.faction)} · 基础等级 ${enemy.baseLevel}${headText ? ` · ${headText}` : ""}`),
       defenseChipRow(enemy),
     );
+    option.append(thumb, info);
+    const notesRow = enemyNotesRow(enemy);
+    if (notesRow) option.append(notesRow);
     missing.forEach((label) => option.append(create("em", "enemy-missing-badge", label)));
     option.addEventListener("click", () => {
       ui["build-enemy-select"].value = enemy.path;
@@ -7959,6 +9068,8 @@ function refreshEnemyTargetSummary() {
   const meta = ui["build-enemy-current-meta"];
   meta.replaceChildren();
   meta.append(create("span", "", `Lv ${ui["build-enemy-level"]?.value || enemy.baseLevel}`), defenseChipRow(enemy));
+  const notesRow = enemyNotesRow(enemy);
+  if (notesRow) meta.append(notesRow);
   if (enemy.hasHeadProxy && enemy.headshotMultiplier) {
     meta.append(create("span", "enemy-headshot", enemyHeadshotText(enemy)));
   } else {
@@ -8003,7 +9114,7 @@ async function submitWeaponBuild(event, live = false) {
     payload = buildPayloadFromForm();
   } catch (error) {
     showBuildMessage(issueLabel(error.message));
-    toast(issueLabel(error.message));
+    toast(issueLabel(error.message), "error");
     return;
   }
   showBuildMessage("");
@@ -8025,7 +9136,7 @@ async function submitWeaponBuild(event, live = false) {
       if (live) {
         // Keep the last good numbers on screen but surface the failure clearly.
         ui["live-hud-pulse"]?.classList.remove("is-solving");
-        toast(`实时解算失败：${message}`);
+        toast(`实时解算失败：${message}`, "error");
       } else {
         setWeaponBuildState("error");
       }
@@ -8098,8 +9209,9 @@ function exportResult() {
   URL.revokeObjectURL(url);
 }
 
-function toast(message) {
-  const node = create("div", "toast", message);
+function toast(message, type = "info") {
+  // type: info / success / error —— 顶部居中横幅，颜色随深浅主题联动。
+  const node = create("div", `toast is-${type}`, message);
   ui["toast-region"].append(node);
   requestAnimationFrame(() => node.classList.add("is-visible"));
   window.setTimeout(() => {
@@ -8120,6 +9232,11 @@ function bindEvents() {
   ui["add-stat"].addEventListener("click", () => addStat());
   ui["riven-form"].addEventListener("submit", submitAnalysis);
   ui["retry-button"].addEventListener("click", submitAnalysis);
+  // 分析页元素选择：改动即重算（偏好复合元素已移除，只留天生元素）。
+  ui["analysis-innate-element-select"]?.addEventListener("change", () => {
+    setAnalysisElementIcons();
+    if (!ui["result-content"].hidden) submitAnalysis();
+  });
   ui["sample-button"].addEventListener("click", sample);
   ui["reset-button"].addEventListener("click", reset);
   ui["theme-toggle"]?.addEventListener("click", () => {
@@ -8166,6 +9283,24 @@ function bindEvents() {
   });
   ui["build-fire-mode-select"].addEventListener("change", () => {
     refreshBuildMetrics();
+    scheduleLiveBuild();
+  });
+  // 解算档位：两处选择器联动，localStorage 持久化。
+  for (const id of ["analysis-profile-select", "solve-profile-select"]) {
+    document.getElementById(id)?.addEventListener("change", (event) => {
+      setSolveProfile(event.target.value);
+    });
+  }
+  setSolveProfile(solveProfile());
+  // 「限制」面板：数量范围与赋能开关即时生效并持久化。
+  for (const id of ["build-min-fill", "build-max-fill"]) {
+    document.getElementById(id)?.addEventListener("input", () => {
+      renderScopeLists();
+      persistActiveBuildConfig();
+    });
+  }
+  document.getElementById("build-optimize-arcanes")?.addEventListener("change", () => {
+    persistActiveBuildConfig();
     scheduleLiveBuild();
   });
   ui["build-element-select"]?.addEventListener("change", () => {
@@ -8257,7 +9392,7 @@ function bindEvents() {
       scheduleLiveManualSimulation();
       toast("已回填最优配装并自动极化");
     } catch (error) {
-      toast(issueLabel(error.message) || "求解失败");
+      toast(issueLabel(error.message) || "求解失败", "error");
     } finally {
       button.disabled = false;
       button.innerHTML = originalLabel;
@@ -8276,6 +9411,24 @@ function bindEvents() {
     const mod = state.manualSlots[target];
     setSlotPolarity(target, state.modAssets?.mods?.[mod.path]?.polarity || mod.polarity);
     toast(`槽位 ${target + 1} 已极化`);
+  });
+  // 战斗演算「重演」按钮：清空 liveTimer 立即重跑一次 simulate（敌人/等级/
+  // 强化/触发口径改动后 KPM 立刻刷新，不等防抖）。
+  document.getElementById("combat-replay-button")?.addEventListener("click", () => {
+    window.clearTimeout(state.liveTimer);
+    state.liveTimer = null;
+    const button = document.getElementById("combat-replay-button");
+    if (button) {
+      button.disabled = true;
+      window.setTimeout(() => { button.disabled = false; }, 800);
+    }
+    submitWeaponBuild(null, true);
+  });
+  // 触发口径切换（emergent/assumed_max）：改动即重演。
+  document.getElementById("trigger-policy-select")?.addEventListener("change", () => {
+    window.clearTimeout(state.liveTimer);
+    state.liveTimer = null;
+    submitWeaponBuild(null, true);
   });
   ui["forma-decrease"]?.addEventListener("click", () => {
     const keys = Object.keys(state.formaSlots).map(Number).sort((a, b) => b - a);
