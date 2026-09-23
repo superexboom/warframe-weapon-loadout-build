@@ -2642,7 +2642,12 @@ def recommend_optimal_riven(
     )
 
     # beam 宽度随预算：10s → 头部 8；20/30s → 10；60s → 12。
+    # ── 反哺算法强化（2026-09-23）：自适应 beam——粗排提前完成（预算
+    # 富余）时 beam 吸收更多后续候选；负面头部随预算加宽（4→6→8）。
     beam_width = 8 if budget_seconds <= 10 else (10 if budget_seconds <= 30 else 12)
+    if _time.monotonic() < coarse_deadline * 0.75:
+        # 粗排便宜（keep2 单层）：提前完成说明预算富余，beam 加宽一档。
+        beam_width = min(beam_width + 2, len(positive_ranked))
     beam = [line for _, line in positive_ranked[:beam_width]]
 
     # ── 阶段 2：组合枚举（2 正 / 3 正；keep 7→5 全量层）─────────────────
@@ -2652,7 +2657,10 @@ def recommend_optimal_riven(
             break
         for combo in itertools.combinations(beam, size):
             stage2_combos.append(combo)
-    negative_head = [line for _, line in negative_ranked[:4]]
+    # 负面头部随预算加宽：短预算只试头部 4 个，长预算 6/8 个——「3+1 vs
+    # 2+1 的最优负面」经常不同（2 正结构的负面系数 0.5，选错代价更大）。
+    negative_head_size = 4 if budget_seconds <= 10 else (6 if budget_seconds <= 30 else 8)
+    negative_head = [line for _, line in negative_ranked[:negative_head_size]]
 
     evaluated_keys: set[tuple[str, ...]] = set()
     for combo in stage2_combos:
@@ -2665,8 +2673,10 @@ def recommend_optimal_riven(
         score = evaluate_combo(combo, (7, 6, 5))
         if score is not None:
             record(combo, score, "beam")
-        # 负面配对只给头部组合（时间预算内尽力而为）。
-        if len(combo) == 3:
+        # ── 反哺算法强化：负面配对同时覆盖 3 正与 2 正头部组合（旧实现
+        # 只给 3 正配负面——2+1 结构被系统性跳过，而它的负面系数档位
+        # 不同（0.5 vs 0.757525），最优负面可能完全不同）。
+        if len(combo) in (2, 3):
             for negative in negative_head:
                 if _time.monotonic() > deadline:
                     break
@@ -2679,12 +2689,15 @@ def recommend_optimal_riven(
                 if nscore is not None:
                     record(with_negative, nscore, "beam-negative")
 
-    # ── 阶段 3：精排头部候选（keep 4→0 补全层，时间富余时）──────────────
+    # ── 阶段 3：精排头部候选（keep 7→0 全层，时间富余时）───────────────
+    # 反哺算法强化：精排用完整 keep 阶梯（含 keep 7——「紫卡换掉一张基准
+    # 卡」的挂卡口径）；头部数量随预算（top_limit/3 → /2）。
     refined = 0
     if results and _time.monotonic() <= deadline:
+        head_size = max(3, top_limit // 3 if budget_seconds <= 10 else top_limit // 2)
         head = sorted(
             results.values(), key=lambda row: -row["score"]
-        )[: max(3, top_limit // 3)]
+        )[:head_size]
         code_to_line = {
             line.code: line for line in (*supported_positives, *supported_negatives)
         }
@@ -2692,7 +2705,7 @@ def recommend_optimal_riven(
             if _time.monotonic() > deadline:
                 break
             lines = tuple(code_to_line[stat["code"]] for stat in row["stats"])
-            score = evaluate_combo(lines, (4, 3, 2, 1, 0))
+            score = evaluate_combo(lines, (7, 6, 5, 4, 3, 2, 1, 0))
             if score is not None:
                 record(lines, score, "refined")
                 refined += 1
@@ -2707,8 +2720,8 @@ def recommend_optimal_riven(
         "refined": refined,
         "stages": {
             "coarse": "single-stat ranking (keep 2)",
-            "beam": f"beam width {beam_width} × sizes 2/3 (keep 7/6/5), negatives head {len(negative_head)}",
-            "refined": "keep 4..0 completion of head",
+            "beam": f"beam width {beam_width} × sizes 2/3 (keep 7/6/5), negatives head {len(negative_head)} on 2/3-positive combos",
+            "refined": "keep 7..0 full ladder of head",
         },
         "baselineScore": baseline.score,
     }

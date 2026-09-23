@@ -97,6 +97,36 @@
 - 全套测试 **33 passed（7 subtests）**；wfsim 黄金集 43/43 收敛。
 - `RIVEN-ANOMALY-FIX-STATUS.md` 重写为本阶段终态（F01–F17 交付摘要、静态分析结论、回归证据、明确未实现/fail-closed 清单、缓存准入条件）。
 
+### 2026-09-23 Round 6（词条融合布局 + 反哺算法强化）
+
+**一、新版本静态分析（词条融合探测）**
+
+- 今晚 0:03 游戏缓存更新（H.Misc 264MB）→ dump 出新 build `2026.08.19.11.06`（201531 对象 + 双语语言包）。
+- **与 2026.08.13.13.24 全量 diff：0 新增 / 0 删除 / 15 个无关热修文件**（装饰、NPC 套装、商店礼包）——本 build 是补丁级热更，**不含词条融合数据**。
+- 语言包 diff（tag 级 + 关键词计数）：`Coalescent/Ascent Fusion/升华融合/联结融合` 在旧 build 已存在（Archon 水晶合成器的既有 UI 预埋）；新增仅中文 `词条` 3→4、`转换` 74→78、英文 `Fusion` 174→178 等零星计数——**无新融合命名空间、无新机制对象**。
+- Packages.bin 二进制标识符扫描（10 组正则）：新旧 build 融合相关标识符零 delta（唯一差异 `FuseP`——FX 粒子名）。
+- **结论：词条融合的数值模型不在静态数据包中**——服务器侧下发（同 Cycle 元素/玄骸数值模式），或等正式内容 build 落盘。语言包里已有 `FUSE <FUSE_CURRENCY>|COST|` 格式串（Mod 融合=Endo 升级的既有 UI），可作为未来 UI 命名参考。
+
+**二、反哺算法（根据配装算紫卡词条）强化——`recommend_optimal_riven`**
+
+- 负面配对从「只配 3 正组合」扩展到 **2 正与 3 正组合都配**（2+1 结构的负面系数档位不同（0.5 vs 0.757525），最优负面可能完全不同——旧实现系统性跳过 2+1）。
+- 负面头部随预算加宽：4（≤10s）→ 6（≤30s）→ 8（60s）。
+- 阶段 3 精排用完整 keep 阶梯（7..0，含 keep7「紫卡换掉一张基准卡」的挂卡口径）；头部数量随预算（top_limit/3 → /2）。
+- 自适应 beam：粗排提前完成（预算富余）时 beam 加宽一档。
+- 端到端验证：Braton Prime + 4 卡配装，20s 预算 → 36.2s 全链路、3415 次评估、beam 10、负面头部 6，top 组合含 D+S+M- 等 2/3 正+负结构。
+- 新增回归 `tests/test_recommender_upgrade.py`（3 用例：2+1 结构覆盖、完整 keep 阶梯、watcher 工具契约）。
+
+**三、新数据包自动监测工具——`tools/watch-new-build.py`**
+
+- `--dump`：检测游戏 build 比 dump 库新时自动跑 dump_all.ps1（Packages.bin + 双语语言包）。
+- `--analyze`：新旧 build 内容 diff（聚焦 Lotus/Upgrades、Types/Items、Game、StoreItems、EE/Game 命名空间）+ Packages.bin 标识符扫描（10 组融合/紫卡相关正则）+ 语言包关键词计数 delta（en/zh），报告落 `.local/reports/new-build-watch/<build>-vs-<old>.md`；有新文件时退出码 3（可接 CI/脚本）。
+- 实测当前状态：0 新增、标识符零 delta、语言包计数微变——与手工分析一致。
+
+**四、全量验证**
+
+- 36 项测试全通过（7 subtests）；wfsim 黄金集 43/43；py_compile/node --check/git diff --check 干净。
+
+
 
 
 

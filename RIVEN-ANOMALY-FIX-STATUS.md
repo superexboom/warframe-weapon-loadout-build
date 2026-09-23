@@ -78,6 +78,12 @@
 - cold/hot/bake 三路缓存测试通过（临时目录，C04 隔离已结构化保证）；
 - 烘焙报告列出 profile、条目数、指纹、失败 shard、`qualityCalibrated` 语义。
 
+## 词条融合（2026-09-23 布局）
+
+- **当前判定**：今晚 0 点更新的 build `2026.08.19.11.06`（9/23 0:03 缓存落盘，已全量 dump）**不含词条融合数据**——201531 个对象与 8/13 完全一致（0 新增/0 删除/15 个无关热修），语言包与 Packages.bin 标识符零新增。融合数值为服务器侧下发或等正式内容 build。
+- **已就绪的探测工具**：`python tools/watch-new-build.py --dump --analyze`——检测新 build 自动 dump + 内容 diff + 融合/紫卡标识符扫描 + 语言包关键词 delta，报告落 `.local/reports/new-build-watch/`。融合数据落盘后第一时间可见。
+- **接入计划**（数据到位后）：融合词条若有新 UpgradeType/新 RandomModRare 结构 → `RIVEN_RULES`/`synthetic_riven_effects` 扩词条码；数值缩放若改变结构系数 → `theoretical_structure_scale` 与 `_structure_remap` 同步；`recommend_optimal_riven` 的组合搜索自动纳入新词条（候选行来自 `_candidate_lines`，无硬编码）。
+
 ## 发布边界
 
 - 只提交本任务相关源码、数据 sidecar、追踪文档和必要回归；
