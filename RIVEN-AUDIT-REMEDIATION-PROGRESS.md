@@ -146,6 +146,31 @@
 - 融合上线当天操作：正常玩→跑本工具→新紫卡 fingerprint（融合产物词条样本）与新货币立刻可见；多张样本 + `theoretical_structure_scale` 即可拟合融合数值缩放。
 - 回归 `tests/test_riven_snapshot_tool.py`（2 用例：提取合同 + RandomMod 家族正则）。
 
+### 2026-09-23 Round 8（静态逆向：Luau 脚本通道打通）
+
+**一、重大发现：Luau 脚本字节码的静态提取路径**
+
+- 游戏客户端的 **Font 缓存包**（`Cache.Windows\H.Font.cache`，2.5MB）携带全部 **5327 个编译后 Luau 脚本**（命名伪装成「字体」包；`--ls` 分类器不认识但 `--write-raw` 按内部路径直接取）。
+- 提取路径（复刻 nightcap-lua-raw 试验的机制）：`Warframe-Exporter-CLI --write-raw --package Font --internal-path <路径>` → 输出 `.lua_B`（字节码）+ `.lua_H`（EE 参数声明头）。
+- 反汇编：`nightcap_luau_dump <.lua_B>`（WF_Rever 现有工具，输出 UTF-16 需转码）→ 完整 proto/常量/指令流。
+- **已提取并反汇编 8 个关键脚本**：BonusDamageOnNextHit（Double Tap，含 ApplyUpgrade/UnApplyUpgrade/OnProjectileContact/HudBuffLoop/GetModDescriptionInfo 五函数）、BioGrenade（Torid）、ProjectileEmbedTimeOnCondition（Renewed Horror）、UnlockAltFire（Latron 灵化）、SplitStatusProcsOnStackedStatusHit、BonusDamageForNextShot、BonusDamageNextShotForCurEnergy、RequireArmor。产物在 `.local/research/luau-disasm/`。
+- BonusDamageOnNextHit.lua_H 头声明参数：`bonusDamagePercent`、`multTimeWindow`、`hudBuffType`。
+
+**二、融合脚本静态确认（二次验证）**
+
+- Font 包 5327 脚本全量关键词清点：**Riven=0、Fuse=0、Coalescent=0、Ascent=0**；Fusion 仅 6 个全部是既有 Endo/融合宝物 UI（ModFusion.lua、FusionTreasureManager.lua 等）。词条融合未落地客户端的结论再次被脚本通道独立证实。
+
+**三、新工具：`tools/luau-extract.py`**
+
+- `--list` / `--search <关键词>` / `--extract <路径>` / `--extract-dir <前缀>`（+`--disassemble`）——任何 script-driven 游戏机制都能静态提取反汇编。反汇编输出自动 UTF-16(BOM)→UTF-8 转码。
+- 回归 `tests/test_luau_extract_tool.py`（4 用例：TOC 契约、融合脚本缺失哨兵（落地当天报错提醒重跑分析）、BioGrenade 提取+反汇编端到端、Double Tap 五函数契约）。
+
+**四、进行中（subagent × 2）**
+
+- Luau 反汇编深度分析（Double Tap 消费语义/重置规则、Torid/解锁脚本机制、引擎常量）。
+- 引擎二进制逆向（Warframe.x64.exe 45.6MB，含 RTTI；已定位 mEmbedAttack/@34814185 字段元数据与 RadialOnMiss* 类型描述符/@36078771；用 objdump 定向反汇编 EmbedAttack tick 循环，交叉验证 wfsim 实测 1/s）。
+
+
 
 
 
