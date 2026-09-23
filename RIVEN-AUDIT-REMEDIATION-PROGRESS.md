@@ -222,6 +222,33 @@
 - 交付物：`.local/research/nextshot-bonus-path.json`（完整裁决）+ `engine-disasm/nsb_*`（98 个分析文件）。
 - 42 项测试全通过。
 
+### 2026-09-23 Round 11（解算正确性排查：守望者异常 + KPM 差异）
+
+**用户报告的三组问题与排查结果：**
+
+**一、守望者 Prime 双爆负弹匣解算异常（1.3 亿 KPM / UNRESOLVED / 无膛室 Prime）——部分修复**
+
+- 复现确认：`scoringValues` 天文数字（baseline 9300万 / actual 1.35亿 windowedDps）、`unresolved-lower-bound`、bestFound 无 Primed Chamber、postSearchProbe KPM=284 饱和。
+- **根因 1（已修复）**：`expected_dot_damage` 的 Slash DoT seed 用 **dot_base（武器总基伤）** 而非 **该类型面板份额**——IPS 类 DoT 被高估 `dot_base/slash_share` 倍（物理武器 2-4×，Vectis 实测 2.65×：模型 766/s vs 正确 287/s）。修复：IPS（Slash/Impact/Puncture）seed 基数改为 `stats.damage_types[dtype]`（最终面板份额，暴击仍按 seed_tiers 分档），元素 DoT（Heat/Toxin/Elec/Gas）维持 `dot_base × elemental`。修复后模型 287 vs 手工 289（0.99×）。此高估与高暴击/多重叠乘后使 DoT 通道撑爆步进 KPM（240 饱和=每 250ms 步一杀）→ 千万级分母。
+- **根因 2（遗留待查）**：搜索中间候选出现**异常膨胀面板**（capture 到 dmg=798,639、DT_CORROSIVE 38万 + DT_EXPLOSION 41.9万、`projectile-component-damage-unapplied`）——某候选的 stats 构建把投射物组件伤害算进了面板。需后续审计 `_evaluate` 的候选 stats 构建（尤其含爆炸组件的形态/`_branch_effects`）。
+- 腔室 Prime 未被推荐：与上述两个问题相关（分母失真 + `first_shot_damage_bonus` 在负弹匣场景的协同未被正确排序）；根因 2 修复后需复验。
+
+**二、PrimeBoltor 配卡 5.3 vs wfsim 1.3 KPM——部分定位**
+
+- 复现（100k 血无甲自定义靶）：我们 KPM=159.5、79 杀、directWindow=7.94M；**物理上限** 340 攻击 × perShot 11,208 = 3.81M——入账是上限的 2.085 倍。
+- 深挖（逐步插桩）：**per_attack 在步循环内从 11,208 涨到 ~23,000**——动态来源是 **puncture/cold proc 的 crit 覆写**（puncture 层数爬升给 +crit chance，模型允许到 +25%；0.24→0.49 cc 使 crit_avg 3.06→5.23，×1.71 ≈ 观测 1.79×）。入账与 per_attack 一致（无双重入账；340 次攻击枚举无重复）。
+- **待验证**：puncture proc +crit 的游戏真实行为（上限/衰减/是否影响 DoT）需引擎逆向或游戏实测确认；wfsim 是否建模此机制。
+- wfsim 同武器快测（base form + 近似 mod 映射）：**mod 映射无法对齐**（MagneticClipRifleMod 误映射 malignant_force 电卡），面板元素合成结果不同（我们 Viral+Magnetic+Fire vs wfsim Viral+Electricity）——**需精确 mod 映射后重跑同条件对比**才能下结论。
+- wfsim 快测还显示：30 秒 228 发、3 次装填、downtime 7.2s（弹匣 84? 不——wfsim panel 与我们的 mag=84 reload=0 有显著差异，**灵化形态的弹匣/装填语义**需对照）。
+
+**三、元素状态机制完备性（冰内置 CD 等）——登记待查**
+
+- 当前模型：cold proc 削甲/crit 加成按 live_stacks 连续近似；**冰的「冻结」与触发内置 CD**（若存在）未建模；viral/magnetic/corrosive 的层数爬升已建模但无 proc 间隔 CD 概念。
+- 待办：引擎逆向 cold proc 的 CD/冻结规则（走 Round 10 的 RE 管线：字段注册 → 消费函数 → 常量），确认哪些状态有 per-target proc cooldown。
+
+**验证**：42 项测试全通过；wfsim 黄金集 43/43 保持收敛。
+
+
 
 
 

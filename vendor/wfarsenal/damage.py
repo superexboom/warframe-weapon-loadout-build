@@ -2703,6 +2703,25 @@ def expected_dot_damage(
             if defenses["shield"] > 0.0 and interaction_type not in shield_bypass:
                 target_multiplier *= _magnetic_defense_multiplier(magnetic_stacks)
         elemental = stats.dot_elemental_multipliers.get(dtype, 1.0)
+        # ── IPS/元素 DoT 的种子基数区分（引擎合同修复）──────────────────
+        # Slash（bleed）的 DoT 基数 = 触发那一击的「该类型伤害份额」
+        # （stats.damage_types[dtype]，含基伤/元素合并后的最终份额），
+        # 不含暴击（暴击按触发那一击的档位经 seed_tiers 乘入）。
+        # 元素 DoT（Heat/Toxin/Electricity/Gas）的基数 = dot_base
+        # （武器基础伤害 × 基伤乘区，不含元素 MOD）× elemental 乘数。
+        # 旧实现统一用 dot_base × elemental：对 Slash 把「总伤」当
+        # Slash 基数，高估 dot_base/slash_share 倍（物理武器 2-4×），
+        # 直接撑爆 DoT 通道与 KPM/评分分母。
+        # DT_PUNCTURE 虽无 DoT（不在 DOT_DAMAGE_COEFFICIENTS），防御性
+        # 处理同 IPS 口径。
+        if dtype in ("DT_SLASH", "DT_IMPACT", "DT_PUNCTURE"):
+            seed_basis = max(
+                float(stats.damage_types.get(dtype, 0.0) or 0.0), 0.0
+            )
+            elemental_factor = 1.0  # IPS 无元素乘区
+        else:
+            seed_basis = dot_base
+            elemental_factor = max(float(elemental), 0.0)
         # +1 accumulator per tick group (wfsim MEASUREMENTS M58, AGPL-3.0):
         # Heat/Electricity/Gas consolidate into ONE tick group sharing a single
         # +1; Slash and Toxin tick independently so every live stack carries
@@ -2719,8 +2738,8 @@ def expected_dot_damage(
             (
                 weight,
                 coefficient
-                * dot_base
-                * max(float(elemental), 0.0)
+                * seed_basis
+                * elemental_factor
                 * factor
                 * proc_damage
                 * stats.falloff_multiplier
