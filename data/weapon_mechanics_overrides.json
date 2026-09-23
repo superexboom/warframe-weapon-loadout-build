@@ -34,7 +34,13 @@
         "radial": "径向不乘：爆炸 fn 0x14148be10 构造径向包时传入空哨兵表 0x14272f3b0（ctor 0x14047c562-585 写 packet+0x180=empty）；径向伤害结算（vt+0x788 @0x14148c222）之后才在 0x14148c25b-68 consume-and-clear proj[0x658]（仅触发 on-consumed 副作用事件，不乘径向）",
         "buffAggregation": "引擎聚合 fn 0x141807a80 计算倍率并写入 payload 键 NextShotMult/NextShotMult2（0x141808e10/0x141808e87；键 @0x1421bebd0/be0）",
         "perFormState": "bonus 表按 fire-mode/behavior 对象存储（开火路径读 [[weapon+0x48]]+0x90，0x140a1e782/0x1414a39c8）——每个形态结构性保有独立状态；无快照/恢复代码（ClearChargesOnBehaviorChange 零静态 xref）",
-        "wikiDiscrepancy": "wiki 记录「只有 AoE 吃、直击不吃」被引擎证据推翻（接线相反）；wiki 记录「切换形态快照/恢复」机制描述不准确（实际是 per-behavior 存储，但可观察行为「各形态独立 buff 状态」成立）"
+        "wikiDiscrepancy": "wiki 记录「只有 AoE 吃、直击不吃」与引擎接线相反；群内实测确认游戏实际行为确实「直击不吃、AoE 吃」——引擎接线与实际表现不一致，判定为游戏 bug。",
+        "liveBehaviorOverride": {
+          "directHit": "not-applied（实测：直击不吃 bonus；群内测试与 wiki 一致；与引擎接线相反→bug）",
+          "radial": "applied（实测：AoE 吃 bonus；群内测试与 wiki 一致）",
+          "source": "群内实测 2026-09-23 + wiki 记录一致；引擎逆向（直击 0x1400e2212 携带 bonus 表/径向空哨兵 0x14148be10）与实测相悖",
+          "modelingDirective": "按实测行为建模：灵化径向乘 bonus、直击不乘；DE 修复 bug 后切回引擎语义"
+        }
       },
       "stacking": {
         "bonusDamagePercentAtSampledRank": 0.050000001,
@@ -48,9 +54,9 @@
         "evidence": "raw-export-field: AvailableOnPve=1 (唯一非 0 的 PvPMods 条目)"
       },
       "modeRules": {
-        "baseDirect": "supported（引擎证实：直击伤害包携带 bonus 表，fn 0x1400e2212）",
-        "incarnonDirect": "supported（同一引擎路径；冲击处理按 proj[0x658] 消耗，与武器无关）",
-        "incarnonRadial": "not-multiplied（引擎证实：径向包构造传入空哨兵表，径向伤害不读 bonus；爆炸后仅触发 consume-clear 副作用）"
+        "baseDirect": "applied-per-live-behavior（实测：基础形态直击吃 buff——非灵化路径无 bug 报告；引擎接线同向）",
+        "incarnonDirect": "not-applied（实测 bug：灵化直击不吃——引擎接线携带 bonus 表但游戏实际不生效；群内测试+wiki 一致）",
+        "incarnonRadial": "applied（实测：灵化径向吃 buff——群内测试+wiki 一致；引擎接线为空哨兵表但实际生效→bug）"
       },
       "notes": [
         "原始参数来自导出 mod JSON 的 Script 字段（UpgradeType NONE，数值全部在脚本参数）：_bonusDamagePercent 0.05（5%）、_multTimeWindow 0.5s。",

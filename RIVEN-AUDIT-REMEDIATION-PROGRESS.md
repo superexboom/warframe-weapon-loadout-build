@@ -282,6 +282,34 @@
 
 **验证**：44 项测试全通过；wfsim 黄金集 43/43。
 
+### 2026-09-23 Round 13（灵化全面审计：SubUpgrades 丢失 + 触发词条 + Double Tap bug 双轨）
+
+**一、全灵化词条审计（791 进化文件、935 条词条）**
+
+- UpgradeType 分布：WEAPON_DAMAGE_AMOUNT×168、NONE×133（脚本占位）、CRIT_CHANCE×114、PROC_CHANCE×100……
+- **8 条 `WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE`**（DualToxocyst/Angstrum/Lato/Zylok/Burston/Latron/Soma/Despair 的「对触发状态目标增伤」）——已走 CO 桶 + 窗口层 emergent 重算 ✓ 处理正确
+- **41 条描述脚本**（LocKeyWordScript）——动态描述，多数为占位
+- 条件族（fail-closed 排除）：WEAPON_VICTIM_DAMAGE_AMOUNT（低血增伤 Dread/Kunai/Sicarus）、WEAPON_VICTIM_CRIT_*（未受伤敌人 Paris）、WEAPON_LOW_CRIT_VALUE/DAMAGE（Braton/Furis 家族「最低暴击率」）、WEAPON_LAST_MULTISHOT（Torid 末发多重）、WEAPON_AMMO_POOL_MULTISHOT_DAMAGE（Torid/Braton 弹药池多重）、WEAPON_SLASH_PROC_ON_IMPACT（Furax/Magistar/Bo）
+
+**二、核心发现：SubUpgrades 丢失（螺钉 2-2 描述错误的根源）**
+
+- 主进化文件（如 BoltorEvoTier1B）通过 `SubUpgrades: ["BoltorEvoTier1BSubMod"]` 挂接**条件性子词条**（「装填前每秒 +2 伤害」「弹药效率 -20%」）；SubMod 带 `UpgradeChance/UpgradeDuration/MaxConditionalStacks` 条件元数据。
+- **旧 extract.py 只遍历 Upgrades——SubUpgrades 全部丢失**：UI 描述不完整（螺钉 2-2「猩红序曲」只剩主词条一半）、模拟器永远看不到子词条。
+- 修复：extract.py `_build_incarnon_branch` 解析 SubUpgrades 引用，子词条带 `isSubUpgrade` + 条件元数据导出；UI `_incarnon_effect_text` 渲染 `[条件 X% 几率，Ys，最多 Z 层]` 标注。
+- 模拟器端：`_branch_effects` 对 `isSubUpgrade` 词条 **fail-closed 排除并诊断**（`sub-upgrade-conditional-excluded`）——条件触发词条绝不按常驻计算（用户报告的「击杀触发按常驻算」同族问题的通用防线）；事件模拟器落地后按 UpgradeChance/Duration/Stacks 语义实现。
+
+**三、Double Tap 实测 bug 双轨登记**
+
+- 群内实测确认：游戏实际行为「直击不吃、AoE 吃」与引擎接线（直击携带 bonus 表/径向空哨兵）**相反**——判定为游戏 bug。
+- sidecar 双轨：`enginePath`（引擎语义证据）+ `liveBehaviorOverride`（实测行为 + modelingDirective：按实测建模直至 DE 修复）+ `modeRules` 按实测行为标注。
+
+**四、基础设施**
+
+- tests/conftest.py：vendored wfarsenal 路径优先（修复裸 pytest 下的导入顺序问题）。
+- 回归 `tests/test_incarnon_subupgrade.py`（5 用例：SubMod 数据结构、extract 提取、模拟器 gate、UI 渲染）。
+- **52 项测试全通过**；wfsim 黄金集 43/43。
+
+
 
 
 

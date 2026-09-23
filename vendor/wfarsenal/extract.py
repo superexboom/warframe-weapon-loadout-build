@@ -329,6 +329,51 @@ def _build_incarnon_branch(
             for upgrade in obj.get("Upgrades") or ()
             if isinstance(upgrade, dict)
         ]
+        # ── SubUpgrades（灵化进化子词条）提取修复 ───────────────────────
+        # 主进化文件（如 BoltorEvoTier1B）通过 SubUpgrades: ["...SubMod"]
+        # 挂接条件性子词条（「装填前每秒 +2 伤害」「弹药效率」等）。旧导出
+        # 只遍历 Upgrades——子词条全部丢失，UI 描述不完整、模拟器少算
+        # 词条。SubMod 带条件元数据（UpgradeChance/UpgradeDuration/
+        # MaxConditionalStacks），一并导出供模拟器按事件语义处理。
+        for sub_ref in _string_list(obj.get("SubUpgrades")):
+            sub_resolved, sub_obj = _resolve_weapon_reference(
+                index, resolved, sub_ref
+            )
+            if not sub_obj:
+                unresolved.append(
+                    {
+                        "field": "SubUpgrades",
+                        "value": sub_ref,
+                        "resolvedPath": sub_resolved,
+                        "reason": "notFound",
+                    }
+                )
+                continue
+            sub_effects = [
+                {
+                    **_build_effect(upgrade),
+                    "sourcePath": sub_resolved,
+                    "isSubUpgrade": True,
+                    **(
+                        {
+                            key: sub_obj[key]
+                            for key in (
+                                "UpgradeChance",
+                                "UpgradeDuration",
+                                "MaxConditionalStacks",
+                            )
+                            if key in sub_obj
+                        }
+                    ),
+                }
+                for upgrade in sub_obj.get("Upgrades") or ()
+                if isinstance(upgrade, dict)
+            ]
+            source_effects.extend(sub_effects)
+            sub_scripts = _runtime_scripts(sub_obj)
+            if sub_scripts:
+                runtime_scripts.append({"sourcePath": sub_resolved, **sub_scripts})
+        # ─────────────────────────────────────────────────────────────
         source_conditionals, source_unresolved = _conditional_effects(
             index, resolved, obj
         )

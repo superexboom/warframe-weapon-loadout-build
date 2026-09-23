@@ -596,6 +596,21 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
                 f"incarnon-{branch.get('id')}-no-crit-no-proc-gate-excluded-from-panel"
             )
             continue
+        # ── 灵化进化 SubUpgrade（条件性子词条）修复 ─────────────────────
+        # 主进化文件的 SubUpgrades 子词条（「装填前每秒 +伤害」「弹药效率」
+        # 「弹匣末发多重」等）带条件元数据（UpgradeChance/UpgradeDuration/
+        # MaxConditionalStacks）——它们是事件/条件触发的，不是无条件常驻。
+        # 旧实现（SubUpgrades 未导出前）完全没有这些词条；导出修复后，
+        # 无条件按常驻计算会虚增面板（用户报告的「击杀触发按常驻算」
+        # 家族的同一问题）。在事件模拟器落地前按 fail-closed 排除并诊断，
+        # 绝不假精确。
+        if raw.get("isSubUpgrade"):
+            unsupported.append(
+                f"incarnon-{branch.get('id')}-sub-upgrade-conditional-excluded"
+                f"({'UpgradeChance' if raw.get('UpgradeChance') is not None else 'conditional'}"
+                f":{str(raw.get('sourcePath') or '').rsplit('/', 1)[-1]})"
+            )
+            continue
         effect = ModEffect.from_export(raw, 0, source_path=source)
         if effect.supported:
             effects.append(effect)

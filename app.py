@@ -1050,9 +1050,28 @@ def _incarnon_effect_text(effect: Mapping[str, Any]) -> str | None:
     else:
         value_text = ""
     operation = INCARNON_OPERATION_LABELS.get(op_key, "") if value_text else ""
+    # ── 灵化 SubUpgrade（条件性子词条）描述渲染 ────────────────────────
+    # 主进化的 SubUpgrades 子词条（装填叠层/弹药效率等）带条件元数据；
+    # 渲染时标注触发条件，避免与无条件主词条混淆（螺钉 2-2 描述错误
+    # 的根源：子词条此前未导出，描述只剩主词条一半）。
+    sub_prefix = ""
+    if effect.get("isSubUpgrade"):
+        chance = effect.get("UpgradeChance")
+        duration = effect.get("UpgradeDuration")
+        stacks = effect.get("MaxConditionalStacks")
+        gate_bits = []
+        if isinstance(chance, (int, float)) and not isinstance(chance, bool):
+            gate_bits.append(f"{float(chance) * 100:g}% 几率")
+        if isinstance(duration, (int, float)) and not isinstance(duration, bool):
+            gate_bits.append(f"{float(duration):g}s")
+        if isinstance(stacks, (int, float)) and not isinstance(stacks, bool):
+            gate_bits.append(f"最多 {stacks:g} 层")
+        sub_prefix = f"[条件{'，'.join(gate_bits)}] " if gate_bits else "[条件] "
     # 以引擎当前支持表为准（冻结快照的 supported 标记滞后于引擎实现）。
     support = "" if upgrade in SUPPORTED_WEAPON_UPGRADE_TYPES else "（当前不计入）"
-    return f"{label} {operation}{value_text}{support}".strip()
+    if effect.get("isSubUpgrade"):
+        support = "（条件触发，当前不计入）"
+    return f"{sub_prefix}{label} {operation}{value_text}{support}".strip()
 
 
 def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
