@@ -1131,9 +1131,32 @@ def apply_mods(
         for effect in buckets["WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE"]
     ]
     co_effects = list(buckets["WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE"])
+    # ── ADD_BASE 语义分离（解算正确性修复）────────────────────────────
+    # WEAPON_DAMAGE_AMOUNT 的 ADD_BASE（灵化进化「+N 基础伤害」类词条，
+    # 如 PrimeVectisEvoTier1B 的 +150）语义是「往武器基伤上加 N 点平坦
+    # 伤害」，随后再吃乘区；不是「基值 1 上的 +N×100% 乘数」。旧实现把
+    # 它留在 _combine(1.0, ...) 里：(1+150)×mods → 150×151×2.551 =
+    # 57,780（385× 膨胀），直接撑爆搜索候选面板与评分分母。
+    # 正确口径：flat_base 先按类型份额摊入 base，再乘 damage_scale。
+    damage_flat_base = 0.0
+    damage_scale_effects = []
+    for effect in buckets["WEAPON_DAMAGE_AMOUNT"]:
+        if effect.operation == "ADD_BASE":
+            damage_flat_base += effect.value
+        else:
+            damage_scale_effects.append(effect)
     damage_scale = _combine(
-        1.0, buckets["WEAPON_DAMAGE_AMOUNT"] + status_damage_effects
+        1.0, damage_scale_effects + status_damage_effects
     )
+    if damage_flat_base:
+        base_total_unscaled = sum(base.values())
+        if base_total_unscaled > 0:
+            # 按类型份额摊平（DT_ANY 词条对所有类型等比生效）。
+            # 构造新 dict——base 是 mode.damage.types 的引用，不得原地改。
+            scale_up = 1.0 + damage_flat_base / base_total_unscaled
+            base = {dtype: amount * scale_up for dtype, amount in base.items()}
+        # base_total_unscaled == 0（无基伤模式）：flat 无可加权的份额，
+        # 维持原状并诊断（不虚构伤害类型）。
     if weapon.get("slot") in MELEE_SLOTS:
         damage_scale = _combine(
             damage_scale,
