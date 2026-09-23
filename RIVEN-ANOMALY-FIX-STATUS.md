@@ -61,9 +61,10 @@
 
 ## 明确未实现 / 保持 fail-closed
 
+- **已闭合（静态逆向）**：Torid 场 tick 间隔 = 1.0s（引擎 fn_14189a0ad 常量 0x14203bf94=1.0f，2026-09-23 逆向证实）；Double Tap 消费语义 = 单次增益/命中消耗/0.5s 窗口/CAP=100%（Luau 字节码反汇编，consume-on-use 模式）。
 - Latron 灵化径向的 Double Tap 适用性：无静态证据（ExplosiveAttack 无脚本钩子）——unknown。
-- Torid 场 tick 间隔、Double Tap 消费语义（重置/衰减）、失误重置条件：静态不可验证——需要游戏内实测；在取得实测前不实现。
-- Torid/Opticor 的场/径向伤害本体实现：伤害合同已登记（sidecar v2），但 compact 导出数据源尚未重建（需要用修复后的 extract.py 重跑导出管线）——在重建+验收前保持 `weapon-radial-or-field-damage-not-in-export` 诊断路径。
+- Torid/Opticor 的场/径向伤害本体实现：伤害合同已登记且 tick 已证实，但 compact 导出数据源尚未重建（需要用修复后的 extract.py 重跑导出管线）——在重建+验收前保持 `weapon-radial-or-field-damage-not-in-export` 诊断路径。
+- Double Tap 的引擎事件模拟：数据已理解（conditional-supported），事件账本实现待做——`simulatorImplemented: false` 期间 fail-closed。
 - wfsim 目录中 Opticor Vandal 径向 300 与原始数据 100 不符（1.5×）——以原始导出为准，差异登记 openQuestions。
 - 弹匣/装填/蓄力的精确开火调度（E04）：当前 `sustained_attack_rate` 平均口径仍是模型近似（attackRateSource 字段如实标注）。
 - 搜索全局最优性：仍是 beam+爬山+多起点+双槽交换的 best-known（`scoreBasis: best-known-search-result`），不宣称全局证明。

@@ -5029,10 +5029,15 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
         mechanic_override = WEAPON_MECHANICS_OVERRIDES.get("mods", {}).get(path)
         # F16：sidecar schema v2 的统一口径——"event-unmodeled"（旧）与
         # "unsupported"（新）都走 fail-closed（返回空收益而非假收益）。
-        if isinstance(mechanic_override, Mapping) and mechanic_override.get("status") in {
-            "event-unmodeled",
-            "unsupported",
-        }:
+        # "conditional-supported" 表示数据已理解；若 simulatorImplemented
+        # 仍为 false（机制已知但引擎未实现事件模拟），同样 fail-closed。
+        if isinstance(mechanic_override, Mapping) and (
+            mechanic_override.get("status") in {"event-unmodeled", "unsupported"}
+            or (
+                mechanic_override.get("status") == "conditional-supported"
+                and mechanic_override.get("simulatorImplemented") is False
+            )
+        ):
             gains[path] = {
                 "gainPercent": None,
                 "reason": "event-mechanic-unmodeled",

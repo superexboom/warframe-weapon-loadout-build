@@ -21,12 +21,16 @@
   "mods": {
     "/Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod": {
       "mechanicId": "latron-double-tap",
-      "status": "unsupported",
+      "status": "conditional-supported",
+      "simulatorImplemented": false,
       "kind": "next-shot-multiplier",
       "maxRank": 3,
       "stacking": {
-        "bonusDamagePercentPerWindow": 0.050000001,
-        "windowSeconds": 0.5
+        "bonusDamagePercentAtSampledRank": 0.050000001,
+        "windowSeconds": 0.5,
+        "capPercent": 100,
+        "consumption": "consume-on-use",
+        "note": "单次增益、命中消耗：buff 载荷（proto 0.4）携带单一 BONUS 值（CAP=100 上限）；OnProjectileContact（proto 0.3）读出→应用→清态。无叠加计数器、无失误重置分支（旧登记的 20 层/2.0s/resetOnMiss 均无字节码依据）。"
       },
       "pveAvailability": {
         "availableOnPve": true,
@@ -40,16 +44,15 @@
       "notes": [
         "原始参数来自导出 mod JSON 的 Script 字段（UpgradeType NONE，数值全部在脚本参数）：_bonusDamagePercent 0.05（5%）、_multTimeWindow 0.5s。",
         "机制为「下一发乘数」（BonusDamageOnNextHit.lua；HUD 图标 NextShotDamageMultiplier.png；Buff 描述 DoubleTapBuffDesc），不是持续时长增益。",
-        "旧登记的 0.2/每击、20 层上限、2.0s、resetOnMiss 均无静态数据支持，已删除。",
+        "Luau 字节码反汇编（Font 包提取，2026-09-23）：五个函数 ApplyUpgrade/UnApplyUpgrade/OnProjectileContact/HudBuffLoop/GetModDescriptionInfo；buff 载荷 K: BONUS/DURATION/CAP=100；proto 0.3 呈 consume-on-use 模式（读出→应用→清态）。",
         "灵化直击受支持：Latron 灵化波投射物自身接线 OnProjectileContactScript→BonusDamageOnNextHit.lua（LatronIncarnonAltFireWaveProj.json）。",
         "灵化径向未决：ExplosiveAttack 块无脚本钩子、无 next-shot 标记——静态证据缺失，保持 unknown（fail-closed）。",
-        "重置条件（失误/装填/切形态）静态不可验证：导出无 .lua 文件。ClearChargesOnBehaviorChange 重置的是灵化充能，不是本增益。",
-        "AvailableOnPve=1：PvP 目录里唯一开放 PvE 的 mod（其余 93 条全为 0）。",
-        "消费语义（增益后完全重置还是衰减）静态不可验证：需要游戏内实测或脚本源码。"
+        "重置条件：窗口过期（0.5s 内未命中则增益过期）——字节码无失误重置分支。ClearChargesOnBehaviorChange 重置的是灵化充能，不是本增益。",
+        "AvailableOnPve=1：PvP 目录里唯一开放 PvE 的 mod（其余 93 条全为 0）。"
       ],
       "sources": [
         "raw-export: Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod.json (Script._bonusDamagePercent, Script._multTimeWindow, AvailableOnPve)",
-        "raw-export: Lotus/Upgrades/CosmeticEnhancers/Offensive/BonusDamageOnNextHit.lua 引用",
+        "luau-disasm: Font package BonusDamageOnNextHit.lua (five-function structure, BONUS/DURATION/CAP=100 payload, consume-on-use pattern — .local/research/luau-mechanics-analysis.json)",
         "raw-export: Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/LatronIncarnonAltFireWaveProj.json (OnProjectileContactScript)",
         "static-analysis: .local/research/latron-double-tap-static-analysis.json"
       ]
@@ -69,8 +72,8 @@
         "procChance": 0.25,
         "radius": 3.0,
         "durationSeconds": 10.0,
-        "tickIntervalSeconds": null,
-        "tickIntervalNote": "tick 间隔不在任何静态导出内（全键位扫描零命中）；wfsim 实测 1/s（cross-reference，需游戏内确认）",
+        "tickIntervalSeconds": 1.0,
+        "tickIntervalNote": "引擎逆向证实（2026-09-23）：fn_14189a0ad 的 tick 阈值常量 0x14203bf94=1.0f，计时器 obj+0x8d0 以 dt×[projConfig+0x294] 累积，≥1.0 结算一次 EmbedAttack。BioGrenadeProjectile 导出无 TickRate 字段→引擎默认 1.0/s。与 wfsim 实测一致。",
         "evolutionRenewedHorror": "ToridEvoTier3B 将场时长 ×2（空仓装填后的第一发，脚本 ProjectileEmbedTimeOnCondition.lua，_embedDurationMultiplier=2）"
       },
       "fieldShareReference": 0.78,
@@ -78,15 +81,17 @@
         "毒云没有独立游戏对象：完整 Fx 链（ToxicGrenadePoisonCloudSpawner→Smoke/Spots/BioPoisonImpact/RangeDeco）全部是纯视觉；伤害合同就是投射物的 EmbedAttack。",
         "直击 100 DT_POISON / proc 0.23 / 暴击 15%/×2 / DamageRadius 10 / CanStick / 强制 PT_STAGGERED+PT_BIG_STAGGER。",
         "EmbedAttack 40 DT_POISON / proc 0.25 / EmbedDamageRadius 3 / EmbedTime [10,10]——这是场的伤害合同。",
+        "tick 间隔 1.0s：引擎二进制逆向证实（fn_14189a0ad 常量 0x14203bf94=1.0f），不再依赖 wfsim 实测标注。",
         "Incarnon 光束（Behaviors[1]）：51 DT_POISON / proc 0.39 / 暴击 29%/×3.1 / 8/s / 射程 37 / 光束半径 2.3 / 5 链×0.75@7m / 170 充能（+34/直击）——无场组件。",
         "fieldShareReference 0.78 只是 wfsim 的社区参考比例，不得当作通用补偿乘率。",
-        "BioGrenade.lua（warframe-companion 反汇编副本）只播嵌入动画，无伤害逻辑。"
+        "BioGrenade.lua 反汇编（Font 包提取）确认：仅 OnContact 播放嵌入动画（fast/slow anim rate lerp），无伤害逻辑。"
       ],
       "sources": [
         "raw-export: Lotus/Weapons/ClanTech/Bio/BioGrenadeProjectile.json (AttackData, EmbedAttack, EmbedDamageRadius, EmbedTime, EmbedEffect)",
         "raw-export: Lotus/Weapons/ClanTech/Bio/BioWeapon.json (Behaviors[1] Incarnon beam)",
-        "cross-reference: wfsim field tick_rate 1/s (measured, labeled)",
-        "static-analysis: .local/research/torid-field-static-analysis.json"
+        "engine-reverse: Warframe.x64.exe fn_14189a0ad tick threshold 0x14203bf94=1.0f (see .local/research/engine-embed-tick.json)",
+        "luau-disasm: Font package BioGrenade.lua (animation-only)",
+        "cross-reference: wfsim field tick_rate 1/s (measured, agrees)"
       ]
     },
     "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG": {

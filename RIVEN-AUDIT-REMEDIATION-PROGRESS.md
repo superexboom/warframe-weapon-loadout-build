@@ -170,6 +170,29 @@
 - Luau 反汇编深度分析（Double Tap 消费语义/重置规则、Torid/解锁脚本机制、引擎常量）。
 - 引擎二进制逆向（Warframe.x64.exe 45.6MB，含 RTTI；已定位 mEmbedAttack/@34814185 字段元数据与 RadialOnMiss* 类型描述符/@36078771；用 objdump 定向反汇编 EmbedAttack tick 循环，交叉验证 wfsim 实测 1/s）。
 
+### 2026-09-23 Round 9（静态逆向收尾：两大缺口闭合）
+
+**一、Torid 场 tick 间隔——引擎逆向证实 1.0s（缺口闭合）**
+
+- 路径：subagent 构建 PE 解析器（wfbin.py）→ RTTI 扫描 → 字段注册函数 fn_140c01880 反汇编 → **弹道类完整成员偏移表**（mEmbedAttack@0x950、mEmbedDamageRadius@0x954、计时器@0x8d0 等 100+ 字段）→ embed 更新函数 fn_14189a0ad 定向反汇编。
+- 证据链：`fn_14189a0ad+0x88` 加载阈值常量 **0x14203bf94 = 1.0f**；计时器 `obj+0x8d0` 以 `dt × [projConfig+0x294]` 累积（每武器可覆盖的 tick rate）；`comiss` 与 1.0 比较 ≥ 时结算一次 EmbedAttack 伤害。BioGrenadeProjectile 无 TickRate 字段 → 引擎默认 1.0/s。
+- **结论：Torid 毒云 tick = 1.0 秒，静态逆向证实，与 wfsim 实测一致**——不再是「静态无法获取需运行时」。
+- 附带产出：弹道类成员偏移表（后续任何弹道机制逆向的现成索引）、DoT 应用函数 fn_140ccc940（每 tick 构造 5 个伤害类型条目）。
+- sidecar 更新：`tickIntervalSeconds: 1.0`（引擎逆向证据标注），来源加 engine-reverse 条目。
+
+**二、Double Tap 消费语义——Luau 字节码反汇编（缺口大部分闭合）**
+
+- 反汇编结构：五函数（ApplyUpgrade/UnApplyUpgrade/OnProjectileContact/HudBuffLoop/GetModDescriptionInfo）+ buff 载荷常量 **BONUS/DURATION/CAP=100** + 引擎 buff 签名（instigator/affected/buffType/buffData/buffDataExtra）。
+- **结论**：单次增益、命中消耗（proto 0.3 呈「读出→应用→清态」模式）、窗口过期（0.5s）、CAP=100%；**无叠加计数器、无失误重置分支**（旧登记 20 层/2.0s/resetOnMiss 无字节码依据，确认删除）。灵化直击受支持（投射物接线）；径向 unknown 维持。
+- sidecar 更新：status → `conditional-supported`（数据已理解）+ 新增 `simulatorImplemented: false` 字段（引擎事件模拟未实现）；app.py fail-closed 门扩展为「conditional-supported 且 simulatorImplemented=false 也拒算」——数据到位但引擎未实现时绝不输出假收益。
+- 置信度标注：常量与载荷结构为直接字节码证据；consume-on-use 基于 proto 0.3 的调用/清态模式（结构性证据单边支持，游戏内帧捕获可最终确认）。
+
+**三、验证与交付**
+
+- 42 项测试全通过（Double Tap fail-closed 测试在新状态下依然通过）。
+- 逆向产物归档：`.local/research/engine-embed-tick.json`、`luau-mechanics-analysis.json`、`engine-disasm/`（含成员偏移表与全部函数反汇编）。
+
+
 
 
 
