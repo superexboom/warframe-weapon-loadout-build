@@ -8271,7 +8271,7 @@
    "nameInternal": "CrpBEArcaPlasmor",
    "nameTag": "/Lotus/Language/Weapons/CrpBEArcaPlasmorName",
    "nameZh": "信条·弧电离子枪",
-   "omegaAttenuation": 0.55000001,
+   "omegaAttenuation": 0.60000002,
    "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
    "polarities": [
     "AP_UNIVERSAL",
@@ -9064,7 +9064,7 @@
    "nameInternal": "CrpBEQuanta",
    "nameTag": "/Lotus/Language/Weapons/CrpBEQuantaName",
    "nameZh": "信条·量子切割器",
-   "omegaAttenuation": 0.75,
+   "omegaAttenuation": 0.85000002,
    "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta",
    "polarities": [
     "AP_UNIVERSAL",
@@ -23948,7 +23948,7 @@
    "nameInternal": "GrnBowWeapon",
    "nameTag": "/Lotus/Language/Weapons/KuvaGrnBowName",
    "nameZh": "赤毒·布拉玛",
-   "omegaAttenuation": 0.64999998,
+   "omegaAttenuation": 0.69999999,
    "path": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -26361,7 +26361,7 @@
    "nameInternal": "KuvaGhoulSaw",
    "nameTag": "/Lotus/Language/Weapons/KuvaGhoulsawName",
    "nameZh": "赤毒·尸鬼电锯",
-   "omegaAttenuation": 0.69999999,
+   "omegaAttenuation": 0.80000001,
    "path": "/Lotus/Weapons/Grineer/KuvaLich/Melee/Ghoulsaw/KuvaGhoulSaw",
    "polarities": [
     "AP_UNIVERSAL",
@@ -29261,7 +29261,7 @@
    "nameInternal": "GrnChemstrikeNoxRiflePlayer",
    "nameTag": "/Lotus/Language/Items/GrineerAssaultRifleName",
    "nameZh": "葛拉卡达",
-   "omegaAttenuation": null,
+   "omegaAttenuation": 0.5,
    "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
    "polarities": [
     "AP_UNIVERSAL",
@@ -39720,7 +39720,7 @@
    "nameInternal": "GrnKuvaLichScytheWeapon",
    "nameTag": "/Lotus/Language/Weapons/KuvaScytheName",
    "nameZh": "赤毒·希尔德",
-   "omegaAttenuation": 0.80000001,
+   "omegaAttenuation": 0.85000002,
    "path": "/Lotus/Weapons/Grineer/Melee/GrnKuvaLichScythe/GrnKuvaLichScytheWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -41626,7 +41626,7 @@
    "nameInternal": "GrnDrillScythe",
    "nameTag": "/Lotus/Language/Weapons/GrnDrillScytheName",
    "nameZh": "加拉亚 Prime",
-   "omegaAttenuation": 0.80000001,
+   "omegaAttenuation": 0.89999998,
    "path": "/Lotus/Weapons/Grineer/Melee/Scythe/GrnDrillScythe/GrnDrillScythe",
    "polarities": [
     "AP_UNIVERSAL",
@@ -41939,7 +41939,7 @@
    "nameInternal": "GrnChainSawTonfaWeapon",
    "nameTag": "/Lotus/Language/Weapons/GrnChainSawTonfaName",
    "nameZh": "通卡拐刃",
-   "omegaAttenuation": 0.85000002,
+   "omegaAttenuation": 0.94999999,
    "path": "/Lotus/Weapons/Grineer/Melee/Tonfa/GrnChainSawTonfa/GrnChainSawTonfaWeapon",
    "polarities": [
     "AP_ATTACK",
@@ -44378,7 +44378,7 @@
    "nameInternal": "GrnOrokinPistol",
    "nameTag": "/Lotus/Language/Weapons/GrnOrokinPistolName",
    "nameZh": "杀格 Prime",
-   "omegaAttenuation": 0.80000001,
+   "omegaAttenuation": 0.89999998,
    "path": "/Lotus/Weapons/Grineer/Pistols/GrnOrokinPistol/GrnOrokinPistol",
    "polarities": [
     "AP_ATTACK",
@@ -46415,7 +46415,7 @@
    "nameInternal": "CodaBubonicoCannon",
    "nameTag": "/Lotus/Language/Weapons/CodaBubonicoCannonName",
    "nameZh": "终幕·横痃重炮",
-   "omegaAttenuation": 0.55000001,
+   "omegaAttenuation": 0.60000002,
    "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -46517,7 +46517,7 @@
    "nameInternal": "CodaHema",
    "nameTag": "/Lotus/Language/1999Echoes/CodaHemaName",
    "nameZh": "终幕·血肢",
-   "omegaAttenuation": 0.94999999,
+   "omegaAttenuation": 1.0,
    "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaHema",
    "polarities": [
     "AP_UNIVERSAL",
@@ -48306,7 +48306,7 @@
    "nameInternal": "CodaCatabolyst",
    "nameTag": "/Lotus/Language/1999Echoes/CodaCatabolystName",
    "nameZh": "终幕·异化者",
-   "omegaAttenuation": 0.64999998,
+   "omegaAttenuation": 0.69999999,
    "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaCatabolyst",
    "polarities": [
     "AP_UNIVERSAL",
@@ -48405,7 +48405,7 @@
    "nameInternal": "CodaPox",
    "nameTag": "/Lotus/Language/1999Echoes/CodaPoxName",
    "nameZh": "终幕·脓痘",
-   "omegaAttenuation": 1,
+   "omegaAttenuation": 1.05,
    "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPox",
    "polarities": [
     "AP_UNIVERSAL",
@@ -55187,7 +55187,7 @@
    "nameInternal": "LasrianNoxPlayerWeapon",
    "nameTag": "/Lotus/Language/Weapons/LasrianNoxPlayerWeaponName",
    "nameZh": "净化者 1",
-   "omegaAttenuation": 1.15,
+   "omegaAttenuation": 1.2,
    "path": "/Lotus/Weapons/Lasria/LasGrenadeLauncher/LasrianNoxPlayerWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -64858,7 +64858,7 @@
    "nameInternal": "SentOctaMiniGun",
    "nameTag": "/Lotus/Language/Weapons/TnoOctaMiniGunName",
    "nameZh": "哈尔武",
-   "omegaAttenuation": null,
+   "omegaAttenuation": 0.60000002,
    "path": "/Lotus/Weapons/Sentients/SentOctaMiniGun/SentOctaMiniGun",
    "polarities": [
     "AP_ATTACK",
@@ -79309,7 +79309,7 @@
    "nameInternal": "PrimeCorvasWeapon",
    "nameTag": "/Lotus/Language/Weapons/PrimeCorvasName",
    "nameZh": "黑鸦 Prime",
-   "omegaAttenuation": 0.94999999,
+   "omegaAttenuation": 1.0,
    "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeCorvas/PrimeCorvasWeapon",
    "polarities": [
     "AP_TACTIC",
@@ -79960,7 +79960,7 @@
    "nameInternal": "ThanoTechLongGun",
    "nameTag": "/Lotus/Language/Weapons/ThanoTechLongGunName",
    "nameZh": "惩戒者",
-   "omegaAttenuation": null,
+   "omegaAttenuation": 0.5,
    "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
    "polarities": [
     "AP_ATTACK",
@@ -82479,7 +82479,7 @@
    "nameInternal": "PrimeDaikyuBow",
    "nameTag": "/Lotus/Language/Primes/DaikyuPrimeName",
    "nameZh": "大久和弓 Prime",
-   "omegaAttenuation": 0.89999998,
+   "omegaAttenuation": 1.0,
    "path": "/Lotus/Weapons/Tenno/Bows/PrimeDaikyu/PrimeDaikyuBow",
    "polarities": [
     "AP_UNIVERSAL",
@@ -87493,7 +87493,7 @@
    "nameInternal": "GyreRifleWeapon",
    "nameTag": "/Lotus/Language/Weapons/GyreRifleName",
    "nameZh": "电幻步枪",
-   "omegaAttenuation": 1.15,
+   "omegaAttenuation": 1.2,
    "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -88130,7 +88130,7 @@
    "nameInternal": "PrimeAfentisWeapon",
    "nameTag": "/Lotus/Language/Primes/AfentisPrimeName",
    "nameZh": "圣英 Prime",
-   "omegaAttenuation": 0.5,
+   "omegaAttenuation": 0.64999998,
    "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisWeapon",
    "polarities": [
     "AP_ATTACK",
@@ -88286,7 +88286,7 @@
    "nameInternal": "PrimeAlternoxWeapon",
    "nameTag": "/Lotus/Language/Primes/PrimeAlternoxWeaponName",
    "nameZh": "电幻步枪 Prime",
-   "omegaAttenuation": 0.80000001,
+   "omegaAttenuation": 0.94999999,
    "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
    "polarities": [
     "AP_TACTIC",
@@ -91331,7 +91331,7 @@
    "nameInternal": "PrimeLightningGun",
    "nameTag": "/Lotus/Language/Primes/PrimeLightningGunName",
    "nameZh": "瓦德雅 Prime",
-   "omegaAttenuation": 0.75,
+   "omegaAttenuation": 0.80000001,
    "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeLightningGun/PrimeLightningGun",
    "polarities": [
     "AP_UNIVERSAL",
@@ -91677,7 +91677,7 @@
    "nameInternal": "PrimePerigaleSniper",
    "nameTag": "/Lotus/Language/Primes/PrimePerigaleSniperName",
    "nameZh": "月面狂风 Prime",
-   "omegaAttenuation": 0.64999998,
+   "omegaAttenuation": 0.80000001,
    "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePerigale/PrimePerigaleSniper",
    "polarities": [
     "AP_ATTACK",
@@ -99036,7 +99036,7 @@
    "nameInternal": "TnInkRifleWeapon",
    "nameTag": "/Lotus/Language/Weapons/TnInkRifleWeaponName",
    "nameZh": "绘墨",
-   "omegaAttenuation": 0.69999999,
+   "omegaAttenuation": 0.80000001,
    "path": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkRifleWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -99114,7 +99114,7 @@
    "nameInternal": "TnModQuestRifleWeapon",
    "nameTag": "/Lotus/Language/ModQuest/ModQuestRifleName",
    "nameZh": "棘背",
-   "omegaAttenuation": 1.15,
+   "omegaAttenuation": 1.2,
    "path": "/Lotus/Weapons/Tenno/LongGuns/TnModQuestRifle/TnModQuestRifleWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -105123,7 +105123,7 @@
    "nameInternal": "PrimeVorunaAxeWeapon",
    "nameTag": "/Lotus/Language/Primes/PrimeVorunaAxeName",
    "nameZh": "沙罗之牙 Prime",
-   "omegaAttenuation": 0.64999998,
+   "omegaAttenuation": 0.75,
    "path": "/Lotus/Weapons/Tenno/Melee/Axe/PrimeVorunaAxeWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -105439,7 +105439,7 @@
    "nameInternal": "PrimeZorenAxeWeapon",
    "nameTag": "/Lotus/Language/Primes/DualZorenPrimeName",
    "nameZh": "佐伦双斧 Prime",
-   "omegaAttenuation": 0.89999998,
+   "omegaAttenuation": 0.94999999,
    "path": "/Lotus/Weapons/Tenno/Melee/Axe/PrimeZoren/PrimeZorenAxeWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -117258,7 +117258,7 @@
    "nameInternal": "PrimeKestrel",
    "nameTag": "/Lotus/Language/Primes/PrimeKestrelName",
    "nameZh": "红隼 Prime",
-   "omegaAttenuation": 0.75,
+   "omegaAttenuation": 0.85000002,
    "path": "/Lotus/Weapons/Tenno/Melee/Glaives/PrimeKestrel/PrimeKestrel",
    "polarities": [
     "AP_ATTACK",
@@ -121586,7 +121586,7 @@
    "nameInternal": "TnOrionScytheWeapon",
    "nameTag": "/Lotus/Language/Weapons/TnOrionScytheName",
    "nameZh": "愤怒",
-   "omegaAttenuation": 0.5,
+   "omegaAttenuation": 0.69999999,
    "path": "/Lotus/Weapons/Tenno/Melee/HeavyScythe/TnOrionSiriusScythe/TnOrionScytheWeapon",
    "polarities": [
     "AP_ATTACK",
@@ -121881,7 +121881,7 @@
    "nameInternal": "TnSiriusScytheWeapon",
    "nameTag": "/Lotus/Language/Weapons/TnSiriusScytheName",
    "nameZh": "骄傲",
-   "omegaAttenuation": 0.5,
+   "omegaAttenuation": 0.69999999,
    "path": "/Lotus/Weapons/Tenno/Melee/HeavyScythe/TnOrionSiriusScythe/TnSiriusScytheWeapon",
    "polarities": [
     "AP_ATTACK",
@@ -132847,7 +132847,7 @@
    "nameInternal": "PrimeVentoScythe",
    "nameTag": "/Lotus/Language/Primes/PrimeVentoScytheName",
    "nameZh": "脉纹 Prime",
-   "omegaAttenuation": 0.60000002,
+   "omegaAttenuation": 0.64999998,
    "path": "/Lotus/Weapons/Tenno/Melee/Scythe/PrimeVento/PrimeVentoScythe",
    "polarities": [
     "AP_UNIVERSAL",
@@ -146546,7 +146546,7 @@
    "nameInternal": "PrimeGram",
    "nameTag": "/Lotus/Language/Primes/GramPrimeName",
    "nameZh": "格拉姆 Prime",
-   "omegaAttenuation": 0.75,
+   "omegaAttenuation": 0.80000001,
    "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeGram/PrimeGram",
    "polarities": [
     "AP_UNIVERSAL",
@@ -149927,7 +149927,7 @@
    "nameInternal": "PrimeWarWeapon",
    "nameTag": "/Lotus/Language/Primes/WarPrimeWeaponName",
    "nameZh": "战争之剑 Prime",
-   "omegaAttenuation": 0.5,
+   "omegaAttenuation": 0.64999998,
    "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeWar/PrimeWarWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -155836,7 +155836,7 @@
    "nameInternal": "MortiforShieldAndSword",
    "nameTag": "/Lotus/Language/Weapons/MortiforShieldAndSwordName",
    "nameZh": "塔克 & 卢格",
-   "omegaAttenuation": 0.94999999,
+   "omegaAttenuation": 1.05,
    "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/MortiforShieldAndSword/MortiforShieldAndSword",
    "polarities": [
     "AP_UNIVERSAL",
@@ -159038,7 +159038,7 @@
    "nameInternal": "SpiderWhipWeapon",
    "nameTag": "/Lotus/Language/Oraxia/SpiderWhipName",
    "nameZh": "丝蛛皇",
-   "omegaAttenuation": 0.75,
+   "omegaAttenuation": 0.85000002,
    "path": "/Lotus/Weapons/Tenno/Melee/Whips/SpiderWhip/SpiderWhipWeapon",
    "polarities": [
     "AP_ATTACK",
@@ -175940,7 +175940,7 @@
    "nameInternal": "PrimeAksomati",
    "nameTag": "/Lotus/Language/Primes/PrimeAksomatiName",
    "nameZh": "轻灵月神双枪 Prime",
-   "omegaAttenuation": 1.05,
+   "omegaAttenuation": 1.1,
    "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
    "polarities": [
     "AP_UNIVERSAL",
@@ -176147,7 +176147,7 @@
    "nameInternal": "PrimeAthodaiPistolWeapon",
    "nameTag": "/Lotus/Language/Primes/AthodaiPrimeName",
    "nameZh": "阿索代 Prime",
-   "omegaAttenuation": 0.5,
+   "omegaAttenuation": 0.64999998,
    "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAthodai/PrimeAthodaiPistolWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -177676,7 +177676,7 @@
    "nameInternal": "PrimeHystrixWeapon",
    "nameTag": "/Lotus/Language/Weapons/PrimeHystrixName",
    "nameZh": "豪猪 Prime",
-   "omegaAttenuation": 1,
+   "omegaAttenuation": 1.05,
    "path": "/Lotus/Weapons/Tenno/Pistols/PrimeHystrix/PrimeHystrixWeapon",
    "polarities": [
     "AP_UNIVERSAL",
@@ -183652,7 +183652,7 @@
    "nameInternal": "ZylokPrimePistol",
    "nameTag": "/Lotus/Language/Primes/ZylokPrimeName",
    "nameZh": "席尔火枪 Prime",
-   "omegaAttenuation": 0.89999998,
+   "omegaAttenuation": 0.94999999,
    "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZylok/ZylokPrimePistol",
    "polarities": [
     "AP_UNIVERSAL",
@@ -207694,7 +207694,7 @@
    "nameInternal": "TnOraxiaFlechette",
    "nameTag": "/Lotus/Language/Weapons/TnOraxiaFlechetteName",
    "nameZh": "镰刃刺",
-   "omegaAttenuation": 0.69999999,
+   "omegaAttenuation": 0.75,
    "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnOraxiaFlechette/TnOraxiaFlechette",
    "polarities": [
     "AP_UNIVERSAL",
@@ -214727,7 +214727,7 @@
    "nameInternal": "ZarimanHeavyScytheWeapon",
    "nameTag": "/Lotus/Language/Weapons/VoidHeavyScytheName",
    "nameZh": "大力士",
-   "omegaAttenuation": 0.60000002,
+   "omegaAttenuation": 0.64999998,
    "path": "/Lotus/Weapons/Tenno/Zariman/Melee/HeavyScythe/ZarimanHeavyScythe/ZarimanHeavyScytheWeapon",
    "polarities": [
     "AP_ATTACK",
@@ -221911,7 +221911,7 @@
    "nameInternal": "EntratiWristGunWeapon",
    "nameTag": "/Lotus/Language/Weapons/EntratiWristGunWeaponName",
    "nameZh": "赘骨",
-   "omegaAttenuation": 0.80000001,
+   "omegaAttenuation": 0.85000002,
    "path": "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon",
    "polarities": [
     "AP_UNIVERSAL",

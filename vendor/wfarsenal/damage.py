@@ -288,6 +288,19 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "WEAPON_MELEE_COMBO_USAGE_EFFICIENCY": "heavy_attack_efficiency",
     "GAMEPLAY_FACTION_DAMAGE": "faction_damage_multipliers",
     "WEAPON_NOCRIT_DAMAGE": "noncrit_damage_multiplier",
+    # ── 词条融合新词条（2026.09.22，引擎乘区已逆向裁决）──────────────
+    # WEAPON_CRIT_CHANCE_WEAKPOINT：与 WEAPON_CRIT_CHANCE 加算进同一次
+    # 判定（fn 0x1406dc47e 链 244-248，IsWeakpoint 门控）——引擎侧门控在
+    # 伤害事件的 mIsWeakpoint 标志上；面板口径按无瞄准基准的弱命中期望
+    # 折算（headshot_chance 加权），与 headshot_bonus_multiplier 同一
+    # 折算通道。
+    "WEAPON_CRIT_CHANCE_WEAKPOINT": "weakpoint_crit_chance",
+    # WEAPON_DAMAGE_WEAKPOINT：条件升级管线（与 IF_VICTIM_PROC_ACTIVE
+    # 同系统，enum 266），独立乘区于部位倍率：
+    #   伤害 × DamageAtten(部位) × (1 + 弱点加成)
+    # 面板口径按弱命中期望折算（同上）。DoT/径向范围静态未决（fail-open
+    # 到直击口径，sidecar 登记）。
+    "WEAPON_DAMAGE_WEAKPOINT": "weakpoint_damage",
     # 膛室家族（蓄力装填 / 膛室 Prime）：弹匣第一发的最终伤害乘区。单发口径
     # 直接乘算；循环口径按弹匣折算（第一发多造成 bonus × 单发伤害）。
     "WEAPON_INIT_DAMAGE_MOD": "first_shot_damage",
@@ -794,6 +807,13 @@ class ModdedStats:
     double_crit_chance: float = 0.0
     # 膛室家族首发伤害加成（最终伤害乘区，只作用于弹匣第一发）。
     first_shot_damage_bonus: float = 0.0
+    # ── 词条融合新词条（弱点家族，2026.09.22）─────────────────────────
+    # 弱点伤害加成（WEAPON_DAMAGE_WEAKPOINT，条件乘区：弱点命中时
+    # ×(1+bonus)，与部位倍率独立；面板按弱命中期望折算）。
+    weakpoint_damage_bonus: float = 0.0
+    # 弱点暴击几率加成（WEAPON_CRIT_CHANCE_WEAKPOINT，与基础暴击加算，
+    # 弱点命中门控；面板按弱命中期望折算）。
+    weakpoint_crit_chance_bonus: float = 0.0
     # Per-trigger ammo cost in sustained rate（Twin Grakatas 类 ammoCost=2）
     ammo_cost: float = 1.0
     # CO bucket（对触发目标增伤，Galvanized Aptitude 类）：emergent 窗口模型
@@ -1298,6 +1318,19 @@ def apply_mods(
         first_shot_damage_bonus=max(
             _combine(1.0, buckets["WEAPON_INIT_DAMAGE_MOD"]) - 1.0,
             0.0,
+        ),
+        # ── 弱点家族词条（2026.09.22 融合新词条，引擎乘区已裁决）─────
+        # WEAPON_DAMAGE_WEAKPOINT：STACKING_MULTIPLY 口径（×(1+bonus)），
+        # 与部位倍率独立的条件乘区；面板存原始值，弱命中期望折算在
+        # average_hit/damage_against 按 headshot_chance 权重进行。
+        weakpoint_damage_bonus=max(
+            _combine(1.0, buckets["WEAPON_DAMAGE_WEAKPOINT"]) - 1.0,
+            0.0,
+        ),
+        # WEAPON_CRIT_CHANCE_WEAKPOINT：与基础暴击加算（引擎 fn
+        # 0x1406dc47e 同链）；面板存原始值，弱命中期望折算同上。
+        weakpoint_crit_chance_bonus=_combine(
+            0.0, buckets["WEAPON_CRIT_CHANCE_WEAKPOINT"]
         ),
         falloff_multiplier=falloff_multiplier,
         dot_base_damage=sum(scaled_base.values()),
@@ -2291,6 +2324,10 @@ def damage_against_cached_armour(
         hit_critical_multiplier,
         double_crit_chance=stats.double_crit_chance,
     )
+    raw = _apply_weakpoint_folding(
+        raw, stats, hit_multiplier, hit_critical_multiplier,
+        crit_chance_add=crit_chance_add, crit_multiplier_add=crit_multiplier_add,
+    )
     return {
         "health": float(defenses_snapshot.get("health") or 0.0),
         "shield": shield_value,
@@ -2302,6 +2339,54 @@ def damage_against_cached_armour(
         "perShot": raw * max(stats.multishot, 1.0),
         "dps": raw * max(stats.multishot, 1.0) * stats.sustained_attack_rate,
     }
+
+
+def _apply_weakpoint_folding(
+    raw: float,
+    stats: "ModdedStats",
+    hit_multiplier: float,
+    hit_critical_multiplier: float,
+    *,
+    crit_chance_add: float = 0.0,
+    crit_multiplier_add: float = 0.0,
+) -> float:
+    """弱点家族词条期望折算（引擎裁决 2026-09-22）。
+
+    hit_multiplier 即部位倍率通道（弱命中时为 hitProxies 的 damageAtten）。
+    - WEAPON_DAMAGE_WEAKPOINT：独立乘区，弱命中时 ×(1+bonus)。
+    - WEAPON_CRIT_CHANCE_WEAKPOINT：与基础暴击加算进同一次判定，弱命中
+      时等效暴击率提升。
+    弱命中权重：hit_multiplier>1 视为弱命中（无弱命中目标上词条无收益，
+    与引擎 mIsWeakpoint 门控一致）。
+    """
+    weakpoint_share = 1.0 if hit_multiplier > 1.0 + 1e-9 else 0.0
+    if weakpoint_share <= 0.0:
+        return raw
+    if getattr(stats, "weakpoint_damage_bonus", 0.0) > 0.0:
+        raw *= 1.0 + float(stats.weakpoint_damage_bonus)
+    if getattr(stats, "weakpoint_crit_chance_bonus", 0.0) > 0.0:
+        base_cc = (
+            max(stats.crit_chance + crit_chance_add, 0.0)
+            if crit_chance_add
+            else stats.crit_chance
+        )
+        base_cd = (
+            max(stats.crit_multiplier + crit_multiplier_add, 1.0)
+            if crit_multiplier_add
+            else stats.crit_multiplier
+        )
+        base_crit = effective_hit_multiplier(
+            base_cc, base_cd, stats.noncrit_damage_multiplier,
+            hit_critical_multiplier, double_crit_chance=stats.double_crit_chance,
+        )
+        boosted_crit = effective_hit_multiplier(
+            min(base_cc + float(stats.weakpoint_crit_chance_bonus), 10.0),
+            base_cd, stats.noncrit_damage_multiplier,
+            hit_critical_multiplier, double_crit_chance=stats.double_crit_chance,
+        )
+        if base_crit > 0.0:
+            raw *= 1.0 + (boosted_crit / base_crit - 1.0)
+    return raw
 
 
 def damage_against(
@@ -2406,6 +2491,9 @@ def damage_against(
         stats.noncrit_damage_multiplier,
         hit_critical_multiplier,
         double_crit_chance=stats.double_crit_chance,
+    )
+    raw = _apply_weakpoint_folding(
+        raw, stats, hit_multiplier, hit_critical_multiplier
     )
     return {
         "perType": per_type,

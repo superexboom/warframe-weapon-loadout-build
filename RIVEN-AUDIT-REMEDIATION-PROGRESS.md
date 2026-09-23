@@ -330,6 +330,44 @@
 
 **验证**：54 项测试全通过（SubUpgrade 测试从 5 → 7：新增 trigger 合并与卡片携带契约）；wfsim 黄金集 43/43。
 
+### 2026-09-24 Round 15（词条融合版本接入：弱点乘区 + 倾向 + 新词条管线）
+
+**一、新版本数据全景（build 2026.09.22.16.46）**
+
+- 新 dump（EE-notation .txt，204,291 实体）+ 另一线程数值提取（`new_riven_stats.json` 3411 行、`fusion-riven-analysis.json` 融合配方、`disposition-table.json` 703 条倾向）。
+- **8 个新 UpgradeType**（弱点家族为核心）：WEAPON_DAMAGE_WEAKPOINT（base90=2.25 步枪/霰弹/弓、0.9 手枪）、WEAPON_CRIT_CHANCE_WEAKPOINT（2.475/0.9）、WEAPON_PROC_DAMAGE、WEAPON_AMMO_CONSUME_RATE、WEAPON_AUTO_RELOAD_RATE、近战三件（HEAVY_CHARGE/PARRY_ANGLE/SLAM_DAMAGE）。
+- 新复合元素词条（Gas/Corrosive/Viral/Radiation/Blast/Magnetic）与新派系（Orokin/Techrot/Scaldra）。
+- 融合配方：基伤+变焦 → 弱点伤害；暴击+变焦 → 弱点暴击等（14 条配方已提取）。
+
+**二、弱点乘区引擎裁决（weakpoint-multiplier-re.json，subagent RE）**
+
+- **枚举索引修正**：UpgradeType 表 428 项三重锚定；此前一轮索引全部 +24 偏差（构建表起始假设错误）。
+- **WEAPON_DAMAGE_WEAKPOINT(266)**：条件升级管线（与 IF_VICTIM_PROC_ACTIVE 同系统），**独立乘区于部位倍率**：`伤害 × DamageAtten(部位) × (1 + 弱点加成)`；门控在伤害事件 mIsWeakpoint（event+0x322）。DoT/径向范围静态未决（开放项）。
+- **WEAPON_CRIT_CHANCE_WEAKPOINT(246)**：与 WEAPON_CRIT_CHANCE(244)/BODY_PART(245) **加算进同一次判定**（fn 0x1406dc47e 同链）。
+- **mWeakpointWeaknessValue 是挑战字段**（IsWeakpoint.lua 阈值），不进伤害公式；真实倍率在 HitProxy mDamageAtten（弱点 2.0）。
+- PROC_DAMAGE(367)：既有状态伤害乘区同桶（pair-modifier on PROC object），只缩放 tick seed。
+- 复合元素/新派系：与基础元素/派系同桶（SymbolFilter=Orokin/Techrot/Scaldra）。
+
+**三、弱点条件系统（数据侧）**
+
+- 8 个新条件对象（IsWeakpoint.lua::MatchAttackEvent，_weakness=0.5）；**IgnoreHitTypes={DHT_RADIAL, DHT_DOT}**——径向和 DoT 不触发弱点条件。
+
+**四、新赋能：StatusAndAmmoEfficiencyOnWeakpointHit**
+
+- R5 主武器：弱点命中 +5% 状态几率 +1%/层 弹药效率（10 层 10s，满层 +25% 状态 + -5% 弹药）。
+- 无新边框 mod（用户确认不存在）。
+
+**五、引擎实现**
+
+- `WEAPON_EFFECT_HANDLERS` 新增 weakpoint_crit_chance/weakpoint_damage；`ModdedStats` 新增 `weakpoint_damage_bonus`/`weakpoint_crit_chance_bonus`。
+- `_apply_weakpoint_folding` 辅助（双路径 damage_against/cached_armour 共用）：弱命中（hit_multiplier>1）时伤害乘区 ×(1+bonus)、暴击率加算折算；无弱命中目标词条零收益（与引擎门控一致）。
+- 倾向合并：42 把武器 omegaAttenuation 已更新进冻结导出。
+
+**六、验证**
+
+- **58 项测试全通过**（新增 test_weakpoint_handlers.py 4 用例：弱点伤害只在弱命中生效、弱点暴击加算、PROC_DAMAGE 同桶、新派系过滤器）；wfsim 黄金集 43/43。
+- 记录文档：`.local/research/update-2026.09.22/FUSION-INTEGRATION.md`（滚动更新）。
+
 
 
 
