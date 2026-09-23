@@ -248,6 +248,41 @@
 
 **验证**：42 项测试全通过；wfsim 黄金集 43/43 保持收敛。
 
+### 2026-09-23 Round 12（遗留事项完成：ADD_BASE 膨胀 + proc 暴击引擎裁决）
+
+**一、守望者 80× 面板膨胀——根因修复（ADD_BASE 语义）**
+
+- 插桩定位：`PrimeVectisEvoTier1B`（灵化进化「+150 基础伤害」）词条 `WEAPON_DAMAGE_AMOUNT / ADD_BASE / value=150` 被 `_combine(1.0, ...)` 当成「基值 1 + 150 = ×151 乘算」→ 150×151×2.551 = 57,780（385× 膨胀）。
+- 修复：ADD_BASE 从 damage_scale 池分离，按类型份额摊入基伤向量（非变异拷贝），百分比 MOD 再乘增广后的基伤。回归 `tests/test_incarnon_add_base.py`（面板 300±30 / Serration 缩放 (150+150)×2.65=795）。
+- 守望者端到端复验：scoringValues 从 9300万/1.35亿/1.59亿 → **101万/250万/303万**（44×↓）；targetStatus saturated-unresolved@9999 → **calibrated@298**；postSearchProbe KPM 284 → 48；scoreStatusReason 如实标注 `model-missing:projectile-component`（灵化波投射物 ExplosiveAttack 未建模，正确 fail-closed）。
+
+**二、同条件 KPM 对比方法建立 + proc 暴击引擎裁决**
+
+- wfsim 精确 mod 映射（magnetic_capacity 等同名卡找到）；复现用户数值：**wfsim 1.2763（用户的 1.3）vs 我们 5.36（用户的 5.3）**——同靶（Thrax Lv170 SP）同卡。
+- 行为隔离实验（value-matched 面板对齐 940 vs 939.55、cc/cd/ms 全同）后：我们 3.45 vs wfsim 1.2763（2.7× 行为差）。
+- **引擎逆向裁决（subagent，proc-mechanics-re.json）**：
+  - **穿刺 crit：我们模型错误**——引擎无内建「每层 +5% 暴击率（上限 25%）」；对带 proc 目标的暴击只通过数据驱动的 `WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE`（平坦值、非按层，GrnDrillScytheInnateUpgrade 实证）实现。
+  - **冰 crit 伤害：我们模型错误**——引擎无每层暴伤加成；冰是冻结层机器（mBaseFreezeModifier 等字段）；WEAPON_FROZEN_CRIT_* 零原生内容使用。
+  - **冰内置 CD：不存在**（proc 门控是乘法免疫检查 fn 0x14170e110，无计时器）。
+  - **Viral 2×@10 层：机制确认**（fn 0x1410d28b0 → GetPairModifier 四容器），数值数据驱动（wiki 值维持）。
+  - Buff 键簇完整枚举：proc 不走 buff 键系统（victim pair-modifier 系统）。
+- 修复：删除窗口层的穿刺/冰 crit 覆写（臆造机制），mod 桶的 `WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE` 类词条本来就正确处理。回归 `tests/test_proc_crit_contract.py`（3 用例钉住删除契约 + RE 产物存在性）。
+- **收敛效果**：value-matched 我们 **3.45 → 2.26**（对 wfsim 1.2763 差距 2.7× → 1.77×）；用户原配卡（Expert 满级）5.36 → 3.75。
+
+**三、Boltor 灵化弹匣语义澄清（非 bug）**
+
+- 灵化形态 reload=0 是**有意近似**（注释已说明：170 充能池、ammoCost=0；30s×11.33/s=340 发恰好耗尽 340 容量——边界情况已记录）。
+- wfsim 的 252 发/2 装填是 base form（对比时形态映射错误导致误判）。
+
+**四、剩余差异（1.77×）登记**
+
+- wfsim damage_sources 显示 Electricity DoT 15 万（magnetic proc 链电伤判定？）我们未建模；
+- viral 曲线细节、reload/射速离散化差异；
+- RE 产物 openQuestions：pair-multiplier 写路径（层数如何缩放条目乘数）、冻结字段默认值、四个 victim 容器的语义分工。
+
+**验证**：44 项测试全通过；wfsim 黄金集 43/43。
+
+
 
 
 

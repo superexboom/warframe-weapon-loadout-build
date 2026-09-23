@@ -3751,20 +3751,21 @@ def windowed_status_damage(
                 value *= 1.0 - _armour_reduction(live_armour)
             return value
 
-        # Cold/puncture crit adjustments at the current step.
-        # ── 性能：不再 replace() 整个 dataclass（39.5 万次 = 4.6s）——
-        # crit 增量作为覆写参数传给 fast-path，仅在缓存 miss 时使用。
-        cold_count = levels["cold"]
-        cold_crit = (
-            0.1 * cold_count
-            if cold_count < 1.0
-            else min(0.1 + 0.05 * (cold_count - 1.0), 0.5)
-        )
-        puncture_crit = min(0.05 * levels["puncture"], 0.25)
-        crit_overrides = (
-            puncture_crit if puncture_crit > 0.0 else 0.0,
-            cold_crit if cold_crit > 0.0 else 0.0,
-        )
+        # ── 引擎裁决（2026-09-23 proc-mechanics-re.json）：删除穿刺/冰动态暴击 ──
+        # 引擎二进制证实：不存在「穿刺每层 +5% 暴击率（上限 25%）」和「冰每层
+        # +10% 暴伤（上限 50%）」的内建机制。旧模型把这两个臆造加成作为
+        # crit 覆写传给每步直伤，同时虚增暴击频率与暴击档位伤害（对比
+        # wfsim 的 KPM 虚高主要来源之一）。
+        # 引擎真实语义：
+        #   - 对「带任意指定 proc 的目标」加暴击，只通过数据驱动的
+        #     WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE 词条实现（平坦值、
+        #     非按层），已由 mod 桶按 ValidProcTypes 正常处理。
+        #   - 冰（PT_CHILLED）是冻结层机器（mBaseFreezeModifier 等字段，
+        #     数值数据驱动未解出）；暴击交互只有 WEAPON_FROZEN_CRIT_*，
+        #     当前全部原生内容零使用。
+        #   - 无冰内置 CD（proc 门控是乘法免疫检查 fn 0x14170e110）。
+        # 窗口层因此不再注入任何 crit 覆写。
+        crit_overrides = (0.0, 0.0)
         # Live-pool per-shot direct damage: recompute the target interaction at
         # the step's armour/pool.  damage_against on a synthesized record keeps
         # level scaling identical (armour already level-scaled by defenses).
