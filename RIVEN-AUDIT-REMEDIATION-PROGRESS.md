@@ -126,6 +126,27 @@
 
 - 36 项测试全通过（7 subtests）；wfsim 黄金集 43/43；py_compile/node --check/git diff --check 干净。
 
+### 2026-09-23 Round 7（运行时数据获取路径 + 采集工具固化）
+
+**一、运行时路径梳理（与用户确认安全边界后）**
+
+- ✅ **路径 A——官方 Companion API**（已有基础设施 `WF_Rever/warframe-companion-5.3.5.0`）：走 Warframe 官方手机 App 协议（`mobile.warframe.com/api/inventory.php` 等只读端点），用自己账号 session，`auto_collect.py` 全自动（Steam 启动→登录→采集→退出）。**不是 hook/注入/内存读取**，风险=平时用手机 App 查仓库。实测当前仓库快照：`RawUpgrades` 363 条普通 MOD、0 紫卡（该账号无紫卡），但通道验证可读完整 `UpgradeFingerprint`（词条级数值 JSON）。
+- ✅ **路径 B——公开 worldstate**（`collect_worldstate` 已在用）：无需登录零风险，新物品定义/商店条目先落这里。
+- ✅ **路径 C——客户端二进制静态分析**（`nightcap-luau-dump` + objdump 工具链）：对磁盘文件逆向，不运行游戏零封号风险；客户端硬编码常量（如 Torid tick）从这条线挖。
+- ❌ **路径 D——运行时 hook/内存读取**：用户明确不做（反作弊风险 + 收益不成比例——融合数值大概率服务器下发，API 响应直接可读）。
+
+**二、意外发现：`RivenFragment` 材料类型**
+
+- 账号仓库中存在 `/Lotus/Types/Items/MiscItems/RivenFragment`（紫卡碎片，7 个）——DE 为紫卡相关功能预留的材料类型。若词条融合需要消耗品，大概率是它或其变体；快照工具会对其变化立即报告。
+- 另有 `OroFusexOrnament`（1999 融合宝物，Endo 融合用既有物品）——不要与词条融合混淆。
+
+**三、新工具：`tools/collect-riven-snapshot.py`**
+
+- 一键：Companion API 采集仓库（复用 `login_capture.py --once inventory`）→ 提取全部紫卡（含 `UpgradeFingerprint` 词条数值）+ 融合相关材料/货币 + 快照落盘 → 与上次快照 diff 报告新增项。
+- 融合上线当天操作：正常玩→跑本工具→新紫卡 fingerprint（融合产物词条样本）与新货币立刻可见；多张样本 + `theoretical_structure_scale` 即可拟合融合数值缩放。
+- 回归 `tests/test_riven_snapshot_tool.py`（2 用例：提取合同 + RandomMod 家族正则）。
+
+
 
 
 
