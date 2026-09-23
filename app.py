@@ -4403,6 +4403,27 @@ def _collect_trigger_sources(ctx: Mapping[str, Any]) -> list[dict[str, Any]]:
             "duration": 0.0,
         })
 
+    # 4. Incarnon 条件 SubUpgrade 子词条（事件化叠层，如 Boltor 猩红序曲
+    #    「每层 +2 伤害，最多 4 层，持续 5s」）。_incarnon_card 把这些子
+    #    词条从面板通道排除（fail-closed）并打包成 trigger_specs；这里
+    #    合并进窗口模型的触发源列表——层数折线图与赋能/镀层同一渲染通道。
+    incarnon_card = ctx.get("incarnon_card")
+    if incarnon_card is not None:
+        for spec in getattr(incarnon_card, "trigger_specs", ()) or ():
+            if not isinstance(spec, Mapping):
+                continue
+            entry = {
+                "id": str(spec.get("id") or f"incarnon-sub-{len(sources)}"),
+                "label": str(spec.get("label") or "灵化叠层"),
+                "kind": str(spec.get("kind") or "on-hit"),
+                "perEvent": float(spec.get("perEvent") or 1.0),
+                "maxStacks": float(spec.get("maxStacks") or 1.0),
+                "duration": float(spec.get("duration") or 0.0),
+            }
+            if isinstance(spec.get("damagePerStack"), (int, float)) and not isinstance(spec.get("damagePerStack"), bool):
+                entry["damagePerStack"] = float(spec["damagePerStack"])
+            sources.append(entry)
+
     return sources
 
 

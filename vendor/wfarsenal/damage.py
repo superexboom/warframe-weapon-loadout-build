@@ -3338,7 +3338,7 @@ def windowed_status_damage(
     for raw in trigger_sources or ():
         if not isinstance(raw, Mapping):
             continue
-        trigger_specs.append({
+        spec = {
             "id": str(raw.get("id") or raw.get("path") or "?"),
             "label": str(raw.get("label") or raw.get("nameZh") or raw.get("nameEn") or raw.get("id") or "?"),
             "kind": str(raw.get("kind") or "on-kill"),
@@ -3348,7 +3348,21 @@ def windowed_status_damage(
             "decay": str(raw.get("decay") or "lose_one_and_reset"),
             "currentStacks": 0.0,
             "series": [] if collect_timeline else None,
-        })
+        }
+        # ── 灵化 SubUpgrade 叠层的伤害反馈（事件化建模）─────────────────
+        # 带 gate 元数据的条件子词条（如 Boltor 猩红序曲的「+2 伤害/层，
+        # 最多 4 层，持续 5s」）从触发事件获得层数后，其伤害分量按
+        # 当前层数 × 每层基伤加值折算进直伤乘区。damagePerStackBase 是
+        # 每层的基伤**加值**（ADD_BASE 口径）——按步内当前层数线性叠加。
+        damage_per_stack = raw.get("damagePerStack")
+        if isinstance(damage_per_stack, (int, float)) and not isinstance(damage_per_stack, bool) and damage_per_stack > 0:
+            spec["damagePerStack"] = float(damage_per_stack)
+            # 叠层伤害的基数：以窗口起点的面板总伤为锚（ADD_BASE 的每层
+            # 加值是绝对伤害，不随面板乘区缩放——引擎口径是加到基伤，
+            # 但窗口层以「每层加值 / 初始面板」折算成乘数最稳）。
+            base_total = max(stats.total_damage, 1e-9)
+            spec["stackDamageScalePerStack"] = float(damage_per_stack) / base_total
+        trigger_specs.append(spec)
 
     # CO emergent 重算（wfsim M27：镀层 CO 在杀不动的高级靶上接近无效）。
     # stats.damage_types 已按面板假定层数（victim_status_count）预乘 CO 乘区。
@@ -3827,6 +3841,16 @@ def windowed_status_damage(
             * (weighted / per_type_total)
             * max(float(damage_rate_multiplier), 0.0)
         )
+        # ── 灵化 SubUpgrade 叠层伤害反馈（事件化）──────────────────────
+        # 带伤害分量的触发源（damagePerStack）按「当前步的层数 × 每层
+        # 加值」线性放大本步直伤。层数由步末 trigger 推进更新；本步用
+        # 的是上一推进后的当前值（事件先发生、增益后生效的保守口径）。
+        _stack_damage_scale = 1.0
+        for spec in trigger_specs:
+            per_stack = spec.get("stackDamageScalePerStack")
+            if per_stack and spec["currentStacks"] > 0.0:
+                _stack_damage_scale += float(per_stack) * spec["currentStacks"]
+        _per_attack *= _stack_damage_scale
         _component_damage = _per_attack / _component_count
         # 本步攻击事件：k 满足 elapsed ≤ k/rate < elapsed+dt（k ≥ 0，首
         # 发 t=0）。注意首个步（elapsed=0）包含 k=0——首杀时刻为 0。

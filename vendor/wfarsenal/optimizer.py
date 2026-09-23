@@ -232,6 +232,10 @@ class _Card:
     riven_lines: tuple[_RivenLine, ...] = ()
     required: bool = False
     set_shell: Mapping[str, Any] | None = None
+    # 灵化卡专属：条件 SubUpgrade 子词条的触发规格（事件化叠层语义）。
+    # 结构与 app 层 trigger_sources 一致：
+    # {id, label, kind, perEvent, maxStacks, duration, effects: [原始 effect 行]}。
+    trigger_specs: tuple[Mapping[str, Any], ...] = ()
 
 
 @dataclass
@@ -596,21 +600,34 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
                 f"incarnon-{branch.get('id')}-no-crit-no-proc-gate-excluded-from-panel"
             )
             continue
-        # ── 灵化进化 SubUpgrade（条件性子词条）修复 ─────────────────────
-        # 主进化文件的 SubUpgrades 子词条（「装填前每秒 +伤害」「弹药效率」
-        # 「弹匣末发多重」等）带条件元数据（UpgradeChance/UpgradeDuration/
-        # MaxConditionalStacks）——它们是事件/条件触发的，不是无条件常驻。
-        # 旧实现（SubUpgrades 未导出前）完全没有这些词条；导出修复后，
-        # 无条件按常驻计算会虚增面板（用户报告的「击杀触发按常驻算」
-        # 家族的同一问题）。在事件模拟器落地前按 fail-closed 排除并诊断，
-        # 绝不假精确。
+        # ── 灵化进化 SubUpgrade（子词条）语义分层 ─────────────────────────
+        # 主进化文件的 SubUpgrades 子词条分两类（引擎语义按 gate 元数据区分）：
+        #   1) 无条件常驻（无 UpgradeDuration/MaxConditionalStacks，如
+        #      BoltorEvoTier1ASubMod 的穿透+4/散布-40%）——游戏内就是常驻
+        #      属性，直接进面板。
+        #   2) 条件叠层（带 UpgradeChance/UpgradeDuration/MaxConditionalStacks，
+        #      如 BoltorEvoTier1BSubMod 的「装填时每秒+2伤害，最多4层，
+        #      持续5s」）——事件/条件触发，绝不按常驻进面板（用户报告的
+        #      「触发类按常驻算」问题的通用防线）；条件语义由
+        #      trigger_specs 事件模拟承载（见 _incarnon_trigger_sources）。
         if raw.get("isSubUpgrade"):
-            unsupported.append(
-                f"incarnon-{branch.get('id')}-sub-upgrade-conditional-excluded"
-                f"({'UpgradeChance' if raw.get('UpgradeChance') is not None else 'conditional'}"
-                f":{str(raw.get('sourcePath') or '').rsplit('/', 1)[-1]})"
+            has_gate = (
+                raw.get("UpgradeDuration") is not None
+                or raw.get("MaxConditionalStacks") is not None
+                or (
+                    isinstance(raw.get("UpgradeChance"), (int, float))
+                    and not isinstance(raw.get("UpgradeChance"), bool)
+                    and float(raw.get("UpgradeChance")) < 1.0
+                )
             )
-            continue
+            if has_gate:
+                unsupported.append(
+                    f"incarnon-{branch.get('id')}-sub-upgrade-conditional-excluded"
+                    f"({'UpgradeChance' if raw.get('UpgradeChance') is not None else 'conditional'}"
+                    f":{str(raw.get('sourcePath') or '').rsplit('/', 1)[-1]})"
+                )
+                continue
+            # 无条件子词条：fall through 按常驻词条处理。
         effect = ModEffect.from_export(raw, 0, source_path=source)
         if effect.supported:
             effects.append(effect)
@@ -625,6 +642,62 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
     if branch.get("unresolvedReferences"):
         unsupported.append(f"incarnon-{branch.get('id')}-unresolved-references")
     return effects, unsupported
+
+
+def _branch_trigger_specs(branch: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """灵化条件 SubUpgrade 子词条 → 触发规格（事件化叠层）。
+
+    带 UpgradeDuration/MaxConditionalStacks 的 SubUpgrade（如 Boltor 猩红
+    序曲「每层 +2 伤害，最多 4 层，持续 5s」）从 _branch_effects 的面板
+    通道排除后，在这里转为 trigger_specs 事件规格：层数按事件率爬升、
+    按 duration 衰减、伤害分量按 damagePerStack 反馈进窗口模型。
+
+    kind 判定：升级类型为 WEAPON_DAMAGE_AMOUNT/CRIT_* 的命中叠层 →
+    "on-hit"（每次攻击一层）；弹药效率类（AMMO_CONSUME_RATE）无伤害
+    分量，仍以 "on-hit" 追踪层数（折线图可见）但不带伤害反馈。
+    """
+    specs: list[dict[str, Any]] = []
+    merged: dict[str, dict[str, Any]] = {}
+    branch_id = str(branch.get("id") or branch.get("path") or "incarnon")
+    for raw in branch.get("effects") or ():
+        if not isinstance(raw, Mapping) or not raw.get("isSubUpgrade"):
+            continue
+        duration = raw.get("UpgradeDuration")
+        max_stacks = raw.get("MaxConditionalStacks")
+        chance = raw.get("UpgradeChance")
+        if duration is None and max_stacks is None:
+            continue  # 无条件常驻子词条——已进面板，不是触发源
+        upgrade_type = str(raw.get("upgradeType") or "")
+        has_damage = upgrade_type == "WEAPON_DAMAGE_AMOUNT"
+        value = raw.get("valuePerRank")
+        per_event = 1.0
+        if isinstance(chance, (int, float)) and not isinstance(chance, bool):
+            per_event = max(float(chance), 0.0)
+        # 同一 SubMod 的多条子词条（伤害+弹药效率）共享同一叠层状态：
+        # 按 sourcePath 合并为一个触发源（层数只有一份），伤害分量取
+        # 该 SubMod 的 damagePerStack。
+        source_key = str(raw.get("sourcePath") or "")
+        spec = merged.get(source_key)
+        if spec is None:
+            spec = {
+                "id": f"incarnon-{branch_id}-{source_key.rsplit('/', 1)[-1]}",
+                "label": f"灵化·{branch_id}",
+                "kind": "on-hit",
+                "perEvent": per_event,
+                "maxStacks": max(
+                    float(max_stacks) if isinstance(max_stacks, (int, float)) and not isinstance(max_stacks, bool) else 1.0,
+                    1.0,
+                ),
+                "duration": max(
+                    float(duration) if isinstance(duration, (int, float)) and not isinstance(duration, bool) else 0.0,
+                    0.0,
+                ),
+            }
+            merged[source_key] = spec
+            specs.append(spec)
+        if has_damage and isinstance(value, (int, float)) and not isinstance(value, bool) and float(value) > 0:
+            spec["damagePerStack"] = float(value)
+    return specs
 
 
 # Incarnon evolution perks whose exported effect rows are UNCONDITIONAL but the
@@ -703,6 +776,7 @@ def _incarnon_card(
         return None, {}, [], {}
     defaults = DEFAULT_INCARNON_CHOICES.get(str(weapon.get("path") or ""), {})
     selected_effects: list[ModEffect] = []
+    selected_triggers: list[dict[str, Any]] = []
     selected: dict[str, str] = {}
     unsupported: list[str] = []
     policy_route: Mapping[str, Any] = {}
@@ -843,6 +917,9 @@ def _incarnon_card(
         branch_effects, branch_unsupported = _branch_effects(branch)
         selected_effects.extend(branch_effects)
         unsupported.extend(branch_unsupported)
+        # 条件 SubUpgrade 子词条 → 触发规格（事件化叠层，进 trigger_specs）。
+        branch_triggers = _branch_trigger_specs(branch)
+        selected_triggers.extend(branch_triggers)
         selected[f"tier{tier}"] = str(branch.get("id") or branch.get("path") or "")
         if policy_choice and not normalized.get(tier) and selected[f"tier{tier}"] == policy_choice:
             policy_used.append(f"tier{tier}")
@@ -861,6 +938,7 @@ def _incarnon_card(
             skipped=(),
             drain=0,
             polarity=None,
+            trigger_specs=tuple(selected_triggers),
         ),
         selected,
         unsupported,

@@ -88,29 +88,108 @@ class SubUpgradeSimulatorGateTests(unittest.TestCase):
                     "valuePerRank": 165,
                     "damageType": "DT_ANY",
                 },
-                {  # sub perk: reload-stacking damage — conditional, excluded
+                {  # gated sub perk: reload-stacking damage — conditional, excluded
                     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
                     "operation": "ADD_BASE",
                     "valuePerRank": 2,
                     "damageType": "DT_ANY",
                     "isSubUpgrade": True,
                     "UpgradeChance": 1.0,
-                    "UpgradeDuration": 2.0,
-                    "MaxConditionalStacks": 20,
+                    "UpgradeDuration": 5.0,
+                    "MaxConditionalStacks": 3,
                     "sourcePath": "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/BoltorEvoTier1BSubMod",
+                },
+                {  # unconditional sub perk (no gate) — kept as常驻
+                    "upgradeType": "WEAPON_SPREAD",
+                    "operation": "STACKING_MULTIPLY",
+                    "valuePerRank": -0.4,
+                    "damageType": "DT_ANY",
+                    "isSubUpgrade": True,
+                    "sourcePath": "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/BoltorEvoTier1ASubMod",
                 },
             ],
         }
         effects, unsupported = _branch_effects(branch)
-        # The main perk survives.
-        self.assertEqual(len(effects), 1)
-        self.assertEqual(effects[0].upgrade_type, "WEAPON_DAMAGE_AMOUNT")
-        self.assertAlmostEqual(effects[0].value, 165.0)
-        # The sub perk is fail-closed with a diagnostic.
+        # Main perk + unconditional sub survive.
+        types = [e.upgrade_type for e in effects]
+        self.assertEqual(len(effects), 2)
+        self.assertIn("WEAPON_DAMAGE_AMOUNT", types)
+        self.assertIn("WEAPON_SPREAD", types)
+        # The gated sub perk is fail-closed with a diagnostic.
         self.assertTrue(
             any("sub-upgrade-conditional-excluded" in u for u in unsupported),
             f"sub-upgrade exclusion diagnostic missing: {unsupported}",
         )
+
+    def test_branch_trigger_specs_merge_submod_effects(self) -> None:
+        """_branch_trigger_specs produces one trigger source per SubMod
+        (damage + ammo-efficiency share one stack), with damagePerStack."""
+        from wfarsenal.optimizer import _branch_trigger_specs
+
+        branch = {
+            "id": "2-2",
+            "effects": [
+                {
+                    "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+                    "operation": "ADD_BASE",
+                    "valuePerRank": 2,
+                    "isSubUpgrade": True,
+                    "UpgradeChance": 1.0,
+                    "UpgradeDuration": 5.0,
+                    "MaxConditionalStacks": 3,
+                    "sourcePath": "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/PrimeBoltorEvoTier1BSubMod",
+                },
+                {
+                    "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                    "operation": "STACKING_MULTIPLY",
+                    "valuePerRank": -0.2,
+                    "isSubUpgrade": True,
+                    "UpgradeChance": 1.0,
+                    "UpgradeDuration": 5.0,
+                    "MaxConditionalStacks": 3,
+                    "sourcePath": "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/PrimeBoltorEvoTier1BSubMod",
+                },
+                {  # unconditional sub — no trigger
+                    "upgradeType": "WEAPON_SPREAD",
+                    "operation": "STACKING_MULTIPLY",
+                    "valuePerRank": -0.4,
+                    "isSubUpgrade": True,
+                    "sourcePath": "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/BoltorEvoTier1ASubMod",
+                },
+            ],
+        }
+        specs = _branch_trigger_specs(branch)
+        self.assertEqual(len(specs), 1, "one SubMod = one trigger source")
+        spec = specs[0]
+        self.assertEqual(spec["kind"], "on-hit")
+        self.assertEqual(spec["maxStacks"], 3.0)
+        self.assertEqual(spec["duration"], 5.0)
+        self.assertAlmostEqual(spec["damagePerStack"], 2.0)
+        self.assertIn("灵化", spec["label"])
+
+    def test_incarnon_card_carries_trigger_specs(self) -> None:
+        """_incarnon_card attaches the merged trigger specs to the card."""
+        import app
+        from wfarsenal import optimizer as opt
+
+        weapon = opt.resolve_record(
+            app.EXPORTS["weapons"],
+            "/Lotus/Weapons/Tenno/LongGuns/PrimeBoltor/PrimeBoltor",
+            kind="weapon",
+        )
+        card, choices, unsupported, _policy = opt._incarnon_card(
+            weapon,
+            {"tier2": "2-2"},
+            scenario=opt._scenario("killsPerMinute"),
+            metric="killsPerMinute",
+            policy=app.EXPORTS.get("incarnonDefaults"),
+            build_label=app.EXPORTS["buildLabel"],
+        )
+        self.assertIsNotNone(card)
+        specs = list(getattr(card, "trigger_specs", ()) or ())
+        self.assertTrue(specs, "Boltor 2-2 must carry its SubMod trigger spec")
+        self.assertEqual(len(specs), 1)
+        self.assertAlmostEqual(specs[0]["damagePerStack"], 2.0)
 
     def test_ui_description_renders_sub_upgrade_gate(self) -> None:
         """_incarnon_effect_text annotates conditional sub-perks."""

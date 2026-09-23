@@ -309,6 +309,28 @@
 - 回归 `tests/test_incarnon_subupgrade.py`（5 用例：SubMod 数据结构、extract 提取、模拟器 gate、UI 渲染）。
 - **52 项测试全通过**；wfsim 黄金集 43/43。
 
+### 2026-09-23 Round 14（灵化叠层事件化建模 + 折线图 + 导出重建）
+
+**一、灵化导出重建（SubUpgrades 数据落地）**
+
+- 用修复后的 `_build_incarnon_branch`（含 SubUpgrades 解析）对冻结导出 weapons.json 的 98 把灵化武器原地重建 incarnon 结构：**94 把带 SubUpgrade 词条**。
+- 螺钉（Prime Boltor）2-2（猩红序曲）数据验证：主词条（基伤）+ Sub「+2 伤害 chance=1/dur=5/maxStacks=3」+「弹药效率-20% 同 gate」；2-1 的 Sub（穿透/散布）为**无条件常驻**（无 gate 元数据）。
+
+**二、SubUpgrade 语义分层 + 事件化建模**
+
+- `_branch_effects` 分层：**带 gate（UpgradeDuration/MaxConditionalStacks/Chance<1）→ fail-closed 面板排除 + 诊断**；**无 gate → 常驻进面板**（游戏内就是常驻属性，如 2-1 的散布-40%）。
+- 新增 `_branch_trigger_specs`：带 gate 的 SubUpgrade 子词条转为触发规格——**同一 SubMod 的多条子词条（伤害+弹药效率）按 sourcePath 合并为一个触发源**（叠层状态只有一份），`damagePerStack` 携带伤害分量。
+- `_Card` 新增 `trigger_specs` 字段；`_incarnon_card` 打包；`_collect_trigger_sources` 合并进窗口模型触发源列表（与赋能/镀层同一通道）。
+- **窗口模型伤害反馈**：`trigger_specs` 扩展 `damagePerStack` → `stackDamageScalePerStack`（每层加值/初始面板折算乘数）；步循环 `_per_attack ×= (1 + Σ 每层乘数 × 当前层数)`——叠层伤害真正进入解算（不再常驻也不再忽略）。
+
+**三、灵化叠层折线图**
+
+- 灵化触发源经 `_collect_trigger_sources` → `trigger_sources` → 窗口模型 `triggerSeries` 输出——**前端既有渲染通道自动出图**（与赋能/镀层同款样式：每源一张子图、标题带均值/覆盖率、悬停显示层数）。
+- E2E 验证：Boltor tier2=2-2 → `triggerSeries: [灵化·2-2, kind=on-hit, maxStacks=3.0, avg=2.85, uptime=100%]` ✓。
+
+**验证**：54 项测试全通过（SubUpgrade 测试从 5 → 7：新增 trigger 合并与卡片携带契约）；wfsim 黄金集 43/43。
+
+
 
 
 
