@@ -192,6 +192,37 @@
 - 42 项测试全通过（Double Tap fail-closed 测试在新状态下依然通过）。
 - 逆向产物归档：`.local/research/engine-embed-tick.json`、`luau-mechanics-analysis.json`、`engine-disasm/`（含成员偏移表与全部函数反汇编）。
 
+### 2026-09-23 Round 10（引擎裁决：Double Tap 伤害路径 + wiki 纠错）
+
+**背景**：用户提供 wiki 记录（Latron Incarnon Genesis bugs：只有 AoE 吃 buff 直击不吃；切形态快照/恢复 buff 状态）与此前静态分析矛盾。按用户要求继续深入逆向（wiki 只作对照不作权威）。
+
+**一、引擎伤害路径完整裁决（subagent 深度逆向，98 个工作文件）**
+
+- `mUseNextShotDamageBonus` 成员 = **proj+0x658**（引用计数的 per-hit-type bonus 表 + 原始值 +0x660；字段注册 fn_140c01880@0x140c0220f，typedesc 0x1428cf410）。
+- **直击消耗 bonus**：投射物冲击处理 fn 0x1400e2212 把 proj[0x658] 拷贝进出站伤害包（packet+0x180/+0x188，0x1400e2895-0x1400e28bf）→ 调用实体伤害虚函数 vt+0x5a8/vt+0x5a0——**倍率乘直击**。
+- **径向不乘**：爆炸 fn 0x14148be10 构造径向包时传入**空哨兵表** 0x14272f3b0（ctor 0x14047c562-585）；径向伤害结算（vt+0x788）之后才 consume-and-clear proj[0x658]（仅副作用事件）。
+- **buff 聚合**：fn 0x141807a80 计算倍率写入引擎 payload 键 NextShotMult/NextShotMult2。
+- **per-form 状态**：bonus 表挂在 **behavior/fire-mode 对象**上（开火路径读 [[weapon+0x48]]+0x90）——各形态结构性独立保有状态；**无快照/恢复代码**（ClearChargesOnBehaviorChange 零静态 xref）。
+
+**二、Wiki 纠错裁决**
+
+| Wiki 记录 | 引擎裁决 |
+|---|---|
+| 「只有 AoE 吃、直击不吃」 | **推翻**——引擎接线完全相反（直击伤害包携带 bonus 表；径向包是空哨兵表） |
+| 「切形态快照 buff 值+时长、切回恢复」 | **机制描述不准确**——实际是 per-behavior 存储（无快照代码）；但可观察行为「各形态独立 buff 状态」成立 |
+
+**三、Prime vs Wraith（数据侧完整澄清）**
+
+- Packages.bin 父链证实：Prime/Wraith 灵化波投射物**都继承自 LatronIncarnonAltFireWaveProj**（只覆盖数值字段）→ OnProjectileContactScript（命中叠加/刷新 buff，参数 _bonusDamagePercent=1/_multTimeWindow=1 即每层 100%/1s）**两者都继承**。
+- 引擎伤害路径对两把武器完全相同（proj[0x658] 消费）。
+
+**四、sidecar 更新**
+
+- enginePath 段（成员偏移/直击/径向/聚合/per-form 存储/wiki 差异全登记）；modeRules 三条全部引擎裁决标注；Prime/Wraith 继承链说明；evidenceTypes 增加 engine-reverse 与 luau-disasm 两个证据类别。
+- 交付物：`.local/research/nextshot-bonus-path.json`（完整裁决）+ `engine-disasm/nsb_*`（98 个分析文件）。
+- 42 项测试全通过。
+
+
 
 
 

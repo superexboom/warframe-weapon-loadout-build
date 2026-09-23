@@ -12,6 +12,8 @@
     "evidenceTypes": [
       "raw-export-field",
       "raw-export-script-reference",
+      "engine-reverse",
+      "luau-disasm",
       "cross-reference-wfsim",
       "wiki",
       "in-game-measurement"
@@ -25,36 +27,48 @@
       "simulatorImplemented": false,
       "kind": "next-shot-multiplier",
       "maxRank": 3,
+      "enginePath": {
+        "memberOffset": "0x658",
+        "structure": "引用计数的 per-hit-type bonus 表（非布尔）+ 原始值 +0x660；字段注册 fn_140c01880@0x140c0220f，typedesc 0x1428cf410",
+        "directHit": "直击消耗 bonus：投射物冲击处理 fn 0x1400e2212 把 proj[0x658] 智能指针拷贝进出站伤害包 packet+0x180/+0x188（0x1400e2895-0x1400e28bf），随后调用实体伤害虚函数 vt+0x5a8/vt+0x5a0——倍率作用于直击",
+        "radial": "径向不乘：爆炸 fn 0x14148be10 构造径向包时传入空哨兵表 0x14272f3b0（ctor 0x14047c562-585 写 packet+0x180=empty）；径向伤害结算（vt+0x788 @0x14148c222）之后才在 0x14148c25b-68 consume-and-clear proj[0x658]（仅触发 on-consumed 副作用事件，不乘径向）",
+        "buffAggregation": "引擎聚合 fn 0x141807a80 计算倍率并写入 payload 键 NextShotMult/NextShotMult2（0x141808e10/0x141808e87；键 @0x1421bebd0/be0）",
+        "perFormState": "bonus 表按 fire-mode/behavior 对象存储（开火路径读 [[weapon+0x48]]+0x90，0x140a1e782/0x1414a39c8）——每个形态结构性保有独立状态；无快照/恢复代码（ClearChargesOnBehaviorChange 零静态 xref）",
+        "wikiDiscrepancy": "wiki 记录「只有 AoE 吃、直击不吃」被引擎证据推翻（接线相反）；wiki 记录「切换形态快照/恢复」机制描述不准确（实际是 per-behavior 存储，但可观察行为「各形态独立 buff 状态」成立）"
+      },
       "stacking": {
         "bonusDamagePercentAtSampledRank": 0.050000001,
         "windowSeconds": 0.5,
         "capPercent": 100,
         "consumption": "consume-on-use",
-        "note": "单次增益、命中消耗：buff 载荷（proto 0.4）携带单一 BONUS 值（CAP=100 上限）；OnProjectileContact（proto 0.3）读出→应用→清态。无叠加计数器、无失误重置分支（旧登记的 20 层/2.0s/resetOnMiss 均无字节码依据）。"
+        "note": "单次增益、命中消耗：直击伤害包携带 bonus 表（引擎 0x1400e2212 路径）；径向包为空表不乘。buff 载荷（proto 0.4）CAP=100；无叠加计数器、无失误重置分支。"
       },
       "pveAvailability": {
         "availableOnPve": true,
         "evidence": "raw-export-field: AvailableOnPve=1 (唯一非 0 的 PvPMods 条目)"
       },
       "modeRules": {
-        "baseDirect": "supported",
-        "incarnonDirect": "supported",
-        "incarnonRadial": "unknown"
+        "baseDirect": "supported（引擎证实：直击伤害包携带 bonus 表，fn 0x1400e2212）",
+        "incarnonDirect": "supported（同一引擎路径；冲击处理按 proj[0x658] 消耗，与武器无关）",
+        "incarnonRadial": "not-multiplied（引擎证实：径向包构造传入空哨兵表，径向伤害不读 bonus；爆炸后仅触发 consume-clear 副作用）"
       },
       "notes": [
         "原始参数来自导出 mod JSON 的 Script 字段（UpgradeType NONE，数值全部在脚本参数）：_bonusDamagePercent 0.05（5%）、_multTimeWindow 0.5s。",
-        "机制为「下一发乘数」（BonusDamageOnNextHit.lua；HUD 图标 NextShotDamageMultiplier.png；Buff 描述 DoubleTapBuffDesc），不是持续时长增益。",
-        "Luau 字节码反汇编（Font 包提取，2026-09-23）：五个函数 ApplyUpgrade/UnApplyUpgrade/OnProjectileContact/HudBuffLoop/GetModDescriptionInfo；buff 载荷 K: BONUS/DURATION/CAP=100；proto 0.3 呈 consume-on-use 模式（读出→应用→清态）。",
-        "灵化直击受支持：Latron 灵化波投射物自身接线 OnProjectileContactScript→BonusDamageOnNextHit.lua（LatronIncarnonAltFireWaveProj.json）。",
-        "灵化径向未决：ExplosiveAttack 块无脚本钩子、无 next-shot 标记——静态证据缺失，保持 unknown（fail-closed）。",
-        "重置条件：窗口过期（0.5s 内未命中则增益过期）——字节码无失误重置分支。ClearChargesOnBehaviorChange 重置的是灵化充能，不是本增益。",
-        "AvailableOnPve=1：PvP 目录里唯一开放 PvE 的 mod（其余 93 条全为 0）。"
+        "机制为「下一发乘数」（BonusDamageOnNextHit.lua；HUD 图标 NextShotDamageMultiplier.png；Buff 描述 DoubleTapBuffDesc）。",
+        "引擎逆向（2026-09-23，nextshot-bonus-path.json）：mUseNextShotDamageBonus = proj+0x658 的 per-hit-type bonus 表引用；直击伤害包携带该表（乘直击，fn 0x1400e2212），径向包构造传入空哨兵表（径向不乘，fn 0x14148be10）。",
+        "wiki「只有 AoE 吃、直击不吃」被引擎证据推翻——接线相反。wiki「切换形态快照/恢复」机制描述不准确：实际为 per-behavior 存储（各形态结构性独立保有状态），可观察行为「独立 buff 状态」成立。",
+        "Luau 字节码反汇编：五函数 + buff 载荷 BONUS/DURATION/CAP=100；引擎侧聚合键 NextShotMult/NextShotMult2。",
+        "灵化直击：同一引擎消耗路径，受支持。灵化径向：引擎证实不乘（空表）。",
+        "重置条件：窗口过期（0.5s 内未命中则增益过期）——字节码无失误重置分支。",
+        "AvailableOnPve=1：PvP 目录里唯一开放 PvE 的 mod（其余 93 条全为 0）。",
+        "Prime vs Wraith：引擎伤害路径完全相同（proj[0x658] 消费）；差异仅数据——基体 LatronIncarnonAltFireWaveProj 带 OnProjectileContactScript（命中叠加/刷新 buff，参数 _bonusDamagePercent=1/_multTimeWindow=1 即每层 100%/1s 窗口），Prime/Wraith 投射物继承自基体（Packages.bin 父链证实，只覆盖数值字段），因此两者都继承该 script 接线。"
       ],
       "sources": [
         "raw-export: Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod.json (Script._bonusDamagePercent, Script._multTimeWindow, AvailableOnPve)",
-        "luau-disasm: Font package BonusDamageOnNextHit.lua (five-function structure, BONUS/DURATION/CAP=100 payload, consume-on-use pattern — .local/research/luau-mechanics-analysis.json)",
-        "raw-export: Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/LatronIncarnonAltFireWaveProj.json (OnProjectileContactScript)",
-        "static-analysis: .local/research/latron-double-tap-static-analysis.json"
+        "engine-reverse: Warframe.x64.exe proj+0x658 bonus 表——直击 0x1400e2212 vs 径向空哨兵 0x14148be10；per-behavior 存储 [[weapon+0x48]]+0x90；聚合 0x141807a80 NextShotMult 键（.local/research/nextshot-bonus-path.json）",
+        "luau-disasm: Font 包 BonusDamageOnNextHit.lua（五函数、BONUS/DURATION/CAP=100 载荷——.local/research/luau-mechanics-analysis.json）",
+        "raw-export: LatronIncarnonAltFireWaveProj.json（OnProjectileContactScript）+ Packages.bin 父链（Prime/Wraith 投射物继承基体）",
+        "wiki-cross-reference: warframe.fandom.com Double Tap（claim 1 被引擎推翻；claim 2 机制描述不准确但可观察行为部分成立）"
       ]
     }
   },
@@ -168,7 +182,7 @@
     "/Lotus/Weapons/Tenno/Rifle/LatronPrime": {
       "mechanicIds": ["latron-double-tap", "latron-incarnon-radial"],
       "incarnonDirectReceivesDoubleTap": true,
-      "incarnonRadialReceivesDoubleTap": "unknown",
+      "incarnonRadialReceivesDoubleTap": "not-multiplied (engine: radial packet built with empty sentinel table — fn 0x14148be10)",
       "status": "conditional-supported",
       "incarnonRadialContract": {
         "damageType": "DT_EXPLOSION-mixed",
@@ -192,7 +206,7 @@
     "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron": {
       "mechanicIds": ["latron-double-tap", "latron-incarnon-radial"],
       "incarnonDirectReceivesDoubleTap": true,
-      "incarnonRadialReceivesDoubleTap": "unknown",
+      "incarnonRadialReceivesDoubleTap": "not-multiplied (engine: radial packet built with empty sentinel table — fn 0x14148be10)",
       "status": "conditional-supported",
       "incarnonRadialContract": {
         "damageType": "DT_EXPLOSION-mixed",
