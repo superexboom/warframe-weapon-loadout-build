@@ -94,3 +94,48 @@ UpgradeType 枚举表（.data 0x14278d000，428 项）三重锚定确认：`WEAP
 1. 弱点伤害对 DoT/径向的影响范围（需动态测试或更深逆向）
 2. 条件伤害加算的确切算术（与 259 是乘算还是加算进同一括号）
 3. 弱点暴击与部位 mCriticalChance/mCriticalMultiplier 的交互细节
+
+## 六、爆头→弱点击杀 系统性更名（2026-09-24 确认）
+
+**用户观察证实**：本更新把大量爆头条件改为弱点条件。diff 新旧 dump 确认 **11 个文件发生更名**（0 个文件消失）：
+
+| 文件 | 旧条件 | 新条件 |
+|---|---|---|
+| AmmoEfficiencyOnPistolHeadshot | HeadshotKillCondition | WeakPointKillCondition |
+| GolemArcanePistolDamageOnHeadshot | HeadshotCondition | WeakPointHitCondition |
+| LongbowDamageOnHeadshot | HeadshotCondition | WeakPointHitCondition |
+| PrimaryDamageOnNoMelee | HeadshotKillCondition/AnySource | WeakPointKillCondition/AnySource |
+| SecondaryDamageOnNoMelee | HeadshotKillCondition/AnySource | WeakPointKillCondition/AnySource |
+| CritChanceWhileAiming{Pistol,Rifle,Shotgun}Mod | HeadshotCondition | WeakPointHitCondition |
+| （+PvP Conditions 两个） | OnPistolHeadshotKill | OnPistolWeakPointKill |
+
+**语义变化（实质更名，非表面）**：
+
+| 维度 | 旧（Headshot） | 新（WeakPoint） |
+|---|---|---|
+| 判定方式 | `Part: "HEAD"`（硬编码头部） | `IsWeakpoint.lua::MatchAttackEvent` + `_weakness=0.5`（弱点系数≥0.5 的任意部位） |
+| 覆盖范围 | 只有爆头 | **任意弱点部位**（机器人腿部、Golem 核心等） |
+| 排除类型 | DHT_RADIAL | **DHT_RADIAL + DHT_DOT**（新排除 DoT） |
+
+**含义**：所有原「爆头击杀触发」的赋能（PrimaryDamageOnNoMelee 家族 = Primary/Secondary Merciless 等）现在**任意弱点击杀都触发**——触发面扩大；但 **DoT 击杀不再触发**。
+
+### 新增 mod（同名弱点家族）
+
+- `WeaponWeakpointCriticalChanceMod`（Rifle + Pistol 版）——弱点暴击几率 mod
+- `PlayerWeakpointCriticalChanceAuraMod`——光环版
+
+## 七、接入深度（2026-09-24 盘点与补齐）
+
+**已接入（本轮提交）**：
+- ✅ 弱点乘区 handler（WEAPON_DAMAGE_WEAKPOINT / WEAPON_CRIT_CHANCE_WEAKPOINT）+ `_apply_weakpoint_folding`
+- ✅ PROC_DAMAGE 同桶（既有 handler）
+- ✅ 42 把武器倾向合并
+- ✅ **RIVEN_RULES 新词条码**（48 码）：W=弱点伤害、Y=弱点暴击、GA/CO/VI/RA/BL/MA=复合元素、SD=状态伤害、AE=弹药效率、HR=收枪装填、FO/FT/FS=新派系
+- ✅ **RIVEN_BASE_VALUES 新基值**（步枪/霰弹/弓 W=330、Y=363；手枪 W=132、Y=132 等）
+
+**待接入（下轮）**：
+- ⬜ 新赋能 StatusAndAmmoEfficiencyOnWeakpointHit 进 MANUAL_ARCANES 目录（数据在冻结导出之外——需要重建 mod/arcane 导出或手工 sidecar）
+- ⬜ 新 mod（WeaponWeakpointCriticalChanceMod 等）进 mod 目录（同上）
+- ⬜ 爆头→弱点更名影响模拟器 trigger 判定：`_collect_trigger_sources` 的 `"headshot" in condition_text` 分支应同时匹配 weakpoint（触发面扩大）——条件文本仍含 "hit"/"kill" 关键字所以现有匹配大体兼容，但 DoT 排除是新行为
+- ⬜ 前端词条词典（新码的中文标签已在 RIVEN_RULES label 里，前端 TYPE_LABELS 无需额外改动）
+- ⬜ 融合配方 UI（14 条配方数据在 fusion-riven-analysis.json，交互设计待定）

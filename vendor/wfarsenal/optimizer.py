@@ -79,6 +79,12 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "C": 45.0, "D": 164.9997, "F": 49.995, "G": 45.0,
         "H": 59.994, "I": 45.0, "L": 49.995, "M": 49.95,
         "P": 2.7, "R": 60.03, "S": 90.0, "V": 90.0, "Z": 90.0,
+        # ── 词条融合新词条（base90/0.9/0.757525×100 换算显示基值）────
+        "W": 330.0, "Y": 363.0, "SD": 132.0,
+        "GA": 132.0, "CO": 132.0, "VI": 132.0, "RA": 132.0,
+        "BL": 132.0, "MA": 132.0,
+        "AE": 13.2, "HR": 132.0,
+        "FO": 66.0, "FT": 66.0, "FS": 66.0,
     },
     "shotgun": {
         "0": 90.0, "1": 90.0, "2": 90.0, "3": 99.99,
@@ -87,6 +93,12 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "C": 45.0, "D": 164.7, "F": 49.995, "G": 45.0,
         "I": 45.0, "L": 49.995, "M": 90.0, "P": 2.7,
         "R": 90.0, "S": 119.7, "V": 90.0, "Z": 90.0,
+        # 新词条（霰弹与步枪同值：弱点家族 base90=2.25/2.475）
+        "W": 330.0, "Y": 363.0, "SD": 132.0,
+        "GA": 132.0, "CO": 132.0, "VI": 132.0, "RA": 132.0,
+        "BL": 132.0, "MA": 132.0,
+        "AE": 13.2, "HR": 132.0,
+        "FO": 66.0, "FT": 66.0, "FS": 66.0,
     },
     "pistol": {
         "0": 149.994, "1": 90.0, "2": 90.0, "3": 99.99,
@@ -95,6 +107,12 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "C": 45.0, "D": 219.6, "F": 49.995, "G": 45.0,
         "H": 80.1, "I": 45.0, "L": 49.995, "M": 90.0,
         "P": 2.7, "R": 74.7, "S": 119.7, "V": 90.0, "Z": 90.0,
+        # 新词条（手枪弱点家族 base90=0.9/0.9——明显低于步枪）
+        "W": 132.0, "Y": 132.0, "SD": 132.0,
+        "GA": 132.0, "CO": 132.0, "VI": 132.0, "RA": 132.0,
+        "BL": 132.0, "MA": 132.0,
+        "AE": 13.2, "HR": 132.0,
+        "FO": 66.0, "FT": 66.0, "FS": 66.0,
     },
     "archgun": {
         "0": 99.9, "1": 80.1, "2": 60.3, "3": 99.99,
@@ -103,6 +121,12 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "C": 45.0, "D": 99.9, "F": 99.9, "G": 45.0,
         "H": 59.994, "L": 60.3, "M": 99.9, "P": 2.7,
         "R": 60.03, "S": 60.3, "Z": 90.0,
+        # 新词条（弓枪与步枪同值）
+        "W": 330.0, "Y": 363.0, "SD": 132.0,
+        "GA": 132.0, "CO": 132.0, "VI": 132.0, "RA": 132.0,
+        "BL": 132.0, "MA": 132.0,
+        "AE": 13.2, "HR": 132.0,
+        "FO": 66.0, "FT": 66.0, "FS": 66.0,
     },
     "melee": {
         "0": 180.0, "1": 90.0, "2": 90.0, "3": 99.99,
@@ -112,6 +136,9 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "I": 45.0, "J": 54.9, "K": 164.7, "N": 8.1,
         "O": 58.77, "Q": 104.85, "T": 1.9422, "U": 73.44,
         "X": 119.7,
+        # 新词条（近战专属：重击蓄力/格挡角度/震地伤害 base90=1.197/8.1/1.197）
+        "HR": 132.0,
+        "FO": 66.0, "FT": 66.0, "FS": 66.0,
     },
 }
 
@@ -156,6 +183,25 @@ RIVEN_RULES: dict[str, tuple[str, str, str, str | None, str | None, str, float, 
     "X": ("处决伤害", "WEAPON_MELEE_FINISHER_DAMAGE", "STACKING_MULTIPLY", None, None, "percent", 1, True, True),
     # A beneficial recoil line is printed as a negative percentage.
     "Z": ("武器后坐力", "WEAPON_RECOIL", "STACKING_MULTIPLY", None, None, "percent", -1, True, True),
+    # ── 词条融合新词条（2026.09.22，Advanced Traits）─────────────────
+    # 数值来自 new_riven_stats.json（base90 = 0.9 倾向基准显示值）。
+    # 弱点家族乘区已引擎裁决：弱点伤害是独立乘区（弱命中 ×(1+bonus)）、
+    # 弱点暴击与基础暴击同链加算——见 weakpoint-multiplier-re.json。
+    "W": ("弱点伤害", "WEAPON_DAMAGE_WEAKPOINT", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
+    "Y": ("弱点暴击几率", "WEAPON_CRIT_CHANCE_WEAKPOINT", "ADD", None, None, "percent", 1, True, False),
+    # 双字符码避免与既有单字母冲突（wire 上 code.upper() 去重）。
+    "GA": ("毒气伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_GAS", None, "percent", 1, True, False),
+    "CO": ("腐蚀伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_CORROSIVE", None, "percent", 1, True, False),
+    "VI": ("病毒伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_VIRAL", None, "percent", 1, True, False),
+    "RA": ("辐射伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_RADIATION", None, "percent", 1, True, False),
+    "BL": ("爆炸伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_EXPLOSION", None, "percent", 1, True, False),
+    "MA": ("磁力伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_MAGNETIC", None, "percent", 1, True, False),
+    "SD": ("状态伤害", "WEAPON_PROC_DAMAGE", "STACKING_MULTIPLY", None, None, "percent", 1, True, True),
+    "AE": ("弹药效率", "WEAPON_AMMO_CONSUME_RATE", "STACKING_MULTIPLY", None, None, "percent", -1, True, True),
+    "HR": ("收枪自动装填", "WEAPON_AUTO_RELOAD_RATE", "ADD", None, None, "percent", 1, True, False),
+    "FO": ("对Orokin伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Orokin", "percent", 1, True, True),
+    "FT": ("对Techrot伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Techrot", "percent", 1, True, True),
+    "FS": ("对Scaldra伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Scaldra", "percent", 1, True, True),
 }
 
 
