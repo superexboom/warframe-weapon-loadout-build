@@ -2229,7 +2229,13 @@ function renderScore() {
   const contextNote = ui["score-context-note"];
   if (contextNote) {
     const bits = [];
-    if (target.level != null) bits.push(`评价 Lv${target.level}`);
+    // ── 评分靶信息前置（2026-09-24）：等级随压力校准逐次变化（170→
+    // 522→914…），不同次分析不能直接横向对比——靶名+等级必须显式可见。
+    const enemyName = target.enemyName || target.enemyPath?.rsplit?.("/", 1)?.pop?.() || "";
+    if (enemyName) bits.push(`靶 ${enemyName}`);
+    if (target.level != null) bits.push(`Lv${target.level}`);
+    if (target.steelPath) bits.push("钢铁之路");
+    if (target.enemyEnhancements?.eximus) bits.push("卓越者");
     if (quality.scoreMetric) bits.push(`指标 ${quality.scoreMetric}`);
     if (calibration.status) bits.push(`校准 ${calibration.status}`);
     if (state.result.targetStatus && state.result.targetStatus !== "not-applicable") {
@@ -5929,7 +5935,9 @@ async function runModGains() {
   const candidates = rows.slice(0, 80).map((mod) => mod.path);
   if (!candidates.length) return;
   const targetSlot = state.modPickerSlot;
-  const signature = JSON.stringify([payload.weapon, payload.mods, targetSlot, candidates.slice().sort()]);
+  // 签名必须覆盖全部影响解算的载荷字段（2026-09-24 修复）：arcanes 缺席
+  // 导致「加赋能后重开选择器」命中旧签名跳过重取——贡献是旧赋能语境的。
+  const signature = JSON.stringify([payload.weapon, payload.mods, payload.arcanes, payload.riven, targetSlot, candidates.slice().sort()]);
   if (signature === modGainsSignature && state.modGains && Object.keys(state.modGains).length) {
     paintModGains();
     return;
@@ -6064,7 +6072,11 @@ function paintModGains() {
     badge.hidden = false;
     badge.textContent = `${percent >= 0 ? "+" : ""}${percent.toFixed(1)}%`;
     badge.classList.toggle("is-negative", percent < 0);
+    // 超容量但显示贡献（2026-09-24 口径）：数值照排，附加装配受限提示。
     badge.removeAttribute("title");
+    if (gainInfo.reason === "over-capacity") {
+      badge.title = `贡献 ${percent >= 0 ? "+" : ""}${percent.toFixed(1)}%（当前装不下：容量 ${gainInfo.capacity} / ${gainInfo.capacityLimit}）`;
+    }
   });
 }
 
@@ -6865,7 +6877,9 @@ function drawBenchmarkReplay(bench) {
   const TRIGGER_COLORS = ["#e6c86e", "#8fd694", "#c792ea", "#6ec5e8", "#e69b6e", "#9be86e"];
   triggerSeriesData.forEach((series, index) => {
     const values = series.series || [];
-    if (!values.length || !values.some((v) => v > 0.05)) return;
+    if (!values.length) return;
+    // 2026-09-24：装备了就显示——全零曲线（如冷门触发条件的战甲赋能）
+    // 保留展示（用户确认装备生效是可见性的一部分），不再静默隐藏。
     const maxStacks = Math.max(1, Number(series.maxStacks) || 1, ...values);
     const avg = Number(series.avgStacks || 0);
     const uptime = Number(series.uptime || 0);
@@ -8654,6 +8668,9 @@ function updateEnemyStatsPanel(result) {
   if (!panel) return;
   const sim = result?.simulation || result || {};
   const target = sim.targetDamage;
+  // ── 即时口径行（2026-09-24）：等级/强化标签来自表单状态，不等解算
+  // 返回——选项或等级一改立刻刷新（防御数值仍随后端缩放返回更新）。
+  updateEnemyStatsContext();
   if (!target || !Number.isFinite(Number(target.health))) {
     panel.hidden = true;
     return;
@@ -8674,15 +8691,20 @@ function updateEnemyStatsPanel(result) {
   set("reduction", `${(reduction * 100).toFixed(1)}%`);
   set("overguard", formatMetric(overguard));
   set("ehp", formatMetric(ehp));
-  const enh = sim.enemyEnhancements || result?.enemyEnhancements || {};
+  panel.hidden = false;
+}
+
+function updateEnemyStatsContext() {
+  // 等级与强化标签全部来自当前表单：可即时渲染，与解算结果无关。
+  const panel = ui["build-enemy-stats"];
+  if (!panel) return;
   const tags = [];
-  if (enh.eximus) tags.push("卓越者");
-  if (enh.empowered) tags.push(`强化·${enh.playerCount || 1}人`);
-  if (enh.archimedea) tags.push("科研超宏");
+  if (ui["build-enemy-eximus"]?.checked) tags.push("卓越者");
+  if (ui["build-enemy-empowered"]?.checked) tags.push(`强化·${ui["build-enemy-player-count"]?.value || 1}人`);
+  if (ui["build-enemy-archimedea"]?.checked) tags.push("科研超宏");
   if (ui["build-steel-path"]?.checked) tags.push("钢铁之路");
   const ctx = ui["build-enemy-stats-context"];
   if (ctx) ctx.textContent = [`Lv ${ui["build-enemy-level"]?.value || 160}`, ...tags].join(" · ");
-  panel.hidden = false;
 }
 
 function setWeaponBuildState(name) {
@@ -9159,6 +9181,23 @@ function fillBuildEnemies() {
   }));
   if (!ui["build-enemy-select"].value && rows.length) ui["build-enemy-select"].value = rows[0].path;
   refreshEnemyTargetSummary();
+  // ── 等级/钢铁之路即时刷新（2026-09-24）：靶子摘要与靶信息口径行
+  // 随表单立刻更新——不再等下一次解算返回（解算期间 UI 不冻结）。
+  ui["build-enemy-level"]?.removeEventListener?.("input", onTargetFormInput);
+  ui["build-enemy-level"]?.addEventListener("input", onTargetFormInput);
+  ui["build-steel-path"]?.removeEventListener?.("change", onTargetFormInput);
+  ui["build-steel-path"]?.addEventListener("change", onTargetFormInput);
+  for (const id of ("build-enemy-eximus", "build-enemy-empowered", "build-enemy-archimedea")) {
+    ui[id]?.removeEventListener?.("change", onTargetFormInput);
+    ui[id]?.addEventListener("change", onTargetFormInput);
+  }
+  ui["build-enemy-player-count"]?.removeEventListener?.("change", onTargetFormInput);
+  ui["build-enemy-player-count"]?.addEventListener("change", onTargetFormInput);
+}
+
+function onTargetFormInput() {
+  refreshEnemyTargetSummary();
+  updateEnemyStatsContext();
 }
 
 function refreshEnemyTargetSummary() {

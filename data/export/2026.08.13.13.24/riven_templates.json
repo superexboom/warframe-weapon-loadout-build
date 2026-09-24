@@ -105,101 +105,137 @@
  },
  "fusionRecipes": [
   {
-   "primary": "D",
+   "primary": "WeaponDamageAmountMod",
    "primaryTag": "WeaponDamageAmountMod",
    "result": "W",
    "resultTag": "WeaponWeakpointDamage",
-   "secondary": "H",
+   "secondary": "WeaponZoomFovMod",
    "secondaryTag": "WeaponZoomFovMod",
    "weaponType": "rifle"
   },
   {
-   "primary": "0",
+   "primary": "WeaponDamageAmountMod",
+   "primaryTag": "WeaponDamageAmountMod",
+   "result": "W",
+   "resultTag": "WeaponWeakpointDamage",
+   "secondary": "WeaponFireIterationsMod",
+   "secondaryTag": "WeaponFireIterationsMod",
+   "weaponType": "rifle"
+  },
+  {
+   "primary": "WeaponCritChanceMod",
    "primaryTag": "WeaponCritChanceMod",
    "result": "Y",
    "resultTag": "WeaponWeakpointCriticalChance",
-   "secondary": "H",
+   "secondary": "WeaponZoomFovMod",
    "secondaryTag": "WeaponZoomFovMod",
    "weaponType": "rifle"
   },
   {
-   "primary": "L",
+   "primary": "WeaponCritChanceMod",
+   "primaryTag": "WeaponCritChanceMod",
+   "result": "Y",
+   "resultTag": "WeaponWeakpointCriticalChance",
+   "secondary": "WeaponFireIterationsMod",
+   "secondaryTag": "WeaponFireIterationsMod",
+   "weaponType": "rifle"
+  },
+  {
+   "primary": "WeaponClipMaxMod",
    "primaryTag": "WeaponClipMaxMod",
    "result": "AE",
    "resultTag": "WeaponAmmoEfficiency",
-   "secondary": "F",
+   "secondary": "WeaponReloadSpeedMod",
    "secondaryTag": "WeaponReloadSpeedMod",
    "weaponType": "rifle"
   },
   {
-   "primary": "M",
+   "primary": "WeaponRecoilReductionMod",
+   "primaryTag": "WeaponRecoilReductionMod",
+   "result": "AE",
+   "resultTag": "WeaponAmmoEfficiency",
+   "secondary": "WeaponAmmoMaxMod",
+   "secondaryTag": "WeaponAmmoMaxMod",
+   "weaponType": "rifle"
+  },
+  {
+   "primary": "WeaponAmmoMaxMod",
    "primaryTag": "WeaponAmmoMaxMod",
    "result": "HR",
    "resultTag": "WeaponMagazineReloadHolstered",
-   "secondary": "F",
+   "secondary": "WeaponReloadSpeedMod",
    "secondaryTag": "WeaponReloadSpeedMod",
    "weaponType": "rifle"
   },
   {
-   "primary": "D",
+   "primary": "WeaponAmmoMaxMod",
+   "primaryTag": "WeaponAmmoMaxMod",
+   "result": "HR",
+   "resultTag": "WeaponMagazineReloadHolstered",
+   "secondary": "WeaponClipMaxMod",
+   "secondaryTag": "WeaponClipMaxMod",
+   "weaponType": "rifle"
+  },
+  {
+   "primary": "WeaponDamageAmountMod",
    "primaryTag": "WeaponDamageAmountMod",
    "result": "SD",
    "resultTag": "WeaponStatusDamage",
-   "secondary": "2",
+   "secondary": "WeaponStunChanceMod",
    "secondaryTag": "WeaponStunChanceMod",
    "weaponType": "rifle"
   },
   {
-   "primary": "6",
+   "primary": "WeaponToxinDamageMod",
    "primaryTag": "WeaponToxinDamageMod",
    "result": "GA",
    "resultTag": "WeaponGasDamageMod",
-   "secondary": "4",
+   "secondary": "WeaponFireDamageMod",
    "secondaryTag": "WeaponFireDamageMod",
    "weaponType": "rifle"
   },
   {
-   "primary": "6",
+   "primary": "WeaponToxinDamageMod",
    "primaryTag": "WeaponToxinDamageMod",
    "result": "CO",
    "resultTag": "WeaponCorrosiveDamageMod",
-   "secondary": "7",
+   "secondary": "WeaponElectricityDamageMod",
    "secondaryTag": "WeaponElectricityDamageMod",
    "weaponType": "rifle"
   },
   {
-   "primary": "6",
+   "primary": "WeaponToxinDamageMod",
    "primaryTag": "WeaponToxinDamageMod",
    "result": "VI",
    "resultTag": "WeaponViralDamageMod",
-   "secondary": "5",
+   "secondary": "WeaponFreezeDamageMod",
    "secondaryTag": "WeaponFreezeDamageMod",
    "weaponType": "rifle"
   },
   {
-   "primary": "4",
+   "primary": "WeaponFireDamageMod",
    "primaryTag": "WeaponFireDamageMod",
    "result": "RA",
    "resultTag": "WeaponRadiationDamageMod",
-   "secondary": "7",
+   "secondary": "WeaponElectricityDamageMod",
    "secondaryTag": "WeaponElectricityDamageMod",
    "weaponType": "rifle"
   },
   {
-   "primary": "4",
+   "primary": "WeaponFireDamageMod",
    "primaryTag": "WeaponFireDamageMod",
    "result": "BL",
    "resultTag": "WeaponBlastDamageMod",
-   "secondary": "5",
+   "secondary": "WeaponFreezeDamageMod",
    "secondaryTag": "WeaponFreezeDamageMod",
    "weaponType": "rifle"
   },
   {
-   "primary": "7",
+   "primary": "WeaponElectricityDamageMod",
    "primaryTag": "WeaponElectricityDamageMod",
    "result": "MA",
    "resultTag": "WeaponMagneticDamageMod",
-   "secondary": "5",
+   "secondary": "WeaponFreezeDamageMod",
    "secondaryTag": "WeaponFreezeDamageMod",
    "weaponType": "rifle"
   },
@@ -229,6 +265,15 @@
    "secondary": "G",
    "secondaryTag": "WeaponFactionDamageGrineer",
    "weaponType": "rifle"
+  },
+  {
+   "primary": "\"\"",
+   "primaryTag": "\"\"",
+   "result": "\"\"",
+   "resultTag": "\"\"",
+   "secondary": "\"\"",
+   "secondaryTag": "\"\"",
+   "weaponType": "pistol"
   }
  ],
  "fusionSchema": {

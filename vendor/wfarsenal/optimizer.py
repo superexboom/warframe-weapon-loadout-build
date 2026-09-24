@@ -2465,6 +2465,25 @@ def _structure_full_roll_factor() -> float:
     return 1.089
 
 
+def _fusion_codes_from_templates(
+    templates: Mapping[str, Any], weapon_type: str
+) -> frozenset[str]:
+    """该武器类型可融合获得的结果词条码集合（riven_templates 的
+    fusionRecipes.weaponType == weapon_type 的 result 集）。"""
+    recipes = (
+        templates.get("fusionRecipes")
+        if isinstance(templates, Mapping)
+        else None
+    ) or ()
+    return frozenset(
+        str(recipe.get("result"))
+        for recipe in recipes
+        if isinstance(recipe, Mapping)
+        and str(recipe.get("weaponType") or "") == weapon_type
+        and recipe.get("result")
+    )
+
+
 def _candidate_lines(
     weapon_type: str,
     disposition: float,
@@ -2473,6 +2492,7 @@ def _candidate_lines(
     negative: bool,
     bases: Mapping[str, float] | None = None,
     structure_scale: float | None = None,
+    available_fusion_codes: frozenset[str] | None = None,
 ) -> tuple[list[_RivenLine], bool]:
     bases = dict(bases or RIVEN_BASE_VALUES[weapon_type])
     ratios = []
@@ -2500,12 +2520,24 @@ def _candidate_lines(
         )
 
     lines: list[_RivenLine] = []
+    # ── 融合词条类型过滤（2026-09-24）───────────────────────────────────
+    # 融合配方（词条融合系统）本 build 只对部分武器类型发布（rifle 有
+    # 18 条 MergeOptions；pistol/shotgun/archgun/melee 的模板里是空占位
+    # 或缺失）。无配方类型的融合词条不可能通过融合获得——候选层直接
+    # 过滤（数值表保留全类型：引擎乘区本身是类型无关的）。
+    # available_fusion_codes=None 时不过滤（测试/内部调用兼容）。
     for code, base in bases.items():
         rule = RIVEN_RULES.get(code)
         if rule is None:
             continue
         can_roll = rule[8] if negative else rule[7]
         if not can_roll:
+            continue
+        if (
+            code in _FUSION_LINE_CODES
+            and available_fusion_codes is not None
+            and code not in available_fusion_codes
+        ):
             continue
         value = base * disposition * roll_scale
         effect = _effect_from_code(
@@ -4267,12 +4299,17 @@ def analyze_riven_request(
         actual_card,
     )
 
+    _fusable = _fusion_codes_from_templates(
+        exports.get("rivenTemplates") or {}, weapon_type
+    )
     positive_candidates, _ = _candidate_lines(
-        weapon_type, disposition, (), negative=False, bases=template_bases
+        weapon_type, disposition, (), negative=False, bases=template_bases,
+        available_fusion_codes=_fusable,
     )
     candidate_by_code = {line.code: line for line in positive_candidates}
     negative_candidates, _ = _candidate_lines(
-        weapon_type, disposition, (), negative=True, bases=template_bases
+        weapon_type, disposition, (), negative=True, bases=template_bases,
+        available_fusion_codes=_fusable,
     )
     negative_by_code = {line.code: line for line in negative_candidates}
 
@@ -4498,10 +4535,12 @@ def analyze_riven_request(
     positive_candidates_neg, _ = _candidate_lines(
         weapon_type, disposition, (), negative=False, bases=template_bases,
         structure_scale=theoretical_structure_scale(positive_count, optimal_structure_negative),
+        available_fusion_codes=_fusable,
     )
     negative_candidates_neg, _ = _candidate_lines(
         weapon_type, disposition, (), negative=True, bases=template_bases,
         structure_scale=theoretical_structure_scale(positive_count, True, negative=True),
+        available_fusion_codes=_fusable,
     )
     pos_by_code_neg = {line.code: line for line in positive_candidates_neg}
     neg_by_code_neg = {line.code: line for line in negative_candidates_neg}

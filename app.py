@@ -1721,12 +1721,17 @@ def build_catalog() -> dict[str, Any]:
             _recipes_by_type[wtype][result] = recipe
     for weapon_type, base_values in RIVEN_BASE_VALUES.items():
         rows = []
+        # 该类型可融合获得的词条（有配方的类型才有融合词条；无配方类型
+        # 的融合码从下拉里整体剔除——既不能洗出也不能融合）。
+        type_fusable = _recipes_by_type.get(weapon_type) or {}
         for code in base_values:
             rule = RIVEN_RULES.get(code)
             if rule is None:
                 continue
+            if code in optimizer._FUSION_LINE_CODES and code not in type_fusable:
+                continue
             label, upgrade_type, _, _, _, unit, _, can_positive, can_negative = rule
-            recipe = _recipes_by_type.get(weapon_type, {}).get(code)
+            recipe = type_fusable.get(code)
             rows.append(
                 {
                     "code": code,
@@ -2635,6 +2640,9 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     # ── 融合词条规则（游戏规则，2026-09-24 用户确认）────────────────────
     # 融合词条（Advanced Traits）仅正面、每卡限 1 条。fail-closed 校验：
     # 负面融合词条直接拒绝；正面融合词条超过 1 条直接拒绝。
+    # 类型可用性：本 build 融合配方只对部分武器类型发布（rifle 有 18 条
+    # MergeOptions；pistol/shotgun/archgun/melee 为空/缺失）——无配方类型
+    # 的融合词条不可能获得，直接拒绝。
     _fusion_codes = _fusion_stat_codes(weapon["weaponType"])
     fusion_lines = [
         s for s in raw_stats
@@ -2649,6 +2657,13 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
         raise SimulationError(
             f"融合词条每卡限 1 条（当前 {len(fusion_lines)} 条）"
         )
+    for stat in raw_stats:
+        _code = str(stat.get("code") or "").strip().upper()
+        if _code in optimizer._FUSION_LINE_CODES and _code not in _fusion_codes:
+            raise SimulationError(
+                f"融合词条 {_code} 对 {weapon['weaponType']} 类型不可用"
+                "（该类型本版本没有融合配方）"
+            )
 
     bases = RIVEN_BASE_VALUES.get(weapon["weaponType"], {})
     normalized_stats = []
@@ -5329,35 +5344,41 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
         try:
             with ANALYZE_LOCK:
                 variant_result = simulate(**variant_common, hit_location="body", passive_effects=variant_passives)
-            # 容量校验：换入后超容量的候选给「超容量」而非假收益——选择器
-            # 的收益必须对应一张真实可装备的卡。
-            loadout_validation = variant_result.get("loadoutValidation") or {}
-            if mode != "equipped" and loadout_validation.get("valid") is False:
-                gains[path] = {
-                    "gainPercent": None,
-                    "reason": "over-capacity",
-                    "capacity": loadout_validation.get("capacity"),
-                    "capacityLimit": loadout_validation.get("capacityLimit"),
-                }
-                continue
             value = _mod_gains_metric_value(variant_result, metric)
+            # ── 超容量仍显示贡献（2026-09-24 用户口径）────────────────────
+            # 容量只标记「这张卡当前装不下」，不是「这张卡没价值」——贡献
+            # 数值照算照显示（选择器/对比视图按 gain 排序时超容量卡也能
+            # 参与比较），前端用 over-capacity 标记提示装配受限。
+            loadout_validation = variant_result.get("loadoutValidation") or {}
+            over_capacity = (
+                mode != "equipped" and loadout_validation.get("valid") is False
+            )
+            if mode == "equipped":
+                # contribution of the equipped card = how much removing it costs
+                if base_value > 0:
+                    gain = (value / base_value - 1.0) * 100.0
+                else:
+                    gain = 0.0 if value <= 0 else 100.0
+            else:
+                gain = ((value / base_value - 1.0) * 100.0) if base_value > 0 else (0.0 if value <= 0 else 100.0)
+            gains[path] = {
+                "gainPercent": round(gain, 2),
+                "value": round(value, 3),
+                "baseValue": round(base_value, 3),
+                "metric": metric,
+                **(
+                    {
+                        "reason": "over-capacity",
+                        "capacity": loadout_validation.get("capacity"),
+                        "capacityLimit": loadout_validation.get("capacityLimit"),
+                    }
+                    if over_capacity
+                    else {}
+                ),
+            }
         except (SimulationError, TypeError, ValueError):
             gains[path] = {"gainPercent": None, "reason": "variant-not-computable"}
             continue
-        if mode == "equipped":
-            # contribution of the equipped card = how much removing it costs
-            if base_value > 0:
-                gain = (value / base_value - 1.0) * 100.0
-            else:
-                gain = 0.0 if value <= 0 else 100.0
-        else:
-            gain = ((value / base_value - 1.0) * 100.0) if base_value > 0 else (0.0 if value <= 0 else 100.0)
-        gains[path] = {
-            "gainPercent": round(gain, 2),
-            "value": round(value, 3),
-            "baseValue": round(base_value, 3),
-            "metric": metric,
-        }
     result = {
         "buildLabel": EXPORTS.get("buildLabel"),
         "metric": metric,
