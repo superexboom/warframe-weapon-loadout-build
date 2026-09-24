@@ -92,8 +92,9 @@
      "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
      "chargeTime": null,
      "damage": {
-      "critChance": 0.25,
-      "critMultiplier": 2.5,
+      "critChance": 0.1,
+      "critMultiplier": 1.75,
+      "flightSpeed": 20,
       "procChance": 0.1,
       "shares": {
        "DT_IMPACT": 1.0
@@ -163,6 +164,8 @@
     {
      "ammoCost": 1,
      "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
+     "burstCount": 3,
+     "burstDelay": 0.40000001,
      "chargeTime": null,
      "damage": {
       "components": [
@@ -266,6 +269,8 @@
     {
      "ammoCost": 0,
      "ammoType": "/EE/Types/Game/AmmoEx",
+     "burstCount": 4,
+     "burstDelay": 0.1,
      "chargeTime": null,
      "damage": {
       "components": [
@@ -309,11 +314,10 @@
        "DT_IMPACT": 0.55,
        "DT_PUNCTURE": 0.45
       },
-      "sourceTotal": 9.0,
-      "total": 10.0,
+      "total": 9.0,
       "types": {
-       "DT_IMPACT": 5.5,
-       "DT_PUNCTURE": 4.5
+       "DT_IMPACT": 4.95,
+       "DT_PUNCTURE": 4.05
       }
      },
      "falloffMinDamage": 0,
@@ -451,7 +455,7 @@
     {
      "ammoCost": 1,
      "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
-     "chargeTime": null,
+     "chargeTime": 1,
      "damage": {
       "critChance": 0.2,
       "critMultiplier": 2.5,
@@ -1227,6 +1231,8 @@
     {
      "ammoCost": 1,
      "ammoType": "/EE/Types/Game/AmmoEx",
+     "burstCount": 3,
+     "burstDelay": 0.40000001,
      "chargeTime": null,
      "damage": {
       "critChance": 0.15000001,
@@ -1307,18 +1313,66 @@
      "chargeTime": null,
      "damage": {
       "critChance": 0.0,
-      "critMultiplier": 2.0,
-      "procChance": 0.1,
+      "critMultiplier": 1.0,
+      "procChance": 0.25,
+      "sequenceDamage": [
+       {
+        "critChance": 0.0,
+        "critMultiplier": 1.0,
+        "procChance": 0.25,
+        "shares": {
+         "DT_IMPACT": 1.0
+        },
+        "total": 160.0,
+        "types": {
+         "DT_IMPACT": 160.0
+        }
+       },
+       {
+        "critChance": 0.0,
+        "critMultiplier": 1.0,
+        "procChance": 0.25,
+        "shares": {
+         "DT_PUNCTURE": 1.0
+        },
+        "total": 160.0,
+        "types": {
+         "DT_PUNCTURE": 160.0
+        }
+       },
+       {
+        "critChance": 0.0,
+        "critMultiplier": 1.0,
+        "procChance": 0.25,
+        "shares": {
+         "DT_SLASH": 1.0
+        },
+        "total": 160.0,
+        "types": {
+         "DT_SLASH": 160.0
+        }
+       }
+      ],
+      "sequenceProjectiles": [
+       {
+        "name": "PrimeHeliosProjectileFront",
+        "path": "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosProjectileFront"
+       },
+       {
+        "name": "PrimeHeliosProjectileRear",
+        "path": "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosProjectileRear"
+       },
+       {
+        "name": "PrimeHeliosProjectileMid",
+        "path": "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosProjectileMid"
+       }
+      ],
       "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
+       "DT_IMPACT": 1.0
       },
-      "total": 10.0,
+      "total": 160.0,
       "types": {
-       "DT_IMPACT": 3.33333,
-       "DT_PUNCTURE": 3.33333,
-       "DT_SLASH": 3.33334
+       "DT_IMPACT": 160.0
       }
      },
      "falloffMinDamage": 1,
@@ -1330,6 +1384,7 @@
      "fireRateRaw": 80,
      "index": 0,
      "isAlternateFire": false,
+     "maxProjectiles": 3,
      "multishot": 1,
      "reloadTime": 3,
      "trigger": ""
@@ -1337,9 +1392,17 @@
    ],
    "gripType": "MELEE_ONE_HAND",
    "isIncarnon": false,
+   "isMeleeJudged": true,
    "magazineSize": null,
    "masteryReq": 0,
    "maxRank": 30,
+   "meleeFields": {
+    "empoweredMeleeChance": 0.15000001,
+    "empoweredMeleeChancePerCombo": 0,
+    "heavySlamAttack": "HeavySlamAoE",
+    "parryAngle": 90,
+    "slamAttack": "SlamAoE"
+   },
    "name": "PrimeHeliosGlaiveWeapon",
    "nameEn": "Deconstructor Prime",
    "nameInternal": "PrimeHeliosGlaiveWeapon",
@@ -1605,6 +1668,8 @@
     {
      "ammoCost": 1,
      "ammoType": "/EE/Types/Game/AmmoEx",
+     "burstCount": 5,
+     "burstDelay": 0.2,
      "chargeTime": null,
      "damage": {
       "critChance": 0.2,
@@ -1767,7 +1832,7 @@
       "critChance": 0.2,
       "critMultiplier": 2.0,
       "flightSpeed": 40,
-      "procChance": 0.0,
+      "procChance": 0.1,
       "projectile": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeLaserRifleProjectile",
       "shares": {
        "DT_IMPACT": 0.1,
@@ -1912,6 +1977,8 @@
     {
      "ammoCost": 1,
      "ammoType": "/EE/Types/Game/AmmoEx",
+     "burstCount": 4,
+     "burstDelay": 0.30000001,
      "chargeTime": null,
      "damage": {
       "critChance": 0.18000001,
@@ -2144,18 +2211,66 @@
      "chargeTime": null,
      "damage": {
       "critChance": 0.0,
-      "critMultiplier": 2.0,
-      "procChance": 0.1,
+      "critMultiplier": 1.0,
+      "procChance": 0.25,
+      "sequenceDamage": [
+       {
+        "critChance": 0.0,
+        "critMultiplier": 1.0,
+        "procChance": 0.25,
+        "shares": {
+         "DT_IMPACT": 1.0
+        },
+        "total": 130.0,
+        "types": {
+         "DT_IMPACT": 130.0
+        }
+       },
+       {
+        "critChance": 0.0,
+        "critMultiplier": 1.0,
+        "procChance": 0.25,
+        "shares": {
+         "DT_PUNCTURE": 1.0
+        },
+        "total": 130.0,
+        "types": {
+         "DT_PUNCTURE": 130.0
+        }
+       },
+       {
+        "critChance": 0.0,
+        "critMultiplier": 1.0,
+        "procChance": 0.25,
+        "shares": {
+         "DT_SLASH": 1.0
+        },
+        "total": 130.0,
+        "types": {
+         "DT_SLASH": 130.0
+        }
+       }
+      ],
+      "sequenceProjectiles": [
+       {
+        "name": "MeleePetProjectileFront",
+        "path": "/Lotus/Types/Sentinels/SentinelWeapons/MeleePetProjectileFront"
+       },
+       {
+        "name": "MeleePetProjectileRear",
+        "path": "/Lotus/Types/Sentinels/SentinelWeapons/MeleePetProjectileRear"
+       },
+       {
+        "name": "MeleePetProjectileMid",
+        "path": "/Lotus/Types/Sentinels/SentinelWeapons/MeleePetProjectileMid"
+       }
+      ],
       "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
+       "DT_IMPACT": 1.0
       },
-      "total": 10.0,
+      "total": 130.0,
       "types": {
-       "DT_IMPACT": 3.33333,
-       "DT_PUNCTURE": 3.33333,
-       "DT_SLASH": 3.33334
+       "DT_IMPACT": 130.0
       }
      },
      "falloffMinDamage": 1,
@@ -2167,6 +2282,7 @@
      "fireRateRaw": 80,
      "index": 0,
      "isAlternateFire": false,
+     "maxProjectiles": 3,
      "multishot": 1,
      "reloadTime": 3,
      "trigger": ""
@@ -2174,9 +2290,17 @@
    ],
    "gripType": "MELEE_ONE_HAND",
    "isIncarnon": false,
+   "isMeleeJudged": true,
    "magazineSize": null,
    "masteryReq": 0,
    "maxRank": 30,
+   "meleeFields": {
+    "empoweredMeleeChance": 0.15000001,
+    "empoweredMeleeChancePerCombo": 0,
+    "heavySlamAttack": "HeavySlamAoE",
+    "parryAngle": 90,
+    "slamAttack": "SlamAoE"
+   },
    "name": "SentGlaiveWeapon",
    "nameEn": "Deconstructor",
    "nameInternal": "SentGlaiveWeapon",
