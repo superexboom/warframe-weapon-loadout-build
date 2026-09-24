@@ -13,9 +13,10 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import sys
 import threading
+import time
 import traceback
 from typing import Any, Mapping
-from urllib.parse import unquote, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 import webbrowser
 
 from data_sources import active_build, dataset_root, load_source_lock
@@ -814,6 +815,67 @@ optimizer.load_exports = lambda _export_dir: EXPORTS
 # ponytail: this is a single-user desktop app; use a worker pool if concurrent
 # remote clients ever become a real requirement.
 ANALYZE_LOCK = threading.Lock()
+
+# ── 分析进度注册表（前端进度条数据源）───────────────────────────────────
+# 长分析（deep 档 1-3 分钟）期间前端轮询 /api/analyze/progress?id=<token>
+# 读取阶段心跳，区分「还在跑」与「卡死」。注册表条目在完成后保留 10 分钟
+# 供迟到查询，随后惰性清理。
+_ANALYZE_STAGES = ("baseline", "calibration", "actual", "recommendation", "quality", "payload")
+_ANALYZE_PROGRESS: dict[str, dict[str, Any]] = {}
+_ANALYZE_PROGRESS_LOCK = threading.Lock()
+_ANALYZE_PROGRESS_TTL = 600.0
+
+
+def _progress_token_for(payload: Mapping[str, Any]) -> str | None:
+    """请求声明的进度令牌（前端生成，随 payload 传入）。"""
+    token = payload.get("progressToken")
+    if isinstance(token, str) and 1 <= len(token) <= 64:
+        return token
+    return None
+
+
+def _report_analysis_progress(token: str, stage: str) -> None:
+    now = time.time()
+    with _ANALYZE_PROGRESS_LOCK:
+        entry = _ANALYZE_PROGRESS.get(token)
+        if entry is None:
+            return
+        stages = list(entry.get("stages") or [])
+        if stage not in stages:
+            stages.append(stage)
+        entry["stages"] = stages
+        entry["stageIndex"] = _ANALYZE_STAGES.index(stage) + 1 if stage in _ANALYZE_STAGES else len(stages)
+        entry["lastBeat"] = now
+
+
+def _begin_analysis_progress(token: str) -> None:
+    now = time.time()
+    with _ANALYZE_PROGRESS_LOCK:
+        # 惰性清理过期条目。
+        expired = [
+            key for key, row in _ANALYZE_PROGRESS.items()
+            if row.get("done") and now - float(row.get("finishedAt") or 0) > _ANALYZE_PROGRESS_TTL
+        ]
+        for key in expired:
+            _ANALYZE_PROGRESS.pop(key, None)
+        _ANALYZE_PROGRESS[token] = {
+            "stages": [],
+            "stageIndex": 0,
+            "startedAt": now,
+            "lastBeat": now,
+            "done": False,
+            "error": None,
+        }
+
+
+def _finish_analysis_progress(token: str, error: str | None = None) -> None:
+    with _ANALYZE_PROGRESS_LOCK:
+        entry = _ANALYZE_PROGRESS.get(token)
+        if entry is None:
+            return
+        entry["done"] = True
+        entry["error"] = error
+        entry["finishedAt"] = time.time()
 
 
 def _finite_positive(value: Any) -> float | None:
@@ -2633,6 +2695,7 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     engine_request.pop("sourceWeapon", None)
     engine_request.pop("sourceDisposition", None)
     engine_request.pop("kitgunParts", None)
+    engine_request.pop("progressToken", None)  # HTTP 进度令牌不进引擎层
     # 标准配装靶（用户指定）：170 级钢铁之路、卓越者（超宏护盾）、凶魂百夫长，
     # 0 削甲 0 爆头，30 秒窗口击杀数（KPM）为优化目标。该目标不属于任何有
     # 派系增伤加成的派系、无特殊护盾，仅弱虚空伤害（武器不可携带）——
@@ -2683,15 +2746,33 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
                 EXPORTS["weapons"], weapon["path"], kind="weapon"
             )
         analysis_stance = _analysis_stance(stance_record, weapon["weaponType"])
-    with ANALYZE_LOCK:
-        result = optimizer.analyze_riven_request(
-            EXPORT_DIR,
-            engine_request,
-            weapon_record=analysis_record if innate_selection is not None else assembled_record,
-            stance=analysis_stance,
-            statics_cache=ANALYSIS_STATICS_CACHE,
-        )
-        _persist_analysis_statics_cache()
+    # 进度令牌：前端在 payload 里声明 progressToken 时注册进度心跳，
+    # analyze_riven_request 的阶段边界回调更新注册表，前端轮询读取。
+    progress_token = _progress_token_for(payload)
+    if progress_token is not None:
+        _begin_analysis_progress(progress_token)
+
+    def _stage_hook(stage: str) -> None:
+        if progress_token is not None:
+            _report_analysis_progress(progress_token, stage)
+
+    try:
+        with ANALYZE_LOCK:
+            result = optimizer.analyze_riven_request(
+                EXPORT_DIR,
+                engine_request,
+                weapon_record=analysis_record if innate_selection is not None else assembled_record,
+                stance=analysis_stance,
+                statics_cache=ANALYSIS_STATICS_CACHE,
+                progress_hook=_stage_hook,
+            )
+            _persist_analysis_statics_cache()
+    except BaseException as exc:
+        if progress_token is not None:
+            _finish_analysis_progress(progress_token, str(exc) or type(exc).__name__)
+        raise
+    if progress_token is not None:
+        _finish_analysis_progress(progress_token)
     result.pop("projection", None)
     weapon_mechanics = WEAPON_MECHANICS_OVERRIDES.get("weapons", {}).get(
         str((result.get("weapon") or {}).get("path") or weapon.get("path") or "")
@@ -5303,6 +5384,38 @@ class PortableHandler(BaseHTTPRequestHandler):
             return
         if path == "/api/warframe/catalog":
             self._send_json(HTTPStatus.OK, WARFRAME_CATALOG, cache="no-cache")
+            return
+        # 分析进度轮询：?id=<progressToken>（analyze 期间前端每 500ms 查询）。
+        if path == "/api/analyze/progress":
+            query = parse_qs(urlsplit(self.path).query)
+            token = (query.get("id") or [""])[0]
+            with _ANALYZE_PROGRESS_LOCK:
+                entry = _ANALYZE_PROGRESS.get(token)
+                if entry is not None:
+                    entry = dict(entry)
+            if entry is None:
+                self._send_error(HTTPStatus.NOT_FOUND, "unknown_token", "no progress entry for this token")
+                return
+            now = time.time()
+            elapsed = max(now - float(entry.get("startedAt") or now), 0.0)
+            since_beat = max(now - float(entry.get("lastBeat") or now), 0.0)
+            total_stages = len(_ANALYZE_STAGES)
+            stage_index = int(entry.get("stageIndex") or 0)
+            self._send_json(
+                HTTPStatus.OK,
+                {
+                    "token": token,
+                    "stages": list(entry.get("stages") or []),
+                    "stageIndex": stage_index,
+                    "totalStages": total_stages,
+                    "percent": round(min(stage_index / total_stages, 1.0) * 100, 1),
+                    "elapsedSeconds": round(elapsed, 1),
+                    "secondsSinceBeat": round(since_beat, 1),
+                    "done": bool(entry.get("done")),
+                    "error": entry.get("error"),
+                },
+                cache="no-cache",
+            )
             return
         self._serve_static(path)
 

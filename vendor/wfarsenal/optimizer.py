@@ -3406,6 +3406,7 @@ def analyze_riven_request(
     weapon_record: Mapping[str, Any] | None = None,
     stance: Mapping[str, Any] | None = None,
     statics_cache: dict[str, Any] | None = None,
+    progress_hook: Any = None,
 ) -> dict[str, Any]:
     """Score one wire-format Riven and return baseline/actual/optimal builds.
 
@@ -3418,7 +3419,19 @@ def analyze_riven_request(
     stance 传入与配装页同口径的架势信息；statics_cache 为按武器缓存的静态
     解算结果（基准配装/双路推荐/理论上限），组合装配、显式灵化/赋能与时间线
     请求不读不写缓存。
+
+    progress_hook(stage: str)：阶段边界回调（"baseline" / "calibration" /
+    "actual" / "recommendation" / "optimal" / "quality" / "payload"），
+    供 HTTP 层向前端报告分析进度；None 时零开销。
     """
+    def _progress(stage: str) -> None:
+        if progress_hook is not None:
+            try:
+                progress_hook(stage)
+            except Exception:
+                # 进度上报绝不影响解算。
+                pass
+
     if not isinstance(request, Mapping):
         raise SimulationError("riven request must be a JSON object")
     record_overridden = weapon_record is not None
@@ -3933,6 +3946,7 @@ def analyze_riven_request(
         # 缩的是爬山轮数与 _best_fixed 的子集枚举。
         return _apply_riven_floor(result, riven_card)
 
+    _progress("baseline")
     baseline = _reconstruct(statics.get("baselineCards"), None) if statics else None
     baseline_fresh = baseline is None
     if baseline_fresh:
@@ -4082,6 +4096,7 @@ def analyze_riven_request(
             return floor
         return result
 
+    _progress("actual")
     actual_card = _card_from_lines(actual_lines)
     actual = _apply_riven_floor_profiled(
         _optimize_archetype(
@@ -4114,6 +4129,7 @@ def analyze_riven_request(
         and objective_metric == "killsPerMinute"
         and not request.get("_skipTargetCalibration")
     ):
+        _progress("calibration")
         target_calibration["status"] = "running"
         calibration_seed_baseline = baseline
         calibration_seed_actual = actual
@@ -4225,6 +4241,7 @@ def analyze_riven_request(
     elif benchmark_context is not None:
         target_calibration["status"] = "skipped-by-request"
 
+    _progress("recommendation")
     positive_count = sum(not line.negative for line in actual_lines)
     if positive_count not in {2, 3}:
         positive_count = 3
@@ -4585,6 +4602,7 @@ def analyze_riven_request(
     # onto the same integer-like rate even when their damage envelopes differ
     # substantially.  Never turn that plateau into a false 100% Riven score;
     # use the same target/window model's continuous DPS as the quality metric.
+    _progress("quality")
     score_metric = objective_metric
     quality_scores = {
         "baseline": baseline.score,
@@ -5295,6 +5313,7 @@ def analyze_riven_request(
         skipped.append(
             "arcane timeline is an expected DPS envelope, not an enemy hit/status event replay"
         )
+    _progress("payload")
     baseline_payload = _build_payload(weapon, baseline, None, passives)
     actual_payload = _build_payload(weapon, actual, actual_card, passives)
     optimal_payload = _build_payload(weapon, optimal, optimal_card, passives)

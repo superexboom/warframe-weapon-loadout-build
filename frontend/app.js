@@ -2115,11 +2115,48 @@ async function submitAnalysis(event) {
   ui["analyze-button"].classList.add("is-loading");
   ui["analyze-button"].disabled = true;
   setResultState("loading");
+  // ── 进度上报（阶段心跳 + 已用时间）：区分「还在跑」与「卡死」─────────
+  const progressToken = `an-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  payload.progressToken = progressToken;
+  const STAGE_LABELS = {
+    baseline: "基准配装解算",
+    calibration: "评分靶压力校准",
+    actual: "当前紫卡配装求解",
+    recommendation: "词条优先级排序",
+    quality: "连续指标复评",
+    payload: "结果构建",
+  };
+  const TOTAL_STAGES = Object.keys(STAGE_LABELS).length;
+  const startedAt = performance.now();
+  let lastStage = "";
+  const beatTimer = window.setInterval(() => {
+    const elapsed = (performance.now() - startedAt) / 1000;
+    let beat = null;
+    fetch(`/api/analyze/progress?id=${encodeURIComponent(progressToken)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((row) => { if (row) beat = row; return row; })
+      .catch(() => {})
+      .finally(() => {
+        const stageList = beat?.stages || [];
+        const stage = stageList[stageList.length - 1] || "";
+        const pct = beat ? Math.round(beat.percent) : null;
+        const stageLabel = STAGE_LABELS[stage] || (stage ? stage : "准备中");
+        const elapsedText = elapsed < 60 ? `${elapsed.toFixed(0)}s` : `${Math.floor(elapsed / 60)}m${Math.round(elapsed % 60)}s`;
+        // 无心跳数据（旧后端/轮询失败）：只显示阶段文案循环 + 计时。
+        if (beat) {
+          const bar = `${"█".repeat(Math.round((pct || 0) / 10))}${"░".repeat(10 - Math.round((pct || 0) / 10))}`;
+          ui["loading-copy"].textContent = `${stageLabel} ${bar} ${pct}% · ${elapsedText}${beat.secondsSinceBeat > 30 ? " · 长时间无阶段推进" : ""}`;
+        } else {
+          ui["loading-copy"].textContent = `${STAGE_LABELS[stage] || "解算中"} · 已用 ${elapsedText}`;
+        }
+        lastStage = stage;
+      });
+  }, 500);
   const messages = ["比对武器档案与词条贡献", "求解包含当前紫卡的 8 槽配装", "整理 T0–T3 词条优先级"];
   let messageIndex = 0;
   state.loadingTimer = window.setInterval(() => {
+    // 阶段文案由心跳接管；无心跳时保留旧轮播（500ms 心跳失败场景）。
     messageIndex = (messageIndex + 1) % messages.length;
-    ui["loading-copy"].textContent = messages[messageIndex];
   }, 900);
   try {
     const response = await fetch("/api/analyze", {
@@ -2140,6 +2177,7 @@ async function submitAnalysis(event) {
     setResultState("error");
   } finally {
     window.clearInterval(state.loadingTimer);
+    window.clearInterval(beatTimer);
     state.loadingTimer = null;
     ui["analyze-button"].classList.remove("is-loading");
     updateAnalyzeAvailability();
