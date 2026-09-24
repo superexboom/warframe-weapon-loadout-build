@@ -1623,7 +1623,9 @@ def build_catalog() -> dict[str, Any]:
 
     for weapon in EXPORTS["weapons"]:
         slot = str(weapon.get("slot") or "")
-        if slot not in RIVEN_SLOTS:
+        # 空战武器（地面口径，arch_gun）2026-09-24 起进入配装目录（单开
+        # 分类「Archwing」）；紫卡分析仍只覆盖 primary/secondary/melee。
+        if slot not in RIVEN_SLOTS and slot != "arch_gun":
             continue
         # 暗黑分合剑基体已被两个形态记录取代（巨刃/双剑），基体不再出现在
         # 任何选择器里——它自身没有开火模式，永远灰置只会造成困惑。

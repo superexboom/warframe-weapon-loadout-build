@@ -1,6 +1,6 @@
 {
  "buildLabel": "2026.08.13.13.24",
- "count": 659,
+ "count": 651,
  "data": [
   {
    "ancestry": [
@@ -24331,56 +24331,59 @@
    "variantType": null
   },
   {
+   "ammoMax": 165,
    "ancestry": [
     "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/GrnHeavyGrenadeLauncherDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "components": [
        {
-        "falloff": 0.30000001,
+        "falloff": 0.5,
         "procChance": 0.2,
-        "radius": 9,
+        "radius": 6,
         "shares": {},
         "source": "ExplosiveAttack",
-        "total": 187.0,
+        "total": 280.0,
         "types": {}
        }
       ],
       "critChance": 0.34999999,
       "critMultiplier": 2.0,
-      "flightSpeed": 300,
+      "flightSpeed": 55,
       "procChance": 0.2,
-      "projectile": "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncherWavProj",
+      "projectile": "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncherProjectile",
       "radial": {
-       "falloff": 0.30000001,
+       "falloff": 0.5,
        "procChance": 0.2,
-       "radius": 9,
+       "radius": 6,
        "shares": {},
        "source": "ExplosiveAttack",
-       "total": 187.0,
+       "total": 280.0,
        "types": {}
       },
       "shares": {
        "DT_IMPACT": 1.0
       },
-      "total": 87.0,
+      "total": 130.0,
       "types": {
-       "DT_IMPACT": 87.0
+       "DT_IMPACT": 130.0
       }
      },
-     "falloffMinDamage": 0,
+     "falloffMinDamage": 1,
      "falloffRange": [
       0,
       0
@@ -24448,21 +24451,24 @@
    "variantType": null
   },
   {
+   "ammoMax": 320,
    "ancestry": [
     "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler",
     "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/ArchGRNAAGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/KuvaGrattlerDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "components": [
@@ -24472,22 +24478,22 @@
         "radius": 9,
         "shares": {},
         "source": "ExplosiveAttack",
-        "total": 155.0,
+        "total": 235.0,
         "types": {}
        }
       ],
       "critChance": 0.27000001,
-      "critMultiplier": 2.0999999,
+      "critMultiplier": 2.0,
       "flightSpeed": 250,
       "procChance": 0.27000001,
-      "projectile": "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattlerWavProjSpace",
+      "projectile": "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattlerWavProj",
       "radial": {
        "falloff": 0.69999999,
        "procChance": 0.27000001,
        "radius": 9,
        "shares": {},
        "source": "ExplosiveAttack",
-       "total": 155.0,
+       "total": 235.0,
        "types": {}
       },
       "shares": {
@@ -24495,24 +24501,24 @@
        "DT_PUNCTURE": 0.8,
        "DT_SLASH": 0.1
       },
-      "total": 50.0,
+      "total": 140.0,
       "types": {
-       "DT_IMPACT": 5.0,
-       "DT_PUNCTURE": 40.0,
-       "DT_SLASH": 4.999998
+       "DT_IMPACT": 14.0,
+       "DT_PUNCTURE": 112.000001,
+       "DT_SLASH": 13.999995
       }
      },
-     "falloffMinDamage": 20,
+     "falloffMinDamage": 0,
      "falloffRange": [
-      1000,
-      2000
+      50,
+      175
      ],
      "fireRate": 5.55,
      "fireRateRaw": 333,
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
-     "reloadTime": 2,
+     "reloadTime": 2.5,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
     }
    ],
@@ -74964,2012 +74970,6 @@
   },
   {
    "ancestry": [
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchHammer/ArchHammer",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchMeleeWeapon",
-    "/Lotus/Types/Game/LotusMeleeWeapon"
-   ],
-   "compatTags": [],
-   "defaultModTemplate": null,
-   "descTag": "/Lotus/Language/Items/ArchHammerDesc",
-   "fireModes": [
-    {
-     "ammoCost": 0,
-     "ammoType": "",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.2,
-      "critMultiplier": 2.0,
-      "procChance": 0.12,
-      "shares": {
-       "DT_IMPACT": 0.8,
-       "DT_PUNCTURE": 0.15,
-       "DT_SLASH": 0.05
-      },
-      "total": 450.0,
-      "types": {
-       "DT_IMPACT": 360.000004,
-       "DT_PUNCTURE": 67.500004,
-       "DT_SLASH": 22.499978
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 0.916667,
-     "fireRateRaw": 55,
-     "index": 0,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 1,
-     "trigger": ""
-    },
-    {
-     "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.0,
-      "critMultiplier": 2.0,
-      "procChance": 0.1,
-      "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
-      },
-      "total": 10.0,
-      "types": {
-       "DT_IMPACT": 3.33333,
-       "DT_PUNCTURE": 3.33333,
-       "DT_SLASH": 3.33334
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 1,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 2,
-     "trigger": ""
-    }
-   ],
-   "gripType": "MELEE_ONE_HAND",
-   "heavyAttack": {
-    "attackSet": "/Lotus/Animations/FlightSuit/Archaxe/QuickDefaults",
-    "attacks": [
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickA",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickB",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickC",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickD",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickE",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickF",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 3,
-       "forcedProcs": [
-        "PT_BIG_STAGGER"
-       ]
-      }
-     }
-    ],
-    "chargeDuration": null,
-    "chargeTime": 0.69999999,
-    "comboContext": "CC_GROUND_HEAVY",
-    "components": [
-     {
-      "count": 1,
-      "damage": {
-       "critChance": 0.2,
-       "critMultiplier": 2.0,
-       "procChance": 0.12,
-       "shares": {
-        "DT_IMPACT": 0.8000000337777788,
-        "DT_PUNCTURE": 0.150000013555556,
-        "DT_SLASH": 0.049999952666665196
-       },
-       "total": 449.999986,
-       "types": {
-        "DT_IMPACT": 360.000004,
-        "DT_PUNCTURE": 67.500004,
-        "DT_SLASH": 22.499978
-       }
-      },
-      "id": "attack-1-swing-1",
-      "kind": "melee",
-      "source": null
-     }
-    ],
-    "defaultAttackIndex": 0,
-    "disableTime": 1,
-    "kind": "melee",
-    "meleeTree": "/Lotus/Animations/FlightSuit/Archaxe/ArchAxeMeleeTree",
-    "support": {
-     "complete": true,
-     "level": "complete",
-     "singleDamage": true,
-     "timing": "charge-and-disable"
-    },
-    "tapTime": null,
-    "timingApproximation": true,
-    "timingSource": "ComboData.HeavyMeleeChargeTime"
-   },
-   "isIncarnon": false,
-   "magazineSize": 0,
-   "masteryReq": 6,
-   "maxRank": 30,
-   "name": "ArchHammer",
-   "nameEn": "<ARCHWING> Rathbone",
-   "nameInternal": "ArchHammer",
-   "nameTag": "/Lotus/Language/Items/ArchHammerName",
-   "nameZh": "<ARCHWING> 拉斯波恩",
-   "omegaAttenuation": null,
-   "path": "/Lotus/Weapons/Tenno/Archwing/Melee/ArchHammer/ArchHammer",
-   "polarities": [
-    "AP_ATTACK",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL"
-   ],
-   "primaryOmegaAttenuation": null,
-   "productCategory": "SpaceMelee",
-   "slot": "arch_melee",
-   "variantType": null
-  },
-  {
-   "ancestry": [
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchScythe/ArchScythe",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchMeleeWeapon",
-    "/Lotus/Types/Game/LotusMeleeWeapon"
-   ],
-   "compatTags": [],
-   "defaultModTemplate": null,
-   "descTag": "/Lotus/Language/Items/ArchScytheDesc",
-   "fireModes": [
-    {
-     "ammoCost": 0,
-     "ammoType": "",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.15000001,
-      "critMultiplier": 2.0,
-      "procChance": 0.2,
-      "shares": {
-       "DT_IMPACT": 0.05,
-       "DT_PUNCTURE": 0.8,
-       "DT_SLASH": 0.15
-      },
-      "total": 392.0,
-      "types": {
-       "DT_IMPACT": 19.6,
-       "DT_PUNCTURE": 313.600004,
-       "DT_SLASH": 58.799992
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 0,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 1,
-     "trigger": ""
-    },
-    {
-     "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.0,
-      "critMultiplier": 2.0,
-      "procChance": 0.1,
-      "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
-      },
-      "total": 10.0,
-      "types": {
-       "DT_IMPACT": 3.33333,
-       "DT_PUNCTURE": 3.33333,
-       "DT_SLASH": 3.33334
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 1,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 2,
-     "trigger": ""
-    }
-   ],
-   "gripType": "MELEE_ONE_HAND",
-   "isIncarnon": false,
-   "magazineSize": 0,
-   "masteryReq": 4,
-   "maxRank": 30,
-   "name": "ArchScythe",
-   "nameEn": "<ARCHWING> Kaszas",
-   "nameInternal": "ArchScythe",
-   "nameTag": "/Lotus/Language/Items/ArchScytheName",
-   "nameZh": "<ARCHWING> 死亡使徒",
-   "omegaAttenuation": null,
-   "path": "/Lotus/Weapons/Tenno/Archwing/Melee/ArchScythe/ArchScythe",
-   "polarities": [
-    "AP_DEFENSE",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL"
-   ],
-   "primaryOmegaAttenuation": null,
-   "productCategory": "SpaceMelee",
-   "slot": "arch_melee",
-   "variantType": null
-  },
-  {
-   "ancestry": [
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchSwordHook/ArchHookSwordWeapon",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchMeleeWeapon",
-    "/Lotus/Types/Game/LotusMeleeWeapon"
-   ],
-   "compatTags": [],
-   "defaultModTemplate": null,
-   "descTag": "/Lotus/Language/Items/ArchHookSwordDesc",
-   "fireModes": [
-    {
-     "ammoCost": 0,
-     "ammoType": "",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.050000001,
-      "critMultiplier": 1.5,
-      "procChance": 0.15000001,
-      "shares": {
-       "DT_IMPACT": 0.15,
-       "DT_PUNCTURE": 0.7,
-       "DT_SLASH": 0.15
-      },
-      "total": 436.0,
-      "types": {
-       "DT_IMPACT": 65.400004,
-       "DT_PUNCTURE": 305.199996,
-       "DT_SLASH": 65.399991
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 0,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 1,
-     "trigger": ""
-    },
-    {
-     "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.0,
-      "critMultiplier": 2.0,
-      "procChance": 0.1,
-      "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
-      },
-      "total": 10.0,
-      "types": {
-       "DT_IMPACT": 3.33333,
-       "DT_PUNCTURE": 3.33333,
-       "DT_SLASH": 3.33334
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 1,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 2,
-     "trigger": ""
-    }
-   ],
-   "gripType": "MELEE_ONE_HAND",
-   "heavyAttack": {
-    "attackSet": "/Lotus/Animations/FlightSuit/Archaxe/QuickDefaults",
-    "attacks": [
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickA",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickB",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickC",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickD",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickE",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickF",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 3,
-       "forcedProcs": [
-        "PT_BIG_STAGGER"
-       ]
-      }
-     }
-    ],
-    "chargeDuration": null,
-    "chargeTime": 0.69999999,
-    "comboContext": "CC_GROUND_HEAVY",
-    "components": [
-     {
-      "count": 1,
-      "damage": {
-       "critChance": 0.050000001,
-       "critMultiplier": 1.5,
-       "procChance": 0.15000001,
-       "shares": {
-        "DT_IMPACT": 0.15000001227064244,
-        "DT_PUNCTURE": 0.7000000052752294,
-        "DT_SLASH": 0.14999998245412807
-       },
-       "total": 435.999991,
-       "types": {
-        "DT_IMPACT": 65.400004,
-        "DT_PUNCTURE": 305.199996,
-        "DT_SLASH": 65.399991
-       }
-      },
-      "id": "attack-1-swing-1",
-      "kind": "melee",
-      "source": null
-     }
-    ],
-    "defaultAttackIndex": 0,
-    "disableTime": 1,
-    "kind": "melee",
-    "meleeTree": "/Lotus/Animations/FlightSuit/Archaxe/ArchAxeMeleeTree",
-    "support": {
-     "complete": true,
-     "level": "complete",
-     "singleDamage": true,
-     "timing": "charge-and-disable"
-    },
-    "tapTime": null,
-    "timingApproximation": true,
-    "timingSource": "ComboData.HeavyMeleeChargeTime"
-   },
-   "isIncarnon": false,
-   "magazineSize": 0,
-   "masteryReq": 3,
-   "maxRank": 30,
-   "name": "ArchHookSwordWeapon",
-   "nameEn": "<ARCHWING> Agkuza",
-   "nameInternal": "ArchHookSwordWeapon",
-   "nameTag": "/Lotus/Language/Items/ArchHookSwordName",
-   "nameZh": "<ARCHWING> 驯象钩刃",
-   "omegaAttenuation": null,
-   "path": "/Lotus/Weapons/Tenno/Archwing/Melee/ArchSwordHook/ArchHookSwordWeapon",
-   "polarities": [
-    "AP_DEFENSE",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL"
-   ],
-   "primaryOmegaAttenuation": null,
-   "productCategory": "SpaceMelee",
-   "slot": "arch_melee",
-   "variantType": null
-  },
-  {
-   "ancestry": [
-    "/Lotus/Weapons/Tenno/Archwing/Melee/Archaxe/ArchAxeWeapon",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchHeavyAxe",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchMeleeWeapon",
-    "/Lotus/Types/Game/LotusMeleeWeapon"
-   ],
-   "compatTags": [],
-   "defaultModTemplate": null,
-   "descTag": "/Lotus/Language/Items/ArchAxeDesc",
-   "fireModes": [
-    {
-     "ammoCost": 0,
-     "ammoType": "",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.15000001,
-      "critMultiplier": 1.25,
-      "procChance": 0.050000001,
-      "shares": {
-       "DT_IMPACT": 0.3,
-       "DT_PUNCTURE": 0.2,
-       "DT_SLASH": 0.5
-      },
-      "total": 412.0,
-      "types": {
-       "DT_IMPACT": 123.600004,
-       "DT_PUNCTURE": 82.4,
-       "DT_SLASH": 206.0
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 0,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 1,
-     "trigger": ""
-    }
-   ],
-   "gripType": "MELEE_ONE_HAND",
-   "heavyAttack": {
-    "attackSet": "/Lotus/Animations/FlightSuit/Archaxe/QuickDefaults",
-    "attacks": [
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickA",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickB",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickC",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickD",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickE",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/Archaxe/QuickF",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 3,
-       "forcedProcs": [
-        "PT_BIG_STAGGER"
-       ]
-      }
-     }
-    ],
-    "chargeDuration": null,
-    "chargeTime": 0.69999999,
-    "comboContext": "CC_GROUND_HEAVY",
-    "components": [
-     {
-      "count": 1,
-      "damage": {
-       "critChance": 0.15000001,
-       "critMultiplier": 1.25,
-       "procChance": 0.050000001,
-       "shares": {
-        "DT_IMPACT": 0.30000000679611644,
-        "DT_PUNCTURE": 0.19999999805825247,
-        "DT_SLASH": 0.49999999514563115
-       },
-       "total": 412.000004,
-       "types": {
-        "DT_IMPACT": 123.600004,
-        "DT_PUNCTURE": 82.4,
-        "DT_SLASH": 206.0
-       }
-      },
-      "id": "attack-1-swing-1",
-      "kind": "melee",
-      "source": null
-     }
-    ],
-    "defaultAttackIndex": 0,
-    "disableTime": 1,
-    "kind": "melee",
-    "meleeTree": "/Lotus/Animations/FlightSuit/Archaxe/ArchAxeMeleeTree",
-    "support": {
-     "complete": true,
-     "level": "complete",
-     "singleDamage": true,
-     "timing": "charge-and-disable"
-    },
-    "tapTime": null,
-    "timingApproximation": true,
-    "timingSource": "ComboData.HeavyMeleeChargeTime"
-   },
-   "isIncarnon": false,
-   "magazineSize": 0,
-   "masteryReq": 1,
-   "maxRank": 30,
-   "name": "ArchAxeWeapon",
-   "nameEn": "<ARCHWING> Onorix",
-   "nameInternal": "ArchAxeWeapon",
-   "nameTag": "/Lotus/Language/Items/ArchAxeName",
-   "nameZh": "<ARCHWING> 奥努里克斯",
-   "omegaAttenuation": null,
-   "path": "/Lotus/Weapons/Tenno/Archwing/Melee/Archaxe/ArchAxeWeapon",
-   "polarities": [
-    "AP_ATTACK",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL"
-   ],
-   "primaryOmegaAttenuation": null,
-   "productCategory": "SpaceMelee",
-   "slot": "arch_melee",
-   "variantType": null
-  },
-  {
-   "ancestry": [
-    "/Lotus/Weapons/Tenno/Archwing/Melee/Archsword/ArchSwordWeapon",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchMeleeWeapon",
-    "/Lotus/Types/Game/LotusMeleeWeapon"
-   ],
-   "compatTags": [],
-   "defaultModTemplate": null,
-   "descTag": "/Lotus/Language/Items/ArchSwordDesc",
-   "fireModes": [
-    {
-     "ammoCost": 0,
-     "ammoType": "",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.050000001,
-      "critMultiplier": 1.5,
-      "procChance": 0.1,
-      "shares": {
-       "DT_IMPACT": 0.15,
-       "DT_PUNCTURE": 0.15,
-       "DT_SLASH": 0.7
-      },
-      "total": 470.0,
-      "types": {
-       "DT_IMPACT": 70.500005,
-       "DT_PUNCTURE": 70.500005,
-       "DT_SLASH": 328.999995
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 0.833333,
-     "fireRateRaw": 50,
-     "index": 0,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 1,
-     "trigger": ""
-    },
-    {
-     "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.0,
-      "critMultiplier": 2.0,
-      "procChance": 0.1,
-      "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
-      },
-      "total": 10.0,
-      "types": {
-       "DT_IMPACT": 3.33333,
-       "DT_PUNCTURE": 3.33333,
-       "DT_SLASH": 3.33334
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 1,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 2,
-     "trigger": ""
-    }
-   ],
-   "gripType": "MELEE_ONE_HAND",
-   "heavyAttack": {
-    "attackSet": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickDefaults",
-    "attacks": [
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickA",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickB",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickC",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickD",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickE",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickF",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 3,
-       "forcedProcs": [
-        "PT_BIG_STAGGER"
-       ]
-      }
-     }
-    ],
-    "chargeDuration": null,
-    "chargeTime": 0.69999999,
-    "comboContext": "CC_GROUND_HEAVY",
-    "components": [
-     {
-      "count": 1,
-      "damage": {
-       "critChance": 0.050000001,
-       "critMultiplier": 1.5,
-       "procChance": 0.1,
-       "shares": {
-        "DT_IMPACT": 0.1500000090425531,
-        "DT_PUNCTURE": 0.1500000090425531,
-        "DT_SLASH": 0.6999999819148939
-       },
-       "total": 470.000005,
-       "types": {
-        "DT_IMPACT": 70.500005,
-        "DT_PUNCTURE": 70.500005,
-        "DT_SLASH": 328.999995
-       }
-      },
-      "id": "attack-1-swing-1",
-      "kind": "melee",
-      "source": null
-     }
-    ],
-    "defaultAttackIndex": 0,
-    "disableTime": 1,
-    "kind": "melee",
-    "meleeTree": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/SpaceMeleeTree",
-    "support": {
-     "complete": true,
-     "level": "complete",
-     "singleDamage": true,
-     "timing": "charge-and-disable"
-    },
-    "tapTime": null,
-    "timingApproximation": true,
-    "timingSource": "ComboData.HeavyMeleeChargeTime"
-   },
-   "isIncarnon": false,
-   "magazineSize": 0,
-   "masteryReq": 0,
-   "maxRank": 30,
-   "name": "ArchSwordWeapon",
-   "nameEn": "<ARCHWING> Veritux",
-   "nameInternal": "ArchSwordWeapon",
-   "nameTag": "/Lotus/Language/Items/ArchSwordName",
-   "nameZh": "<ARCHWING> 真理巨剑",
-   "omegaAttenuation": null,
-   "path": "/Lotus/Weapons/Tenno/Archwing/Melee/Archsword/ArchSwordWeapon",
-   "polarities": [
-    "AP_DEFENSE",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL"
-   ],
-   "primaryOmegaAttenuation": null,
-   "productCategory": "SpaceMelee",
-   "slot": "arch_melee",
-   "variantType": null
-  },
-  {
-   "ancestry": [
-    "/Lotus/Weapons/Tenno/Archwing/Melee/Archswordandshield/ArchSwordShield",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchHeavyAxe",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchMeleeWeapon",
-    "/Lotus/Types/Game/LotusMeleeWeapon"
-   ],
-   "compatTags": [],
-   "defaultModTemplate": null,
-   "descTag": "/Lotus/Language/Items/ArchSwordShieldDesc",
-   "fireModes": [
-    {
-     "ammoCost": 0,
-     "ammoType": "",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.25,
-      "critMultiplier": 2.0,
-      "procChance": 0.2,
-      "shares": {
-       "DT_IMPACT": 0.1,
-       "DT_PUNCTURE": 0.2,
-       "DT_SLASH": 0.7
-      },
-      "total": 376.0,
-      "types": {
-       "DT_IMPACT": 37.6,
-       "DT_PUNCTURE": 75.2,
-       "DT_SLASH": 263.199996
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.083333,
-     "fireRateRaw": 65,
-     "index": 0,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 1,
-     "trigger": ""
-    }
-   ],
-   "gripType": "MELEE_ONE_HAND",
-   "heavyAttack": {
-    "attackSet": "/Lotus/Animations/FlightSuit/SwordShield/QuickDefaults",
-    "attacks": [
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/SwordShield/QuickA",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/SwordShield/QuickB",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/SwordShield/QuickC",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/SwordShield/QuickD",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/SwordShield/QuickE",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/SwordShield/QuickF",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 3,
-       "forcedProcs": [
-        "PT_BIG_STAGGER"
-       ]
-      }
-     }
-    ],
-    "chargeDuration": null,
-    "chargeTime": 0.69999999,
-    "comboContext": "CC_GROUND_HEAVY",
-    "components": [
-     {
-      "count": 1,
-      "damage": {
-       "critChance": 0.25,
-       "critMultiplier": 2.0,
-       "procChance": 0.2,
-       "shares": {
-        "DT_IMPACT": 0.1000000010638298,
-        "DT_PUNCTURE": 0.2000000021276596,
-        "DT_SLASH": 0.6999999968085105
-       },
-       "total": 375.999996,
-       "types": {
-        "DT_IMPACT": 37.6,
-        "DT_PUNCTURE": 75.2,
-        "DT_SLASH": 263.199996
-       }
-      },
-      "id": "attack-1-swing-1",
-      "kind": "melee",
-      "source": null
-     }
-    ],
-    "defaultAttackIndex": 0,
-    "disableTime": 1,
-    "kind": "melee",
-    "meleeTree": "/Lotus/Animations/FlightSuit/SwordShield/ArchSwordShieldMeleeTree",
-    "support": {
-     "complete": true,
-     "level": "complete",
-     "singleDamage": true,
-     "timing": "charge-and-disable"
-    },
-    "tapTime": null,
-    "timingApproximation": true,
-    "timingSource": "ComboData.HeavyMeleeChargeTime"
-   },
-   "isIncarnon": false,
-   "magazineSize": 0,
-   "masteryReq": 8,
-   "maxRank": 30,
-   "name": "ArchSwordShield",
-   "nameEn": "<ARCHWING> Centaur",
-   "nameInternal": "ArchSwordShield",
-   "nameTag": "/Lotus/Language/Items/ArchSwordShieldName",
-   "nameZh": "<ARCHWING> 半人马",
-   "omegaAttenuation": null,
-   "path": "/Lotus/Weapons/Tenno/Archwing/Melee/Archswordandshield/ArchSwordShield",
-   "polarities": [
-    "AP_ATTACK",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL"
-   ],
-   "primaryOmegaAttenuation": null,
-   "productCategory": "SpaceMelee",
-   "slot": "arch_melee",
-   "variantType": null
-  },
-  {
-   "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Melee/ExaltedArchScythe/ExaltedAWScytheWeapon",
     "/Lotus/Weapons/Tenno/Melee/HeavyScytheWeapon",
     "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
@@ -77211,800 +75211,51 @@
    "variantType": null
   },
   {
-   "ancestry": [
-    "/Lotus/Weapons/Tenno/Archwing/Melee/GrnArchHand/GrnArchHandWeapon",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchMeleeWeapon",
-    "/Lotus/Types/Game/LotusMeleeWeapon"
-   ],
-   "compatTags": [],
-   "defaultModTemplate": null,
-   "descTag": "/Lotus/Language/Items/GrnArchHandDesc",
-   "fireModes": [
-    {
-     "ammoCost": 0,
-     "ammoType": "",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.13,
-      "critMultiplier": 2.0,
-      "procChance": 0.30000001,
-      "shares": {
-       "DT_IMPACT": 0.9,
-       "DT_PUNCTURE": 0.05,
-       "DT_SLASH": 0.05
-      },
-      "total": 445.0,
-      "types": {
-       "DT_IMPACT": 400.499991,
-       "DT_PUNCTURE": 22.25,
-       "DT_SLASH": 22.250005
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 0,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 1,
-     "trigger": ""
-    },
-    {
-     "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.0,
-      "critMultiplier": 2.0,
-      "procChance": 0.1,
-      "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
-      },
-      "total": 10.0,
-      "types": {
-       "DT_IMPACT": 3.33333,
-       "DT_PUNCTURE": 3.33333,
-       "DT_SLASH": 3.33334
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 1,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 2,
-     "trigger": ""
-    }
-   ],
-   "gripType": "MELEE_ONE_HAND",
-   "heavyAttack": {
-    "attackSet": "/Lotus/Animations/FlightSuit/GrnArchHand/QuickDefaults",
-    "attacks": [
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/GrnArchHand/QuickA",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/GrnArchHand/QuickB",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/GrnArchHand/QuickC",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/GrnArchHand/QuickD",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/GrnArchHand/QuickE",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 3,
-       "forcedProcs": [
-        "PT_BIG_STAGGER"
-       ]
-      }
-     }
-    ],
-    "chargeDuration": null,
-    "chargeTime": 0.69999999,
-    "comboContext": "CC_GROUND_HEAVY",
-    "components": [
-     {
-      "count": 1,
-      "damage": {
-       "critChance": 0.13,
-       "critMultiplier": 2.0,
-       "procChance": 0.30000001,
-       "shares": {
-        "DT_IMPACT": 0.8999999878651684,
-        "DT_PUNCTURE": 0.050000000449438205,
-        "DT_SLASH": 0.050000011685393364
-       },
-       "total": 444.999996,
-       "types": {
-        "DT_IMPACT": 400.499991,
-        "DT_PUNCTURE": 22.25,
-        "DT_SLASH": 22.250005
-       }
-      },
-      "id": "attack-1-swing-1",
-      "kind": "melee",
-      "source": null
-     }
-    ],
-    "defaultAttackIndex": 0,
-    "disableTime": 1,
-    "kind": "melee",
-    "meleeTree": "/Lotus/Animations/FlightSuit/GrnArchHand/GrnArchHandMeleeTree",
-    "support": {
-     "complete": true,
-     "level": "complete",
-     "singleDamage": true,
-     "timing": "charge-and-disable"
-    },
-    "tapTime": null,
-    "timingApproximation": true,
-    "timingSource": "ComboData.HeavyMeleeChargeTime"
-   },
-   "isIncarnon": false,
-   "magazineSize": 0,
-   "masteryReq": 7,
-   "maxRank": 30,
-   "name": "GrnArchHandWeapon",
-   "nameEn": "<ARCHWING> Knux",
-   "nameInternal": "GrnArchHandWeapon",
-   "nameTag": "/Lotus/Language/Items/GrnArchHandName",
-   "nameZh": "<ARCHWING> 克纳克斯",
-   "omegaAttenuation": null,
-   "path": "/Lotus/Weapons/Tenno/Archwing/Melee/GrnArchHand/GrnArchHandWeapon",
-   "polarities": [
-    "AP_DEFENSE",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL"
-   ],
-   "primaryOmegaAttenuation": null,
-   "productCategory": "SpaceMelee",
-   "slot": "arch_melee",
-   "variantType": null
-  },
-  {
-   "ancestry": [
-    "/Lotus/Weapons/Tenno/Archwing/Melee/VoidTraderArchsword/VTArchSwordWeapon",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/Archsword/ArchSwordWeapon",
-    "/Lotus/Weapons/Tenno/Archwing/Melee/ArchMeleeWeapon",
-    "/Lotus/Types/Game/LotusMeleeWeapon"
-   ],
-   "compatTags": [],
-   "defaultModTemplate": null,
-   "descTag": "/Lotus/Language/Items/PrismaArchSwordDesc",
-   "fireModes": [
-    {
-     "ammoCost": 0,
-     "ammoType": "",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.30000001,
-      "critMultiplier": 2.0,
-      "procChance": 0.2,
-      "shares": {
-       "DT_IMPACT": 0.15,
-       "DT_PUNCTURE": 0.15,
-       "DT_SLASH": 0.7
-      },
-      "total": 394.0,
-      "types": {
-       "DT_IMPACT": 59.100004,
-       "DT_PUNCTURE": 59.100004,
-       "DT_SLASH": 275.799996
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 0,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 1,
-     "trigger": ""
-    },
-    {
-     "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.0,
-      "critMultiplier": 2.0,
-      "procChance": 0.1,
-      "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
-      },
-      "total": 10.0,
-      "types": {
-       "DT_IMPACT": 3.33333,
-       "DT_PUNCTURE": 3.33333,
-       "DT_SLASH": 3.33334
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 1,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 2,
-     "trigger": ""
-    }
-   ],
-   "gripType": "MELEE_ONE_HAND",
-   "heavyAttack": {
-    "attackSet": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickDefaults",
-    "attacks": [
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickA",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickB",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickC",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {}
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickD",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickE",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 2
-      }
-     },
-     {
-      "action": null,
-      "extraAction": null,
-      "path": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/QuickF",
-      "perSwing": [
-       {
-        "index": 1,
-        "override": false,
-        "properties": {
-         "baseDamageMultiplier": 1,
-         "comboHits": 1,
-         "damageTypeMultipliers": {
-          "DT_CINEMATIC": 1,
-          "DT_CORROSIVE": 1,
-          "DT_ELECTRICITY": 1,
-          "DT_ENERGY_DRAIN": 1,
-          "DT_EXPLOSION": 1,
-          "DT_FINISHER": 1,
-          "DT_FIRE": 1,
-          "DT_FREEZE": 1,
-          "DT_GAS": 1,
-          "DT_HEALTH_DRAIN": 1,
-          "DT_IMPACT": 1,
-          "DT_MAGNETIC": 1,
-          "DT_POISON": 1,
-          "DT_PUNCTURE": 1,
-          "DT_RADIANT": 1,
-          "DT_RADIATION": 1,
-          "DT_SENTIENT": 1,
-          "DT_SHIELD_DRAIN": 1,
-          "DT_SLASH": 1,
-          "DT_VIRAL": 1
-         },
-         "procChanceMultiplier": 1,
-         "slam": ""
-        }
-       }
-      ],
-      "properties": {
-       "baseDamageMultiplier": 3,
-       "forcedProcs": [
-        "PT_BIG_STAGGER"
-       ]
-      }
-     }
-    ],
-    "chargeDuration": null,
-    "chargeTime": 0.69999999,
-    "comboContext": "CC_GROUND_HEAVY",
-    "components": [
-     {
-      "count": 1,
-      "damage": {
-       "critChance": 0.30000001,
-       "critMultiplier": 2.0,
-       "procChance": 0.2,
-       "shares": {
-        "DT_IMPACT": 0.15000000862944154,
-        "DT_PUNCTURE": 0.15000000862944154,
-        "DT_SLASH": 0.699999982741117
-       },
-       "total": 394.000004,
-       "types": {
-        "DT_IMPACT": 59.100004,
-        "DT_PUNCTURE": 59.100004,
-        "DT_SLASH": 275.799996
-       }
-      },
-      "id": "attack-1-swing-1",
-      "kind": "melee",
-      "source": null
-     }
-    ],
-    "defaultAttackIndex": 0,
-    "disableTime": 1,
-    "kind": "melee",
-    "meleeTree": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/SpaceMeleeTree",
-    "support": {
-     "complete": true,
-     "level": "complete",
-     "singleDamage": true,
-     "timing": "charge-and-disable"
-    },
-    "tapTime": null,
-    "timingApproximation": true,
-    "timingSource": "ComboData.HeavyMeleeChargeTime"
-   },
-   "isIncarnon": false,
-   "magazineSize": 0,
-   "masteryReq": 8,
-   "maxRank": 30,
-   "name": "VTArchSwordWeapon",
-   "nameEn": "<ARCHWING> Prisma Veritux",
-   "nameInternal": "VTArchSwordWeapon",
-   "nameTag": "/Lotus/Language/Items/PrismaArchSwordName",
-   "nameZh": "<ARCHWING> 棱晶·真理巨剑",
-   "omegaAttenuation": null,
-   "path": "/Lotus/Weapons/Tenno/Archwing/Melee/VoidTraderArchsword/VTArchSwordWeapon",
-   "polarities": [
-    "AP_DEFENSE",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL",
-    "AP_UNIVERSAL"
-   ],
-   "primaryOmegaAttenuation": null,
-   "productCategory": "SpaceMelee",
-   "slot": "arch_melee",
-   "variantType": null
-  },
-  {
+   "ammoMax": 480,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchBurstGun/ArchBurstGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Items/ArchBurstGunDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "critChance": 0.2,
       "critMultiplier": 2.2,
-      "flightSpeed": 220,
       "procChance": 0.30000001,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchBurstGun/CyngasWavProjectile",
       "shares": {
-       "DT_IMPACT": 0.33,
-       "DT_PUNCTURE": 0.33,
-       "DT_SLASH": 0.34
+       "DT_IMPACT": 0.333333,
+       "DT_PUNCTURE": 0.333333,
+       "DT_SLASH": 0.333334
       },
-      "total": 120.0,
+      "total": 240.0,
       "types": {
-       "DT_IMPACT": 39.600001,
-       "DT_PUNCTURE": 39.600001,
-       "DT_SLASH": 40.799996
+       "DT_IMPACT": 79.999918,
+       "DT_PUNCTURE": 79.999918,
+       "DT_SLASH": 80.000167
       }
      },
-     "falloffMinDamage": 24,
+     "falloffMinDamage": 1,
      "falloffRange": [
-      1500,
-      3000
+      0,
+      0
      ],
      "fireRate": 6.666667,
      "fireRateRaw": 400,
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
-     "reloadTime": 2.26,
+     "reloadTime": 1.2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst"
     }
    ],
@@ -78038,43 +75289,44 @@
    "variantType": null
   },
   {
+   "ammoMax": 960,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchLongRifle/ArchLongRifle",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Items/ArchLongRifleDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "critChance": 0.14,
       "critMultiplier": 2.0,
-      "flightSpeed": 220,
       "procChance": 0.30000001,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchLongRifle/PhaedraWavProjectile",
       "shares": {
        "DT_IMPACT": 0.25,
        "DT_PUNCTURE": 0.65,
        "DT_SLASH": 0.1
       },
-      "total": 56.0,
+      "total": 116.0,
       "types": {
-       "DT_IMPACT": 14.0,
-       "DT_PUNCTURE": 36.399999,
-       "DT_SLASH": 5.600001
+       "DT_IMPACT": 29.0,
+       "DT_PUNCTURE": 75.399998,
+       "DT_SLASH": 11.600002
       }
      },
-     "falloffMinDamage": 4,
+     "falloffMinDamage": 0,
      "falloffRange": [
-      1500,
-      3000
+      0,
+      0
      ],
      "fireRate": 18.75,
      "fireRateRaw": 1125,
@@ -78115,50 +75367,51 @@
    "variantType": null
   },
   {
+   "ammoMax": 512,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/ArchHeavyPistols",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Items/ArchHeavyPistolsDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "critChance": 0.28,
       "critMultiplier": 2.2,
-      "flightSpeed": 220,
       "procChance": 0.14,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/DualDecurionWavProjectile",
       "shares": {
        "DT_IMPACT": 0.45,
        "DT_PUNCTURE": 0.275,
        "DT_SLASH": 0.275
       },
-      "total": 110.0,
+      "total": 190.0,
       "types": {
-       "DT_IMPACT": 49.499999,
-       "DT_PUNCTURE": 30.250001,
-       "DT_SLASH": 30.249998
+       "DT_IMPACT": 85.499998,
+       "DT_PUNCTURE": 52.250002,
+       "DT_SLASH": 52.249996
       }
      },
-     "falloffMinDamage": 21,
+     "falloffMinDamage": 1,
      "falloffRange": [
-      1500,
-      3000
+      0,
+      0
      ],
      "fireRate": 10.416667,
      "fireRateRaw": 625,
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
-     "reloadTime": 2,
+     "reloadTime": 1.4,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
     }
    ],
@@ -78192,51 +75445,52 @@
    "variantType": null
   },
   {
+   "ammoMax": 512,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/Prisma/PrismaArchHeavyPistols",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/ArchHeavyPistols",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/PrismaArchHeavyPistolsDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "critChance": 0.30000001,
       "critMultiplier": 2.2,
-      "flightSpeed": 300,
       "procChance": 0.23999999,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/Prisma/PrismaDualDecurionWavProjectile",
       "shares": {
        "DT_IMPACT": 0.45,
        "DT_PUNCTURE": 0.275,
        "DT_SLASH": 0.275
       },
-      "total": 110.0,
+      "total": 220.0,
       "types": {
-       "DT_IMPACT": 49.499999,
-       "DT_PUNCTURE": 30.250001,
-       "DT_SLASH": 30.249998
+       "DT_IMPACT": 98.999998,
+       "DT_PUNCTURE": 60.500002,
+       "DT_SLASH": 60.499996
       }
      },
-     "falloffMinDamage": 21,
+     "falloffMinDamage": 1,
      "falloffRange": [
-      1500,
-      3000
+      0,
+      0
      ],
      "fireRate": 12.5,
      "fireRateRaw": 750,
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
-     "reloadTime": 2,
+     "reloadTime": 1.4,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
     }
    ],
@@ -78270,43 +75524,44 @@
    "variantType": null
   },
   {
+   "ammoMax": 800,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Items/ArchMachinegunDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "critChance": 0.23999999,
       "critMultiplier": 2.0,
-      "flightSpeed": 220,
       "procChance": 0.12,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ImperatorBoltoProj",
       "shares": {
        "DT_IMPACT": 0.4,
        "DT_PUNCTURE": 0.35,
        "DT_SLASH": 0.25
       },
-      "total": 50.0,
+      "total": 100.0,
       "types": {
-       "DT_IMPACT": 20.000001,
-       "DT_PUNCTURE": 17.499999,
-       "DT_SLASH": 12.5
+       "DT_IMPACT": 40.000001,
+       "DT_PUNCTURE": 34.999999,
+       "DT_SLASH": 25.0
       }
      },
-     "falloffMinDamage": 25,
+     "falloffMinDamage": 0,
      "falloffRange": [
-      1500,
-      3000
+      0,
+      0
      ],
      "fireRate": 16.666667,
      "fireRateRaw": 1000,
@@ -78315,39 +75570,6 @@
      "multishot": 1,
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
-    },
-    {
-     "ammoCost": 0,
-     "ammoType": "",
-     "chargeTime": null,
-     "damage": {
-      "critChance": 0.0,
-      "critMultiplier": 2.0,
-      "procChance": 0.1,
-      "shares": {
-       "DT_IMPACT": 0.333333,
-       "DT_PUNCTURE": 0.333333,
-       "DT_SLASH": 0.333334
-      },
-      "total": 10.0,
-      "types": {
-       "DT_IMPACT": 3.33333,
-       "DT_PUNCTURE": 3.33333,
-       "DT_SLASH": 3.33334
-      }
-     },
-     "falloffMinDamage": 1,
-     "falloffRange": [
-      0,
-      0
-     ],
-     "fireRate": 1.0,
-     "fireRateRaw": 60,
-     "index": 1,
-     "isAlternateFire": false,
-     "multishot": 1,
-     "reloadTime": 2,
-     "trigger": ""
     }
    ],
    "gripType": "GUN_TWO_HAND",
@@ -78380,44 +75602,45 @@
    "variantType": null
   },
   {
+   "ammoMax": 1200,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGunVandal",
     "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Items/ImperatorVandalDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "critChance": 0.28,
       "critMultiplier": 2.4000001,
-      "flightSpeed": 220,
       "procChance": 0.12,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ImperatorVandalBoltoProj",
       "shares": {
        "DT_IMPACT": 0.4,
        "DT_PUNCTURE": 0.35,
        "DT_SLASH": 0.25
       },
-      "total": 50.0,
+      "total": 100.0,
       "types": {
-       "DT_IMPACT": 20.000001,
-       "DT_PUNCTURE": 17.499999,
-       "DT_SLASH": 12.5
+       "DT_IMPACT": 40.000001,
+       "DT_PUNCTURE": 34.999999,
+       "DT_SLASH": 25.0
       }
      },
-     "falloffMinDamage": 25,
+     "falloffMinDamage": 0,
      "falloffRange": [
-      1500,
-      3000
+      0,
+      0
      ],
      "fireRate": 25.0,
      "fireRateRaw": 1500,
@@ -78458,47 +75681,53 @@
    "variantType": null
   },
   {
+   "ammoMax": 100,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/LaunchGrenade/ArchCannon",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Items/ArchCannonDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
+     "chargeTime": 0.5,
      "damage": {
       "critChance": 0.40000001,
-      "critMultiplier": 2.5999999,
-      "flightSpeed": 400,
-      "procChance": 0.13,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/LaunchGrenade/CorvasWaveProj",
+      "critMultiplier": 3.0,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "procChance": 0.14,
       "shares": {
-       "DT_FIRE": 0.545455,
-       "DT_IMPACT": 0.454545
+       "DT_IMPACT": 0.8,
+       "DT_PUNCTURE": 0.1,
+       "DT_SLASH": 0.1
       },
-      "total": 440.0,
+      "total": 80.0,
       "types": {
-       "DT_FIRE": 240.0,
-       "DT_IMPACT": 200.0
+       "DT_IMPACT": 64.000001,
+       "DT_PUNCTURE": 8.0,
+       "DT_SLASH": 7.999997
       }
      },
-     "falloffMinDamage": 1,
+     "falloffMinDamage": 20,
      "falloffRange": [
-      600,
-      1200
+      60,
+      120
      ],
      "fireRate": 2.0,
      "fireRateRaw": 120,
      "index": 0,
      "isAlternateFire": false,
-     "multishot": 1,
+     "multishot": 11,
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
     }
@@ -78533,16 +75762,19 @@
    "variantType": null
   },
   {
+   "ammoMax": 540,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/NokkoArchGunDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
@@ -78569,14 +75801,14 @@
          "DT_VIRAL": 0.166667
         },
         "source": "ExplosiveAttack",
-        "total": 114.0,
+        "total": 228.0,
         "types": {
-         "DT_CORROSIVE": 19.0,
-         "DT_EXPLOSION": 19.0,
-         "DT_GAS": 19.0,
-         "DT_MAGNETIC": 19.0,
-         "DT_RADIATION": 19.0,
-         "DT_VIRAL": 19.0
+         "DT_CORROSIVE": 38.0,
+         "DT_EXPLOSION": 38.0,
+         "DT_GAS": 38.0,
+         "DT_MAGNETIC": 38.0,
+         "DT_RADIATION": 38.0,
+         "DT_VIRAL": 38.0
         }
        }
       ],
@@ -78584,12 +75816,12 @@
       "critMultiplier": 2.9000001,
       "procChance": 2.0940001,
       "projectileSequence": [
-       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedBlastProj",
-       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedCorrosiveProj",
-       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedGasProj",
-       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedMagneticProj",
-       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedRadiationProj",
-       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedViralProj"
+       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+       "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj"
       ],
       "shares": {
        "DT_CORROSIVE": 0.166667,
@@ -78599,14 +75831,14 @@
        "DT_RADIATION": 0.166667,
        "DT_VIRAL": 0.166667
       },
-      "total": 16.000002,
+      "total": 31.999997999999998,
       "types": {
-       "DT_CORROSIVE": 2.666667,
-       "DT_EXPLOSION": 2.666667,
-       "DT_GAS": 2.666667,
-       "DT_MAGNETIC": 2.666667,
-       "DT_RADIATION": 2.666667,
-       "DT_VIRAL": 2.666667
+       "DT_CORROSIVE": 5.333333,
+       "DT_EXPLOSION": 5.333333,
+       "DT_GAS": 5.333333,
+       "DT_MAGNETIC": 5.333333,
+       "DT_RADIATION": 5.333333,
+       "DT_VIRAL": 5.333333
       }
      },
      "falloffMinDamage": 1,
@@ -78625,7 +75857,7 @@
        "id": "sequence:0:runtime:arbucep-innate:flight-duration",
        "kind": "runtimeStateTransition",
        "parameter": "_scaleDurationAsFunctionOfFireRate",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedBlastProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
        "runtimeAdapter": "arbucep-innate",
        "support": "partial",
        "transitionId": "flight-duration",
@@ -78634,13 +75866,26 @@
         "nokko-flight-duration-unverified"
        ],
        "value": 0.75
+      },
+      {
+       "aggregate": false,
+       "id": "sequence:0:runtime:arbucep-innate:mushroom-contact",
+       "kind": "runtimeStateTransition",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+       "runtimeAdapter": "arbucep-innate",
+       "support": "partial",
+       "transitionId": "mushroom-contact",
+       "trigger": "projectile-contact",
+       "unsupported": [
+        "nokko-mushroom-state-unresolved"
+       ]
       },
       {
        "aggregate": false,
        "id": "sequence:1:runtime:arbucep-innate:flight-duration",
        "kind": "runtimeStateTransition",
        "parameter": "_scaleDurationAsFunctionOfFireRate",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedCorrosiveProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
        "runtimeAdapter": "arbucep-innate",
        "support": "partial",
        "transitionId": "flight-duration",
@@ -78649,13 +75894,26 @@
         "nokko-flight-duration-unverified"
        ],
        "value": 0.75
+      },
+      {
+       "aggregate": false,
+       "id": "sequence:1:runtime:arbucep-innate:mushroom-contact",
+       "kind": "runtimeStateTransition",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+       "runtimeAdapter": "arbucep-innate",
+       "support": "partial",
+       "transitionId": "mushroom-contact",
+       "trigger": "projectile-contact",
+       "unsupported": [
+        "nokko-mushroom-state-unresolved"
+       ]
       },
       {
        "aggregate": false,
        "id": "sequence:2:runtime:arbucep-innate:flight-duration",
        "kind": "runtimeStateTransition",
        "parameter": "_scaleDurationAsFunctionOfFireRate",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedGasProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
        "runtimeAdapter": "arbucep-innate",
        "support": "partial",
        "transitionId": "flight-duration",
@@ -78664,13 +75922,26 @@
         "nokko-flight-duration-unverified"
        ],
        "value": 0.75
+      },
+      {
+       "aggregate": false,
+       "id": "sequence:2:runtime:arbucep-innate:mushroom-contact",
+       "kind": "runtimeStateTransition",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+       "runtimeAdapter": "arbucep-innate",
+       "support": "partial",
+       "transitionId": "mushroom-contact",
+       "trigger": "projectile-contact",
+       "unsupported": [
+        "nokko-mushroom-state-unresolved"
+       ]
       },
       {
        "aggregate": false,
        "id": "sequence:3:runtime:arbucep-innate:flight-duration",
        "kind": "runtimeStateTransition",
        "parameter": "_scaleDurationAsFunctionOfFireRate",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedMagneticProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
        "runtimeAdapter": "arbucep-innate",
        "support": "partial",
        "transitionId": "flight-duration",
@@ -78679,13 +75950,26 @@
         "nokko-flight-duration-unverified"
        ],
        "value": 0.75
+      },
+      {
+       "aggregate": false,
+       "id": "sequence:3:runtime:arbucep-innate:mushroom-contact",
+       "kind": "runtimeStateTransition",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+       "runtimeAdapter": "arbucep-innate",
+       "support": "partial",
+       "transitionId": "mushroom-contact",
+       "trigger": "projectile-contact",
+       "unsupported": [
+        "nokko-mushroom-state-unresolved"
+       ]
       },
       {
        "aggregate": false,
        "id": "sequence:4:runtime:arbucep-innate:flight-duration",
        "kind": "runtimeStateTransition",
        "parameter": "_scaleDurationAsFunctionOfFireRate",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedRadiationProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
        "runtimeAdapter": "arbucep-innate",
        "support": "partial",
        "transitionId": "flight-duration",
@@ -78697,10 +75981,23 @@
       },
       {
        "aggregate": false,
+       "id": "sequence:4:runtime:arbucep-innate:mushroom-contact",
+       "kind": "runtimeStateTransition",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+       "runtimeAdapter": "arbucep-innate",
+       "support": "partial",
+       "transitionId": "mushroom-contact",
+       "trigger": "projectile-contact",
+       "unsupported": [
+        "nokko-mushroom-state-unresolved"
+       ]
+      },
+      {
+       "aggregate": false,
        "id": "sequence:5:runtime:arbucep-innate:flight-duration",
        "kind": "runtimeStateTransition",
        "parameter": "_scaleDurationAsFunctionOfFireRate",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedViralProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
        "runtimeAdapter": "arbucep-innate",
        "support": "partial",
        "transitionId": "flight-duration",
@@ -78709,6 +76006,19 @@
         "nokko-flight-duration-unverified"
        ],
        "value": 0.75
+      },
+      {
+       "aggregate": false,
+       "id": "sequence:5:runtime:arbucep-innate:mushroom-contact",
+       "kind": "runtimeStateTransition",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
+       "runtimeAdapter": "arbucep-innate",
+       "support": "partial",
+       "transitionId": "mushroom-contact",
+       "trigger": "projectile-contact",
+       "unsupported": [
+        "nokko-mushroom-state-unresolved"
+       ]
       }
      ],
      "projectileEventState": {
@@ -78719,27 +76029,36 @@
       "runtimeAdapters": [
        {
         "functions": [
-         "OnProjectileStart"
+         "OnProjectileStart",
+         "CheckForNokkoMushroomHit"
         ],
         "key": "arbucep-innate",
         "kind": "guided_state_script",
         "parameters": {
          "_scaleDurationAsFunctionOfFireRate": 0.75
         },
-        "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedBlastProj",
+        "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
         "projectiles": [
-         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedBlastProj",
-         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedCorrosiveProj",
-         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedGasProj",
-         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedMagneticProj",
-         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedRadiationProj",
-         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedViralProj"
+         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+         "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj"
         ],
         "script": "NokkoArchGunInnateMod.lua",
         "signatures": [
          {
           "event": "OnProjectileStartScript",
           "function": "OnProjectileStart",
+          "params": {
+           "_scaleDurationAsFunctionOfFireRate": 0.75
+          },
+          "script": "NokkoArchGunInnateMod.lua"
+         },
+         {
+          "event": "OnProjectileContactScript",
+          "function": "CheckForNokkoMushroomHit",
           "params": {
            "_scaleDurationAsFunctionOfFireRate": 0.75
           },
@@ -78758,10 +76077,20 @@
            "nokko-flight-duration-unverified"
           ],
           "value": 0.75
+         },
+         {
+          "id": "mushroom-contact",
+          "kind": "runtimeStateTransition",
+          "support": "partial",
+          "trigger": "projectile-contact",
+          "unsupported": [
+           "nokko-mushroom-state-unresolved"
+          ]
          }
         ],
         "unsupported": [
-         "nokko-flight-duration-unverified"
+         "nokko-flight-duration-unverified",
+         "nokko-mushroom-state-unresolved"
         ]
        }
       ],
@@ -78775,23 +76104,8 @@
         "script": "NokkoArchGunInnateMod.lua"
        },
        {
-        "event": "ScriptInstance",
-        "function": "FluidAmmoContainer",
-        "params": {
-         "_alsoHideAttachment": 1,
-         "_autoReloadAnim": "",
-         "_clipBone": "",
-         "_clipType": "",
-         "_fluidLevelMax": 0.02,
-         "_fluidLevelMin": -0.039999999,
-         "_fluidType": "/Lotus/Weapons/Tenno/LongGuns/LavosDeluxeShotgun/LavosDeluxeShotgunLiquidDeco",
-         "_impactEffect": "/Lotus/Fx/Weapons/Cedo/LavosDeluxeShotgun/LavosDeluxeShotgunHitEffect"
-        },
-        "script": "/Lotus/Scripts/Effects/LavosDeluxeShotgunFluidAmmoEffect.lua"
-       },
-       {
-        "event": "OnProjectileStartScript",
-        "function": "OnProjectileStart",
+        "event": "OnProjectileContactScript",
+        "function": "CheckForNokkoMushroomHit",
         "params": {
          "_scaleDurationAsFunctionOfFireRate": 0.75
         },
@@ -78821,23 +76135,8 @@
         "script": "NokkoArchGunInnateMod.lua"
        },
        {
-        "event": "ScriptInstance",
-        "function": "FluidAmmoContainer",
-        "params": {
-         "_alsoHideAttachment": 1,
-         "_autoReloadAnim": "",
-         "_clipBone": "",
-         "_clipType": "",
-         "_fluidLevelMax": 0.02,
-         "_fluidLevelMin": -0.039999999,
-         "_fluidType": "/Lotus/Weapons/Tenno/LongGuns/LavosDeluxeShotgun/LavosDeluxeShotgunLiquidDeco",
-         "_impactEffect": "/Lotus/Fx/Weapons/Cedo/LavosDeluxeShotgun/LavosDeluxeShotgunHitEffect"
-        },
-        "script": "/Lotus/Scripts/Effects/LavosDeluxeShotgunFluidAmmoEffect.lua"
-       },
-       {
-        "event": "OnProjectileStartScript",
-        "function": "OnProjectileStart",
+        "event": "OnProjectileContactScript",
+        "function": "CheckForNokkoMushroomHit",
         "params": {
          "_scaleDurationAsFunctionOfFireRate": 0.75
         },
@@ -78867,6 +76166,14 @@
         "script": "NokkoArchGunInnateMod.lua"
        },
        {
+        "event": "OnProjectileContactScript",
+        "function": "CheckForNokkoMushroomHit",
+        "params": {
+         "_scaleDurationAsFunctionOfFireRate": 0.75
+        },
+        "script": "NokkoArchGunInnateMod.lua"
+       },
+       {
         "event": "ScriptInstance",
         "function": "FluidAmmoContainer",
         "params": {
@@ -78884,6 +76191,76 @@
        {
         "event": "OnProjectileStartScript",
         "function": "OnProjectileStart",
+        "params": {
+         "_scaleDurationAsFunctionOfFireRate": 0.75
+        },
+        "script": "NokkoArchGunInnateMod.lua"
+       },
+       {
+        "event": "OnProjectileContactScript",
+        "function": "CheckForNokkoMushroomHit",
+        "params": {
+         "_scaleDurationAsFunctionOfFireRate": 0.75
+        },
+        "script": "NokkoArchGunInnateMod.lua"
+       },
+       {
+        "event": "ScriptInstance",
+        "function": "FluidAmmoContainer",
+        "params": {
+         "_alsoHideAttachment": 1,
+         "_autoReloadAnim": "",
+         "_clipBone": "",
+         "_clipType": "",
+         "_fluidLevelMax": 0.02,
+         "_fluidLevelMin": -0.039999999,
+         "_fluidType": "/Lotus/Weapons/Tenno/LongGuns/LavosDeluxeShotgun/LavosDeluxeShotgunLiquidDeco",
+         "_impactEffect": "/Lotus/Fx/Weapons/Cedo/LavosDeluxeShotgun/LavosDeluxeShotgunHitEffect"
+        },
+        "script": "/Lotus/Scripts/Effects/LavosDeluxeShotgunFluidAmmoEffect.lua"
+       },
+       {
+        "event": "OnProjectileStartScript",
+        "function": "OnProjectileStart",
+        "params": {
+         "_scaleDurationAsFunctionOfFireRate": 0.75
+        },
+        "script": "NokkoArchGunInnateMod.lua"
+       },
+       {
+        "event": "OnProjectileContactScript",
+        "function": "CheckForNokkoMushroomHit",
+        "params": {
+         "_scaleDurationAsFunctionOfFireRate": 0.75
+        },
+        "script": "NokkoArchGunInnateMod.lua"
+       },
+       {
+        "event": "ScriptInstance",
+        "function": "FluidAmmoContainer",
+        "params": {
+         "_alsoHideAttachment": 1,
+         "_autoReloadAnim": "",
+         "_clipBone": "",
+         "_clipType": "",
+         "_fluidLevelMax": 0.02,
+         "_fluidLevelMin": -0.039999999,
+         "_fluidType": "/Lotus/Weapons/Tenno/LongGuns/LavosDeluxeShotgun/LavosDeluxeShotgunLiquidDeco",
+         "_impactEffect": "/Lotus/Fx/Weapons/Cedo/LavosDeluxeShotgun/LavosDeluxeShotgunHitEffect"
+        },
+        "script": "/Lotus/Scripts/Effects/LavosDeluxeShotgunFluidAmmoEffect.lua"
+       },
+       {
+        "event": "OnProjectileStartScript",
+        "function": "OnProjectileStart",
+        "params": {
+         "_scaleDurationAsFunctionOfFireRate": 0.75
+        },
+        "script": "NokkoArchGunInnateMod.lua"
+       },
+       {
+        "event": "OnProjectileContactScript",
+        "function": "CheckForNokkoMushroomHit",
         "params": {
          "_scaleDurationAsFunctionOfFireRate": 0.75
         },
@@ -78908,6 +76285,7 @@
       "status": "partial",
       "unsupported": [
        "nokko-flight-duration-unverified",
+       "nokko-mushroom-state-unresolved",
        "projectile-runtime-script"
       ]
      },
@@ -78925,14 +76303,14 @@
         "shares": {
          "DT_EXPLOSION": 1.0
         },
-        "total": 16.0,
+        "total": 32.0,
         "types": {
-         "DT_EXPLOSION": 16.0
+         "DT_EXPLOSION": 32.0
         }
        },
        "id": "sequence:0:impact",
        "kind": "impact",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedBlastProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
        "support": "exact",
        "trigger": "fire"
       },
@@ -78952,14 +76330,14 @@
          "DT_EXPLOSION": 1.0
         },
         "source": "ExplosiveAttack",
-        "total": 114.0,
+        "total": 228.0,
         "types": {
-         "DT_EXPLOSION": 114.0
+         "DT_EXPLOSION": 228.0
         }
        },
        "id": "sequence:0:explosion",
        "kind": "explosion",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedBlastProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
        "support": "exact",
        "trigger": "detonation"
       },
@@ -78976,14 +76354,14 @@
         "shares": {
          "DT_CORROSIVE": 1.0
         },
-        "total": 16.0,
+        "total": 32.0,
         "types": {
-         "DT_CORROSIVE": 16.0
+         "DT_CORROSIVE": 32.0
         }
        },
        "id": "sequence:1:impact",
        "kind": "impact",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedCorrosiveProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
        "support": "exact",
        "trigger": "fire"
       },
@@ -79003,14 +76381,14 @@
          "DT_CORROSIVE": 1.0
         },
         "source": "ExplosiveAttack",
-        "total": 114.0,
+        "total": 228.0,
         "types": {
-         "DT_CORROSIVE": 114.0
+         "DT_CORROSIVE": 228.0
         }
        },
        "id": "sequence:1:explosion",
        "kind": "explosion",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedCorrosiveProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
        "support": "exact",
        "trigger": "detonation"
       },
@@ -79027,14 +76405,14 @@
         "shares": {
          "DT_GAS": 1.0
         },
-        "total": 16.0,
+        "total": 32.0,
         "types": {
-         "DT_GAS": 16.0
+         "DT_GAS": 32.0
         }
        },
        "id": "sequence:2:impact",
        "kind": "impact",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedGasProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
        "support": "exact",
        "trigger": "fire"
       },
@@ -79054,14 +76432,14 @@
          "DT_GAS": 1.0
         },
         "source": "ExplosiveAttack",
-        "total": 114.0,
+        "total": 228.0,
         "types": {
-         "DT_GAS": 114.0
+         "DT_GAS": 228.0
         }
        },
        "id": "sequence:2:explosion",
        "kind": "explosion",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedGasProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
        "support": "exact",
        "trigger": "detonation"
       },
@@ -79078,14 +76456,14 @@
         "shares": {
          "DT_MAGNETIC": 1.0
         },
-        "total": 16.0,
+        "total": 32.0,
         "types": {
-         "DT_MAGNETIC": 16.0
+         "DT_MAGNETIC": 32.0
         }
        },
        "id": "sequence:3:impact",
        "kind": "impact",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedMagneticProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
        "support": "exact",
        "trigger": "fire"
       },
@@ -79105,14 +76483,14 @@
          "DT_MAGNETIC": 1.0
         },
         "source": "ExplosiveAttack",
-        "total": 114.0,
+        "total": 228.0,
         "types": {
-         "DT_MAGNETIC": 114.0
+         "DT_MAGNETIC": 228.0
         }
        },
        "id": "sequence:3:explosion",
        "kind": "explosion",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedMagneticProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
        "support": "exact",
        "trigger": "detonation"
       },
@@ -79129,14 +76507,14 @@
         "shares": {
          "DT_RADIATION": 1.0
         },
-        "total": 16.0,
+        "total": 32.0,
         "types": {
-         "DT_RADIATION": 16.0
+         "DT_RADIATION": 32.0
         }
        },
        "id": "sequence:4:impact",
        "kind": "impact",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedRadiationProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
        "support": "exact",
        "trigger": "fire"
       },
@@ -79156,14 +76534,14 @@
          "DT_RADIATION": 1.0
         },
         "source": "ExplosiveAttack",
-        "total": 114.0,
+        "total": 228.0,
         "types": {
-         "DT_RADIATION": 114.0
+         "DT_RADIATION": 228.0
         }
        },
        "id": "sequence:4:explosion",
        "kind": "explosion",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedRadiationProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
        "support": "exact",
        "trigger": "detonation"
       },
@@ -79180,14 +76558,14 @@
         "shares": {
          "DT_VIRAL": 1.0
         },
-        "total": 16.0,
+        "total": 32.0,
         "types": {
-         "DT_VIRAL": 16.0
+         "DT_VIRAL": 32.0
         }
        },
        "id": "sequence:5:impact",
        "kind": "impact",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedViralProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
        "support": "exact",
        "trigger": "fire"
       },
@@ -79207,14 +76585,14 @@
          "DT_VIRAL": 1.0
         },
         "source": "ExplosiveAttack",
-        "total": 114.0,
+        "total": 228.0,
         "types": {
-         "DT_VIRAL": 114.0
+         "DT_VIRAL": 228.0
         }
        },
        "id": "sequence:5:explosion",
        "kind": "explosion",
-       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunAWGuidedViralProj",
+       "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
        "support": "exact",
        "trigger": "detonation"
       }
@@ -79253,28 +76631,31 @@
    "variantType": null
   },
   {
+   "ammoMax": 120,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeCorvas/PrimeCorvasWeapon",
     "/Lotus/Weapons/Tenno/Archwing/Primary/LaunchGrenade/ArchCannon",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/PrimeCorvasDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
+     "chargeTime": 0.5,
      "damage": {
       "critChance": 0.44,
       "critMultiplier": 3.0,
-      "flightSpeed": 400,
+      "flightSpeed": 120,
       "procChance": 0.2,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeCorvas/PrimeCorvasWaveProj",
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeCorvas/PrimeCorvasWaveHWProj",
       "shares": {
        "DT_FIRE": 0.589286,
        "DT_IMPACT": 0.410714
@@ -79285,10 +76666,10 @@
        "DT_IMPACT": 230.0
       }
      },
-     "falloffMinDamage": 1,
+     "falloffMinDamage": 20,
      "falloffRange": [
-      600,
-      1200
+      60,
+      120
      ],
      "fireRate": 2.0,
      "fireRateRaw": 120,
@@ -79329,21 +76710,24 @@
    "variantType": null
   },
   {
+   "ammoMax": 400,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
     "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/PrimeLarkspurDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 0.5,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "critChance": 0.14,
@@ -79353,10 +76737,10 @@
        "DT_IMPACT": 0.111111,
        "DT_RADIATION": 0.888889
       },
-      "total": 90.0,
+      "total": 180.0,
       "types": {
-       "DT_IMPACT": 10.0,
-       "DT_RADIATION": 80.0
+       "DT_IMPACT": 20.0,
+       "DT_RADIATION": 160.0
       }
      },
      "falloffMinDamage": 1,
@@ -79374,8 +76758,8 @@
     },
     {
      "ammoCost": 10,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
+     "chargeTime": 0.5,
      "damage": {
       "components": [
        {
@@ -79390,10 +76774,10 @@
          "DT_RADIATION": 0.5
         },
         "source": "ExplosiveAttack",
-        "total": 800.0,
+        "total": 1600.0,
         "types": {
-         "DT_EXPLOSION": 400.0,
-         "DT_RADIATION": 400.0
+         "DT_EXPLOSION": 800.0,
+         "DT_RADIATION": 800.0
         }
        }
       ],
@@ -79404,7 +76788,7 @@
        "PT_KNOCKED_DOWN"
       ],
       "procChance": 0.38,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurProjectile",
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurHeavyProjectile",
       "radial": {
        "falloff": 0.60000002,
        "forcedProcs": [
@@ -79417,10 +76801,10 @@
         "DT_RADIATION": 0.5
        },
        "source": "ExplosiveAttack",
-       "total": 800.0,
+       "total": 1600.0,
        "types": {
-        "DT_EXPLOSION": 400.0,
-        "DT_RADIATION": 400.0
+        "DT_EXPLOSION": 800.0,
+        "DT_RADIATION": 800.0
        }
       },
       "shares": {
@@ -79428,11 +76812,11 @@
        "DT_IMPACT": 0.333333,
        "DT_RADIATION": 0.238095
       },
-      "total": 420.0,
+      "total": 840.0,
       "types": {
-       "DT_EXPLOSION": 180.0,
-       "DT_IMPACT": 140.0,
-       "DT_RADIATION": 100.0
+       "DT_EXPLOSION": 360.0,
+       "DT_IMPACT": 280.0,
+       "DT_RADIATION": 200.0
       }
      },
      "falloffMinDamage": 1,
@@ -79479,42 +76863,45 @@
    "variantType": null
   },
   {
+   "ammoMax": 60,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/Railgun/ArchRailgun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Items/ArchRailgunDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
+     "chargeTime": 1,
      "damage": {
       "critChance": 0.30000001,
       "critMultiplier": 2.0,
-      "flightSpeed": 500,
+      "flightSpeed": 100,
       "procChance": 0.25,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/Railgun/RailGunWavProj",
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/Railgun/RailgunHeavyProjectile",
       "shares": {
        "DT_IMPACT": 0.25,
        "DT_MAGNETIC": 0.25,
        "DT_PUNCTURE": 0.25,
        "DT_SLASH": 0.25
       },
-      "total": 600.0,
+      "total": 1200.0,
       "types": {
-       "DT_IMPACT": 150.0,
-       "DT_MAGNETIC": 150.0,
-       "DT_PUNCTURE": 150.0,
-       "DT_SLASH": 150.0
+       "DT_IMPACT": 300.0,
+       "DT_MAGNETIC": 300.0,
+       "DT_PUNCTURE": 300.0,
+       "DT_SLASH": 300.0
       }
      },
-     "falloffMinDamage": 0,
+     "falloffMinDamage": 1,
      "falloffRange": [
       0,
       0
@@ -79558,20 +76945,23 @@
    "variantType": null
   },
   {
+   "ammoMax": 210,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/ArchGRNAAGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Items/GrnAntiAirGunDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "components": [
@@ -79589,7 +76979,7 @@
       "critMultiplier": 2.0,
       "flightSpeed": 250,
       "procChance": 0.25,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/GrattlerWavProjSpace",
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/GrattlerWavProj",
       "radial": {
        "falloff": 0.69999999,
        "procChance": 0.25,
@@ -79611,10 +77001,10 @@
        "DT_SLASH": 22.499992
       }
      },
-     "falloffMinDamage": 20,
+     "falloffMinDamage": 0,
      "falloffRange": [
-      1000,
-      2000
+      50,
+      175
      ],
      "fireRate": 6.25,
      "fireRateRaw": 375,
@@ -79655,43 +77045,49 @@
    "variantType": null
   },
   {
+   "ammoMax": 160,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/RocketArtillery/ArchRocketCrossbow",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Items/ArchRocketCrossbowDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "critChance": 0.22,
       "critMultiplier": 2.0,
-      "flightSpeed": 300,
+      "flightSpeed": 45,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
       "procChance": 0.16,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/RocketArtillery/ArchRocketProjectile",
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/RocketArtillery/ArchRocketHeavyProjectile",
       "shares": {
        "DT_IMPACT": 0.2,
        "DT_PUNCTURE": 0.1,
        "DT_SLASH": 0.7
       },
-      "total": 250.0,
+      "total": 500.0,
       "types": {
-       "DT_IMPACT": 50.0,
-       "DT_PUNCTURE": 25.0,
-       "DT_SLASH": 174.999998
+       "DT_IMPACT": 100.0,
+       "DT_PUNCTURE": 50.0,
+       "DT_SLASH": 349.999995
       }
      },
-     "falloffMinDamage": 12,
+     "falloffMinDamage": 1,
      "falloffRange": [
-      800,
-      1600
+      0,
+      0
      ],
      "fireRate": 5.0,
      "fireRateRaw": 300,
@@ -79732,20 +77128,23 @@
    "variantType": null
   },
   {
+   "ammoMax": 300,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/ThanoTechArchGunDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 0.5,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "critChance": 0.2,
@@ -79754,9 +77153,9 @@
       "shares": {
        "DT_FIRE": 1.0
       },
-      "total": 90.0,
+      "total": 180.0,
       "types": {
-       "DT_FIRE": 90.0
+       "DT_FIRE": 180.0
       }
      },
      "falloffMinDamage": 1,
@@ -79784,7 +77183,7 @@
         "radius": 4,
         "shares": {},
         "source": "ExplosiveAttack",
-        "total": 1000.0,
+        "total": 2000.0,
         "types": {}
        },
        {
@@ -79795,32 +77194,33 @@
          "DT_FIRE": 1.0
         },
         "source": "EmbedDeathAttack",
-        "total": 1000.0,
+        "total": 2000.0,
         "types": {
-         "DT_FIRE": 1000.0
+         "DT_FIRE": 2000.0
         }
        }
       ],
       "critChance": 0.30000001,
       "critMultiplier": 2.4000001,
-      "falloff": 0.30000001,
       "flightSpeed": 30,
       "procChance": 0.5,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/AltFireProjectile",
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/AltFireHeavyProjectile",
       "radial": {
        "falloff": 0.30000001,
        "procChance": 0.5,
        "radius": 4,
        "shares": {},
        "source": "ExplosiveAttack",
-       "total": 1000.0,
+       "total": 2000.0,
        "types": {}
       },
-      "radius": 4,
-      "shares": {},
-      "source": "ExplosiveAttack",
-      "total": 1000.0,
-      "types": {}
+      "shares": {
+       "DT_IMPACT": 1.0
+      },
+      "total": 20.0,
+      "types": {
+       "DT_IMPACT": 20.0
+      }
      },
      "falloffMinDamage": 1,
      "falloffRange": [
@@ -79866,44 +77266,64 @@
    "variantType": null
   },
   {
+   "ammoMax": 900,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/ThanoTechLongGunDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/Lotus/Weapons/Ammo/BatteryAmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
+      "components": [
+       {
+        "falloff": 0.2,
+        "procChance": 0.25999999,
+        "radius": 1.8,
+        "shares": {},
+        "source": "RadialDamage",
+        "total": 72.0,
+        "types": {}
+       }
+      ],
       "critChance": 0.30000001,
       "critMultiplier": 2.2,
-      "forcedProcs": [
-       "PT_KNOCKBACK"
-      ],
       "procChance": 0.25999999,
+      "radial": {
+       "falloff": 0.2,
+       "procChance": 0.25999999,
+       "radius": 1.8,
+       "shares": {},
+       "source": "RadialDamage",
+       "total": 72.0,
+       "types": {}
+      },
       "shares": {
        "DT_FIRE": 0.416667,
-       "DT_IMPACT": 0.2,
-       "DT_PUNCTURE": 0.383333
+       "DT_IMPACT": 0.194444,
+       "DT_PUNCTURE": 0.388889
       },
-      "total": 120.0,
+      "total": 180.0,
       "types": {
-       "DT_FIRE": 50.0,
-       "DT_IMPACT": 24.0,
-       "DT_PUNCTURE": 46.0
+       "DT_FIRE": 75.0,
+       "DT_IMPACT": 35.0,
+       "DT_PUNCTURE": 70.0
       }
      },
-     "falloffMinDamage": 2,
+     "falloffMinDamage": 1,
      "falloffRange": [
-      1400,
-      2800
+      0,
+      0
      ],
      "fireRate": 8.333333,
      "fireRateRaw": 500,
@@ -79916,24 +77336,44 @@
     {
      "ammoCost": 0,
      "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
+     "chargeTime": 0.80000001,
      "damage": {
+      "components": [
+       {
+        "falloff": 0.40000001,
+        "procChance": 0.5,
+        "radius": 8,
+        "shares": {},
+        "source": "RadialDamage",
+        "total": 4500.0,
+        "types": {}
+       }
+      ],
       "critChance": 0.5,
       "critMultiplier": 3.5,
       "forcedProcs": [
-       "PT_RAGDOLL"
+       "PT_LIFT_HIT"
       ],
       "procChance": 0.5,
+      "radial": {
+       "falloff": 0.40000001,
+       "procChance": 0.5,
+       "radius": 8,
+       "shares": {},
+       "source": "RadialDamage",
+       "total": 4500.0,
+       "types": {}
+      },
       "shares": {
        "DT_FIRE": 0.5,
        "DT_IMPACT": 0.1,
        "DT_PUNCTURE": 0.4
       },
-      "total": 1000.0,
+      "total": 1500.0,
       "types": {
-       "DT_FIRE": 500.0,
-       "DT_IMPACT": 100.0,
-       "DT_PUNCTURE": 400.0
+       "DT_FIRE": 750.0,
+       "DT_IMPACT": 150.0,
+       "DT_PUNCTURE": 600.0
       }
      },
      "falloffMinDamage": 1,
@@ -79980,20 +77420,23 @@
    "variantType": null
   },
   {
+   "ammoMax": 160,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/ThanoTechGrenadeLauncherDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "components": [
@@ -80003,7 +77446,7 @@
         "radius": 3,
         "shares": {},
         "source": "ExplosiveAttack",
-        "total": 164.0,
+        "total": 328.0,
         "types": {}
        },
        {
@@ -80012,30 +77455,30 @@
         "radius": 3,
         "shares": {},
         "source": "EmbedDeathAttack",
-        "total": 175.0,
+        "total": 350.0,
         "types": {}
        }
       ],
       "critChance": 0.30000001,
       "critMultiplier": 2.2,
-      "flightSpeed": 160,
+      "flightSpeed": 60,
       "procChance": 0.28,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanotechGrenadeClusterAWProj",
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanotechGrenadeClusterProj",
       "radial": {
        "falloff": 0.30000001,
        "procChance": 0.28,
        "radius": 3,
        "shares": {},
        "source": "ExplosiveAttack",
-       "total": 164.0,
+       "total": 328.0,
        "types": {}
       },
       "shares": {
        "DT_IMPACT": 1.0
       },
-      "total": 32.0,
+      "total": 64.0,
       "types": {
-       "DT_IMPACT": 32.0
+       "DT_IMPACT": 64.0
       }
      },
      "falloffMinDamage": 1,
@@ -80048,8 +77491,8 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
-     "reloadTime": 2,
-     "trigger": "/Lotus/Language/Weapons/CrpSentExperimentRiflePrimaryFire"
+     "reloadTime": 3,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst"
     },
     {
      "ammoCost": 1,
@@ -80063,7 +77506,7 @@
          "PT_KNOCKED_DOWN"
         ],
         "procChance": 0.5,
-        "radius": 20,
+        "radius": 12,
         "shares": {
          "DT_EXPLOSION": 0.333333,
          "DT_IMPACT": 0.166667,
@@ -80071,30 +77514,30 @@
          "DT_SLASH": 0.277778
         },
         "source": "ExplosiveAttack",
-        "total": 3600.0,
+        "total": 7200.0,
         "types": {
-         "DT_EXPLOSION": 1200.0,
-         "DT_IMPACT": 600.0,
-         "DT_PUNCTURE": 800.0,
-         "DT_SLASH": 1000.0
+         "DT_EXPLOSION": 2400.0,
+         "DT_IMPACT": 1200.0,
+         "DT_PUNCTURE": 1600.0,
+         "DT_SLASH": 2000.0
         }
        }
       ],
       "critChance": 0.40000001,
       "critMultiplier": 3.0,
-      "flightSpeed": 20,
+      "flightSpeed": 15,
       "forcedProcs": [
        "PT_KNOCKBACK"
       ],
       "procChance": 0.5,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanotechGrenadeAltAWProjectile",
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanotechGrenadeAltProjectile",
       "radial": {
        "falloff": 0.60000002,
        "forcedProcs": [
         "PT_KNOCKED_DOWN"
        ],
        "procChance": 0.5,
-       "radius": 20,
+       "radius": 12,
        "shares": {
         "DT_EXPLOSION": 0.333333,
         "DT_IMPACT": 0.166667,
@@ -80102,20 +77545,20 @@
         "DT_SLASH": 0.277778
        },
        "source": "ExplosiveAttack",
-       "total": 3600.0,
+       "total": 7200.0,
        "types": {
-        "DT_EXPLOSION": 1200.0,
-        "DT_IMPACT": 600.0,
-        "DT_PUNCTURE": 800.0,
-        "DT_SLASH": 1000.0
+        "DT_EXPLOSION": 2400.0,
+        "DT_IMPACT": 1200.0,
+        "DT_PUNCTURE": 1600.0,
+        "DT_SLASH": 2000.0
        }
       },
       "shares": {
        "DT_IMPACT": 1.0
       },
-      "total": 100.0,
+      "total": 200.0,
       "types": {
-       "DT_IMPACT": 100.0
+       "DT_IMPACT": 200.0
       }
      },
      "falloffMinDamage": 1,
@@ -80162,39 +77605,42 @@
    "variantType": null
   },
   {
+   "ammoMax": 300,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunWeapon",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/TnConcreteArchgunDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 1,
-     "ammoType": "/Lotus/Weapons/Ammo/RifleAmmoEx",
-     "chargeTime": null,
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
+     "chargeTime": 1.5,
      "damage": {
       "critChance": 0.25,
       "critMultiplier": 2.0,
-      "flightSpeed": 125,
+      "flightSpeed": 50,
       "procChance": 1.2,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunProjectile",
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunHeavyProjectile",
       "shares": {
        "DT_IMPACT": 0.277778,
        "DT_PUNCTURE": 0.166667,
        "DT_RADIATION": 0.444444,
        "DT_SLASH": 0.111111
       },
-      "total": 90.0,
+      "total": 180.0,
       "types": {
-       "DT_IMPACT": 25.0,
-       "DT_PUNCTURE": 15.0,
-       "DT_RADIATION": 40.0,
-       "DT_SLASH": 10.0
+       "DT_IMPACT": 50.0,
+       "DT_PUNCTURE": 30.0,
+       "DT_RADIATION": 80.0,
+       "DT_SLASH": 20.0
       }
      },
      "falloffMinDamage": 1,
@@ -80213,7 +77659,7 @@
     {
      "ammoCost": 1,
      "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
-     "chargeTime": null,
+     "chargeTime": 0,
      "damage": {
       "critChance": 0.30000001,
       "critMultiplier": 2.5,
@@ -80226,11 +77672,11 @@
        "DT_PUNCTURE": 0.222222,
        "DT_RADIATION": 0.444444
       },
-      "total": 900.0,
+      "total": 1800.0,
       "types": {
-       "DT_FIRE": 300.0,
-       "DT_PUNCTURE": 200.0,
-       "DT_RADIATION": 400.0
+       "DT_FIRE": 600.0,
+       "DT_PUNCTURE": 400.0,
+       "DT_RADIATION": 800.0
       }
      },
      "falloffMinDamage": 1,
@@ -80277,20 +77723,23 @@
    "variantType": null
   },
   {
+   "ammoMax": 400,
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon"
+    "/Lotus/Types/Game/LotusWeapon",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
    ],
    "compatTags": [
     "BATTERY"
    ],
    "defaultModTemplate": null,
    "descTag": "/Lotus/Language/Weapons/TnShieldFameArchGunDesc",
+   "fireModeSource": "HeavyBehaviors",
    "fireModes": [
     {
      "ammoCost": 0.5,
-     "ammoType": "/EE/Types/Game/AmmoEx",
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
      "chargeTime": null,
      "damage": {
       "critChance": 0.1,
@@ -80300,10 +77749,10 @@
        "DT_IMPACT": 0.111111,
        "DT_RADIATION": 0.888889
       },
-      "total": 90.0,
+      "total": 180.0,
       "types": {
-       "DT_IMPACT": 10.0,
-       "DT_RADIATION": 80.0
+       "DT_IMPACT": 20.0,
+       "DT_RADIATION": 160.0
       }
      },
      "falloffMinDamage": 1,
@@ -80321,8 +77770,8 @@
     },
     {
      "ammoCost": 10,
-     "ammoType": "/EE/Types/Game/AmmoEx",
-     "chargeTime": null,
+     "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
+     "chargeTime": 0.5,
      "damage": {
       "components": [
        {
@@ -80337,10 +77786,10 @@
          "DT_RADIATION": 0.5
         },
         "source": "ExplosiveAttack",
-        "total": 800.0,
+        "total": 1600.0,
         "types": {
-         "DT_EXPLOSION": 400.0,
-         "DT_RADIATION": 400.0
+         "DT_EXPLOSION": 800.0,
+         "DT_RADIATION": 800.0
         }
        }
       ],
@@ -80351,7 +77800,7 @@
        "PT_KNOCKED_DOWN"
       ],
       "procChance": 0.34,
-      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchgunProjectile",
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameHeavyArchgunProjectile",
       "radial": {
        "falloff": 0.60000002,
        "forcedProcs": [
@@ -80364,10 +77813,10 @@
         "DT_RADIATION": 0.5
        },
        "source": "ExplosiveAttack",
-       "total": 800.0,
+       "total": 1600.0,
        "types": {
-        "DT_EXPLOSION": 400.0,
-        "DT_RADIATION": 400.0
+        "DT_EXPLOSION": 800.0,
+        "DT_RADIATION": 800.0
        }
       },
       "shares": {
@@ -80375,11 +77824,11 @@
        "DT_IMPACT": 0.333333,
        "DT_RADIATION": 0.238095
       },
-      "total": 420.0,
+      "total": 840.0,
       "types": {
-       "DT_EXPLOSION": 180.0,
-       "DT_IMPACT": 140.0,
-       "DT_RADIATION": 100.0
+       "DT_EXPLOSION": 360.0,
+       "DT_IMPACT": 280.0,
+       "DT_RADIATION": 200.0
       }
      },
      "falloffMinDamage": 1,

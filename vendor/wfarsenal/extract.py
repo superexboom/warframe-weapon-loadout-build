@@ -217,6 +217,16 @@ def _build_weapon(
     weapon: dict[str, Any],
 ) -> dict[str, Any]:
     modes = _extract_fire_modes(index, path, weapon)
+    # Archguns (SpaceGuns) carry two parallel behaviour sets: ``Behaviors`` is
+    # the Archwing/space loadout while ``HeavyBehaviors`` is the ground "Heavy
+    # Weapon" loadout players actually use in atmosphere.  Ground data is the
+    # only surface this catalog serves, so export those modes instead of the
+    # space ones and record which set produced them.
+    ground_source: str | None = None
+    if slot == "arch_gun":
+        ground = _extract_archgun_ground_modes(index, path, weapon)
+        if ground:
+            modes, ground_source = ground
     incarnon = _extract_incarnon_evolutions(index, path, weapon)
     variant_type = item.get("VariantType") or weapon.get("VariantType")
     record = {
@@ -240,13 +250,24 @@ def _build_weapon(
             if weapon.get("PrimaryOmegaAttenuation") is not None
             else weapon.get("PrimeOmegaAttenuation")
         ),
-        "magazineSize": weapon.get("AmmoClipSize"),
+        "magazineSize": (
+            weapon.get("HeavyAmmoClipSize") or weapon.get("AmmoClipSize")
+            if slot == "arch_gun"
+            else weapon.get("AmmoClipSize")
+        ),
         "defaultModTemplate": weapon.get("DefaultModTemplate"),
         "compatTags": weapon.get("CompatibilityTags") or [],
         "variantType": variant_type,
         "isIncarnon": bool(incarnon),
         "fireModes": modes,
     }
+    if slot == "arch_gun":
+        # Reserve-ammo pool for the ground (Heavy Weapon) loadout.  The engine
+        # stores it only on the weapon root, not on any behaviour, so surface it
+        # next to the magazine size the way the in-game panel shows both.
+        record["ammoMax"] = weapon.get("HeavyAmmoCapacity")
+        if ground_source:
+            record["fireModeSource"] = ground_source
     if slot in {"melee", "arch_melee"}:
         heavy = _extract_heavy_attack(index, path, weapon, modes)
         if heavy:
@@ -261,6 +282,100 @@ def _build_weapon(
     # package cannot carry the selected value.
     record.update(innate)
     return record
+
+
+ARCHGUN_GROUND_MODE_PREFIX = "Heavy"
+
+
+def _extract_archgun_ground_modes(
+    index: PackageIndex, weapon_path: str, weapon: Mapping[str, Any]
+) -> tuple[list[dict[str, Any]], str] | None:
+    """Extract an archgun's GROUND (Heavy Weapon) fire modes.
+
+    Returns ``(modes, source_label)`` or ``None`` when neither behaviour list
+    yields a usable mode.  ``HeavyBehaviors`` is the authoritative ground set;
+    a few entries fall back to the shared ``Behaviors`` list when the ground
+    override only changes ammo/reload and reuses the space fire logic.
+
+    Modes mirror :func:`_extract_fire_modes` output with one ground-specific
+    filter: behaviour entries with no ammo cost and no trigger tag are the
+    weapon's animation/dry-fire click (generic ``WeaponStateBehavior``), not a
+    real attack, and are dropped so the catalog never offers a damage-less
+    default mode.  Genuine zero-ammo alternate fires (Mausolon's charged shot)
+    carry a trigger tag and survive the filter.
+    """
+    for field, label in (("HeavyBehaviors", "HeavyBehaviors"), ("Behaviors", "Behaviors")):
+        behaviours = weapon.get(field)
+        if not isinstance(behaviours, list):
+            continue
+        modes = _flatten_behaviours(index, weapon_path, behaviours)
+        modes = [mode for mode in modes if mode.get("ammoCost") or mode.get("trigger")]
+        if any((mode.get("damage") or {}).get("types") for mode in modes):
+            return modes, label
+    return None
+
+
+def _flatten_behaviours(
+    index: PackageIndex, weapon_path: str, behaviours: list[Any]
+) -> list[dict[str, Any]]:
+    """Flatten one ``Behaviors``-shaped list into compact fire modes.
+
+    Shared by the ordinary (space) extraction and the archgun ground extraction
+    so both emit the identical mode schema.
+    """
+    modes = []
+    for position, entry in enumerate(behaviours):
+        if not isinstance(entry, dict):
+            continue
+        fire = _sub_behaviour(entry, "fire:")
+        state = _sub_behaviour(entry, "state:")
+        impact = _sub_behaviour(entry, "impact:")
+        if fire is None and state is None:
+            continue
+
+        mode: dict[str, Any] = {"index": position}
+        if state:
+            mode["trigger"] = state.get("LocTag")
+            mode["fireRate"] = _per_second(state.get("fireRate"))
+            mode["fireRateRaw"] = state.get("fireRate")
+            mode["reloadTime"] = state.get("reloadTime")
+            mode["isAlternateFire"] = bool(state.get("IsAlternateFire"))
+            # ── F16/pipelineGaps[chargetime-case-bug]（审计修复）──────────
+            # 原始字段拼写是 ChargeTime（大写 C）；旧代码读 chargeTime，
+            # 全部蓄力武器的 compact 导出 chargeTime=null。
+            mode["chargeTime"] = state.get("ChargeTime", state.get("chargeTime"))
+        if fire:
+            mode["multishot"] = fire.get("fireIterations", 1)
+            mode["ammoCost"] = fire.get("ammoRequirement")
+            mode["ammoType"] = fire.get("ammoType")
+        mode["damage"] = _resolve_damage(
+            index, weapon_path, fire or {}, impact or {}
+        )
+        projectile_layer = _extract_projectile_events(
+            index, weapon_path, fire or {}
+        )
+        if projectile_layer:
+            mode.update(projectile_layer)
+            # Sequence weapons such as Arbucep intentionally leave projectileType
+            # empty. Keep the historical per-iteration damage contract usable while
+            # the event layer carries every individual projectile and explosion.
+            if mode["damage"] is None:
+                mode["damage"] = _sequence_average_damage(
+                    projectile_layer["projectileEvents"],
+                    int(fire.get("fireIterations") or 1) if fire else 1,
+                )
+
+        if impact:
+            # Hitscan weapons lose damage past a range band; projectiles do not.
+            falloff = impact.get("damageFallOff")
+            if isinstance(falloff, list) and falloff:
+                mode["falloffRange"] = falloff
+                mode["falloffMinDamage"] = impact.get("damageFallOffMinDamage")
+            if impact.get("tracePunctureDepth") is not None:
+                mode["puncture"] = impact.get("tracePunctureDepth")
+
+        modes.append(mode)
+    return modes
 
 
 def _extract_incarnon_evolutions(
@@ -640,60 +755,7 @@ def _extract_fire_modes(
     behaviours = weapon.get("Behaviors")
     if not isinstance(behaviours, list):
         return []
-
-    modes = []
-    for position, entry in enumerate(behaviours):
-        if not isinstance(entry, dict):
-            continue
-        fire = _sub_behaviour(entry, "fire:")
-        state = _sub_behaviour(entry, "state:")
-        impact = _sub_behaviour(entry, "impact:")
-        if fire is None and state is None:
-            continue
-
-        mode: dict[str, Any] = {"index": position}
-        if state:
-            mode["trigger"] = state.get("LocTag")
-            mode["fireRate"] = _per_second(state.get("fireRate"))
-            mode["fireRateRaw"] = state.get("fireRate")
-            mode["reloadTime"] = state.get("reloadTime")
-            mode["isAlternateFire"] = bool(state.get("IsAlternateFire"))
-            # ── F16/pipelineGaps[chargetime-case-bug]（审计修复）──────────
-            # 原始字段拼写是 ChargeTime（大写 C）；旧代码读 chargeTime，
-            # 全部蓄力武器的 compact 导出 chargeTime=null。
-            mode["chargeTime"] = state.get("ChargeTime", state.get("chargeTime"))
-        if fire:
-            mode["multishot"] = fire.get("fireIterations", 1)
-            mode["ammoCost"] = fire.get("ammoRequirement")
-            mode["ammoType"] = fire.get("ammoType")
-        mode["damage"] = _resolve_damage(
-            index, weapon_path, fire or {}, impact or {}
-        )
-        projectile_layer = _extract_projectile_events(
-            index, weapon_path, fire or {}
-        )
-        if projectile_layer:
-            mode.update(projectile_layer)
-            # Sequence weapons such as Arbucep intentionally leave projectileType
-            # empty. Keep the historical per-iteration damage contract usable while
-            # the event layer carries every individual projectile and explosion.
-            if mode["damage"] is None:
-                mode["damage"] = _sequence_average_damage(
-                    projectile_layer["projectileEvents"],
-                    int(fire.get("fireIterations") or 1) if fire else 1,
-                )
-
-        if impact:
-            # Hitscan weapons lose damage past a range band; projectiles do not.
-            falloff = impact.get("damageFallOff")
-            if isinstance(falloff, list) and falloff:
-                mode["falloffRange"] = falloff
-                mode["falloffMinDamage"] = impact.get("damageFallOffMinDamage")
-            if impact.get("tracePunctureDepth") is not None:
-                mode["puncture"] = impact.get("tracePunctureDepth")
-
-        modes.append(mode)
-    return modes
+    return _flatten_behaviours(index, weapon_path, behaviours)
 
 
 def _sub_behaviour(entry: dict[str, Any], prefix: str) -> dict[str, Any] | None:

@@ -31,23 +31,35 @@
 
 ControllableLotusSuit（可操控 Lotus，2 技能，剧情甲）暂不收录（非常规配装对象）。
 
-## 二、空战武器（进行中）
+## 二、空战武器（进行中 — subagent）
 
-### 结构发现
+**用户口径更新（2026-09-24）**：只做空战**枪**（archgun）的地面数据；**空战近战全部不要**（无地面状态）——8 把 SpaceMelee 将从导出中移除。
 
-- 导出映射 `SpaceGuns → arch_gun` **存在**但**空战枪全部缺失**（导出只有 8 把空战近战）
-- **根因**：空战枪的射击数据不在 `FireModes`（普通武器结构）而在 **`Behaviors`**（fire:LotusWeaponProjectileFireBehavior 体系）+ **`HeavyBehaviors`（地面/Havy Weapon 形态专用）**
-- 地面弹药：`HeavyAmmoCapacity/HeavyAmmoClipSize`（Heavy 前缀 = 地面）
-- 枪械清单（36 条记录去重后 ~15 把 + 近战 8 把）：Imperator（ArchMachineGun）、Fluctus（ArchBurstGun）、Corvas/PrimeCorvas、Larkspur/Prime、Velocitus（?）、Dual Decurion、Cyngas、Kuva Ayanga（ArchGRNAAGun）、Phaedra、Morus（ThanoTechArchGun）、Corufell/Prime（空战镰刀，melee）、Grattler、Fluctus 等
-- **空战近战已在导出**（8 把）——它们的地面数据（ArchwingAtmosphere melee）可能也要核对
-- 待做：Behaviors → fire mode 提取器（damage/crit/proc/rate 从 LotusWeaponProjectileFireBehavior 的 AttackData）+ 地面口径选择（HeavyBehaviors 优先）+ mod 补全（Archgun duel stat mods：地面用 Primary mod 槽）
+### 结构发现（subagent ec90cf8a 已确认）
 
-## 三、同伴武器（未开始）
+- 20 把 SpaceGuns **已在导出**（slot=arch_gun）但 fireModes 是**空战模式**（Behaviors 的投射物口径）——将**原地替换**为地面模式（HeavyBehaviors）
+- 地面数据：`HeavyBehaviors[i]` 与 Behaviors[i] 同构（fire:/state:/impact: 命名空间字典）；impact 带 AttackData + `criticalHitChance/criticalHitDamageMultiplier`；state 带 fireRate（rpm/60）+ reloadTime + trigger LocTag
+- 地面弹药：`HeavyAmmoClipSize`（= 弹匣）+ `HeavyAmmoCapacity`（ammoMax）
+- Imperator 地面核对（wiki 一致）：100 伤害（40/35/25 IPS）、24% 暴击、×2.0、12% 触发、16.67/s、弹匣 200、备弹 800
+- **名称修正**：TnConcreteArchgun=Mandonel（辐光弩炮）；Kuva Ayanga 在 GrnHeavyGrenadeLauncher；ThanoTechArchGun=Cortege、ThanoTechLongGun=Mausolon、ThanoTechGrenadeLauncher=Morgha；ArchBurstGun=Cyngas；NokkoArchGun=Arbucep；TnShieldFrameArchGun=Larkspur；ArchCannon=Corvas；ArchRocketCrossbow=Fluctus；ArchRailgun=Velocitus
 
-- 待枚举：Sentinel/Pet/MOA/Kubrow/Kavat 武器（ProductCategory: SentinelWeapons——导出里 companion 类已存在？）
-- **特殊：分离**（用户说判定像近战）——候选：Dethcube 的武器？或 Vulpine/「Slink」？需查证具体武器名（可能是 MOA 的 Cryoxion 或新的分离式同伴武器）
-- 数据/乘区/效果自行获取，最后对照 wfsim
+## 三、同伴武器（进行中 — subagent）
 
-## 四、Banshee Deluxe 哨兵（未开始）
+### 数据质量问题（已核实）
 
-- 新同伴（BansheeDlxSentinel）+ 对应武器——归入同伴武器部分
+当前导出的 24 把同伴武器（哨兵/MOA/Zanuka）数据**不完整**：它们的射击数据在 Behaviors（fire:/impact:/state: 命名空间），现有提取器漏读字段——**Deconstructor Prime 导出 critChance=0.0 是错的**（impact 行为里有独立的 `criticalHitChance` 字段未被读取）；fireRate 也不对。
+
+### Deconstructor / Deconstructor Prime（破坏者，用户确认的特殊武器）
+
+- **战刃类型近战判定**（用户确认）：`GlaiveProjectileFireBehavior`（战刃投掷）+ 完整近战字段集
+- 近战结构：`SlamMeleeAttack=/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE`、`HeavySlamMeleeAttack`（重击震地）、`ParryAngle`/`ParryDamagePercentBlocked`（格挡）、`BaseEmpoweredMeleeChance=0.15`（强化近战几率）、`StealthMultiplier`（偷袭）
+- 导出处理：`isMeleeJudged: true` + meleeFields 结构登记（不模拟震地伤害，只记录结构）
+- AttackData：Amount=10、IPS 均分、proc 0.1、DHT_NONE
+
+### 新同伴武器
+
+- Banshee Deluxe 哨兵（BansheeDlxSentinel）——subagent 排查其武器记录（新 dump EE 格式）
+
+## 四、Banshee Deluxe 哨兵
+
+并入同伴武器部分（见上）。
