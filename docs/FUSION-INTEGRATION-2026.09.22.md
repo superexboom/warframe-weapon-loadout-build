@@ -149,16 +149,28 @@ UpgradeType 枚举表（.data 0x14278d000，428 项）三重锚定确认：`WEAP
 - Akarius Prime（阿利乌双枪 Prime，pistol）的 UNRESOLVED 评分与融合无关：`model-missing:projectile-component-damage-unapplied`（投射物组件伤害未建模的诚实标注，数值正常）。
 - 阿利乌 D+VI 病毒融合（若未来 pistol 发布配方）在超宏靶的强协同已由 rifle 侧验证（Braton VI 3.64×）。
 
-## 九、镀层异况增伤 × 范围伤害 裁决（galvanized-radial-re.json，2026-09-24）
+## 九、镀层异况增伤 × 范围伤害 裁决（两轮 RE，2026-09-24 修正版）
 
-**引擎裁决**：`WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE`（镀层准确射手/镀层竞争 等）的每异常层数增伤**对范围伤害生效**——只排除 DoT tick。
+**第一轮结论被第二轮修正**：第一轮判定「径向一律吃镀层 CO」结构上成立（核心门只排 DoT），但用户指出该加成曾被削弱、削弱后只有少量爆炸武器受加成——**第二轮 RE 找到了 per-weapon 判别**：
 
-- 核函数 `0x140e266d0`（UpgradeType 259 唯一游戏消费方）：门控一 = 事件 hitType@+0x1bf **只排除 DHT_DOT(7)**（`cmpb $0x7` @0x140e26728）；门控二 = 事件触发 proc 类型@+0x268 必须为 30（哨兵「非 proc 伤害」`cmpb $0x1e` @0x140e26735）——DoT tick 带真实 PT id 双门皆不过。
-- **径向包走同一核心**：爆炸 fn `0x14148be10` → `0x140899430`（逐受害者分发）→ … → `0x140b60160` → `0x140e266d0`（调用链验证）；直击路径汇入同尾。**径向没有任何排除**。
-- DHT 枚举（字符串表构建 fn 0x140039880）：NONE=0, TRACE=1, PROJECTILE=2, MELEE=3, **RADIAL=4**, SCRIPT=5, LINK=6, **DOT=7**。
-- mod 数据本身无 hit-type 过滤（DT_ANY、无 ValidModifiers/ValidProcTypes）——门控纯引擎侧。
-- **mod 描述「直接伤害」的语义 = 「非触发 tick 伤害」，不是「非范围伤害」**。社区佐证：Torid Incarnon 顶级 AoE 构筑（overframe）带镀层准确射手。
+### 判别机制（引擎）
 
-**模拟器现状核对**：镀层 CO 乘区作用于直伤向量（引擎口径一致 ✓）；DoT 种子基于 CO 剥离后的基向量构造（probe 在 CO 回退之后构建）——**DoT 已正确排除 CO** ✓。范围伤害部分因冻结导出（Rabbit 2D）不含 radial 分量而整体缺席（`weapon-radial-or-field-damage-not-in-export` 已登记）——引擎侧该分量同样吃镀层 CO，未来导出补齐后无需改乘区逻辑。
+- **径向路由**：爆炸入口 fn `0x14148b760-0x14148c886` 在 `0x14148b7ff` 查武器 `vtable+0x708`（HasBehaviorOfType `0x140fdc820`，query `*[proj+0x520]`）：
+  - **TRUE** → 武器 `vtable+0xab8`（`0x140647bb0`）经**武器冲击 behavior** 结算径向（武器升级上下文 → UpgradeType 259 生效）
+  - **FALSE** → 通用逐受害者径向（`0x140899430`→`0x14148c080`→…，投射物局部上下文，`GetUpgradeValueF(259)=0` **不生效**）
+- **数据标志**：投射物成员 `mDealDamageThroughImpactBehavior` @+0xd99（EE 字段 `DealDamageThroughImpactBehavior=1`）。**白名单 = 标志 ∧ ExplosiveAttack Amount>0 ∧ DamageRadius>0**
 
-**结论**：优化器给 AoE 武器选镀层卡是**正确行为**（引擎 + 社区双重验证），无需修改。
+### 白名单（玩家武器，~40 把 / 原始 190 条）
+
+Ogris/Kuva Ogris、Kuva Tonkor、Kuva Zarr、Penta 家族、Acceltra、Corinth Prime 副模式、Cedo、Strun Prime 副模式、Vectis 灵化、Zariman 重型手枪副模式、Sancti Castanas、Talons、Atomos 副模式、Angstrum/棱晶、Castanas、Fusilai、多数 Glaive（Glaive Prime/Halikar/Orvius/Cerata/回旋镖/Teshin 系）、CrpElectroMag、Cernos 集束、Cephalon 主武器、1999 RPG、Amp 部件、Grimoire、Goo 枪、Zymos 系、ThanoTech 弓枪。
+
+### 黑名单（径向不吃，直击照常吃）
+
+**Torid、Akarius Prime、Kuva Bramma** 等绝大多数爆炸武器——径向伤害不获 259 加成。
+
+### 模拟器口径核对（修正）
+
+- 直击向量 CO ✓（所有武器）
+- DoT 种子无 CO ✓（第一轮已钉死）
+- **径向**：冻结导出多数武器无径向分量（解算只含直击——与黑名单语义一致）；径向已导出的武器（Akarius ExplosiveAttack 509）也不参与解算（已知缺口）——**解算层无需行为变更**，判别机制登记进 `weapon_mechanics_overrides.json`（galvanized-conditional-radial-scope）供用户对照与未来径向分量导出补齐后启用。
+- **用户对照实战**：黑名单 AoE 武器上镀层的 CO 线只作用于直击占比（Akarius 12%、Torid 弹体命中）——优化器选卡以导出直击为准，实战径向部分不吃加成。社区 Torid 构筑带镀层的部分收益来自直击/毒云 tick 而非爆炸径向。

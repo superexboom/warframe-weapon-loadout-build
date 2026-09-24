@@ -21,6 +21,44 @@
     "note": "F16（审计修复）：schema v2 把「未知」与「已知不适用」分开表达；每条机制登记固定来源（raw 导出字段路径或脚本引用）、适用形态/组件与未决点。参考比例（fieldShareReference/radialShareReference）只是登记的社区参考，不得当作通用伤害补偿乘数。"
   },
   "mods": {
+    "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod": {
+      "mechanicId": "galvanized-conditional-radial-scope",
+      "status": "conditional-supported",
+      "simulatorImplemented": true,
+      "kind": "per-status-conditional-damage",
+      "appliesToMods": [
+        "镀层家族（Galvanized Aptitude/Arsenal/Chamber/Precision/Justice 等，主武器 WeaponStatusChanceSPMod 家族）",
+        "异况超量（Condition Overload，近战 WeaponDamageIfVictimProcActive）",
+        "优胜劣汰（Cull the Weak，库狃武器）"
+      ],
+      "enginePath": {
+        "coreFn": "0x140e266d0（ApplyVictimProcConditionalBonuses，UpgradeType 259 唯一游戏消费方；GetUpgradeValueF 0x140309c20 r8d=0x103 读值，按受害者异常层数 ×(value-1) 乘入事件伤害倍率 [r14+0x6c/0x68]）",
+        "gateDoT": "门控一：事件 hitType@+0x1bf ≠ DHT_DOT(7)（cmpb $0x7 @0x140e26728）；门控二：事件 EProcType@+0x268 = 30 哨兵（cmpb $0x1e @0x140e26735）——DoT tick 事件带真实 PT id 双门皆不过",
+        "radialRouting": "径向判别（第二轮 RE，2026-09-24）：爆炸入口 fn 0x14148b760-0x14148c886 在 0x14148b7ff 查武器 vtable+0x708（HasBehaviorOfType 0x140fdc820，query *[proj+0x520]）；TRUE→武器 vtable+0xab8（0x140647bb0）经武器冲击 behavior 结算径向（武器升级上下文→259 生效）；FALSE→通用逐受害者径向（0x140899430→0x14148c080→0x140e2b680，投射物局部上下文，GetUpgradeValueF(259)=0 不生效）",
+        "dataFlag": "投射物序列化成员 mDealDamageThroughImpactBehavior @+0xd99（getter 0x1410d0490；17 个投射物 vtable 覆写）；EE 字段 DealDamageThroughImpactBehavior=1。白名单 = 该标志 ∧ ExplosiveAttack Amount>0 ∧ DamageRadius>0"
+      },
+      "radialWhitelist": {
+        "note": "玩家可用武器（完整 190 条原始名单见 .local/research/engine-disasm/gr_whitelist.json）：Ogris/Kuva Ogris、Kuva Tonkor、Kuva Zarr、Penta 家族、Acceltra、Corinth Prime 副模式、Cedo、Strun Prime 副模式、Vectis 灵化、Zariman 重型手枪副模式、Sancti Castanas、Talons、Atomos 副模式、Angstrum/棱晶、Castanas、Fusilai、多数 Glaive 家族（Glaive Prime、Halikar、Orvius、Cerata、Xiphos 系、回旋镖系、Teshin 系）、CrpElectroMag、Cernos 集束、Cephalon 主武器、1999 RPG、Amp 部件、Grimoire、Goo 枪、Zymos 系、ThanoTech 弓枪——约 40 把。",
+        "blacklistExamples": [
+          "Torid（BioGrenadeProjectile：无 DealDamageThroughImpactBehavior 标志）",
+          "Akarius Prime（PrimeAkariusGlaiveProjectile：爆炸 509 半径 7.8 但无标志）",
+          "Kuva Bramma（集束弹无标志）"
+        ],
+        "blacklistNote": "黑名单武器的径向伤害不吃 259 加成；直击部分照常吃。"
+      },
+      "simulatorContract": {
+        "direct": "CO（每异常层增伤）作用于导出直击向量——所有武器（引擎核心门只排 DoT）。",
+        "radial": "白名单武器的径向吃 CO（武器升级上下文）；黑名单不吃（投射物局部上下文读值为 0）。冻结导出（Rabbit 2D）多数武器无径向分量（weapon-radial-or-field-damage-not-in-export 已登记）——径向缺席时解算只含直击，CO 作用面与黑名单语义一致；径向已导出的武器（如 Akarius 的 ExplosiveAttack total）在导出层面仍不参与解算（kitgun-radial-damage-unapplied 同族缺口）。",
+        "dot": "DoT tick 不吃 CO（种子基于 CO 剥离后的基向量构造——tests/test_galvanized_scope.py 钉死）。",
+        "optimizerNote": "黑名单 AoE 武器（Torid/Akarius/Bramma 等）上镀层卡的 CO 线只作用于直击占比（Akarius 12%、Torid 直击为毒云外的弹体命中）；优化器解算不含径向分量，选卡排名以导出直击为准——用户对照实战时注意径向部分实战不吃加成。"
+      },
+      "sources": [
+        "engine-reverse: .local/research/galvanized-radial-re.json（第一轮：核心 fn 0x140e266d0 双门控 + DHT 枚举 + 调用链）",
+        "engine-reverse: .local/research/galvanized-radial-whitelist.json（第二轮：径向路由 0x14148b760-0x14148c886 + mDealDamageThroughImpactBehavior@+0xd99 + 190 条原始白名单）",
+        "raw-export: BioGrenadeProjectile.txt / PrimeAkariusGlaiveProjectile.txt（黑名单投射物无 DealDamageThroughImpactBehavior）",
+        "community-cross-check: overframe.gg Torid AoE 构筑带镀层（该结论与本裁决冲突——白名单以引擎二进制为准；Torid 属黑名单，实战直击/毒云 tick 吃、爆炸径向不吃）"
+      ]
+    },
     "/Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod": {
       "mechanicId": "latron-double-tap",
       "status": "conditional-supported",
