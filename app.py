@@ -1038,6 +1038,25 @@ def _riven_code_label(code: str) -> str:
     return str(rule[0]) if rule else code
 
 
+def _fusion_stat_codes(weapon_type: str) -> frozenset[str]:
+    """该武器类型的融合词条码集合（riven_templates.fusionRecipes 的
+    result 集合）。融合词条仅正面、每卡限 1 条——分析入口用它做
+    fail-closed 校验。"""
+    templates = EXPORTS.get("rivenTemplates")
+    recipes = (
+        templates.get("fusionRecipes")
+        if isinstance(templates, Mapping)
+        else None
+    ) or []
+    return frozenset(
+        str(recipe.get("result"))
+        for recipe in recipes
+        if isinstance(recipe, Mapping)
+        and str(recipe.get("weaponType") or "") == weapon_type
+        and recipe.get("result")
+    )
+
+
 def _incarnon_effect_text(effect: Mapping[str, Any]) -> str | None:
     upgrade = str(effect.get("upgradeType") or "")
     # NONE 是脚本占位词条（真实效果在 runtimeScripts 里），不渲染进描述；
@@ -2550,6 +2569,23 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     if positive_count not in {2, 3} or negative_count > 1:
         raise SimulationError(
             "portable Riven input requires 2 or 3 positive stats and at most 1 negative stat"
+        )
+    # ── 融合词条规则（游戏规则，2026-09-24 用户确认）────────────────────
+    # 融合词条（Advanced Traits）仅正面、每卡限 1 条。fail-closed 校验：
+    # 负面融合词条直接拒绝；正面融合词条超过 1 条直接拒绝。
+    _fusion_codes = _fusion_stat_codes(weapon["weaponType"])
+    fusion_lines = [
+        s for s in raw_stats
+        if str(s.get("code") or "").strip().upper() in _fusion_codes
+    ]
+    for stat in fusion_lines:
+        if stat.get("negative") is True:
+            raise SimulationError(
+                f"融合词条 {stat.get('code')} 不能作为负面词条（仅正面）"
+            )
+    if len(fusion_lines) > 1:
+        raise SimulationError(
+            f"融合词条每卡限 1 条（当前 {len(fusion_lines)} 条）"
         )
 
     bases = RIVEN_BASE_VALUES.get(weapon["weaponType"], {})

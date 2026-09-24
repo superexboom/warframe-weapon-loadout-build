@@ -1681,7 +1681,12 @@ function definitionStep(definition) {
 
 function fillStatSelect(select, preferredCode) {
   const previous = preferredCode || select.value;
-  const used = new Set(activeStats().filter((entry) => entry.row.querySelector(".stat-code") !== select).map((entry) => entry.code));
+  const activeEntries = activeStats();
+  const used = new Set(activeEntries.filter((entry) => entry.row.querySelector(".stat-code") !== select).map((entry) => entry.code));
+  // 融合词条每卡限 1 条：其他行已有融合词条时，本行禁选所有融合词条。
+  const fusionUsedElsewhere = activeEntries.some(
+    (entry) => entry.row.querySelector(".stat-code") !== select && entry.definition?.isFusion,
+  );
   const options = statDefinitions().map((definition) => {
     const option = document.createElement("option");
     option.value = definition.code;
@@ -1689,7 +1694,10 @@ function fillStatSelect(select, preferredCode) {
     // 融合词条标 ★（只能通过词条融合获得，不能直接洗出）。
     const fusionMark = definition.isFusion ? "★" : "";
     option.textContent = `${fusionMark}${definition.label}${outOfObjective}`;
-    option.disabled = used.has(definition.code) && definition.code !== previous;
+    option.disabled = (
+      (used.has(definition.code) && definition.code !== previous)
+      || (definition.isFusion && fusionUsedElsewhere && definition.code !== previous)
+    );
     if (definition.isFusion) {
       const recipe = definition.fusionRecipe || {};
       option.title = `融合词条（${recipe.primaryLabel || "?"} + ${recipe.secondaryLabel || "?"} 合成）`;
@@ -2364,6 +2372,15 @@ function buildMetrics(build, weapon = state.weapon) {
   return preferred.filter((key) => finite(build?.[key]) !== null).slice(0, 5);
 }
 
+// 栏位语义（2026-09-24 修复）：objectiveScore 的标签必须与评分指标一致——
+// KPM 口径显示「标准靶 KPM」，KPM 饱和切换 windowedDps 后显示「标准靶 DPS」。
+// 旧实现恒显「标准靶 KPM」，5M 量级的窗口 DPS 塞进 KPM 栏有强误导性。
+function metricLabel(key) {
+  if (key !== "objectiveScore") return METRIC_LABELS[key];
+  const metric = String(state.result?.searchQuality?.scoreMetric || state.result?.scoreMetric || "").toLowerCase();
+  return metric.includes("dps") ? "标准靶 DPS" : "标准靶 KPM";
+}
+
 function renderMetrics(build, target = ui["damage-metrics"], weapon = state.weapon) {
   const previousValues = new Map([...target.querySelectorAll(".damage-metric")].map((card) => {
     const label = card.querySelector("span")?.textContent;
@@ -2374,9 +2391,10 @@ function renderMetrics(build, target = ui["damage-metrics"], weapon = state.weap
     card.title = new Intl.NumberFormat("zh-CN", { maximumFractionDigits: 2 }).format(build[key]);
     const text = formatMetric(build[key]);
     card.dataset.liveValue = text;
+    const label = metricLabel(key);
     const value = create("strong", "", text);
-    if (previousValues.has(METRIC_LABELS[key]) && previousValues.get(METRIC_LABELS[key]) !== text) value.classList.add("is-flash");
-    card.append(create("span", "", METRIC_LABELS[key]), value);
+    if (previousValues.has(label) && previousValues.get(label) !== text) value.classList.add("is-flash");
+    card.append(create("span", "", label), value);
     return card;
   });
   target.replaceChildren(...nodes);
@@ -2609,6 +2627,7 @@ function renderRivenBuilder(target) {
     sign.addEventListener("click", () => {
       const negativeCount = state.rivenBuilderStats.filter((s) => s.negative).length;
       const positiveCount = state.rivenBuilderStats.length - negativeCount;
+      if (!entry.negative && def?.isFusion) return toast("融合词条仅正面");
       if (!entry.negative && (negativeCount >= 1 || positiveCount <= 2)) return toast("负面最多 1 条且需保留 2 条正面");
       entry.negative = !entry.negative;
       renderManualMods();
@@ -2617,12 +2636,18 @@ function renderRivenBuilder(target) {
     select.className = "riven-stat-code";
     // 已被其他行占用的词条置灰（同一词条不能重复录入，与分析页同口径）。
     const usedCodes = new Set(state.rivenBuilderStats.filter((_s, i) => i !== index).map((s) => s.code));
+    // 融合词条每卡限 1 条：其他行已有融合词条时，本行禁选所有融合词条。
+    const fusionUsedElsewhere = state.rivenBuilderStats.some((_s, i) => i !== index && (defs.find((d) => d.code === _s.code)?.isFusion));
     defs.forEach((d) => {
       const option = document.createElement("option");
       option.value = d.code;
-      option.textContent = d.label || d.code;
+      option.textContent = d.isFusion ? `★${d.label || d.code}` : (d.label || d.code);
       option.selected = d.code === entry.code;
-      option.disabled = usedCodes.has(d.code);
+      option.disabled = usedCodes.has(d.code) || (d.isFusion && fusionUsedElsewhere && d.code !== entry.code);
+      if (d.isFusion) {
+        const recipe = d.fusionRecipe || {};
+        option.title = `融合词条（${recipe.primaryLabel || "?"} + ${recipe.secondaryLabel || "?"} 合成）· 仅正面，每卡限 1 条`;
+      }
       select.append(option);
     });
     select.value = entry.code;

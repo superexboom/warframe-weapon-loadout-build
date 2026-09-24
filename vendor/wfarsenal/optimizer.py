@@ -188,6 +188,9 @@ RIVEN_RULES: dict[str, tuple[str, str, str, str | None, str | None, str, float, 
     # 数值来自 new_riven_stats.json（base90 = 0.9 倾向基准显示值）。
     # 弱点家族乘区已引擎裁决：弱点伤害是独立乘区（弱命中 ×(1+bonus)）、
     # 弱点暴击与基础暴击同链加算——见 weakpoint-multiplier-re.json。
+    # 融合词条游戏规则（用户确认 2026-09-24）：仅正面、每卡限 1 条——
+    # can_negative 一律 False（提取数据的 CanBeCurse 标志是融合原料的
+    # 旧口径，不适用于融合结果词条）。
     "W": ("弱点伤害", "WEAPON_DAMAGE_WEAKPOINT", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
     "Y": ("弱点暴击几率", "WEAPON_CRIT_CHANCE_WEAKPOINT", "ADD", None, None, "percent", 1, True, False),
     # 双字符码避免与既有单字母冲突（wire 上 code.upper() 去重）。
@@ -197,12 +200,12 @@ RIVEN_RULES: dict[str, tuple[str, str, str, str | None, str | None, str, float, 
     "RA": ("辐射伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_RADIATION", None, "percent", 1, True, False),
     "BL": ("爆炸伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_EXPLOSION", None, "percent", 1, True, False),
     "MA": ("磁力伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_MAGNETIC", None, "percent", 1, True, False),
-    "SD": ("状态伤害", "WEAPON_PROC_DAMAGE", "STACKING_MULTIPLY", None, None, "percent", 1, True, True),
-    "AE": ("弹药效率", "WEAPON_AMMO_CONSUME_RATE", "STACKING_MULTIPLY", None, None, "percent", -1, True, True),
+    "SD": ("状态伤害", "WEAPON_PROC_DAMAGE", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
+    "AE": ("弹药效率", "WEAPON_AMMO_CONSUME_RATE", "STACKING_MULTIPLY", None, None, "percent", -1, True, False),
     "HR": ("收枪自动装填", "WEAPON_AUTO_RELOAD_RATE", "ADD", None, None, "percent", 1, True, False),
-    "FO": ("对Orokin伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Orokin", "percent", 1, True, True),
-    "FT": ("对Techrot伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Techrot", "percent", 1, True, True),
-    "FS": ("对Scaldra伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Scaldra", "percent", 1, True, True),
+    "FO": ("对Orokin伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Orokin", "percent", 1, True, False),
+    "FT": ("对Techrot伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Techrot", "percent", 1, True, False),
+    "FS": ("对Scaldra伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Scaldra", "percent", 1, True, False),
     # 近战专属融合词条（base90: 蓄力速度 1.197、格挡角度 8.1、震地伤害 1.197）。
     "HC": ("重击蓄力速度", "WEAPON_MELEE_HEAVY_CHARGE_SPEED", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
     "PA": ("格挡角度", "WEAPON_PARRY_ANGLE", "ADD", None, None, "flat", 1, True, False),
@@ -1721,6 +1724,7 @@ def _optimize(
     forbidden_mod_keys: Sequence[str] | None = None,
     min_fill: int | None = None,
     max_fill: int | None = None,
+    seed_cards: Sequence[_Card] | None = None,
 ) -> _Evaluation:
     # 解算档位（用户可调，平衡深度与等待时间）：
     #   fast     — beam 12/32，不做爬山。适合快速预览；可能漏掉冷门协同组合。
@@ -1898,6 +1902,46 @@ def _optimize(
             best is None or greedy_eval.score > best.score
         ):
             best = greedy_eval
+    # ── baseline 种子（携带紫卡的实际/最优搜索下界保证）─────────────────
+    # 紫卡占容量（~18）会改变 beam 的可行组合空间：fast/standard 档的剪枝
+    # 可能把「无紫卡时的最优配装家族」整体淘汰，导致 actual < baseline 的
+    # 假象（用户报告：加了紫卡评分反而崩）。把 baseline 的选卡作为种子
+    # 直接评估（按容量逐张保留，装不下就丢），确保带紫卡搜索不劣于
+    # 「baseline 配装去掉最贵的一张」这个自然下界。
+    if seed_cards:
+        candidate_pool_keys = {card.key for card in pool}
+        seed_kept: list[_Card] = []
+        for card in seed_cards:
+            if card.required or card.key in candidate_pool_keys or any(
+                c.key == card.key for c in required_cards
+            ):
+                if validate_build(
+                    (*required_cards, *seed_kept, card),
+                    riven,
+                    slot_count=slot_count,
+                    capacity_limit=capacity_limit,
+                    required_mod_keys=required_mod_keys,
+                    forbidden_mod_keys=forbidden_mod_keys,
+                    min_fill=min_fill,
+                    max_fill=max_fill,
+                ) is None:
+                    seed_kept.append(card)
+        if seed_kept:
+            seed_eval = _evaluate(
+                weapon,
+                (*required_cards, *seed_kept),
+                riven,
+                scenario=scenario,
+                metric=metric,
+                passives=passives,
+                slot_limit=slot_count,
+                capacity_limit=capacity_limit,
+                target_context=target_context,
+            )
+            if seed_eval is not None and eligible(seed_eval) and (
+                best is None or seed_eval.score > best.score
+            ):
+                best = seed_eval
     for _ in range(limit):
         expanded: list[tuple[tuple[int, ...], _Evaluation]] = []
         for selected, _previous in beam:
@@ -3951,19 +3995,63 @@ def analyze_riven_request(
         # ── F07（审计修复）：floor 路径同样过统一可行域验证（必选卡必须
         # 保留、数量范围不得越界）。旧实现只查容量，riven-floor 可以把用户
         # 必选卡换掉或把配卡数压到 min_fill 之下。
+        # ── 容量修复（2026-09-24）：紫卡 18 耗经常要求丢 2 张卡（8 张满配
+        # 60 耗 + 18 超限）；旧 floor 只枚举单卡丢弃，装不下就整条 floor
+        # 失效——actual 于是回退到 beam 的劣解（用户报告的 actual < baseline
+        # 崩坏）。先按容量贪心保留（按卡序丢最贵），再补单卡丢弃枚举。
         required_keys = {
             card.key for card in baseline.cards if card.required
         }
         droppable = [
-            index
-            for index, card in enumerate(baseline.cards)
+            card
+            for card in baseline.cards
             if card.key not in required_keys
         ]
-        floor: _Evaluation | None = None
-        for drop in (*droppable, -1):
+        floor_candidates: list[tuple[_Card, ...]] = []
+        # 容量贪心：从 baseline 全卡开始，装不下就按「最贵优先丢」直到可装。
+        kept_greedy = list(baseline.cards)
+        guard = 0
+        while (
+            validate_build(
+                tuple(kept_greedy),
+                riven_card,
+                slot_count=8,  # analyze_riven_request 固定 8 槽口径
+                capacity_limit=capacity_limit,
+                required_mod_keys=search_required_keys,
+                forbidden_mod_keys=search_forbidden_keys,
+                min_fill=search_min_fill,
+                max_fill=search_max_fill,
+            ) is not None
+            and kept_greedy
+            and guard < 8
+        ):
+            # 丢最贵的一张可丢卡。
+            droppable_here = [c for c in kept_greedy if c.key not in required_keys]
+            if not droppable_here:
+                break
+            most_expensive = max(droppable_here, key=lambda c: c.drain)
+            kept_greedy.remove(most_expensive)
+            guard += 1
+        if kept_greedy and validate_build(
+            tuple(kept_greedy),
+            riven_card,
+            slot_count=8,
+            capacity_limit=capacity_limit,
+            required_mod_keys=search_required_keys,
+            forbidden_mod_keys=search_forbidden_keys,
+            min_fill=search_min_fill,
+            max_fill=search_max_fill,
+        ) is None:
+            floor_candidates.append(tuple(kept_greedy))
+        # 单卡丢弃枚举（保留旧口径；droppable 非空时）。
+        for drop_card in droppable:
             kept = tuple(
-                card for index, card in enumerate(baseline.cards) if index != drop
-            ) if drop >= 0 else tuple(baseline.cards)
+                card for card in baseline.cards if card.key != drop_card.key
+            )
+            floor_candidates.append(kept)
+        floor_candidates.append(tuple(baseline.cards))
+        floor: _Evaluation | None = None
+        for kept in floor_candidates:
             if validate_build(
                 kept,
                 riven_card,
@@ -3980,7 +4068,10 @@ def analyze_riven_request(
                 kept,
                 riven_card,
                 scenario=scenario,
-                metric=objective_metric,
+                metric=(
+                    target_calibration.get("formalSearchMetric")
+                    or objective_metric
+                ),
                 passives=passives,
                 capacity_limit=capacity_limit,
                 target_context=benchmark_context,
@@ -4086,11 +4177,27 @@ def analyze_riven_request(
             # pressure-test level is selected.
         if calibration_level_changed:
             final_level = benchmark_context.get("level")
+            # ── 饱和口径切换（2026-09-24 修复）─────────────────────────────
+            # 压力校准把等级推到 522/914 之后，KPM 在该等级上对所有可行配装
+            # 同时趋零/饱和——搜索的区分度崩塌，beam 会随机收敛到 DPS 极差
+            # 的平局解（用户报告：带紫卡 actual 反而比 baseline 差 3 倍）。
+            # 与评分层（quality metric）保持同口径：饱和/封顶时正式搜索改用
+            # 连续 windowedDps，分数才有区分度。
+            calibration_capped = target_calibration["status"] in {
+                "capped-saturated", "post-search-saturated",
+            }
+            formal_metric = (
+                "windowedDps" if calibration_capped else objective_metric
+            )
+            if calibration_capped:
+                unsupported.append(
+                    "target-calibration-saturated-search-metric-switched-to-windowed-dps"
+                )
             baseline = _optimize_archetype(
                 weapon,
                 None,
                 scenario=scenario,
-                metric=objective_metric,
+                metric=formal_metric,
                 passives=passives,
                 capacity_limit=capacity_limit,
             )
@@ -4099,7 +4206,7 @@ def analyze_riven_request(
                     weapon,
                     actual_card,
                     scenario=scenario,
-                    metric=objective_metric,
+                    metric=formal_metric,
                     passives=passives,
                     capacity_limit=capacity_limit,
                 ),
@@ -4107,6 +4214,7 @@ def analyze_riven_request(
             )
             baseline_fresh = True
             target_calibration["formalSearchLevel"] = final_level
+            target_calibration["formalSearchMetric"] = formal_metric
             _scoring_cache_migrate(int(final_level))
             if statics is not None:
                 statics["baselineCards"] = [card.key for card in baseline.cards]
@@ -4236,13 +4344,18 @@ def analyze_riven_request(
     if isinstance(cached_optimal, dict):
         optimal = _reconstruct(cached_optimal.get("cards"), optimal_card)
     optimal_fresh = optimal is None
+    # 饱和感知的搜索口径：压力校准封顶后 KPM 无区分度，正式搜索（含
+    # optimal/上限）与评分层同口径切 windowedDps。
+    _formal_search_metric = (
+        target_calibration.get("formalSearchMetric") or objective_metric
+    )
     if optimal_fresh:
         optimal = _apply_riven_floor_profiled(
             _optimize_archetype(
                 weapon,
                 optimal_card,
                 scenario=scenario,
-                metric=objective_metric,
+                metric=_formal_search_metric,
                 passives=passives,
                 capacity_limit=capacity_limit,
             ),
@@ -4381,13 +4494,20 @@ def analyze_riven_request(
                 target_calibration["evaluationLevel"] = final_level
                 target_calibration["status"] = "calibrated"
                 target_calibration["formalSearchLevel"] = final_level
+                # 升靶后的正式搜索口径：饱和时与评分层同源（windowedDps），
+                # 与上方初次校准的 formalSearchMetric 切换一致。
+                if not target_calibration.get("formalSearchMetric"):
+                    target_calibration["formalSearchMetric"] = (
+                        "windowedDps" if objective_metric == "killsPerMinute" else objective_metric
+                    )
+                _formal_search_metric = target_calibration["formalSearchMetric"]
                 # 冻结的最终上下文里重跑三条正式曲线（旧赢家作为搜索的
                 # 起点，数值不跨等级复用）。
                 baseline = _optimize_archetype(
                     weapon,
                     None,
                     scenario=scenario,
-                    metric=objective_metric,
+                    metric=_formal_search_metric,
                     passives=passives,
                     capacity_limit=capacity_limit,
                 )
@@ -4396,7 +4516,7 @@ def analyze_riven_request(
                         weapon,
                         actual_card,
                         scenario=scenario,
-                        metric=objective_metric,
+                        metric=_formal_search_metric,
                         passives=passives,
                         capacity_limit=capacity_limit,
                     ),
@@ -4407,7 +4527,7 @@ def analyze_riven_request(
                         weapon,
                         optimal_card,
                         scenario=scenario,
-                        metric=objective_metric,
+                        metric=_formal_search_metric,
                         passives=passives,
                         capacity_limit=capacity_limit,
                     ),
@@ -4546,21 +4666,32 @@ def analyze_riven_request(
                         passives=passives,
                         capacity_limit=capacity_limit,
                     ),
-                    "actual": _optimize_archetype(
-                        weapon,
+                    # actual/optimal 带 floor 保护：quality 重搜同样受紫卡
+                    # 容量挤压影响（beam 剪掉「baseline 赢家 − 最贵卡」的
+                    # 显见路径），无 floor 时 1.22M 劣解会覆盖校准阶段
+                    # floor 修正后的结果（2026-09-24 actual<baseline 崩坏
+                    # 的直接根因）。
+                    "actual": _apply_riven_floor_profiled(
+                        _optimize_archetype(
+                            weapon,
+                            actual_card,
+                            scenario=scenario,
+                            metric=score_metric,
+                            passives=passives,
+                            capacity_limit=capacity_limit,
+                        ),
                         actual_card,
-                        scenario=scenario,
-                        metric=score_metric,
-                        passives=passives,
-                        capacity_limit=capacity_limit,
                     ),
-                    "optimal": _optimize_archetype(
-                        weapon,
+                    "optimal": _apply_riven_floor_profiled(
+                        _optimize_archetype(
+                            weapon,
+                            optimal_card,
+                            scenario=scenario,
+                            metric=score_metric,
+                            passives=passives,
+                            capacity_limit=capacity_limit,
+                        ),
                         optimal_card,
-                        scenario=scenario,
-                        metric=score_metric,
-                        passives=passives,
-                        capacity_limit=capacity_limit,
                     ),
                 }
                 # KPM ties can also make the cached recommended positive set
@@ -4655,13 +4786,16 @@ def analyze_riven_request(
                 # value look like a stronger candidate and can invert the
                 # comparison for otherwise neutral negatives.
                 actual_quality_card = _card_from_lines(actual_lines)
-                actual_quality_candidate = _optimize_archetype(
-                    weapon,
+                actual_quality_candidate = _apply_riven_floor_profiled(
+                    _optimize_archetype(
+                        weapon,
+                        actual_quality_card,
+                        scenario=scenario,
+                        metric=score_metric,
+                        passives=passives,
+                        capacity_limit=capacity_limit,
+                    ),
                     actual_quality_card,
-                    scenario=scenario,
-                    metric=score_metric,
-                    passives=passives,
-                    capacity_limit=capacity_limit,
                 )
                 if actual_quality_candidate.score > quality_evaluations["optimal"].score:
                     quality_evaluations["optimal"] = actual_quality_candidate
