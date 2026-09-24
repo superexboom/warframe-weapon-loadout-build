@@ -1563,6 +1563,12 @@ def _auto_exilus(
     # when leveling it adds no supported primary effect.
     choices.sort(key=lambda item: (item[1], item[0], item[2], item[3], item[4]), reverse=True)
     score, _matched, _drain_key, _rank_key, _path, row, rank, drain, relation, stats, derived_scenario = choices[0]
+    # ── 无收益不选（2026-09-24 用户反馈）─────────────────────────────────
+    # 工具池大量卡没有已建模词条（NONE 占位/空 effects）——全员与基准
+    # 持平时，旧实现靠平局兜底选一张（观感=「随机选的没用卡」）。改为：
+    # 最优选择的分数必须严格高于基准（容差 1e-9）才装备；否则留空。
+    if score <= evaluation.score + 1e-9:
+        return evaluation, None
     return (
         replace(
             evaluation,
