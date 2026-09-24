@@ -2023,13 +2023,18 @@ def _manual_mod_rows() -> list[dict[str, Any]]:
         # card-level support.weapon flag is false for Amalgam-style hybrids
         # whose riders (charge speed etc.) are unsupported, so the effect-level
         # check is authoritative; unsupported riders surface as notes.
+        # 冻结快照的 supported 标记滞后于引擎（首发伤害、弱点家族词条都
+        # 属于此类）——以引擎当前支持表为准做准入判断，展示层再按
+        # _refresh_effect_support 动态覆写标记。
         effects = mod.get("effects") or []
-        has_supported_effect = any(
-            isinstance(effect, Mapping)
-            and effect.get("supported") is True
-            and "weapon" in (effect.get("supportedBy") or ())
-            for effect in effects
-        )
+        def _effect_supported(effect: Any) -> bool:
+            if not isinstance(effect, Mapping):
+                return False
+            if effect.get("supported") is True:
+                return "weapon" in (effect.get("supportedBy") or ()) or not effect.get("supportedBy")
+            # stale marker: the engine's current support table is authoritative.
+            return str(effect.get("upgradeType") or "").upper() in SUPPORTED_WEAPON_UPGRADE_TYPES
+        has_supported_effect = any(_effect_supported(effect) for effect in effects)
         fixed_melee_range = str(mod.get("nameEn") or "") == "Primed Reach"
         # 膛室家族（Primed Chamber / 蓄力装填）的 WEAPON_INIT_DAMAGE_MOD「首发
         # 伤害」引擎已建模；冻结快照的 supported 标记滞后，过滤阶段仍需按词条名
@@ -3659,6 +3664,10 @@ def _manual_arcane_trigger_kind(arcane: Mapping[str, Any]) -> str | None:
     text = " ".join(parts).casefold()
     if "headshot" in text:
         return "headshot"
+    # 弱点命中触发（2026.09.22 更名：原 HeadshotCondition 系统性改为
+    # WeakPointHitCondition——IsWeakpoint.lua 任意弱点部位 ≥0.5）。
+    if "weakpoint" in text and ("hit" in text or "kill" in text):
+        return "hit"
     if "crit" in text:
         return "crit"
     if "onhit" in text or "on_hit" in text:

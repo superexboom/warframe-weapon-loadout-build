@@ -9465,7 +9465,30 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "status chance per stack",
+     "operation": "ADD",
+     "perStack": true,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_PROC_CHANCE",
+     "valuePerRank": 0.05
+    },
+    {
+     "damageType": "DT_ANY",
+     "label": "ammo efficiency per stack (utility)",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": true,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+     "valuePerRank": -0.01
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDK.png",
    "maxRank": 5,
@@ -9488,11 +9511,12 @@
      "_statusChancePerLevel": 0.050000001
     }
    },
+   "stackSemantics": "OnWeakpointHitCondition 触发叠层：每层 +5% 状态几率（rank 每级 +5%，R5=+30%/层），同时 -1%/层 弹药消耗（utility，不参与伤害解算）；10 层上限，每层持续 10s。径向命中与 DoT tick 不触发（OnWeakPointHitCondition IgnoreHitTypes=DHT_RADIAL,DHT_DOT）。参数来自 StatusAndAmmoEfficiencyOnWeakpointHit.lua ApplyUpgrade 脚本参数（导出冻结快照）。",
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 2,
+    "weaponEffects": 2
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
@@ -9501,10 +9525,10 @@
     "conditions": [
      "OnWeakpointHitCondition"
     ],
-    "duration": null,
+    "duration": 10,
     "durationScalesWithRank": null,
-    "maxStacks": null,
-    "stackMode": null
+    "maxStacks": 10,
+    "stackMode": "per-stack"
    }
   },
   {

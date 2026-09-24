@@ -1071,12 +1071,18 @@ def _expected_arcane_state(
     expected_stacks = _expected_capped_poisson(mean, limit)
     applied_stacks = math.ceil(expected_stacks) if expected_stacks else 0
     effect_uptime = expected_stacks / applied_stacks if applied_stacks else 0.0
+    # conditionTag 为空时回退 conditions 数组（Primary Crux 家族的
+    # OnWeakpointHitCondition 只出现在 conditions 里）。
+    condition_bits = [str(trigger.get("conditionTag") or "")]
+    trigger_conditions = trigger.get("conditions")
+    if isinstance(trigger_conditions, (list, tuple)):
+        condition_bits.extend(str(item) for item in trigger_conditions)
     return applied_stacks, effect_uptime, expected_stacks, active_uptime, {
         "triggerChance": chance,
         "durationSeconds": duration,
         "maxStacks": limit,
         "stackMode": str(trigger.get("stackMode") or ""),
-        "triggerCondition": str(trigger.get("conditionTag") or ""),
+        "triggerCondition": " ".join(bit for bit in condition_bits if bit),
     }
 
 
@@ -1192,6 +1198,11 @@ def _arcane_card(
             state["rank"] = max_rank if max_rank is not None else 0
         trigger = arcane.get("trigger")
         if isinstance(trigger, Mapping):
+            # conditionTag 为空时回退 conditions 数组（同 _expected_trigger_state）。
+            _cond_bits = [str(trigger.get("conditionTag") or "")]
+            _trigger_conditions = trigger.get("conditions")
+            if isinstance(_trigger_conditions, (list, tuple)):
+                _cond_bits.extend(str(item) for item in _trigger_conditions)
             state.update(
                 {
                     "triggerChance": _number(
@@ -1202,7 +1213,7 @@ def _arcane_card(
                     ),
                     "maxStacks": int(trigger.get("maxStacks") or 1),
                     "stackMode": str(trigger.get("stackMode") or ""),
-                    "triggerCondition": str(trigger.get("conditionTag") or ""),
+                    "triggerCondition": " ".join(bit for bit in _cond_bits if bit),
                 }
             )
         implicit_heavy_state = (

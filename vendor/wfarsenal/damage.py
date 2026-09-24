@@ -1328,10 +1328,11 @@ def apply_mods(
             0.0,
         ),
         # WEAPON_CRIT_CHANCE_WEAKPOINT：与基础暴击加算（引擎 fn
-        # 0x1406dc47e 同链）；面板存原始值，弱命中期望折算同上。
+        # 0x1406dc47e 同链）。STACKING_MULTIPLY 卡（Primary Acuity
+        # ×0.318/级）从 1 累乘再减回 1；ADD 卡直接累加。
         weakpoint_crit_chance_bonus=_combine(
-            0.0, buckets["WEAPON_CRIT_CHANCE_WEAKPOINT"]
-        ),
+            1.0, buckets["WEAPON_CRIT_CHANCE_WEAKPOINT"]
+        ) - 1.0,
         falloff_multiplier=falloff_multiplier,
         dot_base_damage=sum(scaled_base.values()),
         dot_elemental_multipliers=_dot_elemental_multipliers(
