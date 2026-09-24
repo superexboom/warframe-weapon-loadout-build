@@ -346,6 +346,13 @@
                   <summary class="fold-head"><strong>灵化路线</strong><span>进化 II / III / IV 使用冻结游戏数据</span></summary>
                   <div class="fold-body">
                     <div class="incarnon-tiers" id="build-incarnon-tiers"></div>
+                    <!-- 灵化循环口径开关：常驻灵化（充能池近似零装填，默认）
+                         vs 真实循环（池耗尽回基础形态充能，装填按基础形态折算）。 -->
+                    <label class="incarnon-cycle-toggle" for="build-incarnon-cycle" title="常驻灵化：灵化形态零装填（170 充能池近似）&#10;真实循环：池耗尽后回基础形态充能再灵化（装填按基础形态时长保守折算）">
+                      <input type="checkbox" id="build-incarnon-cycle">
+                      <span>灵化循环口径</span>
+                      <small id="build-incarnon-cycle-note">常驻灵化（默认）</small>
+                    </label>
                   </div>
                 </details>
               </section>

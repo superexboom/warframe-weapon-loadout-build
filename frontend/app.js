@@ -117,7 +117,7 @@ const ui = Object.fromEntries([
   "build-fire-mode-select", "build-metric-select", "build-element-select", "build-element-icon",
   "build-innate-element-field", "build-innate-element-select", "build-innate-element-icon",
   "build-innate-element-value-field", "build-innate-element-value", "build-innate-element-output",
-  "build-incarnon-panel", "build-incarnon-tiers", "build-incarnon-note",
+  "build-incarnon-panel", "build-incarnon-tiers", "build-incarnon-note", "build-incarnon-cycle", "build-incarnon-cycle-note",
   "build-slot-count", "build-slot-output", "build-weapon-issue",
   "build-weapon-issue-text", "build-form-message",
   "build-enemy-select", "build-enemy-search", "build-enemy-factions", "build-enemy-list", "build-enemy-count", "build-enemy-level", "build-steel-path", "build-armour-strip", "build-armour-strip-output",
@@ -8777,6 +8777,8 @@ function buildPayloadFromForm() {
     riven: rivenPayload(),
     kitgunParts: kitgunPartsPayload(),
     incarnonChoices: { ...state.incarnonChoices },
+    // 灵化循环口径（缺省常驻灵化；true = 真实循环折算装填）。
+    incarnonCycle: Boolean(ui["build-incarnon-cycle"]?.checked),
   };
 }
 
@@ -9460,6 +9462,13 @@ function bindEvents() {
     const value = clamp(Number(ui["build-innate-element-value"].value || 60), 25, 60);
     ui["build-innate-element-output"].textContent = `${value}%`;
     setSliderVisual(ui["build-innate-element-value"]);
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+  // ── 灵化循环口径开关（2026-09-24）：常驻灵化（默认）vs 真实循环。
+  ui["build-incarnon-cycle"]?.addEventListener("change", () => {
+    const note = ui["build-incarnon-cycle-note"];
+    if (note) note.textContent = ui["build-incarnon-cycle"].checked ? "真实循环（充能折算装填）" : "常驻灵化（默认）";
     persistActiveBuildConfig();
     scheduleLiveBuild();
   });

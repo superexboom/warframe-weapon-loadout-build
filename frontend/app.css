@@ -828,6 +828,11 @@ i.empty-slot-polarity { font-size: 13px; font-style: normal; line-height: 16px; 
 .incarnon-panel { padding: 0; border-top: 1px solid var(--line-soft); }
 .incarnon-tiers { display: grid; gap: 10px; }
 .incarnon-tier { min-width: 0; margin: 0; padding: 9px; border: 1px solid var(--line-soft); }
+/* 灵化循环口径开关（常驻 vs 真实循环）。 */
+.incarnon-cycle-toggle { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 8px 9px; border: 1px solid var(--line-soft); cursor: pointer; }
+.incarnon-cycle-toggle input { margin: 0; }
+.incarnon-cycle-toggle span { font-weight: 600; }
+.incarnon-cycle-toggle small { color: var(--muted, rgba(200,210,225,.65)); }
 .incarnon-tier legend { padding: 0 6px; color: var(--orokin); font: 700 11px/1.2 ui-monospace, Consolas, monospace; }
 .incarnon-options { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 7px; }
 .incarnon-option { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 8px; padding: 9px; border: 1px solid transparent; background: rgba(255,255,255,.025); cursor: pointer; }
