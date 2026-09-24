@@ -1032,6 +1032,12 @@ INCARNON_OPERATION_LABELS = {
 }
 
 
+def _riven_code_label(code: str) -> str:
+    """词条码的中文标签（融合配方 hover 用；未知码回退码本身）。"""
+    rule = RIVEN_RULES.get(code)
+    return str(rule[0]) if rule else code
+
+
 def _incarnon_effect_text(effect: Mapping[str, Any]) -> str | None:
     upgrade = str(effect.get("upgradeType") or "")
     # NONE 是脚本占位词条（真实效果在 runtimeScripts 里），不渲染进描述；
@@ -1615,6 +1621,23 @@ def build_catalog() -> dict[str, Any]:
     )
 
     stats_by_type: dict[str, list[dict[str, Any]]] = {}
+    # ── 融合配方（词条融合 Advanced Traits，2026.09.22）──────────────────
+    # riven_templates.json 的 fusionRecipes: [{weaponType, result, primary,
+    # secondary, ...}]。目录构建时为每个武器类型建立 result->recipe 的
+    # 查找表，前端词条渲染用它在金框 hover 中显示合成路径。
+    _fusion_recipes = (
+        (EXPORTS.get("rivenTemplates") or {}).get("fusionRecipes")
+        if isinstance(EXPORTS.get("rivenTemplates"), Mapping)
+        else None
+    ) or []
+    _recipes_by_type: dict[str, dict[str, Any]] = {}
+    for recipe in _fusion_recipes:
+        if not isinstance(recipe, Mapping):
+            continue
+        wtype = str(recipe.get("weaponType") or "")
+        result = str(recipe.get("result") or "")
+        if wtype and result and result not in _recipes_by_type.setdefault(wtype, {}):
+            _recipes_by_type[wtype][result] = recipe
     for weapon_type, base_values in RIVEN_BASE_VALUES.items():
         rows = []
         for code in base_values:
@@ -1622,6 +1645,7 @@ def build_catalog() -> dict[str, Any]:
             if rule is None:
                 continue
             label, upgrade_type, _, _, _, unit, _, can_positive, can_negative = rule
+            recipe = _recipes_by_type.get(weapon_type, {}).get(code)
             rows.append(
                 {
                     "code": code,
@@ -1631,6 +1655,24 @@ def build_catalog() -> dict[str, Any]:
                     "canPositive": can_positive,
                     "canNegative": can_negative,
                     "objectiveSupported": upgrade_type in SUPPORTED_WEAPON_UPGRADE_TYPES,
+                    # 融合词条元数据（有配方的词条只能通过融合获得）。
+                    **(
+                        {
+                            "isFusion": True,
+                            "fusionRecipe": {
+                                "primary": recipe.get("primary"),
+                                "primaryLabel": _riven_code_label(
+                                    str(recipe.get("primary") or "")
+                                ),
+                                "secondary": recipe.get("secondary"),
+                                "secondaryLabel": _riven_code_label(
+                                    str(recipe.get("secondary") or "")
+                                ),
+                            },
+                        }
+                        if recipe is not None
+                        else {}
+                    ),
                 }
             )
         stats_by_type[weapon_type] = rows

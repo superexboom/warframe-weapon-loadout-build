@@ -215,6 +215,9 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .card-stats span { display: block; width: 100%; overflow: hidden; color: #dfc8ef; font-size: 13px; line-height: 1.25; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
 .card-stats span.is-negative { color: #efc9ed; }
 .card-stats .card-empty { color: rgba(228,210,241,.55); font-size: 11px; }
+/* 融合词条（Advanced Traits）：金色文字 + hover 显示合成路径。 */
+.card-stats span.is-fusion { color: #ffd76e; text-shadow: 0 0 1px rgba(255,215,110,.4); cursor: help; }
+.card-stats span.is-fusion.is-negative { color: #e6c86e; }
 .riven-card-meta { position: absolute; z-index: 6; top: 83.25%; right: 18.35%; left: 18.35%; display: flex; height: 4.25%; align-items: center; justify-content: space-between; color: #d8c6e8; font-size: 10px; text-shadow: 0 1px 2px #000; }
 .riven-card-meta b { font-weight: 650; }
 .reroll-mark { display: flex; align-items: center; gap: 4px; }
@@ -330,6 +333,9 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .contribution-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
 .contribution-row { min-width: 0; padding: 10px 11px; border-left: 2px solid var(--success); background: rgba(104,212,170,.035); }
 .contribution-row.is-harmful { border-color: var(--danger); background: rgba(239,113,131,.04); }
+/* 融合词条贡献行：金色边框（用户口径：金框代替，无新边框资源）。 */
+.contribution-row.is-fusion { border-color: #ffd76e; background: rgba(255,215,110,.05); }
+.contribution-row.is-fusion.is-harmful { border-color: #e6c86e; }
 .contribution-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .contribution-head > div:first-child { display: flex; min-width: 0; align-items: center; gap: 5px; }
 .contribution-sign { color: var(--success); }

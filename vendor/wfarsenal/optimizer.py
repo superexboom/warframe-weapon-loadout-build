@@ -137,6 +137,7 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "O": 58.77, "Q": 104.85, "T": 1.9422, "U": 73.44,
         "X": 119.7,
         # 新词条（近战专属：重击蓄力/格挡角度/震地伤害 base90=1.197/8.1/1.197）
+        "HC": 175.8, "PA": 1190.0, "SL": 175.8,
         "HR": 132.0,
         "FO": 66.0, "FT": 66.0, "FS": 66.0,
     },
@@ -202,6 +203,10 @@ RIVEN_RULES: dict[str, tuple[str, str, str, str | None, str | None, str, float, 
     "FO": ("对Orokin伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Orokin", "percent", 1, True, True),
     "FT": ("对Techrot伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Techrot", "percent", 1, True, True),
     "FS": ("对Scaldra伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Scaldra", "percent", 1, True, True),
+    # 近战专属融合词条（base90: 蓄力速度 1.197、格挡角度 8.1、震地伤害 1.197）。
+    "HC": ("重击蓄力速度", "WEAPON_MELEE_HEAVY_CHARGE_SPEED", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
+    "PA": ("格挡角度", "WEAPON_PARRY_ANGLE", "ADD", None, None, "flat", 1, True, False),
+    "SL": ("震地伤害", "WEAPON_MELEE_SLAM_DAMAGE_BONUS", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
 }
 
 

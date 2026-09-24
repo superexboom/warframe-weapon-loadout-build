@@ -1685,8 +1685,15 @@ function fillStatSelect(select, preferredCode) {
   const options = statDefinitions().map((definition) => {
     const option = document.createElement("option");
     option.value = definition.code;
-    option.textContent = definition.objectiveSupported ? definition.label : `${definition.label} · 评分外`;
+    const outOfObjective = definition.objectiveSupported ? "" : " · 评分外";
+    // 融合词条标 ★（只能通过词条融合获得，不能直接洗出）。
+    const fusionMark = definition.isFusion ? "★" : "";
+    option.textContent = `${fusionMark}${definition.label}${outOfObjective}`;
     option.disabled = used.has(definition.code) && definition.code !== previous;
+    if (definition.isFusion) {
+      const recipe = definition.fusionRecipe || {};
+      option.title = `融合词条（${recipe.primaryLabel || "?"} + ${recipe.secondaryLabel || "?"} 合成）`;
+    }
     return option;
   });
   select.replaceChildren(...options);
@@ -1928,6 +1935,12 @@ function updateCardPreview() {
 
   const lines = entries.filter((entry) => entry.definition && entry.value !== null).map((entry) => {
     const line = create("span", entry.negative ? "is-negative" : "");
+    // 融合词条（Advanced Traits）：金框样式 + hover 合成路径。
+    if (entry.definition.isFusion) {
+      line.classList.add("is-fusion");
+      const recipe = entry.definition.fusionRecipe || {};
+      line.title = `融合词条 · 合成路径：${recipe.primaryLabel || recipe.primary || "?"} + ${recipe.secondaryLabel || recipe.secondary || "?"} → ${entry.definition.label}`;
+    }
     line.textContent = `${formatStatNumber(entry.value, entry.definition, entry.negative)} ${entry.definition.label}`;
     return line;
   });
@@ -2206,14 +2219,22 @@ function renderScore() {
 function renderContributions() {
   const details = Array.isArray(state.result.details) ? state.result.details : [];
   const max = Math.max(1, ...details.map((entry) => Math.abs(finite(entry.delta) ?? 0)));
+  // 融合词条码集合（贡献行的金框标注——与 updateCardPreview 的 is-fusion 同源）。
+  const fusionDefs = statDefinitions().filter((d) => d.isFusion);
+  const fusionByCode = new Map(fusionDefs.map((d) => [d.code, d]));
   const rows = details.map((detail) => {
     const negative = state.submittedStats.find((entry) => entry.code === detail.code)?.negative;
     const delta = finite(detail.delta) ?? 0;
     const reoptimized = finite(detail.reoptimizedDelta);
-    const row = create("article", `contribution-row${delta < 0 ? " is-harmful" : ""}`);
+    const fusionDef = fusionByCode.get(detail.code) || null;
+    const row = create("article", `contribution-row${delta < 0 ? " is-harmful" : ""}${fusionDef ? " is-fusion" : ""}`);
     const head = create("div", "contribution-head");
     const title = create("div");
-    title.append(create("span", "contribution-sign", negative ? "−" : "+"), create("strong", "", detail.label || detail.code));
+    title.append(create("span", "contribution-sign", negative ? "−" : "+"), create("strong", "", `${detail.label || detail.code}${fusionDef ? " ★" : ""}`));
+    if (fusionDef) {
+      const recipe = fusionDef.fusionRecipe || {};
+      title.title = `融合词条 · 合成路径：${recipe.primaryLabel || recipe.primary || "?"} + ${recipe.secondaryLabel || recipe.secondary || "?"} → ${fusionDef.label}`;
+    }
     const value = create("div", "contribution-values");
     // F08：主数值是「同一配卡移除此词条」的消融口径；重优化收益（删词条
     // 并重选 MOD）单独展示，两者不再混为一谈。
