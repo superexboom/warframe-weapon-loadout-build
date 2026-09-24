@@ -1826,20 +1826,50 @@ def _optimize(
         )
 
     ranked: list[tuple[float, _Card]] = []
-    for card in candidates:
-        evaluated = _evaluate(
-            weapon,
-            (*required_cards, card),
-            riven,
-            scenario=scenario,
-            metric=metric,
-            passives=passives,
-            slot_limit=slot_count,
-            capacity_limit=capacity_limit,
-            target_context=target_context,
-        )
-        if evaluated is not None:
-            ranked.append((evaluated.score, card))
+    # ── 单卡排名并行化（~200 次独立评估；物理核 worker 池）────────────
+    _rank_jobs = [(*required_cards, card) for card in candidates]
+    _rank_scores: list[float | None] = []
+    from wfarsenal import parallel as _parallel
+
+    _wire_scenario = (
+        scenario
+        if isinstance(scenario.conditional_stacks, dict)
+        else replace(scenario, conditional_stacks=dict(scenario.conditional_stacks))
+    )
+    _pool_ctx = {
+        "weapon": weapon,
+        "scenario": _wire_scenario,
+        "metric": metric,
+        "passives": passives,
+        "slot_limit": slot_count,
+        "capacity_limit": capacity_limit,
+        "target_context": target_context,
+    }
+    _pool_exec = _parallel.get_pool()
+    if _pool_exec is not None and len(_rank_jobs) >= 8:
+        _futures = [
+            _pool_exec.submit(_parallel._score_job, (cards, riven, _pool_ctx))
+            for cards in _rank_jobs
+        ]
+        _rank_scores = [fut.result() for fut in _futures]
+    for cards, score in zip(_rank_jobs, _rank_scores):
+        if score is not None:
+            ranked.append((score, cards[-1]))
+    if not _rank_scores:
+        for cards in _rank_jobs:
+            evaluated = _evaluate(
+                weapon,
+                cards,
+                riven,
+                scenario=scenario,
+                metric=metric,
+                passives=passives,
+                slot_limit=slot_count,
+                capacity_limit=capacity_limit,
+                target_context=target_context,
+            )
+            if evaluated is not None:
+                ranked.append((evaluated.score, cards[-1]))
     ranked.sort(key=lambda item: (-item[0], item[1].key))
     pool: list[_Card] = []
     families: set[str] = set()
@@ -1944,26 +1974,68 @@ def _optimize(
                 best = seed_eval
     for _ in range(limit):
         expanded: list[tuple[tuple[int, ...], _Evaluation]] = []
+        # ── 并行层扩展（物理核进程池；串行回退=1 核或 WF_ANALYZER_SERIAL）──
+        # 每层数百次独立评估分发到 worker；worker 只回 score（避免 stats
+        # 的深 pickle），beam 幸存者与 incumbent 在父进程串行重评估以附上
+        # 完整 stats（确定性纯函数，~15 次/层）。
+        layer_jobs: list[tuple[tuple[int, ...], tuple[tuple[int, ...], ...]]] = []
         for selected, _previous in beam:
             used = set(selected)
             used_families = {_mod_family(pool[index]) for index in selected}
             for index in range(len(pool)):
                 if index in used or _mod_family(pool[index]) in used_families:
                     continue
-                next_selected = (*selected, index)
-                evaluated = _evaluate(
-                    weapon,
-                    (*required_cards, *(pool[item] for item in next_selected)),
-                    riven,
-                    scenario=scenario,
-                    metric=metric,
-                    passives=passives,
-                    slot_limit=slot_count,
-                    capacity_limit=capacity_limit,
-                    target_context=target_context,
+                layer_jobs.append(
+                    ((*selected, index), (*required_cards, *(
+                        pool[item] for item in (*selected, index)
+                    )))
                 )
-                if evaluated is not None:
-                    expanded.append((next_selected, evaluated))
+        scores: list[float | None] = []
+        if layer_jobs:
+            if _pool_exec is not None and len(layer_jobs) >= 8:
+                futures = [
+                    _pool_exec.submit(
+                        _parallel._score_job, (cards, riven, _pool_ctx)
+                    )
+                    for _sel, cards in layer_jobs
+                ]
+                scores = [fut.result() for fut in futures]
+            else:
+                scores = []
+                for _sel, cards in layer_jobs:
+                    evaluated = _evaluate(
+                        weapon,
+                        cards,
+                        riven,
+                        scenario=scenario,
+                        metric=metric,
+                        passives=passives,
+                        slot_limit=slot_count,
+                        capacity_limit=capacity_limit,
+                        target_context=target_context,
+                    )
+                    scores.append(None if evaluated is None else evaluated.score)
+        scored: list[tuple[tuple[int, ...], float]] = [
+            (sel, score)
+            for (sel, _cards), score in zip(layer_jobs, scores)
+            if score is not None
+        ]
+        scored.sort(key=lambda item: (-item[1], tuple(pool[i].key for i in item[0])))
+        # Beam 幸存者 + 全局最优候选在父进程重评估附 stats。
+        for sel, _score in scored[: beam_width + 1]:
+            evaluated = _evaluate(
+                weapon,
+                (*required_cards, *(pool[item] for item in sel)),
+                riven,
+                scenario=scenario,
+                metric=metric,
+                passives=passives,
+                slot_limit=slot_count,
+                capacity_limit=capacity_limit,
+                target_context=target_context,
+            )
+            if evaluated is not None:
+                expanded.append((sel, evaluated))
         if not expanded:
             break
         expanded.sort(
@@ -2468,22 +2540,66 @@ def _recommend_positive(
     #               _best_fixed 的子集枚举上限压到 5（2^5=32 而非 2^7=128）。
     #   deep     — 完整口径（现状）。
     keep_cap = {"fast": 3, "standard": 5, "deep": None}[profile]
+    # ── 单词条粗排并行化（每词条一次 _best_fixed 的子集枚举——40+ 次
+    # 独立的重量评估；物理核 worker 池，串行回退）──────────────────────
+    _supported_lines = [
+        line for line in candidates
+        if line.effect is not None and line.effect.supported
+    ]
+    _line_scores: list[float | None] | None = None
+    from wfarsenal import parallel as _parallel
+
+    _wire_scenario = (
+        scenario
+        if isinstance(scenario.conditional_stacks, dict)
+        else replace(scenario, conditional_stacks=dict(scenario.conditional_stacks))
+    )
+    _pool_ctx = {
+        "weapon": weapon,
+        "scenario": _wire_scenario,
+        "metric": metric,
+        "passives": passives,
+        "slot_limit": 8,
+        "capacity_limit": capacity_limit,
+        "target_context": target_context,
+    }
+    _pool_exec = _parallel.get_pool()
+    if _pool_exec is not None and len(_supported_lines) >= 4:
+        _futures = {
+            line.code: _pool_exec.submit(
+                _parallel._best_fixed_job,
+                (baseline.cards, _card_from_lines([line]), keep_cap, _pool_ctx),
+            )
+            for line in _supported_lines
+        }
+        _line_scores = [
+            _futures[line.code].result() for line in _supported_lines
+        ]
+
     ranked: list[tuple[float, _RivenLine]] = []
-    for line in candidates:
-        if line.effect is None or not line.effect.supported:
-            continue
-        result = _best_fixed(
-            weapon,
-            baseline.cards,
-            _card_from_lines([line]),
-            scenario=scenario,
-            metric=metric,
-            passives=passives,
-            capacity_limit=capacity_limit,
-            target_context=target_context,
-            max_keep_cap=keep_cap,
-        )
-        ranked.append((result.score, line))
+    if _line_scores is not None:
+        for line, score in zip(_supported_lines, _line_scores):
+            if score is not None:
+                ranked.append((score, line))
+    else:
+        for line in _supported_lines:
+            try:
+                result = _best_fixed(
+                    weapon,
+                    baseline.cards,
+                    _card_from_lines([line]),
+                    scenario=scenario,
+                    metric=metric,
+                    passives=passives,
+                    capacity_limit=capacity_limit,
+                    target_context=target_context,
+                    max_keep_cap=keep_cap,
+                )
+            except SimulationError:
+                # 与并行口径一致：单词条无可行配装时跳过（worker 侧
+                # 捕获后返回 None）。
+                continue
+            ranked.append((result.score, line))
     ranked.sort(key=lambda item: (-item[0], item[1].code))
     shortlist = [line for _, line in ranked[: max(8, count)]]
     if len(shortlist) < count:

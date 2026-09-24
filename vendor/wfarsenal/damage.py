@@ -333,6 +333,31 @@ DEFERRED_WEAPON_REASON_CODES = {
 }
 
 
+def _rebuild_scenario(
+    aiming: bool,
+    heavy_attack: bool,
+    combo_tier: int,
+    victim_status_count: int,
+    conditional_stacks: Mapping[str, int],
+    distance: float | None,
+    cloaked: bool,
+    nearest_enemy_distance: float | None,
+    trigger_policy: str,
+) -> "Scenario":
+    """Scenario.__reduce__ 的重建入口（pickle 反序列化路径）。"""
+    return Scenario(
+        aiming=aiming,
+        heavy_attack=heavy_attack,
+        combo_tier=combo_tier,
+        victim_status_count=victim_status_count,
+        conditional_stacks=conditional_stacks,
+        distance=distance,
+        cloaked=cloaked,
+        nearest_enemy_distance=nearest_enemy_distance,
+        trigger_policy=trigger_policy,
+    )
+
+
 @dataclass(frozen=True)
 class Scenario:
     """Explicit combat state used by conditional effects and qualifiers.
@@ -393,6 +418,25 @@ class Scenario:
                 raise TypeError("conditional stack keys must be non-empty strings")
             stacks[key] = _require_int(f"conditional_stacks[{key!r}]", value)
         object.__setattr__(self, "conditional_stacks", MappingProxyType(stacks))
+
+    def __reduce__(self) -> tuple[Any, ...]:
+        """Pickle 支持：conditional_stacks 的 MappingProxyType 不可序列化
+        （多进程 beam 评估的 job 参数），序列化时物化成普通 dict；
+        反序列化经 __init__/__post_init__ 重新包成 proxy，语义不变。"""
+        return (
+            _rebuild_scenario,
+            (
+                self.aiming,
+                self.heavy_attack,
+                self.combo_tier,
+                self.victim_status_count,
+                dict(self.conditional_stacks),
+                self.distance,
+                self.cloaked,
+                self.nearest_enemy_distance,
+                self.trigger_policy,
+            ),
+        )
 
 
 @dataclass(frozen=True)
