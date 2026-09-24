@@ -403,3 +403,40 @@
 | F15 | 已完成 | 有序去重 + 槽位保持 Swap + 贪心多起点 + deep 档双槽成对交换 |
 | F16 | 已端到端完成 | sidecar schema v2（证据类型/五态/固定来源）+ 审计计数分母合同 + extract.py 双 bug 修复 |
 | F17 | 已端到端完成 | `.gitignore` 修掉；测试入库（14 passed） |
+
+### 2026-09-24 Round 16（紫卡分析修复批次：评分崩坏 + 进度条 + 并行化 + 灵化口径）
+
+**一、评分崩坏修复（PrimeBoltor 弱点+多重+暴击+负变焦 actual 1.22M vs baseline 4.92M）**
+
+- 根因三重：① quality 重评分阶段的 actual/optimal 搜索**没有紫卡下限保护**（beam 在紫卡 18 容量挤压下收敛到劣解，覆盖校准阶段的修正结果）；② riven floor 只枚举单卡丢弃，但 18 耗紫卡通常需要丢 2 张（floor 静默失效）；③ KPM 饱和后搜索仍用无区分度的 KPM 口径。
+- 修复：quality 阶段全部走 `_apply_riven_floor_profiled`；floor 改为容量贪心（最贵先丢直到可装）+ 单卡枚举；饱和时正式搜索切换 windowedDps（`formalSearchMetric` 记录）。
+- 用户案例验证：actual 1.22M → 3.18M（与 deep 档一致），S 词条 ablation 0→41.8%。
+- 多武器取样：Braton W 0.98×（弱点词条槽代价）、Braton VI **3.64×**（病毒融合在超宏靶强协同）、Lato Y/W 0.80×——评分完整性全部正常。
+
+**二、KPM 栏位语义**
+
+- `objectiveScore` 标签跟随 `scoreMetric`：windowedDps 口径显示「标准靶 DPS」，KPM 口径显示「标准靶 KPM」（旧实现恒显 KPM，5M 量级 DPS 塞 KPM 栏误导）。
+
+**三、融合词条游戏规则限制**
+
+- 仅正面、每卡限 1 条：RIVEN_RULES 全部 can-negative=False（SD/AE/FO/FT/FS 修正）；分析入口 fail-closed（负面融合/双融合直接拒绝）；前端两处（分析行 + 配装页构建器）禁选已用融合 + 禁止切负面；推荐器组合枚举过滤双融合组合。
+
+**四、分析进度条**
+
+- 六阶段心跳（baseline/calibration/actual/recommendation/quality/payload）：`analyze_riven_request(progress_hook)` + HTTP 进度注册表 + `/api/analyze/progress?id=` 轮询端点。
+- 前端 500ms 轮询：阶段名 + 块状进度条 + 百分比 + 已用时间 + 30s 无推进警告；旧后端优雅降级。
+
+**五、物理核并行池（wfarsenal/parallel.py）**
+
+- 三个重评估循环并行化：单卡排名（~200 评估）、beam 层扩展（~384/层）、tier 词条粗排（40+ 次 _best_fixed）。
+- worker = 物理核数（psutil logical=False），每 worker 绑定单个物理核（pid % physical；修复用户报告的「跑在相邻逻辑线程」SMT 争抢）。
+- worker 无状态（job 携带全上下文，池跨口径切换不重启）；`Scenario.__reduce__` 解决 mappingproxy 不可 pickle。
+- 一致性验证：并行/串行 scoringValues 完全一致；104s vs 171s（1.65×）；测试套件 260s→197s。
+
+**六、灵化循环口径开关 + simulator 灵化标记修复**
+
+- `Scenario.incarnon_cycle`：False=常驻灵化（默认，紫卡分析维持）；True=真实循环（池耗尽回基础形态充能，充能时长按基础形态装填保守折算 + `incarnon-cycle-reload-estimated` 注记）。
+- payload `incarnonCycle` 透传（simulate/build 路径）。
+- **隐藏 bug 修复**：simulate 路径此前不标记 isIncarnonForm → 灵化形态持续 DPS 一直按裸 reloadTime 解算（与基准 KPM 零装填口径不一致——KPM 与 sim 对不上的原因之一）。E2E PrimeBoltor：sustainedDps 1042→1436（常驻）/988（循环）。
+
+**验证**：61 项测试全通过；wfsim 黄金集 43/43；融合防线（负面/双融合拒绝）验证。
