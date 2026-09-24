@@ -343,6 +343,7 @@ def _rebuild_scenario(
     cloaked: bool,
     nearest_enemy_distance: float | None,
     trigger_policy: str,
+    incarnon_cycle: bool = False,
 ) -> "Scenario":
     """Scenario.__reduce__ 的重建入口（pickle 反序列化路径）。"""
     return Scenario(
@@ -355,6 +356,7 @@ def _rebuild_scenario(
         cloaked=cloaked,
         nearest_enemy_distance=nearest_enemy_distance,
         trigger_policy=trigger_policy,
+        incarnon_cycle=incarnon_cycle,
     )
 
 
@@ -383,6 +385,13 @@ class Scenario:
     #   emergent    — 战斗口径：层数从零爬升，按触发率/衰减模拟（窗口模型）。
     # 影响三处：mod conditional_stacks、赋能 stacks、灵化 on-kill 进化。
     trigger_policy: str = "assumed_max"
+    # 灵化循环口径（2026-09-24 用户口径分离）：
+    #   False（默认）— 常驻灵化：灵化形态零装填（170 充能池近似，30s
+    #     窗口打不空），紫卡分析维持此口径。
+    #   True — 真实循环：灵化形态按「池耗尽 → 回基础形态充能 → 再灵化」
+    #     折算可用率（灵化段窗口 × availability；availability 由灵化池
+    #     容量与充能时长估计，缺数据时 0.5 并在 unsupported 注记）。
+    incarnon_cycle: bool = False
 
     def __post_init__(self) -> None:
         if (
@@ -391,6 +400,8 @@ class Scenario:
             or not isinstance(self.cloaked, bool)
         ):
             raise TypeError("aiming, heavy_attack and cloaked must be booleans")
+        if not isinstance(self.incarnon_cycle, bool):
+            raise TypeError("incarnon_cycle must be a boolean")
         _require_int("combo_tier", self.combo_tier, maximum=11)
         _require_int("victim_status_count", self.victim_status_count)
         if self.trigger_policy not in ("assumed_max", "emergent"):
@@ -435,6 +446,7 @@ class Scenario:
                 self.cloaked,
                 self.nearest_enemy_distance,
                 self.trigger_policy,
+                self.incarnon_cycle,
             ),
         )
 
@@ -1284,6 +1296,27 @@ def apply_mods(
         per_pellet_proc = exported_proc / innate_multishot
     else:
         per_pellet_proc = exported_proc
+    # ── 装填时长（含灵化充能池口径）──────────────────────────────────────
+    # 常驻灵化（默认）：灵化形态零装填——170 充能池在 30s 基准窗口内打不
+    # 空（每发 0.5 充能，最高导出射速也耗不尽），导出无池字段故直接置零。
+    # 灵化循环（Scenario.incarnon_cycle=True，2026-09-24 口径分离）：池
+    # 耗尽后回基础形态充能再灵化——导出没有充能时长字段，用基础形态装填
+    # 时长作保守折算（一次完整弹匣循环的量级），unsupported 注记口径估计。
+    # 基础/非灵化形态：装填速度加成分母缩短装填。
+    if weapon.get("isIncarnonForm"):
+        if getattr(scenario, "incarnon_cycle", False):
+            base_modes = weapon.get("__baseFireModes__") or []
+            base_reload = float(
+                (base_modes[0] if base_modes else mode).get("reloadTime") or 2.0
+            )
+            reload_time = max(base_reload, 0.5)
+            unsupported.add("incarnon-cycle-reload-estimated")
+        else:
+            reload_time = 0.0
+    else:
+        reload_time = _divide(
+            mode.get("reloadTime") or 0.0, buckets["WEAPON_RELOAD_SPEED"]
+        )
     return ModdedStats(
         damage_types=damage_types,
         crit_chance=_combine(damage.get("critChance", 0.0), buckets["WEAPON_CRIT_CHANCE"]),
@@ -1307,19 +1340,8 @@ def apply_mods(
         magazine=_combine(
             float(weapon.get("magazineSize") or 0), buckets["WEAPON_CLIP_MAX"]
         ),
-        # A reload *speed* bonus shortens the reload, so it divides rather than scales.
-        # Incarnon charge-pool approximation (wfsim docs/MECHANICS.md §Incarnon):
-        # the Incarnon form draws from a 170-charge pool instead of the base
-        # magazine — there is no reload cycle while the pool holds (ammo is
-        # consumed at 0.5/shot and a 30 s benchmark window cannot exhaust 170
-        # charges at any exported fire rate).  The export lacks the pool field,
-        # so the tagged Incarnon form's reload is zeroed here; the base form
-        # keeps its normal magazine cycle.
-        reload_time=(
-            0.0
-            if weapon.get("isIncarnonForm")
-            else _divide(mode.get("reloadTime") or 0.0, buckets["WEAPON_RELOAD_SPEED"])
-        ),
+        # 装填时长在上方按灵化口径预计算（reload_time 局部变量）。
+        reload_time=reload_time,
         # The compact weapon export does not yet carry native spread, recoil or
         # reserve-ammo bases.  These fields therefore expose the exact relative
         # transform rather than fabricating an absolute stat.

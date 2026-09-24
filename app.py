@@ -2989,7 +2989,13 @@ def build_weapon_payload(
     if not isinstance(damage, Mapping) or not damage.get("types"):
         raise SimulationError(f"fire mode {selected_fire_mode} has no direct damage types")
 
-    scenario = optimizer._scenario(metric)
+    # 灵化循环口径开关（2026-09-24 用户口径分离）：
+    #   incarnonCycle=true  — 真实循环（池耗尽回基础形态充能再灵化；
+    #                         导出无充能时长，用基础形态装填时长保守折算）。
+    #   缺省/false          — 常驻灵化（170 充能池近似零装填；紫卡分析
+    #                         维持此口径）。
+    incarnon_cycle_flag = payload.get("incarnonCycle") is True
+    scenario = optimizer._scenario(metric, incarnon_cycle=incarnon_cycle_flag)
     stance = _resolve_stance(
         selected_weapon, catalog_weapon["weaponType"], payload.get("stancePath")
     )
@@ -4012,6 +4018,11 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
         distance=_manual_number(scenario_raw["distance"], "distance", low=0.0) if scenario_raw.get("distance") is not None else None,
         cloaked=_manual_bool(scenario_raw.get("cloaked", False), "cloaked"),
         nearest_enemy_distance=_manual_number(scenario_raw["nearestEnemyDistance"], "nearestEnemyDistance", low=0.0) if scenario_raw.get("nearestEnemyDistance") is not None else None,
+        # 灵化循环口径开关（缺省常驻灵化——紫卡分析维持常驻口径）。
+        incarnon_cycle=_manual_bool(
+            scenario_raw.get("incarnonCycle", payload.get("incarnonCycle", False)),
+            "incarnonCycle",
+        ),
     )
     weapon_record = optimizer.resolve_record(EXPORTS["weapons"], weapon_path.strip(), kind="weapon")
     weapon_record = _special_slot_override(payload, weapon_record, weapon["weaponType"])

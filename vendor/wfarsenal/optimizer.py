@@ -212,6 +212,23 @@ RIVEN_RULES: dict[str, tuple[str, str, str, str | None, str | None, str, float, 
     "SL": ("震地伤害", "WEAPON_MELEE_SLAM_DAMAGE_BONUS", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
 }
 
+# ── 融合词条码集合（仅正面、每卡限 1 条——游戏规则，2026-09-24 确认）──
+# 推荐器的组合枚举（_recommend_positive 头部组合、recommend_optimal_riven
+# 的 beam 组合）用它过滤：任何含 2+ 融合词条的组合非法，直接跳过。
+_FUSION_LINE_CODES = frozenset({
+    "W", "Y", "GA", "CO", "VI", "RA", "BL", "MA",
+    "SD", "AE", "HR", "FO", "FT", "FS", "HC", "PA", "SL",
+})
+
+
+def _combo_allows_fusion(lines: Sequence[Any]) -> bool:
+    """组合是否满足「融合词条每卡限 1 条」（负融合词条已被候选层排除）。"""
+    return sum(
+        1
+        for line in lines
+        if str(getattr(line, "code", "")) in _FUSION_LINE_CODES
+    ) <= 1
+
 
 def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, float]:
     """Recover display-scale base values from the current RandomModRare export."""
@@ -615,6 +632,10 @@ def _select_fire_mode(
             f"fireMode {index} is out of range for {len(modes)} fire modes"
         )
     selected = {**weapon, "fireModes": [modes[index]]}
+    # 灵化循环口径（Scenario.incarnon_cycle）需要基础形态的装填时长折算
+    # 充能——保留完整模式列表供 apply_mods 读取。
+    if weapon.get("isIncarnon"):
+        selected["__baseFireModes__"] = list(modes)
     # Tag the Incarnon form explicitly: a multi-mode Incarnon weapon's LAST
     # mode is its transformed form (single-mode Incarnons are the form itself),
     # and downstream consumers (charge-pool ammo) key off this flag because the
@@ -2608,7 +2629,18 @@ def _recommend_positive(
     best_result: _Evaluation | None = None
     if profile == "fast":
         # 头部组合 = 粗排前 count 名直接组合，不枚举 C(8,count)。
-        best_lines = tuple(shortlist[:count])
+        # 融合词条每卡限 1 条：跳过第二条及以后的融合词条顺延取非融合。
+        fast_combo: list[_RivenLine] = []
+        fusion_used = False
+        for line in shortlist:
+            if len(fast_combo) >= count:
+                break
+            if line.code in _FUSION_LINE_CODES:
+                if fusion_used:
+                    continue
+                fusion_used = True
+            fast_combo.append(line)
+        best_lines = tuple(fast_combo)
         best_result = _best_fixed(
             weapon,
             baseline.cards,
@@ -2622,6 +2654,9 @@ def _recommend_positive(
         )
     else:
         for combo in itertools.combinations(shortlist, count):
+            # 融合词条每卡限 1 条（游戏规则）：含 2+ 融合的组合非法。
+            if not _combo_allows_fusion(combo):
+                continue
             result = _best_fixed(
                 weapon,
                 baseline.cards,
@@ -2971,6 +3006,9 @@ def recommend_optimal_riven(
         if len(beam) < size:
             break
         for combo in itertools.combinations(beam, size):
+            # 融合词条每卡限 1 条（游戏规则）：含 2+ 融合的组合非法。
+            if not _combo_allows_fusion(combo):
+                continue
             stage2_combos.append(combo)
     # 负面头部随预算加宽：短预算只试头部 4 个，长预算 6/8 个——「3+1 vs
     # 2+1 的最优负面」经常不同（2 正结构的负面系数 0.5，选错代价更大）。
@@ -3080,8 +3118,11 @@ def _objective_metric(metric: str) -> str:
     return "heavyDamage" if metric in {"heavyAttackDps", "heavyDamage"} else metric
 
 
-def _scenario(metric: str) -> Scenario:
-    return Scenario(heavy_attack=metric in {"heavyAttackDps", "heavyDamage"})
+def _scenario(metric: str, *, incarnon_cycle: bool = False) -> Scenario:
+    return Scenario(
+        heavy_attack=metric in {"heavyAttackDps", "heavyDamage"},
+        incarnon_cycle=incarnon_cycle,
+    )
 
 
 def _percent_gain(value: float, baseline: float) -> float:

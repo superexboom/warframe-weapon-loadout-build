@@ -811,6 +811,22 @@ def simulate(
         if not isinstance(weapon_override, Mapping):
             raise SimulationError("weapon_override must be an object")
         weapon_record = {**weapon_record, **weapon_override}
+    # ── 灵化形态标记（与 optimizer._select_fire_mode 同口径）──────────────
+    # apply_mods 按 isIncarnonForm 决定充能池口径（常驻灵化零装填 / 循环
+    # 折算装填）。simulate 路径此前不标记——灵化形态一直按裸 reloadTime
+    # 解算持续 DPS，与基准 KPM 口径（零装填）不一致（KPM 与 sim 对不上
+    # 的原因之一，2026-09-24 修复）。保留完整 fireModes（apply_mods 按
+    # fire_mode 下标取模式），另存 __baseFireModes__ 供循环口径读取
+    # 基础形态装填。
+    _modes = weapon_record.get("fireModes") or []
+    if weapon_record.get("isIncarnon") and (
+        len(_modes) == 1 or fire_mode == len(_modes) - 1
+    ):
+        weapon_record = {
+            **weapon_record,
+            "isIncarnonForm": True,
+            "__baseFireModes__": list(_modes),
+        }
     if enemy_override is not None:
         if not isinstance(enemy_override, Mapping):
             raise SimulationError("enemy_override must be an object")
