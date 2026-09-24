@@ -1,6 +1,6 @@
 {
  "buildLabel": "2026.08.13.13.24",
- "count": 127,
+ "count": 129,
  "data": [
   {
    "abilities": [
@@ -3065,13 +3065,14 @@
    "stamina": null
   },
   {
+   "_statSource": "updated-from-2026.09.22.16.46",
    "abilities": [
     "Abilities/CannonBarrageAbility",
     "Abilities/TidalWaveAbility",
     "Abilities/PirateArmourAbility",
     "Abilities/KrakenAbility"
    ],
-   "armour": 290,
+   "armour": 650.0,
    "descTag": "/Lotus/Language/Primes/HydroidPrimeDesc",
    "health": 270,
    "kind": "warframe",
@@ -3097,17 +3098,18 @@
     "AP_UNIVERSAL",
     "AP_UNIVERSAL"
    ],
-   "shield": 550,
+   "shield": 190.0,
    "stamina": null
   },
   {
+   "_statSource": "updated-from-2026.09.22.16.46",
    "abilities": [
     "Abilities/CannonBarrageAbility",
     "Abilities/TidalWaveAbility",
     "Abilities/PirateArmourAbility",
     "Abilities/KrakenAbility"
    ],
-   "armour": 240,
+   "armour": 465.0,
    "descTag": "/Lotus/Language/Suits/HydroidDesc",
    "health": 270,
    "kind": "warframe",
@@ -3133,7 +3135,7 @@
     "AP_UNIVERSAL",
     "AP_UNIVERSAL"
    ],
-   "shield": 365,
+   "shield": 140.0,
    "stamina": null
   },
   {
@@ -4448,6 +4450,78 @@
    "path": "/Lotus/Types/Game/PowerSuits/PlayerPowerSuit",
    "polarities": [],
    "shield": null,
+   "stamina": null
+  },
+  {
+   "_source": "added-from-2026.09.22.16.46",
+   "abilities": [
+    "Abilities/GeodeShardsAbility",
+    "Abilities/GeodeShellAbility",
+    "Abilities/GeodeCrystalAbility",
+    "Abilities/GeodeGrowthsAbility"
+   ],
+   "armour": 325.0,
+   "descTag": "/Lotus/Language/Primes/CitrinePrimeDesc",
+   "health": 400.0,
+   "kind": "warframe",
+   "masteryReq": 0,
+   "name": "CitrinePrime",
+   "nameEn": "Citrine Prime",
+   "nameTag": "/Lotus/Language/Primes/CitrinePrimeName",
+   "nameZh": null,
+   "passiveTag": "/Lotus/Language/Suits/GeodePassiveAbility",
+   "path": "/Lotus/Powersuits/Geode/CitrinePrime",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_DEFENSE",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "shield": 270.0,
+   "stamina": null
+  },
+  {
+   "_source": "added-from-2026.09.22.16.46",
+   "abilities": [
+    "Abilities/DuelistThrustAbility",
+    "Abilities/DuelistRiposteAbility",
+    "Abilities/DuelistLeapAbility",
+    "Abilities/DuelistBladeDanceAbility"
+   ],
+   "armour": 165.0,
+   "descTag": "/Lotus/Language/Iceblade/DuelistSuitDesc",
+   "health": 270.0,
+   "kind": "warframe",
+   "masteryReq": 0,
+   "name": "Duelist",
+   "nameEn": "Duelist",
+   "nameTag": "/Lotus/Language/Iceblade/DuelistSuitName",
+   "nameZh": null,
+   "passiveTag": "/Lotus/Language/Iceblade/DuelistSuitPassiveDesc",
+   "path": "/Lotus/Powersuits/Duelist/Duelist",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_DEFENSE",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "shield": 550.0,
    "stamina": null
   }
  ],
