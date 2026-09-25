@@ -46,6 +46,7 @@ const state = {
   stanceLocked: false,
   exilusSelection: null,
   weaponArcane: null,
+  weaponArcane2: null, // 空战武器（地面）第二武器赋能槽（主+副赋能池，wfsim 口径）
   frameArcanes: [null, null],
   incarnonChoices: {},
   manualModCategory: "all",
@@ -388,7 +389,7 @@ function arcaneSimulationSelection(item) {
 }
 
 function syncArcaneSelections() {
-  state.arcaneSelections = [state.weaponArcane, ...state.frameArcanes].filter(Boolean).map((item) => ({ ...item }));
+  state.arcaneSelections = [state.weaponArcane, state.weaponArcane2, ...state.frameArcanes].filter(Boolean).map((item) => ({ ...item }));
 }
 
 function applyBuildConfig(config) {
@@ -3736,7 +3737,13 @@ function arcaneMatchesBuildWeapon(arcane) {
   if (!compatibility) return true;
   if (compatibility.includes("powersuit") || compatibility.includes("operatoramp")) return false;
   if (compatibility.includes("melee")) return isMeleeBuild();
-  if (compatibility.includes("pistol")) return state.buildWeapon?.slot === "secondary" || state.buildWeapon?.weaponType === "pistol";
+  const isArchgun = state.buildWeapon?.weaponType === "archgun";
+  if (compatibility.includes("pistol")) {
+    // 空战武器（地面）：副武器赋能池也可选（wfsim arcane_pools [primary,
+    // secondary]——部署期副武器在身，双赋能同时触发）。
+    if (isArchgun) return true;
+    return state.buildWeapon?.slot === "secondary" || state.buildWeapon?.weaponType === "pistol";
+  }
   if (/longgun|rifle|shotgun|bulletweapon/.test(compatibility)) return state.buildWeapon?.slot === "primary" || ["rifle", "shotgun", "archgun"].includes(state.buildWeapon?.weaponType);
   return true;
 }
@@ -3838,7 +3845,7 @@ function renderArcanePicker() {
 function openArcanePicker(kind, slotIndex = 0) {
   if (!ui["arcane-picker"]) return;
   state.arcanePickerKind = kind;
-  state.arcanePickerSlot = clamp(Number(slotIndex) || 0, 0, kind === "warframe" ? 1 : 0);
+  state.arcanePickerSlot = clamp(Number(slotIndex) || 0, 0, kind === "warframe" ? 1 : weaponArcaneSlotCount() - 1);
   ui["arcane-picker"].hidden = false;
   ui["mod-picker-scrim"].hidden = false;
   document.body.classList.add("is-modal-open");
@@ -4749,7 +4756,7 @@ function renderArcaneSlot(kind, slotIndex, item) {
     down.disabled = rank <= 0;
     up.disabled = rank >= maxRank;
     const update = (next) => {
-      const target = kind === "warframe" ? state.frameArcanes[slotIndex] : state.weaponArcane;
+      const target = kind === "warframe" ? state.frameArcanes[slotIndex] : (slotIndex === 1 ? state.weaponArcane2 : state.weaponArcane);
       target.rank = clamp(next, 0, maxRank);
       syncArcaneSelections(); renderArcaneSelections(); persistActiveBuildConfig(); scheduleLiveManualSimulation();
     };
@@ -4758,6 +4765,7 @@ function renderArcaneSlot(kind, slotIndex, item) {
     remove.addEventListener("click", (event) => {
       event.stopPropagation();
       if (kind === "warframe") state.frameArcanes[slotIndex] = null;
+      else if (slotIndex === 1) state.weaponArcane2 = null;
       else state.weaponArcane = null;
       syncArcaneSelections(); renderArcaneSelections(); persistActiveBuildConfig(); scheduleLiveManualSimulation();
     });
@@ -4769,7 +4777,7 @@ function renderArcaneSlot(kind, slotIndex, item) {
     const hasTrigger = trigger.conditionTag || trigger.chance != null || trigger.maxStacks != null;
     if (hasTrigger) {
       const maxStacks = Math.max(1, Number(trigger.maxStacks ?? 1) || 1);
-      const entry = () => (kind === "warframe" ? state.frameArcanes[slotIndex] : state.weaponArcane);
+      const entry = () => (kind === "warframe" ? state.frameArcanes[slotIndex] : (slotIndex === 1 ? state.weaponArcane2 : state.weaponArcane));
       const commit = () => { syncArcaneSelections(); renderArcaneSelections(); persistActiveBuildConfig(); scheduleLiveManualSimulation(); };
       const toggles = create("div", "arcane-slot-toggles");
       const force = create("button", `arcane-flag-toggle${item.forceProc ? " is-active" : ""}`, "强制触发");
@@ -4824,14 +4832,20 @@ function renderArcaneSlot(kind, slotIndex, item) {
   return slot;
 }
 
+function weaponArcaneSlotCount() {
+  // 空战武器（地面）：两个武器赋能槽（主+副赋能池同时触发——wfsim
+  // arcane_slots=2 / arcane_pools=[primary, secondary]）。
+  return state.buildWeapon?.weaponType === "archgun" ? 2 : 1;
+}
+
 function renderArcaneSelections() {
   const target = ui["build-arcane-list"];
   if (!target) return;
   const specs = [
     ["weapon", 0, state.weaponArcane],
-    ["warframe", 0, state.frameArcanes[0]],
-    ["warframe", 1, state.frameArcanes[1]],
   ];
+  if (weaponArcaneSlotCount() > 1) specs.push(["weapon", 1, state.weaponArcane2]);
+  specs.push(["warframe", 0, state.frameArcanes[0]], ["warframe", 1, state.frameArcanes[1]]);
   // diff 复用：未变化的赋能槽不重绘（图标/框图不重载）
   const existing = Array.from(target.children);
   specs.forEach(([kind, slotIndex, item], position) => {
@@ -4849,7 +4863,10 @@ function renderArcaneSelections() {
 function addArcaneSelection(path) {
   const target = path || state.arcanePickerTarget;
   if (!target) return toast("先选择一个赋能");
-  const current = state.arcanePickerKind === "warframe" ? state.frameArcanes[state.arcanePickerSlot] : state.weaponArcane;
+  const slotIndex = state.arcanePickerSlot || 0;
+  const current = state.arcanePickerKind === "warframe"
+    ? state.frameArcanes[slotIndex]
+    : (slotIndex === 1 ? state.weaponArcane2 : state.weaponArcane);
   if (state.arcaneSelections.some((item) => item.path === target && item !== current)) return toast("该赋能已经添加");
   const record = arcaneRecords().find((item) => item.path === target) || {};
   const isFrame = record.slotKind === "warframe";
@@ -4859,7 +4876,8 @@ function addArcaneSelection(path) {
     rank: Number(record.maxRank ?? 0),
     slotKind: record.slotKind || "weapon",
   };
-  if (isFrame) state.frameArcanes[state.arcanePickerSlot] = selection;
+  if (isFrame) state.frameArcanes[slotIndex] = selection;
+  else if (slotIndex === 1) state.weaponArcane2 = selection;
   else state.weaponArcane = selection;
   syncArcaneSelections();
   renderArcaneSelections();

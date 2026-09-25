@@ -1991,6 +1991,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingDualStatImpactStatusMeleeMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2036,6 +2037,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingDualStatPunctureStatusMeleeMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2081,6 +2083,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingDualStatSlashStatusMeleeMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2143,6 +2146,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventColdStatusMeleeMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2205,6 +2209,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventElectricityStatusMeleeMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2267,6 +2272,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventFireStatusMeleeMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2329,6 +2335,7 @@
      "valuePerRank": 0.1
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventMagneticCritDamageMeleeMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2391,6 +2398,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/DoubleMods/ArchwingEventRadiationCritChanceMeleeMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2453,6 +2461,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventToxinStatusMeleeMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2498,6 +2507,7 @@
      "valuePerRank": 0.25
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeCritChanceMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2543,6 +2553,7 @@
      "valuePerRank": 0.1
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeCritDamageMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2588,6 +2599,7 @@
      "valuePerRank": 0.1
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeDamageMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2633,6 +2645,7 @@
      "valuePerRank": 0.025
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeFireRateMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2706,6 +2719,7 @@
      "valuePerRank": 0.75
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeRangeIncMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2749,6 +2763,7 @@
      "valuePerRank": 1
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeScanOnKillMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2794,6 +2809,7 @@
      "valuePerRank": 0.1
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingStatusChanceModMelee.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2839,6 +2855,7 @@
      "valuePerRank": 0.2
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponElectricityDamageModMelee.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2884,6 +2901,7 @@
      "valuePerRank": 0.2
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponFireDamageModMelee.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2929,6 +2947,7 @@
      "valuePerRank": 0.2
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponFreezeDamageModMelee.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -2974,6 +2993,7 @@
      "valuePerRank": 0.2
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponToxinDamageModMelee.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3106,6 +3126,7 @@
      "valuePerRank": -0.083499998
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingCCImmunityIfAimingMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3171,6 +3192,7 @@
     }
    ],
    "effects": [],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDamageAfterReloadMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3216,6 +3238,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDualStatImpactStatusRifleMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3261,6 +3284,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDualStatPunctureStatusRifleMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3306,6 +3330,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDualStatSlashStatusRifleMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3368,6 +3393,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventColdStatusRifleMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3430,6 +3456,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventElectricityStatusRifleMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3492,6 +3519,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventFireStatusRifleMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3554,6 +3582,7 @@
      "valuePerRank": 0.075000003
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventMagneticFireRateRifleMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3616,6 +3645,7 @@
      "valuePerRank": 0.075000003
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/DoubleMods/ArchwingEventRadiationFireIterationRifleMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3678,6 +3708,7 @@
      "valuePerRank": 0.15000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventToxinStatusRifleMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3769,6 +3800,7 @@
     }
    ],
    "effects": [],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingHeadshotKillAmmoEfficiencyMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3814,6 +3846,7 @@
      "valuePerRank": 0.16670001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleAmmoMaxMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3857,6 +3890,7 @@
      "valuePerRank": 0.125
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleChargeSpeedMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3902,6 +3936,7 @@
      "valuePerRank": 0.1
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleClipMaxMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -3968,6 +4003,7 @@
      "valuePerRank": 0.1
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleCritChanceDamageAimingMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4013,6 +4049,7 @@
      "valuePerRank": 0.25
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleCritChanceMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4058,6 +4095,7 @@
      "valuePerRank": 0.2
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleCritDamageMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4103,6 +4141,7 @@
      "valuePerRank": 0.1666
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleDamageAmountMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4148,6 +4187,7 @@
      "valuePerRank": 0.1
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleFireIterationsMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4193,6 +4233,7 @@
      "valuePerRank": 0.1
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleFireRateMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4253,6 +4294,7 @@
      "valuePerRank": 0.5
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRiflePunchthroughMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4296,6 +4338,7 @@
      "valuePerRank": 0.050000001
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleRangeMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4341,6 +4384,7 @@
      "valuePerRank": 0.25
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleReloadSpeedMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4388,6 +4432,7 @@
      "valuePerRank": 0.2
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleStatusChanceAimingMod.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4433,6 +4478,7 @@
      "valuePerRank": 0.1
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingStatusChanceModRifle.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4478,6 +4524,7 @@
      "valuePerRank": 0.2
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponElectricityDamageModRifle.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4523,6 +4570,7 @@
      "valuePerRank": 0.2
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponFireDamageModRifle.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4568,6 +4616,7 @@
      "valuePerRank": 0.2
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponFreezeDamageModRifle.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,
@@ -4613,6 +4662,7 @@
      "valuePerRank": 0.2
     }
    ],
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponToxinDamageModRifle.png",
    "incompatibilityTags": [],
    "isAugment": false,
    "isSubUpgrade": false,

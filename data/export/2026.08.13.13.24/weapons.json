@@ -24459,8 +24459,7 @@
    "ancestry": [
     "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -24580,8 +24579,7 @@
     "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler",
     "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/ArchGRNAAGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -75339,8 +75337,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchBurstGun/ArchBurstGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -75417,8 +75414,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchLongRifle/ArchLongRifle",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -75495,8 +75491,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/ArchHeavyPistols",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -75574,8 +75569,7 @@
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/Prisma/PrismaArchHeavyPistols",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/ArchHeavyPistols",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -75652,8 +75646,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -75731,8 +75724,7 @@
     "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGunVandal",
     "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -75809,8 +75801,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/LaunchGrenade/ArchCannon",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -75890,8 +75881,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -76760,8 +76750,7 @@
     "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeCorvas/PrimeCorvasWeapon",
     "/Lotus/Weapons/Tenno/Archwing/Primary/LaunchGrenade/ArchCannon",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -76839,8 +76828,7 @@
     "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
     "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -76991,8 +76979,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/Railgun/ArchRailgun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -77073,8 +77060,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/ArchGRNAAGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -77173,8 +77159,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/RocketArtillery/ArchRocketCrossbow",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -77256,8 +77241,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -77394,8 +77378,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -77548,8 +77531,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -77733,8 +77715,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunWeapon",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
@@ -77851,8 +77832,7 @@
    "ancestry": [
     "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
-    "/Lotus/Types/Game/LotusWeapon",
-    "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+    "/Lotus/Types/Game/LotusWeapon"
    ],
    "compatTags": [
     "BATTERY"
