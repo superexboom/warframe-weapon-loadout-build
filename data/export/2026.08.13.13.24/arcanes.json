@@ -3331,34 +3331,14 @@
    "descTag": "",
    "effects": [
     {
-     "autoType": 1,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
-     "localizationScript": {
-      "Function": "GetDescription",
-      "Script": "AmmoEfficiencyOnSliding.lua",
-      "_ammoEfficiencyIncreaseLevels": [
-       0.15000001,
-       0.25,
-       0.34999999,
-       0.44999999,
-       0.55000001,
-       0.64999998
-      ],
-      "_heavyWeaponCompatibility": []
-     },
-     "operation": "ADD",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AmmoEfficiencyOnSliding",
+     "label": "ammo efficiency while sliding/aim gliding (utility)",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
      "supported": false,
      "supportedBy": [],
-     "symbolFilter": "",
-     "upgradeType": "NONE",
-     "validModifiers": [],
-     "validPostures": [],
-     "validProcTypes": [],
-     "validType": "",
-     "valuePerRank": 0
+     "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+     "valuePerRank": -0.1
     }
    ],
    "extraEffects": [],
@@ -3408,15 +3388,16 @@
     "weaponEffects": 0
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
+    "applyUpgradesByDefault": 0,
     "chance": 1,
     "conditionTag": null,
     "conditions": [],
     "duration": null,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "滑行/瞄准滑翔时双持手枪弹药效率 +15%/级（R5=+65%，utility，不参与伤害解算）；参数来自 AmmoEfficiencyOnSliding.lua _ammoEfficiencyIncreaseLevels。无武器数值词条（弹药效率不受引擎支持）——manualState 保持关闭。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
@@ -3536,7 +3517,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "armor per melee-kill stack",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "AVATAR_ARMOUR",
+     "valuePerRank": 35
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDA.png",
    "maxRank": 5,
@@ -3556,15 +3548,14 @@
    "trigger": {
     "applyUpgradesByDefault": 0,
     "chance": 1,
-    "conditionTag": "/Lotus/Language/Upgrades/OnMeleeKillCondition_Description",
-    "conditions": [
-     "OnMeleeKillCondition"
-    ],
+    "conditionTag": null,
+    "conditions": [],
     "duration": 10,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": 255,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "近战击杀获得护甲 +35/级（R5=+210/层，255 层上限，每层 10s）。纯 AVATAR_ARMOUR 词条——无武器数值行，manualState 保持关闭（目录门槛 weaponEffects>0 不通过）。参数来自原生 conditionalUpgrades 导出（raw Upgrades AVATAR_ARMOUR ADD 35）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
@@ -3595,7 +3586,20 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "next-shot damage per 200 current energy",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+     "valuePerRank": 0.5
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDE.png",
    "maxRank": 5,
@@ -3616,10 +3620,10 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
@@ -3632,10 +3636,11 @@
      "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbility4Condition"
     ],
     "duration": null,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "施放技能后下一发弹药按每点当前能量 +0.5%（=每 200 能量 +100%，rank 不缩放）获得独立伤害乘区，上限 x3+1/级（R5=x8，+700%），乘算于基伤词条。参数来自 BonusDamageNextShotForCurEnergy.lua _bonusPercentOfCurrentEnergy=0.5/_bonusLimit=3/_bonusLimitStepPerFusionLevel=1。单发口径；数值不随 rank 变化，仅上限随 rank 提升。"
   },
   {
    "compatibility": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
@@ -3886,7 +3891,20 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_CORROSIVE",
+     "label": "corrosive melee damage per ability cast",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+     "valuePerRank": 0.1
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionCY.png",
    "maxRank": 5,
@@ -3911,10 +3929,10 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
@@ -3923,11 +3941,12 @@
     "conditions": [
      "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnWarframeOnlyAbilityCondition"
     ],
-    "duration": null,
-    "durationScalesWithRank": 0,
-    "maxStacks": null,
-    "stackMode": null
-   }
+    "duration": 25,
+    "durationScalesWithRank": null,
+    "maxStacks": 24,
+    "stackMode": "SM_GROUP"
+   },
+   "stackSemantics": "施放技能使近战腐蚀伤害 +10%/层（rank 每级 +10%，R5=60%/层，上限 240%/25s，层数共享时长并刷新）。词条 WEAPON_PERCENT_BASE_DAMAGE_ADDED（element_pre_coalesce）。参数来自 CorrosiveMeleePerAbilityCast.lua _buffStepPerCast/_buffStepPerFusionLevel/_buffHardLimit=2.4000001/_buffDuration=25。"
   },
   {
    "compatibility": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
@@ -4026,7 +4045,20 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "crit damage per 10% puncture status",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_CRIT_DAMAGE",
+     "valuePerRank": 0.1
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDM.png",
    "maxRank": 5,
@@ -4066,27 +4098,41 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
-    "chance": null,
+    "applyUpgradesByDefault": 0,
+    "chance": 1,
     "conditionTag": null,
     "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
-    "maxStacks": null,
+    "maxStacks": 50,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "每 10% 穿刺异常几率提供暴击伤害 +（0.5x+0.1x×rank）（R5=1.0x/10%，上限 +50x）。词条 WEAPON_CRIT_DAMAGE 加算。参数来自 GiveStatForDamageType.lua _giveStatIncreaseBase=0.5/_giveStatIncreasePerLevel=0.1/_haveStatThresholdBase=0.1/_maxStacks=50。常驻条件（按面板穿刺占比折算）。词条行按 PerLevel=0.1 步进（Base=0.5 已在此注明）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
    "conditionalEffects": [],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "damage per armor over 1000",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+     "valuePerRank": 0.001
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDU.png",
    "maxRank": 5,
@@ -4119,21 +4165,22 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
-    "chance": null,
+    "applyUpgradesByDefault": 0,
+    "chance": 1,
     "conditionTag": null,
     "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
-    "maxStacks": null,
+    "maxStacks": 500,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "每点超过 1000 的护甲提供伤害 +（0.5%+0.1%×rank）（R5=1.0%/点），上限 +250%+50%/rank（护甲 1500 封顶，R5=+500%）。词条 WEAPON_DAMAGE_AMOUNT 乘区（与基伤加算词条同桶）。参数来自 GiveStatForStat.lua _giveStatIncreaseBase=0.005/_giveStatIncreasePerLevel=0.001/_haveStatThresholdMin=1000/_maxStacks=500。常驻条件（按面板护甲折算）。词条行按 PerLevel=0.001 步进（Base=0.005 已在此注明）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
@@ -4165,7 +4212,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "status stacks duplicated on knockdown (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_PROC_CHANCE",
+     "valuePerRank": 1
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDH.png",
    "maxRank": 5,
@@ -4190,23 +4248,20 @@
    "support": {
     "complete": false,
     "manualState": false,
-    "totalEffects": 0,
+    "totalEffects": 1,
     "weaponEffects": 0
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
     "chance": 1,
     "conditionTag": null,
-    "conditions": [
-     "OnMeleeKnockdownCondition",
-     "OnRagdollCondition",
-     "OnLiftedCondition"
-    ],
+    "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "击倒/击飞/浮空的近战攻击使目标已有异常状态各 +1..6 层（rank 0–5）。纯异常层数复制，无武器数值词条——manualState 保持关闭。参数来自 DuplicateStatus.lua _duplicateNum/_duplciateNumPerFusionLevel。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
@@ -4214,58 +4269,43 @@
    "descTag": "",
    "effects": [
     {
-     "autoType": 1,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
+     "label": "spread reduction while airborne",
      "operation": "STACKING_MULTIPLY",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/EyeInTheSky",
-     "supported": false,
-     "supportedBy": [],
-     "symbolFilter": "",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
      "upgradeType": "WEAPON_SPREAD",
+     "valuePerRank": -0.125,
      "validModifiers": [
       "PM_AIRBORNE"
-     ],
-     "validPostures": [],
-     "validProcTypes": [],
-     "validType": "",
-     "valuePerRank": -0.125
+     ]
     },
     {
-     "autoType": 1,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
+     "label": "recoil reduction while airborne",
      "operation": "STACKING_MULTIPLY",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/EyeInTheSky",
-     "supported": false,
-     "supportedBy": [],
-     "symbolFilter": "",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
      "upgradeType": "WEAPON_RECOIL",
+     "valuePerRank": -0.125,
      "validModifiers": [
       "PM_AIRBORNE"
-     ],
-     "validPostures": [],
-     "validProcTypes": [],
-     "validType": "",
-     "valuePerRank": -0.125
+     ]
     },
     {
-     "autoType": 0,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
+     "label": "aim glide duration",
      "operation": "ADD",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/EyeInTheSky",
+     "perStack": false,
      "supported": false,
      "supportedBy": [],
-     "symbolFilter": "",
      "upgradeType": "AVATAR_PARKOUR_GLIDE",
-     "validModifiers": [],
-     "validPostures": [],
-     "validProcTypes": [],
-     "validType": "",
      "valuePerRank": 1.25
     }
    ],
@@ -4289,21 +4329,22 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
+    "complete": true,
+    "manualState": true,
     "totalEffects": 3,
-    "weaponEffects": 0
+    "weaponEffects": 2
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
-    "chance": null,
+    "applyUpgradesByDefault": 0,
+    "chance": 1,
     "conditionTag": null,
     "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "空中时散布与后坐 -12.5%/级（R3=-50%）且瞄准滑翔 +1.25s/级（R3=+5s）。词条 WEAPON_SPREAD/WEAPON_RECOIL 引擎已建模（PM_AIRBORNE 限定）；AVATAR_PARKOUR_GLIDE 为 utility。参数来自原生 effects 导出（EyeInTheSky.lua 挂载）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
@@ -5390,7 +5431,20 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "heavy-attack crit chance per stack",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_CRIT_CHANCE",
+     "valuePerRank": 0.07
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionCV.png",
    "maxRank": 5,
@@ -5424,21 +5478,24 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
+    "applyUpgradesByDefault": 0,
     "chance": 1,
     "conditionTag": null,
-    "conditions": [],
+    "conditions": [
+     "OnNonHeavyMeleeHitCondition"
+    ],
     "duration": null,
-    "durationScalesWithRank": 0,
-    "maxStacks": null,
-    "stackMode": null
-   }
+    "durationScalesWithRank": null,
+    "maxStacks": 10,
+    "stackMode": "per-stack"
+   },
+   "stackSemantics": "普通近战命中每层为下一次重击蓄暴击几率 +7%/级（R5=42%/层，10 层上限=420%），加算进暴击几率。触发条件 OnNonHeavyMeleeHitCondition（重击命中消耗层数）。参数来自 HeavyCritEachHit.lua _critPerHit/_critPerFusionLevel/_critStackLimit（apply 侧 0.07）。层持续至近战结束（_waitForMeleeEndTimeout=5s）。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
@@ -5769,7 +5826,20 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "next-shot damage after weakpoint hit",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+     "valuePerRank": 0.5
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionCL.png",
    "maxRank": 5,
@@ -5795,10 +5865,10 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
+    "complete": true,
+    "manualState": true,
     "totalEffects": 1,
-    "weaponEffects": 0
+    "weaponEffects": 1
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
@@ -5807,11 +5877,12 @@
     "conditions": [
      "OnBowHeadshotCondition"
     ],
-    "duration": null,
-    "durationScalesWithRank": 0,
+    "duration": 6,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "弱点命中后下一发伤害 +50%/级（R5=+300%），独立乘区（与基伤加算词条相乘）。触发器 OnBowHeadshotCondition（U44 起改为弱点命中）；增益持续至下一发（导出触发器填 6s 标称窗口以便时间线建模）。参数来自 BonusDamageForNextShot.lua _damageBonuses。单发口径。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
@@ -6397,31 +6468,16 @@
    "descTag": "",
    "effects": [
     {
-     "autoType": 1,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
-     "localizationScript": {
-      "Function": "GetDescription",
-      "Script": "MeleeDamageForActiveShields.lua",
-      "_meleeDamageLimit": 4.1999998,
-      "_meleeDamagePerBonus": 0.050000001,
-      "_meleeDamageStepPerFusionLevel": 0.050000001,
-      "_overshieldMeleeDamageCoef": 0.5,
-      "_shieldsToGetBonus": 200,
-      "_shieldsToGetBonusStepPerFusionLevel": 0
-     },
+     "label": "melee damage per 200 current shields",
      "operation": "ADD",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MeleeDamageForActiveShields",
-     "supported": false,
-     "supportedBy": [],
-     "symbolFilter": "",
-     "upgradeType": "NONE",
-     "validModifiers": [],
-     "validPostures": [],
-     "validProcTypes": [],
-     "validType": "",
-     "valuePerRank": 0
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_MELEE_DAMAGE",
+     "valuePerRank": 0.05
     }
    ],
    "extraEffects": [],
@@ -6457,21 +6513,22 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
+    "complete": true,
+    "manualState": true,
     "totalEffects": 1,
-    "weaponEffects": 0
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
-    "chance": null,
+    "applyUpgradesByDefault": 0,
+    "chance": 1,
     "conditionTag": null,
     "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "每 200 当前护盾提供近战伤害 +5%/级（R5=+30%/200 护盾，上限 420%，过载护盾减半）。词条 WEAPON_MELEE_DAMAGE 加算（与 Pressure Point 同乘区）。参数来自 MeleeDamageForActiveShields.lua _meleeDamagePerBonus/_meleeDamageStepPerFusionLevel/_meleeDamageLimit=4.2/_shieldsToGetBonus=200。常驻条件（按当前护盾折算）。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
@@ -6588,7 +6645,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "status spread chance on electric proc (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_PROC_CHANCE",
+     "valuePerRank": 0.2
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionCZ.png",
    "maxRank": 5,
@@ -6614,21 +6682,20 @@
    "support": {
     "complete": false,
     "manualState": false,
-    "totalEffects": 0,
+    "totalEffects": 1,
     "weaponEffects": 0
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
     "chance": 0.2,
     "conditionTag": null,
-    "conditions": [
-     "OnElectricityProcCondition"
-    ],
+    "conditions": [],
     "duration": 3,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "近战电击异常触发时 20% 概率使元素异常在 10–20m 内扩散（rank 提升半径与 3–18s 时长，不可刷新）。状态扩散机制引擎未建模——manualState 保持关闭。参数来自 raw UpgradeChance=0.2 与 _upgradeToGive=SpreadStatusOnStatusProc。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
@@ -6722,37 +6789,26 @@
    "descTag": "",
    "effects": [
     {
-     "autoType": 1,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
-     "localizationScript": {
-      "Function": "GetDescription",
-      "Script": "MultishotForCombo.lua",
-      "_duration": 30,
-      "_operationType": "STACKING_MULTIPLY",
-      "_secondaryUpgradeType": "WEAPON_CRIT_CHANCE",
-      "_upgradeType": "WEAPON_FIRE_ITERATIONS",
-      "_valuesPerCombo": [
-       0.050000001,
-       0.07,
-       0.090000004,
-       0.12,
-       0.16,
-       0.2
-      ]
-     },
-     "operation": "ADD",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MultishotForCombo",
+     "label": "crit chance per combo consumed",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
      "supported": false,
      "supportedBy": [],
-     "symbolFilter": "",
-     "upgradeType": "NONE",
-     "validModifiers": [],
-     "validPostures": [],
-     "validProcTypes": [],
-     "validType": "",
-     "valuePerRank": 0
+     "upgradeType": "WEAPON_CRIT_CHANCE",
+     "valuePerRank": 0.033399999
+    },
+    {
+     "damageType": "DT_ANY",
+     "label": "crit damage per combo consumed",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_CRIT_DAMAGE",
+     "valuePerRank": 0.033399999
     }
    ],
    "extraEffects": [],
@@ -6784,27 +6840,43 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 1,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 2,
+    "weaponEffects": 2
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
+    "applyUpgradesByDefault": 0,
     "chance": 1,
     "conditionTag": null,
-    "conditions": [],
-    "duration": 10,
-    "durationScalesWithRank": 0,
+    "conditions": [
+     "OnWeaponSwapCondition"
+    ],
+    "duration": 30,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "切换至副武器时消耗全部近战连击，每个连击倍率提供暴击几率与暴击伤害 +5/7/9/12/16/20%（rank 0–5 非线性表，12x 连击 R5=+240%），持续 30s。词条按 _valuesPerCombo 的等效线性步进 0.0334/rank 折算（R5=0.2 精确吻合端点）；WEAPON_CRIT_CHANCE 行因切换触发器未建模标 unsupported。参数来自 MultishotForCombo.lua _valuesPerCombo/_duration=30。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
    "conditionalEffects": [],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "multishot from max energy at 90%+ energy",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_FIRE_ITERATIONS",
+     "valuePerRank": 0
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionEA.png",
    "maxRank": 5,
@@ -6856,13 +6928,13 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
+    "applyUpgradesByDefault": 0,
     "chance": 1,
     "conditionTag": null,
     "conditions": [],
@@ -6870,7 +6942,8 @@
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "能量 ≥90% 时每点能量上限提供多重射击 +0.35%（Base=0.0035，rank 不缩放），上限 +100%+50%/rank（R5=350%，1000 能量封顶）。词条 WEAPON_FIRE_ITERATIONS 乘区。参数来自 GiveStatForStat.lua _giveStatIncreaseBase=0.0035/_giveStatIncreasePerLevel=0/_giveStatCapBase=1/_giveStatCapPerLevel=0.5/_haveStatThresholdMin=0.9。常驻条件（按能量上限折算）；数值不随 rank 变化（PerLevel=0），仅上限随 rank 提升。"
   },
   {
    "compatibility": "/Lotus/Powersuits/Operator/OperatorSuit",
@@ -7189,7 +7262,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "overguard damage multiplier (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+     "valuePerRank": 1
+    }
+   ],
    "extraEffects": [
     {
      "autoType": 1,
@@ -7238,14 +7322,13 @@
     "applyUpgradesByDefault": 0,
     "chance": 1,
     "conditionTag": null,
-    "conditions": [
-     "OnOverguardHitCondition"
-    ],
+    "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "对超宏护盾伤害 x3–x8/级（R5=x8），并按伤害 10% 偷取超宏（上限 15000）。超宏乘区引擎未建模——manualState 保持关闭。参数来自 OverguardLifesteal.lua _overguardSteal=0.01/_overguardLimit=15000（x3+1/级）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
@@ -7274,7 +7357,20 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "initial combo per finisher kill",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_MELEE_COMBO_INITIAL_BONUS",
+     "valuePerRank": 1
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDB.png",
    "maxRank": 5,
@@ -7295,21 +7391,22 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
+    "applyUpgradesByDefault": 0,
     "chance": 1,
     "conditionTag": "/Lotus/Language/Upgrades/OnFinisherCondition_Description",
     "conditions": [],
     "duration": null,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "处决击杀永久获得初始连击 +1/级（R5=+6，上限 240——37 次处决达 12x）。词条 WEAPON_MELEE_COMBO_INITIAL_BONUS 引擎已建模（initial_combo）。参数来自 PermaComboUpgrade.lua _initialComboUpgrade/_initialComboUpgradePerFusionLevel/_doNotExceedCap。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
@@ -7772,37 +7869,15 @@
    "descTag": "",
    "effects": [
     {
-     "autoType": 0,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
-     "localizationScript": {
-      "Function": "GetDescription",
-      "Script": "PrimaryDamagePerAmmoOnReload.lua",
-      "_baselineClipSize": 10,
-      "_damagePerStack": [
-       0.15000001
-      ],
-      "_durations": [
-       3,
-       4,
-       5,
-       6,
-       8,
-       10
-      ],
-      "_powerAttenuation": 2
-     },
-     "operation": "ADD",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamagePerAmmoOnReload",
-     "supported": false,
-     "supportedBy": [],
-     "symbolFilter": "",
-     "upgradeType": "NONE",
-     "validModifiers": [],
-     "validPostures": [],
-     "validProcTypes": [],
-     "validType": "/Lotus/Weapons/Tenno/LotusLongGun",
+     "label": "damage per round reloaded",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
      "valuePerRank": 0
     }
    ],
@@ -7836,21 +7911,22 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
+    "complete": true,
+    "manualState": true,
     "totalEffects": 1,
-    "weaponEffects": 0
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
-    "chance": null,
+    "applyUpgradesByDefault": 0,
+    "chance": 1,
     "conditionTag": null,
     "conditions": [],
-    "duration": null,
+    "duration": 3,
     "durationScalesWithRank": null,
     "maxStacks": null,
-    "stackMode": null
-   }
+    "stackMode": "reload-scaled"
+   },
+   "stackSemantics": "装填弹匣后每发装填弹药提供伤害 +15%（Base=0.15，rank 不缩放；弹匣口径对数折算，5 发弹匣满装=+75%），持续 _durations[rank]=3/4/5/6/8/10s，加算进基伤词条。参数来自 PrimaryDamagePerAmmoOnReload.lua _damagePerStack=[0.15]/_baselineClipSize=5/_durations。时长按 rank 索引。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
@@ -7972,7 +8048,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "energy regen per impact-proc stack",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "AVATAR_POWER_RATE",
+     "valuePerRank": 0.2
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionCN.png",
    "maxRank": 5,
@@ -7992,15 +8079,14 @@
    "trigger": {
     "applyUpgradesByDefault": 0,
     "chance": 1,
-    "conditionTag": "/Lotus/Language/Upgrades/OnWeaponImpactProcCondition_Description",
-    "conditions": [
-     "OnImpactProcCondition"
-    ],
+    "conditionTag": null,
+    "conditions": [],
     "duration": 10,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": 3,
     "stackMode": "SM_DECAY"
-   }
+   },
+   "stackSemantics": "主武器冲击异常触发能量恢复 +0.2/级（R5=+1.2/s/层，3 层同享 10s，SM_DECAY 逐层衰减）。纯 AVATAR_POWER_RATE 词条——无武器数值行，manualState 保持关闭。参数来自原生 conditionalUpgrades 导出（raw AVATAR_POWER_RATE ADD 0.2，MaxConditionalStacks=3）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
@@ -8154,7 +8240,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "weapon-jam cooldown reduction (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_PROC_CHANCE",
+     "valuePerRank": 10
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionCM.png",
    "maxRank": 5,
@@ -8193,14 +8290,13 @@
     "applyUpgradesByDefault": 0,
     "chance": 1,
     "conditionTag": null,
-    "conditions": [
-     "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/OnAnyWeaponMagneticProcCondition"
-    ],
+    "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "主武器磁力异常触发时 15m 内敌方武器卡壳（~4s 动画），冷却 60s 起、rank 每级 -10s（R5=10s）。控制机制引擎未建模——manualState 保持关闭。参数来自 JamNearbyEnemies.lua _cooldownTimes=[60,50,40,30,20,10]/_jamRange=15。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
@@ -8235,7 +8331,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "pull chance on magnetic-victim kill (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+     "valuePerRank": 0.05
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDC.png",
    "maxRank": 5,
@@ -8265,21 +8372,20 @@
    "support": {
     "complete": false,
     "manualState": false,
-    "totalEffects": 0,
+    "totalEffects": 1,
     "weaponEffects": 0
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
-    "chance": 1,
-    "conditionTag": "/Lotus/Language/Upgrades/OnMeleeKillCondition_Description",
-    "conditions": [
-     "OnMeleeKillCondition"
-    ],
+    "chance": 0.2,
+    "conditionTag": null,
+    "conditions": [],
     "duration": null,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "击杀受磁化影响的敌人时 20%+5%/级 概率将 18m 内敌人拉向击杀点（1.5s）。牵引控制机制引擎未建模——manualState 保持关闭。参数来自 PullEnemiesOnMeleeKill.lua _blackHoleSpawnChance/_blackHoleSpawnChancePerFusionLevel/_blackHoleRadius=18。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
@@ -8311,7 +8417,20 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "radial damage share at 10 radiation stacks",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+     "valuePerRank": 0.2
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDV.png",
    "maxRank": 5,
@@ -8336,10 +8455,10 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
@@ -8348,11 +8467,12 @@
     "conditions": [
      "OnMaxRadiationHitCondition"
     ],
-    "duration": null,
+    "duration": 6,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "命中 10 层辐射目标时，对 4.5–7m（+0.5m/级）内敌人造成该次伤害的（80%+20%×rank）（R5=180%）；导出触发器填 6s 标称窗口以便时间线建模（实际为逐击触发，无内部冷却时连续生效）。词条按独立伤害份额折算进 WEAPON_DAMAGE_AMOUNT 乘区。参数来自 RadialDamageOnMaxRadiationStackHit.lua _damageToSpreadBase=0.8/_damageToSpreadPerLevel=0.2/_radiusToSpreadBase=4.5。词条行按 PerLevel=0.2 步进（Base=0.8 已在此注明）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
@@ -8394,7 +8514,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "second-hit chance on base crits (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+     "valuePerRank": 0.15
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionCW.png",
    "maxRank": 5,
@@ -8420,15 +8551,14 @@
    "trigger": {
     "applyUpgradesByDefault": 0,
     "chance": 0.25,
-    "conditionTag": "/Lotus/Language/Upgrades/OnCritCondition_Description",
-    "conditions": [
-     "OnMeleeCritConditionNoIntermediates"
-    ],
+    "conditionTag": null,
+    "conditions": [],
     "duration": null,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "基础（黄色）暴击命中有 25%–100%/级 概率追加一次独立伤害实例（重roll暴击与异常）。Extra-Hit 机制引擎未建模——manualState 保持关闭。参数来自 raw 触发器 UpgradeChance（0.25 为 rank0 值，每级 +0.15）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
@@ -8468,7 +8598,21 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "cold stacks applied on puncture (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_PROC_CHANCE",
+     "valuePerRank": 1,
+     "validProcTypes": [
+      "PT_CHILLED"
+     ]
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/SecondaryCritStrikeColdPunct.png",
    "maxRank": 5,
@@ -8503,21 +8647,20 @@
    "support": {
     "complete": false,
     "manualState": false,
-    "totalEffects": 0,
+    "totalEffects": 1,
     "weaponEffects": 0
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
     "chance": 1,
     "conditionTag": null,
-    "conditions": [
-     "OnPunctureProcCondition"
-    ],
+    "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "穿刺异常触发时向 10–15m 内敌人施加 1–3 层寒冷（rank 0–5：层数 [1,1,2,2,3,3]，半径 10+1/级）。异常施加机制引擎未建模——manualState 保持关闭。参数来自 AoeOnCondition.lua _numDamageProcsToSpreadAtLevel=[1,1,2,2,3,3]/_radiusBase=10/_radiusPerLevel=1。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
@@ -8525,30 +8668,16 @@
    "descTag": "",
    "effects": [
     {
-     "autoType": 0,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
-     "localizationScript": {
-      "Function": "GetDescription",
-      "Script": "UpgradePerAllyBuff.lua",
-      "_baseValue": 0.034000002,
-      "_isPercent": 1,
-      "_operationType": "ADD",
-      "_rankValue": 0.034000002,
-      "_upgradeType": "NONE"
-     },
-     "operation": "ADD",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritChancePerBuff",
-     "supported": false,
-     "supportedBy": [],
-     "symbolFilter": "",
-     "upgradeType": "NONE",
-     "validModifiers": [],
-     "validPostures": [],
-     "validProcTypes": [],
-     "validType": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
-     "valuePerRank": 0
+     "label": "crit chance per active ally buff",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_CRIT_CHANCE",
+     "valuePerRank": 0.033399999
     }
    ],
    "extraEffects": [],
@@ -8582,21 +8711,22 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
+    "complete": true,
+    "manualState": true,
     "totalEffects": 1,
-    "weaponEffects": 0
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
-    "chance": 0,
+    "applyUpgradesByDefault": 0,
+    "chance": 1,
     "conditionTag": null,
     "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "每个增益中的战火友军 buff 提供暴击几率 +3.34%/级（R5=+20.04%/个，加算进暴击词条）。参数来自 UpgradePerAllyBuff.lua _rankValue=0.033399999/_upgradeType=WEAPON_CRIT_CHANCE。常驻条件（按活跃 buff 数折算）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
@@ -8674,7 +8804,20 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "crit chance per hit stack",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_CRIT_CHANCE",
+     "valuePerRank": 0
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDL.png",
    "maxRank": 5,
@@ -8700,10 +8843,10 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
@@ -8712,11 +8855,12 @@
     "conditions": [
      "OnHitCondition"
     ],
-    "duration": null,
+    "duration": 10,
     "durationScalesWithRank": null,
-    "maxStacks": null,
-    "stackMode": null
-   }
+    "maxStacks": 100,
+    "stackMode": "tiered-reset"
+   },
+   "stackSemantics": "命中叠加暴击几率 +10%/层（Base=0.1，rank 不缩放），在 1–6 次（rank+1）大暴击后重置（导出触发器填 10s 标称窗口以便时间线建模；实际层数仅在大暴击时消耗）。词条 WEAPON_CRIT_CHANCE 绝对加算。参数来自 CritOnHit.lua _critChanceBase=0.1/_critChancePerLevel=0/_numTieredCritsToResetBase=1/_numTieredCritToResetPerLevel=1（层数无硬上限，30/s 触发限频）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
@@ -9075,23 +9219,17 @@
    "descTag": "",
    "effects": [
     {
-     "autoType": 1,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
+     "label": "damage per cold status on victim",
      "operation": "STACKING_MULTIPLY",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryExtraDamagePerFreezeStack",
+     "perStack": false,
      "supported": false,
      "supportedBy": [],
-     "symbolFilter": "",
      "upgradeType": "WEAPON_DAMAGE_PER_ACTIVE_PROC_STACK_ON_VICTIM",
-     "validModifiers": [],
-     "validPostures": [],
+     "valuePerRank": 0.075000003,
      "validProcTypes": [
       "PT_CHILLED"
-     ],
-     "validType": "",
-     "valuePerRank": 0.075000003
+     ]
     }
    ],
    "extraEffects": [],
@@ -9105,21 +9243,22 @@
    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryExtraDamagePerFreezeStack",
    "rarity": "LEGENDARY",
    "support": {
-    "complete": false,
-    "manualState": false,
+    "complete": true,
+    "manualState": true,
     "totalEffects": 1,
-    "weaponEffects": 0
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
+    "applyUpgradesByDefault": 0,
     "chance": 1,
     "conditionTag": null,
     "conditions": [],
     "duration": null,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "目标每层寒冷状态使该武器对其伤害 +7.5%/级（R5=+45%/层，10 层冻结时+450%），加算进基伤词条（与 Galvanized Shot 同桶，径向伤害不适用）。词条 WEAPON_DAMAGE_PER_ACTIVE_PROC_STACK_ON_VICTIM 引擎未建模——仅目录收录。参数来自原生 effects 导出（raw 0.075/rank）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
@@ -9253,7 +9392,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "homing projectiles per headshot kill (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+     "valuePerRank": 1
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/SolarisSeekerProjOnHeadshotKill.png",
    "maxRank": 3,
@@ -9281,15 +9431,14 @@
    "trigger": {
     "applyUpgradesByDefault": 0,
     "chance": 1,
-    "conditionTag": "/Lotus/Language/Upgrades/OnHeadshotKillCondition_Description",
-    "conditions": [
-     "OnHeadshotKillNoScriptHitTypeCondition"
-    ],
+    "conditionTag": null,
+    "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "爆头击杀时发射 1–4 发（rank 0–3 每级 +1）追踪弹头（50% 穿刺/50% 切割，继承暴击属性）。投射物机制引擎未建模——manualState 保持关闭。参数来自 SeekerProjOnHeadshotKill.lua _projectileCountPerLevel=1。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
@@ -9399,7 +9548,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "base-status split chance at 10 stacks (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_PROC_CHANCE",
+     "valuePerRank": 0.1
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDW.png",
    "maxRank": 5,
@@ -9420,21 +9580,20 @@
    "support": {
     "complete": false,
     "manualState": false,
-    "totalEffects": 0,
+    "totalEffects": 1,
     "weaponEffects": 0
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
     "chance": 0.5,
     "conditionTag": null,
-    "conditions": [
-     "SplitStatusProcsOnStackedStatusHitCondition"
-    ],
+    "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "目标已有 10 层复合异常时再次施加同异常，有 50%+10%/级 概率附带其基础组成异常之一。异常拆分机制引擎未建模——manualState 保持关闭。参数来自 SplitStatusProcsOnStackedStatusHit.lua _stacksRequiredToSplit=10 与 raw UpgradeChance=0.5。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
@@ -13528,7 +13687,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "residual field on kill (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_PROC_CHANCE",
+     "valuePerRank": 0.2
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ResidualLesions.png",
    "maxRank": 3,
@@ -13566,10 +13736,11 @@
      "OnResidualKillCondition"
     ],
     "duration": null,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "kitgun 击杀 20% 概率生成灼 residual（火焰囊肿，80 火焰伤害/10m）的残余区域，持续 3–12s/级（rank 0–3 每级 +3s），同一时间最多 2 个区域。区域伤害为独立实例（20% 概率附带对应异常），站在区域内的定理赋能获得对应元素。机制引擎未建模——manualState 保持关闭。参数来自 ResidualTrigger.lua 本地化参数与 raw UpgradeChance=0.2。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
@@ -13651,7 +13822,30 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "damage per meter of radius lost while aiming",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+     "valuePerRank": 0.1
+    },
+    {
+     "damageType": "DT_ANY",
+     "label": "ammo efficiency per meter of radius lost (utility)",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+     "valuePerRank": -0.0049999999
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/PrimaryRadialAttack.png",
    "maxRank": 5,
@@ -13675,10 +13869,10 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 2,
+    "weaponEffects": 2
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
@@ -13694,7 +13888,8 @@
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "瞄准时爆炸半径 x0.2，每损失 1m 半径获得伤害 +（50%+10%×rank）（R5=100%/m）与弹药效率 +（3%+0.5%×rank）（R5=5.5%/m）。伤害词条 WEAPON_DAMAGE_AMOUNT 独立乘区（投射物上与基伤乘算）。参数来自 ConvergeRadialAttackOnAim.lua _damageMultPerMeterLostBase=0.5/_damageMultPerMeterLostPerLevel=0.1/_explosionRadiusBase=-0.8。词条行按 PerLevel 步进（Base 已在此注明）。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
@@ -13820,7 +14015,28 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "ability efficiency after headshot kill",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "AVATAR_ABILITY_EFFICIENCY",
+     "valuePerRank": 0.075000003
+    },
+    {
+     "damageType": "DT_ANY",
+     "label": "ability strength after headshot kill",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "AVATAR_ABILITY_STRENGTH",
+     "valuePerRank": 0.075000003
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/SolarisEnergyEfficiency.png",
    "maxRank": 3,
@@ -13840,15 +14056,14 @@
    "trigger": {
     "applyUpgradesByDefault": 0,
     "chance": 1,
-    "conditionTag": "/Lotus/Language/Upgrades/OnHeadshotKillCondition_Description",
-    "conditions": [
-     "EnergyEfficiencyOnHeadshotCondition"
-    ],
+    "conditionTag": null,
+    "conditions": [],
     "duration": 4,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "爆头击杀后 4s 内下一个技能获得效率与强度 +7.5%/级（R3=+30%，加算）。纯 AVATAR_* 词条——无武器数值行，manualState 保持关闭。参数来自原生 conditionalUpgrades 导出（raw 双词条 0.075）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
@@ -13886,21 +14101,15 @@
    "descTag": "",
    "effects": [
     {
-     "autoType": 1,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
+     "label": "extra random status chance on status proc",
      "operation": "ADD",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ExtraProcOnProc",
+     "perStack": false,
      "supported": false,
      "supportedBy": [],
-     "symbolFilter": "",
      "upgradeType": "WEAPON_PROC_ON_PROC_CHANCE",
-     "validModifiers": [],
-     "validPostures": [],
-     "validProcTypes": [],
-     "validType": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
-     "valuePerRank": 0.039999999
+     "valuePerRank": 0.039999999,
+     "validType": "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
     }
    ],
    "extraEffects": [],
@@ -13914,21 +14123,22 @@
    "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ExtraProcOnProc",
    "rarity": "RARE",
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 2,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
-    "chance": null,
-    "conditionTag": "/Lotus/Language/Upgrades/OnProcCondition_Description",
+    "applyUpgradesByDefault": 0,
+    "chance": 1,
+    "conditionTag": null,
     "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "触发异常状态时 +4%/级 概率（R5=+24%）追加一个随机异常（同一瞬间最多1 个）。词条 WEAPON_PROC_ON_PROC_CHANCE 引擎未建模——仅目录收录，不参与伤害解算。参数来自原生 effects 导出（raw 0.04/rank）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
@@ -13994,7 +14204,20 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "melee damage vs frozen enemies",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_MELEE_DAMAGE",
+     "valuePerRank": 0.25
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDX.png",
    "maxRank": 5,
@@ -14025,10 +14248,10 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
-    "totalEffects": 0,
-    "weaponEffects": 0
+    "complete": true,
+    "manualState": true,
+    "totalEffects": 1,
+    "weaponEffects": 1
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
@@ -14037,11 +14260,12 @@
     "conditions": [
      "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnRollCondition"
     ],
-    "duration": null,
+    "duration": 2,
     "durationScalesWithRank": null,
     "maxStacks": null,
-    "stackMode": null
-   }
+    "stackMode": "cooldown"
+   },
+   "stackSemantics": "对完全冻结（10 层寒冷）敌人近战伤害 +25%/级（R5=+150%）。翻滚时在3–5.5m 半径施加寒冷层数（5–10 层/级，2s 冷却，冻结持续 6s）。参数来自 ApplyStatusToEnemiesOnRoll.lua _damageToApplyBase/_damageToApplyPerLevel=0.25 与 _numStatusProcsToApplyBase/_radiusBase。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
@@ -14835,7 +15059,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "residual field on kill (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_PROC_CHANCE",
+     "valuePerRank": 0.2
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ResidualMiasma.png",
    "maxRank": 3,
@@ -14876,7 +15111,8 @@
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "kitgun 击杀 20% 概率生成残余·恶臭（冰雾，20 伤害/2.5m）的残余区域，持续 3–12s/级（rank 0–3 每级 +3s），同一时间最多 2 个区域。区域伤害为独立实例（20% 概率附带对应异常），站在区域内的定理赋能获得对应元素。机制引擎未建模——manualState 保持关闭。参数来自 ResidualTrigger.lua 本地化参数与 raw UpgradeChance=0.2。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
@@ -15010,7 +15246,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "residual field on kill (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_PROC_CHANCE",
+     "valuePerRank": 0.2
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ResidualShock.png",
    "maxRank": 3,
@@ -15051,7 +15298,8 @@
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "kitgun 击杀 20% 概率生成残余·电击（雷击，200 电击伤害/10m）的残余区域，持续 3–12s/级（rank 0–3 每级 +3s），同一时间最多 2 个区域。区域伤害为独立实例（20% 概率附带对应异常），站在区域内的定理赋能获得对应元素。机制引擎未建模——manualState 保持关闭。参数来自 ResidualTrigger.lua 本地化参数与 raw UpgradeChance=0.2。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
@@ -16222,7 +16470,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "residual field on kill (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_PROC_CHANCE",
+     "valuePerRank": 0.2
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ResidualViremia.png",
    "maxRank": 3,
@@ -16263,7 +16522,8 @@
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "kitgun 击杀 20% 概率生成残余·病毒（毒血，40 毒素伤害/2.5m）的残余区域，持续 3–12s/级（rank 0–3 每级 +3s），同一时间最多 2 个区域。区域伤害为独立实例（20% 概率附带对应异常），站在区域内的定理赋能获得对应元素。机制引擎未建模——manualState 保持关闭。参数来自 ResidualTrigger.lua 本地化参数与 raw UpgradeChance=0.2。"
   },
   {
    "compatibility": "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
@@ -16995,34 +17255,16 @@
    "descTag": "",
    "effects": [
     {
-     "autoType": 1,
-     "checkTypeOnInstall": 0,
      "damageType": "DT_ANY",
-     "invalidModifiers": [],
-     "localizationScript": {
-      "Function": "GetDescription",
-      "Script": "SecondaryOnOvershieldCritChance.lua",
-      "_bonuses": [
-       0.5,
-       1,
-       1.5,
-       2,
-       2.5,
-       3
-      ],
-      "_upgradeType": "AVATAR_ABILITY_DURATION"
-     },
+     "label": "crit chance while overshields active",
      "operation": "ADD",
-     "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnOvershieldCritChance",
-     "supported": false,
-     "supportedBy": [],
-     "symbolFilter": "",
-     "upgradeType": "NONE",
-     "validModifiers": [],
-     "validPostures": [],
-     "validProcTypes": [],
-     "validType": "",
-     "valuePerRank": 0
+     "perStack": false,
+     "supported": true,
+     "supportedBy": [
+      "weapon"
+     ],
+     "upgradeType": "WEAPON_CRIT_CHANCE",
+     "valuePerRank": 0.5
     }
    ],
    "extraEffects": [],
@@ -17051,21 +17293,22 @@
     }
    },
    "support": {
-    "complete": false,
-    "manualState": false,
+    "complete": true,
+    "manualState": true,
     "totalEffects": 1,
-    "weaponEffects": 0
+    "weaponEffects": 1
    },
    "trigger": {
-    "applyUpgradesByDefault": null,
-    "chance": null,
+    "applyUpgradesByDefault": 0,
+    "chance": 1,
     "conditionTag": null,
     "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "护盾过载（Overshield）激活期间暴击几率 +50%/级（R5=+300%），与暴击几率词条加算。参数来自 SecondaryOnOvershieldCritChance.lua _bonuses/_upgradeType=WEAPON_CRIT_CHANCE（本地化脚本里的 AVATAR_ABILITY_DURATION 是描述占位）。常驻条件（无叠层/无时长）。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
@@ -17101,7 +17344,19 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "weakpoint crit chance after roll",
+     "operation": "STACKING_MULTIPLY",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_CRIT_CHANCE_BODY_PART",
+     "valuePerRank": 0.5,
+     "symbolFilter": "HEAD"
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionBU.png",
    "maxRank": 5,
@@ -17113,10 +17368,10 @@
    "path": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnRollCritChanceOnHeadshot",
    "rarity": "RARE",
    "support": {
-    "complete": false,
-    "manualState": false,
+    "complete": true,
+    "manualState": true,
     "totalEffects": 1,
-    "weaponEffects": 0
+    "weaponEffects": 1
    },
    "trigger": {
     "applyUpgradesByDefault": 0,
@@ -17126,10 +17381,11 @@
      "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnRollEndedCondition"
     ],
     "duration": 4,
-    "durationScalesWithRank": 0,
+    "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "翻滚后 4s 内弱点命中暴击几率 +50%/级（R5=+300%）。触发器 OnRollEndedCondition；词条 WEAPON_CRIT_CHANCE_BODY_PART 引擎未建模（弱点专属词条，与 WEAPON_CRIT_CHANCE_WEAKPOINT 不同键）——仅目录收录，不参与伤害解算。参数来自 conditionalUpgrades 原生导出。"
   },
   {
    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
@@ -17191,7 +17447,18 @@
     }
    ],
    "descTag": "",
-   "effects": [],
+   "effects": [
+    {
+     "damageType": "DT_ANY",
+     "label": "flat damage on status proc (utility)",
+     "operation": "ADD",
+     "perStack": false,
+     "supported": false,
+     "supportedBy": [],
+     "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+     "valuePerRank": 100
+    }
+   ],
    "extraEffects": [],
    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionBT.png",
    "maxRank": 5,
@@ -17225,15 +17492,14 @@
    "trigger": {
     "applyUpgradesByDefault": 0,
     "chance": 1,
-    "conditionTag": "/Lotus/Language/Upgrades/OnProcCondition_Description",
-    "conditions": [
-     "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcALLCondition"
-    ],
+    "conditionTag": null,
+    "conditions": [],
     "duration": null,
     "durationScalesWithRank": null,
     "maxStacks": null,
     "stackMode": null
-   }
+   },
+   "stackSemantics": "触发异常状态时附加 250–750 点同类型 flat 伤害（rank 0–5 每级 +100）。flat 伤害实例不受武器数值乘区影响（引擎无对应词条）——manualState 保持关闭。"
   },
   {
    "compatibility": "PowerSuits/PlayerPowerSuit",
