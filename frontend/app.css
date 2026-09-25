@@ -1025,16 +1025,18 @@ body.is-modal-open { overflow: hidden; }
 .mod-picker-grid.is-list { grid-template-columns: 1fr; gap: 6px; }
 .mod-picker-grid.is-weapon-list { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; }
 /* 武器选择器选项：仿战甲选择器——左缩略图 + 右信息列 */
-.weapon-option { display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 2px 10px; align-items: center; min-width: 0; padding: 9px 12px; border: 1px solid var(--line-soft); border-left: 2px solid var(--ice); border-radius: 5px; color: var(--text-soft); background: rgba(0,0,0,.18); cursor: pointer; text-align: left; transition: border-color .15s ease, background .15s ease; }
-.weapon-thumb { grid-row: 1 / -1; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 5px; background: linear-gradient(135deg, rgba(148,163,184,.12), rgba(148,163,184,.05)); overflow: hidden; }
-.weapon-thumb img { width: 40px; height: 40px; object-fit: contain; }
-.weapon-thumb-placeholder { width: 28px; height: 28px; border-radius: 4px; opacity: .5; }
+/* 2026-09-24 尺寸加大（用户要求与战甲选择器同规格）：44→76px 缩略图、
+   11→13.5px 标题，内边距同步放大。 */
+.weapon-option { display: grid; grid-template-columns: 76px minmax(0,1fr); gap: 4px 12px; align-items: center; min-width: 0; padding: 10px 14px; border: 1px solid var(--line-soft); border-left: 2px solid var(--ice); border-radius: 5px; color: var(--text-soft); background: rgba(0,0,0,.18); cursor: pointer; text-align: left; transition: border-color .15s ease, background .15s ease; }
+.weapon-thumb { grid-row: 1 / -1; display: grid; place-items: center; width: 76px; height: 64px; border-radius: 5px; background: linear-gradient(135deg, rgba(148,163,184,.12), rgba(148,163,184,.05)); overflow: hidden; }
+.weapon-thumb img { width: 68px; height: 56px; object-fit: contain; }
+.weapon-thumb-placeholder { width: 44px; height: 44px; border-radius: 4px; opacity: .5; }
 .weapon-option:hover { border-color: rgba(115,207,223,.5); background: rgba(115,207,223,.08); }
 .weapon-option.is-selected { border-color: var(--ice); background: rgba(115,207,223,.14); }
 .weapon-option:disabled { opacity: .45; cursor: not-allowed; }
-.weapon-option-copy { display: grid; gap: 3px; min-width: 0; }
-.weapon-option-copy strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
-.weapon-option-copy small { color: var(--muted); font-size: 9px; }
+.weapon-option-copy { display: grid; gap: 4px; min-width: 0; }
+.weapon-option-copy strong { overflow: hidden; font-size: 13.5px; text-overflow: ellipsis; white-space: nowrap; }
+.weapon-option-copy small { color: var(--muted); font-size: 10.5px; }
 .weapon-option-copy em { color: #d6a16d; font-size: 8px; font-style: normal; }
 .manual-mod-categories .mod-riven-chip { border-color: rgba(181,128,225,.5); color: var(--riven-bright); }
 .manual-mod-categories .mod-riven-chip.is-active { border-color: var(--riven); color: #fff; background: var(--riven-strong); }

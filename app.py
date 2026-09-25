@@ -1623,15 +1623,19 @@ def build_catalog() -> dict[str, Any]:
 
     for weapon in EXPORTS["weapons"]:
         slot = str(weapon.get("slot") or "")
-        # 空战武器（地面口径，arch_gun）2026-09-24 起进入配装目录（单开
-        # 分类「Archwing」）；紫卡分析仍只覆盖 primary/secondary/melee。
-        if slot not in RIVEN_SLOTS and slot != "arch_gun":
+        # 空战武器（地面口径，arch_gun）与同伴武器（companion）2026-09-24 起
+        # 进入配装目录（单开分类）；紫卡分析仍只覆盖 primary/secondary/melee。
+        if slot not in RIVEN_SLOTS and slot not in ("arch_gun", "companion"):
             continue
         # 暗黑分合剑基体已被两个形态记录取代（巨刃/双剑），基体不再出现在
         # 任何选择器里——它自身没有开火模式，永远灰置只会造成困惑。
         if str(weapon.get("path") or "") == _DARK_SPLIT_SWORD_PATH:
             continue
         weapon_type = optimizer._weapon_type(None, weapon)
+        # 同伴武器（哨兵/MOA/Zanuka）：slot 区分而非类型推导（它们的 ancestry
+        # 解析成 rifle 是因为共享枪械基类）——强制 companion 类型。
+        if slot == "companion":
+            weapon_type = "companion"
         issue = _weapon_issue(weapon, weapon_type)
         build_issue = issue or _weapon_build_issue(weapon, weapon_type)
         hidden_from_build_picker = issue is None and build_issue is not None

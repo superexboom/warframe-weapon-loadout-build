@@ -154,7 +154,7 @@ const ui = Object.fromEntries([
 
 const TYPE_LABELS = {
   rifle: "步枪", shotgun: "霰弹枪", pistol: "手枪", kitgun: "组合枪",
-  melee: "近战", zaw: "组合近战", archgun: "Archwing 枪械",
+  melee: "近战", zaw: "组合近战", archgun: "空战武器(地面)", companion: "同伴武器",
 };
 
 const METRIC_LABELS = {
@@ -3891,7 +3891,7 @@ const EXTERNAL_BUFFS = [
 const EXTERNAL_BUFF_GROUPS = ["终伤", "基伤", "元素", "暴击/触发", "射击"];
 
 const WEAPON_PICKER_CATEGORIES = {
-  all: "全部", rifle: "步枪", shotgun: "霰弹枪", pistol: "手枪", melee: "近战", zaw: "组合近战", kitgun: "组合枪", archgun: "Archwing",
+  all: "全部", rifle: "步枪", shotgun: "霰弹枪", pistol: "手枪", melee: "近战", zaw: "组合近战", kitgun: "组合枪", archgun: "空战武器(地面)", companion: "同伴武器",
 };
 
 function weaponPickerRows() {
@@ -3925,21 +3925,36 @@ function weaponPickerRows() {
   );
 }
 
-// 武器 StoreIcon 匹配（frontend/assets/weapons/，80% 命中率）。
-// 构造候选文件名；img onerror 自然降级到类型色块占位。
-function weaponIconFile(weapon) {
-  const names = [String(weapon.nameEn || "")];
-  for (const n of names) {
-    if (!n) continue;
-    for (const pattern of [
-      n.replace(/ /g, ""),
-      n.replace(/ /g, "").replace(/'/g, ""),
-      n.replace(/ /g, "").replace(/-/g, ""),
-    ]) {
-      return `${pattern.replace(/^MK1(?=[A-Z])/, "Mk1")}.png`;
+// 武器 StoreIcon 匹配（frontend/assets/weapons/）。
+// 候选序列：内部 basename 优先（资产文件按内部名保存——信条/赤毒/科达
+// 变体与 Infested/Tenno 专题武器的 nameEn 与内部名完全不同，旧实现只用
+// nameEn 造成大面积缺图、「Prime 有图普通版没图」的观感），nameEn 变体
+// 兜底；全部候选失败时 img onerror 降级到类型色块占位。
+function weaponIconCandidates(weapon) {
+  const internal = String(weapon.path || "").split("/").pop() || "";
+  const name = String(weapon.nameEn || "");
+  const raw = [];
+  if (internal) raw.push(internal);
+  if (name) {
+    raw.push(
+      name.replace(/ /g, ""),
+      name.replace(/ /g, "").replace(/'/g, ""),
+      name.replace(/ /g, "").replace(/-/g, ""),
+    );
+  }
+  const seen = new Set();
+  const out = [];
+  for (const pattern of raw) {
+    if (!pattern) continue;
+    // 原样优先（资产命名不完全统一：MK1Bo.png 用大写 MK1，Mk1Strun 用 Mk1），
+    // MK1→Mk1 改写作为追加候选兜底。
+    for (const variant of [pattern, pattern.replace(/^MK1(?=[A-Z])/, "Mk1")]) {
+      if (!variant || seen.has(variant)) continue;
+      seen.add(variant);
+      out.push(`${variant}.png`);
     }
   }
-  return null;
+  return out;
 }
 
 function renderWeaponPicker() {
@@ -3992,18 +4007,24 @@ function renderWeaponPicker() {
       rifle: "#5b8dc9", shotgun: "#c05555", pistol: "#7db85b", melee: "#c9b05b",
       bow: "#8d6fc9", zaw: "#c9b05b",
     }[weapon.weaponType] || "rgba(148,163,184,.3)";
-    const iconFile = weaponIconFile(weapon);
-    if (iconFile) {
+    const iconCandidates = weaponIconCandidates(weapon);
+    if (iconCandidates.length) {
       const img = create("img", "");
-      img.src = `/assets/weapons/${iconFile}`;
       img.alt = "";
       img.loading = "lazy";
-      img.addEventListener("error", () => {
-        img.remove();
-        const placeholder = create("div", "weapon-thumb-placeholder");
-        placeholder.style.background = typeColor;
-        thumb.append(placeholder);
-      });
+      let candidateIndex = 0;
+      const tryNext = () => {
+        if (candidateIndex >= iconCandidates.length) {
+          img.remove();
+          const placeholder = create("div", "weapon-thumb-placeholder");
+          placeholder.style.background = typeColor;
+          thumb.append(placeholder);
+          return;
+        }
+        img.src = `/assets/weapons/${iconCandidates[candidateIndex++]}`;
+      };
+      img.addEventListener("error", tryNext);
+      tryNext();
       thumb.append(img);
     } else {
       const placeholder = create("div", "weapon-thumb-placeholder");
