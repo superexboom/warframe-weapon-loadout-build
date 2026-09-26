@@ -2982,10 +2982,15 @@ def build_weapon_payload(
     metric_rows = _metric_options(catalog_weapon["weaponType"])
     allowed_metrics = {row["id"] for row in metric_rows}
     metric = payload.get("metric") or metric_rows[0]["id"]
-    if metric not in allowed_metrics:
+    # KPM 是事件回放目标，不属于静态面板 metric；允许批测和自动配卡
+    # 显式请求它，但目录/UI 仍只暴露面板可计算的三项。
+    internal_event_metric = metric == "killsPerMinute"
+    if metric not in allowed_metrics and not internal_event_metric:
         raise SimulationError(
-            "metric must be one of " + ", ".join(row["id"] for row in metric_rows)
+            "metric must be one of " + ", ".join((*[row["id"] for row in metric_rows], "killsPerMinute"))
         )
+    if internal_event_metric:
+        metric = "sustainedDps"
 
     element_key = payload.get("elementTarget", payload.get("element"))
     if element_key in (None, ""):
@@ -3135,7 +3140,7 @@ def build_weapon_payload(
         "statusRateMultiplier": status_rate_multiplier,
     }
     objective = optimizer._objective_metric(metric)
-    dual_route = objective in {"sustainedDps", "attackDps"}
+    dual_route = internal_event_metric or objective in {"sustainedDps", "attackDps"}
     # 解算档位（与紫卡分析共用）：fast/standard/deep，标准档为默认。
     profile = _solve_profile(payload.get("profile"))
     # ── 搜索约束（wfsim 优化器 scope 模型）────────────────────────────
