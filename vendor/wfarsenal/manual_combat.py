@@ -32,12 +32,15 @@ def condition_kind(condition):
         "onheadshotcondition": "on-headshot",
         "onheadshotriflecondition": "on-headshot",
         "onheadshotpistolcondition": "on-headshot",
+        "onheadshotpistolnoabilityweaponscondition": "on-headshot",
+        "onpistolheadshotkillcondition": "on-headshot-kill",
         "onheadshotkillanysourcecondition": "on-headshot-kill",
         "onheadshotkillcondition": "on-headshot-kill",
         "onkillheadshotriflecondition": "on-headshot-kill",
         "onkillheadshotpistolcondition": "on-headshot-kill",
         "onkillcondition": "on-kill",
         "onkillriflecondition": "on-kill",
+        "onpistolkillcondition": "on-kill",
         "onprimarykillcondition": "on-primary-kill",
         "onmeleekillanysourcecondition": "on-melee-kill",
         "onmeleekillcondition": "on-melee-kill",
@@ -116,6 +119,8 @@ def prepare(
             } and condition_kind(condition) == "on-reload-empty-complete"
                     and condition.get("duration") == 1.5):
                 condition = {**condition, "duration": 1.5 * (rank + 1)}
+            if record.get('path') in ('/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleSPMod', '/Lotus/Upgrades/Mods/Pistol/Event/CritChanceWhileAimingPistolSPMod') and condition.get('maxStacks') == 5:
+                condition = {**condition, 'stackMode': 'per-stack'}
             if condition.get("runtimeScripts"):
                 source = str(condition.get("sourcePath") or record["path"])
                 if not ("Burston" in source and "Tier1ASubMod" in source):
@@ -367,12 +372,13 @@ def prepare(
         ),
         multishotLocked=any(e.upgrade_type == "RUNTIME_LOCK_MULTISHOT" for e in static),
         conditionOverload=any(
-            e.upgrade_type == "WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE" for e in original
+            e.upgrade_type == "WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE" for e in [*original, *(term for _, terms in dynamic for term in terms)]
         ),
         baseBurst=(base_attack.get("burst") or (profile.get("burst") if profile else None)) if mode_index == 0 or cycle else None,
         baseFireRate=modes[0].get("fireRate"),
         baseMode=mode_index == 0,
         selectedIncarnon=bool(weapon.get("isIncarnonForm")) and not cycle,
         weaponSlot=weapon.get("slot"),
+        battery=base_attack.get("battery") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
         distance=scenario.distance,
     )

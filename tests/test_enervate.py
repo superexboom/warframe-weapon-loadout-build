@@ -151,7 +151,7 @@ def test_probability_damage_integral_matches_monte_carlo():
     assert predicted==pytest.approx(total/20000,rel=.003)
 
 
-def test_alt_ignored_gain_still_allows_big_crit_consumption():
+def test_ignored_alt_event_preserves_state_under_current_contract():
     state=EnervateState(cfg(0));state.advance(0)
     state.advance(.1,{1:1},gain=False)
     assert state.states=={(1,0):1}

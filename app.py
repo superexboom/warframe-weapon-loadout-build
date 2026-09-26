@@ -4232,9 +4232,14 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
             ):
                 raise SimulationError(f"arcanes[{index}].stacks must be a non-negative integer")
             trigger_meta = arcane_meta.get("trigger") if isinstance(arcane_meta.get("trigger"), Mapping) else {}
-            stack_cap = trigger_meta.get("maxStacks")
-            stack_cap = stack_cap if isinstance(stack_cap, int) and stack_cap > 0 else 1
-            arcane_row["stacks"] = min(stacks_override, stack_cap)
+            from wfarsenal.enervate import configuration as enervate_configuration
+            if enervate_configuration(arcane_record, rank):
+                # The verified event has no stack ceiling. None is not a 1-stack cap.
+                arcane_row["stacks"] = stacks_override
+            else:
+                stack_cap = trigger_meta.get("maxStacks")
+                stack_cap = stack_cap if isinstance(stack_cap, int) and stack_cap > 0 else 1
+                arcane_row["stacks"] = min(stacks_override, stack_cap)
         uptime_override = item.get("uptime")
         if uptime_override is not None:
             if (

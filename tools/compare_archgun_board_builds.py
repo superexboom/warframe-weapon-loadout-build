@@ -1,4 +1,4 @@
-"""Replay complete public Arch-gun builds; record UI blockers separately.
+"""Replay complete public ranged builds; record UI blockers separately.
 Source checkouts stay read-only. A new evidence directory is required per run.
 """
 from __future__ import annotations
@@ -43,7 +43,9 @@ def exact_record(row,records):
  if len(matches)!=1:raise ValueError('ambiguous or missing identity: '+str(row.get('id')))
  return matches[0]
 def local_replay(payload,*,duration,include_arcanes=True):
- mods=[(app.optimizer.resolve_record(app.EXPORTS['mods'],m['path'],kind='mod'),m['rank'],None) for m in payload['mods']]
+ kernel_mods=list(payload['mods'])
+ if payload.get('exilus'):kernel_mods.append({**payload['exilus'],'slot':8})
+ mods=[(app.optimizer.resolve_record(app.EXPORTS['mods'],m['path'],kind='mod'),m['rank'],None) for m in kernel_mods]
  arcs=[(app.optimizer.resolve_record(app.EXPORTS['arcanes'],a['path'],kind='arcane'),a['rank'],a) for a in payload['arcanes']] if include_arcanes else []
  weapon=app.optimizer.resolve_record(app.EXPORTS['weapons'],payload['weapon'],kind='weapon')
  passive=ModEffectList([])
@@ -52,9 +54,9 @@ def local_replay(payload,*,duration,include_arcanes=True):
   passive=app._manual_passive_effects(card)
  override={'innateElements':[{'damageType':payload['innateElement'],'value':payload['innateElementValue']}]} if payload.get('innateElement') else None
  engine={}
- result=app.simulate(export_dir=app.EXPORT_DIR,weapon=payload['weapon'],mods=payload['mods'],
+ result=app.simulate(export_dir=app.EXPORT_DIR,weapon=payload['weapon'],mods=kernel_mods,slot_count=9 if payload.get('exilus') else 8,
   fire_mode=payload['fireMode'],enemy=payload['enemy'],level=payload['level'],steel_path=True,
-  scenario=Scenario(aiming=True),weapon_override=override,passive_effects=passive,engine_context_sink=engine)
+  scenario=Scenario(aiming=True, trigger_policy="emergent", distance=(payload.get("scenario") or {}).get("distance")),weapon_override=override,passive_effects=passive,engine_context_sink=engine)
  stats=app._benchmark_timeline_stats(result['moddedStats'])
  target=app.MANUAL_ENEMIES_BY_PATH[payload['enemy']]
  combat=prepare(engine,mods,arcs,assumed=False,affinity_target=target,level=payload['level'])
@@ -72,6 +74,7 @@ def main():
  p.add_argument('--fetch',action='store_true',help='Download fresh public board snapshots into output')
  p.add_argument('--without-enervate',action='store_true',help='Synthetic ablation: remove only Secondary Enervate')
  p.add_argument('--output',type=Path,required=True);p.add_argument('--runs',type=int,default=200)
+ p.add_argument('--weapons',nargs='+',default=list(WEAPONS),help='Explicit non-melee board IDs; default preserves the archgun audit')
  p.add_argument('--per-weapon',type=int,default=2);p.add_argument('--duration',type=float,default=30)
  args=p.parse_args()
  if args.output.exists():p.error('output exists; preserve previous evidence')
@@ -82,8 +85,8 @@ def main():
  subprocess.run(['node',str(ROOT/'tools/run_reference_wasm.mjs'),str(args.wfsim),'/api/meta',str(args.output/'empty.json'),str(meta)],check=True)
  metadata=json.loads(meta.read_text(encoding='utf-8'));wm={w['id']:w for w in metadata['weapons']}
  mods=registry(args.wfsim/'data/mods');arcanes=registry(args.wfsim/'data/arcanes')
- weapons=registry(args.wfsim/'data/weapons/archgun');cases=[];skips=[];requests=[];sources=[]
- for wid in WEAPONS:
+ weapons=registry(args.wfsim/'data/weapons');cases=[];skips=[];requests=[];sources=[]
+ for wid in args.weapons:
   path=(args.output if args.fetch else args.board_dir)/f'wfsim-board-{wid}.json'
   if args.fetch:
    req=Request(f'https://wfsim.app/board/{wid}.json',headers={'User-Agent':'WF-Riven-build-audit/1.0'})
@@ -100,7 +103,11 @@ def main():
   if not rows:skips.append(dict(weapon=wid,reason='no-no-riven-row-in-exported-form'));continue
   for index,row in rows[:args.per_weapon]:
    try:
+    if row.get('evolutions') or row.get('warframe') or row.get('buffs'):
+     raise ValueError('unmapped board evolutions or external buffs')
     weapon=exact_record(weapons[wid],app.EXPORTS['weapons'])
+    if weapon.get('slot') in ('Melee', 'MELEE'):
+     raise ValueError('melee outside audit contract')
     equipped_arcanes=[a for a in row['arcanes'] if not args.without_enervate or a!='secondary_enervate']
     cards=[exact_record(mods[mid],app.EXPORTS['mods']) for mid in row['mods']]
     arcs=[exact_record(arcanes[aid],app.EXPORTS['arcanes']) for aid in equipped_arcanes]
@@ -108,15 +115,20 @@ def main():
      mods=[dict(path=m['path'],rank=m['maxRank'],slot=i) for i,m in enumerate(cards)],
      arcanes=[dict(path=a['path'],rank=a['maxRank']) for a in arcs],enemy=app._BENCHMARK_ENEMY_PATH,
      level=9999,steelPath=True,headshotChance=1.0,aiming=True,triggerPolicy='emergent',
-     slotPolarities=[m.get('polarity') for m in cards])
+     slotPolarities=[m.get('polarity') for m in cards],scenario={'distance':0.5})
+    if row.get('exilus'):
+     exilus=exact_record(mods[row['exilus']],app.EXPORTS['mods'])
+     payload['exilus']=dict(path=exilus['path'],rank=exilus['maxRank'])
     if row.get('valence'):payload.update(innateElement=ELEMENTS[row['valence']],innateElementValue=0.60)
     request=dict(weapon=wid,mode=row['mode'],mods=row['mods'],arcane=equipped_arcanes,evolutions=[],
      evolutions_as_given=True,enemy='thrax_centurion',level=9999,steel_path=True,headshot_pct=100,
      aiming=True,duration=args.duration,runs=args.runs,seed=12648430,infinite_ammo=True,
      class_rules={'archgun':{'infinite_ammo':True}},ammo_drops=False,
      spectral_form=False,eximus=False,assume_max=False,frenzy=False,player_at=[0,0],target_at=[0,0.5])
+    if row.get('exilus'):request['mods']=[*row['mods'],row['exilus']]
     if row.get('valence'):request.update(valence_element=row['valence'],valence_bonus=0.60)
     blockers=[m['path'] for m in cards if m['path'] not in app.MANUAL_MODS_BY_PATH]+[a['path'] for a in arcs if a['path'] not in app.MANUAL_ARCANES_BY_PATH]
+    if row.get('exilus') and exilus['path'] not in app.UTILITY_MODS_BY_PATH:blockers.append(exilus['path'])
     case=dict(id=f'{wid}-{index}',weapon=wid,name=weapon['nameEn'],boardRowIndex=index,board=row,
      manualPayload=payload,referenceRequest=request,catalogBlockers=blockers,referenceLimitations=wm[wid].get('unmodeled',[]))
     case['local']=local_replay(payload,duration=args.duration)

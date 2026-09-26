@@ -892,6 +892,8 @@ class ModdedStats:
     # 按每步实际活异常类型数重算。co_assumed_count 记录面板预乘时的层数。
     co_bucket: list[ModEffect] = field(default_factory=list)
     co_assumed_count: float = 0.0
+    # Beams merge multishot into one damage/status instance.
+    continuous: bool = False
 
     @property
     def total_damage(self) -> float:
@@ -1318,6 +1320,9 @@ def apply_mods(
     if event_profile.get('reloadPerShell') is not None:
         reload_base = event_profile['reloadStart'] + event_profile['reloadPerShell'] * magazine + event_profile['reloadEnd']
     reload_time = _divide(reload_base, buckets['WEAPON_RELOAD_SPEED'])
+    battery = event_profile.get('battery')
+    if battery:
+        reload_time = _divide(battery['delayEmptySeconds'], buckets['WEAPON_RELOAD_SPEED']) + magazine / battery['regenPerSecond']
     if weapon.get('isIncarnonForm'):
         reload_time = 0.
         if profile and profile.get('pool'):
@@ -1342,6 +1347,7 @@ def apply_mods(
                 _split_crit_damage_bucket(bucket)[1],
             )
         )(damage.get("critMultiplier", 1.0), buckets["WEAPON_CRIT_DAMAGE"]),
+        continuous=mode.get('trigger') == '/Lotus/Language/Menu/Loadout_TriggerContinous',
         status_chance=_combine(per_pellet_proc, buckets["WEAPON_PROC_CHANCE"]),
         multishot=(innate_multishot if buckets['RUNTIME_LOCK_MULTISHOT'] else _combine(
             innate_multishot, buckets['WEAPON_FIRE_ITERATIONS']
@@ -1408,7 +1414,7 @@ def apply_mods(
         weakpoint_crit_chance_relative=sum(e.value for e in buckets['WEAPON_CRIT_CHANCE_WEAKPOINT'] if e.operation == 'STACKING_MULTIPLY'),
         base_crit_chance=_combine(damage.get('critChance', 0.0), [e for e in buckets['WEAPON_CRIT_CHANCE'] if e.operation in ('ADD_BASE', 'SET_BASE')]),
         falloff_multiplier=falloff_multiplier,
-        dot_base_damage=elemental_base_total * damage_scale,
+        dot_base_damage=elemental_base_total * _combine(1.0, damage_scale_effects),
         dot_elemental_multipliers=_dot_elemental_multipliers(
             buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED"],
             buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE"],
@@ -1679,13 +1685,13 @@ def _dot_elemental_multipliers(
 ) -> dict[str, float]:
     """Return elemental multipliers used by damaging status effects.
 
-    Heat, Toxin and Electricity use their own installed elemental bonus.  Gas uses
-    the shared additive Heat+Toxin pool (``1 + heat + toxin``), not the product of
-    the two elemental multipliers.  Slash has no matching elemental bonus.
+    Heat, Toxin and Electricity use their own installed elemental bonus. Gas
+    accepts only an explicit Gas bonus: component Heat/Toxin mods change its
+    direct damage weight, not its status payload. Slash has no elemental bonus.
     """
     typed: dict[str, list[ModEffect]] = {}
     for effect in (*pre, *post):
-        if effect.damage_type in {"DT_FIRE", "DT_POISON", "DT_ELECTRICITY"}:
+        if effect.damage_type in {"DT_FIRE", "DT_POISON", "DT_ELECTRICITY", "DT_GAS"}:
             typed.setdefault(effect.damage_type, []).append(effect)
 
     heat = max(_combine(1.0, typed.get("DT_FIRE", [])), 0.0)
@@ -1696,7 +1702,7 @@ def _dot_elemental_multipliers(
         "DT_FIRE": heat,
         "DT_POISON": toxin,
         "DT_ELECTRICITY": electricity,
-        "DT_GAS": max(heat + toxin - 1.0, 0.0),
+        "DT_GAS": max(_combine(1.0, typed.get("DT_GAS", [])), 0.0),
     }
 
 
@@ -2724,6 +2730,8 @@ def expected_status_procs(
     chance = max(float(stats.status_chance), 0.0)
     shots = max(float(stats.multishot), 0.0)
     random_total = chance * shots
+    if stats.continuous:
+        shots = 1.0 if shots > 0 else 0.0
     weights = {
         dtype: max(float(amount), 0.0)
         for dtype, amount in stats.damage_types.items()
@@ -2783,6 +2791,26 @@ def expected_victim_status_count(
         for value in expected_status_procs(stats, forced_procs=forced_procs).values()
         if value > 0.0
     )
+
+
+def _proc_seed_merge_multiplier(stats, dtype, forced_procs=None):
+    if not stats.continuous or stats.multishot <= 0:
+        return 1.0
+    # Conditional seed moment: E[M^2]/E[M] for natural status rolls,
+    # E[M] for an independent proc on the single merged beam hit.
+    from dataclasses import replace
+    low = int(math.floor(stats.multishot))
+    fraction = stats.multishot - low
+    count = seed = 0.0
+    for merged, probability in ((low, 1 - fraction), (low + 1, fraction)):
+        if merged <= 0 or probability <= 0:
+            continue
+        probe = replace(stats, continuous=False, multishot=1.0,
+                        status_chance=stats.status_chance * merged)
+        n = expected_status_procs(probe, forced_procs=forced_procs).get(dtype, 0.0)
+        count += probability * n
+        seed += probability * n * merged
+    return seed / count if count else 1.0
 
 
 def expected_dot_damage(
@@ -2887,25 +2915,12 @@ def expected_dot_damage(
             if defenses["shield"] > 0.0 and interaction_type not in shield_bypass:
                 target_multiplier *= _magnetic_defense_multiplier(magnetic_stacks)
         elemental = stats.dot_elemental_multipliers.get(dtype, 1.0)
-        # ── IPS/元素 DoT 的种子基数区分（引擎合同修复）──────────────────
-        # Slash（bleed）的 DoT 基数 = 触发那一击的「该类型伤害份额」
-        # （stats.damage_types[dtype]，含基伤/元素合并后的最终份额），
-        # 不含暴击（暴击按触发那一击的档位经 seed_tiers 乘入）。
-        # 元素 DoT（Heat/Toxin/Electricity/Gas）的基数 = dot_base
-        # （武器基础伤害 × 基伤乘区，不含元素 MOD）× elemental 乘数。
-        # 旧实现统一用 dot_base × elemental：对 Slash 把「总伤」当
-        # Slash 基数，高估 dot_base/slash_share 倍（物理武器 2-4×），
-        # 直接撑爆 DoT 通道与 KPM/评分分母。
-        # DT_PUNCTURE 虽无 DoT（不在 DOT_DAMAGE_COEFFICIENTS），防御性
-        # 处理同 IPS 口径。
-        if dtype in ("DT_SLASH", "DT_IMPACT", "DT_PUNCTURE"):
-            seed_basis = max(
-                float(stats.damage_types.get(dtype, 0.0) or 0.0), 0.0
-            )
-            elemental_factor = 1.0  # IPS 无元素乘区
-        else:
-            seed_basis = dot_base
-            elemental_factor = max(float(elemental), 0.0)
+        # Status payload reads weapon modified base, never the Slash share.
+        # Physical-type and elemental mods do not amplify Bleed; GunCO is
+        # excluded when apply_mods creates dot_base_damage above.
+        seed_basis = dot_base
+        elemental_factor = (1.0 if dtype in ('DT_SLASH', 'DT_IMPACT', 'DT_PUNCTURE')
+                            else max(float(elemental), 0.0))
         # +1 accumulator per tick group (wfsim MEASUREMENTS M58, AGPL-3.0):
         # Heat/Electricity/Gas consolidate into ONE tick group sharing a single
         # +1; Slash and Toxin tick independently so every live stack carries
@@ -2923,6 +2938,7 @@ def expected_dot_damage(
                 weight,
                 coefficient
                 * seed_basis
+                * _proc_seed_merge_multiplier(stats, dtype, forced_procs)
                 * elemental_factor
                 * factor
                 * proc_damage
@@ -3089,6 +3105,7 @@ def expected_status_damage(
         modded_base = max(float(modded_base), 0.0)
         per_proc = (
             BLAST_DAMAGE_COEFFICIENT
+            * _proc_seed_merge_multiplier(stats, 'DT_EXPLOSION', forced_procs)
             * modded_base
             * crit
             * proc_damage

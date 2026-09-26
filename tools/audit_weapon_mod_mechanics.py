@@ -143,10 +143,10 @@ def audit() -> dict[str, Any]:
             "compatibilityWithoutWeaponSupport": compatibility_without_support,
             "compatibilityWithoutWeaponSupportDenominator": "weaponMods",
             "eventUnmodeledCandidates": event_unmodeled_candidates,
-            "eventUnmodeledCandidatesDenominator": "weaponMods锛坲nsupported 鎴?scripts 闈炵┖锛?,
+            "eventUnmodeledCandidatesDenominator": "weaponMods with unsupported effects or scripts",
             "coverageNote": (
                 "杩欐槸搴撳瓨瀹¤鑰岄潪杩愯鏃舵秷璐硅鐩栬瘉鏄庯細auditedRows 鏄瓫閫夊悗鐨勮鏁帮紝"
-                "涓嶆槸鍏ㄩ儴 MOD 鐨勬満鍒跺畬鎴愮巼銆?
+                "This inventory audit is not runtime coverage proof."
             ),
         },
         "rows": rows,

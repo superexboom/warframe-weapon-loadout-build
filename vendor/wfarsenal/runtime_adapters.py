@@ -663,6 +663,13 @@ def verified_crux_condition(record):
             or apply.get('Function') != 'ApplyUpgrade'
             or any(not _close(apply.get(k), v) for k, v in expected.items())):
         return None
+    # Relative to each attack part's base chance; the old materialized ADD
+    # incorrectly supplied +300 percentage points at max rank/stacks.
+    # Rebuild from the verified script, leaving the frozen raw record intact.
+    effects = [
+        dict(upgradeType='WEAPON_PROC_CHANCE', operation='STACKING_MULTIPLY', valuePerRank=.05),
+        dict(upgradeType='WEAPON_AMMO_CONSUME_RATE', operation='STACKING_MULTIPLY', valuePerRank=-.01),
+    ]
     return {'sourcePath': record['path'], 'conditionTag': 'OnWeakpointHitCondition',
             'conditions': ['OnWeakpointHitCondition'], 'duration': 10, 'maxStacks': 10,
-            'stackMode': 'reset', 'effects': record.get('effects') or []}
+            'stackMode': 'reset', 'effects': effects}

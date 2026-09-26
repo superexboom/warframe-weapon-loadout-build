@@ -121,6 +121,7 @@ def replay(
     totals = dict(direct=0.0, dot=0.0, nonDot=0.0, syndicate=0.0)
     proc_counts = {}
     dot_by_type = {}
+    magnetic_breaks = []
     last_totals = totals.copy()
     timeline = []
     averaged = {k: 0.0 for k in names.values()}
@@ -139,6 +140,8 @@ def replay(
     transforms = 0
     ammo = stats.magazine
     reloads = 0
+    recharges = 0
+    last_fire_time = -math.inf
     burst_round = 0
     first_round = True
     model_cache = {}
@@ -275,6 +278,21 @@ def replay(
             if affinity >= syndrome["affinityToFill"]:
                 push(t, "syndicate")
 
+    def magnetic_break(t, pool_index):
+        stacks = min(count('DT_MAGNETIC'), 10.0)
+        if stacks <= 0:
+            return
+        # Pinned WFSim engine contract: target-pool fraction, six immediate/1s
+        # ticks, status-damage multiplier squared; no weapon base/crit/element.
+        multiplier = max(model(t)[0].proc_damage_multiplier, 0.0)
+        per_tick = full[pool_index] * .03 * stacks * multiplier ** 2 / 6
+        magnetic_breaks.append(dict(time=t, pool=('overguard', 'shield')[pool_index],
+                                    stacks=stacks, seedPerTick=per_tick))
+        states.setdefault('DT_ELECTRICITY', deque()).append((t + 6, 1.0))
+        proc_counts['DT_ELECTRICITY'] = proc_counts.get('DT_ELECTRICITY', 0) + 1
+        for tick in range(6):
+            push(t + tick, 'dot', ('DT_ELECTRICITY', per_tick, t + 6), gen)
+
     def take(vector, t, source, weak_kill=False):
         # Spend one attack fraction across pools. Shield bypass acts in parallel.
         # Residual damage never leaks to the next target.
@@ -301,6 +319,8 @@ def replay(
             pools[0] = max(0.0, pools[0] - drain)
             applied += drain
             left -= fraction
+            if pools[0] <= 1e-9:
+                magnetic_break(t, 0)
         if left > 0.0 and pools[1] > 0.0:
             shield = sum(
                 raw * max(0.0, 1.0 + cache["faction_deltas"].get(k, 0.0))
@@ -323,6 +343,8 @@ def replay(
             pools[2] -= b
             applied += a + b
             left -= fraction
+            if pools[1] <= 1e-9:
+                magnetic_break(t, 1)
         if left > 0.0 and pools[1] <= 1e-9 and pools[2] > 0.0:
             value = sum(health_value(k, raw) for k, raw in vector.items())
             drain = min(pools[2], value * left)
@@ -366,11 +388,6 @@ def replay(
                         damage_types={
                             k: v * ratio for k, v in stats.damage_types.items()
                         },
-                        dot_base_damage=(
-                            stats.dot_base_damage * ratio
-                            if stats.dot_base_damage is not None
-                            else None
-                        ),
                     ),
                     None,
                 )
@@ -496,7 +513,7 @@ def replay(
             # part and status ticks do not masquerade as extra direct pellets.
             p=(1-head)*big_crit_probability(cc,st.double_crit_chance)
             p+=head*big_crit_probability(cc+weak,st.double_crit_chance)
-            probabilities[stacks]=any_probability(p,st.multishot)
+            probabilities[stacks]=any_probability(p,1.0 if st.continuous else st.multishot)
         gain=not (combat['enervate'].get('ignoreSelected') and form != 'base')
         enervate.advance(t,probabilities,gain=gain)
 
@@ -688,10 +705,19 @@ def replay(
             if cycle and form == "base" and gauge >= cycle["hits"] - 1e-9:
                 push(t + cycle["enterSeconds"], "transform", "incarnon")
                 continue
+            battery = combat.get('battery')
+            if battery and math.isfinite(last_fire_time):
+                delay = battery['delayEmptySeconds'] if ammo <= 1e-9 else battery['delayPartialSeconds']
+                ammo = min(active.magazine, ammo + max(0, t - last_fire_time - delay) * battery['regenPerSecond'])
             if ammo <= 1e-9 and active.magazine > 0.0 and combat:
                 if cycle and form == "incarnon":
                     push(t + cycle["exitSeconds"], "transform", "base")
                 else:
+                    if battery:
+                        recharges += 1
+                        ammo = active.magazine
+                        push(t + active.reload_time, 'fire')
+                        continue
                     reloads += 1
                     first_round = True
                     burst_round = 0
@@ -714,6 +740,7 @@ def replay(
                     push(t + reload_time, "reload-complete")
                 continue
             attacks += 1
+            last_fire_time = t
             generation = gen
             if (
                 combat.get("lastBurst")
@@ -729,6 +756,7 @@ def replay(
                 if active.dot_base_damage is not None:
                     active.dot_base_damage *= factor
             first_round = False
+            hit_count = 1.0 if active.continuous else active.multishot
             shot_puncture=live_crit()[0]
             direct_packet = packet(active, head)
             vector, _, _, _ = direct_packet
@@ -755,8 +783,8 @@ def replay(
             if (form == "base" or combat.get("baseMode")) and burst_round == 2:
                 signal("on-burst-hit", t)
             enervate_hit(active,t,shot_puncture)
-            signal("on-hit", t, active.multishot)
-            signal("on-headshot", t, head * active.multishot)
+            signal("on-hit", t, hit_count)
+            signal("on-headshot", t, head * hit_count)
             signal(
                 "on-crit",
                 t,
@@ -770,7 +798,7 @@ def replay(
                     ),
                     1.0,
                 )
-                * active.multishot,
+                * hit_count,
             )
             if cycle and form == "base":
                 gauge = min(cycle["hits"], gauge + (1.0 if cycle.get('chargeOn') == 'direct_hits' else head) * active.multishot)
@@ -899,10 +927,12 @@ def replay(
         "staleComponents": stale,
         "shots": attacks,
         "reloads": reloads,
+        "recharges": recharges,
         "transforms": transforms,
         "directEventLedger": ledger,
         "emergent": {"onKillStacks": "events" if sources else "panel-assumed-max"},
         "enervate": enervate.summary() if enervate else None,
+        "magneticBreaks": magnetic_breaks,
         "triggerSeries": [
             {
                 **{k: q[k] for k in ("id", "label", "kind", "maxStacks", "series")},
@@ -935,5 +965,6 @@ def replay(
             "non-heat-stacking-procs-expected",
             "fractional-proc-refresh-approximates-uptime",
             "single-target-syndicate-no-player-buffs",
+            "magnetic-break-six-ticks-pinned-reference-contract",
         ] + (ASSUMPTIONS if enervate else []),
     }
