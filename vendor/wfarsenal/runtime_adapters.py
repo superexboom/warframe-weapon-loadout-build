@@ -665,4 +665,4 @@ def verified_crux_condition(record):
         return None
     return {'sourcePath': record['path'], 'conditionTag': 'OnWeakpointHitCondition',
             'conditions': ['OnWeakpointHitCondition'], 'duration': 10, 'maxStacks': 10,
-            'stackMode': 'per-stack', 'effects': record.get('effects') or []}
+            'stackMode': 'reset', 'effects': record.get('effects') or []}

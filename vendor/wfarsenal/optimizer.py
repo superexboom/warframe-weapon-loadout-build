@@ -1204,7 +1204,11 @@ def _arcane_card(
             )
         if requested_rank is None:
             state["rank"] = max_rank if max_rank is not None else 0
+        from .enervate import configuration
+        enervate_spec = configuration(arcane, int(state['rank']))
         trigger = arcane.get("trigger")
+        if enervate_spec:
+            trigger = {**(trigger or {}), 'duration': None, 'maxStacks': None}
         if isinstance(trigger, Mapping):
             # conditionTag 为空时回退 conditions 数组（同 _expected_trigger_state）。
             _cond_bits = [str(trigger.get("conditionTag") or "")]
@@ -1225,7 +1229,7 @@ def _arcane_card(
                 }
             )
         implicit_heavy_state = (
-            default_heavy_state
+            default_heavy_state and not enervate_spec
             and requested_rate is None
             and "stacks" not in raw
             and "uptime" not in raw
@@ -1269,7 +1273,7 @@ def _arcane_card(
             continue
         effect_stacks = wire_stacks
         effect_uptime = wire_uptime
-        if requested_rate is not None:
+        if requested_rate is not None and not enervate_spec:
             (
                 effect_stacks,
                 effect_uptime,
@@ -1293,6 +1297,10 @@ def _arcane_card(
             state["error"] = str(exc)
             unsupported.append(f"arcane-state-{index}-invalid-not-applied")
             continue
+        if enervate_spec:
+            state.update(durationSeconds=None,maxStacks=None,stackMode='joint-probability-reset',
+                         mode='explicit-fixed' if 'stacks' in raw else 'events',
+                         resetAfter=enervate_spec['resetAfter'])
         event_arcanes.append((arcane, int(state["rank"]), dict(raw)))
         supported_effects = [effect for effect in effects if effect.supported]
         unsupported_effects = [effect for effect in effects if not effect.supported]
@@ -1304,7 +1312,7 @@ def _arcane_card(
             unsupported.append(f"arcane-state-{index}-runtime-effects-skipped")
         if supported_effects:
             combined.extend(supported_effects)
-            state["active"] = bool(state["expectedStacks"])
+            state["active"] = bool(state["expectedStacks"]) or bool(enervate_spec)
             state["applied"] = True
             state["effectCount"] = len(supported_effects)
         else:

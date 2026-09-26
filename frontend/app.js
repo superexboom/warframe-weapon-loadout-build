@@ -3780,6 +3780,7 @@ function arcanePickerRows(kind) {
 }
 
 function arcaneEffectHint(arcane) {
+  if (arcane.eventModel === "enervate-joint-probability") return "命中叠暴击 · 强暴击计数重置 · 已计入事件计算";
   if (arcane.descriptionSource && arcane.effectsZhByRank?.length) {
     const typeLabels = { "Bow Arcane": "弓箭专用", "Shotgun Arcane": "霰弹枪专用", "Kitgun Arcane": "组合枪专用", "Primary Arcane": "主要武器", "Secondary Arcane": "次要武器", "Melee Arcane": "近战武器", "Warframe Arcane": "战甲赋能" };
     return typeLabels[arcane.equipmentType] || arcane.trigger?.conditionZh || "效果与触发条件见下方";
@@ -6960,13 +6961,13 @@ function drawBenchmarkReplay(bench) {
     const uptime = Number(series.uptime || 0);
     charts.push({
       key: `trigger-${series.id}`,
-      label: `${series.label}（均值 ${avg.toFixed(1)} · 覆盖 ${(uptime * 100).toFixed(0)}%）`,
+      label: `${series.label}（${series.kind === "enervate" ? "期望层数" : "均值"} ${avg.toFixed(1)} · 覆盖 ${(uptime * 100).toFixed(0)}%）`,
       color: TRIGGER_COLORS[index % TRIGGER_COLORS.length],
       render(svg) {
         const y = (v) => pad.t + (H - pad.t - pad.b) * (1 - clamp(v / maxStacks, 0, 1));
         const d = values.map((v, i) => `${i === 0 ? "M" : "L"}${xOf(points[i]?.time || i * tMax / values.length).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
         svg.append(el("path", { d, fill: "none", stroke: TRIGGER_COLORS[index % TRIGGER_COLORS.length], "stroke-width": 1.6, "stroke-linecap": "round" }));
-        return { axis: [String(Math.round(maxStacks)), "", "0"], tooltip: (p, i) => `${series.label}：${(values[i] || 0).toFixed(1)} / ${Math.round(maxStacks)} 层` };
+        return { axis: [String(Math.round(maxStacks)), "", "0"], tooltip: (p, i) => `${series.label}：${(values[i] || 0).toFixed(1)}${series.kind === "enervate" ? " 期望层（无固定层数上限）" : ` / ${Math.round(maxStacks)} 层`}` };
       },
     });
   });

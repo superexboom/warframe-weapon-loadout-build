@@ -73,6 +73,8 @@ def prepare(
     scenario = engine["scenario"]
     mode_index = engine["fire_mode"]
     original = list(engine["effects"])
+    from .enervate import configuration, PATH as ENERVATE_PATH, IGNORED_ALT
+    enervate = None
     sources = []
     dynamic = []
     excluded = set()
@@ -92,6 +94,15 @@ def prepare(
         *arcane_records,
         *[(b, 0, None) for b in branches],
     ]:
+        spec = configuration(record, rank)
+        if spec:
+            enervate = {**spec, 'uptime': (override or {}).get('uptime', 1.0),
+                        'ignoreSelected': weapon.get('path') == IGNORED_ALT and mode_index > 0}
+            if (override or {}).get('stacks') is not None:
+                enervate['fixedStacks'] = override['stacks']
+            if assumed and 'fixedStacks' not in enervate:
+                notes.append('enervate-has-no-maximum-using-events')
+            continue
         crux = verified_crux_condition(record)
         if crux:
             record = {**record, "conditionalEffects": [crux]}
@@ -186,7 +197,7 @@ def prepare(
         e
         for e in original
         if (e.source_path, e.upgrade_type, e.operation, e.damage_type)
-        not in replaced_terms
+        not in replaced_terms and not (enervate and e.source_path == ENERVATE_PATH)
     ]
     ref = reference()
     native_trigger = ref.get('nativeTriggers', {}).get(weapon.get('path'))
@@ -344,6 +355,7 @@ def prepare(
     )
     return dict(
         resolve=resolve,
+        enervate=enervate,
         cycle=cycle,
         syndicate=syndrome,
         affinityPerKill=affinity,

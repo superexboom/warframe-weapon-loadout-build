@@ -345,3 +345,43 @@ def test_inactive_ads_mod_has_zero_gain_with_trigger_arcane():
         "candidates": [path],
     }
     assert app.mod_gains_payload(p)["gains"][path]["gainPercent"] == 0.0
+
+
+def test_crux_refreshes_whole_pile_until_last_hit_expiry():
+    path='/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit'
+    rec=app.optimizer.resolve_record(app.EXPORTS['arcanes'],path,kind='arcane')
+    assert verified_crux_condition(rec)['stackMode']=='reset'
+    st=stats(status_chance=0,magazine=3,fire_rate=1,reload_time=15)
+    source=dict(id='crux',label='crux',kind='on-headshot',duration=10,maxStacks=10,perEvent=1)
+    combat=dict(resolve=lambda *a:(st,None))
+    r=run(st,combat=combat,trigger_sources=[source],headshot_chance=1,window_seconds=14)
+    assert next(p for p in r['timeline'] if p['time']==11.5)['triggerStacks']['crux']==3
+    assert next(p for p in r['timeline'] if p['time']==12)['triggerStacks']['crux']==0
+
+
+def test_puncture_buff_is_live_and_applies_after_hit():
+    st=stats(damage_types={'DT_PUNCTURE':100},crit_chance=0,fire_rate=1,status_chance=1)
+    r=run(st,window_seconds=3,time_step=.5)
+    assert r['timeline'][0]['stepDamage']==100
+    assert r['directWindow']==pytest.approx(100+105+110)
+    assert r['timeline'][-1]['punctureCritChance']==pytest.approx(.15)
+
+
+def test_cold_freezes_thaws_and_overguard_caps_without_freezing():
+    st=stats(damage_types={'DT_FREEZE':100},fire_rate=10,crit_chance=1,status_chance=1)
+    r=run(st,window_seconds=5)
+    frozen=next(p for p in r['timeline'] if p['frozen'])
+    assert frozen['stacks']['cold']==10 and frozen['coldCritDamage']==1
+    assert all(p['stacks']['cold']==10 for p in r['timeline'] if p['frozen'])
+    assert any(not p['frozen'] and p['time']>3.9 for p in r['timeline'])
+    over=run(st,{**target(),'overguard':1e12},window_seconds=5)
+    assert all(p['stacks']['cold']<=4 and not p['frozen'] for p in over['timeline'])
+    assert over['timeline'][-1]['coldCritDamage']==pytest.approx(.25)
+
+
+def test_heat_new_proc_keeps_stronger_decay_tail():
+    st=stats(fire_rate=.4,proc_duration_multiplier=1/3)
+    r=run(st,window_seconds=3,time_step=.1)
+    at=next(p for p in r['timeline'] if p['time']==2.6)
+    assert at['stacks']['heat']==1
+    assert at['heatArmourStrip']==.4

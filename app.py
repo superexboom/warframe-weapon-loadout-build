@@ -640,6 +640,7 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("combat_events.py"),
         Path(optimizer.__file__).with_name("combat_replay.py"),
         Path(optimizer.__file__).with_name("manual_combat.py"),
+        Path(optimizer.__file__).with_name("enervate.py"),
         Path(optimizer.__file__).with_name("search_combat.py"),
         Path(optimizer.__file__).with_name("event_profiles.py"),
         Path(optimizer.__file__).with_name("riven_fusion.py"),
@@ -2350,6 +2351,10 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
         if not arcane.get("path") or not support.get("manualState") or not int(support.get("weaponEffects") or 0):
             continue
         trigger = arcane.get("trigger") if isinstance(arcane.get("trigger"), Mapping) else {}
+        from wfarsenal.enervate import configuration
+        enervate_spec = configuration(arcane, int(arcane.get('maxRank') or 0))
+        if enervate_spec:
+            trigger = {**trigger, 'duration': None, 'maxStacks': None}
         compatibility = str(arcane.get("compatibility") or "")
         # Weapon-slot arcanes install on guns; PowerSuit-compatible ones are
         # the Warframe-slot entries the UI offers in the frame arcane slots.
@@ -2407,7 +2412,8 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
             "runtime": bool(arcane.get("runtimeScripts")),
             "effect": effect,
             "effectsZhByRank": effects_by_rank,
-            "description": effect if official_levels else " · ".join(bit for bit in [effect, *trigger_bits] if bit),
+            "description": (effect + ' 命中后叠加10个暴击百分点；累计rank+1次橙暴或更高暴击后清零。无固定时限/层数上限，最多30次/秒；真实事件已计入。' if enervate_spec else effect if official_levels else " · ".join(bit for bit in [effect, *trigger_bits] if bit)),
+            "eventModel": 'enervate-joint-probability' if enervate_spec else None,
         })
     rows.sort(key=lambda row: (row["nameZh"].casefold(), row["path"]))
     return rows

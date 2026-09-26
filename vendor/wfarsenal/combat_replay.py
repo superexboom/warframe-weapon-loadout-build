@@ -43,6 +43,8 @@ def replay(
     )
 
     combat = combat or {}
+    from .enervate import EnervateState, big_crit_probability, any_probability, ASSUMPTIONS
+    enervate = EnervateState(combat['enervate']) if combat.get('enervate') else None
     target = target or {}
     window = max(float(window_seconds), 0.0)
     step = max(0.01, float(time_step))
@@ -105,6 +107,8 @@ def replay(
     blast_procs = deque()
     heat = dict(count=0.0, seed=0.0, acc=0.0, start=0.0, end=-1.0, scale=1.0, token=0)
     old_heat_strip = (0.0, -1.0, 1.0)
+    frozen_until = -1.0
+    frozen_scale = 1.0
     heap = []
     seq = 0
     gen = 0
@@ -115,6 +119,8 @@ def replay(
     last_kill = None
     min_interval = None
     totals = dict(direct=0.0, dot=0.0, nonDot=0.0, syndicate=0.0)
+    proc_counts = {}
+    dot_by_type = {}
     last_totals = totals.copy()
     timeline = []
     averaged = {k: 0.0 for k in names.values()}
@@ -153,27 +159,34 @@ def replay(
     def count(dtype):
         if dtype == "DT_FIRE":
             return heat["count"]
+        if dtype == 'DT_FREEZE' and frozen_until > current_time:
+            return 10.0
         if dtype == "DT_GAS":
             return sum(p["count"] for p in gas_procs) + sum(
                 x[1] for x in states.get(dtype, ())
             )
         if dtype == "DT_EXPLOSION":
             return sum(p["count"] for p in blast_procs)
-        return min(sum(x[1] for x in states.get(dtype, ())), caps.get(dtype, math.inf))
+        cap = 4.0 if dtype == 'DT_FREEZE' and pools[0] > 0 else caps.get(dtype,math.inf)
+        return min(sum(x[1] for x in states.get(dtype, ())),cap)
 
     def heat_strip(t):
+        up=0.0
         if heat["count"]:
             n = min(4, int((t - heat["start"] + 1e-9) / max(0.5 * heat["scale"], 1e-9)))
-            return (0.0, 0.15, 0.30, 0.40, 0.50)[max(0, n)]
+            up=(0.0, 0.15, 0.30, 0.40, 0.50)[max(0, n)]
         value, ended, scale = old_heat_strip
         if ended < 0:
-            return 0.0
+            return up
         n = int(max(0.0, t - ended) / max(1.5 * scale, 1e-9))
         descending = [v for v in (0.5, 0.4, 0.3, 0.15, 0.0) if v <= value + 1e-9]
-        return descending[min(n, len(descending) - 1)]
+        return max(up,descending[min(n, len(descending) - 1)])
 
     def clean(t):
-        nonlocal old_heat_strip
+        nonlocal old_heat_strip, frozen_until
+        if frozen_until >= 0 and t >= frozen_until - 1e-9:
+            states['DT_FREEZE']=deque([(frozen_until+6*frozen_scale,3.0)])
+            frozen_until=-1.0
         while gas_procs and gas_procs[0]["end"] < t - 1e-9:
             gas_procs.popleft()
         for rows in states.values():
@@ -227,7 +240,7 @@ def replay(
             q["expires"] = t + q["duration"] if q["duration"] else math.inf
 
     def die(t, weak_kill=False, weapon_kill=True):
-        nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, old_heat_strip
+        nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, old_heat_strip, frozen_until
         kills += 1
         gen += 1
         if first_kill is None:
@@ -241,6 +254,7 @@ def replay(
         last_kill = t
         pools[:] = full
         states.clear()
+        frozen_until=-1.0
         gas_procs.clear()
         blast_procs.clear()
         heat.update(count=0.0, seed=0.0, end=-1.0, token=heat["token"] + 1)
@@ -315,6 +329,8 @@ def replay(
             pools[2] -= drain
             applied += drain
         totals[source] += applied
+        if source == 'dot' and len(vector) == 1:
+            dtype=next(iter(vector));dot_by_type[dtype]=dot_by_type.get(dtype,0.0)+applied
         if ehp > 0.0 and pools[0] <= 1e-7 and pools[2] <= 1e-7:
             die(t, weak_kill, source != "syndicate")
             return True
@@ -433,13 +449,66 @@ def replay(
         )  # Retain temporary burst stats to prevent recycled ids.
         return result
 
-    def add_procs(st, aim, t):
-        _, procs, rows, non = attack_data(st, aim)
+    crit_views = {}
+    current_time=0.0
+
+    def live_crit():
+        cold=count('DT_FREEZE')
+        cd=1.0 if frozen_until>current_time else (.1*cold if cold<1 else .1+.05*(cold-1))
+        return .05*count('DT_PUNCTURE'),cd
+
+    def packet(st, aim):
+        puncture,cold=live_crit()
+        if not enervate and not puncture and not cold:
+            return attack_data(st, aim)
+        vector, procs, rows, non = {}, {}, {}, {}
+        seed_sums, non_sums = {}, {}
+        weights=enervate.damage_marginal() if enervate else {0:1.0}
+        for stacks, weight in weights.items():
+            key=(id(st), stacks, puncture, cold)
+            if key not in crit_views:
+                view=copy(st)
+                view.crit_chance=max(0.0,st.crit_chance + stacks*.1 + puncture)
+                view.crit_multiplier=st.crit_multiplier+cold
+                crit_views[key]=(st,view)
+            v,p,r,n=attack_data(crit_views[key][1],aim)
+            for k,value in v.items():vector[k]=vector.get(k,0.0)+weight*value
+            for k,value in p.items():procs[k]=procs.get(k,0.0)+weight*value
+            for k,row in r.items():
+                rows[k]=dict(row)
+                seed_sums[k]=seed_sums.get(k,0.0)+weight*p.get(k,0)*row['seedPerSecondPerProc']
+            for k,row in n.items():
+                non[k]=dict(row)
+                non_sums[k]=non_sums.get(k,0.0)+weight*p.get(k,0)*row['perProc']
+        for k,row in rows.items():row['seedPerSecondPerProc']=seed_sums[k]/procs[k] if procs[k] else 0.0
+        for k,row in non.items():row['perProc']=non_sums[k]/procs[k] if procs[k] else 0.0
+        return vector,procs,rows,non
+
+    def enervate_hit(st,t,puncture):
+        if (not enervate or st.multishot<=0
+                or (combat['enervate'].get('ignoreSelected') and form != 'base')):
+            return
+        weak=st.weakpoint_crit_chance_bonus+st.base_crit_chance*st.weakpoint_crit_chance_relative
+        probabilities={}
+        for stacks in enervate.marginal():
+            cc=max(0.0,st.crit_chance+stacks*.1+puncture)
+            # The direct pellet rolls aggregate one grouped Hit. The radial
+            # part and status ticks do not masquerade as extra direct pellets.
+            p=(1-head)*big_crit_probability(cc,st.double_crit_chance)
+            p+=head*big_crit_probability(cc+weak,st.double_crit_chance)
+            probabilities[stacks]=any_probability(p,st.multishot)
+        gain=not (combat['enervate'].get('ignoreSelected') and form != 'base')
+        enervate.advance(t,probabilities,gain=gain)
+
+    def add_procs(st, aim, t, data=None):
+        nonlocal frozen_until,frozen_scale
+        _, procs, rows, non = data if data is not None else packet(st, aim)
         scale = max(st.proc_duration_multiplier, 0.0)
         for dtype, n in procs.items():
             n *= max(status_rate_multiplier, 0.0)
-            if n <= 0.0:
+            if n <= 0.0 or dtype == 'DT_FREEZE' and frozen_until > t:
                 continue
+            proc_counts[dtype]=proc_counts.get(dtype,0.0)+n
             signal("proc-" + dtype, t, n)
             signal("on-proc", t, n)
             if scale <= 0.0:
@@ -460,6 +529,15 @@ def replay(
                 heat["end"] = t + duration
             else:
                 states.setdefault(dtype, deque()).append((t + duration, n))
+                if dtype in caps and dtype != 'DT_GAS':
+                    cap=4.0 if dtype=='DT_FREEZE' and pools[0]>0 else caps[dtype]
+                    excess=sum(q[1] for q in states[dtype])-cap
+                    while excess>1e-9 and states[dtype]:
+                        end,number=states[dtype].popleft();remove=min(number,excess)
+                        if number>remove:states[dtype].appendleft((end,number-remove))
+                        excess-=remove
+                if dtype=='DT_FREEZE' and count(dtype)>=10-1e-9 and pools[0]<=0:
+                    frozen_until=t+3*scale;frozen_scale=scale
                 if row:
                     immediate = dtype in ("DT_GAS", "DT_ELECTRICITY")
                     ticks = (
@@ -511,6 +589,7 @@ def replay(
     max_per_step = 0
     while heap:
         t, _, kind, payload, event_gen = heapq.heappop(heap)
+        current_time=t
         clean(t)
         if event_gen is not None and event_gen != gen:
             continue
@@ -530,6 +609,9 @@ def replay(
                 blast_procs.popleft()
             if value:
                 take({"DT_EXPLOSION": value}, t, "nonDot")
+                # Only natural expiration is an Enervate hit; the 10-stack
+                # detonation is not. Counts remain the replay's expected procs.
+                if enervate and kind == 'blast':enervate.advance(t)
         elif kind == "independent-dot":
             if payload["count"] > 0 and t <= payload["end"] + 1e-9:
                 dtype = payload["dtype"]
@@ -647,7 +729,9 @@ def replay(
                 if active.dot_base_damage is not None:
                     active.dot_base_damage *= factor
             first_round = False
-            vector, _, _, _ = attack_data(active, head)
+            shot_puncture=live_crit()[0]
+            direct_packet = packet(active, head)
+            vector, _, _, _ = direct_packet
             died = take(
                 {k: v * damage_rate_multiplier for k, v in vector.items()},
                 t,
@@ -655,20 +739,22 @@ def replay(
                 True,
             )
             if not died:
-                add_procs(active, head, t)
+                add_procs(active, head, t, direct_packet)
                 field = getattr(active, '_lingering', None)
                 if field:
                     part, tick_rate, duration = field
                     for tick in range(int(math.ceil(duration * tick_rate - 1e-9))):
                         push(t + tick / tick_rate, 'lingering', part, gen)
             if radial and gen == generation:
-                vec, _, _, _ = attack_data(radial, 0.0)
+                radial_packet = packet(radial, 0.0)
+                vec, _, _, _ = radial_packet
                 if not take(vec, t, "direct"):
-                    add_procs(radial, 0.0, t)
+                    add_procs(radial, 0.0, t, radial_packet)
             elif radial:
                 stale += 1
             if (form == "base" or combat.get("baseMode")) and burst_round == 2:
                 signal("on-burst-hit", t)
+            enervate_hit(active,t,shot_puncture)
             signal("on-hit", t, active.multishot)
             signal("on-headshot", t, head * active.multishot)
             signal(
@@ -732,6 +818,10 @@ def replay(
                 "stacks": stacks,
                 "armour": armour(t),
                 "heatArmourStrip": heat_strip(t),
+                "heatSeedPerTick": heat['seed'],
+                "punctureCritChance": live_crit()[0],
+                "coldCritDamage": live_crit()[1],
+                "frozen": frozen_until>t,
                 "totalArmourStrip": 1 - armour(t) / armour_base if armour_base else 0.0,
                 "generation": gen,
                 "form": form,
@@ -746,6 +836,10 @@ def replay(
                 "syndicatePoints": affinity,
                 "triggerStacks": {q["id"]: q["stacks"] for q in sources},
             }
+            if enervate:
+                point['enervate']=enervate.snapshot()
+                point['triggerStacks'][enervate.config['id']]=point['enervate']['stacks']
+                enervate.sample()
             timeline.append(point)
             last_totals = totals.copy()
             for q in sources:
@@ -792,6 +886,8 @@ def replay(
         "targetTotalEhp": ehp,
         "directWindow": totals["direct"],
         "dotWindow": totals["dot"],
+        "dotByType": dot_by_type,
+        "procCounts": proc_counts,
         "nonDotWindow": totals["nonDot"],
         "syndicateWindow": totals["syndicate"],
         "syndicateEvents": syndicate_events,
@@ -806,6 +902,7 @@ def replay(
         "transforms": transforms,
         "directEventLedger": ledger,
         "emergent": {"onKillStacks": "events" if sources else "panel-assumed-max"},
+        "enervate": enervate.summary() if enervate else None,
         "triggerSeries": [
             {
                 **{k: q[k] for k in ("id", "label", "kind", "maxStacks", "series")},
@@ -819,7 +916,7 @@ def replay(
                 ),
             }
             for q in sources
-        ],
+        ] + ([enervate.summary()] if enervate else []),
         "perAttack": expected_status_damage(
             stats,
             target,
@@ -838,5 +935,5 @@ def replay(
             "non-heat-stacking-procs-expected",
             "fractional-proc-refresh-approximates-uptime",
             "single-target-syndicate-no-player-buffs",
-        ],
+        ] + (ASSUMPTIONS if enervate else []),
     }

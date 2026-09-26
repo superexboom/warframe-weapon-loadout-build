@@ -8,6 +8,8 @@ def main():
     ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--full',action='store_true',help='Use eight slots instead of two')
     ap.add_argument('--archguns',action='store_true',help='Audit ground Arch-guns with primary/secondary Arcanes')
+    ap.add_argument('--enervate',action='store_true',help='Use Secondary Enervate in the Arch-gun regression')
+    ap.add_argument('--weapons',nargs='+',help='Restrict the named regression weapons')
     args=ap.parse_args()
     out=args.output
     if out.exists(): ap.error('output exists; preserve earlier evidence')
@@ -15,6 +17,10 @@ def main():
     rows=[]
     names=['Braton Prime','Burston Prime','Torid','Felarx','Mausolon','Nataruk','Lex Prime','Nikana Prime']
     if args.archguns:names=['Imperator Vandal','Mausolon','Kuva Grattler','Larkspur Prime','Cyngas','Morgha']
+    if args.enervate and not args.archguns: ap.error('--enervate requires --archguns')
+    if args.weapons:
+     if not set(args.weapons)<=set(names):ap.error('unknown regression weapon')
+     names=args.weapons
     for name in names:
      w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')==name)
      mode=1 if name in ['Burston Prime','Torid'] else 0
@@ -24,7 +30,7 @@ def main():
       arc=next(a for a in app.MANUAL_ARCANES if a.get('nameEn')=='Primary Merciless')
       p['arcanes']=[{'path':arc['path'],'rank':5}]
      if args.archguns:
-      p['arcanes']=[{'path':next(a['path'] for a in app.MANUAL_ARCANES if a.get('nameEn')==n),'rank':5} for n in ['Primary Crux','Cascadia Flare']]
+      p['arcanes']=[{'path':next(a['path'] for a in app.MANUAL_ARCANES if a.get('nameEn')==n),'rank':5} for n in ['Primary Crux','Secondary Enervate' if args.enervate else 'Cascadia Flare']]
       p['externalBuffs']=[]
       p['headshotChance']=1
       if name=='Kuva Grattler':p.update(innateElement='DT_MAGNETIC',innateElementValue=0.6)

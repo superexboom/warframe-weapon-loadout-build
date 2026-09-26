@@ -122,3 +122,47 @@ git -c core.whitespace=cr-at-eol diff --check
 ```
 
 比较工具报告残差，不把“运行完成”包装为外部数值通过；自动/手动一致性回归则在任一失败时返回非零退出码。
+
+## 追加回归：Secondary Enervate 与邻接状态（2026-09-26）
+
+本轮在前述21套社区配装上启用 Secondary Enervate（当前冻结导出中文名为“次要·失活”）并复算。这里不是把赋能当固定暴击率，而是按命中、叠层、强暴击计数、重置和30/s限流走事件状态。
+
+| 武器 | 本地 KPM | WFSim KPM | 偏差 |
+|---|---:|---:|---:|
+| corvas-5 | 3.820 | 3.567 | 7.10% |
+| mausolon-136 | 27.451 | 24.807 | 10.66% |
+| mausolon-137 | 27.745 | 25.133 | 10.39% |
+| larkspur_prime-1033 | 16.000 | 19.435 | -17.67% |
+| larkspur_prime-1037 | 14.974 | 19.688 | -23.95% |
+| imperator-2 | 3.385 | 3.238 | 4.53% |
+| imperator_vandal-75 | 31.243 | 23.983 | 30.28% |
+| imperator_vandal-76 | 24.140 | 20.211 | 19.44% |
+| grattler-2 | 2.439 | 1.975 | 23.47% |
+| kuva_grattler-190 | 21.513 | 15.020 | 43.23% |
+| kuva_grattler-191 | 24.558 | 18.005 | 36.40% |
+| fluctus-6 | 9.677 | 7.097 | 36.35% |
+| fluctus-7 | 10.038 | 9.596 | 4.61% |
+| cyngas-2 | 3.892 | 3.833 | 1.54% |
+| velocitus-5 | 1.639 | 1.672 | -1.99% |
+| morgha-5 | 1.590 | 1.590 | 0.01% |
+| cortege-219 | 19.792 | 21.656 | -8.61% |
+| cortege-223 | 24.199 | 28.052 | -13.73% |
+| dual_decurion-2 | 3.643 | 3.466 | 5.11% |
+| prisma_dual_decurions-10 | 22.903 | 18.276 | 25.31% |
+| prisma_dual_decurions-11 | 21.401 | 17.829 | 20.03% |
+
+观察到的结果：
+- 帝皇、Cyngas、Morgha 等命中/暴击关系清晰的样本已经进入同一数量级；Morgha 的一套结果几乎重合。
+- 仍有 Larkspur、Grattler、Prisma Dual Decurions 等明显残差，主要来自 Heat 单例种子/状态寿命、连续束/范围部件、随机死亡与期望事件的相关性；不使用倍率补偿。
+- 另行补入 Primary Crux 整组到期、Puncture 暴击加成、Cold 叠层/冻结/解冻和 Heat 衰减轨迹，全部进入共享 replay。
+- 完整全量回归和自动配装结果以本次最终命令输出为准；Duelist、有限弹药、复杂多目标仍未宣称完成。
+
+实现细节和边界见 `docs/ENERVATE-MODEL-2026-09-26.md`。
+
+
+## 追加提交验证（Secondary Enervate）
+
+- `python -m pytest tests tools/test_data_pipeline.py -q --tb=short`：**182 passed，12 subtests passed，903.91 秒**。
+- 定向 Enervate / replay / arch-gun 回归：109 项通过；自动配装事件审计：86/86。
+- 六把带 Secondary Enervate 的空战完整8槽自动配装均与本地手动回填一致；结果保存在 `.local/reports/2026-09-26-enervate/auto-full-final.json`。
+- 本次新增路径：`vendor/wfarsenal/enervate.py`、共享 `combat_replay` 状态消费、Crux/Heat/Puncture/Cold 边界修复、前端触发图例和两份回归文档。

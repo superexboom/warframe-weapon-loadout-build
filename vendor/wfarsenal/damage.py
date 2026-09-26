@@ -725,6 +725,11 @@ def arcane_effects(
             f"{arcane.get('name', '?')} ranks to {max_rank}, got rank {rank}"
         )
 
+    from .enervate import configuration
+    if configuration(arcane, rank):
+        # Explicit state only; the shared replay owns emergent state/reset.
+        return ModEffectList([ModEffect('WEAPON_CRIT_CHANCE', 'ADD', .1*stacks*uptime,
+                                        source_path=arcane.get('path'))])
     from .runtime_adapters import verified_crux_condition
     crux = verified_crux_condition(arcane)
     if crux is not None:
@@ -989,6 +994,7 @@ def crit_tier_seed_distribution(
     crit_multiplier: float,
     noncrit_damage_multiplier: float = 1.0,
     critical_multiplier_factor: float = 1.0,
+    *, double_crit_chance: float = 0.0,
 ) -> list[tuple[float, float]]:
     """Per-proc DoT seed distribution by crit tier (wfsim MECHANICS §6).
 
@@ -1005,45 +1011,19 @@ def crit_tier_seed_distribution(
     amplifiers (live armour strip, viral ramp) and the average of products no
     longer equals the product of averages.
     """
-    if (
-        crit_chance <= 0.0
-        or (crit_multiplier * float(critical_multiplier_factor)) <= 1.0
-    ):
-        noncrit_chance = max(1.0 - crit_chance, 0.0)
-        noncrit_bonus = max(noncrit_damage_multiplier - 1.0, 0.0)
-        # cc<=0: every hit is noncrit; the bonus (if any) is uniform.
-        if crit_chance <= 0.0:
-            return [(1.0, 1.0 + noncrit_bonus)]
-        # cd<=1 with cc>0: crits exist but multiply by 1 — the hit factor is
-        # still cc-split for seed purposes (noncrit hits carry the proxy bonus).
-        if noncrit_bonus:
-            return [(noncrit_chance, 1.0 + noncrit_bonus), (crit_chance, 1.0)]
-        return [(1.0, 1.0)]
-    guaranteed = int(crit_chance)
-    remainder = crit_chance - guaranteed
-    cd = crit_multiplier * float(critical_multiplier_factor)
-    low = 1.0 + guaranteed * (cd - 1.0)
-    high = 1.0 + (guaranteed + 1) * (cd - 1.0)
-    noncrit_chance = max(1.0 - crit_chance, 0.0)
-    noncrit_bonus = max(noncrit_damage_multiplier - 1.0, 0.0)
-    pairs: list[tuple[float, float]] = []
-    if guaranteed == 0:
-        # No guaranteed tier: the noncrit branch carries its own bonus factor,
-        # the crit branch carries the tier-1 crit factor (the noncrit bonus
-        # does NOT ride crit hits — see effective_hit_multiplier's split).
-        pairs.append((noncrit_chance, 1.0 + noncrit_bonus))
-        pairs.append((crit_chance, high))
-    else:
-        if noncrit_chance > 0.0 and noncrit_bonus > 0.0:
-            pairs.append((noncrit_chance, 1.0 + noncrit_bonus))
-        pairs.append((crit_chance * (1.0 - remainder), low))
-        if remainder > 0.0:
-            pairs.append((crit_chance * remainder, high))
-    # Normalize away float dust; weights must sum to 1.
-    total_weight = sum(w for w, _ in pairs)
-    if total_weight <= 0.0:
-        return [(1.0, low)]
-    return [(w / total_weight, f) for w, f in pairs if w > 0.0]
+    chance=max(float(crit_chance),0.0)
+    whole=int(chance);fraction=chance-whole
+    promotion=min(1.0,max(0.0,float(double_crit_chance)))
+    tiers={whole:1-fraction}
+    if fraction:tiers[whole+1]=fraction
+    promoted={}
+    for tier,weight in tiers.items():
+        rate=promotion if tier>0 else 0.0
+        promoted[tier]=promoted.get(tier,0.0)+weight*(1-rate)
+        if rate:promoted[tier+1]=promoted.get(tier+1,0.0)+weight*rate
+    cd=max(1.0,crit_multiplier*float(critical_multiplier_factor))
+    return [(weight, max(1.0,noncrit_damage_multiplier) if tier==0 else 1+tier*(cd-1))
+            for tier,weight in sorted(promoted.items()) if weight>0]
 
 
 def effective_hit_multiplier(
@@ -1085,7 +1065,7 @@ def effective_hit_multiplier(
         * min(float(double_crit_chance), 1.0)
         * max(crit_multiplier * float(critical_multiplier_factor) - 1.0, 0.0)
     )
-    noncrit_chance = max(1.0 - crit_chance, 0.0)
+    noncrit_chance = min(1.0, max(1.0 - crit_chance, 0.0))
     noncrit_bonus = max(noncrit_damage_multiplier - 1.0, 0.0)
     return crit + promotion + noncrit_chance * noncrit_bonus
 
@@ -2873,6 +2853,7 @@ def expected_dot_damage(
         stats.crit_multiplier,
         stats.noncrit_damage_multiplier,
         hit_critical_multiplier,
+        double_crit_chance=stats.double_crit_chance,
     )
     crit = sum(weight * factor for weight, factor in seed_tiers)
     weak_seed_scale = _apply_weakpoint_folding(1.0, stats, hit_multiplier, hit_critical_multiplier)
