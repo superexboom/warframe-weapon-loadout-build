@@ -25,6 +25,7 @@ from .damage import (
     mod_effects,
 )
 from .projectile_events import evaluate_projectile_events
+from .catalog_releases import released_mod_catalog
 
 
 EXPORT_NAMES = ("weapons", "warframes", "mods", "enemies")
@@ -188,6 +189,7 @@ def _load_exports_uncached(root: Path) -> dict[str, Any]:
         "incarnonDefaults": incarnon_defaults,
         "rivenTemplates": riven_templates,
         **{name: payloads[name]["data"] for name in EXPORT_NAMES},
+        'mods': released_mod_catalog(payloads['mods']['data']),
     }
 
 

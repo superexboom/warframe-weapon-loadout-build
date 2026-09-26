@@ -1576,6 +1576,75 @@
       "scope": "base mode, direct-hit target at centre",
       "drawSeconds": 0.0,
       "bow": true
+    },
+    "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler": {
+      "name": "Kuva Grattler",
+      "source": "data/weapons/archgun/kuva_grattler.yaml",
+      "sha256": "d648e3983cafd0f0e951a11c33b3bcf00cde11243ff942b32eca08ad2aa07e83",
+      "directTotal": 140.0,
+      "scope": "base mode, direct-hit target at centre",
+      "radial": {
+        "damage": {
+          "blast": 235.0
+        },
+        "radius_m": 9.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.7,
+        "crit_chance": 0.27,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.27
+      }
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ArchBurstGun/ArchBurstGun": {
+      "name": "Cyngas",
+      "source": "data/weapons/archgun/cyngas.yaml",
+      "sha256": "70607ca4547acccac3997d75b3921bb777829bbc61e384f76d33ba14dc2d0564",
+      "directTotal": 240.0,
+      "scope": "base mode, direct-hit target at centre",
+      "burst": {
+        "count": 3,
+        "delay_seconds": 0.06
+      }
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/ArchGRNAAGun": {
+      "name": "Grattler",
+      "source": "data/weapons/archgun/grattler.yaml",
+      "sha256": "08ec15e12f04fb1f420fff7d30091becfc49dc5c8f11648bc2e12a6bb2767cbe",
+      "directTotal": 225.0,
+      "scope": "base mode, direct-hit target at centre",
+      "radial": {
+        "damage": {
+          "blast": 310.0
+        },
+        "radius_m": 9.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.7,
+        "crit_chance": 0.25,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.25
+      }
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher": {
+      "name": "Morgha",
+      "source": "data/weapons/archgun/morgha.yaml",
+      "sha256": "ba16c94df23cbfe77db4ce2169d1b13dad247e2cd0f57ed53e27f94d141ac561",
+      "directTotal": 64.0,
+      "scope": "base mode, direct-hit target at centre",
+      "burst": {
+        "count": 2,
+        "delay_seconds": 0.0
+      },
+      "radial": {
+        "damage": {
+          "blast": 328.0
+        },
+        "radius_m": 3.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.3,
+        "crit_chance": 0.3,
+        "crit_multiplier": 2.2,
+        "status_chance": 0.28
+      }
     }
   },
   "nativeTriggers": {

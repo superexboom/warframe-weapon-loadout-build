@@ -7,12 +7,14 @@ def main():
     ap=argparse.ArgumentParser(description='Compare actual automatic builds to manual event replay')
     ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--full',action='store_true',help='Use eight slots instead of two')
+    ap.add_argument('--archguns',action='store_true',help='Audit ground Arch-guns with primary/secondary Arcanes')
     args=ap.parse_args()
     out=args.output
     if out.exists(): ap.error('output exists; preserve earlier evidence')
     out.parent.mkdir(parents=True,exist_ok=True)
     rows=[]
     names=['Braton Prime','Burston Prime','Torid','Felarx','Mausolon','Nataruk','Lex Prime','Nikana Prime']
+    if args.archguns:names=['Imperator Vandal','Mausolon','Kuva Grattler','Larkspur Prime','Cyngas','Morgha']
     for name in names:
      w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')==name)
      mode=1 if name in ['Burston Prime','Torid'] else 0
@@ -21,6 +23,11 @@ def main():
      if name in ['Braton Prime','Burston Prime']:
       arc=next(a for a in app.MANUAL_ARCANES if a.get('nameEn')=='Primary Merciless')
       p['arcanes']=[{'path':arc['path'],'rank':5}]
+     if args.archguns:
+      p['arcanes']=[{'path':next(a['path'] for a in app.MANUAL_ARCANES if a.get('nameEn')==n),'rank':5} for n in ['Primary Crux','Cascadia Flare']]
+      p['externalBuffs']=[]
+      p['headshotChance']=1
+      if name=='Kuva Grattler':p.update(innateElement='DT_MAGNETIC',innateElementValue=0.6)
      t=time.perf_counter();row=dict(name=name,request=p)
      try:
       res=app.build_weapon_payload(p);build=res['build']
@@ -38,6 +45,8 @@ def main():
      row['seconds']=time.perf_counter()-t;rows.append(row)
      out.write_text(json.dumps(rows,ensure_ascii=False,indent=2)+chr(10),encoding='utf-8')
      print(name,row.get('automatic'),row.get('manual'),row.get('delta'),row.get('error'),row['seconds'],flush=True)
+
+    if any(not row.get('passed') for row in rows):raise SystemExit(1)
 
 if __name__ == '__main__':
     main()

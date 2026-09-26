@@ -139,7 +139,7 @@ for category, field, dest in [
                 }
 # Only these attacks have a confirmed match to the frozen export's base vector.
 audited = {}
-selection = {'Felarx':'felarx', 'Torid':'torid', 'Mausolon':'mausolon', 'Opticor Vandal':'opticor_vandal_quick', 'Nataruk':'nataruk', 'Cinta':'cinta', 'Paris Prime':'paris_prime_uncharged'}
+selection = {'Felarx':'felarx', 'Torid':'torid', 'Mausolon':'mausolon', 'Opticor Vandal':'opticor_vandal_quick', 'Nataruk':'nataruk', 'Cinta':'cinta', 'Paris Prime':'paris_prime_uncharged', 'Grattler':'grattler', 'Kuva Grattler':'kuva_grattler', 'Morgha':'morgha', 'Cyngas':'cyngas'}
 for row in read_rows('weapons'):
     key = selection.get(row.get('nameEn'))
     if not key:
@@ -151,6 +151,7 @@ for row in read_rows('weapons'):
         entry.update(magazine=spec['magazine'], reloadStart=spec['reload_start_seconds'], reloadPerShell=spec['reload_per_shell_seconds'], reloadEnd=spec['reload_end_seconds'])
     if spec.get('class') == 'bow':
         entry.update(bow=True, drawSeconds=atk['charge_seconds'])
+    if atk.get('burst'): entry['burst'] = atk['burst']
     for component in ('radial','lingering'):
         if atk.get(component): entry[component] = atk[component]
     audited[row['path']] = entry

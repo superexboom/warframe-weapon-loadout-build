@@ -593,6 +593,9 @@ def replay(
             if form == "base":
                 gauge = 0.0
             push(t, "fire")
+        elif kind == "reload-complete":
+            signal("on-reload-empty-complete", t)
+            push(t, "fire")
         elif kind == "fire":
             if t >= window - 1e-9 or rate <= 0.0:
                 continue
@@ -626,7 +629,7 @@ def replay(
                             q["stacks"] = (
                                 q["initialStacks"] if q["perEvent"] == 0 else 0.0
                             )
-                    push(t + reload_time, "fire")
+                    push(t + reload_time, "reload-complete")
                 continue
             attacks += 1
             generation = gen

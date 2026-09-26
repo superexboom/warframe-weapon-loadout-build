@@ -25,6 +25,7 @@ def condition_kind(condition):
         names = {str(condition.get("conditionTag") or "").rsplit("/", 1)[-1].lower()}
     exact = {
         "onreloadfromemptyclipcondition": "on-reload-empty",
+        "onreloadarchgunfromemptyclipcondition": "on-reload-empty-complete",
         "onreloadfromemptycondition_description": "on-reload-empty",
         "burstononbursthit": "on-burst-hit",
         "onweakpointhitcondition": "on-headshot",
@@ -95,6 +96,15 @@ def prepare(
         if crux:
             record = {**record, "conditionalEffects": [crux]}
         for ci, condition in enumerate(record.get("conditionalEffects") or []):
+            # The two audited Deadly Efficiency cards scale their 1.5-second
+            # base duration by rank. The raw event is specifically reload from
+            # an empty Arch-gun; keep unrelated reload cards unchanged.
+            if (record.get("path") in {
+                "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingDamageAfterReloadMod",
+                "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingDamageOnReloadMod",
+            } and condition_kind(condition) == "on-reload-empty-complete"
+                    and condition.get("duration") == 1.5):
+                condition = {**condition, "duration": 1.5 * (rank + 1)}
             if condition.get("runtimeScripts"):
                 source = str(condition.get("sourcePath") or record["path"])
                 if not ("Burston" in source and "Tier1ASubMod" in source):
@@ -347,7 +357,7 @@ def prepare(
         conditionOverload=any(
             e.upgrade_type == "WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE" for e in original
         ),
-        baseBurst=profile.get("burst") if profile else None,
+        baseBurst=(base_attack.get("burst") or (profile.get("burst") if profile else None)) if mode_index == 0 or cycle else None,
         baseFireRate=modes[0].get("fireRate"),
         baseMode=mode_index == 0,
         selectedIncarnon=bool(weapon.get("isIncarnonForm")) and not cycle,

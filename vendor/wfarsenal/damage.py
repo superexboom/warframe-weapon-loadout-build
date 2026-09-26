@@ -1093,6 +1093,22 @@ def effective_hit_multiplier(
 # -- mod application ------------------------------------------------------------------
 
 
+# Ground Arch-guns inherit the primary/secondary Arcane pools, not arbitrary
+# weapon-specific or frame qualifiers.
+ARCHGUN_ARCANE_TYPES = frozenset({
+    "/Lotus/Weapons/Tenno/LotusLongGun",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+})
+
+
+def archgun_arcane_type_applies(weapon, source_path, valid_type):
+    return (
+        weapon.get("slot") == "arch_gun"
+        and str(source_path or "").startswith("/Lotus/Upgrades/CosmeticEnhancers/")
+        and str(valid_type or "").rstrip("/") in ARCHGUN_ARCANE_TYPES
+    )
+
+
 def apply_mods(
     weapon: Mapping[str, Any],
     effects: Iterable[ModEffect],
@@ -1154,7 +1170,8 @@ def apply_mods(
             skipped.append(f"{source}: unsupported[{code}]")
             continue
         # validType selects a weapon-specific branch inside the same mod.
-        if effect.valid_type and effect.valid_type.rstrip("/") not in weapon_types:
+        if (effect.valid_type and effect.valid_type.rstrip("/") not in weapon_types
+                and not archgun_arcane_type_applies(weapon, effect.source_path, effect.valid_type)):
             continue
         reason = _qualifier_rejection(effect, weapon, scenario)
         if reason:
@@ -1256,13 +1273,16 @@ def apply_mods(
     scaled_base = {dtype: amount * damage_scale for dtype, amount in base.items()}
     base_total = sum(base.values())
 
+    innate_entries, innate_candidates = _read_innate_elements(weapon)
+    # Progenitor damage belongs to the base used by elemental mods and DoT
+    # seeds, although its element joins after the ordered mod coalescing.
+    elemental_base_total = base_total * (1.0 + sum(value for _, value in innate_entries))
     damage_types = _apply_elements(
         scaled_base,
-        base_total=base_total * damage_scale,
+        base_total=elemental_base_total * damage_scale,
         pre=buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED"],
         post=buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE"],
     )
-    innate_entries, innate_candidates = _read_innate_elements(weapon)
     if innate_candidates and not innate_entries:
         unsupported.add("innate-element-instance-required")
         skipped.append(
@@ -1408,7 +1428,7 @@ def apply_mods(
         weakpoint_crit_chance_relative=sum(e.value for e in buckets['WEAPON_CRIT_CHANCE_WEAKPOINT'] if e.operation == 'STACKING_MULTIPLY'),
         base_crit_chance=_combine(damage.get('critChance', 0.0), [e for e in buckets['WEAPON_CRIT_CHANCE'] if e.operation in ('ADD_BASE', 'SET_BASE')]),
         falloff_multiplier=falloff_multiplier,
-        dot_base_damage=sum(scaled_base.values()),
+        dot_base_damage=elemental_base_total * damage_scale,
         dot_elemental_multipliers=_dot_elemental_multipliers(
             buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED"],
             buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE"],

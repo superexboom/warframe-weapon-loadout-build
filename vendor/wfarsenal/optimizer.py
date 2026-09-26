@@ -1012,6 +1012,9 @@ def _arcane_matches_weapon(
         ancestry = " ".join(str(p) for p in weapon.get("ancestry") or ()).casefold()
         if "modular" not in ancestry and not weapon.get("kitgunParts"):
             return False
+    from .damage import archgun_arcane_type_applies
+    if archgun_arcane_type_applies(weapon, arcane.get("path"), arcane.get("compatibility")):
+        return True
     if _mod_matches_weapon(arcane, weapon):
         return True
     if not _frame_owned_arcane(arcane):
@@ -1259,8 +1262,8 @@ def _arcane_card(
                 raise SimulationError("at most two frame-owned Arcanes may be selected")
         else:
             weapon_arcane_count += 1
-            if weapon_arcane_count > 1:
-                raise SimulationError("at most one weapon Arcane may be selected")
+            if weapon_arcane_count > (2 if weapon.get("slot") == "arch_gun" else 1):
+                raise SimulationError("weapon Arcane slot limit exceeded")
         if arcane.get("unresolvedReferences"):
             unsupported.append(f"arcane-state-{index}-has-unresolved-references")
             continue

@@ -1,0 +1,3613 @@
+{
+  "sourceCommit": "b98b3d456393131857e1c0e247b19aac6ecc08f4",
+  "release": {
+    "commit": "becb34b1+",
+    "release": "285450cbd40f",
+    "wasm": "697c63bfc0d2"
+  },
+  "wasmSha256": "697c63bfc0d2fe1c5da82e19adc9d76e54933bbc0baa9cd60c804e419fbe8f0f",
+  "duration": 30,
+  "runs": 500,
+  "seed": 12648430,
+  "sources": [
+    {
+      "weapon": "corvas",
+      "url": "https://wfsim.app/board/corvas.json",
+      "sha256": "766e95299534b97ef7c7cced3289c6c3ec8694c7e523a10211f126e90770fcfd"
+    },
+    {
+      "weapon": "corvas_prime",
+      "url": "https://wfsim.app/board/corvas_prime.json",
+      "sha256": "d3409338a168a43d99d5bfb316ff9e9a2c30c97a8252c6665570c3d3bd1da874"
+    },
+    {
+      "weapon": "mausolon",
+      "url": "https://wfsim.app/board/mausolon.json",
+      "sha256": "0fbaa927e1810997cc240da1b5d33e2eb3760115dce9599a996f3dec7e114f6f"
+    },
+    {
+      "weapon": "larkspur",
+      "url": "https://wfsim.app/board/larkspur.json",
+      "sha256": "8f63e6569dbeb171e244bcdd8e1d8cd84c1cedc864a02fdf6c9844bf2cb2a0dd"
+    },
+    {
+      "weapon": "larkspur_prime",
+      "url": "https://wfsim.app/board/larkspur_prime.json",
+      "sha256": "9a8fb136ba0731add7ae01b1bfa6e61021d9e607e65fd3cec71e362d0b0af470"
+    },
+    {
+      "weapon": "imperator",
+      "url": "https://wfsim.app/board/imperator.json",
+      "sha256": "280cfaea44bf03a6e803fe2be5c958a907398e5233a5d189b7d9e28311793b0c"
+    },
+    {
+      "weapon": "imperator_vandal",
+      "url": "https://wfsim.app/board/imperator_vandal.json",
+      "sha256": "ddd7835bd2f56bc15977edbd99b4d74d75baa9d8adefcf3068ed914f884396ff"
+    },
+    {
+      "weapon": "grattler",
+      "url": "https://wfsim.app/board/grattler.json",
+      "sha256": "8a21981dd2e1020f7d7616749b8bd69e54931f64cb857aa37ec6bb8908169159"
+    },
+    {
+      "weapon": "kuva_grattler",
+      "url": "https://wfsim.app/board/kuva_grattler.json",
+      "sha256": "f04b9d26e9af1723a35c7741fcc90453f33955a1b5d229c208f2842de6fffc88"
+    },
+    {
+      "weapon": "fluctus",
+      "url": "https://wfsim.app/board/fluctus.json",
+      "sha256": "11984ab5388eb1488117f4d80c604a552d3e3ab0db35f1624fda7ee1cb4190cc"
+    },
+    {
+      "weapon": "cyngas",
+      "url": "https://wfsim.app/board/cyngas.json",
+      "sha256": "8f5184987d65ca121b4faefe81e6080071bf3c9443b2f64389f26bf3498f6b39"
+    },
+    {
+      "weapon": "velocitus",
+      "url": "https://wfsim.app/board/velocitus.json",
+      "sha256": "81351dd42b0d5931f50d2ec53a09bc152817b3e5fada239b3fd92f2d0eefee1c"
+    },
+    {
+      "weapon": "morgha",
+      "url": "https://wfsim.app/board/morgha.json",
+      "sha256": "a0303c2e226923b6a1ec796e334f316fb0e1d09f01e0df7c94f9c8964dcd7432"
+    },
+    {
+      "weapon": "cortege",
+      "url": "https://wfsim.app/board/cortege.json",
+      "sha256": "9d9c3c19be2e50a2b5709ff48fb1aa51b502cf1ad6fc9ca8802458549a96fe29"
+    },
+    {
+      "weapon": "dual_decurion",
+      "url": "https://wfsim.app/board/dual_decurion.json",
+      "sha256": "2de179e31df4ce78e0f4549f702ce76074c9ab5fb7b679b78a7d865b3614164c"
+    },
+    {
+      "weapon": "prisma_dual_decurions",
+      "url": "https://wfsim.app/board/prisma_dual_decurions.json",
+      "sha256": "dfa52e7779bbce95984c85e61ac8ba82fcbd712c69468125ef8180a963c67f71"
+    }
+  ],
+  "skips": [
+    {
+      "weapon": "corvas_prime",
+      "reason": "no-no-riven-row-in-exported-form"
+    },
+    {
+      "weapon": "larkspur",
+      "reason": "no-no-riven-row-in-exported-form"
+    }
+  ],
+  "contract": "Lv9999 SP Thrax, headshots, ADS, single target, infinite resupply explicitly set by archgun class rule, timed buffs start at zero. Offline kernel audit when catalogBlockers is nonempty. Board score uses separate 180s contract.",
+  "cases": [
+    {
+      "id": "corvas-5",
+      "boardRowIndex": 5,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "alternate",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 1.5794317026726648,
+        "shown": "1.5794",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/LaunchGrenade/ArchCannon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "corvas",
+        "mode": "alternate",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the ARCHWING column of this weapon is not offered — in space it is a single 440-damage Impact/Heat projectile with a 13% status chance instead of eleven hit-scan pellets at 1.3%, which is a different weapon rather than a restated one",
+        "the 11-degree spread is not modelled — this arena has one target at zero distance, so all eleven pellets always land on it",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "the ARCHWING column of this weapon is not offered — in space it is a single 440-damage Impact/Heat projectile with a 13% status chance instead of eleven hit-scan pellets at 1.3%, which is a different weapon rather than a restated one",
+        "the 11-degree spread is not modelled — this arena has one target at zero distance, so all eleven pellets always land on it",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 1.9789949589491467,
+      "referenceKpm": 3.5678108844783885,
+      "referenceKpmSe": 0.0018965291536584446,
+      "deltaPercent": -44.53195466276867,
+      "panelDifferences": {
+        "statusChance": {
+          "local": 0.012727272727272728,
+          "reference": 0.013
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 1.9789949589491467,
+        "referenceKpm": 1.8780730671235029,
+        "referenceKpmSe": 0.001425202141740066,
+        "deltaPercent": 5.3736935794632235
+      }
+    },
+    {
+      "id": "mausolon-136",
+      "boardRowIndex": 136,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 25.801799362811867,
+        "shown": "25.8018",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnNoMelee",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "mausolon",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_deadhead"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the LIFTED SYNERGY is not modelled — the wiki gives this weapon `up to 13 additional instances of direct hit damage` against a Lifted enemy, and its own alt-fire is a guaranteed Lifted proc, so a real engagement alternates between lifting and cashing in; the sim applies the Lifted status (Condition Overload counts it) and none of the extra instances, which makes the primary read LOW for as long as the target is lifted",
+        "Primary Compression's 444% case is not modelled — the catalog gives this weapon a second effectiveness for aiming DURING the alt-fire, and this arena has no such state; the ordinary 100% is what is applied",
+        "the radial's falloff is not modelled — this arena has one target at the centre, so it always takes the full 72 and never the 58 at the rim",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "LIFTED's crowd control is not modelled — the explosion suspends what it hits, and this arena has no movement to interrupt; what IS modelled is the 1 s status itself, which Condition Overload counts like any other",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 21.342394577896503,
+      "referenceKpm": 24.82975880626216,
+      "referenceKpmSe": 0.03111496856201938,
+      "deltaPercent": -14.045099090878521,
+      "panelDifferences": {
+        "critMultiplier": {
+          "local": 5.28879120879121,
+          "reference": 5.28
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 21.342394577896503,
+        "referenceKpm": 24.82975880626216,
+        "referenceKpmSe": 0.03111496856201938,
+        "deltaPercent": -14.045099090878521
+      }
+    },
+    {
+      "id": "mausolon-137",
+      "boardRowIndex": 137,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 25.047718865124832,
+        "shown": "25.0477",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "mausolon",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "cascadia_flare"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the LIFTED SYNERGY is not modelled — the wiki gives this weapon `up to 13 additional instances of direct hit damage` against a Lifted enemy, and its own alt-fire is a guaranteed Lifted proc, so a real engagement alternates between lifting and cashing in; the sim applies the Lifted status (Condition Overload counts it) and none of the extra instances, which makes the primary read LOW for as long as the target is lifted",
+        "Primary Compression's 444% case is not modelled — the catalog gives this weapon a second effectiveness for aiming DURING the alt-fire, and this arena has no such state; the ordinary 100% is what is applied",
+        "the radial's falloff is not modelled — this arena has one target at the centre, so it always takes the full 72 and never the 58 at the rim",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "LIFTED's crowd control is not modelled — the explosion suspends what it hits, and this arena has no movement to interrupt; what IS modelled is the 1 s status itself, which Condition Overload counts like any other",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 22.527993522523776,
+      "referenceKpm": 25.135560440058175,
+      "referenceKpmSe": 0.02472590617831432,
+      "deltaPercent": -10.3740154262833,
+      "panelDifferences": {
+        "critMultiplier": {
+          "local": 5.28879120879121,
+          "reference": 5.28
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 22.527993522523776,
+        "referenceKpm": 25.135560440058175,
+        "referenceKpmSe": 0.02472590617831432,
+        "deltaPercent": -10.3740154262833
+      }
+    },
+    {
+      "id": "larkspur_prime-1033",
+      "boardRowIndex": 1033,
+      "board": {
+        "arcanes": [
+          "primary_deadhead",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "contamination_casing",
+          "hypothermic_shell",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_ammo_chain",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 22.02834441153597,
+        "shown": "22.0283",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventToxinStatusRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventColdStatusRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamageOnNoMelee",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "larkspur_prime",
+        "mode": "base",
+        "mods": [
+          "contamination_casing",
+          "hypothermic_shell",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_ammo_chain",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_deadhead",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "Hildryn's signature bonus is not modelled — carried by her it holds 300 more reserve ammo, 700 instead of 400, and this arena has no Warframe holding it",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "Hildryn's signature bonus is not modelled — carried by her it holds 300 more reserve ammo, 700 instead of 400, and this arena has no Warframe holding it"
+      ],
+      "localKpm": 5.586119424310399,
+      "referenceKpm": 19.403174280510527,
+      "referenceKpmSe": 0.07929862453716319,
+      "deltaPercent": -71.21028062959078,
+      "panelDifferences": {
+        "critMultiplier": {
+          "local": 2.883516483516484,
+          "reference": 2.8800000000000003
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 5.586119424310399,
+        "referenceKpm": 7.84910360765084,
+        "referenceKpmSe": 0.023149301014762414,
+        "deltaPercent": -28.831116219877874
+      }
+    },
+    {
+      "id": "larkspur_prime-1037",
+      "boardRowIndex": 1037,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "contamination_casing",
+          "hypothermic_shell",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_deadly_efficiency",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 20.835450826977215,
+        "shown": "20.8355",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventToxinStatusRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventColdStatusRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingDamageOnReloadMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "larkspur_prime",
+        "mode": "base",
+        "mods": [
+          "contamination_casing",
+          "hypothermic_shell",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_deadly_efficiency",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "Hildryn's signature bonus is not modelled — carried by her it holds 300 more reserve ammo, 700 instead of 400, and this arena has no Warframe holding it",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "Hildryn's signature bonus is not modelled — carried by her it holds 300 more reserve ammo, 700 instead of 400, and this arena has no Warframe holding it"
+      ],
+      "localKpm": 7.43775590847445,
+      "referenceKpm": 19.692550785551653,
+      "referenceKpmSe": 0.004627695314104666,
+      "deltaPercent": -62.23061202446408,
+      "panelDifferences": {
+        "critMultiplier": {
+          "local": 2.883516483516484,
+          "reference": 2.8800000000000003
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 7.43775590847445,
+        "referenceKpm": 9.36936414927678,
+        "referenceKpmSe": 0.01830493761324117,
+        "deltaPercent": -20.61621482554322
+      }
+    },
+    {
+      "id": "imperator-2",
+      "boardRowIndex": 2,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 1.2014967854880705,
+        "shown": "1.2015",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "imperator",
+        "mode": "base",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 1.5659531082934979,
+      "referenceKpm": 3.2370245238692377,
+      "referenceKpmSe": 0.004451900702826364,
+      "deltaPercent": -51.623687224287586,
+      "panelDifferences": {
+        "fireRate": {
+          "local": 31.666667500000006,
+          "reference": 31.729999999999997
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 1.5659531082934979,
+        "referenceKpm": 1.6983879870112517,
+        "referenceKpmSe": 0.0005561444806532781,
+        "deltaPercent": -7.797681079386754
+      }
+    },
+    {
+      "id": "imperator_vandal-75",
+      "boardRowIndex": 75,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "automatic_trigger",
+          "critical_focus",
+          "primed_ammo_chain",
+          "magnetized_cycle"
+        ],
+        "score": 23.49394672697651,
+        "shown": "23.4939",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGunVandal",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "imperator_vandal",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "automatic_trigger",
+          "critical_focus",
+          "primed_ammo_chain",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "cascadia_flare"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the AUTO-SPOOL ramp is not modelled — the page gives this trigger as Auto-Spool and the fire rate here is the spooled-up 25/s from the first shot, so a short burst is faster in this sim than in game",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 27.740070402139523,
+      "referenceKpm": 23.96883928026584,
+      "referenceKpmSe": 0.022300946041710755,
+      "deltaPercent": 15.73389131520706,
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 27.740070402139523,
+        "referenceKpm": 23.96883928026584,
+        "referenceKpmSe": 0.022300946041710755,
+        "deltaPercent": 15.73389131520706
+      }
+    },
+    {
+      "id": "imperator_vandal-76",
+      "boardRowIndex": 76,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "automatic_trigger",
+          "critical_focus",
+          "primed_ammo_chain",
+          "magnetized_cycle"
+        ],
+        "score": 23.146716940323493,
+        "shown": "23.1467",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGunVandal",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnNoMelee",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "imperator_vandal",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "automatic_trigger",
+          "critical_focus",
+          "primed_ammo_chain",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_deadhead"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the AUTO-SPOOL ramp is not modelled — the page gives this trigger as Auto-Spool and the fire rate here is the spooled-up 25/s from the first shot, so a short burst is faster in this sim than in game",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 15.21050978586305,
+      "referenceKpm": 20.173583132032782,
+      "referenceKpmSe": 0.05737577756906766,
+      "deltaPercent": -24.6018434786088,
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 15.21050978586305,
+        "referenceKpm": 20.173583132032782,
+        "referenceKpmSe": 0.05737577756906766,
+        "deltaPercent": -24.6018434786088
+      }
+    },
+    {
+      "id": "grattler-2",
+      "boardRowIndex": 2,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 0.6368988386994379,
+        "shown": "0.6369",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/ArchGRNAAGun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "grattler",
+        "mode": "base",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the AUTO-SPOOL ramp is not modelled — the page gives this trigger as Auto-Spool and the fire rate here is the spooled-up 6.25/s from the first shot, so a short burst is faster in this sim than in game",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 1.5170280523142303,
+      "referenceKpm": 1.973819907469179,
+      "referenceKpmSe": 0.0018757041345389047,
+      "deltaPercent": -23.14252954012631,
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 1.5170280523142303,
+        "referenceKpm": 1.6397602404289422,
+        "referenceKpmSe": 0.0005677654603105525,
+        "deltaPercent": -7.484764241057984
+      }
+    },
+    {
+      "id": "kuva_grattler-190",
+      "boardRowIndex": 190,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "critical_focus",
+          "hollowed_bullets",
+          "parallax_scope"
+        ],
+        "score": 16.209970617763776,
+        "shown": "16.2100",
+        "valence": "magnetic"
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ],
+        "innateElement": "DT_MAGNETIC",
+        "innateElementValue": 0.6
+      },
+      "referenceRequest": {
+        "weapon": "kuva_grattler",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "critical_focus",
+          "hollowed_bullets",
+          "parallax_scope"
+        ],
+        "arcane": [
+          "primary_crux",
+          "cascadia_flare"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "valence_element": "magnetic",
+        "valence_bonus": 0.6
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 18.0,
+      "referenceKpm": 15.01805842873298,
+      "referenceKpmSe": 0.027751758110650185,
+      "deltaPercent": 19.855706284654516,
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 18.0,
+        "referenceKpm": 15.01805842873298,
+        "referenceKpmSe": 0.027751758110650185,
+        "deltaPercent": 19.855706284654516
+      }
+    },
+    {
+      "id": "kuva_grattler-191",
+      "boardRowIndex": 191,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 15.075755859736386,
+        "shown": "15.0758",
+        "valence": "magnetic"
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "innateElement": "DT_MAGNETIC",
+        "innateElementValue": 0.6
+      },
+      "referenceRequest": {
+        "weapon": "kuva_grattler",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "cascadia_flare"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "valence_element": "magnetic",
+        "valence_bonus": 0.6
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 19.34742128505835,
+      "referenceKpm": 17.996304148990994,
+      "referenceKpmSe": 0.025891639448044106,
+      "deltaPercent": 7.507747840231449,
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 19.34742128505835,
+        "referenceKpm": 17.996304148990994,
+        "referenceKpmSe": 0.025891639448044106,
+        "deltaPercent": 7.507747840231449
+      }
+    },
+    {
+      "id": "fluctus-6",
+      "boardRowIndex": 6,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_deadly_efficiency",
+          "critical_focus",
+          "primed_ammo_chain"
+        ],
+        "score": 8.998202312140762,
+        "shown": "8.9982",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/RocketArtillery/ArchRocketCrossbow",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingDamageOnReloadMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "fluctus",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_deadly_efficiency",
+          "critical_focus",
+          "primed_ammo_chain"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the wave's vertical hitbox is not modelled — it is a wide flat projectile rather than a point, which this arena has no geometry to express",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 5.077844141775706,
+      "referenceKpm": 7.080289467268872,
+      "referenceKpmSe": 0.008405255129545144,
+      "deltaPercent": -28.281969752086745,
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 5.077844141775706,
+        "referenceKpm": 3.4133182075074298,
+        "referenceKpmSe": 0.012467532793220038,
+        "deltaPercent": 48.765624330225954
+      }
+    },
+    {
+      "id": "fluctus-7",
+      "boardRowIndex": 7,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_fortifier"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "critical_focus",
+          "primed_ammo_chain",
+          "magnetized_cycle"
+        ],
+        "score": 8.917842076929945,
+        "shown": "8.9178",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/RocketArtillery/ArchRocketCrossbow",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OverguardSteal",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "fluctus",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "critical_focus",
+          "primed_ammo_chain",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_fortifier"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [
+        "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OverguardSteal"
+      ],
+      "referenceLimitations": [
+        "the wave's vertical hitbox is not modelled — it is a wide flat projectile rather than a point, which this arena has no geometry to express",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 9.304480473900751,
+      "referenceKpm": 9.5814936925419,
+      "referenceKpmSe": 0.011992823741895453,
+      "deltaPercent": -2.8911277044076256,
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": false,
+      "ablationWithoutEnervate": {
+        "localKpm": 9.304480473900751,
+        "referenceKpm": 9.5814936925419,
+        "referenceKpmSe": 0.011992823741895453,
+        "deltaPercent": -2.8911277044076256
+      }
+    },
+    {
+      "id": "cyngas-2",
+      "boardRowIndex": 2,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 1.6418522322707363,
+        "shown": "1.6419",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchBurstGun/ArchBurstGun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "cyngas",
+        "mode": "base",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 1.692877566776806,
+      "referenceKpm": 3.8342373465012254,
+      "referenceKpmSe": 0.001927760648028151,
+      "deltaPercent": -55.8483887722399,
+      "panelDifferences": {
+        "critMultiplier": {
+          "local": 5.28879120879121,
+          "reference": 5.28
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 1.692877566776806,
+        "referenceKpm": 1.9926690057122343,
+        "referenceKpmSe": 0.00546688391817223,
+        "deltaPercent": -15.0447183187995
+      }
+    },
+    {
+      "id": "velocitus-5",
+      "boardRowIndex": 5,
+      "board": {
+        "arcanes": [
+          "primary_dexterity",
+          "cascadia_overcharge"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "alternate",
+        "mods": [
+          "primed_polar_magazine",
+          "electrified_barrel",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "containment_breach",
+          "hollowed_bullets",
+          "magnetized_cycle",
+          "parallax_scope"
+        ],
+        "score": 0.26121397418801184,
+        "shown": "0.2612",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/Railgun/ArchRailgun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingWeaponElectricityDamageMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventRadiationFireIterationRifleMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamageOnMeleeKill",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnOvershieldCritChance",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "velocitus",
+        "mode": "alternate",
+        "mods": [
+          "primed_polar_magazine",
+          "electrified_barrel",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "containment_breach",
+          "hollowed_bullets",
+          "magnetized_cycle",
+          "parallax_scope"
+        ],
+        "arcane": [
+          "primary_dexterity",
+          "cascadia_overcharge"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 1.6203656172521632,
+      "referenceKpm": 1.6720292769346643,
+      "referenceKpmSe": 0.0013268998520354518,
+      "deltaPercent": -3.0898776950375018,
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 1.6203656172521632,
+        "referenceKpm": 1.6720292769346643,
+        "referenceKpmSe": 0.0013268998520354518,
+        "deltaPercent": -3.0898776950375018
+      }
+    },
+    {
+      "id": "morgha-5",
+      "boardRowIndex": 5,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 0.3312642563112287,
+        "shown": "0.3313",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "morgha",
+        "mode": "base",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "the CHARGE this form is named for is not modelled as a charge — the page calls it a Charged Shot and then gives it a Semi-Auto trigger with no charge time, so it is paced as a slow semi-auto shot and filed as an alt-fire",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 1.3885442598417501,
+      "referenceKpm": 1.589319316853221,
+      "referenceKpmSe": 0.0002987212498385544,
+      "deltaPercent": -12.63277019806166,
+      "panelDifferences": {
+        "critMultiplier": {
+          "local": 5.28879120879121,
+          "reference": 5.28
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 1.3885442598417501,
+        "referenceKpm": 1.4074675674322834,
+        "referenceKpmSe": 0.0001942617931959602,
+        "deltaPercent": -1.3444933317402152
+      }
+    },
+    {
+      "id": "cortege-219",
+      "boardRowIndex": 219,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "contamination_casing",
+          "hypothermic_shell",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_ammo_chain",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 20.662815094798827,
+        "shown": "20.6628",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventToxinStatusRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventColdStatusRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "cortege",
+        "mode": "base",
+        "mods": [
+          "contamination_casing",
+          "hypothermic_shell",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_ammo_chain",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the BEAM'S CONE is not modelled — the wiki says the primary fire `deals radial damage varying from of 1 to 4 meters in a cone shape`, and publishes no damage figure for it anywhere; only the direct beam damage is applied here, so this weapon reads low against anything the cone would have caught",
+        "the atmospheric beam's INNATE INFINITE BODY PUNCH THROUGH is not modelled — it passes through a body to reach whatever is behind it, and this arena has one target with nothing behind it",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "the LINGERING FLAMES the grenades leave are not modelled — the page gives them 11 seconds of continuous damage and no per-tick number this intake could find, so the ground fire contributes nothing here and this weapon reads low",
+        "the explosion's falloff is not modelled — this arena has one target at the centre, so it always takes the full 2000 a grenade and never the 1400 at the rim",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 9.847560140259901,
+      "referenceKpm": 21.64032546130421,
+      "referenceKpmSe": 0.023926388091984507,
+      "deltaPercent": -54.49439908901253,
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 9.847560140259901,
+        "referenceKpm": 11.424641042621746,
+        "referenceKpmSe": 0.01879370140304511,
+        "deltaPercent": -13.804205282934067
+      }
+    },
+    {
+      "id": "cortege-223",
+      "boardRowIndex": 223,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "contamination_casing",
+          "hypothermic_shell",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 20.436026496394092,
+        "shown": "20.4360",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventToxinStatusRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventColdStatusRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "cortege",
+        "mode": "base",
+        "mods": [
+          "contamination_casing",
+          "hypothermic_shell",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the BEAM'S CONE is not modelled — the wiki says the primary fire `deals radial damage varying from of 1 to 4 meters in a cone shape`, and publishes no damage figure for it anywhere; only the direct beam damage is applied here, so this weapon reads low against anything the cone would have caught",
+        "the atmospheric beam's INNATE INFINITE BODY PUNCH THROUGH is not modelled — it passes through a body to reach whatever is behind it, and this arena has one target with nothing behind it",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing",
+        "the LINGERING FLAMES the grenades leave are not modelled — the page gives them 11 seconds of continuous damage and no per-tick number this intake could find, so the ground fire contributes nothing here and this weapon reads low",
+        "the explosion's falloff is not modelled — this arena has one target at the centre, so it always takes the full 2000 a grenade and never the 1400 at the rim",
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 13.312504339128326,
+      "referenceKpm": 28.047216442720142,
+      "referenceKpmSe": 0.01940755222995077,
+      "deltaPercent": -52.535381304893505,
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 13.312504339128326,
+        "referenceKpm": 14.895071144981625,
+        "referenceKpmSe": 0.026717115057490803,
+        "deltaPercent": -10.624768357595183
+      }
+    },
+    {
+      "id": "dual_decurion-2",
+      "boardRowIndex": 2,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 1.310391781538702,
+        "shown": "1.3104",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/ArchHeavyPistols",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "dual_decurion",
+        "mode": "base",
+        "mods": [
+          "primed_combustion_rounds",
+          "primed_polar_magazine",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "automatic_trigger",
+          "critical_focus",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 1.701765637807081,
+      "referenceKpm": 3.4653558140491874,
+      "referenceKpmSe": 0.0013868322155253432,
+      "deltaPercent": -50.89203738017864,
+      "panelDifferences": {
+        "critMultiplier": {
+          "local": 5.28879120879121,
+          "reference": 5.28
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 1.701765637807081,
+        "referenceKpm": 1.8304462901640663,
+        "referenceKpmSe": 0.0009982876731435247,
+        "deltaPercent": -7.0300151962094155
+      }
+    },
+    {
+      "id": "prisma_dual_decurions-10",
+      "boardRowIndex": 10,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_ammo_chain",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 17.793431987285512,
+        "shown": "17.7934",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/Prisma/PrismaArchHeavyPistols",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "prisma_dual_decurions",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_ammo_chain",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 11.301292220738729,
+      "referenceKpm": 18.27692977175307,
+      "referenceKpmSe": 0.021951236605898723,
+      "deltaPercent": -38.1663530917275,
+      "panelDifferences": {
+        "critMultiplier": {
+          "local": 3.966593406593407,
+          "reference": 3.9600000000000004
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 11.301292220738729,
+        "referenceKpm": 10.977193462677148,
+        "referenceKpmSe": 0.01869522390008556,
+        "deltaPercent": 2.9524737735882045
+      }
+    },
+    {
+      "id": "prisma_dual_decurions-11",
+      "boardRowIndex": 11,
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "contamination_casing",
+          "hypothermic_shell",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_ammo_chain",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "score": 17.476246375152797,
+        "shown": "17.4762",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/Prisma/PrismaArchHeavyPistols",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventToxinStatusRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventColdStatusRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "prisma_dual_decurions",
+        "mode": "base",
+        "mods": [
+          "contamination_casing",
+          "hypothermic_shell",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_ammo_chain",
+          "hollowed_bullets",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "referenceLimitations": [
+        "the Arch-Gun Deployer's five-minute cooldown is not modelled — when the reserve runs dry the weapon is gone for the rest of a real mission, and this arena simply stops firing"
+      ],
+      "localKpm": 11.219674537461726,
+      "referenceKpm": 17.83257977451091,
+      "referenceKpmSe": 0.012944731698944516,
+      "deltaPercent": -37.083278587102555,
+      "panelDifferences": {
+        "critMultiplier": {
+          "local": 3.966593406593407,
+          "reference": 3.9600000000000004
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "ablationWithoutEnervate": {
+        "localKpm": 11.219674537461726,
+        "referenceKpm": 11.242398703624135,
+        "referenceKpmSe": 0.01119932524804006,
+        "deltaPercent": -0.20212916087990473
+      }
+    }
+  ]
+}

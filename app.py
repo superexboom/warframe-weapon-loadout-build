@@ -634,6 +634,7 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__),
         Path(optimizer.__file__).with_name("damage.py"),
         Path(optimizer.__file__).with_name("simulator.py"),
+        Path(optimizer.__file__).with_name("catalog_releases.py"),
         Path(optimizer.__file__).with_name("projectile_events.py"),
         Path(optimizer.__file__).with_name("runtime_adapters.py"),
         Path(optimizer.__file__).with_name("combat_events.py"),
@@ -3208,13 +3209,9 @@ def build_weapon_payload(
                 arcane_slot_count[kind] += 1
                 seen_paths.add(path)
                 record = optimizer.resolve_record(EXPORTS["arcanes"], path, kind="arcane")
-                # 空战武器（地面）：赋能池 = 主+副武器赋能（wfsim arcane_pools
-                # [primary, secondary]——部署期副武器在身，双赋能同时触发）；
-                # 血统匹配对 archgun 天然不过（主/副赋能的 compatibility 指
-                # 向 LongGun/Pistol 基类），武器槽赋能一律放行。
+                # The shared adapter owns primary/secondary Arch-gun admission.
                 if not optimizer._arcane_matches_weapon(record, selected_weapon):
-                    if not (kind == "weapon" and str(catalog_weapon.get("weaponType") or "") == "archgun"):
-                        continue
+                    continue
                 max_rank = meta.get("maxRank")
                 rank = item.get("rank")
                 if isinstance(rank, int) and not isinstance(rank, bool) and isinstance(max_rank, int):
@@ -4210,10 +4207,7 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
             )
         arcane_record = optimizer.resolve_record(EXPORTS["arcanes"], path, kind="arcane")
         if not optimizer._arcane_matches_weapon(arcane_record, selected_weapon):
-            # 空战武器：武器槽赋能一律放行（血统匹配对 archgun 天然不过，
-            # 池=主+副武器赋能——wfsim arcane_pools [primary, secondary]）。
-            if not (slot_kind == "weapon" and weapon["weaponType"] == "archgun"):
-                raise SimulationError("Arcane is not compatible with the selected weapon")
+            raise SimulationError("Arcane is not compatible with the selected weapon")
         max_rank = arcane_meta.get("maxRank")
         rank = _manual_int(item.get("rank", max_rank or 0), f"arcanes[{index}].rank")
         if isinstance(max_rank, int) and rank > max_rank:
