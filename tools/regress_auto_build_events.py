@@ -9,6 +9,7 @@ def main():
     ap.add_argument('--full',action='store_true',help='Use eight slots instead of two')
     ap.add_argument('--archguns',action='store_true',help='Audit ground Arch-guns with primary/secondary Arcanes')
     ap.add_argument('--community',action='store_true',help='Audit newly sampled ranged weapons with their relevant arcanes')
+    ap.add_argument('--status-arcanes',action='store_true',help='Audit event-only arcanes and raw spooling models')
     ap.add_argument('--enervate',action='store_true',help='Use Secondary Enervate in the Arch-gun regression')
     ap.add_argument('--weapons',nargs='+',help='Restrict the named regression weapons')
     args=ap.parse_args()
@@ -19,6 +20,7 @@ def main():
     names=['Braton Prime','Burston Prime','Torid','Felarx','Mausolon','Nataruk','Lex Prime','Nikana Prime']
     if args.archguns:names=['Imperator Vandal','Mausolon','Kuva Grattler','Larkspur Prime','Cyngas','Morgha']
     if args.community:names=['Ignis Wraith','Amprex','Kuva Nukor','Tenet Cycron','Baza Prime','Trumna Prime']
+    if args.status_arcanes:names=['Aksomati Prime','Twin Grakatas','Akbolto Prime','Tenet Cycron','Kohm','Twin Kohmak']
     if args.enervate and not args.archguns: ap.error('--enervate requires --archguns')
     if args.weapons:
      if not set(args.weapons)<=set(names):ap.error('unknown regression weapon')
@@ -42,6 +44,12 @@ def main():
       p['externalBuffs']=[]
       p['headshotChance']=1
       if name in ['Kuva Nukor','Tenet Cycron']:p.update(innateElement='DT_MAGNETIC',innateElementValue=.6)
+     if args.status_arcanes:
+      arcane='Primary Crux' if name=='Kohm' else ('Secondary Fortifier' if name=='Tenet Cycron' else 'Secondary Encumber')
+      p['arcanes']=[{'path':next(a['path'] for a in app.MANUAL_ARCANES if a.get('nameEn')==arcane),'rank':5}]
+      p['externalBuffs']=[]
+      p['headshotChance']=1
+      if name=='Tenet Cycron':p.update(innateElement='DT_MAGNETIC',innateElementValue=.6)
      t=time.perf_counter();row=dict(name=name,request=p)
      try:
       res=app.build_weapon_payload(p);build=res['build']

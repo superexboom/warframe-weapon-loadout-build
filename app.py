@@ -641,6 +641,7 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("combat_replay.py"),
         Path(optimizer.__file__).with_name("manual_combat.py"),
         Path(optimizer.__file__).with_name("enervate.py"),
+        Path(optimizer.__file__).with_name("status_arcanes.py"),
         Path(optimizer.__file__).with_name("search_combat.py"),
         Path(optimizer.__file__).with_name("event_profiles.py"),
         Path(optimizer.__file__).with_name("riven_fusion.py"),
@@ -2348,7 +2349,9 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
     rows = []
     for arcane in EXPORTS.get("arcanes") or ():
         support = arcane.get("support") if isinstance(arcane.get("support"), Mapping) else {}
-        if not arcane.get("path") or not support.get("manualState") or not int(support.get("weaponEffects") or 0):
+        from wfarsenal.status_arcanes import configuration as status_configuration
+        status_spec = status_configuration(arcane, int(arcane.get('maxRank') or 0))
+        if not arcane.get('path') or (not status_spec and (not support.get('manualState') or not int(support.get('weaponEffects') or 0))):
             continue
         trigger = arcane.get("trigger") if isinstance(arcane.get("trigger"), Mapping) else {}
         from wfarsenal.enervate import configuration
@@ -2371,6 +2374,11 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
             # synthetic materialized effects are only a calculation channel.
             if "：" in effect:
                 condition_zh = effect.split("：", 1)[0]
+        if status_spec:
+            condition_zh = ('施加物理或元素异常时' if status_spec['kind']=='encumber' else '伤害命中敌方超宏时')
+            effect += ('；事件解算：4%/级随机追加13类异常之一，同瞬间最多一次，不自触发。CO类型占用采用概率近似。'
+                       if status_spec['kind']=='encumber' else
+                       '；事件解算：仅超宏部分乘×(3+等级)，按实际扣除超宏的1%窃取，上限15000；不模拟玩家受伤。')
         trigger_bits = [condition_zh]
         if isinstance(chance, (int, float)):
             trigger_bits.append(f"{float(chance) * 100:g}%")
@@ -2408,12 +2416,12 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
                 "conditionTag": trigger.get("conditionTag"),
                 "conditionZh": condition_zh,
             },
-            "complete": bool(support.get("complete")),
+            "complete": False if status_spec else bool(support.get("complete")),
             "runtime": bool(arcane.get("runtimeScripts")),
             "effect": effect,
             "effectsZhByRank": effects_by_rank,
             "description": (effect + ' 命中后叠加10个暴击百分点；累计rank+1次橙暴或更高暴击后清零。无固定时限/层数上限，最多30次/秒；真实事件已计入。' if enervate_spec else effect if official_levels else " · ".join(bit for bit in [effect, *trigger_bits] if bit)),
-            "eventModel": 'enervate-joint-probability' if enervate_spec else None,
+            "eventModel": 'enervate-joint-probability' if enervate_spec else (status_spec['kind'] if status_spec else None),
         })
     rows.sort(key=lambda row: (row["nameZh"].casefold(), row["path"]))
     return rows
@@ -3921,8 +3929,11 @@ def _prepare_manual_arcanes(
                 rate = _manual_arcane_rate(kind, event_stats, headshot_chance)
                 row["triggerRate"] = rate
                 inferred[query.casefold()] = rate
-            elif kind is None and not arcane.get("effects"):
-                unsupported.append(f"arcane-state-{index}-trigger-rate-required")
+            elif kind is None and not arcane.get('effects'):
+                from wfarsenal.manual_combat import modeled_event_kinds
+                rank = row.get('rank', arcane.get('maxRank') or 0)
+                if not modeled_event_kinds(arcane, rank):
+                    unsupported.append(f'arcane-state-{index}-trigger-rate-required')
         normalized.append(row)
 
     card, states, adapter_unsupported = optimizer._arcane_card(

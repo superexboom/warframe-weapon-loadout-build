@@ -122,6 +122,16 @@ def replay(
     proc_counts = {}
     dot_by_type = {}
     magnetic_breaks = []
+    fortifier = combat.get('fortifier')
+    fortifier_damage = fortifier_stolen = 0.0
+    self_overguard = 0.0
+    encumber = combat.get('encumber')
+    if encumber and encumber.get('uptime',1.0) == 0:encumber=None
+    encumber_time = -math.inf
+    encumber_remaining = 1.0
+    encumber_expected = 0.0
+    encumber_events = []
+    encumber_views = {}
     last_totals = totals.copy()
     timeline = []
     averaged = {k: 0.0 for k in names.values()}
@@ -142,6 +152,8 @@ def replay(
     reloads = 0
     recharges = 0
     last_fire_time = -math.inf
+    spool_shots = 0
+    spool_trace = []
     burst_round = 0
     first_round = True
     model_cache = {}
@@ -296,6 +308,7 @@ def replay(
     def take(vector, t, source, weak_kill=False):
         # Spend one attack fraction across pools. Shield bypass acts in parallel.
         # Residual damage never leaks to the next target.
+        nonlocal fortifier_damage, fortifier_stolen, self_overguard
         left = 1.0
         applied = 0.0
 
@@ -312,11 +325,18 @@ def replay(
                 raw * (1.5 if k in ("DT_VOID", "DT_RADIANT") else 1.0)
                 for k, raw in vector.items()
             ) * vulnerability(count("DT_MAGNETIC"))
+            if fortifier and source != 'syndicate':
+                value *= 1.0 + (fortifier['multiplier'] - 1.0) * fortifier.get('uptime', 1.0)
             if value <= 0.0:
                 return False
             fraction = min(left, pools[0] / value)
             drain = value * fraction
             pools[0] = max(0.0, pools[0] - drain)
+            if fortifier and source != 'syndicate':
+                fortifier_damage += drain
+                stolen = drain * fortifier['steal'] * fortifier.get('uptime', 1.0)
+                fortifier_stolen += stolen
+                self_overguard = min(fortifier['cap'], self_overguard + stolen)
             applied += drain
             left -= fraction
             if pools[0] <= 1e-9:
@@ -360,7 +380,8 @@ def replay(
 
     def model(t):
         live_types = (
-            sum(count(k) > 0 for k in states) + int(heat["count"] > 0)
+            (sum(-math.expm1(-count(k)) for k in set(states) | {'DT_FIRE'}) if encumber
+             else sum(count(k) > 0 for k in states) + int(heat["count"] > 0))
             if combat.get("conditionOverload") or stats.co_bucket
             else 0
         )
@@ -517,9 +538,29 @@ def replay(
         gain=not (combat['enervate'].get('ignoreSelected') and form != 'base')
         enervate.advance(t,probabilities,gain=gain)
 
-    def add_procs(st, aim, t, data=None):
-        nonlocal frozen_until,frozen_scale
+    def add_procs(st, aim, t, data=None, allow_encumber=True):
+        nonlocal frozen_until,frozen_scale,encumber_time,encumber_remaining,encumber_expected
         _, procs, rows, non = data if data is not None else packet(st, aim)
+        if encumber and allow_encumber and status_rate_multiplier > 0:
+            from .status_arcanes import STATUS_POOL, encumber_roll
+            if abs(t - encumber_time) > 1e-9:
+                encumber_time=t;encumber_remaining=1.0
+            probability, merged_seed=encumber_roll(st, encumber['chance'], forced_procs)
+            weight=encumber_remaining*probability*encumber.get('uptime',1.0)
+            encumber_remaining*=1-probability*encumber.get('uptime',1.0)
+            if weight > 0:
+                encumber_expected+=weight
+                if collect_timeline:encumber_events.append(dict(time=t,expected=weight))
+                key=(id(st),aim)
+                if key not in encumber_views:
+                    probe=replace(st,status_chance=0.0,continuous=False,multishot=1.0,
+                                  independent_proc_chances={k:1.0 for k in STATUS_POOL},
+                                  impact_proc_conversions={})
+                    encumber_views[key]=(st,probe)
+                _,_,extra_rows,extra_non=packet(encumber_views[key][1],aim)
+                extra_rows={k:{**r,'seedPerSecondPerProc':r['seedPerSecondPerProc']*merged_seed} for k,r in extra_rows.items()}
+                extra_non={k:{**r,'perProc':r['perProc']*merged_seed} for k,r in extra_non.items()}
+                add_procs(st,aim,t,({},dict.fromkeys(STATUS_POOL,weight/len(STATUS_POOL)),extra_rows,extra_non),False)
         scale = max(st.proc_duration_multiplier, 0.0)
         for dtype, n in procs.items():
             n *= max(status_rate_multiplier, 0.0)
@@ -693,6 +734,7 @@ def replay(
                 gauge = 0.0
             push(t, "fire")
         elif kind == "reload-complete":
+            signal("on-reload-complete", t)
             signal("on-reload-empty-complete", t)
             push(t, "fire")
         elif kind == "fire":
@@ -737,8 +779,21 @@ def replay(
                             q["stacks"] = (
                                 q["initialStacks"] if q["perEvent"] == 0 else 0.0
                             )
+                    if combat.get('spool') and reload_time >= combat['spool']['spindown']:
+                        spool_shots=0
                     push(t + reload_time, "reload-complete")
                 continue
+            spool=combat.get('spool')
+            if spool:
+                # Holding the trigger through a slow cadence is not idle.
+                # Only the separately scheduled reload can reset the spool.
+                pellets=min(spool['maximum'],spool['initial']+spool_shots)
+                speed*=spool['rateStart']+(1-spool['rateStart'])*min(spool_shots/spool['rateShots'],1.)
+                active=replace(active,multishot=active.multishot*pellets/spool['maximum'],
+                               status_chance=active.status_chance*spool['maximum']/pellets,
+                               ammo_cost=active.ammo_cost*math.ceil(pellets/spool['ammoDivisor'])/math.ceil(spool['maximum']/spool['ammoDivisor']))
+                if collect_timeline:spool_trace.append(dict(time=t,pellets=pellets,fireRate=speed,ammoCost=active.ammo_cost))
+                spool_shots+=1
             attacks += 1
             last_fire_time = t
             generation = gen
@@ -928,11 +983,17 @@ def replay(
         "shots": attacks,
         "reloads": reloads,
         "recharges": recharges,
+        'spoolTrace':spool_trace,
         "transforms": transforms,
         "directEventLedger": ledger,
         "emergent": {"onKillStacks": "events" if sources else "panel-assumed-max"},
         "enervate": enervate.summary() if enervate else None,
         "magneticBreaks": magnetic_breaks,
+        'fortifier': ({'multiplier':fortifier['multiplier'],'overguardDamage':fortifier_damage,
+                       'stolenTotal':fortifier_stolen,'selfOverguard':self_overguard,
+                       'cap':fortifier['cap'],'selfDamageModeled':False} if fortifier else None),
+        'encumber': ({'chance':encumber['chance'],'expectedExtraProcs':encumber_expected,
+                      'events':encumber_events,'typeCount':13,'coPresence':'poisson-occupancy'} if encumber else None),
         "triggerSeries": [
             {
                 **{k: q[k] for k in ("id", "label", "kind", "maxStacks", "series")},
@@ -966,5 +1027,8 @@ def replay(
             "fractional-proc-refresh-approximates-uptime",
             "single-target-syndicate-no-player-buffs",
             "magnetic-break-six-ticks-pinned-reference-contract",
-        ] + (ASSUMPTIONS if enervate else []),
+        ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
+          + (ASSUMPTIONS if enervate else [])
+          + (['encumber-poisson-status-presence','encumber-single-target-expected-procs'] if encumber else [])
+          + (['fortifier-raw-multiply-r5-x8-reference-x9-conflict','fortifier-player-overguard-no-incoming-damage'] if fortifier else []),
     }

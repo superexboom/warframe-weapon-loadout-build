@@ -41,6 +41,7 @@ def condition_kind(condition):
         "onkillcondition": "on-kill",
         "onkillriflecondition": "on-kill",
         "onpistolkillcondition": "on-kill",
+        "onshotgunkillcondition": "on-kill",
         "onprimarykillcondition": "on-primary-kill",
         "onmeleekillanysourcecondition": "on-melee-kill",
         "onmeleekillcondition": "on-melee-kill",
@@ -48,6 +49,9 @@ def condition_kind(condition):
         "oncriticalhitcondition": "on-crit",
         "onhitcondition": "on-hit",
         "onreloadcondition": "on-reload",
+        "onreloadshotguncondition": "on-reload-complete",
+        "onreloadriflecondition": "on-reload-complete",
+        "onreloadpistolcondition": "on-reload-complete",
         "onheatproccondition": "proc-DT_FIRE",
         "oncoldproccondition": "proc-DT_FREEZE",
         "ontoxinproccondition": "proc-DT_POISON",
@@ -56,6 +60,25 @@ def condition_kind(condition):
         "onshotgunclosekillcondition": "on-close-kill",
     }
     return next((exact[x] for x in names if x in exact), None)
+
+
+def modeled_event_kinds(record, rank):
+    # Empty starting stacks are valid only for replay-supported conditions.
+    from .damage import ModEffect
+    from .runtime_adapters import verified_crux_condition
+
+    crux = verified_crux_condition(record)
+    conditions = [crux] if crux else record.get('conditionalEffects') or []
+    kinds = []
+    for condition in conditions:
+        kind = condition_kind(condition)
+        effects = condition.get('effects') or []
+        if not kind or not effects or condition.get('runtimeScripts'):
+            return ()
+        if not all(ModEffect.from_export(effect, rank).supported for effect in effects):
+            return ()
+        kinds.append(kind)
+    return tuple(kinds)
 
 
 def prepare(
@@ -78,6 +101,8 @@ def prepare(
     original = list(engine["effects"])
     from .enervate import configuration, PATH as ENERVATE_PATH, IGNORED_ALT
     enervate = None
+    status_arcanes = {}
+    from .status_arcanes import configuration as status_configuration
     sources = []
     dynamic = []
     excluded = set()
@@ -97,6 +122,13 @@ def prepare(
         *arcane_records,
         *[(b, 0, None) for b in branches],
     ]:
+        status_spec = status_configuration(record, rank)
+        if status_spec:
+            uptime = (override or {}).get('uptime', 1.0)
+            if override is not None and override.get('stacks') == 0:
+                uptime = 0.0
+            status_arcanes[status_spec['kind']] = {**status_spec, 'uptime': uptime}
+            continue
         spec = configuration(record, rank)
         if spec:
             enervate = {**spec, 'uptime': (override or {}).get('uptime', 1.0),
@@ -121,6 +153,12 @@ def prepare(
                 condition = {**condition, "duration": 1.5 * (rank + 1)}
             if record.get('path') in ('/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleSPMod', '/Lotus/Upgrades/Mods/Pistol/Event/CritChanceWhileAimingPistolSPMod') and condition.get('maxStacks') == 5:
                 condition = {**condition, 'stackMode': 'per-stack'}
+            if (record.get('path') in (
+                '/Lotus/Upgrades/Mods/Shotgun/Event/FireRateWhileAimingShotgunMod',
+                '/Lotus/Upgrades/Mods/Rifle/Event/FireRateWhileAimingRifleMod',
+                '/Lotus/Upgrades/Mods/Pistol/Event/FireRateWhileAimingPistolMod')
+                and condition.get('duration') == 1.5):
+                condition = {**condition, 'duration':1.5*(rank+1)}
             if condition.get("runtimeScripts"):
                 source = str(condition.get("sourcePath") or record["path"])
                 if not ("Burston" in source and "Tier1ASubMod" in source):
@@ -255,6 +293,13 @@ def prepare(
             n = stacks.get(key, 0.0)
             if n > 0:
                 fx.extend(replace(e, value=(1.0 + (e.value - 1.0) * n) if e.operation == 'MULTIPLY' else e.value * n) for e in terms)
+        # Public Scenario requires an integer count. Scale the linear CO
+        # coefficient to represent expected presence without rounding it up.
+        count_ceiling = int(math.ceil(live_types))
+        if count_ceiling and live_types != count_ceiling:
+            fx = ModEffectList(replace(e,value=e.value*live_types/count_ceiling)
+                               if e.upgrade_type == 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'
+                               else e for e in fx)
         idx = 0 if form == "base" else mode_index
         wp = {
             **weapon,
@@ -266,7 +311,7 @@ def prepare(
             fx,
             fire_mode=idx,
             scenario=replace(
-                scenario, incarnon_cycle=False, victim_status_count=live_types
+                scenario, incarnon_cycle=False, victim_status_count=count_ceiling
             ),
         )
         radial = None
@@ -307,7 +352,7 @@ def prepare(
                 'procChance': component.get('status_chance', rm['damage'].get('procChance')),
             }
             part_fx = fx if component.get('takes_condition_overload') else ModEffectList(e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
-            part = apply_mods({**wp, 'fireModes': [rm]}, part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=live_types))
+            part = apply_mods({**wp, 'fireModes': [rm]}, part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
             part = replace(part, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
             if component.get('takes_multishot') is False:
                 part = replace(part, multishot=1.0)
@@ -361,6 +406,7 @@ def prepare(
     return dict(
         resolve=resolve,
         enervate=enervate,
+        **status_arcanes,
         cycle=cycle,
         syndicate=syndrome,
         affinityPerKill=affinity,
@@ -379,6 +425,7 @@ def prepare(
         baseMode=mode_index == 0,
         selectedIncarnon=bool(weapon.get("isIncarnonForm")) and not cycle,
         weaponSlot=weapon.get("slot"),
+        spool=base_attack.get("spool") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
         battery=base_attack.get("battery") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
         distance=scenario.distance,
     )

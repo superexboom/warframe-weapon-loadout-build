@@ -1297,6 +1297,13 @@ def _arcane_card(
             state["error"] = str(exc)
             unsupported.append(f"arcane-state-{index}-invalid-not-applied")
             continue
+        from .status_arcanes import configuration as status_configuration
+        status_spec = status_configuration(arcane, int(state['rank']))
+        if status_spec:
+            status_uptime = 0.0 if raw.get('stacks') == 0 else wire_uptime
+            state.update(active=status_uptime>0, applied=True, effectCount=1, mode='events',
+                         eventModel=status_spec['kind'], expectedUptime=status_uptime)
+            state.pop('error', None)
         if enervate_spec:
             state.update(durationSeconds=None,maxStacks=None,stackMode='joint-probability-reset',
                          mode='explicit-fixed' if 'stacks' in raw else 'events',
@@ -1315,9 +1322,20 @@ def _arcane_card(
             state["active"] = bool(state["expectedStacks"]) or bool(enervate_spec)
             state["applied"] = True
             state["effectCount"] = len(supported_effects)
-        else:
-            state["error"] = "no supported static effect"
-            unsupported.append(f"arcane-state-{index}-no-supported-effects")
+        elif not status_spec:
+            from .manual_combat import modeled_event_kinds
+            event_kinds = modeled_event_kinds(arcane, int(state['rank']))
+            if event_kinds:
+                # Zero starting stacks do not mean the event effect is missing.
+                explicit = 'stacks' in raw or 'uptime' in raw
+                state.update(
+                    applied=True, active=bool(state['expectedStacks']),
+                    mode='explicit-fixed' if explicit else 'events',
+                    eventModel='conditional-effects', eventKinds=event_kinds,
+                )
+            else:
+                state['error'] = 'no supported static effect'
+                unsupported.append(f'arcane-state-{index}-no-supported-effects')
 
     card = None
     if combined or skipped or event_arcanes:

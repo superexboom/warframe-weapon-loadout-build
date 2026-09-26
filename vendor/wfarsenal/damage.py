@@ -725,6 +725,9 @@ def arcane_effects(
             f"{arcane.get('name', '?')} ranks to {max_rank}, got rank {rank}"
         )
 
+    from .status_arcanes import configuration as status_configuration
+    if status_configuration(arcane, rank):
+        return ModEffectList([])  # Event-only; no fabricated static stat.
     from .enervate import configuration
     if configuration(arcane, rank):
         # Explicit state only; the shared replay owns emergent state/reset.
@@ -1127,6 +1130,18 @@ def apply_mods(
             "is out of range"
         )
     mode = modes[fire_mode]
+    from .event_profiles import base_profile
+    event_profile = base_profile(weapon, fire_mode)
+    spool = event_profile.get('spool')
+    if spool:
+        damage = mode['damage']
+        mode = {**mode, 'multishot':spool['maximum'],
+                'ammoCost':math.ceil(spool['maximum']/spool['ammoDivisor']),
+                'damage':{**damage,'types':{k:v*event_profile['playerDamageMultiplier']
+                                          for k,v in damage['types'].items()}}}
+        # Absolute raw minimum uses the same units as unscaled damage.
+        if mode.get('falloffMinDamage') is not None:
+            mode['falloffMinDamage'] *= event_profile['playerDamageMultiplier']
     base = (mode.get("damage") or {}).get("types")
     if not base:
         raise ValueError(f"{weapon.get('name')} fire mode {fire_mode} has no damage data")

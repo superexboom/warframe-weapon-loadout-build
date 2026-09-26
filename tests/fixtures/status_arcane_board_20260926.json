@@ -1,0 +1,2437 @@
+{
+  "sourceCommit": "b98b3d456393131857e1c0e247b19aac6ecc08f4",
+  "release": {
+    "commit": "becb34b1+",
+    "release": "285450cbd40f",
+    "wasm": "697c63bfc0d2"
+  },
+  "wasmSha256": "697c63bfc0d2fe1c5da82e19adc9d76e54933bbc0baa9cd60c804e419fbe8f0f",
+  "sources": [
+    {
+      "weapon": "twin_grakatas",
+      "url": "https://wfsim.app/board/twin_grakatas.json",
+      "sha256": "f235a4e1df0bc30e9771e39cac94501c533e5dc38697cc9b8e9e321bc170a3f1"
+    },
+    {
+      "weapon": "kuva_brakk",
+      "url": "https://wfsim.app/board/kuva_brakk.json",
+      "sha256": "2fb2291355bec62315468d92259af8a2a1662d903a628d1d891a0ef75a29ae02"
+    },
+    {
+      "weapon": "spira_prime",
+      "url": "https://wfsim.app/board/spira_prime.json",
+      "sha256": "d2e27b15ce8bb6e4fd7c0fddd09965edba5444e07f6cb6f6d15d9eaa32ecb4c2"
+    },
+    {
+      "weapon": "vasto_prime",
+      "url": "https://wfsim.app/board/vasto_prime.json",
+      "sha256": "923cb150e2b892a4a15fc9f6c4cb71325e14ae2f59aeb802534d6437a6404ad9"
+    },
+    {
+      "weapon": "sicarus_prime",
+      "url": "https://wfsim.app/board/sicarus_prime.json",
+      "sha256": "2240dd7318d8d815b03634b64e8286adfbb5d7470d068b834efa122dd10f38fc"
+    },
+    {
+      "weapon": "kohm",
+      "url": "https://wfsim.app/board/kohm.json",
+      "sha256": "a7be0dee465c97dc14fd73ee31222978d5b3c85dd36ce8d12efbe3ba8a968fd1"
+    },
+    {
+      "weapon": "boar_prime",
+      "url": "https://wfsim.app/board/boar_prime.json",
+      "sha256": "64d494058daff193fd14e8e067bc3d01221ec76578938c5d8e5eb04e0e3ee730"
+    },
+    {
+      "weapon": "strun_prime",
+      "url": "https://wfsim.app/board/strun_prime.json",
+      "sha256": "632f0aa448a9585b9a75b062e0d731923730a4c4c137573738e1e54b297ff940"
+    },
+    {
+      "weapon": "aksomati_prime",
+      "url": "https://wfsim.app/board/aksomati_prime.json",
+      "sha256": "5e729b2f697e0cfa07daed2c5331263d1d37b0996c6b0d9ae1a74417ad6225af"
+    },
+    {
+      "weapon": "tenet_cycron",
+      "url": "https://wfsim.app/board/tenet_cycron.json",
+      "sha256": "e0c3e58471e92f44b11ad09319a3b0be7f8a9ea117181ef8b572ef42831bb343"
+    },
+    {
+      "weapon": "fluctus",
+      "url": "https://wfsim.app/board/fluctus.json",
+      "sha256": "70c7abce7dfaedd1510a62eb53d5f2fd7a53ed7437aac9a28251b4ff80632ee0"
+    },
+    {
+      "weapon": "akbolto_prime",
+      "url": "https://wfsim.app/board/akbolto_prime.json",
+      "sha256": "e9652771b0dd6f1dd8c7572246a6f4a1312b06c68944d1954d11b383a5e95f53"
+    },
+    {
+      "weapon": "aklex_prime",
+      "url": "https://wfsim.app/board/aklex_prime.json",
+      "sha256": "6391724ee513e17ca712ce7d42c03065e75cf9f75d247e87aa1fd8572bb4515e"
+    },
+    {
+      "weapon": "pandero_prime",
+      "url": "https://wfsim.app/board/pandero_prime.json",
+      "sha256": "2af68b89a338f12582056fd5053ce7c1a965acf5dc614fe9daf565e77d7e6218"
+    },
+    {
+      "weapon": "twin_kohmak",
+      "url": "https://wfsim.app/board/twin_kohmak.json",
+      "sha256": "ae4abad1c82381b53e1f961a38be3a76538ead0e6a8942ab8769c274f149f3e5"
+    },
+    {
+      "weapon": "kuva_sobek",
+      "url": "https://wfsim.app/board/kuva_sobek.json",
+      "sha256": "93ed2075549a2b22598aefd288d5ff0c1dea193023c0c625f3303ad2bd02f36f"
+    }
+  ],
+  "cases": [
+    {
+      "id": "twin_grakatas-2",
+      "weapon": "twin_grakatas",
+      "name": "Twin Grakatas",
+      "board": {
+        "arcanes": [
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "pistol_pestilence",
+          "frostbite",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "score": 0.22550622122347533,
+        "shown": "0.2255",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/TwinGrakatas",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "twin_grakatas",
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "pistol_pestilence",
+          "frostbite",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "arcane": [
+          "cascadia_flare"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "kuva_brakk-2",
+      "weapon": "kuva_brakk",
+      "name": "Kuva Brakk",
+      "board": {
+        "arcanes": [
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "pistol_pestilence",
+          "frostbite",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "score": 0.2719298033168043,
+        "shown": "0.2719",
+        "valence": "impact"
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Brakk/KuvaBrakk",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "innateElement": "DT_IMPACT",
+        "innateElementValue": 0.6
+      },
+      "referenceRequest": {
+        "weapon": "kuva_brakk",
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "pistol_pestilence",
+          "frostbite",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "arcane": [
+          "cascadia_flare"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "valence_element": "impact",
+        "valence_bonus": 0.6
+      }
+    },
+    {
+      "id": "spira_prime-2",
+      "weapon": "spira_prime",
+      "name": "Spira Prime",
+      "board": {
+        "arcanes": [
+          "secondary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "pistol_acuity",
+          "hornet_strike",
+          "primed_target_cracker",
+          "anemic_agility",
+          "magnetic_might"
+        ],
+        "score": 4.4758466661502565,
+        "shown": "4.4758",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/ThrowingWeapons/PrimeLiDagger/PrimeLiDagger",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnNoMelee",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "spira_prime",
+        "mode": "base",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "pistol_acuity",
+          "hornet_strike",
+          "primed_target_cracker",
+          "anemic_agility",
+          "magnetic_might"
+        ],
+        "arcane": [
+          "secondary_deadhead"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "kohm-4",
+      "weapon": "kohm",
+      "name": "Kohm",
+      "board": {
+        "arcanes": [
+          "shotgun_vendetta"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_chilling_grasp",
+          "contagious_spread",
+          "incendiary_coat",
+          "galvanized_hell",
+          "primed_point_blank",
+          "primed_ravage",
+          "galvanized_savvy",
+          "shotgun_barrage"
+        ],
+        "score": 7.8123702689166254,
+        "shown": "7.8124",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrnSpark/GrnSparkRifle",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponCritDamageModExpert",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireRateMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/ShotgunMultishotAndReloadSpeedOnCloseKill",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "kohm",
+        "mode": "base",
+        "mods": [
+          "primed_chilling_grasp",
+          "contagious_spread",
+          "incendiary_coat",
+          "galvanized_hell",
+          "primed_point_blank",
+          "primed_ravage",
+          "galvanized_savvy",
+          "shotgun_barrage"
+        ],
+        "arcane": [
+          "shotgun_vendetta"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "kohm-5",
+      "weapon": "kohm",
+      "name": "Kohm",
+      "board": {
+        "arcanes": [
+          "primary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "frigid_blast",
+          "toxic_barrage",
+          "incendiary_coat",
+          "galvanized_hell",
+          "primed_point_blank",
+          "primed_ravage",
+          "galvanized_savvy",
+          "shotgun_barrage"
+        ],
+        "score": 6.979305544033829,
+        "shown": "6.9793",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrnSpark/GrnSparkRifle",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/IceEventShotgunMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/PoisonEventShotgunMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponCritDamageModExpert",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireRateMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamageOnNoMelee",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "kohm",
+        "mode": "base",
+        "mods": [
+          "frigid_blast",
+          "toxic_barrage",
+          "incendiary_coat",
+          "galvanized_hell",
+          "primed_point_blank",
+          "primed_ravage",
+          "galvanized_savvy",
+          "shotgun_barrage"
+        ],
+        "arcane": [
+          "primary_deadhead"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "aksomati_prime-8",
+      "weapon": "aksomati_prime",
+      "name": "Aksomati Prime",
+      "board": {
+        "arcanes": [
+          "secondary_encumber"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "primed_steady_hands",
+        "mode": "base",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "primed_pistol_gambit",
+          "lethal_torrent"
+        ],
+        "score": 7.394876033880386,
+        "shown": "7.3949",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ExtraProcOnProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "exilus": {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponRecoilReductionModExpert",
+          "rank": 10
+        }
+      },
+      "referenceRequest": {
+        "weapon": "aksomati_prime",
+        "mode": "base",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "primed_pistol_gambit",
+          "lethal_torrent",
+          "primed_steady_hands"
+        ],
+        "arcane": [
+          "secondary_encumber"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "aksomati_prime-9",
+      "weapon": "aksomati_prime",
+      "name": "Aksomati Prime",
+      "board": {
+        "arcanes": [
+          "secondary_encumber"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "primed_steady_hands",
+        "mode": "base",
+        "mods": [
+          "primed_convulsion",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "primed_pistol_gambit",
+          "lethal_torrent"
+        ],
+        "score": 6.3630012237015166,
+        "shown": "6.3630",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ExtraProcOnProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "exilus": {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponRecoilReductionModExpert",
+          "rank": 10
+        }
+      },
+      "referenceRequest": {
+        "weapon": "aksomati_prime",
+        "mode": "base",
+        "mods": [
+          "primed_convulsion",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "primed_pistol_gambit",
+          "lethal_torrent",
+          "primed_steady_hands"
+        ],
+        "arcane": [
+          "secondary_encumber"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "tenet_cycron-170",
+      "weapon": "tenet_cycron",
+      "name": "Tenet Cycron",
+      "board": {
+        "arcanes": [
+          "secondary_fortifier"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "galvanized_shot",
+          "primed_pistol_gambit",
+          "lethal_torrent",
+          "pistol_elementalist"
+        ],
+        "score": 17.286527385796685,
+        "shown": "17.2865",
+        "valence": "magnetic"
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OverguardSteal",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "innateElement": "DT_MAGNETIC",
+        "innateElementValue": 0.6
+      },
+      "referenceRequest": {
+        "weapon": "tenet_cycron",
+        "mode": "base",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "galvanized_shot",
+          "primed_pistol_gambit",
+          "lethal_torrent",
+          "pistol_elementalist"
+        ],
+        "arcane": [
+          "secondary_fortifier"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "valence_element": "magnetic",
+        "valence_bonus": 0.6
+      }
+    },
+    {
+      "id": "tenet_cycron-171",
+      "weapon": "tenet_cycron",
+      "name": "Tenet Cycron",
+      "board": {
+        "arcanes": [
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "ruinous_extension",
+        "mode": "base",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "hornet_strike",
+          "primed_target_cracker",
+          "lethal_torrent",
+          "pistol_elementalist"
+        ],
+        "score": 17.1056643239586,
+        "shown": "17.1057",
+        "valence": "magnetic"
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "exilus": {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponBeamDistanceMod",
+          "rank": 3
+        },
+        "innateElement": "DT_MAGNETIC",
+        "innateElementValue": 0.6
+      },
+      "referenceRequest": {
+        "weapon": "tenet_cycron",
+        "mode": "base",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "hornet_strike",
+          "primed_target_cracker",
+          "lethal_torrent",
+          "pistol_elementalist",
+          "ruinous_extension"
+        ],
+        "arcane": [
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "valence_element": "magnetic",
+        "valence_bonus": 0.6
+      }
+    },
+    {
+      "id": "fluctus-6",
+      "weapon": "fluctus",
+      "name": "Fluctus",
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_deadly_efficiency",
+          "critical_focus",
+          "primed_ammo_chain"
+        ],
+        "score": 8.998202312140762,
+        "shown": "8.9982",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/RocketArtillery/ArchRocketCrossbow",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingDamageOnReloadMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "fluctus",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "primed_deadly_efficiency",
+          "critical_focus",
+          "primed_ammo_chain"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_enervate"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "fluctus-7",
+      "weapon": "fluctus",
+      "name": "Fluctus",
+      "board": {
+        "arcanes": [
+          "primary_crux",
+          "secondary_fortifier"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "critical_focus",
+          "primed_ammo_chain",
+          "magnetized_cycle"
+        ],
+        "score": 8.917842076929945,
+        "shown": "8.9178",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Archwing/Primary/RocketArtillery/ArchRocketCrossbow",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+            "rank": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OverguardSteal",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "fluctus",
+        "mode": "base",
+        "mods": [
+          "primed_polar_magazine",
+          "primed_venomous_clip",
+          "primed_combustion_rounds",
+          "primed_dual_rounds",
+          "primed_rubedo_lined_barrel",
+          "critical_focus",
+          "primed_ammo_chain",
+          "magnetized_cycle"
+        ],
+        "arcane": [
+          "primary_crux",
+          "secondary_fortifier"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "akbolto_prime-2",
+      "weapon": "akbolto_prime",
+      "name": "Akbolto Prime",
+      "board": {
+        "arcanes": [
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "pistol_pestilence",
+          "frostbite",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "score": 0.22644710742683402,
+        "shown": "0.2264",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAkbolto/PrimeAkBoltoWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "akbolto_prime",
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "pistol_pestilence",
+          "frostbite",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "arcane": [
+          "cascadia_flare"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "pandero_prime-5",
+      "weapon": "pandero_prime",
+      "name": "Pandero Prime",
+      "board": {
+        "arcanes": [
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "pistol_pestilence",
+          "frostbite",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "score": 0.22807225076623097,
+        "shown": "0.2281",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimePandero/PanderoPrimeWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "pandero_prime",
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "pistol_pestilence",
+          "frostbite",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "arcane": [
+          "cascadia_flare"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "twin_kohmak-2",
+      "weapon": "twin_kohmak",
+      "name": "Twin Kohmak",
+      "board": {
+        "arcanes": [
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "pistol_pestilence",
+          "frostbite",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "score": 0.2611244295183107,
+        "shown": "0.2611",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/Pistols/GrnDWUniques/GrnTwinKohmaks",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "twin_kohmak",
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "pistol_pestilence",
+          "frostbite",
+          "galvanized_diffusion",
+          "primed_target_cracker",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "arcane": [
+          "cascadia_flare"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "kuva_sobek-40",
+      "weapon": "kuva_sobek",
+      "name": "Kuva Sobek",
+      "board": {
+        "arcanes": [
+          "shotgun_vendetta"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "vigilante_supplies",
+        "mode": "base",
+        "mods": [
+          "primed_chilling_grasp",
+          "toxic_barrage",
+          "blaze",
+          "galvanized_hell",
+          "primed_ravage",
+          "galvanized_savvy",
+          "critical_deceleration",
+          "shotgun_barrage"
+        ],
+        "score": 22.15410020767233,
+        "shown": "22.1541",
+        "valence": "magnetic"
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Sobek/KuvaSobek",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/PoisonEventShotgunMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/BlazeMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponCritDamageModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/CorruptedCritChanceFireRateShotgun",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireRateMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/ShotgunMultishotAndReloadSpeedOnCloseKill",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "exilus": {
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "rank": 5
+        },
+        "innateElement": "DT_MAGNETIC",
+        "innateElementValue": 0.6
+      },
+      "referenceRequest": {
+        "weapon": "kuva_sobek",
+        "mode": "base",
+        "mods": [
+          "primed_chilling_grasp",
+          "toxic_barrage",
+          "blaze",
+          "galvanized_hell",
+          "primed_ravage",
+          "galvanized_savvy",
+          "critical_deceleration",
+          "shotgun_barrage",
+          "vigilante_supplies"
+        ],
+        "arcane": [
+          "shotgun_vendetta"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "valence_element": "magnetic",
+        "valence_bonus": 0.6
+      }
+    },
+    {
+      "id": "kuva_sobek-41",
+      "weapon": "kuva_sobek",
+      "name": "Kuva Sobek",
+      "board": {
+        "arcanes": [
+          "primary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "shell_shock",
+          "galvanized_hell",
+          "galvanized_savvy",
+          "critical_deceleration",
+          "ravage",
+          "repeater_clip",
+          "shotgun_elementalist",
+          "magnetic_strafe"
+        ],
+        "score": 11.23078043206915,
+        "shown": "11.2308",
+        "valence": "toxin"
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Sobek/KuvaSobek",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/ElectEventShotgunMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/CorruptedCritChanceFireRateShotgun",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Event/FireRateWhileAimingShotgunMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/ShotgunStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/MagneticFireRateShotgunMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamageOnNoMelee",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "innateElement": "DT_POISON",
+        "innateElementValue": 0.6
+      },
+      "referenceRequest": {
+        "weapon": "kuva_sobek",
+        "mode": "base",
+        "mods": [
+          "shell_shock",
+          "galvanized_hell",
+          "galvanized_savvy",
+          "critical_deceleration",
+          "ravage",
+          "repeater_clip",
+          "shotgun_elementalist",
+          "magnetic_strafe"
+        ],
+        "arcane": [
+          "primary_deadhead"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "valence_element": "toxin",
+        "valence_bonus": 0.6
+      }
+    }
+  ]
+}

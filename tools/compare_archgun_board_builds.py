@@ -106,7 +106,7 @@ def main():
     if row.get('evolutions') or row.get('warframe') or row.get('buffs'):
      raise ValueError('unmapped board evolutions or external buffs')
     weapon=exact_record(weapons[wid],app.EXPORTS['weapons'])
-    if weapon.get('slot') in ('Melee', 'MELEE'):
+    if str(weapon.get('slot') or '').casefold() == 'melee':
      raise ValueError('melee outside audit contract')
     equipped_arcanes=[a for a in row['arcanes'] if not args.without_enervate or a!='secondary_enervate']
     cards=[exact_record(mods[mid],app.EXPORTS['mods']) for mid in row['mods']]
