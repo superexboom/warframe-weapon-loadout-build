@@ -398,6 +398,7 @@ _UTILITY_MOD_FIXUP_PATHS: tuple[str, ...] = (
 # 资源索引（frontend/assets/mods/index.json）：补丁卡的卡面美术在导出里没有
 # icon 字段，按路径从资源索引解析（Prime 版本与普通版共用同一张卡面）。
 _MOD_ART_INDEX: dict[str, str] = {}
+_mod_art_payload: dict[str, Any] = {}
 try:
     _mod_art_payload = json.loads(
         (ROOT / "frontend" / "assets" / "mods" / "index.json").read_text(encoding="utf-8-sig")
@@ -585,7 +586,7 @@ if getattr(sys, "frozen", False):
         Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
         / "Warframe-Weapon-Loadout-Build" / "cache" / "riven-analysis-statics.json"
     )
-ANALYSIS_STATICS_CACHE_VERSION = 8
+ANALYSIS_STATICS_CACHE_VERSION = 10
 
 
 def _stances_fingerprint() -> str:
@@ -624,6 +625,7 @@ def _analysis_inputs_fingerprint() -> str:
         EXPORT_DIR / "riven_templates.json",
         EXPORT_DIR / "incarnon_defaults.json",
         ROOT / "data" / "source-lock.json",
+        ROOT / "data" / "mechanics" / "combat-reference.json",
         # The mechanics override sidecar currently feeds only the manual
         # simulation/audit path (fail-closed diagnostics); it is not consumed
         # by the static optimizer candidate set yet, so changing its notes
@@ -635,6 +637,12 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("projectile_events.py"),
         Path(optimizer.__file__).with_name("runtime_adapters.py"),
         Path(optimizer.__file__).with_name("combat_events.py"),
+        Path(optimizer.__file__).with_name("combat_replay.py"),
+        Path(optimizer.__file__).with_name("manual_combat.py"),
+        Path(optimizer.__file__).with_name("search_combat.py"),
+        Path(optimizer.__file__).with_name("event_profiles.py"),
+        Path(optimizer.__file__).with_name("riven_fusion.py"),
+        EXPORT_DIR / "arcanes.json",
         Path(__file__),  # app.py — 运行时补丁与分析入口语义
     )
     for path in engine_paths:
@@ -1053,6 +1061,9 @@ INCARNON_UPGRADE_LABELS = {
     "WEAPON_HEADSHOT_MULTIPLIER": "爆头倍率",
     "WEAPON_CRIT_CHANCE_BODY_PART": "弱点部位暴击几率",
     "WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE": "对异常目标伤害",
+    "WEAPON_DAMAGE_WEAKPOINT": "弱点伤害",
+    "WEAPON_CRIT_CHANCE_WEAKPOINT": "弱点暴击几率",
+    "WEAPON_MELEE_HEAVY_ATTACK_DAMAGE": "重击伤害",
     "WEAPON_DAMAGE_TYPE_BIAS": "伤害类型占比",
     "WEAPON_EXPLOSION_RADIUS": "爆炸半径",
     "WEAPON_PROC_DAMAGE": "异常伤害",
@@ -1101,22 +1112,9 @@ def _riven_code_label(code: str) -> str:
 
 
 def _fusion_stat_codes(weapon_type: str) -> frozenset[str]:
-    """该武器类型的融合词条码集合（riven_templates.fusionRecipes 的
-    result 集合）。融合词条仅正面、每卡限 1 条——分析入口用它做
-    fail-closed 校验。"""
-    templates = EXPORTS.get("rivenTemplates")
-    recipes = (
-        templates.get("fusionRecipes")
-        if isinstance(templates, Mapping)
-        else None
-    ) or []
-    return frozenset(
-        str(recipe.get("result"))
-        for recipe in recipes
-        if isinstance(recipe, Mapping)
-        and str(recipe.get("weaponType") or "") == weapon_type
-        and recipe.get("result")
-    )
+    """Keep UI, input validation and recommenders on the same trait pool."""
+    return optimizer._fusion_codes_from_templates(EXPORTS.get("rivenTemplates") or {}, weapon_type)
+
 
 
 def _incarnon_effect_text(effect: Mapping[str, Any]) -> str | None:
@@ -1162,6 +1160,7 @@ def _incarnon_effect_text(effect: Mapping[str, Any]) -> str | None:
 
 
 def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
+    from wfarsenal.incarnon_conditions import describe as describe_condition
     rows = []
     incarnon = weapon.get("incarnon")
     adapter_key = optimizer._path_basename(incarnon.get("adapter")) if isinstance(incarnon, Mapping) else ""
@@ -1179,19 +1178,20 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
             continue
         options = []
         for branch in branches:
+            conditional_sources = {str(c.get('sourcePath') or branch.get('path')) for c in branch.get('conditionalEffects') or []}
             effects = [
                 text
                 for text in (
                     _incarnon_effect_text(effect)
                     for effect in branch.get("effects") or ()
-                    if isinstance(effect, Mapping)
+                    if isinstance(effect, Mapping) and str(effect.get('sourcePath') or branch.get('path')) not in conditional_sources
                 )
                 if text
             ]
             for conditional in branch.get("conditionalEffects") or ():
                 if not isinstance(conditional, Mapping):
                     continue
-                condition = INCARNON_STRINGS.get(str(conditional.get("conditionTag") or ""), "条件生效时")
+                condition = describe_condition(conditional, INCARNON_STRINGS)
                 effects.extend(
                     f"{condition}：{text}"
                     for effect in conditional.get("effects") or ()
@@ -1200,12 +1200,16 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
                     if text
                 )
             unsupported = []
-            if branch.get("conditionalEffects"):
-                unsupported.append("含条件效果；未支持的条件部分不会计入")
-            if branch.get("runtimeScripts"):
-                # 「运行时脚本」= 游戏内由脚本驱动的动态效果（形态切换、叠层联动等），
-                # 数据快照无法静态回放，不参与解算但描述照常展示。
-                unsupported.append("含游戏内动态脚本效果（如形态/叠层联动）；该部分不参与解算")
+            for conditional in branch.get('conditionalEffects') or []:
+                condition_text = describe_condition(conditional, INCARNON_STRINGS)
+                if not conditional.get('effects'):effects.append(condition_text)
+                source = str(conditional.get('sourcePath') or '')
+                if 'Burston' in source and ('Tier1ASubMod' in source or 'Tier2B' in source or 'Tier3A' in source):
+                    effects.append('此条件在真实循环回放中逐事件结算；面板不作为常驻加成')
+                else:unsupported.append(condition_text+'：未建模的事件/角色条件不计入，不能当作常驻')
+            if branch.get('runtimeScripts') and not branch.get('conditionalEffects'):
+                effects.append(describe_condition({'runtimeScripts':branch['runtimeScripts']}, INCARNON_STRINGS))
+                unsupported.append('脚本参数可读，尚未建立完整事件适配')
             if branch.get("unresolvedReferences"):
                 unsupported.append("含未解析引用")
             options.append({
@@ -1503,7 +1507,8 @@ def _score_with_special_card(
     passives: optimizer._Card | None,
     target_context: Mapping[str, Any] | None,
 ) -> tuple[float, Any, Scenario]:
-    cards = [*evaluation.cards]
+    bound = getattr(evaluation.stats, "_combat_inputs", {})
+    cards = list(bound.get("cards") or evaluation.cards)
     if card is not None:
         cards.append(card)
     effect_cards = [passives, *cards] if passives is not None else cards
@@ -1518,6 +1523,7 @@ def _score_with_special_card(
     events = optimizer.evaluate_projectile_events(
         weapon, effects, scenario=derived_scenario
     )
+    optimizer._bind_combat_inputs(stats, weapon, cards, effects, derived_scenario, passives)
     return optimizer._score(stats, metric, events, target_context), stats, derived_scenario
 
 
@@ -1558,10 +1564,9 @@ def _auto_exilus(
             choices.append((score, relation == "matched", -drain, -rank, str(row.get("path")), row, rank, drain, relation, stats, derived_scenario))
     if not choices:
         return evaluation, None
-    # Exilus is a dedicated slot: prefer its matching polarity first, then
-    # maximize modeled gain; the rank/drain tie-breakers keep a zero-rank card
+    # Exilus maximizes modeled gain first, then matching polarity; the rank/drain tie-breakers keep a zero-rank card
     # when leveling it adds no supported primary effect.
-    choices.sort(key=lambda item: (item[1], item[0], item[2], item[3], item[4]), reverse=True)
+    choices.sort(key=lambda item: (item[0], item[1], item[2], item[3], item[4]), reverse=True)
     score, _matched, _drain_key, _rank_key, _path, row, rank, drain, relation, stats, derived_scenario = choices[0]
     # ── 无收益不选（2026-09-24 用户反馈）─────────────────────────────────
     # 工具池大量卡没有已建模词条（NONE 占位/空 effects）——全员与基准
@@ -1590,16 +1595,16 @@ def _auto_exilus(
 def _forma_summary(
     weapon: Mapping[str, Any], cards: tuple[optimizer._Card, ...], stance: Mapping[str, Any] | None
 ) -> dict[str, int]:
-    native = Counter(str(value) for value in list(weapon.get("polarities") or ())[:8])
+    native = list(weapon.get('polarities') or ())[:8]
     regular = 0
     umbra = 0
-    for card in cards:
-        polarity = str(card.polarity or "")
-        if not polarity or polarity == "AP_UNIVERSAL":
+    for index, card in enumerate(cards):
+        polarity = str(card.polarity or '')
+        if not polarity or polarity == 'AP_UNIVERSAL':
             continue
-        if native[polarity] > 0:
-            native[polarity] -= 1
-        elif polarity in {"AP_UMBRA", "AP_ULTIMATE"}:
+        if index < len(native) and (native[index] == polarity or native[index] == 'AP_ANY'):
+            continue
+        if polarity in {'AP_UMBRA', 'AP_ULTIMATE'}:
             umbra += 1
         else:
             regular += 1
@@ -1735,7 +1740,7 @@ def build_catalog() -> dict[str, Any]:
         rows = []
         # 该类型可融合获得的词条（有配方的类型才有融合词条；无配方类型
         # 的融合码从下拉里整体剔除——既不能洗出也不能融合）。
-        type_fusable = _recipes_by_type.get(weapon_type) or {}
+        type_fusable = _fusion_stat_codes(weapon_type)
         for code in base_values:
             rule = RIVEN_RULES.get(code)
             if rule is None:
@@ -1743,7 +1748,7 @@ def build_catalog() -> dict[str, Any]:
             if code in optimizer._FUSION_LINE_CODES and code not in type_fusable:
                 continue
             label, upgrade_type, _, _, _, unit, _, can_positive, can_negative = rule
-            recipe = type_fusable.get(code)
+            recipe = (_recipes_by_type.get(weapon_type) or {}).get(code)
             rows.append(
                 {
                     "code": code,
@@ -1758,17 +1763,17 @@ def build_catalog() -> dict[str, Any]:
                         {
                             "isFusion": True,
                             "fusionRecipe": {
-                                "primary": recipe.get("primary"),
+                                "primary": (recipe or {}).get("primary"),
                                 "primaryLabel": _riven_code_label(
-                                    str(recipe.get("primary") or "")
+                                    str((recipe or {}).get("primary") or "")
                                 ),
-                                "secondary": recipe.get("secondary"),
+                                "secondary": (recipe or {}).get("secondary"),
                                 "secondaryLabel": _riven_code_label(
-                                    str(recipe.get("secondary") or "")
+                                    str((recipe or {}).get("secondary") or "")
                                 ),
                             },
                         }
-                        if recipe is not None
+                        if code in type_fusable
                         else {}
                     ),
                 }
@@ -2115,7 +2120,7 @@ def _manual_mod_rows() -> list[dict[str, Any]]:
         # Aura/Warframe cards can carry weapon effects, but they are installed
         # on a Warframe and must never appear in the weapon MOD picker.
         compatibility = str(mod.get("compatibility") or "").casefold()
-        if "powersuit" in compatibility or "/aura/" in path.casefold():
+        if 'powersuit' in compatibility or '/aura/' in path.casefold():
             continue
         # A mod qualifies when at least one weapon effect is supported. The
         # card-level support.weapon flag is false for Amalgam-style hybrids
@@ -2213,7 +2218,19 @@ def _manual_mod_rows() -> list[dict[str, Any]]:
             "effects": [_refresh_effect_support(effect) for effect in (mod.get("effects") or ())],
             "conditionalEffects": list(mod.get("conditionalEffects") or ()),
             "mechanicOverride": mechanic_override,
+            "iconAsset": _MOD_ART_INDEX.get(path),
+            "art": _MOD_ART_INDEX.get(path),
+            "effectsZhByRank": None,
+            "effectsZh": None,
         }
+        indexed = _mod_art_payload.get("mods", {}).get(path) if isinstance(_mod_art_payload, Mapping) else None
+        if isinstance(indexed, Mapping):
+            row["iconAsset"] = indexed.get("art") or row.get("iconAsset")
+            row["art"] = row["iconAsset"]
+            row["effectsZhByRank"] = indexed.get("effectsZhByRank")
+            row["effectsZh"] = indexed.get("effectsZh")
+            if indexed.get("description"):
+                row["description"] = "；".join(indexed["description"]) if isinstance(indexed["description"], list) else indexed["description"]
         identity = (row["nameZh"] or row["nameEn"], row["compatibility"])
         all_rows_by_path[path] = row
         source_paths_by_identity.setdefault(identity, []).append(path)
@@ -2264,6 +2281,9 @@ def _arcane_effect_summary(
         "WEAPON_PROJECTILE_SPEED": "弹速",
         "WEAPON_RANGE": "攻击范围",
         "WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE": "对异常目标伤害",
+    "WEAPON_DAMAGE_WEAKPOINT": "弱点伤害",
+    "WEAPON_CRIT_CHANCE_WEAKPOINT": "弱点暴击几率",
+    "WEAPON_MELEE_HEAVY_ATTACK_DAMAGE": "重击伤害",
         "WEAPON_FREEZE_DAMAGE": "冰冻伤害",
         "WEAPON_FIRE_DAMAGE": "火焰伤害",
         "WEAPON_ELECTRICITY_DAMAGE": "电击伤害",
@@ -2338,6 +2358,13 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
         duration = trigger.get("duration")
         stacks = trigger.get("maxStacks")
         condition_zh = _localized_condition(trigger.get("conditionTag"))
+        official_levels = arcane.get("effectsZhByRank") or []
+        if official_levels:
+            effect = "；".join(official_levels[-1])
+            # Full localized descriptions retain script conditions and units;
+            # synthetic materialized effects are only a calculation channel.
+            if "：" in effect:
+                condition_zh = effect.split("：", 1)[0]
         trigger_bits = [condition_zh]
         if isinstance(chance, (int, float)):
             trigger_bits.append(f"{float(chance) * 100:g}%")
@@ -2353,7 +2380,7 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
         effects_by_rank: list[list[str]] = []
         for rank in range(max_rank_int + 1):
             line = _arcane_effect_summary(arcane, rank)
-            effects_by_rank.append([line] if line else [])
+            effects_by_rank.append(list(official_levels[min(rank, len(official_levels) - 1)]) if official_levels else ([line] if line else []))
         rows.append({
             "path": str(arcane.get("path")),
             "nameZh": str(arcane.get("nameZh") or arcane.get("nameEn") or ""),
@@ -2364,6 +2391,10 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
             "iconAsset": f"/assets/arcanes/{Path(icon).name}" if icon else None,
             "compatibility": compatibility,
             "slotKind": slot_kind,
+            "equipmentType": arcane.get("equipmentType"),
+            "compatibilityTags": list(arcane.get("compatibilityTags") or ()),
+            "incompatibilityTags": list(arcane.get("incompatibilityTags") or ()),
+            "descriptionSource": arcane.get("descriptionSource"),
             "trigger": {
                 "chance": trigger.get("chance"),
                 "duration": trigger.get("duration"),
@@ -2375,7 +2406,7 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
             "runtime": bool(arcane.get("runtimeScripts")),
             "effect": effect,
             "effectsZhByRank": effects_by_rank,
-            "description": " · ".join(bit for bit in [effect, *trigger_bits] if bit),
+            "description": effect if official_levels else " · ".join(bit for bit in [effect, *trigger_bits] if bit),
         })
     rows.sort(key=lambda row: (row["nameZh"].casefold(), row["path"]))
     return rows
@@ -2652,9 +2683,7 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     # ── 融合词条规则（游戏规则，2026-09-24 用户确认）────────────────────
     # 融合词条（Advanced Traits）仅正面、每卡限 1 条。fail-closed 校验：
     # 负面融合词条直接拒绝；正面融合词条超过 1 条直接拒绝。
-    # 类型可用性：本 build 融合配方只对部分武器类型发布（rifle 有 18 条
-    # MergeOptions；pistol/shotgun/archgun/melee 为空/缺失）——无配方类型
-    # 的融合词条不可能获得，直接拒绝。
+    # 类型可用性来自显式 AdvancedTrait 模板；配方缺失不能推断该词条不存在。
     _fusion_codes = _fusion_stat_codes(weapon["weaponType"])
     fusion_lines = [
         s for s in raw_stats
@@ -2674,7 +2703,7 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
         if _code in optimizer._FUSION_LINE_CODES and _code not in _fusion_codes:
             raise SimulationError(
                 f"融合词条 {_code} 对 {weapon['weaponType']} 类型不可用"
-                "（该类型本版本没有融合配方）"
+                "（该类型当前模板没有该融合词条）"
             )
 
     bases = RIVEN_BASE_VALUES.get(weapon["weaponType"], {})
@@ -3022,7 +3051,13 @@ def build_weapon_payload(
     #   缺省/false          — 常驻灵化（170 充能池近似零装填；紫卡分析
     #                         维持此口径）。
     incarnon_cycle_flag = payload.get("incarnonCycle") is True
-    scenario = optimizer._scenario(metric, incarnon_cycle=incarnon_cycle_flag)
+    scenario = optimizer._scenario(metric, incarnon_cycle=incarnon_cycle_flag, aiming=payload.get("aiming") is True)
+    scenario = replace(
+        scenario, heavy_attack=bool(payload.get('heavyAttack')) or scenario.heavy_attack, trigger_policy=str(payload.get("triggerPolicy") or "emergent"),
+        distance=payload.get("distance"), combo_tier=int(payload.get("comboTier") or 0),
+    )
+    if scenario.trigger_policy not in {'emergent', 'assumed_max'}:
+        raise SimulationError('triggerPolicy must be emergent or assumed_max')
     stance = _resolve_stance(
         selected_weapon, catalog_weapon["weaponType"], payload.get("stancePath")
     )
@@ -3047,14 +3082,11 @@ def build_weapon_payload(
         or (
             str(card.record.get("path") or "") in MANUAL_MODS_BY_PATH
             and str(card.record.get("path") or "") not in UTILITY_MOD_PATHS
-            # 派系增伤卡（净化/灭亡/驱逐 XX）按指定目标的派系弱点定向加成——
-            # 配装页维持目标中立口径，禁止优化器选入（与分析页同规则）。
-            and str(card.record.get("path") or "") not in FACTION_DAMAGE_MOD_PATHS
         )
     ]
     enemy_path = payload.get("enemy")
     if not isinstance(enemy_path, str) or enemy_path not in MANUAL_ENEMIES_BY_PATH:
-        enemy_path = MANUAL_ENEMIES[0]["path"]
+        enemy_path = _BENCHMARK_ENEMY_PATH
     target = MANUAL_ENEMIES_BY_PATH[enemy_path]
     if str(payload.get("damageModel") or "target").casefold() == "custom":
         target = _custom_enemy_snapshot(
@@ -3139,10 +3171,8 @@ def build_weapon_payload(
         )
     required_keys = [candidates_by_path[p] for p in required_mod_paths]
     forbidden_keys = [candidates_by_path[p] for p in forbidden_mod_paths if p in candidates_by_path]
-    # ── 赋能纳入优化（assumed-max 100% 触发口径）──────────────────────
-    # 配好的武器赋能走 passive 通道参与「填充最优」：与手动解算同一条
-    # _prepare_manual_arcanes 路径（触发期望按无事件 stats 推导，即满层
-    # 口径），评估开销为零（passive 合并一次，不随候选组合重算）。
+    # 保留真实赋能记录及显式覆盖。每个候选由共享事件回放解析触发；
+    # 用户关闭此项时仅求解评分排除赋能，手动实战回放仍使用已装备赋能。
     optimize_arcanes = payload.get("optimizeWithArcanes")
     optimize_with_arcanes = (
         bool(optimize_arcanes)
@@ -3163,7 +3193,7 @@ def build_weapon_payload(
         if isinstance(raw_arcanes, list):
             arcane_slot_count = {"weapon": 0, "warframe": 0}
             seen_paths: set[str] = set()
-            for item in raw_arcanes[:3]:
+            for item in raw_arcanes[:4]:
                 if not isinstance(item, Mapping):
                     continue
                 path = str(item.get("path") or "").strip()
@@ -3191,54 +3221,58 @@ def build_weapon_payload(
                     rank = min(rank, max_rank)
                 else:
                     rank = max_rank or 0
-                validated.append({"path": path, "rank": rank})
+                arcane_row = {'path': path, 'rank': rank}
+                if item.get('stacks') is not None:
+                    arcane_row['stacks'] = _manual_int(item['stacks'], 'arcanes.stacks', low=0)
+                if item.get('uptime') is not None:
+                    arcane_row['uptime'] = _manual_number(item['uptime'], 'arcanes.uptime', low=0, high=1)
+                validated.append(arcane_row)
         if validated:
             try:
-                # assumed-max 口径（wfsim StackPolicy::AssumedMax 的移植）：
-                # stacks = 该赋能触发器的 maxStacks（满层）、uptime 1.0。
-                # _prepare_manual_arcanes 按 per-arcane 触发器解析真实层数上限，
-                # 而不是拍 1 层。
-                assumed_rows = []
-                for item in validated:
-                    record = optimizer.resolve_record(
-                        EXPORTS["arcanes"], item["path"], kind="arcane"
-                    )
-                    trigger = record.get("trigger") if isinstance(record.get("trigger"), Mapping) else {}
-                    max_stacks = trigger.get("maxStacks")
-                    assumed_rows.append(
-                        {
-                            "query": item["path"],
-                            "rank": item["rank"],
-                            "stacks": int(max_stacks) if isinstance(max_stacks, int) and max_stacks > 0 else 1,
-                            "uptime": 1.0,
-                        }
-                    )
+                # 静态面板载体附带 event_arcanes；事件准备阶段替换条件项。
                 arcane_card, _states, arcane_unsupported_opt, _normalized = _prepare_manual_arcanes(
-                    assumed_rows,
-                    selected_weapon,
-                    event_stats=None,
-                    headshot_chance=0.0,
+                    validated, selected_weapon, event_stats=None,
+                    headshot_chance=float(payload.get("headshotChance") or 0.0),
                 )
                 if arcane_card is not None:
                     arcane_passives = optimizer._merge_passives(incarnon_card, arcane_card)
             except (SimulationError, TypeError, ValueError):
                 arcane_passives = incarnon_card
                 arcane_unsupported_opt = ["optimize-arcanes-merge-failed-using-incarnon-only"]
-    # 标准靶 KPM 口径（与分析页统一，用户指定的解算基准）：170 级钢铁之路
-    # 卓越者超宏凶魂百夫长，30 秒窗口击杀数。流派不钳制（实战双修口径）。
-    # 流派钳制已移除（用户确认实战即双修混搭）：全量池单次求解。
-    # 标准靶 KPM 口径（与分析页统一）：170 级钢铁之路卓越者超宏凶魂百夫长，
-    # 30 秒窗口击杀数——触发从零层爬升、护甲/超宏/等级缩放全部参与。
+    external = _external_buff_effects(payload.get("externalBuffs"))
+    if external:
+        arcane_passives = optimizer._merge_passives(arcane_passives, optimizer._Card(
+            key="__external__", record=None, rank=0, effects=tuple(external),
+            skipped=(), drain=0, polarity=None,
+        ))
+    equipped_riven = None
+    if isinstance(payload.get("riven"), Mapping) and payload["riven"].get("stats"):
+        lines, reasons = optimizer._wire_lines(payload["riven"]["stats"])
+        if reasons:
+            arcane_unsupported_opt.extend(reasons)
+        equipped_riven = optimizer._card_from_lines(lines)
+        if payload['riven'].get('polarity') in _RIVEN_FIXED_POLARITIES:
+            equipped_riven = replace(equipped_riven, polarity=payload['riven']['polarity'])
+    # 当前目标的 30 秒事件 KPM；无有效敌人时使用既有基准目标。
     benchmark_context = _benchmark_target_context(
         stance_multiplier=stance_multiplier,
         status_rate_multiplier=status_rate_multiplier,
     )
+    if isinstance(target, Mapping) and target.get("health"):
+        benchmark_context = dict(target_context, windowSeconds=_BENCHMARK_WINDOW_SECONDS)
+    benchmark_context["headshotChance"] = _manual_number(
+        payload.get("headshotChance", 0.0), "headshotChance", low=0.0, high=1.0
+    )
+    forced = payload.get('forcedProcs') or {}
+    if not isinstance(forced, Mapping):
+        raise SimulationError('forcedProcs must be an object')
+    benchmark_context['forcedProcs'] = {str(k): _manual_number(v, 'forcedProcs', low=0) for k,v in forced.items()}
     with ANALYZE_LOCK:
         try:
             evaluation = optimizer._optimize(
                 selected_weapon,
                 candidates,
-                None,
+                equipped_riven,
                 scenario=scenario,
                 metric="killsPerMinute" if dual_route else objective,
                 passives=arcane_passives,
@@ -3287,7 +3321,11 @@ def build_weapon_payload(
             raise SimulationError(
                 f"optimizer returned no usable MOD build for fire mode {selected_fire_mode} metric {metric}"
             )
-        build = optimizer._build_payload(selected_weapon, evaluation, None, arcane_passives)
+        build = optimizer._build_payload(selected_weapon, evaluation, equipped_riven, arcane_passives)
+        if equipped_riven is not None:
+            build["riven"] = {**dict(payload["riven"]), "slot": evaluation.riven_index}
+            for index, mod in enumerate(build["mods"]):
+                mod["slot"] = index + (1 if index >= evaluation.riven_index else 0)
         evaluated_metrics = optimizer._metrics(evaluation.stats)
         for key in ("shotDamage", "burstDps", "sustainedDps", "attackDps"):
             build[key] = evaluated_metrics[key]
@@ -3298,14 +3336,17 @@ def build_weapon_payload(
         build["objectiveScore"] = evaluation.score
         build["stance"] = stance
         build["exilus"] = selected_exilus
-        build["forma"] = _forma_summary(selected_weapon, evaluation.cards, stance)
+        ordered_cards = list(evaluation.cards)
+        if equipped_riven is not None:
+            ordered_cards.insert(evaluation.riven_index, equipped_riven)
+        build['forma'] = _forma_summary(selected_weapon, ordered_cards, stance)
         alternate_modes = _alternate_build_modes(
             weapon_record, evaluation, selected_fire_mode, scenario, incarnon_card
         )
 
     skipped = [
         f"optimizer-assumption: {slot_count} ordinary slots, {capacity_limit} capacity after stance, Catalyst and matching ordinary-slot Forma",
-        "optimizer-objective: 标准靶 KPM（170 级钢铁之路卓越者超宏凶魂百夫长，30s 击杀数）；触发从零层爬升、护甲/超宏/等级缩放全部参与，流派不钳制（实战双修口径）",
+        "optimizer-objective: 当前目标/爆头率/瞄准/灵化循环的 30 秒事件 KPM；未选择有效目标时回退标准靶",
         (
             f"optimizer-profile: {_PROFILE_LABELS[profile]}档"
             + (
@@ -3331,8 +3372,12 @@ def build_weapon_payload(
         skipped.append("optimizer-scope: " + " · ".join(scope_bits))
     if optimize_with_arcanes and arcane_passives is not incarnon_card:
         skipped.append(
-            "optimizer-arcanes: 已配置的武器赋能按满层（100% 触发）口径参与本次解算"
+            "optimizer-arcanes: 已配置赋能按当前触发策略参与每个候选的同一事件回放评分"
         )
+    if not optimize_with_arcanes:
+        skipped.append('optimizer-arcanes: 求解已排除赋能；已装备赋能仍参与手动回放，两者分数不可直接比较')
+    else:
+        skipped.append('optimizer-trigger-policy: ' + scenario.trigger_policy + '；显式层数/覆盖率按手动设置')
     skipped.extend(arcane_unsupported_opt)
     if element_target:
         skipped.append(
@@ -3346,6 +3391,11 @@ def build_weapon_payload(
         "weaponType": catalog_weapon["weaponType"],
         "fireMode": selected_fire_mode,
         "metric": metric,
+        "scoringModel": "loadout-events-v1" if dual_route else "panel-heavy",
+        'scoreMetric': 'killsPerMinute' if dual_route else objective,
+        'evaluationScenario': {'aiming': scenario.aiming, 'incarnonCycle': scenario.incarnon_cycle, 'triggerPolicy': scenario.trigger_policy, 'includeArcanes': optimize_with_arcanes},
+        "evaluationContext": {k: v for k, v in benchmark_context.items() if k != "target"},
+        "evaluationTarget": optimizer.record_identity(benchmark_context.get("target") or {}),
         "buildArchetype": build_archetype,
         "archetypeComparison": None,
         "slotCount": slot_count,
@@ -3368,7 +3418,7 @@ def build_weapon_payload(
             evaluation.stats, catalog_weapon["weaponType"], stance_multiplier
         ),
         "alternateModes": alternate_modes,
-        "unsupported": sorted(set(build.get("unsupported") or ()) | set(incarnon_unsupported)),
+        "unsupported": sorted(set(build.get("unsupported") or ()) | set(incarnon_unsupported) | set(evaluation.stats.unsupported)),
         "skipped": list(dict.fromkeys(skipped)),
         "profile": profile,
         "limitations": CATALOG["buildOptions"]["limitations"],
@@ -3387,6 +3437,7 @@ def build_weapon_payload(
             "weaponType": catalog_weapon["weaponType"],
             "stanceMultiplier": stance_multiplier,
             "candidates": candidates,
+            "riven": equipped_riven,
         }
         return result, engine_context
     return result
@@ -3425,44 +3476,25 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
     # 基准解算：与 /api/build 同路径（无紫卡最优配装）。求解语境里的
     # 必选/禁选/数量约束全部参与——最优紫卡是在「当前限制下的最优配装」
     # 之上定义的。
-    build_result, engine = build_weapon_payload(payload, return_engine_context=True)
+    build_result, engine = build_weapon_payload({**payload, 'riven': None}, return_engine_context=True)
     weapon_record = engine["weapon"]
     weapon_type = engine["weaponType"]
     baseline = engine["evaluation"]
     benchmark_context = engine["benchmarkContext"]
-    # 评分靶自适应（与分析页同口径）：基准配装已秒杀饱和（KPM ≥ 重爬
-    # 平衡点）时，求解语境升到 Lv9999——饱和平台上所有组合 tie 同一
-    # KPM，求解器失去排序信号。KPM 展示值不受影响。
-    # The window model advances in 250 ms slices, so one settled kill per
-    # slice is 240 KPM.  Using 120 here promoted ordinary fast weapons to the
-    # Lv9999 fallback too early and flattened the Riven search signal.
-    _SOLVE_SATURATION_KPM = 240.0
-    if (
-        benchmark_context is not None
-        and benchmark_context.get("level") != 9999
-        and baseline.score >= _SOLVE_SATURATION_KPM
-    ):
-        benchmark_context = dict(benchmark_context, level=9999)
-        baseline = optimizer._optimize(
-            weapon_record,
-            engine["candidates"],
-            None,
-            scenario=engine["scenario"],
-            metric=engine["metric"],
-            passives=engine["passives"],
-            target_context=benchmark_context,
-            profile="fast",
-        )
+    # Keep the user's actual target throughout; there is no 240-KPM timestep ceiling.
     disposition = _finite_positive(weapon_record.get("omegaAttenuation")) or 1.0
     template_bases = optimizer._template_bases(
         EXPORTS.get("rivenTemplates") or {}, weapon_type
     )
+    fusable = optimizer._fusion_codes_from_templates(EXPORTS.get('rivenTemplates') or {}, weapon_type)
     positive_candidates, _ = optimizer._candidate_lines(
-        weapon_type, disposition, (), negative=False, bases=template_bases
+        weapon_type, disposition, (), negative=False, bases=template_bases, available_fusion_codes=fusable
     )
     negative_candidates, _ = optimizer._candidate_lines(
-        weapon_type, disposition, (), negative=True, bases=template_bases
+        weapon_type, disposition, (), negative=True, bases=template_bases, available_fusion_codes=fusable
     )
+    special = build_result.get('exilus')
+    special_card = _utility_card_at_rank(special, engine['scenario'], special['rank']) if special else None
     with ANALYZE_LOCK:
         recommendation = optimizer.recommend_optimal_riven(
             weapon_record,
@@ -3476,6 +3508,12 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
             target_context=benchmark_context,
             budget_seconds=budget,
             top_limit=top_limit,
+            slot_count=build_result['slotCount'],
+            min_fill=payload.get('minFill'),
+            max_fill=payload.get('maxFill'),
+            required_damage_type=optimizer._ELEMENT_TARGET_TYPES.get(str(payload.get('elementTarget') or payload.get('element') or '')),
+            special_cards=(special_card,) if special_card else (),
+            special_capacity_cost=int(special.get('drain') or 0) if special_card else 0,
         )
     recommendation["weapon"] = optimizer.record_identity(weapon_record)
     recommendation["weaponType"] = weapon_type
@@ -3486,6 +3524,10 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
         "capacity": build_result["capacity"],
     }
     recommendation["metric"] = engine["metric"]
+    recommendation['evaluationContext'] = build_result['evaluationContext']
+    recommendation['evaluationTarget'] = build_result['evaluationTarget']
+    recommendation['scoringModel'] = build_result['scoringModel']
+    recommendation['evaluationScenario'] = build_result['evaluationScenario']
     recommendation["skipped"] = [
         f"recommend-budget: {int(budget)} 秒 anytime 预算（粗排 → beam 组合 → 精排，时间耗尽返回当前最优）",
         f"recommend-candidates: {len(positive_candidates)} 正面 / {len(negative_candidates)} 负面词条（理论满数值口径）",
@@ -3507,9 +3549,7 @@ MANUAL_MODS_BY_PATH.update({
 })
 UTILITY_MODS_BY_PATH = {row["path"]: row for row in CATALOG_UTILITY_MODS}
 MANUAL_ARCANES_BY_PATH = {row["path"]: row for row in MANUAL_ARCANES}
-# 派系增伤卡（净化/灭亡/驱逐/牺牲 XX Prime 等，GAMEPLAY_FACTION_DAMAGE 词条）：
-# 按指定目标的派系弱点定向加成。武器配装页维持目标中立口径——优化器候选池
-# 与配装页选择器都不收录（手动模拟请求如显式传入则照常解算）。
+# 派系卡目录标记；按请求目标计入，选择器与自动配装保持可选。
 FACTION_DAMAGE_MOD_PATHS = frozenset(
     row["path"]
     for row in (*MANUAL_MODS, *MANUAL_MOD_VARIANTS)
@@ -3520,7 +3560,7 @@ FACTION_DAMAGE_MOD_PATHS = frozenset(
     )
 )
 # 目录行打标（引用同一 dict，打标对已下发的 manualMods 同样生效）：
-# 前端配装页选择器按 factionDamage 标记过滤派系增伤卡。
+# 前端保留 factionDamage 标记用于分类，不再从候选池隐藏。
 for _row in (*MANUAL_MODS, *MANUAL_MOD_VARIANTS):
     if _row["path"] in FACTION_DAMAGE_MOD_PATHS:
         _row["factionDamage"] = True
@@ -4238,6 +4278,8 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
         "capacity_limit": capacity_limit,
         "slot_polarities": kernel_slot_polarities,
     }
+    if isinstance(payload.get('riven'), Mapping) and isinstance(payload['riven'].get('slot'), int):
+        common['riven_slot'] = payload['riven']['slot']
     weapon_override: dict[str, Any] = {}
     if innate_selection is not None:
         weapon_override["innateElements"] = [innate_selection]
@@ -4654,60 +4696,25 @@ def _collect_trigger_sources(ctx: Mapping[str, Any]) -> list[dict[str, Any]]:
 
 
 def _benchmark_timeline_stats(modded: Mapping[str, Any]):
-    """Rebuild a ModdedStats-like view from the serialized moddedStats dict.
+    # Restore all combat fields without replacing valid zero values.
+    from dataclasses import fields
+    from wfarsenal.damage import ModdedStats, ModEffect
 
-    The windowed replay needs the dataclass fields (total_damage, crit etc.);
-    simulate responses carry the serialized camelCase dict.  Only the fields
-    the stepped model reads are mapped — anything missing falls back to the
-    class defaults, which the replay tolerates (unknown fields simply do not
-    amplify).
-    """
-    from wfarsenal.damage import ModdedStats
-
-    def _num(*keys, default=0.0):
-        for key in keys:
-            value = modded.get(key)
-            if isinstance(value, (int, float)) and not isinstance(value, bool):
-                return float(value)
-        return default
-
-    damage_types = modded.get("damageTypes") or modded.get("damage_types") or {}
-    if isinstance(damage_types, Mapping):
-        damage_types = {str(k): float(v) for k, v in damage_types.items() if isinstance(v, (int, float))}
-    else:
-        damage_types = {}
-    # CO（对触发目标增伤）回放重建：序列化 dict 不带 co_bucket（ModEffect
-    # 不可 JSON 化），用 statusConditionDamageMultiplier（面板预乘的 CO 因子）
-    # 与 coAssumedCount 反推 —— 窗口模型需要剥离预乘并按每步活层数重算。
-    co_assumed = float(modded.get("coAssumedCount") or 0.0)
-    co_factor = float(modded.get("statusConditionDamageMultiplier") or 1.0)
-    co_bucket = []
-    if co_assumed > 0 and co_factor > 1.0:
-        # 近似重建一张 CO 效果：per-type 加成 = (factor - 1) / assumed。
-        from wfarsenal.damage import ModEffect
-        co_bucket = [
-            ModEffect(
-                upgrade_type="WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE",
-                operation="STACKING_MULTIPLY",
-                value=(co_factor - 1.0) / co_assumed,
-                damage_type="DT_ANY",
-                supported=True,
-            )
-        ]
-    return ModdedStats(
-        damage_types=damage_types,
-        crit_chance=_num("critChance", "crit_chance"),
-        crit_multiplier=_num("critMultiplier", "crit_multiplier", default=1.0) or 1.0,
-        status_chance=_num("statusChance", "status_chance"),
-        multishot=_num("multishot", default=1.0) or 1.0,
-        fire_rate=_num("fireRate", "fire_rate", default=1.0) or 1.0,
-        magazine=_num("magazine"),
-        reload_time=_num("reloadTime", "reload_time"),
-        proc_damage_multiplier=_num("procDamageMultiplier", "proc_damage_multiplier", default=1.0) or 1.0,
-        proc_duration_multiplier=_num("procDurationMultiplier", "proc_duration_multiplier", default=1.0) or 1.0,
-        co_bucket=co_bucket,
-        co_assumed_count=co_assumed,
-    )
+    values = {}
+    for field in fields(ModdedStats):
+        name = field.name
+        camel = name.split('_')[0] + ''.join(x.title() for x in name.split('_')[1:])
+        if name in modded:
+            values[name] = modded[name]
+        elif camel in modded:
+            values[name] = modded[camel]
+    values['co_bucket'] = [
+        x if isinstance(x, ModEffect) else ModEffect(**x)
+        for x in values.get('co_bucket', ())
+    ]
+    if 'innate_element_candidates' in values:
+        values['innate_element_candidates'] = tuple(values['innate_element_candidates'])
+    return ModdedStats(**values)
 
 
 def simulate_manual_payload(payload: Any) -> dict[str, Any]:
@@ -5009,21 +5016,42 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                 replay_stats = _benchmark_timeline_stats(modded)
                 # 触发源打包：已配赋能 + 镀层 MOD + 灵化 on-kill 进化的层数
                 # 规格，窗口模型按 emergent 模拟爬升并输出覆盖率折线。
-                _trigger_sources = _collect_trigger_sources(ctx)
+                # Replay creates verified sources from raw condition records.
                 _policy = str(payload.get("triggerPolicy") or "emergent")
-                windowed = optimizer.windowed_status_damage(
+                from wfarsenal.manual_combat import prepare as prepare_combat
+                from wfarsenal.combat_replay import replay as replay_combat
+                engine = {}
+                simulate(**common, hit_location='body', passive_effects=passive_effects, engine_context_sink=engine)
+                combat = prepare_combat(
+                    engine,
+                    [(optimizer.resolve_record(EXPORTS['mods'], item['path'], kind='mod'),
+                      int(item.get('rank') if item.get('rank') is not None else MANUAL_MODS_BY_PATH.get(item['path'], {}).get('maxRank') or 0), None)
+                     for item in common['mods']],
+                    [(optimizer.resolve_record(EXPORTS['arcanes'], item['path'], kind='arcane'),item['rank'],item) for item in ctx['validated_arcanes']],
+                    cycle_enabled=common['scenario'].incarnon_cycle, assumed=_policy!='emergent',
+                    incarnon_choices=result.get('incarnonChoices'),
+                    affinity_target=_replay_ctx['target'], level=_replay_ctx['level'],
+                    eximus=bool((_replay_ctx['enemy_enhancements'] or {}).get('eximus')),
+                )
+                windowed = replay_combat(
                     replay_stats,
                     _replay_ctx["target"],
                     attacks_per_second=replay_stats.sustained_attack_rate,
+                    headshot_chance=headshot_chance,
+                    armour_strip=float(common.get('armour_strip') or 0.0),
+                    elemental_armour_strip=float(common.get('elemental_armour_strip') or 0.0),
                     window_seconds=_BENCHMARK_WINDOW_SECONDS,
                     level=_replay_ctx["level"],
                     steel_path=_replay_ctx["steel_path"],
                     enemy_enhancements=_replay_ctx["enemy_enhancements"],
                     status_rate_multiplier=_sr_mult,
                     damage_rate_multiplier=_dmg_mult,
-                    trigger_sources=_trigger_sources if _policy == "emergent" else None,
+                    forced_procs=common.get("forced_procs"),
+                    trigger_sources=combat["trigger_sources"],
+                    combat=combat,
                 )
                 result["benchmarkTimeline"] = {
+                    **{k: windowed[k] for k in ("shots", "transforms", "reloads", "syndicateEvents", "syndicateWindow", "limitations", "unsupported")},
                     "model": windowed.get("model"),
                     "windowSeconds": windowed.get("windowSeconds"),
                     "killsPerMinute": windowed.get("killsPerMinute"),
@@ -5193,48 +5221,8 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
     # 并把「其余已入键字段」维持原样，避免行为漂移。
     _riven_cache_value = payload.get("riven") if isinstance(payload.get("riven"), Mapping) else None
     cache_key = json.dumps(
-        {
-            "weapon": payload.get("weapon"),
-            "fireMode": payload.get("fireMode"),
-            "metric": payload.get("metric"),
-            "mods": sorted(
-                (
-                    {"path": item.get("path"), "rank": item.get("rank"), "slot": item.get("slot")}
-                    for item in (payload.get("mods") or [])
-                    if isinstance(item, Mapping)
-                ),
-                key=lambda item: (item.get("slot") is None, item.get("slot"), item.get("path")),
-            ),
-            "enemy": payload.get("enemy"),
-            "level": payload.get("level"),
-            "steelPath": payload.get("steelPath"),
-            "armourStrip": payload.get("armourStrip"),
-            "headshotChance": payload.get("headshotChance"),
-            "scenario": payload.get("scenario"),
-            "incarnonChoices": payload.get("incarnonChoices"),
-            "arcanes": payload.get("arcanes"),
-            # 实际紫卡参与模拟：键必须随之变化（F12 回归 C02 的对象）。
-            "riven": (
-                {
-                    "stats": [
-                        {
-                            "code": str(stat.get("code") or ""),
-                            "value": stat.get("value"),
-                            "negative": bool(stat.get("negative")),
-                        }
-                        for stat in (_riven_cache_value.get("stats") or [])
-                        if isinstance(stat, Mapping)
-                    ],
-                }
-                if _riven_cache_value is not None
-                else None
-            ),
-            "targetSlot": target_slot,
-            "mode": mode,
-            "candidates": sorted(candidates),
-        },
-        sort_keys=True,
-        ensure_ascii=False,
+        {**dict(payload), 'targetSlot': target_slot, 'mode': mode, 'candidates': sorted(candidates)},
+        sort_keys=True, ensure_ascii=False,
     )
     cached = _MOD_GAINS_CACHE.get(cache_key)
     if cached is not None:
@@ -5264,12 +5252,34 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
         )
         for item in ctx["validated_arcanes"]
     )
-    with ANALYZE_LOCK:
-        base_kernel = simulate(**common, hit_location="body", passive_effects=passive_effects)
-    base_value = _mod_gains_metric_value(base_kernel, metric)
+    event_metric = optimizer._objective_metric(metric) in {'sustainedDps', 'attackDps'}
+    if event_metric:
+        metric = 'killsPerMinute'
+
+    def measured_value(arguments, passives, arcs=None):
+        engine = {}
+        with ANALYZE_LOCK:
+            body = simulate(**arguments, hit_location='body', passive_effects=passives, engine_context_sink=engine)
+            weight = ctx['headshot_chance']
+            if not event_metric:
+                if not weight:
+                    return _mod_gains_metric_value(body, metric)
+                head = simulate(**arguments, hit_location='head', passive_effects=passives)
+                return ((1 - weight) * _mod_gains_metric_value(body, metric) + weight * _mod_gains_metric_value(head, metric))
+        from wfarsenal.manual_combat import prepare
+        from wfarsenal.combat_replay import replay
+        enemy = arguments.get('enemy_override') or optimizer.resolve_record(EXPORTS['enemies'], arguments['enemy'], kind='enemy')
+        records = [(optimizer.resolve_record(EXPORTS['mods'], row['path'], kind='mod'), row['rank'], None) for row in arguments['mods']]
+        selected_arcs = ctx['validated_arcanes'] if arcs is None else arcs
+        arc_records = [(optimizer.resolve_record(EXPORTS['arcanes'], row['path'], kind='arcane'), row['rank'], row) for row in selected_arcs]
+        choices = dict(ctx['incarnon_card'].incarnon_choices) if ctx.get('incarnon_card') else {}
+        combat = prepare(engine, records, arc_records, cycle_enabled=arguments['scenario'].incarnon_cycle, assumed=payload.get('triggerPolicy') == 'assumed_max', incarnon_choices=choices, affinity_target=enemy, level=arguments['level'], eximus=bool(arguments['enemy_enhancements'].get('eximus')))
+        st = _benchmark_timeline_stats(body['moddedStats'])
+        return replay(st, enemy, attacks_per_second=st.sustained_attack_rate, window_seconds=_BENCHMARK_WINDOW_SECONDS, headshot_chance=weight, combat=combat, trigger_sources=combat['trigger_sources'], collect_timeline=False, level=arguments['level'], steel_path=arguments['steel_path'], enemy_enhancements=arguments['enemy_enhancements'], armour_strip=arguments['armour_strip'], elemental_armour_strip=arguments['elemental_armour_strip'], forced_procs=arguments['forced_procs'], status_rate_multiplier=arguments['status_rate_multiplier'], damage_rate_multiplier=arguments['damage_rate_multiplier'])['killsPerMinute']
 
     mods_list = [dict(item) for item in ctx["raw_mods"] if isinstance(item, Mapping)]
     base_riven = payload.get("riven") if isinstance(payload.get("riven"), Mapping) else None
+    special_mods = [dict(item) for item in common['mods'] if item.get('slot', 0) >= ctx['slot_count']]
     gains: dict[str, Any] = {}
 
     def _variant_passives(variant_mods: list[dict[str, Any]], skip_riven: bool) -> Any:
@@ -5281,7 +5291,7 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
         """
         if not has_trigger_arcanes:
             return ctx["build_passives"](None, skip_riven=skip_riven)["passive_effects"]
-        variant_common = {**common, "mods": variant_mods}
+        variant_common = {**common, "mods": [*variant_mods, *special_mods]}
         # The probe pass must run WITHOUT passives (the arcane card itself is
         # what we are deriving) — plain ctx passives are fine to omit here
         # because event_stats only reads panel-level fire rate / multishot /
@@ -5290,7 +5300,10 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
             event_stats = simulate(**variant_common, hit_location="body")["moddedStats"]
         return ctx["build_passives"](event_stats, skip_riven=skip_riven)["passive_effects"]
 
+    base_value = measured_value(common, _variant_passives(mods_list, skip_riven=False))
+
     for path in candidates:
+        kept_arcanes = None
         arcane_removal = path.startswith("__arcane__:")
         mechanic_override = WEAPON_MECHANICS_OVERRIDES.get("mods", {}).get(path)
         # F16：sidecar schema v2 的统一口径——"event-unmodeled"（旧）与
@@ -5325,6 +5338,9 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
                     continue
                 try:
                     variant_passives = _build_passives_without_arcane(ctx, kept_arcanes, common)
+                    external = _external_buff_effects(payload.get('externalBuffs'))
+                    if external:
+                        variant_passives = ModEffectList([*variant_passives, *external], skipped=getattr(variant_passives, 'skipped', ()))
                 except (SimulationError, TypeError, ValueError):
                     gains[path] = {"gainPercent": None, "reason": "variant-not-computable"}
                     continue
@@ -5372,11 +5388,11 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
         except (SimulationError, TypeError, ValueError):
             gains[path] = {"gainPercent": None, "reason": "variant-not-computable"}
             continue
-        variant_common = {**common, "mods": normalized}
+        variant_common = {**common, "mods": [*normalized, *special_mods]}
         try:
             with ANALYZE_LOCK:
                 variant_result = simulate(**variant_common, hit_location="body", passive_effects=variant_passives)
-            value = _mod_gains_metric_value(variant_result, metric)
+            value = measured_value(variant_common, variant_passives, kept_arcanes)
             # ── 超容量仍显示贡献（2026-09-24 用户口径）────────────────────
             # 容量只标记「这张卡当前装不下」，不是「这张卡没价值」——贡献
             # 数值照算照显示（选择器/对比视图按 gain 排序时超容量卡也能

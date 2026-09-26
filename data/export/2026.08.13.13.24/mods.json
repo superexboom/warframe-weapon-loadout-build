@@ -4727,7 +4727,8 @@
     "warframe": false,
     "weapon": true
    },
-   "supported": true
+   "supported": true,
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleAmmoMaxMod.png"
   },
   {
    "baseDrain": 6,
@@ -4773,7 +4774,8 @@
     "warframe": false,
     "weapon": true
    },
-   "supported": true
+   "supported": true,
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleDamageAmountMod.png"
   },
   {
    "baseDrain": 4,
@@ -4819,7 +4821,8 @@
     "warframe": false,
     "weapon": true
    },
-   "supported": true
+   "supported": true,
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponElectricityDamageModRifle.png"
   },
   {
    "baseDrain": 4,
@@ -4865,7 +4868,8 @@
     "warframe": false,
     "weapon": true
    },
-   "supported": true
+   "supported": true,
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponFireDamageModRifle.png"
   },
   {
    "baseDrain": 4,
@@ -4911,7 +4915,8 @@
     "warframe": false,
     "weapon": true
    },
-   "supported": true
+   "supported": true,
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponFreezeDamageModRifle.png"
   },
   {
    "baseDrain": 4,
@@ -4957,7 +4962,8 @@
     "warframe": false,
     "weapon": true
    },
-   "supported": true
+   "supported": true,
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponToxinDamageModRifle.png"
   },
   {
    "applyUpgradesByDefault": 0,
@@ -5016,7 +5022,8 @@
     "warframe": false,
     "weapon": true
    },
-   "supported": true
+   "supported": true,
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDamageAfterReloadMod.png"
   },
   {
    "baseDrain": 6,
@@ -5061,7 +5068,8 @@
     "warframe": false,
     "weapon": true
    },
-   "supported": true
+   "supported": true,
+   "icon": "/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleFireIterationsMod.png"
   },
   {
    "baseDrain": 6,
@@ -7609,7 +7617,44 @@
     "warframe": false,
     "weapon": false
    },
-   "supported": false
+   "supported": false,
+   "icon": "/Lotus/Interface/Cards/Images/Auras/PlayerWeakpointCriticalChanceAuraMod.png",
+   "officialLocalization": {
+    "name": "可靠战友",
+    "levelStats": [
+     {
+      "stats": [
+       "小队获得 +12.5% 弱点暴击几率"
+      ]
+     },
+     {
+      "stats": [
+       "小队获得 +25% 弱点暴击几率"
+      ]
+     },
+     {
+      "stats": [
+       "小队获得 +37.5% 弱点暴击几率"
+      ]
+     },
+     {
+      "stats": [
+       "小队获得 +50% 弱点暴击几率"
+      ]
+     },
+     {
+      "stats": [
+       "小队获得 +62.5% 弱点暴击几率"
+      ]
+     },
+     {
+      "stats": [
+       "小队获得 +75% 弱点暴击几率"
+      ]
+     }
+    ],
+    "source": "warframe-items/data/json/i18n.json"
+   }
   },
   {
    "baseDrain": -2,
@@ -35905,7 +35950,80 @@
     "warframe": false,
     "weapon": false
    },
-   "supported": false
+   "supported": false,
+   "officialLocalization": {
+    "name": "敏锐手枪",
+    "levelStats": [
+     {
+      "stats": [
+       "+32% 弱点伤害",
+       "+32% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+64% 弱点伤害",
+       "+64% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+95% 弱点伤害",
+       "+95% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+127% 弱点伤害",
+       "+127% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+159% 弱点伤害",
+       "+159% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+191% 弱点伤害",
+       "+191% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+223% 弱点伤害",
+       "+223% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+254% 弱点伤害",
+       "+254% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+286% 弱点伤害",
+       "+286% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+318% 弱点伤害",
+       "+318% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+350% 弱点伤害",
+       "+350% 弱点暴击几率。多重射击无法变动。"
+      ]
+     }
+    ],
+    "source": "warframe-items/data/json/i18n.json"
+   },
+   "icon": "/Lotus/Interface/Cards/Images/Pistol/WeaponWeakpointCriticalChanceMod.png"
   },
   {
    "baseDrain": -2,
@@ -60993,7 +61111,80 @@
     "warframe": false,
     "weapon": false
    },
-   "supported": false
+   "supported": false,
+   "icon": "/Lotus/Interface/Cards/Images/Rifle/WeaponWeakpointCriticalChanceMod.png",
+   "officialLocalization": {
+    "name": "敏锐主武",
+    "levelStats": [
+     {
+      "stats": [
+       "+32% 弱点伤害",
+       "+32% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+64% 弱点伤害",
+       "+64% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+95% 弱点伤害",
+       "+95% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+127% 弱点伤害",
+       "+127% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+159% 弱点伤害",
+       "+159% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+191% 弱点伤害",
+       "+191% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+223% 弱点伤害",
+       "+223% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+254% 弱点伤害",
+       "+254% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+286% 弱点伤害",
+       "+286% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+318% 弱点伤害",
+       "+318% 弱点暴击几率。多重射击无法变动。"
+      ]
+     },
+     {
+      "stats": [
+       "+350% 弱点伤害",
+       "+350% 弱点暴击几率。多重射击无法变动。"
+      ]
+     }
+    ],
+    "source": "warframe-items/data/json/i18n.json"
+   }
   },
   {
    "baseDrain": 4,

@@ -98,145 +98,175 @@
   "missingLocalizationTags": 0,
   "missingWeaponPaths": 64,
   "omegaMismatches": 3,
-  "statEntries": 165,
+  "statEntries": 242,
   "templates": 7,
   "uniqueDispositionPaths": 696,
-  "upgradeRows": 174
+  "upgradeRows": 251
  },
  "fusionRecipes": [
   {
-   "primary": "WeaponDamageAmountMod",
+   "primary": "D",
    "primaryTag": "WeaponDamageAmountMod",
    "result": "W",
    "resultTag": "WeaponWeakpointDamage",
-   "secondary": "WeaponZoomFovMod",
+   "secondary": "H",
    "secondaryTag": "WeaponZoomFovMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponDamageAmountMod",
+   "primary": "D",
    "primaryTag": "WeaponDamageAmountMod",
    "result": "W",
    "resultTag": "WeaponWeakpointDamage",
-   "secondary": "WeaponFireIterationsMod",
+   "secondary": "S",
    "secondaryTag": "WeaponFireIterationsMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponCritChanceMod",
+   "primary": "0",
    "primaryTag": "WeaponCritChanceMod",
    "result": "Y",
    "resultTag": "WeaponWeakpointCriticalChance",
-   "secondary": "WeaponZoomFovMod",
+   "secondary": "H",
    "secondaryTag": "WeaponZoomFovMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponCritChanceMod",
+   "primary": "0",
    "primaryTag": "WeaponCritChanceMod",
    "result": "Y",
    "resultTag": "WeaponWeakpointCriticalChance",
-   "secondary": "WeaponFireIterationsMod",
+   "secondary": "S",
    "secondaryTag": "WeaponFireIterationsMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponClipMaxMod",
+   "primary": "L",
    "primaryTag": "WeaponClipMaxMod",
    "result": "AE",
    "resultTag": "WeaponAmmoEfficiency",
-   "secondary": "WeaponReloadSpeedMod",
+   "secondary": "F",
    "secondaryTag": "WeaponReloadSpeedMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponRecoilReductionMod",
+   "primary": "Z",
    "primaryTag": "WeaponRecoilReductionMod",
    "result": "AE",
    "resultTag": "WeaponAmmoEfficiency",
-   "secondary": "WeaponAmmoMaxMod",
+   "secondary": "M",
    "secondaryTag": "WeaponAmmoMaxMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponAmmoMaxMod",
+   "primary": "M",
    "primaryTag": "WeaponAmmoMaxMod",
    "result": "HR",
    "resultTag": "WeaponMagazineReloadHolstered",
-   "secondary": "WeaponReloadSpeedMod",
+   "secondary": "F",
    "secondaryTag": "WeaponReloadSpeedMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponAmmoMaxMod",
+   "primary": "M",
    "primaryTag": "WeaponAmmoMaxMod",
    "result": "HR",
    "resultTag": "WeaponMagazineReloadHolstered",
-   "secondary": "WeaponClipMaxMod",
+   "secondary": "L",
    "secondaryTag": "WeaponClipMaxMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponDamageAmountMod",
+   "primary": "D",
    "primaryTag": "WeaponDamageAmountMod",
    "result": "SD",
    "resultTag": "WeaponStatusDamage",
-   "secondary": "WeaponStunChanceMod",
+   "secondary": "2",
    "secondaryTag": "WeaponStunChanceMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponToxinDamageMod",
+   "primary": "6",
    "primaryTag": "WeaponToxinDamageMod",
    "result": "GA",
    "resultTag": "WeaponGasDamageMod",
-   "secondary": "WeaponFireDamageMod",
+   "secondary": "4",
    "secondaryTag": "WeaponFireDamageMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponToxinDamageMod",
+   "primary": "6",
    "primaryTag": "WeaponToxinDamageMod",
    "result": "CO",
    "resultTag": "WeaponCorrosiveDamageMod",
-   "secondary": "WeaponElectricityDamageMod",
+   "secondary": "7",
    "secondaryTag": "WeaponElectricityDamageMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponToxinDamageMod",
+   "primary": "6",
    "primaryTag": "WeaponToxinDamageMod",
    "result": "VI",
    "resultTag": "WeaponViralDamageMod",
-   "secondary": "WeaponFreezeDamageMod",
+   "secondary": "5",
    "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponFireDamageMod",
+   "primary": "4",
    "primaryTag": "WeaponFireDamageMod",
    "result": "RA",
    "resultTag": "WeaponRadiationDamageMod",
-   "secondary": "WeaponElectricityDamageMod",
+   "secondary": "7",
    "secondaryTag": "WeaponElectricityDamageMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponFireDamageMod",
+   "primary": "4",
    "primaryTag": "WeaponFireDamageMod",
    "result": "BL",
    "resultTag": "WeaponBlastDamageMod",
-   "secondary": "WeaponFreezeDamageMod",
+   "secondary": "5",
    "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "WeaponElectricityDamageMod",
+   "primary": "7",
    "primaryTag": "WeaponElectricityDamageMod",
    "result": "MA",
    "resultTag": "WeaponMagneticDamageMod",
-   "secondary": "WeaponFreezeDamageMod",
+   "secondary": "5",
    "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
@@ -246,6 +276,8 @@
    "resultTag": "WeaponFactionDamageOrokin",
    "secondary": "C",
    "secondaryTag": "WeaponFactionDamageCorpus",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
@@ -255,6 +287,8 @@
    "resultTag": "WeaponFactionDamageTechrot",
    "secondary": "I",
    "secondaryTag": "WeaponFactionDamageInfested",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
@@ -264,21 +298,628 @@
    "resultTag": "WeaponFactionDamageScaldra",
    "secondary": "G",
    "secondaryTag": "WeaponFactionDamageGrineer",
+   "sourceKind": "raw-merge-options",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "rifle"
   },
   {
-   "primary": "\"\"",
-   "primaryTag": "\"\"",
-   "result": "\"\"",
-   "resultTag": "\"\"",
-   "secondary": "\"\"",
-   "secondaryTag": "\"\"",
+   "primary": "D",
+   "primaryTag": "WeaponDamageAmountMod",
+   "result": "W",
+   "resultTag": "WeaponWeakpointDamage",
+   "secondary": "H",
+   "secondaryTag": "WeaponZoomFovMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "D",
+   "primaryTag": "WeaponDamageAmountMod",
+   "result": "W",
+   "resultTag": "WeaponWeakpointDamage",
+   "secondary": "S",
+   "secondaryTag": "WeaponFireIterationsMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "0",
+   "primaryTag": "WeaponCritChanceMod",
+   "result": "Y",
+   "resultTag": "WeaponWeakpointCriticalChance",
+   "secondary": "H",
+   "secondaryTag": "WeaponZoomFovMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "0",
+   "primaryTag": "WeaponCritChanceMod",
+   "result": "Y",
+   "resultTag": "WeaponWeakpointCriticalChance",
+   "secondary": "S",
+   "secondaryTag": "WeaponFireIterationsMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "L",
+   "primaryTag": "WeaponClipMaxMod",
+   "result": "AE",
+   "resultTag": "WeaponAmmoEfficiency",
+   "secondary": "F",
+   "secondaryTag": "WeaponReloadSpeedMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "Z",
+   "primaryTag": "WeaponRecoilReductionMod",
+   "result": "AE",
+   "resultTag": "WeaponAmmoEfficiency",
+   "secondary": "M",
+   "secondaryTag": "WeaponAmmoMaxMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "M",
+   "primaryTag": "WeaponAmmoMaxMod",
+   "result": "HR",
+   "resultTag": "WeaponMagazineReloadHolstered",
+   "secondary": "F",
+   "secondaryTag": "WeaponReloadSpeedMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "M",
+   "primaryTag": "WeaponAmmoMaxMod",
+   "result": "HR",
+   "resultTag": "WeaponMagazineReloadHolstered",
+   "secondary": "L",
+   "secondaryTag": "WeaponClipMaxMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "D",
+   "primaryTag": "WeaponDamageAmountMod",
+   "result": "SD",
+   "resultTag": "WeaponStatusDamage",
+   "secondary": "2",
+   "secondaryTag": "WeaponStunChanceMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "6",
+   "primaryTag": "WeaponToxinDamageMod",
+   "result": "GA",
+   "resultTag": "WeaponGasDamageMod",
+   "secondary": "4",
+   "secondaryTag": "WeaponFireDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "6",
+   "primaryTag": "WeaponToxinDamageMod",
+   "result": "CO",
+   "resultTag": "WeaponCorrosiveDamageMod",
+   "secondary": "7",
+   "secondaryTag": "WeaponElectricityDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "6",
+   "primaryTag": "WeaponToxinDamageMod",
+   "result": "VI",
+   "resultTag": "WeaponViralDamageMod",
+   "secondary": "5",
+   "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "4",
+   "primaryTag": "WeaponFireDamageMod",
+   "result": "RA",
+   "resultTag": "WeaponRadiationDamageMod",
+   "secondary": "7",
+   "secondaryTag": "WeaponElectricityDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "4",
+   "primaryTag": "WeaponFireDamageMod",
+   "result": "BL",
+   "resultTag": "WeaponBlastDamageMod",
+   "secondary": "5",
+   "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "7",
+   "primaryTag": "WeaponElectricityDamageMod",
+   "result": "MA",
+   "resultTag": "WeaponMagneticDamageMod",
+   "secondary": "5",
+   "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "G",
+   "primaryTag": "WeaponFactionDamageGrineer",
+   "result": "FO",
+   "resultTag": "WeaponFactionDamageOrokin",
+   "secondary": "C",
+   "secondaryTag": "WeaponFactionDamageCorpus",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "C",
+   "primaryTag": "WeaponFactionDamageCorpus",
+   "result": "FT",
+   "resultTag": "WeaponFactionDamageTechrot",
+   "secondary": "I",
+   "secondaryTag": "WeaponFactionDamageInfested",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "I",
+   "primaryTag": "WeaponFactionDamageInfested",
+   "result": "FS",
+   "resultTag": "WeaponFactionDamageScaldra",
+   "secondary": "G",
+   "secondaryTag": "WeaponFactionDamageGrineer",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "shotgun"
+  },
+  {
+   "primary": "D",
+   "primaryTag": "WeaponDamageAmountMod",
+   "result": "W",
+   "resultTag": "WeaponWeakpointDamage",
+   "secondary": "H",
+   "secondaryTag": "WeaponZoomFovMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
    "weaponType": "pistol"
+  },
+  {
+   "primary": "D",
+   "primaryTag": "WeaponDamageAmountMod",
+   "result": "W",
+   "resultTag": "WeaponWeakpointDamage",
+   "secondary": "S",
+   "secondaryTag": "WeaponFireIterationsMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "0",
+   "primaryTag": "WeaponCritChanceMod",
+   "result": "Y",
+   "resultTag": "WeaponWeakpointCriticalChance",
+   "secondary": "H",
+   "secondaryTag": "WeaponZoomFovMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "0",
+   "primaryTag": "WeaponCritChanceMod",
+   "result": "Y",
+   "resultTag": "WeaponWeakpointCriticalChance",
+   "secondary": "S",
+   "secondaryTag": "WeaponFireIterationsMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "L",
+   "primaryTag": "WeaponClipMaxMod",
+   "result": "AE",
+   "resultTag": "WeaponAmmoEfficiency",
+   "secondary": "F",
+   "secondaryTag": "WeaponReloadSpeedMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "Z",
+   "primaryTag": "WeaponRecoilReductionMod",
+   "result": "AE",
+   "resultTag": "WeaponAmmoEfficiency",
+   "secondary": "M",
+   "secondaryTag": "WeaponAmmoMaxMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "M",
+   "primaryTag": "WeaponAmmoMaxMod",
+   "result": "HR",
+   "resultTag": "WeaponMagazineReloadHolstered",
+   "secondary": "F",
+   "secondaryTag": "WeaponReloadSpeedMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "M",
+   "primaryTag": "WeaponAmmoMaxMod",
+   "result": "HR",
+   "resultTag": "WeaponMagazineReloadHolstered",
+   "secondary": "L",
+   "secondaryTag": "WeaponClipMaxMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "D",
+   "primaryTag": "WeaponDamageAmountMod",
+   "result": "SD",
+   "resultTag": "WeaponStatusDamage",
+   "secondary": "2",
+   "secondaryTag": "WeaponStunChanceMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "6",
+   "primaryTag": "WeaponToxinDamageMod",
+   "result": "GA",
+   "resultTag": "WeaponGasDamageMod",
+   "secondary": "4",
+   "secondaryTag": "WeaponFireDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "6",
+   "primaryTag": "WeaponToxinDamageMod",
+   "result": "CO",
+   "resultTag": "WeaponCorrosiveDamageMod",
+   "secondary": "7",
+   "secondaryTag": "WeaponElectricityDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "6",
+   "primaryTag": "WeaponToxinDamageMod",
+   "result": "VI",
+   "resultTag": "WeaponViralDamageMod",
+   "secondary": "5",
+   "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "4",
+   "primaryTag": "WeaponFireDamageMod",
+   "result": "RA",
+   "resultTag": "WeaponRadiationDamageMod",
+   "secondary": "7",
+   "secondaryTag": "WeaponElectricityDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "4",
+   "primaryTag": "WeaponFireDamageMod",
+   "result": "BL",
+   "resultTag": "WeaponBlastDamageMod",
+   "secondary": "5",
+   "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "7",
+   "primaryTag": "WeaponElectricityDamageMod",
+   "result": "MA",
+   "resultTag": "WeaponMagneticDamageMod",
+   "secondary": "5",
+   "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "G",
+   "primaryTag": "WeaponFactionDamageGrineer",
+   "result": "FO",
+   "resultTag": "WeaponFactionDamageOrokin",
+   "secondary": "C",
+   "secondaryTag": "WeaponFactionDamageCorpus",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "C",
+   "primaryTag": "WeaponFactionDamageCorpus",
+   "result": "FT",
+   "resultTag": "WeaponFactionDamageTechrot",
+   "secondary": "I",
+   "secondaryTag": "WeaponFactionDamageInfested",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "I",
+   "primaryTag": "WeaponFactionDamageInfested",
+   "result": "FS",
+   "resultTag": "WeaponFactionDamageScaldra",
+   "secondary": "G",
+   "secondaryTag": "WeaponFactionDamageGrineer",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "pistol"
+  },
+  {
+   "primary": "D",
+   "primaryTag": "WeaponDamageAmountMod",
+   "result": "W",
+   "resultTag": "WeaponWeakpointDamage",
+   "secondary": "H",
+   "secondaryTag": "WeaponZoomFovMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "D",
+   "primaryTag": "WeaponDamageAmountMod",
+   "result": "W",
+   "resultTag": "WeaponWeakpointDamage",
+   "secondary": "S",
+   "secondaryTag": "WeaponFireIterationsMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "0",
+   "primaryTag": "WeaponCritChanceMod",
+   "result": "Y",
+   "resultTag": "WeaponWeakpointCriticalChance",
+   "secondary": "H",
+   "secondaryTag": "WeaponZoomFovMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "0",
+   "primaryTag": "WeaponCritChanceMod",
+   "result": "Y",
+   "resultTag": "WeaponWeakpointCriticalChance",
+   "secondary": "S",
+   "secondaryTag": "WeaponFireIterationsMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "L",
+   "primaryTag": "WeaponClipMaxMod",
+   "result": "AE",
+   "resultTag": "WeaponAmmoEfficiency",
+   "secondary": "F",
+   "secondaryTag": "WeaponReloadSpeedMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "Z",
+   "primaryTag": "WeaponRecoilReductionMod",
+   "result": "AE",
+   "resultTag": "WeaponAmmoEfficiency",
+   "secondary": "M",
+   "secondaryTag": "WeaponAmmoMaxMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "D",
+   "primaryTag": "WeaponDamageAmountMod",
+   "result": "SD",
+   "resultTag": "WeaponStatusDamage",
+   "secondary": "2",
+   "secondaryTag": "WeaponStunChanceMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "6",
+   "primaryTag": "WeaponToxinDamageMod",
+   "result": "GA",
+   "resultTag": "WeaponGasDamageMod",
+   "secondary": "4",
+   "secondaryTag": "WeaponFireDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "6",
+   "primaryTag": "WeaponToxinDamageMod",
+   "result": "CO",
+   "resultTag": "WeaponCorrosiveDamageMod",
+   "secondary": "7",
+   "secondaryTag": "WeaponElectricityDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "6",
+   "primaryTag": "WeaponToxinDamageMod",
+   "result": "VI",
+   "resultTag": "WeaponViralDamageMod",
+   "secondary": "5",
+   "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "4",
+   "primaryTag": "WeaponFireDamageMod",
+   "result": "RA",
+   "resultTag": "WeaponRadiationDamageMod",
+   "secondary": "7",
+   "secondaryTag": "WeaponElectricityDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "4",
+   "primaryTag": "WeaponFireDamageMod",
+   "result": "BL",
+   "resultTag": "WeaponBlastDamageMod",
+   "secondary": "5",
+   "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "7",
+   "primaryTag": "WeaponElectricityDamageMod",
+   "result": "MA",
+   "resultTag": "WeaponMagneticDamageMod",
+   "secondary": "5",
+   "secondaryTag": "WeaponFreezeDamageMod",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "G",
+   "primaryTag": "WeaponFactionDamageGrineer",
+   "result": "FO",
+   "resultTag": "WeaponFactionDamageOrokin",
+   "secondary": "C",
+   "secondaryTag": "WeaponFactionDamageCorpus",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "C",
+   "primaryTag": "WeaponFactionDamageCorpus",
+   "result": "FT",
+   "resultTag": "WeaponFactionDamageTechrot",
+   "secondary": "I",
+   "secondaryTag": "WeaponFactionDamageInfested",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "I",
+   "primaryTag": "WeaponFactionDamageInfested",
+   "result": "FS",
+   "resultTag": "WeaponFactionDamageScaldra",
+   "secondary": "G",
+   "secondaryTag": "WeaponFactionDamageGrineer",
+   "sourceKind": "shared-ranged-recipe",
+   "sourceTemplate": "LotusRifleRandomModRare",
+   "weaponType": "archgun"
+  },
+  {
+   "primary": "U",
+   "result": "HD",
+   "secondary": "O",
+   "sourceKind": "official-workshop-table",
+   "sourceUrl": "https://www.bilibili.com/opus/1250999307650203648",
+   "weaponType": "melee"
+  },
+  {
+   "primary": "U",
+   "result": "HC",
+   "secondary": "N",
+   "sourceKind": "official-workshop-table",
+   "sourceUrl": "https://www.bilibili.com/opus/1250999307650203648",
+   "weaponType": "melee"
+  },
+  {
+   "primary": "J",
+   "result": "PA",
+   "secondary": "T",
+   "sourceKind": "official-workshop-table",
+   "sourceUrl": "https://www.bilibili.com/opus/1250999307650203648",
+   "weaponType": "melee"
+  },
+  {
+   "primary": "J",
+   "result": "SL",
+   "secondary": "K",
+   "sourceKind": "official-workshop-table",
+   "sourceUrl": "https://www.bilibili.com/opus/1250999307650203648",
+   "weaponType": "melee"
   }
  ],
  "fusionSchema": {
+  "availabilitySource": "canonical-template-IsAdvancedTrait",
   "extractedFrom": "2026.09.22.16.46",
-  "note": "Advanced traits (isAdvancedTrait) can only be obtained through fusion (fusionOnly: true), not by direct rolling. Recipes map primary+secondary tag codes to the result code."
+  "note": "Missing MergeOptions is not evidence of absent traits. Shared ranged pairs require an explicit advanced result in the target template.",
+  "templateHashes": {
+   "LotusArchgunRandomModRare": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+   "LotusModularMeleeRandomModRare": "badb698a526d3c2117c2c1b8fa581c7c5b647f498af2324d9c52d816b0bde18b",
+   "LotusModularPistolRandomModRare": "b4d3a9bfa6396f07274639a1cd9c8f67b9729b7a399fa66dc398ce898db4116c",
+   "LotusPistolRandomModRare": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+   "LotusRifleRandomModRare": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+   "LotusShotgunRandomModRare": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+   "PlayerMeleeWeaponRandomModRare": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385"
+  }
  },
  "schemaVersion": 1,
  "sources": {
@@ -294,6 +935,11 @@
  },
  "templates": [
   {
+   "advancedTraitSource": {
+    "alias": false,
+    "sha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+    "template": "LotusArchgunRandomModRare"
+   },
    "description": null,
    "descriptionTag": "",
    "dispositions": [
@@ -1297,236 +1943,405 @@
      ]
     },
     {
-     "base90": 2.25,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "W",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/WeaponWeakpointCriticalChanceMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponWeakpointDamage",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponWeakpointDamage",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.025,
-       "upgradeType": "WEAPON_DAMAGE_WEAKPOINT"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 2.475,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "Y",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/WeaponWeakpointCriticalChanceMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponWeakpointCriticalChance",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponWeakpointCriticalChance",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0275,
-       "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": -0.09,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "AE",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponAmmoEfficiency.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponAmmoEfficiency",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/RadiationAmmoEfficiencyPistolModDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": -0.001,
-       "upgradeType": "WEAPON_AMMO_CONSUME_RATE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "SD",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/DoubleMods/RifleStatusDamageDuoMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponStatusDamage",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponStatusDamage",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PROC_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PROC_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "GA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponGasDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponGasDamageMod",
      "upgrades": [
       {
        "damageType": "DT_GAS",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponGasDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "CO",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponCorrosiveDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponCorrosiveDamageMod",
      "upgrades": [
       {
        "damageType": "DT_CORROSIVE",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponCorrosiveDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "VI",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponViralDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponViralDamageMod",
      "upgrades": [
       {
        "damageType": "DT_VIRAL",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponViralDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "RA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponRadiationDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponRadiationDamageMod",
      "upgrades": [
       {
        "damageType": "DT_RADIATION",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponRadiationDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "BL",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponBlastDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponBlastDamageMod",
      "upgrades": [
       {
        "damageType": "DT_EXPLOSION",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponExplosionDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
-     "code": "6",
+     "code": "MA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponMagneticDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponMagneticDamageMod",
      "upgrades": [
       {
        "damageType": "DT_POISON",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponMagneticDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FO",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/RifleDamageCorrupted.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponFactionDamageOrokin",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageCorruptedDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Orokin",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FT",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponFactionDamageTechrot.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponFactionDamageTechrot",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageTechrotDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Techrot",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FS",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponFactionDamageScaldra.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "29c7bc7adff5cf5c0ebe3bddfe04f8a584b7c11f7346aa82b9a572f49fc14108",
+     "sourceTemplate": "LotusArchgunRandomModRare",
      "tag": "WeaponFactionDamageScaldra",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageScaldraDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Scaldra",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     }
@@ -1534,6 +2349,11 @@
    "weaponType": "archgun"
   },
   {
+   "advancedTraitSource": {
+    "alias": true,
+    "sha256": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385",
+    "template": "PlayerMeleeWeaponRandomModRare"
+   },
    "description": null,
    "descriptionTag": "",
    "dispositions": [
@@ -2469,74 +3289,128 @@
      ]
     },
     {
-     "base90": 1.197,
      "canBeBuff": true,
      "canBeCurse": false,
-     "code": "K",
+     "code": "HD",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingKillingBlow.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385",
+     "sourceTemplate": "PlayerMeleeWeaponRandomModRare",
      "tag": "WeaponMeleeHeavyAttackDamageMod",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/MeleeDamageBuffOnHeavyDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0133,
-       "upgradeType": "WEAPON_MELEE_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_MELEE_DAMAGE",
+       "validModifiers": [
+        "PM_HEAVY_MELEE"
+       ],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 1.197,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "HC",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingKillingBlow.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385",
+     "sourceTemplate": "PlayerMeleeWeaponRandomModRare",
      "tag": "WeaponMeleeHeavyAttackChargeMod",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponHeavyChargeSpeed",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0133,
-       "upgradeType": "WEAPON_MELEE_HEAVY_CHARGE_SPEED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_MELEE_HEAVY_CHARGE_SPEED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 8.1,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "PA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingParryMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385",
+     "sourceTemplate": "PlayerMeleeWeaponRandomModRare",
      "tag": "WeaponMeleeParryAngleMod",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/ParryAngleNoPercentModDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.090000004,
-       "upgradeType": "WEAPON_PARRY_ANGLE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PARRY_ANGLE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 1.197,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "SL",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Melee/WeaponMeleeSlamDamageMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385",
+     "sourceTemplate": "PlayerMeleeWeaponRandomModRare",
      "tag": "WeaponMeleeSlamDamageMod",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponMeleeSlamDmgBonusModDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0133,
-       "upgradeType": "WEAPON_MELEE_SLAM_DAMAGE_BONUS"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_MELEE_SLAM_DAMAGE_BONUS",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     }
@@ -2544,6 +3418,11 @@
    "weaponType": "melee"
   },
   {
+   "advancedTraitSource": {
+    "alias": true,
+    "sha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+    "template": "LotusPistolRandomModRare"
+   },
    "description": null,
    "descriptionTag": "",
    "dispositions": [
@@ -3388,254 +4267,436 @@
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "W",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponWeakpointDamage",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponWeakpointDamage",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_DAMAGE_WEAKPOINT"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "Y",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponWeakpointCriticalChance",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponWeakpointCriticalChance",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": -0.09,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "AE",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponAmmoEfficiency",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/RadiationAmmoEfficiencyPistolModDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": -0.001,
-       "upgradeType": "WEAPON_AMMO_CONSUME_RATE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "HR",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponMagazineReloadHolstered",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponHolsteredAutoReloadRate",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_AUTO_RELOAD_RATE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Holstered",
+       "upgradeType": "WEAPON_AUTO_RELOAD_RATE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "SD",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponStatusDamage",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponStatusDamage",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PROC_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PROC_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "GA",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponGasDamageMod",
      "upgrades": [
       {
        "damageType": "DT_GAS",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponGasDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "CO",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponCorrosiveDamageMod",
      "upgrades": [
       {
        "damageType": "DT_CORROSIVE",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponCorrosiveDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "VI",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponViralDamageMod",
      "upgrades": [
       {
        "damageType": "DT_VIRAL",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponViralDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "RA",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponRadiationDamageMod",
      "upgrades": [
       {
        "damageType": "DT_RADIATION",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponRadiationDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "BL",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponBlastDamageMod",
      "upgrades": [
       {
        "damageType": "DT_EXPLOSION",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponExplosionDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
-     "code": "6",
+     "code": "MA",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponMagneticDamageMod",
      "upgrades": [
       {
        "damageType": "DT_POISON",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponMagneticDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FO",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponFactionDamageOrokin",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageCorruptedDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Orokin",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FT",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponFactionDamageTechrot",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageTechrotDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Techrot",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FS",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponFactionDamageScaldra",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageScaldraDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Scaldra",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     }
@@ -3643,6 +4704,11 @@
    "weaponType": "pistol"
   },
   {
+   "advancedTraitSource": {
+    "alias": false,
+    "sha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+    "template": "LotusPistolRandomModRare"
+   },
    "description": null,
    "descriptionTag": "",
    "dispositions": [
@@ -6658,254 +7724,436 @@
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "W",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponWeakpointDamage",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponWeakpointDamage",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_DAMAGE_WEAKPOINT"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "Y",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponWeakpointCriticalChance",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponWeakpointCriticalChance",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": -0.09,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "AE",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponAmmoEfficiency",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/RadiationAmmoEfficiencyPistolModDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": -0.001,
-       "upgradeType": "WEAPON_AMMO_CONSUME_RATE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "HR",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponMagazineReloadHolstered",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponHolsteredAutoReloadRate",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_AUTO_RELOAD_RATE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Holstered",
+       "upgradeType": "WEAPON_AUTO_RELOAD_RATE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "SD",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponStatusDamage",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponStatusDamage",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PROC_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PROC_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "GA",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponGasDamageMod",
      "upgrades": [
       {
        "damageType": "DT_GAS",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponGasDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "CO",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponCorrosiveDamageMod",
      "upgrades": [
       {
        "damageType": "DT_CORROSIVE",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponCorrosiveDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "VI",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponViralDamageMod",
      "upgrades": [
       {
        "damageType": "DT_VIRAL",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponViralDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "RA",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponRadiationDamageMod",
      "upgrades": [
       {
        "damageType": "DT_RADIATION",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponRadiationDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "BL",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponBlastDamageMod",
      "upgrades": [
       {
        "damageType": "DT_EXPLOSION",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponExplosionDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
-     "code": "6",
+     "code": "MA",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponMagneticDamageMod",
      "upgrades": [
       {
        "damageType": "DT_POISON",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponMagneticDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FO",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponFactionDamageOrokin",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageCorruptedDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Orokin",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FT",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponFactionDamageTechrot",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageTechrotDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Techrot",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FS",
      "fusionOnly": true,
+     "icon": "",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "55ca3b07b6b09c2650ed8f4b299c69abd091967262221326d798b80b5b065b3e",
+     "sourceTemplate": "LotusPistolRandomModRare",
      "tag": "WeaponFactionDamageScaldra",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageScaldraDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Scaldra",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     }
@@ -6913,6 +8161,11 @@
    "weaponType": "pistol"
   },
   {
+   "advancedTraitSource": {
+    "alias": false,
+    "sha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+    "template": "LotusRifleRandomModRare"
+   },
    "description": null,
    "descriptionTag": "",
    "dispositions": [
@@ -10033,254 +11286,436 @@
      ]
     },
     {
-     "base90": 2.25,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "W",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/WeaponWeakpointCriticalChanceMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponWeakpointDamage",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponWeakpointDamage",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.025,
-       "upgradeType": "WEAPON_DAMAGE_WEAKPOINT"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 2.475,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "Y",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/WeaponWeakpointCriticalChanceMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponWeakpointCriticalChance",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponWeakpointCriticalChance",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0275,
-       "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": -0.09,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "AE",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponAmmoEfficiency.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponAmmoEfficiency",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/RadiationAmmoEfficiencyPistolModDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": -0.001,
-       "upgradeType": "WEAPON_AMMO_CONSUME_RATE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "HR",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/PvP/Rifle/PassiveReloadRifleMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponMagazineReloadHolstered",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponHolsteredAutoReloadRate",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_AUTO_RELOAD_RATE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Holstered",
+       "upgradeType": "WEAPON_AUTO_RELOAD_RATE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "SD",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/DoubleMods/RifleStatusDamageDuoMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponStatusDamage",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponStatusDamage",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PROC_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PROC_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "GA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponGasDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponGasDamageMod",
      "upgrades": [
       {
        "damageType": "DT_GAS",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponGasDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "CO",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponCorrosiveDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponCorrosiveDamageMod",
      "upgrades": [
       {
        "damageType": "DT_CORROSIVE",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponCorrosiveDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "VI",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponViralDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponViralDamageMod",
      "upgrades": [
       {
        "damageType": "DT_VIRAL",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponViralDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "RA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponRadiationDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponRadiationDamageMod",
      "upgrades": [
       {
        "damageType": "DT_RADIATION",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponRadiationDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "BL",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponBlastDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponBlastDamageMod",
      "upgrades": [
       {
        "damageType": "DT_EXPLOSION",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponExplosionDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
-     "code": "6",
+     "code": "MA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponMagneticDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponMagneticDamageMod",
      "upgrades": [
       {
        "damageType": "DT_POISON",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponMagneticDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FO",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/RifleDamageCorrupted.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponFactionDamageOrokin",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageCorruptedDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Orokin",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FT",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponFactionDamageTechrot.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponFactionDamageTechrot",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageTechrotDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Techrot",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FS",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponFactionDamageScaldra.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "52ad961f2d25a382c539dade6352f52d29c0a05d04776e4bb6ffb5cc2ef46f77",
+     "sourceTemplate": "LotusRifleRandomModRare",
      "tag": "WeaponFactionDamageScaldra",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageScaldraDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Scaldra",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     }
@@ -10288,6 +11723,11 @@
    "weaponType": "rifle"
   },
   {
+   "advancedTraitSource": {
+    "alias": false,
+    "sha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+    "template": "LotusShotgunRandomModRare"
+   },
    "description": null,
    "descriptionTag": "",
    "dispositions": [
@@ -11602,254 +13042,436 @@
      ]
     },
     {
-     "base90": 2.25,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "W",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/WeaponWeakpointCriticalChanceMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponWeakpointDamage",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponWeakpointDamage",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.025,
-       "upgradeType": "WEAPON_DAMAGE_WEAKPOINT"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 2.475,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "Y",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/WeaponWeakpointCriticalChanceMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponWeakpointCriticalChance",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponWeakpointCriticalChance",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0275,
-       "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": -0.09,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "AE",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponAmmoEfficiency.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponAmmoEfficiency",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/RadiationAmmoEfficiencyPistolModDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": -0.001,
-       "upgradeType": "WEAPON_AMMO_CONSUME_RATE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "HR",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/PvP/Rifle/PassiveReloadRifleMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponMagazineReloadHolstered",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponHolsteredAutoReloadRate",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_AUTO_RELOAD_RATE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Holstered",
+       "upgradeType": "WEAPON_AUTO_RELOAD_RATE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
-     "canBeCurse": true,
+     "canBeCurse": false,
      "code": "SD",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/DoubleMods/RifleStatusDamageDuoMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponStatusDamage",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponStatusDamage",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PROC_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PROC_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "GA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponGasDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponGasDamageMod",
      "upgrades": [
       {
        "damageType": "DT_GAS",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponGasDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "CO",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponCorrosiveDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponCorrosiveDamageMod",
      "upgrades": [
       {
        "damageType": "DT_CORROSIVE",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponCorrosiveDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "VI",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponViralDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponViralDamageMod",
      "upgrades": [
       {
        "damageType": "DT_VIRAL",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponViralDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "RA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponRadiationDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponRadiationDamageMod",
      "upgrades": [
       {
        "damageType": "DT_RADIATION",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponRadiationDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "BL",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponBlastDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponBlastDamageMod",
      "upgrades": [
       {
        "damageType": "DT_EXPLOSION",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponExplosionDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.9,
      "canBeBuff": true,
      "canBeCurse": false,
-     "code": "6",
+     "code": "MA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponMagneticDamage.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponMagneticDamageMod",
      "upgrades": [
       {
        "damageType": "DT_POISON",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponMagneticDamage",
+       "localizedText": null,
        "operation": "ADD",
        "rawValue": 0.0099999998,
-       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FO",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/RifleDamageCorrupted.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponFactionDamageOrokin",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageCorruptedDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Orokin",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FT",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponFactionDamageTechrot.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponFactionDamageTechrot",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageTechrotDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Techrot",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 0.45,
      "canBeBuff": true,
-     "canBeCurse": true,
-     "code": "C",
+     "canBeCurse": false,
+     "code": "FS",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/RivenUpgrades/WeaponFactionDamageScaldra.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": true,
+     "sourceSha256": "111cab94b6445e514d7f14f191628a9914887e5c1b33ea7be713e21f1cf5cfab",
+     "sourceTemplate": "LotusShotgunRandomModRare",
      "tag": "WeaponFactionDamageScaldra",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageScaldraDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0049999999,
-       "upgradeType": "GAMEPLAY_FACTION_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "Scaldra",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     }
@@ -11857,6 +13479,11 @@
    "weaponType": "shotgun"
   },
   {
+   "advancedTraitSource": {
+    "alias": false,
+    "sha256": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385",
+    "template": "PlayerMeleeWeaponRandomModRare"
+   },
    "description": null,
    "descriptionTag": "",
    "dispositions": [
@@ -16042,74 +17669,128 @@
      ]
     },
     {
-     "base90": 1.197,
      "canBeBuff": true,
      "canBeCurse": false,
-     "code": "K",
+     "code": "HD",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingKillingBlow.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385",
+     "sourceTemplate": "PlayerMeleeWeaponRandomModRare",
      "tag": "WeaponMeleeHeavyAttackDamageMod",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/MeleeDamageBuffOnHeavyDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0133,
-       "upgradeType": "WEAPON_MELEE_DAMAGE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_MELEE_DAMAGE",
+       "validModifiers": [
+        "PM_HEAVY_MELEE"
+       ],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 1.197,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "HC",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingKillingBlow.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385",
+     "sourceTemplate": "PlayerMeleeWeaponRandomModRare",
      "tag": "WeaponMeleeHeavyAttackChargeMod",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponHeavyChargeSpeed",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0133,
-       "upgradeType": "WEAPON_MELEE_HEAVY_CHARGE_SPEED"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_MELEE_HEAVY_CHARGE_SPEED",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 8.1,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "PA",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/MeleeChanneling/ChannelingParryMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385",
+     "sourceTemplate": "PlayerMeleeWeaponRandomModRare",
      "tag": "WeaponMeleeParryAngleMod",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/ParryAngleNoPercentModDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.090000004,
-       "upgradeType": "WEAPON_PARRY_ANGLE"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_PARRY_ANGLE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     },
     {
-     "base90": 1.197,
      "canBeBuff": true,
      "canBeCurse": false,
      "code": "SL",
      "fusionOnly": true,
+     "icon": "/Lotus/Interface/Cards/Images/Melee/WeaponMeleeSlamDamageMod.png",
      "isAdvancedTrait": true,
-     "rarity": "RARE",
+     "rarity": "COMMON",
+     "rawCanBeCurse": false,
+     "sourceSha256": "38b46512cf0693d47b54958533cfa3f9f5c44a2cf05957af395aca5d01b90385",
+     "sourceTemplate": "PlayerMeleeWeaponRandomModRare",
      "tag": "WeaponMeleeSlamDamageMod",
      "upgrades": [
       {
        "damageType": "DT_ANY",
+       "displayAsMultiplier": 0,
+       "displayAsPercent": 1,
+       "locTag": "/Lotus/Language/Upgrades/WeaponMeleeSlamDmgBonusModDesc",
+       "localizedText": null,
        "operation": "STACKING_MULTIPLY",
        "rawValue": 0.0133,
-       "upgradeType": "WEAPON_MELEE_SLAM_DAMAGE_BONUS"
+       "smallerIsBetter": 0,
+       "symbolFilter": "",
+       "upgradeType": "WEAPON_MELEE_SLAM_DAMAGE_BONUS",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
       }
      ]
     }

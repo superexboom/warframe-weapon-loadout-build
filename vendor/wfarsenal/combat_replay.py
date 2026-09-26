@@ -1,0 +1,839 @@
+from __future__ import annotations
+
+import heapq
+import math
+from collections import deque
+from dataclasses import replace
+from copy import copy
+
+
+def replay(
+    stats,
+    target,
+    *,
+    attacks_per_second,
+    window_seconds=5.0,
+    status_rate_multiplier=1.0,
+    damage_rate_multiplier=1.0,
+    forced_procs=None,
+    level=None,
+    armour_strip=0.0,
+    elemental_armour_strip=0.0,
+    steel_path=False,
+    enemy_enhancements=None,
+    time_step=0.25,
+    trigger_sources=None,
+    collect_timeline=True,
+    headshot_chance=0.0,
+    combat=None,
+):
+    # Expected proc counts; attack/tick/resource clocks are discrete.
+    # Mechanics: WFSim 69e6a139, data/debuffs/ignite.yaml and syndicates/.
+    from .damage import (
+        enemy_defenses,
+        expected_status_damage,
+        damage_against_cached_armour,
+        _hit_location_info,
+        _faction_damage_deltas,
+        _damage_type_set,
+        DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES,
+        DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES,
+        _armour_reduction,
+        direct_fire_ledger,
+    )
+
+    combat = combat or {}
+    target = target or {}
+    window = max(float(window_seconds), 0.0)
+    step = max(0.01, float(time_step))
+    head = min(1.0, max(0.0, float(headshot_chance)))
+    rate = max(0.0, float(attacks_per_second))
+    defenses = enemy_defenses(
+        target,
+        level=level,
+        armour_strip=armour_strip,
+        steel_path=steel_path,
+        enemy_enhancements=enemy_enhancements,
+    )
+    full = [float(defenses.get(k) or 0.0) for k in ("overguard", "shield", "health")]
+    pools = full.copy()
+    ehp = sum(full)
+    armour_base = float(defenses.get("armour") or 0.0)
+    cache = dict(
+        faction_deltas=_faction_damage_deltas(target),
+        armour_bypass=_damage_type_set(
+            target.get("armourBypassDamageTypes"), DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES
+        ),
+        shield_bypass=_damage_type_set(
+            target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
+        ),
+        target_faction=str(target.get("faction") or ""),
+    )
+    locations = {}
+    for location in ("body", "head"):
+        _, hm, hcm, _, _ = _hit_location_info(target, location)
+        locations[location] = {
+            **cache,
+            "hit_multiplier": hm,
+            "hit_critical_multiplier": hcm,
+        }
+    names = {
+        "DT_FIRE": "heat",
+        "DT_VIRAL": "viral",
+        "DT_CORROSIVE": "corrosive",
+        "DT_MAGNETIC": "magnetic",
+        "DT_FREEZE": "cold",
+        "DT_PUNCTURE": "puncture",
+    }
+    durations = {
+        "DT_VIRAL": 6.0,
+        "DT_CORROSIVE": 8.0,
+        "DT_MAGNETIC": 6.0,
+        "DT_FREEZE": 6.0,
+        "DT_PUNCTURE": 10.0,
+    }
+    caps = {
+        "DT_VIRAL": 10.0,
+        "DT_CORROSIVE": 10.0,
+        "DT_MAGNETIC": 10.0,
+        "DT_FREEZE": 10.0,
+        "DT_PUNCTURE": 5.0,
+        "DT_GAS": 10.0,
+    }
+    states = {}
+    gas_procs = deque()
+    blast_procs = deque()
+    heat = dict(count=0.0, seed=0.0, acc=0.0, start=0.0, end=-1.0, scale=1.0, token=0)
+    old_heat_strip = (0.0, -1.0, 1.0)
+    heap = []
+    seq = 0
+    gen = 0
+    kills = 0
+    attacks = 0
+    stale = 0
+    first_kill = None
+    last_kill = None
+    min_interval = None
+    totals = dict(direct=0.0, dot=0.0, nonDot=0.0, syndicate=0.0)
+    last_totals = totals.copy()
+    timeline = []
+    averaged = {k: 0.0 for k in names.values()}
+    sources = []
+    for src in trigger_sources or []:
+        q = dict(src)
+        q.update(stacks=float(q.get("initialStacks", 0)), expires=math.inf, series=[])
+        q.setdefault("maxStacks", 1.0)
+        q.setdefault("duration", 0.0)
+        q.setdefault("perEvent", 1.0)
+        q.setdefault("decay", "reset")
+        sources.append(q)
+    cycle = combat.get("cycle")
+    form = "base" if cycle else "selected"
+    gauge = 0.0
+    transforms = 0
+    ammo = stats.magazine
+    reloads = 0
+    burst_round = 0
+    first_round = True
+    model_cache = {}
+    syndrome = combat.get("syndicate")
+    affinity = 0.0
+    syndicate_ready = 0.0
+    syndicate_events = []
+    unsupported = list(combat.get("unsupported") or [])
+    if syndrome and not combat.get("affinityPerKill"):
+        unsupported.append("syndicate-affinity-unavailable")
+
+    def push(t, kind, payload=None, generation=None):
+        nonlocal seq
+        if t < window + 1e-9:
+            seq += 1
+            heapq.heappush(heap, (max(0.0, t), seq, kind, payload, generation))
+
+    def count(dtype):
+        if dtype == "DT_FIRE":
+            return heat["count"]
+        if dtype == "DT_GAS":
+            return sum(p["count"] for p in gas_procs) + sum(
+                x[1] for x in states.get(dtype, ())
+            )
+        if dtype == "DT_EXPLOSION":
+            return sum(p["count"] for p in blast_procs)
+        return min(sum(x[1] for x in states.get(dtype, ())), caps.get(dtype, math.inf))
+
+    def heat_strip(t):
+        if heat["count"]:
+            n = min(4, int((t - heat["start"] + 1e-9) / max(0.5 * heat["scale"], 1e-9)))
+            return (0.0, 0.15, 0.30, 0.40, 0.50)[max(0, n)]
+        value, ended, scale = old_heat_strip
+        if ended < 0:
+            return 0.0
+        n = int(max(0.0, t - ended) / max(1.5 * scale, 1e-9))
+        descending = [v for v in (0.5, 0.4, 0.3, 0.15, 0.0) if v <= value + 1e-9]
+        return descending[min(n, len(descending) - 1)]
+
+    def clean(t):
+        nonlocal old_heat_strip
+        while gas_procs and gas_procs[0]["end"] < t - 1e-9:
+            gas_procs.popleft()
+        for rows in states.values():
+            while rows and rows[0][0] < t - 1e-9:
+                rows.popleft()
+        if heat["count"] and heat["end"] < t - 1e-9:
+            old_heat_strip = (heat_strip(heat["end"]), heat["end"], heat["scale"])
+            heat["count"] = heat["seed"] = 0.0
+            heat["token"] += 1
+        for q in sources:
+            if q["duration"] and q["stacks"] and t >= q["expires"]:
+                if q["decay"] == "lose_one_and_reset":
+                    missed = 1 + int((t - q["expires"]) / q["duration"])
+                    q["stacks"] = max(0.0, q["stacks"] - missed)
+                    q["expires"] += missed * q["duration"]
+                elif q.get("decay") != "per-stack":
+                    q["stacks"] = 0.0
+            if q.get("decay") == "per-stack":
+                q["expiries"] = [x for x in q.get("expiries", []) if x[0] > t]
+                q["stacks"] = sum(x[1] for x in q["expiries"])
+
+    def armour(t):
+        c = count("DT_CORROSIVE")
+        cs = 0.26 * c if c < 1 else min(0.26 + 0.06 * (c - 1), 0.8)
+        return (
+            armour_base * (1 - elemental_armour_strip) * (1 - cs) * (1 - heat_strip(t))
+        )
+
+    def vulnerability(n):
+        return 1.0 + n if n < 1 else min(2.0 + 0.25 * (n - 1), 4.25)
+
+    def signal(kind, t, weight=1.0):
+        for q in sources:
+            if q.get("kind") != kind:
+                continue
+            delta = weight * q["perEvent"]
+            if delta <= 0:
+                continue
+            if q.get("decay") == "per-stack":
+                q.setdefault("expiries", []).append((t + q["duration"], delta))
+                excess = sum(x[1] for x in q["expiries"]) - q["maxStacks"]
+                while excess > 1e-9 and q["expiries"]:
+                    end, n = q["expiries"][0]
+                    removed = min(n, excess)
+                    excess -= removed
+                    if removed >= n:
+                        q["expiries"].pop(0)
+                    else:
+                        q["expiries"][0] = (end, n - removed)
+            q["stacks"] = min(q["maxStacks"], q["stacks"] + delta)
+            q["expires"] = t + q["duration"] if q["duration"] else math.inf
+
+    def die(t, weak_kill=False, weapon_kill=True):
+        nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, old_heat_strip
+        kills += 1
+        gen += 1
+        if first_kill is None:
+            first_kill = t
+        if last_kill is not None:
+            min_interval = (
+                t - last_kill
+                if min_interval is None
+                else min(min_interval, t - last_kill)
+            )
+        last_kill = t
+        pools[:] = full
+        states.clear()
+        gas_procs.clear()
+        blast_procs.clear()
+        heat.update(count=0.0, seed=0.0, end=-1.0, token=heat["token"] + 1)
+        old_heat_strip = (0.0, -1.0, 1.0)
+        signal("on-kill", t)
+        slot = str(combat.get("weaponSlot") or "").lower()
+        if "longgun" in slot or slot in ("primary", "rifle"):
+            signal("on-primary-kill", t)
+        if "melee" in slot:
+            signal("on-melee-kill", t)
+        distance = combat.get("distance")
+        if distance is not None and distance <= 5.0:
+            signal("on-close-kill", t)
+        if weak_kill:
+            signal("on-headshot-kill", t, head)
+        if syndrome and weapon_kill and t >= syndicate_ready:
+            affinity += float(combat.get("affinityPerKill") or 0.0)
+            if affinity >= syndrome["affinityToFill"]:
+                push(t, "syndicate")
+
+    def take(vector, t, source, weak_kill=False):
+        # Spend one attack fraction across pools. Shield bypass acts in parallel.
+        # Residual damage never leaks to the next target.
+        left = 1.0
+        applied = 0.0
+
+        def health_value(dtype, raw):
+            mult = max(
+                0.0, 1.0 + cache["faction_deltas"].get(dtype, 0.0)
+            ) * vulnerability(count("DT_VIRAL"))
+            if dtype not in cache["armour_bypass"]:
+                mult *= 1.0 - _armour_reduction(armour(t))
+            return raw * mult
+
+        if pools[0] > 0.0:
+            value = sum(
+                raw * (1.5 if k in ("DT_VOID", "DT_RADIANT") else 1.0)
+                for k, raw in vector.items()
+            ) * vulnerability(count("DT_MAGNETIC"))
+            if value <= 0.0:
+                return False
+            fraction = min(left, pools[0] / value)
+            drain = value * fraction
+            pools[0] = max(0.0, pools[0] - drain)
+            applied += drain
+            left -= fraction
+        if left > 0.0 and pools[1] > 0.0:
+            shield = sum(
+                raw * max(0.0, 1.0 + cache["faction_deltas"].get(k, 0.0))
+                for k, raw in vector.items()
+                if k not in cache["shield_bypass"]
+            ) * vulnerability(count("DT_MAGNETIC"))
+            bypass = sum(
+                health_value(k, raw)
+                for k, raw in vector.items()
+                if k in cache["shield_bypass"]
+            )
+            fraction = min(
+                left,
+                pools[1] / shield if shield > 0 else math.inf,
+                pools[2] / bypass if bypass > 0 else math.inf,
+            )
+            a = min(pools[1], shield * fraction)
+            b = min(pools[2], bypass * fraction)
+            pools[1] -= a
+            pools[2] -= b
+            applied += a + b
+            left -= fraction
+        if left > 0.0 and pools[1] <= 1e-9 and pools[2] > 0.0:
+            value = sum(health_value(k, raw) for k, raw in vector.items())
+            drain = min(pools[2], value * left)
+            pools[2] -= drain
+            applied += drain
+        totals[source] += applied
+        if ehp > 0.0 and pools[0] <= 1e-7 and pools[2] <= 1e-7:
+            die(t, weak_kill, source != "syndicate")
+            return True
+        return False
+
+    def model(t):
+        live_types = (
+            sum(count(k) > 0 for k in states) + int(heat["count"] > 0)
+            if combat.get("conditionOverload") or stats.co_bucket
+            else 0
+        )
+        key = (form, tuple(q["stacks"] for q in sources), live_types)
+        if key not in model_cache:
+            resolver = combat.get("resolve")
+            if resolver:
+                model_cache[key] = resolver(
+                    form, {q["id"]: q["stacks"] for q in sources}, live_types
+                )
+            elif stats.co_bucket:
+                from .damage import _combine, _scale_effect
+
+                assumed = _combine(
+                    1.0,
+                    [_scale_effect(e, stats.co_assumed_count) for e in stats.co_bucket],
+                )
+                live = _combine(
+                    1.0, [_scale_effect(e, live_types) for e in stats.co_bucket]
+                )
+                ratio = live / assumed if assumed else 1.0
+                model_cache[key] = (
+                    replace(
+                        stats,
+                        damage_types={
+                            k: v * ratio for k, v in stats.damage_types.items()
+                        },
+                        dot_base_damage=(
+                            stats.dot_base_damage * ratio
+                            if stats.dot_base_damage is not None
+                            else None
+                        ),
+                    ),
+                    None,
+                )
+            else:
+                model_cache[key] = (stats, None)
+        return model_cache[key]
+
+    bare_def = {**defenses, "armour": 0.0, "overguard": 0.0, "shield": 0.0}
+    probes = {}
+
+    def attack_data(st, aim):
+        key = (id(st), aim)
+        if key in probes:
+            return probes[key][1]
+        raw_cache = {**locations["body"], "faction_deltas": {}}
+        body = damage_against_cached_armour(
+            st, 0.0, bare_def, target=target, _target_cache=raw_cache
+        )
+        hc = {**locations["head"], "faction_deltas": {}}
+        hh = (
+            damage_against_cached_armour(
+                st, 0.0, bare_def, target=target, _target_cache=hc
+            )
+            if aim
+            else body
+        )
+        total = body["perShot"] * (1 - aim) + hh["perShot"] * aim
+        raw_sum = sum(body["perType"].values())
+        vector = (
+            {k: v * total / raw_sum for k, v in body["perType"].items()}
+            if raw_sum
+            else {}
+        )
+        dot_target = {
+            "health": 1.0,
+            "armour": 0.0,
+            "shield": 0.0,
+            "faction": target.get("faction", ""),
+            "hitProxies": target.get("hitProxies", []),
+            "factionResistance": "RK_NEUTRAL",
+        }
+        b = expected_status_damage(
+            st, dot_target, forced_procs=forced_procs, level=1, hit_location="body"
+        )
+        h = (
+            expected_status_damage(
+                st, dot_target, forced_procs=forced_procs, level=1, hit_location="head"
+            )
+            if aim
+            else b
+        )
+        rows = {}
+        for dtype, r in b["dot"]["perType"].items():
+            hr = h["dot"]["perType"].get(dtype, r)
+            rows[dtype] = {
+                **r,
+                "seedPerSecondPerProc": r["seedPerSecondPerProc"] * (1 - aim)
+                + hr["seedPerSecondPerProc"] * aim,
+            }
+        procs = {
+            k: (1 - aim) * b["expectedProcs"].get(k, 0.0)
+            + aim * h["expectedProcs"].get(k, 0.0)
+            for k in set(b["expectedProcs"]) | set(h["expectedProcs"])
+        }
+        non = {}
+        for k, row in b.get("nonDot", {}).get("perType", {}).items():
+            hr = h.get("nonDot", {}).get("perType", {}).get(k, row)
+            non[k] = {
+                **row,
+                "perProc": row["perProc"] * (1 - aim) + hr["perProc"] * aim,
+            }
+        result = (vector, procs, rows, non)
+        probes[key] = (
+            st,
+            result,
+        )  # Retain temporary burst stats to prevent recycled ids.
+        return result
+
+    def add_procs(st, aim, t):
+        _, procs, rows, non = attack_data(st, aim)
+        scale = max(st.proc_duration_multiplier, 0.0)
+        for dtype, n in procs.items():
+            n *= max(status_rate_multiplier, 0.0)
+            if n <= 0.0:
+                continue
+            signal("proc-" + dtype, t, n)
+            signal("on-proc", t, n)
+            if scale <= 0.0:
+                continue
+            row = rows.get(dtype)
+            duration = (
+                row["durationSeconds"] if row else durations.get(dtype, 6.0) * scale
+            )
+            if duration <= 0.0:
+                continue
+            if dtype == "DT_FIRE" and row:
+                if not heat["count"]:
+                    heat.update(start=t, scale=scale, token=heat["token"] + 1)
+                    push(t + 1.0, "heat", heat["token"], gen)
+                heat["count"] += n
+                heat["seed"] += n * row["seedPerSecondPerProc"]
+                heat["acc"] = row["accumulatorPerSecondPerAttack"]
+                heat["end"] = t + duration
+            else:
+                states.setdefault(dtype, deque()).append((t + duration, n))
+                if row:
+                    immediate = dtype in ("DT_GAS", "DT_ELECTRICITY")
+                    ticks = (
+                        range(0, max(1, int(math.ceil(duration - 1e-9))))
+                        if immediate
+                        else range(1, int(math.floor(duration + 1e-9)) + 1)
+                    )
+                    per = row["seedPerSecondPerProc"]
+                    if not row["accumulatorSharedGroup"]:
+                        per += row["coefficient"]
+                    instance = {
+                        "dtype": dtype,
+                        "per": per,
+                        "count": n,
+                        "end": t + duration,
+                    }
+                    if dtype == "DT_GAS":
+                        states[dtype].pop()
+                        gas_procs.append(instance)
+                        excess = sum(p["count"] for p in gas_procs) - 10.0
+                        for p in gas_procs:
+                            if excess <= 0:
+                                break
+                            removed = min(p["count"], excess)
+                            p["count"] -= removed
+                            excess -= removed
+                    for j in ticks:
+                        push(t + j, "independent-dot", instance, gen)
+                elif dtype in non:
+                    states[dtype].pop()
+                    instance = {
+                        "count": n,
+                        "per": non[dtype]["perProc"],
+                        "end": t + 1.5 * scale,
+                    }
+                    blast_procs.append(instance)
+                    push(instance["end"], "blast", instance, gen)
+                    if sum(p["count"] for p in blast_procs) >= 10.0:
+                        push(t, "blast-all", None, gen)
+
+    if combat:
+        ammo = model(0.0)[0].magazine
+    push(0.0, "fire")
+    if collect_timeline:
+        for i in range(1, int(math.ceil(window / step)) + 1):
+            push(min(i * step, window), "sample")
+    sample_time = 0.0
+    last_kills = 0
+    max_per_step = 0
+    while heap:
+        t, _, kind, payload, event_gen = heapq.heappop(heap)
+        clean(t)
+        if event_gen is not None and event_gen != gen:
+            continue
+        if kind == "heat":
+            if heat["count"] and payload == heat["token"] and t <= heat["end"] + 1e-9:
+                token = heat["token"]
+                generation = gen
+                take({"DT_FIRE": heat["seed"] + heat["acc"]}, t, "dot")
+                if gen == generation:
+                    push(t + 1.0, "heat", token, gen)
+        elif kind in ("blast", "blast-all"):
+            affected = list(blast_procs) if kind == "blast-all" else [payload]
+            value = sum(p["count"] * p["per"] for p in affected)
+            for p in affected:
+                p["count"] = 0.0
+            while blast_procs and not blast_procs[0]["count"]:
+                blast_procs.popleft()
+            if value:
+                take({"DT_EXPLOSION": value}, t, "nonDot")
+        elif kind == "independent-dot":
+            if payload["count"] > 0 and t <= payload["end"] + 1e-9:
+                dtype = payload["dtype"]
+                take(
+                    {
+                        "DT_CINEMATIC" if dtype == "DT_SLASH" else dtype: payload[
+                            "count"
+                        ]
+                        * payload["per"]
+                    },
+                    t,
+                    "dot",
+                )
+        elif kind == 'lingering':
+            part = payload
+            vec, _, _, _ = attack_data(part, 0.0)
+            if not take(vec, t, 'direct'):
+                add_procs(part, 0.0, t)
+        elif kind == "dot":
+            dtype, value, end = payload
+            if t <= end + 1e-9:
+                take(
+                    {"DT_CINEMATIC" if dtype == "DT_SLASH" else dtype: value}, t, "dot"
+                )
+        elif kind == "syndicate":
+            if (
+                not syndrome
+                or t < syndicate_ready
+                or affinity < syndrome["affinityToFill"]
+            ):
+                continue
+            affinity = 0.0
+            syndicate_ready = t + 30.0
+            before = totals["syndicate"]
+            died = take({syndrome["damageType"]: 1000.0}, t, "syndicate")
+            syndicate_events.append(
+                {
+                    "time": t,
+                    "id": syndrome["id"],
+                    "damage": totals["syndicate"] - before,
+                }
+            )
+            if not died and syndrome["id"] != "justice":
+                dtype = syndrome["damageType"]
+                duration = (
+                    8.0
+                    if dtype == "DT_CORROSIVE"
+                    else (12.0 if dtype == "DT_RADIATION" else 6.0)
+                )
+                states.setdefault(dtype, deque()).append((t + duration, 1.0))
+                if dtype in ("DT_GAS", "DT_POISON"):
+                    for j in (range(6) if dtype == "DT_GAS" else range(1, 7)):
+                        push(t + j, "dot", (dtype, 500.5, t + 6.0), gen)
+        elif kind == "transform":
+            form = payload
+            transforms += 1
+            first_round = True
+            burst_round = 0
+            active, _ = model(t)
+            ammo = cycle["pool"] if form == "incarnon" else active.magazine
+            if form == "base":
+                gauge = 0.0
+            push(t, "fire")
+        elif kind == "fire":
+            if t >= window - 1e-9 or rate <= 0.0:
+                continue
+            active, radial = model(t)
+            speed = active.fire_rate if combat else rate
+            if speed <= 0.0:
+                continue
+            if cycle and form == "base" and gauge >= cycle["hits"] - 1e-9:
+                push(t + cycle["enterSeconds"], "transform", "incarnon")
+                continue
+            if ammo <= 1e-9 and active.magazine > 0.0 and combat:
+                if cycle and form == "incarnon":
+                    push(t + cycle["exitSeconds"], "transform", "base")
+                else:
+                    reloads += 1
+                    first_round = True
+                    burst_round = 0
+                    ammo = active.magazine
+                    signal("on-reload-empty", t)
+                    signal("on-reload", t)
+                    for q in sources:
+                        if q.get("kind") == "on-burst-hit":
+                            q["stacks"] = 0.0
+                    active, _ = model(t)
+                    reload_time = active.reload_time
+                    for q in sources:
+                        if (
+                            q.get("kind") in ("on-reload-empty", "on-reload")
+                            and not q["duration"]
+                        ):
+                            q["stacks"] = (
+                                q["initialStacks"] if q["perEvent"] == 0 else 0.0
+                            )
+                    push(t + reload_time, "fire")
+                continue
+            attacks += 1
+            generation = gen
+            if (
+                combat.get("lastBurst")
+                and form == "base"
+                and ammo <= 3
+                and not combat.get("multishotLocked")
+            ):
+                active = replace(active, multishot=active.multishot * 6.0)
+            if first_round and active.first_shot_damage_bonus:
+                active = copy(active)
+                factor = 1.0 + active.first_shot_damage_bonus
+                active.damage_types = {k: v * factor for k,v in active.damage_types.items()}
+                if active.dot_base_damage is not None:
+                    active.dot_base_damage *= factor
+            first_round = False
+            vector, _, _, _ = attack_data(active, head)
+            died = take(
+                {k: v * damage_rate_multiplier for k, v in vector.items()},
+                t,
+                "direct",
+                True,
+            )
+            if not died:
+                add_procs(active, head, t)
+                field = getattr(active, '_lingering', None)
+                if field:
+                    part, tick_rate, duration = field
+                    for tick in range(int(math.ceil(duration * tick_rate - 1e-9))):
+                        push(t + tick / tick_rate, 'lingering', part, gen)
+            if radial and gen == generation:
+                vec, _, _, _ = attack_data(radial, 0.0)
+                if not take(vec, t, "direct"):
+                    add_procs(radial, 0.0, t)
+            elif radial:
+                stale += 1
+            if (form == "base" or combat.get("baseMode")) and burst_round == 2:
+                signal("on-burst-hit", t)
+            signal("on-hit", t, active.multishot)
+            signal("on-headshot", t, head * active.multishot)
+            signal(
+                "on-crit",
+                t,
+                min(
+                    active.crit_chance
+                    + head
+                    * (
+                        active.weakpoint_crit_chance_bonus
+                        + active.base_crit_chance
+                        * active.weakpoint_crit_chance_relative
+                    ),
+                    1.0,
+                )
+                * active.multishot,
+            )
+            if cycle and form == "base":
+                gauge = min(cycle["hits"], gauge + (1.0 if cycle.get('chargeOn') == 'direct_hits' else head) * active.multishot)
+            if combat:
+                ammo -= (
+                    1.0
+                    if form == "incarnon" or combat.get("selectedIncarnon")
+                    else (1.0 if hasattr(active, '_bow_draw') and active.ammo_cost == 0 else max(active.ammo_cost, 0.0))
+                )
+            burst = (
+                combat.get("baseBurst")
+                if (form == "base" or combat.get("baseMode"))
+                else None
+            )
+            delay = getattr(active, '_bow_draw', 1.0 / speed)
+            if delay == 0 and ammo > 0:
+                delay = active.reload_time or 1.0 / speed
+            if burst:
+                burst_round += 1
+                if burst_round < int(burst["count"]) and ammo > 0:
+                    delay = float(burst["delay_seconds"]) / max(
+                        1.0, speed / float(combat["baseFireRate"])
+                    )
+                else:
+                    burst_round = 0
+            push(t + delay, "fire")
+        elif kind == "sample":
+            dt = t - sample_time
+            sample_time = t
+            max_per_step = max(max_per_step, kills - last_kills)
+            last_kills = kills
+            stacks = {name: round(count(dtype), 3) for dtype, name in names.items()}
+            for k, v in stacks.items():
+                averaged[k] += v * dt
+            point = {
+                "time": round(t, 6),
+                "pool": (
+                    "overguard"
+                    if pools[0] > 0
+                    else ("shield" if pools[1] > 0 else "health")
+                ),
+                "overguard": pools[0],
+                "shield": pools[1],
+                "health": pools[2],
+                "stacks": stacks,
+                "armour": armour(t),
+                "heatArmourStrip": heat_strip(t),
+                "totalArmourStrip": 1 - armour(t) / armour_base if armour_base else 0.0,
+                "generation": gen,
+                "form": form,
+                "ammo": ammo,
+                "gauge": gauge,
+                "shots": attacks,
+                "directDps": (
+                    (totals["direct"] - last_totals["direct"]) / dt if dt else 0.0
+                ),
+                "dotDps": (totals["dot"] - last_totals["dot"]) / dt if dt else 0.0,
+                "stepDamage": sum(totals.values()) - sum(last_totals.values()),
+                "syndicatePoints": affinity,
+                "triggerStacks": {q["id"]: q["stacks"] for q in sources},
+            }
+            timeline.append(point)
+            last_totals = totals.copy()
+            for q in sources:
+                q["series"].append(q["stacks"])
+    score = kills + (1 - sum(pools) / ehp if ehp else 0.0)
+    initial = damage_against_cached_armour(
+        stats, armour_base, defenses, target=target, _target_cache=locations["body"]
+    )
+    if head:
+        h = damage_against_cached_armour(
+            stats, armour_base, defenses, target=target, _target_cache=locations["head"]
+        )
+        initial["perShot"] = initial["perShot"] * (1 - head) + h["perShot"] * head
+    ledger = (
+        direct_fire_ledger(
+            attacks_per_second=rate,
+            window_seconds=window,
+            target_ehp=ehp,
+            component_damage=[
+                ("expected-shot", initial["perShot"] * damage_rate_multiplier)
+            ],
+            collect_trace=False,
+        )
+        if ehp and rate
+        else {}
+    )
+    ledger.update(status="diagnostic-static-defense", perShotDamage=initial["perShot"])
+    return {
+        "model": "event-expected-v3",
+        "eventModel": "target-generation-events-v3",
+        "windowSeconds": window,
+        "timeStep": step,
+        "attacksPerSecond": attacks / window if window else 0.0,
+        "statusEventsPerSecond": rate * status_rate_multiplier,
+        "timeline": timeline,
+        "averagedStacks": {
+            k: v / window if window else 0.0 for k, v in averaged.items()
+        },
+        "steadyStacks": timeline[-1]["stacks"] if timeline else {},
+        "killsPerMinute": score * 60 / window if window else 0.0,
+        "killsInWindow": score,
+        "killEvents": kills,
+        "targetGeneration": gen,
+        "targetTotalEhp": ehp,
+        "directWindow": totals["direct"],
+        "dotWindow": totals["dot"],
+        "nonDotWindow": totals["nonDot"],
+        "syndicateWindow": totals["syndicate"],
+        "syndicateEvents": syndicate_events,
+        "totalWindowDamage": sum(totals.values()),
+        "windowDps": sum(totals.values()) / window if window else 0.0,
+        "firstKillTime": first_kill,
+        "minKillInterval": min_interval,
+        "maxKillsPerStep": max_per_step,
+        "staleComponents": stale,
+        "shots": attacks,
+        "reloads": reloads,
+        "transforms": transforms,
+        "directEventLedger": ledger,
+        "emergent": {"onKillStacks": "events" if sources else "panel-assumed-max"},
+        "triggerSeries": [
+            {
+                **{k: q[k] for k in ("id", "label", "kind", "maxStacks", "series")},
+                "avgStacks": (
+                    sum(q["series"]) / len(q["series"]) if q["series"] else 0.0
+                ),
+                "uptime": (
+                    sum(v > 0 for v in q["series"]) / len(q["series"])
+                    if q["series"]
+                    else 0.0
+                ),
+            }
+            for q in sources
+        ],
+        "perAttack": expected_status_damage(
+            stats,
+            target,
+            forced_procs=forced_procs,
+            level=level,
+            armour_strip=armour_strip,
+            steel_path=steel_path,
+            enemy_enhancements=enemy_enhancements,
+        ),
+        "continuousKillEvents": True,
+        "activePool": "overguard" if full[0] else ("shield" if full[1] else "health"),
+        "unsupported": unsupported,
+        "limitations": [
+            "expected-proc-counts-not-Monte-Carlo",
+            "single-target",
+            "non-heat-stacking-procs-expected",
+            "fractional-proc-refresh-approximates-uptime",
+            "single-target-syndicate-no-player-buffs",
+        ],
+    }

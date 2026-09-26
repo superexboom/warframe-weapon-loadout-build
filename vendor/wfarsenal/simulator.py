@@ -755,6 +755,8 @@ def simulate(
     status_rate_multiplier: float = 1.0,
     damage_rate_multiplier: float = 1.0,
     weapon_override: Mapping[str, Any] | None = None,
+    engine_context_sink: dict | None = None,
+    riven_slot: int | None = None,
 ) -> dict[str, Any]:
     """Resolve a loadout and return one deterministic JSON-compatible result."""
     if isinstance(fire_mode, bool) or not isinstance(fire_mode, int) or fire_mode < 0:
@@ -877,7 +879,10 @@ def simulate(
 
     active_set_pieces: dict[str, int] = {}
     set_diagnostics: list[str] = []
+    riven_effect_index = None
     for mod, query, rank, compatible, slot in resolved_mods:
+        if riven_slot is not None and riven_effect_index is None and (slot if slot is not None else len(selected_mods)) >= riven_slot:
+            riven_effect_index = len(effects)
         set_id = _set_key(mod.get("modSet"))
         shell = shells.get(set_id) if set_id else None
         pieces = 0
@@ -997,6 +1002,11 @@ def simulate(
     # adapter.  Keep them on this same reducer path instead of maintaining a
     # second damage implementation in the HTTP layer.
     passive_list = list(passive_effects)
+    if riven_slot is not None:
+        riven_terms = [e for e in passive_list if str(e.source_path or '').startswith('riven:')]
+        passive_list = [e for e in passive_list if not str(e.source_path or '').startswith('riven:')]
+        at = riven_effect_index if riven_effect_index is not None else len(effects)
+        effects[at:at] = riven_terms
     effects.extend(passive_list)
     effects.skipped.extend(getattr(passive_effects, "skipped", ()))
 
@@ -1014,6 +1024,8 @@ def simulate(
         stats = apply_mods(
             weapon_record, effects, fire_mode=fire_mode, scenario=scenario
         )
+        if engine_context_sink is not None:
+            engine_context_sink.update(weapon=weapon_record, effects=effects, scenario=scenario, fire_mode=fire_mode)
         target_damage = damage_against(
             stats,
             enemy_record,

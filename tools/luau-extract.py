@@ -62,6 +62,16 @@ def known_roots() -> list[str]:
         "/Lotus/Scripts/Venus/",
         "/Lotus/Upgrades/CosmeticEnhancers/Offensive/",
         "/Lotus/PowersuitAbilities/",
+        # Script references in ability/weapon package records are resolved
+        # relative to their owner package, not necessarily /Lotus/Scripts/.
+        # Keep the known game families here so basename extraction remains
+        # useful for newly introduced script-driven content.
+        "/Lotus/Powersuits/Duelist/",
+        "/Lotus/Powersuits/Duelist/Abilities/",
+        "/Lotus/Weapons/Tenno/Bows/DuelistBow/",
+        "/Lotus/Weapons/Tenno/Pistols/DuelistPistols/",
+        "/Lotus/Weapons/Tenno/Pistols/DuelistPistols/Abilities/",
+        "/Lotus/Characters/Tenno/Accessory/Ephemeras/DuelistSpiritEphemera/",
     ]
 
 

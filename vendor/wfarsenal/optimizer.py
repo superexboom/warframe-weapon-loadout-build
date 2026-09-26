@@ -137,7 +137,7 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "O": 58.77, "Q": 104.85, "T": 1.9422, "U": 73.44,
         "X": 119.7,
         # 新词条（近战专属：重击蓄力/格挡角度/震地伤害 base90=1.197/8.1/1.197）
-        "HC": 175.8, "PA": 1190.0, "SL": 175.8,
+        "HC": 175.8, "PA": 1190.0, "SL": 175.8, "HD": 119.7,
         "HR": 132.0,
         "FO": 66.0, "FT": 66.0, "FS": 66.0,
     },
@@ -207,6 +207,7 @@ RIVEN_RULES: dict[str, tuple[str, str, str, str | None, str | None, str, float, 
     "FT": ("对Techrot伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Techrot", "percent", 1, True, False),
     "FS": ("对Scaldra伤害", "GAMEPLAY_FACTION_DAMAGE", "STACKING_MULTIPLY", None, "Scaldra", "percent", 1, True, False),
     # 近战专属融合词条（base90: 蓄力速度 1.197、格挡角度 8.1、震地伤害 1.197）。
+    "HD": ("重击伤害", "WEAPON_MELEE_DAMAGE", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
     "HC": ("重击蓄力速度", "WEAPON_MELEE_HEAVY_CHARGE_SPEED", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
     "PA": ("格挡角度", "WEAPON_PARRY_ANGLE", "ADD", None, None, "flat", 1, True, False),
     "SL": ("震地伤害", "WEAPON_MELEE_SLAM_DAMAGE_BONUS", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
@@ -215,10 +216,8 @@ RIVEN_RULES: dict[str, tuple[str, str, str, str | None, str | None, str, float, 
 # ── 融合词条码集合（仅正面、每卡限 1 条——游戏规则，2026-09-24 确认）──
 # 推荐器的组合枚举（_recommend_positive 头部组合、recommend_optimal_riven
 # 的 beam 组合）用它过滤：任何含 2+ 融合词条的组合非法，直接跳过。
-_FUSION_LINE_CODES = frozenset({
-    "W", "Y", "GA", "CO", "VI", "RA", "BL", "MA",
-    "SD", "AE", "HR", "FO", "FT", "FS", "HC", "PA", "SL",
-})
+from .riven_fusion import FUSION_CODES as _FUSION_LINE_CODES, available_codes as _available_fusion_codes
+
 
 
 def _combo_allows_fusion(lines: Sequence[Any]) -> bool:
@@ -253,6 +252,8 @@ def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, f
         matches = []
         for code, rule in RIVEN_RULES.items():
             _label, upgrade_type, operation, damage_type, symbol_filter, unit, *_rest = rule
+            if tuple(upgrade.get("validModifiers") or ()) != (("PM_HEAVY_MELEE",) if code == "HD" else ()):
+                continue
             if upgrade_type != upgrade.get("upgradeType") or operation != upgrade.get("operation"):
                 continue
             raw_damage = upgrade.get("damageType")
@@ -307,6 +308,8 @@ class _Card:
     # 结构与 app 层 trigger_sources 一致：
     # {id, label, kind, perEvent, maxStacks, duration, effects: [原始 effect 行]}。
     trigger_specs: tuple[Mapping[str, Any], ...] = ()
+    event_arcanes: tuple[tuple[Mapping[str, Any], int, Mapping[str, Any]], ...] = ()
+    incarnon_choices: tuple[tuple[str, str], ...] = ()
 
 
 @dataclass
@@ -377,6 +380,7 @@ def _effect_from_code(
         symbol_filter=symbol_filter,
         supported=upgrade_type in SUPPORTED_WEAPON_UPGRADE_TYPES,
         source_path=source,
+        valid_modifiers=("PM_HEAVY_MELEE",) if code == "HD" else (),
     )
 
 
@@ -631,7 +635,7 @@ def _select_fire_mode(
         raise SimulationError(
             f"fireMode {index} is out of range for {len(modes)} fire modes"
         )
-    selected = {**weapon, "fireModes": [modes[index]]}
+    selected = {**weapon, "fireModes": [modes[index]], "__selectedFireMode__": index, "__baseFireModes__": list(modes)}
     # 灵化循环口径（Scenario.incarnon_cycle）需要基础形态的装填时长折算
     # 充能——保留完整模式列表供 apply_mods 读取。
     if weapon.get("isIncarnon"):
@@ -653,8 +657,14 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
     source = str(branch.get("path") or branch.get("id") or "incarnon")
     effects: list[ModEffect] = []
     unsupported: list[str] = []
+    # Flattened child effects repeat the condition block. Never make them passive.
+    conditional_sources = {str(c.get('sourcePath') or source)
+                           for c in branch.get('conditionalEffects') or () if c.get('effects')}
     for raw in branch.get("effects") or ():
         if not isinstance(raw, Mapping):
+            continue
+        if str(raw.get('sourcePath') or source) in conditional_sources:
+            unsupported.append(f'incarnon-{branch.get("id")}-conditional-source-excluded')
             continue
         gate = _incarnon_expected_weight(str(raw.get("sourcePath") or source))
         if gate == "headshot_only":
@@ -720,58 +730,23 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
 
 
 def _branch_trigger_specs(branch: Mapping[str, Any]) -> list[dict[str, Any]]:
-    """灵化条件 SubUpgrade 子词条 → 触发规格（事件化叠层）。
-
-    带 UpgradeDuration/MaxConditionalStacks 的 SubUpgrade（如 Boltor 猩红
-    序曲「每层 +2 伤害，最多 4 层，持续 5s」）从 _branch_effects 的面板
-    通道排除后，在这里转为 trigger_specs 事件规格：层数按事件率爬升、
-    按 duration 衰减、伤害分量按 damagePerStack 反馈进窗口模型。
-
-    kind 判定：升级类型为 WEAPON_DAMAGE_AMOUNT/CRIT_* 的命中叠层 →
-    "on-hit"（每次攻击一层）；弹药效率类（AMMO_CONSUME_RATE）无伤害
-    分量，仍以 "on-hit" 追踪层数（折线图可见）但不带伤害反馈。
-    """
-    specs: list[dict[str, Any]] = []
-    merged: dict[str, dict[str, Any]] = {}
-    branch_id = str(branch.get("id") or branch.get("path") or "incarnon")
-    for raw in branch.get("effects") or ():
-        if not isinstance(raw, Mapping) or not raw.get("isSubUpgrade"):
-            continue
-        duration = raw.get("UpgradeDuration")
-        max_stacks = raw.get("MaxConditionalStacks")
-        chance = raw.get("UpgradeChance")
-        if duration is None and max_stacks is None:
-            continue  # 无条件常驻子词条——已进面板，不是触发源
-        upgrade_type = str(raw.get("upgradeType") or "")
-        has_damage = upgrade_type == "WEAPON_DAMAGE_AMOUNT"
-        value = raw.get("valuePerRank")
-        per_event = 1.0
-        if isinstance(chance, (int, float)) and not isinstance(chance, bool):
-            per_event = max(float(chance), 0.0)
-        # 同一 SubMod 的多条子词条（伤害+弹药效率）共享同一叠层状态：
-        # 按 sourcePath 合并为一个触发源（层数只有一份），伤害分量取
-        # 该 SubMod 的 damagePerStack。
-        source_key = str(raw.get("sourcePath") or "")
-        spec = merged.get(source_key)
-        if spec is None:
-            spec = {
-                "id": f"incarnon-{branch_id}-{source_key.rsplit('/', 1)[-1]}",
-                "label": f"灵化·{branch_id}",
-                "kind": "on-hit",
-                "perEvent": per_event,
-                "maxStacks": max(
-                    float(max_stacks) if isinstance(max_stacks, (int, float)) and not isinstance(max_stacks, bool) else 1.0,
-                    1.0,
-                ),
-                "duration": max(
-                    float(duration) if isinstance(duration, (int, float)) and not isinstance(duration, bool) else 0.0,
-                    0.0,
-                ),
-            }
-            merged[source_key] = spec
-            specs.append(spec)
-        if has_damage and isinstance(value, (int, float)) and not isinstance(value, bool) and float(value) > 0:
-            spec["damagePerStack"] = float(value)
+    """Export only identified events; a duration alone does not imply on-hit."""
+    from .manual_combat import condition_kind
+    specs=[]
+    for condition in branch.get('conditionalEffects') or []:
+        if condition.get('runtimeScripts'):continue
+        kind=condition_kind(condition)
+        if not kind:continue
+        source=str(condition.get('sourcePath') or branch.get('path') or '')
+        terms=condition.get('effects') or []
+        spec={'id':'incarnon-'+str(branch.get('id'))+'-'+source.rsplit('/',1)[-1],
+              'label':'灵化·'+str(branch.get('id')),'kind':kind,
+              'perEvent':float(condition.get('chance') or 1.),
+              'maxStacks':float(condition.get('maxStacks') or 1.),
+              'duration':float(condition.get('duration') or 0.)}
+        damage=sum(float(e.get('valuePerRank') or 0.) for e in terms if e.get('upgradeType')=='WEAPON_DAMAGE_AMOUNT')
+        if damage:spec['damagePerStack']=damage
+        specs.append(spec)
     return specs
 
 
@@ -1014,6 +989,7 @@ def _incarnon_card(
             drain=0,
             polarity=None,
             trigger_specs=tuple(selected_triggers),
+            incarnon_choices=tuple(selected.items()),
         ),
         selected,
         unsupported,
@@ -1032,6 +1008,10 @@ def _arcane_matches_weapon(
     effects; ``validType`` and upgrade qualifiers are still enforced later by
     ``apply_mods``.
     """
+    if arcane.get("equipmentType") == "Kitgun Arcane":
+        ancestry = " ".join(str(p) for p in weapon.get("ancestry") or ()).casefold()
+        if "modular" not in ancestry and not weapon.get("kitgunParts"):
+            return False
     if _mod_matches_weapon(arcane, weapon):
         return True
     if not _frame_owned_arcane(arcane):
@@ -1127,6 +1107,7 @@ def _arcane_card(
     skipped: list[str] = []
     states: list[dict[str, Any]] = []
     unsupported: list[str] = []
+    event_arcanes = []
     weapon_arcane_count = 0
     frame_arcane_count = 0
     queries: list[str] = []
@@ -1309,6 +1290,7 @@ def _arcane_card(
             state["error"] = str(exc)
             unsupported.append(f"arcane-state-{index}-invalid-not-applied")
             continue
+        event_arcanes.append((arcane, int(state["rank"]), dict(raw)))
         supported_effects = [effect for effect in effects if effect.supported]
         unsupported_effects = [effect for effect in effects if not effect.supported]
         if effects.skipped:
@@ -1327,9 +1309,10 @@ def _arcane_card(
             unsupported.append(f"arcane-state-{index}-no-supported-effects")
 
     card = None
-    if combined or skipped:
+    if combined or skipped or event_arcanes:
         card = _Card(
             key="__arcanes__",
+            event_arcanes=tuple(event_arcanes),
             record=None,
             rank=0,
             effects=tuple(combined),
@@ -1346,6 +1329,9 @@ def _merge_passives(*cards: _Card | None) -> _Card | None:
         return None
     return _Card(
         key="__passives__",
+        trigger_specs=tuple(t for c in active for t in c.trigger_specs),
+        event_arcanes=tuple(r for c in active for r in c.event_arcanes),
+        incarnon_choices=tuple(x for c in active for x in c.incarnon_choices),
         record=None,
         rank=0,
         effects=tuple(effect for card in active for effect in card.effects),
@@ -1498,6 +1484,22 @@ def _metrics(
     return result
 
 
+def _bind_combat_inputs(stats, weapon, cards, effects, scenario, passives=None):
+    """Keep the loadout with its stats across beam, Riven and ablation scoring.
+
+    Plain data is picklable by search workers. Runtime resolver closures are
+    built only inside the event evaluation; public stat serialization is unchanged.
+    """
+    from .search_combat import bind
+    bind(stats, weapon, cards, effects, scenario, passives)
+    return stats
+
+
+def _event_window(stats, context):
+    from .search_combat import window
+    return window(stats, context)
+
+
 def _score(
     stats: Any,
     metric: str,
@@ -1534,18 +1536,18 @@ def _score(
             else status["directDps"]
         )
     if metric in {"windowedDps", "windowedTotalDamage", "killsPerMinute"}:
-        # 启动窗口模型：从零层开始积分触发爬升。无 target 时为中立靶（无护甲
-        # 无派系）；携带 target 时按真实目标（等级/钢铁之路/卓越者超宏/派系
-        # 克制）解算。killsPerMinute 返回窗口内击杀数折算的 KPM（用户指定的
-        # 标准靶：170 级钢铁之路卓越者超宏凶魂百夫长，0 削甲 0 爆头，30s 窗口）。
+        # Event-window scores use the caller's complete target and scenario.
+        # Bound loadouts share prepare/replay with manual builds; unbound legacy
+        # panel callers retain their original fallback. KPM is the window rate.
         context = target_context or {}
         target = context.get("target")
         target = target if isinstance(target, Mapping) else None
-        windowed = windowed_status_damage(
+        windowed = _event_window(stats, context) if hasattr(stats, "_combat_inputs") else windowed_status_damage(
             stats,
             target,
             attacks_per_second=stats.sustained_attack_rate,
             window_seconds=float(context.get("windowSeconds") or 5.0),
+            headshot_chance=float(context.get('headshotChance') or (1.0 if context.get('hit_location') == 'head' else 0.0)),
             status_rate_multiplier=float(context.get("statusRateMultiplier") or 1.0),
             damage_rate_multiplier=float(context.get("stanceMultiplier") or 1.0),
             level=context.get("level"),
@@ -1585,11 +1587,12 @@ def _window_pressure_probe(
     target = context.get("target")
     if not isinstance(target, Mapping):
         return None
-    result = windowed_status_damage(
+    result = _event_window(stats, context) if hasattr(stats, "_combat_inputs") else windowed_status_damage(
         stats,
         target,
         attacks_per_second=stats.sustained_attack_rate,
         window_seconds=float(context.get("windowSeconds") or 30.0),
+        headshot_chance=float(context.get('headshotChance') or (1.0 if context.get('hit_location') == 'head' else 0.0)),
         status_rate_multiplier=float(context.get("statusRateMultiplier") or 1.0),
         damage_rate_multiplier=float(context.get("stanceMultiplier") or 1.0),
         level=context.get("level"),
@@ -1663,6 +1666,8 @@ def _evaluate(
     passives: _Card | None = None,
     slot_limit: int = 8,
     capacity_limit: int = 60,
+    special_cards: Sequence[_Card] = (),
+    special_capacity_cost: int = 0,
     target_context: Mapping[str, Any] | None = None,
 ) -> _Evaluation | None:
     if len(cards) + (1 if riven else 0) > slot_limit:
@@ -1698,10 +1703,11 @@ def _evaluate(
         ordered = list(cards)
         if riven is not None and position is not None:
             ordered.insert(position, riven)
-        capacity = _capacity(ordered)
+        capacity = _capacity(ordered) + special_capacity_cost
         if capacity > capacity_limit:
             continue
-        effect_cards = [passives, *ordered] if passives is not None else ordered
+        all_cards = [*ordered, *special_cards]
+        effect_cards = [passives, *all_cards] if passives is not None else all_cards
         effects = _effects(effect_cards, scenario)
         probe_scenario = replace(scenario, victim_status_count=0)
         probe_stats = apply_mods(weapon, effects, scenario=probe_scenario)
@@ -1713,6 +1719,7 @@ def _evaluate(
         projectile_events = evaluate_projectile_events(
             weapon, effects, scenario=derived_scenario
         )
+        _bind_combat_inputs(stats, weapon, all_cards, effects, derived_scenario, passives)
         current = _Evaluation(
             score=_score(stats, metric, projectile_events, target_context),
             cards=tuple(cards),
@@ -2468,20 +2475,9 @@ def _structure_full_roll_factor() -> float:
 def _fusion_codes_from_templates(
     templates: Mapping[str, Any], weapon_type: str
 ) -> frozenset[str]:
-    """该武器类型可融合获得的结果词条码集合（riven_templates 的
-    fusionRecipes.weaponType == weapon_type 的 result 集）。"""
-    recipes = (
-        templates.get("fusionRecipes")
-        if isinstance(templates, Mapping)
-        else None
-    ) or ()
-    return frozenset(
-        str(recipe.get("result"))
-        for recipe in recipes
-        if isinstance(recipe, Mapping)
-        and str(recipe.get("weaponType") or "") == weapon_type
-        and recipe.get("result")
-    )
+    """Read advanced-trait availability; recipe completeness is separate."""
+    return _available_fusion_codes(templates, weapon_type)
+
 
 
 def _candidate_lines(
@@ -2520,12 +2516,7 @@ def _candidate_lines(
         )
 
     lines: list[_RivenLine] = []
-    # ── 融合词条类型过滤（2026-09-24）───────────────────────────────────
-    # 融合配方（词条融合系统）本 build 只对部分武器类型发布（rifle 有
-    # 18 条 MergeOptions；pistol/shotgun/archgun/melee 的模板里是空占位
-    # 或缺失）。无配方类型的融合词条不可能通过融合获得——候选层直接
-    # 过滤（数值表保留全类型：引擎乘区本身是类型无关的）。
-    # available_fusion_codes=None 时不过滤（测试/内部调用兼容）。
+    # Candidate availability follows advanced-trait templates, not recipe coverage.
     for code, base in bases.items():
         rule = RIVEN_RULES.get(code)
         if rule is None:
@@ -2808,6 +2799,12 @@ def recommend_optimal_riven(
     target_context: Mapping[str, Any] | None = None,
     budget_seconds: float = 10.0,
     top_limit: int = 10,
+    slot_count: int = 8,
+    min_fill: int | None = None,
+    max_fill: int | None = None,
+    required_damage_type: str | None = None,
+    special_cards: Sequence[_Card] = (),
+    special_capacity_cost: int = 0,
 ) -> dict[str, Any]:
     """Anytime 最优紫卡词条搜索（KPM 口径）。
 
@@ -2852,6 +2849,15 @@ def recommend_optimal_riven(
 
     required_cards = tuple(card for card in baseline.cards if card.required)
     optional_cards = tuple(card for card in baseline.cards if not card.required)
+    fill_low = max(1, min_fill if min_fill is not None else 1)
+    fill_high = min(slot_count, max_fill if max_fill is not None else slot_count)
+    optional_low = max(0, fill_low - len(required_cards) - 1)
+    optional_high = min(len(optional_cards), fill_high - len(required_cards) - 1)
+    if optional_high < optional_low:
+        raise SimulationError('Riven and required MODs cannot satisfy the selected slot/fill limits')
+    def legal_layers(layers):
+        return tuple(dict.fromkeys(min(max(n, optional_low), optional_high) for n in layers))
+    witnesses = {}
     # memo：key = (保留卡下标 frozenset, 紫卡词条码 tuple)。
     memo: dict[tuple[tuple[int, ...], tuple[str, ...]], float] = {}
     # 已超过容量的子集跳过表：粗排阶段 keep=3 内容量更宽松，记下不可行
@@ -2882,11 +2888,17 @@ def recommend_optimal_riven(
             metric=metric,
             passives=passives,
             capacity_limit=capacity_limit,
+            slot_limit=slot_count,
+            special_cards=special_cards,
+            special_capacity_cost=special_capacity_cost,
             target_context=target_context,
         )
-        if outcome is None:
+        if outcome is None or (required_damage_type and outcome.stats.damage_types.get(required_damage_type, 0) <= 0):
             return None
         memo[key] = outcome.score
+        combo_key = _riven_combo_key(lines)
+        if combo_key not in witnesses or outcome.score > witnesses[combo_key][0].score:
+            witnesses[combo_key] = (outcome, riven_card)
         return outcome.score
 
     def _structure_remap(
@@ -2952,8 +2964,8 @@ def recommend_optimal_riven(
         remapped = _structure_remap(lines)
         riven_card = _card_from_lines(remapped)
         best: float | None = None
-        layer_cap = min(len(optional_cards), 7 - len(required_cards))
-        for keep in keep_layers:
+        layer_cap = optional_high
+        for keep in legal_layers(keep_layers):
             if keep > layer_cap or keep < 0:
                 continue
             for indexes in itertools.combinations(range(len(optional_cards)), keep):
@@ -2972,7 +2984,15 @@ def recommend_optimal_riven(
         # 输出数值按组合实际结构重映射（与评估口径一致）。
         remapped = _structure_remap(lines)
         ordered = sorted(remapped, key=lambda line: (line.negative, line.code))
+        outcome, riven_card = witnesses[key]
+        witness = _build_payload(weapon, outcome, riven_card, passives)
+        witness['damageTypes'] = dict(outcome.stats.damage_types)
+        witness['riven'] = {'slot': outcome.riven_index, 'stats': [{'code':line.code,'value':line.value,'negative':line.negative} for line in ordered]}
+        for index, row in enumerate(witness['mods']):
+            row['slot'] = index + (index >= outcome.riven_index)
+        witness['specialMods'] = [{'path':c.record['path'],'rank':c.rank} for c in special_cards if c.record]
         results[key] = {
+            'build': witness,
             "stats": [
                 {
                     "code": line.code,
@@ -3027,7 +3047,7 @@ def recommend_optimal_riven(
     # ── 反哺算法强化（2026-09-23）：自适应 beam——粗排提前完成（预算
     # 富余）时 beam 吸收更多后续候选；负面头部随预算加宽（4→6→8）。
     beam_width = 8 if budget_seconds <= 10 else (10 if budget_seconds <= 30 else 12)
-    if _time.monotonic() < coarse_deadline * 0.75:
+    if _time.monotonic() - started < (coarse_deadline - started) * 0.75:
         # 粗排便宜（keep2 单层）：提前完成说明预算富余，beam 加宽一档。
         beam_width = min(beam_width + 2, len(positive_ranked))
     beam = [line for _, line in positive_ranked[:beam_width]]
@@ -3108,6 +3128,8 @@ def recommend_optimal_riven(
             "beam": f"beam width {beam_width} × sizes 2/3 (keep 7/6/5), negatives head {len(negative_head)} on 2/3-positive combos",
             "refined": "keep 7..0 full ladder of head",
         },
+        'scope': {'slotCount':slot_count,'minFill':fill_low,'maxFill':fill_high,'requiredDamageType':required_damage_type},
+        'searchStatus': 'heuristic-best-found',
         "baselineScore": baseline.score,
     }
 
@@ -3150,10 +3172,12 @@ def _objective_metric(metric: str) -> str:
     return "heavyDamage" if metric in {"heavyAttackDps", "heavyDamage"} else metric
 
 
-def _scenario(metric: str, *, incarnon_cycle: bool = False) -> Scenario:
+def _scenario(metric: str, *, incarnon_cycle: bool = False, aiming: bool = False) -> Scenario:
     return Scenario(
         heavy_attack=metric in {"heavyAttackDps", "heavyDamage"},
         incarnon_cycle=incarnon_cycle,
+        aiming=aiming,
+        trigger_policy="emergent",
     )
 
 
@@ -3196,6 +3220,9 @@ def _statics_cache_key(
         "statusRateMultiplier": raw.get("statusRateMultiplier", 1.0),
         "heavyAttack": bool(raw.get("heavyAttack")),
         "windowSeconds": raw.get("windowSeconds", 30.0),
+        "enemyEnhancements": raw.get("enemyEnhancements"),
+        "playerCount": raw.get("playerCount", 1),
+        "eventScoringVersion": "loadout-events-v1",
     }
     return json.dumps(
         {
@@ -3442,6 +3469,7 @@ def _build_payload(
     unsupported_set = {
         *normal.unsupported,
         *heavy.unsupported,
+        *evaluation.stats.unsupported,
         *((projectile_events or {}).get("unsupported") or ()),
     }
     if isinstance(safe_event_hit, (int, float)) and safe_event_hit > 0:
@@ -3721,7 +3749,11 @@ def analyze_riven_request(
             f"requested-metric-{request.get('metric')}-ignored-using-{metric}"
         )
     objective_metric = metric
-    scenario = _scenario(metric)
+    scenario = _scenario(metric, incarnon_cycle=request.get("incarnonCycle") is True, aiming=request.get("aiming") is True)
+    policy = str(request.get('triggerPolicy') or 'emergent')
+    if policy not in {'emergent', 'assumed_max'}:
+        raise SimulationError('triggerPolicy must be emergent or assumed_max')
+    scenario = replace(scenario, trigger_policy=policy)
     # 偏好复合元素（elementTarget）：软约束——最终配装必须包含该元素
     # （与配装页的元素限制同一套伤害类型映射）。空值/未知值保持无约束。
     element_target_raw = str(request.get("elementTarget") or "").strip()
@@ -3766,12 +3798,13 @@ def analyze_riven_request(
                 "target": resolved_enemy,
                 "level": benchmark.get("level"),
                 "armour_strip": float(benchmark.get("armourStrip") or 0.0),
-                "elemental_armour_strip": 0.0,
+                "elemental_armour_strip": float(benchmark.get("elementalArmourStrip") or 0.0),
                 "steel_path": bool(benchmark.get("steelPath")),
                 "enemy_enhancements": (
-                    {"eximus": True} if benchmark.get("eximus") else None
+                    benchmark.get("enemyEnhancements") or {k: benchmark[k] for k in ("eximus", "archimedea", "empowered", "playerCount") if k in benchmark}
                 ),
-                "hit_location": "body",
+                "hit_location": str(benchmark.get("hitLocation") or "body"),
+                "headshotChance": float(benchmark.get("headshotChance") or 0.0),
                 "windowSeconds": float(benchmark.get("windowSeconds") or 30.0),
                 "stanceMultiplier": stance_multiplier,
                 "statusRateMultiplier": status_rate_multiplier,
@@ -3959,6 +3992,9 @@ def analyze_riven_request(
         and (not record_overridden or bool(request.get("_cacheDefaultInnate")))
         and request.get("incarnonChoices") is None
         and request.get("arcanes") is None
+        and not scenario.incarnon_cycle
+        and not scenario.aiming
+        and scenario.trigger_policy == 'emergent'
         and timeline_seconds is None
         and not has_search_constraints
     )
@@ -5258,6 +5294,7 @@ def analyze_riven_request(
             "armourStrip": benchmark_context.get("armour_strip", 0.0),
             "elementalArmourStrip": benchmark_context.get("elemental_armour_strip", 0.0),
             "hitLocation": benchmark_context.get("hit_location", "body"),
+            "headshotChance": benchmark_context.get("headshotChance", 0.0),
             "windowSeconds": benchmark_context.get("windowSeconds"),
         }
     context_payload = {
@@ -5277,6 +5314,11 @@ def analyze_riven_request(
         "scenario": {
             "heavyAttack": bool(scenario.heavy_attack),
             "throwable": throwable,
+            "aiming": scenario.aiming,
+            "incarnonCycle": scenario.incarnon_cycle,
+            "triggerPolicy": scenario.trigger_policy,
+            "incarnonChoices": resolved_choices,
+            "arcanes": request.get("arcanes"),
         },
         "stance": (
             {

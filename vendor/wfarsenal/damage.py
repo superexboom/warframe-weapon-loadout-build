@@ -277,6 +277,7 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "WEAPON_FIRE_RATE": "fire_rate",
     "WEAPON_CLIP_MAX": "magazine",
     "WEAPON_RELOAD_SPEED": "reload_time",
+    "WEAPON_AMMO_CONSUME_RATE": "ammo_cost",
     "WEAPON_SPREAD": "spread_multiplier",
     "WEAPON_RECOIL": "recoil_multiplier",
     "WEAPON_AMMO_MAX": "ammo_max_multiplier",
@@ -301,6 +302,7 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     # 面板口径按弱命中期望折算（同上）。DoT/径向范围静态未决（fail-open
     # 到直击口径，sidecar 登记）。
     "WEAPON_DAMAGE_WEAKPOINT": "weakpoint_damage",
+    "RUNTIME_LOCK_MULTISHOT": "multishot_lock",
     # 膛室家族（蓄力装填 / 膛室 Prime）：弹匣第一发的最终伤害乘区。单发口径
     # 直接乘算；循环口径按弹匣折算（第一发多造成 bonus × 单发伤害）。
     "WEAPON_INIT_DAMAGE_MOD": "first_shot_damage",
@@ -552,9 +554,7 @@ def mod_effects(
     runtime_scripts = mod.get("runtimeScripts") or {}
     adapter = resolve_runtime_adapter(mod, rank) if runtime_scripts else None
     if runtime_scripts and adapter is None:
-        return ModEffectList(
-            skipped=[f"{source_path or '?'}: unsupported[runtime-script]"]
-        )
+        return ModEffectList(skipped=[f'{source_path or "?"}: unsupported[runtime-script]'])
 
     # Range Advantage and Spectral Serration carry a placeholder NONE/conditional
     # effect in the export.  Their adapter emits a normal damage effect only when
@@ -578,7 +578,12 @@ def mod_effects(
     )
 
     if adapter is not None:
-        if adapter.kind == "impact_conversion":
+        if adapter.kind == 'lock_multishot':
+            effects.append(ModEffect(
+                upgrade_type='RUNTIME_LOCK_MULTISHOT', operation='SET', value=1.0,
+                supported=True, source_path=source_path, runtime_kind=adapter.kind,
+            ))
+        elif adapter.kind == 'impact_conversion':
             effects.append(
                 ModEffect(
                     upgrade_type="RUNTIME_IMPACT_PROC_CONVERSION",
@@ -720,6 +725,10 @@ def arcane_effects(
             f"{arcane.get('name', '?')} ranks to {max_rank}, got rank {rank}"
         )
 
+    from .runtime_adapters import verified_crux_condition
+    crux = verified_crux_condition(arcane)
+    if crux is not None:
+        arcane = {**arcane, 'runtimeScripts': {}, 'effects': [], 'conditionalEffects': [crux]}
     source_path = arcane.get("path") or None
     if arcane.get("runtimeScripts"):
         return ModEffectList(
@@ -870,6 +879,8 @@ class ModdedStats:
     # 弱点暴击几率加成（WEAPON_CRIT_CHANCE_WEAKPOINT，与基础暴击加算，
     # 弱点命中门控；面板按弱命中期望折算）。
     weakpoint_crit_chance_bonus: float = 0.0
+    weakpoint_crit_chance_relative: float = 0.0
+    base_crit_chance: float = 0.0
     # Per-trigger ammo cost in sustained rate（Twin Grakatas 类 ammoCost=2）
     ammo_cost: float = 1.0
     # CO bucket（对触发目标增伤，Galvanized Aptitude 类）：emergent 窗口模型
@@ -930,7 +941,9 @@ class ModdedStats:
         """
         if not self.magazine or not self.fire_rate:
             return max(float(self.fire_rate), 0.0)
-        ammo_cost = max(float(getattr(self, "ammo_cost", 1.0) or 1.0), 1.0)
+        ammo_cost = max(float(self.ammo_cost), 0.0)
+        if ammo_cost == 0.0:
+            return self.fire_rate
         triggers = max(float(self.magazine) / ammo_cost, 0.0)
         if triggers <= 0.0:
             return 0.0
@@ -1296,27 +1309,24 @@ def apply_mods(
         per_pellet_proc = exported_proc / innate_multishot
     else:
         per_pellet_proc = exported_proc
-    # ── 装填时长（含灵化充能池口径）──────────────────────────────────────
-    # 常驻灵化（默认）：灵化形态零装填——170 充能池在 30s 基准窗口内打不
-    # 空（每发 0.5 充能，最高导出射速也耗不尽），导出无池字段故直接置零。
-    # 灵化循环（Scenario.incarnon_cycle=True，2026-09-24 口径分离）：池
-    # 耗尽后回基础形态充能再灵化——导出没有充能时长字段，用基础形态装填
-    # 时长作保守折算（一次完整弹匣循环的量级），unsupported 注记口径估计。
-    # 基础/非灵化形态：装填速度加成分母缩短装填。
-    if weapon.get("isIncarnonForm"):
-        if getattr(scenario, "incarnon_cycle", False):
-            base_modes = weapon.get("__baseFireModes__") or []
-            base_reload = float(
-                (base_modes[0] if base_modes else mode).get("reloadTime") or 2.0
-            )
-            reload_time = max(base_reload, 0.5)
-            unsupported.add("incarnon-cycle-reload-estimated")
-        else:
-            reload_time = 0.0
-    else:
-        reload_time = _divide(
-            mode.get("reloadTime") or 0.0, buckets["WEAPON_RELOAD_SPEED"]
-        )
+    from .manual_combat import reference
+    profile = reference()['incarnon'].get(weapon.get('path')) if weapon.get('isIncarnonForm') else None
+    from .event_profiles import base_profile
+    event_profile = base_profile(weapon, fire_mode)
+    magazine = _combine(float(weapon.get('magazineSize') or event_profile.get('magazine') or 0), buckets['WEAPON_CLIP_MAX'])
+    reload_base = mode.get('reloadTime') or 0.0
+    if event_profile.get('reloadPerShell') is not None:
+        reload_base = event_profile['reloadStart'] + event_profile['reloadPerShell'] * magazine + event_profile['reloadEnd']
+    reload_time = _divide(reload_base, buckets['WEAPON_RELOAD_SPEED'])
+    if weapon.get('isIncarnonForm'):
+        reload_time = 0.
+        if profile and profile.get('pool'):
+            magazine = float(profile['pool'])
+            if scenario.incarnon_cycle:
+                # Panel throughput only; replay schedules charging and both forms.
+                reload_time = float(profile['enterSeconds']) + float(profile['exitSeconds'])
+        elif scenario.incarnon_cycle:
+            unsupported.add('incarnon-cycle-data-unavailable')
     return ModdedStats(
         damage_types=damage_types,
         crit_chance=_combine(damage.get("critChance", 0.0), buckets["WEAPON_CRIT_CHANCE"]),
@@ -1333,13 +1343,11 @@ def apply_mods(
             )
         )(damage.get("critMultiplier", 1.0), buckets["WEAPON_CRIT_DAMAGE"]),
         status_chance=_combine(per_pellet_proc, buckets["WEAPON_PROC_CHANCE"]),
-        multishot=_combine(
-            float(mode.get("multishot") or 1), buckets["WEAPON_FIRE_ITERATIONS"]
-        ),
+        multishot=(innate_multishot if buckets['RUNTIME_LOCK_MULTISHOT'] else _combine(
+            innate_multishot, buckets['WEAPON_FIRE_ITERATIONS']
+        )),
         fire_rate=_combine(mode.get("fireRate") or 0.0, buckets["WEAPON_FIRE_RATE"]),
-        magazine=_combine(
-            float(weapon.get("magazineSize") or 0), buckets["WEAPON_CLIP_MAX"]
-        ),
+        magazine=magazine,
         # 装填时长在上方按灵化口径预计算（reload_time 局部变量）。
         reload_time=reload_time,
         # The compact weapon export does not yet carry native spread, recoil or
@@ -1349,7 +1357,7 @@ def apply_mods(
         recoil_multiplier=_combine(1.0, buckets["WEAPON_RECOIL"]),
         ammo_max_multiplier=_combine(1.0, buckets["WEAPON_AMMO_MAX"]),
         # 每扳机弹药消耗（Twin Grakatas 类）：sustained_attack_rate 折算用。
-        ammo_cost=max(float(mode.get("ammoCost") or 1), 1.0),
+        ammo_cost=max(0.0, _combine(float(mode.get("ammoCost") or 1), buckets["WEAPON_AMMO_CONSUME_RATE"])),
         headshot_bonus_multiplier=_combine(
             1.0, buckets["WEAPON_HEADSHOT_MULTIPLIER"]
         ),
@@ -1396,9 +1404,9 @@ def apply_mods(
         # WEAPON_CRIT_CHANCE_WEAKPOINT：与基础暴击加算（引擎 fn
         # 0x1406dc47e 同链）。STACKING_MULTIPLY 卡（Primary Acuity
         # ×0.318/级）从 1 累乘再减回 1；ADD 卡直接累加。
-        weakpoint_crit_chance_bonus=_combine(
-            1.0, buckets["WEAPON_CRIT_CHANCE_WEAKPOINT"]
-        ) - 1.0,
+        weakpoint_crit_chance_bonus=sum(e.value for e in buckets['WEAPON_CRIT_CHANCE_WEAKPOINT'] if e.operation == 'ADD'),
+        weakpoint_crit_chance_relative=sum(e.value for e in buckets['WEAPON_CRIT_CHANCE_WEAKPOINT'] if e.operation == 'STACKING_MULTIPLY'),
+        base_crit_chance=_combine(damage.get('critChance', 0.0), [e for e in buckets['WEAPON_CRIT_CHANCE'] if e.operation in ('ADD_BASE', 'SET_BASE')]),
         falloff_multiplier=falloff_multiplier,
         dot_base_damage=sum(scaled_base.values()),
         dot_elemental_multipliers=_dot_elemental_multipliers(
@@ -1579,7 +1587,8 @@ def _bucket(effects: Iterable[ModEffect]) -> dict[str, list[ModEffect]]:
     """Group effects by upgrade type, defaulting missing keys to empty lists."""
     grouped: dict[str, list[ModEffect]] = {}
     for effect in effects:
-        grouped.setdefault(effect.upgrade_type, []).append(effect)
+        key = effect.upgrade_type
+        grouped.setdefault(key, []).append(effect)
 
     class _Defaulting(dict):
         def __missing__(self, key: str) -> list[ModEffect]:
@@ -2417,21 +2426,16 @@ def _apply_weakpoint_folding(
     crit_chance_add: float = 0.0,
     crit_multiplier_add: float = 0.0,
 ) -> float:
-    """弱点家族词条期望折算（引擎裁决 2026-09-22）。
-
-    hit_multiplier 即部位倍率通道（弱命中时为 hitProxies 的 damageAtten）。
-    - WEAPON_DAMAGE_WEAKPOINT：独立乘区，弱命中时 ×(1+bonus)。
-    - WEAPON_CRIT_CHANCE_WEAKPOINT：与基础暴击加算进同一次判定，弱命中
-      时等效暴击率提升。
-    弱命中权重：hit_multiplier>1 视为弱命中（无弱命中目标上词条无收益，
-    与引擎 mIsWeakpoint 门控一致）。
-    """
+    # WFSim 69e6a139 MECHANICS weak-point bracket. Prior disassembly only
+    # established the gate, not the arithmetic (its openQuestions say so).
     weakpoint_share = 1.0 if hit_multiplier > 1.0 + 1e-9 else 0.0
     if weakpoint_share <= 0.0:
         return raw
     if getattr(stats, "weakpoint_damage_bonus", 0.0) > 0.0:
-        raw *= 1.0 + float(stats.weakpoint_damage_bonus)
-    if getattr(stats, "weakpoint_crit_chance_bonus", 0.0) > 0.0:
+        raw *= (hit_multiplier + 1.5 * float(stats.weakpoint_damage_bonus)) / hit_multiplier
+    raw *= stats.headshot_bonus_multiplier
+    weak_crit = stats.weakpoint_crit_chance_bonus + stats.base_crit_chance * stats.weakpoint_crit_chance_relative
+    if weak_crit != 0.0:
         base_cc = (
             max(stats.crit_chance + crit_chance_add, 0.0)
             if crit_chance_add
@@ -2447,7 +2451,7 @@ def _apply_weakpoint_folding(
             hit_critical_multiplier, double_crit_chance=stats.double_crit_chance,
         )
         boosted_crit = effective_hit_multiplier(
-            min(base_cc + float(stats.weakpoint_crit_chance_bonus), 10.0),
+            max(base_cc + weak_crit, 0.0),
             base_cd, stats.noncrit_damage_multiplier,
             hit_critical_multiplier, double_crit_chance=stats.double_crit_chance,
         )
@@ -2851,6 +2855,7 @@ def expected_dot_damage(
         hit_critical_multiplier,
     )
     crit = sum(weight * factor for weight, factor in seed_tiers)
+    weak_seed_scale = _apply_weakpoint_folding(1.0, stats, hit_multiplier, hit_critical_multiplier)
     proc_damage = max(float(stats.proc_damage_multiplier), 0.0)
     target_faction = str(target.get("faction") or "")
     faction_mod = stats.faction_damage_multipliers.get("", 1.0)
@@ -2922,6 +2927,7 @@ def expected_dot_damage(
                 * proc_damage
                 * stats.falloff_multiplier
                 * hit_multiplier
+                * weak_seed_scale
                 * target_multiplier
                 * max(float(faction_mod), 0.0) ** 2,
             )
@@ -3436,6 +3442,7 @@ def windowed_status_damage(
     *,
     attacks_per_second: float,
     window_seconds: float = 5.0,
+    headshot_chance: float = 0.0,
     status_rate_multiplier: float = 1.0,
     damage_rate_multiplier: float = 1.0,
     forced_procs: Mapping[str, float] | None = None,
@@ -3473,6 +3480,19 @@ def windowed_status_damage(
       mitigation is a tick-time input (§6 boundary rule); Bleed stays armour-
       blind (Cinematic).
     """
+    # Heat is a refreshable tick entity, not continuous damage in a time bin.
+    # Use the same event kernel as manual replay for Heat-bearing candidates.
+    # A stat-only search has no loadout event context: its buffs stay panel-assumed.
+    if stats.damage_types.get('DT_FIRE', 0) > 0 and isinstance(target, Mapping) and target.get('health'):
+        from .combat_replay import replay
+        return replay(
+            stats, target, attacks_per_second=attacks_per_second, window_seconds=window_seconds,
+            headshot_chance=headshot_chance, status_rate_multiplier=status_rate_multiplier,
+            damage_rate_multiplier=damage_rate_multiplier, forced_procs=forced_procs, level=level,
+            armour_strip=armour_strip, elemental_armour_strip=elemental_armour_strip,
+            steel_path=steel_path, enemy_enhancements=enemy_enhancements, time_step=time_step,
+            trigger_sources=trigger_sources, collect_timeline=collect_timeline,
+        )
     target = target if isinstance(target, Mapping) else {}
     rate = max(float(attacks_per_second), 0.0)
     proc_rate = rate * max(float(status_rate_multiplier), 0.0)
@@ -3555,6 +3575,18 @@ def windowed_status_damage(
     probe = expected_status_damage(
         stats, target, forced_procs=forced_procs, **target_kwargs
     )
+    head_weight = min(max(float(headshot_chance), 0.0), 1.0)
+    def mix(body, head):
+        if isinstance(body, Mapping) and isinstance(head, Mapping):
+            return {k: mix(v, head.get(k, v)) for k, v in body.items()}
+        if isinstance(body, (int, float)) and not isinstance(body, bool) and isinstance(head, (int, float)):
+            return body * (1.0 - head_weight) + head * head_weight
+        return body
+    if head_weight:
+        head_probe = expected_status_damage(
+            stats, target, forced_procs=forced_procs, hit_location='head', **target_kwargs
+        )
+        probe = mix(probe, head_probe)
     procs = probe["expectedProcs"]
     duration_scale = max(float(stats.proc_duration_multiplier), 0.0)
 
@@ -3694,6 +3726,17 @@ def windowed_status_damage(
     _loc, _hm, _hcm, _hu, _hmd = _hit_location_info(target, None)
     _target_cache["hit_multiplier"] = _hm
     _target_cache["hit_critical_multiplier"] = _hcm
+    head_cache = dict(_target_cache)
+    _, hm, hcm, _, _ = _hit_location_info(target, 'head')
+    head_cache.update(hit_multiplier=hm, hit_critical_multiplier=hcm)
+
+    def mixed_direct(*args, **kwargs):
+        body = damage_against_cached_armour(*args, **kwargs)
+        if not head_weight:
+            return body
+        head = damage_against_cached_armour(*args, **{**kwargs, '_target_cache': head_cache})
+        return mix(body, head)
+
     total_overguard = float(defenses.get("overguard") or 0.0)
     total_shield = float(defenses.get("shield") or 0.0)
     total_health = float(defenses.get("health") or 0.0)
@@ -3758,7 +3801,7 @@ def windowed_status_damage(
         ],
     }
     if total_ehp_ref > 0.0 and rate > 0.0:
-        initial_direct = damage_against_cached_armour(
+        initial_direct = mixed_direct(
             stats,
             armour_base,
             defenses_snapshot,
@@ -3954,7 +3997,7 @@ def windowed_status_damage(
         if direct_key == _last_direct_key and _last_direct is not None:
             direct = _last_direct
         else:
-            direct = damage_against_cached_armour(
+            direct = mixed_direct(
                 step_stats,
                 live_armour,
                 defenses_snapshot,

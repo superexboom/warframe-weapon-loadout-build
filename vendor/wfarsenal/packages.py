@@ -71,6 +71,10 @@ class PackageIndex:
             except (json.JSONDecodeError, OSError):
                 obj = None
 
+        elif file.with_suffix(".txt").is_file():
+            from .ee import parse_ee
+            obj = parse_ee(file.with_suffix(".txt").read_text(encoding="utf-8-sig"))
+
         self._cache[path] = obj
         return obj
 

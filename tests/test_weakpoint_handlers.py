@@ -83,9 +83,9 @@ class WeakpointHandlerTests(unittest.TestCase):
         self.assertAlmostEqual(
             flat["perShot"] / base_flat["perShot"], 1.0, delta=1e-6
         )
-        # Weakpoint target: +100% multiplicative on top of the part multiplier.
+        # Head weakpoint: (3 + 1.5 * 1) / 3, additive part bracket.
         self.assertAlmostEqual(
-            weak["perShot"] / base_weak["perShot"], 2.0, delta=1e-6
+            weak["perShot"] / base_weak["perShot"], 1.5, delta=1e-6
         )
 
     def test_crit_chance_weakpoint_adds_on_weakpoint_hits(self) -> None:

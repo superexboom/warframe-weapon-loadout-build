@@ -2,11 +2,11 @@
  "schemaVersion": 1,
  "buildLabel": "2026.08.13.13.24",
  "counts": {
-  "eligibleMods": 507,
-  "mappedMods": 507,
+  "eligibleMods": 568,
+  "mappedMods": 568,
   "uniqueArtFiles": 265,
   "missingMods": 0,
-  "effectTextZh": 506,
+  "effectTextZh": 566,
   "conditionTextZh": 38,
   "setTextZh": 20
  },
@@ -20320,154 +20320,2297 @@
    "unsupportedNotes": null
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingDualStatImpactStatusMeleeMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingDualStatImpactStatusMeleeMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingDualStatImpactStatusMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "流星撞击",
+   "nameEn": "Meteor Crash",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+90% <DT_IMPACT_COLOR>冲击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+30% <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+45% <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+60% <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+75% <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+90% <DT_IMPACT_COLOR>冲击伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingDualStatPunctureStatusMeleeMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingDualStatPunctureStatusMeleeMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingDualStatPunctureStatusMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "星云钻孔",
+   "nameEn": "Nebula Bore",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+90% <DT_PUNCTURE_COLOR>穿刺伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+30% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+45% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+60% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+75% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+90% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingDualStatSlashStatusMeleeMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingDualStatSlashStatusMeleeMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingDualStatSlashStatusMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "星体切砍",
+   "nameEn": "Astral Slash",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+90% <DT_SLASH_COLOR>切割伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+30% <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+45% <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+60% <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+75% <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+90% <DT_SLASH_COLOR>切割伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingEventColdStatusMeleeMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventColdStatusMeleeMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventColdStatusMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "冷冻包覆",
+   "nameEn": "Cryo Coating",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_FREEZE_COLOR>冰冻伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_FREEZE_COLOR>冰冻伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_FREEZE_COLOR>冰冻伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_FREEZE_COLOR>冰冻伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_FREEZE_COLOR>冰冻伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingEventElectricStatusMeleeMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventElectricityStatusMeleeMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventElectricityStatusMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "离子注入",
+   "nameEn": "Ion Infusion",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_ELECTRICITY_COLOR>电击伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingEventFireStatusMeleeMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventFireStatusMeleeMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventFireStatusMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "炽燃钢铁",
+   "nameEn": "Searing Steel",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_FIRE_COLOR>火焰伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_FIRE_COLOR>火焰伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_FIRE_COLOR>火焰伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_FIRE_COLOR>火焰伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_FIRE_COLOR>火焰伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingEventMagneticCritDamageMeleeMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventMagneticCritDamageMeleeMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventMagneticCritDamageMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "磁性核心",
+   "nameEn": "Magnetized Core",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_MAGNETIC_COLOR>磁力伤害",
+    "+40% 暴击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+10% 暴击伤害"
+    ],
+    [
+     "+30% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+20% 暴击伤害"
+    ],
+    [
+     "+45% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+30% 暴击伤害"
+    ],
+    [
+     "+60% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+40% 暴击伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingEventRadiationCritChanceMeleeMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/DoubleMods/ArchwingEventRadiationCritChanceMeleeMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/DoubleMods/ArchwingEventRadiationCritChanceMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "关键熔毁",
+   "nameEn": "Critical Meltdown",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_RADIATION_COLOR>辐射伤害",
+    "+60% 暴击几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_RADIATION_COLOR>辐射伤害",
+     "+15% 暴击几率"
+    ],
+    [
+     "+30% <DT_RADIATION_COLOR>辐射伤害",
+     "+30% 暴击几率"
+    ],
+    [
+     "+45% <DT_RADIATION_COLOR>辐射伤害",
+     "+45% 暴击几率"
+    ],
+    [
+     "+60% <DT_RADIATION_COLOR>辐射伤害",
+     "+60% 暴击几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingEventToxinStatusMeleeMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventToxinStatusMeleeMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingEventToxinStatusMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "传染性注射",
+   "nameEn": "Infectious Injection",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_POISON_COLOR>毒素伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_POISON_COLOR>毒素伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_POISON_COLOR>毒素伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_POISON_COLOR>毒素伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_POISON_COLOR>毒素伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingMeleeCritChanceMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeCritChanceMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeCritChanceMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "强化刀片",
+   "nameEn": "Tempered Blade",
+   "rarity": null,
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+150% 暴击几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+25% 暴击几率"
+    ],
+    [
+     "+50% 暴击几率"
+    ],
+    [
+     "+75% 暴击几率"
+    ],
+    [
+     "+100% 暴击几率"
+    ],
+    [
+     "+125% 暴击几率"
+    ],
+    [
+     "+150% 暴击几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingMeleeCritDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeCritDamageMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeCritDamageMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "血色刃缘",
+   "nameEn": "Bleeding Edge",
+   "rarity": null,
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+110% 暴击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 暴击伤害"
+    ],
+    [
+     "+20% 暴击伤害"
+    ],
+    [
+     "+30% 暴击伤害"
+    ],
+    [
+     "+40% 暴击伤害"
+    ],
+    [
+     "+50% 暴击伤害"
+    ],
+    [
+     "+60% 暴击伤害"
+    ],
+    [
+     "+70% 暴击伤害"
+    ],
+    [
+     "+80% 暴击伤害"
+    ],
+    [
+     "+90% 暴击伤害"
+    ],
+    [
+     "+100% 暴击伤害"
+    ],
+    [
+     "+110% 暴击伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingMeleeDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeDamageMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeDamageMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "切割刃缘",
+   "nameEn": "Cutting Edge",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 16,
+   "description": "",
+   "effectsZh": [
+    "+110% 近战伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 近战伤害"
+    ],
+    [
+     "+20% 近战伤害"
+    ],
+    [
+     "+30% 近战伤害"
+    ],
+    [
+     "+40% 近战伤害"
+    ],
+    [
+     "+50% 近战伤害"
+    ],
+    [
+     "+60% 近战伤害"
+    ],
+    [
+     "+70% 近战伤害"
+    ],
+    [
+     "+80% 近战伤害"
+    ],
+    [
+     "+90% 近战伤害"
+    ],
+    [
+     "+100% 近战伤害"
+    ],
+    [
+     "+110% 近战伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingMeleeFireRateMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeFireRateMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeFireRateMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "狂怒",
+   "nameEn": "Furor",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+10% 攻击速度"
+   ],
+   "effectsZhByRank": [
+    [
+     "+2.5% 攻击速度"
+    ],
+    [
+     "+5% 攻击速度"
+    ],
+    [
+     "+7.5% 攻击速度"
+    ],
+    [
+     "+10% 攻击速度"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingMeleeRangeIncMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeRangeIncMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeRangeIncMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "延展",
+   "nameEn": "Extend",
+   "rarity": null,
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+100 吸引范围（太空）",
+    "+3 近战范围"
+   ],
+   "effectsZhByRank": [
+    [
+     "+25 吸引范围（太空）",
+     "+0.8 近战范围"
+    ],
+    [
+     "+50 吸引范围（太空）",
+     "+1.5 近战范围"
+    ],
+    [
+     "+75 吸引范围（太空）",
+     "+2.3 近战范围"
+    ],
+    [
+     "+100 吸引范围（太空）",
+     "+3 近战范围"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingMeleeScanOnKillMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeScanOnKillMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingMeleeScanOnKillMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "星界剖解",
+   "nameEn": "Astral Autopsy",
+   "rarity": "RARE",
+   "polarity": "AP_DEFENSE",
+   "maxRank": 0,
+   "drain": 10,
+   "description": [
+    "对一个敌人致死攻击同时也会进行资料库扫描。扫描需要携带一个资料库扫描器且有可用的扫描次数。"
+   ],
+   "effectsZh": null,
+   "effectsZhByRank": null,
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingMeleeStatusChanceMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingStatusChanceModMelee.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingStatusChanceModMelee.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "瞬间冲击",
+   "nameEn": "Sudden Impact",
+   "rarity": null,
+   "polarity": "AP_DEFENSE",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 触发几率"
+    ],
+    [
+     "+20% 触发几率"
+    ],
+    [
+     "+30% 触发几率"
+    ],
+    [
+     "+40% 触发几率"
+    ],
+    [
+     "+50% 触发几率"
+    ],
+    [
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingWeaponElectricityDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponElectricityDamageModMelee.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponElectricityDamageModMelee.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "通电刀刃",
+   "nameEn": "Conductive Blade",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": [
+    "+120% <DT_ELECTRICITY_COLOR>电击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+20% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+40% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+60% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+80% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+100% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+120% <DT_ELECTRICITY_COLOR>电击伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingWeaponFireDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponFireDamageModMelee.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponFireDamageModMelee.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "炽烈坚刃",
+   "nameEn": "Blazing Steel",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+120% <DT_FIRE_COLOR>火焰伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+20% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+40% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+60% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+80% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+100% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+120% <DT_FIRE_COLOR>火焰伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingWeaponFreezeDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponFreezeDamageModMelee.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponFreezeDamageModMelee.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "冰冷刃缘",
+   "nameEn": "Glacial Edge",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_DEFENSE",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+120% <DT_FREEZE_COLOR>冰冻伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+20% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+40% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+60% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+80% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+100% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+120% <DT_FREEZE_COLOR>冰冻伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Melee/ArchwingWeaponToxinDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponToxinDamageModMelee.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingMelee/ArchwingWeaponToxinDamageModMelee.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "剧毒螫刺",
+   "nameEn": "Poisonous Sting",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+120% <DT_POISON_COLOR>毒素伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+20% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+40% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+60% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+80% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+100% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+120% <DT_POISON_COLOR>毒素伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingCCImmunityIfAimingMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingCCImmunityIfAimingMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingCCImmunityIfAimingMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "坚决专注",
+   "nameEn": "Resolute Focus",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+100% 瞄准时抵挡失衡攻击/击倒的几率",
+    "+50% 瞄准时的精准度"
+   ],
+   "effectsZhByRank": [
+    [
+     "+17% 瞄准时抵挡失衡攻击/击倒的几率",
+     "+8% 瞄准时的精准度"
+    ],
+    [
+     "+33% 瞄准时抵挡失衡攻击/击倒的几率",
+     "+17% 瞄准时的精准度"
+    ],
+    [
+     "+50% 瞄准时抵挡失衡攻击/击倒的几率",
+     "+25% 瞄准时的精准度"
+    ],
+    [
+     "+67% 瞄准时抵挡失衡攻击/击倒的几率",
+     "+33% 瞄准时的精准度"
+    ],
+    [
+     "+84% 瞄准时抵挡失衡攻击/击倒的几率",
+     "+42% 瞄准时的精准度"
+    ],
+    [
+     "+100% 瞄准时抵挡失衡攻击/击倒的几率",
+     "+50% 瞄准时的精准度"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingDamageAfterReloadMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDamageAfterReloadMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDamageAfterReloadMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "致命效率",
+   "nameEn": "Deadly Efficiency",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "空弹匣装填时： \\n+120% 伤害，持续 9 秒"
+   ],
+   "effectsZhByRank": [
+    [
+     "空弹匣装填时： \\n+20% 伤害，持续 2 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+40% 伤害，持续 3 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+60% 伤害，持续 5 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+80% 伤害，持续 6 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+100% 伤害，持续 8 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+120% 伤害，持续 9 秒"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingDualStatImpactStatusMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDualStatImpactStatusRifleMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDualStatImpactStatusRifleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "彗星爆发",
+   "nameEn": "Comet Blast",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+90% <DT_IMPACT_COLOR>冲击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+30% <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+45% <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+60% <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+75% <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+90% <DT_IMPACT_COLOR>冲击伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingDualStatPunctureStatusMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDualStatPunctureStatusRifleMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDualStatPunctureStatusRifleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "类星钻体",
+   "nameEn": "Quasar Drill",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+90% <DT_PUNCTURE_COLOR>穿刺伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+30% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+45% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+60% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+75% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+90% <DT_PUNCTURE_COLOR>穿刺伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingDualStatSlashStatusMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDualStatSlashStatusRifleMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDualStatSlashStatusRifleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "黄道碎裂",
+   "nameEn": "Zodiac Shred",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+90% <DT_SLASH_COLOR>切割伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+30% <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+45% <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+60% <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+75% <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+90% <DT_SLASH_COLOR>切割伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventColdStatusRifleMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventColdStatusRifleMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventColdStatusRifleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "低温外壳",
+   "nameEn": "Hypothermic Shell",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_FREEZE_COLOR>冰冻伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_FREEZE_COLOR>冰冻伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_FREEZE_COLOR>冰冻伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_FREEZE_COLOR>冰冻伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_FREEZE_COLOR>冰冻伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventElectricStatusRifleMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventElectricityStatusRifleMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventElectricityStatusRifleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "带电子弹",
+   "nameEn": "Charged Bullets",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_ELECTRICITY_COLOR>电击伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventFireStatusRifleMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventFireStatusRifleMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventFireStatusRifleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "熔岩弹膛",
+   "nameEn": "Magma Chamber",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_FIRE_COLOR>火焰伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_FIRE_COLOR>火焰伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_FIRE_COLOR>火焰伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_FIRE_COLOR>火焰伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_FIRE_COLOR>火焰伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventMagneticFireRateRifleMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventMagneticFireRateRifleMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventMagneticFireRateRifleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "磁场循环",
+   "nameEn": "Magnetized Cycle",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_MAGNETIC_COLOR>磁力伤害",
+    "+30% 射速"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+7.5% 射速"
+    ],
+    [
+     "+30% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+15% 射速"
+    ],
+    [
+     "+45% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+22.5% 射速"
+    ],
+    [
+     "+60% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+30% 射速"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventRadiationFireIterationRifleMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/DoubleMods/ArchwingEventRadiationFireIterationRifleMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/DoubleMods/ArchwingEventRadiationFireIterationRifleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "核控突破",
+   "nameEn": "Containment Breach",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_RADIATION_COLOR>辐射伤害",
+    "+30% 多重射击"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_RADIATION_COLOR>辐射伤害",
+     "+7.5% 多重射击"
+    ],
+    [
+     "+30% <DT_RADIATION_COLOR>辐射伤害",
+     "+15% 多重射击"
+    ],
+    [
+     "+45% <DT_RADIATION_COLOR>辐射伤害",
+     "+22.5% 多重射击"
+    ],
+    [
+     "+60% <DT_RADIATION_COLOR>辐射伤害",
+     "+30% 多重射击"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventToxinStatusRifleMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventToxinStatusRifleMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingEventToxinStatusRifleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "毒染套管",
+   "nameEn": "Contamination Casing",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_POISON_COLOR>毒素伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_POISON_COLOR>毒素伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_POISON_COLOR>毒素伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_POISON_COLOR>毒素伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_POISON_COLOR>毒素伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingHeadshotKillAmmoEfficiencyMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingHeadshotKillAmmoEfficiencyMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingHeadshotKillAmmoEfficiencyMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "曲翼枪械行家",
+   "nameEn": "Archgun Ace",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": [
+    "爆头击杀时： \\n+50% 射速 / 蓄力速度\\n+100% 装填速度，持续 9 秒"
+   ],
+   "effectsZhByRank": [
+    [
+     "爆头击杀时： \\n+8% 射速 / 蓄力速度\\n+17% 装填速度，持续 2 秒"
+    ],
+    [
+     "爆头击杀时： \\n+17% 射速 / 蓄力速度\\n+33% 装填速度，持续 3 秒"
+    ],
+    [
+     "爆头击杀时： \\n+25% 射速 / 蓄力速度\\n+50% 装填速度，持续 5 秒"
+    ],
+    [
+     "爆头击杀时： \\n+33% 射速 / 蓄力速度\\n+67% 装填速度，持续 6 秒"
+    ],
+    [
+     "爆头击杀时： \\n+42% 射速 / 蓄力速度\\n+83% 装填速度，持续 8 秒"
+    ],
+    [
+     "爆头击杀时： \\n+50% 射速 / 蓄力速度\\n+100% 装填速度，持续 9 秒"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleAmmoMaxMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleAmmoMaxMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleAmmoMaxMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "弹链",
+   "nameEn": "Ammo Chain",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+100% 弹药最大值"
+   ],
+   "effectsZhByRank": [
+    [
+     "+16.7% 弹药最大值"
+    ],
+    [
+     "+33.3% 弹药最大值"
+    ],
+    [
+     "+50% 弹药最大值"
+    ],
+    [
+     "+66.7% 弹药最大值"
+    ],
+    [
+     "+83.4% 弹药最大值"
+    ],
+    [
+     "+100% 弹药最大值"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleChargeSpeedMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleChargeSpeedMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleChargeSpeedMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "填弹加速",
+   "nameEn": "Shell Rush",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_DEFENSE",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+50% 蓄力速度"
+   ],
+   "effectsZhByRank": [
+    [
+     "+12.5% 蓄力速度"
+    ],
+    [
+     "+25% 蓄力速度"
+    ],
+    [
+     "+37.5% 蓄力速度"
+    ],
+    [
+     "+50% 蓄力速度"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleClipMaxMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleClipMaxMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleClipMaxMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "扩充弹匣",
+   "nameEn": "Magazine Extension",
+   "rarity": null,
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+60% 弹匣容量"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 弹匣容量"
+    ],
+    [
+     "+20% 弹匣容量"
+    ],
+    [
+     "+30% 弹匣容量"
+    ],
+    [
+     "+40% 弹匣容量"
+    ],
+    [
+     "+50% 弹匣容量"
+    ],
+    [
+     "+60% 弹匣容量"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleCritChanceDamageAimingMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleCritChanceDamageAimingMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "关键焦点",
+   "nameEn": "Critical Focus",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": [
+    "+60% 瞄准时的暴击几率和伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 瞄准时的暴击几率和伤害"
+    ],
+    [
+     "+20% 瞄准时的暴击几率和伤害"
+    ],
+    [
+     "+30% 瞄准时的暴击几率和伤害"
+    ],
+    [
+     "+40% 瞄准时的暴击几率和伤害"
+    ],
+    [
+     "+50% 瞄准时的暴击几率和伤害"
+    ],
+    [
+     "+60% 瞄准时的暴击几率和伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleCritChanceMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleCritChanceMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "视差瞄具",
+   "nameEn": "Parallax Scope",
+   "rarity": null,
+   "polarity": "AP_TACTIC",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+100% 暴击几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+25% 暴击几率"
+    ],
+    [
+     "+50% 暴击几率"
+    ],
+    [
+     "+75% 暴击几率"
+    ],
+    [
+     "+100% 暴击几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleCritDamageMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleCritDamageMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "中空子弹",
+   "nameEn": "Hollowed Bullets",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+80% 暴击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+20% 暴击伤害"
+    ],
+    [
+     "+40% 暴击伤害"
+    ],
+    [
+     "+60% 暴击伤害"
+    ],
+    [
+     "+80% 暴击伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleDamageAmountMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleDamageAmountMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleDamageAmountMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "红晶枪管",
+   "nameEn": "Rubedo-Lined Barrel",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": [
+    "+100% 伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+16.7% 伤害"
+    ],
+    [
+     "+33.3% 伤害"
+    ],
+    [
+     "+50% 伤害"
+    ],
+    [
+     "+66.6% 伤害"
+    ],
+    [
+     "+83.3% 伤害"
+    ],
+    [
+     "+100% 伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireIterationsMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleFireIterationsMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleFireIterationsMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "双重弹头",
+   "nameEn": "Dual Rounds",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": [
+    "+60% 多重射击"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 多重射击"
+    ],
+    [
+     "+20% 多重射击"
+    ],
+    [
+     "+30% 多重射击"
+    ],
+    [
+     "+40% 多重射击"
+    ],
+    [
+     "+50% 多重射击"
+    ],
+    [
+     "+60% 多重射击"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleFireRateMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleFireRateMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "自动扳机",
+   "nameEn": "Automatic Trigger",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 15,
+   "description": "",
+   "effectsZh": [
+    "+60% 射速"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 射速"
+    ],
+    [
+     "+20% 射速"
+    ],
+    [
+     "+30% 射速"
+    ],
+    [
+     "+40% 射速"
+    ],
+    [
+     "+50% 射速"
+    ],
+    [
+     "+60% 射速"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRiflePunchthroughMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRiflePunchthroughMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRiflePunchthroughMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "覆壳弹药",
+   "nameEn": "Sabot Rounds",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 15,
+   "description": "",
+   "effectsZh": [
+    "+60% 伤害",
+    "+3 穿透"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 伤害",
+     "+0.5 穿透"
+    ],
+    [
+     "+20% 伤害",
+     "+1 穿透"
+    ],
+    [
+     "+30% 伤害",
+     "+1.5 穿透"
+    ],
+    [
+     "+40% 伤害",
+     "+2 穿透"
+    ],
+    [
+     "+50% 伤害",
+     "+2.5 穿透"
+    ],
+    [
+     "+60% 伤害",
+     "+3 穿透"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleRangeMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleRangeMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleRangeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "弩炮测距",
+   "nameEn": "Ballista Measure",
+   "rarity": "RARE",
+   "polarity": "AP_DEFENSE",
+   "maxRank": 3,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+20% 攻击范围"
+   ],
+   "effectsZhByRank": [
+    [
+     "+5% 攻击范围"
+    ],
+    [
+     "+10% 攻击范围"
+    ],
+    [
+     "+15% 攻击范围"
+    ],
+    [
+     "+20% 攻击范围"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleReloadSpeedMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleReloadSpeedMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleReloadSpeedMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "快速装填",
+   "nameEn": "Quick Reload",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_TACTIC",
+   "maxRank": 3,
+   "drain": 5,
+   "description": "",
+   "effectsZh": [
+    "+100% 装填速度"
+   ],
+   "effectsZhByRank": [
+    [
+     "+25% 装填速度"
+    ],
+    [
+     "+50% 装填速度"
+    ],
+    [
+     "+75% 装填速度"
+    ],
+    [
+     "+100% 装填速度"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleStatusChanceAimingMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleStatusChanceAimingMod.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleStatusChanceAimingMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "标记目标",
+   "nameEn": "Marked Target",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": [
+    "+120% 瞄准时的触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+20% 瞄准时的触发几率"
+    ],
+    [
+     "+40% 瞄准时的触发几率"
+    ],
+    [
+     "+60% 瞄准时的触发几率"
+    ],
+    [
+     "+80% 瞄准时的触发几率"
+    ],
+    [
+     "+100% 瞄准时的触发几率"
+    ],
+    [
+     "+120% 瞄准时的触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleStatusChanceMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingStatusChanceModRifle.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingStatusChanceModRifle.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "弹药改良",
+   "nameEn": "Modified Munitions",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_DEFENSE",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 触发几率"
+    ],
+    [
+     "+20% 触发几率"
+    ],
+    [
+     "+30% 触发几率"
+    ],
+    [
+     "+40% 触发几率"
+    ],
+    [
+     "+50% 触发几率"
+    ],
+    [
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingWeaponElectricityDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponElectricityDamageModRifle.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponElectricityDamageModRifle.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "带电枪管",
+   "nameEn": "Electrified Barrel",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+120% <DT_ELECTRICITY_COLOR>电击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+20% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+40% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+60% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+80% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+100% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+120% <DT_ELECTRICITY_COLOR>电击伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingWeaponFireDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponFireDamageModRifle.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponFireDamageModRifle.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "燃烧弹头",
+   "nameEn": "Combustion Rounds",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+120% <DT_FIRE_COLOR>火焰伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+20% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+40% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+60% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+80% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+100% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+120% <DT_FIRE_COLOR>火焰伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingWeaponFreezeDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponFreezeDamageModRifle.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponFreezeDamageModRifle.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "极地弹仓",
+   "nameEn": "Polar Magazine",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_DEFENSE",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+120% <DT_FREEZE_COLOR>冰冻伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+20% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+40% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+60% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+80% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+100% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+120% <DT_FREEZE_COLOR>冰冻伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
   },
   "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingWeaponToxinDamageMod": {
-   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponToxinDamageModRifle.png"
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponToxinDamageModRifle.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "恶毒弹匣",
+   "nameEn": "Venomous Clip",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_DEFENSE",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+120% <DT_POISON_COLOR>毒素伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+20% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+40% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+60% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+80% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+100% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+120% <DT_POISON_COLOR>毒素伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
+  },
+  "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleAmmoMaxModExpert": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleAmmoMaxMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "弹链 Prime",
+   "nameEn": "Primed Ammo Chain",
+   "rarity": "LEGENDARY",
+   "polarity": "AP_TACTIC",
+   "maxRank": 10,
+   "drain": 10,
+   "description": "",
+   "effectsZh": [
+    "+165% 弹药最大值"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% 弹药最大值"
+    ],
+    [
+     "+30% 弹药最大值"
+    ],
+    [
+     "+45% 弹药最大值"
+    ],
+    [
+     "+60% 弹药最大值"
+    ],
+    [
+     "+75% 弹药最大值"
+    ],
+    [
+     "+90% 弹药最大值"
+    ],
+    [
+     "+105% 弹药最大值"
+    ],
+    [
+     "+120% 弹药最大值"
+    ],
+    [
+     "+135% 弹药最大值"
+    ],
+    [
+     "+150% 弹药最大值"
+    ],
+    [
+     "+165% 弹药最大值"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
+  },
+  "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleDamageAmountMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "红晶枪管 Prime",
+   "nameEn": "Primed Rubedo-Lined Barrel",
+   "rarity": "LEGENDARY",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 16,
+   "description": "",
+   "effectsZh": [
+    "+187% 伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+17% 伤害"
+    ],
+    [
+     "+34% 伤害"
+    ],
+    [
+     "+51% 伤害"
+    ],
+    [
+     "+68% 伤害"
+    ],
+    [
+     "+85% 伤害"
+    ],
+    [
+     "+102% 伤害"
+    ],
+    [
+     "+119% 伤害"
+    ],
+    [
+     "+136% 伤害"
+    ],
+    [
+     "+153% 伤害"
+    ],
+    [
+     "+170% 伤害"
+    ],
+    [
+     "+187% 伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
+  },
+  "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponElectricityDamageModExpert": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponElectricityDamageModRifle.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "带电枪管 Prime",
+   "nameEn": "Primed Electrified Barrel",
+   "rarity": "LEGENDARY",
+   "polarity": "AP_TACTIC",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+187% <DT_ELECTRICITY_COLOR>电击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+17% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+34% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+51% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+68% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+85% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+102% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+119% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+136% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+153% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+170% <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+187% <DT_ELECTRICITY_COLOR>电击伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
+  },
+  "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponFireDamageModRifle.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "燃烧弹头 Prime",
+   "nameEn": "Primed Combustion Rounds",
+   "rarity": "LEGENDARY",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+187% <DT_FIRE_COLOR>火焰伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+17% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+34% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+51% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+68% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+85% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+102% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+119% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+136% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+153% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+170% <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+187% <DT_FIRE_COLOR>火焰伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
+  },
+  "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponFreezeDamageModRifle.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "极地弹仓 Prime",
+   "nameEn": "Primed Polar Magazine",
+   "rarity": "LEGENDARY",
+   "polarity": "AP_DEFENSE",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+187% <DT_FREEZE_COLOR>冰冻伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+17% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+34% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+51% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+68% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+85% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+102% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+119% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+136% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+153% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+170% <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+187% <DT_FREEZE_COLOR>冰冻伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
+  },
+  "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingWeaponToxinDamageModRifle.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "恶毒弹匣 Prime",
+   "nameEn": "Primed Venomous Clip",
+   "rarity": "LEGENDARY",
+   "polarity": "AP_DEFENSE",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+187% <DT_POISON_COLOR>毒素伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+17% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+34% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+51% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+68% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+85% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+102% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+119% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+136% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+153% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+170% <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+187% <DT_POISON_COLOR>毒素伤害"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
+  },
+  "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingDamageOnReloadMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingDamageAfterReloadMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "致命效率 Prime",
+   "nameEn": "Primed Deadly Efficiency",
+   "rarity": "LEGENDARY",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "空弹匣装填时： \\n+220% 伤害，持续 17 秒"
+   ],
+   "effectsZhByRank": [
+    [
+     "空弹匣装填时： \\n+20% 伤害，持续 2 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+40% 伤害，持续 3 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+60% 伤害，持续 5 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+80% 伤害，持续 6 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+100% 伤害，持续 8 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+120% 伤害，持续 9 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+140% 伤害，持续 11 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+160% 伤害，持续 12 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+180% 伤害，持续 14 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+200% 伤害，持续 15 秒"
+    ],
+    [
+     "空弹匣装填时： \\n+220% 伤害，持续 17 秒"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
+  },
+  "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/ArchwingMods/ArchwingRifle/ArchwingRifleFireIterationsMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "双重弹头 Prime",
+   "nameEn": "Primed Dual Rounds",
+   "rarity": "LEGENDARY",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 16,
+   "description": "",
+   "effectsZh": [
+    "+110% 多重射击"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 多重射击"
+    ],
+    [
+     "+20% 多重射击"
+    ],
+    [
+     "+30% 多重射击"
+    ],
+    [
+     "+40% 多重射击"
+    ],
+    [
+     "+50% 多重射击"
+    ],
+    [
+     "+60% 多重射击"
+    ],
+    [
+     "+70% 多重射击"
+    ],
+    [
+     "+80% 多重射击"
+    ],
+    [
+     "+90% 多重射击"
+    ],
+    [
+     "+100% 多重射击"
+    ],
+    [
+     "+110% 多重射击"
+    ]
+   ],
+   "textSource": "frozen-official-localized-levelStats"
+  },
+  "/Lotus/Upgrades/Mods/Aura/PlayerWeakpointCriticalChanceAuraMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Auras/PlayerWeakpointCriticalChanceAuraMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "可靠战友",
+   "nameEn": "Worthy Comradery",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 3,
+   "description": [
+    "小队获得 +75% 弱点暴击几率"
+   ],
+   "effectsZh": [
+    "小队获得 +75% 弱点暴击几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "小队获得 +12.5% 弱点暴击几率"
+    ],
+    [
+     "小队获得 +25% 弱点暴击几率"
+    ],
+    [
+     "小队获得 +37.5% 弱点暴击几率"
+    ],
+    [
+     "小队获得 +50% 弱点暴击几率"
+    ],
+    [
+     "小队获得 +62.5% 弱点暴击几率"
+    ],
+    [
+     "小队获得 +75% 弱点暴击几率"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/WeaponWeakpointCriticalChanceMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "敏锐手枪",
+   "nameEn": "Pistol Acuity",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 10,
+   "drain": 16,
+   "description": [
+    "+350% 弱点伤害",
+    "+350% 弱点暴击几率。多重射击无法变动。"
+   ],
+   "effectsZh": [
+    "+350% 弱点伤害",
+    "+350% 弱点暴击几率。多重射击无法变动。"
+   ],
+   "effectsZhByRank": [
+    [
+     "+32% 弱点伤害",
+     "+32% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+64% 弱点伤害",
+     "+64% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+95% 弱点伤害",
+     "+95% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+127% 弱点伤害",
+     "+127% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+159% 弱点伤害",
+     "+159% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+191% 弱点伤害",
+     "+191% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+223% 弱点伤害",
+     "+223% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+254% 弱点伤害",
+     "+254% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+286% 弱点伤害",
+     "+286% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+318% 弱点伤害",
+     "+318% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+350% 弱点伤害",
+     "+350% 弱点暴击几率。多重射击无法变动。"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/WeaponWeakpointCriticalChanceMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "敏锐主武",
+   "nameEn": "Primary Acuity",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 10,
+   "drain": 16,
+   "description": [
+    "+350% 弱点伤害",
+    "+350% 弱点暴击几率。多重射击无法变动。"
+   ],
+   "effectsZh": [
+    "+350% 弱点伤害",
+    "+350% 弱点暴击几率。多重射击无法变动。"
+   ],
+   "effectsZhByRank": [
+    [
+     "+32% 弱点伤害",
+     "+32% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+64% 弱点伤害",
+     "+64% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+95% 弱点伤害",
+     "+95% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+127% 弱点伤害",
+     "+127% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+159% 弱点伤害",
+     "+159% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+191% 弱点伤害",
+     "+191% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+223% 弱点伤害",
+     "+223% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+254% 弱点伤害",
+     "+254% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+286% 弱点伤害",
+     "+286% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+318% 弱点伤害",
+     "+318% 弱点暴击几率。多重射击无法变动。"
+    ],
+    [
+     "+350% 弱点伤害",
+     "+350% 弱点暴击几率。多重射击无法变动。"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
   }
  },
  "missing": []

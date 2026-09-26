@@ -119,6 +119,10 @@ def copy_runtime(root: Path, destination: Path, *, include_export: bool = True, 
         lock["snapshotId"] = sha256(content / "snapshot.json")
     destination.mkdir(parents=True, exist_ok=False)
     shutil.copytree(content / "data", destination / "data", ignore=shutil.ignore_patterns("snapshots", "export", "cache"))
+    # Mechanics metadata ships with the engine, independently of a game snapshot.
+    mechanics = root / 'data/mechanics'
+    if mechanics.is_dir():
+        shutil.copytree(mechanics, destination / 'data/mechanics', dirs_exist_ok=True)
     if include_export:
         build = validate_build(str(lock["activeBuild"]))
         shutil.copytree(content / "data" / "export" / build, destination / "data" / "export" / build)
@@ -216,6 +220,8 @@ def prepare(root: Path, config: Path) -> Path:
               "--localization", inputs["weaponIndex"], "--output", export / "kitguns.json")
     run_stage(stage, "tools/generate_riven_templates.py", "--build", build, "--raw-packages", raw,
               "--localization", languages / "zh.json", "--weapons", export / "weapons.json", "--output", export / "riven_templates.json")
+    run_stage(stage, "tools/refresh_riven_fusion.py", "--raw-packages", raw,
+              "--output", export / "riven_templates.json")
     run_stage(stage, "sync_enemy_overrides.py", "--export-dir", export, "--raw", inputs["enemyExport"], "--output", export / "enemy_overrides.json")
     run_stage(stage, "sync_incarnon_strings.py", "--build", build, "--export-dir", export, "--localization", languages / "zh.json")
     run_stage(stage, "generate_game_data.py", "--build", build, "--export-dir", export, "--raw-packages", raw,
@@ -236,6 +242,9 @@ def prepare(root: Path, config: Path) -> Path:
               "--companion-mods", inputs["companionMods"], "--warframe-items", items, "--warframe-items-img", items / "img",
               "--i18n", items / "json/i18n.json", "--lang", languages / "zh.json", "--modframe-root", inputs["modframeRoot"],
               "--arcanes", export / "arcanes.json")
+    run_stage(stage, "tools/repair_content_assets.py", "--official-art", inputs["completeArtRoot"],
+              "--items", items, "--packages", raw, "--export", export,
+              "--report", stage / ".local/content-assets-repair.json")
     if initial_hashes != {key: sha256(sources[key]) for key in initial_hashes}:
         raise ValueError("source files changed during generation; prepare from immutable inputs")
     for source in lock["sources"]:

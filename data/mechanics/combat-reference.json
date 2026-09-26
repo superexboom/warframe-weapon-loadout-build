@@ -1,0 +1,1615 @@
+{
+  "source": {
+    "repository": "magenie33/wfsim",
+    "commit": "b98b3d456393131857e1c0e247b19aac6ecc08f4"
+  },
+  "incarnon": {
+    "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun": {
+      "pool": 150,
+      "hits": 50,
+      "gain": 3,
+      "enterSeconds": 2.7,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/boar_incarnon.yaml",
+      "referenceId": "boar_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Shotgun/PrimeBoar": {
+      "pool": 150,
+      "hits": 50,
+      "gain": 3,
+      "enterSeconds": 2.75,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/boar_prime_incarnon.yaml",
+      "referenceId": "boar_prime_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/BoltoRifle": {
+      "pool": 160,
+      "hits": 20,
+      "gain": 8,
+      "enterSeconds": 2.6,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/boltor_incarnon.yaml",
+      "referenceId": "boltor_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeBoltor/PrimeBoltor": {
+      "pool": 160,
+      "hits": 20,
+      "gain": 8,
+      "enterSeconds": 2.4,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/boltor_prime_incarnon.yaml",
+      "referenceId": "boltor_prime_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/Rifle": {
+      "pool": 200,
+      "hits": 20,
+      "gain": 10,
+      "enterSeconds": 2.0,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "blast_kind": "terminal",
+        "damage": {
+          "heat": 50.0
+        },
+        "radius_m": 3.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.1,
+        "crit_chance": 0.3,
+        "crit_multiplier": 3.0,
+        "status_chance": 0.12,
+        "takes_condition_overload": true,
+        "takes_multishot": false
+      },
+      "source": "data/weapons/primary/braton_incarnon.yaml",
+      "referenceId": "braton_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/BratonPrime": {
+      "pool": 200,
+      "hits": 20,
+      "gain": 10,
+      "enterSeconds": 2.15,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "blast_kind": "terminal",
+        "damage": {
+          "heat": 70.0
+        },
+        "radius_m": 3.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.1,
+        "crit_chance": 0.3,
+        "crit_multiplier": 3.0,
+        "status_chance": 0.3,
+        "takes_condition_overload": true,
+        "takes_multishot": false
+      },
+      "source": "data/weapons/primary/braton_prime_incarnon.yaml",
+      "referenceId": "braton_prime_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/VIPRifle": {
+      "pool": 200,
+      "hits": 20,
+      "gain": 10,
+      "enterSeconds": 1.75,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "blast_kind": "terminal",
+        "damage": {
+          "heat": 65.0
+        },
+        "radius_m": 3.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.1,
+        "crit_chance": 0.38,
+        "crit_multiplier": 3.2,
+        "status_chance": 0.22,
+        "takes_condition_overload": true,
+        "takes_multishot": false
+      },
+      "source": "data/weapons/primary/braton_vandal_incarnon.yaml",
+      "referenceId": "braton_vandal_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/BurstRifle": {
+      "pool": 600,
+      "hits": 20,
+      "gain": 30,
+      "enterSeconds": 2.0,
+      "exitSeconds": 1.0,
+      "burst": {
+        "count": 3,
+        "delay_seconds": 0.061
+      },
+      "radial": {
+        "blast_kind": "terminal",
+        "damage": {
+          "heat": 3.0
+        },
+        "radius_m": 2.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 1.0,
+        "crit_chance": 0.3,
+        "crit_multiplier": 3.0,
+        "status_chance": 0.3,
+        "takes_condition_overload": true,
+        "takes_multishot": false
+      },
+      "source": "data/weapons/primary/burston_incarnon.yaml",
+      "referenceId": "burston_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston": {
+      "pool": 600,
+      "hits": 20,
+      "gain": 30,
+      "enterSeconds": 2.0,
+      "exitSeconds": 1.0,
+      "burst": {
+        "count": 3,
+        "delay_seconds": 0.04
+      },
+      "radial": {
+        "blast_kind": "terminal",
+        "damage": {
+          "heat": 13.0
+        },
+        "radius_m": 2.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 1.0,
+        "crit_chance": 0.28,
+        "crit_multiplier": 3.0,
+        "status_chance": 0.3,
+        "takes_condition_overload": true,
+        "takes_multishot": false
+      },
+      "source": "data/weapons/primary/burston_prime_incarnon.yaml",
+      "referenceId": "burston_prime_incarnon"
+    },
+    "/Lotus/Weapons/ClanTech/Energy/EnergyRifle": {
+      "pool": 50,
+      "hits": 25,
+      "gain": 2,
+      "enterSeconds": 1.8,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/dera_incarnon.yaml",
+      "referenceId": "dera_incarnon"
+    },
+    "/Lotus/Weapons/ClanTech/Energy/DeraVandal": {
+      "pool": 50,
+      "hits": 25,
+      "gain": 2,
+      "enterSeconds": 1.8,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/dera_vandal_incarnon.yaml",
+      "referenceId": "dera_vandal_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird": {
+      "pool": 200,
+      "hits": 25,
+      "gain": 8,
+      "enterSeconds": 1.5,
+      "exitSeconds": 1.0,
+      "burst": {
+        "count": 2,
+        "delay_seconds": 0.09
+      },
+      "radial": null,
+      "source": "data/weapons/primary/dex_sybaris_incarnon.yaml",
+      "referenceId": "dex_sybaris_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Bows/StalkerBow": {
+      "pool": 20,
+      "hits": 4,
+      "gain": 5,
+      "enterSeconds": 0.7,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/dread_incarnon.yaml",
+      "referenceId": "dread_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanPumpShotgun": {
+      "pool": 60,
+      "hits": 30,
+      "gain": 2,
+      "enterSeconds": 3.7,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/felarx_incarnon.yaml",
+      "referenceId": "felarx_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/HeavyRifle": {
+      "pool": 20,
+      "hits": 30,
+      "gain": 0.66,
+      "enterSeconds": 4.2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "heat": 750
+        },
+        "radius_m": 5,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.1,
+        "forced_procs": [
+          "heat"
+        ],
+        "crit_chance": 0.21,
+        "crit_multiplier": 1.9,
+        "status_chance": 0.19
+      },
+      "source": "data/weapons/primary/gorgon_incarnon.yaml",
+      "referenceId": "gorgon_incarnon"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/WraithGorgon": {
+      "pool": 20,
+      "hits": 30,
+      "gain": 0.66,
+      "enterSeconds": 3,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "heat": 750
+        },
+        "radius_m": 5,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.1,
+        "forced_procs": [
+          "heat"
+        ],
+        "crit_chance": 0.19,
+        "crit_multiplier": 2.1,
+        "status_chance": 0.27
+      },
+      "source": "data/weapons/primary/gorgon_wraith_incarnon.yaml",
+      "referenceId": "gorgon_wraith_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle": {
+      "pool": 40,
+      "hits": 8,
+      "gain": 5,
+      "enterSeconds": 2.4,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "puncture": 40.0,
+          "heat": 40.0
+        },
+        "radius_m": 4.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.2,
+        "crit_chance": 0.32,
+        "crit_multiplier": 3.0,
+        "status_chance": 0.24
+      },
+      "source": "data/weapons/primary/latron_incarnon.yaml",
+      "referenceId": "latron_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/LatronPrime": {
+      "pool": 40,
+      "hits": 8,
+      "gain": 5,
+      "enterSeconds": 2.4,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "puncture": 70.0,
+          "heat": 70.0
+        },
+        "radius_m": 4.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.2,
+        "crit_chance": 0.44,
+        "crit_multiplier": 3.4,
+        "status_chance": 0.3
+      },
+      "source": "data/weapons/primary/latron_prime_incarnon.yaml",
+      "referenceId": "latron_prime_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron": {
+      "pool": 40,
+      "hits": 8,
+      "gain": 5,
+      "enterSeconds": 2.4,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "puncture": 50.0,
+          "heat": 50.0
+        },
+        "radius_m": 4.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.2,
+        "crit_chance": 0.48,
+        "crit_multiplier": 3.4,
+        "status_chance": 0.28
+      },
+      "source": "data/weapons/primary/latron_wraith_incarnon.yaml",
+      "referenceId": "latron_wraith_incarnon"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun": {
+      "pool": 20,
+      "hits": 4,
+      "gain": 5,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "heat": 80
+        },
+        "radius_m": 3,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.2,
+        "crit_chance": 0.2,
+        "crit_multiplier": 3.3,
+        "status_chance": 0.56
+      },
+      "source": "data/weapons/primary/miter_incarnon.yaml",
+      "referenceId": "miter_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/StartingRifle": {
+      "pool": 200,
+      "hits": 20,
+      "gain": 10,
+      "enterSeconds": 2.0,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "blast_kind": "terminal",
+        "damage": {
+          "heat": 50.0
+        },
+        "radius_m": 3.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.1,
+        "crit_chance": 0.2,
+        "crit_multiplier": 2.4,
+        "status_chance": 0.1,
+        "takes_condition_overload": true,
+        "takes_multishot": false
+      },
+      "source": "data/weapons/primary/mk1_braton_incarnon.yaml",
+      "referenceId": "mk1_braton_incarnon"
+    },
+    "/Lotus/Weapons/MK1Series/MK1Paris": {
+      "pool": 20,
+      "hits": 4,
+      "gain": 5,
+      "enterSeconds": 0.55,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/mk1_paris_incarnon.yaml",
+      "referenceId": "mk1_paris_incarnon"
+    },
+    "/Lotus/Weapons/MK1Series/MK1Strun": {
+      "pool": 40,
+      "hits": 40,
+      "gain": 1,
+      "enterSeconds": 3.75,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "slash": 60,
+          "puncture": 25,
+          "blast": 45
+        },
+        "radius_m": 4,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.2,
+        "crit_chance": 0.44,
+        "crit_multiplier": 3,
+        "status_chance": 0.4
+      },
+      "source": "data/weapons/primary/mk1_strun_incarnon.yaml",
+      "referenceId": "mk1_strun_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Bows/HuntingBow": {
+      "pool": 20,
+      "hits": 4,
+      "gain": 5,
+      "enterSeconds": 0.65,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/paris_incarnon.yaml",
+      "referenceId": "paris_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow": {
+      "pool": 20,
+      "hits": 4,
+      "gain": 5,
+      "enterSeconds": 0.7,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/paris_prime_incarnon.yaml",
+      "referenceId": "paris_prime_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Zariman/LongGuns/SemiAutoRifle/ZarimanSemiAutoRifle": {
+      "pool": 408,
+      "hits": 12,
+      "gain": 34,
+      "enterSeconds": 2.8,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/phenmor_incarnon.yaml",
+      "referenceId": "phenmor_incarnon"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/VTGorgon": {
+      "pool": 20,
+      "hits": 30,
+      "gain": 0.66,
+      "enterSeconds": 3,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "heat": 700
+        },
+        "radius_m": 5,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.1,
+        "forced_procs": [
+          "heat"
+        ],
+        "crit_chance": 0.27,
+        "crit_multiplier": 2.3,
+        "status_chance": 0.21
+      },
+      "source": "data/weapons/primary/prisma_gorgon_incarnon.yaml",
+      "referenceId": "prisma_gorgon_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/TennoAR": {
+      "pool": 200,
+      "hits": 20,
+      "gain": 10,
+      "enterSeconds": 3,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/soma_incarnon.yaml",
+      "referenceId": "soma_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeSoma/PrimeSomaRifle": {
+      "pool": 200,
+      "hits": 20,
+      "gain": 10,
+      "enterSeconds": 3,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/soma_prime_incarnon.yaml",
+      "referenceId": "soma_prime_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Shotgun/Shotgun": {
+      "pool": 40,
+      "hits": 40,
+      "gain": 1,
+      "enterSeconds": 3.75,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "slash": 80,
+          "puncture": 30,
+          "blast": 60
+        },
+        "radius_m": 4,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.2,
+        "forced_procs": [
+          "impact"
+        ],
+        "crit_chance": 0.44,
+        "crit_multiplier": 2.8,
+        "status_chance": 0.4
+      },
+      "source": "data/weapons/primary/strun_incarnon.yaml",
+      "referenceId": "strun_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeStrun/PrimeStrunWeapon": {
+      "pool": 40,
+      "hits": 40,
+      "gain": 1,
+      "enterSeconds": 4.6,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "slash": 100,
+          "puncture": 40,
+          "blast": 60
+        },
+        "radius_m": 4,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.2,
+        "forced_procs": [
+          "impact"
+        ],
+        "crit_chance": 0.48,
+        "crit_multiplier": 3.4,
+        "status_chance": 0.46
+      },
+      "source": "data/weapons/primary/strun_prime_incarnon.yaml",
+      "referenceId": "strun_prime_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Shotgun/ShotgunVandal": {
+      "pool": 40,
+      "hits": 40,
+      "gain": 1,
+      "enterSeconds": 5,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "slash": 90,
+          "puncture": 40,
+          "blast": 70
+        },
+        "radius_m": 4,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.2,
+        "forced_procs": [
+          "impact"
+        ],
+        "crit_chance": 0.56,
+        "crit_multiplier": 3.4,
+        "status_chance": 0.44
+      },
+      "source": "data/weapons/primary/strun_wraith_incarnon.yaml",
+      "referenceId": "strun_wraith_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/TnoLeverActionRifle": {
+      "pool": 200,
+      "hits": 25,
+      "gain": 8,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": {
+        "count": 2,
+        "delay_seconds": 0.101
+      },
+      "radial": null,
+      "source": "data/weapons/primary/sybaris_incarnon.yaml",
+      "referenceId": "sybaris_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeSybaris/PrimeSybarisRifle": {
+      "pool": 200,
+      "hits": 25,
+      "gain": 8,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": {
+        "count": 2,
+        "delay_seconds": 0.062
+      },
+      "radial": null,
+      "source": "data/weapons/primary/sybaris_prime_incarnon.yaml",
+      "referenceId": "sybaris_prime_incarnon"
+    },
+    "/Lotus/Weapons/Syndicates/ArbitersOfHexis/LongGuns/AHBoltor": {
+      "pool": 160,
+      "hits": 20,
+      "gain": 8,
+      "enterSeconds": 2.4,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/telos_boltor_incarnon.yaml",
+      "referenceId": "telos_boltor_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/TennoSniperRifle": {
+      "pool": 45,
+      "hits": 5,
+      "gain": 10,
+      "enterSeconds": 1,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "cold": 5
+        },
+        "radius_m": 6.7,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0,
+        "forced_procs": [
+          "cold"
+        ],
+        "crit_chance": 0.3,
+        "crit_multiplier": 2.5,
+        "status_chance": 0.3
+      },
+      "source": "data/weapons/primary/vectis_incarnon.yaml",
+      "referenceId": "vectis_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle": {
+      "pool": 45,
+      "hits": 5,
+      "gain": 10,
+      "enterSeconds": 0.85,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "cold": 150
+        },
+        "radius_m": 6.7,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0,
+        "forced_procs": [
+          "cold"
+        ],
+        "crit_chance": 0.35,
+        "crit_multiplier": 3,
+        "status_chance": 0.3
+      },
+      "source": "data/weapons/primary/vectis_prime_incarnon.yaml",
+      "referenceId": "vectis_prime_incarnon"
+    },
+    "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun": {
+      "pool": 21,
+      "hits": 21,
+      "gain": 1,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "blast": 450
+        },
+        "radius_m": 7.9,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.8,
+        "crit_chance": 0.18,
+        "crit_multiplier": 3,
+        "status_chance": 0.41
+      },
+      "source": "data/weapons/secondary/atomos_incarnon.yaml",
+      "referenceId": "atomos_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow": {
+      "pool": 18,
+      "hits": 12,
+      "gain": 1.5,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/ballistica_incarnon.yaml",
+      "referenceId": "ballistica_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeBallistica/PrimeBallistica": {
+      "pool": 18,
+      "hits": 12,
+      "gain": 1.5,
+      "enterSeconds": 1.2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/ballistica_prime_incarnon.yaml",
+      "referenceId": "ballistica_prime_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistol/HandShotGun": {
+      "pool": 20,
+      "hits": 40,
+      "gain": 1,
+      "enterSeconds": 1.05,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/bronco_incarnon.yaml",
+      "referenceId": "bronco_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistol/BroncoPrime": {
+      "pool": 20,
+      "hits": 40,
+      "gain": 1,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/bronco_prime_incarnon.yaml",
+      "referenceId": "bronco_prime_incarnon"
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun": {
+      "pool": 150,
+      "hits": 15,
+      "gain": 10,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/cestra_incarnon.yaml",
+      "referenceId": "cestra_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/ThrowingWeapons/StalkerKunai": {
+      "pool": 20,
+      "hits": 4,
+      "gain": 5,
+      "enterSeconds": 0.75,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "heat": 160
+        },
+        "radius_m": 4,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.2,
+        "crit_chance": 0.3,
+        "crit_multiplier": 3,
+        "status_chance": 0.3
+      },
+      "source": "data/weapons/secondary/despair_incarnon.yaml",
+      "referenceId": "despair_incarnon"
+    },
+    "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep": {
+      "pool": 270,
+      "hits": 9,
+      "gain": 30,
+      "enterSeconds": 2.35,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/dual_toxocyst_incarnon.yaml",
+      "referenceId": "dual_toxocyst_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistol/AutoPistol": {
+      "pool": 280,
+      "hits": 20,
+      "gain": 14,
+      "enterSeconds": 1.4,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/furis_incarnon.yaml",
+      "referenceId": "furis_incarnon"
+    },
+    "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSDroidArray": {
+      "pool": 15,
+      "hits": 15,
+      "gain": 1,
+      "enterSeconds": 1.4,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "cold": 660
+        },
+        "radius_m": 5,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.3,
+        "forced_procs": [
+          "cold"
+        ],
+        "crit_chance": 0.14,
+        "crit_multiplier": 1.8,
+        "status_chance": 0.22
+      },
+      "source": "data/weapons/secondary/gammacor_incarnon.yaml",
+      "referenceId": "gammacor_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/ThrowingWeapons/Kunai": {
+      "pool": 20,
+      "hits": 4,
+      "gain": 5,
+      "enterSeconds": 0.75,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/kunai_incarnon.yaml",
+      "referenceId": "kunai_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol": {
+      "pool": 216,
+      "hits": 12,
+      "gain": 18,
+      "enterSeconds": 2.0,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "radiation": 300.0
+        },
+        "radius_m": 2.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.2,
+        "crit_chance": 0.22,
+        "crit_multiplier": 2.2,
+        "status_chance": 0.22
+      },
+      "source": "data/weapons/secondary/laetum_incarnon.yaml",
+      "referenceId": "laetum_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistol/Pistol": {
+      "pool": 24,
+      "hits": 6,
+      "gain": 4,
+      "enterSeconds": 1,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/lato_incarnon.yaml",
+      "referenceId": "lato_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistol/LatoPrime": {
+      "pool": 24,
+      "hits": 6,
+      "gain": 4,
+      "enterSeconds": 1,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/lato_prime_incarnon.yaml",
+      "referenceId": "lato_prime_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistol/LatoVandal": {
+      "pool": 24,
+      "hits": 6,
+      "gain": 4,
+      "enterSeconds": 1,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/lato_vandal_incarnon.yaml",
+      "referenceId": "lato_vandal_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistol/HeavyPistol": {
+      "pool": 20,
+      "hits": 10,
+      "gain": 2,
+      "enterSeconds": 2.35,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/lex_incarnon.yaml",
+      "referenceId": "lex_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex": {
+      "pool": 20,
+      "hits": 10,
+      "gain": 2,
+      "enterSeconds": 2.35,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/lex_prime_incarnon.yaml",
+      "referenceId": "lex_prime_incarnon"
+    },
+    "/Lotus/Weapons/MK1Series/MK1Furis": {
+      "pool": 280,
+      "hits": 20,
+      "gain": 14,
+      "enterSeconds": 1.4,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/mk1_furis_incarnon.yaml",
+      "referenceId": "mk1_furis_incarnon"
+    },
+    "/Lotus/Weapons/MK1Series/MK1Kunai": {
+      "pool": 20,
+      "hits": 4,
+      "gain": 5,
+      "enterSeconds": 0.75,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/mk1_kunai_incarnon.yaml",
+      "referenceId": "mk1_kunai_incarnon"
+    },
+    "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon": {
+      "pool": 350,
+      "hits": 12,
+      "gain": 30,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/onos_incarnon.yaml",
+      "referenceId": "onos_incarnon"
+    },
+    "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica": {
+      "pool": 18,
+      "hits": 12,
+      "gain": 1.5,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/rakta_ballistica_incarnon.yaml",
+      "referenceId": "rakta_ballistica_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistol/BurstPistol": {
+      "pool": 120,
+      "hits": 12,
+      "gain": 10,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": {
+        "count": 3,
+        "delay_seconds": 0.04
+      },
+      "radial": null,
+      "source": "data/weapons/secondary/sicarus_incarnon.yaml",
+      "referenceId": "sicarus_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeSicarus/PrimeSicarusPistol": {
+      "pool": 120,
+      "hits": 12,
+      "gain": 10,
+      "enterSeconds": 2,
+      "exitSeconds": 1.0,
+      "burst": {
+        "count": 3,
+        "delay_seconds": 0.04
+      },
+      "radial": null,
+      "source": "data/weapons/secondary/sicarus_prime_incarnon.yaml",
+      "referenceId": "sicarus_prime_incarnon"
+    },
+    "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSSynoidGammacor": {
+      "pool": 15,
+      "hits": 15,
+      "gain": 1,
+      "enterSeconds": 1.8,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "cold": 800
+        },
+        "radius_m": 5,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.3,
+        "forced_procs": [
+          "cold"
+        ],
+        "crit_chance": 0.2,
+        "crit_multiplier": 2,
+        "status_chance": 0.28
+      },
+      "source": "data/weapons/secondary/synoid_gammacor_incarnon.yaml",
+      "referenceId": "synoid_gammacor_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistol/RevolverPistol": {
+      "pool": 24,
+      "hits": 8,
+      "gain": 3,
+      "enterSeconds": 1,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/vasto_incarnon.yaml",
+      "referenceId": "vasto_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeVasto/PrimeVastoPistol": {
+      "pool": 24,
+      "hits": 8,
+      "gain": 3,
+      "enterSeconds": 1,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/secondary/vasto_prime_incarnon.yaml",
+      "referenceId": "vasto_prime_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ConclaveLeverPistol": {
+      "pool": 12,
+      "hits": 12,
+      "gain": 1,
+      "enterSeconds": 1.2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "heat": 600
+        },
+        "radius_m": 6,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.6,
+        "crit_chance": 0.2,
+        "crit_multiplier": 2,
+        "status_chance": 0.4,
+        "takes_condition_overload": true,
+        "takes_multishot": false
+      },
+      "source": "data/weapons/secondary/zylok_incarnon.yaml",
+      "referenceId": "zylok_incarnon"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeZylok/ZylokPrimePistol": {
+      "pool": 12,
+      "hits": 12,
+      "gain": 1,
+      "enterSeconds": 1.2,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": {
+        "damage": {
+          "heat": 700
+        },
+        "radius_m": 6,
+        "falloff_start_m": 0,
+        "falloff_reduction": 0.6,
+        "crit_chance": 0.26,
+        "crit_multiplier": 2.4,
+        "status_chance": 0.4,
+        "takes_condition_overload": true,
+        "takes_multishot": false
+      },
+      "source": "data/weapons/secondary/zylok_prime_incarnon.yaml",
+      "referenceId": "zylok_prime_incarnon"
+    },
+    "/Lotus/Weapons/ClanTech/Bio/BioWeapon": {
+      "pool": 170,
+      "hits": 5,
+      "gain": 34,
+      "chargeOn": "direct_hits",
+      "enterSeconds": 1.7,
+      "exitSeconds": 1.0,
+      "burst": null,
+      "radial": null,
+      "source": "data/weapons/primary/torid_incarnon.yaml",
+      "referenceId": "torid_incarnon"
+    }
+  },
+  "syndicates": {
+    "blight": {
+      "id": "blight",
+      "name": "Blight",
+      "syndicate": "Red Veil",
+      "weapon_prefix": "Rakta",
+      "damage": 1000.0,
+      "element": "viral",
+      "radius_m": 25.0,
+      "guaranteed_status": true,
+      "affinity_to_fill": 1000.0,
+      "cooldown_seconds": 30.0,
+      "restore": {
+        "stat": "energy",
+        "fraction": 0.25
+      },
+      "buff": {
+        "stat": "movement_speed",
+        "amount": 0.1,
+        "duration_seconds": 30.0
+      }
+    },
+    "entropy": {
+      "id": "entropy",
+      "name": "Entropy",
+      "syndicate": "Cephalon Suda",
+      "weapon_prefix": "Synoid",
+      "damage": 1000.0,
+      "element": "magnetic",
+      "radius_m": 25.0,
+      "guaranteed_status": true,
+      "affinity_to_fill": 1000.0,
+      "cooldown_seconds": 30.0,
+      "restore": {
+        "stat": "energy",
+        "fraction": 0.25
+      },
+      "buff": {
+        "stat": "energy",
+        "amount": 0.25,
+        "duration_seconds": 30.0
+      }
+    },
+    "justice": {
+      "id": "justice",
+      "name": "Justice",
+      "syndicate": "Steel Meridian",
+      "weapon_prefix": "Vaykor",
+      "damage": 1000.0,
+      "element": "blast",
+      "radius_m": 25.0,
+      "guaranteed_status": false,
+      "affinity_to_fill": 1000.0,
+      "cooldown_seconds": 30.0,
+      "restore": {
+        "stat": "health",
+        "fraction": 0.25
+      },
+      "buff": {
+        "stat": "armor",
+        "amount": 0.15,
+        "duration_seconds": 30.0
+      }
+    },
+    "purity": {
+      "id": "purity",
+      "name": "Purity",
+      "syndicate": "New Loka",
+      "weapon_prefix": "Sancti",
+      "damage": 1000.0,
+      "element": "corrosive",
+      "radius_m": 25.0,
+      "guaranteed_status": true,
+      "affinity_to_fill": 1000.0,
+      "cooldown_seconds": 30.0,
+      "restore": {
+        "stat": "health",
+        "fraction": 0.25
+      },
+      "buff": {
+        "stat": "health",
+        "amount": 0.25,
+        "duration_seconds": 30.0
+      }
+    },
+    "sequence": {
+      "id": "sequence",
+      "name": "Sequence",
+      "syndicate": "The Perrin Sequence",
+      "weapon_prefix": "Secura",
+      "damage": 1000.0,
+      "element": "radiation",
+      "radius_m": 25.0,
+      "guaranteed_status": true,
+      "affinity_to_fill": 1000.0,
+      "cooldown_seconds": 30.0,
+      "restore": {
+        "stat": "shield",
+        "fraction": 0.25
+      },
+      "buff": {
+        "stat": "shield",
+        "amount": 0.5,
+        "duration_seconds": 30.0
+      }
+    },
+    "truth": {
+      "id": "truth",
+      "name": "Truth",
+      "syndicate": "Arbiters of Hexis",
+      "weapon_prefix": "Telos",
+      "damage": 1000.0,
+      "element": "gas",
+      "radius_m": 25.0,
+      "guaranteed_status": true,
+      "affinity_to_fill": 1000.0,
+      "cooldown_seconds": 30.0,
+      "restore": {
+        "stat": "health",
+        "fraction": 0.25
+      },
+      "buff": {
+        "stat": "parkour_velocity",
+        "amount": 0.25,
+        "duration_seconds": 30.0
+      }
+    }
+  },
+  "mods": {
+    "/Lotus/Upgrades/Mods/Syndicate/KunaiMod": "blight",
+    "/Lotus/Upgrades/Mods/Syndicate/FurisMod": "purity",
+    "/Lotus/Upgrades/Mods/Syndicate/GrinlokMod": "sequence",
+    "/Lotus/Upgrades/Mods/Syndicate/BurstonPrimeMod": "truth",
+    "/Lotus/Upgrades/Mods/Syndicate/MiterMod": "justice",
+    "/Lotus/Upgrades/Mods/Syndicate/HekMod": "justice",
+    "/Lotus/Upgrades/Mods/Syndicate/SobekMod": "justice",
+    "/Lotus/Upgrades/Mods/Syndicate/AcridMod": "sequence",
+    "/Lotus/Upgrades/Mods/Syndicate/BallisticaMod": "purity",
+    "/Lotus/Upgrades/Mods/Syndicate/BoltoMod": "entropy",
+    "/Lotus/Upgrades/Mods/Syndicate/DarkDaggerMod": "blight",
+    "/Lotus/Upgrades/Mods/Syndicate/DualCleaversMod": "justice",
+    "/Lotus/Upgrades/Mods/Syndicate/EmbolistMod": "blight",
+    "/Lotus/Upgrades/Mods/Syndicate/JawSwordMod": "truth",
+    "/Lotus/Upgrades/Mods/Syndicate/KestrelMod": "entropy",
+    "/Lotus/Upgrades/Mods/Syndicate/LankaMod": "sequence",
+    "/Lotus/Upgrades/Mods/Syndicate/MireMod": "blight",
+    "/Lotus/Upgrades/Mods/Syndicate/ObexMod": "entropy",
+    "/Lotus/Upgrades/Mods/Syndicate/PantheraMod": "purity",
+    "/Lotus/Upgrades/Mods/Syndicate/SilvaAegisMod": "truth",
+    "/Lotus/Upgrades/Mods/Syndicate/SkanaMod": "purity",
+    "/Lotus/Upgrades/Mods/Syndicate/SpectraMod": "sequence",
+    "/Lotus/Upgrades/Mods/Syndicate/SupraMod": "entropy",
+    "/Lotus/Upgrades/Mods/Syndicate/ViperMod": "truth",
+    "/Lotus/Upgrades/Mods/Syndicate/VulkarMod": "purity"
+  },
+  "nativeSyndicates": {
+    "/Lotus/Weapons/Syndicates/ArbitersOfHexis/LongGuns/AHBoltor": "truth",
+    "/Lotus/Weapons/Syndicates/ArbitersOfHexis/Pistols/AHAkbolto": "truth",
+    "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSSimulor": "entropy",
+    "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSSynoidGammacor": "entropy",
+    "/Lotus/Weapons/Syndicates/NewLoka/LongGuns/NLTigris": "purity",
+    "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanas": "purity",
+    "/Lotus/Weapons/Syndicates/PerrinSequence/LongGuns/PSPenta": "sequence",
+    "/Lotus/Weapons/Syndicates/PerrinSequence/Pistols/PSDualCestra": "sequence",
+    "/Lotus/Weapons/Syndicates/RedVeil/Bows/RVCernos": "blight",
+    "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica": "blight",
+    "/Lotus/Weapons/Syndicates/SteelMeridian/LongGuns/SMHek": "justice",
+    "/Lotus/Weapons/Syndicates/SteelMeridian/Pistols/SMMarelok": "justice"
+  },
+  "enemyAffinity": {
+    "corrupted heavy gunner": 500,
+    "crewman": 50,
+    "demolisher devourer": 0,
+    "legacyte": 1500,
+    "techrot babau": 500,
+    "thrax centurion": 50
+  },
+  "packageBuild": "2026.09.22.16.46",
+  "packageEvidence": {
+    "/Lotus/Upgrades/Mods/Syndicate/AcridMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/PerrinSyndicate",
+      "value": 0.25,
+      "sha256": "af832fe50544f9d6a58470c3f37a4622ff75423a8f38c1942af7d0dc20c886e2"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/BallisticaMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/NewLokaSyndicate",
+      "value": 0.25,
+      "sha256": "509d565397c0cbcdbd774cd330f934ff8b8a62aae5dcba97e6be2d19dced69b6"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/BoltoMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/CephalonSudaSyndicate",
+      "value": 0.25,
+      "sha256": "e4d9b5d21005343d8b39ca50b85342f1d90e49eca183e6c52613afb646db3d2f"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/BurstonPrimeMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/ArbitersSyndicate",
+      "value": 0.25,
+      "sha256": "a2cfd0e99b9eb0ebd67c381501a9a6d8e72ca529f20b8adcaaa423b4e10bc945"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/DarkDaggerMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/RedVeilSyndicate",
+      "value": 0.25,
+      "sha256": "774bdbddc68edcb53a24baa45215ff5e652661da9a62ba68d726d1de4f52a27d"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/DualCleaversMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/SteelMeridianSyndicate",
+      "value": 0.25,
+      "sha256": "15757e07137035ba071428c298c6155b94b2d522c206a8dc376c6fd8cdd89c66"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/EmbolistMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/RedVeilSyndicate",
+      "value": 0.25,
+      "sha256": "73f8d477d78f9650b55ee5da7975700302d58bd473dc3050631aaa70199ecab8"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/FurisMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/NewLokaSyndicate",
+      "value": 0.25,
+      "sha256": "0e8b20f45aa201ee4df520579090cc7abc932b782b5ad06b23c71a1520248378"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/GrinlokMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/PerrinSyndicate",
+      "value": 0.25,
+      "sha256": "ee0df65fa98ad2dcfb41f9df901d0599b134dd5827efe5b868d050db157025ac"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/HekMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/SteelMeridianSyndicate",
+      "value": 0.25,
+      "sha256": "61a0ee26bd73003f4b71530c4e19dfd83a129a7fec473d871f92aac3870e3a70"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/JawSwordMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/ArbitersSyndicate",
+      "value": 0.25,
+      "sha256": "7153e4d9956c98f2b89b7b3e0df8c00e0f4768162596f8355a607858d22e021a"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/KestrelMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/CephalonSudaSyndicate",
+      "value": 0.25,
+      "sha256": "5cccdededeb5ff785aab12e099c73299ed562b263ce0f8d63eda4e057119a857"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/KunaiMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/RedVeilSyndicate",
+      "value": 0.25,
+      "sha256": "a8fef6065bd0a494cbca96a0ea993a2835a3e923bf4f44bea7d9b4e91a0155a0"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/LankaMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/PerrinSyndicate",
+      "value": 0.25,
+      "sha256": "fd491d62e06ad1b28c6aacfc7776ef8a6b7867aa65f18c92c3f7e0ef1c0cee13"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/MireMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/RedVeilSyndicate",
+      "value": 0.25,
+      "sha256": "d89892ec8cf3b4f65bfe5affc6d7bebfeb4e0ecaff3b9948f64c528828d2e604"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/MiterMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/SteelMeridianSyndicate",
+      "value": 0.25,
+      "sha256": "fd4edcffb80ad4f26bbeff41cf9a9750951e543a0a0481a0118f8c52460873fe"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/ObexMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/CephalonSudaSyndicate",
+      "value": 0.25,
+      "sha256": "232729099450e912124244010e94056b2448427d093837640964c9ed038d6b92"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/PantheraMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/NewLokaSyndicate",
+      "value": 0.25,
+      "sha256": "db9f116c8e65ad93a9aa3c11c2622d5d0a67e56dda5c57d68a7ca0c6a4f25f60"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/SilvaAegisMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/ArbitersSyndicate",
+      "value": 0.25,
+      "sha256": "a60276dccc2db35e3eb2030d85436ce0899fe14f671c2c3587260b529bea4022"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/SkanaMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/NewLokaSyndicate",
+      "value": 0.25,
+      "sha256": "1adb0dd1c9d89f9c77bca3009c0c56ec5faef79b4bf40096593bb961edd35bd9"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/SobekMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/SteelMeridianSyndicate",
+      "value": 0.25,
+      "sha256": "ab52ab66ae21d1a0ada65a80f1ecf426451dce7052f350d9178d07627aa6e895"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/SpectraMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/PerrinSyndicate",
+      "value": 0.25,
+      "sha256": "606f7a74b88504fff8ed7ae2438325a9c53419f823784a1db4bdcc5cb9a6353a"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/SupraMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/CephalonSudaSyndicate",
+      "value": 0.25,
+      "sha256": "3bab9da6c9aa5775a42e107380dd624d3c9f8dbd29f1523655ba53636be20367"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/ViperMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/ArbitersSyndicate",
+      "value": 0.25,
+      "sha256": "49abd14dfff504b8a7a75ac3407330d973080f3e404d28d5391ab050bda93599"
+    },
+    "/Lotus/Upgrades/Mods/Syndicate/VulkarMod": {
+      "field": "Upgrades",
+      "object": "/Lotus/Syndicates/NewLokaSyndicate",
+      "value": 0.25,
+      "sha256": "5095e41e9fa810d4206a85e635aa9aa943f4e165aa115e81bdf9c75cdd4fa5dd"
+    },
+    "/Lotus/Weapons/Syndicates/ArbitersOfHexis/LongGuns/AHBoltor": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/ArbitersSyndicate",
+      "value": 1,
+      "sha256": "3059847fa964d4cb95b2bf341975fe29facee86b7e63c95f0f1d5a078e6f7e68"
+    },
+    "/Lotus/Weapons/Syndicates/ArbitersOfHexis/Pistols/AHAkbolto": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/ArbitersSyndicate",
+      "value": 1,
+      "sha256": "2fa39bb63e7ea20981389730199acd7cf1463b48237896954edb7b5d1e99429d"
+    },
+    "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSSimulor": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/CephalonSudaSyndicate",
+      "value": 1,
+      "sha256": "2a21ef973e57eefb8793787a6231cf0c22866d15fd09629ebff5608224259fc5"
+    },
+    "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSSynoidGammacor": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/CephalonSudaSyndicate",
+      "value": 1,
+      "sha256": "79cbe65057773dacedea45a8f61ea7dc5387b1babf55187e869ef0bdbd7a770c"
+    },
+    "/Lotus/Weapons/Syndicates/NewLoka/LongGuns/NLTigris": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/NewLokaSyndicate",
+      "value": 1,
+      "sha256": "c45ed417e3728894c00c14c4d51246231b859e3e6a7a1b91d70260a953acd8b8"
+    },
+    "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanas": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/NewLokaSyndicate",
+      "value": 1,
+      "sha256": "d145c9068dfe549abf1339905bca43b956ad87223b55355186592d743292c848"
+    },
+    "/Lotus/Weapons/Syndicates/PerrinSequence/LongGuns/PSPenta": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/PerrinSyndicate",
+      "value": 1,
+      "sha256": "b80659074767365cb2e797b07506c829acec49218a9d542812280f2915c9b578"
+    },
+    "/Lotus/Weapons/Syndicates/PerrinSequence/Pistols/PSDualCestra": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/PerrinSyndicate",
+      "value": 1,
+      "sha256": "2c4729b3184a19bd0f2c45f8b8cfe94a9160174dea9822c23e3986ac1c24d5e7"
+    },
+    "/Lotus/Weapons/Syndicates/RedVeil/Bows/RVCernos": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/RedVeilSyndicate",
+      "value": 1,
+      "sha256": "25e7cdf1c2a8f947a73ca3438b5a550bd01c81649591559de4455b0c87a28e19"
+    },
+    "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/RedVeilSyndicate",
+      "value": 1,
+      "sha256": "1cad732850fc34c5677e0c60c1f8381540fc1c5bafc5d63c6be3109c21422af4"
+    },
+    "/Lotus/Weapons/Syndicates/SteelMeridian/LongGuns/SMHek": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/SteelMeridianSyndicate",
+      "value": 1,
+      "sha256": "8e3d6b283e152a443d852fd2d4518b2a4de85e311b57ecd446ae3e81cdd73320"
+    },
+    "/Lotus/Weapons/Syndicates/SteelMeridian/Pistols/SMMarelok": {
+      "field": "LevelUpgrades",
+      "object": "/Lotus/Syndicates/SteelMeridianSyndicate",
+      "value": 1,
+      "sha256": "d67e507e7ddbc0c63d1af6eeb60632133c70cf7c6d632330e77c6fdb9ec91232"
+    }
+  },
+  "auditedAttacks": {
+    "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanPumpShotgun": {
+      "name": "Felarx",
+      "source": "data/weapons/primary/felarx.yaml",
+      "sha256": "1f38670ddabbe0a6f1a30648ab9e07746055accf6243bd0fe7242c31fb3bbf30",
+      "directTotal": 190.0,
+      "scope": "base mode, direct-hit target at centre",
+      "magazine": 6,
+      "reloadStart": 0.8,
+      "reloadPerShell": 0.4,
+      "reloadEnd": 0.5
+    },
+    "/Lotus/Weapons/ClanTech/Bio/BioWeapon": {
+      "name": "Torid",
+      "source": "data/weapons/primary/torid.yaml",
+      "sha256": "6329a517a5a13423ea17fa1f81d6cd8d68be1c1a7a2f560fdbbdca291ca482c3",
+      "directTotal": 100.0,
+      "scope": "base mode, direct-hit target at centre",
+      "lingering": {
+        "damage": {
+          "toxin": 40.0
+        },
+        "tick_rate": 1.0,
+        "duration_seconds": 10.0,
+        "radius_m": 3.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 1.0,
+        "crit_chance": 0.15,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.25,
+        "stacking": "stack",
+        "takes_condition_overload": true
+      }
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun": {
+      "name": "Mausolon",
+      "source": "data/weapons/archgun/mausolon.yaml",
+      "sha256": "cb6241a94441f14bbedf32a3e4c26cadd0d8a69dec9fae4335ef2309cf38d9ac",
+      "directTotal": 180.0,
+      "scope": "base mode, direct-hit target at centre",
+      "radial": {
+        "damage": {
+          "heat": 72.0
+        },
+        "radius_m": 1.8,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.2,
+        "crit_chance": 0.3,
+        "crit_multiplier": 2.2,
+        "status_chance": 0.26
+      }
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG": {
+      "name": "Opticor Vandal",
+      "source": "data/weapons/primary/opticor_vandal_quick.yaml",
+      "sha256": "0784f6cc6d461a4a35f2520a5930f6d67d4f73d46981d4fcf1ac9450e8718712",
+      "directTotal": 200,
+      "scope": "base mode, direct-hit target at centre",
+      "radial": {
+        "radius_m": 4.6,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.6,
+        "crit_chance": 0.24,
+        "crit_multiplier": 2.6,
+        "status_chance": 0.3,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "magnetic": 100
+        }
+      }
+    },
+    "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPlayerWep": {
+      "name": "Nataruk",
+      "source": "data/weapons/primary/nataruk.yaml",
+      "sha256": "af210092fae50a82e32aa9727ab6997c1f6461281ac520921722a4cb836a0263",
+      "directTotal": 450,
+      "scope": "base mode, direct-hit target at centre",
+      "drawSeconds": 0.0,
+      "bow": true
+    },
+    "/Lotus/Weapons/Tenno/Bows/DaxDuviriAsymetricalBow/DaxDuviriAsymmetricalLongBowPlayerWeapon": {
+      "name": "Cinta",
+      "source": "data/weapons/primary/cinta.yaml",
+      "sha256": "f70d647dadb7ed31a2ea1c0e5c1fbe29194f7e15450bb24108b0c0893e6baf07",
+      "directTotal": 450,
+      "scope": "base mode, direct-hit target at centre",
+      "drawSeconds": 0.0,
+      "bow": true
+    },
+    "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow": {
+      "name": "Paris Prime",
+      "source": "data/weapons/primary/paris_prime_uncharged.yaml",
+      "sha256": "c5b3519e752c6a03455709d9947d9c50f30335895ec5d08c47e3b62b996df0f3",
+      "directTotal": 180,
+      "scope": "base mode, direct-hit target at centre",
+      "drawSeconds": 0.0,
+      "bow": true
+    }
+  },
+  "nativeTriggers": {
+    "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep": {
+      "id": "dual-toxocyst-frenzy",
+      "label": "狂躁：直接爆头后 3 秒；射速 x2.5、毒素 +100%、普通弹药消耗 0",
+      "kind": "on-headshot",
+      "duration": 3,
+      "maxStacks": 1,
+      "perEvent": 1,
+      "effects": [
+        {
+          "upgradeType": "WEAPON_FIRE_RATE",
+          "operation": "MULTIPLY",
+          "value": 2.5,
+          "damageType": "DT_ANY"
+        },
+        {
+          "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+          "operation": "SET",
+          "value": 0,
+          "damageType": "DT_ANY"
+        },
+        {
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+          "operation": "ADD",
+          "value": 1,
+          "damageType": "DT_POISON"
+        }
+      ],
+      "sourceBuild": "2026.09.22.16.46",
+      "source": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/FireRateOnHeadshotPistolMod",
+      "conditionSource": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunProcCondition",
+      "sha256": "5f8b95b3c3bb37ade2e762b6af40f73fcaff43c073115751d76bc24532aff825"
+    }
+  }
+}

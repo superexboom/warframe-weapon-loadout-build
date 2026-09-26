@@ -20,6 +20,7 @@ import unittest
 ACUITY_RIFLE = "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod"
 ACUITY_PISTOL = "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod"
 CRUX = "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit"
+AURA = "/Lotus/Upgrades/Mods/Aura/PlayerWeakpointCriticalChanceAuraMod"
 
 
 class NewItemLandingTests(unittest.TestCase):
@@ -30,7 +31,7 @@ class NewItemLandingTests(unittest.TestCase):
         for path in (ACUITY_RIFLE, ACUITY_PISTOL):
             record = app.MANUAL_MODS_BY_PATH.get(path)
             self.assertIsNotNone(record, f"{path} must be in the manual catalog")
-            effects = mod_effects(record, rank=record.get("maxRank") or 10)
+            effects = mod_effects(app.optimizer.resolve_record(app.EXPORTS["mods"], path, kind="mod"), rank=10)
             by_type = {e.upgrade_type: e for e in effects}
             self.assertIn("WEAPON_DAMAGE_WEAKPOINT", by_type)
             self.assertIn("WEAPON_CRIT_CHANCE_WEAKPOINT", by_type)
@@ -51,7 +52,42 @@ class NewItemLandingTests(unittest.TestCase):
                 weapon, effects, scenario=app.optimizer._scenario("killsPerMinute")
             )
             self.assertAlmostEqual(stats.weakpoint_damage_bonus, 3.498, places=3)
-            self.assertAlmostEqual(stats.weakpoint_crit_chance_bonus, 3.498, places=3)
+            self.assertAlmostEqual(stats.weakpoint_crit_chance_relative, 3.498, places=3)
+
+    def test_new_mod_assets_and_localization_are_present(self) -> None:
+        import app
+        for path in (ACUITY_RIFLE, ACUITY_PISTOL):
+            row = app.MANUAL_MODS_BY_PATH.get(path)
+            self.assertIsNotNone(row, path)
+            self.assertTrue(row.get("iconAsset"), path)
+            self.assertTrue(row.get("effectsZhByRank"), path)
+            self.assertTrue((app.ROOT / "frontend" / row["iconAsset"].lstrip("/")).is_file(), path)
+            icon = app.ROOT / "frontend" / row["iconAsset"].lstrip("/")
+            self.assertTrue(icon.with_suffix(".bg.jpg").is_file(), path)
+            self.assertTrue(icon.with_suffix(".fg.png").is_file(), path)
+
+    def test_acuity_runtime_side_rule_does_not_drop_normal_effects(self) -> None:
+        import app
+        from wfarsenal.damage import mod_effects
+        row = app.optimizer.resolve_record(app.EXPORTS["mods"], ACUITY_RIFLE, kind="mod")
+        effects = mod_effects(row, rank=10)
+        self.assertEqual({e.upgrade_type for e in effects}, {"WEAPON_DAMAGE_WEAKPOINT", "WEAPON_CRIT_CHANCE_WEAKPOINT", "RUNTIME_LOCK_MULTISHOT"})
+        self.assertTrue(any("runtime-script" in note for note in effects.skipped) is False)
+
+    def test_mod_gains_returns_numeric_acuity_gain(self) -> None:
+        import app
+        result = app.mod_gains_payload({
+            "weapon": "/Lotus/Weapons/Tenno/Rifle/BratonPrime",
+            "enemy": app._BENCHMARK_ENEMY_PATH,
+            "level": 170,
+            "steelPath": True,
+            "mods": [{"path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod", "rank": 10, "slot": 0}],
+            "candidates": [ACUITY_RIFLE], "targetSlot": 1,
+            "metric": "sustainedDps", "headshotChance": 1.0,
+        })
+        gain = result["gains"][ACUITY_RIFLE]
+        self.assertIsInstance(gain.get("gainPercent"), (int, float))
+        self.assertNotEqual(gain.get("reason"), "variant-not-computable")
 
     def test_primary_crux_arcane_admitted_with_stack_semantics(self) -> None:
         import app
@@ -93,7 +129,7 @@ class NewItemLandingTests(unittest.TestCase):
         series = (result.get("benchmarkTimeline") or {}).get("triggerSeries") or []
         crux = [s for s in series if s.get("maxStacks") == 10.0]
         self.assertTrue(crux, "Primary Crux stack series must reach the timeline")
-        self.assertEqual(crux[0].get("kind"), "on-hit")
+        self.assertEqual(crux[0].get("kind"), "on-headshot")
 
 
 if __name__ == "__main__":

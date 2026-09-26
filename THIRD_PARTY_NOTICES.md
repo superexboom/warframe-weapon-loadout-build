@@ -120,3 +120,29 @@ there (each carries a source comment in the code):
 Both projects are AGPL-3.0, so this derivation keeps the combined work under
 the same license. The "WFSim" name and logo are not used here; see wfsim's
 `TRADEMARK.md` for its branding terms.
+
+
+### Pinned combat-reference refresh (2026-09-26)
+
+`data/mechanics/combat-reference.json` records WFSim source commit
+`b98b3d456393131857e1c0e247b19aac6ecc08f4`. Its 65 weakpoint-charged
+Incarnon profiles, six syndicate families and enemy-affinity reference data
+were imported from that project's YAML data. Internal syndicate identities
+were independently matched against local game-package UpgradeObject fields,
+with hashes in packageEvidence. No WFSim executable or website assets are
+redistributed by this change.
+
+`vendor/wfarsenal/combat_replay.py` and `manual_combat.py` implement an
+expected-count event model informed by those records, the debuff YAML files,
+and MECHANICS/MEASUREMENTS. They do not claim numerical equivalence to the
+reference's random simulation or a general-purpose Lua runtime. The original
+AGPL licensing and attribution above continue to apply.
+
+The follow-up event audit also imports one audited direct-hit charged Torid
+profile (66 charging profiles total) and seven base-attack records. Each audited
+attack records its source YAML path and SHA-256; runtime application is gated by
+weapon identity, mode, and matching base damage. Dual Toxocyst frenzy is derived
+from the local 2026.09.22.16.46 game-package upgrade and direct-headshot condition,
+with original source paths and hash retained. The importer can reproduce the
+current records into an isolated output directory. Further direct-hit profiles
+are excluded until their runtime economics have been audited.

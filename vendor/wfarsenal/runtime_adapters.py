@@ -58,6 +58,20 @@ def resolve_runtime_adapter(
     if not scripts:
         return None
 
+    # Only the three canonical Acuity cards use this stat override contract.
+    acuity_paths = {
+        '/Lotus/Upgrades/Mods/' + family + '/WeaponWeakpointCriticalChanceMod'
+        for family in ('Rifle', 'Pistol', 'Shotgun')
+    }
+    override = '/Lotus/Upgrades/Mods/WeaponStatOverride/LimitMultishot.lua'
+    raw_scripts = mod.get('runtimeScripts') or {}
+    if (path in acuity_paths
+            and raw_scripts == {
+                'apply': {'Function': 'OnApplyUpgrade', 'Script': override},
+                'unapply': {'Function': 'OnUnapplyUpgrade', 'Script': override},
+            }):
+        return RuntimeAdapter(key='acuity', kind='lock_multishot', source_path=path, rank=rank)
+
     # Hemorrhage / Internal Bleeding / Magnetic Welt all use the same verified
     # fire-rate check.  The chance table is indexed by the exported rank (rank 5
     # is 35%); the trailing entries are unused generic script values.
@@ -635,3 +649,20 @@ def _stug_signature(params: Mapping[str, Any]) -> bool:
         and math.isfinite(float(mirror))
         and mirror >= 0
     )
+
+
+def verified_crux_condition(record):
+    # Exact raw Lua parameters; unknown scripts still fail closed.
+    if record.get('path') != '/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit':
+        return None
+    apply = (record.get('runtimeScripts') or {}).get('apply', {})
+    expected = {'_ammoEfficiencyBase': -.01, '_ammoEfficiencyPerLevel': -.01,
+                '_statusChanceBase': .05, '_statusChancePerLevel': .05,
+                '_duration': 10, '_maxStacks': 10}
+    if (apply.get('Script') != 'StatusAndAmmoEfficiencyOnWeakpointHit.lua'
+            or apply.get('Function') != 'ApplyUpgrade'
+            or any(not _close(apply.get(k), v) for k, v in expected.items())):
+        return None
+    return {'sourcePath': record['path'], 'conditionTag': 'OnWeakpointHitCondition',
+            'conditions': ['OnWeakpointHitCondition'], 'duration': 10, 'maxStacks': 10,
+            'stackMode': 'per-stack', 'effects': record.get('effects') or []}
