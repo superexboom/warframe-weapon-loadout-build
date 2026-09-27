@@ -4,9 +4,10 @@
 
 - 目录指纹：`d7543a576dee5f4573225c1806b1e7b4f7062ac73e68dbc126e48c2e9b37cfbc`
 - 目标武器：409；实际覆盖：409；缺失：0
-- 尝试：614；成功/结构性可解释：601；结构性缺口：11
+- 尝试：614；生成成功并回放通过：601；结构性缺口：11；真实生成失败：2
 - 本地手动回放：601/601 通过；失败：0；回放错误：0
 - 结构性缺口：`abstract-modular-placeholder` 6、`catalog-absent` 4、`mode-metric-unavailable` 1
+- 真实生成失败：Talons 模式 0/1，均报 `fire mode 0 has no direct damage types`。上一版说明遗漏此项，汇总器还把成功项误计进 `engineFailures`；现已修正统计，保留原始失败行。
 - 外部 WFSim 配装对比：本工具本轮未执行，不能据此宣称跨引擎数值一致。
 
 主要剩余机制缺口按频次排序：

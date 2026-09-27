@@ -10,7 +10,7 @@
     "attemptsOk": 601,
     "attemptsFailed": 13,
     "structuralGaps": 11,
-    "engineFailures": 603,
+    "engineFailures": 2,
     "structuralGapKinds": [
       [
         "abstract-modular-placeholder",

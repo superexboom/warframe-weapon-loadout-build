@@ -80,5 +80,15 @@ def test_merge_separates_structural_gaps_from_engine_failures(tmp_path):
         dict(path='/c',fingerprint='v',ok=True,replayComplete=True,attempts=[dict(status='generation-failed',ok=False)]),
     ])
     s=merge_runs([root])['summary']
-    assert s['structuralGaps']==1 and s['engineFailures']==2
+    assert s['structuralGaps']==1 and s['engineFailures']==1
     assert s['structuralGapKinds']==[('catalog-absent',1)]
+
+
+def test_merge_counts_replay_mismatch_even_when_build_generation_succeeded(tmp_path):
+    from tools.merge_nonmelee_catalog_audit import merge_runs
+    dump(tmp_path/'meta.json',dict(fingerprint='v',weapons=['/a'],state='complete'))
+    dump(tmp_path/'results.json',[dict(path='/a',fingerprint='v',ok=True,replayComplete=False,
+        attempts=[dict(status='replay-mismatch',ok=True,manualKpm=1.,autoManualPassed=False)])])
+    s=merge_runs([tmp_path])['summary']
+    assert s['engineFailures']==s['manualReplayFailed']==1
+    assert s['attemptsOk']==1 and not s['allLocalReplayComplete']
