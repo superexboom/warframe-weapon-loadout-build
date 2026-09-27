@@ -1335,7 +1335,7 @@ def apply_mods(
     # component weapons still fail closed in the compact panel path.
     from .event_profiles import base_profile
     event_profile = base_profile(weapon, fire_mode)
-    has_replay_profile = bool(event_profile.get('radial') or event_profile.get('lingering'))
+    has_replay_profile = bool(event_profile.get('radial') or event_profile.get('radials') or event_profile.get('lingering'))
     if damage.get("components") and not has_replay_profile:
         # Secondary explosions/stacking attacks need a hit timeline; the compact
         # evaluator intentionally scores only the exported primary hit.
@@ -1371,7 +1371,13 @@ def apply_mods(
         per_pellet_proc = exported_proc
     from .manual_combat import reference
     profile = reference()['incarnon'].get(weapon.get('path')) if weapon.get('isIncarnonForm') else None
-    magazine = _combine(float(weapon.get('magazineSize') or event_profile.get('magazine') or 0), buckets['WEAPON_CLIP_MAX'])
+    base_magazine = float(weapon.get('magazineSize') or event_profile.get('magazine') or 0)
+    magazine = _combine(base_magazine, buckets['WEAPON_CLIP_MAX'])
+    # Ammo magazines hold whole rounds; fractional consumption below remains
+    # fractional. Quantize to native f32 before truncating so e.g. 40 rounds
+    # represented as 39.9999994 do not lose a round to Python precision.
+    if base_magazine > 0 and not weapon.get('isIncarnonForm'):
+        magazine = float(max(1, math.floor(_float32(magazine))))
     reload_base = mode.get('reloadTime') or 0.0
     if event_profile.get('reloadPerShell') is not None:
         reload_base = event_profile['reloadStart'] + event_profile['reloadPerShell'] * magazine + event_profile['reloadEnd']
@@ -1405,8 +1411,9 @@ def apply_mods(
         )(damage.get("critMultiplier", 1.0), buckets["WEAPON_CRIT_DAMAGE"]),
         explosion_radius_multiplier=_combine(1.0, buckets['WEAPON_EXPLOSION_RADIUS']),
         radial_only=damage.get('source') in ('ExplosiveAttack', 'RadialDamage', 'EmbedDeathAttack', 'StackingAttack'),
-        native_forced_procs={'DT_ELECTRICITY': float(damage.get('forcedProcs', []).count('PT_ELECTROCUTION'))}
-        if 'PT_ELECTROCUTION' in (damage.get('forcedProcs') or ()) else {},
+        native_forced_procs={dtype: float((damage.get('forcedProcs') or []).count(proc))
+            for proc, dtype in [('PT_ELECTROCUTION', 'DT_ELECTRICITY'), ('PT_CHILLED', 'DT_FREEZE')]
+            if proc in (damage.get('forcedProcs') or ())},
         continuous=mode.get('trigger') == '/Lotus/Language/Menu/Loadout_TriggerContinous',
         status_chance=_combine(per_pellet_proc, buckets["WEAPON_PROC_CHANCE"]),
         multishot=(innate_multishot if buckets['RUNTIME_LOCK_MULTISHOT'] else _combine(

@@ -1,6 +1,6 @@
 """Run resumable automatic-build smoke/replay coverage for all non-melee weapons."""
 from __future__ import annotations
-import argparse, hashlib, json, os, subprocess, sys, time, traceback
+import argparse, hashlib, json, math, os, subprocess, sys, time, traceback
 from datetime import datetime, timezone
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -51,6 +51,7 @@ def main():
     ap.add_argument("--output",type=Path,required=True)
     ap.add_argument("--weapons",nargs="+",help="restrict by exact English name or internal path")
     ap.add_argument("--limit",type=int,default=0)
+    ap.add_argument("--distance",type=float,help="explicit target distance shared by search and replay")
     ap.add_argument("--profile",choices=("fast","standard","deep"),default="fast")
     ap.add_argument("--force",action="store_true")
     ap.add_argument("--start",type=int,default=0,help="zero-based start in the selected weapon list")
@@ -60,6 +61,8 @@ def main():
     args=ap.parse_args()
     if args.start < 0 or args.shards < 1 or not 0 <= args.shard < args.shards:
         ap.error("invalid start/shard bounds")
+    if args.distance is not None and (not math.isfinite(args.distance) or args.distance < 0):
+        ap.error("distance must be finite and non-negative")
     args.output.mkdir(parents=True,exist_ok=True)
     result_path=args.output/"results.json"
     if result_path.exists():
@@ -67,6 +70,7 @@ def main():
         if not isinstance(rows,list): rows=[]
     else: rows=[]
     identity=run_identity(args.profile)
+    if args.distance is not None: identity["distance"]=args.distance
     fingerprint=hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest()
     if rows and not args.force and any(r.get('fingerprint') != fingerprint for r in rows):
         ap.error('existing results use another model/contract; choose a new output or explicitly --force')
@@ -104,6 +108,7 @@ def main():
             attempts=[]
             for mode in mode_indices:
                 payload={"weapon":path,"fireMode":mode,"metric":"killsPerMinute","incarnonCycle":row["isIncarnon"],"aiming":True,"headshotChance":1.0,"steelPath":True,"level":9999,"profile":args.profile}
+                if args.distance is not None: payload["scenario"]={"distance":args.distance}
                 try:
                     built=app.build_weapon_payload(payload)
                     b=built.get("build") or {}

@@ -312,9 +312,10 @@ def prepare(
     modes = weapon["fireModes"]
     from .event_profiles import base_profile
     base_attack = base_profile({**weapon, 'isIncarnonForm': False, '__selectedFireMode__': 0}, 0)
-    if mode_index==0:
-        notes.extend(base_attack.get('unmodeled') or [])
-        minimum=(base_attack.get('radial') or {}).get('armingDistance')
+    selected_attack = base_profile(weapon, mode_index)
+    if selected_attack:
+        notes.extend(selected_attack.get('unmodeled') or [])
+        minimum=(selected_attack.get('radial') or {}).get('armingDistance')
         if minimum is not None and scenario.distance is None:
             notes.append('radial-arming-distance-assumed-armed')
     cycle = (
@@ -415,36 +416,43 @@ def prepare(
                 weakpoint_crit_chance_relative=0.0,
                 headshot_bonus_multiplier=1.0,
             )
-        extra = base_attack if idx == 0 and not wp.get('isIncarnonForm') else {}
-        component = extra.get('radial') or extra.get('lingering')
-        if (component and component.get('armingDistance') is not None
-                and scenario.distance is not None
-                and scenario.distance < component['armingDistance']):
-            component = None
-        if component and component.get('damage'):
-            rm = deepcopy(modes[idx])
-            # This part detonates at the aimed target; shot flight distance is
-            # not distance from the explosion centre.
-            rm['falloffRange'] = [0, 0]
-            rm['falloffMinDamage'] = 1
-            rm['damage'] = {
-                **rm['damage'], 'types': {mapped[k]: v for k, v in component['damage'].items()},
-                'forcedProcs': ['PT_ELECTROCUTION'] if 'electricity' in component.get('forced_procs', []) else [],
-                'critChance': component.get('crit_chance', rm['damage'].get('critChance')),
-                'critMultiplier': component.get('crit_multiplier', rm['damage'].get('critMultiplier')),
-                'procChance': (component['status_chance'] * float(rm.get('multishot') or 1) if component.get('status_chance') is not None else rm['damage'].get('procChance')),
-            }
-            part_fx = fx if component.get('takes_condition_overload') else ModEffectList(e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
-            part = apply_mods({**wp, 'fireModes': [rm], '__compressionProfile__': extra.get('compression')}, part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
-            part = replace(part, radial_only=True, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
-            if component.get('takes_multishot') is False:
-                part = replace(part, multishot=1.0)
-            if component.get('impact_delay_seconds') is not None:
-                part._impact_delay = float(component['impact_delay_seconds'])
-            if extra.get('radial'):
-                radial = part
-            else:
-                st._lingering = (part, component['tick_rate'], component['duration_seconds'])
+        extra = base_profile(wp, idx)
+        components = extra.get('radials') or [extra.get('radial') or extra.get('lingering')]
+        radial_parts = []
+        for component in components:
+            if (component and component.get('armingDistance') is not None
+                    and scenario.distance is not None
+                    and scenario.distance < component['armingDistance']):
+                component = None
+            if component and component.get('damage'):
+                rm = deepcopy(modes[idx])
+                # This part detonates at the aimed target; shot flight distance is
+                # not distance from the explosion centre.
+                rm['falloffRange'] = [0, 0]
+                rm['falloffMinDamage'] = 1
+                rm['damage'] = {
+                    **rm['damage'], 'types': {mapped[k]: v for k, v in component['damage'].items()},
+                    'forcedProcs': [proc for element, proc in [('electricity', 'PT_ELECTROCUTION'), ('cold', 'PT_CHILLED')] if element in component.get('forced_procs', [])],
+                    'critChance': component.get('crit_chance', rm['damage'].get('critChance')),
+                    'critMultiplier': component.get('crit_multiplier', rm['damage'].get('critMultiplier')),
+                    'procChance': (component['status_chance'] * float(rm.get('multishot') or 1) if component.get('status_chance') is not None else rm['damage'].get('procChance')),
+                }
+                part_fx = fx if component.get('takes_condition_overload') else ModEffectList(e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
+                part = apply_mods({**wp, 'fireModes': [rm], '__compressionProfile__': extra.get('compression')}, part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
+                part = replace(part, radial_only=True, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
+                if component.get('takes_multishot') is False:
+                    part = replace(part, multishot=1.0)
+                if component.get('impact_delay_seconds') is not None:
+                    part._impact_delay = float(component['impact_delay_seconds'])
+                if extra.get('radial') or extra.get('radials'):
+                    radial_parts.append(part)
+                else:
+                    st._lingering = (part, component['tick_rate'], component['duration_seconds'])
+        if radial_parts:
+            radial = radial_parts[0]
+            radial._additional_radials = tuple(radial_parts[1:])
+        if extra.get('charge'):
+            st._charge_time = extra['charge']['seconds'] / max(st.fire_rate / float(modes[idx]['fireRate']), 1e-9)
         if extra.get('bow'):
             st._bow_draw = extra['drawSeconds'] / max(st.fire_rate / float(modes[idx]['fireRate']), 1e-9)
         return st, radial

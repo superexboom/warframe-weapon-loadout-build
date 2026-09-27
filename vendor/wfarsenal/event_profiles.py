@@ -30,13 +30,20 @@ SPOOL_PROFILES = {
 
 def base_profile(weapon, fire_mode=0):
     from .manual_combat import reference
-    if weapon.get('isIncarnonForm') or int(weapon.get('__selectedFireMode__', fire_mode)) != 0:
+    if weapon.get('isIncarnonForm'):
         return {}
+    selected = int(weapon.get('__selectedFireMode__', fire_mode))
     profile = {**reference().get('auditedAttacks', {}).get(weapon.get('path'), {}),
                **BATTERY_PROFILES.get(weapon.get('path'), {}),
                **SPOOL_PROFILES.get(weapon.get('path'), {})}
+    if selected:
+        profile = profile.get('modes', {}).get(str(selected), {})
+    if not profile:
+        return {}
     mode = (weapon.get('fireModes') or [{}])[fire_mode]
-    total = sum((mode.get('damage', {}).get('types') or {}).values())
+    if profile.get('projectile') and (mode.get('damage') or {}).get('projectile') != profile['projectile']:
+        return {}
+    total = sum(((mode.get('damage') or {}).get('types') or {}).values())
     if abs(total - profile.get('directTotal', total)) > 0.02:
         return {}
     return profile

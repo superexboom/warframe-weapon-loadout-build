@@ -909,17 +909,18 @@ def replay(
                     part, tick_rate, duration = field
                     for tick in range(int(math.ceil(duration * tick_rate - 1e-9))):
                         push(t + tick / tick_rate, 'lingering', part, gen)
-            if radial and gen == generation:
-                delay = max(0.0, getattr(radial, '_impact_delay', 0.0))
+            radial_parts = (radial, *getattr(radial, '_additional_radials', ())) if radial else ()
+            for part in radial_parts:
+                if gen != generation:
+                    stale += 1
+                    continue
+                delay = max(0.0, getattr(part, '_impact_delay', 0.0))
                 if delay:
-                    push(t + delay, 'delayed-radial', radial, generation)
+                    push(t + delay, 'delayed-radial', part, generation)
                 else:
-                    radial_packet = packet(radial, 0.0)
-                    vec, _, _, _ = radial_packet
-                    if not take(vec, t, "direct"):
-                        add_procs(radial, 0.0, t, radial_packet)
-            elif radial:
-                stale += 1
+                    radial_packet = packet(part, 0.0)
+                    if not take(radial_packet[0], t, "direct"):
+                        add_procs(part, 0.0, t, radial_packet)
             if (form == "base" or combat.get("baseMode")) and burst_round == 2:
                 signal("on-burst-hit", t)
             enervate_hit(active,t,shot_puncture,aim)
@@ -954,7 +955,7 @@ def replay(
                 if (form == "base" or combat.get("baseMode"))
                 else None
             )
-            delay = getattr(active, '_bow_draw', 1.0 / speed)
+            delay = getattr(active, '_bow_draw', 1.0 / speed + getattr(active, '_charge_time', 0.0))
             if delay == 0 and ammo > 0:
                 delay = active.reload_time or 1.0 / speed
             if burst:

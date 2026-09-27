@@ -1,0 +1,1918 @@
+[
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "charged"
+    ],
+    "armor_left": 0.5010545428433737,
+    "big_crit_rate": 0.011041666666666667,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          10
+        ],
+        "damage": 8503434.508689553,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 377930.4226084246,
+    "combatants": [
+      {
+        "big_crit_rate": 0.011041666666666667,
+        "crit_rate": 0.22308333333333333,
+        "crit_tier": 1.0494957041464326,
+        "damage": 8503434.508689553,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 24,
+        "procs": 40.301,
+        "reloads": 3,
+        "shots": 24,
+        "transforms": 0,
+        "weapon": "ogris"
+      }
+    ],
+    "crit_rate": 0.22308333333333333,
+    "crit_tier": 0.234125,
+    "damage_per_pellet": 354309.77119539806,
+    "damage_per_shot": 354309.77119539806,
+    "damage_sources": [
+      {
+        "dmg": 6310964.890625,
+        "source": "Heat"
+      },
+      {
+        "by_type": [
+          {
+            "dmg": 620191.6875,
+            "type": "Heat"
+          },
+          {
+            "dmg": 413461.125,
+            "type": "Blast"
+          },
+          {
+            "dmg": 245492.54296875,
+            "type": "Magnetic"
+          }
+        ],
+        "dmg": 1279145.35546875,
+        "source": "direct"
+      },
+      {
+        "by_type": [
+          {
+            "dmg": 213043.5,
+            "type": "Heat"
+          },
+          {
+            "dmg": 142029,
+            "type": "Blast"
+          },
+          {
+            "dmg": 84329.71875,
+            "type": "Magnetic"
+          }
+        ],
+        "dmg": 439402.21875,
+        "source": "radial"
+      },
+      {
+        "dmg": 152115.1875,
+        "source": "Blast"
+      }
+    ],
+    "downtime": 7.5,
+    "dps": 283447.8169563184,
+    "dps_runs": [],
+    "dps_se": 3253.5704315056746,
+    "duration": 30,
+    "field_ticks": 0,
+    "first_magazine": 817387.4656273443,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 5,
+      "total_drain": 57,
+      "umbra": 0,
+      "used": 5
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 1119041.8125,
+    "mean_max_hit": 502029.1534603686,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.05,
+      "crit_damage": 3.2,
+      "damage": [
+        {
+          "type": "Heat",
+          "value": 645
+        },
+        {
+          "type": "Blast",
+          "value": 430
+        },
+        {
+          "type": "Magnetic",
+          "value": 258
+        }
+      ],
+      "fire_rate": 1.5,
+      "modified_base": 430,
+      "multishot": 1,
+      "status_chance": 0.84,
+      "total": 1333
+    },
+    "pellets": 24,
+    "picked_up_ammo": null,
+    "procs": 40.301,
+    "reloads": 3,
+    "replay": null,
+    "run": [
+      3418799953,
+      1632908591
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 272720.9217447916,
+      "kills": 0,
+      "score": 0.3247797114887542
+    },
+    "score": 0.3375542280519899,
+    "score_runs": [],
+    "score_se": 0.0038746336705388217,
+    "self_damage": null,
+    "shots": 24,
+    "spilled": 0,
+    "target": {
+      "armor": 2700,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0,
+      "steel_path": true
+    },
+    "timeline": [
+      64852.734375,
+      67024.28125,
+      197810.125,
+      126654.53125,
+      132093.94640625,
+      236323.265625,
+      72860.72499999999,
+      65875.375,
+      65875.375,
+      222320.125,
+      143170.1225,
+      223888.28125,
+      252993.90625,
+      269293.05625,
+      316668.30625,
+      304942.85125,
+      292539.853125,
+      256440.625,
+      412885.375,
+      425140.375,
+      373864.97125,
+      372940.3125,
+      366816.25,
+      424210.25390625,
+      442546.79765625,
+      403202.503125,
+      395343.984375,
+      507861.625,
+      490472.828125,
+      254714.890625
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "charged"
+    ],
+    "armor_left": 1,
+    "big_crit_rate": 1,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          10
+        ],
+        "damage": 8073662.946335513,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 538244.1964223676,
+    "combatants": [
+      {
+        "big_crit_rate": 1,
+        "crit_rate": 1,
+        "crit_tier": 2.3008333333333333,
+        "damage": 8073662.946335513,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 36,
+        "procs": 41.77,
+        "reloads": 35,
+        "shots": 36,
+        "transforms": 0,
+        "weapon": "lenz"
+      }
+    ],
+    "crit_rate": 1,
+    "crit_tier": 2.3008333333333333,
+    "damage_per_pellet": 224268.41517598648,
+    "damage_per_shot": 224268.41517598648,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 3652392.3046875005,
+            "type": "Magnetic"
+          },
+          {
+            "dmg": 1623285.4687500002,
+            "type": "Impact"
+          },
+          {
+            "dmg": 963825.7470703126,
+            "type": "Radiation"
+          }
+        ],
+        "dmg": 6239503.520507813,
+        "source": "direct"
+      },
+      {
+        "by_type": [
+          {
+            "dmg": 1028254.8374999998,
+            "type": "Magnetic"
+          },
+          {
+            "dmg": 457002.15,
+            "type": "Blast"
+          },
+          {
+            "dmg": 271345.0265625,
+            "type": "Radiation"
+          }
+        ],
+        "dmg": 1756602.0140625,
+        "source": "radial"
+      },
+      {
+        "dmg": 3615.480000000001,
+        "source": "Blast"
+      }
+    ],
+    "downtime": 15.000000000000002,
+    "dps": 269122.0982111838,
+    "dps_runs": [],
+    "dps_se": 1301.4191608119668,
+    "duration": 30,
+    "field_ticks": 0,
+    "first_magazine": 155204.49988828256,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 3,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 3
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 635629.8867187502,
+    "mean_max_hit": 353370.07889648445,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.5,
+      "crit_damage": 4.4,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 207.50000000000003
+        },
+        {
+          "type": "Magnetic",
+          "value": 466.87500000000006
+        },
+        {
+          "type": "Radiation",
+          "value": 124.50000000000001
+        }
+      ],
+      "fire_rate": 2.8,
+      "modified_base": 207.50000000000003,
+      "multishot": 1,
+      "status_chance": 0.08000000000000002,
+      "total": 798.8750000000001
+    },
+    "pellets": 36,
+    "picked_up_ammo": null,
+    "procs": 41.77,
+    "reloads": 35,
+    "replay": null,
+    "run": [
+      2213804664,
+      1789772034
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 266657.36715234374,
+      "kills": 0,
+      "score": 0.3175587051261607
+    },
+    "score": 0.32049392049968634,
+    "score_runs": [],
+    "score_se": 0.0015498427361945166,
+    "self_damage": null,
+    "shots": 36,
+    "spilled": 0,
+    "target": {
+      "armor": 2700,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0,
+      "steel_path": true
+    },
+    "timeline": [
+      290836.86328125006,
+      155551.66171875002,
+      155551.66171875002,
+      155551.66171875002,
+      119756.35546875003,
+      119756.35546875003,
+      311103.32343750005,
+      119756.35546875003,
+      155551.66171875002,
+      155551.66171875002,
+      206875.81406250002,
+      155551.66171875002,
+      275308.0171875001,
+      155551.66171875002,
+      123371.83546875003,
+      171080.50781250003,
+      413751.62812500005,
+      311103.32343750005,
+      622206.6468750001,
+      311103.32343750005,
+      311103.32343750005,
+      239512.71093750006,
+      171080.50781250003,
+      311103.32343750005,
+      311103.32343750005,
+      239512.71093750006,
+      342161.01562500006,
+      349991.2388671876,
+      384931.14257812506,
+      854349.7359375001
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "charged"
+    ],
+    "armor_left": 0.5589842470081899,
+    "big_crit_rate": 1,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          10
+        ],
+        "damage": 10430418.748774298,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 827811.0118074737,
+    "combatants": [
+      {
+        "big_crit_rate": 1,
+        "crit_rate": 1,
+        "crit_tier": 2.2491666666666665,
+        "damage": 10430418.748774298,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 30,
+        "procs": 51.234,
+        "reloads": 29,
+        "shots": 30,
+        "transforms": 0,
+        "weapon": "prisma_lenz"
+      }
+    ],
+    "crit_rate": 1,
+    "crit_tier": 2.2491666666666665,
+    "damage_per_pellet": 347680.6249591433,
+    "damage_per_shot": 347680.6249591433,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 4449865.612500001,
+            "type": "Magnetic"
+          },
+          {
+            "dmg": 1977718.0499999998,
+            "type": "Impact"
+          },
+          {
+            "dmg": 1174270.0921874999,
+            "type": "Heat"
+          }
+        ],
+        "dmg": 7601853.7546875,
+        "source": "direct"
+      },
+      {
+        "by_type": [
+          {
+            "dmg": 1068055.875,
+            "type": "Magnetic"
+          },
+          {
+            "dmg": 474691.5,
+            "type": "Blast"
+          },
+          {
+            "dmg": 281848.078125,
+            "type": "Heat"
+          }
+        ],
+        "dmg": 1824595.453125,
+        "source": "radial"
+      },
+      {
+        "dmg": 875616.216,
+        "source": "Heat"
+      },
+      {
+        "dmg": 20415.120000000003,
+        "source": "Blast"
+      }
+    ],
+    "downtime": 17.399999999999842,
+    "dps": 347680.6249591432,
+    "dps_runs": [],
+    "dps_se": 1601.4298431130292,
+    "duration": 30,
+    "field_ticks": 0,
+    "first_magazine": 147974.4588937496,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 1,
+      "total_drain": 57,
+      "umbra": 0,
+      "used": 1
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 734617.4440000001,
+    "mean_max_hit": 413569.1487293142,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.5,
+      "crit_damage": 6.16,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 140
+        },
+        {
+          "type": "Heat",
+          "value": 84
+        },
+        {
+          "type": "Magnetic",
+          "value": 315
+        }
+      ],
+      "fire_rate": 2.8,
+      "modified_base": 140,
+      "multishot": 1,
+      "status_chance": 0.35200000000000004,
+      "total": 539
+    },
+    "pellets": 30,
+    "picked_up_ammo": null,
+    "procs": 51.234,
+    "reloads": 29,
+    "replay": null,
+    "run": [
+      1081799660,
+      268497909
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 344082.68479375,
+      "kills": 0,
+      "score": 0.40976348415309716
+    },
+    "score": 0.4140482231507295,
+    "score_runs": [],
+    "score_se": 0.0019071214598725802,
+    "self_damage": null,
+    "shots": 30,
+    "spilled": 0,
+    "target": {
+      "armor": 2700,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0,
+      "steel_path": true
+    },
+    "timeline": [
+      162316.95,
+      113115.95625,
+      119172.39375,
+      226231.9125,
+      297507.7875,
+      225900.646875,
+      334696.26093750005,
+      252138.27656250002,
+      224122.9125,
+      326411.634375,
+      258468.69656250003,
+      330260.94,
+      303134.8275,
+      231527.686875,
+      341026.68093750003,
+      403645.815,
+      225900.646875,
+      447771.121875,
+      345647.10468750005,
+      253916.01093750002,
+      371884.734375,
+      385471.828125,
+      446371.61250000005,
+      446261.68125,
+      534159.7875625,
+      611462.562,
+      570773.39325,
+      475644.494375,
+      521460.4089375,
+      536075.7789375
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.50955959761835,
+    "big_crit_rate": 0.21233856754217356,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          10
+        ],
+        "damage": 22508119.447549812,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 1042042.5670161876,
+    "combatants": [
+      {
+        "big_crit_rate": 0.21233856754217356,
+        "crit_rate": 1,
+        "crit_tier": 1.2211509527815818,
+        "damage": 22508119.447549812,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 162.839,
+        "procs": 78.896,
+        "reloads": 6,
+        "shots": 247,
+        "transforms": 0,
+        "weapon": "stahlta"
+      }
+    ],
+    "crit_rate": 1,
+    "crit_tier": 1.2211509527815818,
+    "damage_per_pellet": 138223.14953757892,
+    "damage_per_shot": 91125.98966619358,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 8433045.30250244,
+            "type": "Magnetic"
+          },
+          {
+            "dmg": 2225386.9548270344,
+            "type": "Heat"
+          },
+          {
+            "dmg": 1991135.6964241932,
+            "type": "Slash"
+          },
+          {
+            "dmg": 1171256.2920142266,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 468502.51680569176,
+            "type": "Impact"
+          }
+        ],
+        "dmg": 14289326.762573589,
+        "source": "direct"
+      },
+      {
+        "dmg": 5501566.173239162,
+        "source": "Electricity"
+      },
+      {
+        "dmg": 2163794.5260995026,
+        "source": "Heat"
+      },
+      {
+        "dmg": 816404.2407499991,
+        "source": "Slash"
+      }
+    ],
+    "downtime": 8.399999999999846,
+    "dps": 750270.6482516604,
+    "dps_runs": [],
+    "dps_se": 1314.4558114497,
+    "duration": 30,
+    "field_ticks": 0,
+    "first_magazine": 2661563.9042773093,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 4,
+      "total_drain": 57,
+      "umbra": 0,
+      "used": 4
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 1018808.5505998449,
+    "mean_max_hit": 887628.3383017246,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.24,
+      "crit_damage": 3.9600000000000004,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 18.2
+        },
+        {
+          "type": "Puncture",
+          "value": 41.6
+        },
+        {
+          "type": "Slash",
+          "value": 70.19999999999999
+        },
+        {
+          "type": "Heat",
+          "value": 78
+        },
+        {
+          "type": "Magnetic",
+          "value": 292.5
+        }
+      ],
+      "fire_rate": 11.399999999999999,
+      "modified_base": 130,
+      "multishot": 1,
+      "status_chance": 0.48400000000000004,
+      "total": 500.5
+    },
+    "pellets": 162.839,
+    "picked_up_ammo": null,
+    "procs": 78.896,
+    "reloads": 6,
+    "replay": null,
+    "run": [
+      3924177674,
+      971083327
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 759036.3900887404,
+      "kills": 0,
+      "score": 0.9039263222099866
+    },
+    "score": 0.8934873170664942,
+    "score_runs": [],
+    "score_se": 0.0015653679097169084,
+    "self_damage": null,
+    "shots": 247,
+    "spilled": 0,
+    "target": {
+      "armor": 2700,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0,
+      "steel_path": true
+    },
+    "timeline": [
+      699162.0796875001,
+      1019978.726,
+      1591878.5616875004,
+      574539.8965,
+      185651.70237500002,
+      994069.3570625001,
+      856436.7726875,
+      524777.9074375001,
+      653924.3570000001,
+      298963.09675,
+      685832.0641250001,
+      1269112.5121875,
+      2084978.9623125002,
+      284742.13200000004,
+      970955.3253750001,
+      1394921.8555,
+      2395383.8186288155,
+      1084129.8561070776,
+      1019364.6814545592,
+      1032329.9401421295,
+      1044104.9387359148,
+      1073304.243923485,
+      146261.86610318557,
+      55511.74444006935,
+      134963.25010318556,
+      173496.06045425855,
+      140245.40645200288,
+      186390.64964355112,
+      74289.97170569925,
+      121389.96608084001
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "charged"
+    ],
+    "armor_left": 0.5064910158908377,
+    "big_crit_rate": 0.8122119815668203,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          10
+        ],
+        "damage": 17675627.50976817,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 724410.9635150904,
+    "combatants": [
+      {
+        "big_crit_rate": 0.8122119815668203,
+        "crit_rate": 1,
+        "crit_tier": 1.847926267281106,
+        "damage": 17675627.50976817,
+        "finishes": 0.153,
+        "id": "wielder",
+        "pellets": 2.604,
+        "procs": 14.144,
+        "reloads": 4,
+        "shots": 8,
+        "transforms": 0,
+        "weapon": "stahlta"
+      }
+    ],
+    "crit_rate": 1,
+    "crit_tier": 1.847926267281106,
+    "damage_per_pellet": 6787875.387775795,
+    "damage_per_shot": 2209453.438721021,
+    "damage_sources": [
+      {
+        "dmg": 13142418.000244861,
+        "source": "Heat"
+      },
+      {
+        "by_type": [
+          {
+            "dmg": 2276703.585444237,
+            "type": "Heat"
+          },
+          {
+            "dmg": 758901.1951480791,
+            "type": "Slash"
+          },
+          {
+            "dmg": 474313.24696754944,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 284587.94818052964,
+            "type": "Impact"
+          }
+        ],
+        "dmg": 3794505.9757403955,
+        "source": "direct"
+      },
+      {
+        "dmg": 951186.7399999996,
+        "source": "Slash"
+      },
+      {
+        "by_type": [
+          {
+            "dmg": 93093.36795130507,
+            "type": "Heat"
+          },
+          {
+            "dmg": 62062.245300870054,
+            "type": "Radiation"
+          }
+        ],
+        "dmg": 155155.61325217513,
+        "source": "radial"
+      }
+    ],
+    "downtime": 5.600000000000051,
+    "dps": 589187.583658939,
+    "dps_runs": [],
+    "dps_se": 9353.860929404249,
+    "duration": 30,
+    "field_ticks": 0,
+    "first_magazine": 2118035.562357153,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 4,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 4
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 0.214,
+    "kills_max": 2,
+    "kills_min": 0,
+    "kills_std": 0.412557874727898,
+    "max_hit": 4106959.2499999995,
+    "mean_max_hit": 1820909.8461947453,
+    "ok": true,
+    "overkill": 119321.4795981385,
+    "overkill_rate": 0.00679650260100774,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.4,
+      "crit_damage": 8.399999999999999,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 516
+        },
+        {
+          "type": "Puncture",
+          "value": 774
+        },
+        {
+          "type": "Slash",
+          "value": 1290
+        },
+        {
+          "type": "Heat",
+          "value": 3870
+        }
+      ],
+      "fire_rate": 0.667,
+      "modified_base": 2580,
+      "multishot": 1,
+      "status_chance": 0.768,
+      "total": 6450
+    },
+    "pellets": 2.604,
+    "picked_up_ammo": null,
+    "procs": 14.144,
+    "reloads": 4,
+    "replay": null,
+    "run": [
+      938967892,
+      629668851
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 601442.210974581,
+      "kills": 0,
+      "score": 0.7162495143672021
+    },
+    "score": 0.6969190299993065,
+    "score_runs": [],
+    "score_se": 0.010937166847465927,
+    "self_damage": null,
+    "shots": 8,
+    "spilled": 0,
+    "target": {
+      "armor": 2700,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0,
+      "steel_path": true
+    },
+    "timeline": [
+      1747627.4999999998,
+      1660248.5,
+      1660248.5,
+      1672573.2249131545,
+      1672503.5,
+      1672503.5,
+      1672503.5,
+      3515591,
+      766973.6943722083,
+      608128.7902325884,
+      3841.00432878184,
+      3712.3053362205546,
+      4456.829316158187,
+      4456.829316158187,
+      4456.829316158187,
+      13426.03445853703,
+      8912.79507306116,
+      8912.79507306116,
+      13571.083165124659,
+      8912.79507306116,
+      8912.79507306116,
+      0,
+      3867.8662622753063,
+      3712.3053362205546,
+      4456.829316158187,
+      334198.29532697814,
+      242253.5143161581,
+      242253.5143161581,
+      242253.5143161581,
+      237796.6849999999
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 21.98968262347697,
+      "median": 22.697751124437783,
+      "p90": 28.197001499250376,
+      "runs": 213
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.5005897348122746,
+    "big_crit_rate": 0.04442381836355847,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          10
+        ],
+        "damage": 17668233.087858796,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 654379.0032540294,
+    "combatants": [
+      {
+        "big_crit_rate": 0.04442381836355847,
+        "crit_rate": 0.8980151363701271,
+        "crit_tier": 1.0494688970868846,
+        "damage": 17668233.087858796,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 140.06,
+        "procs": 67.294,
+        "reloads": 1,
+        "shots": 637,
+        "transforms": 0,
+        "weapon": "supra_vandal"
+      }
+    ],
+    "crit_rate": 0.8980151363701271,
+    "crit_tier": 0.9424389547336856,
+    "damage_per_pellet": 126147.60165542478,
+    "damage_per_shot": 27736.629651269694,
+    "damage_sources": [
+      {
+        "dmg": 9046928.021274487,
+        "source": "Heat"
+      },
+      {
+        "by_type": [
+          {
+            "dmg": 3832447.5679859356,
+            "type": "Heat"
+          },
+          {
+            "dmg": 1916223.7839929678,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 1517010.495661105,
+            "type": "Magnetic"
+          },
+          {
+            "dmg": 399213.2883318688,
+            "type": "Slash"
+          },
+          {
+            "dmg": 239527.97299912098,
+            "type": "Impact"
+          }
+        ],
+        "dmg": 7904423.1089709755,
+        "source": "direct"
+      },
+      {
+        "dmg": 507993.1831245766,
+        "source": "Electricity"
+      },
+      {
+        "dmg": 139810.53625,
+        "source": "Slash"
+      }
+    ],
+    "downtime": 3,
+    "dps": 588941.1029286266,
+    "dps_runs": [],
+    "dps_se": 1038.8658595384934,
+    "duration": 30,
+    "field_ticks": 0,
+    "first_magazine": 13318754.104819449,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 3,
+      "total_drain": 57,
+      "umbra": 0,
+      "used": 3
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 1355295.4999999998,
+    "mean_max_hit": 782898.2747632512,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.16,
+      "crit_damage": 4.4,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 16.6
+        },
+        {
+          "type": "Puncture",
+          "value": 124.50000000000001
+        },
+        {
+          "type": "Slash",
+          "value": 24.900000000000002
+        },
+        {
+          "type": "Heat",
+          "value": 249
+        },
+        {
+          "type": "Magnetic",
+          "value": 99.6
+        }
+      ],
+      "fire_rate": 23.75,
+      "modified_base": 166,
+      "multishot": 1,
+      "status_chance": 0.48,
+      "total": 514.6
+    },
+    "pellets": 140.06,
+    "picked_up_ammo": null,
+    "procs": 67.294,
+    "reloads": 1,
+    "replay": null,
+    "run": [
+      1170074547,
+      1357433782
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 586638.4949873344,
+      "kills": 0,
+      "score": 0.6986199662689498
+    },
+    "score": 0.7013621113822055,
+    "score_runs": [],
+    "score_se": 0.0012371715084322512,
+    "self_damage": null,
+    "shots": 637,
+    "spilled": 0,
+    "target": {
+      "armor": 2700,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0,
+      "steel_path": true
+    },
+    "timeline": [
+      78806.16562500001,
+      98588.48125000003,
+      146700.72812500002,
+      499433.0093750001,
+      757790.746875,
+      786559.2937500001,
+      1509139.9914062505,
+      877887.4875000002,
+      1146788.8125000002,
+      872469.9376562502,
+      1145678.4556250002,
+      921104.0218750003,
+      1039058.6568750001,
+      991021.3325000003,
+      1151229.4323437503,
+      1398884.3671875005,
+      1189153.6890625001,
+      1030984.4411918487,
+      210012.07936403665,
+      210012.07936403665,
+      205793.66936403664,
+      273577.86681754154,
+      252223.14777826468,
+      129106.11314648019,
+      64534.72418836954,
+      81896.81603113512,
+      99390.61648504471,
+      151016.15676781512,
+      130639.08959708062,
+      149673.43999311532
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.1541721456515,
+    "big_crit_rate": 0.7677946428571428,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          10
+        ],
+        "damage": 68640281.07286495,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 2860011.711369373,
+    "combatants": [
+      {
+        "big_crit_rate": 0.7677946428571428,
+        "crit_rate": 1,
+        "crit_tier": 1.8058285714285713,
+        "damage": 68640281.07286495,
+        "finishes": 2,
+        "id": "wielder",
+        "pellets": 560,
+        "procs": 159.769,
+        "reloads": 4,
+        "shots": 560,
+        "transforms": 0,
+        "weapon": "synapse"
+      }
+    ],
+    "crit_rate": 1,
+    "crit_tier": 1.8058285714285713,
+    "damage_per_pellet": 122571.93048725884,
+    "damage_per_shot": 122571.93048725884,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 34614509.52641485,
+            "type": "Magnetic"
+          },
+          {
+            "dmg": 15384226.456184404,
+            "type": "Corrosive"
+          },
+          {
+            "dmg": 9134384.458359456,
+            "type": "Heat"
+          }
+        ],
+        "dmg": 59133120.4409588,
+        "source": "direct"
+      },
+      {
+        "dmg": 7731516.897315633,
+        "source": "Electricity"
+      },
+      {
+        "dmg": 2207948.5938732256,
+        "source": "Heat"
+      }
+    ],
+    "downtime": 6,
+    "dps": 2288009.369095498,
+    "dps_runs": [],
+    "dps_se": 2574.488691646902,
+    "duration": 30,
+    "field_ticks": 0,
+    "first_magazine": 19633080.660203468,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 5,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 5
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 2,
+    "kills_max": 2,
+    "kills_min": 2,
+    "kills_std": 0,
+    "max_hit": 572281.2952,
+    "mean_max_hit": 549320.3698290675,
+    "ok": true,
+    "overkill": 52623.82372303696,
+    "overkill_rate": 0.0007672491791326686,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.39,
+      "crit_damage": 5.940000000000001,
+      "damage": [
+        {
+          "type": "Heat",
+          "value": 49.8
+        },
+        {
+          "type": "Corrosive",
+          "value": 83
+        },
+        {
+          "type": "Magnetic",
+          "value": 186.75
+        }
+      ],
+      "fire_rate": 22.799999999999997,
+      "modified_base": 83,
+      "multishot": 1,
+      "status_chance": 0.28600000000000003,
+      "total": 319.55
+    },
+    "pellets": 560,
+    "picked_up_ammo": null,
+    "procs": 159.769,
+    "reloads": 4,
+    "replay": null,
+    "run": [
+      1465927818,
+      1031287188
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 2302419.531071588,
+      "kills": 2,
+      "score": 2.739423679046029
+    },
+    "score": 2.7226709011482066,
+    "score_runs": [],
+    "score_se": 0.0030625012935457207,
+    "self_damage": null,
+    "shots": 560,
+    "spilled": 0,
+    "target": {
+      "armor": 2700,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0,
+      "steel_path": true
+    },
+    "timeline": [
+      1630076.7624878294,
+      4711161.049806252,
+      5612400.206912502,
+      4627313.8141787145,
+      1612604.0281985095,
+      1696140.6593552055,
+      765945.4556509757,
+      1057164.5691061912,
+      1743048.0933546706,
+      1113112.3572150955,
+      1249045.0086910515,
+      2765313.7441875,
+      4655473.321818752,
+      4032118.441056251,
+      239387.41760000007,
+      3828589.322772047,
+      1485474.457025426,
+      1497814.0607935975,
+      1398725.3971011583,
+      1250409.1291395465,
+      1421074.5297193304,
+      443015.61073572317,
+      131432.73628965486,
+      1013521.311703685,
+      1991155.9513265702,
+      4483835.869218752,
+      6056942.223368751,
+      4346576.750632302,
+      1574908.3070359807,
+      638805.345665565
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 11.313245614035063,
+      "median": 11.192982456140328,
+      "p90": 12.28947368421049,
+      "runs": 1000
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.5000299510142516,
+    "big_crit_rate": 0,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          10
+        ],
+        "damage": 18310223.82161932,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 821086.2700277676,
+    "combatants": [
+      {
+        "big_crit_rate": 0,
+        "crit_rate": 0.6945666686896886,
+        "crit_tier": 1,
+        "damage": 18310223.82161932,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 131.816,
+        "procs": 63.3,
+        "reloads": 7,
+        "shots": 300,
+        "transforms": 0,
+        "weapon": "akstiletto_prime"
+      }
+    ],
+    "crit_rate": 0.6945666686896886,
+    "crit_tier": 0.6945666686896886,
+    "damage_per_pellet": 138907.44539069096,
+    "damage_per_shot": 61034.07940539773,
+    "damage_sources": [
+      {
+        "dmg": 10238919.062579539,
+        "source": "Heat"
+      },
+      {
+        "by_type": [
+          {
+            "dmg": 4556154.853475798,
+            "type": "Heat"
+          },
+          {
+            "dmg": 1202318.6418894466,
+            "type": "Impact"
+          },
+          {
+            "dmg": 1202318.6418894466,
+            "type": "Magnetic"
+          },
+          {
+            "dmg": 632799.2852049724,
+            "type": "Slash"
+          },
+          {
+            "dmg": 189839.7855614919,
+            "type": "Puncture"
+          }
+        ],
+        "dmg": 7783431.208021172,
+        "source": "direct"
+      },
+      {
+        "dmg": 169331.06104152548,
+        "source": "Electricity"
+      },
+      {
+        "dmg": 115925.78374999997,
+        "source": "Slash"
+      }
+    ],
+    "downtime": 7.699999999999876,
+    "dps": 610340.7940539774,
+    "dps_runs": [],
+    "dps_se": 976.2072605346091,
+    "duration": 30,
+    "field_ticks": 0,
+    "first_magazine": 1162000.7321084372,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 2,
+      "total_drain": 60,
+      "umbra": 0,
+      "used": 2
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 1743790.546875,
+    "mean_max_hit": 911060.2580177333,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.15,
+      "crit_damage": 5,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 101.52000000000001
+        },
+        {
+          "type": "Puncture",
+          "value": 16.92
+        },
+        {
+          "type": "Slash",
+          "value": 50.760000000000005
+        },
+        {
+          "type": "Heat",
+          "value": 380.70000000000005
+        },
+        {
+          "type": "Magnetic",
+          "value": 101.52000000000001
+        }
+      ],
+      "fire_rate": 13.452,
+      "modified_base": 169.20000000000002,
+      "multishot": 1,
+      "status_chance": 0.48,
+      "total": 651.4200000000001
+    },
+    "pellets": 131.816,
+    "picked_up_ammo": null,
+    "procs": 63.3,
+    "reloads": 7,
+    "replay": null,
+    "run": [
+      1038635249,
+      2385853039
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 610253.5705130744,
+      "kills": 0,
+      "score": 0.7267428450234157
+    },
+    "score": 0.7268467183759547,
+    "score_runs": [],
+    "score_se": 0.001162552217854686,
+    "self_damage": null,
+    "shots": 300,
+    "spilled": 0,
+    "target": {
+      "armor": 2700,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0,
+      "steel_path": true
+    },
+    "timeline": [
+      219985.11562499998,
+      388761.39999999997,
+      382567.09375,
+      145176.85,
+      949760.5234375,
+      646698.359375,
+      644626.3203124999,
+      377681.85,
+      1033613.07890625,
+      692534.4507812499,
+      1322860.5140624999,
+      588036.043125,
+      1203726.0923437502,
+      1586213.5978125,
+      1591587.7253125,
+      397449.6025,
+      504270.5,
+      570924.7249999999,
+      1516474.8124999998,
+      816964.3361754692,
+      218175.55945890347,
+      297036.8678215682,
+      358499.35352744616,
+      254578.31906085726,
+      210674.0530568035,
+      241468.52355596324,
+      301946.8358622466,
+      248004.07626507775,
+      277996.59941260377,
+      319313.9363515504
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.5064873945330717,
+    "big_crit_rate": 0.4219961704724253,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          10
+        ],
+        "damage": 22026781.39232174,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 1095859.7707622652,
+    "combatants": [
+      {
+        "big_crit_rate": 0.4219961704724253,
+        "crit_rate": 1,
+        "crit_tier": 1.44194338003736,
+        "damage": 22026781.39232174,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 427.729,
+        "procs": 96.153,
+        "reloads": 9,
+        "shots": 648,
+        "transforms": 0,
+        "weapon": "baza_prime"
+      }
+    ],
+    "crit_rate": 1,
+    "crit_tier": 1.44194338003736,
+    "damage_per_pellet": 51497.04928195596,
+    "damage_per_shot": 33991.9465930891,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 11502939.92265222,
+            "type": "Magnetic"
+          },
+          {
+            "dmg": 3035498.035144385,
+            "type": "Heat"
+          },
+          {
+            "dmg": 2076919.7082566542,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 1917156.653775398,
+            "type": "Impact"
+          },
+          {
+            "dmg": 1118341.3813689747,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 19650855.701197803,
+        "source": "direct"
+      },
+      {
+        "dmg": 1693310.610415255,
+        "source": "Electricity"
+      },
+      {
+        "dmg": 565730.2657847793,
+        "source": "Heat"
+      },
+      {
+        "dmg": 163984.99599999993,
+        "source": "Slash"
+      }
+    ],
+    "downtime": 9.899999999999812,
+    "dps": 734226.0464107246,
+    "dps_runs": [],
+    "dps_se": 607.3232851457926,
+    "duration": 30,
+    "field_ticks": 0,
+    "first_magazine": 4200980.0534264995,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 4,
+      "total_drain": 57,
+      "umbra": 0,
+      "used": 4
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 336475.87875000003,
+    "mean_max_hit": 305880.1892184026,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.28,
+      "crit_damage": 6.6000000000000005,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 23.904
+        },
+        {
+          "type": "Puncture",
+          "value": 27.888
+        },
+        {
+          "type": "Slash",
+          "value": 14.608
+        },
+        {
+          "type": "Heat",
+          "value": 39.84
+        },
+        {
+          "type": "Magnetic",
+          "value": 149.4
+        }
+      ],
+      "fire_rate": 31.673000000000002,
+      "modified_base": 66.4,
+      "multishot": 1,
+      "status_chance": 0.22400000000000003,
+      "total": 255.64000000000001
+    },
+    "pellets": 427.729,
+    "picked_up_ammo": null,
+    "procs": 96.153,
+    "reloads": 9,
+    "replay": null,
+    "run": [
+      4284777560,
+      3919678004
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 735796.0524465998,
+      "kills": 0,
+      "score": 0.8762497138074139
+    },
+    "score": 0.8743800145408327,
+    "score_runs": [],
+    "score_se": 0.0007232532072309477,
+    "self_damage": null,
+    "shots": 648,
+    "spilled": 0,
+    "target": {
+      "armor": 2700,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0,
+      "steel_path": true
+    },
+    "timeline": [
+      928151.2350000001,
+      1935751.8751875008,
+      462930.5188750001,
+      1417058.4586875003,
+      2110640.308250001,
+      1548997.2598750007,
+      1203572.5545625004,
+      3403194.123625002,
+      2909599.9031775845,
+      290472.83693112776,
+      555678.9763012814,
+      596103.0067826442,
+      383177.4682039853,
+      481175.11785577436,
+      300588.9099018114,
+      223803.24821489464,
+      76041.16709930674,
+      244015.26345557615,
+      325863.2971424928,
+      92783.04608174288,
+      304691.21959327126,
+      300027.59594679304,
+      224867.81881461284,
+      169000.2765641754,
+      342252.3746270718,
+      399756.0689164236,
+      48423.86687691707,
+      372734.83869330597,
+      316443.0500400986,
+      106085.88811430518
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  }
+]

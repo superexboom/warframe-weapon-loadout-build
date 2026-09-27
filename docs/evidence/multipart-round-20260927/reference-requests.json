@@ -1,0 +1,360 @@
+[
+  {
+    "weapon": "ogris",
+    "mode": "base",
+    "mods": [
+      "heavy_caliber",
+      "thermite_rounds",
+      "magnetic_capacity",
+      "primary_acuity",
+      "hellfire",
+      "hammer_shot",
+      "rifle_elementalist",
+      "serration",
+      "vigilante_supplies@0"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100.0,
+    "aiming": true,
+    "duration": 30,
+    "runs": 1000,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      10.0
+    ]
+  },
+  {
+    "weapon": "lenz",
+    "mode": "base",
+    "mods": [
+      "heavy_caliber",
+      "primed_cryo_rounds",
+      "primary_acuity",
+      "high_voltage",
+      "vital_sense",
+      "vile_acceleration",
+      "serration",
+      "radiated_reload",
+      "vigilante_supplies@0"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100.0,
+    "aiming": true,
+    "duration": 30,
+    "runs": 1000,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      10.0
+    ]
+  },
+  {
+    "weapon": "prisma_lenz",
+    "mode": "base",
+    "mods": [
+      "heavy_caliber",
+      "high_voltage",
+      "primary_acuity",
+      "vital_sense",
+      "primed_cryo_rounds",
+      "vile_acceleration",
+      "thermite_rounds",
+      "rifle_elementalist"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100.0,
+    "aiming": true,
+    "duration": 30,
+    "runs": 1000,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      10.0
+    ]
+  },
+  {
+    "weapon": "stahlta",
+    "mode": "base",
+    "mods": [
+      "primed_cryo_rounds",
+      "primary_acuity",
+      "high_voltage",
+      "heavy_caliber",
+      "vital_sense",
+      "thermite_rounds",
+      "rifle_elementalist",
+      "vile_acceleration",
+      "vigilante_supplies@0"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100.0,
+    "aiming": true,
+    "duration": 30,
+    "runs": 1000,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      10.0
+    ]
+  },
+  {
+    "weapon": "stahlta",
+    "mode": "alternate",
+    "mods": [
+      "heavy_caliber",
+      "primary_acuity",
+      "thermite_rounds",
+      "vital_sense",
+      "hellfire",
+      "hammer_shot",
+      "serration",
+      "rifle_elementalist",
+      "vigilante_supplies@0"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100.0,
+    "aiming": true,
+    "duration": 30,
+    "runs": 1000,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      10.0
+    ]
+  },
+  {
+    "weapon": "supra_vandal",
+    "mode": "base",
+    "mods": [
+      "heavy_caliber",
+      "magnetic_capacity",
+      "primary_acuity",
+      "thermite_rounds",
+      "vital_sense",
+      "hellfire",
+      "vile_acceleration",
+      "serration",
+      "vigilante_supplies@0"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100.0,
+    "aiming": true,
+    "duration": 30,
+    "runs": 1000,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      10.0
+    ]
+  },
+  {
+    "weapon": "synapse",
+    "mode": "base",
+    "mods": [
+      "primed_cryo_rounds",
+      "primary_acuity",
+      "high_voltage",
+      "heavy_caliber",
+      "vile_acceleration",
+      "vital_sense",
+      "thermite_rounds",
+      "serration",
+      "vigilante_supplies@0"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100.0,
+    "aiming": true,
+    "duration": 30,
+    "runs": 1000,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      10.0
+    ]
+  },
+  {
+    "weapon": "akstiletto_prime",
+    "mode": "base",
+    "mods": [
+      "magnetic_might",
+      "pistol_acuity",
+      "primed_heated_charge",
+      "hornet_strike",
+      "anemic_agility",
+      "scorch",
+      "primed_target_cracker",
+      "magnum_force"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100.0,
+    "aiming": true,
+    "duration": 30,
+    "runs": 1000,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      10.0
+    ]
+  },
+  {
+    "weapon": "baza_prime",
+    "mode": "base",
+    "mods": [
+      "primed_cryo_rounds",
+      "primary_acuity",
+      "high_voltage",
+      "heavy_caliber",
+      "wildfire",
+      "vital_sense",
+      "serration",
+      "vile_acceleration",
+      "vigilante_supplies@0"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100.0,
+    "aiming": true,
+    "duration": 30,
+    "runs": 1000,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      10.0
+    ]
+  }
+]

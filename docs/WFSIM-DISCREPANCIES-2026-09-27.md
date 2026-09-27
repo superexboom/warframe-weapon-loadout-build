@@ -45,3 +45,10 @@ Elementalist 已由对方确认并修复；本轮参考是修复后的冻结版�
 本地已补入原生投射物部件与 Kompressa 0.6–0.8 秒嵌入延迟、Cyanex 爆炸部件。冻结 WFSim 的 `pellet.rs` 明确规定 `takes_multishot=false` 的 radial 在 `pellet_idx > 0` 不重复生成；因此在同一目标、无状态、只增加 Barrel Diffusion 的最小实验中，参考 Kompressa KPM/DPS 比约 1.192，而本地按每个原生投射物结算范围部件会显著不同。该差异已保存于 `evidence/radial-round-20260927/secondary-radial-multishot-probe-20260927/summary.json` 与源码行证据；当前没有真实游戏录制，不能断言哪一边是游戏正确行为。
 
 这条不用于豁免本地未实现机制，也不把 Kompressa 的公开紫卡跨引擎差异强行压到参考值。
+
+
+## 5. Prisma Lenz 原生蓄力与冻结参考冲突（本轮新增）
+
+原生 build `2026.09.22.16.46` 的 `PrismaLenzWeapon` 行为直接写 `ChargeTime=0.80000001`；固定参考 `data/weapons/primary/prisma_lenz.yaml` 写 `charge_seconds: 1.2`。普通 Lenz 原生仍为 1.2，因此不能把两种武器的时间混用。本地现用 0.8；原始文件哈希与两边数值保存在 `evidence/multipart-round-20260927/native-charge-import.json`。此处是包与参考的可验证数据冲突，未做真实游戏计时。
+
+Lenz 两种版本的 10 Cold 初爆、1.3 秒嵌入延迟，以及 Stahlta 0.36 秒延迟也已本地建模。参考各 YAML 中初爆缺失/径向不随多重仍是差异来源；多重空间落点没有游戏实验，不据此笼统判定参考全错。完整配装与消融结果见 `MULTIPART-ROUND-2026-09-27.md`。

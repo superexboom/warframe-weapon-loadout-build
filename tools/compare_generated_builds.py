@@ -8,6 +8,9 @@ from tools.compare_archgun_board_builds import BATCH_JS, registry, ELEMENTS
 
 # Audited from StugEvoTier1A/2B/3C + their exported effects and WFSim YAML.
 # Explicit mapping: no name-based substitutions or implicit reference defaults.
+# Exact local mode to reference form, verified from native projectile and YAML.
+WEAPON_FORMS = {('stahlta', 1): 'alternate'}
+
 EVOLUTIONS = {'stug': {'tier2': {'2-1': 'stug_blazing_barrel'},
     'tier3': {'3-2': 'stug_swift_deliverance'},
     'tier4': {'4-3': 'stug_elemental_dominance'}}}
@@ -33,9 +36,16 @@ def ranked_card(item, index):
 def reference_request(payload, weapons, mods, arcanes, runs):
     rows = weapons.get(payload['weapon'], [])
     rows = [w for w in rows if w.get('default_form') or w.get('form', 'base') == 'base']
-    if len(rows) != 1 or payload.get('fireMode', 0) != 0:
+    if len(rows) != 1:
         raise ValueError('unmapped exact weapon form')
     weapon = rows[0]
+    play_mode = 'base'
+    mode = payload.get('fireMode', 0)
+    if mode != 0:
+        form = WEAPON_FORMS.get((weapon['id'], mode))
+        if form is None:
+            raise ValueError('unmapped exact weapon form')
+        play_mode = form
     if payload.get('externalBuffs') or payload.get('riven') or payload.get('incarnonCycle'):
         raise ValueError('unmapped external, riven or cycle state')
     evolution_ids = []
@@ -46,7 +56,7 @@ def reference_request(payload, weapons, mods, arcanes, runs):
             if pick not in mapping.get(tier, {}):
                 raise ValueError('unmapped evolution ' + str((weapon['id'], tier, pick)))
             evolution_ids.append(mapping[tier][pick])
-    q = dict(weapon=weapon['id'], mode=weapon.get('form', 'base'),
+    q = dict(weapon=weapon['id'], mode=play_mode,
         mods=[ranked_card(m, mods) for m in sorted(payload['mods'], key=lambda m: m['slot'])],
         arcane=[ranked_card(a, arcanes) for a in payload.get('arcanes', [])],
         evolutions=evolution_ids, evolutions_as_given=True, enemy='thrax_centurion',
@@ -61,6 +71,15 @@ def reference_request(payload, weapons, mods, arcanes, runs):
         q.update(valence_element={v: k for k, v in ELEMENTS.items()}[payload['innateElement']],
                  valence_bonus=payload['innateElementValue'])
     return q, weapon.get('unmodeled', [])
+
+def reference_identity_matches(response, request):
+    """The reference silently defaults unknown weapon ids; never accept that."""
+    wielders = [c for c in response.get('combatants', []) if c.get('id') == 'wielder']
+    if len(wielders) != 1 or wielders[0].get('weapon') != request['weapon']:
+        return False
+    if request['weapon'] == 'stahlta' and request.get('mode') == 'alternate':
+        return 'charged' in response.get('apl', [])
+    return True
 
 def main():
     ap=argparse.ArgumentParser(description='Replay exact automatic builds against frozen WFSim; unmapped inputs fail closed.')
@@ -91,6 +110,9 @@ def main():
     subprocess.run(['node',str(a.output/'batch.mjs'),str(a.wfsim),str(a.output/'requests.json'),str(a.output/'responses.json')],check=True)
     for c,ref in zip(pending,json.loads((a.output/'responses.json').read_text(encoding='utf-8')),strict=True):
         if not ref.get('ok'):c['referenceError']=ref;continue
+        if not reference_identity_matches(ref, c['request']):
+            c['referenceError']={'error':'reference returned another or missing weapon identity', 'combatants':ref.get('combatants')}
+            continue
         kpm=ref['score']*60/ref['duration']
         c.update(referenceKpm=kpm,referenceKpmSe=ref.get('score_se',0)*60/ref['duration'],
             deltaPercent=(c['manualKpm']/kpm-1)*100 if kpm else None)

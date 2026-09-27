@@ -233,6 +233,9 @@ payload = {
     "packageBuild": a.packages.parent.name,
     "packageEvidence": evidence,
 }
+sys.path.insert(0, str(root))
+from tools.import_native_radial_profiles import import_profiles
+import_profiles(a.packages, ref, json.loads((exports / "weapons.json").read_text(encoding="utf-8")), payload)
 (out / "combat-reference.json").write_text(
     json.dumps(payload, ensure_ascii=False, indent=2) + chr(10),
     encoding="utf-8",
