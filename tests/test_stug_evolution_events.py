@@ -79,7 +79,7 @@ def test_stug_trigger_description_survives_actual_manual_replay():
     c=build_combat();q=c['trigger_sources'][0]
     st,_=c['resolve']('selected',{},0)
     r=replay(st,dict(health=1e12,shield=0,armour=0,overguard=0,baseLevel=1),
-        attacks_per_second=st.fire_rate,window_seconds=.5,combat=c,
+        attacks_per_second=st.fire_rate,window_seconds=1.0,combat=c,
         trigger_sources=c['trigger_sources'])
     shown=r['triggerSeries'][0]
     assert shown['conditionText']==q['conditionText']
@@ -158,6 +158,6 @@ def test_cestra_overguard_break_evolution_uses_shared_event_signal():
         return original(form,stacks,live_types,last_round)
     c['resolve']=resolve
     st,_=original('selected',{},0)
-    replay(st,dict(health=1e12,shield=0,armour=0,overguard=1e3,baseLevel=1),
+    replay(st,dict(health=1e12,shield=0,armour=0,overguard=10,baseLevel=1),
            attacks_per_second=st.fire_rate,window_seconds=.5,combat=c,trigger_sources=c['trigger_sources'])
     assert any(x>0 for x in seen)
