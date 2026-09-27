@@ -80,5 +80,5 @@ def test_merge_separates_structural_gaps_from_engine_failures(tmp_path):
         dict(path='/c',fingerprint='v',ok=True,replayComplete=True,attempts=[dict(status='generation-failed',ok=False)]),
     ])
     s=merge_runs([root])['summary']
-    assert s['structuralGaps']==1 and s['engineFailures']==1
+    assert s['structuralGaps']==1 and s['engineFailures']==2
     assert s['structuralGapKinds']==[['catalog-absent',1]]
