@@ -667,6 +667,13 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
             continue
         kind = condition.get('eventKind') or condition_kind(condition)
         terms = condition.get('effects') or ()
+        # Empty-condition terminal magazine gates are still event modeled by
+        # manual_combat.resolve (Final Fusillade). Do not report them as a
+        # missing conditional block merely because the export has no tag.
+        if (not kind and terms and any(e.get('upgradeType') == 'WEAPON_LAST_MULTISHOT'
+                                      for e in terms if isinstance(e, Mapping))):
+            modeled_sources.add(source_path)
+            continue
         # Conditional evolution terms with an identified replay event are
         # consumed by manual_combat.prepare; keep them out of the static
         # panel without falsely reporting them as absent. Unknown/empty

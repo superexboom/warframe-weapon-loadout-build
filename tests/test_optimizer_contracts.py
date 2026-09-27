@@ -386,3 +386,13 @@ def test_identified_incarnon_conditional_is_event_modeled_not_false_missing():
     _,unsupported=_branch_effects(b)
     assert not any('conditional-effects-not-applied' in x or 'conditional-source-excluded' in x for x in unsupported)
     assert not any('WEAPON_AMMO_CONSUME_RATE-not-evaluated' in x for x in unsupported)
+
+
+def test_torid_last_round_gate_is_not_reported_as_missing_condition():
+    import app
+    from wfarsenal.optimizer import _branch_effects
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Torid')
+    b=next(b for t in w['incarnon']['tiers'] for b in t['branches'] if b['id']=='2-1')
+    _,unsupported=_branch_effects(b)
+    assert not any('conditional-effects-not-applied' in x or 'conditional-source-excluded' in x for x in unsupported)
+    assert not any('WEAPON_LAST_MULTISHOT' in x for x in unsupported)
