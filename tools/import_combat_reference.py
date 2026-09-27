@@ -139,7 +139,7 @@ for category, field, dest in [
                 }
 # Only these attacks have a confirmed match to the frozen export's base vector.
 audited = {}
-selection = {'Simulor':'simulor', 'Synoid Simulor':'synoid_simulor', 'Kuva Ogris':'kuva_ogris', 'Kuva Bramma':'kuva_bramma', 'Penta':'penta', 'Secura Penta':'secura_penta', 'Zarr':'zarr', 'Acceltra Prime':'acceltra_prime', 'Sonicor':'sonicor', 'Felarx':'felarx', 'Torid':'torid', 'Mausolon':'mausolon', 'Opticor Vandal':'opticor_vandal_quick', 'Nataruk':'nataruk', 'Cinta':'cinta', 'Paris Prime':'paris_prime_uncharged', 'Grattler':'grattler', 'Kuva Grattler':'kuva_grattler', 'Morgha':'morgha', 'Cyngas':'cyngas'}
+selection = {'Kompressa':'kompressa', 'Cyanex':'cyanex', 'Simulor':'simulor', 'Synoid Simulor':'synoid_simulor', 'Kuva Ogris':'kuva_ogris', 'Kuva Bramma':'kuva_bramma', 'Penta':'penta', 'Secura Penta':'secura_penta', 'Zarr':'zarr', 'Acceltra Prime':'acceltra_prime', 'Sonicor':'sonicor', 'Felarx':'felarx', 'Torid':'torid', 'Mausolon':'mausolon', 'Opticor Vandal':'opticor_vandal_quick', 'Nataruk':'nataruk', 'Cinta':'cinta', 'Paris Prime':'paris_prime_uncharged', 'Grattler':'grattler', 'Kuva Grattler':'kuva_grattler', 'Morgha':'morgha', 'Cyngas':'cyngas'}
 for row in read_rows('weapons'):
     key = selection.get(row.get('nameEn'))
     if not key:
@@ -160,6 +160,37 @@ for row in read_rows('weapons'):
             'takesRadiusMods':component.get('takes_blast_radius_mods',True)}
     if atk.get('cluster'):entry['unmodeled']=['cluster-submunitions-unmodeled']
     entry['sourceCommit']=subprocess.check_output(['git','-C',str(ref),'rev-parse','HEAD'],text=True).strip()
+    if key in ('kompressa','cyanex'):
+        mode=row['fireModes'][0]
+        projectile=mode['damage']['projectile']
+        native_projectile=pkg.resolve(projectile)
+        field='EmbedDeathAttack' if key=='kompressa' else 'ExplosiveAttack'
+        native_part=native_projectile[field]
+        expected=('DT_VIRAL',42.) if key=='kompressa' else ('DT_GAS',41.)
+        if native_part.get('Type')!=expected[0] or abs(float(native_part.get('Amount',0))-expected[1])>.001:
+            raise ValueError('native secondary radial changed: '+key)
+        if key=='cyanex' and (native_projectile.get('Embed') or native_projectile.get('DealExplosionDamageOnImpact')!=1):
+            raise ValueError('Cyanex collision/embed contract changed')
+        entry['radial'].update(takes_multishot=True,
+            status_chance=float(native_part['ProcChance'])/float(mode.get('multishot') or 1),
+            nativeSource=projectile,nativeField=field,
+            multishotSource='one native radial attack per spawned projectile',
+            referenceTakesMultishot=component.get('takes_multishot'))
+        sources=[row['path'],projectile]
+        if key=='kompressa':
+            ms=projectile+'MS';other=pkg.resolve(ms)
+            if other.get(field)!=native_part or native_projectile.get('Embed')!=1:
+                raise ValueError('Kompressa multishot/embed contract changed')
+            delay=native_projectile.get('EmbedTime')
+            if not isinstance(delay,list) or len(delay)!=2 or not 0<=delay[0]<=delay[1]:
+                raise ValueError('missing native embed delay')
+            entry['radial']['impact_delay_seconds']=sum(delay)/2
+            entry['radial']['nativeDelayRange']=delay
+            entry['unmodeled']=['embed-delay-uniform-approximated-by-mean','spatial-projectile-hit-loss-unmodeled']
+            sources.append(ms)
+        else:
+            entry['unmodeled']=['projectile-homing-and-bounce-target-selection-unmodeled','spatial-projectile-hit-loss-unmodeled']
+        entry['nativeSources']=[dict(path=source,sha256=hashlib.sha256((a.packages/(source.lstrip('/')+'.txt')).read_bytes()).hexdigest()) for source in sources]
     if key in ('simulor','synoid_simulor'):
         exported=row['fireModes'][0]['damage']
         if exported.get('source')!='ExplosiveAttack' or abs(sum(exported['types'].values())-sum(component['damage'].values()))>.02:
