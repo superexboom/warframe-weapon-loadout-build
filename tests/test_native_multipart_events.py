@@ -147,3 +147,48 @@ def test_unprofiled_empty_alternate_mode_stays_a_data_gap():
     assert base_profile({'path':'/unknown','fireModes':[{'damage':None}]})=={}
     w=weapon('Coda Bassocyst')
     assert base_profile(w,1)=={}
+
+
+def test_talons_pure_radial_uses_one_blast_and_auxiliary_melee_is_not_rankable():
+    import app
+    from wfarsenal.manual_combat import prepare
+    from wfarsenal.damage import Scenario
+    from wfarsenal.combat_replay import replay
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Talons')
+    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(distance=10)),[],[])
+    st,radial=c['resolve']('selected',{})
+    assert st.radial_only and st.total_damage==pytest.approx(250.)
+    assert radial is None
+    assert st.native_forced_procs=={'DT_PUNCTURE':1.}
+    result=replay(st, target(), combat=c, attacks_per_second=st.fire_rate, window_seconds=1.)
+    assert result['directWindow']>0 and result['shots']>=1
+    with pytest.raises(app.SimulationError, match="auxiliary melee"):
+        app.build_weapon_payload(dict(weapon=w['path'],fireMode=1,metric='killsPerMinute',profile='fast'))
+
+
+def test_talons_extractor_selects_embedded_attack_without_breaking_contact_projectiles(monkeypatch):
+    from wfarsenal import extract
+    path='/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives'
+    mine={'AttackData':{'Amount':0},'Embed':1,'CriticalChance':.22,'CriticalMultiplier':2,
+          'ExplosiveAttack':{'Amount':120},
+          'EmbedDeathAttack':{'Amount':250,'Type':'DT_EXPLOSION','ForcedProcs':['PT_FRAILTY','PT_RAGDOLL']}}
+    monkeypatch.setattr(extract,'_resolve_weapon_reference',lambda *args:(path+'Projectile',mine))
+    result=extract._resolve_damage(None,path,{'projectileType':'p'}, {})
+    assert result['types']=={'DT_EXPLOSION':250}
+    assert result['radial']['source']=='EmbedDeathAttack'
+    assert result['radial']['total']==250
+    assert len(result['components'])==2
+    assert result['critChance']==.22 and result['procChance']==0
+    other=extract._resolve_damage(None,'/unverified',{'projectileType':'p'}, {})
+    assert other['source']=='ExplosiveAttack' and other['total']==120
+    mine['AttackData']={'Amount':10,'Type':'DT_IMPACT'}
+    direct=extract._resolve_damage(None,path,{'projectileType':'p'}, {})
+    assert direct['types']=={'DT_IMPACT':10}
+    assert direct['radial']['source']=='ExplosiveAttack'
+
+def test_talons_export_radial_alias_matches_primary_and_keeps_airborne_evidence():
+    d=weapon('Talons')['fireModes'][0]['damage']
+    assert d['radial']['source']==d['source']=='EmbedDeathAttack'
+    assert d['radial']['types']==d['types']=={'DT_EXPLOSION':250}
+    assert d['components'][0]['source']=='ExplosiveAttack'
+    assert d['components'][0]['total']==120

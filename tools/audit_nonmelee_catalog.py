@@ -37,6 +37,8 @@ def attempt_status(a):
             return 'catalog-absent'
         if 'weapon has no fire modes' in error:
             return 'abstract-modular-placeholder'
+        if 'auxiliary melee' in error and 'outside nonmelee scope' in error:
+            return 'auxiliary-melee-mode'
         if 'metric' in error and 'unavailable' in error:
             return 'mode-metric-unavailable'
         return 'generation-failed'
@@ -156,8 +158,8 @@ def main():
                     attempts.append({"fireMode":mode,"ok":False,"error":error,**({"status":status} if status else {})})
             row["attempts"]=attempts
             for attempt in attempts:attempt['status']=attempt_status(attempt)
-            row['ok']=bool(attempts) and all(a.get('ok') or a.get('status')=='mode-metric-unavailable' for a in attempts)
-            row['replayComplete']=bool(attempts) and all(a.get('status') in ('replay-matched','mode-metric-unavailable') for a in attempts)
+            row['ok']=bool(attempts) and all(a.get('ok') or a.get('status') in ('mode-metric-unavailable','auxiliary-melee-mode') for a in attempts)
+            row['replayComplete']=bool(attempts) and all(a.get('status') in ('replay-matched','mode-metric-unavailable','auxiliary-melee-mode') for a in attempts)
         except Exception as exc:
             row["ok"]=False; row["error"]=f"{type(exc).__name__}: {exc}"; row["traceback"]=traceback.format_exc()
         row["seconds"]=round(time.perf_counter()-t,3)

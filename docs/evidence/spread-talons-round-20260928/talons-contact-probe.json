@@ -1,0 +1,353 @@
+{
+  "cases": [
+    {
+      "centreDistanceM": 10,
+      "headshotChance": 1,
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "talons",
+        "mode": "base",
+        "mods": [
+          "lethal_torrent",
+          "primed_heated_charge",
+          "hornet_strike",
+          "barrel_diffusion",
+          "magnetic_might",
+          "pistol_elementalist",
+          "scorch",
+          "primed_pistol_gambit"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10
+        ]
+      },
+      "localKpm": 0.5637083616020984,
+      "localShots": 88,
+      "referenceKpm": 0.0,
+      "referenceShots": 88
+    },
+    {
+      "centreDistanceM": 0,
+      "headshotChance": 1,
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "talons",
+        "mode": "base",
+        "mods": [
+          "lethal_torrent",
+          "primed_heated_charge",
+          "hornet_strike",
+          "barrel_diffusion",
+          "magnetic_might",
+          "pistol_elementalist",
+          "scorch",
+          "primed_pistol_gambit"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0
+        ]
+      },
+      "localKpm": 0.5637083616020984,
+      "localShots": 88,
+      "referenceKpm": 1.733987483418405,
+      "referenceShots": 88
+    },
+    {
+      "centreDistanceM": 0,
+      "headshotChance": 0,
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceRequest": {
+        "weapon": "talons",
+        "mode": "base",
+        "mods": [
+          "lethal_torrent",
+          "primed_heated_charge",
+          "hornet_strike",
+          "barrel_diffusion",
+          "magnetic_might",
+          "pistol_elementalist",
+          "scorch",
+          "primed_pistol_gambit"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0
+        ]
+      },
+      "localKpm": 0.5637083616020984,
+      "localShots": 88,
+      "referenceKpm": 0.5872822876676992,
+      "referenceShots": 88
+    }
+  ],
+  "contract": "Fixed build, explicit coordinate and headshot diagnostic; not a new optimized build"
+}

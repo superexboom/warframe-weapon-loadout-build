@@ -1,0 +1,57 @@
+{
+  "files": [
+    {
+      "path": "final-builds.json",
+      "sha256": "f9c402c698d3d7e1f254938efba072397a5d3d2654f012037dd2feb64564a020"
+    },
+    {
+      "path": "final-audit-results.json",
+      "sha256": "e2014f479e56b3c20e87f1c91e11872942503b5914c79045703237b5a8fddfdf"
+    },
+    {
+      "path": "final-audit-meta.json",
+      "sha256": "09424c698ff8db193c927fe3ada8856b0d08ac3315998992e4ea334b42719fbf"
+    },
+    {
+      "path": "reference-comparison.json",
+      "sha256": "14d31615f69df062a606cc5b68b3c47306bce132b61eccf76d4ae6cb1af9fe3e"
+    },
+    {
+      "path": "automatic-builds.json",
+      "sha256": "c70759ba3eb4347802df1326c9e7f769771224743ab6e85738aa963d4cd6cae3"
+    },
+    {
+      "path": "initial-reference-comparison.json",
+      "sha256": "5b585be0ae4daa48413b3cc4c930b4612e93fa157608262b04a747b5fc08b541"
+    },
+    {
+      "path": "fixed-build-ablations.json",
+      "sha256": "4085e347c5408367d12b62955e95f902c1a1234cb8df88ff4ce6f41a327eeaf9"
+    },
+    {
+      "path": "native-burst-final.json",
+      "sha256": "8c2391ad6cd50f885ab94f8c909151017c7ef570186249f6ca563f29e9224d4d"
+    },
+    {
+      "path": "final-import-check.json",
+      "sha256": "ad7a9dd03bcd1ab81a3212bb76404c7b60a9eaec6e5fcb9c0204d1b6ba88900a"
+    },
+    {
+      "path": "talons-contact-probe.json",
+      "sha256": "7098244ca348469f9c13bcceec7dd0b12eac889958ad9d3db34120a1e5be8aa9"
+    },
+    {
+      "path": "tiberon-fixed-build-clock.json",
+      "sha256": "7f28404779787b2ba8283b57a722f07a66a10dad097bec85211d929b906d5d6b"
+    },
+    {
+      "path": "regression.txt",
+      "sha256": "85ee3eb74ea5ea094a1897e5d757d3691d940799a5f8918f1a01d1e86adf8d51"
+    },
+    {
+      "path": "renderer-check.json",
+      "sha256": "e14463a6ef3f537008bbf5ff57df4da5bd9693bf6ed0b97812744a03ab968762"
+    }
+  ],
+  "scope": "Single target event scoring and exact saved full builds; 7 comparable weapons, Talons limitations explicit; no full 409 roster or gameplay claim"
+}

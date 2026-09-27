@@ -31,6 +31,7 @@ def replay(
     # Mechanics: WFSim 69e6a139, data/debuffs/ignite.yaml and syndicates/.
     from .damage import (
         enemy_defenses,
+        spread_hit_probability,
         expected_status_damage,
         damage_against_cached_armour,
         _hit_location_info,
@@ -114,6 +115,7 @@ def replay(
     gen = 0
     kills = 0
     attacks = 0
+    initial_spread = None
     stale = 0
     first_kill = None
     last_kill = None
@@ -505,6 +507,10 @@ def replay(
                 **row,
                 "perProc": row["perProc"] * (1 - aim) + hr["perProc"] * aim,
             }
+        hit_probability = spread_hit_probability(st, combat.get('distance'))
+        if hit_probability < 1.0:
+            vector = {k: v * hit_probability for k, v in vector.items()}
+            procs = {k: v * hit_probability for k, v in procs.items()}
         result = (vector, procs, rows, non)
         probes[key] = (
             st,
@@ -560,7 +566,8 @@ def replay(
             # part and status ticks do not masquerade as extra direct pellets.
             p=(1-aim)*big_crit_probability(cc,st.double_crit_chance)
             p+=aim*big_crit_probability(cc+weak,st.double_crit_chance)
-            probabilities[stacks]=any_probability(p,1.0 if st.continuous else st.multishot)
+            landing = spread_hit_probability(st, combat.get('distance'))
+            probabilities[stacks]=any_probability(p * landing,1.0 if st.continuous else st.multishot)
         gain=not (combat['enervate'].get('ignoreSelected') and form != 'base')
         enervate.advance(t,probabilities,gain=gain)
 
@@ -591,7 +598,8 @@ def replay(
             from .status_arcanes import STATUS_POOL, encumber_roll
             if abs(t - encumber_time) > 1e-9:
                 encumber_time=t;encumber_remaining=1.0
-            probability, merged_seed=encumber_roll(st, encumber['chance'], forced_procs)
+            landing = spread_hit_probability(st, combat.get('distance'))
+            probability, merged_seed=encumber_roll(st, encumber['chance'], forced_procs, hit_probability=landing)
             weight=encumber_remaining*probability*encumber.get('uptime',1.0)
             encumber_remaining*=1-probability*encumber.get('uptime',1.0)
             if weight > 0:
@@ -891,7 +899,14 @@ def replay(
                 if active.dot_base_damage is not None:
                     active.dot_base_damage *= factor
             first_round = False
-            hit_count = 1.0 if active.continuous else active.multishot
+            landing = spread_hit_probability(active, combat.get('distance'))
+            if initial_spread is None and active.spread_min_deg is not None:
+                initial_spread = dict(
+                    model='uniform-native-min-angle',geometry='pinned-reference-ray-circle',
+                    centreDistanceM=combat.get('distance'),bodyRadiusM=.25,
+                    initialMinDeg=active.spread_min_deg,initialMaxDeg=active.spread_max_deg,
+                    initialHitProbability=landing)
+            hit_count = (1.0 if active.continuous else active.multishot) * landing
             shot_puncture=0.0 if active.radial_only else live_crit()[0]
             aim = 0.0 if active.radial_only else head
             direct_packet = packet(active, aim)
@@ -943,7 +958,7 @@ def replay(
                 * hit_count,
             )
             if cycle and form == "base" and not active.radial_only:
-                gauge = min(cycle["hits"], gauge + (1.0 if cycle.get('chargeOn') == 'direct_hits' else head) * active.multishot)
+                gauge = min(cycle["hits"], gauge + (1.0 if cycle.get('chargeOn') == 'direct_hits' else head) * active.multishot * landing)
             if combat:
                 ammo -= (
                     1.0
@@ -1068,6 +1083,7 @@ def replay(
         "minKillInterval": min_interval,
         "maxKillsPerStep": max_per_step,
         "staleComponents": stale,
+        'spread': initial_spread,
         "shots": attacks,
         "reloads": reloads,
         "recharges": recharges,
@@ -1123,7 +1139,7 @@ def replay(
             "fractional-proc-refresh-approximates-uptime",
             "single-target-syndicate-no-player-buffs",
             "magnetic-break-six-ticks-pinned-reference-contract",
-        ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
+        ] + list(combat.get('spatialLimitations') or []) + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
           + (ASSUMPTIONS if enervate else [])
           + (['encumber-poisson-status-presence','encumber-single-target-expected-procs'] if encumber else [])
           + (['cryogenic-single-target-expected-procs-no-neighbor-burst'] if cryogenic else [])

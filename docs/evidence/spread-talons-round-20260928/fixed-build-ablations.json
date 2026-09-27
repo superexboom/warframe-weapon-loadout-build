@@ -1,0 +1,2271 @@
+{
+  "cases": [
+    {
+      "name": "Supra Vandal mode 0",
+      "variant": "original",
+      "manualKpm": 1.5090374589408908,
+      "localShots": 642,
+      "request": {
+        "weapon": "supra_vandal",
+        "mode": "base",
+        "mods": [
+          "heavy_caliber",
+          "magnetic_capacity",
+          "primary_acuity",
+          "thermite_rounds",
+          "vital_sense",
+          "hellfire",
+          "vile_acceleration",
+          "serration",
+          "vigilante_supplies@0"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": {
+          "baseDrain": 4,
+          "baseDrainEnum": "QA_MEDIUM",
+          "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "compatibilityTags": [],
+          "conditionalEffects": [],
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetDescriptionInfo",
+                "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+              },
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_CONVERT_AMMO",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "incompatibilityTags": [],
+          "isAugment": false,
+          "isSubUpgrade": false,
+          "maxRank": 5,
+          "modFamily": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "modSet": "VigilanteSetMod",
+          "name": "PrimaryVigilanteSuppliesMod",
+          "nameEn": "Vigilante Supplies",
+          "nameInternal": "PrimaryVigilanteSuppliesMod",
+          "nameTag": "/Lotus/Language/Mods/PrimaryVigilanteSuppliesModName",
+          "nameZh": "私法 补给",
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "polarity": "AP_TACTIC",
+          "rarity": "RARE",
+          "selectable": true,
+          "support": {
+            "warframe": false,
+            "weapon": false
+          },
+          "supported": false,
+          "slotKind": "primary",
+          "exilus": true,
+          "description": "将拾取的次要武器弹药转换为 30% 弹药拾取。",
+          "effectsZh": [
+            "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+          ],
+          "effectsZhByRank": [
+            [
+              "将拾取的次要武器弹药转换为 5% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 10% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 15% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 20% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+            ]
+          ],
+          "drain": 5,
+          "rank": 0,
+          "icon": "/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "sourceKind": "isUtility",
+          "catalogJoined": true,
+          "modSetValues": [],
+          "setMaxPieces": 6,
+          "setName": "私法 Mod 组合加成",
+          "setNameZh": "私法 Mod 组合加成",
+          "setDescription": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setDesc": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setStats": [
+            {
+              "operation": "ADD",
+              "upgradeType": "WEAPON_DOUBLE_CRIT_CHANCE",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "setConditionalEffects": [],
+          "setDisplayValues": {
+            "STAT1": [
+              5,
+              10,
+              15,
+              20,
+              25,
+              30
+            ]
+          },
+          "setRuntime": {},
+          "setSource": "/Lotus/Upgrades/Mods/Sets/Vigilante/VigilanteSetMod",
+          "category": "set",
+          "type": "weapon-exilus",
+          "sourceType": "Weapon Exilus",
+          "slotPolarity": "AP_ATTACK",
+          "polarityRelation": "mismatched"
+        },
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceKpm": 1.402724222764411,
+      "deltaPercent": 7.579054703066546,
+      "referenceShots": 637
+    },
+    {
+      "name": "Supra Vandal mode 0",
+      "variant": "body",
+      "manualKpm": 0.08953866054701898,
+      "localShots": 642,
+      "request": {
+        "weapon": "supra_vandal",
+        "mode": "base",
+        "mods": [
+          "heavy_caliber",
+          "magnetic_capacity",
+          "primary_acuity",
+          "thermite_rounds",
+          "vital_sense",
+          "hellfire",
+          "vile_acceleration",
+          "serration",
+          "vigilante_supplies@0"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 0.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 0.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": {
+          "baseDrain": 4,
+          "baseDrainEnum": "QA_MEDIUM",
+          "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "compatibilityTags": [],
+          "conditionalEffects": [],
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetDescriptionInfo",
+                "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+              },
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_CONVERT_AMMO",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "incompatibilityTags": [],
+          "isAugment": false,
+          "isSubUpgrade": false,
+          "maxRank": 5,
+          "modFamily": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "modSet": "VigilanteSetMod",
+          "name": "PrimaryVigilanteSuppliesMod",
+          "nameEn": "Vigilante Supplies",
+          "nameInternal": "PrimaryVigilanteSuppliesMod",
+          "nameTag": "/Lotus/Language/Mods/PrimaryVigilanteSuppliesModName",
+          "nameZh": "私法 补给",
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "polarity": "AP_TACTIC",
+          "rarity": "RARE",
+          "selectable": true,
+          "support": {
+            "warframe": false,
+            "weapon": false
+          },
+          "supported": false,
+          "slotKind": "primary",
+          "exilus": true,
+          "description": "将拾取的次要武器弹药转换为 30% 弹药拾取。",
+          "effectsZh": [
+            "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+          ],
+          "effectsZhByRank": [
+            [
+              "将拾取的次要武器弹药转换为 5% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 10% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 15% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 20% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+            ]
+          ],
+          "drain": 5,
+          "rank": 0,
+          "icon": "/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "sourceKind": "isUtility",
+          "catalogJoined": true,
+          "modSetValues": [],
+          "setMaxPieces": 6,
+          "setName": "私法 Mod 组合加成",
+          "setNameZh": "私法 Mod 组合加成",
+          "setDescription": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setDesc": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setStats": [
+            {
+              "operation": "ADD",
+              "upgradeType": "WEAPON_DOUBLE_CRIT_CHANCE",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "setConditionalEffects": [],
+          "setDisplayValues": {
+            "STAT1": [
+              5,
+              10,
+              15,
+              20,
+              25,
+              30
+            ]
+          },
+          "setRuntime": {},
+          "setSource": "/Lotus/Upgrades/Mods/Sets/Vigilante/VigilanteSetMod",
+          "category": "set",
+          "type": "weapon-exilus",
+          "sourceType": "Weapon Exilus",
+          "slotPolarity": "AP_ATTACK",
+          "polarityRelation": "mismatched"
+        },
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceKpm": 0.06750223411988655,
+      "deltaPercent": 32.645477167459205,
+      "referenceShots": 637
+    },
+    {
+      "name": "Supra Vandal mode 0",
+      "variant": "no-acuity",
+      "manualKpm": 0.4642416411498178,
+      "localShots": 642,
+      "request": {
+        "weapon": "supra_vandal",
+        "mode": "base",
+        "mods": [
+          "heavy_caliber",
+          "magnetic_capacity",
+          "thermite_rounds",
+          "vital_sense",
+          "hellfire",
+          "vile_acceleration",
+          "serration",
+          "vigilante_supplies@0"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": {
+          "baseDrain": 4,
+          "baseDrainEnum": "QA_MEDIUM",
+          "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "compatibilityTags": [],
+          "conditionalEffects": [],
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetDescriptionInfo",
+                "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+              },
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_CONVERT_AMMO",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "incompatibilityTags": [],
+          "isAugment": false,
+          "isSubUpgrade": false,
+          "maxRank": 5,
+          "modFamily": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "modSet": "VigilanteSetMod",
+          "name": "PrimaryVigilanteSuppliesMod",
+          "nameEn": "Vigilante Supplies",
+          "nameInternal": "PrimaryVigilanteSuppliesMod",
+          "nameTag": "/Lotus/Language/Mods/PrimaryVigilanteSuppliesModName",
+          "nameZh": "私法 补给",
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "polarity": "AP_TACTIC",
+          "rarity": "RARE",
+          "selectable": true,
+          "support": {
+            "warframe": false,
+            "weapon": false
+          },
+          "supported": false,
+          "slotKind": "primary",
+          "exilus": true,
+          "description": "将拾取的次要武器弹药转换为 30% 弹药拾取。",
+          "effectsZh": [
+            "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+          ],
+          "effectsZhByRank": [
+            [
+              "将拾取的次要武器弹药转换为 5% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 10% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 15% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 20% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+            ]
+          ],
+          "drain": 5,
+          "rank": 0,
+          "icon": "/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "sourceKind": "isUtility",
+          "catalogJoined": true,
+          "modSetValues": [],
+          "setMaxPieces": 6,
+          "setName": "私法 Mod 组合加成",
+          "setNameZh": "私法 Mod 组合加成",
+          "setDescription": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setDesc": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setStats": [
+            {
+              "operation": "ADD",
+              "upgradeType": "WEAPON_DOUBLE_CRIT_CHANCE",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "setConditionalEffects": [],
+          "setDisplayValues": {
+            "STAT1": [
+              5,
+              10,
+              15,
+              20,
+              25,
+              30
+            ]
+          },
+          "setRuntime": {},
+          "setSource": "/Lotus/Upgrades/Mods/Sets/Vigilante/VigilanteSetMod",
+          "category": "set",
+          "type": "weapon-exilus",
+          "sourceType": "Weapon Exilus",
+          "slotPolarity": "AP_ATTACK",
+          "polarityRelation": "mismatched"
+        },
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceKpm": 0.34524213571627427,
+      "deltaPercent": 34.46841886395331,
+      "referenceShots": 637
+    },
+    {
+      "name": "Supra Vandal mode 0",
+      "variant": "no-spread-penalty",
+      "manualKpm": 1.6851895434291895,
+      "localShots": 642,
+      "request": {
+        "weapon": "supra_vandal",
+        "mode": "base",
+        "mods": [
+          "magnetic_capacity",
+          "primary_acuity",
+          "thermite_rounds",
+          "vital_sense",
+          "hellfire",
+          "vile_acceleration",
+          "serration",
+          "vigilante_supplies@0"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": {
+          "baseDrain": 4,
+          "baseDrainEnum": "QA_MEDIUM",
+          "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "compatibilityTags": [],
+          "conditionalEffects": [],
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetDescriptionInfo",
+                "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+              },
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_CONVERT_AMMO",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "incompatibilityTags": [],
+          "isAugment": false,
+          "isSubUpgrade": false,
+          "maxRank": 5,
+          "modFamily": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "modSet": "VigilanteSetMod",
+          "name": "PrimaryVigilanteSuppliesMod",
+          "nameEn": "Vigilante Supplies",
+          "nameInternal": "PrimaryVigilanteSuppliesMod",
+          "nameTag": "/Lotus/Language/Mods/PrimaryVigilanteSuppliesModName",
+          "nameZh": "私法 补给",
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "polarity": "AP_TACTIC",
+          "rarity": "RARE",
+          "selectable": true,
+          "support": {
+            "warframe": false,
+            "weapon": false
+          },
+          "supported": false,
+          "slotKind": "primary",
+          "exilus": true,
+          "description": "将拾取的次要武器弹药转换为 30% 弹药拾取。",
+          "effectsZh": [
+            "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+          ],
+          "effectsZhByRank": [
+            [
+              "将拾取的次要武器弹药转换为 5% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 10% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 15% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 20% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+            ]
+          ],
+          "drain": 5,
+          "rank": 0,
+          "icon": "/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "sourceKind": "isUtility",
+          "catalogJoined": true,
+          "modSetValues": [],
+          "setMaxPieces": 6,
+          "setName": "私法 Mod 组合加成",
+          "setNameZh": "私法 Mod 组合加成",
+          "setDescription": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setDesc": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setStats": [
+            {
+              "operation": "ADD",
+              "upgradeType": "WEAPON_DOUBLE_CRIT_CHANCE",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "setConditionalEffects": [],
+          "setDisplayValues": {
+            "STAT1": [
+              5,
+              10,
+              15,
+              20,
+              25,
+              30
+            ]
+          },
+          "setRuntime": {},
+          "setSource": "/Lotus/Upgrades/Mods/Sets/Vigilante/VigilanteSetMod",
+          "category": "set",
+          "type": "weapon-exilus",
+          "sourceType": "Weapon Exilus",
+          "slotPolarity": "AP_ATTACK",
+          "polarityRelation": "mismatched"
+        },
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceKpm": 1.663233718379103,
+      "deltaPercent": 1.3200685392239064,
+      "referenceShots": 637
+    },
+    {
+      "name": "Akstiletto Prime mode 0",
+      "variant": "original",
+      "manualKpm": 1.0446658326097866,
+      "localShots": 301,
+      "request": {
+        "weapon": "akstiletto_prime",
+        "mode": "base",
+        "mods": [
+          "magnetic_might",
+          "pistol_acuity",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "scorch",
+          "primed_target_cracker",
+          "magnum_force"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceKpm": 1.4536934367519094,
+      "deltaPercent": -28.137129452551036,
+      "referenceShots": 300
+    },
+    {
+      "name": "Akstiletto Prime mode 0",
+      "variant": "body",
+      "manualKpm": 0.029011175429172198,
+      "localShots": 301,
+      "request": {
+        "weapon": "akstiletto_prime",
+        "mode": "base",
+        "mods": [
+          "magnetic_might",
+          "pistol_acuity",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "scorch",
+          "primed_target_cracker",
+          "magnum_force"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 0.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 0.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceKpm": 0.0667405738002759,
+      "deltaPercent": -56.53142642137088,
+      "referenceShots": 300
+    },
+    {
+      "name": "Akstiletto Prime mode 0",
+      "variant": "no-acuity",
+      "manualKpm": 0.12941796839734643,
+      "localShots": 301,
+      "request": {
+        "weapon": "akstiletto_prime",
+        "mode": "base",
+        "mods": [
+          "magnetic_might",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "scorch",
+          "primed_target_cracker",
+          "magnum_force"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceKpm": 0.30204403811719066,
+      "deltaPercent": -57.15261615356457,
+      "referenceShots": 300
+    },
+    {
+      "name": "Akstiletto Prime mode 0",
+      "variant": "no-spread-penalty",
+      "manualKpm": 1.7576014313503288,
+      "localShots": 301,
+      "request": {
+        "weapon": "akstiletto_prime",
+        "mode": "base",
+        "mods": [
+          "magnetic_might",
+          "pistol_acuity",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "scorch",
+          "primed_target_cracker"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "incarnonChoices": {},
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ]
+      },
+      "referenceKpm": 1.7388274321010726,
+      "deltaPercent": 1.0796930680217587,
+      "referenceShots": 300
+    },
+    {
+      "name": "Baza Prime mode 0",
+      "variant": "original",
+      "manualKpm": 1.4665542051685123,
+      "localShots": 648,
+      "request": {
+        "weapon": "baza_prime",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "primary_acuity",
+          "high_voltage",
+          "heavy_caliber",
+          "wildfire",
+          "vital_sense",
+          "serration",
+          "vile_acceleration",
+          "vigilante_supplies@0"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/WildfireMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": {
+          "baseDrain": 4,
+          "baseDrainEnum": "QA_MEDIUM",
+          "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "compatibilityTags": [],
+          "conditionalEffects": [],
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetDescriptionInfo",
+                "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+              },
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_CONVERT_AMMO",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "incompatibilityTags": [],
+          "isAugment": false,
+          "isSubUpgrade": false,
+          "maxRank": 5,
+          "modFamily": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "modSet": "VigilanteSetMod",
+          "name": "PrimaryVigilanteSuppliesMod",
+          "nameEn": "Vigilante Supplies",
+          "nameInternal": "PrimaryVigilanteSuppliesMod",
+          "nameTag": "/Lotus/Language/Mods/PrimaryVigilanteSuppliesModName",
+          "nameZh": "私法 补给",
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "polarity": "AP_TACTIC",
+          "rarity": "RARE",
+          "selectable": true,
+          "support": {
+            "warframe": false,
+            "weapon": false
+          },
+          "supported": false,
+          "slotKind": "primary",
+          "exilus": true,
+          "description": "将拾取的次要武器弹药转换为 30% 弹药拾取。",
+          "effectsZh": [
+            "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+          ],
+          "effectsZhByRank": [
+            [
+              "将拾取的次要武器弹药转换为 5% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 10% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 15% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 20% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+            ]
+          ],
+          "drain": 2,
+          "rank": 0,
+          "icon": "/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "sourceKind": "isUtility",
+          "catalogJoined": true,
+          "modSetValues": [],
+          "setMaxPieces": 6,
+          "setName": "私法 Mod 组合加成",
+          "setNameZh": "私法 Mod 组合加成",
+          "setDescription": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setDesc": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setStats": [
+            {
+              "operation": "ADD",
+              "upgradeType": "WEAPON_DOUBLE_CRIT_CHANCE",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "setConditionalEffects": [],
+          "setDisplayValues": {
+            "STAT1": [
+              5,
+              10,
+              15,
+              20,
+              25,
+              30
+            ]
+          },
+          "setRuntime": {},
+          "setSource": "/Lotus/Upgrades/Mods/Sets/Vigilante/VigilanteSetMod",
+          "category": "set",
+          "type": "weapon-exilus",
+          "sourceType": "Weapon Exilus",
+          "slotPolarity": "AP_TACTIC",
+          "polarityRelation": "matched"
+        },
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "referenceKpm": 1.7487600290816654,
+      "deltaPercent": -16.137481370805872,
+      "referenceShots": 648
+    },
+    {
+      "name": "Baza Prime mode 0",
+      "variant": "body",
+      "manualKpm": 0.053152564634525445,
+      "localShots": 648,
+      "request": {
+        "weapon": "baza_prime",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "primary_acuity",
+          "high_voltage",
+          "heavy_caliber",
+          "wildfire",
+          "vital_sense",
+          "serration",
+          "vile_acceleration",
+          "vigilante_supplies@0"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 0.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 0.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/WildfireMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": {
+          "baseDrain": 4,
+          "baseDrainEnum": "QA_MEDIUM",
+          "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "compatibilityTags": [],
+          "conditionalEffects": [],
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetDescriptionInfo",
+                "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+              },
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_CONVERT_AMMO",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "incompatibilityTags": [],
+          "isAugment": false,
+          "isSubUpgrade": false,
+          "maxRank": 5,
+          "modFamily": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "modSet": "VigilanteSetMod",
+          "name": "PrimaryVigilanteSuppliesMod",
+          "nameEn": "Vigilante Supplies",
+          "nameInternal": "PrimaryVigilanteSuppliesMod",
+          "nameTag": "/Lotus/Language/Mods/PrimaryVigilanteSuppliesModName",
+          "nameZh": "私法 补给",
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "polarity": "AP_TACTIC",
+          "rarity": "RARE",
+          "selectable": true,
+          "support": {
+            "warframe": false,
+            "weapon": false
+          },
+          "supported": false,
+          "slotKind": "primary",
+          "exilus": true,
+          "description": "将拾取的次要武器弹药转换为 30% 弹药拾取。",
+          "effectsZh": [
+            "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+          ],
+          "effectsZhByRank": [
+            [
+              "将拾取的次要武器弹药转换为 5% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 10% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 15% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 20% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+            ]
+          ],
+          "drain": 2,
+          "rank": 0,
+          "icon": "/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "sourceKind": "isUtility",
+          "catalogJoined": true,
+          "modSetValues": [],
+          "setMaxPieces": 6,
+          "setName": "私法 Mod 组合加成",
+          "setNameZh": "私法 Mod 组合加成",
+          "setDescription": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setDesc": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setStats": [
+            {
+              "operation": "ADD",
+              "upgradeType": "WEAPON_DOUBLE_CRIT_CHANCE",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "setConditionalEffects": [],
+          "setDisplayValues": {
+            "STAT1": [
+              5,
+              10,
+              15,
+              20,
+              25,
+              30
+            ]
+          },
+          "setRuntime": {},
+          "setSource": "/Lotus/Upgrades/Mods/Sets/Vigilante/VigilanteSetMod",
+          "category": "set",
+          "type": "weapon-exilus",
+          "sourceType": "Weapon Exilus",
+          "slotPolarity": "AP_TACTIC",
+          "polarityRelation": "matched"
+        },
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "referenceKpm": 0.125940866897939,
+      "deltaPercent": -57.79561794060093,
+      "referenceShots": 648
+    },
+    {
+      "name": "Baza Prime mode 0",
+      "variant": "no-acuity",
+      "manualKpm": 0.2872341522359443,
+      "localShots": 648,
+      "request": {
+        "weapon": "baza_prime",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "high_voltage",
+          "heavy_caliber",
+          "wildfire",
+          "vital_sense",
+          "serration",
+          "vile_acceleration",
+          "vigilante_supplies@0"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/WildfireMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": {
+          "baseDrain": 4,
+          "baseDrainEnum": "QA_MEDIUM",
+          "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "compatibilityTags": [],
+          "conditionalEffects": [],
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetDescriptionInfo",
+                "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+              },
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_CONVERT_AMMO",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "incompatibilityTags": [],
+          "isAugment": false,
+          "isSubUpgrade": false,
+          "maxRank": 5,
+          "modFamily": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "modSet": "VigilanteSetMod",
+          "name": "PrimaryVigilanteSuppliesMod",
+          "nameEn": "Vigilante Supplies",
+          "nameInternal": "PrimaryVigilanteSuppliesMod",
+          "nameTag": "/Lotus/Language/Mods/PrimaryVigilanteSuppliesModName",
+          "nameZh": "私法 补给",
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "polarity": "AP_TACTIC",
+          "rarity": "RARE",
+          "selectable": true,
+          "support": {
+            "warframe": false,
+            "weapon": false
+          },
+          "supported": false,
+          "slotKind": "primary",
+          "exilus": true,
+          "description": "将拾取的次要武器弹药转换为 30% 弹药拾取。",
+          "effectsZh": [
+            "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+          ],
+          "effectsZhByRank": [
+            [
+              "将拾取的次要武器弹药转换为 5% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 10% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 15% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 20% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+            ]
+          ],
+          "drain": 2,
+          "rank": 0,
+          "icon": "/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "sourceKind": "isUtility",
+          "catalogJoined": true,
+          "modSetValues": [],
+          "setMaxPieces": 6,
+          "setName": "私法 Mod 组合加成",
+          "setNameZh": "私法 Mod 组合加成",
+          "setDescription": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setDesc": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setStats": [
+            {
+              "operation": "ADD",
+              "upgradeType": "WEAPON_DOUBLE_CRIT_CHANCE",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "setConditionalEffects": [],
+          "setDisplayValues": {
+            "STAT1": [
+              5,
+              10,
+              15,
+              20,
+              25,
+              30
+            ]
+          },
+          "setRuntime": {},
+          "setSource": "/Lotus/Upgrades/Mods/Sets/Vigilante/VigilanteSetMod",
+          "category": "set",
+          "type": "weapon-exilus",
+          "sourceType": "Weapon Exilus",
+          "slotPolarity": "AP_TACTIC",
+          "polarityRelation": "matched"
+        },
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "referenceKpm": 0.6936899856359928,
+      "deltaPercent": -58.59329697939914,
+      "referenceShots": 648
+    },
+    {
+      "name": "Baza Prime mode 0",
+      "variant": "no-spread-penalty",
+      "manualKpm": 1.7696364666668727,
+      "localShots": 648,
+      "request": {
+        "weapon": "baza_prime",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "primary_acuity",
+          "high_voltage",
+          "wildfire",
+          "vital_sense",
+          "serration",
+          "vile_acceleration",
+          "vigilante_supplies@0"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          10.0
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "incarnonCycle": false,
+        "aiming": true,
+        "headshotChance": 1.0,
+        "steelPath": true,
+        "level": 9999,
+        "profile": "fast",
+        "scenario": {
+          "distance": 10.0
+        },
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "triggerPolicy": "emergent",
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/WildfireMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": {
+          "baseDrain": 4,
+          "baseDrainEnum": "QA_MEDIUM",
+          "compatibility": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "compatibilityTags": [],
+          "conditionalEffects": [],
+          "effects": [
+            {
+              "autoType": 1,
+              "damageType": "DT_ANY",
+              "invalidModifiers": [],
+              "localizationScript": {
+                "Function": "GetDescriptionInfo",
+                "Script": "/Lotus/Scripts/Mods/AmmoMutationMod.lua"
+              },
+              "operation": "ADD",
+              "supported": false,
+              "supportedBy": [],
+              "symbolFilter": "",
+              "upgradeType": "WEAPON_CONVERT_AMMO",
+              "validModifiers": [],
+              "validPostures": [],
+              "validProcTypes": [],
+              "validType": "",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "incompatibilityTags": [],
+          "isAugment": false,
+          "isSubUpgrade": false,
+          "maxRank": 5,
+          "modFamily": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "modSet": "VigilanteSetMod",
+          "name": "PrimaryVigilanteSuppliesMod",
+          "nameEn": "Vigilante Supplies",
+          "nameInternal": "PrimaryVigilanteSuppliesMod",
+          "nameTag": "/Lotus/Language/Mods/PrimaryVigilanteSuppliesModName",
+          "nameZh": "私法 补给",
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "polarity": "AP_TACTIC",
+          "rarity": "RARE",
+          "selectable": true,
+          "support": {
+            "warframe": false,
+            "weapon": false
+          },
+          "supported": false,
+          "slotKind": "primary",
+          "exilus": true,
+          "description": "将拾取的次要武器弹药转换为 30% 弹药拾取。",
+          "effectsZh": [
+            "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+          ],
+          "effectsZhByRank": [
+            [
+              "将拾取的次要武器弹药转换为 5% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 10% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 15% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 20% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 25% 弹药拾取。"
+            ],
+            [
+              "将拾取的次要武器弹药转换为 30% 弹药拾取。"
+            ]
+          ],
+          "drain": 2,
+          "rank": 0,
+          "icon": "/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "iconAsset": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Vigilante/VigilanteSupplies.png",
+          "sourceKind": "isUtility",
+          "catalogJoined": true,
+          "modSetValues": [],
+          "setMaxPieces": 6,
+          "setName": "私法 Mod 组合加成",
+          "setNameZh": "私法 Mod 组合加成",
+          "setDescription": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setDesc": "|STAT1|% 的几率强化主要武器的暴击。",
+          "setStats": [
+            {
+              "operation": "ADD",
+              "upgradeType": "WEAPON_DOUBLE_CRIT_CHANCE",
+              "valuePerRank": 0.050000001
+            }
+          ],
+          "setConditionalEffects": [],
+          "setDisplayValues": {
+            "STAT1": [
+              5,
+              10,
+              15,
+              20,
+              25,
+              30
+            ]
+          },
+          "setRuntime": {},
+          "setSource": "/Lotus/Upgrades/Mods/Sets/Vigilante/VigilanteSetMod",
+          "category": "set",
+          "type": "weapon-exilus",
+          "sourceType": "Weapon Exilus",
+          "slotPolarity": "AP_TACTIC",
+          "polarityRelation": "matched"
+        },
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "referenceKpm": 1.7512828885465064,
+      "deltaPercent": 1.048007620036695,
+      "referenceShots": 648
+    }
+  ],
+  "localFingerprint": "59fffaeaa60e7763",
+  "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+  "contract": "Fixed-build ablations; changing one input family, no new optimizer search"
+}

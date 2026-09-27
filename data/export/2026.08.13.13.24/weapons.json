@@ -12721,6 +12721,7 @@
     {
      "ammoCost": 0,
      "ammoType": "",
+     "behaviorKind": "auxiliary-melee",
      "chargeTime": null,
      "damage": {
       "critChance": 0.0,
@@ -84543,6 +84544,7 @@
     {
      "ammoCost": 0,
      "ammoType": "",
+     "behaviorKind": "auxiliary-melee",
      "chargeTime": null,
      "damage": {
       "critChance": 0.0,
@@ -173557,6 +173559,7 @@
     {
      "ammoCost": 0,
      "ammoType": "",
+     "behaviorKind": "auxiliary-melee",
      "chargeTime": null,
      "damage": {
       "critChance": 0.0,
@@ -205316,22 +205319,40 @@
       "critMultiplier": 2.0,
       "falloff": 0.5,
       "flightSpeed": 60,
-      "procChance": 0.0,
+      "forcedProcs": [
+       "PT_FRAILTY",
+       "PT_RAGDOLL"
+      ],
+      "nativeProcChance": 0.0,
+      "procChance": 0.1,
+      "procChanceSource": "pinned-reference-talons-status-chance",
       "projectile": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknivesProjectile",
       "radial": {
        "falloff": 0.5,
+       "forcedProcs": [
+        "PT_FRAILTY",
+        "PT_RAGDOLL"
+       ],
        "procChance": 0.0,
        "radius": 4.8000002,
-       "shares": {},
-       "source": "ExplosiveAttack",
-       "total": 120.0,
-       "types": {}
+       "shares": {
+        "DT_EXPLOSION": 1.0
+       },
+       "source": "EmbedDeathAttack",
+       "total": 250.0,
+       "types": {
+        "DT_EXPLOSION": 250.0
+       }
       },
       "radius": 4.8000002,
-      "shares": {},
-      "source": "ExplosiveAttack",
-      "total": 120.0,
-      "types": {}
+      "shares": {
+       "DT_EXPLOSION": 1.0
+      },
+      "source": "EmbedDeathAttack",
+      "total": 250.0,
+      "types": {
+       "DT_EXPLOSION": 250.0
+      }
      },
      "falloffMinDamage": 1,
      "falloffRange": [
@@ -205349,6 +205370,7 @@
     {
      "ammoCost": 0,
      "ammoType": "",
+     "behaviorKind": "auxiliary-melee",
      "chargeTime": null,
      "damage": {
       "critChance": 0.0,

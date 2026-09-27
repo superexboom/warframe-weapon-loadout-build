@@ -64,6 +64,7 @@ def test_merge_rejects_legacy_evidence_without_version_manifest(tmp_path):
     ('SimulationError: weapon is not in the portable Riven catalog','catalog-absent'),
     ('SimulationError: weapon has no fire modes','abstract-modular-placeholder'),
     ('SimulationError: fire mode 1 metric sustainedDps is unavailable','mode-metric-unavailable'),
+    ('SimulationError: fire mode 1 is auxiliary melee, outside nonmelee scope','auxiliary-melee-mode'),
     ('ValueError: unrelated','generation-failed'),
 ])
 def test_attempt_status_classifies_structural_denominator_gaps(error,status):
@@ -92,3 +93,14 @@ def test_merge_counts_replay_mismatch_even_when_build_generation_succeeded(tmp_p
     s=merge_runs([tmp_path])['summary']
     assert s['engineFailures']==s['manualReplayFailed']==1
     assert s['attemptsOk']==1 and not s['allLocalReplayComplete']
+
+
+def test_auxiliary_melee_is_reported_outside_ranged_scope_not_as_a_successful_replay(tmp_path):
+    from tools.merge_nonmelee_catalog_audit import merge_runs
+    dump(tmp_path/'meta.json',dict(fingerprint='v',weapons=['/a'],state='complete'))
+    dump(tmp_path/'results.json',[dict(path='/a',fingerprint='v',ok=True,replayComplete=True,
+        attempts=[dict(status='replay-matched',ok=True,manualKpm=1.,autoManualPassed=True),
+                  dict(status='auxiliary-melee-mode',ok=False)])])
+    s=merge_runs([tmp_path])['summary']
+    assert s['attemptsOk']==1 and s['engineFailures']==0
+    assert s['structuralGaps']==1 and s['structuralGapKinds']==[('auxiliary-melee-mode',1)]

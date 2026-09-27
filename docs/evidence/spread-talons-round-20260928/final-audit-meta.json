@@ -1,0 +1,32 @@
+{
+  "recordedAt": "2026-09-27T16:41:52.969057+00:00",
+  "identity": {
+    "schema": 2,
+    "inputs": "59fffaeaa60e7763",
+    "toolSha256": "1b8315f6e06786c47993ff332caa5629fd295645afb1d2eb1239c0f8cc2b916d",
+    "profile": "fast",
+    "contract": "event-kpm; all explicit modes; matched manual replay; no external parity claim",
+    "distance": 10.0
+  },
+  "fingerprint": "a7d6bdf04fc5304d0aa40253404c1724d6404219609db4fc80a2b45267443d0c",
+  "state": "complete",
+  "pid": 15128,
+  "sourceCommit": "7f5a93df339114ebf8694734a8fe786d051ae7da",
+  "weaponCount": 8,
+  "weapons": [
+    "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+    "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/KarakWraith",
+    "/Lotus/Weapons/Grineer/Pistols/WraithSingleViper/WraithSingleViper",
+    "/Lotus/Weapons/Tenno/LongGuns/DrakeRifle/DrakeRifle",
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+    "/Lotus/Weapons/Tenno/Pistol/CrossBow",
+    "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+    "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives"
+  ],
+  "shard": 0,
+  "shards": 1,
+  "start": 0,
+  "exportDir": "C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\data\\export\\2026.08.13.13.24",
+  "finishedAt": "2026-09-27T16:47:27.692524+00:00",
+  "replayComplete": 8
+}

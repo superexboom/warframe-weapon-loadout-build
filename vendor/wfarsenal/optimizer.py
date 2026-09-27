@@ -635,6 +635,9 @@ def _select_fire_mode(
         raise SimulationError(
             f"fireMode {index} is out of range for {len(modes)} fire modes"
         )
+    if (modes[index].get('behaviorKind') == 'auxiliary-melee'
+            and weapon.get('slot') in ('primary','secondary','arch_gun')):
+        raise SimulationError(f"fire mode {index} is auxiliary melee, outside nonmelee scope")
     selected = {**weapon, "fireModes": [modes[index]], "__selectedFireMode__": index, "__baseFireModes__": list(modes)}
     # 灵化循环口径（Scenario.incarnon_cycle）需要基础形态的装填时长折算
     # 充能——保留完整模式列表供 apply_mods 读取。

@@ -39,8 +39,8 @@ def merge_runs(inputs):
     rows=sorted(rows_by_path.values(),key=lambda r:(str(r.get('slot')),str(r.get('nameEn')),r['path']))
     attempts=[a for r in rows for a in r.get('attempts',[])]
     successful=[a for a in attempts if a.get('ok')]
-    structural=[a for a in attempts if a.get('status') in ('catalog-absent','abstract-modular-placeholder','mode-metric-unavailable')]
-    engine=[a for a in attempts if a.get('status') not in ('replay-matched','catalog-absent','abstract-modular-placeholder','mode-metric-unavailable')]
+    structural=[a for a in attempts if a.get('status') in ('catalog-absent','abstract-modular-placeholder','mode-metric-unavailable','auxiliary-melee-mode')]
+    engine=[a for a in attempts if a.get('status') not in ('replay-matched','catalog-absent','abstract-modular-placeholder','mode-metric-unavailable','auxiliary-melee-mode')]
     summary=dict(fingerprint=fingerprint,expectedWeapons=len(expected),weapons=len(rows),
         missingWeapons=sorted(expected-rows_by_path.keys()),
         weaponOk=sum(bool(r.get('ok')) for r in rows),weaponFailed=sum(not r.get('ok') for r in rows),

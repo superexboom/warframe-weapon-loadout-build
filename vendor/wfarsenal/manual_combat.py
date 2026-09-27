@@ -315,6 +315,8 @@ def prepare(
     selected_attack = base_profile(weapon, mode_index)
     if selected_attack:
         notes.extend(selected_attack.get('unmodeled') or [])
+        if selected_attack.get('spreadAim') and scenario.distance is None:
+            notes.append('spread-distance-unspecified-assumed-all-hit')
         minimum=(selected_attack.get('radial') or {}).get('armingDistance')
         if minimum is not None and scenario.distance is None:
             notes.append('radial-arming-distance-assumed-armed')
@@ -417,7 +419,7 @@ def prepare(
                 headshot_bonus_multiplier=1.0,
             )
         extra = base_profile(wp, idx)
-        components = extra.get('radials') or [extra.get('radial') or extra.get('lingering')]
+        components = () if extra.get('pureRadial') else (extra.get('radials') or [extra.get('radial') or extra.get('lingering')])
         radial_parts = []
         for component in components:
             if (component and component.get('armingDistance') is not None
@@ -522,4 +524,5 @@ def prepare(
         battery=base_attack.get("battery") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
         lastRoundMultishot=last_round_multishot,
         distance=scenario.distance,
+        spatialLimitations=selected_attack.get('limitations', []),
     )

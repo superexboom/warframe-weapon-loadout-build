@@ -334,6 +334,10 @@ def _flatten_behaviours(
             continue
 
         mode: dict[str, Any] = {"index": position}
+        if (entry.get('fire:Type') == '/EE/Types/Game/WeaponMeleeRadiusFireBehavior'
+                and entry.get('state:Type') == '/EE/Types/Game/WeaponMeleeRadiusStateBehavior'):
+            mode['behaviorKind'] = 'auxiliary-melee'
+
         if state:
             mode["trigger"] = state.get("LocTag")
             mode["fireRate"] = _per_second(state.get("fireRate"))
@@ -1204,7 +1208,19 @@ def _resolve_damage(
             return inline
         components = _projectile_damage_components(proj)
         if components:
-            data = dict(components[0])
+            primary = components[0]
+            # Exact native Talons pair: zero contact damage, manually detonated
+            # embedded mines. Keep the airborne 120 blast as evidence, not as
+            # an additional hit on top of the embedded 250 blast.
+            if (weapon_path == '/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives'
+                    and projectile_path == weapon_path + 'Projectile'
+                    and (proj.get('AttackData') or {}).get('Amount') == 0
+                    and proj.get('Embed') == 1):
+                embedded = next((c for c in components if c['source'] == 'EmbedDeathAttack'
+                                 and c.get('types') == {'DT_EXPLOSION': 250.0}), None)
+                if embedded is not None:
+                    primary = embedded
+            data = dict(primary)
             data["projectile"] = projectile_path
             data["flightSpeed"] = proj.get("KinematicInitialSpeed")
             data["critChance"] = _first_number(
@@ -1214,7 +1230,7 @@ def _resolve_damage(
                 proj, "CriticalMultiplier", "criticalHitDamageMultiplier"
             ) or 1.0
             data["components"] = components
-            data["radial"] = components[0]
+            data["radial"] = primary
             return data
 
     for source in (impact, fire):

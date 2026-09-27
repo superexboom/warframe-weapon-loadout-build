@@ -1,0 +1,648 @@
+{
+  "packageBuild": "2026.09.22.16.46",
+  "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+  "geometrySources": [
+    {
+      "path": "engine/src/model/shape.rs",
+      "sha256": "e5b2dae371ee2ce8176c516bd6db83de08218774745feabef57b8de48ce1bdbd"
+    },
+    {
+      "path": "engine/src/rules/space.rs",
+      "sha256": "087a156c7995d1df6f62d5bf4489362ac063672fd93430fed0bc064aa580d500"
+    }
+  ],
+  "cases": [
+    {
+      "name": "Baza Prime",
+      "profile": {
+        "directTotal": 16.0,
+        "referenceId": "baza_prime",
+        "fireMode": 0,
+        "model": "uniform-native-min-angle",
+        "geometry": "pinned-reference-ray-circle",
+        "bodyRadiusM": 0.25,
+        "sourceBuild": "2026.09.22.16.46",
+        "limitations": [
+          "spread-bloom-not-modeled",
+          "target-hitbox-reference-assumption"
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+            "sha256": "6278c5bbf79d955a3439e294d534c2f2c617bb45483ee3e20de8c4d5f6b55253"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/TnSMGAimAccuracyInfo",
+            "sha256": "c484a497348a4324668754b78247961cbb2979ab6052169135ee6e8592fb881a"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/TnSMGHipAccuracyInfo",
+            "sha256": "638f6ab0f616238078a4f531614d59824e2b2f098a2a10477cce0fe86ed5000c"
+          }
+        ],
+        "referenceSource": "data/weapons/primary/baza_prime.yaml",
+        "referenceSha256": "4697606363ae16f86b11d45885c5958627668da22d618fcdef3d513978081749",
+        "spreadAim": {
+          "min_deg": 1.0,
+          "max_deg": 1.5
+        },
+        "spreadHip": {
+          "min_deg": 2.0,
+          "max_deg": 3.0
+        }
+      }
+    },
+    {
+      "name": "Akstiletto Prime",
+      "profile": {
+        "directTotal": 35.999999,
+        "referenceId": "akstiletto_prime",
+        "fireMode": 0,
+        "model": "uniform-native-min-angle",
+        "geometry": "pinned-reference-ray-circle",
+        "bodyRadiusM": 0.25,
+        "sourceBuild": "2026.09.22.16.46",
+        "limitations": [
+          "spread-bloom-not-modeled",
+          "target-hitbox-reference-assumption"
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+            "sha256": "a6c7f9568c96ade6a4e19db119ae8ba4110f69c2ad5494d589fbb865e1936a41"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/TennoUziAimAccuracyInfo",
+            "sha256": "3efb24b6ca78fb3dc4ff7c5bfebea0d7c5d530ad458f5830ccdc185ad5ceaa68"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/TennoUziHipAccuracyInfo",
+            "sha256": "4e7ecf1bba4a8125d767383e54d83f148feadb9f014dde2ba13934d5c03d660a"
+          }
+        ],
+        "referenceSource": "data/weapons/secondary/akstiletto_prime.yaml",
+        "referenceSha256": "1040a18f112aa0e1fddfe7716c059d3dfd1c1f06e324463466382da1fd2e45ce",
+        "spreadAim": {
+          "min_deg": 1.5,
+          "max_deg": 7.0
+        },
+        "spreadHip": {
+          "min_deg": 4.0,
+          "max_deg": 12.0
+        }
+      }
+    },
+    {
+      "name": "Supra Vandal",
+      "profile": {
+        "directTotal": 39.999999,
+        "referenceId": "supra_vandal",
+        "fireMode": 0,
+        "model": "uniform-native-min-angle",
+        "geometry": "pinned-reference-ray-circle",
+        "bodyRadiusM": 0.25,
+        "sourceBuild": "2026.09.22.16.46",
+        "limitations": [
+          "spread-bloom-not-modeled",
+          "target-hitbox-reference-assumption"
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+            "sha256": "7086fffb68f7b0dd5b9b51f17f965cbe72dfea96ac80cdbc310c9fc6876af8dc"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/SupraVandalAimAccuracyInfo",
+            "sha256": "80d84509aa356cc9b885f97a7652c6b65eacb25860018225a5a5c38e9e26b98b"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/SupraVandalHipAccuracyInfo",
+            "sha256": "d62ac3f398555c00428cd2300726e899d874b8b751ebf7896899d1e039a079fd"
+          }
+        ],
+        "referenceSource": "data/weapons/primary/supra_vandal.yaml",
+        "referenceSha256": "a727aab39a9303061b2a8b21954f8497d15e73f36b52a3994010019af54aa878",
+        "spreadAim": {
+          "min_deg": 3.0,
+          "max_deg": 4.0
+        },
+        "spreadHip": {
+          "min_deg": 5.0,
+          "max_deg": 10.0
+        }
+      }
+    },
+    {
+      "name": "Karak Wraith",
+      "profile": {
+        "directTotal": 31.0,
+        "referenceId": "karak_wraith",
+        "fireMode": 0,
+        "model": "uniform-native-min-angle",
+        "geometry": "pinned-reference-ray-circle",
+        "bodyRadiusM": 0.25,
+        "sourceBuild": "2026.09.22.16.46",
+        "limitations": [
+          "spread-bloom-not-modeled",
+          "target-hitbox-reference-assumption"
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/KarakWraith",
+            "sha256": "6a5321814fa1c51fbdffcd5d42907261a25ef5c53ff59791a25c2231489ca321"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/GrineerAssaultRifleAimAccuracyInfo",
+            "sha256": "e9a4b9897ebcc5e854073735e213bcc1afc4215fbe0a9b40a5e2e61436344b3d"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/GrineerAssaultRifleHipAccuracyInfo",
+            "sha256": "bd2fbcd16b0f386866f51f448912a5953c73de4ecb0cc53e6311538b95b2e075"
+          }
+        ],
+        "referenceSource": "data/weapons/primary/karak_wraith.yaml",
+        "referenceSha256": "b6f625da1ecab3bbf5377446d203ef235d607c062e461e686211ee9037097882",
+        "spreadAim": {
+          "min_deg": 2.0,
+          "max_deg": 5.0
+        },
+        "spreadHip": {
+          "min_deg": 8.0,
+          "max_deg": 11.0
+        }
+      }
+    },
+    {
+      "name": "Viper Wraith",
+      "profile": {
+        "directTotal": 17.999999,
+        "referenceId": "viper_wraith",
+        "fireMode": 0,
+        "model": "uniform-native-min-angle",
+        "geometry": "pinned-reference-ray-circle",
+        "bodyRadiusM": 0.25,
+        "sourceBuild": "2026.09.22.16.46",
+        "limitations": [
+          "spread-bloom-not-modeled",
+          "target-hitbox-reference-assumption"
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Grineer/Pistols/WraithSingleViper/WraithSingleViper",
+            "sha256": "644a636e1707349ad164a2a0107f1e603d88611275697cb0f1717a1a323eb4d3"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/WraithSingleViperAimAccuracyInfo",
+            "sha256": "3a219c373e2199a29cf863ef9c4c6e5c25721a950151fa3b6952327f149632dd"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/WraithSingleViperHipAccuracyInfo",
+            "sha256": "37f209cfbdec0e1877d19f7e5dcb69b463de31d42dc6c0940531d3084bac3110"
+          }
+        ],
+        "referenceSource": "data/weapons/secondary/viper_wraith.yaml",
+        "referenceSha256": "1f52f2eb0412a783b1807bf01ca16a6f6eeaffda84660b2a97c8a0ef0d7839f8",
+        "spreadAim": {
+          "min_deg": 1.0,
+          "max_deg": 6.0
+        },
+        "spreadHip": {
+          "min_deg": 3.0,
+          "max_deg": 10.0
+        }
+      }
+    },
+    {
+      "name": "Tiberon",
+      "profile": {
+        "directTotal": 44.0,
+        "referenceId": "tiberon",
+        "fireMode": 0,
+        "model": "uniform-native-min-angle",
+        "geometry": "pinned-reference-ray-circle",
+        "bodyRadiusM": 0.25,
+        "sourceBuild": "2026.09.22.16.46",
+        "limitations": [
+          "spread-bloom-not-modeled",
+          "target-hitbox-reference-assumption"
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/DrakeRifle/DrakeRifle",
+            "sha256": "664324de83a29823acf98872ef9104a9aa578d4dc5e18e8123afa0e3137333c6"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/GrnBurstRifleAimAccuracyInfo",
+            "sha256": "e47f8cbe04e2ead3674326100feaeb006798d6354f7c2e1a5a839988c295ba09"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/GrnBurstRifleHipAccuracyInfo",
+            "sha256": "7f29b5281eb6f403152152a1494e89b21173adabb98aec97a5c6f9cc7c243bc3"
+          }
+        ],
+        "referenceSource": "data/weapons/primary/tiberon.yaml",
+        "referenceSha256": "db69b3166c4a302db70666c1d734a398f413948173a9c5ac9d67c508e5cb707d",
+        "spreadAim": {
+          "min_deg": 0.0,
+          "max_deg": 6.0
+        },
+        "spreadHip": {
+          "min_deg": 2.0,
+          "max_deg": 8.0
+        },
+        "burst": {
+          "count": 3,
+          "delay_seconds": 0.059999999
+        }
+      }
+    },
+    {
+      "name": "Bolto",
+      "profile": {
+        "directTotal": 63.999998999999995,
+        "referenceId": "bolto",
+        "fireMode": 0,
+        "model": "uniform-native-min-angle",
+        "geometry": "pinned-reference-ray-circle",
+        "bodyRadiusM": 0.25,
+        "sourceBuild": "2026.09.22.16.46",
+        "limitations": [
+          "spread-bloom-not-modeled",
+          "target-hitbox-reference-assumption"
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Tenno/Pistol/CrossBow",
+            "sha256": "06f68c0a23c916ef0c65b5e1724444527c8fed5635e7dea33ad69c225d266bca"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/AkimboBoltoAimAccuracyInfo",
+            "sha256": "0e5ba385ba01650612d9195cc0f3241dad346a0b208b3e522b264f3804dbf450"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/AkimboBoltoHipAccuracyInfo",
+            "sha256": "29958ea01aaeac86e8cc3432119534eb39f02aa4e71e15127831c34e0a5f9ed0"
+          }
+        ],
+        "referenceSource": "data/weapons/secondary/bolto.yaml",
+        "referenceSha256": "d50cd04cabf593ebd23463457e790604602e5ae7c44833015765f5d759e9d7eb",
+        "spreadAim": {
+          "min_deg": 0.5,
+          "max_deg": 7.0
+        },
+        "spreadHip": {
+          "min_deg": 6.5,
+          "max_deg": 13.0
+        }
+      }
+    },
+    {
+      "name": "Talons",
+      "before": {
+        "ancestry": [
+          "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+          "/Lotus/Weapons/Tenno/Akimbo/LotusThrown",
+          "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+        ],
+        "compatTags": [
+          "PROJECTILE",
+          "DEPLOYABLE",
+          "AOE",
+          "SINGLESHOT"
+        ],
+        "defaultModTemplate": "/Lotus/Types/ModLists/Pistol/HybridBlast",
+        "descTag": "/Lotus/Language/Items/U18ThrowingKnivesDesc",
+        "fireModes": [
+          {
+            "ammoCost": 1,
+            "ammoType": "/Lotus/Weapons/Ammo/PistolAmmoEx",
+            "chargeTime": null,
+            "damage": {
+              "components": [
+                {
+                  "falloff": 0.5,
+                  "procChance": 0.0,
+                  "radius": 4.8000002,
+                  "shares": {},
+                  "source": "ExplosiveAttack",
+                  "total": 120.0,
+                  "types": {}
+                },
+                {
+                  "falloff": 0.5,
+                  "forcedProcs": [
+                    "PT_FRAILTY",
+                    "PT_RAGDOLL"
+                  ],
+                  "procChance": 0.0,
+                  "radius": 4.8000002,
+                  "shares": {
+                    "DT_EXPLOSION": 1.0
+                  },
+                  "source": "EmbedDeathAttack",
+                  "total": 250.0,
+                  "types": {
+                    "DT_EXPLOSION": 250.0
+                  }
+                }
+              ],
+              "critChance": 0.22,
+              "critMultiplier": 2.0,
+              "falloff": 0.5,
+              "flightSpeed": 60,
+              "forcedProcs": [
+                "PT_FRAILTY",
+                "PT_RAGDOLL"
+              ],
+              "nativeProcChance": 0.0,
+              "procChance": 0.1,
+              "procChanceSource": "pinned-reference-talons-status-chance",
+              "projectile": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknivesProjectile",
+              "radial": {
+                "falloff": 0.5,
+                "forcedProcs": [
+                  "PT_FRAILTY",
+                  "PT_RAGDOLL"
+                ],
+                "procChance": 0.0,
+                "radius": 4.8000002,
+                "shares": {
+                  "DT_EXPLOSION": 1.0
+                },
+                "source": "EmbedDeathAttack",
+                "total": 250.0,
+                "types": {
+                  "DT_EXPLOSION": 250.0
+                }
+              },
+              "radius": 4.8000002,
+              "shares": {
+                "DT_EXPLOSION": 1.0
+              },
+              "source": "EmbedDeathAttack",
+              "total": 250.0,
+              "types": {
+                "DT_EXPLOSION": 250.0
+              }
+            },
+            "falloffMinDamage": 1,
+            "falloffRange": [
+              0,
+              0
+            ],
+            "fireRate": 3.333333,
+            "fireRateRaw": 200,
+            "index": 0,
+            "isAlternateFire": false,
+            "multishot": 1,
+            "reloadTime": 1,
+            "trigger": "/Lotus/Language/Menu/Loadout_TriggerActivated"
+          },
+          {
+            "ammoCost": 0,
+            "ammoType": "",
+            "behaviorKind": "auxiliary-melee",
+            "chargeTime": null,
+            "damage": {
+              "critChance": 0.0,
+              "critMultiplier": 2.0,
+              "procChance": 0.1,
+              "shares": {
+                "DT_IMPACT": 1.0
+              },
+              "total": 40.0,
+              "types": {
+                "DT_IMPACT": 40.0
+              }
+            },
+            "falloffMinDamage": 1,
+            "falloffRange": [
+              0,
+              0
+            ],
+            "fireRate": 1.0,
+            "fireRateRaw": 60,
+            "index": 1,
+            "isAlternateFire": false,
+            "multishot": 1,
+            "reloadTime": 1,
+            "trigger": ""
+          }
+        ],
+        "gripType": "DUAL_GUN_GUN",
+        "isIncarnon": false,
+        "magazineSize": 4,
+        "masteryReq": 8,
+        "maxRank": 30,
+        "name": "U18throwingknives",
+        "nameEn": "Talons",
+        "nameInternal": "U18throwingknives",
+        "nameTag": "/Lotus/Language/Items/U18ThrowingKnivesName",
+        "nameZh": "鹰爪",
+        "omegaAttenuation": 1.4400001,
+        "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+        "polarities": [
+          "AP_UNIVERSAL",
+          "AP_UNIVERSAL",
+          "AP_UNIVERSAL",
+          "AP_UNIVERSAL",
+          "AP_UNIVERSAL",
+          "AP_UNIVERSAL",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_UNIVERSAL"
+        ],
+        "primaryOmegaAttenuation": null,
+        "productCategory": "Pistols",
+        "slot": "secondary",
+        "variantType": null
+      },
+      "after": {
+        "ancestry": [
+          "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+          "/Lotus/Weapons/Tenno/Akimbo/LotusThrown",
+          "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+        ],
+        "compatTags": [
+          "PROJECTILE",
+          "DEPLOYABLE",
+          "AOE",
+          "SINGLESHOT"
+        ],
+        "defaultModTemplate": "/Lotus/Types/ModLists/Pistol/HybridBlast",
+        "descTag": "/Lotus/Language/Items/U18ThrowingKnivesDesc",
+        "fireModes": [
+          {
+            "ammoCost": 1,
+            "ammoType": "/Lotus/Weapons/Ammo/PistolAmmoEx",
+            "chargeTime": null,
+            "damage": {
+              "total": 250.0,
+              "procChance": 0.1,
+              "shares": {
+                "DT_EXPLOSION": 1.0
+              },
+              "types": {
+                "DT_EXPLOSION": 250.0
+              },
+              "radius": 4.8000002,
+              "falloff": 0.5,
+              "source": "EmbedDeathAttack",
+              "forcedProcs": [
+                "PT_FRAILTY",
+                "PT_RAGDOLL"
+              ],
+              "projectile": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknivesProjectile",
+              "flightSpeed": 60,
+              "critChance": 0.22,
+              "critMultiplier": 2.0,
+              "components": [
+                {
+                  "total": 120.0,
+                  "procChance": 0.0,
+                  "shares": {},
+                  "types": {},
+                  "radius": 4.8000002,
+                  "falloff": 0.5,
+                  "source": "ExplosiveAttack"
+                },
+                {
+                  "total": 250.0,
+                  "procChance": 0.0,
+                  "shares": {
+                    "DT_EXPLOSION": 1.0
+                  },
+                  "types": {
+                    "DT_EXPLOSION": 250.0
+                  },
+                  "radius": 4.8000002,
+                  "falloff": 0.5,
+                  "source": "EmbedDeathAttack",
+                  "forcedProcs": [
+                    "PT_FRAILTY",
+                    "PT_RAGDOLL"
+                  ]
+                }
+              ],
+              "radial": {
+                "total": 250.0,
+                "procChance": 0.0,
+                "shares": {
+                  "DT_EXPLOSION": 1.0
+                },
+                "types": {
+                  "DT_EXPLOSION": 250.0
+                },
+                "radius": 4.8000002,
+                "falloff": 0.5,
+                "source": "EmbedDeathAttack",
+                "forcedProcs": [
+                  "PT_FRAILTY",
+                  "PT_RAGDOLL"
+                ]
+              },
+              "nativeProcChance": 0.0,
+              "procChanceSource": "pinned-reference-talons-status-chance"
+            },
+            "falloffMinDamage": 1,
+            "falloffRange": [
+              0,
+              0
+            ],
+            "fireRate": 3.333333,
+            "fireRateRaw": 200,
+            "index": 0,
+            "isAlternateFire": false,
+            "multishot": 1,
+            "reloadTime": 1,
+            "trigger": "/Lotus/Language/Menu/Loadout_TriggerActivated"
+          },
+          {
+            "ammoCost": 0,
+            "ammoType": "",
+            "behaviorKind": "auxiliary-melee",
+            "chargeTime": null,
+            "damage": {
+              "total": 40.0,
+              "procChance": 0.1,
+              "shares": {
+                "DT_IMPACT": 1.0
+              },
+              "types": {
+                "DT_IMPACT": 40.0
+              },
+              "critChance": 0.0,
+              "critMultiplier": 2.0
+            },
+            "falloffMinDamage": 1,
+            "falloffRange": [
+              0,
+              0
+            ],
+            "fireRate": 1.0,
+            "fireRateRaw": 60,
+            "index": 1,
+            "isAlternateFire": false,
+            "multishot": 1,
+            "reloadTime": 1,
+            "trigger": ""
+          }
+        ],
+        "gripType": "DUAL_GUN_GUN",
+        "isIncarnon": false,
+        "magazineSize": 4,
+        "masteryReq": 8,
+        "maxRank": 30,
+        "name": "U18throwingknives",
+        "nameEn": "Talons",
+        "nameInternal": "U18throwingknives",
+        "nameTag": "/Lotus/Language/Items/U18ThrowingKnivesName",
+        "nameZh": "鹰爪",
+        "omegaAttenuation": 1.4400001,
+        "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+        "polarities": [
+          "AP_UNIVERSAL",
+          "AP_UNIVERSAL",
+          "AP_UNIVERSAL",
+          "AP_UNIVERSAL",
+          "AP_UNIVERSAL",
+          "AP_UNIVERSAL",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_UNIVERSAL"
+        ],
+        "primaryOmegaAttenuation": null,
+        "productCategory": "Pistols",
+        "slot": "secondary",
+        "variantType": null
+      },
+      "profile": {
+        "name": "Talons",
+        "directTotal": 250.0,
+        "pureRadial": true,
+        "statusChanceFallback": 0.1,
+        "scope": "single-target embedded mine, immediate manual detonation after each throw",
+        "source": "data/weapons/secondary/talons.yaml",
+        "sourceSha256": "eba9e3857416234f40f12a30cba3ec5179744f9b73b42e6c88c35d328ce8fbc8",
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+            "sha256": "2880c814d9a515f7267155e48b11ac39bc48d5df617ec6aa9db4ba9a83937c04"
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknivesProjectile",
+            "sha256": "ce1c2b05723905c882249c6485555cd42d0bd2bb77581c7afb46a07f624f3c46"
+          }
+        ],
+        "sourceBuild": "2026.09.22.16.46",
+        "unmodeled": [
+          "talons-manual-detonation-timing-assumed",
+          "talons-multishot-spatial-hit-loss-unmodeled",
+          "talons-natural-status-reference-calibrated"
+        ]
+      }
+    }
+  ]
+}

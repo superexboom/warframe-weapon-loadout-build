@@ -38,6 +38,9 @@ def base_profile(weapon, fire_mode=0):
                **SPOOL_PROFILES.get(weapon.get('path'), {})}
     if selected:
         profile = profile.get('modes', {}).get(str(selected), {})
+    spread = reference().get('spreadProfiles', {}).get(weapon.get('path'), {})
+    if spread.get('fireMode') == selected:
+        profile = {**profile, **spread}
     if not profile:
         return {}
     mode = (weapon.get('fireModes') or [{}])[fire_mode]

@@ -1,0 +1,17 @@
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+.................................................................... [ 46%]
+........................................................................ [ 62%]
+........................................................................ [ 78%]
+........................................................................ [ 94%]
+..........................                                            [100%]
+============================= slowest 8 durations =============================
+1.66s call     tests/test_optimizer_contracts.py::BuildValidatorTests::test_required_survives_search
+0.75s call     tests/test_archgun_board_regression.py::test_frozen_community_builds_use_the_same_manual_and_search_evaluator[prisma_dual_decurions-10]
+0.63s call     tests/test_archgun_board_regression.py::test_frozen_community_builds_use_the_same_manual_and_search_evaluator[dual_decurion-2]
+0.62s call     tests/test_archgun_board_regression.py::test_frozen_community_builds_use_the_same_manual_and_search_evaluator[imperator-2]
+0.56s call     tests/test_status_arcanes.py::test_complete_community_builds_use_shared_score[aksomati_prime-8]
+0.47s call     tests/test_status_arcanes.py::test_complete_community_builds_use_shared_score[aksomati_prime-9]
+0.44s call     tests/test_archgun_board_regression.py::test_frozen_community_builds_use_the_same_manual_and_search_evaluator[fluctus-6]
+0.43s call     tests/test_status_arcanes.py::test_complete_community_builds_use_shared_score[fluctus-6]
+454 passed, 3 deselected, 7 subtests passed in 21.46s

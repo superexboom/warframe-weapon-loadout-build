@@ -49,10 +49,11 @@ def configuration(record, rank):
             return dict(kind='fortifier',multiplier=3.+rank,steal=.01,cap=15000.)
     return None
 
-def encumber_roll(stats,chance,forced_procs=None):
+def encumber_roll(stats,chance,forced_procs=None,*,hit_probability=1.0):
     """One-success probability and conditional beam seed, over integer rolls.
     Extra statuses never feed back into their own trigger.
     """
+    landing=min(max(float(hit_probability),0.),1.)
     m=max(float(stats.multishot),0.);low=math.floor(m);frac=m-low
     q_ind=1.
     for dtype,p in stats.independent_proc_chances.items():
@@ -66,11 +67,13 @@ def encumber_roll(stats,chance,forced_procs=None):
         if pellets<=0 or weight<=0:continue
         if stats.continuous:
             source=1-(1-min(sc*pellets,1.))*q_ind*(1-forced)
-            p=chance*source;merged=pellets
+            p=landing*chance*source;merged=pellets
         else:
             source=1-(1-min(sc,1.))*q_ind
-            p=1-(1-chance*source)**pellets
-            p=1-(1-p)*(1-chance*forced*(1-source))
+            # Thin individual pellet opportunities before aggregating.
+            # Explicit per-trigger forced procs share the first pellet's hit.
+            no_first=(1-landing)+landing*(1-chance*source)*(1-chance*forced*(1-source))
+            p=1-no_first*(1-landing*chance*source)**(pellets-1)
             merged=1.
         probability+=weight*p;seed+=weight*p*merged
     return probability,seed/probability if probability else 1.

@@ -241,6 +241,9 @@ import_profiles(a.packages, ref, json.loads((exports / "weapons.json").read_text
     encoding="utf-8",
     newline=chr(10),
 )
+# Rebuild verified profiles without modifying the active export in staging runs.
+from tools.refresh_spread_talons import refresh as refresh_spread_talons
+refresh_spread_talons(a.packages, ref, exports / 'weapons.json', out / 'combat-reference.json', update_export=False)
 print(
     "reference:",
     len(forms),

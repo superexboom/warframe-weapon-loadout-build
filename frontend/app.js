@@ -2333,6 +2333,13 @@ function renderContributions() {
 }
 
 const DIAGNOSTIC_CODE_LABELS = {
+  'spread-distance-unspecified-assumed-all-hit': '未设置交战距离：散布按全部命中处理',
+  'spread-bloom-not-modeled': '连续射击的散布扩张速度未知；暂用初始散布角',
+  'target-hitbox-reference-assumption': '命中几何采用固定参考模型的半径 0.25 米圆形目标，并非游戏实测',
+  'talons-manual-detonation-timing-assumed': '鹰爪按投出后立即手动起爆计算，未计额外等待',
+  'talons-multishot-spatial-hit-loss-unmodeled': '鹰爪多重投掷的分散落点与范围命中损失尚未计入',
+  'talons-natural-status-reference-calibrated': '鹰爪自然触发率原生字段缺失，暂用固定参考版本的 10%',
+
   "kitgun-radial-damage-unapplied": "组合枪爆炸范围伤害部分未计入单目标计算",
   "kitgun-chain-damage-unapplied": "组合枪光束的链式伤害未计入",
   "kitgun-cluster-damage-unapplied": "组合枪孢子分裂弹的二次伤害未计入",
@@ -7084,10 +7091,16 @@ function drawBenchmarkReplay(bench) {
     if (enh.archimedea) parts.push("科研");
     if (enh.empowered) parts.push("强化");
     const caveats = ["期望触发数模型（非随机模拟）"];
+    if (bench.spread) {
+      const spread = bench.spread;
+      const distance = spread.centreDistanceM;
+      caveats.push(distance == null ? '距离未设置，散布按全命中' : `中心距 ${Number(distance).toFixed(1)}m · 初始期望命中 ${(Number(spread.initialHitProbability) * 100).toFixed(1)}%`);
+      caveats.push('使用初始散布角；命中体型为参考假设');
+    }
     if (bench.syndicateEvents?.length) caveats.push(`集团爆发 ${bench.syndicateEvents.length} 次，实际伤害 ${formatMetric(bench.syndicateWindow || 0)}`);
     if (bench.unsupported?.length) caveats.push(`另有 ${bench.unsupported.length} 项事件未建模，见提示`);
     note.textContent = `${parts.join(" · ") || "标准靶"} · ${tMax.toFixed(0)}s 窗口 · ${caveats.join(" · ")}`;
-    note.title = (bench.unsupported || []).join("; ");
+    note.title = normalizeLabels([...(bench.unsupported || []), ...(bench.limitations || [])]).join('；');
   }
 }
 

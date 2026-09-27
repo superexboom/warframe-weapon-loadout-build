@@ -1011,7 +1011,8 @@ def _fire_mode_options(
         if not isinstance(mode, Mapping):
             continue
         damage = mode.get("damage") if isinstance(mode.get("damage"), Mapping) else {}
-        available = bool(damage.get("types"))
+        auxiliary = mode.get("behaviorKind") == "auxiliary-melee" and weapon.get("slot") in ("primary","secondary","arch_gun")
+        available = bool(damage.get("types")) and not auxiliary
         rows.append(
             {
                 "index": index,
@@ -1024,7 +1025,7 @@ def _fire_mode_options(
                 and index == mode_count - 1,
                 "damageTotal": _finite_positive(damage.get("total")),
                 "available": available,
-                "issue": None if available else f"fire mode {index} has no direct damage types",
+                "issue": None if available else (f"fire mode {index} is auxiliary melee, outside nonmelee scope" if auxiliary else f"fire mode {index} has no direct damage types"),
                 "metricAvailability": _metric_availability(
                     weapon, weapon_type, index
                 ) if available else {},
@@ -5113,6 +5114,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     "points": windowed.get("timeline") or [],
                     "stacks": windowed.get("averagedStacks") or {},
                     "triggerSeries": windowed.get("triggerSeries") or [],
+                    'spread': windowed.get('spread'),
                     "cryogenic": windowed.get("cryogenic"),
                     "empowered": windowed.get("empowered"),
                     "triggerPolicy": _policy,
