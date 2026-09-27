@@ -376,3 +376,13 @@ class StaticsCacheContextTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_identified_incarnon_conditional_is_event_modeled_not_false_missing():
+    import app
+    from wfarsenal.optimizer import _branch_effects
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Dera')
+    b=next(b for t in w['incarnon']['tiers'] for b in t['branches'] if b['id']=='2-1')
+    _,unsupported=_branch_effects(b)
+    assert not any('conditional-effects-not-applied' in x or 'conditional-source-excluded' in x for x in unsupported)
+    assert not any('WEAPON_AMMO_CONSUME_RATE-not-evaluated' in x for x in unsupported)

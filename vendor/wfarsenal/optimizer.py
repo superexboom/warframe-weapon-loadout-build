@@ -658,9 +658,21 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
     effects: list[ModEffect] = []
     unsupported: list[str] = []
     from .runtime_adapters import verified_stug_condition
-    modeled_sources = {str(c.get('sourcePath') or source)
-                       for c in branch.get('conditionalEffects') or ()
-                       if verified_stug_condition(branch, c)}
+    from .manual_combat import condition_kind
+    modeled_sources = set()
+    for condition in branch.get('conditionalEffects') or ():
+        source_path = str(condition.get('sourcePath') or source)
+        if verified_stug_condition(branch, condition):
+            modeled_sources.add(source_path)
+            continue
+        kind = condition.get('eventKind') or condition_kind(condition)
+        terms = condition.get('effects') or ()
+        # Conditional evolution terms with an identified replay event are
+        # consumed by manual_combat.prepare; keep them out of the static
+        # panel without falsely reporting them as absent. Unknown/empty
+        # condition blocks remain fail-closed and visible.
+        if kind and terms and all(ModEffect.from_export(e, 0).supported for e in terms):
+            modeled_sources.add(source_path)
     # Flattened child effects repeat the condition block. Never make them passive.
     conditional_sources = {str(c.get('sourcePath') or source)
                            for c in branch.get('conditionalEffects') or () if c.get('effects')}
