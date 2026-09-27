@@ -56,11 +56,16 @@ def test_delayed_projectile_cannot_damage_a_different_target_generation():
     assert delayed['directWindow']==direct['directWindow']
 
 
-@pytest.mark.parametrize('name',['Kompressa','Cyanex','Carmine Penta','Prisma Lenz','Tenet Envoy'])
-def test_native_parts_are_in_manual_and_optimizer_with_empowered(name):
-    from wfarsenal.status_arcanes import EMPOWERED
+@pytest.mark.parametrize('name,arcanes',[
+    ('Kompressa', lambda: [dict(path='/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnStatusProcBonusDamage',rank=5)]),
+    ('Cyanex', lambda: [dict(path='/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnStatusProcBonusDamage',rank=5)]),
+    ('Carmine Penta', lambda: []),
+    ('Prisma Lenz', lambda: []),
+    ('Tenet Envoy', lambda: []),
+])
+def test_native_parts_are_in_manual_and_optimizer_with_supported_arcane_scope(name,arcanes):
     w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')==name)
-    p=dict(weapon=w['path'],fireMode=0,mods=[],arcanes=[dict(path=EMPOWERED,rank=5)],
+    p=dict(weapon=w['path'],fireMode=0,mods=[],arcanes=arcanes(),
            enemy=app._BENCHMARK_ENEMY_PATH,level=9999,steelPath=True,
            headshotChance=1,aiming=True,scenario={'distance':.5},triggerPolicy='emergent')
     r=evaluate_payload(p)
