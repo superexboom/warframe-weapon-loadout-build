@@ -58,6 +58,8 @@ def condition_kind(condition):
         "onelectricityproccondition": "proc-DT_ELECTRICITY",
         "onproccondition": "on-proc",
         "onshotgunclosekillcondition": "on-close-kill",
+        "evonshieldbreakcondition": "on-overguard-broken",
+        "onoverguardbrokencondition": "on-overguard-broken",
     }
     return next((exact[x] for x in names if x in exact), None)
 
@@ -81,6 +83,7 @@ EVENT_CONDITION_TEXT = {
     'proc-DT_ELECTRICITY': '施加电击异常时触发。',
     'on-proc': '施加异常状态时触发。',
     'on-close-kill': '击杀距离不超过 5 米的目标时触发。',
+    'on-overguard-broken': '目标超宏被击破时触发。',
 }
 
 

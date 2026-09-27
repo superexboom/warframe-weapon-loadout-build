@@ -138,3 +138,26 @@ def test_torid_last_round_gate_enters_replay_before_ammo_payment():
     # The resolver cache elides repeated false-gate calls; the only second
     # invocation is the first last-round state.
     assert observed==[False,True]
+
+
+def test_cestra_overguard_break_evolution_uses_shared_event_signal():
+    import app
+    from wfarsenal.damage import Scenario
+    from wfarsenal.manual_combat import prepare
+    from wfarsenal.combat_replay import replay
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Cestra')
+    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent')),[],[],incarnon_choices={'tier2':'2-1'})
+    assert not any('conditional-effects-not-applied' in x for x in c['unsupported'])
+    q=c['trigger_sources'][0]
+    base,_=c['resolve']('selected',{},0);live,_=c['resolve']('selected',{q['id']:1},0)
+    assert q['kind']=='on-overguard-broken' and q['duration']==6
+    assert live.crit_multiplier > base.crit_multiplier
+    seen=[];original=c['resolve']
+    def resolve(form,stacks,live_types=0,last_round=False):
+        seen.append(stacks.get(q['id'],0))
+        return original(form,stacks,live_types,last_round)
+    c['resolve']=resolve
+    st,_=original('selected',{},0)
+    replay(st,dict(health=1e12,shield=0,armour=0,overguard=1e3,baseLevel=1),
+           attacks_per_second=st.fire_rate,window_seconds=.5,combat=c,trigger_sources=c['trigger_sources'])
+    assert any(x>0 for x in seen)

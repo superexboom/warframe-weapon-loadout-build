@@ -352,6 +352,7 @@ def replay(
             if pools[0] <= 1e-9:
                 pools[0] = 0.0  # Retire the pool before a same-timestamp event can break it again.
                 magnetic_break(t, 0)
+                signal('on-overguard-broken', t)
         if left > 0.0 and pools[1] > 0.0:
             shield = sum(
                 raw * max(0.0, 1.0 + cache["faction_deltas"].get(k, 0.0))
