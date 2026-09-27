@@ -1,0 +1,3381 @@
+{
+  "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+  "localInputFingerprint": "f66cbc7501363df2",
+  "toolSha256": "b13a4d7afec65b7811d0b6f9723fe6da5b7d0d7e41bd7afce7557a41dca85f48",
+  "release": {
+    "commit": "11db54b9+",
+    "release": "39047c9ca078",
+    "wasm": "7e893c83e508"
+  },
+  "wasmSha256": "7e893c83e50896ea043d3a5753492399c23b4a6c71fa09dbf12e91f913b59f36",
+  "duration": 30,
+  "runs": 500,
+  "seed": 12648430,
+  "recordedAt": "2026-09-26T20:09:55.540080+00:00",
+  "ablation": false,
+  "sources": [
+    {
+      "weapon": "kuva_ogris",
+      "url": "https://wfsim.app/board/kuva_ogris.json",
+      "sha256": "c54160cb2b6027fafc56956bfdd413fd05e2a3bac7a74c0ccf1426768eaa52ec"
+    },
+    {
+      "weapon": "kuva_bramma",
+      "url": "https://wfsim.app/board/kuva_bramma.json",
+      "sha256": "c81ee789bf08218d73df27f1882c827d2976d3a27c72608d1f2aef690d3acae2"
+    },
+    {
+      "weapon": "penta",
+      "url": "https://wfsim.app/board/penta.json",
+      "sha256": "2b5c0312854068e774913a7b9646170879c9e3ef143575e08b5e2f1a3d0c7c45"
+    },
+    {
+      "weapon": "secura_penta",
+      "url": "https://wfsim.app/board/secura_penta.json",
+      "sha256": "1562261fdade566df586fadb7eb286dddf89540605289d078dcba3686e9b43dd"
+    },
+    {
+      "weapon": "zarr",
+      "url": "https://wfsim.app/board/zarr.json",
+      "sha256": "a5a3e9675c42ee8acd7505b609856752b6adbe129acdf3bd0309f56a2f99b07e"
+    },
+    {
+      "weapon": "acceltra_prime",
+      "url": "https://wfsim.app/board/acceltra_prime.json",
+      "sha256": "26917c148f5e4cffff15d6fbb1635d9eb293c24025ba03ec1d83b389fa1ed04c"
+    }
+  ],
+  "cases": [
+    {
+      "id": "kuva_ogris-75",
+      "weapon": "kuva_ogris",
+      "name": "Kuva Ogris",
+      "boardRowIndex": 75,
+      "board": {
+        "arcanes": [
+          "primary_compression"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "malignant_force",
+          "rime_rounds",
+          "hellfire",
+          "galvanized_chamber",
+          "primed_firestorm",
+          "serration",
+          "nightwatch_napalm",
+          "semi_rifle_cannonade"
+        ],
+        "score": 3.7280703208838473,
+        "shown": "3.7281",
+        "valence": "magnetic"
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgris",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/IceEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponIncreaseRadialExplosionModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Event/ProjectNightwatch/OgrisNightwatchMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ConvergeRadialAttackOnAim",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "innateElement": "DT_MAGNETIC",
+        "innateElementValue": 0.6
+      },
+      "referenceRequest": {
+        "weapon": "kuva_ogris",
+        "mode": "base",
+        "mods": [
+          "malignant_force",
+          "rime_rounds",
+          "hellfire",
+          "galvanized_chamber",
+          "primed_firestorm",
+          "serration",
+          "nightwatch_napalm",
+          "semi_rifle_cannonade"
+        ],
+        "arcane": [
+          "primary_compression"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "valence_element": "magnetic",
+        "valence_bonus": 0.6
+      },
+      "catalogBlockers": [
+        "/Lotus/Upgrades/Mods/Rifle/Event/ProjectNightwatch/OgrisNightwatchMod"
+      ],
+      "nativeIncompatibleMods": [],
+      "referenceLimitations": [
+        "the blast needs no line of sight and goes through walls — this arena has no geometry, so nothing is ever behind cover and the perk pays nothing extra",
+        "the blast staggers the WIELDER in game — this arena gives the player no body, so a build that would be unplayable in a corridor costs nothing here",
+        "the rocket flies at 60 m/s and can be shot down in flight — this sim gives a projectile a travel time but nothing here shoots back, so a rocket always arrives"
+      ],
+      "local": {
+        "panel": {
+          "total": 6831.131128245434,
+          "critChance": 0.090000004,
+          "critMultiplier": 2.0004884004884005,
+          "fireRate": 1.5,
+          "multishot": 1.800029967,
+          "statusChance": 1.0340000375999998
+        },
+        "defenses": {
+          "level": 9999,
+          "baseLevel": 1.0,
+          "steelPath": true,
+          "steelPathMultiplier": 2.5,
+          "steelPathShieldMultiplier": 2.5,
+          "steelPathArmorMultiplier": 1.0,
+          "health": 9667913.96369529,
+          "shield": 0.0,
+          "armour": 2700.0,
+          "armourReduction": 0.9,
+          "elementalArmourStrip": 0.0,
+          "overguard": 15523399.911299936,
+          "overguardMultiplier": 0.0,
+          "magneticStacks": 0,
+          "empoweredMultiplier": 1.0,
+          "enhancements": {
+            "eximus": false,
+            "archimedea": false,
+            "empowered": false,
+            "playerCount": null,
+            "magneticStacks": 0
+          },
+          "unsupported": []
+        },
+        "replay": {
+          "model": "event-expected-v3",
+          "eventModel": "target-generation-events-v3",
+          "windowSeconds": 30.0,
+          "timeStep": 0.25,
+          "attacksPerSecond": 1.0333333333333334,
+          "statusEventsPerSecond": 0.9839751260420759,
+          "averagedStacks": {
+            "heat": 9.402191666666669,
+            "viral": 7.688266666666672,
+            "corrosive": 0.0,
+            "magnetic": 2.4115916666666637,
+            "cold": 0.0,
+            "puncture": 1.5996583333333332
+          },
+          "steadyStacks": {
+            "heat": 16.391,
+            "viral": 10.0,
+            "corrosive": 0,
+            "magnetic": 3.152,
+            "cold": 0,
+            "puncture": 2.479
+          },
+          "killsPerMinute": 3.6649895958738807,
+          "killsInWindow": 1.8324947979369401,
+          "killEvents": 1,
+          "targetGeneration": 1,
+          "targetTotalEhp": 25191313.874995224,
+          "directWindow": 25550484.37900196,
+          "dotWindow": 20393988.61404519,
+          "dotByType": {
+            "DT_FIRE": 16980316.389597084,
+            "DT_CINEMATIC": 828169.9840495393,
+            "DT_ELECTRICITY": 2585502.2403985863
+          },
+          "procCounts": {
+            "DT_VIRAL": 47.79124712863967,
+            "DT_IMPACT": 8.711945510361891,
+            "DT_FIRE": 35.84343534647969,
+            "DT_MAGNETIC": 14.93476373204898,
+            "DT_PUNCTURE": 7.048904134085707,
+            "DT_EXPLOSION": 6.322455776910585,
+            "DT_SLASH": 2.807967465390088,
+            "DT_ELECTRICITY": 2
+          },
+          "nonDotWindow": 218478.636078238,
+          "syndicateWindow": 0.0,
+          "syndicateEvents": [],
+          "totalWindowDamage": 46162951.62912539,
+          "windowDps": 1538765.0543041795,
+          "firstKillTime": 16.0,
+          "minKillInterval": null,
+          "maxKillsPerStep": 1,
+          "staleComponents": 0,
+          "shots": 31,
+          "reloads": 5,
+          "recharges": 0,
+          "transforms": 0,
+          "emergent": {
+            "onKillStacks": "events"
+          },
+          "magneticBreaks": [
+            {
+              "time": 9.433333233333332,
+              "pool": "overguard",
+              "stacks": 2.4766379836135735,
+              "seedPerTick": 192229.20927574497
+            },
+            {
+              "time": 27.066666266666676,
+              "pool": "overguard",
+              "stacks": 2.6266934840017435,
+              "seedPerTick": 203876.06698282392
+            }
+          ],
+          "fortifier": null,
+          "encumber": null,
+          "perAttack": {
+            "dot": {
+              "perType": {
+                "DT_FIRE": {
+                  "expectedProcs": 0.9906027338704244,
+                  "coefficient": 0.5,
+                  "durationSeconds": 6.0,
+                  "elementalMultiplier": 1.90000006,
+                  "critMultiplier": 1.0900439600459098,
+                  "seedTiers": [
+                    {
+                      "weight": 0.909999996,
+                      "perSecond": 2093.4111237708194
+                    },
+                    {
+                      "weight": 0.090000004,
+                      "perSecond": 4187.844670556911
+                    }
+                  ],
+                  "targetMultiplier": 1.0,
+                  "perSecond": 2283.8101514193017,
+                  "seedPerSecondPerProc": 2281.910151359302,
+                  "accumulatorPerSecondPerAttack": 1.90000006,
+                  "accumulatorSharedGroup": true,
+                  "perProc": 13702.86090851581,
+                  "expectedDamage": 13574.091477821928
+                }
+              },
+              "total": 13574.091477821928,
+              "expectedProcs": {
+                "DT_IMPACT": 0.48154296352859205,
+                "DT_PUNCTURE": 0.206375555797968,
+                "DT_VIRAL": 1.3208036451605658,
+                "DT_FIRE": 0.9906027338704244,
+                "DT_MAGNETIC": 0.412751111595936
+              },
+              "durationSeconds": 6.0,
+              "falloffMultiplier": 1.0,
+              "factionMultiplier": 1.0,
+              "armour": 2700.0,
+              "armourReduction": 0.9,
+              "elementalArmourStrip": 0.0,
+              "overguard": 15523399.911299936,
+              "hitLocation": "body",
+              "hitMultiplier": 1.0,
+              "unsupported": []
+            },
+            "nonDot": {
+              "perType": {},
+              "total": 0.0,
+              "aoePotential": 0.0
+            },
+            "dotTotal": 13574.091477821928,
+            "nonDotTotal": 0.0,
+            "total": 13574.091477821928,
+            "expectedProcs": {
+              "DT_IMPACT": 0.48154296352859205,
+              "DT_PUNCTURE": 0.206375555797968,
+              "DT_VIRAL": 1.3208036451605658,
+              "DT_FIRE": 0.9906027338704244,
+              "DT_MAGNETIC": 0.412751111595936
+            },
+            "aoePotential": 0.0,
+            "unsupported": []
+          },
+          "continuousKillEvents": true,
+          "activePool": "overguard",
+          "unsupported": [],
+          "limitations": [
+            "expected-proc-counts-not-Monte-Carlo",
+            "single-target",
+            "non-heat-stacking-procs-expected",
+            "fractional-proc-refresh-approximates-uptime",
+            "single-target-syndicate-no-player-buffs",
+            "magnetic-break-six-ticks-pinned-reference-contract"
+          ]
+        },
+        "unsupported": [
+          "WEAPON_PUNCTURE_DEPTH",
+          "projectile-component-damage-unapplied"
+        ],
+        "skipped": [
+          "/Lotus/Upgrades/Mods/Rifle/Event/ProjectNightwatch/OgrisNightwatchMod: unsupported[runtime-script]",
+          "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod: unsupported[no-handler]",
+          "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgris: unsupported[projectile-component-damage-unapplied]"
+        ]
+      },
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5,
+        "big_crit_rate": 0,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 31828517.345196076,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 1632231.658728004,
+        "combatants": [
+          {
+            "big_crit_rate": 0,
+            "crit_rate": 0.15360577757716745,
+            "crit_tier": 1,
+            "damage": 31828517.345196076,
+            "finishes": 0.98,
+            "id": "wielder",
+            "pellets": 57.602,
+            "procs": 378.858,
+            "reloads": 5,
+            "shots": 31,
+            "transforms": 0,
+            "weapon": "kuva_ogris"
+          }
+        ],
+        "crit_rate": 0.15360577757716745,
+        "crit_tier": 0.15360577757716745,
+        "damage_per_pellet": 552559.2400471525,
+        "damage_per_shot": 1026726.3659740669,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 7609885.459192014,
+                "type": "Viral"
+              },
+              {
+                "dmg": 5807544.16622548,
+                "type": "Heat"
+              },
+              {
+                "dmg": 2403121.7239553714,
+                "type": "Magnetic"
+              },
+              {
+                "dmg": 2002601.436629476,
+                "type": "Blast"
+              },
+              {
+                "dmg": 1001300.718314738,
+                "type": "Puncture"
+              },
+              {
+                "dmg": 1001300.718314738,
+                "type": "Slash"
+              }
+            ],
+            "dmg": 19825754.222631823,
+            "source": "radial"
+          },
+          {
+            "dmg": 7205221.891154292,
+            "source": "Heat"
+          },
+          {
+            "by_type": [
+              {
+                "dmg": 1025332.4037552945,
+                "type": "Viral"
+              },
+              {
+                "dmg": 782490.5186553563,
+                "type": "Heat"
+              },
+              {
+                "dmg": 377754.0434887926,
+                "type": "Impact"
+              },
+              {
+                "dmg": 323789.1801332509,
+                "type": "Magnetic"
+              },
+              {
+                "dmg": 161894.59006662545,
+                "type": "Puncture"
+              }
+            ],
+            "dmg": 2671260.736099319,
+            "source": "direct"
+          },
+          {
+            "dmg": 1128873.7402768368,
+            "source": "Electricity"
+          },
+          {
+            "by_type": [
+              {
+                "dmg": 716387.5634248578,
+                "type": "Heat"
+              }
+            ],
+            "dmg": 716387.5634248578,
+            "source": "field"
+          },
+          {
+            "dmg": 56352.39399999999,
+            "source": "Slash"
+          },
+          {
+            "dmg": 23692.101047357064,
+            "source": "Blast"
+          }
+        ],
+        "downtime": 10.5,
+        "dps": 1060950.5781732025,
+        "dps_se": 5070.2456074431875,
+        "duration": 30,
+        "field_ticks": 316.602,
+        "first_magazine": 5614761.679040486,
+        "forma": {
+          "cap": 80,
+          "legal": true,
+          "omni": 0,
+          "rank": 40,
+          "regular": 5,
+          "total_drain": 53,
+          "umbra": 0,
+          "used": 5
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 0.988,
+        "kills_max": 1,
+        "kills_min": 0,
+        "kills_std": 0.1088852607105295,
+        "max_hit": 1300979.18907,
+        "mean_max_hit": 867371.3032042022,
+        "ok": true,
+        "overkill": 150026.68640849116,
+        "overkill_rate": 0.004735916493763692,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.09,
+          "crit_damage": 2,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 95.445
+            },
+            {
+              "type": "Puncture",
+              "value": 40.904999999999994
+            },
+            {
+              "type": "Heat",
+              "value": 196.344
+            },
+            {
+              "type": "Magnetic",
+              "value": 81.80999999999999
+            },
+            {
+              "type": "Viral",
+              "value": 261.792
+            }
+          ],
+          "fire_rate": 1.5,
+          "modified_base": 218.16,
+          "multishot": 1.8,
+          "status_chance": 1.034,
+          "total": 676.2959999999999
+        },
+        "pellets": 57.602,
+        "picked_up_ammo": null,
+        "procs": 391.512,
+        "reloads": 5,
+        "replay": null,
+        "run": [
+          2283646147,
+          3098219016
+        ],
+        "runs": 500,
+        "sample": {
+          "dps": 1054251.421621148,
+          "kills": 1,
+          "score": 1.2527521629383884
+        },
+        "score": 1.2575164128390657,
+        "score_runs": [],
+        "score_se": 0.0060253886753845395,
+        "self_damage": null,
+        "shots": 31,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "transforms": 0,
+        "ttk": {
+          "mean": 23.229149797570873,
+          "median": 23,
+          "p90": 26.40000000000001,
+          "runs": 494
+        },
+        "virus_stacks": 7.9852163537289975
+      },
+      "comparisonKind": "public-board-build",
+      "panelDifferences": {
+        "total": {
+          "local": 6831.131128245434,
+          "reference": 676.2959999999999
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": false,
+      "fullBuildComparable": false,
+      "panelMatches": false,
+      "referenceKpm": 2.5150328256781314,
+      "referenceKpmSe": 0.012050777350769077,
+      "localKpm": 3.6649895958738807,
+      "deltaPercent": 45.72333046530657
+    },
+    {
+      "id": "kuva_bramma-37",
+      "weapon": "kuva_bramma",
+      "name": "Kuva Bramma",
+      "boardRowIndex": 37,
+      "board": {
+        "arcanes": [
+          "primary_compression"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "ammo_drum",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "infected_clip",
+          "heavy_caliber",
+          "primed_firestorm",
+          "critical_delay",
+          "vigilante_supplies",
+          "vile_acceleration",
+          "vital_sense"
+        ],
+        "score": 6.9654727624363355,
+        "shown": "6.9655",
+        "valence": "heat"
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponIncreaseRadialExplosionModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ConvergeRadialAttackOnAim",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "exilus": {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponAmmoMaxMod",
+          "rank": 5
+        },
+        "innateElement": "DT_FIRE",
+        "innateElementValue": 0.6
+      },
+      "referenceRequest": {
+        "weapon": "kuva_bramma",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "infected_clip",
+          "heavy_caliber",
+          "primed_firestorm",
+          "critical_delay",
+          "vigilante_supplies",
+          "vile_acceleration",
+          "vital_sense",
+          "ammo_drum"
+        ],
+        "arcane": [
+          "primary_compression"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "valence_element": "heat",
+        "valence_bonus": 0.6
+      },
+      "catalogBlockers": [
+        "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod"
+      ],
+      "nativeIncompatibleMods": [],
+      "referenceLimitations": [
+        "the blast needs no line of sight and goes through walls — this arena has no geometry, so nothing is ever behind cover and the perk pays nothing extra",
+        "the blast staggers the WIELDER in game — this arena gives the player no body, so a build that would be unplayable in a corridor costs nothing here",
+        "the alternate fire detonates the arrow in mid-flight — this sim fires the shot and lets it land, so the choice of WHEN to burst it, which is most of how this weapon is aimed, is not a decision here"
+      ],
+      "local": {
+        "panel": {
+          "total": 28045.275023054674,
+          "critChance": 1.0499929910001993,
+          "critMultiplier": 4.624566544566545,
+          "fireRate": 1.600267538800036,
+          "multishot": 1.0,
+          "statusChance": 0.20999999
+        },
+        "defenses": {
+          "level": 9999,
+          "baseLevel": 1.0,
+          "steelPath": true,
+          "steelPathMultiplier": 2.5,
+          "steelPathShieldMultiplier": 2.5,
+          "steelPathArmorMultiplier": 1.0,
+          "health": 9667913.96369529,
+          "shield": 0.0,
+          "armour": 2700.0,
+          "armourReduction": 0.9,
+          "elementalArmourStrip": 0.0,
+          "overguard": 15523399.911299936,
+          "overguardMultiplier": 0.0,
+          "magneticStacks": 0,
+          "empoweredMultiplier": 1.0,
+          "enhancements": {
+            "eximus": false,
+            "archimedea": false,
+            "empowered": false,
+            "playerCount": null,
+            "magneticStacks": 0
+          },
+          "unsupported": []
+        },
+        "replay": {
+          "model": "event-expected-v3",
+          "eventModel": "target-generation-events-v3",
+          "windowSeconds": 30.0,
+          "timeStep": 0.25,
+          "attacksPerSecond": 2.2666666666666666,
+          "statusEventsPerSecond": 1.0996712046628225,
+          "averagedStacks": {
+            "heat": 0.35193333333333304,
+            "viral": 2.3280583333333325,
+            "corrosive": 0.0,
+            "magnetic": 0.0,
+            "cold": 0.0,
+            "puncture": 0.0
+          },
+          "steadyStacks": {
+            "heat": 0.0,
+            "viral": 0,
+            "corrosive": 0,
+            "magnetic": 0,
+            "cold": 0,
+            "puncture": 0
+          },
+          "killsPerMinute": 8.0,
+          "killsInWindow": 4.0,
+          "killEvents": 4,
+          "targetGeneration": 4,
+          "targetTotalEhp": 25191313.874995224,
+          "directWindow": 99657706.60776214,
+          "dotWindow": 1006972.6782583726,
+          "dotByType": {
+            "DT_FIRE": 1006972.6782583726
+          },
+          "procCounts": {
+            "DT_VIRAL": 19.911549181249736,
+            "DT_FIRE": 2.928168802031356,
+            "DT_IMPACT": 2.5140842669311776,
+            "DT_EXPLOSION": 2.3661970697877455
+          },
+          "nonDotWindow": 100576.21396042217,
+          "syndicateWindow": 0.0,
+          "syndicateEvents": [],
+          "totalWindowDamage": 100765255.49998094,
+          "windowDps": 3358841.849999365,
+          "firstKillTime": 6.866222316323945,
+          "minKillInterval": 7.632861222344184,
+          "maxKillsPerStep": 1,
+          "staleComponents": 0,
+          "shots": 68,
+          "reloads": 32,
+          "recharges": 0,
+          "transforms": 0,
+          "emergent": {
+            "onKillStacks": "panel-assumed-max"
+          },
+          "magneticBreaks": [],
+          "fortifier": null,
+          "encumber": null,
+          "perAttack": {
+            "dot": {
+              "perType": {
+                "DT_FIRE": {
+                  "expectedProcs": 0.022183096472922145,
+                  "coefficient": 0.5,
+                  "durationSeconds": 6.0,
+                  "elementalMultiplier": 1.0,
+                  "critMultiplier": 4.986997798061577,
+                  "seedTiers": [
+                    {
+                      "weight": 0.9025066575998038,
+                      "perSecond": 18267.21611182154
+                    },
+                    {
+                      "weight": 0.09499369280019328,
+                      "perSecond": 32584.393677158354
+                    },
+                    {
+                      "weight": 0.0024996496000029497,
+                      "perSecond": 46901.57124249517
+                    }
+                  ],
+                  "targetMultiplier": 1.0,
+                  "perSecond": 19699.833533577694,
+                  "seedPerSecondPerProc": 19698.833533577694,
+                  "accumulatorPerSecondPerAttack": 1.0,
+                  "accumulatorSharedGroup": true,
+                  "perProc": 118199.00120146616,
+                  "expectedDamage": 2622.0198466551647
+                }
+              },
+              "total": 2622.0198466551647,
+              "expectedProcs": {
+                "DT_IMPACT": 0.036971827454870244,
+                "DT_VIRAL": 0.15084506607220763,
+                "DT_FIRE": 0.022183096472922145
+              },
+              "durationSeconds": 6.0,
+              "falloffMultiplier": 1.0,
+              "factionMultiplier": 1.0,
+              "armour": 2700.0,
+              "armourReduction": 0.9,
+              "elementalArmourStrip": 0.0,
+              "overguard": 15523399.911299936,
+              "hitLocation": "body",
+              "hitMultiplier": 1.0,
+              "unsupported": []
+            },
+            "nonDot": {
+              "perType": {},
+              "total": 0.0,
+              "aoePotential": 0.0
+            },
+            "dotTotal": 2622.0198466551647,
+            "nonDotTotal": 0.0,
+            "total": 2622.0198466551647,
+            "expectedProcs": {
+              "DT_IMPACT": 0.036971827454870244,
+              "DT_VIRAL": 0.15084506607220763,
+              "DT_FIRE": 0.022183096472922145
+            },
+            "aoePotential": 0.0,
+            "unsupported": []
+          },
+          "continuousKillEvents": true,
+          "activePool": "overguard",
+          "unsupported": [
+            "cluster-submunitions-unmodeled"
+          ],
+          "limitations": [
+            "expected-proc-counts-not-Monte-Carlo",
+            "single-target",
+            "non-heat-stacking-procs-expected",
+            "fractional-proc-refresh-approximates-uptime",
+            "single-target-syndicate-no-player-buffs",
+            "magnetic-break-six-ticks-pinned-reference-contract"
+          ]
+        },
+        "unsupported": [
+          "WEAPON_CONVERT_AMMO",
+          "projectile-component-damage-unapplied"
+        ],
+        "skipped": [
+          "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod: unsupported[no-handler]",
+          "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon: unsupported[projectile-component-damage-unapplied]"
+        ]
+      },
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "charged"
+        ],
+        "armor_left": 0.7709641421842728,
+        "big_crit_rate": 0.09682352941176471,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 93156500.0176888,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 8625601.8534897,
+        "combatants": [
+          {
+            "big_crit_rate": 0.09682352941176471,
+            "crit_rate": 1,
+            "crit_tier": 1.099,
+            "damage": 93156500.0176888,
+            "finishes": 3.122,
+            "id": "wielder",
+            "pellets": 68,
+            "procs": 113.434,
+            "reloads": 32,
+            "shots": 68,
+            "transforms": 0,
+            "weapon": "kuva_bramma"
+          }
+        ],
+        "crit_rate": 1,
+        "crit_tier": 1.099,
+        "damage_per_pellet": 1369948.5296718942,
+        "damage_per_shot": 1369948.5296718942,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 34145827.479718566,
+                "type": "Viral"
+              },
+              {
+                "dmg": 8328250.604809409,
+                "type": "Impact"
+              },
+              {
+                "dmg": 4996950.362885647,
+                "type": "Heat"
+              }
+            ],
+            "dmg": 47471028.44741363,
+            "source": "direct"
+          },
+          {
+            "by_type": [
+              {
+                "dmg": 32644057.51824022,
+                "type": "Viral"
+              },
+              {
+                "dmg": 7774644.366564891,
+                "type": "Blast"
+              },
+              {
+                "dmg": 3896591.3200446093,
+                "type": "Heat"
+              },
+              {
+                "dmg": 1067908.7107525398,
+                "type": "Impact"
+              }
+            ],
+            "dmg": 45383201.9156021,
+            "source": "radial"
+          },
+          {
+            "dmg": 95100.36452490395,
+            "source": "Heat"
+          },
+          {
+            "dmg": 1732.2605645185877,
+            "source": "Blast"
+          }
+        ],
+        "downtime": 19.199999999999996,
+        "dps": 3105216.6672562934,
+        "dps_se": 16429.338026401496,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 4856438.805441431,
+        "forma": {
+          "cap": 80,
+          "legal": true,
+          "omni": 0,
+          "rank": 40,
+          "regular": 5,
+          "total_drain": 61,
+          "umbra": 0,
+          "used": 5
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 3.122,
+        "kills_max": 5,
+        "kills_min": 2,
+        "kills_std": 0.5395516657373978,
+        "max_hit": 3355798.413903474,
+        "mean_max_hit": 1863422.303916358,
+        "ok": true,
+        "overkill": 1260372.8742513845,
+        "overkill_rate": 0.013715190328794957,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 1.0499999999999998,
+          "crit_damage": 4.620000000000001,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 467.5
+            },
+            {
+              "type": "Heat",
+              "value": 280.5
+            },
+            {
+              "type": "Viral",
+              "value": 1907.4
+            }
+          ],
+          "fire_rate": 1.6008,
+          "modified_base": 748,
+          "multishot": 1,
+          "status_chance": 0.21,
+          "total": 2655.4
+        },
+        "pellets": 68,
+        "picked_up_ammo": null,
+        "procs": 113.434,
+        "reloads": 32,
+        "replay": null,
+        "run": [
+          3550239251,
+          570934902
+        ],
+        "runs": 500,
+        "sample": {
+          "dps": 3098368.7662701653,
+          "kills": 3,
+          "score": 3.6558158515964694
+        },
+        "score": 3.647929107606081,
+        "score_runs": [],
+        "score_se": 0.018790929398459243,
+        "self_damage": null,
+        "shots": 68,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "transforms": 0,
+        "ttk": {
+          "mean": 8.132800000000014,
+          "median": 8.733333333333334,
+          "p90": 10.599999999999998,
+          "runs": 500
+        },
+        "virus_stacks": 9.857418223389216
+      },
+      "comparisonKind": "public-board-build",
+      "panelDifferences": {
+        "total": {
+          "local": 28045.275023054674,
+          "reference": 2655.4
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": false,
+      "fullBuildComparable": false,
+      "panelMatches": false,
+      "referenceKpm": 7.295858215212162,
+      "referenceKpmSe": 0.037581858796918485,
+      "localKpm": 8.0,
+      "deltaPercent": 9.651253684174854
+    },
+    {
+      "id": "penta-2",
+      "weapon": "penta",
+      "name": "Penta",
+      "boardRowIndex": 2,
+      "board": {
+        "arcanes": [
+          "primary_compression"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "malignant_force",
+          "hellfire",
+          "galvanized_chamber",
+          "serration",
+          "critical_delay",
+          "semi_rifle_cannonade",
+          "vital_sense"
+        ],
+        "score": 0.2449461084270056,
+        "shown": "0.2449",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncher",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ConvergeRadialAttackOnAim",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "penta",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "malignant_force",
+          "hellfire",
+          "galvanized_chamber",
+          "serration",
+          "critical_delay",
+          "semi_rifle_cannonade",
+          "vital_sense"
+        ],
+        "arcane": [
+          "primary_compression"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "nativeIncompatibleMods": [
+        "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod"
+      ],
+      "referenceLimitations": [
+        "the grenades are DETONATED BY HAND — 'it launches ballistic grenades that can be manually detonated with Alternate Fire', with no arming delay at all (wiki). This sim has no second trigger, so every grenade goes off the instant it lands, which is what a player detonating immediately gets and is therefore the ceiling. What is lost is the play pattern the weapon exists for: laying grenades and firing them together",
+        "only five grenades may be live at once, and multishot counts towards that limit (wiki) — so on this weapon a multishot mod buys fewer shots rather than more damage per shot, which is the one place multishot is not simply good. This sim resolves each shot on its own and never hits the cap",
+        "Tether Grenades, Napalm Grenades and the launcher-exclusive Adhesive Blast are outside the pools this roster loads. Tether Grenades in particular changes what the weapon IS — it makes each grenade a vortex",
+        "the blast needs no line of sight and goes through walls — this arena has no geometry, so nothing is ever behind cover and the perk pays nothing extra",
+        "the blast staggers the WIELDER in game — this arena gives the player no body, so a build that would be unplayable in a corridor costs nothing here"
+      ],
+      "local": {
+        "panel": {
+          "total": 3464.2128190950066,
+          "critChance": 0.299998006,
+          "critMultiplier": 4.401074481074481,
+          "fireRate": 0.800199994,
+          "multishot": 1.800029967,
+          "statusChance": 0.0
+        },
+        "defenses": {
+          "level": 9999,
+          "baseLevel": 1.0,
+          "steelPath": true,
+          "steelPathMultiplier": 2.5,
+          "steelPathShieldMultiplier": 2.5,
+          "steelPathArmorMultiplier": 1.0,
+          "health": 9667913.96369529,
+          "shield": 0.0,
+          "armour": 2700.0,
+          "armourReduction": 0.9,
+          "elementalArmourStrip": 0.0,
+          "overguard": 15523399.911299936,
+          "overguardMultiplier": 0.0,
+          "magneticStacks": 0,
+          "empoweredMultiplier": 1.0,
+          "enhancements": {
+            "eximus": false,
+            "archimedea": false,
+            "empowered": false,
+            "playerCount": null,
+            "magneticStacks": 0
+          },
+          "unsupported": []
+        },
+        "replay": {
+          "model": "event-expected-v3",
+          "eventModel": "target-generation-events-v3",
+          "windowSeconds": 30.0,
+          "timeStep": 0.25,
+          "attacksPerSecond": 0.6333333333333333,
+          "statusEventsPerSecond": 0.6017978394597417,
+          "averagedStacks": {
+            "heat": 0.36515833333333336,
+            "viral": 0.31223333333333364,
+            "corrosive": 0.0,
+            "magnetic": 0.0,
+            "cold": 0.0,
+            "puncture": 0.0
+          },
+          "steadyStacks": {
+            "heat": 0.659,
+            "viral": 0.26,
+            "corrosive": 0,
+            "magnetic": 0,
+            "cold": 0,
+            "puncture": 0
+          },
+          "killsPerMinute": 0.15050588864506143,
+          "killsInWindow": 0.07525294432253071,
+          "killEvents": 0,
+          "targetGeneration": 0,
+          "targetTotalEhp": 25191313.874995224,
+          "directWindow": 1810656.9239395708,
+          "dotWindow": 83334.08225812497,
+          "dotByType": {
+            "DT_FIRE": 83334.08225812497
+          },
+          "procCounts": {
+            "DT_VIRAL": 1.648192838766148,
+            "DT_FIRE": 0.6592771355064597,
+            "DT_EXPLOSION": 0.7325301017273926
+          },
+          "nonDotWindow": 1729.5342486961065,
+          "syndicateWindow": 0.0,
+          "syndicateEvents": [],
+          "totalWindowDamage": 1895720.5404463918,
+          "windowDps": 63190.684681546394,
+          "firstKillTime": null,
+          "minKillInterval": null,
+          "maxKillsPerStep": 0,
+          "staleComponents": 0,
+          "shots": 19,
+          "reloads": 3,
+          "recharges": 0,
+          "transforms": 0,
+          "emergent": {
+            "onKillStacks": "events"
+          },
+          "magneticBreaks": [],
+          "fortifier": null,
+          "encumber": null,
+          "perAttack": {
+            "dot": {
+              "perType": {},
+              "total": 0.0,
+              "expectedProcs": {},
+              "durationSeconds": 6.0,
+              "falloffMultiplier": 1.0,
+              "factionMultiplier": 1.0,
+              "armour": 2700.0,
+              "armourReduction": 0.9,
+              "elementalArmourStrip": 0.0,
+              "overguard": 15523399.911299936,
+              "hitLocation": "body",
+              "hitMultiplier": 1.0,
+              "unsupported": []
+            },
+            "nonDot": {
+              "perType": {},
+              "total": 0.0,
+              "aoePotential": 0.0
+            },
+            "dotTotal": 0.0,
+            "nonDotTotal": 0.0,
+            "total": 0.0,
+            "expectedProcs": {},
+            "aoePotential": 0.0,
+            "unsupported": []
+          },
+          "continuousKillEvents": true,
+          "activePool": "overguard",
+          "unsupported": [],
+          "limitations": [
+            "expected-proc-counts-not-Monte-Carlo",
+            "single-target",
+            "non-heat-stacking-procs-expected",
+            "fractional-proc-refresh-approximates-uptime",
+            "single-target-syndicate-no-player-buffs",
+            "magnetic-break-six-ticks-pinned-reference-contract"
+          ]
+        },
+        "unsupported": [
+          "projectile-component-damage-unapplied"
+        ],
+        "skipped": [
+          "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod: compatibility /Lotus/Weapons/Tenno/Rifle/LotusRifle does not match weapon",
+          "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncher: unsupported[projectile-component-damage-unapplied]"
+        ]
+      },
+      "manualKpm": 0.15050588864506143,
+      "manualKernelMatches": true,
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 1,
+        "big_crit_rate": 0,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 4170520.7277343734,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 185356.47678819438,
+        "combatants": [
+          {
+            "big_crit_rate": 0,
+            "crit_rate": 0.2926406091859849,
+            "crit_tier": 1,
+            "damage": 4170520.7277343734,
+            "finishes": 0,
+            "id": "wielder",
+            "pellets": 41.498,
+            "procs": 10.352,
+            "reloads": 3,
+            "shots": 23,
+            "transforms": 0,
+            "weapon": "penta"
+          }
+        ],
+        "crit_rate": 0.2926406091859849,
+        "crit_tier": 0.2926406091859849,
+        "damage_per_pellet": 100499.31870775395,
+        "damage_per_shot": 181326.98816236405,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 1466751.0375000003,
+                "type": "Viral"
+              },
+              {
+                "dmg": 651889.3500000001,
+                "type": "Impact"
+              },
+              {
+                "dmg": 590774.7234375,
+                "type": "Heat"
+              }
+            ],
+            "dmg": 2709415.1109375004,
+            "source": "direct"
+          },
+          {
+            "by_type": [
+              {
+                "dmg": 781694.5500000002,
+                "type": "Viral"
+              },
+              {
+                "dmg": 347419.8000000001,
+                "type": "Blast"
+              },
+              {
+                "dmg": 314849.19375000003,
+                "type": "Heat"
+              }
+            ],
+            "dmg": 1443963.5437500004,
+            "source": "radial"
+          },
+          {
+            "dmg": 7562.7125,
+            "source": "Heat"
+          },
+          {
+            "dmg": 530.25,
+            "source": "Blast"
+          }
+        ],
+        "downtime": 7.5,
+        "dps": 139017.3575911458,
+        "dps_se": 804.8072426300384,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 1261714.88991875,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 4,
+          "total_drain": 59,
+          "umbra": 0,
+          "used": 4
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 0,
+        "kills_max": 0,
+        "kills_min": 0,
+        "kills_std": 0,
+        "max_hit": 174545.04375,
+        "mean_max_hit": 174545.04375000164,
+        "ok": true,
+        "overkill": 0,
+        "overkill_rate": 0,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.30000000000000004,
+          "crit_damage": 4.4,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 378.75
+            },
+            {
+              "type": "Heat",
+              "value": 340.875
+            },
+            {
+              "type": "Viral",
+              "value": 852.1875
+            }
+          ],
+          "fire_rate": 1,
+          "modified_base": 378.75,
+          "multishot": 1.8,
+          "status_chance": 0.16000000000000003,
+          "total": 1571.8125
+        },
+        "pellets": 41.498,
+        "picked_up_ammo": null,
+        "procs": 10.352,
+        "reloads": 3,
+        "replay": null,
+        "run": [
+          860882739,
+          4240284136
+        ],
+        "runs": 500,
+        "sample": {
+          "dps": 138715.72057291673,
+          "kills": 0,
+          "score": 0.1651947031360702
+        },
+        "score": 0.16555391864153302,
+        "score_runs": [],
+        "score_se": 0.0009584342205693513,
+        "self_damage": null,
+        "shots": 23,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "transforms": 0,
+        "ttk": {
+          "mean": 0,
+          "median": 0,
+          "p90": 0,
+          "runs": 0
+        },
+        "virus_stacks": null
+      },
+      "comparisonKind": "public-board-build",
+      "panelDifferences": {
+        "total": {
+          "local": 3464.2128190950066,
+          "reference": 1571.8125
+        },
+        "fireRate": {
+          "local": 0.800199994,
+          "reference": 1
+        },
+        "statusChance": {
+          "local": 0.0,
+          "reference": 0.16000000000000003
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "fullBuildComparable": false,
+      "panelMatches": false,
+      "referenceKpm": 0.33110783728306603,
+      "referenceKpmSe": 0.0019168684411387026,
+      "localKpm": 0.15050588864506143,
+      "deltaPercent": -54.5447519816956
+    },
+    {
+      "id": "secura_penta-2",
+      "weapon": "secura_penta",
+      "name": "Secura Penta",
+      "boardRowIndex": 2,
+      "board": {
+        "arcanes": [
+          "primary_compression"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "malignant_force",
+          "hellfire",
+          "galvanized_chamber",
+          "serration",
+          "critical_delay",
+          "semi_rifle_cannonade",
+          "vital_sense"
+        ],
+        "score": 1.6382557814606846,
+        "shown": "1.6383",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Syndicates/PerrinSequence/LongGuns/PSPenta",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ConvergeRadialAttackOnAim",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "secura_penta",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "malignant_force",
+          "hellfire",
+          "galvanized_chamber",
+          "serration",
+          "critical_delay",
+          "semi_rifle_cannonade",
+          "vital_sense"
+        ],
+        "arcane": [
+          "primary_compression"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "nativeIncompatibleMods": [
+        "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod"
+      ],
+      "referenceLimitations": [
+        "the grenades are DETONATED BY HAND — 'it launches ballistic grenades that can be manually detonated with Alternate Fire', with no arming delay at all (wiki). This sim has no second trigger, so every grenade goes off the instant it lands, which is what a player detonating immediately gets and is therefore the ceiling. What is lost is the play pattern the weapon exists for: laying grenades and firing them together",
+        "only five grenades may be live at once, and multishot counts towards that limit (wiki) — so on this weapon a multishot mod buys fewer shots rather than more damage per shot, which is the one place multishot is not simply good. This sim resolves each shot on its own and never hits the cap",
+        "the SEQUENCE syndicate effect, which converts damage dealt into shields for the wielder and nearby allies on a proc — the wielder is not a body in this arena and there are no allies, so it pays nothing",
+        "the blast needs no line of sight and goes through walls — this arena has no geometry, so nothing is ever behind cover and the perk pays nothing extra",
+        "the blast staggers the WIELDER in game — this arena gives the player no body, so a build that would be unplayable in a corridor costs nothing here"
+      ],
+      "local": {
+        "panel": {
+          "total": 4783.91294065501,
+          "critChance": 0.7799947856001994,
+          "critMultiplier": 4.401074481074481,
+          "fireRate": 1.600399988,
+          "multishot": 1.800029967,
+          "statusChance": 0.4159999943999996
+        },
+        "defenses": {
+          "level": 9999,
+          "baseLevel": 1.0,
+          "steelPath": true,
+          "steelPathMultiplier": 2.5,
+          "steelPathShieldMultiplier": 2.5,
+          "steelPathArmorMultiplier": 1.0,
+          "health": 9667913.96369529,
+          "shield": 0.0,
+          "armour": 2700.0,
+          "armourReduction": 0.9,
+          "elementalArmourStrip": 0.0,
+          "overguard": 15523399.911299936,
+          "overguardMultiplier": 0.0,
+          "magneticStacks": 0,
+          "empoweredMultiplier": 1.0,
+          "enhancements": {
+            "eximus": false,
+            "archimedea": false,
+            "empowered": false,
+            "playerCount": null,
+            "magneticStacks": 0
+          },
+          "unsupported": []
+        },
+        "replay": {
+          "model": "event-expected-v3",
+          "eventModel": "target-generation-events-v3",
+          "windowSeconds": 30.0,
+          "timeStep": 0.25,
+          "attacksPerSecond": 1.2333333333333334,
+          "statusEventsPerSecond": 1.1265055141607823,
+          "averagedStacks": {
+            "heat": 4.80379166666667,
+            "viral": 4.062899999999998,
+            "corrosive": 0.0,
+            "magnetic": 0.0,
+            "cold": 0.0,
+            "puncture": 0.0
+          },
+          "steadyStacks": {
+            "heat": 9.347,
+            "viral": 5.052,
+            "corrosive": 0,
+            "magnetic": 0,
+            "cold": 0,
+            "puncture": 0
+          },
+          "killsPerMinute": 0.9877309387921481,
+          "killsInWindow": 0.493865469396074,
+          "killEvents": 0,
+          "targetGeneration": 0,
+          "targetTotalEhp": 25191313.874995224,
+          "directWindow": 9373107.155714417,
+          "dotWindow": 3050791.4796990408,
+          "dotByType": {
+            "DT_FIRE": 3050791.4796990408
+          },
+          "procCounts": {
+            "DT_VIRAL": 23.366419132899082,
+            "DT_FIRE": 9.346567653159632,
+            "DT_IMPACT": 6.67615891014564,
+            "DT_EXPLOSION": 3.7089155676934253
+          },
+          "nonDotWindow": 17221.416164910217,
+          "syndicateWindow": 0.0,
+          "syndicateEvents": [],
+          "totalWindowDamage": 12441120.051578367,
+          "windowDps": 414704.0017192789,
+          "firstKillTime": null,
+          "minKillInterval": null,
+          "maxKillsPerStep": 0,
+          "staleComponents": 0,
+          "shots": 37,
+          "reloads": 3,
+          "recharges": 0,
+          "transforms": 0,
+          "emergent": {
+            "onKillStacks": "events"
+          },
+          "magneticBreaks": [],
+          "fortifier": null,
+          "encumber": null,
+          "perAttack": {
+            "dot": {
+              "perType": {
+                "DT_FIRE": {
+                  "expectedProcs": 0.2977048344241907,
+                  "coefficient": 0.5,
+                  "durationSeconds": 6.0,
+                  "elementalMultiplier": 1.90000006,
+                  "critMultiplier": 3.6528203606759995,
+                  "seedTiers": [
+                    {
+                      "weight": 0.22000521439980059,
+                      "perSecond": 1095.1125800400016
+                    },
+                    {
+                      "weight": 0.7799947856001994,
+                      "perSecond": 4819.672029917686
+                    }
+                  ],
+                  "targetMultiplier": 1.0,
+                  "perSecond": 4002.1495296625426,
+                  "seedPerSecondPerProc": 4000.2495296025427,
+                  "accumulatorPerSecondPerAttack": 1.90000006,
+                  "accumulatorSharedGroup": true,
+                  "perProc": 24012.897177975254,
+                  "expectedDamage": 7148.75557841424
+                }
+              },
+              "total": 7148.75557841424,
+              "expectedProcs": {
+                "DT_IMPACT": 0.3307831273080034,
+                "DT_VIRAL": 0.7442620860604767,
+                "DT_FIRE": 0.2977048344241907
+              },
+              "durationSeconds": 6.0,
+              "falloffMultiplier": 1.0,
+              "factionMultiplier": 1.0,
+              "armour": 2700.0,
+              "armourReduction": 0.9,
+              "elementalArmourStrip": 0.0,
+              "overguard": 15523399.911299936,
+              "hitLocation": "body",
+              "hitMultiplier": 1.0,
+              "unsupported": []
+            },
+            "nonDot": {
+              "perType": {},
+              "total": 0.0,
+              "aoePotential": 0.0
+            },
+            "dotTotal": 7148.75557841424,
+            "nonDotTotal": 0.0,
+            "total": 7148.75557841424,
+            "expectedProcs": {
+              "DT_IMPACT": 0.3307831273080034,
+              "DT_VIRAL": 0.7442620860604767,
+              "DT_FIRE": 0.2977048344241907
+            },
+            "aoePotential": 0.0,
+            "unsupported": []
+          },
+          "continuousKillEvents": true,
+          "activePool": "overguard",
+          "unsupported": [],
+          "limitations": [
+            "expected-proc-counts-not-Monte-Carlo",
+            "single-target",
+            "non-heat-stacking-procs-expected",
+            "fractional-proc-refresh-approximates-uptime",
+            "single-target-syndicate-no-player-buffs",
+            "magnetic-break-six-ticks-pinned-reference-contract"
+          ]
+        },
+        "unsupported": [
+          "projectile-component-damage-unapplied"
+        ],
+        "skipped": [
+          "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod: compatibility /Lotus/Weapons/Tenno/Rifle/LotusRifle does not match weapon",
+          "/Lotus/Weapons/Syndicates/PerrinSequence/LongGuns/PSPenta: unsupported[projectile-component-damage-unapplied]"
+        ]
+      },
+      "manualKpm": 0.9877309387921481,
+      "manualKernelMatches": true,
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5203564361610326,
+        "big_crit_rate": 0,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 19945679.82032206,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 997283.991016103,
+        "combatants": [
+          {
+            "big_crit_rate": 0,
+            "crit_rate": 0.7762953511594364,
+            "crit_tier": 1,
+            "damage": 19945679.82032206,
+            "finishes": 0.002,
+            "id": "wielder",
+            "pellets": 72.104,
+            "procs": 46.476,
+            "reloads": 4,
+            "shots": 40,
+            "transforms": 0,
+            "weapon": "secura_penta"
+          }
+        ],
+        "crit_rate": 0.7762953511594364,
+        "crit_tier": 0.7762953511594364,
+        "damage_per_pellet": 276623.76317987987,
+        "damage_per_shot": 498641.9955080515,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 7518092.921855368,
+                "type": "Viral"
+              },
+              {
+                "dmg": 3341374.63193572,
+                "type": "Impact"
+              },
+              {
+                "dmg": 3028120.7601917437,
+                "type": "Heat"
+              }
+            ],
+            "dmg": 13887588.313982828,
+            "source": "direct"
+          },
+          {
+            "by_type": [
+              {
+                "dmg": 3108994.89556813,
+                "type": "Viral"
+              },
+              {
+                "dmg": 1381775.5091413916,
+                "type": "Blast"
+              },
+              {
+                "dmg": 1252234.0551593855,
+                "type": "Heat"
+              }
+            ],
+            "dmg": 5743004.459868907,
+            "source": "radial"
+          },
+          {
+            "dmg": 304533.6516924362,
+            "source": "Heat"
+          },
+          {
+            "dmg": 7174.814734650117,
+            "source": "Blast"
+          }
+        ],
+        "downtime": 10,
+        "dps": 664855.9940107353,
+        "dps_se": 1965.4230163249842,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 4825055.790853117,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 1,
+          "total_drain": 59,
+          "umbra": 0,
+          "used": 1
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 0.002,
+        "kills_max": 1,
+        "kills_min": 0,
+        "kills_std": 0.044676615807377355,
+        "max_hit": 372480.62193046155,
+        "mean_max_hit": 286251.1791139459,
+        "ok": true,
+        "overkill": 437.2721459188322,
+        "overkill_rate": 2.1923631405466055e-05,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.78,
+          "crit_damage": 4.4,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 378.75
+            },
+            {
+              "type": "Heat",
+              "value": 340.875
+            },
+            {
+              "type": "Viral",
+              "value": 852.1875
+            }
+          ],
+          "fire_rate": 2,
+          "modified_base": 378.75,
+          "multishot": 1.8,
+          "status_chance": 0.41600000000000004,
+          "total": 1571.8125
+        },
+        "pellets": 72.104,
+        "picked_up_ammo": null,
+        "procs": 46.476,
+        "reloads": 4,
+        "replay": null,
+        "run": [
+          4141945792,
+          4247294514
+        ],
+        "runs": 500,
+        "sample": {
+          "dps": 664743.3746759607,
+          "kills": 0,
+          "score": 0.7916340266822315
+        },
+        "score": 0.7917507854948875,
+        "score_runs": [],
+        "score_se": 0.0023374409306425262,
+        "self_damage": null,
+        "shots": 40,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "transforms": 0,
+        "ttk": {
+          "mean": 29.5,
+          "median": 29.5,
+          "p90": 29.5,
+          "runs": 1
+        },
+        "virus_stacks": 4.771067147676055
+      },
+      "comparisonKind": "public-board-build",
+      "panelDifferences": {
+        "total": {
+          "local": 4783.91294065501,
+          "reference": 1571.8125
+        },
+        "fireRate": {
+          "local": 1.600399988,
+          "reference": 2
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "fullBuildComparable": false,
+      "panelMatches": false,
+      "referenceKpm": 1.583501570989775,
+      "referenceKpmSe": 0.0046748818612850525,
+      "localKpm": 0.9877309387921481,
+      "deltaPercent": -37.62362116415443
+    },
+    {
+      "id": "zarr-10",
+      "weapon": "zarr",
+      "name": "Zarr",
+      "boardRowIndex": 10,
+      "board": {
+        "arcanes": [
+          "primary_compression"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "vigilante_supplies",
+        "mode": "base",
+        "mods": [
+          "hellfire",
+          "thermite_rounds",
+          "heavy_caliber",
+          "primary_acuity",
+          "serration",
+          "hammer_shot",
+          "vital_sense",
+          "magnetic_capacity"
+        ],
+        "score": 0.9199822218576099,
+        "shown": "0.9200",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ConvergeRadialAttackOnAim",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "exilus": {
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "rank": 5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "zarr",
+        "mode": "base",
+        "mods": [
+          "hellfire",
+          "thermite_rounds",
+          "heavy_caliber",
+          "primary_acuity",
+          "serration",
+          "hammer_shot",
+          "vital_sense",
+          "magnetic_capacity",
+          "vigilante_supplies"
+        ],
+        "arcane": [
+          "primary_compression"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "nativeIncompatibleMods": [],
+      "referenceLimitations": [
+        "the blast needs no line of sight and goes through walls — this arena has no geometry, so nothing is ever behind cover and the perk pays nothing extra",
+        "the blast staggers the WIELDER in game — this arena gives the player no body, so a build that would be unplayable in a corridor costs nothing here",
+        "the bomblets take no Condition Overload. The wiki's CO catalog gives them a rule of their own — Zarr | Cannon Child Bomb | Projectile | 15 | 25 | 167% | Adding — and a CO class is a property of the WEAPON in this engine, so they take none at all rather than take it under a class the catalog denies them. The bomblets below are understated by that term and by nothing else"
+      ],
+      "local": {
+        "panel": {
+          "total": 1639.5901579320036,
+          "critChance": 0.17,
+          "critMultiplier": 7.001709501733822,
+          "fireRate": 1.666667,
+          "multishot": 1.0,
+          "statusChance": 0.6959999875999996
+        },
+        "defenses": {
+          "level": 9999,
+          "baseLevel": 1.0,
+          "steelPath": true,
+          "steelPathMultiplier": 2.5,
+          "steelPathShieldMultiplier": 2.5,
+          "steelPathArmorMultiplier": 1.0,
+          "health": 9667913.96369529,
+          "shield": 0.0,
+          "armour": 2700.0,
+          "armourReduction": 0.9,
+          "elementalArmourStrip": 0.0,
+          "overguard": 15523399.911299936,
+          "overguardMultiplier": 0.0,
+          "magneticStacks": 0,
+          "empoweredMultiplier": 1.0,
+          "enhancements": {
+            "eximus": false,
+            "archimedea": false,
+            "empowered": false,
+            "playerCount": null,
+            "magneticStacks": 0
+          },
+          "unsupported": []
+        },
+        "replay": {
+          "model": "event-expected-v3",
+          "eventModel": "target-generation-events-v3",
+          "windowSeconds": 30.0,
+          "timeStep": 0.25,
+          "attacksPerSecond": 1.0,
+          "statusEventsPerSecond": 0.9372908887289697,
+          "averagedStacks": {
+            "heat": 10.681316666666651,
+            "viral": 0.0,
+            "corrosive": 0.0,
+            "magnetic": 1.455108333333334,
+            "cold": 0.0,
+            "puncture": 0.0
+          },
+          "steadyStacks": {
+            "heat": 20.206,
+            "viral": 0,
+            "corrosive": 0,
+            "magnetic": 1.617,
+            "cold": 0,
+            "puncture": 0
+          },
+          "killsPerMinute": 1.5316450405508992,
+          "killsInWindow": 0.7658225202754496,
+          "killEvents": 0,
+          "targetGeneration": 0,
+          "targetTotalEhp": 25191313.874995224,
+          "directWindow": 6992761.286319064,
+          "dotWindow": 12278873.769345997,
+          "dotByType": {
+            "DT_FIRE": 12005147.372296954,
+            "DT_ELECTRICITY": 273726.39704904647
+          },
+          "procCounts": {
+            "DT_FIRE": 20.20645203583763,
+            "DT_IMPACT": 6.73548344678461,
+            "DT_MAGNETIC": 8.082580814335056,
+            "DT_EXPLOSION": 6.735483679042676,
+            "DT_ELECTRICITY": 1
+          },
+          "nonDotWindow": 20440.425133676592,
+          "syndicateWindow": 0.0,
+          "syndicateEvents": [],
+          "totalWindowDamage": 19292075.480798736,
+          "windowDps": 643069.1826932912,
+          "firstKillTime": null,
+          "minKillInterval": null,
+          "maxKillsPerStep": 0,
+          "staleComponents": 0,
+          "shots": 30,
+          "reloads": 5,
+          "recharges": 0,
+          "transforms": 0,
+          "emergent": {
+            "onKillStacks": "panel-assumed-max"
+          },
+          "magneticBreaks": [
+            {
+              "time": 18.0,
+              "pool": "overguard",
+              "stacks": 1.6165161628670113,
+              "seedPerTick": 125469.13429632339
+            }
+          ],
+          "fortifier": null,
+          "encumber": null,
+          "perAttack": {
+            "dot": {
+              "perType": {
+                "DT_FIRE": {
+                  "expectedProcs": 0.3367741947908422,
+                  "coefficient": 0.5,
+                  "durationSeconds": 6.0,
+                  "elementalMultiplier": 2.5000001,
+                  "critMultiplier": 2.071305147079778,
+                  "seedTiers": [
+                    {
+                      "weight": 0.83,
+                      "perSecond": 661.1250602700012
+                    },
+                    {
+                      "weight": 0.16149999983000002,
+                      "perSecond": 4629.005616326813
+                    },
+                    {
+                      "weight": 0.008500000169999985,
+                      "perSecond": 8596.886172383625
+                    }
+                  ],
+                  "targetMultiplier": 1.0,
+                  "perSecond": 1371.891740300682,
+                  "seedPerSecondPerProc": 1369.3917402006819,
+                  "accumulatorPerSecondPerAttack": 2.5000001,
+                  "accumulatorSharedGroup": true,
+                  "perProc": 8231.350441804092,
+                  "expectedDamage": 2772.1064170798163
+                }
+              },
+              "total": 2772.1064170798163,
+              "expectedProcs": {
+                "DT_IMPACT": 0.2245161148928205,
+                "DT_FIRE": 0.3367741947908422,
+                "DT_MAGNETIC": 0.13470967791633687
+              },
+              "durationSeconds": 6.0,
+              "falloffMultiplier": 1.0,
+              "factionMultiplier": 1.0,
+              "armour": 2700.0,
+              "armourReduction": 0.9,
+              "elementalArmourStrip": 0.0,
+              "overguard": 15523399.911299936,
+              "hitLocation": "body",
+              "hitMultiplier": 1.0,
+              "unsupported": []
+            },
+            "nonDot": {
+              "perType": {},
+              "total": 0.0,
+              "aoePotential": 0.0
+            },
+            "dotTotal": 2772.1064170798163,
+            "nonDotTotal": 0.0,
+            "total": 2772.1064170798163,
+            "expectedProcs": {
+              "DT_IMPACT": 0.2245161148928205,
+              "DT_FIRE": 0.3367741947908422,
+              "DT_MAGNETIC": 0.13470967791633687
+            },
+            "aoePotential": 0.0,
+            "unsupported": []
+          },
+          "continuousKillEvents": true,
+          "activePool": "overguard",
+          "unsupported": [
+            "cluster-submunitions-unmodeled"
+          ],
+          "limitations": [
+            "expected-proc-counts-not-Monte-Carlo",
+            "single-target",
+            "non-heat-stacking-procs-expected",
+            "fractional-proc-refresh-approximates-uptime",
+            "single-target-syndicate-no-player-buffs",
+            "magnetic-break-six-ticks-pinned-reference-contract"
+          ]
+        },
+        "unsupported": [
+          "WEAPON_CONVERT_AMMO",
+          "projectile-component-damage-unapplied"
+        ],
+        "skipped": [
+          "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod: unsupported[no-handler]",
+          "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonWeapon: unsupported[projectile-component-damage-unapplied]"
+        ]
+      },
+      "manualKpm": 1.5316450405508992,
+      "manualKernelMatches": true,
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5,
+        "big_crit_rate": 0.036,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 18253993.258558057,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 1106302.6217307912,
+        "combatants": [
+          {
+            "big_crit_rate": 0.036,
+            "crit_rate": 0.7651612903225806,
+            "crit_tier": 1.0470489038785835,
+            "damage": 18253993.258558057,
+            "finishes": 0,
+            "id": "wielder",
+            "pellets": 31,
+            "procs": 177.432,
+            "reloads": 6,
+            "shots": 31,
+            "transforms": 0,
+            "weapon": "zarr"
+          }
+        ],
+        "crit_rate": 0.7651612903225806,
+        "crit_tier": 0.8011612903225807,
+        "damage_per_pellet": 588838.4922115502,
+        "damage_per_shot": 588838.4922115502,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 4632094.539759737,
+                "type": "Heat"
+              },
+              {
+                "dmg": 3088063.0265064924,
+                "type": "Impact"
+              },
+              {
+                "dmg": 1833537.4219882297,
+                "type": "Magnetic"
+              }
+            ],
+            "dmg": 9553694.988254458,
+            "source": "direct"
+          },
+          {
+            "dmg": 4440056.813062124,
+            "source": "Heat"
+          },
+          {
+            "by_type": [
+              {
+                "dmg": 1653941.4831687147,
+                "type": "Heat"
+              },
+              {
+                "dmg": 932726.6486819944,
+                "type": "Blast"
+              },
+              {
+                "dmg": 654685.1704209454,
+                "type": "Magnetic"
+              },
+              {
+                "dmg": 169901.00676381812,
+                "type": "Impact"
+              }
+            ],
+            "dmg": 3411254.309035493,
+            "source": "radial"
+          },
+          {
+            "dmg": 846655.3052076275,
+            "source": "Electricity"
+          },
+          {
+            "dmg": 12302.605398662117,
+            "source": "Blast"
+          }
+        ],
+        "downtime": 13.5,
+        "dps": 608466.4419519353,
+        "dps_se": 824.1001077654508,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 3114635.2034832984,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 5,
+          "total_drain": 58,
+          "umbra": 0,
+          "used": 5
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 0,
+        "kills_max": 0,
+        "kills_min": 0,
+        "kills_std": 0,
+        "max_hit": 1549049.9642578126,
+        "mean_max_hit": 959828.540901239,
+        "ok": true,
+        "overkill": 0,
+        "overkill_rate": 0,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.17,
+          "crit_damage": 7,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 107.5
+            },
+            {
+              "type": "Heat",
+              "value": 161.25
+            },
+            {
+              "type": "Magnetic",
+              "value": 64.5
+            }
+          ],
+          "fire_rate": 1.67,
+          "modified_base": 107.5,
+          "multishot": 1,
+          "status_chance": 0.696,
+          "total": 333.25
+        },
+        "pellets": 31,
+        "picked_up_ammo": null,
+        "procs": 177.432,
+        "reloads": 6,
+        "replay": null,
+        "run": [
+          591706541,
+          3689008042
+        ],
+        "runs": 500,
+        "sample": {
+          "dps": 608798.8006986126,
+          "kills": 0,
+          "score": 0.7250103790373055
+        },
+        "score": 0.7246145774348238,
+        "score_runs": [],
+        "score_se": 0.0009814098365672694,
+        "self_damage": null,
+        "shots": 31,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "transforms": 0,
+        "ttk": {
+          "mean": 0,
+          "median": 0,
+          "p90": 0,
+          "runs": 0
+        },
+        "virus_stacks": null
+      },
+      "comparisonKind": "public-board-build",
+      "panelDifferences": {
+        "total": {
+          "local": 1639.5901579320036,
+          "reference": 333.25
+        },
+        "fireRate": {
+          "local": 1.666667,
+          "reference": 1.67
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "fullBuildComparable": false,
+      "panelMatches": false,
+      "referenceKpm": 1.4492291548696477,
+      "referenceKpmSe": 0.0019628196731345388,
+      "localKpm": 1.5316450405508992,
+      "deltaPercent": 5.686877427515213
+    },
+    {
+      "id": "acceltra_prime-24",
+      "weapon": "acceltra_prime",
+      "name": "Acceltra Prime",
+      "boardRowIndex": 24,
+      "board": {
+        "arcanes": [
+          "primary_compression"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "malignant_force",
+          "thermite_rounds",
+          "primary_acuity",
+          "galvanized_aptitude",
+          "vile_acceleration",
+          "vital_sense",
+          "magnetic_capacity"
+        ],
+        "score": 17.049576525490988,
+        "shown": "17.0496",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ConvergeRadialAttackOnAim",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "acceltra_prime",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "malignant_force",
+          "thermite_rounds",
+          "primary_acuity",
+          "galvanized_aptitude",
+          "vile_acceleration",
+          "vital_sense",
+          "magnetic_capacity"
+        ],
+        "arcane": [
+          "primary_compression"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 500,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "catalogBlockers": [],
+      "nativeIncompatibleMods": [],
+      "referenceLimitations": [
+        "the rockets have a MINIMUM ARMING DISTANCE of 7 metres (wiki): closer than that they hit and do not explode. This arena fires at whatever range the scene is set to, and the explosion is applied at every one of them — so a fight staged inside 7 m is overstated here by the whole explosion, which is most of the weapon",
+        "reloading while SPRINTING gives +25% reload speed (+50% on Gauss) — this arena does not move, so the reload here is always the standing one",
+        "the blast needs no line of sight and goes through walls — this arena has no geometry, so nothing is ever behind cover and the perk pays nothing extra",
+        "the blast staggers the WIELDER in game — this arena gives the player no body, so a build that would be unplayable in a corridor costs nothing here"
+      ],
+      "local": {
+        "panel": {
+          "total": 832.15004301,
+          "critChance": 0.34,
+          "critMultiplier": 6.6016117216117225,
+          "fireRate": 19.0000006,
+          "multishot": 1.0,
+          "statusChance": 0.539999508359971
+        },
+        "defenses": {
+          "level": 9999,
+          "baseLevel": 1.0,
+          "steelPath": true,
+          "steelPathMultiplier": 2.5,
+          "steelPathShieldMultiplier": 2.5,
+          "steelPathArmorMultiplier": 1.0,
+          "health": 9667913.96369529,
+          "shield": 0.0,
+          "armour": 2700.0,
+          "armourReduction": 0.9,
+          "elementalArmourStrip": 0.0,
+          "overguard": 15523399.911299936,
+          "overguardMultiplier": 0.0,
+          "magneticStacks": 0,
+          "empoweredMultiplier": 1.0,
+          "enhancements": {
+            "eximus": false,
+            "archimedea": false,
+            "empowered": false,
+            "playerCount": null,
+            "magneticStacks": 0
+          },
+          "unsupported": []
+        },
+        "replay": {
+          "model": "event-expected-v3",
+          "eventModel": "target-generation-events-v3",
+          "windowSeconds": 30.0,
+          "timeStep": 0.25,
+          "attacksPerSecond": 14.366666666666667,
+          "statusEventsPerSecond": 14.044350908610413,
+          "averagedStacks": {
+            "heat": 2.515525,
+            "viral": 7.189433333333336,
+            "corrosive": 0.0,
+            "magnetic": 2.515525,
+            "cold": 0.0,
+            "puncture": 0.0
+          },
+          "steadyStacks": {
+            "heat": 3.349,
+            "viral": 10.0,
+            "corrosive": 0,
+            "magnetic": 3.349,
+            "cold": 0,
+            "puncture": 0
+          },
+          "killsPerMinute": 13.632980811805435,
+          "killsInWindow": 6.816490405902718,
+          "killEvents": 6,
+          "targetGeneration": 6,
+          "targetTotalEhp": 25191313.874995224,
+          "directWindow": 161766217.9623745,
+          "dotWindow": 9950131.378614826,
+          "dotByType": {
+            "DT_FIRE": 3093578.112613929,
+            "DT_ELECTRICITY": 6856553.266000897
+          },
+          "procCounts": {
+            "DT_VIRAL": 116.31225539712025,
+            "DT_IMPACT": 51.694332285764254,
+            "DT_FIRE": 31.016601439231668,
+            "DT_MAGNETIC": 31.016601439231668,
+            "DT_ELECTRICITY": 9
+          },
+          "nonDotWindow": 0.0,
+          "syndicateWindow": 0.0,
+          "syndicateEvents": [],
+          "totalWindowDamage": 171716349.34098932,
+          "windowDps": 5723878.31136631,
+          "firstKillTime": 6.0,
+          "minKillInterval": 3.052631482548449,
+          "maxKillsPerStep": 1,
+          "staleComponents": 0,
+          "shots": 431,
+          "reloads": 5,
+          "recharges": 0,
+          "transforms": 0,
+          "emergent": {
+            "onKillStacks": "events"
+          },
+          "magneticBreaks": [
+            {
+              "time": 2.7894735961218844,
+              "pool": "overguard",
+              "stacks": 3.8588729490124174,
+              "seedPerTick": 299514.1399720854
+            },
+            {
+              "time": 8.336841892520791,
+              "pool": "overguard",
+              "stacks": 2.985165866217153,
+              "seedPerTick": 231699.61771425474
+            },
+            {
+              "time": 13.305262838781148,
+              "pool": "overguard",
+              "stacks": 2.4755034012532495,
+              "seedPerTick": 192141.1463971869
+            },
+            {
+              "time": 13.305262838781148,
+              "pool": "overguard",
+              "stacks": 2.5483123248195216,
+              "seedPerTick": 197792.3565853395
+            },
+            {
+              "time": 16.252631166758963,
+              "pool": "overguard",
+              "stacks": 2.4755034012532495,
+              "seedPerTick": 192141.1463971869
+            },
+            {
+              "time": 20.852631072022096,
+              "pool": "overguard",
+              "stacks": 2.4755034012532495,
+              "seedPerTick": 192141.1463971869
+            },
+            {
+              "time": 25.505262554570546,
+              "pool": "overguard",
+              "stacks": 2.4755034012532495,
+              "seedPerTick": 192141.1463971869
+            },
+            {
+              "time": 25.505262554570546,
+              "pool": "overguard",
+              "stacks": 2.5483123248195216,
+              "seedPerTick": 197792.3565853395
+            },
+            {
+              "time": 28.45263088254836,
+              "pool": "overguard",
+              "stacks": 2.4755034012532495,
+              "seedPerTick": 192141.1463971869
+            }
+          ],
+          "fortifier": null,
+          "encumber": null,
+          "perAttack": {
+            "dot": {
+              "perType": {
+                "DT_FIRE": {
+                  "expectedProcs": 0.07280892356627204,
+                  "coefficient": 0.5,
+                  "durationSeconds": 6.0,
+                  "elementalMultiplier": 1.6000000399999998,
+                  "critMultiplier": 2.9045479853479854,
+                  "seedTiers": [
+                    {
+                      "weight": 0.6599999999999999,
+                      "perSecond": 149.60000373999998
+                    },
+                    {
+                      "weight": 0.34,
+                      "perSecond": 987.6011382431413
+                    }
+                  ],
+                  "targetMultiplier": 1.0,
+                  "perSecond": 436.1203895110681,
+                  "seedPerSecondPerProc": 434.5203894710681,
+                  "accumulatorPerSecondPerAttack": 1.6000000399999998,
+                  "accumulatorSharedGroup": true,
+                  "perProc": 2616.7223370664087,
+                  "expectedDamage": 190.5207366336249
+                }
+              },
+              "total": 190.5207366336249,
+              "expectedProcs": {
+                "DT_IMPACT": 0.12134819785390687,
+                "DT_VIRAL": 0.27303346337352014,
+                "DT_FIRE": 0.07280892356627204,
+                "DT_MAGNETIC": 0.07280892356627204
+              },
+              "durationSeconds": 6.0,
+              "falloffMultiplier": 1.0,
+              "factionMultiplier": 1.0,
+              "armour": 2700.0,
+              "armourReduction": 0.9,
+              "elementalArmourStrip": 0.0,
+              "overguard": 15523399.911299936,
+              "hitLocation": "body",
+              "hitMultiplier": 1.0,
+              "unsupported": []
+            },
+            "nonDot": {
+              "perType": {},
+              "total": 0.0,
+              "aoePotential": 0.0
+            },
+            "dotTotal": 190.5207366336249,
+            "nonDotTotal": 0.0,
+            "total": 190.5207366336249,
+            "expectedProcs": {
+              "DT_IMPACT": 0.12134819785390687,
+              "DT_VIRAL": 0.27303346337352014,
+              "DT_FIRE": 0.07280892356627204,
+              "DT_MAGNETIC": 0.07280892356627204
+            },
+            "aoePotential": 0.0,
+            "unsupported": []
+          },
+          "continuousKillEvents": true,
+          "activePool": "overguard",
+          "unsupported": [],
+          "limitations": [
+            "expected-proc-counts-not-Monte-Carlo",
+            "single-target",
+            "non-heat-stacking-procs-expected",
+            "fractional-proc-refresh-approximates-uptime",
+            "single-target-syndicate-no-player-buffs",
+            "magnetic-break-six-ticks-pinned-reference-contract"
+          ]
+        },
+        "unsupported": [
+          "projectile-component-damage-unapplied"
+        ],
+        "skipped": [
+          "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon: unsupported[projectile-component-damage-unapplied]"
+        ]
+      },
+      "manualKpm": 13.632980811805435,
+      "manualKernelMatches": true,
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5548885156722336,
+        "big_crit_rate": 0.653986046511628,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 202781546.64358628,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 9217343.029253922,
+        "combatants": [
+          {
+            "big_crit_rate": 0.653986046511628,
+            "crit_rate": 1,
+            "crit_tier": 1.6539860465116278,
+            "damage": 202781546.64358628,
+            "finishes": 7.528,
+            "id": "wielder",
+            "pellets": 430,
+            "procs": 884.434,
+            "reloads": 5,
+            "shots": 430,
+            "transforms": 0,
+            "weapon": "acceltra_prime"
+          }
+        ],
+        "crit_rate": 1,
+        "crit_tier": 1.6539860465116278,
+        "damage_per_pellet": 471584.99219438666,
+        "damage_per_shot": 471584.99219438666,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 98038706.52246703,
+                "type": "Viral"
+              },
+              {
+                "dmg": 43572758.45442973,
+                "type": "Impact"
+              },
+              {
+                "dmg": 25871325.33231762,
+                "type": "Heat"
+              },
+              {
+                "dmg": 25871325.33231762,
+                "type": "Magnetic"
+              }
+            ],
+            "dmg": 193354115.6415326,
+            "source": "direct"
+          },
+          {
+            "dmg": 7702692.225540874,
+            "source": "Electricity"
+          },
+          {
+            "by_type": [
+              {
+                "dmg": 529122.9275939364,
+                "type": "Viral"
+              },
+              {
+                "dmg": 191072.16829780993,
+                "type": "Puncture"
+              },
+              {
+                "dmg": 139629.66144839994,
+                "type": "Heat"
+              },
+              {
+                "dmg": 139629.66144839994,
+                "type": "Magnetic"
+              },
+              {
+                "dmg": 44093.57729949467,
+                "type": "Slash"
+              }
+            ],
+            "dmg": 1043547.9960880388,
+            "source": "radial"
+          },
+          {
+            "dmg": 682736.0185315437,
+            "source": "Heat"
+          },
+          {
+            "dmg": 1502.7949999999998,
+            "source": "Slash"
+          }
+        ],
+        "downtime": 8,
+        "dps": 6759384.888119543,
+        "dps_se": 11426.69841555527,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 27286405.202154264,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 1,
+          "total_drain": 60,
+          "umbra": 0,
+          "used": 1
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 7.544,
+        "kills_max": 8,
+        "kills_min": 7,
+        "kills_std": 0.49806023732074756,
+        "max_hit": 1573679.2448437498,
+        "mean_max_hit": 1131376.9529536925,
+        "ok": true,
+        "overkill": 1838327.1748770403,
+        "overkill_rate": 0.009148490701689507,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.34,
+          "crit_damage": 6.6000000000000005,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 37.4
+            },
+            {
+              "type": "Heat",
+              "value": 22.439999999999998
+            },
+            {
+              "type": "Magnetic",
+              "value": 22.439999999999998
+            },
+            {
+              "type": "Viral",
+              "value": 84.14999999999999
+            }
+          ],
+          "fire_rate": 19,
+          "modified_base": 37.4,
+          "multishot": 1,
+          "status_chance": 0.54,
+          "total": 166.43
+        },
+        "pellets": 430,
+        "picked_up_ammo": null,
+        "procs": 884.434,
+        "reloads": 5,
+        "replay": null,
+        "run": [
+          804379793,
+          341316818
+        ],
+        "runs": 500,
+        "sample": {
+          "dps": 6759486.489223099,
+          "kills": 8,
+          "score": 8.004430254907323
+        },
+        "score": 7.976686744718002,
+        "score_runs": [],
+        "score_se": 0.01343136317669794,
+        "self_damage": null,
+        "shots": 430,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "transforms": 0,
+        "ttk": {
+          "mean": 4.2547789473684245,
+          "median": 4.105263157894741,
+          "p90": 4.789473684210527,
+          "runs": 500
+        },
+        "virus_stacks": 9.986938921974037
+      },
+      "comparisonKind": "public-board-build",
+      "panelDifferences": {
+        "total": {
+          "local": 832.15004301,
+          "reference": 166.43
+        }
+      },
+      "targetMatches": true,
+      "uiImportable": true,
+      "fullBuildComparable": false,
+      "panelMatches": false,
+      "referenceKpm": 15.953373489436006,
+      "referenceKpmSe": 0.02686272635339588,
+      "localKpm": 13.632980811805435,
+      "deltaPercent": -14.544840181715092
+    }
+  ],
+  "skips": [],
+  "contract": "Lv9999 SP Thrax, headshots, ADS, single target, infinite resupply explicitly set by archgun class rule, timed buffs start at zero. Offline kernel audit when catalogBlockers is nonempty. Board score uses separate 180s contract.",
+  "fullReportSha256": "4a5b58a1f863d0ae5388766096eb2c329ae11010017c11c88f4bae0c9f6622a4",
+  "fullReportLocalPath": ".local/reports/projectile-extra-board-20260927-verified/comparison.json"
+}

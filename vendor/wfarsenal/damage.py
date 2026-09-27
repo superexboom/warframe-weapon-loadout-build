@@ -303,6 +303,9 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     # 到直击口径，sidecar 登记）。
     "WEAPON_DAMAGE_WEAKPOINT": "weakpoint_damage",
     "RUNTIME_LOCK_MULTISHOT": "multishot_lock",
+    "RUNTIME_LOCK_FIRE_RATE": "fire_rate_lock",
+    "RUNTIME_PRIMARY_COMPRESSION": "compression",
+    "WEAPON_EXPLOSION_RADIUS": "explosion_radius",
     # 膛室家族（蓄力装填 / 膛室 Prime）：弹匣第一发的最终伤害乘区。单发口径
     # 直接乘算；循环口径按弹匣折算（第一发多造成 bonus × 单发伤害）。
     "WEAPON_INIT_DAMAGE_MOD": "first_shot_damage",
@@ -578,6 +581,8 @@ def mod_effects(
     )
 
     if adapter is not None:
+        if adapter.kind == 'lock_fire_rate':
+            effects.append(ModEffect('RUNTIME_LOCK_FIRE_RATE','SET',1.,source_path=source_path))
         if adapter.kind == 'lock_multishot':
             effects.append(ModEffect(
                 upgrade_type='RUNTIME_LOCK_MULTISHOT', operation='SET', value=1.0,
@@ -725,6 +730,12 @@ def arcane_effects(
             f"{arcane.get('name', '?')} ranks to {max_rank}, got rank {rank}"
         )
 
+    from .runtime_adapters import compression_configuration
+    compression = compression_configuration(arcane, rank)
+    if compression:
+        return ModEffectList([ModEffect('RUNTIME_PRIMARY_COMPRESSION','ADD',
+            compression['damagePerMeter']*uptime,source_path=arcane.get('path'),
+            runtime_chance=compression['ammoPerMeter']*uptime)])
     from .status_arcanes import configuration as status_configuration
     if status_configuration(arcane, rank):
         return ModEffectList([])  # Event-only; no fabricated static stat.
@@ -897,6 +908,12 @@ class ModdedStats:
     co_assumed_count: float = 0.0
     # Beams merge multishot into one damage/status instance.
     continuous: bool = False
+    # An exported explosion has no direct weakpoint impact.
+    radial_only: bool = False
+    explosion_radius_multiplier: float = 1.0
+    # Native forced statuses per projectile; explicit caller forced_procs remain
+    # additional per-trigger counts. Never inherit a different component here.
+    native_forced_procs: dict[str, float] = field(default_factory=dict)
 
     @property
     def total_damage(self) -> float:
@@ -1248,9 +1265,30 @@ def apply_mods(
             damage_flat_base += effect.value
         else:
             damage_scale_effects.append(effect)
-    damage_scale = _combine(
-        1.0, damage_scale_effects + status_damage_effects
-    )
+    compression_mult = 1.0
+    compression_ammo = 0.0
+    compression_profile = weapon.get('__compressionProfile__') or event_profile.get('compression')
+    if buckets['RUNTIME_PRIMARY_COMPRESSION'] and scenario.aiming:
+        if compression_profile:
+            radius = float(compression_profile['radius'])
+            if compression_profile.get('takesRadiusMods', True):
+                radius = _combine(radius, buckets['WEAPON_EXPLOSION_RADIUS'])
+            considered = compression_profile.get('reads_radius_m')
+            if considered is None:
+                considered = radius * float(compression_profile.get('effectiveness', 1.))
+            lost = max(float(considered), 0.) * .8
+            bonus = sum(e.value for e in buckets['RUNTIME_PRIMARY_COMPRESSION']) * lost
+            compression_ammo = sum(e.runtime_chance or 0. for e in buckets['RUNTIME_PRIMARY_COMPRESSION']) * lost
+            if compression_profile.get('stacking') == 'adds':
+                damage_scale_effects.append(ModEffect('WEAPON_DAMAGE_AMOUNT','ADD',bonus))
+            else:
+                compression_mult += bonus
+        else:
+            unsupported.add('primary-compression-weapon-profile-unverified')
+    ordinary_scale = _combine(1.0, damage_scale_effects)
+    damage_scale = _combine(1.0, damage_scale_effects + status_damage_effects)
+    # Multiplying Compression amplifies the ordinary bucket, not adding GunCO.
+    damage_scale += ordinary_scale * (compression_mult - 1.0)
     if damage_flat_base:
         base_total_unscaled = sum(base.values())
         if base_total_unscaled > 0:
@@ -1362,12 +1400,16 @@ def apply_mods(
                 _split_crit_damage_bucket(bucket)[1],
             )
         )(damage.get("critMultiplier", 1.0), buckets["WEAPON_CRIT_DAMAGE"]),
+        explosion_radius_multiplier=_combine(1.0, buckets['WEAPON_EXPLOSION_RADIUS']),
+        radial_only=damage.get('source') in ('ExplosiveAttack', 'RadialDamage', 'EmbedDeathAttack', 'StackingAttack'),
+        native_forced_procs={'DT_ELECTRICITY': float(damage.get('forcedProcs', []).count('PT_ELECTROCUTION'))}
+        if 'PT_ELECTROCUTION' in (damage.get('forcedProcs') or ()) else {},
         continuous=mode.get('trigger') == '/Lotus/Language/Menu/Loadout_TriggerContinous',
         status_chance=_combine(per_pellet_proc, buckets["WEAPON_PROC_CHANCE"]),
         multishot=(innate_multishot if buckets['RUNTIME_LOCK_MULTISHOT'] else _combine(
             innate_multishot, buckets['WEAPON_FIRE_ITERATIONS']
         )),
-        fire_rate=_combine(mode.get("fireRate") or 0.0, buckets["WEAPON_FIRE_RATE"]),
+        fire_rate=(mode.get("fireRate") or 0.0) if buckets["RUNTIME_LOCK_FIRE_RATE"] else _combine(mode.get("fireRate") or 0.0, buckets["WEAPON_FIRE_RATE"]),
         magazine=magazine,
         # 装填时长在上方按灵化口径预计算（reload_time 局部变量）。
         reload_time=reload_time,
@@ -1378,7 +1420,7 @@ def apply_mods(
         recoil_multiplier=_combine(1.0, buckets["WEAPON_RECOIL"]),
         ammo_max_multiplier=_combine(1.0, buckets["WEAPON_AMMO_MAX"]),
         # 每扳机弹药消耗（Twin Grakatas 类）：sustained_attack_rate 折算用。
-        ammo_cost=max(0.0, _combine(float(mode.get("ammoCost") or 1), buckets["WEAPON_AMMO_CONSUME_RATE"])),
+        ammo_cost=max(0.0, _combine(float(mode.get("ammoCost") or 1), buckets["WEAPON_AMMO_CONSUME_RATE"])) * max(0.0, 1.0 - compression_ammo),
         headshot_bonus_multiplier=_combine(
             1.0, buckets["WEAPON_HEADSHOT_MULTIPLIER"]
         ),
@@ -1429,7 +1471,7 @@ def apply_mods(
         weakpoint_crit_chance_relative=sum(e.value for e in buckets['WEAPON_CRIT_CHANCE_WEAKPOINT'] if e.operation == 'STACKING_MULTIPLY'),
         base_crit_chance=_combine(damage.get('critChance', 0.0), [e for e in buckets['WEAPON_CRIT_CHANCE'] if e.operation in ('ADD_BASE', 'SET_BASE')]),
         falloff_multiplier=falloff_multiplier,
-        dot_base_damage=elemental_base_total * _combine(1.0, damage_scale_effects),
+        dot_base_damage=elemental_base_total * _combine(1.0, damage_scale_effects) * compression_mult,
         dot_elemental_multipliers=_dot_elemental_multipliers(
             buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED"],
             buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE"],
@@ -2364,7 +2406,7 @@ def damage_against_cached_armour(
         target_faction = _target_cache["target_faction"]
     else:
         location, hit_multiplier, hit_critical_multiplier, hit_unsupported, hit_metadata = _hit_location_info(
-            target, hit_location
+            target, "body" if stats.radial_only else hit_location
         )
         faction_deltas = _faction_damage_deltas(target)
         armour_bypass = _damage_type_set(
@@ -2374,6 +2416,9 @@ def damage_against_cached_armour(
             target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
         )
         target_faction = str(target.get("faction") or "")
+
+    if stats.radial_only:
+        hit_multiplier = hit_critical_multiplier = 1.0
 
     quantized_types = quantize_damage_vector(
         stats.damage_types,
@@ -2449,6 +2494,8 @@ def _apply_weakpoint_folding(
 ) -> float:
     # WFSim 69e6a139 MECHANICS weak-point bracket. Prior disassembly only
     # established the gate, not the arithmetic (its openQuestions say so).
+    if stats.radial_only:
+        return raw
     weakpoint_share = 1.0 if hit_multiplier > 1.0 + 1e-9 else 0.0
     if weakpoint_share <= 0.0:
         return raw
@@ -2516,7 +2563,7 @@ def damage_against(
         enemy_enhancements=enemy_enhancements,
     )
     location, hit_multiplier, hit_critical_multiplier, hit_unsupported, hit_metadata = _hit_location_info(
-        target, hit_location
+        target, "body" if stats.radial_only else hit_location
     )
     armour = defenses["armour"]
     overguard = float(defenses.get("overguard") or 0.0)
@@ -2639,7 +2686,7 @@ def enemy_kill_metrics(
         enemy_enhancements=enemy_enhancements,
     )
     location, hit_multiplier, hit_critical_multiplier, hit_unsupported, hit_metadata = _hit_location_info(
-        target, hit_location
+        target, "body" if stats.radial_only else hit_location
     )
     unsupported = [*defenses["unsupported"], *hit_unsupported]
     pool_damage = _direct_damage_by_pool(
@@ -2763,6 +2810,12 @@ def expected_status_procs(
             }
         )
 
+    # PT_ELECTROCUTION is verified by the native electric-proc adapter and raw
+    # attack ForcedProcs. A zero status chance does not suppress this event.
+    for dtype, per_projectile in stats.native_forced_procs.items():
+        result[dtype] = result.get(dtype, 0.0) + shots * _require_nonnegative_finite(
+            f'native_forced_procs[{dtype!r}]', per_projectile)
+
     # Verified Lua-backed impact conversion cards (Hemorrhage, Internal Bleeding,
     # Magnetic Welt).  Their chance is conditional on an Impact status proc and is
     # independent of the final damage-type weighting.  The raw script's 2.5 value is
@@ -2862,7 +2915,7 @@ def expected_dot_damage(
         enemy_enhancements=enemy_enhancements,
     )
     location, hit_multiplier, hit_critical_multiplier, hit_unsupported, hit_metadata = _hit_location_info(
-        target, hit_location
+        target, "body" if stats.radial_only else hit_location
     )
     armour = defenses["armour"]
     overguard = float(defenses.get("overguard") or 0.0)
@@ -3073,7 +3126,7 @@ def expected_status_damage(
             hit_critical_multiplier,
             hit_unsupported,
             _hit_metadata,
-        ) = _hit_location_info(target, hit_location)
+        ) = _hit_location_info(target, "body" if stats.radial_only else hit_location)
         armour = defenses["armour"]
         overguard = float(defenses.get("overguard") or 0.0)
         magnetic_stacks = int(defenses.get("magneticStacks") or 0)
@@ -4458,6 +4511,8 @@ def _direct_damage_by_pool(
     magnetic_stacks: int = 0,
 ) -> dict[str, float]:
     """Split one trigger's expected direct damage across overguard/shield/health."""
+    if stats.radial_only:
+        hit_multiplier = hit_critical_multiplier = 1.0
     faction_deltas = _faction_damage_deltas(target)
     armour_bypass = _damage_type_set(
         target.get("armourBypassDamageTypes"), DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES

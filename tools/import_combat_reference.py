@@ -139,7 +139,7 @@ for category, field, dest in [
                 }
 # Only these attacks have a confirmed match to the frozen export's base vector.
 audited = {}
-selection = {'Felarx':'felarx', 'Torid':'torid', 'Mausolon':'mausolon', 'Opticor Vandal':'opticor_vandal_quick', 'Nataruk':'nataruk', 'Cinta':'cinta', 'Paris Prime':'paris_prime_uncharged', 'Grattler':'grattler', 'Kuva Grattler':'kuva_grattler', 'Morgha':'morgha', 'Cyngas':'cyngas'}
+selection = {'Simulor':'simulor', 'Synoid Simulor':'synoid_simulor', 'Kuva Ogris':'kuva_ogris', 'Kuva Bramma':'kuva_bramma', 'Penta':'penta', 'Secura Penta':'secura_penta', 'Zarr':'zarr', 'Acceltra Prime':'acceltra_prime', 'Sonicor':'sonicor', 'Felarx':'felarx', 'Torid':'torid', 'Mausolon':'mausolon', 'Opticor Vandal':'opticor_vandal_quick', 'Nataruk':'nataruk', 'Cinta':'cinta', 'Paris Prime':'paris_prime_uncharged', 'Grattler':'grattler', 'Kuva Grattler':'kuva_grattler', 'Morgha':'morgha', 'Cyngas':'cyngas'}
 for row in read_rows('weapons'):
     key = selection.get(row.get('nameEn'))
     if not key:
@@ -154,6 +154,26 @@ for row in read_rows('weapons'):
     if atk.get('burst'): entry['burst'] = atk['burst']
     for component in ('radial','lingering'):
         if atk.get(component): entry[component] = atk[component]
+    component=atk.get('radial') or atk.get('lingering') or {}
+    if atk.get('compression') and component.get('radius_m'):
+        entry['compression']={**atk['compression'],'radius':component['radius_m'],
+            'takesRadiusMods':component.get('takes_blast_radius_mods',True)}
+    if atk.get('cluster'):entry['unmodeled']=['cluster-submunitions-unmodeled']
+    entry['sourceCommit']=subprocess.check_output(['git','-C',str(ref),'rev-parse','HEAD'],text=True).strip()
+    if key in ('simulor','synoid_simulor'):
+        exported=row['fireModes'][0]['damage']
+        if exported.get('source')!='ExplosiveAttack' or abs(sum(exported['types'].values())-sum(component['damage'].values()))>.02:
+            raise ValueError('pure radial export changed: '+key)
+        entry.update(directTotal=sum(exported['types'].values()),scope='exported base explosion only; no duplicate radial child',
+            unmodeled=['orb-merging-and-singularity-unmodeled','orb-multishot-merging-economy-unmodeled'])
+        entry['compression'].update(radius=exported['radius'],radiusSource='native exported damage.radius',referenceRadius=component['radius_m'])
+        entry.pop('radial',None)
+    if key=='acceltra_prime':
+        projectile='/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraProjectile'
+        arming=pkg.resolve(projectile).get('ArmingDistance')
+        if isinstance(arming,(int,float)):
+            entry['radial']['armingDistance']=arming
+            entry['radial']['armingSource']=dict(packageBuild=a.packages.parent.name,path=projectile,nativeValue=arming)
     audited[row['path']] = entry
 wp='/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep'
 mp='/Lotus/Weapons/Infested/Pistols/InfVomitGun/FireRateOnHeadshotPistolMod'

@@ -1,0 +1,59 @@
+{
+  "build": "2026.09.22.16.46",
+  "rows": [
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonWeapon",
+      "sha256": "ae51d47097933d224a6932632a70e6c40fcf8f3d5fc725fcab93f175b4132beb",
+      "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+      "fields": {
+        "CompatibilityTags": [
+          "ASSAULT_AMMO",
+          "PROJECTILE",
+          "AOE",
+          "SINGLESHOT",
+          "SEMI_AUTO"
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod",
+      "sha256": "fa92e636caf2abf3b678ce252771dfd85f0b88467ea1fb1074fb057fe981558c",
+      "parent": "/Lotus/Types/Game/LotusArtifactUpgrades/BaseArtifactUpgrade",
+      "fields": {
+        "CompatibilityTags": [
+          "SEMI_AUTO"
+        ],
+        "ItemCompatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+        "IncompatibilityTags": [
+          "MODULAR_GUN"
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombs",
+      "sha256": "61c46bd906e4f08485f6e21ae73214dea1147dd8e36011c3ed6dd8aa9b28188e",
+      "parent": "/Lotus/Weapons/Tenno/Akimbo/LotusThrown",
+      "fields": {
+        "CompatibilityTags": [
+          "PROJECTILE",
+          "DEPLOYABLE",
+          "AOE",
+          "SINGLESHOT"
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanas",
+      "sha256": "d145c9068dfe549abf1339905bca43b956ad87223b55355186592d743292c848",
+      "parent": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombs",
+      "fields": {
+        "CompatibilityTags": [
+          "PROJECTILE",
+          "DEPLOYABLE",
+          "AOE",
+          "SINGLESHOT"
+        ]
+      }
+    }
+  ]
+}

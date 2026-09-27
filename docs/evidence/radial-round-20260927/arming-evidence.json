@@ -1,0 +1,14 @@
+[
+  {
+    "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraProjectile",
+    "sha256": "c48f1b98673296714c15f9cc5e68b963eaa2fb76c820fe0cdafd76a7017db387",
+    "field": "ArmingDistance",
+    "value": 6
+  },
+  {
+    "path": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
+    "sha256": "7a6d19166d28edb2e8d09f17dcd8429299f0d569f147e3a8dbfc12a602574826",
+    "field": "ArmingDistance",
+    "value": 6
+  }
+]

@@ -1,0 +1,610 @@
+[
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": null,
+    "big_crit_rate": 0,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          0.5
+        ],
+        "damage": 2330.4,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 582.6,
+    "combatants": [
+      {
+        "big_crit_rate": 0,
+        "crit_rate": 0.08071428571428571,
+        "crit_tier": 1,
+        "damage": 2330.4,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 14,
+        "procs": 0,
+        "reloads": 6,
+        "shots": 14,
+        "transforms": 0,
+        "weapon": "castanas"
+      }
+    ],
+    "crit_rate": 0.08071428571428571,
+    "crit_tier": 0.08071428571428571,
+    "damage_per_pellet": 166.45714285714286,
+    "damage_per_shot": 166.45714285714286,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 2320,
+            "type": "Electricity"
+          }
+        ],
+        "dmg": 2320,
+        "source": "direct"
+      }
+    ],
+    "downtime": 6,
+    "dps": 233.04000000000002,
+    "dps_runs": [],
+    "dps_se": 0.2543823893275641,
+    "duration": 10,
+    "field_ticks": 0,
+    "first_magazine": 334.32,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 0,
+      "total_drain": 0,
+      "umbra": 0,
+      "used": 0
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 240,
+    "mean_max_hit": 215.6,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.08,
+      "crit_damage": 1.5,
+      "damage": [
+        {
+          "type": "Electricity",
+          "value": 160
+        }
+      ],
+      "fire_rate": 3.33,
+      "modified_base": 160,
+      "multishot": 1,
+      "status_chance": 0.22,
+      "total": 160
+    },
+    "pellets": 14,
+    "picked_up_ammo": null,
+    "procs": 0,
+    "reloads": 6,
+    "replay": null,
+    "run": [
+      2340149094,
+      2693830494
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 232,
+      "kills": 0,
+      "score": 2.3199999699130558e-9
+    },
+    "score": 2.3303999707735555e-9,
+    "score_runs": [],
+    "score_se": 2.5438241037438715e-12,
+    "self_damage": null,
+    "shots": 14,
+    "spilled": 0,
+    "target": {
+      "armor": 0,
+      "eximus": false,
+      "health": 1000000000000,
+      "level": 1,
+      "name": "Radial head probe",
+      "overguard": 0,
+      "shield": 0,
+      "steel_path": false
+    },
+    "timeline": [
+      320,
+      320,
+      0,
+      320,
+      160,
+      160,
+      400,
+      0,
+      320,
+      320
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": null,
+    "big_crit_rate": 0,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          0.5
+        ],
+        "damage": 7804.8,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 1951.2,
+    "combatants": [
+      {
+        "big_crit_rate": 0,
+        "crit_rate": 0.08071428571428571,
+        "crit_tier": 1,
+        "damage": 7804.8,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 14,
+        "procs": 0,
+        "reloads": 6,
+        "shots": 14,
+        "transforms": 0,
+        "weapon": "castanas"
+      }
+    ],
+    "crit_rate": 0.08071428571428571,
+    "crit_tier": 0.08071428571428571,
+    "damage_per_pellet": 557.4857142857143,
+    "damage_per_shot": 557.4857142857143,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 7680,
+            "type": "Electricity"
+          }
+        ],
+        "dmg": 7680,
+        "source": "direct"
+      }
+    ],
+    "downtime": 6,
+    "dps": 780.48,
+    "dps_runs": [],
+    "dps_se": 3.0525886719307445,
+    "duration": 10,
+    "field_ticks": 0,
+    "first_magazine": 1131.84,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 0,
+      "total_drain": 0,
+      "umbra": 0,
+      "used": 0
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 1440,
+    "mean_max_hit": 1147.2,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.08,
+      "crit_damage": 1.5,
+      "damage": [
+        {
+          "type": "Electricity",
+          "value": 160
+        }
+      ],
+      "fire_rate": 3.33,
+      "modified_base": 160,
+      "multishot": 1,
+      "status_chance": 0.22,
+      "total": 160
+    },
+    "pellets": 14,
+    "picked_up_ammo": null,
+    "procs": 0,
+    "reloads": 6,
+    "replay": null,
+    "run": [
+      2340149094,
+      2693830494
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 768,
+      "kills": 0,
+      "score": 7.679999969312234e-9
+    },
+    "score": 7.80480000073247e-9,
+    "score_runs": [],
+    "score_se": 3.052588710577871e-11,
+    "self_damage": null,
+    "shots": 14,
+    "spilled": 0,
+    "target": {
+      "armor": 0,
+      "eximus": false,
+      "health": 1000000000000,
+      "level": 1,
+      "name": "Radial head probe",
+      "overguard": 0,
+      "shield": 0,
+      "steel_path": false
+    },
+    "timeline": [
+      960,
+      960,
+      0,
+      960,
+      480,
+      480,
+      1920,
+      0,
+      960,
+      960
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": null,
+    "big_crit_rate": 0,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          0.5
+        ],
+        "damage": 5203.5,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 1300.875,
+    "combatants": [
+      {
+        "big_crit_rate": 0,
+        "crit_rate": 0.23892857142857143,
+        "crit_tier": 1,
+        "damage": 5203.5,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 14,
+        "procs": 0,
+        "reloads": 6,
+        "shots": 14,
+        "transforms": 0,
+        "weapon": "sancti_castanas"
+      }
+    ],
+    "crit_rate": 0.23892857142857143,
+    "crit_tier": 0.23892857142857143,
+    "damage_per_pellet": 371.67857142857144,
+    "damage_per_shot": 371.67857142857144,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 5100,
+            "type": "Electricity"
+          }
+        ],
+        "dmg": 5100,
+        "source": "direct"
+      }
+    ],
+    "downtime": 6,
+    "dps": 520.35,
+    "dps_runs": [],
+    "dps_se": 1.4987920135896107,
+    "duration": 10,
+    "field_ticks": 0,
+    "first_magazine": 745.8,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 0,
+      "total_drain": 0,
+      "umbra": 0,
+      "used": 0
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 600,
+    "mean_max_hit": 595.2,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.24,
+      "crit_damage": 2,
+      "damage": [
+        {
+          "type": "Electricity",
+          "value": 300
+        }
+      ],
+      "fire_rate": 3.33,
+      "modified_base": 300,
+      "multishot": 1,
+      "status_chance": 0.1,
+      "total": 300
+    },
+    "pellets": 14,
+    "picked_up_ammo": null,
+    "procs": 0,
+    "reloads": 6,
+    "replay": null,
+    "run": [
+      3071538603,
+      397280518
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 510,
+      "kills": 0,
+      "score": 5.099999977886682e-9
+    },
+    "score": 5.20349999655334e-9,
+    "score_runs": [],
+    "score_se": 1.498792045734624e-11,
+    "self_damage": null,
+    "shots": 14,
+    "spilled": 0,
+    "target": {
+      "armor": 0,
+      "eximus": false,
+      "health": 1000000000000,
+      "level": 1,
+      "name": "Radial head probe",
+      "overguard": 0,
+      "shield": 0,
+      "steel_path": false
+    },
+    "timeline": [
+      1200,
+      600,
+      0,
+      900,
+      300,
+      300,
+      600,
+      0,
+      600,
+      600
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": null,
+    "big_crit_rate": 0,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0,
+          0.5
+        ],
+        "damage": 21631.5,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 5407.875,
+    "combatants": [
+      {
+        "big_crit_rate": 0,
+        "crit_rate": 0.23892857142857143,
+        "crit_tier": 1,
+        "damage": 21631.5,
+        "finishes": 0,
+        "id": "wielder",
+        "pellets": 14,
+        "procs": 0,
+        "reloads": 6,
+        "shots": 14,
+        "transforms": 0,
+        "weapon": "sancti_castanas"
+      }
+    ],
+    "crit_rate": 0.23892857142857143,
+    "crit_tier": 0.23892857142857143,
+    "damage_per_pellet": 1545.107142857143,
+    "damage_per_shot": 1545.107142857143,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 20700,
+            "type": "Electricity"
+          }
+        ],
+        "dmg": 20700,
+        "source": "direct"
+      }
+    ],
+    "downtime": 6,
+    "dps": 2163.15,
+    "dps_runs": [],
+    "dps_se": 13.489128122306496,
+    "duration": 10,
+    "field_ticks": 0,
+    "first_magazine": 3112.2,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 0,
+      "total_drain": 0,
+      "umbra": 0,
+      "used": 0
+    },
+    "frame": {
+      "ability_strength": 1,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 1,
+    "kills": 0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0,
+    "max_hit": 3600,
+    "mean_max_hit": 3556.8,
+    "ok": true,
+    "overkill": 0,
+    "overkill_rate": 0,
+    "panel": {
+      "co_per_type": 0,
+      "crit_chance": 0.24,
+      "crit_damage": 2,
+      "damage": [
+        {
+          "type": "Electricity",
+          "value": 300
+        }
+      ],
+      "fire_rate": 3.33,
+      "modified_base": 300,
+      "multishot": 1,
+      "status_chance": 0.1,
+      "total": 300
+    },
+    "pellets": 14,
+    "picked_up_ammo": null,
+    "procs": 0,
+    "reloads": 6,
+    "replay": null,
+    "run": [
+      3071538603,
+      397280518
+    ],
+    "runs": 1000,
+    "sample": {
+      "dps": 2070,
+      "kills": 0,
+      "score": 2.0700000047391143e-8
+    },
+    "score": 2.1631500047747387e-8,
+    "score_runs": [],
+    "score_se": 1.348912812781673e-10,
+    "self_damage": null,
+    "shots": 14,
+    "spilled": 0,
+    "target": {
+      "armor": 0,
+      "eximus": false,
+      "health": 1000000000000,
+      "level": 1,
+      "name": "Radial head probe",
+      "overguard": 0,
+      "shield": 0,
+      "steel_path": false
+    },
+    "timeline": [
+      7200,
+      1800,
+      0,
+      4500,
+      900,
+      900,
+      1800,
+      0,
+      1800,
+      1800
+    ],
+    "transforms": 0,
+    "ttk": {
+      "mean": 0,
+      "median": 0,
+      "p90": 0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  }
+]

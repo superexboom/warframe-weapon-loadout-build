@@ -1,0 +1,2959 @@
+{
+  "cases": [
+    {
+      "id": "original",
+      "request": {
+        "weapon": "aksomati_prime",
+        "mode": "base",
+        "mods": [
+          "magnetic_might",
+          "pistol_acuity",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "pistol_elementalist",
+          "scorch",
+          "hollow_point"
+        ],
+        "arcane": [
+          "secondary_cryogenic"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "profile": "fast",
+        "slotCount": 8,
+        "maxFill": 8,
+        "minFill": 7,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedCritDamagePistol",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "incarnonCycle": false,
+        "triggerPolicy": "emergent",
+        "externalBuffs": [],
+        "scenario": {
+          "distance": 0.5
+        },
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture",
+            "rank": 5
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": null,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "panel": {
+        "total": 223.30001102000003,
+        "critChance": 0.23999999,
+        "critMultiplier": 6.0014652014652015,
+        "fireRate": 25.33333349999998,
+        "multishot": 1.0,
+        "statusChance": 0.28800002320000034
+      },
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5,
+        "big_crit_rate": 0.24495867768595042,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 46433385.07428949,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 1944853.8251011304,
+        "combatants": [
+          {
+            "big_crit_rate": 0.24495867768595042,
+            "crit_rate": 1,
+            "crit_tier": 1.2449586776859505,
+            "damage": 46433385.07428949,
+            "finishes": 1.053,
+            "id": "wielder",
+            "pellets": 605,
+            "procs": 174.229,
+            "reloads": 7,
+            "shots": 605,
+            "transforms": 0,
+            "weapon": "aksomati_prime"
+          }
+        ],
+        "crit_rate": 1,
+        "crit_tier": 1.2449586776859505,
+        "damage_per_pellet": 76749.39681700742,
+        "damage_per_shot": 76749.39681700742,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 14085597.822786383,
+                "type": "Heat"
+              },
+              {
+                "dmg": 3717032.758790848,
+                "type": "Magnetic"
+              },
+              {
+                "dmg": 3130132.8495080806,
+                "type": "Slash"
+              },
+              {
+                "dmg": 2543232.940225317,
+                "type": "Puncture"
+              },
+              {
+                "dmg": 586899.9092827656,
+                "type": "Impact"
+              }
+            ],
+            "dmg": 24062896.28059329,
+            "source": "direct"
+          },
+          {
+            "dmg": 13798985.54647655,
+            "source": "Heat"
+          },
+          {
+            "dmg": 7844825.839618809,
+            "source": "Electricity"
+          },
+          {
+            "dmg": 931535.2751249998,
+            "source": "Slash"
+          }
+        ],
+        "downtime": 6.124999999999999,
+        "dps": 1547779.5024763164,
+        "dps_runs": [],
+        "dps_se": 3002.6540578067024,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 5180920.23049355,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 1,
+          "total_drain": 57,
+          "umbra": 0,
+          "used": 1
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 1.053,
+        "kills_max": 2,
+        "kills_min": 1,
+        "kills_std": 0.22403347964087889,
+        "max_hit": 2594862.8224999993,
+        "mean_max_hit": 1682189.0706964948,
+        "ok": true,
+        "overkill": 182927.107418481,
+        "overkill_rate": 0.003955141537182417,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.24,
+          "crit_damage": 6,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 5.800000000000001
+            },
+            {
+              "type": "Puncture",
+              "value": 23.200000000000003
+            },
+            {
+              "type": "Slash",
+              "value": 29.000000000000004
+            },
+            {
+              "type": "Heat",
+              "value": 130.5
+            },
+            {
+              "type": "Magnetic",
+              "value": 34.800000000000004
+            }
+          ],
+          "fire_rate": 25.326999999999998,
+          "modified_base": 58.00000000000001,
+          "multishot": 1,
+          "status_chance": 0.288,
+          "total": 223.3
+        },
+        "pellets": 605,
+        "picked_up_ammo": null,
+        "procs": 174.229,
+        "reloads": 7,
+        "replay": null,
+        "run": [
+          2200466128,
+          76805458
+        ],
+        "runs": 1000,
+        "sample": {
+          "dps": 1554608.0980604566,
+          "kills": 1,
+          "score": 1.8345559285684832
+        },
+        "score": 1.835968468987959,
+        "score_runs": [],
+        "score_se": 0.0035928000292685222,
+        "self_damage": null,
+        "shots": 605,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "timeline": [
+          1283325.7851562502,
+          2110474.9762500003,
+          2491937.1546875,
+          1071034.465,
+          2966029.815000002,
+          3158472.7603750015,
+          3315228.539088755,
+          914432.6100711151,
+          1072645.1110292443,
+          1145766.8123647599,
+          1194876.57907969,
+          1014996.024990333,
+          544817.6394878143,
+          582178.6284724682,
+          597314.0560966831,
+          407697.8484450235,
+          633444.6069037038,
+          671387.3564421381,
+          1008784.4863160701,
+          263211.05125,
+          962855.8074999996,
+          2029793.59815625,
+          2955406.65565625,
+          1947968.2773281254,
+          3048073.4218593757,
+          4487266.364938156,
+          1243979.8355692592,
+          1057092.644134435,
+          1201396.4731647507,
+          1256353.557000555
+        ],
+        "transforms": 0,
+        "ttk": {
+          "mean": 17.236788047340774,
+          "median": 17.197417775496504,
+          "p90": 20.24738914991906,
+          "runs": 1000
+        },
+        "virus_stacks": null
+      },
+      "referenceKpm": 3.671936937975918,
+      "deltaPercent": 0.6583458402429354,
+      "beforeFix": {
+        "killsPerMinute": 4.8883902690719605,
+        "shots": 605,
+        "reloads": 7,
+        "directWindow": 31305648.025243584,
+        "dotWindow": 30266838.780588463,
+        "dotByType": {
+          "DT_FIRE": 15237328.281233553,
+          "DT_CINEMATIC": 817462.3581817005,
+          "DT_ELECTRICITY": 14212048.141173214
+        },
+        "procCounts": {
+          "DT_PUNCTURE": 18.102857707755252,
+          "DT_FIRE": 101.82858139469347,
+          "DT_MAGNETIC": 27.15428837191842,
+          "DT_IMPACT": 4.525714426938813,
+          "DT_SLASH": 22.62857213469374,
+          "DT_FREEZE": 51.07698860683919,
+          "DT_ELECTRICITY": 4
+        },
+        "magneticBreaks": [
+          {
+            "time": 6.953947328427992,
+            "pool": "overguard",
+            "stacks": 5.7899226445908685,
+            "seedPerTick": 1622321.1907103166
+          },
+          {
+            "time": 6.953947328427992,
+            "pool": "overguard",
+            "stacks": 5.834805765866767,
+            "seedPerTick": 1634897.3239716368
+          },
+          {
+            "time": 19.05263147662747,
+            "pool": "overguard",
+            "stacks": 5.7899226445908685,
+            "seedPerTick": 1622321.1907103166
+          },
+          {
+            "time": 19.05263147662747,
+            "pool": "overguard",
+            "stacks": 5.834805765866767,
+            "seedPerTick": 1634897.3239716368
+          }
+        ],
+        "cryogenic": {
+          "coldStacksPerPuncture": 3,
+          "radiusMeters": 15,
+          "expectedColdApplications": 51.07698860683919,
+          "neighborTargetsModeled": false
+        },
+        "averagedStacks": {
+          "heat": 19.692466666666668,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 4.008099999999999,
+          "cold": 4.859325000000001,
+          "puncture": 3.1642999999999994
+        }
+      },
+      "local": {
+        "killsPerMinute": 3.696110982063426,
+        "shots": 605,
+        "reloads": 7,
+        "directWindow": 23701974.634534508,
+        "dotWindow": 22852971.298453942,
+        "dotByType": {
+          "DT_CINEMATIC": 815035.5476860107,
+          "DT_FIRE": 15562948.566758413,
+          "DT_ELECTRICITY": 6474987.18400942
+        },
+        "procCounts": {
+          "DT_SLASH": 22.62857213469374,
+          "DT_IMPACT": 4.525714426938813,
+          "DT_FIRE": 101.82858139469347,
+          "DT_MAGNETIC": 27.15428837191842,
+          "DT_PUNCTURE": 18.102857707755252,
+          "DT_FREEZE": 44.79335204712272,
+          "DT_ELECTRICITY": 2
+        },
+        "magneticBreaks": [
+          {
+            "time": 6.953947328427992,
+            "pool": "overguard",
+            "stacks": 5.7899226445908685,
+            "seedPerTick": 1622321.1907103166,
+            "targetGeneration": 0
+          },
+          {
+            "time": 24.355263032202277,
+            "pool": "overguard",
+            "stacks": 4.802493976521108,
+            "seedPerTick": 1345646.2589612703,
+            "targetGeneration": 1
+          }
+        ],
+        "cryogenic": {
+          "coldStacksPerPuncture": 3,
+          "radiusMeters": 15,
+          "expectedColdApplications": 44.79335204712272,
+          "neighborTargetsModeled": false
+        },
+        "averagedStacks": {
+          "heat": 26.991625000000006,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 4.411958333333333,
+          "cold": 5.804066666666668,
+          "puncture": 3.7383833333333336
+        }
+      },
+      "beforeDeltaPercent": 33.12838296636402
+    },
+    {
+      "id": "without-cryo",
+      "request": {
+        "weapon": "aksomati_prime",
+        "mode": "base",
+        "mods": [
+          "magnetic_might",
+          "pistol_acuity",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "pistol_elementalist",
+          "scorch",
+          "hollow_point"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "profile": "fast",
+        "slotCount": 8,
+        "maxFill": 8,
+        "minFill": 7,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedCritDamagePistol",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "incarnonCycle": false,
+        "triggerPolicy": "emergent",
+        "externalBuffs": [],
+        "scenario": {
+          "distance": 0.5
+        },
+        "arcanes": [],
+        "incarnonChoices": {},
+        "exilus": null,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "panel": {
+        "total": 223.30001102000003,
+        "critChance": 0.23999999,
+        "critMultiplier": 6.0014652014652015,
+        "fireRate": 25.33333349999998,
+        "multishot": 1.0,
+        "statusChance": 0.28800002320000034
+      },
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5,
+        "big_crit_rate": 0.24566280991735537,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 45461716.44152937,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 1904155.6624724346,
+        "combatants": [
+          {
+            "big_crit_rate": 0.24566280991735537,
+            "crit_rate": 1,
+            "crit_tier": 1.2456628099173555,
+            "damage": 45461716.44152937,
+            "finishes": 1.026,
+            "id": "wielder",
+            "pellets": 605,
+            "procs": 174.244,
+            "reloads": 7,
+            "shots": 605,
+            "transforms": 0,
+            "weapon": "aksomati_prime"
+          }
+        ],
+        "crit_rate": 1,
+        "crit_tier": 1.2456628099173555,
+        "damage_per_pellet": 75143.33296120558,
+        "damage_per_shot": 75143.33296120558,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 13595657.243810462,
+                "type": "Heat"
+              },
+              {
+                "dmg": 3587742.883783285,
+                "type": "Magnetic"
+              },
+              {
+                "dmg": 3021257.1652912176,
+                "type": "Slash"
+              },
+              {
+                "dmg": 2454771.4467990915,
+                "type": "Puncture"
+              },
+              {
+                "dmg": 566485.7184921,
+                "type": "Impact"
+              }
+            ],
+            "dmg": 23225914.458176192,
+            "source": "direct"
+          },
+          {
+            "dmg": 15452193.818268808,
+            "source": "Heat"
+          },
+          {
+            "dmg": 6112851.303599072,
+            "source": "Electricity"
+          },
+          {
+            "dmg": 775332.2281249992,
+            "source": "Slash"
+          }
+        ],
+        "downtime": 6.124999999999999,
+        "dps": 1515390.548050979,
+        "dps_runs": [],
+        "dps_se": 3095.1059755274223,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 5052563.317546418,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 1,
+          "total_drain": 57,
+          "umbra": 0,
+          "used": 1
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 1.026,
+        "kills_max": 2,
+        "kills_min": 1,
+        "kills_std": 0.15913516267626124,
+        "max_hit": 2511539.224999999,
+        "mean_max_hit": 1669910.3529747159,
+        "ok": true,
+        "overkill": 183347.83121728522,
+        "overkill_rate": 0.004049347113083222,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.24,
+          "crit_damage": 6,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 5.800000000000001
+            },
+            {
+              "type": "Puncture",
+              "value": 23.200000000000003
+            },
+            {
+              "type": "Slash",
+              "value": 29.000000000000004
+            },
+            {
+              "type": "Heat",
+              "value": 130.5
+            },
+            {
+              "type": "Magnetic",
+              "value": 34.800000000000004
+            }
+          ],
+          "fire_rate": 25.326999999999998,
+          "modified_base": 58.00000000000001,
+          "multishot": 1,
+          "status_chance": 0.288,
+          "total": 223.3
+        },
+        "pellets": 605,
+        "picked_up_ammo": null,
+        "procs": 174.244,
+        "reloads": 7,
+        "replay": null,
+        "run": [
+          2283646147,
+          3098219016
+        ],
+        "runs": 1000,
+        "sample": {
+          "dps": 1518876.3936056464,
+          "kills": 1,
+          "score": 1.802430958086008
+        },
+        "score": 1.7973801936251512,
+        "score_runs": [],
+        "score_se": 0.0037175160830975715,
+        "self_damage": null,
+        "shots": 605,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "timeline": [
+          656606.6718750001,
+          1497589.4407812501,
+          2054919.5500000003,
+          986207.3362500003,
+          2884297.21125,
+          3474612.28515625,
+          4891411.498585941,
+          1126186.026252984,
+          1356430.4063955054,
+          1350294.3278069808,
+          1405635.5238136163,
+          1224091.4476925784,
+          575870.5490243164,
+          693093.6830581356,
+          697938.2125482636,
+          631313.1970200359,
+          1127968.2437500001,
+          1768924.850625,
+          1981665.66921875,
+          1135342.1796875002,
+          2367629.2109375,
+          2648351.654843751,
+          2680765.8354687504,
+          1914194.2683007796,
+          669039.0341691637,
+          745173.4125108786,
+          792734.5262893836,
+          661605.4254668037,
+          815177.1628299996,
+          751222.9665598919
+        ],
+        "transforms": 0,
+        "ttk": {
+          "mean": 17.885996589607924,
+          "median": 18,
+          "p90": 21.157934220397205,
+          "runs": 1000
+        },
+        "virus_stacks": null
+      },
+      "referenceKpm": 3.5947603872503024,
+      "deltaPercent": 0.34593671045131114,
+      "beforeFix": {
+        "killsPerMinute": 3.607195983082563,
+        "shots": 605,
+        "reloads": 7,
+        "directWindow": 23669447.430208568,
+        "dotWindow": 21765555.679018263,
+        "dotByType": {
+          "DT_FIRE": 14614441.768036136,
+          "DT_CINEMATIC": 772154.079278249,
+          "DT_ELECTRICITY": 6378959.831704195
+        },
+        "procCounts": {
+          "DT_PUNCTURE": 18.102857707755252,
+          "DT_FIRE": 101.82858139469347,
+          "DT_MAGNETIC": 27.15428837191842,
+          "DT_IMPACT": 4.525714426938813,
+          "DT_SLASH": 22.62857213469374,
+          "DT_ELECTRICITY": 2
+        },
+        "magneticBreaks": [
+          {
+            "time": 7.0,
+            "pool": "overguard",
+            "stacks": 5.834805765866767,
+            "seedPerTick": 1634897.3239716368
+          },
+          {
+            "time": 25.894736706284693,
+            "pool": "overguard",
+            "stacks": 5.520623916935479,
+            "seedPerTick": 1546864.391142395
+          }
+        ],
+        "cryogenic": null,
+        "averagedStacks": {
+          "heat": 27.232875,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 4.364833333333332,
+          "cold": 0.0,
+          "puncture": 3.6970000000000023
+        }
+      },
+      "local": {
+        "killsPerMinute": 3.607195983082563,
+        "shots": 605,
+        "reloads": 7,
+        "directWindow": 23669447.430208568,
+        "dotWindow": 21765555.679018263,
+        "dotByType": {
+          "DT_CINEMATIC": 772154.079278249,
+          "DT_FIRE": 14614441.768036136,
+          "DT_ELECTRICITY": 6378959.831704195
+        },
+        "procCounts": {
+          "DT_SLASH": 22.62857213469374,
+          "DT_IMPACT": 4.525714426938813,
+          "DT_FIRE": 101.82858139469347,
+          "DT_MAGNETIC": 27.15428837191842,
+          "DT_PUNCTURE": 18.102857707755252,
+          "DT_ELECTRICITY": 2
+        },
+        "magneticBreaks": [
+          {
+            "time": 7.0,
+            "pool": "overguard",
+            "stacks": 5.834805765866767,
+            "seedPerTick": 1634897.3239716368,
+            "targetGeneration": 0
+          },
+          {
+            "time": 25.894736706284693,
+            "pool": "overguard",
+            "stacks": 5.520623916935479,
+            "seedPerTick": 1546864.391142395,
+            "targetGeneration": 1
+          }
+        ],
+        "cryogenic": null,
+        "averagedStacks": {
+          "heat": 27.232875,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 4.364833333333332,
+          "cold": 0.0,
+          "puncture": 3.6970000000000023
+        }
+      },
+      "beforeDeltaPercent": 0.34593671045131114
+    },
+    {
+      "id": "without-magnetic",
+      "request": {
+        "weapon": "aksomati_prime",
+        "mode": "base",
+        "mods": [
+          "pistol_acuity",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "pistol_elementalist",
+          "scorch",
+          "hollow_point"
+        ],
+        "arcane": [
+          "secondary_cryogenic"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "profile": "fast",
+        "slotCount": 8,
+        "maxFill": 8,
+        "minFill": 7,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedCritDamagePistol",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "incarnonCycle": false,
+        "triggerPolicy": "emergent",
+        "externalBuffs": [],
+        "scenario": {
+          "distance": 0.5
+        },
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture",
+            "rank": 5
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": null,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "panel": {
+        "total": 188.50000870000002,
+        "critChance": 0.23999999,
+        "critMultiplier": 4.801172161172161,
+        "fireRate": 25.33333349999998,
+        "multishot": 1.0,
+        "statusChance": 0.28800002320000034
+      },
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5,
+        "big_crit_rate": 0.2757801652892562,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 26276373.952377725,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 1100581.1079529936,
+        "combatants": [
+          {
+            "big_crit_rate": 0.2757801652892562,
+            "crit_rate": 1,
+            "crit_tier": 1.2757801652892562,
+            "damage": 26276373.952377725,
+            "finishes": 0.92,
+            "id": "wielder",
+            "pellets": 605,
+            "procs": 174.275,
+            "reloads": 7,
+            "shots": 605,
+            "transforms": 0,
+            "weapon": "aksomati_prime"
+          }
+        ],
+        "crit_rate": 1,
+        "crit_tier": 1.2757801652892562,
+        "damage_per_pellet": 43432.023061781365,
+        "damage_per_shot": 43432.023061781365,
+        "damage_sources": [
+          {
+            "dmg": 17132726.80884294,
+            "source": "Heat"
+          },
+          {
+            "by_type": [
+              {
+                "dmg": 5994522.36266543,
+                "type": "Heat"
+              },
+              {
+                "dmg": 1332116.0805923305,
+                "type": "Slash"
+              },
+              {
+                "dmg": 1082344.3154812607,
+                "type": "Puncture"
+              },
+              {
+                "dmg": 249771.76511105732,
+                "type": "Impact"
+              }
+            ],
+            "dmg": 8658754.523850085,
+            "source": "direct"
+          },
+          {
+            "dmg": 425194.3499999999,
+            "source": "Slash"
+          }
+        ],
+        "downtime": 6.124999999999999,
+        "dps": 875879.1317459241,
+        "dps_runs": [],
+        "dps_se": 713.1216616557366,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 1841642.753837376,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 0,
+          "total_drain": 54,
+          "umbra": 0,
+          "used": 0
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 0.92,
+        "kills_max": 1,
+        "kills_min": 0,
+        "kills_std": 0.2712931993250107,
+        "max_hit": 1452699.7793750013,
+        "mean_max_hit": 1120630.8885021498,
+        "ok": true,
+        "overkill": 303827.9792147022,
+        "overkill_rate": 0.011698043754687828,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.24,
+          "crit_damage": 4.800000000000001,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 5.800000000000001
+            },
+            {
+              "type": "Puncture",
+              "value": 23.200000000000003
+            },
+            {
+              "type": "Slash",
+              "value": 29.000000000000004
+            },
+            {
+              "type": "Heat",
+              "value": 130.5
+            }
+          ],
+          "fire_rate": 25.326999999999998,
+          "modified_base": 58.00000000000001,
+          "multishot": 1,
+          "status_chance": 0.288,
+          "total": 188.5
+        },
+        "pellets": 605,
+        "picked_up_ammo": null,
+        "procs": 174.275,
+        "reloads": 7,
+        "replay": null,
+        "run": [
+          2950289040,
+          1813768665
+        ],
+        "runs": 1000,
+        "sample": {
+          "dps": 873889.1894230951,
+          "kills": 1,
+          "score": 1.0335372416338533
+        },
+        "score": 1.0310119631728585,
+        "score_runs": [],
+        "score_se": 0.0007237388642751662,
+        "self_damage": null,
+        "shots": 605,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "timeline": [
+          401533.27500000026,
+          519142.2790000002,
+          589603.5045000002,
+          250426.14350000003,
+          652565.91725,
+          745308.9737499998,
+          821471.2206249996,
+          494217.4815000002,
+          884197.6660000001,
+          1015859.1469999996,
+          1176285.8419999995,
+          923744.49475,
+          1263072.769749999,
+          1451500.9117499993,
+          1579546.9946249994,
+          1227591.1046250006,
+          1548963.2752743445,
+          624449.9653505177,
+          682402.0093391316,
+          603302.7974184586,
+          743333.2107650865,
+          826199.8364873203,
+          846484.7663646255,
+          783536.8048113264,
+          883042.6586851625,
+          967804.3163204977,
+          1033413.4229909235,
+          963835.301090129,
+          1194324.561670468,
+          519515.0305000002
+        ],
+        "transforms": 0,
+        "ttk": {
+          "mean": 27.817638344797903,
+          "median": 28.039483555099302,
+          "p90": 29.157934220397205,
+          "runs": 920
+        },
+        "virus_stacks": null
+      },
+      "referenceKpm": 2.062023926345717,
+      "deltaPercent": 0.2766672334784337,
+      "beforeFix": {
+        "killsPerMinute": 2.067728870896401,
+        "shots": 605,
+        "reloads": 7,
+        "directWindow": 8942022.846687555,
+        "dotWindow": 17102380.650882807,
+        "dotByType": {
+          "DT_FIRE": 16549126.217794502,
+          "DT_CINEMATIC": 553254.4330879926
+        },
+        "procCounts": {
+          "DT_PUNCTURE": 21.44492381466498,
+          "DT_FIRE": 120.62770449933595,
+          "DT_IMPACT": 5.361230953666245,
+          "DT_SLASH": 26.80615476833141,
+          "DT_FREEZE": 51.680494085589295
+        },
+        "magneticBreaks": [],
+        "cryogenic": {
+          "coldStacksPerPuncture": 3,
+          "radiusMeters": 15,
+          "expectedColdApplications": 51.680494085589295,
+          "neighborTargetsModeled": false
+        },
+        "averagedStacks": {
+          "heat": 54.16616666666665,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 0.0,
+          "cold": 5.580308333333332,
+          "puncture": 4.2184333333333335
+        }
+      },
+      "local": {
+        "killsPerMinute": 2.067728870896401,
+        "shots": 605,
+        "reloads": 7,
+        "directWindow": 8942022.846687555,
+        "dotWindow": 17102380.650882807,
+        "dotByType": {
+          "DT_CINEMATIC": 553254.4330879926,
+          "DT_FIRE": 16549126.217794502
+        },
+        "procCounts": {
+          "DT_SLASH": 26.80615476833141,
+          "DT_IMPACT": 5.361230953666245,
+          "DT_FIRE": 120.62770449933595,
+          "DT_PUNCTURE": 21.44492381466498,
+          "DT_FREEZE": 51.680494085589295
+        },
+        "magneticBreaks": [],
+        "cryogenic": {
+          "coldStacksPerPuncture": 3,
+          "radiusMeters": 15,
+          "expectedColdApplications": 51.680494085589295,
+          "neighborTargetsModeled": false
+        },
+        "averagedStacks": {
+          "heat": 54.16616666666665,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 0.0,
+          "cold": 5.580308333333332,
+          "puncture": 4.2184333333333335
+        }
+      },
+      "beforeDeltaPercent": 0.2766672334784337
+    },
+    {
+      "id": "without-elementalist",
+      "request": {
+        "weapon": "aksomati_prime",
+        "mode": "base",
+        "mods": [
+          "magnetic_might",
+          "pistol_acuity",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "scorch",
+          "hollow_point"
+        ],
+        "arcane": [
+          "secondary_cryogenic"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "profile": "fast",
+        "slotCount": 8,
+        "maxFill": 8,
+        "minFill": 7,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedCritDamagePistol",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "incarnonCycle": false,
+        "triggerPolicy": "emergent",
+        "externalBuffs": [],
+        "scenario": {
+          "distance": 0.5
+        },
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture",
+            "rank": 5
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": null,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "panel": {
+        "total": 223.30001102000003,
+        "critChance": 0.23999999,
+        "critMultiplier": 6.0014652014652015,
+        "fireRate": 25.33333349999998,
+        "multishot": 1.0,
+        "statusChance": 0.28800002320000034
+      },
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5,
+        "big_crit_rate": 0.25386131386861316,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 27205593.048940063,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 1259518.1967101793,
+        "combatants": [
+          {
+            "big_crit_rate": 0.25386131386861316,
+            "crit_rate": 1,
+            "crit_tier": 1.2538613138686132,
+            "damage": 27205593.048940063,
+            "finishes": 0.871,
+            "id": "wielder",
+            "pellets": 548,
+            "procs": 157.951,
+            "reloads": 6,
+            "shots": 548,
+            "transforms": 0,
+            "weapon": "aksomati_prime"
+          }
+        ],
+        "crit_rate": 1,
+        "crit_tier": 1.2538613138686132,
+        "damage_per_pellet": 49645.24279003661,
+        "damage_per_shot": 49645.24279003661,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 10535951.828967627,
+                "type": "Heat"
+              },
+              {
+                "dmg": 2780320.6215331387,
+                "type": "Magnetic"
+              },
+              {
+                "dmg": 2341322.6286594733,
+                "type": "Slash"
+              },
+              {
+                "dmg": 1902324.6357858412,
+                "type": "Puncture"
+              },
+              {
+                "dmg": 438997.9928736519,
+                "type": "Impact"
+              }
+            ],
+            "dmg": 17998917.70781975,
+            "source": "direct"
+          },
+          {
+            "dmg": 7940829.1216426045,
+            "source": "Heat"
+          },
+          {
+            "dmg": 1015986.3662491532,
+            "source": "Electricity"
+          },
+          {
+            "dmg": 314857.06875000003,
+            "source": "Slash"
+          }
+        ],
+        "downtime": 8.399999999999846,
+        "dps": 906853.1016313354,
+        "dps_runs": [],
+        "dps_se": 1839.5461570062678,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 4693388.076990703,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 0,
+          "total_drain": 52,
+          "umbra": 0,
+          "used": 0
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 0.871,
+        "kills_max": 1,
+        "kills_min": 0,
+        "kills_std": 0.33519994033412354,
+        "max_hit": 1569748.8625000003,
+        "mean_max_hit": 902432.1816928705,
+        "ok": true,
+        "overkill": 102684.27802270626,
+        "overkill_rate": 0.003788681092890337,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.24,
+          "crit_damage": 6,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 5.800000000000001
+            },
+            {
+              "type": "Puncture",
+              "value": 23.200000000000003
+            },
+            {
+              "type": "Slash",
+              "value": 29.000000000000004
+            },
+            {
+              "type": "Heat",
+              "value": 130.5
+            },
+            {
+              "type": "Magnetic",
+              "value": 34.800000000000004
+            }
+          ],
+          "fire_rate": 25.326999999999998,
+          "modified_base": 58.00000000000001,
+          "multishot": 1,
+          "status_chance": 0.288,
+          "total": 223.3
+        },
+        "pellets": 548,
+        "picked_up_ammo": null,
+        "procs": 157.951,
+        "reloads": 6,
+        "replay": null,
+        "run": [
+          726294640,
+          3943674571
+        ],
+        "runs": 1000,
+        "sample": {
+          "dps": 909019.675482045,
+          "kills": 1,
+          "score": 1.068822823433432
+        },
+        "score": 1.0758830962691113,
+        "score_runs": [],
+        "score_se": 0.002154792009552237,
+        "self_damage": null,
+        "shots": 548,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "timeline": [
+          899385.6093750001,
+          1543231.2906250001,
+          1909299.98515625,
+          646192.9668750002,
+          1313188.036015625,
+          2652137.789375,
+          3594489.0507812505,
+          2331896.7089062505,
+          817572.5543793695,
+          523295.42668092676,
+          562659.4118152322,
+          607625.159803004,
+          394943.3533627471,
+          433664.1396791814,
+          455868.6058488928,
+          519573.3979308514,
+          481019.8503794841,
+          265309.56213932124,
+          465961.4302497209,
+          573033.6446208408,
+          627326.7496432223,
+          408613.7609615364,
+          378398.86144443386,
+          566907.7660344682,
+          594339.4578181106,
+          619478.0381588531,
+          359063.2246639958,
+          555275.2921120407,
+          920820.43337587,
+          1250018.70625
+        ],
+        "transforms": 0,
+        "ttk": {
+          "mean": 27.936414286664355,
+          "median": 28.102293994551413,
+          "p90": 29.326284202629783,
+          "runs": 871
+        },
+        "virus_stacks": null
+      },
+      "referenceKpm": 2.1517661925382225,
+      "deltaPercent": 2.130744717577593,
+      "beforeFix": {
+        "killsPerMinute": 2.1976148370203514,
+        "shots": 548,
+        "reloads": 6,
+        "directWindow": 17318961.208661966,
+        "dotWindow": 10361441.359200886,
+        "dotByType": {
+          "DT_FIRE": 9345236.893987529,
+          "DT_CINEMATIC": 385395.62168767204,
+          "DT_ELECTRICITY": 630808.8435257747
+        },
+        "procCounts": {
+          "DT_PUNCTURE": 16.397299212975,
+          "DT_FIRE": 92.23481422197048,
+          "DT_MAGNETIC": 24.59595045919222,
+          "DT_IMPACT": 4.09932480324375,
+          "DT_SLASH": 20.496624016218476,
+          "DT_FREEZE": 38.95854667024314,
+          "DT_ELECTRICITY": 1
+        },
+        "magneticBreaks": [
+          {
+            "time": 9.0,
+            "pool": "overguard",
+            "stacks": 3.725299065899551,
+            "seedPerTick": 289146.5359457541
+          }
+        ],
+        "cryogenic": {
+          "coldStacksPerPuncture": 3,
+          "radiusMeters": 15,
+          "expectedColdApplications": 38.95854667024314,
+          "neighborTargetsModeled": false
+        },
+        "averagedStacks": {
+          "heat": 41.22377499999998,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 4.140358333333333,
+          "cold": 6.349533333333333,
+          "puncture": 4.043700000000001
+        }
+      },
+      "local": {
+        "killsPerMinute": 2.1976148370203514,
+        "shots": 548,
+        "reloads": 6,
+        "directWindow": 17318961.208661966,
+        "dotWindow": 10361441.359200886,
+        "dotByType": {
+          "DT_CINEMATIC": 385395.62168767204,
+          "DT_FIRE": 9345236.893987529,
+          "DT_ELECTRICITY": 630808.8435257747
+        },
+        "procCounts": {
+          "DT_SLASH": 20.496624016218476,
+          "DT_IMPACT": 4.09932480324375,
+          "DT_FIRE": 92.23481422197048,
+          "DT_MAGNETIC": 24.59595045919222,
+          "DT_PUNCTURE": 16.397299212975,
+          "DT_FREEZE": 38.95854667024314,
+          "DT_ELECTRICITY": 1
+        },
+        "magneticBreaks": [
+          {
+            "time": 9.0,
+            "pool": "overguard",
+            "stacks": 3.725299065899551,
+            "seedPerTick": 289146.5359457541,
+            "targetGeneration": 0
+          }
+        ],
+        "cryogenic": {
+          "coldStacksPerPuncture": 3,
+          "radiusMeters": 15,
+          "expectedColdApplications": 38.95854667024314,
+          "neighborTargetsModeled": false
+        },
+        "averagedStacks": {
+          "heat": 41.22377499999998,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 4.140358333333333,
+          "cold": 6.349533333333333,
+          "puncture": 4.043700000000001
+        }
+      },
+      "beforeDeltaPercent": 2.130744717577593
+    },
+    {
+      "id": "without-acuity",
+      "request": {
+        "weapon": "aksomati_prime",
+        "mode": "base",
+        "mods": [
+          "magnetic_might",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "pistol_elementalist",
+          "scorch",
+          "hollow_point"
+        ],
+        "arcane": [
+          "secondary_cryogenic"
+        ],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "profile": "fast",
+        "slotCount": 8,
+        "maxFill": 8,
+        "minFill": 7,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedCritDamagePistol",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "incarnonCycle": false,
+        "triggerPolicy": "emergent",
+        "externalBuffs": [],
+        "scenario": {
+          "distance": 0.5
+        },
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture",
+            "rank": 5
+          }
+        ],
+        "incarnonChoices": {},
+        "exilus": null,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "panel": {
+        "total": 223.30001102000003,
+        "critChance": 0.23999999,
+        "critMultiplier": 6.0014652014652015,
+        "fireRate": 25.33333349999998,
+        "multishot": 1.0,
+        "statusChance": 0.28800002320000034
+      },
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5,
+        "big_crit_rate": 0,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 19203290.888094924,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 804326.3199202063,
+        "combatants": [
+          {
+            "big_crit_rate": 0,
+            "crit_rate": 0.4355223140495868,
+            "crit_tier": 1,
+            "damage": 19203290.888094924,
+            "finishes": 0,
+            "id": "wielder",
+            "pellets": 605,
+            "procs": 174.324,
+            "reloads": 7,
+            "shots": 605,
+            "transforms": 0,
+            "weapon": "aksomati_prime"
+          }
+        ],
+        "crit_rate": 0.4355223140495868,
+        "crit_tier": 0.4355223140495868,
+        "damage_per_pellet": 31740.976674537065,
+        "damage_per_shot": 31740.976674537065,
+        "damage_sources": [
+          {
+            "dmg": 10808598.923092043,
+            "source": "Heat"
+          },
+          {
+            "by_type": [
+              {
+                "dmg": 3332084.6947030947,
+                "type": "Heat"
+              },
+              {
+                "dmg": 879300.1277688663,
+                "type": "Magnetic"
+              },
+              {
+                "dmg": 740463.2654895738,
+                "type": "Slash"
+              },
+              {
+                "dmg": 601626.4032102779,
+                "type": "Puncture"
+              },
+              {
+                "dmg": 138836.8622792949,
+                "type": "Impact"
+              }
+            ],
+            "dmg": 5692311.353451097,
+            "source": "direct"
+          },
+          {
+            "dmg": 2445140.521439628,
+            "source": "Electricity"
+          },
+          {
+            "dmg": 214415.98325000005,
+            "source": "Slash"
+          }
+        ],
+        "downtime": 6.124999999999999,
+        "dps": 640109.6962698308,
+        "dps_runs": [],
+        "dps_se": 1792.5417496807354,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 597867.8459958752,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 0,
+          "total_drain": 49,
+          "umbra": 0,
+          "used": 0
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 0,
+        "kills_max": 0,
+        "kills_min": 0,
+        "kills_std": 0,
+        "max_hit": 1308047.780000001,
+        "mean_max_hit": 860946.7115293506,
+        "ok": true,
+        "overkill": 0,
+        "overkill_rate": 0,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.24,
+          "crit_damage": 6,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 5.800000000000001
+            },
+            {
+              "type": "Puncture",
+              "value": 23.200000000000003
+            },
+            {
+              "type": "Slash",
+              "value": 29.000000000000004
+            },
+            {
+              "type": "Heat",
+              "value": 130.5
+            },
+            {
+              "type": "Magnetic",
+              "value": 34.800000000000004
+            }
+          ],
+          "fire_rate": 25.326999999999998,
+          "modified_base": 58.00000000000001,
+          "multishot": 1,
+          "status_chance": 0.288,
+          "total": 223.3
+        },
+        "pellets": 605,
+        "picked_up_ammo": null,
+        "procs": 174.324,
+        "reloads": 7,
+        "replay": null,
+        "run": [
+          4171771667,
+          425230248
+        ],
+        "runs": 1000,
+        "sample": {
+          "dps": 638682.2260410914,
+          "kills": 0,
+          "score": 0.7605981520579195
+        },
+        "score": 0.7622981073311808,
+        "score_runs": [],
+        "score_se": 0.0021347140826900144,
+        "self_damage": null,
+        "shots": 605,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "timeline": [
+          94035.03750000002,
+          238502.48312500003,
+          313901.0615625,
+          193430.82,
+          590418.3450000001,
+          665852.708125,
+          726207.3740625,
+          461406.31781250006,
+          612335.0762500002,
+          684271.3618750001,
+          752085.0856250002,
+          683244.8100000002,
+          830119.5159375002,
+          965826.7490625002,
+          1050255.5343750003,
+          791992.0640625003,
+          904380.4218749999,
+          945733.2778125003,
+          1023077.3381250001,
+          821403.5672500005,
+          926285.3162500005,
+          1012612.0696875006,
+          765954.2870470191,
+          529203.3223290433,
+          556374.4333376552,
+          566846.7774358828,
+          569858.9246306622,
+          549125.0529468859,
+          165774.00613984792,
+          169953.6419907629
+        ],
+        "transforms": 0,
+        "ttk": {
+          "mean": 0,
+          "median": 0,
+          "p90": 0,
+          "runs": 0
+        },
+        "virus_stacks": null
+      },
+      "referenceKpm": 1.5245962146623615,
+      "deltaPercent": 1.8346269342830013,
+      "beforeFix": {
+        "killsPerMinute": 1.5525668674556163,
+        "shots": 605,
+        "reloads": 7,
+        "directWindow": 6031972.218225123,
+        "dotWindow": 13523627.416771298,
+        "dotByType": {
+          "DT_FIRE": 10229360.629973885,
+          "DT_CINEMATIC": 221391.51302996397,
+          "DT_ELECTRICITY": 3072875.273767182
+        },
+        "procCounts": {
+          "DT_PUNCTURE": 18.102857707755252,
+          "DT_FIRE": 101.82858139469347,
+          "DT_MAGNETIC": 27.15428837191842,
+          "DT_IMPACT": 4.525714426938813,
+          "DT_SLASH": 22.62857213469374,
+          "DT_FREEZE": 49.55096258519376,
+          "DT_ELECTRICITY": 1
+        },
+        "magneticBreaks": [
+          {
+            "time": 24.0,
+            "pool": "overguard",
+            "stacks": 5.026909582900599,
+            "seedPerTick": 1408526.9252678717
+          }
+        ],
+        "cryogenic": {
+          "coldStacksPerPuncture": 3,
+          "radiusMeters": 15,
+          "expectedColdApplications": 49.55096258519376,
+          "neighborTargetsModeled": false
+        },
+        "averagedStacks": {
+          "heat": 52.00836666666667,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 4.901566666666666,
+          "cold": 4.774674999999999,
+          "puncture": 4.3922583333333325
+        }
+      },
+      "local": {
+        "killsPerMinute": 1.5525668674556163,
+        "shots": 605,
+        "reloads": 7,
+        "directWindow": 6031972.218225123,
+        "dotWindow": 13523627.416771298,
+        "dotByType": {
+          "DT_CINEMATIC": 221391.51302996397,
+          "DT_FIRE": 10229360.629973885,
+          "DT_ELECTRICITY": 3072875.273767182
+        },
+        "procCounts": {
+          "DT_SLASH": 22.62857213469374,
+          "DT_IMPACT": 4.525714426938813,
+          "DT_FIRE": 101.82858139469347,
+          "DT_MAGNETIC": 27.15428837191842,
+          "DT_PUNCTURE": 18.102857707755252,
+          "DT_FREEZE": 49.55096258519376,
+          "DT_ELECTRICITY": 1
+        },
+        "magneticBreaks": [
+          {
+            "time": 24.0,
+            "pool": "overguard",
+            "stacks": 5.026909582900599,
+            "seedPerTick": 1408526.9252678717,
+            "targetGeneration": 0
+          }
+        ],
+        "cryogenic": {
+          "coldStacksPerPuncture": 3,
+          "radiusMeters": 15,
+          "expectedColdApplications": 49.55096258519376,
+          "neighborTargetsModeled": false
+        },
+        "averagedStacks": {
+          "heat": 52.00836666666667,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 4.901566666666666,
+          "cold": 4.774674999999999,
+          "puncture": 4.3922583333333325
+        }
+      },
+      "beforeDeltaPercent": 1.8346269342830013
+    },
+    {
+      "id": "without-cryo-magnetic",
+      "request": {
+        "weapon": "aksomati_prime",
+        "mode": "base",
+        "mods": [
+          "pistol_acuity",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "pistol_elementalist",
+          "scorch",
+          "hollow_point"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "profile": "fast",
+        "slotCount": 8,
+        "maxFill": 8,
+        "minFill": 7,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedCritDamagePistol",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "incarnonCycle": false,
+        "triggerPolicy": "emergent",
+        "externalBuffs": [],
+        "scenario": {
+          "distance": 0.5
+        },
+        "arcanes": [],
+        "incarnonChoices": {},
+        "exilus": null,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "panel": {
+        "total": 188.50000870000002,
+        "critChance": 0.23999999,
+        "critMultiplier": 4.801172161172161,
+        "fireRate": 25.33333349999998,
+        "multishot": 1.0,
+        "statusChance": 0.28800002320000034
+      },
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5,
+        "big_crit_rate": 0.2809768595041322,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 25645055.289299645,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 1074138.4414366344,
+        "combatants": [
+          {
+            "big_crit_rate": 0.2809768595041322,
+            "crit_rate": 1,
+            "crit_tier": 1.2809768595041322,
+            "damage": 25645055.289299645,
+            "finishes": 0.702,
+            "id": "wielder",
+            "pellets": 605,
+            "procs": 174.289,
+            "reloads": 7,
+            "shots": 605,
+            "transforms": 0,
+            "weapon": "aksomati_prime"
+          }
+        ],
+        "crit_rate": 1,
+        "crit_tier": 1.2809768595041322,
+        "damage_per_pellet": 42388.521139338256,
+        "damage_per_shot": 42388.521139338256,
+        "damage_sources": [
+          {
+            "dmg": 17047254.339361593,
+            "source": "Heat"
+          },
+          {
+            "by_type": [
+              {
+                "dmg": 5647351.764551869,
+                "type": "Heat"
+              },
+              {
+                "dmg": 1254967.0587892998,
+                "type": "Slash"
+              },
+              {
+                "dmg": 1019660.7352663088,
+                "type": "Puncture"
+              },
+              {
+                "dmg": 235306.32352299066,
+                "type": "Impact"
+              }
+            ],
+            "dmg": 8157285.88213047,
+            "source": "direct"
+          },
+          {
+            "dmg": 645433.704999999,
+            "source": "Slash"
+          }
+        ],
+        "downtime": 6.124999999999999,
+        "dps": 854835.1763099881,
+        "dps_runs": [],
+        "dps_se": 897.3821946755432,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 1784577.9880504983,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 0,
+          "total_drain": 54,
+          "umbra": 0,
+          "used": 0
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 0.703,
+        "kills_max": 1,
+        "kills_min": 0,
+        "kills_std": 0.45693653826324726,
+        "max_hit": 1379865.500000001,
+        "mean_max_hit": 1098509.3680169983,
+        "ok": true,
+        "overkill": 219254.50054741598,
+        "overkill_rate": 0.008623307575209549,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.24,
+          "crit_damage": 4.800000000000001,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 5.800000000000001
+            },
+            {
+              "type": "Puncture",
+              "value": 23.200000000000003
+            },
+            {
+              "type": "Slash",
+              "value": 29.000000000000004
+            },
+            {
+              "type": "Heat",
+              "value": 130.5
+            }
+          ],
+          "fire_rate": 25.326999999999998,
+          "modified_base": 58.00000000000001,
+          "multishot": 1,
+          "status_chance": 0.288,
+          "total": 188.5
+        },
+        "pellets": 605,
+        "picked_up_ammo": null,
+        "procs": 174.289,
+        "reloads": 7,
+        "replay": null,
+        "run": [
+          177752509,
+          2461573269
+        ],
+        "runs": 1000,
+        "sample": {
+          "dps": 861665.7975497446,
+          "kills": 1,
+          "score": 1.014754088526081
+        },
+        "score": 1.0093082446957617,
+        "score_runs": [],
+        "score_se": 0.000876862108104572,
+        "self_damage": null,
+        "shots": 605,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "timeline": [
+          468403.6500000003,
+          511157.1237500003,
+          634898.4200000002,
+          343576.0305,
+          751516.4204999995,
+          828991.4462499995,
+          949411.3157499994,
+          601770.0075000001,
+          1008963.9374999995,
+          1131204.9497499997,
+          1208307.2239999995,
+          911013.9777500005,
+          1331870.9157499997,
+          1413694.7077499998,
+          1505733.5459999994,
+          1257324.7640000002,
+          1026514.0673815935,
+          662086.0667594655,
+          725507.1742647426,
+          607177.5369065576,
+          708613.2341049132,
+          737389.1938092811,
+          760778.1671966679,
+          669211.4892864799,
+          735770.2606946793,
+          804867.9567136925,
+          862500.5524397934,
+          779023.0071170775,
+          835973.1001412572,
+          1076723.6829258346
+        ],
+        "transforms": 0,
+        "ttk": {
+          "mean": 28.48630908428989,
+          "median": 28.630626406601834,
+          "p90": 29.341330398389275,
+          "runs": 703
+        },
+        "virus_stacks": null
+      },
+      "referenceKpm": 2.0186164893915235,
+      "deltaPercent": 0.6780275211342612,
+      "beforeFix": {
+        "killsPerMinute": 2.032303264735752,
+        "shots": 605,
+        "reloads": 7,
+        "directWindow": 8184087.605196822,
+        "dotWindow": 17414107.11037189,
+        "dotByType": {
+          "DT_FIRE": 16885176.495992653,
+          "DT_CINEMATIC": 528930.6143783928
+        },
+        "procCounts": {
+          "DT_PUNCTURE": 21.44492381466498,
+          "DT_FIRE": 120.62770449933595,
+          "DT_IMPACT": 5.361230953666245,
+          "DT_SLASH": 26.80615476833141
+        },
+        "magneticBreaks": [],
+        "cryogenic": null,
+        "averagedStacks": {
+          "heat": 57.755091666666644,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 0.0,
+          "cold": 0.0,
+          "puncture": 4.349066666666666
+        }
+      },
+      "local": {
+        "killsPerMinute": 2.032303264735752,
+        "shots": 605,
+        "reloads": 7,
+        "directWindow": 8184087.605196822,
+        "dotWindow": 17414107.11037189,
+        "dotByType": {
+          "DT_CINEMATIC": 528930.6143783928,
+          "DT_FIRE": 16885176.495992653
+        },
+        "procCounts": {
+          "DT_SLASH": 26.80615476833141,
+          "DT_IMPACT": 5.361230953666245,
+          "DT_FIRE": 120.62770449933595,
+          "DT_PUNCTURE": 21.44492381466498
+        },
+        "magneticBreaks": [],
+        "cryogenic": null,
+        "averagedStacks": {
+          "heat": 57.755091666666644,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 0.0,
+          "cold": 0.0,
+          "puncture": 4.349066666666666
+        }
+      },
+      "beforeDeltaPercent": 0.6780275211342612
+    },
+    {
+      "id": "without-cryo-elementalist",
+      "request": {
+        "weapon": "aksomati_prime",
+        "mode": "base",
+        "mods": [
+          "magnetic_might",
+          "pistol_acuity",
+          "primed_heated_charge",
+          "hornet_strike",
+          "anemic_agility",
+          "scorch",
+          "hollow_point"
+        ],
+        "arcane": [],
+        "evolutions": [],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100.0,
+        "aiming": true,
+        "duration": 30,
+        "runs": 1000,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ]
+      },
+      "manualRequest": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+        "fireMode": 0,
+        "metric": "killsPerMinute",
+        "profile": "fast",
+        "slotCount": 8,
+        "maxFill": 8,
+        "minFill": 7,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedCritDamagePistol",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "incarnonCycle": false,
+        "triggerPolicy": "emergent",
+        "externalBuffs": [],
+        "scenario": {
+          "distance": 0.5
+        },
+        "arcanes": [],
+        "incarnonChoices": {},
+        "exilus": null,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ]
+      },
+      "panel": {
+        "total": 223.30001102000003,
+        "critChance": 0.23999999,
+        "critMultiplier": 6.0014652014652015,
+        "fireRate": 25.33333349999998,
+        "multishot": 1.0,
+        "statusChance": 0.28800002320000034
+      },
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.5,
+        "big_crit_rate": 0.25933576642335765,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 26023301.112030376,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 1204782.4588902867,
+        "combatants": [
+          {
+            "big_crit_rate": 0.25933576642335765,
+            "crit_rate": 1,
+            "crit_tier": 1.2593357664233578,
+            "damage": 26023301.112030376,
+            "finishes": 0.632,
+            "id": "wielder",
+            "pellets": 548,
+            "procs": 157.974,
+            "reloads": 6,
+            "shots": 548,
+            "transforms": 0,
+            "weapon": "aksomati_prime"
+          }
+        ],
+        "crit_rate": 1,
+        "crit_tier": 1.2593357664233578,
+        "damage_per_pellet": 47487.77575188025,
+        "damage_per_shot": 47487.77575188025,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 9600930.190506067,
+                "type": "Heat"
+              },
+              {
+                "dmg": 2533578.800272382,
+                "type": "Magnetic"
+              },
+              {
+                "dmg": 2133540.0423346753,
+                "type": "Slash"
+              },
+              {
+                "dmg": 1733501.2843969278,
+                "type": "Puncture"
+              },
+              {
+                "dmg": 400038.757937753,
+                "type": "Impact"
+              }
+            ],
+            "dmg": 16401589.075447695,
+            "source": "direct"
+          },
+          {
+            "dmg": 8130992.119163138,
+            "source": "Heat"
+          },
+          {
+            "dmg": 846655.3052076275,
+            "source": "Electricity"
+          },
+          {
+            "dmg": 351749.12499999953,
+            "source": "Slash"
+          }
+        ],
+        "downtime": 8.399999999999846,
+        "dps": 867443.3704010125,
+        "dps_runs": [],
+        "dps_se": 1517.4580514051013,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 4574304.656524218,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 0,
+          "total_drain": 52,
+          "umbra": 0,
+          "used": 0
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 0.632,
+        "kills_max": 1,
+        "kills_min": 0,
+        "kills_std": 0.48226133993924913,
+        "max_hit": 1510420.8437500005,
+        "mean_max_hit": 894088.2075584665,
+        "ok": true,
+        "overkill": 68415.07287953616,
+        "overkill_rate": 0.002635922684319923,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 0.24,
+          "crit_damage": 6,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 5.800000000000001
+            },
+            {
+              "type": "Puncture",
+              "value": 23.200000000000003
+            },
+            {
+              "type": "Slash",
+              "value": 29.000000000000004
+            },
+            {
+              "type": "Heat",
+              "value": 130.5
+            },
+            {
+              "type": "Magnetic",
+              "value": 34.800000000000004
+            }
+          ],
+          "fire_rate": 25.326999999999998,
+          "modified_base": 58.00000000000001,
+          "multishot": 1,
+          "status_chance": 0.288,
+          "total": 223.3
+        },
+        "pellets": 548,
+        "picked_up_ammo": null,
+        "procs": 157.974,
+        "reloads": 6,
+        "replay": null,
+        "run": [
+          1923046261,
+          149624371
+        ],
+        "runs": 1000,
+        "sample": {
+          "dps": 857699.5208272984,
+          "kills": 1,
+          "score": 1.0209540585395565
+        },
+        "score": 1.0303109305034175,
+        "score_runs": [],
+        "score_se": 0.0017481821953130798,
+        "self_damage": null,
+        "shots": 548,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "timeline": [
+          787192.3125000001,
+          1638709.6171875002,
+          2113358.25078125,
+          601130.0281250001,
+          1376287.5328125001,
+          2845485.9523437503,
+          3246769.1609375,
+          2838343.2914062506,
+          326204.2572917996,
+          532157.9280492142,
+          519311.9081082374,
+          538614.955031784,
+          362719.52995717945,
+          366219.74396288017,
+          374782.80843972723,
+          414442.53862693335,
+          398629.1321033446,
+          213966.37090147295,
+          398029.8371599755,
+          461394.95066010574,
+          525364.7172491237,
+          391436.3839185088,
+          355299.11669095274,
+          540592.5715772965,
+          535381.3433702678,
+          581807.087445034,
+          353822.19453734125,
+          510306.55484813364,
+          599397.4747943669,
+          983828.074001108
+        ],
+        "transforms": 0,
+        "ttk": {
+          "mean": 28.547353477276783,
+          "median": 28.77351443123955,
+          "p90": 29.552769771390217,
+          "runs": 632
+        },
+        "virus_stacks": null
+      },
+      "referenceKpm": 2.060621861006835,
+      "deltaPercent": 0.24144941227401961,
+      "beforeFix": {
+        "killsPerMinute": 2.0655972203794257,
+        "shots": 548,
+        "reloads": 6,
+        "directWindow": 15370366.350721762,
+        "dotWindow": 10647187.608225502,
+        "dotByType": {
+          "DT_FIRE": 9661705.294131527,
+          "DT_CINEMATIC": 369873.6836655179,
+          "DT_ELECTRICITY": 615608.6304287681
+        },
+        "procCounts": {
+          "DT_PUNCTURE": 16.367377134119206,
+          "DT_FIRE": 92.06650251718587,
+          "DT_MAGNETIC": 24.551067337916322,
+          "DT_IMPACT": 4.0918442835298015,
+          "DT_SLASH": 20.459221417648735,
+          "DT_ELECTRICITY": 1
+        },
+        "magneticBreaks": [
+          {
+            "time": 9.15526311608381,
+            "pool": "overguard",
+            "stacks": 3.6355328233477544,
+            "seedPerTick": 282179.1495374227
+          }
+        ],
+        "cryogenic": null,
+        "averagedStacks": {
+          "heat": 43.85504166666666,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 4.241341666666666,
+          "cold": 0.0,
+          "puncture": 4.166716666666667
+        }
+      },
+      "local": {
+        "killsPerMinute": 2.0655972203794257,
+        "shots": 548,
+        "reloads": 6,
+        "directWindow": 15370366.350721762,
+        "dotWindow": 10647187.608225502,
+        "dotByType": {
+          "DT_CINEMATIC": 369873.6836655179,
+          "DT_FIRE": 9661705.294131527,
+          "DT_ELECTRICITY": 615608.6304287681
+        },
+        "procCounts": {
+          "DT_SLASH": 20.459221417648735,
+          "DT_IMPACT": 4.0918442835298015,
+          "DT_FIRE": 92.06650251718587,
+          "DT_MAGNETIC": 24.551067337916322,
+          "DT_PUNCTURE": 16.367377134119206,
+          "DT_ELECTRICITY": 1
+        },
+        "magneticBreaks": [
+          {
+            "time": 9.15526311608381,
+            "pool": "overguard",
+            "stacks": 3.6355328233477544,
+            "seedPerTick": 282179.1495374227,
+            "targetGeneration": 0
+          }
+        ],
+        "cryogenic": null,
+        "averagedStacks": {
+          "heat": 43.85504166666666,
+          "viral": 0.0,
+          "corrosive": 0.0,
+          "magnetic": 4.241341666666666,
+          "cold": 0.0,
+          "puncture": 4.166716666666667
+        }
+      },
+      "beforeDeltaPercent": 0.24144941227401961
+    }
+  ],
+  "kind": "synthetic-one-change-ablation-from-actual-automatic-build",
+  "fingerprint": "f9badf3f84ce57bc",
+  "scriptSha256": "d1f5646670890f54b18f624c24a5253779614805441d35d9adb9777db1dec082",
+  "referenceResponseReuse": "Same frozen WASM, seed and request; only local event settlement changed."
+}

@@ -9,6 +9,8 @@ def main():
     ap.add_argument('--full',action='store_true',help='Use eight slots instead of two')
     ap.add_argument('--archguns',action='store_true',help='Audit ground Arch-guns with primary/secondary Arcanes')
     ap.add_argument('--community',action='store_true',help='Audit newly sampled ranged weapons with their relevant arcanes')
+    ap.add_argument('--radial',action='store_true',help='Audit projectile builds with Primary Compression')
+    ap.add_argument('--cryogenic',action='store_true',help='Audit full secondary builds with native puncture-to-Cold events')
     ap.add_argument('--status-arcanes',action='store_true',help='Audit event-only arcanes and raw spooling models')
     ap.add_argument('--enervate',action='store_true',help='Use Secondary Enervate in the Arch-gun regression')
     ap.add_argument('--weapons',nargs='+',help='Restrict the named regression weapons')
@@ -18,6 +20,8 @@ def main():
     out.parent.mkdir(parents=True,exist_ok=True)
     rows=[]
     names=['Braton Prime','Burston Prime','Torid','Felarx','Mausolon','Nataruk','Lex Prime','Nikana Prime']
+    if args.radial:names=['Kuva Ogris','Kuva Bramma','Penta','Zarr','Acceltra Prime','Sonicor','Stug','Simulor','Synoid Simulor']
+    if args.cryogenic:names=['Aksomati Prime','Akbolto Prime','Kuva Twin Stubbas']
     if args.archguns:names=['Imperator Vandal','Mausolon','Kuva Grattler','Larkspur Prime','Cyngas','Morgha']
     if args.community:names=['Ignis Wraith','Amprex','Kuva Nukor','Tenet Cycron','Baza Prime','Trumna Prime']
     if args.status_arcanes:names=['Aksomati Prime','Twin Grakatas','Akbolto Prime','Tenet Cycron','Kohm','Twin Kohmak']
@@ -50,7 +54,16 @@ def main():
       p['externalBuffs']=[]
       p['headshotChance']=1
       if name=='Tenet Cycron':p.update(innateElement='DT_MAGNETIC',innateElementValue=.6)
-     t=time.perf_counter();row=dict(name=name,request=p)
+     if args.radial:
+      p.update(metric='killsPerMinute',externalBuffs=[],headshotChance=1.,scenario={'distance':10.})
+      if name not in ('Sonicor','Stug'):
+       p['arcanes']=[{'path':'/Lotus/Upgrades/CosmeticEnhancers/Utility/ConvergeRadialAttackOnAim','rank':5}]
+      if name in ['Kuva Ogris','Kuva Bramma']:p.update(innateElement='DT_MAGNETIC',innateElementValue=.6)
+     if args.cryogenic:
+      p.update(metric='killsPerMinute',externalBuffs=[],headshotChance=1.,scenario={'distance':.5})
+      p['arcanes']=[dict(path='/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture',rank=5)]
+      if name=='Kuva Twin Stubbas':p.update(innateElement='DT_MAGNETIC',innateElementValue=.6)
+     t=time.perf_counter();row=dict(name=name,request=p,inputFingerprint=app._analysis_inputs_fingerprint())
      try:
       res=app.build_weapon_payload(p);build=res['build']
       mods=[{'path':m['path'],'rank':m['rank'],'slot':m.get('slot',i)} for i,m in enumerate(build['mods'])]
@@ -62,7 +75,7 @@ def main():
       manual['slotPolarities']=slots
       mr=app.simulate_manual_payload(manual)
       a=build['objectiveScore'];b=mr['benchmarkTimeline']['killsPerMinute']
-      row.update(automatic=a,manual=b,delta=a-b,passed=abs(a-b)<max(1e-7,abs(b)*1e-8),build=build,manualRequest=manual,unsupported=res['unsupported'],model=res['scoringModel'])
+      row.update(automatic=a,manual=b,delta=a-b,passed=abs(a-b)<max(1e-7,abs(b)*1e-8),build=build,manualRequest=manual,unsupported=res['unsupported'],manualUnsupported=mr.get('unsupported',[]),model=res['scoringModel'])
      except Exception as e:row.update(error=str(e),traceback=traceback.format_exc(),passed=False)
      row['seconds']=time.perf_counter()-t;rows.append(row)
      out.write_text(json.dumps(rows,ensure_ascii=False,indent=2)+chr(10),encoding='utf-8')

@@ -166,8 +166,8 @@ class ModGainsRivenCacheTests(unittest.TestCase):
             "steelPath": True,
             "mods": [
                 {
-                    "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponToxinDamageModExpert",
-                    "rank": 10,
+                    "path": "/Lotus/Upgrades/Mods/Pistol/WeaponToxinDamageMod",
+                    "rank": 5,
                     "slot": 0,
                 }
             ],

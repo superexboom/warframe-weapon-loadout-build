@@ -1,0 +1,80 @@
+{
+  "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+  "fireMode": 0,
+  "metric": "killsPerMinute",
+  "profile": "fast",
+  "slotCount": 8,
+  "maxFill": 8,
+  "minFill": 7,
+  "mods": [
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+      "rank": 3,
+      "slot": 0
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+      "rank": 10,
+      "slot": 1
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+      "rank": 10,
+      "slot": 2
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+      "rank": 10,
+      "slot": 3
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+      "rank": 5,
+      "slot": 4
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+      "rank": 5,
+      "slot": 5
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+      "rank": 3,
+      "slot": 6
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedCritDamagePistol",
+      "rank": 5,
+      "slot": 7
+    }
+  ],
+  "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+  "level": 9999,
+  "steelPath": true,
+  "headshotChance": 1.0,
+  "aiming": true,
+  "incarnonCycle": false,
+  "triggerPolicy": "emergent",
+  "externalBuffs": [],
+  "scenario": {
+    "distance": 0.5
+  },
+  "arcanes": [
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture",
+      "rank": 5
+    }
+  ],
+  "incarnonChoices": {},
+  "exilus": null,
+  "slotPolarities": [
+    "AP_ATTACK",
+    "AP_TACTIC",
+    "AP_TACTIC",
+    "AP_ATTACK",
+    "AP_TACTIC",
+    "AP_DEFENSE",
+    "AP_ATTACK",
+    "AP_TACTIC"
+  ]
+}

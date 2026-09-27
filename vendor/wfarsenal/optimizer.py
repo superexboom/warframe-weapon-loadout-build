@@ -657,6 +657,10 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
     source = str(branch.get("path") or branch.get("id") or "incarnon")
     effects: list[ModEffect] = []
     unsupported: list[str] = []
+    from .runtime_adapters import verified_stug_condition
+    modeled_sources = {str(c.get('sourcePath') or source)
+                       for c in branch.get('conditionalEffects') or ()
+                       if verified_stug_condition(branch, c)}
     # Flattened child effects repeat the condition block. Never make them passive.
     conditional_sources = {str(c.get('sourcePath') or source)
                            for c in branch.get('conditionalEffects') or () if c.get('effects')}
@@ -664,7 +668,8 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
         if not isinstance(raw, Mapping):
             continue
         if str(raw.get('sourcePath') or source) in conditional_sources:
-            unsupported.append(f'incarnon-{branch.get("id")}-conditional-source-excluded')
+            if str(raw.get('sourcePath') or source) not in modeled_sources:
+                unsupported.append(f'incarnon-{branch.get("id")}-conditional-source-excluded')
             continue
         gate = _incarnon_expected_weight(str(raw.get("sourcePath") or source))
         if gate == "headshot_only":
@@ -720,7 +725,8 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
             unsupported.append(
                 f"incarnon-{branch.get('id')}-{effect.upgrade_type}-not-evaluated"
             )
-    if branch.get("conditionalEffects"):
+    if any(str(c.get('sourcePath') or source) not in modeled_sources
+           for c in branch.get('conditionalEffects') or ()):
         unsupported.append(f"incarnon-{branch.get('id')}-conditional-effects-not-applied")
     if branch.get("runtimeScripts"):
         unsupported.append(f"incarnon-{branch.get('id')}-runtime-scripts-not-applied")
@@ -732,10 +738,13 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
 def _branch_trigger_specs(branch: Mapping[str, Any]) -> list[dict[str, Any]]:
     """Export only identified events; a duration alone does not imply on-hit."""
     from .manual_combat import condition_kind
+    from .runtime_adapters import verified_stug_condition
     specs=[]
     for condition in branch.get('conditionalEffects') or []:
         if condition.get('runtimeScripts'):continue
-        kind=condition_kind(condition)
+        verified=verified_stug_condition(branch, condition)
+        if verified:condition=verified
+        kind=condition.get('eventKind') or condition_kind(condition)
         if not kind:continue
         source=str(condition.get('sourcePath') or branch.get('path') or '')
         terms=condition.get('effects') or []
@@ -744,6 +753,10 @@ def _branch_trigger_specs(branch: Mapping[str, Any]) -> list[dict[str, Any]]:
               'perEvent':float(condition.get('chance') or 1.),
               'maxStacks':float(condition.get('maxStacks') or 1.),
               'duration':float(condition.get('duration') or 0.)}
+        if condition.get('resetOn'):
+            spec['resetOn']=list(condition['resetOn'])
+        if condition.get('conditionText'):
+            spec['conditionText']=condition['conditionText']
         damage=sum(float(e.get('valuePerRank') or 0.) for e in terms if e.get('upgradeType')=='WEAPON_DAMAGE_AMOUNT')
         if damage:spec['damagePerStack']=damage
         specs.append(spec)
@@ -1286,6 +1299,10 @@ def _arcane_card(
             state["uptime"] = expected_uptime
             state["expectedStacks"] = expected_stacks
             state["expectedUptime"] = expected_uptime
+        from .runtime_adapters import compression_configuration
+        compression_spec = compression_configuration(arcane, int(state['rank']))
+        if compression_spec and raw.get('stacks') == 0:
+            effect_uptime = 0.0
         try:
             effects = arcane_effects(
                 arcane,
@@ -1322,6 +1339,14 @@ def _arcane_card(
             state["active"] = bool(state["expectedStacks"]) or bool(enervate_spec)
             state["applied"] = True
             state["effectCount"] = len(supported_effects)
+            if compression_spec:
+                # Actual ADS and per-attack profile gates resolve downstream.
+                state.update(mode='conditional', triggerCondition='aiming',
+                    eventModel='primary-compression', active=effect_uptime > 0,
+                    expectedUptime=effect_uptime, conditionRequired=True,
+                    triggerDescription='While aiming: lose 80% of the audited attack radius; continuous damage and ammo-efficiency bonuses per metre lost. Unknown profiles are excluded.',
+                    damagePerMeter=compression_spec['damagePerMeter'],
+                    ammoEfficiencyPerMeter=compression_spec['ammoPerMeter'])
         elif not status_spec:
             from .manual_combat import modeled_event_kinds
             event_kinds = modeled_event_kinds(arcane, int(state['rank']))

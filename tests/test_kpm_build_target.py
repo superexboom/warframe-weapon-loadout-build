@@ -2,12 +2,10 @@
 from __future__ import annotations
 
 import math
-import os
-
-os.environ.setdefault("WF_ANALYZER_SERIAL", "1")
 
 
-def test_build_payload_accepts_internal_kpm_target_without_catalog_metric_pollution():
+def test_build_payload_accepts_internal_kpm_target_without_catalog_metric_pollution(monkeypatch):
+    monkeypatch.setenv("WF_ANALYZER_SERIAL", "1")
     import app
 
     weapon = next(row for row in app.EXPORTS["weapons"] if row.get("nameEn") == "Braton Prime")

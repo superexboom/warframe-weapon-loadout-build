@@ -20772,14 +20772,13 @@
         }
        }
       ],
-      "critChance": 0.1,
+      "critChance": 0.0,
       "critMultiplier": 2.0,
-      "falloff": null,
       "flightSpeed": 50,
       "forcedProcs": [
-       "PT_KNOCKBACK"
+       "PT_RAGDOLL"
       ],
-      "procChance": 0.25,
+      "procChance": 0,
       "projectile": "/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolProjectile",
       "radial": {
        "falloff": null,
@@ -20797,14 +20796,13 @@
         "DT_IMPACT": 50.0
        }
       },
-      "radius": 5,
       "shares": {
        "DT_IMPACT": 1.0
       },
-      "source": "ExplosiveAttack",
-      "total": 50.0,
+      "source": "ImpactBehavior",
+      "total": 150.0,
       "types": {
-       "DT_IMPACT": 50.0
+       "DT_IMPACT": 150.0
       }
      },
      "falloffMinDamage": 25,

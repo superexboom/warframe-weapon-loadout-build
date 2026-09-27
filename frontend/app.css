@@ -1259,6 +1259,7 @@ body.is-modal-open { overflow: hidden; }
 .combat-chart-head::after { color: var(--muted-dark); content: "▸"; font-size: 9px; transition: transform .15s ease; }
 .combat-chart-head strong { color: var(--muted); font-size: 10px; font-weight: 650; }
 .combat-chart-swatch { width: 14px; height: 3px; border-radius: 2px; }
+.combat-chart-condition { margin: 3px 10px 6px; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .combat-chart-svg { display: block; width: 100%; height: 110px; }
 .combat-chart-row:not([open]) .combat-chart-svg { display: none; }
 /* 每张图自己的气泡（贴近光标，防溢出翻转） */

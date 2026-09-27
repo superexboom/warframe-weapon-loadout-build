@@ -6961,6 +6961,7 @@ function drawBenchmarkReplay(bench) {
     const uptime = Number(series.uptime || 0);
     charts.push({
       key: `trigger-${series.id}`,
+      description: [series.conditionText, series.simulationMode === 'fixed' ? '本次使用指定层数/覆盖率，不由上述事件累积。' : ''].filter(Boolean).join(' '),
       label: `${series.label}（${series.kind === "enervate" ? "期望层数" : "均值"} ${avg.toFixed(1)} · 覆盖 ${(uptime * 100).toFixed(0)}%）`,
       color: TRIGGER_COLORS[index % TRIGGER_COLORS.length],
       render(svg) {
@@ -7016,6 +7017,7 @@ function drawBenchmarkReplay(bench) {
     crossLines.push({ layer: hoverLayer, line: crossLine });
     // 悬停：光标全图同步；气泡跟随鼠标所在的那张图
     const chartTip = create("div", "timeline-tip combat-chart-tip");
+    chartTip.hidden = true;
     section.append(chartTip);
     svg.addEventListener("mousemove", (evt) => {
       const rect = svg.getBoundingClientRect();
@@ -7047,7 +7049,9 @@ function drawBenchmarkReplay(bench) {
       for (const entry of crossLines) entry.layer.style.display = "none";
       chartTip.hidden = true;
     });
-    section.append(head, svg);
+    section.prepend(head);
+    if (chart.description) section.append(create('p', 'combat-chart-condition muted', chart.description));
+    section.append(svg);
     return section;
   });
 

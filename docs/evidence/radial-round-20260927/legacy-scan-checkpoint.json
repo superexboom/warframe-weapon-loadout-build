@@ -1,0 +1,208 @@
+{
+  "stoppedAt": "2026-09-27T04:04:23.9475139+08:00",
+  "reason": "Unversioned old audit processes started before current model edits; preserve partial coverage only, not acceptance. Release workers for versioned rerun.",
+  "processes": [
+    {
+      "ProcessId": 38120,
+      "ParentProcessId": 42072,
+      "CreationDate": "2026-09-27T02:25:40.921098+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" tools/audit_nonmelee_catalog.py --output C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\docs\\evidence\\nonmelee-catalog-shard-0-20260926 --profile fast --shard 0 --shards 4 --include-companions"
+    },
+    {
+      "ProcessId": 4660,
+      "ParentProcessId": 38120,
+      "CreationDate": "2026-09-27T02:25:40.924758+08:00",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "ProcessId": 38048,
+      "ParentProcessId": 42072,
+      "CreationDate": "2026-09-27T02:25:40.93485+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" tools/audit_nonmelee_catalog.py --output C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\docs\\evidence\\nonmelee-catalog-shard-1-20260926 --profile fast --shard 1 --shards 4 --include-companions"
+    },
+    {
+      "ProcessId": 42172,
+      "ParentProcessId": 38048,
+      "CreationDate": "2026-09-27T02:25:40.937534+08:00",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "ProcessId": 41204,
+      "ParentProcessId": 42072,
+      "CreationDate": "2026-09-27T02:25:40.950143+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" tools/audit_nonmelee_catalog.py --output C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\docs\\evidence\\nonmelee-catalog-shard-3-20260926 --profile fast --shard 3 --shards 4 --include-companions"
+    },
+    {
+      "ProcessId": 12580,
+      "ParentProcessId": 41204,
+      "CreationDate": "2026-09-27T02:25:40.952899+08:00",
+      "CommandLine": "\\??\\C:\\WINDOWS\\system32\\conhost.exe 0x4"
+    },
+    {
+      "ProcessId": 40776,
+      "ParentProcessId": 41204,
+      "CreationDate": "2026-09-27T02:25:42.956568+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=41204, pipe_handle=636)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 40280,
+      "ParentProcessId": 41204,
+      "CreationDate": "2026-09-27T02:25:42.959986+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=41204, pipe_handle=644)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 6816,
+      "ParentProcessId": 41204,
+      "CreationDate": "2026-09-27T02:25:42.962104+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=41204, pipe_handle=292)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 29564,
+      "ParentProcessId": 41204,
+      "CreationDate": "2026-09-27T02:25:42.964095+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=41204, pipe_handle=684)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 23560,
+      "ParentProcessId": 41204,
+      "CreationDate": "2026-09-27T02:25:42.966107+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=41204, pipe_handle=348)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 35520,
+      "ParentProcessId": 41204,
+      "CreationDate": "2026-09-27T02:25:42.968095+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=41204, pipe_handle=728)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 42212,
+      "ParentProcessId": 41204,
+      "CreationDate": "2026-09-27T02:25:42.970165+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=41204, pipe_handle=752)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 36564,
+      "ParentProcessId": 38048,
+      "CreationDate": "2026-09-27T02:25:42.970795+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38048, pipe_handle=280)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 23960,
+      "ParentProcessId": 41204,
+      "CreationDate": "2026-09-27T02:25:42.972596+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=41204, pipe_handle=776)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 33208,
+      "ParentProcessId": 38048,
+      "CreationDate": "2026-09-27T02:25:42.974398+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38048, pipe_handle=616)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 33480,
+      "ParentProcessId": 38048,
+      "CreationDate": "2026-09-27T02:25:42.97695+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38048, pipe_handle=644)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 32468,
+      "ParentProcessId": 38048,
+      "CreationDate": "2026-09-27T02:25:42.979567+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38048, pipe_handle=548)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 34088,
+      "ParentProcessId": 38048,
+      "CreationDate": "2026-09-27T02:25:42.982106+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38048, pipe_handle=672)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 32512,
+      "ParentProcessId": 38048,
+      "CreationDate": "2026-09-27T02:25:42.98456+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38048, pipe_handle=768)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 8112,
+      "ParentProcessId": 38048,
+      "CreationDate": "2026-09-27T02:25:42.987283+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38048, pipe_handle=772)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 14404,
+      "ParentProcessId": 38048,
+      "CreationDate": "2026-09-27T02:25:42.9899+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38048, pipe_handle=724)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 41496,
+      "ParentProcessId": 38120,
+      "CreationDate": "2026-09-27T02:25:42.991855+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38120, pipe_handle=444)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 35028,
+      "ParentProcessId": 38120,
+      "CreationDate": "2026-09-27T02:25:42.996288+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38120, pipe_handle=572)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 38664,
+      "ParentProcessId": 38120,
+      "CreationDate": "2026-09-27T02:25:42.999484+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38120, pipe_handle=648)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 33000,
+      "ParentProcessId": 38120,
+      "CreationDate": "2026-09-27T02:25:43.002359+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38120, pipe_handle=664)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 22812,
+      "ParentProcessId": 38120,
+      "CreationDate": "2026-09-27T02:25:43.005231+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38120, pipe_handle=740)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 36360,
+      "ParentProcessId": 38120,
+      "CreationDate": "2026-09-27T02:25:43.008098+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38120, pipe_handle=756)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 40552,
+      "ParentProcessId": 38120,
+      "CreationDate": "2026-09-27T02:25:43.011155+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38120, pipe_handle=752)\" \"--multiprocessing-fork\""
+    },
+    {
+      "ProcessId": 30724,
+      "ParentProcessId": 38120,
+      "CreationDate": "2026-09-27T02:25:43.014451+08:00",
+      "CommandLine": "\"C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe\" \"-c\" \"from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=38120, pipe_handle=816)\" \"--multiprocessing-fork\""
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs\\evidence\\nonmelee-catalog-shard-0-20260926\\results.json",
+      "weapons": 88,
+      "sha256": "102A0627F5AF74A6FDC49D890C0353384A317D311C884CE21906FBF0CB785CFB"
+    },
+    {
+      "path": "docs\\evidence\\nonmelee-catalog-shard-1-20260926\\results.json",
+      "weapons": 89,
+      "sha256": "DE2ED833184584D9A9357CC92985871EE5DA1A847D9E419A3527F26DAFFA26A2"
+    },
+    {
+      "path": "docs\\evidence\\nonmelee-catalog-shard-2-20260926\\results.json",
+      "weapons": 103,
+      "sha256": "B56B6E5180588033C1C504152B2A3E5DEEFA9CC3748474B689F581A85443A564"
+    },
+    {
+      "path": "docs\\evidence\\nonmelee-catalog-shard-3-20260926\\results.json",
+      "weapons": 77,
+      "sha256": "31084FC2D9F1A392BFAD6D7553A6C23464950B055D28173476D20C86A8992492"
+    }
+  ]
+}

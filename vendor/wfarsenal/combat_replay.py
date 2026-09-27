@@ -125,6 +125,8 @@ def replay(
     fortifier = combat.get('fortifier')
     fortifier_damage = fortifier_stolen = 0.0
     self_overguard = 0.0
+    cryogenic = combat.get('cryogenic')
+    cryogenic_expected = 0.0
     encumber = combat.get('encumber')
     if encumber and encumber.get('uptime',1.0) == 0:encumber=None
     encumber_time = -math.inf
@@ -235,6 +237,10 @@ def replay(
 
     def signal(kind, t, weight=1.0):
         for q in sources:
+            if kind in q.get('resetOn', ()) and q['perEvent'] != 0:
+                q['stacks'] = 0.0
+                q['expires'] = math.inf
+                q['expiries'] = []
             if q.get("kind") != kind:
                 continue
             delta = weight * q["perEvent"]
@@ -299,7 +305,7 @@ def replay(
         multiplier = max(model(t)[0].proc_damage_multiplier, 0.0)
         per_tick = full[pool_index] * .03 * stacks * multiplier ** 2 / 6
         magnetic_breaks.append(dict(time=t, pool=('overguard', 'shield')[pool_index],
-                                    stacks=stacks, seedPerTick=per_tick))
+                                    stacks=stacks, seedPerTick=per_tick, targetGeneration=gen))
         states.setdefault('DT_ELECTRICITY', deque()).append((t + 6, 1.0))
         proc_counts['DT_ELECTRICITY'] = proc_counts.get('DT_ELECTRICITY', 0) + 1
         for tick in range(6):
@@ -340,6 +346,7 @@ def replay(
             applied += drain
             left -= fraction
             if pools[0] <= 1e-9:
+                pools[0] = 0.0  # Retire the pool before a same-timestamp event can break it again.
                 magnetic_break(t, 0)
         if left > 0.0 and pools[1] > 0.0:
             shield = sum(
@@ -364,6 +371,7 @@ def replay(
             applied += a + b
             left -= fraction
             if pools[1] <= 1e-9:
+                pools[1] = 0.0
                 magnetic_break(t, 1)
         if left > 0.0 and pools[1] <= 1e-9 and pools[2] > 0.0:
             value = sum(health_value(k, raw) for k, raw in vector.items())
@@ -497,6 +505,7 @@ def replay(
 
     def packet(st, aim):
         puncture,cold=live_crit()
+        if st.radial_only:puncture=0.0
         if not enervate and not puncture and not cold:
             return attack_data(st, aim)
         vector, procs, rows, non = {}, {}, {}, {}
@@ -522,7 +531,7 @@ def replay(
         for k,row in non.items():row['perProc']=non_sums[k]/procs[k] if procs[k] else 0.0
         return vector,procs,rows,non
 
-    def enervate_hit(st,t,puncture):
+    def enervate_hit(st,t,puncture,aim):
         if (not enervate or st.multishot<=0
                 or (combat['enervate'].get('ignoreSelected') and form != 'base')):
             return
@@ -532,14 +541,14 @@ def replay(
             cc=max(0.0,st.crit_chance+stacks*.1+puncture)
             # The direct pellet rolls aggregate one grouped Hit. The radial
             # part and status ticks do not masquerade as extra direct pellets.
-            p=(1-head)*big_crit_probability(cc,st.double_crit_chance)
-            p+=head*big_crit_probability(cc+weak,st.double_crit_chance)
+            p=(1-aim)*big_crit_probability(cc,st.double_crit_chance)
+            p+=aim*big_crit_probability(cc+weak,st.double_crit_chance)
             probabilities[stacks]=any_probability(p,1.0 if st.continuous else st.multishot)
         gain=not (combat['enervate'].get('ignoreSelected') and form != 'base')
         enervate.advance(t,probabilities,gain=gain)
 
     def add_procs(st, aim, t, data=None, allow_encumber=True):
-        nonlocal frozen_until,frozen_scale,encumber_time,encumber_remaining,encumber_expected
+        nonlocal frozen_until,frozen_scale,encumber_time,encumber_remaining,encumber_expected,cryogenic_expected
         _, procs, rows, non = data if data is not None else packet(st, aim)
         if encumber and allow_encumber and status_rate_multiplier > 0:
             from .status_arcanes import STATUS_POOL, encumber_roll
@@ -636,6 +645,16 @@ def replay(
                     if sum(p["count"] for p in blast_procs) >= 10.0:
                         push(t, "blast-all", None, gen)
 
+        # The derived Cold application is not elemental damage or a status-
+        # chance modifier. The ordinary status path owns duration, Overguard's
+        # four-stack limit and the freeze cycle. It cannot trigger itself.
+        if cryogenic:
+            extra_cold = max(procs.get('DT_PUNCTURE', 0.0), 0.0) * cryogenic['coldStacks'] * cryogenic.get('uptime', 1.0)
+            if extra_cold > 0:
+                before = proc_counts.get('DT_FREEZE', 0.0)
+                add_procs(st, aim, t, ({}, {'DT_FREEZE':extra_cold}, {}, {}), False)
+                cryogenic_expected += proc_counts.get('DT_FREEZE', 0.0) - before
+
     if combat:
         ammo = model(0.0)[0].magazine
     push(0.0, "fire")
@@ -725,6 +744,7 @@ def replay(
                         push(t + j, "dot", (dtype, 500.5, t + 6.0), gen)
         elif kind == "transform":
             form = payload
+            signal('on-transform', t)
             transforms += 1
             first_round = True
             burst_round = 0
@@ -763,7 +783,8 @@ def replay(
                     reloads += 1
                     first_round = True
                     burst_round = 0
-                    ammo = active.magazine
+                    # Fractional ammo overdraw remains owed after a reload.
+                    ammo += active.magazine
                     signal("on-reload-empty", t)
                     signal("on-reload", t)
                     for q in sources:
@@ -812,17 +833,18 @@ def replay(
                     active.dot_base_damage *= factor
             first_round = False
             hit_count = 1.0 if active.continuous else active.multishot
-            shot_puncture=live_crit()[0]
-            direct_packet = packet(active, head)
+            shot_puncture=0.0 if active.radial_only else live_crit()[0]
+            aim = 0.0 if active.radial_only else head
+            direct_packet = packet(active, aim)
             vector, _, _, _ = direct_packet
             died = take(
                 {k: v * damage_rate_multiplier for k, v in vector.items()},
                 t,
                 "direct",
-                True,
+                not active.radial_only,
             )
             if not died:
-                add_procs(active, head, t, direct_packet)
+                add_procs(active, aim, t, direct_packet)
                 field = getattr(active, '_lingering', None)
                 if field:
                     part, tick_rate, duration = field
@@ -837,15 +859,16 @@ def replay(
                 stale += 1
             if (form == "base" or combat.get("baseMode")) and burst_round == 2:
                 signal("on-burst-hit", t)
-            enervate_hit(active,t,shot_puncture)
+            enervate_hit(active,t,shot_puncture,aim)
+            signal('on-fire', t)
             signal("on-hit", t, hit_count)
-            signal("on-headshot", t, head * hit_count)
+            signal("on-headshot", t, aim * hit_count)
             signal(
                 "on-crit",
                 t,
                 min(
                     active.crit_chance
-                    + head
+                    + aim
                     * (
                         active.weakpoint_crit_chance_bonus
                         + active.base_crit_chance
@@ -855,7 +878,7 @@ def replay(
                 )
                 * hit_count,
             )
-            if cycle and form == "base":
+            if cycle and form == "base" and not active.radial_only:
                 gauge = min(cycle["hits"], gauge + (1.0 if cycle.get('chargeOn') == 'direct_hits' else head) * active.multishot)
             if combat:
                 ammo -= (
@@ -994,9 +1017,14 @@ def replay(
                        'cap':fortifier['cap'],'selfDamageModeled':False} if fortifier else None),
         'encumber': ({'chance':encumber['chance'],'expectedExtraProcs':encumber_expected,
                       'events':encumber_events,'typeCount':13,'coPresence':'poisson-occupancy'} if encumber else None),
+        'cryogenic': ({'coldStacksPerPuncture':cryogenic['coldStacks'],
+                       'radiusMeters':cryogenic['radius'],
+                       'expectedColdApplications':cryogenic_expected,
+                       'neighborTargetsModeled':False} if cryogenic else None),
         "triggerSeries": [
             {
                 **{k: q[k] for k in ("id", "label", "kind", "maxStacks", "series")},
+                **{k: q[k] for k in ('conditionText', 'resetOn', 'simulationMode') if k in q},
                 "avgStacks": (
                     sum(q["series"]) / len(q["series"]) if q["series"] else 0.0
                 ),
@@ -1030,5 +1058,6 @@ def replay(
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
           + (ASSUMPTIONS if enervate else [])
           + (['encumber-poisson-status-presence','encumber-single-target-expected-procs'] if encumber else [])
+          + (['cryogenic-single-target-expected-procs-no-neighbor-burst'] if cryogenic else [])
           + (['fortifier-raw-multiply-r5-x8-reference-x9-conflict','fortifier-player-overguard-no-incoming-damage'] if fortifier else []),
     }

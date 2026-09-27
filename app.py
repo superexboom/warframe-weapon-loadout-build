@@ -2105,8 +2105,8 @@ def _manual_mod_rows() -> list[dict[str, Any]]:
     source_paths_by_identity: dict[tuple[str, str], list[str]] = {}
     # Every qualifying row keyed by its own path, including the tiered
     # (Beginner/Intermediate/Expert) variants that lose the dedupe below — the
-    # solver may legitimately pick those, so the workbench must be able to
-    # display and simulate the exact card that was solved.
+    # released variants retain exact identity for display and replay.
+    # Unreleased tier clones are excluded by the shared catalog.
     all_rows_by_path: dict[str, dict[str, Any]] = {}
     for mod in EXPORTS.get("mods") or ():
         support = mod.get("support") if isinstance(mod.get("support"), Mapping) else {}
@@ -2375,10 +2375,13 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
             if "：" in effect:
                 condition_zh = effect.split("：", 1)[0]
         if status_spec:
-            condition_zh = ('施加物理或元素异常时' if status_spec['kind']=='encumber' else '伤害命中敌方超宏时')
-            effect += ('；事件解算：4%/级随机追加13类异常之一，同瞬间最多一次，不自触发。CO类型占用采用概率近似。'
-                       if status_spec['kind']=='encumber' else
-                       '；事件解算：仅超宏部分乘×(3+等级)，按实际扣除超宏的1%窃取，上限15000；不模拟玩家受伤。')
+            event_text = {
+                'encumber': ('施加物理或元素异常时', '事件解算：4%/级随机追加13类异常之一，同瞬间最多一次，不自触发。CO类型占用采用概率近似。'),
+                'fortifier': ('伤害命中敌方超宏时', '事件解算：仅超宏部分乘×(3+等级)，按实际扣除超宏的1%窃取，上限15000；不模拟玩家受伤。'),
+                'cryogenic': ('施加穿刺异常时', '事件解算：每次穿刺异常追加冰冻，R0–R5分别1/1/2/2/3/3层；继承异常持续时间，计入冰冻暴伤、冻结及超宏层数限制。当前只计算主目标，不计算邻敌。'),
+            }
+            condition_zh, event_note = event_text[status_spec['kind']]
+            effect += '；' + event_note
         trigger_bits = [condition_zh]
         if isinstance(chance, (int, float)):
             trigger_bits.append(f"{float(chance) * 100:g}%")
@@ -2947,6 +2950,13 @@ def _modded_stats_payload(
     return result
 
 
+def _scenario_input(payload: Mapping[str, Any], key: str, default=None):
+    # Nested explicit scenario fields win; otherwise use the public form field.
+    # Keep zero and explicit null intact (distance=0 is an arming boundary).
+    nested = payload.get('scenario')
+    return nested.get(key, payload.get(key, default)) if isinstance(nested, Mapping) else payload.get(key, default)
+
+
 def build_weapon_payload(
     payload: Any, *, return_engine_context: bool = False
 ) -> dict[str, Any]:
@@ -3070,11 +3080,18 @@ def build_weapon_payload(
     #                         导出无充能时长，用基础形态装填时长保守折算）。
     #   缺省/false          — 常驻灵化（170 充能池近似零装填；紫卡分析
     #                         维持此口径）。
-    incarnon_cycle_flag = payload.get("incarnonCycle") is True
-    scenario = optimizer._scenario(metric, incarnon_cycle=incarnon_cycle_flag, aiming=payload.get("aiming") is True)
+    incarnon_cycle_flag = _manual_bool(_scenario_input(payload, 'incarnonCycle', False), 'incarnonCycle')
+    scenario = optimizer._scenario(metric, incarnon_cycle=incarnon_cycle_flag,
+        aiming=_manual_bool(_scenario_input(payload, 'aiming', False), 'aiming'))
+    distance = _scenario_input(payload, 'distance')
+    nearest = _scenario_input(payload, 'nearestEnemyDistance')
     scenario = replace(
-        scenario, heavy_attack=bool(payload.get('heavyAttack')) or scenario.heavy_attack, trigger_policy=str(payload.get("triggerPolicy") or "emergent"),
-        distance=payload.get("distance"), combo_tier=int(payload.get("comboTier") or 0),
+        scenario, heavy_attack=_manual_bool(_scenario_input(payload, 'heavyAttack', False), 'heavyAttack') or scenario.heavy_attack,
+        trigger_policy=str(payload.get('triggerPolicy') or 'emergent'),
+        distance=_manual_number(distance, 'distance', low=0.) if distance is not None else None,
+        combo_tier=_manual_int(_scenario_input(payload, 'comboTier', 0), 'comboTier', high=11),
+        cloaked=_manual_bool(_scenario_input(payload, 'cloaked', False), 'cloaked'),
+        nearest_enemy_distance=_manual_number(nearest, 'nearestEnemyDistance', low=0.) if nearest is not None else None,
     )
     if scenario.trigger_policy not in {'emergent', 'assumed_max'}:
         raise SimulationError('triggerPolicy must be emergent or assumed_max')
@@ -3553,6 +3570,9 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
 
 
 MANUAL_ENEMIES_BY_PATH = {row["path"]: row for row in MANUAL_ENEMIES}
+_CATALOG_EXCLUDED_MODS = {m['path']: m['catalogExclusion']
+                          for m in EXPORTS['mods'] if m.get('catalogExclusion')}
+
 MANUAL_MODS_BY_PATH = {row["path"]: row for row in MANUAL_MODS}
 for alias, canonical in MANUAL_MOD_ALIASES.items():
     if canonical in MANUAL_MODS_BY_PATH:
@@ -3936,8 +3956,9 @@ def _prepare_manual_arcanes(
                 inferred[query.casefold()] = rate
             elif kind is None and not arcane.get('effects'):
                 from wfarsenal.manual_combat import modeled_event_kinds
+                from wfarsenal.runtime_adapters import compression_configuration
                 rank = row.get('rank', arcane.get('maxRank') or 0)
-                if not modeled_event_kinds(arcane, rank):
+                if not modeled_event_kinds(arcane, rank) and not compression_configuration(arcane, rank):
                     unsupported.append(f'arcane-state-{index}-trigger-rate-required')
         normalized.append(row)
 
@@ -4114,9 +4135,9 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
         combo_tier=_manual_int(scenario_raw.get("comboTier", payload.get("comboTier", 0)), "comboTier", high=11),
         victim_status_count=0,
         conditional_stacks={},
-        distance=_manual_number(scenario_raw["distance"], "distance", low=0.0) if scenario_raw.get("distance") is not None else None,
-        cloaked=_manual_bool(scenario_raw.get("cloaked", False), "cloaked"),
-        nearest_enemy_distance=_manual_number(scenario_raw["nearestEnemyDistance"], "nearestEnemyDistance", low=0.0) if scenario_raw.get("nearestEnemyDistance") is not None else None,
+        distance=_manual_number(_scenario_input(payload, 'distance'), 'distance', low=0.) if _scenario_input(payload, 'distance') is not None else None,
+        cloaked=_manual_bool(_scenario_input(payload, 'cloaked', False), 'cloaked'),
+        nearest_enemy_distance=_manual_number(_scenario_input(payload, 'nearestEnemyDistance'), 'nearestEnemyDistance', low=0.) if _scenario_input(payload, 'nearestEnemyDistance') is not None else None,
         # 灵化循环口径开关（缺省常驻灵化——紫卡分析维持常驻口径）。
         incarnon_cycle=_manual_bool(
             scenario_raw.get("incarnonCycle", payload.get("incarnonCycle", False)),
@@ -4578,6 +4599,13 @@ def _manual_normalize_mods(raw_mods: list[Any], slot_count: int) -> list[dict[st
         if not isinstance(item, Mapping):
             raise SimulationError(f"mods[{index}] must be an object")
         path = item.get("path") or item.get("query")
+        if isinstance(path, str):
+            excluded = _CATALOG_EXCLUDED_MODS.get(path.strip())
+            if excluded:
+                raise SimulationError(
+                    'mods[%s].path is an unreleased tier variant; select %s at its actual rank'
+                    % (index, excluded['basePath'])
+                )
         if not isinstance(path, str) or path.strip() not in MANUAL_MODS_BY_PATH:
             raise SimulationError(f"mods[{index}].path is not a supported weapon MOD")
         mod = MANUAL_MODS_BY_PATH[path.strip()]
@@ -4709,6 +4737,9 @@ def _collect_trigger_sources(ctx: Mapping[str, Any]) -> list[dict[str, Any]]:
                 "maxStacks": float(spec.get("maxStacks") or 1.0),
                 "duration": float(spec.get("duration") or 0.0),
             }
+            for field in ('resetOn', 'conditionText'):
+                if field in spec:
+                    entry[field] = spec[field]
             if isinstance(spec.get("damagePerStack"), (int, float)) and not isinstance(spec.get("damagePerStack"), bool):
                 entry["damagePerStack"] = float(spec["damagePerStack"])
             sources.append(entry)
@@ -5081,6 +5112,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     "points": windowed.get("timeline") or [],
                     "stacks": windowed.get("averagedStacks") or {},
                     "triggerSeries": windowed.get("triggerSeries") or [],
+                    "cryogenic": windowed.get("cryogenic"),
                     "triggerPolicy": _policy,
                     # 演算条件回显：前端标注本次 KPM 用的敌人/等级。
                     "context": {

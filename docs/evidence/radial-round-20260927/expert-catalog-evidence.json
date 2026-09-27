@@ -1,0 +1,6969 @@
+{
+  "source": "C:\\Users\\SuperExboom\\Documents\\WF_Rever\\wf-arsenal\\data\\raw\\2026.09.22.16.46",
+  "publicSource": "https://content.warframe.com/PublicExport/Manifest/ExportUpgrades_en.json!00_8OAjaCAFR9CWHGr7OrhxAA",
+  "publicSha256": "616c03e3a308e82e5730e73a5455b8dda3d13cd8412137a1d291079158123baf",
+  "policy": "Exact nonlegendary weapon tier clones with explicit RO_NEVER and no booster source, same nameTag/family/compatibility as a lower-rank base. Public export presence alone is not release proof.",
+  "rows": [
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponArmorPiercingDamageModExpert",
+      "name": "Sundering Strike",
+      "nameTag": "/Lotus/Language/Items/MeleeModArmorPiercing",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponArmorPiercingDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponArmorPiercingDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponArmorPiercingDamageModExpert",
+        "name": "Sundering Strike",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponArmorPiercingDamageMod",
+        "name": "Sundering Strike",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponCritChanceModExpert",
+      "name": "True Steel",
+      "nameTag": "/Lotus/Language/Items/MeleeModCritChance",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponCritChanceMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponCritChanceMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponCritChanceModExpert",
+        "name": "True Steel",
+        "polarity": "AP_ATTACK",
+        "rarity": "COMMON",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+20% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+140% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+160% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+180% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+200% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+220% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponCritChanceMod",
+        "name": "True Steel",
+        "polarity": "AP_ATTACK",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+20% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Critical Chance (x2 for Heavy Attacks)"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponCritDamageModExpert",
+      "name": "Organ Shatter",
+      "nameTag": "/Lotus/Language/Items/MeleeModCritDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponCritDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponCritDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponCritDamageModExpert",
+        "name": "Organ Shatter",
+        "polarity": "AP_ATTACK",
+        "rarity": "COMMON",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Critical Damage"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponCritDamageMod",
+        "name": "Organ Shatter",
+        "polarity": "AP_ATTACK",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Critical Damage"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponCritFireRateBonusModExpert",
+      "name": "Berserker Fury",
+      "nameTag": "/Lotus/Language/Items/MeleeModCritFireRateBonus",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponCritFireRateBonusMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponFireRateMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponCritFireRateBonusModExpert",
+        "name": "Berserker Fury",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "On Melee Kill:\r\n+5.8% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+11.7% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+17.5% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+23.3% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+29.2% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+35% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+40.8% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+46.7% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+52.5% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+58.3% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+64.2% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponCritFireRateBonusMod",
+        "name": "Berserker Fury",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "On Melee Kill:\r\n+5.8% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+11.7% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+17.5% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+23.3% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+29.2% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          },
+          {
+            "stats": [
+              "On Melee Kill:\r\n+35% Attack Speed for 10s. Stacks up to 2x."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponElectricityDamageModExpert",
+      "name": "Shocking Touch",
+      "nameTag": "/Lotus/Language/Items/MeleeModElectricityDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponElectricityDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponElectricityDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponElectricityDamageModExpert",
+        "name": "Shocking Touch",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponElectricityDamageMod",
+        "name": "Shocking Touch",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponFireDamageModExpert",
+      "name": "Molten Impact",
+      "nameTag": "/Lotus/Language/Items/MeleeModFireDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponFireDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponFireDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponFireDamageModExpert",
+        "name": "Molten Impact",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_FIRE_COLOR>Heat"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponFireDamageMod",
+        "name": "Molten Impact",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_FIRE_COLOR>Heat"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponFreezeDamageModExpert",
+      "name": "North Wind",
+      "nameTag": "/Lotus/Language/Items/MeleeModFreezeDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponFreezeDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponFreezeDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponFreezeDamageModExpert",
+        "name": "North Wind",
+        "polarity": "AP_DEFENSE",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_FREEZE_COLOR>Cold"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponFreezeDamageMod",
+        "name": "North Wind",
+        "polarity": "AP_DEFENSE",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_FREEZE_COLOR>Cold"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponGlaivePowerthrowModExpert",
+      "name": "Power Throw",
+      "nameTag": "/Lotus/Language/Items/MeleeModGlaivePowerThrow",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponGlaivePowerthrowMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/LotusGlaiveWeaponBase",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponGlaivePowerthrowMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponGlaivePowerthrowModExpert",
+        "name": "Power Throw",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Thrown Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+0.3 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+16.7% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+0.7 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+33.3% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+1 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+50% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+1.3 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+66.7% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+1.7 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+83.3% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+2 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+100% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+2.3 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+116.7% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+2.7 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+133.3% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+3 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+150% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+3.3 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+166.7% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+3.7 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+183.3% Throw Damage"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponGlaivePowerthrowMod",
+        "name": "Power Throw",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Thrown Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+0.3 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+16.7% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+0.7 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+33.3% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+1 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+50% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+1.3 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+66.7% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+1.7 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+83.3% Throw Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+2 Punch Through",
+              "On Consecutive throw (Max stacks 3):\r\n+100% Throw Damage"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponGlaiveReflectionDecreaseModExpert",
+      "name": "Quick Return",
+      "nameTag": "/Lotus/Language/Items/MeleeModGlaiveReflectionIncrease",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponGlaiveReflectionDecreaseMod",
+      "maxRank": 10,
+      "baseMaxRank": 3,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/LotusGlaiveWeaponBase",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/BaseGlaiveReflectionArtifactUpgrade",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": null,
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponGlaiveReflectionDecreaseMod",
+        "name": "Quick Return",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 3,
+        "compatName": "Thrown Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "-1 Bounce"
+            ]
+          },
+          {
+            "stats": [
+              "-2 Bounce"
+            ]
+          },
+          {
+            "stats": [
+              "-3 Bounce"
+            ]
+          },
+          {
+            "stats": [
+              "-4 Bounce"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponGlaiveReflectionIncreaseModExpert",
+      "name": "Rebound",
+      "nameTag": "/Lotus/Language/Items/MeleeModGlaiveReflectionDecrease",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponGlaiveReflectionIncreaseMod",
+      "maxRank": 10,
+      "baseMaxRank": 3,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/LotusGlaiveWeaponBase",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/BaseGlaiveReflectionArtifactUpgrade",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": null,
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponGlaiveReflectionIncreaseMod",
+        "name": "Rebound",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 3,
+        "compatName": "Thrown Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+1 Bounce"
+            ]
+          },
+          {
+            "stats": [
+              "+2 Bounce"
+            ]
+          },
+          {
+            "stats": [
+              "+3 Bounce"
+            ]
+          },
+          {
+            "stats": [
+              "+4 Bounce"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponGlaiveSpeedModExpert",
+      "name": "Whirlwind",
+      "nameTag": "/Lotus/Language/Items/MeleeModGlaiveSpeedMod",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponGlaiveSpeedMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/LotusGlaiveWeaponBase",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponGlaiveSpeedMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponGlaiveSpeedModExpert",
+        "name": "Whirlwind",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "isUtility": true,
+        "compatName": "Thrown Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+30% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+180% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+210% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+240% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+270% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+300% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+330% Projectile Speed"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponGlaiveSpeedMod",
+        "name": "Whirlwind",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "isUtility": true,
+        "compatName": "Thrown Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+30% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Projectile Speed"
+            ]
+          },
+          {
+            "stats": [
+              "+180% Projectile Speed"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponMeleeChannelingEfficiencyModExpert",
+      "name": "Reflex Coil",
+      "nameTag": "/Lotus/Language/Items/MeleeModChargeRate",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponMeleeChargeRateMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponMeleeChargeRateMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponMeleeChannelingEfficiencyModExpert",
+        "name": "Reflex Coil",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+10% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+20% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+50% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+70% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+110% Heavy Attack Efficiency"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponMeleeChargeRateMod",
+        "name": "Reflex Coil",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+10% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+20% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+50% Heavy Attack Efficiency"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Heavy Attack Efficiency"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponMeleeFinisherDamageModExpert",
+      "name": "Finishing Touch",
+      "nameTag": "/Lotus/Language/Items/MeleeModFinisherDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponMeleeFinisherDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 3,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponMeleeFinisherDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponMeleeFinisherDamageModExpert",
+        "name": "Finishing Touch",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Finisher Damage"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponMeleeFinisherDamageMod",
+        "name": "Finishing Touch",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 3,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Finisher Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Finisher Damage"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponPowerDamageModExpert",
+      "name": "Energy Channel",
+      "nameTag": "/Lotus/Language/Items/MeleeModPowerDmgBonus",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponPowerDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 3,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponPowerDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponPowerDamageModExpert",
+        "name": "Energy Channel",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "Converts 50% of Energy used to up to 50 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 100% of Energy used to up to 100 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 150% of Energy used to up to 150 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 200% of Energy used to up to 200 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 250% of Energy used to up to 250 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 300% of Energy used to up to 300 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 350% of Energy used to up to 350 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 400% of Energy used to up to 400 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 450% of Energy used to up to 450 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 500% of Energy used to up to 500 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 550% of Energy used to up to 550 Bonus Damage on next Melee Attack."
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponPowerDamageMod",
+        "name": "Energy Channel",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 3,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "Converts 50% of Energy used to up to 50 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 100% of Energy used to up to 100 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 150% of Energy used to up to 150 Bonus Damage on next Melee Attack."
+            ]
+          },
+          {
+            "stats": [
+              "Converts 200% of Energy used to up to 200 Bonus Damage on next Melee Attack."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponSlashDamageModExpert",
+      "name": "Jagged Edge",
+      "nameTag": "/Lotus/Language/Items/SlashDamageMeleeMod",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponSlashDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponSlashDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponSlashDamageModExpert",
+        "name": "Jagged Edge",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_SLASH_COLOR>Slash"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponSlashDamageMod",
+        "name": "Jagged Edge",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_SLASH_COLOR>Slash"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponStunChanceModExpert",
+      "name": "Melee Prowess",
+      "nameTag": "/Lotus/Language/Items/MeleeModStunChance",
+      "basePath": "/Lotus/Upgrades/Mods/Melee/WeaponStunChanceMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+      "modFamily": "/Lotus/Upgrades/Mods/Melee/WeaponStunChanceMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponStunChanceModExpert",
+        "name": "Melee Prowess",
+        "polarity": "AP_DEFENSE",
+        "rarity": "COMMON",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Status Chance"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Melee/WeaponStunChanceMod",
+        "name": "Melee Prowess",
+        "polarity": "AP_DEFENSE",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "compatName": "Melee",
+        "type": "MELEE",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Status Chance"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponAmmoMaxModExpert",
+      "name": "Trick Mag",
+      "nameTag": "/Lotus/Language/Items/PistolModAmmoMax",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponAmmoMaxMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponAmmoMaxMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponAmmoMaxModExpert",
+        "name": "Trick Mag",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "isUtility": true,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Ammo Maximum"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponAmmoMaxMod",
+        "name": "Trick Mag",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "isUtility": true,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Ammo Maximum"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponArmorPiercingDamageModExpert",
+      "name": "No Return",
+      "nameTag": "/Lotus/Language/Items/PistolModArmorPiercing",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponArmorPiercingDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponArmorPiercingDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponArmorPiercingDamageModExpert",
+        "name": "No Return",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponArmorPiercingDamageMod",
+        "name": "No Return",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritDamageModExpert",
+      "name": "Target Cracker",
+      "nameTag": "/Lotus/Language/Items/PistolModCritDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponCritDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponCritDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritDamageModExpert",
+        "name": "Target Cracker",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+10% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+20% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+50% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+70% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+110% Critical Damage"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponCritDamageMod",
+        "name": "Target Cracker",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+10% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+20% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+50% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Critical Damage"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponElectricityDamageModExpert",
+      "name": "Convulsion",
+      "nameTag": "/Lotus/Language/Items/PistolModElectricityDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponElectricityDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponElectricityDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponElectricityDamageModExpert",
+        "name": "Convulsion",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponElectricityDamageMod",
+        "name": "Convulsion",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireIterationsModExpert",
+      "name": "Barrel Diffusion",
+      "nameTag": "/Lotus/Language/Items/PistolModFireIterations",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireIterationsModExpert",
+        "name": "Barrel Diffusion",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": true,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+20% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+140% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+160% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+180% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+200% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+220% Multishot"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+        "name": "Barrel Diffusion",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+20% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Multishot"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireRateModExpert",
+      "name": "Gunslinger",
+      "nameTag": "/Lotus/Language/Items/PistolModFireRate",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponFireRateMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponFireRateMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireRateModExpert",
+        "name": "Gunslinger",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+12% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+24% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+36% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+48% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+72% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+84% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+96% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+108% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+132% Fire Rate"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponFireRateMod",
+        "name": "Gunslinger",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+12% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+24% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+36% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+48% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+72% Fire Rate"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFreezeDamageModExpert",
+      "name": "Deep Freeze",
+      "nameTag": "/Lotus/Language/Items/PistolModFreezeDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponFreezeDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponFreezeDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFreezeDamageModExpert",
+        "name": "Deep Freeze",
+        "polarity": "AP_DEFENSE",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_FREEZE_COLOR>Cold"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponFreezeDamageMod",
+        "name": "Deep Freeze",
+        "polarity": "AP_DEFENSE",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_FREEZE_COLOR>Cold"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_FREEZE_COLOR>Cold"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponImpactDamageModExpert",
+      "name": "Concussion Rounds",
+      "nameTag": "/Lotus/Language/Items/ImpactDamagePistolMod",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponImpactDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponImpactDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponImpactDamageModExpert",
+        "name": "Concussion Rounds",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_IMPACT_COLOR>Impact"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponImpactDamageMod",
+        "name": "Concussion Rounds",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_IMPACT_COLOR>Impact"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponPistolZoomFovModExpert",
+      "name": "Hawk Eye",
+      "nameTag": "/Lotus/Language/Items/PistolModZoomFov",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponPistolZoomFovMod",
+      "maxRank": 10,
+      "baseMaxRank": 3,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponPistolZoomFovMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponPistolZoomFovModExpert",
+        "name": "Hawk Eye",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "isUtility": true,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+20% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+140% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+160% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+180% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+200% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+220% Zoom"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponPistolZoomFovMod",
+        "name": "Hawk Eye",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 3,
+        "isUtility": true,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+20% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Zoom"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponPunctureDepthModExpert",
+      "name": "Seeker",
+      "nameTag": "/Lotus/Language/Items/PistolModPunctureDepth",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponPunctureDepthMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponPunctureDepthMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponPunctureDepthModExpert",
+        "name": "Seeker",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": true,
+        "baseDrain": 10,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+0.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+0.7 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.8 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.8 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+3.1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+3.5 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+3.9 Punch Through"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponPunctureDepthMod",
+        "name": "Seeker",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 10,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+0.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+0.7 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.8 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.1 Punch Through"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponSlashDamageModExpert",
+      "name": "Razor Shot",
+      "nameTag": "/Lotus/Language/Items/SlashDamagePistolMod",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponSlashDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponSlashDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponSlashDamageModExpert",
+        "name": "Razor Shot",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_SLASH_COLOR>Slash"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponSlashDamageMod",
+        "name": "Razor Shot",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_SLASH_COLOR>Slash"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponStatusChanceModExpert",
+      "name": "Sure Shot",
+      "nameTag": "/Lotus/Language/Items/PistolModStunChance",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponStunChanceMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponStunChanceMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponStatusChanceModExpert",
+        "name": "Sure Shot",
+        "polarity": "AP_DEFENSE",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Status Chance"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponStunChanceMod",
+        "name": "Sure Shot",
+        "polarity": "AP_DEFENSE",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Status Chance"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponToxinDamageModExpert",
+      "name": "Pathogen Rounds",
+      "nameTag": "/Lotus/Language/Items/PoisonDamagePistolMod",
+      "basePath": "/Lotus/Upgrades/Mods/Pistol/WeaponToxinDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "modFamily": "/Lotus/Upgrades/Mods/Pistol/WeaponToxinDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponToxinDamageModExpert",
+        "name": "Pathogen Rounds",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_POISON_COLOR>Toxin"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Pistol/WeaponToxinDamageMod",
+        "name": "Pathogen Rounds",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Pistol",
+        "type": "SECONDARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_POISON_COLOR>Toxin"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/BowExplosionChanceModExpert",
+      "name": "Thunderbolt",
+      "nameTag": "/Lotus/Language/Items/ParisModExplosionChance",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/BowExplosionChanceMod",
+      "maxRank": 10,
+      "baseMaxRank": 3,
+      "compatibility": "/Lotus/Weapons/Tenno/Bows/LotusBow",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/BowExplosionChanceMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/BowExplosionChanceModExpert",
+        "name": "Thunderbolt",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Bow",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+7.5% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+15% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+22.5% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+37.5% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+52.5% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+67.5% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+82.5% Chance to Explode (Use with Caution)"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/BowExplosionChanceMod",
+        "name": "Thunderbolt",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 3,
+        "compatName": "Bow",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+7.5% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+15% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+22.5% Chance to Explode (Use with Caution)"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Chance to Explode (Use with Caution)"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponAmmoMaxModExpert",
+      "name": "Ammo Drum",
+      "nameTag": "/Lotus/Language/Items/RifleModAmmoMax",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponAmmoMaxMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponAmmoMaxMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponAmmoMaxModExpert",
+        "name": "Ammo Drum",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "isUtility": true,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Ammo Maximum"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponAmmoMaxMod",
+        "name": "Ammo Drum",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "isUtility": true,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Ammo Maximum"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponArmorPiercingDamageModExpert",
+      "name": "Piercing Hit",
+      "nameTag": "/Lotus/Language/Items/RifleModArmorPiercing",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponArmorPiercingDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponArmorPiercingDamageMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponArmorPiercingDamageModExpert",
+        "name": "Piercing Hit",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponArmorPiercingDamageMod",
+        "name": "Piercing Hit",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponBowConvertAmmoModExpert",
+      "name": "Arrow Mutation",
+      "nameTag": "/Lotus/Language/Items/BowModConvertAmmo",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponBowConvertAmmoMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Bows/LotusBow",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponBowConvertAmmoMod",
+      "rawChild": "TradeCapability=RO_NEVER\nBaseDrain=QA_NONE\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "136b27b5df91d075a18fc71d52f6c4ebb3cb805cdfd043969d0b4b9ecf033332",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponBowConvertAmmoModExpert",
+        "name": "Arrow Mutation",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 0,
+        "fusionLimit": 10,
+        "isUtility": true,
+        "compatName": "Bow",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 8% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 16% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 25% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 33% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 42% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 50% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 58% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 67% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 75% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 84% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 92% of Ammo Pick Up."
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponBowConvertAmmoMod",
+        "name": "Arrow Mutation",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "isUtility": true,
+        "compatName": "Bow",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 8% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 16% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 25% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 33% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 42% of Ammo Pick Up."
+            ]
+          },
+          {
+            "stats": [
+              "Converts Secondary ammo pickups to 50% of Ammo Pick Up."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponCritChanceModExpert",
+      "name": "Point Strike",
+      "nameTag": "/Lotus/Language/Items/RifleModCritChance",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponCritChanceModExpert",
+        "name": "Point Strike",
+        "polarity": "AP_ATTACK",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+25% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+50% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+125% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+175% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+200% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+225% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+250% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+275% Critical Chance"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "name": "Point Strike",
+        "polarity": "AP_ATTACK",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+25% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+50% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+125% Critical Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Critical Chance"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponCritDamageModExpert",
+      "name": "Vital Sense",
+      "nameTag": "/Lotus/Language/Items/RifleModCritDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponCritDamageModExpert",
+        "name": "Vital Sense",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+20% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+140% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+160% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+180% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+200% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+220% Critical Damage"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "name": "Vital Sense",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+20% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Critical Damage"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Critical Damage"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponElectricityDamageModExpert",
+      "name": "Stormbringer",
+      "nameTag": "/Lotus/Language/Items/RifleModElectricityDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponElectricityDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponElectricityDamageMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponElectricityDamageModExpert",
+        "name": "Stormbringer",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponElectricityDamageMod",
+        "name": "Stormbringer",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_ELECTRICITY_COLOR>Electricity"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFactionDamageCorpusExpert",
+      "name": "Bane of Corpus",
+      "nameTag": "/Lotus/Language/Mods/RifleModFactionDamageCorpus",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFactionDamageCorpusExpert",
+        "name": "Bane of Corpus",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "x1.05 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.1 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.15 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.2 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.25 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.3 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.35 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.4 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.45 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.5 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.55 Damage to Corpus"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageCorpus",
+        "name": "Bane of Corpus",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "x1.05 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.1 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.15 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.2 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.25 Damage to Corpus"
+            ]
+          },
+          {
+            "stats": [
+              "x1.3 Damage to Corpus"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFactionDamageGrineerExpert",
+      "name": "Bane of Grineer",
+      "nameTag": "/Lotus/Language/Mods/RifleModFactionDamageGrineer",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFactionDamageGrineerExpert",
+        "name": "Bane of Grineer",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "x1.05 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.1 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.15 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.2 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.25 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.3 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.35 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.4 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.45 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.5 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.55 Damage to Grineer"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageGrineer",
+        "name": "Bane of Grineer",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "x1.05 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.1 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.15 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.2 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.25 Damage to Grineer"
+            ]
+          },
+          {
+            "stats": [
+              "x1.3 Damage to Grineer"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFactionDamageInfestedExpert",
+      "name": "Bane of Infested",
+      "nameTag": "/Lotus/Language/Mods/RifleModFactionDamageInfested",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageInfested",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageInfested",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFactionDamageInfestedExpert",
+        "name": "Bane of Infested",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "x1.05 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.1 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.15 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.2 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.25 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.3 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.35 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.4 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.45 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.5 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.55 Damage to Infested"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponFactionDamageInfested",
+        "name": "Bane of Infested",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "x1.05 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.1 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.15 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.2 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.25 Damage to Infested"
+            ]
+          },
+          {
+            "stats": [
+              "x1.3 Damage to Infested"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFireDamageModExpert",
+      "name": "Hellfire",
+      "nameTag": "/Lotus/Language/Items/RifleModFireDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFireDamageModExpert",
+        "name": "Hellfire",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_FIRE_COLOR>Heat"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+        "name": "Hellfire",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_FIRE_COLOR>Heat"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFireIterationsModExpert",
+      "name": "Split Chamber",
+      "nameTag": "/Lotus/Language/Items/RifleModFireIterations",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFireIterationsModExpert",
+        "name": "Split Chamber",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 10,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Multishot"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "name": "Split Chamber",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 10,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Multishot"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFireRateModExpert",
+      "name": "Speed Trigger",
+      "nameTag": "/Lotus/Language/Items/RifleModFireRate",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponFireRateMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponFireRateMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFireRateModExpert",
+        "name": "Speed Trigger",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+10% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+20% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+50% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+70% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+110% Fire Rate (x2 for Bows)"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponFireRateMod",
+        "name": "Speed Trigger",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+10% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+20% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+50% Fire Rate (x2 for Bows)"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Fire Rate (x2 for Bows)"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponImpactDamageModExpert",
+      "name": "Rupture",
+      "nameTag": "/Lotus/Language/Items/ImpactDamageRifleMod",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponImpactDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponImpactDamageMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponImpactDamageModExpert",
+        "name": "Rupture",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_IMPACT_COLOR>Impact"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponImpactDamageMod",
+        "name": "Rupture",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_IMPACT_COLOR>Impact"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponPunctureDepthModExpert",
+      "name": "Metal Auger",
+      "nameTag": "/Lotus/Language/Items/RifleModPunctureDepth",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponPunctureDepthMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponPunctureDepthMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponPunctureDepthModExpert",
+        "name": "Metal Auger",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 10,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+0.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+0.7 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.8 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.8 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+3.1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+3.5 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+3.9 Punch Through"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponPunctureDepthMod",
+        "name": "Metal Auger",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 10,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+0.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+0.7 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.8 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.1 Punch Through"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponSlashDamageModExpert",
+      "name": "Sawtooth Clip",
+      "nameTag": "/Lotus/Language/Items/SlashDamageRifleMod",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponSlashDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponSlashDamageMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponSlashDamageModExpert",
+        "name": "Sawtooth Clip",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_SLASH_COLOR>Slash"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponSlashDamageMod",
+        "name": "Sawtooth Clip",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_SLASH_COLOR>Slash"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponStatusChanceModExpert",
+      "name": "Rifle Aptitude",
+      "nameTag": "/Lotus/Language/Items/RifleModStunChance",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponStunChanceMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponStunChanceMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponStatusChanceModExpert",
+        "name": "Rifle Aptitude",
+        "polarity": "AP_DEFENSE",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Status Chance"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponStunChanceMod",
+        "name": "Rifle Aptitude",
+        "polarity": "AP_DEFENSE",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Status Chance"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponToxinDamageModExpert",
+      "name": "Infected Clip",
+      "nameTag": "/Lotus/Language/Items/PoisonDamageRifleMod",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponToxinDamageModExpert",
+        "name": "Infected Clip",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_POISON_COLOR>Toxin"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+        "name": "Infected Clip",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_POISON_COLOR>Toxin"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponZoomFovModExpert",
+      "name": "Eagle Eye",
+      "nameTag": "/Lotus/Language/Items/RifleModZoomFov",
+      "basePath": "/Lotus/Upgrades/Mods/Rifle/WeaponZoomFovMod",
+      "maxRank": 10,
+      "baseMaxRank": 3,
+      "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "modFamily": "/Lotus/Upgrades/Mods/Rifle/WeaponZoomFovMod",
+      "rawChild": "TradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "c2b1eed086e706fa649099bb0733ebca6e224e828e846a1707629998893de52d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponZoomFovModExpert",
+        "name": "Eagle Eye",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "isUtility": true,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+10% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+20% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+50% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+70% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+110% Zoom"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Rifle/WeaponZoomFovMod",
+        "name": "Eagle Eye",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 3,
+        "isUtility": true,
+        "compatName": "Rifle",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+10% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+20% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Zoom"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Zoom"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponAmmoMaxModExpert",
+      "name": "Shell Compression",
+      "nameTag": "/Lotus/Language/Items/ShotgunModAmmoMax",
+      "basePath": "/Lotus/Upgrades/Mods/Shotgun/WeaponAmmoMaxMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+      "modFamily": "/Lotus/Upgrades/Mods/Shotgun/WeaponAmmoMaxMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponAmmoMaxModExpert",
+        "name": "Shell Compression",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 2,
+        "fusionLimit": 10,
+        "isUtility": true,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Ammo Maximum"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/WeaponAmmoMaxMod",
+        "name": "Shell Compression",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 2,
+        "fusionLimit": 5,
+        "isUtility": true,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Ammo Maximum"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Ammo Maximum"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponArmorPiercingDamageModExpert",
+      "name": "Flechette",
+      "nameTag": "/Lotus/Language/Items/ShotgunModArmorPiercing",
+      "basePath": "/Lotus/Upgrades/Mods/Shotgun/WeaponArmorPiercingDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+      "modFamily": "/Lotus/Upgrades/Mods/Shotgun/WeaponArmorPiercingDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponArmorPiercingDamageModExpert",
+        "name": "Flechette",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/WeaponArmorPiercingDamageMod",
+        "name": "Flechette",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_PUNCTURE_COLOR>Puncture"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponFireDamageModExpert",
+      "name": "Incendiary Coat",
+      "nameTag": "/Lotus/Language/Items/ShotgunModFireDamage",
+      "basePath": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+      "modFamily": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponFireDamageModExpert",
+        "name": "Incendiary Coat",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_FIRE_COLOR>Heat"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireDamageMod",
+        "name": "Incendiary Coat",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_FIRE_COLOR>Heat"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_FIRE_COLOR>Heat"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponFireIterationsModExpert",
+      "name": "Hell's Chamber",
+      "nameTag": "/Lotus/Language/Items/ShotgunModFireIterations",
+      "basePath": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+      "modFamily": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponFireIterationsModExpert",
+        "name": "Hell's Chamber",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": true,
+        "baseDrain": 10,
+        "fusionLimit": 10,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+20% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+140% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+160% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+180% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+200% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+220% Multishot"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsMod",
+        "name": "Hell's Chamber",
+        "polarity": "AP_ATTACK",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 10,
+        "fusionLimit": 5,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+20% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+40% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+80% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+100% Multishot"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Multishot"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponFireRateModExpert",
+      "name": "Shotgun Barrage",
+      "nameTag": "/Lotus/Language/Items/ShotgunModFireRate",
+      "basePath": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireRateMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+      "modFamily": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireRateMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponFireRateModExpert",
+        "name": "Shotgun Barrage",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Fire Rate"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireRateMod",
+        "name": "Shotgun Barrage",
+        "polarity": "AP_ATTACK",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Fire Rate"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Fire Rate"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponImpactDamageModExpert",
+      "name": "Disruptor",
+      "nameTag": "/Lotus/Language/Items/ImpactDamageShotgunMod",
+      "basePath": "/Lotus/Upgrades/Mods/Shotgun/WeaponImpactDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+      "modFamily": "/Lotus/Upgrades/Mods/Shotgun/WeaponImpactDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponImpactDamageModExpert",
+        "name": "Disruptor",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_IMPACT_COLOR>Impact"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/WeaponImpactDamageMod",
+        "name": "Disruptor",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_IMPACT_COLOR>Impact"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_IMPACT_COLOR>Impact"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponPunctureDepthModExpert",
+      "name": "Seeking Force",
+      "nameTag": "/Lotus/Language/Items/ShotgunModPunctureDepth",
+      "basePath": "/Lotus/Upgrades/Mods/Shotgun/WeaponPunctureDepthMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+      "modFamily": "/Lotus/Upgrades/Mods/Shotgun/WeaponPunctureDepthMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponPunctureDepthModExpert",
+        "name": "Seeking Force",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": true,
+        "baseDrain": 10,
+        "fusionLimit": 10,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+0.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+0.7 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.8 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.8 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+3.1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+3.5 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+3.9 Punch Through"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/WeaponPunctureDepthMod",
+        "name": "Seeking Force",
+        "polarity": "AP_TACTIC",
+        "rarity": "RARE",
+        "codexSecret": false,
+        "baseDrain": 10,
+        "fusionLimit": 5,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+0.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+0.7 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.4 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+1.8 Punch Through"
+            ]
+          },
+          {
+            "stats": [
+              "+2.1 Punch Through"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponSlashDamageModExpert",
+      "name": "Shredder",
+      "nameTag": "/Lotus/Language/Items/SlashDamageShotgunMod",
+      "basePath": "/Lotus/Upgrades/Mods/Shotgun/WeaponSlashDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+      "modFamily": "/Lotus/Upgrades/Mods/Shotgun/WeaponSlashDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponSlashDamageModExpert",
+        "name": "Shredder",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_SLASH_COLOR>Slash"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/WeaponSlashDamageMod",
+        "name": "Shredder",
+        "polarity": "AP_TACTIC",
+        "rarity": "COMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_SLASH_COLOR>Slash"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_SLASH_COLOR>Slash"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponStunChanceModExpert",
+      "name": "Shotgun Savvy",
+      "nameTag": "/Lotus/Language/Items/ShotgunModStunChance",
+      "basePath": "/Lotus/Upgrades/Mods/Shotgun/WeaponStunChanceMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+      "modFamily": "/Lotus/Upgrades/Mods/Shotgun/WeaponStunChanceMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponStunChanceModExpert",
+        "name": "Shotgun Savvy",
+        "polarity": "AP_DEFENSE",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 4,
+        "fusionLimit": 10,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+105% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+120% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+135% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+150% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+165% Status Chance"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/WeaponStunChanceMod",
+        "name": "Shotgun Savvy",
+        "polarity": "AP_DEFENSE",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 4,
+        "fusionLimit": 5,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+30% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+45% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+60% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+75% Status Chance"
+            ]
+          },
+          {
+            "stats": [
+              "+90% Status Chance"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponToxinDamageModExpert",
+      "name": "Contagious Spread",
+      "nameTag": "/Lotus/Language/Items/PoisonDamageShotgunMod",
+      "basePath": "/Lotus/Upgrades/Mods/Shotgun/WeaponToxinDamageMod",
+      "maxRank": 10,
+      "baseMaxRank": 5,
+      "compatibility": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+      "modFamily": "/Lotus/Upgrades/Mods/Shotgun/WeaponToxinDamageMod",
+      "rawChild": "CodexSecret=1\nTradeCapability=RO_NEVER\nFusionLimit=QA_VERY_HIGH\nIncludeInBoosterPack=0\n",
+      "rawSha256": "1cdf653b59bafeb00ff6373e24ec38cb25f7731455e7dad841f0cb3d1d45ab6d",
+      "publicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponToxinDamageModExpert",
+        "name": "Contagious Spread",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": true,
+        "baseDrain": 6,
+        "fusionLimit": 10,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+105% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+120% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+135% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+150% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+165% <DT_POISON_COLOR>Toxin"
+            ]
+          }
+        ]
+      },
+      "basePublicExport": {
+        "uniqueName": "/Lotus/Upgrades/Mods/Shotgun/WeaponToxinDamageMod",
+        "name": "Contagious Spread",
+        "polarity": "AP_TACTIC",
+        "rarity": "UNCOMMON",
+        "codexSecret": false,
+        "baseDrain": 6,
+        "fusionLimit": 5,
+        "compatName": "Shotgun",
+        "type": "PRIMARY",
+        "levelStats": [
+          {
+            "stats": [
+              "+15% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+30% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+45% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+60% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+75% <DT_POISON_COLOR>Toxin"
+            ]
+          },
+          {
+            "stats": [
+              "+90% <DT_POISON_COLOR>Toxin"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

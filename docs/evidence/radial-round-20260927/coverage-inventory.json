@@ -1,0 +1,5967 @@
+{
+  "fingerprint": "f9badf3f84ce57bc",
+  "contract": "Inventory only; neither matching a path nor running a local replay constitutes WFSim parity.",
+  "weapons": [
+    {
+      "path": "/Lotus/Weapons/Cephalon/Primary/CephPrimary/CephPrimary",
+      "name": "Simulor",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "simulor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Bio/AcidDartPistol",
+      "name": "Acrid",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "acrid",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+      "name": "Torid",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "torid",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Chemical/FlameThrower",
+      "name": "Ignis",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "ignis",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Chemical/FlameThrowerWraith",
+      "name": "Ignis Wraith",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "ignis_wraith",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Chemical/RocketLauncher",
+      "name": "Ogris",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "ogris",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Energy/CrpHeavyRifle",
+      "name": "Supra",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "supra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Energy/CrpLaserPistol",
+      "name": "Spectra",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "spectra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Energy/CrpLaserRifle",
+      "name": "Flux Rifle",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "flux_rifle",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Energy/DeraVandal",
+      "name": "Dera Vandal",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "dera_vandal",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Energy/EnergyRifle",
+      "name": "Dera",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "dera",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Energy/Railgun",
+      "name": "Lanka",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "lanka",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
+      "name": "Tenet Arca Plasmor",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_arca_plasmor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox",
+      "name": "Tenet Ferrox",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_ferrox",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFluxRifle/CrpBEFluxRifle",
+      "name": "Tenet Flux Rifle",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_flux_rifle",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEGlaxion/CrpBEGlaxion",
+      "name": "Tenet Glaxion",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_glaxion",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta",
+      "name": "Tenet Quanta",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_quanta",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
+      "name": "Tenet Tetra",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_tetra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
+      "name": "Tenet Cycron",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_cycron",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEDetron/CrpBEDetron",
+      "name": "Tenet Detron",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_detron",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
+      "name": "Tenet Plinx",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_plinx",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBow",
+      "name": "Lenz",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "lenz",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon",
+      "name": "Prisma Lenz",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "prisma_lenz",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/ChainLightningGun/ChainLightningRifle",
+      "name": "Amprex",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "amprex",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CorpusUMP/CorpusUMP",
+      "name": "Tetra",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tetra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CorpusUMP/PrismaCorpusUMP",
+      "name": "Prisma Tetra",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "prisma_tetra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpArSniper/CrpArSniperRifle",
+      "name": "Ambassador",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "ambassador",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/ConclaveBFG",
+      "name": "Opticor Variant",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG",
+      "name": "Opticor",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "opticor",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG",
+      "name": "Opticor Vandal",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "opticor_vandal",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncher",
+      "name": "Tenet Envoy",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_envoy",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpFreezeRay/CrpFreezeRayRifle",
+      "name": "Glaxion",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "glaxion",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpFreezeRay/Vandal/CrpFreezeRayVandalRifle",
+      "name": "Glaxion Vandal",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "glaxion_vandal",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpRubanRifle/CrpRubanRifle",
+      "name": "Stahlta",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "stahlta",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniper",
+      "name": "Komorex",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "komorex",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
+      "name": "Battacor",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "battacor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShapeBlast/CrpShapeBlastShotgun",
+      "name": "Exergis",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "exergis",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle",
+      "name": "Quanta",
+      "slot": "primary",
+      "modes": 3,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "quanta",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/QuantaVandal",
+      "name": "Quanta Vandal",
+      "slot": "primary",
+      "modes": 3,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "quanta_vandal",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShotgun/CrpShotgun",
+      "name": "Arca Plasmor",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "arca_plasmor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSplitLaser/CrpSplitLaser",
+      "name": "Convectrix",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "convectrix",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/CarminePenta",
+      "name": "Carmine Penta",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "carmine_penta",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncher",
+      "name": "Penta",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "penta",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+      "name": "Supra Vandal",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "supra_vandal",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun",
+      "name": "Ferrox",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "ferrox",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CorpusHandShotgun/CorpusHandCannon",
+      "name": "Detron",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "detron",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun",
+      "name": "Cestra",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "cestra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CorpusMinigun/DualCorpusMinigun",
+      "name": "Dual Cestra",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "dual_cestra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CorpusModularPistol/Vandal/CrpLaserPistolVandal",
+      "name": "Spectra Vandal",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "spectra_vandal",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolArray",
+      "name": "Sonicor",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "sonicor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpBriefcaseAkimbo/CrpBriefcaseAkimboPistol",
+      "name": "Tenet Diplos",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_diplos",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpChargeGun/CrpChargeGun",
+      "name": "Cycron",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cycron",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpElectroMag/CrpElectroMag",
+      "name": "Staticor",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "staticor",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher",
+      "name": "Angstrum",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "angstrum",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum",
+      "name": "Prisma Angstrum",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "prisma_angstrum",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol",
+      "name": "Tenet Spirex",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenet_spirex",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpSentAmalgPistol/CrpSentAmalgPistol",
+      "name": "Cyanex",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cyanex",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpSentExperimentPistol/CrpSentExperimentPistol",
+      "name": "Ocucor",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "ocucor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpSonificBlastor/CrpBlastorWeapon",
+      "name": "Plinx",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "plinx",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/SniperPistol/CrpScopeGun",
+      "name": "Arca Scisco",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "arca_scisco",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon",
+      "name": "Kuva Bramma",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_bramma",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrineerAkimboPistol",
+      "name": "Twin Gremlins",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "twin_gremlins",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrineerLightPistol",
+      "name": "Viper",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "viper",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrnHeavyPistol",
+      "name": "Kraken",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kraken",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrnScopedPistolPlayer",
+      "name": "Seer",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "seer",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher",
+      "name": "Kuva Ayanga",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_ayanga",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler",
+      "name": "Kuva Grattler",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_grattler",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoon",
+      "name": "Kuva Drakgoon",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_drakgoon",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hek/KuvaHekWeapon",
+      "name": "Kuva Hek",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_hek",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind",
+      "name": "Kuva Hind",
+      "slot": "primary",
+      "modes": 3,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_hind",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Karak/KuvaKarak",
+      "name": "Kuva Karak",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_karak",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Kohm/KuvaKohm",
+      "name": "Kuva Kohm",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_kohm",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgris",
+      "name": "Kuva Ogris",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_ogris",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Quartakk/KuvaQuartakk",
+      "name": "Kuva Quartakk",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_quartakk",
+          "form": "alt_fire",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Sobek/KuvaSobek",
+      "name": "Kuva Sobek",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_sobek",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkor",
+      "name": "Kuva Tonkor",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_tonkor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr",
+      "name": "Kuva Zarr",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_zarr",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Brakk/KuvaBrakk",
+      "name": "Kuva Brakk",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_brakk",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Kraken/KuvaKraken",
+      "name": "Kuva Kraken",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_kraken",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Nukor/KuvaNukor",
+      "name": "Kuva Nukor",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_nukor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeer",
+      "name": "Kuva Seer",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_seer",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Stubba/KuvaStubba",
+      "name": "Kuva Twin Stubbas",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_twin_stubbas",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/BurstRifle/GrnBurstRifle",
+      "name": "Hind",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "hind",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/GrnAssaultRifle",
+      "name": "Grakata",
+      "slot": "primary",
+      "modes": 3,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "grakata",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/TwinGrakatas",
+      "name": "Twin Grakatas",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "twin_grakatas",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerFlakCannon/FlakCannon",
+      "name": "Drakgoon",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "drakgoon",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerLeverActionRifle/GLARifle",
+      "name": "Grinlok",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "grinlok",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerLeverActionRifle/PrismaGrinlokWeapon",
+      "name": "Prisma Grinlok",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "prisma_grinlok",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/GrineerM16Rifle",
+      "name": "Karak",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "karak",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/KarakWraith",
+      "name": "Karak Wraith",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "karak_wraith",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun",
+      "name": "Miter",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "miter",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/GrnSniperRifle",
+      "name": "Vulkar",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "vulkar",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/VulkarWraith",
+      "name": "Vulkar Wraith",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "vulkar_wraith",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonWeapon",
+      "name": "Zarr",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "zarr",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
+      "name": "Grakata",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpear",
+      "name": "Javlok",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "javlok",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFourBarrelRifle/GrnFourBarrelRifleWeapon",
+      "name": "Quartakk",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "quartakk",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifle",
+      "name": "Buzlok",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "buzlok",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGrenadeLauncher/GrnGrenadeLauncher",
+      "name": "Tonkor",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tonkor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnHarpoonGun/GrnHarpoonGun",
+      "name": "Harpak",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "harpak",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon",
+      "name": "Kuva Chakkhurr",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kuva_chakkhurr",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnOrokinRifle/GrnOrokinRifleWeapon",
+      "name": "Gotva Prime",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "gotva_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnSpark/GrnSparkRifle",
+      "name": "Kohm",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kohm",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/LaserAimRifle/LaserAimRifle",
+      "name": "Argonak",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "argonak",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/VTGorgon",
+      "name": "Prisma Gorgon",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "prisma_gorgon",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/WraithGorgon",
+      "name": "Gorgon Wraith",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "gorgon_wraith",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrineerBulbousSMG/Prisma/PrismaTwinGremlinsWeapon",
+      "name": "Prisma Twin Gremlins",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "prisma_twin_gremlins",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+      "name": "Stug",
+      "slot": "secondary",
+      "modes": 3,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "stug",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrineerHandShotgun/GrineerHandCannon",
+      "name": "Brakk",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "brakk",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrineerLeverActionPistol/GLAPistol",
+      "name": "Marelok",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "marelok",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrineerMicrowavegun/GrnMicrowavePistol",
+      "name": "Nukor",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "nukor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnAmphisPistol/GrnAmphisPistol",
+      "name": "Quatz",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "quatz",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnDWUniques/GrnTwinKohmaks",
+      "name": "Twin Kohmak",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "twin_kohmak",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnKohmPistol/GrnKohmPistol",
+      "name": "Kohmak",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kohmak",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnOrokinPistol/GrnOrokinPistol",
+      "name": "Sagek Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "sagek_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnQueenGuardDualPistol/GrnQueenGuardDualPistols",
+      "name": "Twin Rogga",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "twin_rogga",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoPistol",
+      "name": "Kulstar",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kulstar",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnUzi/GrnUziWeapon",
+      "name": "Stubba",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "stubba",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun",
+      "name": "Atomos",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "atomos",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/WraithSingleViper/WraithSingleViper",
+      "name": "Viper Wraith",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "viper_wraith",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/WraithTwinVipers/WraithTwinVipers",
+      "name": "Twin Vipers Wraith",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "twin_vipers_wraith",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBomb",
+      "name": "Aegrit",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "aegrit",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Bow/InfCernosBow/InfCernos",
+      "name": "Mutalist Cernos",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "mutalist_cernos",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/1999InfShotgun/1999InfShotgunWeapon",
+      "name": "Coda Bassocyst",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "coda_bassocyst",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon",
+      "name": "Coda Bubonico",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "coda_bubonico",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaHema",
+      "name": "Coda Hema",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "coda_hema",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix",
+      "name": "Coda Sporothrix",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "coda_sporothrix",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSynapse",
+      "name": "Coda Synapse",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "coda_synapse",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/1999InfSporePistol/1999InfSporePistolWeapon",
+      "name": "Dual Coda Torxica",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "dual_coda_torxica",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaCatabolyst",
+      "name": "Coda Catabolyst",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "coda_catabolyst",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPox",
+      "name": "Coda Pox",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "coda_pox",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaTysis",
+      "name": "Coda Tysis",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "coda_tysis",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannon",
+      "name": "Bubonico",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "bubonico",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/LongGuns/InfCrpShockSwarm/InfCrpShockSwarmRifle",
+      "name": "Mutalist Quanta",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "mutalist_quanta",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle",
+      "name": "Sporothrix",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "sporothrix",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/LongGuns/InfWFAccompanyingPri/InfestedBurstRifle",
+      "name": "Hema",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "hema",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/LongGuns/InfestedRifle",
+      "name": "Synapse",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "synapse",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/LongGuns/QuantaFullyInfested/InfQuantaRifle",
+      "name": "Paracyst",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "paracyst",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/LongGuns/Tentacluster/InfestedShotgun",
+      "name": "Phage",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "phage",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Pistols/InfBeamPistol/InfBeamPistol",
+      "name": "Catabolyst",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "catabolyst",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars",
+      "name": "Pox",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "pox",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziWeapon",
+      "name": "Zymos",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "zymos",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep",
+      "name": "Dual Toxocyst",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "dual_toxocyst",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Pistols/InfestedDartPistol/InfestedDartPistol",
+      "name": "Tysis",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tysis",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Pistols/InfestedPistol",
+      "name": "Embolist",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "embolist",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Lasria/AK47/TC2024AK47Weapon",
+      "name": "AX-52",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "ax_52",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Lasria/LasGooAK/LasGooAKPlayerWeapon",
+      "name": "EFV-5 Jupiter",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "efv_5_jupiter",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon",
+      "name": "EFV-8 Mars",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "efv_8_mars",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Lasria/LasGrenadeLauncher/LasrianNoxPlayerWeapon",
+      "name": "Purgator 1",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "purgator_1",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Lasria/LasSilencedPistol/LasSilencedPistolWeapon",
+      "name": "Vesper 77",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "vesper_77",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/MK1Series/MK1Furis",
+      "name": "MK1-Furis",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "mk1_furis",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/MK1Series/MK1Kunai",
+      "name": "MK1-Kunai",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "mk1_kunai",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/MK1Series/MK1Paris",
+      "name": "MK1-Paris",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "mk1_paris",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/MK1Series/MK1Strun",
+      "name": "MK1-Strun",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "mk1_strun",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Operator/Pistols/DrifterPistol/DrifterPistolPlayerWeapon",
+      "name": "Sirocco",
+      "slot": "amp",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
+      "name": "Amp",
+      "slot": "amp",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon",
+      "name": "Mote Amp",
+      "slot": "amp",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Sentients/SentOctaMiniGun/SentOctaMiniGun",
+      "name": "Haalvu",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "haalvu",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleNewWarGun",
+      "name": "Basmu",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "basmu",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Sentients/Shedu/SheduHeavyWeapon",
+      "name": "Shedu",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "shedu",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+      "name": "Kitgun",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam",
+      "name": "Kitgun",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher",
+      "name": "Kitgun",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun",
+      "name": "Kitgun",
+      "slot": "primary",
+      "modes": 0,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper",
+      "name": "Kitgun",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
+      "name": "Kitgun",
+      "slot": "secondary",
+      "modes": 0,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam",
+      "name": "Kitgun",
+      "slot": "secondary",
+      "modes": 0,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun",
+      "name": "Kitgun",
+      "slot": "secondary",
+      "modes": 0,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/ArbitersOfHexis/LongGuns/AHBoltor",
+      "name": "Telos Boltor",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "telos_boltor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/ArbitersOfHexis/Pistols/AHAkbolto",
+      "name": "Telos Akbolto",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "telos_akbolto",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSSimulor",
+      "name": "Synoid Simulor",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "synoid_simulor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSDroidArray",
+      "name": "Gammacor",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "gammacor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSSynoidGammacor",
+      "name": "Synoid Gammacor",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "synoid_gammacor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/NewLoka/LongGuns/NLTigris",
+      "name": "Sancti Tigris",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "sancti_tigris",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanas",
+      "name": "Sancti Castanas",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "sancti_castanas",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/PerrinSequence/LongGuns/PSPenta",
+      "name": "Secura Penta",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "secura_penta",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/PerrinSequence/Pistols/PSDualCestra",
+      "name": "Secura Dual Cestra",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "secura_dual_cestra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/RedVeil/Bows/RVCernos",
+      "name": "Rakta Cernos",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "rakta_cernos",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica",
+      "name": "Rakta Ballistica",
+      "slot": "secondary",
+      "modes": 3,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "rakta_ballistica",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/SteelMeridian/LongGuns/SMHek",
+      "name": "Vaykor Hek",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "vaykor_hek",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Syndicates/SteelMeridian/Pistols/SMMarelok",
+      "name": "Vaykor Marelok",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "vaykor_marelok",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/AkLexPistols",
+      "name": "Aklex",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "aklex",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/AkLexPrimePistols",
+      "name": "Aklex Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "aklex_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboAutoPistols",
+      "name": "Afuris",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "afuris",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboBolto",
+      "name": "Akbolto",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akbolto",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboPistol",
+      "name": "Aklato",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "aklato",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboShotGun",
+      "name": "Akbronco",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akbronco",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboViperPistols",
+      "name": "Twin Vipers",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "twin_vipers",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/DualMagnus",
+      "name": "Akmagnus",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akmagnus",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/DualMagnusPrime",
+      "name": "Akmagnus Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akmagnus_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/DualVastos",
+      "name": "Akvasto",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akvasto",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Akimbo/PrimeAkimboShotGun",
+      "name": "Akbronco Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akbronco_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchBurstGun/ArchBurstGun",
+      "name": "Cyngas",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cyngas",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchLongRifle/ArchLongRifle",
+      "name": "Phaedra",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "phaedra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/ArchHeavyPistols",
+      "name": "Dual Decurion",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "dual_decurion",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/Prisma/PrismaArchHeavyPistols",
+      "name": "Prisma Dual Decurions",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "prisma_dual_decurions",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGun",
+      "name": "Imperator",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "imperator",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGunVandal",
+      "name": "Imperator Vandal",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "imperator_vandal",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/LaunchGrenade/ArchCannon",
+      "name": "Corvas",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "corvas",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun",
+      "name": "Arbucep",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "arbucep",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeCorvas/PrimeCorvasWeapon",
+      "name": "Corvas Prime",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "corvas_prime",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
+      "name": "Larkspur Prime",
+      "slot": "arch_gun",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "larkspur_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/Railgun/ArchRailgun",
+      "name": "Velocitus",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "velocitus",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/ArchGRNAAGun",
+      "name": "Grattler",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "grattler",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/RocketArtillery/ArchRocketCrossbow",
+      "name": "Fluctus",
+      "slot": "arch_gun",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "fluctus",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+      "name": "Cortege",
+      "slot": "arch_gun",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cortege",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+      "name": "Mausolon",
+      "slot": "arch_gun",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "mausolon",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher",
+      "name": "Morgha",
+      "slot": "arch_gun",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "morgha",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunWeapon",
+      "name": "Mandonel",
+      "slot": "arch_gun",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "mandonel",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
+      "name": "Larkspur",
+      "slot": "arch_gun",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "larkspur",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bayonet/TnBayonetRifleWeapon",
+      "name": "Vinquibus",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "vinquibus",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/AntlerBow/AntlerBow",
+      "name": "Cernos",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cernos",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/AsymetricalBow/AsymetricalBow",
+      "name": "Daikyu",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "daikyu",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/DaxDuviriAsymetricalBow/DaxDuviriAsymmetricalLongBowPlayerWeapon",
+      "name": "Cinta",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cinta",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/HuntingBow",
+      "name": "Paris",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "paris",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPlayerWep",
+      "name": "Nataruk",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "nataruk",
+          "form": "base",
+          "default": null
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeCernos/PrimeCernos",
+      "name": "Cernos Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cernos_prime",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeDaikyu/PrimeDaikyuBow",
+      "name": "Daikyu Prime",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "daikyu_prime",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernos",
+      "name": "Proboscis Cernos",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "proboscis_cernos",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow",
+      "name": "Paris Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "paris_prime",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/StalkerBow",
+      "name": "Dread",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "dread",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/TnChoirBow/TnChoirBow",
+      "name": "Evensong",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "evensong",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/ValentinesConclaveVariantBow",
+      "name": "Paris",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Gear/MiningLaserBWeapon",
+      "name": "Focused Nosam Cutter",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Gear/MiningLaserCWeapon",
+      "name": "Advanced Nosam Cutter",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Gear/MiningLaserSolarisWeaponA",
+      "name": "Sunpoint Plasma Drill",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Gear/MiningLaserWeapon",
+      "name": "Nosam Cutter",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Grimoire/TnDoppelgangerGrimoire",
+      "name": "Grimoire",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+      "name": "Grimoire",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "grimoire",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird",
+      "name": "Dex Sybaris",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "dex_sybaris",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/DoubleBarrelShotgun/TennoDoubleBarrelShotgun",
+      "name": "Tigris",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tigris",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/DrakeRifle/DrakeRifle",
+      "name": "Tiberon",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tiberon",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/FiveShotSniper/FiveShotSniper",
+      "name": "Rubico",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "rubico",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/GarudaCrossbow/GarudaCrossbow",
+      "name": "Nagantaka",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "nagantaka",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/Gunbrella/ShrineMaidenGunbrellaWeapon",
+      "name": "Higasa",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "higasa",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+      "name": "Alternox",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "alternox",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/LoginPrimary/SundialRifle",
+      "name": "Zenith",
+      "slot": "primary",
+      "modes": 3,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "zenith",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/Miter/TnoMiter",
+      "name": "Panthera",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "panthera",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PaxDuviricusShotgun/PaxDuviricusShotgun",
+      "name": "Rauta",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "rauta",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon",
+      "name": "Acceltra Prime",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "acceltra_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisWeapon",
+      "name": "Afentis Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "afentis_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
+      "name": "Alternox Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "alternox_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAstilla/AstillaPrimeWeapon",
+      "name": "Astilla Prime",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "astilla_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+      "name": "Baza Prime",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "baza_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBoltor/PrimeBoltor",
+      "name": "Boltor Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "boltor_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+      "name": "Burston Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "burston_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeapon",
+      "name": "Cedo Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cedo_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCorinth/PrimeCorinth",
+      "name": "Corinth Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "corinth_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulmin",
+      "name": "Fulmin Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "fulmin_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeLightningGun/PrimeLightningGun",
+      "name": "Vadarya Prime",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "vadarya_prime",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeNagantaka/PrimeNagantakaWeapon",
+      "name": "Nagantaka Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "nagantaka_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePanthera/PrimePanthera",
+      "name": "Panthera Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "panthera_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePerigale/PrimePerigaleSniper",
+      "name": "Perigale Prime",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "perigale_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
+      "name": "Phantasma Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "phantasma_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+      "name": "Scourge Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "scourge_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeSoma/PrimeSomaRifle",
+      "name": "Soma Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "soma_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeStradavar/PrimeStradavarGun",
+      "name": "Stradavar Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "stradavar_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeStrun/PrimeStrunWeapon",
+      "name": "Strun Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "strun_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeSybaris/PrimeSybarisRifle",
+      "name": "Sybaris Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "sybaris_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTenora/TenoraPrimeWeapon",
+      "name": "Tenora Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenora_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTiberon/PrimeTiberonRifle",
+      "name": "Tiberon Prime",
+      "slot": "primary",
+      "modes": 3,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tiberon_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTigris/PrimeTigris",
+      "name": "Tigris Prime",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tigris_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon",
+      "name": "Trumna Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "trumna_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle",
+      "name": "Vectis Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "vectis_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeCrossbow",
+      "name": "Zhuge Prime",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "zhuge_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/RepeatingCrossbow/RepeatingCrossbow",
+      "name": "Zhuge",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "zhuge",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+      "name": "Phantasma",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "phantasma",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+      "name": "Rubico Prime",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "rubico_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryWeapon",
+      "name": "Acceltra",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "acceltra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TennoTommyGun/TennoTommyGunRifle",
+      "name": "Stradavar",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "stradavar",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgun",
+      "name": "Cedo",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cedo",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnBardRifle/TnBardRifle",
+      "name": "Tenora",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tenora",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnBeltFedRifle/TnBeltFedRifleWeapon",
+      "name": "Reconifex",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "reconifex",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunGun",
+      "name": "Astilla",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "astilla",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunGun",
+      "name": "Corinth",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "corinth",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearGunWeapon",
+      "name": "Afentis",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "afentis",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkRifleWeapon",
+      "name": "Enkaus",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "enkaus",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnModQuestRifle/TnModQuestRifleWeapon",
+      "name": "Thornbak",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "thornbak",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+      "name": "Scourge",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "scourge",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniper",
+      "name": "Perigale",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "perigale",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnRailjackRifle/RailjackRifleGun",
+      "name": "Quellor",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "quellor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnRevolverRifle/TnRevolverRifleGun",
+      "name": "Veldt",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "veldt",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzWeapon",
+      "name": "Aeolak",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "aeolak",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnSMG/TnSMGWeapon",
+      "name": "Baza",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "baza",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnWispRifle/TnWispRifle",
+      "name": "Fulmin",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "fulmin",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/TnoLeverActionRifle",
+      "name": "Sybaris",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "sybaris",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLotusPodShotgun/TnoLotusPodShotgun",
+      "name": "Steflos",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "steflos",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoPrmryXbow/TnoPrmryXbowWeapon",
+      "name": "Attica",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "attica",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron",
+      "name": "Latron Wraith",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "latron_wraith",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "name": "PRIMARY",
+      "slot": "primary",
+      "modes": 0,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+      "name": "Furis",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "furis",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/AutoPistolVariant",
+      "name": "Furis Variant",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/BroncoPrime",
+      "name": "Bronco Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "bronco_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/BurstPistol",
+      "name": "Sicarus",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "sicarus",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/CoHLoanerPistol",
+      "name": "Lato",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/CrossBow",
+      "name": "Bolto",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "bolto",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/HandShotGun",
+      "name": "Bronco",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "bronco",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/HandShotGunVariant",
+      "name": "Bronco Variant",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/HeavyPistol",
+      "name": "Lex",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "lex",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/HeavyPistolVariant",
+      "name": "Lex Variant",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/LatoPrime",
+      "name": "Lato Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "lato_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/LatoVandal",
+      "name": "Lato Vandal",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "lato_vandal",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+      "name": "Pistol",
+      "slot": "secondary",
+      "modes": 0,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/Pistol",
+      "name": "Lato",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "lato",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/PistolVariant",
+      "name": "Lato Variant",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/RevolverPistol",
+      "name": "Vasto",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "vasto",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/1999EntHybridPistolWeapon/1999EntHybridPistolWeapon",
+      "name": "Riot-848",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "riot_848",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/AllNew1hSG/AllNew1hSG",
+      "name": "Euphona Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "euphona_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow",
+      "name": "Ballistica",
+      "slot": "secondary",
+      "modes": 3,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "ballistica",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ConclaveLeverPistol",
+      "name": "Zylok",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "zylok",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/DexFuris/DexFuris",
+      "name": "Dex Furis",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "dex_furis",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/HarlequinGun/HarlequinPistols",
+      "name": "Akzani",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akzani",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/Magnum/Magnum",
+      "name": "Magnus",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "magnus",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAfuris/PrimeAFurisWeapon",
+      "name": "Afuris Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "afuris_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusWeapon",
+      "name": "Akarius Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akarius_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkbolto/PrimeAkBoltoWeapon",
+      "name": "Akbolto Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akbolto_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkjagara/AkJagaraPrime",
+      "name": "Akjagara Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akjagara_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+      "name": "Aksomati Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "aksomati_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+      "name": "Akstiletto Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akstiletto_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAthodai/PrimeAthodaiPistolWeapon",
+      "name": "Athodai Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "athodai_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeBallistica/PrimeBallistica",
+      "name": "Ballistica Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "ballistica_prime",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeEpitaph/PrimeEpitaphSidearmWeapon",
+      "name": "Epitaph Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "epitaph_prime",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeHystrix/PrimeHystrixWeapon",
+      "name": "Hystrix Prime",
+      "slot": "secondary",
+      "modes": 4,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "hystrix_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeKnell/PrimeKnellWeapon",
+      "name": "Knell Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "knell_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressa",
+      "name": "Kompressa Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kompressa_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
+      "name": "Lex Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "lex_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeMagnus/PrimeMagnusWeapon",
+      "name": "Magnus Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "magnus_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimePandero/PanderoPrimeWeapon",
+      "name": "Pandero Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "pandero_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimePyrana/PrimePyranaPistol",
+      "name": "Pyrana Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "pyrana_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeSicarus/PrimeSicarusPistol",
+      "name": "Sicarus Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "sicarus_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVasto/AkPrimeVasto/AkPrimeVastoPistol",
+      "name": "Akvasto Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akvasto_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVasto/PrimeVastoPistol",
+      "name": "Vasto Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "vasto_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVelox/PrimeVeloxPistol",
+      "name": "Velox Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "velox_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiPistol",
+      "name": "Zakti Prime",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "zakti_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZylok/ZylokPrimePistol",
+      "name": "Zylok Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "zylok_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/QuillDartgun/QuillDartGunWeapon",
+      "name": "Hystrix",
+      "slot": "secondary",
+      "modes": 4,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "hystrix",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/SapientPistol/SapientPistol",
+      "name": "Akarius",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akarius",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/SawnOffShotgun/TennoHandShotgun",
+      "name": "Pyrana",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "pyrana",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/SomaSidearm/AkimboSomaPistols",
+      "name": "Aksomati",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "aksomati",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/SundialGun/SundialPistol",
+      "name": "Azima",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "azima",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TennoUzi/TennoUzi",
+      "name": "Akstiletto",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akstiletto",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TigrisRedeemerSetPistol/TnoBladedPistols",
+      "name": "Akjagara",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "akjagara",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnBardPistol/TnBardPistolGun",
+      "name": "Pandero",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "pandero",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolGun",
+      "name": "Zakti",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "zakti",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnJetTurbine/TnJetTurbinePistolWeapon",
+      "name": "Athodai",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "athodai",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnOdaliskSmg/TnOdaliskSmgPistol",
+      "name": "Velox",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "velox",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolWeapon",
+      "name": "Knell",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "knell",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnWraitheSidearm/TnWraitheSidearmWeapon",
+      "name": "Epitaph",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "epitaph",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnYareliPistol/TnYareliPistolWeapon",
+      "name": "Kompressa",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "kompressa",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/BoltoRifle",
+      "name": "Boltor",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "boltor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/BratonPrime",
+      "name": "Braton Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "braton_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/BurstRifle",
+      "name": "Burston",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "burston",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/HeavyRifle",
+      "name": "Gorgon",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "gorgon",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/LatronPrime",
+      "name": "Latron Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "latron_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/Rifle",
+      "name": "Braton",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "braton",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle",
+      "name": "Latron",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "latron",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/SniperRifle",
+      "name": "Snipetron",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "snipetron",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/StartingRifle",
+      "name": "MK1-Braton",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "mk1_braton",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/TennoAR",
+      "name": "Soma",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "soma",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/TennoSniperRifle",
+      "name": "Vectis",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "vectis",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/VIPRifle",
+      "name": "Braton Vandal",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "braton_vandal",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/VandalSniperRifle",
+      "name": "Snipetron Vandal",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "snipetron_vandal",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Shotgun/DoubleBarrelShotgun",
+      "name": "Sobek",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "sobek",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun",
+      "name": "Boar",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "boar",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Shotgun/PrimeBoar",
+      "name": "Boar Prime",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "boar_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Shotgun/QuadShotgun",
+      "name": "Hek",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "hek",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Shotgun/QuadShotgunBase",
+      "name": "Hek",
+      "slot": "primary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
+      "name": "Strun",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "strun",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Shotgun/ShotgunVandal",
+      "name": "Strun Wraith",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "strun_wraith",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/GlassKunai/GlassKunaiWeapon",
+      "name": "Fusilai",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "fusilai",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/Kunai",
+      "name": "Kunai",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "kunai",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/LiDagger/LiDagger",
+      "name": "Spira",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "spira",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/PrimeLiDagger/PrimeLiDagger",
+      "name": "Spira Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "spira_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/PrimeThrowingStar/PrimeHikou",
+      "name": "Hikou Prime",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "hikou_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StalkerKunai",
+      "name": "Despair",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "despair",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombs",
+      "name": "Castanas",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "castanas",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TennoStars",
+      "name": "Hikou",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "hikou",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnChoirframeKunai/TnChoirframeKunai",
+      "name": "Cantare",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cantare",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnOraxiaFlechette/TnOraxiaFlechette",
+      "name": "Scyotid",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "scyotid",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+      "name": "Talons",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "talons",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/VariantSnowBalls",
+      "name": "Solstice Spheres",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/VariantTennoStars",
+      "name": "Hikou Variant",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanPumpShotgun",
+      "name": "Felarx",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "felarx",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Zariman/LongGuns/SemiAutoRifle/ZarimanSemiAutoRifle",
+      "name": "Phenmor",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "phenmor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+      "name": "Laetum",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "laetum",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon",
+      "name": "Onos",
+      "slot": "secondary",
+      "modes": 3,
+      "incarnon": true,
+      "referenceRows": [
+        {
+          "id": "onos",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol",
+      "name": "Sepulcrum",
+      "slot": "secondary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "sepulcrum",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle",
+      "name": "Trumna",
+      "slot": "primary",
+      "modes": 2,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "trumna",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/VoidTrader/PrismaGrakata",
+      "name": "Prisma Grakata",
+      "slot": "primary",
+      "modes": 3,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "prisma_grakata",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Weapons/VoidTrader/VTDetron",
+      "name": "Mara Detron",
+      "slot": "secondary",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "mara_detron",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionWeapon",
+      "name": "Cryotra",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "cryotra",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraWeapon",
+      "name": "Multron",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "multron",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/SwarmerWeapon",
+      "name": "Helstrum",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "helstrum",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/TazronWeapon",
+      "name": "Tazicor",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "tazicor",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/ThermocorMoaWeapon",
+      "name": "Vulcax",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "vulcax",
+          "form": "charged",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/BurstLaserPistol",
+      "name": "Burst Laser",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "burst_laser",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/DethMachineRifle",
+      "name": "Deth Machine Rifle",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "deth_machine_rifle",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/Gremlin",
+      "name": "Artax",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "artax",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/LaserRifle",
+      "name": "Laser Rifle",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "laser_rifle",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeBurstLaserPistol",
+      "name": "Burst Laser Prime",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "burst_laser_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeDethMachineRifle",
+      "name": "Deth Machine Rifle Prime",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "deth_machine_rifle_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeLaserRifle",
+      "name": "Prime Laser Rifle",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "prime_laser_rifle",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeSentShotgun",
+      "name": "Sweeper Prime",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "sweeper_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/PrismaBurstLaserPistol",
+      "name": "Prisma Burst Laser",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "prisma_burst_laser",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentBioWeapon",
+      "name": "Stinger",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "stinger",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentElecRailgun",
+      "name": "Vulklok",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "vulklok",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentShotgun",
+      "name": "Sweeper",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "sweeper",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentinelFreezeRayPrimeRifle",
+      "name": "Verglas Prime",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "verglas_prime",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentinelFreezeRayRifle",
+      "name": "Verglas",
+      "slot": "companion",
+      "modes": 1,
+      "incarnon": false,
+      "referenceRows": [
+        {
+          "id": "verglas",
+          "form": "base",
+          "default": true
+        }
+      ],
+      "status": "requires-complete-build-arcane-and-incarnon-acceptance"
+    }
+  ]
+}

@@ -72,6 +72,14 @@ def resolve_runtime_adapter(
             }):
         return RuntimeAdapter(key='acuity', kind='lock_multishot', source_path=path, rank=rank)
 
+    cannonade_paths = {f'/Lotus/Upgrades/Mods/{family}/{family}SemiAutoFantasyMod'
+                       for family in ('Rifle', 'Pistol', 'Shotgun')}
+    rate_override = '/Lotus/Upgrades/Mods/WeaponStatOverride/LimitFireRate.lua'
+    if (path in cannonade_paths and raw_scripts == {
+            'apply': {'Function':'OnApplyUpgrade','Script':rate_override},
+            'unapply': {'Function':'OnUnapplyUpgrade','Script':rate_override}}):
+        return RuntimeAdapter(key='cannonade',kind='lock_fire_rate',source_path=path,rank=rank)
+
     # Hemorrhage / Internal Bleeding / Magnetic Welt all use the same verified
     # fire-rate check.  The chance table is indexed by the exported rank (rank 5
     # is 35%); the trailing entries are unused generic script values.
@@ -673,3 +681,55 @@ def verified_crux_condition(record):
     return {'sourcePath': record['path'], 'conditionTag': 'OnWeakpointHitCondition',
             'conditions': ['OnWeakpointHitCondition'], 'duration': 10, 'maxStacks': 10,
             'stackMode': 'reset', 'effects': effects}
+
+
+COMPRESSION_PATH = '/Lotus/Upgrades/CosmeticEnhancers/Utility/ConvergeRadialAttackOnAim'
+
+def compression_configuration(record, rank):
+    if (record.get('path') != COMPRESSION_PATH or isinstance(rank,bool)
+            or not isinstance(rank,int) or not 0 <= rank <= 5):
+        return None
+    script=(record.get('runtimeScripts') or {}).get('apply') or {}
+    expected={'_damageMultPerMeterLostBase':.5,'_damageMultPerMeterLostPerLevel':.1,
+              '_ammoEfficiencyPerMeterLostBase':.03,'_ammoEfficiencyPerMeterLostPerLevel':.005,
+              '_explosionRadiusBase':-.8,'_explosionRadiusPerLevel':0.}
+    if (str(script.get('Script') or '').rsplit('/',1)[-1] != 'ConvergeRadialAttackOnAim.lua'
+            or script.get('Function') != 'OnBehaviorChange'
+            or not all(_close(script.get(k),v) for k,v in expected.items())):
+        return None
+    return dict(damagePerMeter=.5+.1*rank,ammoPerMeter=.03+.005*rank)
+
+
+STUG_EVOLUTIONS = '/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/StugIncarnonEvolutions/'
+
+def verified_stug_condition(record, condition):
+    # Source + effect signatures, backed by stug-evolution-conditions.json.
+    # NONE=0 is a localization-only reset hint, not a second buff.
+    path = str(record.get('path') or '')
+    source = str(condition.get('sourcePath') or '')
+    terms = condition.get('effects') or []
+    actual = [e for e in terms if e.get('upgradeType') != 'NONE']
+    if any(e.get('upgradeType') == 'NONE' and e.get('valuePerRank') != 0 for e in terms):
+        return None
+    if len(actual) != 1 or condition.get('runtimeScripts'):
+        return None
+    e = actual[0]
+    if (path == STUG_EVOLUTIONS + 'StugEvoTier1A'
+            and source == path + 'SubMod'
+            and condition.get('conditions') == ['PistolOnShootReloadResetCondition']
+            and condition.get('maxStacks') == 10
+            and condition.get('duration') in (None, 0)
+            and e.get('upgradeType') == 'WEAPON_FIRE_ITERATIONS'
+            and e.get('operation') == 'STACKING_MULTIPLY'
+            and _close(e.get('valuePerRank'), .05)):
+        return {**condition, 'effects': actual, 'eventKind': 'on-fire',
+                'resetOn': ['on-reload', 'on-transform'],
+                'conditionText': '每次开火增加一层；换弹、进入或退出灵化形态时清空。每层 +5% 多重射击，最多 10 层。'}
+    if (path == STUG_EVOLUTIONS + 'StugEvoTier3C'
+            and source == path + 'SubMod'
+            and condition.get('conditions') == ['OnStugIncarnonActivatedCondition']
+            and e.get('upgradeType') == 'WEAPON_PROC_CHANCE'
+            and e.get('operation') == 'ADD_BASE'
+            and _close(e.get('valuePerRank'), .2)):
+        return {**condition, 'effects': actual, 'formGate': 'incarnon'}
+    return None

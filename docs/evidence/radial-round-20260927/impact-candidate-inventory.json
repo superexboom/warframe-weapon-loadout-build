@@ -1,0 +1,1328 @@
+[
+  {
+    "name": "Simulor",
+    "weapon": "/Lotus/Weapons/Cephalon/Primary/CephPrimary/CephPrimary",
+    "mode": 0,
+    "projectile": "/Lotus/Weapons/Cephalon/Primary/CephPrimary/CephPrimaryProjectile",
+    "old": {
+      "components": [
+        {
+          "falloff": 0.60000002,
+          "forcedProcs": [
+            "PT_ELECTROCUTION"
+          ],
+          "procChance": 0.30000001,
+          "radius": 4,
+          "shares": {
+            "DT_MAGNETIC": 1.0
+          },
+          "source": "ExplosiveAttack",
+          "total": 200.0,
+          "types": {
+            "DT_MAGNETIC": 200.0
+          }
+        },
+        {
+          "falloff": 0.60000002,
+          "procChance": 0.30000001,
+          "radius": 4,
+          "shares": {
+            "DT_MAGNETIC": 1.0
+          },
+          "source": "StackingAttack",
+          "total": 60.0,
+          "types": {
+            "DT_MAGNETIC": 60.0
+          }
+        }
+      ],
+      "critChance": 0.12,
+      "critMultiplier": 2.0,
+      "falloff": 0.60000002,
+      "flightSpeed": 80,
+      "forcedProcs": [
+        "PT_ELECTROCUTION"
+      ],
+      "procChance": 0.30000001,
+      "projectile": "/Lotus/Weapons/Cephalon/Primary/CephPrimary/CephPrimaryProjectile",
+      "radial": {
+        "falloff": 0.60000002,
+        "forcedProcs": [
+          "PT_ELECTROCUTION"
+        ],
+        "procChance": 0.30000001,
+        "radius": 4,
+        "shares": {
+          "DT_MAGNETIC": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 200.0,
+        "types": {
+          "DT_MAGNETIC": 200.0
+        }
+      },
+      "radius": 4,
+      "shares": {
+        "DT_MAGNETIC": 1.0
+      },
+      "source": "ExplosiveAttack",
+      "total": 200.0,
+      "types": {
+        "DT_MAGNETIC": 200.0
+      }
+    },
+    "new": {
+      "total": 200.0,
+      "procChance": 0.30000001,
+      "shares": {
+        "DT_MAGNETIC": 1.0
+      },
+      "types": {
+        "DT_MAGNETIC": 200.0
+      },
+      "radius": 4,
+      "falloff": 0.60000002,
+      "source": "ExplosiveAttack",
+      "forcedProcs": [
+        "PT_ELECTROCUTION"
+      ],
+      "projectile": "/Lotus/Weapons/Cephalon/Primary/CephPrimary/CephPrimaryProjectile",
+      "flightSpeed": 80,
+      "critChance": 0.12,
+      "critMultiplier": 2.0,
+      "components": [
+        {
+          "total": 200.0,
+          "procChance": 0.30000001,
+          "shares": {
+            "DT_MAGNETIC": 1.0
+          },
+          "types": {
+            "DT_MAGNETIC": 200.0
+          },
+          "radius": 4,
+          "falloff": 0.60000002,
+          "source": "ExplosiveAttack",
+          "forcedProcs": [
+            "PT_ELECTROCUTION"
+          ]
+        },
+        {
+          "total": 60.0,
+          "procChance": 0.30000001,
+          "shares": {
+            "DT_MAGNETIC": 1.0
+          },
+          "types": {
+            "DT_MAGNETIC": 60.0
+          },
+          "radius": 4,
+          "falloff": 0.60000002,
+          "source": "StackingAttack"
+        }
+      ],
+      "radial": {
+        "total": 200.0,
+        "procChance": 0.30000001,
+        "shares": {
+          "DT_MAGNETIC": 1.0
+        },
+        "types": {
+          "DT_MAGNETIC": 200.0
+        },
+        "radius": 4,
+        "falloff": 0.60000002,
+        "source": "ExplosiveAttack",
+        "forcedProcs": [
+          "PT_ELECTROCUTION"
+        ]
+      }
+    },
+    "changed": false
+  },
+  {
+    "name": "Sonicor",
+    "weapon": "/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolArray",
+    "mode": 0,
+    "projectile": "/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolProjectile",
+    "old": {
+      "components": [
+        {
+          "falloff": null,
+          "forcedProcs": [
+            "PT_KNOCKBACK"
+          ],
+          "procChance": 0.25,
+          "radius": 5,
+          "shares": {
+            "DT_IMPACT": 1.0
+          },
+          "source": "ExplosiveAttack",
+          "total": 50.0,
+          "types": {
+            "DT_IMPACT": 50.0
+          }
+        },
+        {
+          "falloff": null,
+          "forcedProcs": [
+            "PT_ELECTROCUTION"
+          ],
+          "procChance": 0.0,
+          "radius": 5,
+          "shares": {
+            "DT_IMPACT": 1.0
+          },
+          "source": "EmbedDeathAttack",
+          "total": 100.0,
+          "types": {
+            "DT_IMPACT": 100.0
+          }
+        }
+      ],
+      "critChance": 0.0,
+      "critMultiplier": 2.0,
+      "flightSpeed": 50,
+      "forcedProcs": [
+        "PT_RAGDOLL"
+      ],
+      "procChance": 0,
+      "projectile": "/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolProjectile",
+      "radial": {
+        "falloff": null,
+        "forcedProcs": [
+          "PT_KNOCKBACK"
+        ],
+        "procChance": 0.25,
+        "radius": 5,
+        "shares": {
+          "DT_IMPACT": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 50.0,
+        "types": {
+          "DT_IMPACT": 50.0
+        }
+      },
+      "shares": {
+        "DT_IMPACT": 1.0
+      },
+      "source": "ImpactBehavior",
+      "total": 150.0,
+      "types": {
+        "DT_IMPACT": 150.0
+      }
+    },
+    "new": {
+      "total": 150.0,
+      "procChance": 0,
+      "shares": {
+        "DT_IMPACT": 1.0
+      },
+      "types": {
+        "DT_IMPACT": 150.0
+      },
+      "critChance": 0.0,
+      "critMultiplier": 2.0,
+      "forcedProcs": [
+        "PT_RAGDOLL"
+      ],
+      "source": "ImpactBehavior",
+      "projectile": "/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolProjectile",
+      "flightSpeed": 50,
+      "components": [
+        {
+          "total": 50.0,
+          "procChance": 0.25,
+          "shares": {
+            "DT_IMPACT": 1.0
+          },
+          "types": {
+            "DT_IMPACT": 50.0
+          },
+          "radius": 5,
+          "falloff": null,
+          "source": "ExplosiveAttack",
+          "forcedProcs": [
+            "PT_KNOCKBACK"
+          ]
+        },
+        {
+          "total": 100.0,
+          "procChance": 0.0,
+          "shares": {
+            "DT_IMPACT": 1.0
+          },
+          "types": {
+            "DT_IMPACT": 100.0
+          },
+          "radius": 5,
+          "falloff": null,
+          "source": "EmbedDeathAttack",
+          "forcedProcs": [
+            "PT_ELECTROCUTION"
+          ]
+        }
+      ],
+      "radial": {
+        "total": 50.0,
+        "procChance": 0.25,
+        "shares": {
+          "DT_IMPACT": 1.0
+        },
+        "types": {
+          "DT_IMPACT": 50.0
+        },
+        "radius": 5,
+        "falloff": null,
+        "source": "ExplosiveAttack",
+        "forcedProcs": [
+          "PT_KNOCKBACK"
+        ]
+      }
+    },
+    "changed": false
+  },
+  {
+    "name": "Stug",
+    "weapon": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+    "mode": 0,
+    "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+    "old": {
+      "components": [
+        {
+          "falloff": 0.30000001,
+          "procChance": 0.0,
+          "radius": 0.30000001,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "source": "ExplosiveAttack",
+          "total": 75.0,
+          "types": {
+            "DT_CORROSIVE": 75.0
+          }
+        },
+        {
+          "falloff": 0.30000001,
+          "procChance": 0.0,
+          "radius": 0.30000001,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "source": "EmbedDeathAttack",
+          "total": 75.0,
+          "types": {
+            "DT_CORROSIVE": 75.0
+          }
+        }
+      ],
+      "critChance": 0.050000001,
+      "critMultiplier": 1.5,
+      "falloff": 0.30000001,
+      "flightSpeed": 35,
+      "procChance": 0.0,
+      "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+      "radial": {
+        "falloff": 0.30000001,
+        "procChance": 0.0,
+        "radius": 0.30000001,
+        "shares": {
+          "DT_CORROSIVE": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 75.0,
+        "types": {
+          "DT_CORROSIVE": 75.0
+        }
+      },
+      "radius": 0.30000001,
+      "shares": {
+        "DT_CORROSIVE": 1.0
+      },
+      "source": "ExplosiveAttack",
+      "total": 75.0,
+      "types": {
+        "DT_CORROSIVE": 75.0
+      }
+    },
+    "new": {
+      "total": 10.0,
+      "procChance": 0.1,
+      "shares": {
+        "DT_IMPACT": 0.333333,
+        "DT_PUNCTURE": 0.333333,
+        "DT_SLASH": 0.333334
+      },
+      "types": {
+        "DT_IMPACT": 3.33333,
+        "DT_PUNCTURE": 3.33333,
+        "DT_SLASH": 3.33334
+      },
+      "critChance": 0.0,
+      "critMultiplier": 2.0,
+      "source": "ImpactBehavior",
+      "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+      "flightSpeed": 35,
+      "components": [
+        {
+          "total": 75.0,
+          "procChance": 0.0,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "types": {
+            "DT_CORROSIVE": 75.0
+          },
+          "radius": 0.30000001,
+          "falloff": 0.30000001,
+          "source": "ExplosiveAttack"
+        },
+        {
+          "total": 75.0,
+          "procChance": 0.0,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "types": {
+            "DT_CORROSIVE": 75.0
+          },
+          "radius": 0.30000001,
+          "falloff": 0.30000001,
+          "source": "EmbedDeathAttack"
+        }
+      ],
+      "radial": {
+        "total": 75.0,
+        "procChance": 0.0,
+        "shares": {
+          "DT_CORROSIVE": 1.0
+        },
+        "types": {
+          "DT_CORROSIVE": 75.0
+        },
+        "radius": 0.30000001,
+        "falloff": 0.30000001,
+        "source": "ExplosiveAttack"
+      }
+    },
+    "changed": true
+  },
+  {
+    "name": "Stug",
+    "weapon": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+    "mode": 1,
+    "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+    "old": {
+      "components": [
+        {
+          "falloff": 0.30000001,
+          "procChance": 0.0,
+          "radius": 0.30000001,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "source": "ExplosiveAttack",
+          "total": 75.0,
+          "types": {
+            "DT_CORROSIVE": 75.0
+          }
+        },
+        {
+          "falloff": 0.30000001,
+          "procChance": 0.0,
+          "radius": 0.30000001,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "source": "EmbedDeathAttack",
+          "total": 75.0,
+          "types": {
+            "DT_CORROSIVE": 75.0
+          }
+        }
+      ],
+      "critChance": 0.050000001,
+      "critMultiplier": 1.5,
+      "falloff": 0.30000001,
+      "flightSpeed": 35,
+      "procChance": 0.0,
+      "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+      "radial": {
+        "falloff": 0.30000001,
+        "procChance": 0.0,
+        "radius": 0.30000001,
+        "shares": {
+          "DT_CORROSIVE": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 75.0,
+        "types": {
+          "DT_CORROSIVE": 75.0
+        }
+      },
+      "radius": 0.30000001,
+      "shares": {
+        "DT_CORROSIVE": 1.0
+      },
+      "source": "ExplosiveAttack",
+      "total": 75.0,
+      "types": {
+        "DT_CORROSIVE": 75.0
+      }
+    },
+    "new": {
+      "total": 10.0,
+      "procChance": 0.1,
+      "shares": {
+        "DT_IMPACT": 0.333333,
+        "DT_PUNCTURE": 0.333333,
+        "DT_SLASH": 0.333334
+      },
+      "types": {
+        "DT_IMPACT": 3.33333,
+        "DT_PUNCTURE": 3.33333,
+        "DT_SLASH": 3.33334
+      },
+      "critChance": 0.0,
+      "critMultiplier": 2.0,
+      "source": "ImpactBehavior",
+      "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+      "flightSpeed": 35,
+      "components": [
+        {
+          "total": 75.0,
+          "procChance": 0.0,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "types": {
+            "DT_CORROSIVE": 75.0
+          },
+          "radius": 0.30000001,
+          "falloff": 0.30000001,
+          "source": "ExplosiveAttack"
+        },
+        {
+          "total": 75.0,
+          "procChance": 0.0,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "types": {
+            "DT_CORROSIVE": 75.0
+          },
+          "radius": 0.30000001,
+          "falloff": 0.30000001,
+          "source": "EmbedDeathAttack"
+        }
+      ],
+      "radial": {
+        "total": 75.0,
+        "procChance": 0.0,
+        "shares": {
+          "DT_CORROSIVE": 1.0
+        },
+        "types": {
+          "DT_CORROSIVE": 75.0
+        },
+        "radius": 0.30000001,
+        "falloff": 0.30000001,
+        "source": "ExplosiveAttack"
+      }
+    },
+    "changed": true
+  },
+  {
+    "name": "Stug",
+    "weapon": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+    "mode": 2,
+    "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/IncarnonAdapterGrineerCrossbow/IncarnonGooProjectile",
+    "old": {
+      "components": [
+        {
+          "falloff": 0.30000001,
+          "procChance": 0.2,
+          "radius": 0.30000001,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "source": "ExplosiveAttack",
+          "total": 200.0,
+          "types": {
+            "DT_CORROSIVE": 200.0
+          }
+        },
+        {
+          "falloff": 0.30000001,
+          "procChance": 0.2,
+          "radius": 0.30000001,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "source": "EmbedDeathAttack",
+          "total": 200.0,
+          "types": {
+            "DT_CORROSIVE": 200.0
+          }
+        }
+      ],
+      "critChance": 0.15000001,
+      "critMultiplier": 2.0,
+      "falloff": 0.30000001,
+      "flightSpeed": 35,
+      "procChance": 0.2,
+      "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/IncarnonAdapterGrineerCrossbow/IncarnonGooProjectile",
+      "radial": {
+        "falloff": 0.30000001,
+        "procChance": 0.2,
+        "radius": 0.30000001,
+        "shares": {
+          "DT_CORROSIVE": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 200.0,
+        "types": {
+          "DT_CORROSIVE": 200.0
+        }
+      },
+      "radius": 0.30000001,
+      "shares": {
+        "DT_CORROSIVE": 1.0
+      },
+      "source": "ExplosiveAttack",
+      "total": 200.0,
+      "types": {
+        "DT_CORROSIVE": 200.0
+      }
+    },
+    "new": {
+      "total": 10.0,
+      "procChance": 0.1,
+      "shares": {
+        "DT_IMPACT": 0.333333,
+        "DT_PUNCTURE": 0.333333,
+        "DT_SLASH": 0.333334
+      },
+      "types": {
+        "DT_IMPACT": 3.33333,
+        "DT_PUNCTURE": 3.33333,
+        "DT_SLASH": 3.33334
+      },
+      "critChance": 0.0,
+      "critMultiplier": 2.0,
+      "source": "ImpactBehavior",
+      "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/IncarnonAdapterGrineerCrossbow/IncarnonGooProjectile",
+      "flightSpeed": 35,
+      "components": [
+        {
+          "total": 200.0,
+          "procChance": 0.2,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "types": {
+            "DT_CORROSIVE": 200.0
+          },
+          "radius": 0.30000001,
+          "falloff": 0.30000001,
+          "source": "ExplosiveAttack"
+        },
+        {
+          "total": 200.0,
+          "procChance": 0.2,
+          "shares": {
+            "DT_CORROSIVE": 1.0
+          },
+          "types": {
+            "DT_CORROSIVE": 200.0
+          },
+          "radius": 0.30000001,
+          "falloff": 0.30000001,
+          "source": "EmbedDeathAttack"
+        }
+      ],
+      "radial": {
+        "total": 200.0,
+        "procChance": 0.2,
+        "shares": {
+          "DT_CORROSIVE": 1.0
+        },
+        "types": {
+          "DT_CORROSIVE": 200.0
+        },
+        "radius": 0.30000001,
+        "falloff": 0.30000001,
+        "source": "ExplosiveAttack"
+      }
+    },
+    "changed": true
+  },
+  {
+    "name": "Mutalist Quanta",
+    "weapon": "/Lotus/Weapons/Infested/LongGuns/InfCrpShockSwarm/InfCrpShockSwarmRifle",
+    "mode": 1,
+    "projectile": "/Lotus/Weapons/Infested/LongGuns/InfCrpShockSwarm/InfCrpShockSwarmStackProjectile",
+    "old": {
+      "components": [
+        {
+          "falloff": 0.5,
+          "procChance": 0.40000001,
+          "radius": 4.4000001,
+          "shares": {
+            "DT_POISON": 1.0
+          },
+          "source": "ExplosiveAttack",
+          "total": 100.0,
+          "types": {
+            "DT_POISON": 100.0
+          }
+        },
+        {
+          "falloff": 0.5,
+          "procChance": 0.0,
+          "radius": 4.4000001,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "source": "EmbedDeathAttack",
+          "total": 100.0,
+          "types": {
+            "DT_ELECTRICITY": 100.0
+          }
+        },
+        {
+          "falloff": 0.5,
+          "procChance": 0.40000001,
+          "radius": 4.4000001,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "source": "StackingAttack",
+          "total": 50.0,
+          "types": {
+            "DT_ELECTRICITY": 50.0
+          }
+        }
+      ],
+      "critChance": 0.050000001,
+      "critMultiplier": 1.5,
+      "falloff": 0.5,
+      "flightSpeed": 5,
+      "procChance": 0.40000001,
+      "projectile": "/Lotus/Weapons/Infested/LongGuns/InfCrpShockSwarm/InfCrpShockSwarmStackProjectile",
+      "radial": {
+        "falloff": 0.5,
+        "procChance": 0.40000001,
+        "radius": 4.4000001,
+        "shares": {
+          "DT_POISON": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 100.0,
+        "types": {
+          "DT_POISON": 100.0
+        }
+      },
+      "radius": 4.4000001,
+      "shares": {
+        "DT_POISON": 1.0
+      },
+      "source": "ExplosiveAttack",
+      "total": 100.0,
+      "types": {
+        "DT_POISON": 100.0
+      }
+    },
+    "new": {
+      "total": 8.0,
+      "procChance": 0.1,
+      "shares": {
+        "DT_IMPACT": 0.333333,
+        "DT_PUNCTURE": 0.333333,
+        "DT_SLASH": 0.333334
+      },
+      "types": {
+        "DT_IMPACT": 2.666664,
+        "DT_PUNCTURE": 2.666664,
+        "DT_SLASH": 2.666672
+      },
+      "critChance": 0.025,
+      "critMultiplier": 1.5,
+      "source": "ImpactBehavior",
+      "projectile": "/Lotus/Weapons/Infested/LongGuns/InfCrpShockSwarm/InfCrpShockSwarmStackProjectile",
+      "flightSpeed": 5,
+      "components": [
+        {
+          "total": 100.0,
+          "procChance": 0.40000001,
+          "shares": {
+            "DT_POISON": 1.0
+          },
+          "types": {
+            "DT_POISON": 100.0
+          },
+          "radius": 4.4000001,
+          "falloff": 0.5,
+          "source": "ExplosiveAttack"
+        },
+        {
+          "total": 100.0,
+          "procChance": 0.0,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "types": {
+            "DT_ELECTRICITY": 100.0
+          },
+          "radius": 4.4000001,
+          "falloff": 0.5,
+          "source": "EmbedDeathAttack"
+        },
+        {
+          "total": 50.0,
+          "procChance": 0.40000001,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "types": {
+            "DT_ELECTRICITY": 50.0
+          },
+          "radius": 4.4000001,
+          "falloff": 0.5,
+          "source": "StackingAttack"
+        }
+      ],
+      "radial": {
+        "total": 100.0,
+        "procChance": 0.40000001,
+        "shares": {
+          "DT_POISON": 1.0
+        },
+        "types": {
+          "DT_POISON": 100.0
+        },
+        "radius": 4.4000001,
+        "falloff": 0.5,
+        "source": "ExplosiveAttack"
+      }
+    },
+    "changed": true
+  },
+  {
+    "name": "Synoid Simulor",
+    "weapon": "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSSimulor",
+    "mode": 0,
+    "projectile": "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSCephPrimaryProjectile",
+    "old": {
+      "components": [
+        {
+          "falloff": 0.60000002,
+          "forcedProcs": [
+            "PT_ELECTROCUTION"
+          ],
+          "procChance": 0.34999999,
+          "radius": 5,
+          "shares": {
+            "DT_MAGNETIC": 1.0
+          },
+          "source": "ExplosiveAttack",
+          "total": 240.0,
+          "types": {
+            "DT_MAGNETIC": 240.0
+          }
+        },
+        {
+          "falloff": 0.60000002,
+          "procChance": 0.34999999,
+          "radius": 5,
+          "shares": {
+            "DT_MAGNETIC": 1.0
+          },
+          "source": "StackingAttack",
+          "total": 80.0,
+          "types": {
+            "DT_MAGNETIC": 80.0
+          }
+        }
+      ],
+      "critChance": 0.14,
+      "critMultiplier": 2.0,
+      "falloff": 0.60000002,
+      "flightSpeed": 80,
+      "forcedProcs": [
+        "PT_ELECTROCUTION"
+      ],
+      "procChance": 0.34999999,
+      "projectile": "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSCephPrimaryProjectile",
+      "radial": {
+        "falloff": 0.60000002,
+        "forcedProcs": [
+          "PT_ELECTROCUTION"
+        ],
+        "procChance": 0.34999999,
+        "radius": 5,
+        "shares": {
+          "DT_MAGNETIC": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 240.0,
+        "types": {
+          "DT_MAGNETIC": 240.0
+        }
+      },
+      "radius": 5,
+      "shares": {
+        "DT_MAGNETIC": 1.0
+      },
+      "source": "ExplosiveAttack",
+      "total": 240.0,
+      "types": {
+        "DT_MAGNETIC": 240.0
+      }
+    },
+    "new": {
+      "total": 240.0,
+      "procChance": 0.34999999,
+      "shares": {
+        "DT_MAGNETIC": 1.0
+      },
+      "types": {
+        "DT_MAGNETIC": 240.0
+      },
+      "radius": 5,
+      "falloff": 0.60000002,
+      "source": "ExplosiveAttack",
+      "forcedProcs": [
+        "PT_ELECTROCUTION"
+      ],
+      "projectile": "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSCephPrimaryProjectile",
+      "flightSpeed": 80,
+      "critChance": 0.14,
+      "critMultiplier": 2.0,
+      "components": [
+        {
+          "total": 240.0,
+          "procChance": 0.34999999,
+          "shares": {
+            "DT_MAGNETIC": 1.0
+          },
+          "types": {
+            "DT_MAGNETIC": 240.0
+          },
+          "radius": 5,
+          "falloff": 0.60000002,
+          "source": "ExplosiveAttack",
+          "forcedProcs": [
+            "PT_ELECTROCUTION"
+          ]
+        },
+        {
+          "total": 80.0,
+          "procChance": 0.34999999,
+          "shares": {
+            "DT_MAGNETIC": 1.0
+          },
+          "types": {
+            "DT_MAGNETIC": 80.0
+          },
+          "radius": 5,
+          "falloff": 0.60000002,
+          "source": "StackingAttack"
+        }
+      ],
+      "radial": {
+        "total": 240.0,
+        "procChance": 0.34999999,
+        "shares": {
+          "DT_MAGNETIC": 1.0
+        },
+        "types": {
+          "DT_MAGNETIC": 240.0
+        },
+        "radius": 5,
+        "falloff": 0.60000002,
+        "source": "ExplosiveAttack",
+        "forcedProcs": [
+          "PT_ELECTROCUTION"
+        ]
+      }
+    },
+    "changed": false
+  },
+  {
+    "name": "Sancti Castanas",
+    "weapon": "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanas",
+    "mode": 0,
+    "projectile": "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanasProjectile",
+    "old": {
+      "components": [
+        {
+          "falloff": 0.40000001,
+          "procChance": 0.34,
+          "radius": 3.5999999,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "source": "ExplosiveAttack",
+          "total": 300.0,
+          "types": {
+            "DT_ELECTRICITY": 300.0
+          }
+        },
+        {
+          "falloff": 0.40000001,
+          "forcedProcs": [
+            "PT_ELECTROCUTION"
+          ],
+          "procChance": 0.0,
+          "radius": 3.5999999,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "source": "EmbedDeathAttack",
+          "total": 300.0,
+          "types": {
+            "DT_ELECTRICITY": 300.0
+          }
+        }
+      ],
+      "critChance": 0.23999999,
+      "critMultiplier": 2.0,
+      "falloff": 0.40000001,
+      "flightSpeed": 60,
+      "procChance": 0.34,
+      "projectile": "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanasProjectile",
+      "radial": {
+        "falloff": 0.40000001,
+        "procChance": 0.34,
+        "radius": 3.5999999,
+        "shares": {
+          "DT_ELECTRICITY": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 300.0,
+        "types": {
+          "DT_ELECTRICITY": 300.0
+        }
+      },
+      "radius": 3.5999999,
+      "shares": {
+        "DT_ELECTRICITY": 1.0
+      },
+      "source": "ExplosiveAttack",
+      "total": 300.0,
+      "types": {
+        "DT_ELECTRICITY": 300.0
+      }
+    },
+    "new": {
+      "total": 6.0,
+      "procChance": 0.1,
+      "shares": {
+        "DT_IMPACT": 0.333333,
+        "DT_PUNCTURE": 0.333333,
+        "DT_SLASH": 0.333334
+      },
+      "types": {
+        "DT_IMPACT": 1.999998,
+        "DT_PUNCTURE": 1.999998,
+        "DT_SLASH": 2.000004
+      },
+      "critChance": 0.050000001,
+      "critMultiplier": 1.5,
+      "source": "ImpactBehavior",
+      "projectile": "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanasProjectile",
+      "flightSpeed": 60,
+      "components": [
+        {
+          "total": 300.0,
+          "procChance": 0.34,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "types": {
+            "DT_ELECTRICITY": 300.0
+          },
+          "radius": 3.5999999,
+          "falloff": 0.40000001,
+          "source": "ExplosiveAttack"
+        },
+        {
+          "total": 300.0,
+          "procChance": 0.0,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "types": {
+            "DT_ELECTRICITY": 300.0
+          },
+          "radius": 3.5999999,
+          "falloff": 0.40000001,
+          "source": "EmbedDeathAttack",
+          "forcedProcs": [
+            "PT_ELECTROCUTION"
+          ]
+        }
+      ],
+      "radial": {
+        "total": 300.0,
+        "procChance": 0.34,
+        "shares": {
+          "DT_ELECTRICITY": 1.0
+        },
+        "types": {
+          "DT_ELECTRICITY": 300.0
+        },
+        "radius": 3.5999999,
+        "falloff": 0.40000001,
+        "source": "ExplosiveAttack"
+      }
+    },
+    "changed": true
+  },
+  {
+    "name": "Castanas",
+    "weapon": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombs",
+    "mode": 0,
+    "projectile": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombProjectile",
+    "old": {
+      "components": [
+        {
+          "falloff": 0.40000001,
+          "procChance": 0.22,
+          "radius": 3.5999999,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "source": "ExplosiveAttack",
+          "total": 160.0,
+          "types": {
+            "DT_ELECTRICITY": 160.0
+          }
+        },
+        {
+          "falloff": 0.40000001,
+          "forcedProcs": [
+            "PT_ELECTROCUTION"
+          ],
+          "procChance": 0.0,
+          "radius": 3.5999999,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "source": "EmbedDeathAttack",
+          "total": 160.0,
+          "types": {
+            "DT_ELECTRICITY": 160.0
+          }
+        }
+      ],
+      "critChance": 0.079999998,
+      "critMultiplier": 1.5,
+      "falloff": 0.40000001,
+      "flightSpeed": 60,
+      "procChance": 0.22,
+      "projectile": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombProjectile",
+      "radial": {
+        "falloff": 0.40000001,
+        "procChance": 0.22,
+        "radius": 3.5999999,
+        "shares": {
+          "DT_ELECTRICITY": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 160.0,
+        "types": {
+          "DT_ELECTRICITY": 160.0
+        }
+      },
+      "radius": 3.5999999,
+      "shares": {
+        "DT_ELECTRICITY": 1.0
+      },
+      "source": "ExplosiveAttack",
+      "total": 160.0,
+      "types": {
+        "DT_ELECTRICITY": 160.0
+      }
+    },
+    "new": {
+      "total": 6.0,
+      "procChance": 0.1,
+      "shares": {
+        "DT_IMPACT": 0.333333,
+        "DT_PUNCTURE": 0.333333,
+        "DT_SLASH": 0.333334
+      },
+      "types": {
+        "DT_IMPACT": 1.999998,
+        "DT_PUNCTURE": 1.999998,
+        "DT_SLASH": 2.000004
+      },
+      "critChance": 0.050000001,
+      "critMultiplier": 1.5,
+      "source": "ImpactBehavior",
+      "projectile": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombProjectile",
+      "flightSpeed": 60,
+      "components": [
+        {
+          "total": 160.0,
+          "procChance": 0.22,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "types": {
+            "DT_ELECTRICITY": 160.0
+          },
+          "radius": 3.5999999,
+          "falloff": 0.40000001,
+          "source": "ExplosiveAttack"
+        },
+        {
+          "total": 160.0,
+          "procChance": 0.0,
+          "shares": {
+            "DT_ELECTRICITY": 1.0
+          },
+          "types": {
+            "DT_ELECTRICITY": 160.0
+          },
+          "radius": 3.5999999,
+          "falloff": 0.40000001,
+          "source": "EmbedDeathAttack",
+          "forcedProcs": [
+            "PT_ELECTROCUTION"
+          ]
+        }
+      ],
+      "radial": {
+        "total": 160.0,
+        "procChance": 0.22,
+        "shares": {
+          "DT_ELECTRICITY": 1.0
+        },
+        "types": {
+          "DT_ELECTRICITY": 160.0
+        },
+        "radius": 3.5999999,
+        "falloff": 0.40000001,
+        "source": "ExplosiveAttack"
+      }
+    },
+    "changed": true
+  },
+  {
+    "name": "Talons",
+    "weapon": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+    "mode": 0,
+    "projectile": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknivesProjectile",
+    "old": {
+      "components": [
+        {
+          "falloff": 0.5,
+          "procChance": 0.0,
+          "radius": 4.8000002,
+          "shares": {},
+          "source": "ExplosiveAttack",
+          "total": 120.0,
+          "types": {}
+        },
+        {
+          "falloff": 0.5,
+          "forcedProcs": [
+            "PT_FRAILTY",
+            "PT_RAGDOLL"
+          ],
+          "procChance": 0.0,
+          "radius": 4.8000002,
+          "shares": {
+            "DT_EXPLOSION": 1.0
+          },
+          "source": "EmbedDeathAttack",
+          "total": 250.0,
+          "types": {
+            "DT_EXPLOSION": 250.0
+          }
+        }
+      ],
+      "critChance": 0.22,
+      "critMultiplier": 2.0,
+      "falloff": 0.5,
+      "flightSpeed": 60,
+      "procChance": 0.0,
+      "projectile": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknivesProjectile",
+      "radial": {
+        "falloff": 0.5,
+        "procChance": 0.0,
+        "radius": 4.8000002,
+        "shares": {},
+        "source": "ExplosiveAttack",
+        "total": 120.0,
+        "types": {}
+      },
+      "radius": 4.8000002,
+      "shares": {},
+      "source": "ExplosiveAttack",
+      "total": 120.0,
+      "types": {}
+    },
+    "new": {
+      "total": 6.0,
+      "procChance": 0.1,
+      "shares": {
+        "DT_IMPACT": 0.333333,
+        "DT_PUNCTURE": 0.333333,
+        "DT_SLASH": 0.333334
+      },
+      "types": {
+        "DT_IMPACT": 1.999998,
+        "DT_PUNCTURE": 1.999998,
+        "DT_SLASH": 2.000004
+      },
+      "critChance": 0.050000001,
+      "critMultiplier": 1.5,
+      "source": "ImpactBehavior",
+      "projectile": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknivesProjectile",
+      "flightSpeed": 60,
+      "components": [
+        {
+          "total": 120.0,
+          "procChance": 0.0,
+          "shares": {},
+          "types": {},
+          "radius": 4.8000002,
+          "falloff": 0.5,
+          "source": "ExplosiveAttack"
+        },
+        {
+          "total": 250.0,
+          "procChance": 0.0,
+          "shares": {
+            "DT_EXPLOSION": 1.0
+          },
+          "types": {
+            "DT_EXPLOSION": 250.0
+          },
+          "radius": 4.8000002,
+          "falloff": 0.5,
+          "source": "EmbedDeathAttack",
+          "forcedProcs": [
+            "PT_FRAILTY",
+            "PT_RAGDOLL"
+          ]
+        }
+      ],
+      "radial": {
+        "total": 120.0,
+        "procChance": 0.0,
+        "shares": {},
+        "types": {},
+        "radius": 4.8000002,
+        "falloff": 0.5,
+        "source": "ExplosiveAttack"
+      }
+    },
+    "changed": true
+  }
+]

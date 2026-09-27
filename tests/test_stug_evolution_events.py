@@ -1,0 +1,91 @@
+from copy import deepcopy
+from dataclasses import replace
+import pytest
+import app
+from wfarsenal.damage import Scenario, ModEffect, apply_mods
+from wfarsenal.manual_combat import prepare
+from wfarsenal.combat_replay import replay
+from wfarsenal.runtime_adapters import verified_stug_condition
+
+def build_combat(mode=0, extra=()):
+    w=deepcopy(next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Stug'))
+    w['isIncarnonForm']=mode==2
+    branches=[b for t in w['incarnon']['tiers'] for b in t['branches'] if b['id'] in ('2-1','4-3')]
+    fx=list(extra)
+    for b in branches:fx.extend(app.optimizer._branch_effects(b)[0])
+    return prepare(dict(weapon=w,fire_mode=mode,scenario=Scenario(trigger_policy='emergent'),effects=fx),[],[],
+                   incarnon_choices={'tier2':'2-1','tier4':'4-3'})
+
+def test_stug_firing_stack_joins_percentage_bucket_once():
+    c=build_combat(extra=[ModEffect('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',1.2)])
+    q=c['trigger_sources'][0]
+    assert q['kind']=='on-fire' and q['maxStacks']==10
+    assert q['resetOn']==['on-reload','on-transform']
+    a,_=c['resolve']('selected',{},0)
+    b,_=c['resolve']('selected',{q['id']:10},0)
+    assert a.multishot==pytest.approx(2.2)
+    assert b.multishot==pytest.approx(2.7)
+    assert not any('event-condition-unmodeled' in n for n in c['unsupported'])
+
+def test_stug_status_perk_only_doubles_in_incarnon():
+    base=build_combat();inc=build_combat(2)
+    st,_=base['resolve']('selected',{},0)
+    incst,_=inc['resolve']('selected',{},0)
+    returned,_=inc['resolve']('base',{},0)
+    # Native explosion SC is 0 in base, .2 transformed; perk grants .2 + form-only .2.
+    assert st.status_chance==pytest.approx(.2)
+    assert incst.status_chance==pytest.approx(.6)
+    assert returned.status_chance==pytest.approx(.2)
+
+def test_unrelated_or_changed_stug_signature_is_not_adapted():
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Stug')
+    b=next(b for t in w['incarnon']['tiers'] for b in t['branches'] if b['id']=='2-1')
+    q=b['conditionalEffects'][0]
+    assert verified_stug_condition(b,q)
+    assert verified_stug_condition({**b,'path':'/unrelated'},q) is None
+    wrong=deepcopy(q);wrong['effects'][0]['valuePerRank']=.1
+    assert verified_stug_condition(b,wrong) is None
+
+def test_firing_is_per_trigger_pull_and_reload_resets_before_next_shot():
+    c=build_combat();q=c['trigger_sources'][0];observed=[]
+    original=c['resolve']
+    def resolve(form,stacks,live):
+        observed.append(stacks.get(q['id'],0))
+        st,_=original(form,stacks,live)
+        return replace(st,fire_rate=1,magazine=2,reload_time=.5,status_chance=0,crit_chance=0),None
+    c['resolve']=resolve
+    first,_=resolve('selected',{},0)
+    r=replay(first,dict(health=1e12,shield=0,armour=0,overguard=0,baseLevel=1),
+        attacks_per_second=1,window_seconds=4,combat=c,trigger_sources=c['trigger_sources'])
+    assert r['shots']==4 and r['reloads']==1
+    assert r['directWindow']==pytest.approx(first.total_damage*(1+1.05+1+1.05))
+    assert max(observed)<=2
+
+def test_transform_resets_firing_stacks_in_both_directions():
+    c=build_combat(2);q=c['trigger_sources'][0];observed=[];original=c['resolve']
+    def resolve(form,stacks,live):
+        observed.append((form,stacks.get(q['id'],0)))
+        st,_=original(form,stacks,live)
+        return replace(st,fire_rate=2,magazine=20,status_chance=0,crit_chance=0,radial_only=False),None
+    c['resolve']=resolve;c['cycle']=dict(hits=1,pool=1,enterSeconds=.1,exitSeconds=.1,chargeOn='direct_hits')
+    first,_=resolve('base',{},0)
+    r=replay(first,dict(health=1e12,shield=0,armour=0,overguard=0,baseLevel=1),
+        attacks_per_second=2,window_seconds=2.5,combat=c,trigger_sources=c['trigger_sources'])
+    assert r['transforms']>=2
+    assert ('incarnon',0) in observed and ('base',0) in observed
+
+
+def test_stug_trigger_description_survives_actual_manual_replay():
+    c=build_combat();q=c['trigger_sources'][0]
+    st,_=c['resolve']('selected',{},0)
+    r=replay(st,dict(health=1e12,shield=0,armour=0,overguard=0,baseLevel=1),
+        attacks_per_second=st.fire_rate,window_seconds=.5,combat=c,
+        trigger_sources=c['trigger_sources'])
+    shown=r['triggerSeries'][0]
+    assert shown['conditionText']==q['conditionText']
+    assert '每次开火' in shown['conditionText'] and '换弹' in shown['conditionText']
+    assert shown['resetOn']==['on-reload','on-transform']
+    assert shown['simulationMode']=='events'
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Stug')
+    b=next(b for t in w['incarnon']['tiers'] for b in t['branches'] if b['id']=='2-1')
+    assert app.optimizer._branch_trigger_specs(b)[0]['conditionText']==shown['conditionText']

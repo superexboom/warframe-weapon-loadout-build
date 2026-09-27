@@ -62,6 +62,28 @@ def condition_kind(condition):
     return next((exact[x] for x in names if x in exact), None)
 
 
+EVENT_CONDITION_TEXT = {
+    'on-reload-empty': '弹匣打空后开始换弹时触发。',
+    'on-reload-empty-complete': '弹匣打空后完成换弹时触发。',
+    'on-burst-hit': '一轮连射全部命中时触发。',
+    'on-headshot': '命中头部弱点时触发。',
+    'on-headshot-kill': '头部弱点命中造成击杀时触发。',
+    'on-kill': '击杀时触发。',
+    'on-primary-kill': '主武器击杀时触发。',
+    'on-melee-kill': '近战击杀时触发。',
+    'on-crit': '暴击命中时触发。',
+    'on-hit': '命中时触发。',
+    'on-reload': '开始换弹时触发。',
+    'on-reload-complete': '完成换弹时触发。',
+    'proc-DT_FIRE': '施加火焰异常时触发。',
+    'proc-DT_FREEZE': '施加冰冻异常时触发。',
+    'proc-DT_POISON': '施加毒素异常时触发。',
+    'proc-DT_ELECTRICITY': '施加电击异常时触发。',
+    'on-proc': '施加异常状态时触发。',
+    'on-close-kill': '击杀距离不超过 5 米的目标时触发。',
+}
+
+
 def modeled_event_kinds(record, rank):
     # Empty starting stacks are valid only for replay-supported conditions.
     from .damage import ModEffect
@@ -105,6 +127,7 @@ def prepare(
     from .status_arcanes import configuration as status_configuration
     sources = []
     dynamic = []
+    form_dynamic = []
     excluded = set()
     notes = []
     branches = []
@@ -114,7 +137,7 @@ def prepare(
             incarnon_choices or {}
         ).get(str(number))
         branches.extend(b for b in tier.get("branches") or [] if b.get("id") == wanted)
-    from .runtime_adapters import verified_crux_condition
+    from .runtime_adapters import verified_crux_condition, verified_stug_condition
 
     replaced_terms = set()
     for record, rank, override in [
@@ -122,6 +145,10 @@ def prepare(
         *arcane_records,
         *[(b, 0, None) for b in branches],
     ]:
+        from .runtime_adapters import compression_configuration
+        if compression_configuration(record, rank):
+            # The ADS adapter owns this exact runtime record and its children.
+            continue
         status_spec = status_configuration(record, rank)
         if status_spec:
             uptime = (override or {}).get('uptime', 1.0)
@@ -142,6 +169,9 @@ def prepare(
         if crux:
             record = {**record, "conditionalEffects": [crux]}
         for ci, condition in enumerate(record.get("conditionalEffects") or []):
+            verified = verified_stug_condition(record, condition)
+            if verified:
+                condition = verified
             # The two audited Deadly Efficiency cards scale their 1.5-second
             # base duration by rank. The raw event is specifically reload from
             # an empty Arch-gun; keep unrelated reload cards unchanged.
@@ -179,7 +209,10 @@ def prepare(
             replaced_terms.update(
                 (source, e.upgrade_type, e.operation, e.damage_type) for e in effects
             )
-            kind = condition_kind(condition)
+            if condition.get('formGate'):
+                form_dynamic.append(effects)
+                continue
+            kind = condition.get('eventKind') or condition_kind(condition)
             if not kind:
                 notes.append(str(source) + ":event-condition-unmodeled")
                 continue
@@ -200,6 +233,9 @@ def prepare(
             sources.append(
                 dict(
                     id=key,
+                    resetOn=list(condition.get('resetOn') or []),
+                    conditionText=condition.get('conditionText') or EVENT_CONDITION_TEXT.get(kind, kind),
+                    simulationMode='fixed' if fixed else 'events',
                     label=record.get("nameZh")
                     or record.get("nameEn")
                     or ("灵化 " + str(record.get("id")) if record.get("id") else key),
@@ -251,6 +287,11 @@ def prepare(
     modes = weapon["fireModes"]
     from .event_profiles import base_profile
     base_attack = base_profile({**weapon, 'isIncarnonForm': False, '__selectedFireMode__': 0}, 0)
+    if mode_index==0:
+        notes.extend(base_attack.get('unmodeled') or [])
+        minimum=(base_attack.get('radial') or {}).get('armingDistance')
+        if minimum is not None and scenario.distance is None:
+            notes.append('radial-arming-distance-assumed-armed')
     cycle = (
         profile
         if cycle_enabled and weapon.get("isIncarnonForm") and profile and len(modes) > 1
@@ -306,6 +347,9 @@ def prepare(
             "isIncarnonForm": form != "base" and weapon.get("isIncarnonForm", False),
         }
         wp = {**wp, '__selectedFireMode__': idx}
+        if wp.get('isIncarnonForm'):
+            for terms in form_dynamic:
+                fx.extend(terms)
         st = apply_mods(
             wp,
             fx,
@@ -327,6 +371,7 @@ def prepare(
             rm["damage"] = {
                 **rm["damage"],
                 "types": {mapped[k]: v for k, v in r["damage"].items()},
+                "forcedProcs": [],
             }
             radial = apply_mods(
                 {**wp, "fireModes": [rm]},
@@ -335,6 +380,7 @@ def prepare(
             )
             radial = replace(
                 radial,
+                radial_only=True,
                 multishot=1.0,
                 weakpoint_damage_bonus=0.0,
                 weakpoint_crit_chance_bonus=0.0,
@@ -343,17 +389,26 @@ def prepare(
             )
         extra = base_attack if idx == 0 and not wp.get('isIncarnonForm') else {}
         component = extra.get('radial') or extra.get('lingering')
+        if (component and component.get('armingDistance') is not None
+                and scenario.distance is not None
+                and scenario.distance < component['armingDistance']):
+            component = None
         if component and component.get('damage'):
             rm = deepcopy(modes[idx])
+            # This part detonates at the aimed target; shot flight distance is
+            # not distance from the explosion centre.
+            rm['falloffRange'] = [0, 0]
+            rm['falloffMinDamage'] = 1
             rm['damage'] = {
                 **rm['damage'], 'types': {mapped[k]: v for k, v in component['damage'].items()},
+                'forcedProcs': ['PT_ELECTROCUTION'] if 'electricity' in component.get('forced_procs', []) else [],
                 'critChance': component.get('crit_chance', rm['damage'].get('critChance')),
                 'critMultiplier': component.get('crit_multiplier', rm['damage'].get('critMultiplier')),
                 'procChance': component.get('status_chance', rm['damage'].get('procChance')),
             }
             part_fx = fx if component.get('takes_condition_overload') else ModEffectList(e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
-            part = apply_mods({**wp, 'fireModes': [rm]}, part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
-            part = replace(part, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
+            part = apply_mods({**wp, 'fireModes': [rm], '__compressionProfile__': extra.get('compression')}, part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
+            part = replace(part, radial_only=True, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
             if component.get('takes_multishot') is False:
                 part = replace(part, multishot=1.0)
             if extra.get('radial'):

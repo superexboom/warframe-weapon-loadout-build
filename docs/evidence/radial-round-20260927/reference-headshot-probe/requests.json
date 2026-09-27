@@ -1,0 +1,302 @@
+[
+  {
+    "weapon": "castanas",
+    "mode": "base",
+    "mods": [],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "duration": 10,
+    "runs": 1000,
+    "headshot_pct": 0,
+    "enemy": "radial_head_probe",
+    "custom_enemies": [
+      {
+        "id": "radial_head_probe",
+        "name": "Radial head probe",
+        "synthetic": true,
+        "scaling_faction": "unaffiliated",
+        "stats": {
+          "base_level": 1,
+          "health": 1000000000000.0,
+          "shield": 0,
+          "armor": 0,
+          "overguard": 0
+        },
+        "body_parts": [
+          {
+            "name": "body",
+            "multiplier": 1,
+            "is_head": false,
+            "crit_bonus": false
+          },
+          {
+            "name": "head",
+            "multiplier": 3,
+            "is_head": true,
+            "crit_bonus": true
+          }
+        ],
+        "status_immunities": [
+          "impact",
+          "puncture",
+          "slash",
+          "heat",
+          "cold",
+          "electricity",
+          "toxin",
+          "gas",
+          "corrosive",
+          "viral",
+          "radiation",
+          "blast",
+          "magnetic",
+          "void",
+          "tau"
+        ]
+      }
+    ],
+    "level": 1,
+    "steel_path": false,
+    "eximus": false,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "aiming": false,
+    "assume_max": false,
+    "frenzy": false,
+    "ammo_drops": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "castanas",
+    "mode": "base",
+    "mods": [],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "duration": 10,
+    "runs": 1000,
+    "headshot_pct": 100,
+    "enemy": "radial_head_probe",
+    "custom_enemies": [
+      {
+        "id": "radial_head_probe",
+        "name": "Radial head probe",
+        "synthetic": true,
+        "scaling_faction": "unaffiliated",
+        "stats": {
+          "base_level": 1,
+          "health": 1000000000000.0,
+          "shield": 0,
+          "armor": 0,
+          "overguard": 0
+        },
+        "body_parts": [
+          {
+            "name": "body",
+            "multiplier": 1,
+            "is_head": false,
+            "crit_bonus": false
+          },
+          {
+            "name": "head",
+            "multiplier": 3,
+            "is_head": true,
+            "crit_bonus": true
+          }
+        ],
+        "status_immunities": [
+          "impact",
+          "puncture",
+          "slash",
+          "heat",
+          "cold",
+          "electricity",
+          "toxin",
+          "gas",
+          "corrosive",
+          "viral",
+          "radiation",
+          "blast",
+          "magnetic",
+          "void",
+          "tau"
+        ]
+      }
+    ],
+    "level": 1,
+    "steel_path": false,
+    "eximus": false,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "aiming": false,
+    "assume_max": false,
+    "frenzy": false,
+    "ammo_drops": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "sancti_castanas",
+    "mode": "base",
+    "mods": [],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "duration": 10,
+    "runs": 1000,
+    "headshot_pct": 0,
+    "enemy": "radial_head_probe",
+    "custom_enemies": [
+      {
+        "id": "radial_head_probe",
+        "name": "Radial head probe",
+        "synthetic": true,
+        "scaling_faction": "unaffiliated",
+        "stats": {
+          "base_level": 1,
+          "health": 1000000000000.0,
+          "shield": 0,
+          "armor": 0,
+          "overguard": 0
+        },
+        "body_parts": [
+          {
+            "name": "body",
+            "multiplier": 1,
+            "is_head": false,
+            "crit_bonus": false
+          },
+          {
+            "name": "head",
+            "multiplier": 3,
+            "is_head": true,
+            "crit_bonus": true
+          }
+        ],
+        "status_immunities": [
+          "impact",
+          "puncture",
+          "slash",
+          "heat",
+          "cold",
+          "electricity",
+          "toxin",
+          "gas",
+          "corrosive",
+          "viral",
+          "radiation",
+          "blast",
+          "magnetic",
+          "void",
+          "tau"
+        ]
+      }
+    ],
+    "level": 1,
+    "steel_path": false,
+    "eximus": false,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "aiming": false,
+    "assume_max": false,
+    "frenzy": false,
+    "ammo_drops": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "sancti_castanas",
+    "mode": "base",
+    "mods": [],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "duration": 10,
+    "runs": 1000,
+    "headshot_pct": 100,
+    "enemy": "radial_head_probe",
+    "custom_enemies": [
+      {
+        "id": "radial_head_probe",
+        "name": "Radial head probe",
+        "synthetic": true,
+        "scaling_faction": "unaffiliated",
+        "stats": {
+          "base_level": 1,
+          "health": 1000000000000.0,
+          "shield": 0,
+          "armor": 0,
+          "overguard": 0
+        },
+        "body_parts": [
+          {
+            "name": "body",
+            "multiplier": 1,
+            "is_head": false,
+            "crit_bonus": false
+          },
+          {
+            "name": "head",
+            "multiplier": 3,
+            "is_head": true,
+            "crit_bonus": true
+          }
+        ],
+        "status_immunities": [
+          "impact",
+          "puncture",
+          "slash",
+          "heat",
+          "cold",
+          "electricity",
+          "toxin",
+          "gas",
+          "corrosive",
+          "viral",
+          "radiation",
+          "blast",
+          "magnetic",
+          "void",
+          "tau"
+        ]
+      }
+    ],
+    "level": 1,
+    "steel_path": false,
+    "eximus": false,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "aiming": false,
+    "assume_max": false,
+    "frenzy": false,
+    "ammo_drops": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  }
+]

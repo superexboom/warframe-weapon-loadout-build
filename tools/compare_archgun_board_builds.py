@@ -12,6 +12,7 @@ import app, yaml
 from wfarsenal.damage import Scenario, ModEffectList, enemy_defenses
 from wfarsenal.manual_combat import prepare
 from wfarsenal.combat_replay import replay
+from wfarsenal.simulator import _mod_matches_weapon
 FORMS={'corvas':{'alternate':0},'corvas_prime':{'alternate':0},'velocitus':{'alternate':0},
        'larkspur':{'base':0,'alternate':1},'larkspur_prime':{'base':0,'alternate':1}}
 WEAPONS=('corvas','corvas_prime','mausolon','larkspur','larkspur_prime','imperator',
@@ -73,6 +74,7 @@ def main():
  p.add_argument('--wfsim',type=Path,required=True);p.add_argument('--board-dir',type=Path)
  p.add_argument('--fetch',action='store_true',help='Download fresh public board snapshots into output')
  p.add_argument('--without-enervate',action='store_true',help='Synthetic ablation: remove only Secondary Enervate')
+ p.add_argument('--allow-partial',action='store_true',help='Keep catalog-blocked/incompatible public rows as explicit offline diagnostics instead of trying the next public build')
  p.add_argument('--output',type=Path,required=True);p.add_argument('--runs',type=int,default=200)
  p.add_argument('--weapons',nargs='+',default=list(WEAPONS),help='Explicit non-melee board IDs; default preserves the archgun audit')
  p.add_argument('--per-weapon',type=int,default=2);p.add_argument('--duration',type=float,default=30)
@@ -101,7 +103,9 @@ def main():
   rows=[(i,r) for i,r in enumerate(snapshot) if r.get('benchmark')=='standard_single_target' and r.get('mode') in forms and 'riven' not in r.get('mods',[]) and not r.get('riven')]
   rows.sort(key=lambda pair:pair[1]['score'],reverse=True)
   if not rows:skips.append(dict(weapon=wid,reason='no-no-riven-row-in-exported-form'));continue
-  for index,row in rows[:args.per_weapon]:
+  accepted=0
+  for index,row in rows:
+   if accepted >= args.per_weapon:break
    try:
     if row.get('evolutions') or row.get('warframe') or row.get('buffs'):
      raise ValueError('unmapped board evolutions or external buffs')
@@ -130,7 +134,11 @@ def main():
     blockers=[m['path'] for m in cards if m['path'] not in app.MANUAL_MODS_BY_PATH]+[a['path'] for a in arcs if a['path'] not in app.MANUAL_ARCANES_BY_PATH]
     if row.get('exilus') and exilus['path'] not in app.UTILITY_MODS_BY_PATH:blockers.append(exilus['path'])
     case=dict(id=f'{wid}-{index}',weapon=wid,name=weapon['nameEn'],boardRowIndex=index,board=row,
-     manualPayload=payload,referenceRequest=request,catalogBlockers=blockers,referenceLimitations=wm[wid].get('unmodeled',[]))
+     manualPayload=payload,referenceRequest=request,catalogBlockers=blockers,nativeIncompatibleMods=[m['path'] for m in cards if not _mod_matches_weapon(m,weapon)],referenceLimitations=wm[wid].get('unmodeled',[]))
+    if not args.allow_partial and (blockers or case['nativeIncompatibleMods']):
+     skips.append(dict(weapon=wid,rowIndex=index,reason='catalog-blocked-or-native-incompatible',
+                       catalogBlockers=blockers,nativeIncompatibleMods=case['nativeIncompatibleMods']))
+     continue
     case['local']=local_replay(payload,duration=args.duration)
     if not blockers and args.duration==30:
      try:
@@ -140,7 +148,7 @@ def main():
      except (ValueError,KeyError,app.SimulationError) as e:
       case['manualError']=str(e)
       case['manualKernelMatches']=False
-    cases.append(case);requests.append(request)
+    cases.append(case);requests.append(request);accepted+=1
     print(case['id'],'local KPM',round(case['local']['replay']['killsPerMinute'],4),'catalogBlockers',len(blockers),flush=True)
    except (ValueError,KeyError,app.SimulationError) as e:skips.append(dict(weapon=wid,rowIndex=index,reason=str(e)))
  dump(args.output/'requests.json',requests);(args.output/'batch.mjs').write_text(BATCH_JS,encoding='utf-8')
@@ -156,12 +164,13 @@ def main():
   case['panelDifferences']={k:{'local':local_panel[k],'reference':reference_panel[v]} for k,v in panel_keys.items() if not math.isclose(local_panel[k],reference_panel[v],rel_tol=0.001,abs_tol=1e-5)}
   case['targetMatches']=all(math.isclose(case['local']['defenses'][a],ref['target'][b],rel_tol=1e-8,abs_tol=1e-6) for a,b in [('health','health'),('shield','shield'),('armour','armor'),('overguard','overguard')])
   case['uiImportable']=not case['catalogBlockers'] and not case.get('manualError')
+  case['fullBuildComparable']=case['uiImportable'] and not case['nativeIncompatibleMods'] and not case['local'].get('skipped')
   case['panelMatches']=not case['panelDifferences']
   case.update(referenceKpm=kpm,referenceKpmSe=ref.get('score_se',0)*60/ref['duration'],localKpm=lkpm,deltaPercent=100*(lkpm/kpm-1) if kpm else None)
   print(case['id'],round(lkpm,4),round(kpm,4),round(case['deltaPercent'] or 0,2),flush=True)
  release=json.loads((args.wfsim/'site/release.json').read_text(encoding='utf-8'))
  dump(args.output/'comparison.json',dict(sourceCommit=subprocess.check_output(['git','-C',str(args.wfsim),'rev-parse','HEAD'],text=True).strip(),
-  release=release,wasmSha256=digest(args.wfsim/'site/pkg'/f"wfsim_wasm_bg.{release['wasm']}.wasm"),
+  localInputFingerprint=app._analysis_inputs_fingerprint(),toolSha256=digest(Path(__file__)),release=release,wasmSha256=digest(args.wfsim/'site/pkg'/f"wfsim_wasm_bg.{release['wasm']}.wasm"),
   duration=args.duration,runs=args.runs,seed=12648430,recordedAt=datetime.now(timezone.utc).isoformat(),ablation=args.without_enervate,sources=sources,cases=cases,skips=skips,
   contract='Lv9999 SP Thrax, headshots, ADS, single target, infinite resupply explicitly set by archgun class rule, timed buffs start at zero. Offline kernel audit when catalogBlockers is nonempty. Board score uses separate 180s contract.'))
  print('cases',len(cases),'skips',skips)

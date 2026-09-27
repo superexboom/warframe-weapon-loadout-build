@@ -1510,7 +1510,15 @@
         "status_chance": 0.25,
         "stacking": "stack",
         "takes_condition_overload": true
-      }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 3.0,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun": {
       "name": "Mausolon",
@@ -1528,7 +1536,15 @@
         "crit_chance": 0.3,
         "crit_multiplier": 2.2,
         "status_chance": 0.26
-      }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "adds",
+        "radius_calculation": "stolen",
+        "radius": 1.8,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
     },
     "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG": {
       "name": "Opticor Vandal",
@@ -1548,7 +1564,15 @@
         "damage": {
           "magnetic": 100
         }
-      }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "adds",
+        "radius_calculation": "snapshot",
+        "radius": 4.6,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
     },
     "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPlayerWep": {
       "name": "Nataruk",
@@ -1593,7 +1617,15 @@
         "crit_chance": 0.27,
         "crit_multiplier": 2.0,
         "status_chance": 0.27
-      }
+      },
+      "compression": {
+        "effectiveness": 0.0,
+        "stacking": "multiplies",
+        "radius_calculation": "doesnt_work",
+        "radius": 9.0,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/ArchBurstGun/ArchBurstGun": {
       "name": "Cyngas",
@@ -1622,7 +1654,15 @@
         "crit_chance": 0.25,
         "crit_multiplier": 2.0,
         "status_chance": 0.25
-      }
+      },
+      "compression": {
+        "effectiveness": 0.0,
+        "stacking": "multiplies",
+        "radius_calculation": "doesnt_work",
+        "radius": 9.0,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher": {
       "name": "Morgha",
@@ -1644,7 +1684,269 @@
         "crit_chance": 0.3,
         "crit_multiplier": 2.2,
         "status_chance": 0.28
+      },
+      "compression": {
+        "effectiveness": 0.0,
+        "stacking": "multiplies",
+        "radius_calculation": "doesnt_work",
+        "radius": 3.0,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolArray": {
+      "name": "Sonicor",
+      "source": "data/weapons/secondary/sonicor.yaml",
+      "sha256": "085d27111e37454ac1bf1dada763620a14fde01269707104f78f8cf3f6f9ac61",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 150.0,
+      "scope": "base mode, direct-hit target at centre; native delegated impact verified",
+      "radial": {
+        "radius_m": 5.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.0,
+        "crit_chance": 0.1,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.25,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "impact": 50
+        }
       }
+    },
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgris": {
+      "name": "Kuva Ogris",
+      "source": "data/weapons/primary/kuva_ogris.yaml",
+      "sha256": "d7916e7f2daefe09943b8b4708345faf80e688b9c3f46e46d57e18f95b18a321",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 27.0,
+      "scope": "base mode; direct-hit target at explosion centre",
+      "radial": {
+        "radius_m": 7.9,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.8,
+        "crit_chance": 0.09,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.47,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "puncture": 183.0,
+          "slash": 155.0,
+          "blast": 349.0
+        }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 7.9,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+    },
+    "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon": {
+      "name": "Kuva Bramma",
+      "source": "data/weapons/primary/kuva_bramma.yaml",
+      "sha256": "5753f83d8a6fc70152cb3cf35edf7744ed1783fd4decaec9a089f862c6c6f01d",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 187.0,
+      "scope": "base mode; direct-hit target at explosion centre",
+      "radial": {
+        "radius_m": 8.3,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.9,
+        "crit_chance": 0.35,
+        "crit_multiplier": 2.1,
+        "status_chance": 0.21,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "blast": 839.0
+        }
+      },
+      "bow": true,
+      "drawSeconds": 0.4,
+      "unmodeled": [
+        "cluster-submunitions-unmodeled"
+      ],
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 8.3,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncher": {
+      "name": "Penta",
+      "source": "data/weapons/primary/penta.yaml",
+      "sha256": "81028458c8e9a966dcd5376859a2f3bbffa69115f403b90d273c346ca01a92f0",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 75,
+      "scope": "base mode; direct-hit target at explosion centre",
+      "radial": {
+        "radius_m": 4.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.5,
+        "crit_chance": 0.1,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.1,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "blast": 350
+        }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 4.0,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+    },
+    "/Lotus/Weapons/Syndicates/PerrinSequence/LongGuns/PSPenta": {
+      "name": "Secura Penta",
+      "source": "data/weapons/primary/secura_penta.yaml",
+      "sha256": "36b82e913a40063885e33c434004ae19b1554124fce1a2867af33dd197afce63",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 75,
+      "scope": "base mode; direct-hit target at explosion centre",
+      "radial": {
+        "radius_m": 6.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.6,
+        "crit_chance": 0.26,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.26,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "blast": 300
+        }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 6.0,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonWeapon": {
+      "name": "Zarr",
+      "source": "data/weapons/primary/zarr.yaml",
+      "sha256": "aa6a97157fc97428a07e8aed596fd61f22a33df7930417c1155930bcabd5fb7b",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 25,
+      "scope": "base mode; direct-hit target at explosion centre",
+      "radial": {
+        "radius_m": 4.9,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.5,
+        "crit_chance": 0.17,
+        "crit_multiplier": 2.5,
+        "status_chance": 0.29,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "blast": 175
+        }
+      },
+      "unmodeled": [
+        "cluster-submunitions-unmodeled"
+      ],
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 4.9,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon": {
+      "name": "Acceltra Prime",
+      "source": "data/weapons/primary/acceltra_prime.yaml",
+      "sha256": "7a0780c946b624713d34fcb365f0a4f4d2ae684407c7679bcefb5afb322bffe9",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 44,
+      "scope": "base mode; direct-hit target at explosion centre",
+      "radial": {
+        "radius_m": 5.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.5,
+        "crit_chance": 0.34,
+        "crit_multiplier": 3.0,
+        "status_chance": 0.18,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "puncture": 42.4,
+          "slash": 10.6
+        },
+        "armingDistance": 6,
+        "armingSource": {
+          "packageBuild": "2026.09.22.16.46",
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraProjectile",
+          "inheritedFrom": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
+          "nativeValue": 6
+        }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 5.0,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+    },
+    "/Lotus/Weapons/Cephalon/Primary/CephPrimary/CephPrimary": {
+      "name": "Simulor",
+      "source": "data/weapons/primary/simulor.yaml",
+      "sha256": "807070d5a89804e533f4d284703ffdea7601a0ead1050a47aa03aa5e42e845ab",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 200.0,
+      "scope": "exported base explosion only; no duplicate radial child",
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 4,
+        "takesRadiusMods": true,
+        "radiusSource": "native exported damage.radius",
+        "referenceRadius": 5.0
+      },
+      "unmodeled": [
+        "orb-merging-and-singularity-unmodeled",
+        "orb-multishot-merging-economy-unmodeled"
+      ]
+    },
+    "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSSimulor": {
+      "name": "Synoid Simulor",
+      "source": "data/weapons/primary/synoid_simulor.yaml",
+      "sha256": "7122fa9b03ea589e9b05d56ac24f6b032903d43b3795fdc9b8cee861e26bed48",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 240.0,
+      "scope": "exported base explosion only; no duplicate radial child",
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 5,
+        "takesRadiusMods": true,
+        "radiusSource": "native exported damage.radius",
+        "referenceRadius": 5.0
+      },
+      "unmodeled": [
+        "orb-merging-and-singularity-unmodeled",
+        "orb-multishot-merging-economy-unmodeled"
+      ]
     }
   },
   "nativeTriggers": {

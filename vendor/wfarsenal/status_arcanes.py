@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 ENCUMBER = '/Lotus/Upgrades/CosmeticEnhancers/Utility/ExtraProcOnProc'
 FORTIFIER = '/Lotus/Upgrades/CosmeticEnhancers/Offensive/OverguardSteal'
+CRYOGENIC = '/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture'
 STATUS_POOL = ('DT_IMPACT','DT_PUNCTURE','DT_SLASH','DT_FIRE','DT_FREEZE',
                'DT_ELECTRICITY','DT_POISON','DT_EXPLOSION','DT_CORROSIVE',
                'DT_MAGNETIC','DT_VIRAL','DT_GAS','DT_RADIATION')
@@ -17,6 +18,15 @@ def configuration(record, rank):
             and fx[0].get('operation')=='ADD'
             and math.isclose(float(fx[0].get('valuePerRank',0)),.04,abs_tol=1e-8)):
             return dict(kind='encumber',chance=.04*(rank+1))
+    if record.get('path') == CRYOGENIC:
+        script=(record.get('runtimeScripts') or {}).get('apply',{})
+        expected={'Script':'AoeOnCondition.lua','Function':'ApplyUpgrade',
+                  '_radiusBase':10,'_radiusPerLevel':1,'_damageBase':0,'_damagePerLevel':0,
+                  '_damageProcTypes':['DT_FREEZE'],'_numDamageProcsToSpreadAtLevel':[1,1,2,2,3,3]}
+        conditions=record.get('conditionalEffects') or []
+        if (all(script.get(k)==v for k,v in expected.items()) and len(conditions)==1
+                and conditions[0].get('conditions')==['OnPunctureProcCondition']):
+            return dict(kind='cryogenic',coldStacks=expected['_numDamageProcsToSpreadAtLevel'][rank],radius=10+rank)
     if record.get('path') == FORTIFIER:
         script=(record.get('runtimeScripts') or {}).get('apply',{})
         fx=record.get('extraEffects') or []
@@ -37,6 +47,8 @@ def encumber_roll(stats,chance,forced_procs=None):
     q_ind=1.
     for dtype,p in stats.independent_proc_chances.items():
         if dtype in STATUS_POOL:q_ind*=1-min(max(float(p),0.),1.)
+    for dtype,n in stats.native_forced_procs.items():
+        if dtype in STATUS_POOL:q_ind*=1-min(max(float(n),0.),1.)
     forced=min(sum(max(float(n),0.) for k,n in (forced_procs or {}).items() if k in STATUS_POOL),1.)
     sc=max(float(stats.status_chance),0.) if any(stats.damage_types.get(k,0)>0 for k in STATUS_POOL) else 0.
     probability=seed=0.

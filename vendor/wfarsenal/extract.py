@@ -1183,6 +1183,25 @@ def _resolve_damage(
                 data["components"] = components
                 data["radial"] = components[0]
             return data
+        # A zero-contact projectile can delegate its actual direct hit to the
+        # weapon impact behavior (Sonicor). Do not replace authoritative nonzero
+        # projectile data such as Boltor's with an inherited impact placeholder.
+        # A true flag is inherited by mines/goo too; their weapon impacts are
+        # placeholders. Until additional delegates are proven, authorize only
+        # the exact Sonicor weapon/projectile pair audited against the raw dump.
+        if (weapon_path == '/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolArray'
+                and projectile_path == '/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolProjectile'
+                and proj.get('DealDamageThroughImpactBehavior')
+                and isinstance(proj.get('AttackData'), Mapping)
+                and proj['AttackData'].get('Amount') == 0 and inline):
+            inline['source'] = 'ImpactBehavior'
+            inline['projectile'] = projectile_path
+            inline['flightSpeed'] = proj.get('KinematicInitialSpeed')
+            components = _projectile_damage_components(proj)
+            if components:
+                inline['components'] = components
+                inline['radial'] = components[0]
+            return inline
         components = _projectile_damage_components(proj)
         if components:
             data = dict(components[0])
