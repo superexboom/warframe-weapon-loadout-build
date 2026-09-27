@@ -1330,7 +1330,13 @@ def apply_mods(
     falloff_multiplier = _falloff_multiplier(mode, base_total, scenario.distance)
 
     damage = mode["damage"]
-    if damage.get("components"):
+    # Audited native profiles are consumed by manual_combat/replay. Their
+    # exported component rows are no longer a missing-data warning; unknown
+    # component weapons still fail closed in the compact panel path.
+    from .event_profiles import base_profile
+    event_profile = base_profile(weapon, fire_mode)
+    has_replay_profile = bool(event_profile.get('radial') or event_profile.get('lingering'))
+    if damage.get("components") and not has_replay_profile:
         # Secondary explosions/stacking attacks need a hit timeline; the compact
         # evaluator intentionally scores only the exported primary hit.
         unsupported.add("projectile-component-damage-unapplied")
@@ -1365,8 +1371,6 @@ def apply_mods(
         per_pellet_proc = exported_proc
     from .manual_combat import reference
     profile = reference()['incarnon'].get(weapon.get('path')) if weapon.get('isIncarnonForm') else None
-    from .event_profiles import base_profile
-    event_profile = base_profile(weapon, fire_mode)
     magazine = _combine(float(weapon.get('magazineSize') or event_profile.get('magazine') or 0), buckets['WEAPON_CLIP_MAX'])
     reload_base = mode.get('reloadTime') or 0.0
     if event_profile.get('reloadPerShell') is not None:

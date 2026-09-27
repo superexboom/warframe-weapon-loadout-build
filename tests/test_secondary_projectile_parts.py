@@ -84,3 +84,11 @@ def test_torid_reference_field_profile_removes_old_missing_export_diagnostic():
     assert field is None and lingering is not None and lingering[0].total_damage==pytest.approx(40)
     assert 'weapon-radial-or-field-damage-not-in-export-field' not in st.unsupported
     assert not any('weapon-radial-or-field-damage-not-in-export-field' in x for x in c['unsupported'])
+
+
+def test_audited_profile_components_do_not_emit_compact_missing_warning():
+    from wfarsenal.damage import Scenario, apply_mods
+    for name in ('Carmine Penta','Prisma Lenz','Tenet Envoy','Kompressa','Cyanex'):
+        w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')==name)
+        st=apply_mods(w,[],scenario=Scenario(distance=.5))
+        assert 'projectile-component-damage-unapplied' not in st.unsupported, name
