@@ -404,13 +404,15 @@ def prepare(
                 'forcedProcs': ['PT_ELECTROCUTION'] if 'electricity' in component.get('forced_procs', []) else [],
                 'critChance': component.get('crit_chance', rm['damage'].get('critChance')),
                 'critMultiplier': component.get('crit_multiplier', rm['damage'].get('critMultiplier')),
-                'procChance': component.get('status_chance', rm['damage'].get('procChance')),
+                'procChance': (component['status_chance'] * float(rm.get('multishot') or 1) if component.get('status_chance') is not None else rm['damage'].get('procChance')),
             }
             part_fx = fx if component.get('takes_condition_overload') else ModEffectList(e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
             part = apply_mods({**wp, 'fireModes': [rm], '__compressionProfile__': extra.get('compression')}, part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
             part = replace(part, radial_only=True, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
             if component.get('takes_multishot') is False:
                 part = replace(part, multishot=1.0)
+            if component.get('impact_delay_seconds') is not None:
+                part._impact_delay = float(component['impact_delay_seconds'])
             if extra.get('radial'):
                 radial = part
             else:

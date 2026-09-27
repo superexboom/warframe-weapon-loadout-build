@@ -2378,6 +2378,7 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
             event_text = {
                 'encumber': ('施加物理或元素异常时', '事件解算：4%/级随机追加13类异常之一，同瞬间最多一次，不自触发。CO类型占用采用概率近似。'),
                 'fortifier': ('伤害命中敌方超宏时', '事件解算：仅超宏部分乘×(3+等级)，按实际扣除超宏的1%窃取，上限15000；不模拟玩家受伤。'),
+                'empowered': ('武器施加异常时', '事件解算：每次异常追加250–750同类型伤害；不受武器伤害、元素、暴击、弱点及射程加成，阵营加成一次。计入目标减伤；不递归触发脚本或持续伤害异常。'),
                 'cryogenic': ('施加穿刺异常时', '事件解算：每次穿刺异常追加冰冻，R0–R5分别1/1/2/2/3/3层；继承异常持续时间，计入冰冻暴伤、冻结及超宏层数限制。当前只计算主目标，不计算邻敌。'),
             }
             condition_zh, event_note = event_text[status_spec['kind']]
@@ -5113,6 +5114,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     "stacks": windowed.get("averagedStacks") or {},
                     "triggerSeries": windowed.get("triggerSeries") or [],
                     "cryogenic": windowed.get("cryogenic"),
+                    "empowered": windowed.get("empowered"),
                     "triggerPolicy": _policy,
                     # 演算条件回显：前端标注本次 KPM 用的敌人/等级。
                     "context": {

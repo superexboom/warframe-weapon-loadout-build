@@ -65,3 +65,24 @@ def test_old_invalid_build_errors_instead_of_silently_changing_mod_or_rank():
     with pytest.raises(app.SimulationError, match='exceeds maxRank 5'):
         app._manual_normalize_mods([{'path': base, 'rank': 10}], 8)
     assert app._manual_normalize_mods([{'path': base, 'rank': 5}], 8)[0] == {'path': base, 'rank': 5}
+
+
+def test_exact_equivalent_intermediate_keeps_manual_identity_but_marks_optional_duplicate():
+    from wfarsenal.catalog_releases import OPTIMIZER_EQUIVALENT_COPIES, released_mod_catalog
+    from copy import deepcopy
+    by_path={m['path']:m for m in app.EXPORTS['mods']}
+    for child,parent in OPTIMIZER_EQUIVALENT_COPIES.items():
+        assert child in app.MANUAL_MODS_BY_PATH
+        assert by_path[child]['optimizerDuplicateOf']==parent
+        changed=deepcopy(by_path[child]);changed.pop('optimizerDuplicateOf',None)
+        changed['effects'][0]['valuePerRank']=.25
+        out=released_mod_catalog([changed,by_path[parent]])
+        assert 'optimizerDuplicateOf' not in out[0]
+
+
+def test_explicit_required_intermediate_identity_is_not_replaced():
+    child='/Lotus/Upgrades/Mods/Pistol/Intermediate/WeaponStatusChanceModIntermediate'
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Cyanex')
+    result=app.build_weapon_payload(dict(weapon=w['path'],fireMode=0,profile='fast',
+        metric='killsPerMinute',maxFill=1,minFill=1,requiredMods=[child]))
+    assert [m['path'] for m in result['build']['mods']]==[child]

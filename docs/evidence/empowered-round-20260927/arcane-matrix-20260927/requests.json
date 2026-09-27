@@ -1,0 +1,3490 @@
+[
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "akimbo_slip_shot"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_accuracy"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_empowered"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_flare"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_overcharge"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "conjunction_voltage"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_cryogenic"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_deadhead"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_dexterity"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_encumber"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_enervate"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_fortifier"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_irradiate"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_kinship"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_merciless"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_outburst"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_shiver"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "kompressa",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_surge"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "akimbo_slip_shot"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "cascadia_accuracy"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "cascadia_empowered"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "cascadia_flare"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "cascadia_overcharge"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "conjunction_voltage"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_cryogenic"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_deadhead"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_dexterity"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_encumber"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_enervate"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_fortifier"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_irradiate"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_kinship"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_merciless"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_outburst"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_shiver"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "cyanex",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "scorch",
+      "pistol_acuity",
+      "primed_target_cracker",
+      "pistol_elementalist",
+      "pressurized_magazine",
+      "magnetic_might",
+      "sure_shot"
+    ],
+    "arcane": [
+      "secondary_surge"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "akimbo_slip_shot"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_accuracy"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_empowered"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_flare"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_overcharge"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "conjunction_voltage"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_cryogenic"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_deadhead"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_dexterity"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_encumber"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_enervate"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_fortifier"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_irradiate"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_kinship"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_merciless"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_outburst"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_shiver"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "embolist",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_surge"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "akimbo_slip_shot"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_accuracy"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_empowered"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_flare"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "cascadia_overcharge"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "conjunction_voltage"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_cryogenic"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_deadhead"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_dexterity"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_encumber"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_enervate"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_fortifier"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_irradiate"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_kinship"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_merciless"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_outburst"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_shiver"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "tysis",
+    "mode": "base",
+    "mods": [
+      "primed_heated_charge",
+      "pistol_pestilence",
+      "frostbite",
+      "galvanized_diffusion",
+      "primed_target_cracker",
+      "galvanized_shot",
+      "lethal_torrent",
+      "magnetic_might"
+    ],
+    "arcane": [
+      "secondary_surge"
+    ],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30,
+    "runs": 500,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+      "archgun": {
+        "infinite_ammo": true
+      }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  }
+]

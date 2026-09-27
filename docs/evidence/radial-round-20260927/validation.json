@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-09-27T04:16:42.462834+00:00",
+  "recordedAt": "2026-09-27T05:23:37.010671+00:00",
   "checks": [
     {
       "stage": "radial-before-cryogenic",
@@ -71,6 +71,23 @@
       "seconds": 1.78,
       "command": "python -m pytest tests/test_nonmelee_catalog_audit.py tests/test_generated_build_comparison.py -q",
       "note": "Includes three merger tests added after full-suite collection."
+    },
+    {
+      "stage": "empowered-poolfix-full",
+      "state": "passed",
+      "command": "python -m pytest tests -q",
+      "passed": 421,
+      "subtests": 7,
+      "seconds": 847.02,
+      "logSha256": "379cb9c76047897a545c16541e95dd476231a0b019acd4fe101132b08642b4f7",
+      "scope": "post-Cascadia Empowered, projectile-part, public-riven import, optimizer duplicate filtering"
+    },
+    {
+      "stage": "empowered-targeted",
+      "state": "passed",
+      "command": "python -m pytest tests/test_empowered_arcane.py tests/test_secondary_projectile_parts.py tests/test_public_riven_import.py tests/test_catalog_tier_admission.py -q",
+      "passed": 83,
+      "scope": "new event, part, import and candidate identity tests"
     }
   ],
   "goalComplete": false,

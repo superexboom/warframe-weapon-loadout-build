@@ -1,0 +1,165 @@
+{
+  "path": "C:\\Users\\SuperExboom\\Documents\\WF_Rever\\wf-arsenal\\data\\raw\\2026.09.22.16.46\\packages\\Lotus\\Upgrades\\CosmeticEnhancers\\Zariman\\SecondaryOnStatusProcBonusDamage.txt",
+  "sha256": "1beee9f61e0af5e4aed77916fb59287354633661ade08c58dcd3d554455aa7e5",
+  "raw": "Rarity=RARE\nMarketMode=MM_HIDDEN\nLocalizeTag=/Lotus/Language/Arcanes/SecondaryOnStatusProcBonusDamage\nLocalizeDescTag=\"\"\nIcon=/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionBT.png\nExcludeFromCodex=0\nUpgrades={\n{\nUpgradeType=NONE\nOperationType=ADD\nValue=0\nDamageType=DT_ANY\nAutoType=1\nValidType=\"\"\nCheckTypeOnInstall=0\nSymbolFilter=\"\"\nUpgradeObject=\"\"\nValidPostures={}\nValidModifiers={}\nInvalidModifiers={}\nValidProcTypes={}\nOverrideLocalization=1\nLocTag=/Lotus/Language/Upgrades/ProcBonusDamage\nLocKeyWordScript={\nScript=SecondaryOnStatusProcBonusDamage.lua\nFunction=GetDescription\n_damageAmounts={\n250,\n350,\n450,\n550,\n650,\n750\n}\n}\nSmallerIsBetter=0\nRoundTo=0.1\nRoundingMode=RM_ROUND\nAllowConditionalLocMerge=0\n}\n}\nApplyUpgradesByDefault=0\nFusionLimit=QA_HIGH\nItemCompatibility=/Lotus/Weapons/Tenno/Pistol/LotusPistol\nIncompatibilityTags={}\nScript={\nScript=SecondaryOnStatusProcBonusDamage.lua\nFunction=ModApplied\n_damageAmounts={\n250,\n350,\n450,\n550,\n650,\n750\n}\n}\nEnhancementTag=/Lotus/Language/Upgrades/CosmeticEnhancerDescriptionSimple\nEnhancementTagLocScript={\nScript=\"\"\n}\nUpgradeChance=1\nConditionalUpgrades={\n/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcALLCondition\n}\nConditionTag=/Lotus/Language/Upgrades/OnProcCondition_Description\nHudBuffIcon=/Lotus/Interface/Icons/ModBuffIndicators/ArcaneBuffs/ArcaneProjectionBT.png\nBaseDistillPointValue=22\n",
+  "record": {
+    "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+    "conditionalEffects": [
+      {
+        "applyUpgradesByDefault": 0,
+        "conditionTag": "/Lotus/Language/Upgrades/OnProcCondition_Description",
+        "conditions": [
+          "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcALLCondition"
+        ],
+        "duration": null,
+        "effects": [
+          {
+            "autoType": 1,
+            "checkTypeOnInstall": 0,
+            "damageType": "DT_ANY",
+            "invalidModifiers": [],
+            "localizationScript": {
+              "Function": "GetDescription",
+              "Script": "SecondaryOnStatusProcBonusDamage.lua",
+              "_damageAmounts": [
+                250,
+                350,
+                450,
+                550,
+                650,
+                750
+              ]
+            },
+            "operation": "ADD",
+            "supported": false,
+            "supportedBy": [],
+            "symbolFilter": "",
+            "upgradeType": "NONE",
+            "validModifiers": [],
+            "validPostures": [],
+            "validProcTypes": [],
+            "validType": "",
+            "valuePerRank": 0
+          }
+        ],
+        "maxStacks": null,
+        "runtimeScripts": {
+          "apply": {
+            "Function": "ModApplied",
+            "Script": "SecondaryOnStatusProcBonusDamage.lua",
+            "_damageAmounts": [
+              250,
+              350,
+              450,
+              550,
+              650,
+              750
+            ]
+          }
+        },
+        "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnStatusProcBonusDamage",
+        "stackMode": null
+      }
+    ],
+    "descTag": "",
+    "effects": [
+      {
+        "damageType": "DT_ANY",
+        "label": "flat damage on status proc (utility)",
+        "operation": "ADD",
+        "perStack": false,
+        "supported": false,
+        "supportedBy": [],
+        "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+        "valuePerRank": 100
+      }
+    ],
+    "extraEffects": [],
+    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionBT.png",
+    "maxRank": 5,
+    "name": "SecondaryOnStatusProcBonusDamage",
+    "nameEn": "Cascadia Empowered",
+    "nameInternal": "SecondaryOnStatusProcBonusDamage",
+    "nameTag": "/Lotus/Language/Arcanes/SecondaryOnStatusProcBonusDamage",
+    "nameZh": "瀑流·强化",
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnStatusProcBonusDamage",
+    "rarity": "RARE",
+    "runtimeScripts": {
+      "apply": {
+        "Function": "ModApplied",
+        "Script": "SecondaryOnStatusProcBonusDamage.lua",
+        "_damageAmounts": [
+          250,
+          350,
+          450,
+          550,
+          650,
+          750
+        ]
+      }
+    },
+    "support": {
+      "complete": false,
+      "manualState": false,
+      "totalEffects": 1,
+      "weaponEffects": 0
+    },
+    "trigger": {
+      "applyUpgradesByDefault": 0,
+      "chance": 1,
+      "conditionTag": null,
+      "conditions": [],
+      "duration": null,
+      "durationScalesWithRank": null,
+      "maxStacks": null,
+      "stackMode": null
+    },
+    "stackSemantics": "触发异常状态时附加 250–750 点同类型 flat 伤害（rank 0–5 每级 +100）。flat 伤害实例不受武器数值乘区影响（引擎无对应词条）——manualState 保持关闭。",
+    "effectsZhByRank": [
+      [
+        "触发异常状态时：\\n造成与异常状态类型匹配的 250 伤害"
+      ],
+      [
+        "触发异常状态时：\\n造成与异常状态类型匹配的 350 伤害"
+      ],
+      [
+        "触发异常状态时：\\n造成与异常状态类型匹配的 450 伤害"
+      ],
+      [
+        "触发异常状态时：\\n造成与异常状态类型匹配的 550 伤害"
+      ],
+      [
+        "触发异常状态时：\\n造成与异常状态类型匹配的 650 伤害"
+      ],
+      [
+        "触发异常状态时：\\n造成与异常状态类型匹配的 750 伤害"
+      ]
+    ],
+    "effectsEnByRank": [
+      [
+        "On Status Effect:\\nDeals +250 Damage matching the Damage Type of the Status Effect"
+      ],
+      [
+        "On Status Effect:\\nDeals +350 Damage matching the Damage Type of the Status Effect"
+      ],
+      [
+        "On Status Effect:\\nDeals +450 Damage matching the Damage Type of the Status Effect"
+      ],
+      [
+        "On Status Effect:\\nDeals +550 Damage matching the Damage Type of the Status Effect"
+      ],
+      [
+        "On Status Effect:\\nDeals +650 Damage matching the Damage Type of the Status Effect"
+      ],
+      [
+        "On Status Effect:\\nDeals +750 Damage matching the Damage Type of the Status Effect"
+      ]
+    ],
+    "descriptionSource": {
+      "kind": "frozen-official-localized-levelStats",
+      "path": "warframe-items/data/json/i18n.json",
+      "sha256": "bb303f526be7f34c36946c8304544c3ffdd0d00ad2d2e07e5d6a5cb341aa9900"
+    },
+    "equipmentType": "Secondary Arcane"
+  }
+}

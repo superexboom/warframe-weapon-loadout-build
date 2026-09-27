@@ -11,6 +11,7 @@ def main():
     ap.add_argument('--community',action='store_true',help='Audit newly sampled ranged weapons with their relevant arcanes')
     ap.add_argument('--radial',action='store_true',help='Audit projectile builds with Primary Compression')
     ap.add_argument('--cryogenic',action='store_true',help='Audit full secondary builds with native puncture-to-Cold events')
+    ap.add_argument('--empowered',action='store_true',help='Audit fixed-status extra-hit builds, including public-board fallback')
     ap.add_argument('--status-arcanes',action='store_true',help='Audit event-only arcanes and raw spooling models')
     ap.add_argument('--enervate',action='store_true',help='Use Secondary Enervate in the Arch-gun regression')
     ap.add_argument('--weapons',nargs='+',help='Restrict the named regression weapons')
@@ -22,6 +23,7 @@ def main():
     names=['Braton Prime','Burston Prime','Torid','Felarx','Mausolon','Nataruk','Lex Prime','Nikana Prime']
     if args.radial:names=['Kuva Ogris','Kuva Bramma','Penta','Zarr','Acceltra Prime','Sonicor','Stug','Simulor','Synoid Simulor']
     if args.cryogenic:names=['Aksomati Prime','Akbolto Prime','Kuva Twin Stubbas']
+    if args.empowered:names=['Kompressa','Cyanex','Embolist','Spectra Vandal','Tysis']
     if args.archguns:names=['Imperator Vandal','Mausolon','Kuva Grattler','Larkspur Prime','Cyngas','Morgha']
     if args.community:names=['Ignis Wraith','Amprex','Kuva Nukor','Tenet Cycron','Baza Prime','Trumna Prime']
     if args.status_arcanes:names=['Aksomati Prime','Twin Grakatas','Akbolto Prime','Tenet Cycron','Kohm','Twin Kohmak']
@@ -63,6 +65,9 @@ def main():
       p.update(metric='killsPerMinute',externalBuffs=[],headshotChance=1.,scenario={'distance':.5})
       p['arcanes']=[dict(path='/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture',rank=5)]
       if name=='Kuva Twin Stubbas':p.update(innateElement='DT_MAGNETIC',innateElementValue=.6)
+     if args.empowered:
+      p.update(metric='killsPerMinute',externalBuffs=[],headshotChance=1.,scenario={'distance':.5})
+      p['arcanes']=[dict(path='/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnStatusProcBonusDamage',rank=5)]
      t=time.perf_counter();row=dict(name=name,request=p,inputFingerprint=app._analysis_inputs_fingerprint())
      try:
       res=app.build_weapon_payload(p);build=res['build']

@@ -78,6 +78,19 @@ UNRELEASED_TIER_CLONES: dict[str, str] = {
     '/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponToxinDamageModExpert': '/Lotus/Upgrades/Mods/Shotgun/WeaponToxinDamageMod',
 }
 
+# These children only override IncludeInBoosterPack=0 and directly inherit
+# their ordinary card. Prefer the canonical identity in optional searches;
+# retain the original records for explicit/manual input. Never infer equality
+# merely from a display name or a tier directory.
+OPTIMIZER_EQUIVALENT_COPIES = {
+    f'/Lotus/Upgrades/Mods/{family}/Intermediate/WeaponStatusChanceModIntermediate':
+    f'/Lotus/Upgrades/Mods/{family}/WeaponStunChanceMod'
+    for family in ('Pistol', 'Rifle')
+}
+EQUIVALENT_FIELDS = ('nameTag','modFamily','compatibility','compatibilityTags',
+    'incompatibilityTags','maxRank','baseDrain','polarity','rarity','effects',
+    'extraEffects','conditionalEffects','runtimeScripts','modSet')
+
 def released_mod_catalog(records: Sequence[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
     # excludeFromCodex is not a release flag; override only observed sales.
     by_path = {str(r.get('path') or ''): r for r in records}
@@ -95,6 +108,11 @@ def released_mod_catalog(records: Sequence[Mapping[str, Any]]) -> list[Mapping[s
                 'reason': 'unreleased-tier-clone', 'basePath': base_path,
                 'evidence': 'expert-catalog-20260927',
             }}
+        canonical_path=OPTIMIZER_EQUIVALENT_COPIES.get(str(record.get('path') or ''))
+        canonical=by_path.get(canonical_path or '')
+        if (canonical and canonical.get('selectable') is True and record.get('modFamily')
+                and all(record.get(k)==canonical.get(k) for k in EQUIVALENT_FIELDS)):
+            record={**record,'optimizerDuplicateOf':canonical_path}
         evidence = RELEASED_ARCHGUN_MODS.get(str(record.get('path') or ''))
         matches = evidence and (
             record.get('nameEn') == evidence['nameEn']

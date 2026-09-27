@@ -6,6 +6,7 @@ import math
 ENCUMBER = '/Lotus/Upgrades/CosmeticEnhancers/Utility/ExtraProcOnProc'
 FORTIFIER = '/Lotus/Upgrades/CosmeticEnhancers/Offensive/OverguardSteal'
 CRYOGENIC = '/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture'
+EMPOWERED = '/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnStatusProcBonusDamage'
 STATUS_POOL = ('DT_IMPACT','DT_PUNCTURE','DT_SLASH','DT_FIRE','DT_FREEZE',
                'DT_ELECTRICITY','DT_POISON','DT_EXPLOSION','DT_CORROSIVE',
                'DT_MAGNETIC','DT_VIRAL','DT_GAS','DT_RADIATION')
@@ -27,6 +28,15 @@ def configuration(record, rank):
         if (all(script.get(k)==v for k,v in expected.items()) and len(conditions)==1
                 and conditions[0].get('conditions')==['OnPunctureProcCondition']):
             return dict(kind='cryogenic',coldStacks=expected['_numDamageProcsToSpreadAtLevel'][rank],radius=10+rank)
+    if record.get('path') == EMPOWERED:
+        script=(record.get('runtimeScripts') or {}).get('apply',{})
+        conditions=record.get('conditionalEffects') or []
+        values=[250,350,450,550,650,750]
+        if (script.get('Script')=='SecondaryOnStatusProcBonusDamage.lua'
+                and script.get('Function')=='ModApplied' and script.get('_damageAmounts')==values
+                and len(conditions)==1 and conditions[0].get('conditions')==[
+                    '/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcALLCondition']):
+            return dict(kind='empowered',damage=values[rank])
     if record.get('path') == FORTIFIER:
         script=(record.get('runtimeScripts') or {}).get('apply',{})
         fx=record.get('extraEffects') or []

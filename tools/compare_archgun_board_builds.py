@@ -40,9 +40,58 @@ def registry(root):
  return rows
 def exact_record(row,records):
  matches=[r for r in records if r['path']==row.get('internal_name')]
- if not matches:matches=[r for r in records if r.get('nameEn')==row.get('name')]
+ if not matches and not row.get('internal_name'):matches=[r for r in records if r.get('nameEn')==row.get('name')]
  if len(matches)!=1:raise ValueError('ambiguous or missing identity: '+str(row.get('id')))
  return matches[0]
+RIVEN_CODES = dict(critical_chance='0',critical_damage='1',status_chance='2',status_duration='3',
+    heat='4',cold='5',toxin='6',electricity='7',impact='8',puncture='9',slash='A',
+    damage_to_corpus='C',damage='D',reload_speed='F',damage_to_grineer='G',zoom='H',
+    damage_to_infested='I',magazine_capacity='L',ammo_maximum='M',punch_through='P',
+    fire_rate='R',multishot='S',projectile_speed='V',weapon_recoil='Z',
+    weak_point_damage='W',weak_point_critical_chance='Y',status_damage='SD',gas='GA',
+    corrosive='CO',viral='VI',radiation='RA',blast='BL',magnetic='MA',
+    ammo_efficiency='AE',reload_while_holstered='HR',damage_to_orokin='FO',
+    damage_to_techrot='FT',damage_to_scaldra='FS')
+
+
+def public_riven_spec(row):
+    raw=row.get('riven')
+    if not raw:return None
+    bonuses=raw.get('bonuses');malus=raw.get('malus');rolls=raw.get('rolls')
+    if (not isinstance(bonuses,list) or len(bonuses) not in (2,3)
+            or not all(isinstance(x,str) and x for x in bonuses)
+            or (malus is not None and (not isinstance(malus,str) or not malus))
+            or not isinstance(rolls,list) or len(rolls)!=len(bonuses)+int(malus is not None)
+            or any(isinstance(x,bool) or not isinstance(x,(int,float)) or not .9<=x<=1.1 for x in rolls)
+            or row.get('mods',[]).count('riven')!=1):
+        raise ValueError('incomplete or invalid public riven specification')
+    return dict(rank=8,polarity='madurai',bonuses=[dict(id=x,roll=rolls[i]) for i,x in enumerate(bonuses)],
+                malus=dict(id=malus,roll=rolls[-1]) if malus else None)
+
+
+def resolved_riven_payload(spec,resolved,slot,weapon_type):
+    if not resolved.get('ok') or resolved.get('illegal') or resolved.get('unconfirmed'):
+        raise ValueError('reference rejected or has unconfirmed riven effects')
+    expected=[r['id'] for r in spec['bonuses']]+([spec['malus']['id']] if spec.get('malus') else [])
+    stats=resolved.get('stats',[])
+    if [r.get('id') for r in stats]!=expected:
+        raise ValueError('reference omitted or reordered riven stats')
+    definitions={r['code']:r for r in app.CATALOG['statsByType'][weapon_type]}
+    lines=[]
+    for i,r in enumerate(stats):
+        code=RIVEN_CODES.get(r['id']);definition=definitions.get(code)
+        if not definition:raise ValueError('unmapped exact riven stat: '+r['id'])
+        expected_bonus=i<len(spec['bonuses'])
+        if r.get('bonus') is not expected_bonus:raise ValueError('riven sign/slot mismatch')
+        value=r.get('value')
+        if isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value):
+            raise ValueError('missing numeric riven value')
+        # Raw value is the delta: faction x1.67 is +67%, never +167%.
+        value=abs(value)*(100 if definition['unit']=='percent' else 1)
+        lines.append(dict(code=code,value=value,negative=not expected_bonus))
+    return dict(slot=slot,rank=8,polarity='AP_ATTACK',stats=lines)
+
+
 def local_replay(payload,*,duration,include_arcanes=True):
  kernel_mods=list(payload['mods'])
  if payload.get('exilus'):kernel_mods.append({**payload['exilus'],'slot':8})
@@ -55,9 +104,15 @@ def local_replay(payload,*,duration,include_arcanes=True):
   passive=app._manual_passive_effects(card)
  override={'innateElements':[{'damageType':payload['innateElement'],'value':payload['innateElementValue']}]} if payload.get('innateElement') else None
  engine={}
- result=app.simulate(export_dir=app.EXPORT_DIR,weapon=payload['weapon'],mods=kernel_mods,slot_count=9 if payload.get('exilus') else 8,
-  fire_mode=payload['fireMode'],enemy=payload['enemy'],level=payload['level'],steel_path=True,
-  scenario=Scenario(aiming=True, trigger_policy="emergent", distance=(payload.get("scenario") or {}).get("distance")),weapon_override=override,passive_effects=passive,engine_context_sink=engine)
+ if payload.get('riven'):
+  ctx=app._manual_resolve_sim_context({**payload,'arcanes':payload['arcanes'] if include_arcanes else []})
+  # Use the production passive/slot path so elemental order and numeric values survive.
+  passives=ctx['build_passives'](None)['passive_effects']
+  result=app.simulate(**ctx['common'],passive_effects=passives,engine_context_sink=engine)
+ else:
+  result=app.simulate(export_dir=app.EXPORT_DIR,weapon=payload['weapon'],mods=kernel_mods,slot_count=9 if payload.get('exilus') else 8,
+   fire_mode=payload['fireMode'],enemy=payload['enemy'],level=payload['level'],steel_path=True,
+   scenario=Scenario(aiming=True, trigger_policy="emergent", distance=(payload.get("scenario") or {}).get("distance")),weapon_override=override,passive_effects=passive,engine_context_sink=engine)
  stats=app._benchmark_timeline_stats(result['moddedStats'])
  target=app.MANUAL_ENEMIES_BY_PATH[payload['enemy']]
  combat=prepare(engine,mods,arcs,assumed=False,affinity_target=target,level=payload['level'])
@@ -100,9 +155,9 @@ def main():
   snapshot=json.loads(path.read_text(encoding='utf-8'));dump(args.output/f'board-{wid}.json',snapshot)
   sources.append(dict(weapon=wid,url=f'https://wfsim.app/board/{wid}.json',sha256=digest(path)))
   forms=FORMS.get(wid,{'base':0})
-  rows=[(i,r) for i,r in enumerate(snapshot) if r.get('benchmark')=='standard_single_target' and r.get('mode') in forms and 'riven' not in r.get('mods',[]) and not r.get('riven')]
+  rows=[(i,r) for i,r in enumerate(snapshot) if r.get('benchmark')=='standard_single_target' and r.get('mode') in forms]
   rows.sort(key=lambda pair:pair[1]['score'],reverse=True)
-  if not rows:skips.append(dict(weapon=wid,reason='no-no-riven-row-in-exported-form'));continue
+  if not rows:skips.append(dict(weapon=wid,reason='no-single-target-row-in-exported-form'));continue
   accepted=0
   for index,row in rows:
    if accepted >= args.per_weapon:break
@@ -113,13 +168,28 @@ def main():
     if str(weapon.get('slot') or '').casefold() == 'melee':
      raise ValueError('melee outside audit contract')
     equipped_arcanes=[a for a in row['arcanes'] if not args.without_enervate or a!='secondary_enervate']
-    cards=[exact_record(mods[mid],app.EXPORTS['mods']) for mid in row['mods']]
+    card_slots=[i for i,mid in enumerate(row['mods']) if mid!='riven']
+    cards=[exact_record(mods[row['mods'][i]],app.EXPORTS['mods']) for i in card_slots]
     arcs=[exact_record(arcanes[aid],app.EXPORTS['arcanes']) for aid in equipped_arcanes]
     payload=dict(weapon=weapon['path'],fireMode=forms[row['mode']],
-     mods=[dict(path=m['path'],rank=m['maxRank'],slot=i) for i,m in enumerate(cards)],
+     mods=[dict(path=m['path'],rank=m['maxRank'],slot=i) for i,m in zip(card_slots,cards,strict=True)],
      arcanes=[dict(path=a['path'],rank=a['maxRank']) for a in arcs],enemy=app._BENCHMARK_ENEMY_PATH,
      level=9999,steelPath=True,headshotChance=1.0,aiming=True,triggerPolicy='emergent',
      slotPolarities=[m.get('polarity') for m in cards],scenario={'distance':0.5})
+    spec=public_riven_spec(row)
+    resolved_riven=None
+    if spec:
+     request_file=args.output/f'riven-{wid}-{index}-request.json'
+     response_file=args.output/f'riven-{wid}-{index}-response.json'
+     dump(request_file,dict(weapon=wid,**spec))
+     subprocess.run(['node',str(ROOT/'tools/run_reference_wasm.mjs'),str(args.wfsim),'/api/riven',str(request_file),str(response_file)],check=True)
+     resolved_riven=json.loads(response_file.read_text(encoding='utf-8'))
+     slot=row['mods'].index('riven')
+     kind=app.optimizer._weapon_type(None,weapon)
+     payload['riven']=resolved_riven_payload(spec,resolved_riven,slot,kind)
+     payload['slotPolarities']=[None]*8
+     for pos,card in zip(card_slots,cards,strict=True):payload['slotPolarities'][pos]=card.get('polarity')
+     payload['slotPolarities'][slot]='AP_ATTACK'
     if row.get('exilus'):
      exilus=exact_record(mods[row['exilus']],app.EXPORTS['mods'])
      payload['exilus']=dict(path=exilus['path'],rank=exilus['maxRank'])
@@ -129,12 +199,16 @@ def main():
      aiming=True,duration=args.duration,runs=args.runs,seed=12648430,infinite_ammo=True,
      class_rules={'archgun':{'infinite_ammo':True}},ammo_drops=False,
      spectral_form=False,eximus=False,assume_max=False,frenzy=False,player_at=[0,0],target_at=[0,0.5])
-    if row.get('exilus'):request['mods']=[*row['mods'],row['exilus']]
+    if spec:
+     request['mods']=['riven:board' if x=='riven' else x for x in request['mods']]
+     request['rivens']=[dict(id='board',spec=spec)]
+    if row.get('exilus'):request['mods']=[*request['mods'],row['exilus']]
     if row.get('valence'):request.update(valence_element=row['valence'],valence_bonus=0.60)
     blockers=[m['path'] for m in cards if m['path'] not in app.MANUAL_MODS_BY_PATH]+[a['path'] for a in arcs if a['path'] not in app.MANUAL_ARCANES_BY_PATH]
     if row.get('exilus') and exilus['path'] not in app.UTILITY_MODS_BY_PATH:blockers.append(exilus['path'])
     case=dict(id=f'{wid}-{index}',weapon=wid,name=weapon['nameEn'],boardRowIndex=index,board=row,
      manualPayload=payload,referenceRequest=request,catalogBlockers=blockers,nativeIncompatibleMods=[m['path'] for m in cards if not _mod_matches_weapon(m,weapon)],referenceLimitations=wm[wid].get('unmodeled',[]))
+    if spec:case.update(referenceRiven=resolved_riven,rivenSpec=spec)
     if not args.allow_partial and (blockers or case['nativeIncompatibleMods']):
      skips.append(dict(weapon=wid,rowIndex=index,reason='catalog-blocked-or-native-incompatible',
                        catalogBlockers=blockers,nativeIncompatibleMods=case['nativeIncompatibleMods']))

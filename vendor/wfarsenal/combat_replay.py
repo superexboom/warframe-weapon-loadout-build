@@ -118,13 +118,16 @@ def replay(
     first_kill = None
     last_kill = None
     min_interval = None
-    totals = dict(direct=0.0, dot=0.0, nonDot=0.0, syndicate=0.0)
+    totals = dict(direct=0.0, dot=0.0, nonDot=0.0, syndicate=0.0, arcane=0.0)
     proc_counts = {}
     dot_by_type = {}
     magnetic_breaks = []
     fortifier = combat.get('fortifier')
     fortifier_damage = fortifier_stolen = 0.0
     self_overguard = 0.0
+    empowered = combat.get('empowered')
+    empowered_count = 0.0
+    empowered_by_type = {}
     cryogenic = combat.get('cryogenic')
     cryogenic_expected = 0.0
     encumber = combat.get('encumber')
@@ -547,8 +550,28 @@ def replay(
         gain=not (combat['enervate'].get('ignoreSelected') and form != 'base')
         enervate.advance(t,probabilities,gain=gain)
 
+    def empowered_hit(st, dtype, n, t, weapon_status):
+        nonlocal empowered_count
+        from .status_arcanes import STATUS_POOL
+        # Native OnStatusProcALLCondition ignores script/link/DoT sources.
+        # Derived Encumber/Cryogenic statuses do not re-enter this weapon hook.
+        if not empowered or not weapon_status or dtype not in STATUS_POOL:
+            return False
+        n *= empowered.get('uptime', 1.0)
+        if n <= 0:
+            return False
+        faction = st.faction_damage_multipliers.get('', 1.0)
+        if cache['target_faction']:
+            faction *= st.faction_damage_multipliers.get(cache['target_faction'], 1.0)
+        empowered_count += n
+        before = totals['arcane']
+        died = take({dtype:n * empowered['damage'] * faction}, t, 'arcane')
+        empowered_by_type[dtype] = empowered_by_type.get(dtype, 0.0) + totals['arcane'] - before
+        return died
+
     def add_procs(st, aim, t, data=None, allow_encumber=True):
         nonlocal frozen_until,frozen_scale,encumber_time,encumber_remaining,encumber_expected,cryogenic_expected
+        generation = gen
         _, procs, rows, non = data if data is not None else packet(st, aim)
         if encumber and allow_encumber and status_rate_multiplier > 0:
             from .status_arcanes import STATUS_POOL, encumber_roll
@@ -570,8 +593,12 @@ def replay(
                 extra_rows={k:{**r,'seedPerSecondPerProc':r['seedPerSecondPerProc']*merged_seed} for k,r in extra_rows.items()}
                 extra_non={k:{**r,'perProc':r['perProc']*merged_seed} for k,r in extra_non.items()}
                 add_procs(st,aim,t,({},dict.fromkeys(STATUS_POOL,weight/len(STATUS_POOL)),extra_rows,extra_non),False)
+        if gen != generation:
+            return  # A derived status hit killed the original target.
         scale = max(st.proc_duration_multiplier, 0.0)
-        for dtype, n in procs.items():
+        # Stable ordering for grouped expected instances, independent of hash seed.
+        proc_items = sorted(procs.items()) if empowered else procs.items()
+        for dtype, n in proc_items:
             n *= max(status_rate_multiplier, 0.0)
             if n <= 0.0 or dtype == 'DT_FREEZE' and frozen_until > t:
                 continue
@@ -579,12 +606,16 @@ def replay(
             signal("proc-" + dtype, t, n)
             signal("on-proc", t, n)
             if scale <= 0.0:
+                if empowered_hit(st, dtype, n, t, allow_encumber):
+                    return
                 continue
             row = rows.get(dtype)
             duration = (
                 row["durationSeconds"] if row else durations.get(dtype, 6.0) * scale
             )
             if duration <= 0.0:
+                if empowered_hit(st, dtype, n, t, allow_encumber):
+                    return
                 continue
             if dtype == "DT_FIRE" and row:
                 if not heat["count"]:
@@ -645,6 +676,9 @@ def replay(
                     if sum(p["count"] for p in blast_procs) >= 10.0:
                         push(t, "blast-all", None, gen)
 
+            if empowered_hit(st, dtype, n, t, allow_encumber):
+                return
+
         # The derived Cold application is not elemental damage or a status-
         # chance modifier. The ordinary status path owns duration, Overguard's
         # four-stack limit and the freeze cycle. It cannot trigger itself.
@@ -702,6 +736,11 @@ def replay(
                     t,
                     "dot",
                 )
+        elif kind == 'delayed-radial':
+            part = payload
+            radial_packet = packet(part, 0.0)
+            if not take(radial_packet[0], t, 'direct'):
+                add_procs(part, 0.0, t, radial_packet)
         elif kind == 'lingering':
             part = payload
             vec, _, _, _ = attack_data(part, 0.0)
@@ -846,15 +885,19 @@ def replay(
             if not died:
                 add_procs(active, aim, t, direct_packet)
                 field = getattr(active, '_lingering', None)
-                if field:
+                if field and gen == generation:
                     part, tick_rate, duration = field
                     for tick in range(int(math.ceil(duration * tick_rate - 1e-9))):
                         push(t + tick / tick_rate, 'lingering', part, gen)
             if radial and gen == generation:
-                radial_packet = packet(radial, 0.0)
-                vec, _, _, _ = radial_packet
-                if not take(vec, t, "direct"):
-                    add_procs(radial, 0.0, t, radial_packet)
+                delay = max(0.0, getattr(radial, '_impact_delay', 0.0))
+                if delay:
+                    push(t + delay, 'delayed-radial', radial, generation)
+                else:
+                    radial_packet = packet(radial, 0.0)
+                    vec, _, _, _ = radial_packet
+                    if not take(vec, t, "direct"):
+                        add_procs(radial, 0.0, t, radial_packet)
             elif radial:
                 stale += 1
             if (form == "base" or combat.get("baseMode")) and burst_round == 2:
@@ -935,7 +978,7 @@ def replay(
                 "gauge": gauge,
                 "shots": attacks,
                 "directDps": (
-                    (totals["direct"] - last_totals["direct"]) / dt if dt else 0.0
+                    (totals["direct"] + totals["arcane"] - last_totals["direct"] - last_totals["arcane"]) / dt if dt else 0.0
                 ),
                 "dotDps": (totals["dot"] - last_totals["dot"]) / dt if dt else 0.0,
                 "stepDamage": sum(totals.values()) - sum(last_totals.values()),
@@ -992,6 +1035,7 @@ def replay(
         "targetTotalEhp": ehp,
         "directWindow": totals["direct"],
         "dotWindow": totals["dot"],
+        "arcaneWindow": totals["arcane"],
         "dotByType": dot_by_type,
         "procCounts": proc_counts,
         "nonDotWindow": totals["nonDot"],
@@ -1017,6 +1061,9 @@ def replay(
                        'cap':fortifier['cap'],'selfDamageModeled':False} if fortifier else None),
         'encumber': ({'chance':encumber['chance'],'expectedExtraProcs':encumber_expected,
                       'events':encumber_events,'typeCount':13,'coPresence':'poisson-occupancy'} if encumber else None),
+        'empowered': ({'damagePerStatus':empowered['damage'], 'expectedInstances':empowered_count,
+                       'windowDamage':totals['arcane'], 'damageByType':empowered_by_type,
+                       'sourcePolicy':'weapon-status-only-no-script-link-dot-recursion'} if empowered else None),
         'cryogenic': ({'coldStacksPerPuncture':cryogenic['coldStacks'],
                        'radiusMeters':cryogenic['radius'],
                        'expectedColdApplications':cryogenic_expected,
@@ -1059,5 +1106,6 @@ def replay(
           + (ASSUMPTIONS if enervate else [])
           + (['encumber-poisson-status-presence','encumber-single-target-expected-procs'] if encumber else [])
           + (['cryogenic-single-target-expected-procs-no-neighbor-burst'] if cryogenic else [])
+          + (['empowered-grouped-expected-instances','empowered-derived-script-procs-excluded'] if empowered else [])
           + (['fortifier-raw-multiply-r5-x8-reference-x9-conflict','fortifier-player-overguard-no-incoming-damage'] if fortifier else []),
     }

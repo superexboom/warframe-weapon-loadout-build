@@ -1882,6 +1882,12 @@ def _optimize(
         card for card in candidates
         if not card.required and card.key not in {c.key for c in extra_required}
     )
+    # Collapse only verified equivalent optional identities, after applying
+    # the user's exact required/forbidden paths. Explicit choices stay intact.
+    available_keys={c.key for c in (*candidates,*required_cards)}
+    candidates=tuple(c for c in candidates
+                     if (c.record or {}).get('optimizerDuplicateOf') not in available_keys)
+
     limit = min(
         slot_count - len(required_cards) - (1 if riven else 0),
         optional_ceiling,
