@@ -2034,6 +2034,90 @@
           "sha256": "1a94218f9e3d3ef6f8335c332183a3592a1b5d21b0c5e146a0d702f8cbad9e1e"
         }
       ]
+    },
+    "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon": {
+      "name": "Prisma Lenz",
+      "source": "data/weapons/primary/prisma_lenz.yaml",
+      "sha256": "729cb42246ea68b0f3c1eea526e065016366a78374517dca83197d452535e4e7",
+      "directTotal": 56,
+      "scope": "base mode, direct-hit target at centre",
+      "bow": true,
+      "drawSeconds": 1.2,
+      "radial": {
+        "radius_m": 7.2,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.7,
+        "crit_chance": 0.5,
+        "crit_multiplier": 2.8,
+        "status_chance": 0.16,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "blast": 740
+        }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 7.2,
+        "takesRadiusMods": true
+      },
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncher": {
+      "name": "Tenet Envoy",
+      "source": "data/weapons/primary/tenet_envoy.yaml",
+      "sha256": "f5ddf825309714e1d6cfac36bbefcd609ccf8d558ba1abf282ed7a730e55e427",
+      "directTotal": 100,
+      "scope": "base mode, direct-hit target at centre",
+      "radial": {
+        "damage": {
+          "cold": 640
+        },
+        "radius_m": 8.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.8,
+        "crit_chance": 0.28,
+        "crit_multiplier": 2.6,
+        "status_chance": 0.24
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 8.0,
+        "takesRadiusMods": true
+      },
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/CarminePenta": {
+      "name": "Carmine Penta",
+      "source": "data/weapons/primary/carmine_penta.yaml",
+      "sha256": "dbccdeb768f11df1c4d1712172f76e473d694a5010db09be638ef03540ec00c7",
+      "directTotal": 75,
+      "scope": "base mode, direct-hit target at centre",
+      "radial": {
+        "radius_m": 4.0,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.5,
+        "crit_chance": 0.1,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.1,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "blast": 350
+        }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 4.0,
+        "takesRadiusMods": true
+      },
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
     }
   },
   "nativeTriggers": {

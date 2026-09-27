@@ -56,7 +56,7 @@ def test_delayed_projectile_cannot_damage_a_different_target_generation():
     assert delayed['directWindow']==direct['directWindow']
 
 
-@pytest.mark.parametrize('name',['Kompressa','Cyanex'])
+@pytest.mark.parametrize('name',['Kompressa','Cyanex','Carmine Penta','Prisma Lenz','Tenet Envoy'])
 def test_native_parts_are_in_manual_and_optimizer_with_empowered(name):
     from wfarsenal.status_arcanes import EMPOWERED
     w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')==name)

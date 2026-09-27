@@ -139,7 +139,7 @@ for category, field, dest in [
                 }
 # Only these attacks have a confirmed match to the frozen export's base vector.
 audited = {}
-selection = {'Kompressa':'kompressa', 'Cyanex':'cyanex', 'Simulor':'simulor', 'Synoid Simulor':'synoid_simulor', 'Kuva Ogris':'kuva_ogris', 'Kuva Bramma':'kuva_bramma', 'Penta':'penta', 'Secura Penta':'secura_penta', 'Zarr':'zarr', 'Acceltra Prime':'acceltra_prime', 'Sonicor':'sonicor', 'Felarx':'felarx', 'Torid':'torid', 'Mausolon':'mausolon', 'Opticor Vandal':'opticor_vandal_quick', 'Nataruk':'nataruk', 'Cinta':'cinta', 'Paris Prime':'paris_prime_uncharged', 'Grattler':'grattler', 'Kuva Grattler':'kuva_grattler', 'Morgha':'morgha', 'Cyngas':'cyngas'}
+selection = {'Carmine Penta':'carmine_penta', 'Prisma Lenz':'prisma_lenz', 'Tenet Envoy':'tenet_envoy', 'Kompressa':'kompressa', 'Cyanex':'cyanex', 'Simulor':'simulor', 'Synoid Simulor':'synoid_simulor', 'Kuva Ogris':'kuva_ogris', 'Kuva Bramma':'kuva_bramma', 'Penta':'penta', 'Secura Penta':'secura_penta', 'Zarr':'zarr', 'Acceltra Prime':'acceltra_prime', 'Sonicor':'sonicor', 'Felarx':'felarx', 'Torid':'torid', 'Mausolon':'mausolon', 'Opticor Vandal':'opticor_vandal_quick', 'Nataruk':'nataruk', 'Cinta':'cinta', 'Paris Prime':'paris_prime_uncharged', 'Grattler':'grattler', 'Kuva Grattler':'kuva_grattler', 'Morgha':'morgha', 'Cyngas':'cyngas'}
 for row in read_rows('weapons'):
     key = selection.get(row.get('nameEn'))
     if not key:
