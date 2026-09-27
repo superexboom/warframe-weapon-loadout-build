@@ -58,7 +58,7 @@ def condition_kind(condition):
         "onelectricityproccondition": "proc-DT_ELECTRICITY",
         "onproccondition": "on-proc",
         "onshotgunclosekillcondition": "on-close-kill",
-        "evonshieldbreakcondition": "on-overguard-broken",
+        "evoonshieldbreakcondition": "on-shield-broken",
         "onoverguardbrokencondition": "on-overguard-broken",
     }
     return next((exact[x] for x in names if x in exact), None)
@@ -183,7 +183,15 @@ def prepare(
         crux = verified_crux_condition(record)
         if crux:
             record = {**record, "conditionalEffects": [crux]}
-        for ci, condition in enumerate(record.get("conditionalEffects") or []):
+        condition_rows = []
+        for raw_condition in record.get("conditionalEffects") or ():
+            raw_names = {str(x).rsplit("/", 1)[-1].casefold() for x in raw_condition.get("conditions") or ()}
+            if 'evoonshieldbreakcondition' in raw_names and 'onoverguardbrokencondition' in raw_names:
+                for gate in ('EvoOnShieldBreakCondition', 'OnOverguardBrokenCondition'):
+                    condition_rows.append({**raw_condition, 'conditions': [gate]})
+            else:
+                condition_rows.append(raw_condition)
+        for ci, condition in enumerate(condition_rows):
             verified = verified_stug_condition(record, condition)
             if verified:
                 condition = verified
@@ -227,8 +235,9 @@ def prepare(
             if condition.get('formGate'):
                 form_dynamic.append(effects)
                 continue
-            kind = condition.get('eventKind') or condition_kind(condition)
-            if not kind:
+            kinds = [condition.get('eventKind') or condition_kind(condition)]
+            kinds = [k for k in kinds if k]
+            if not kinds:
                 notes.append(str(source) + ":event-condition-unmodeled")
                 continue
             if (
@@ -237,7 +246,6 @@ def prepare(
             ):
                 continue
             excluded.add(source)
-            key = source + ":" + str(ci)
             cap = float(condition.get("maxStacks") or 1.0)
             forced = (override or {}).get("stacks")
             uptime = (override or {}).get('uptime')
@@ -245,47 +253,49 @@ def prepare(
             initial = min(max(float(forced), 0.0), cap) if forced is not None else (cap if fixed else 0.0)
             if uptime is not None:
                 initial *= min(max(float(uptime), 0.0), 1.0)
-            sources.append(
-                dict(
-                    id=key,
-                    resetOn=list(condition.get('resetOn') or []),
-                    conditionText=condition.get('conditionText') or EVENT_CONDITION_TEXT.get(kind, kind),
-                    simulationMode='fixed' if fixed else 'events',
-                    label=record.get("nameZh")
-                    or record.get("nameEn")
-                    or ("灵化 " + str(record.get("id")) if record.get("id") else key),
-                    kind=kind,
-                    maxStacks=cap,
-                    duration=(
-                        0.0
-                        if fixed
-                        else float(condition.get("duration") or 0.0)
-                    ),
-                    perEvent=(
-                        0.0
-                        if fixed
-                        else float(
-                            condition.get(
-                                "chance",
-                                (record.get("trigger") or {}).get("chance", 1.0),
+            for kind_index, kind in enumerate(kinds):
+                key = source + ":" + str(ci) + ":" + str(kind_index)
+                sources.append(
+                    dict(
+                        id=key,
+                        resetOn=list(condition.get('resetOn') or []),
+                        conditionText=condition.get('conditionText') or EVENT_CONDITION_TEXT.get(kind, kind),
+                        simulationMode='fixed' if fixed else 'events',
+                        label=record.get("nameZh")
+                        or record.get("nameEn")
+                        or ("灵化 " + str(record.get("id")) if record.get("id") else key),
+                        kind=kind,
+                        maxStacks=cap,
+                        duration=(
+                            0.0
+                            if fixed
+                            else float(condition.get("duration") or 0.0)
+                        ),
+                        perEvent=(
+                            0.0
+                            if fixed
+                            else float(
+                                condition.get(
+                                    "chance",
+                                    (record.get("trigger") or {}).get("chance", 1.0),
+                                )
+                                or 0.0
                             )
-                            or 0.0
-                        )
-                    ),
-                    initialStacks=initial,
-                    decay=(
-                        "lose_one_and_reset"
-                        if condition.get("stackMode") == "SM_DECAY"
-                        else (
-                            "per-stack"
-                            if condition.get("stackMode") == "per-stack"
-                            and not fixed
-                            else "reset"
-                        )
-                    ),
+                        ),
+                        initialStacks=initial,
+                        decay=(
+                            "lose_one_and_reset"
+                            if condition.get("stackMode") == "SM_DECAY"
+                            else (
+                                "per-stack"
+                                if condition.get("stackMode") == "per-stack"
+                                and not fixed
+                                else "reset"
+                            )
+                        ),
+                    )
                 )
-            )
-            dynamic.append((key, effects))
+                dynamic.append((key, effects))
     # Only conditional terms are replaced. Permanent rank unlocks remain active.
     static = [
         e

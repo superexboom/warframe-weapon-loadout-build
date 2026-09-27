@@ -378,6 +378,7 @@ def replay(
             if pools[1] <= 1e-9:
                 pools[1] = 0.0
                 magnetic_break(t, 1)
+                signal('on-shield-broken', t)
         if left > 0.0 and pools[1] <= 1e-9 and pools[2] > 0.0:
             value = sum(health_value(k, raw) for k, raw in vector.items())
             drain = min(pools[2], value * left)
