@@ -68,3 +68,17 @@ def test_merge_rejects_legacy_evidence_without_version_manifest(tmp_path):
 ])
 def test_attempt_status_classifies_structural_denominator_gaps(error,status):
     assert attempt_status({'ok':False,'error':error})==status
+
+
+def test_merge_separates_structural_gaps_from_engine_failures(tmp_path):
+    from tools.merge_nonmelee_catalog_audit import merge_runs
+    root=tmp_path/'r';root.mkdir()
+    dump(root/'meta.json',dict(fingerprint='v',weapons=['/a','/b','/c'],state='complete'))
+    dump(root/'results.json',[
+        dict(path='/a',fingerprint='v',ok=True,replayComplete=True,attempts=[dict(status='replay-matched',ok=True,manualKpm=1.,autoManualPassed=True)]),
+        dict(path='/b',fingerprint='v',ok=True,replayComplete=True,attempts=[dict(status='catalog-absent',ok=False)]),
+        dict(path='/c',fingerprint='v',ok=True,replayComplete=True,attempts=[dict(status='generation-failed',ok=False)]),
+    ])
+    s=merge_runs([root])['summary']
+    assert s['structuralGaps']==1 and s['engineFailures']==1
+    assert s['structuralGapKinds']==[['catalog-absent',1]]
