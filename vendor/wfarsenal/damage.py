@@ -198,7 +198,6 @@ DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES = frozenset({"DT_POISON", "DT_HEALTH_DRAIN"})
 _KNOWN_MULTIPART_PATHS: dict[str, str] = {
     "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG": "radial",  # Opticor（wfsim: radial 占 32%）
     "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG": "radial",  # Opticor Vandal
-    "/Lotus/Weapons/ClanTech/Bio/BioWeapon": "field",  # Torid（wfsim: field 占 78%）
     "/Lotus/Weapons/MachineGun/PistolGrenadeLauncher/PistolGrenadeLauncher": "radial",  # Angstrum 副模式
 }
 

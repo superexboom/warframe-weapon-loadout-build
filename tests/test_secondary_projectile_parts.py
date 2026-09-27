@@ -71,3 +71,16 @@ def test_native_parts_are_in_manual_and_optimizer_with_supported_arcane_scope(na
     r=evaluate_payload(p)
     assert r['manual']==pytest.approx(r['optimizer'],rel=1e-10)
     assert 'projectile-component-damage-unapplied' not in r['unsupported']
+
+
+def test_torid_reference_field_profile_removes_old_missing_export_diagnostic():
+    import app
+    from wfarsenal.damage import Scenario, apply_mods
+    from wfarsenal.manual_combat import prepare
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Torid')
+    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(distance=.5)),[],[])
+    st,field=c['resolve']('base',{},0)
+    lingering=getattr(st,'_lingering',None)
+    assert field is None and lingering is not None and lingering[0].total_damage==pytest.approx(40)
+    assert 'weapon-radial-or-field-damage-not-in-export-field' not in st.unsupported
+    assert not any('weapon-radial-or-field-damage-not-in-export-field' in x for x in c['unsupported'])
