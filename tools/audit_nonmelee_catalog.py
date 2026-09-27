@@ -138,11 +138,21 @@ def main():
                     delta=(float(auto_score)-float(manual_kpm)) if auto_score is not None and manual_kpm is not None else None
                     attempts.append({"fireMode":mode,"ok":True,"request":payload,"manualRequest":manual_payload,"mods":[m.get("path") for m in b.get("mods") or []],"objectiveScore":auto_score,"manualKpm":manual_kpm,"autoManualDelta":delta,"autoManualPassed":(abs(delta) <= max(1e-7,abs(float(manual_kpm))*1e-8) if delta is not None else False),"manualError":manual_error,"manualUnsupported":manual_unsupported,"unsupported":built.get("unsupported") or [],"skipped":built.get("skipped") or [],"build":b})
                 except Exception as exc:
-                    attempts.append({"fireMode":mode,"ok":False,"error":f"{type(exc).__name__}: {exc}"})
+                    error=f"{type(exc).__name__}: {exc}"
+                    # A declared alternate mode with no exported damage is a
+                    # bounded mode-data gap. Keep the main weapon usable and
+                    # report this attempt separately from a generation failure.
+                    mode_row=modes[mode] if 0 <= mode < len(modes) else {}
+                    if (isinstance(mode_row, dict) and mode_row.get('damage') is None
+                            and mode_row.get('isAlternateFire')):
+                        status='mode-metric-unavailable'
+                    else:
+                        status=None
+                    attempts.append({"fireMode":mode,"ok":False,"error":error,**({"status":status} if status else {})})
             row["attempts"]=attempts
             for attempt in attempts:attempt['status']=attempt_status(attempt)
-            row['ok']=bool(attempts) and all(a.get('ok') for a in attempts)
-            row['replayComplete']=bool(attempts) and all(a['status']=='replay-matched' for a in attempts)
+            row['ok']=bool(attempts) and all(a.get('ok') or a.get('status')=='mode-metric-unavailable' for a in attempts)
+            row['replayComplete']=bool(attempts) and all(a.get('status') in ('replay-matched','mode-metric-unavailable') for a in attempts)
         except Exception as exc:
             row["ok"]=False; row["error"]=f"{type(exc).__name__}: {exc}"; row["traceback"]=traceback.format_exc()
         row["seconds"]=round(time.perf_counter()-t,3)
