@@ -139,6 +139,18 @@ def prepare(
         branches.extend(b for b in tier.get("branches") or [] if b.get("id") == wanted)
     from .runtime_adapters import verified_crux_condition, verified_stug_condition
 
+    # Final Fusillade / equivalent Incarnon terms are read from the base form's
+    # last magazine pull. Keep this as an event gate; never fold it into the
+    # panel's permanent multishot value. Incarnon charge-pool forms do not use
+    # the gate even when the same evolution id is shared.
+    last_round_multishot = 0.0
+    for branch in branches:
+        for term in branch.get('effects') or ():
+            if (term.get('upgradeType') == 'WEAPON_LAST_MULTISHOT'
+                    and isinstance(term.get('valuePerRank'), (int, float))
+                    and not isinstance(term.get('valuePerRank'), bool)):
+                last_round_multishot += float(term['valuePerRank'])
+
     replaced_terms = set()
     for record, rank, override in [
         *mod_records,
@@ -328,7 +340,7 @@ def prepare(
         "magnetic": "DT_MAGNETIC",
     }
 
-    def resolve(form, stacks, live_types=0):
+    def resolve(form, stacks, live_types=0, last_round=False):
         fx = ModEffectList(static)
         for key, terms in dynamic:
             n = stacks.get(key, 0.0)
@@ -350,6 +362,9 @@ def prepare(
         if wp.get('isIncarnonForm'):
             for terms in form_dynamic:
                 fx.extend(terms)
+        if last_round and last_round_multishot and form != 'incarnon':
+            fx.append(ModEffect('WEAPON_FIRE_ITERATIONS', 'ADD', last_round_multishot,
+                                source_path='incarnon:last-round-multishot'))
         st = apply_mods(
             wp,
             fx,
@@ -484,5 +499,6 @@ def prepare(
         weaponSlot=weapon.get("slot"),
         spool=base_attack.get("spool") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
         battery=base_attack.get("battery") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
+        lastRoundMultishot=last_round_multishot,
         distance=scenario.distance,
     )

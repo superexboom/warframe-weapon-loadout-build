@@ -101,3 +101,40 @@ def test_dera_incarnon_on_kill_ammo_efficiency_replays_as_event():
     base,_=c['resolve']('selected',{},0);live,_=c['resolve']('selected',{q['id']:4},0)
     assert q['kind']=='on-kill' and q['maxStacks']==4 and q['duration']==5
     assert base.ammo_cost==1 and live.ammo_cost==pytest.approx(.2)
+
+
+def test_torid_final_fusillade_adds_flat_multishot_only_on_base_last_round():
+    import app
+    from wfarsenal.damage import Scenario
+    from wfarsenal.manual_combat import prepare
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Torid')
+    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent')),[],[],incarnon_choices={'tier2':'2-1'})
+    base,_=c['resolve']('base',{},0,False)
+    last,_=c['resolve']('base',{},0,True)
+    inc,_=c['resolve']('incarnon',{},0,True)
+    assert c['lastRoundMultishot']==pytest.approx(3)
+    assert last.multishot==pytest.approx(base.multishot+3)
+    inc_base,_=c['resolve']('incarnon',{},0,False)
+    assert inc.multishot==pytest.approx(inc_base.multishot)
+
+
+def test_torid_last_round_gate_enters_replay_before_ammo_payment():
+    import app
+    from wfarsenal.damage import Scenario
+    from wfarsenal.manual_combat import prepare
+    from wfarsenal.combat_replay import replay
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Torid')
+    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent')),[],[],incarnon_choices={'tier2':'2-1'})
+    st,_=c['resolve']('base',{},0,False)
+    observed=[]; original=c['resolve']
+    def resolve(form,stacks,live,last_round=False):
+        observed.append(bool(last_round))
+        st,_=original(form,stacks,live,last_round)
+        return replace(st,fire_rate=1,magazine=3,reload_time=.1,status_chance=0,crit_chance=0),None
+    c['resolve']=resolve
+    st=replace(st,fire_rate=1,magazine=3,reload_time=.1,status_chance=0,crit_chance=0)
+    replay(st,dict(health=1e12,shield=0,armour=0,overguard=0,baseLevel=1),
+           attacks_per_second=1,window_seconds=3.2,combat=c,trigger_sources=c['trigger_sources'])
+    # The resolver cache elides repeated false-gate calls; the only second
+    # invocation is the first last-round state.
+    assert observed==[False,True]

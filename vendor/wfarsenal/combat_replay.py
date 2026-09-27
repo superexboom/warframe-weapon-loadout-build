@@ -162,6 +162,7 @@ def replay(
     burst_round = 0
     first_round = True
     model_cache = {}
+    combat['lastRound'] = False
     syndrome = combat.get("syndicate")
     affinity = 0.0
     syndicate_ready = 0.0
@@ -396,13 +397,24 @@ def replay(
             if combat.get("conditionOverload") or stats.co_bucket
             else 0
         )
-        key = (form, tuple(q["stacks"] for q in sources), live_types)
+        last_round = bool(combat.get('lastRound'))
+        key = (form, tuple(q["stacks"] for q in sources), live_types, last_round)
         if key not in model_cache:
             resolver = combat.get("resolve")
             if resolver:
-                model_cache[key] = resolver(
-                    form, {q["id"]: q["stacks"] for q in sources}, live_types
-                )
+                try:
+                    model_cache[key] = resolver(
+                        form, {q["id"]: q["stacks"] for q in sources}, live_types, last_round
+                    )
+                except TypeError as exc:
+                    # Test/custom resolvers from older callers use the original
+                    # three-argument contract. Preserve that contract unless
+                    # the resolver explicitly accepts the new gate.
+                    if last_round and 'positional' not in str(exc) and 'argument' not in str(exc):
+                        raise
+                    model_cache[key] = resolver(
+                        form, {q["id"]: q["stacks"] for q in sources}, live_types
+                    )
             elif stats.co_bucket:
                 from .damage import _combine, _scale_effect
 
@@ -799,6 +811,12 @@ def replay(
         elif kind == "fire":
             if t >= window - 1e-9 or rate <= 0.0:
                 continue
+            active, radial = model(t)
+            # The gate is read before paying this shot's ammo. Incarnon charge
+            # pools and zero-cost abstract events never use magazine semantics.
+            last_round = bool(combat and not cycle and active.magazine > 0
+                              and ammo <= max(active.ammo_cost, 1.0) + 1e-9)
+            combat['lastRound'] = last_round
             active, radial = model(t)
             speed = active.fire_rate if combat else rate
             if speed <= 0.0:
