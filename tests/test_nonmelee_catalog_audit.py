@@ -58,3 +58,13 @@ def test_merge_rejects_legacy_evidence_without_version_manifest(tmp_path):
     dump(tmp_path/'results.json',[dict(path='/legacy',ok=True)])
     with pytest.raises(ValueError,match='missing version manifest'):
         merge_runs([tmp_path])
+
+
+@pytest.mark.parametrize('error,status',[
+    ('SimulationError: weapon is not in the portable Riven catalog','catalog-absent'),
+    ('SimulationError: weapon has no fire modes','abstract-modular-placeholder'),
+    ('SimulationError: fire mode 1 metric sustainedDps is unavailable','mode-metric-unavailable'),
+    ('ValueError: unrelated','generation-failed'),
+])
+def test_attempt_status_classifies_structural_denominator_gaps(error,status):
+    assert attempt_status({'ok':False,'error':error})==status

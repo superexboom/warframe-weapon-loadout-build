@@ -31,7 +31,15 @@ def run_identity(profile):
                 contract='event-kpm; all explicit modes; matched manual replay; no external parity claim')
 
 def attempt_status(a):
-    if not a.get('ok'):return 'generation-failed'
+    if not a.get('ok'):
+        error=str(a.get('error') or '')
+        if 'not in the portable Riven catalog' in error:
+            return 'catalog-absent'
+        if 'weapon has no fire modes' in error:
+            return 'abstract-modular-placeholder'
+        if 'metric' in error and 'unavailable' in error:
+            return 'mode-metric-unavailable'
+        return 'generation-failed'
     if a.get('manualError'):return 'manual-error'
     if a.get('manualKpm') is None:return 'manual-missing'
     if 'loadout-over-capacity' in (a.get('manualUnsupported') or []):return 'invalid-loadout'
