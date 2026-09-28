@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 2,
+  "scope": "Torid lifecycle, Hema cadence, explicit KPM contributions; six real builds; no full roster or full Riven cache acceptance",
+  "files": [
+    {
+      "path": "auto-final.json",
+      "sha256": "eaa8298e5984c8d479ecd9307e4ffcfadac1f1764259b201e531fc303ab10456"
+    },
+    {
+      "path": "causal-checks.json",
+      "sha256": "6cd694b5372282cac83e3c18000a1426006e8eb44a5f10a412d8daca8edd3b89"
+    },
+    {
+      "path": "delivery-auto.json",
+      "sha256": "9db57e8ee05e08be8d544aa35be917236bb2f4421123dcb992b1ea26f174754d"
+    },
+    {
+      "path": "delivery-builds.json",
+      "sha256": "cb437f6aaa2d2906750da5c199cddaee8e0e2aca4010a80bf045de6cc9c6ca64"
+    },
+    {
+      "path": "delivery-old-reference.json",
+      "sha256": "7fd5faa2fe95aa2fa9e3938c958fe0073a3cbbad956c9a2f81967b3dc089a037"
+    },
+    {
+      "path": "delivery-parity.json",
+      "sha256": "c9b2e13d9a6e67b6f1c284250d0c4d9c0b5af16375ca224d73dc5207a28ce34a"
+    },
+    {
+      "path": "delivery-regression.txt",
+      "sha256": "687ca0a67d07005510fdb0ecea14d9774ee619aaa9fa7a73f530b41f39c34d7a"
+    },
+    {
+      "path": "field-duration-pool-probe.json",
+      "sha256": "1406156f00e7a3effa2d3e31056307f7c94ef0acb1ad37ed024a4a1aec03895c"
+    },
+    {
+      "path": "fixed-build-ablations.json",
+      "sha256": "1aded748cbe9e66ce99fb08fe53a84d1c2e3c6f993d48f466631c4f8015059b5"
+    },
+    {
+      "path": "hema-native.json",
+      "sha256": "820f42a5ab9e1fa3256965159b94a05fc164e1935f0dbc5c2c97facb3e81f045"
+    },
+    {
+      "path": "initial-all-reference.json",
+      "sha256": "136be18c7e362b637aff6b2f1cb97144c56a24493fe234064e0dc21412d43cb3"
+    },
+    {
+      "path": "latest-reference-comparison.json",
+      "sha256": "9cfebfb75e9c4b0a2605fc0fde1cee79e2ad5841773fbec02a5de2dc9b379e0e"
+    },
+    {
+      "path": "latest-reference-source.json",
+      "sha256": "f4efa82b1990d9a1e3d7871ca2bd890d95a5d29d618ebe9f5a61d59da3f15fdd"
+    },
+    {
+      "path": "latest-torid-panel.json",
+      "sha256": "12cd48c4e1746dc4c1898aa6ef158e7b2c7b72606b09f8032c9df6a58ee980e2"
+    },
+    {
+      "path": "native-field-condition.json",
+      "sha256": "e7d1156854d327ee89077a946bde13211bf518bdd74efbeb5d50d1739fa58291"
+    },
+    {
+      "path": "old-reference-torid-panel.json",
+      "sha256": "12cd48c4e1746dc4c1898aa6ef158e7b2c7b72606b09f8032c9df6a58ee980e2"
+    },
+    {
+      "path": "refresh-check.json",
+      "sha256": "7a2246099443c7cf2e18fd0019736d96f7c11f823158320fefad73d95fbaa922"
+    },
+    {
+      "path": "regression.txt",
+      "sha256": "3dbbcf46b15833ce99fb2a651e945a4166cf5a4478bacc9bc3719f117566b896"
+    },
+    {
+      "path": "torid-builds.json",
+      "sha256": "2d66a97a8d1b28908c281f535e997352c58e1cbb801a9451dff8243b872ce9f7"
+    },
+    {
+      "path": "torid-reference-comparison.json",
+      "sha256": "5ef12ad9f3184def3bbcf5d2c54ac33d9967ae43b363d6b7894082812e101103"
+    }
+  ]
+}

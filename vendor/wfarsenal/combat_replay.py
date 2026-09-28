@@ -162,6 +162,10 @@ def replay(
     spool_shots = 0
     spool_trace = []
     burst_round = 0
+    field_duration = combat.get('fieldDurationOnEmptyReload')
+    field_duration_ready = False
+    field_duration_used = 0
+    field_events = []
     first_round = True
     model_cache = {}
     combat['lastRound'] = False
@@ -815,6 +819,8 @@ def replay(
                 gauge = 0.0
             push(t, "fire")
         elif kind == "reload-complete":
+            if field_duration:
+                field_duration_ready = True
             signal("on-reload-complete", t)
             signal("on-reload-empty-complete", t)
             push(t, "fire")
@@ -824,7 +830,8 @@ def replay(
             active, radial = model(t)
             # The gate is read before paying this shot's ammo. Incarnon charge
             # pools and zero-cost abstract events never use magazine semantics.
-            last_round = bool(combat and not cycle and active.magazine > 0
+            magazine_form = form == 'base' or (not cycle and not combat.get('selectedIncarnon'))
+            last_round = bool(combat and magazine_form and active.magazine > 0 and ammo > 0
                               and ammo <= max(active.ammo_cost, 1.0) + 1e-9)
             combat['lastRound'] = last_round
             active, radial = model(t)
@@ -899,6 +906,8 @@ def replay(
                 if active.dot_base_damage is not None:
                     active.dot_base_damage *= factor
             first_round = False
+            field_duration_boost = field_duration_ready
+            field_duration_ready = False  # A shot consumes it, even when that shot kills.
             landing = spread_hit_probability(active, combat.get('distance'))
             if initial_spread is None and active.spread_min_deg is not None:
                 initial_spread = dict(
@@ -922,6 +931,13 @@ def replay(
                 field = getattr(active, '_lingering', None)
                 if field and gen == generation:
                     part, tick_rate, duration = field
+                    boosted = bool(field_duration_boost and magazine_form)
+                    if boosted:
+                        duration *= field_duration['multiplier']
+                        field_duration_used += 1
+                    if field_duration and collect_timeline:
+                        field_events.append(dict(time=t,form=form,durationSeconds=duration,
+                                                 multiplier=field_duration['multiplier'] if boosted else 1.))
                     for tick in range(int(math.ceil(duration * tick_rate - 1e-9))):
                         push(t + tick / tick_rate, 'lingering', part, gen)
             radial_parts = (radial, *getattr(radial, '_additional_radials', ())) if radial else ()
@@ -1012,6 +1028,7 @@ def replay(
                 "form": form,
                 "ammo": ammo,
                 "gauge": gauge,
+                "fieldDurationReady": field_duration_ready,
                 "shots": attacks,
                 "directDps": (
                     (totals["direct"] + totals["arcane"] - last_totals["direct"] - last_totals["arcane"]) / dt if dt else 0.0
@@ -1084,6 +1101,8 @@ def replay(
         "maxKillsPerStep": max_per_step,
         "staleComponents": stale,
         'spread': initial_spread,
+        'fieldDuration': ({**field_duration, 'boostedShots':field_duration_used,
+                           'ready':field_duration_ready, 'events':field_events} if field_duration else None),
         "shots": attacks,
         "reloads": reloads,
         "recharges": recharges,

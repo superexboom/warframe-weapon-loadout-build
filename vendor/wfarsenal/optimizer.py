@@ -657,6 +657,10 @@ def _path_basename(value: Any) -> str:
 
 
 def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[str]]:
+    from .runtime_adapters import verified_torid_field_duration
+    if verified_torid_field_duration(branch):
+        # This perk is consumed by the shared event resolver, never as a stat buff.
+        return [], []
     source = str(branch.get("path") or branch.get("id") or "incarnon")
     effects: list[ModEffect] = []
     unsupported: list[str] = []

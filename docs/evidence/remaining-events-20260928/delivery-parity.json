@@ -1,0 +1,334 @@
+{
+  "currentFingerprint": "807b8010da637ce3",
+  "cases": [
+    {
+      "name": "Torid base",
+      "automatic": 1.3917777571343932,
+      "currentManual": 1.3917777571343932,
+      "currentFixedOptimizer": 1.3917777571343932,
+      "shots": 35,
+      "reloads": 4,
+      "transforms": 0,
+      "fieldDuration": {
+        "id": "torid-renewed-horror",
+        "multiplier": 2.0,
+        "conditionText": "弹匣打空并完成换弹后，下一次基础形态射击的毒云持续时间翻倍；只消耗一次，不延长异常状态。",
+        "boostedShots": 4,
+        "ready": false,
+        "events": [
+          {
+            "time": 0.0,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 0.6666666666666666,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 1.3333333333333333,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 2.0,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 2.6666666666666665,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 3.333333333333333,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 3.9999999999999996,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 6.366666666666666,
+            "form": "selected",
+            "durationSeconds": 20.0,
+            "multiplier": 2.0
+          },
+          {
+            "time": 7.033333333333333,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 7.7,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 8.366666666666667,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 9.033333333333333,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 9.7,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 10.366666666666665,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 12.73333333333333,
+            "form": "selected",
+            "durationSeconds": 20.0,
+            "multiplier": 2.0
+          },
+          {
+            "time": 13.399999999999997,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 14.066666666666663,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 14.733333333333329,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 15.399999999999995,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 16.066666666666663,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 16.73333333333333,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 19.099999999999998,
+            "form": "selected",
+            "durationSeconds": 20.0,
+            "multiplier": 2.0
+          },
+          {
+            "time": 19.766666666666666,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 20.433333333333334,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 21.1,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 21.76666666666667,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 22.433333333333337,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 23.100000000000005,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 25.466666666666672,
+            "form": "selected",
+            "durationSeconds": 20.0,
+            "multiplier": 2.0
+          },
+          {
+            "time": 26.13333333333334,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 26.800000000000008,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 27.466666666666676,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 28.133333333333344,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 28.80000000000001,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 29.46666666666668,
+            "form": "selected",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          }
+        ]
+      },
+      "originalFingerprint": "2d4e870b3298a0fb"
+    },
+    {
+      "name": "Torid cycle",
+      "automatic": 1.4712634394828834,
+      "currentManual": 1.4712634394828834,
+      "currentFixedOptimizer": 1.4712634394828834,
+      "shots": 179,
+      "reloads": 0,
+      "transforms": 3,
+      "fieldDuration": {
+        "id": "torid-renewed-horror",
+        "multiplier": 2.0,
+        "conditionText": "弹匣打空并完成换弹后，下一次基础形态射击的毒云持续时间翻倍；只消耗一次，不延长异常状态。",
+        "boostedShots": 0,
+        "ready": false,
+        "events": [
+          {
+            "time": 0.0,
+            "form": "base",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 0.6666666666666666,
+            "form": "base",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 1.3333333333333333,
+            "form": "base",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 25.95,
+            "form": "base",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 26.616666666666667,
+            "form": "base",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          },
+          {
+            "time": 27.283333333333335,
+            "form": "base",
+            "durationSeconds": 10.0,
+            "multiplier": 1.0
+          }
+        ]
+      },
+      "originalFingerprint": "2d4e870b3298a0fb"
+    },
+    {
+      "name": "Tysis base",
+      "automatic": 1.6929257782748837,
+      "currentManual": 1.6929257782748837,
+      "currentFixedOptimizer": 1.6929257782748837,
+      "shots": 66,
+      "reloads": 5,
+      "transforms": 0,
+      "fieldDuration": null,
+      "originalFingerprint": "2d4e870b3298a0fb"
+    },
+    {
+      "name": "Tenora Prime base",
+      "automatic": 4.22709029408914,
+      "currentManual": 4.22709029408914,
+      "currentFixedOptimizer": 4.22709029408914,
+      "shots": 602,
+      "reloads": 2,
+      "transforms": 0,
+      "fieldDuration": null,
+      "originalFingerprint": "2d4e870b3298a0fb"
+    },
+    {
+      "name": "Hema base",
+      "automatic": 3.1985387069358437,
+      "currentManual": 3.1985387069358437,
+      "currentFixedOptimizer": 3.1985387069358437,
+      "shots": 336,
+      "reloads": 4,
+      "transforms": 0,
+      "fieldDuration": null,
+      "originalFingerprint": "2d4e870b3298a0fb"
+    },
+    {
+      "name": "Quanta Vandal base",
+      "automatic": 1.8807327822592426,
+      "currentManual": 1.8807327822592426,
+      "currentFixedOptimizer": 1.8807327822592426,
+      "shots": 339,
+      "reloads": 1,
+      "transforms": 0,
+      "fieldDuration": null,
+      "originalFingerprint": "2d4e870b3298a0fb"
+    }
+  ],
+  "contract": "Replayed saved real automatic builds through current manual and fixed optimizer paths; does not relabel their original search fingerprint"
+}

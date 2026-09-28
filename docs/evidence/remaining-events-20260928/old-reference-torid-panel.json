@@ -1,0 +1,470 @@
+{
+  "buffs": [],
+  "conditionals": [
+    {
+      "active": true,
+      "desc": "set bonus: 5% per equipped member",
+      "mod": "Vigilante",
+      "why": "4 of the set's 6 members are weapon mods — the rest go on the WARFRAME,                      which this sim has no loadout for. So a build here tops out at 20%,                      against 30% in game."
+    }
+  ],
+  "forms": [
+    {
+      "elements": [
+        {
+          "base": "—",
+          "final": "+60% of modified base",
+          "key": "elements",
+          "label": "Magnetic",
+          "sources": [
+            {
+              "fraction": 0.6,
+              "mod": "Magnetic Capacity",
+              "note": null,
+              "value": "+60%"
+            }
+          ]
+        },
+        {
+          "base": "—",
+          "final": "+150% of modified base",
+          "key": "elements",
+          "label": "Toxin",
+          "sources": [
+            {
+              "fraction": 0.6,
+              "mod": "Malignant Force",
+              "note": null,
+              "value": "+60%"
+            },
+            {
+              "fraction": 0.9,
+              "mod": "Infected Clip",
+              "note": null,
+              "value": "+90%"
+            }
+          ]
+        }
+      ],
+      "indirect": [
+        {
+          "base": "—",
+          "final": "−55%",
+          "key": "indirect",
+          "label": "Accuracy",
+          "sources": [
+            {
+              "fraction": -0.55,
+              "mod": "Heavy Caliber",
+              "note": null,
+              "value": "−55%"
+            }
+          ]
+        },
+        {
+          "base": "—",
+          "final": "+5%",
+          "key": "indirect",
+          "label": "Ammo Pickup Conversion",
+          "sources": [
+            {
+              "fraction": 0.05,
+              "mod": "Vigilante Supplies",
+              "note": null,
+              "value": "+5%"
+            }
+          ]
+        },
+        {
+          "base": "—",
+          "final": "+0m",
+          "key": "indirect",
+          "label": "Punch Through",
+          "sources": [
+            {
+              "fraction": 0.6,
+              "mod": "Rifle Elementalist",
+              "note": null,
+              "value": "+60%"
+            }
+          ]
+        }
+      ],
+      "label": "Base Form",
+      "meta": "Semi-Auto · Projectile",
+      "parts": [
+        {
+          "damage": [
+            {
+              "amount": "1623",
+              "share": "81%",
+              "type": "Toxin"
+            },
+            {
+              "amount": "390",
+              "share": "19%",
+              "type": "Magnetic"
+            }
+          ],
+          "damage_total": "2013",
+          "id": "direct",
+          "label": "Direct hit",
+          "meta": "on contact",
+          "stats": [
+            {
+              "base": "100",
+              "final": "649",
+              "key": "base_damage",
+              "label": "Base Damage",
+              "sources": [
+                {
+                  "mod": "Final Fusillade (EVO II)",
+                  "note": "added to the weapon base pro-rata, before mods",
+                  "value": "+51 flat"
+                },
+                {
+                  "fraction": 1.65,
+                  "mod": "Heavy Caliber",
+                  "note": null,
+                  "value": "+165%"
+                },
+                {
+                  "fraction": 1.65,
+                  "mod": "Serration",
+                  "note": null,
+                  "value": "+165%"
+                }
+              ]
+            },
+            {
+              "base": "15.0%",
+              "final": "30.0%",
+              "key": "crit_chance",
+              "label": "Crit Chance",
+              "sources": [
+                {
+                  "mod": "Survivor's Edge (EVO IV)",
+                  "note": "into the BASE crit chance — crit mods multiply it",
+                  "value": "+15% base"
+                }
+              ]
+            },
+            {
+              "base": "×2.0",
+              "final": "×3.2",
+              "key": "crit_damage",
+              "label": "Crit Damage",
+              "sources": [
+                {
+                  "fraction": 0.6,
+                  "mod": "Hammer Shot",
+                  "note": null,
+                  "value": "+60%"
+                }
+              ]
+            },
+            {
+              "base": "23.0%",
+              "final": "91.2%",
+              "key": "status_chance",
+              "label": "Status Chance",
+              "sources": [
+                {
+                  "mod": "Survivor's Edge (EVO IV)",
+                  "note": "into the BASE status chance — status mods multiply it",
+                  "value": "+15% base"
+                },
+                {
+                  "fraction": 0.6,
+                  "mod": "Malignant Force",
+                  "note": null,
+                  "value": "+60%"
+                },
+                {
+                  "fraction": 0.8,
+                  "mod": "Hammer Shot",
+                  "note": null,
+                  "value": "+80%"
+                }
+              ]
+            },
+            {
+              "base": "×1.0",
+              "final": "×1.9",
+              "key": "status_damage",
+              "label": "Status Damage",
+              "sources": [
+                {
+                  "fraction": 0.9,
+                  "mod": "Rifle Elementalist",
+                  "note": null,
+                  "value": "+90%"
+                }
+              ]
+            },
+            {
+              "base": "×1.0",
+              "final": "×1.0",
+              "key": "status_duration",
+              "label": "Status Duration",
+              "sources": []
+            },
+            {
+              "base": "—",
+              "final": "no source equipped",
+              "key": "co",
+              "label": "Condition Overload",
+              "note": "an AoE part taking CO is a per-entry exception the catalog lists; every unlisted weapon is direct hits only · multiplying stands OUTSIDE the base-damage bracket, so Serration does not dilute it; additive joins that bracket and is diluted",
+              "rule": "multiplying · base = 100% (100 of 151) · parts = direct + field",
+              "sources": []
+            }
+          ]
+        },
+        {
+          "damage": [
+            {
+              "amount": "430",
+              "share": "81%",
+              "type": "Toxin"
+            },
+            {
+              "amount": "103",
+              "share": "19%",
+              "type": "Magnetic"
+            }
+          ],
+          "damage_total": "533",
+          "id": "field",
+          "label": "Lingering field",
+          "meta": "3 m, 10 s",
+          "stats": [
+            {
+              "base": "40.0",
+              "final": "172",
+              "key": "base_damage",
+              "label": "Damage per Tick",
+              "sources": [
+                {
+                  "mod": "Final Fusillade (EVO II)",
+                  "note": "added to the weapon base pro-rata, before mods",
+                  "value": "+51 flat"
+                },
+                {
+                  "fraction": 1.65,
+                  "mod": "Heavy Caliber",
+                  "note": null,
+                  "value": "+165%"
+                },
+                {
+                  "fraction": 1.65,
+                  "mod": "Serration",
+                  "note": null,
+                  "value": "+165%"
+                }
+              ]
+            },
+            {
+              "base": "15.0%",
+              "final": "30.0%",
+              "key": "crit_chance",
+              "label": "Crit Chance",
+              "sources": [
+                {
+                  "mod": "Survivor's Edge (EVO IV)",
+                  "note": "into the BASE crit chance — crit mods multiply it",
+                  "value": "+15% base"
+                }
+              ]
+            },
+            {
+              "base": "×2.0",
+              "final": "×3.2",
+              "key": "crit_damage",
+              "label": "Crit Damage",
+              "sources": [
+                {
+                  "fraction": 0.6,
+                  "mod": "Hammer Shot",
+                  "note": null,
+                  "value": "+60%"
+                }
+              ]
+            },
+            {
+              "base": "25.0%",
+              "final": "96.0%",
+              "key": "status_chance",
+              "label": "Status Chance",
+              "sources": [
+                {
+                  "mod": "Survivor's Edge (EVO IV)",
+                  "note": "into the BASE status chance — status mods multiply it",
+                  "value": "+15% base"
+                },
+                {
+                  "fraction": 0.6,
+                  "mod": "Malignant Force",
+                  "note": null,
+                  "value": "+60%"
+                },
+                {
+                  "fraction": 0.8,
+                  "mod": "Hammer Shot",
+                  "note": null,
+                  "value": "+80%"
+                }
+              ]
+            },
+            {
+              "base": "×1.0",
+              "final": "×1.9",
+              "key": "status_damage",
+              "label": "Status Damage",
+              "sources": [
+                {
+                  "fraction": 0.9,
+                  "mod": "Rifle Elementalist",
+                  "note": null,
+                  "value": "+90%"
+                }
+              ]
+            },
+            {
+              "base": "×1.0",
+              "final": "×1.0",
+              "key": "status_duration",
+              "label": "Status Duration",
+              "sources": []
+            },
+            {
+              "base": "—",
+              "final": "1/s",
+              "key": "tick_rate",
+              "label": "Tick Rate",
+              "sources": []
+            },
+            {
+              "base": "—",
+              "final": "10 s",
+              "key": "field_duration",
+              "label": "Field Duration",
+              "note": "10 ticks per field, the first landing with the impact; the shot after an empty reload gets 20 s = 20 ticks",
+              "sources": []
+            },
+            {
+              "base": "400",
+              "final": "1720",
+              "key": "field_total",
+              "label": "Total per Field",
+              "note": "one grenade, before crit and Condition Overload",
+              "sources": []
+            },
+            {
+              "base": "3 m",
+              "final": "3 m",
+              "key": "radius",
+              "label": "Field Radius",
+              "sources": []
+            },
+            {
+              "base": "—",
+              "final": "0% at 3 m",
+              "key": "falloff",
+              "label": "Damage Falloff",
+              "note": "the grenade sticks, so the target stands at the epicentre",
+              "sources": []
+            },
+            {
+              "base": "—",
+              "final": "stack",
+              "key": "field_stacking",
+              "label": "Overlapping Fields",
+              "note": "measured (MEASUREMENTS M13)",
+              "sources": []
+            },
+            {
+              "base": "—",
+              "final": "+0% per status type on target",
+              "key": "co",
+              "label": "Condition Overload",
+              "note": "THE EXCEPTION: CO normally reaches direct hits only, and this field is                      declared to take it. It keeps the DIRECT hit's base — the catalog puts the                      cloud on the same base and the same behaviour as the main fire",
+              "rule": "multiplying · base = 100% (100 of 151) · this part = takes CO",
+              "sources": []
+            }
+          ]
+        }
+      ],
+      "stats": [
+        {
+          "base": "×1.0",
+          "final": "×1.9",
+          "key": "multishot",
+          "label": "Multishot",
+          "sources": [
+            {
+              "fraction": 0.9,
+              "mod": "Split Chamber",
+              "note": null,
+              "value": "+90%"
+            }
+          ]
+        },
+        {
+          "base": "1.5/s",
+          "final": "1.5/s",
+          "key": "fire_rate",
+          "label": "Fire Rate",
+          "sources": []
+        },
+        {
+          "base": "5.0",
+          "final": "7.0",
+          "key": "magazine",
+          "label": "Magazine",
+          "sources": [
+            {
+              "fraction": 0.4,
+              "mod": "Magnetic Capacity",
+              "note": null,
+              "value": "+40%"
+            }
+          ]
+        },
+        {
+          "base": "1.7s",
+          "final": "1.7s",
+          "key": "reload",
+          "label": "Reload",
+          "sources": []
+        },
+        {
+          "base": "0°",
+          "final": "0°",
+          "key": "spread",
+          "label": "Cone",
+          "note": "this weapon fires exactly where the reticle is, so an accuracy                      penalty has no cone to widen and costs nothing here",
+          "sources": []
+        }
+      ]
+    }
+  ],
+  "ok": true,
+  "policy": "conditionals at max stacks",
+  "tenno": {
+    "armor": 105,
+    "energy": 0,
+    "health": 250,
+    "shield": 0,
+    "sprint": 0.9
+  },
+  "weapon": "Torid",
+  "wielder": {
+    "ability_strength": 1,
+    "armor": 105,
+    "energy": 0,
+    "health": 250,
+    "name": "Prototype",
+    "shield": 0,
+    "sprint": 0.9
+  }
+}

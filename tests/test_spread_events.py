@@ -113,3 +113,22 @@ def test_tiberon_native_three_round_clock_is_used():
     c['baseBurst']=None
     flat=replay(st,target(),attacks_per_second=20/3,window_seconds=.271,combat=c)
     assert flat['shots']==2
+
+
+@pytest.mark.parametrize('rate_bonus,edge',[(0,.4),(1,.2)])
+def test_hema_native_burst_has_three_paid_rounds_before_next_pull(rate_bonus,edge):
+    w=weapon('Hema');sc=Scenario(aiming=True,distance=10)
+    fx=[ModEffect('WEAPON_FIRE_RATE','STACKING_MULTIPLY',rate_bonus),ModEffect('WEAPON_CRIT_CHANCE','SET',0),ModEffect('WEAPON_PROC_CHANCE','SET',0)]
+    c=prepare(dict(weapon=w,fire_mode=0,effects=fx,scenario=sc),[],[])
+    st,_=c['resolve']('selected',{})
+    assert c['baseBurst']=={'count':3,'delay_seconds':.1}
+    assert st.spread_min_deg==0 and st.spread_max_deg==10
+    before=replay(st,target(),attacks_per_second=st.fire_rate,window_seconds=edge-.001,combat=c)
+    after=replay(st,target(),attacks_per_second=st.fire_rate,window_seconds=edge+.001,combat=c)
+    assert before['shots']==3 and after['shots']==4
+    assert before['timeline'][-1]['ammo']==st.magazine-3
+    assert 'hema-player-health-cost-not-modeled' in after['unsupported']
+
+def test_hema_burst_profile_does_not_apply_to_different_damage_identity():
+    w=deepcopy(weapon('Hema'));w['fireModes'][0]['damage']['types']={'DT_VIRAL':52.}
+    assert not base_profile(w)

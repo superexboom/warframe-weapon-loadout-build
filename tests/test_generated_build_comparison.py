@@ -50,3 +50,14 @@ def test_reference_stahlta_alternate_must_actually_fire_the_charged_form():
     assert not reference_identity_matches(result,q)
     result['apl'][-1]='charged'
     assert reference_identity_matches(result,q)
+
+
+def test_torid_base_evolution_mapping_does_not_claim_cycle_or_form_parity():
+    weapons={'/torid':[{'id':'torid','form':'base','default_form':True}]}
+    p=dict(weapon='/torid',fireMode=0,mods=[],arcanes=[],level=9999,steelPath=True,headshotChance=0,aiming=True,scenario={'distance':10},incarnonChoices={'tier2':'2-1','tier3':'3-2','tier4':'4-2'})
+    q,_=reference_request(p,weapons,{}, {},1000)
+    assert q['evolutions']==['torid_final_fusillade','torid_renewed_horror','torid_survivors_edge']
+    with pytest.raises(ValueError,match='unmapped external, riven or cycle'):
+        reference_request({**p,'incarnonCycle':True},weapons,{}, {},1000)
+    with pytest.raises(ValueError,match='unmapped exact weapon form'):
+        reference_request({**p,'fireMode':1},weapons,{}, {},1000)

@@ -1197,6 +1197,13 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
             for conditional in branch.get("conditionalEffects") or ():
                 if not isinstance(conditional, Mapping):
                     continue
+                terms = conditional.get('effects') or []
+                if (terms and not conditional.get('conditions') and not conditional.get('runtimeScripts')
+                        and all(e.get('upgradeType') == 'WEAPON_LAST_MULTISHOT' and e.get('operation') == 'ADD'
+                                and isinstance(e.get('valuePerRank'), (int, float)) for e in terms)):
+                    bonus = sum(float(e['valuePerRank']) for e in terms)
+                    effects.append(f'基础形态弹匣最后一次射击：额外 +{bonus:g} 多重射击；真实循环基础形态计入，灵化弹池不计入')
+                    continue
                 condition = describe_condition(conditional, INCARNON_STRINGS)
                 effects.extend(
                     f"{condition}：{text}"
@@ -1207,13 +1214,22 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
                 )
             unsupported = []
             for conditional in branch.get('conditionalEffects') or []:
+                terms = conditional.get('effects') or []
+                if (terms and not conditional.get('conditions') and not conditional.get('runtimeScripts')
+                        and all(e.get('upgradeType') == 'WEAPON_LAST_MULTISHOT' and e.get('operation') == 'ADD'
+                                and isinstance(e.get('valuePerRank'), (int, float)) for e in terms)):
+                    continue
                 condition_text = describe_condition(conditional, INCARNON_STRINGS)
                 if not conditional.get('effects'):effects.append(condition_text)
                 source = str(conditional.get('sourcePath') or '')
                 if 'Burston' in source and ('Tier1ASubMod' in source or 'Tier2B' in source or 'Tier3A' in source):
                     effects.append('此条件在真实循环回放中逐事件结算；面板不作为常驻加成')
                 else:unsupported.append(condition_text+'：未建模的事件/角色条件不计入，不能当作常驻')
-            if branch.get('runtimeScripts') and not branch.get('conditionalEffects'):
+            from wfarsenal.runtime_adapters import verified_torid_field_duration
+            field_duration = verified_torid_field_duration(branch)
+            if field_duration:
+                effects = [field_duration['conditionText']]
+            elif branch.get('runtimeScripts') and not branch.get('conditionalEffects'):
                 effects.append(describe_condition({'runtimeScripts':branch['runtimeScripts']}, INCARNON_STRINGS))
                 unsupported.append('脚本参数可读，尚未建立完整事件适配')
             if branch.get("unresolvedReferences"):
@@ -5131,6 +5147,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     "stacks": windowed.get("averagedStacks") or {},
                     "triggerSeries": windowed.get("triggerSeries") or [],
                     'spread': windowed.get('spread'),
+                    'fieldDuration': windowed.get('fieldDuration'),
                     "cryogenic": windowed.get("cryogenic"),
                     "empowered": windowed.get("empowered"),
                     "triggerPolicy": _policy,
@@ -5325,7 +5342,7 @@ def mod_gains_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
         )
         for item in ctx["validated_arcanes"]
     )
-    event_metric = optimizer._objective_metric(metric) in {'sustainedDps', 'attackDps'}
+    event_metric = optimizer._objective_metric(metric) in {'sustainedDps', 'attackDps', 'killsPerMinute'}
     if event_metric:
         metric = 'killsPerMinute'
 

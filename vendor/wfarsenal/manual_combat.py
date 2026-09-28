@@ -140,7 +140,8 @@ def prepare(
             incarnon_choices or {}
         ).get(str(number))
         branches.extend(b for b in tier.get("branches") or [] if b.get("id") == wanted)
-    from .runtime_adapters import verified_crux_condition, verified_stug_condition
+    from .runtime_adapters import verified_crux_condition, verified_stug_condition, verified_torid_field_duration
+    field_duration = next((spec for b in branches if (spec := verified_torid_field_duration(b))), None)
 
     # Final Fusillade / equivalent Incarnon terms are read from the base form's
     # last magazine pull. Keep this as an event gate; never fold it into the
@@ -378,7 +379,7 @@ def prepare(
         if wp.get('isIncarnonForm'):
             for terms in form_dynamic:
                 fx.extend(terms)
-        if last_round and last_round_multishot and form != 'incarnon':
+        if last_round and last_round_multishot and form != 'incarnon' and not wp.get('isIncarnonForm'):
             fx.append(ModEffect('WEAPON_FIRE_ITERATIONS', 'ADD', last_round_multishot,
                                 source_path='incarnon:last-round-multishot'))
         st = apply_mods(
@@ -523,6 +524,7 @@ def prepare(
         spool=base_attack.get("spool") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
         battery=base_attack.get("battery") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
         lastRoundMultishot=last_round_multishot,
+        fieldDurationOnEmptyReload=field_duration,
         distance=scenario.distance,
         spatialLimitations=selected_attack.get('limitations', []),
     )

@@ -2348,6 +2348,7 @@ function renderContributions() {
 }
 
 const DIAGNOSTIC_CODE_LABELS = {
+  'hema-player-health-cost-not-modeled': '血肢换弹消耗角色生命；当前仅计算输出，未模拟角色生命资源',
   'spread-distance-unspecified-assumed-all-hit': '未设置交战距离：散布按全部命中处理',
   'spread-bloom-not-modeled': '连续射击的散布扩张速度未知；暂用初始散布角',
   'target-hitbox-reference-assumption': '命中几何采用固定参考模型的半径 0.25 米圆形目标，并非游戏实测',
@@ -7112,6 +7113,7 @@ function drawBenchmarkReplay(bench) {
       caveats.push(distance == null ? '距离未设置，散布按全命中' : `中心距 ${Number(distance).toFixed(1)}m · 初始期望命中 ${(Number(spread.initialHitProbability) * 100).toFixed(1)}%`);
       caveats.push('使用初始散布角；命中体型为参考假设');
     }
+    if (bench.fieldDuration) caveats.push(`空仓换弹首发毒云延时已触发 ${bench.fieldDuration.boostedShots} 次`);
     if (bench.syndicateEvents?.length) caveats.push(`集团爆发 ${bench.syndicateEvents.length} 次，实际伤害 ${formatMetric(bench.syndicateWindow || 0)}`);
     if (bench.unsupported?.length) caveats.push(`另有 ${bench.unsupported.length} 项事件未建模，见提示`);
     note.textContent = `${parts.join(" · ") || "标准靶"} · ${tMax.toFixed(0)}s 窗口 · ${caveats.join(" · ")}`;

@@ -733,3 +733,29 @@ def verified_stug_condition(record, condition):
             and _close(e.get('valuePerRank'), .2)):
         return {**condition, 'effects': actual, 'formGate': 'incarnon'}
     return None
+
+
+TORID_FIELD_DURATION_PATH = '/Lotus/Weapons/ClanTech/Bio/ToridIncarnonEvolutions/ToridEvoTier2B'
+
+def verified_torid_field_duration(record):
+    """Exact exported script signature; raw/replay provenance in remaining-events evidence."""
+    if (record.get('path') != TORID_FIELD_DURATION_PATH
+            or record.get('conditionalEffects') or record.get('unresolvedReferences')):
+        return None
+    effects = record.get('effects') or []
+    if (len(effects) != 1 or effects[0].get('upgradeType') != 'NONE'
+            or effects[0].get('operation') != 'ADD' or effects[0].get('valuePerRank') != 0):
+        return None
+    scripts = record.get('runtimeScripts') or []
+    if not isinstance(scripts, list) or len(scripts) != 1:
+        return None
+    row = scripts[0]
+    script = row.get('apply') or {}
+    if (row.get('sourcePath') != TORID_FIELD_DURATION_PATH or row.get('unapply')
+            or script.get('Script') != '/Lotus/Scripts/Mods/ProjectileEmbedTimeOnCondition.lua'
+            or script.get('Function') != 'GiveUpgrade'
+            or script.get('_embedDurationMultiplier') != 2
+            or script.get('_emissionTimeDelta') != 0):
+        return None
+    return dict(id='torid-renewed-horror', multiplier=2.,
+        conditionText='弹匣打空并完成换弹后，下一次基础形态射击的毒云持续时间翻倍；只消耗一次，不延长异常状态。')

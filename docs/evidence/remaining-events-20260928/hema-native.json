@@ -1,0 +1,53 @@
+{
+  "packageBuild": "2026.09.22.16.46",
+  "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+  "cases": [
+    {
+      "name": "Hema",
+      "profile": {
+        "directTotal": 47.0,
+        "referenceId": "hema",
+        "fireMode": 0,
+        "model": "uniform-native-min-angle",
+        "geometry": "pinned-reference-ray-circle",
+        "bodyRadiusM": 0.25,
+        "sourceBuild": "2026.09.22.16.46",
+        "limitations": [
+          "spread-bloom-not-modeled",
+          "target-hitbox-reference-assumption"
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Infested/LongGuns/InfWFAccompanyingPri/InfestedBurstRifle",
+            "sha256": "4fa5ecd2f1ab0c724d8c1bffccd3899700f56f3156f687959c1f110293867085"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/InfBurstRifleAimAccuracyInfo",
+            "sha256": "267949968f33a7f47c870a7b65cd41cfc50bc7617d2dfd8449eea25c1ea6a1fd"
+          },
+          {
+            "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/InfBurstRifleHipAccuracyInfo",
+            "sha256": "3021ce3c37549b594e6bc97ed3c8ed2348d593e7a525e80e25ce0147fa062393"
+          }
+        ],
+        "referenceSource": "data/weapons/primary/hema.yaml",
+        "referenceSha256": "d95988d30049cc8e83a5c8361d77cebf1f4075079cdcf692c5073309189ceae3",
+        "spreadAim": {
+          "min_deg": 0.0,
+          "max_deg": 10.0
+        },
+        "spreadHip": {
+          "min_deg": 1.0,
+          "max_deg": 20.0
+        },
+        "burst": {
+          "count": 3,
+          "delay_seconds": 0.1
+        },
+        "unmodeled": [
+          "hema-player-health-cost-not-modeled"
+        ]
+      }
+    }
+  ]
+}

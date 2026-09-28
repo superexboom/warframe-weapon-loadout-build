@@ -11,7 +11,11 @@ from tools.compare_archgun_board_builds import BATCH_JS, registry, ELEMENTS
 # Exact local mode to reference form, verified from native projectile and YAML.
 WEAPON_FORMS = {('stahlta', 1): 'alternate'}
 
-EVOLUTIONS = {'stug': {'tier2': {'2-1': 'stug_blazing_barrel'},
+EVOLUTIONS = {'torid': {
+    'tier2': {'2-1':'torid_final_fusillade','2-2':'torid_plentiful_mayhem'},
+    'tier3': {'3-1':'torid_swift_deliverance','3-2':'torid_renewed_horror','3-3':'torid_extended_volley'},
+    'tier4': {'4-1':'torid_commodores_fortune','4-2':'torid_survivors_edge','4-3':'torid_elemental_balance'}},
+    'stug': {'tier2': {'2-1': 'stug_blazing_barrel'},
     'tier3': {'3-2': 'stug_swift_deliverance'},
     'tier4': {'4-3': 'stug_elemental_dominance'}}}
 
