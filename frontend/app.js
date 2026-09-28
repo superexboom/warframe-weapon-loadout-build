@@ -41,6 +41,7 @@ const state = {
   activeConfig: "A",
   buildConfigs: { A: null, B: null, C: null },
   buildStore: {},
+  buildMigrationHistory: [],
   arcaneSelections: [],
   stanceSelection: null,
   stanceLocked: false,
@@ -272,6 +273,7 @@ function captureBuildConfig() {
     mode: state.buildInputMode,
     configId: state.activeConfig,
     configSchema: BUILD_CONFIG_SCHEMA,
+    legacyModMigrations: state.buildMigrationHistory.length ? structuredClone(state.buildMigrationHistory) : undefined,
     mods,
     formaSlots: Object.keys(state.formaSlots).length ? { ...state.formaSlots } : undefined,
     // Special-slot Forma is exported explicitly as well as in formaSlots so
@@ -398,6 +400,19 @@ function syncArcaneSelections() {
 }
 
 function applyBuildConfig(config) {
+  const restored = migrateLegacyBuildConfig(config, state.catalog?.legacyModReplacements);
+  config = restored.config;
+  state.buildMigrationHistory = Array.isArray(config?.legacyModMigrations) ? structuredClone(config.legacyModMigrations) : [];
+  const notice = document.getElementById('build-config-migration-note');
+  if (notice) {
+    notice.textContent = legacyModMigrationMessage(state.buildMigrationHistory);
+    notice.hidden = !notice.textContent;
+  }
+  if (restored.changes.length && state.buildWeapon?.path) {
+    state.buildConfigs[state.activeConfig] = config;
+    state.buildStore[state.buildWeapon.path] = state.buildConfigs;
+    writeBuildStore();
+  }
   if (!config || typeof config !== "object") {
     state.manualSlots = Array.from({ length: 8 }, () => null);
     resetSpecialSelections();
@@ -9247,15 +9262,7 @@ function fillBuildEnemies() {
     const option = create("button", `enemy-option${ui["build-enemy-select"].value === enemy.path ? " is-selected" : ""}`);
     option.type = "button"; option.setAttribute("role", "option");
     option.title = `${defenseText}；${headText}${enemy.hasHeadProxy ? "" : "，爆头率只能为 0"}${missing.includes("数值缩放缺失") ? "；基准等级无官方记录，等级缩放不可靠" : ""}`;
-    // 缩略图槽（本地素材暂无敌人 portrait——用派系色块占位，后续接 wiki 图）。
-    const thumb = create("div", "enemy-thumb");
-    const factionColor = {
-      Grineer: "#c05555", Corpus: "#5b8dc9", "感染体": "#7db85b", Orokin: "#c9b05b",
-      "合一众": "#8d6fc9", Sentient: "#c96f9e", Tenno: "#5bc9c0", "双衍王境": "#c98a5b",
-    }[factionGroup(enemy.faction)] || "rgba(148,163,184,.3)";
-    const placeholder = create("div", "enemy-thumb-placeholder");
-    placeholder.style.background = factionColor;
-    thumb.append(placeholder);
+    const thumb = createEnemyThumbnail(enemy, factionGroup(enemy.faction));
     // 名称清理：只显示 zh/en 展示名，不显示 nameInternal（内部字段残余）。
     const displayName = enemy.nameZh || enemy.nameEn || enemy.displayName || "";
     const info = create("div", "enemy-option-info");

@@ -1773,3 +1773,10 @@ body:not(.mod-slot) :is(.eyebrow, .section-index, .field small, .range-min, .ran
 body:not(.mod-slot) :is(.tab-context, .stat-unit, .form-message, .slot-polarity-hint, .warframe-invigoration-description) { font-size: 12px; }
 body:not(.mod-slot) :is(.topbar-meta span, .field > span, .result-state > p, .ability-stat-label, button small, label small) { font-size: 13px; }
 body:not(.mod-slot) :is(.button, .tool-tab, input, select, textarea) { font-size: 14px; }
+
+/* Enemy image fallback remains legible if an asset is absent or fails. */
+.enemy-thumb .enemy-thumb-placeholder { display: grid; place-items: center; color: var(--muted); font-size: 15px; font-weight: 700; background: rgba(148,163,184,.12); opacity: 1; }
+.enemy-thumb > * { grid-area: 1 / 1; }
+.enemy-thumb [hidden] { display: none; }
+
+.build-config-migration-note { margin: 12px 18px; padding: 10px 12px; border-left: 2px solid var(--ice); color: var(--text); background: rgba(115,207,223,.08); font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }

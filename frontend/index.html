@@ -9,6 +9,8 @@
   <link rel="icon" href="/assets/riven/riven-icon.ico">
   <title>Warframe &amp; Weapon Loadout Build</title>
 <link rel="stylesheet" href="/app.css?v=20260902a">
+<script src="/enemy-images.js" defer></script>
+<script src="/build-config-migrations.js" defer></script>
 <script src="/app.js?v=20260902a" defer></script>
 </head>
 <body>
@@ -490,6 +492,7 @@
               <div class="error-symbol" aria-hidden="true">!</div><h3>本次配装未完成</h3><p id="weapon-build-error-message"></p>
             </div>
 
+            <p id="build-config-migration-note" class="build-config-migration-note" role="status" hidden></p>
             <div class="weapon-build-content" id="weapon-build-content" hidden>
               <section class="build-config-strip" aria-label="A / B / C 配置槽">
                 <div class="config-strip-row">

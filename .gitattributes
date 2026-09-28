@@ -6,3 +6,4 @@ tools/diff_ability_runtime_fields.py -text
 tools/promote_ability_runtime_fields.py -text
 # Regression evidence manifests hash exact bytes.
 docs/evidence/spread-talons-round-20260928/** -text
+docs/evidence/legacy-config-icons-20260928/** -text

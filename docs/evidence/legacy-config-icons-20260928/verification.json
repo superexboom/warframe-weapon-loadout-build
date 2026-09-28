@@ -1,0 +1,159 @@
+{
+  "originalCommit": "ae3ec262d3c5d926a018dc669ebb3616cd6ef325",
+  "scope": "Legacy configuration restore and existing parallel enemy visual work; engine equations unchanged",
+  "catalogMigrationRules": 52,
+  "browserRestore": {
+    "mods": [
+      {
+        "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "rank": 10,
+        "slot": 0
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "rank": 5,
+        "slot": 1
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+        "rank": 5,
+        "slot": 2
+      }
+    ],
+    "history": [
+      {
+        "field": "mods",
+        "slot": 2,
+        "from": {
+          "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponToxinDamageModExpert",
+          "rank": 10,
+          "slot": 2
+        },
+        "to": {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+          "rank": 5,
+          "slot": 2
+        },
+        "label": "污染弹匣"
+      }
+    ],
+    "notice": "旧配置中的未发布 MOD 变体已替换为正式版本（第 3 槽：污染弹匣，等级 10 → 5）。超出正式上限的等级已调整，数值将重新计算；原始路径与等级保留在导出 JSON 的 legacyModMigrations 中。",
+    "liveError": "",
+    "visibleError": false,
+    "state": "content",
+    "images": 297
+  },
+  "browserSaveRoundTrip": {
+    "historyCount": 1,
+    "mods": [
+      {
+        "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "slot": 0,
+        "rank": 10
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "slot": 1,
+        "rank": 5
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+        "slot": 2,
+        "rank": 5
+      }
+    ],
+    "from": {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponToxinDamageModExpert",
+      "rank": 10,
+      "slot": 2
+    },
+    "notice": "旧配置中的未发布 MOD 变体已替换为正式版本（第 3 槽：污染弹匣，等级 10 → 5）。超出正式上限的等级已调整，数值将重新计算；原始路径与等级保留在导出 JSON 的 legacyModMigrations 中。"
+  },
+  "browserReload": {
+    "mods": [
+      {
+        "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "slot": 0,
+        "rank": 10
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "slot": 1,
+        "rank": 5
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+        "slot": 2,
+        "rank": 5
+      }
+    ],
+    "history": [
+      {
+        "field": "mods",
+        "slot": 2,
+        "from": {
+          "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponToxinDamageModExpert",
+          "rank": 10,
+          "slot": 2
+        },
+        "to": {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+          "rank": 5,
+          "slot": 2
+        },
+        "label": "污染弹匣"
+      }
+    ],
+    "notice": "旧配置中的未发布 MOD 变体已替换为正式版本（第 3 槽：污染弹匣，等级 10 → 5）。超出正式上限的等级已调整，数值将重新计算；原始路径与等级保留在导出 JSON 的 legacyModMigrations 中。",
+    "liveError": "",
+    "visibleError": false,
+    "state": "content",
+    "images": 297
+  },
+  "browserEnemyImages": {
+    "count": 26,
+    "loaded": 26,
+    "examples": [
+      {
+        "name": "自由派 Grineer 枪兵",
+        "width": 256,
+        "src": "/assets/enemies/art/Lotus/Interface/Icons/Npcs/Tau/AnarchTauGrineerLancer.png",
+        "fallbackHidden": true
+      },
+      {
+        "name": "回旋精英枪兵",
+        "width": 256,
+        "src": "/assets/enemies/art/Lotus/Interface/Icons/Npcs/Railjack/Grineer/Saturn/CrewEliteRifleAvatar.png",
+        "fallbackHidden": true
+      },
+      {
+        "name": "夜巡者强攻枪兵",
+        "width": 256,
+        "src": "/assets/enemies/art/Lotus/Interface/Icons/Npcs/Grineer/Nightwatch/NightwatchBruntLancer.png",
+        "fallbackHidden": true
+      },
+      {
+        "name": "巨牙盾枪兵",
+        "width": 256,
+        "src": "/assets/enemies/art/Lotus/Interface/Icons/Npcs/Grineer/Eidolon/EidolonShieldLancer.png",
+        "fallbackHidden": true
+      }
+    ],
+    "fallbacks": 1
+  },
+  "assets": {
+    "uniqueFiles": 874,
+    "sourceEnemyRecords": 1861,
+    "sourceStates": {
+      "exact": 995,
+      "inherited": 758,
+      "missing": 107,
+      "generic-prototype": 1
+    },
+    "selectableEnemies": 1351,
+    "selectableWithImages": 1253,
+    "allHashAndDecodeChecksPassed": true,
+    "indexSha256": "64d1e0246433142dadf8466a78fde6b7ebdd90d8fbfbbb3dd37298611fb7349a"
+  },
+  "tests": "115 passed; JavaScript syntax checks passed; live browser startup/save/reload and enemy thumbnails verified"
+}

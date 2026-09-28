@@ -20,6 +20,7 @@ from urllib.parse import parse_qs, unquote, urlsplit
 import webbrowser
 
 from data_sources import active_build, dataset_root, load_source_lock
+from enemy_assets import EnemyVisualCatalog
 
 ROOT = Path(__file__).resolve().parent
 VENDOR_DIR = ROOT / "vendor"
@@ -34,6 +35,7 @@ EXALTED_WEAPON_DATA_PATH = DATASET_ROOT / "data" / "exalted_weapons.json"
 WEAPON_MECHANICS_OVERRIDE_PATH = ROOT / "data" / "weapon_mechanics_overrides.json"
 WARFRAME_DATA_PATH = DATASET_ROOT / "data" / "warframe_build_data.json"
 FRONTEND_DIR = ROOT / "frontend"
+ENEMY_VISUALS = EnemyVisualCatalog(DATASET_ROOT)
 MAX_REQUEST_BYTES = 128 * 1024
 RIVEN_SLOTS = {"primary", "secondary", "melee"}
 BUILD_METRICS = {
@@ -1952,6 +1954,7 @@ def _complete_enemy_rows() -> list[dict[str, Any]]:
             "complete": not unsupported,
             "unsupported": sorted(unsupported),
         }
+        row.update(ENEMY_VISUALS.get(path))
         if row_note_overguard:
             # 选择器展示用：天生超宏（已按等级缩放）或数值缺失。
             row["overguardNote"] = row_note_overguard
@@ -3586,6 +3589,19 @@ MANUAL_MODS_BY_PATH.update({
     if row["path"] not in UTILITY_MOD_PATHS
 })
 UTILITY_MODS_BY_PATH = {row["path"]: row for row in CATALOG_UTILITY_MODS}
+# Restoration metadata is distinct from aliases: direct API inputs still reject
+# unreleased cards. The UI records and discloses rank changes in saved configs.
+CATALOG['legacyModReplacements'] = {
+    path: {
+        'path': row['path'], 'maxRank': row['maxRank'],
+        'nameZh': row.get('nameZh'), 'nameEn': row.get('nameEn'),
+        'reason': excluded['reason'],
+    }
+    for path, excluded in _CATALOG_EXCLUDED_MODS.items()
+    if (row := MANUAL_MODS_BY_PATH.get(excluded['basePath'])
+        or UTILITY_MODS_BY_PATH.get(excluded['basePath']))
+    and isinstance(row.get('maxRank'), int)
+}
 MANUAL_ARCANES_BY_PATH = {row["path"]: row for row in MANUAL_ARCANES}
 # 派系卡目录标记；按请求目标计入，选择器与自动配装保持可选。
 FACTION_DAMAGE_MOD_PATHS = frozenset(
@@ -5619,7 +5635,7 @@ class PortableHandler(BaseHTTPRequestHandler):
         static_root = FRONTEND_DIR
         if request_path == "/":
             relative = Path("index.html")
-        elif request_path in {"/app.css", "/app.js"}:
+        elif request_path in {"/app.css", "/app.js", "/enemy-images.js", "/build-config-migrations.js"}:
             relative = Path(request_path.removeprefix("/"))
         elif request_path.startswith("/assets/"):
             static_root = DATASET_ROOT / "frontend"
