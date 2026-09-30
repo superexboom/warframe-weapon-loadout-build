@@ -280,7 +280,7 @@ function captureBuildConfig() {
     // Special-slot Forma is exported explicitly as well as in formaSlots so
     // consumers do not have to infer stance/Exilus from ordinary-slot indexes.
     specialSlotPolarities: Object.keys(specialSlotPolaritiesPayload()).length ? specialSlotPolaritiesPayload() : undefined,
-    riven: rivenMod ? { slot: rivenSlot, stats: rivenMod.stats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) })) } : null,
+    riven: rivenMod ? { slot: rivenSlot, polarity: rivenFixedPolarity(rivenMod, rivenSlot), stats: rivenMod.stats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) })) } : null,
     enemy: get("build-enemy-select", "") || null,
     level: Number(get("build-enemy-level", 160) || 160),
     steelPath: checked("build-steel-path"),
@@ -307,6 +307,7 @@ function captureBuildConfig() {
     stancePath: state.stanceSelection?.path || null,
     exilus: compactRankedSelection(state.exilusSelection),
     weaponArcane: compactRankedSelection(state.weaponArcane),
+    weaponArcane2: compactRankedSelection(state.weaponArcane2),
     frameArcanes: state.frameArcanes.filter(Boolean).map(compactRankedSelection),
     externalBuffs: state.externalBuffs.map((buff) => ({ ...buff })),
     incarnonChoices: { ...state.incarnonChoices },
@@ -369,7 +370,7 @@ function normalizeArcaneSelections(items) {
   return (Array.isArray(items) ? items : []).flatMap((item) => {
     if (!item?.path) return [];
     const isWarframe = (records.get(item.path)?.slotKind || item.slotKind) === "warframe";
-    if (isWarframe ? warframeCount >= 2 : weaponCount >= 1) return [];
+    if (isWarframe ? warframeCount >= 2 : weaponCount >= weaponArcaneSlotCount()) return [];
     if (isWarframe) warframeCount += 1;
     else weaponCount += 1;
     return [{ ...item }];
@@ -443,6 +444,8 @@ function applyBuildConfig(config) {
   setControlValue("build-innate-element-select", config.innateElement || defaultInnateElement(state.buildWeapon));
   setControlValue("build-innate-element-value", clamp(Math.round(Number(config.innateElementValue ?? 0.60) * 100), 25, 60));
   setControlValue("build-slot-count", clamp(Number(config.slotCount ?? 8), 4, 8));
+  if (ui['build-slot-output']) ui['build-slot-output'].textContent = ui['build-slot-count'].value;
+  setSliderVisual(ui['build-slot-count']);
   setControlValue("build-enemy-select", config.enemy || ui["build-enemy-select"]?.value || "");
   fillBuildEnemies();
   setControlValue("build-enemy-level", config.level ?? 160);
@@ -487,6 +490,7 @@ function applyBuildConfig(config) {
       nameEn: "Custom Riven",
       maxRank: 8,
       rank: 8,
+      rivenPolarity: config.riven.polarity || null,
       stats: config.riven.stats.map((s) => ({ ...s })),
     };
   }
@@ -1596,7 +1600,7 @@ function activeStats() {
 }
 
 function statDefinitions() {
-  return state.weapon ? (state.catalog.statsByType[state.weapon.weaponType] || []) : [];
+  return state.weapon ? (state.catalog.statsByType[state.weapon.rivenType || state.weapon.weaponType] || []) : [];
 }
 
 function statShape() {
@@ -2699,7 +2703,7 @@ function modStackedSummary(mod) {
 }
 
 function rivenStatDefinitions() {
-  const type = state.buildWeapon?.weaponType;
+  const type = state.buildWeapon?.rivenType || state.buildWeapon?.weaponType;
   return state.catalog?.statsByType?.[type] || [];
 }
 
@@ -2868,10 +2872,12 @@ function renderRivenBuilder(target) {
 async function requestRivenRecommendation(budgetSeconds, hostElement) {
   if (state.rivenSolving) return toast("最优求解进行中，请稍候");
   let payload;
+  let requestedConfig;
   try {
     // 复用配装表单的全部语境（武器/敌人/约束/赋能/灵化/架势），与
     // 「填充最优」同一套基准——最优紫卡是在当前限制下的最优配装之上定义的。
     payload = buildPayloadFromForm();
+    requestedConfig = structuredClone(captureBuildConfig());
   } catch (error) {
     return toast(error.message || "无法读取当前配装语境");
   }
@@ -2895,7 +2901,8 @@ async function requestRivenRecommendation(budgetSeconds, hostElement) {
       throw new Error(error?.error?.message || `求解失败（${response.status}）`);
     }
     const result = await response.json();
-    state.rivenRecommendation = { ...result, budgetSeconds };
+    if (state.buildWeapon?.path !== payload.weapon) return;
+    state.rivenRecommendation = { ...result, budgetSeconds, requestedConfig };
     const fresh = renderRivenRecommendation(state.rivenRecommendation);
     list.replaceWith(fresh);
   } catch (error) {
@@ -2914,16 +2921,17 @@ function renderRivenRecommendation(recommendation) {
     return wrap;
   }
   const head = create("div", "riven-solve-head");
+  const metricLabel = { killsPerMinute: "KPM", shotDamage: "单次伤害", burstDps: "爆发 DPS", sustainedDps: "持续 DPS", attackDps: "攻击 DPS" }[recommendation.metric] || recommendation.metric || "KPM";
   head.append(
     create("strong", "", "最优词条 TOP 10"),
-    create("small", "", `基准 KPM ${formatMetric(recommendation.baselineScore)} · 用时 ${recommendation.elapsed.toFixed(1)}s · ${recommendation.evaluations.toLocaleString()} 次评估 · 点击回填`),
+    create("small", "", `基准 ${metricLabel} ${formatMetric(recommendation.baselineScore)} · 用时 ${recommendation.elapsed.toFixed(1)}s · ${recommendation.evaluations.toLocaleString()} 次评估`),
   );
   wrap.append(head);
   const rows = create("div", "riven-solve-list");
   combos.forEach((combo, index) => {
     const row = create("button", `riven-solve-row${index === 0 ? " is-top" : ""}`);
     row.type = "button";
-    row.title = "点击将这组词条回填到上面的构建器（数值取理论满值区间内可调）";
+    row.title = "应用此紫卡与对应配装";
     const rank = create("span", "riven-solve-rank", String(index + 1));
     const stats = create("div", "riven-solve-stats");
     for (const stat of combo.stats) {
@@ -2943,26 +2951,30 @@ function renderRivenRecommendation(recommendation) {
 }
 
 function applyRecommendedRiven(combo) {
-  const defs = rivenStatDefinitions();
+  const recommendation = state.rivenRecommendation;
+  if (recommendation?.weapon?.path !== state.buildWeapon?.path) return toast("该结果属于另一把武器，请重新求解");
+  const build = combo.build;
+  if (!build?.mods || !Number.isInteger(build.riven?.slot) || !Array.isArray(build.riven.stats)) {
+    return toast("求解结果缺少完整配装，请重新求解");
+  }
   const negatives = combo.stats.filter((s) => s.negative).length;
   const positives = combo.stats.length - negatives;
   if (positives < 2 || positives > 3 || negatives > 1) {
     return toast("该组合词条结构无法回填");
   }
-  state.rivenBuilderStats = combo.stats.map((stat) => {
-    const def = defs.find((d) => d.code === stat.code);
-    const entry = { code: stat.code, value: null, negative: Boolean(stat.negative) };
-    if (def) {
-      const range = rivenNominalRange(def, entry.negative, positives, negatives);
-      if (range) {
-        // 回填落在合法区间内的该词条理论值（超出区间时夹到边界）。
-        entry.value = Math.min(Math.max(stat.value, range.low), range.high);
-      }
-    }
-    return entry;
-  });
-  renderManualMods();
-  toast(`已回填第 ${state.rivenRecommendation?.combos?.indexOf(combo) + 1 || "?"} 名词条组合`);
+  const config = {
+    ...(recommendation.requestedConfig || captureBuildConfig()),
+    mode: "manual", fireMode: recommendation.fireMode,
+    incarnonChoices: recommendation.incarnonChoices,
+    mods: build.mods.map((mod) => ({ path: mod.path, rank: mod.rank, slot: mod.slot })),
+    riven: structuredClone(build.riven), exilus: build.exilus,
+  };
+  applyBuildConfig(config);
+  syncAutoFormaFromSlots();
+  persistActiveBuildConfig();
+  closeModPicker();
+  scheduleLiveBuild();
+  toast(`已应用第 ${recommendation.combos?.indexOf(combo) + 1 || "?"} 名紫卡与配装`);
 }
 
 function createCustomRivenSlotCard(mod, index, slotPolarity = null) {
@@ -3761,6 +3773,7 @@ function resetSpecialSelections() {
   state.stanceSelection = stanceSelectionWithSlot(defaultSelection);
   state.exilusSelection = null;
   state.weaponArcane = null;
+  state.weaponArcane2 = null;
   state.frameArcanes = [null, null];
   syncArcaneSelections();
 }
@@ -3776,11 +3789,13 @@ function restoreSpecialSelections(config) {
   const hasNewArcanes = Object.hasOwn(config || {}, "weaponArcane") || Array.isArray(config?.frameArcanes);
   if (hasNewArcanes) {
     state.weaponArcane = hydrateRankedSelection(config.weaponArcane, arcaneRecords(), "weapon");
+    if (weaponArcaneSlotCount() > 1) state.weaponArcane2 = hydrateRankedSelection(config.weaponArcane2, arcaneRecords(), "weapon");
     const frames = (config.frameArcanes || []).slice(0, 2).map((item) => hydrateRankedSelection(item, arcaneRecords(), "warframe"));
     state.frameArcanes = [frames[0] || null, frames[1] || null];
   } else {
     const legacy = normalizeArcaneSelections(config?.arcanes || config?.arcaneSelections);
     state.weaponArcane = legacy.find((item) => item.slotKind !== "warframe") || null;
+    if (weaponArcaneSlotCount() > 1) state.weaponArcane2 = legacy.filter((item) => item.slotKind !== "warframe")[1] || null;
     const frames = legacy.filter((item) => item.slotKind === "warframe").slice(0, 2);
     state.frameArcanes = [frames[0] || null, frames[1] || null];
   }
@@ -6495,8 +6510,8 @@ function fillManualFromResult(result) {
   renderManualSlots();
 }
 
-function modPolarity(mod) {
-  return modPolarityOf(mod);
+function modPolarity(mod, slotIndex = 0) {
+  return modPolarityOf(mod, slotIndex);
 }
 
 // Keep the solved elemental order and polarize each occupied slot in place.
@@ -6507,7 +6522,7 @@ function syncAutoFormaFromSlots() {
   state.formaSlots = { ...specialForma };
   state.manualSlots.forEach((mod, index) => {
     if (!mod) return;
-    const polarity = modPolarity(mod);
+    const polarity = modPolarity(mod, index);
     if (polarity && polarity !== "AP_UNIVERSAL" && !polarityMatches(polarity, base[index])) state.formaSlots[index] = polarity;
   });
   state.formaCount = Object.keys(state.formaSlots).length;
@@ -6536,12 +6551,16 @@ function fillSpecialFromResult(result) {
   if (Object.hasOwn(source, "weaponArcane") || Object.hasOwn(result || {}, "weaponArcane")) {
     state.weaponArcane = hydrateRankedSelection(read("weaponArcane"), arcaneRecords(), "weapon");
   }
+  if (weaponArcaneSlotCount() > 1 && (Object.hasOwn(source, "weaponArcane2") || Object.hasOwn(result || {}, "weaponArcane2"))) {
+    state.weaponArcane2 = hydrateRankedSelection(read("weaponArcane2"), arcaneRecords(), "weapon");
+  }
   if (Array.isArray(read("frameArcanes"))) {
     const frames = read("frameArcanes").slice(0, 2).map((item) => hydrateRankedSelection(item, arcaneRecords(), "warframe"));
     state.frameArcanes = [frames[0] || null, frames[1] || null];
   } else if (Array.isArray(read("arcanes"))) {
     const selected = normalizeArcaneSelections(read("arcanes"));
     state.weaponArcane = hydrateRankedSelection(selected.find((item) => item.slotKind !== "warframe"), arcaneRecords(), "weapon");
+    if (weaponArcaneSlotCount() > 1) state.weaponArcane2 = hydrateRankedSelection(selected.filter((item) => item.slotKind !== "warframe")[1], arcaneRecords(), "weapon");
     const frames = selected.filter((item) => item.slotKind === "warframe").slice(0, 2).map((item) => hydrateRankedSelection(item, arcaneRecords(), "warframe"));
     state.frameArcanes = [frames[0] || null, frames[1] || null];
   }
@@ -8634,7 +8653,12 @@ function renderIncarnonChoices() {
     target.replaceChildren();
     return;
   }
+  const selectable = (tier) => tier.selectable ?? Number(tier.tier) !== 1;
+  const allowed = new Set(tiers.filter(selectable).map((tier) => `tier${tier.tier}`));
+  state.incarnonChoices = Object.fromEntries(Object.entries(state.incarnonChoices).filter(([key]) => allowed.has(key)));
   for (const tier of tiers) {
+    // Tier I is a fixed unlock/passive description, never a submitted choice.
+    if (!selectable(tier)) continue;
     const key = `tier${tier.tier}`;
     if (!tier.options.some((option) => option.id === state.incarnonChoices[key])) {
       state.incarnonChoices[key] = tier.options.some((option) => option.id === tier.recommended)
@@ -8647,6 +8671,17 @@ function renderIncarnonChoices() {
     const field = create("fieldset", "incarnon-tier");
     const legend = create("legend", "", tier.label);
     const options = create("div", "incarnon-options");
+    if (!selectable(tier)) {
+      field.classList.add("is-fixed");
+      for (const option of tier.options) {
+        const copy = create("div", "incarnon-fixed-option");
+        copy.append(create("strong", "", `${option.label} · 固定`));
+        appendIncarnonDetails(copy, option);
+        options.append(copy);
+      }
+      field.append(legend, options);
+      return field;
+    }
     for (const option of tier.options) {
       const label = create("label", `incarnon-option${option.complete ? "" : " is-partial"}`);
       const input = document.createElement("input");
@@ -8659,15 +8694,29 @@ function renderIncarnonChoices() {
       });
       const copy = create("span");
       const title = create("strong", "", `${option.label}${option.id === tier.recommended ? " · 推荐" : ""}`);
-      const detail = create("small", "", option.description);
-      copy.append(title, detail);
-      if (option.unsupported?.length) copy.append(create("em", "", option.unsupported.join("；")));
+      copy.append(title);
+      appendIncarnonDetails(copy, option);
       label.append(input, copy);
       options.append(label);
     }
     field.append(legend, options);
     return field;
   }));
+}
+
+function appendIncarnonDetails(copy, option) {
+  if (!option.details?.length) {
+    copy.append(create("small", "", option.description));
+    if (option.unsupported?.length) copy.append(create("em", "", option.unsupported.join("；")));
+    return;
+  }
+  for (const detail of option.details) {
+    const line = create("small", "incarnon-detail", detail.text);
+    if (detail.calculation) {
+      line.append(create("em", detail.modeled ? "is-modeled" : "is-unmodeled", detail.calculation));
+    }
+    copy.append(line);
+  }
 }
 
 function selectBuildWeapon(weapon, writeInput = true) {

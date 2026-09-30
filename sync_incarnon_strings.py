@@ -36,6 +36,10 @@ def main() -> None:
             for branch in tier.get("branches", [])
             for value in (
                 branch.get("nameTag"),
+                branch.get("descTag"),
+                *(effect.get("locTag") for effect in branch.get("effects", [])),
+                *(effect.get("locTag") for conditional in branch.get("conditionalEffects", [])
+                  for effect in conditional.get("effects", [])),
                 *(effect.get("conditionTag") for effect in branch.get("conditionalEffects", [])),
             )
             if value
@@ -69,6 +73,7 @@ def main() -> None:
         )
         + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     print(f"wrote {len(tags) - len(missing)} strings to {output} (missing: {len(missing)})")
 

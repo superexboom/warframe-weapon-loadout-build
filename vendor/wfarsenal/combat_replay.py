@@ -583,6 +583,26 @@ def replay(
         gain=not (combat['enervate'].get('ignoreSelected') and form != 'base')
         enervate.advance(t,probabilities,gain=gain)
 
+    def noncrit_no_proc_hit(st, aim, t):
+        # The native NoProcs/CriticalHit=T_NO gate applies per damage instance,
+        # independently to direct and radial parts. It never arms from DoT ticks.
+        if not any(q.get('kind') == 'on-noncrit-no-proc' for q in sources):
+            return
+        puncture = 0.0 if st.radial_only else live_crit()[0]
+        weak = st.weakpoint_crit_chance_bonus + st.base_crit_chance * st.weakpoint_crit_chance_relative
+        marginal = enervate.damage_marginal() if enervate else {0: 1.0}
+        noncrit = 0.0
+        for stacks, weight in marginal.items():
+            cc = max(0.0, st.crit_chance + stacks * .1 + puncture)
+            noncrit += weight * ((1-aim) * max(0.0, 1-cc) + aim * max(0.0, 1-cc-weak))
+        no_proc = max(0.0, 1-st.status_chance)
+        for chance in st.independent_proc_chances.values():
+            no_proc *= max(0.0, 1-chance)
+        for count_per_projectile in (*st.native_forced_procs.values(), *(forced_procs or {}).values()):
+            no_proc *= max(0.0, 1-count_per_projectile)
+        instances = 1.0 if st.continuous else st.multishot
+        signal('on-noncrit-no-proc', t, instances * noncrit * no_proc)
+
     def empowered_hit(st, dtype, n, t, weapon_status):
         nonlocal empowered_count
         from .status_arcanes import STATUS_POOL
@@ -774,6 +794,7 @@ def replay(
             radial_packet = packet(part, 0.0)
             if not take(radial_packet[0], t, 'direct'):
                 add_procs(part, 0.0, t, radial_packet)
+            noncrit_no_proc_hit(part, 0.0, t)
         elif kind == 'delayed-attack':
             part, aim = payload
             delayed_attack_count += 1
@@ -784,6 +805,7 @@ def replay(
             signal('on-hit', t, part.multishot)
             signal('on-headshot', t, aim*part.multishot)
             signal('on-crit', t, min(part.crit_chance,1.)*part.multishot)
+            noncrit_no_proc_hit(part, aim, t)
         elif kind == 'manual-detonation':
             detonation_count += 1
             before = totals['direct']
@@ -983,6 +1005,7 @@ def replay(
                 "direct",
                 not active.radial_only,
                 )
+                noncrit_no_proc_hit(active, aim, t)
             if not died and not manual_detonation and not primary_delay:
                 add_procs(active, aim, t, direct_packet)
                 field = getattr(active, '_lingering', None)
@@ -1009,6 +1032,7 @@ def replay(
                     radial_packet = packet(part, 0.0)
                     if not take(radial_packet[0], t, "direct"):
                         add_procs(part, 0.0, t, radial_packet)
+                    noncrit_no_proc_hit(part, 0.0, t)
             if (form == "base" or combat.get("baseMode")) and burst_round == 2:
                 signal("on-burst-hit", t)
             if not manual_detonation and not primary_delay:

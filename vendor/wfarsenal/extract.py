@@ -2182,6 +2182,15 @@ def _build_effect(upgrade: dict[str, Any]) -> dict[str, Any]:
         "supportedBy": supported_by,
         "supported": bool(supported_by),
     }
+    if upgrade.get("LocTag"):
+        effect["locTag"] = upgrade["LocTag"]
+        for source, target in (
+            ("DisplayAsPercent", "displayAsPercent"),
+            ("DisplayAsMultiplier", "displayAsMultiplier"),
+            ("ReverseValueSymbol", "reverseValueSymbol"),
+        ):
+            if source in upgrade:
+                effect[target] = upgrade[source]
 
     localization_script = upgrade.get("LocKeyWordScript")
     if isinstance(localization_script, dict) and any(localization_script.values()):

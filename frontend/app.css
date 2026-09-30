@@ -842,6 +842,11 @@ i.empty-slot-polarity { font-size: 13px; font-style: normal; line-height: 16px; 
 .incarnon-option strong { color: var(--text); font-size: 11px; }
 .incarnon-option small { color: var(--muted); font-size: 9px; line-height: 1.45; }
 .incarnon-option em { color: #d6a56d; font-size: 8px; font-style: normal; line-height: 1.4; }
+.incarnon-fixed-option { display: grid; gap: 5px; min-width: 0; padding: 8px; }
+.incarnon-fixed-option strong { font-size: 11px; }
+.incarnon-fixed-option small, .incarnon-option .incarnon-detail { font-size: 11px; line-height: 1.55; overflow-wrap: anywhere; }
+.incarnon-detail em { display: block; font-size: 10px; font-style: normal; }
+.incarnon-detail em.is-modeled { color: var(--muted); }
 
 /* Live HUD */
 .live-hud { position: sticky; top: calc(var(--topbar) + 8px); z-index: 12; margin: 14px 16px 0; border: 1px solid rgba(115,207,223,.24); background: linear-gradient(120deg, rgba(13,20,26,.96), rgba(10,14,20,.96) 60%, rgba(16,13,24,.96)); box-shadow: 0 14px 34px rgba(0,0,0,.4); backdrop-filter: blur(14px); }

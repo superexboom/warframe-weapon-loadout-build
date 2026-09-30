@@ -1,0 +1,112 @@
+{
+  "fingerprint": "6c26cf3664e91c9c",
+  "cacheVersion": 12,
+  "finalApplication": {
+    "status": 200,
+    "score": 3.736574394240632,
+    "kpm": 3.736574394240632,
+    "rivenMatches": true,
+    "rivenSlot": 3,
+    "polarity": "AP_ATTACK",
+    "slotPolarity": "AP_ATTACK",
+    "polarityMatches": true,
+    "capacity": 30,
+    "choiceKeys": [
+      "tier2",
+      "tier3",
+      "tier4",
+      "tier5"
+    ],
+    "overflow": false,
+    "scoreMatches": true
+  },
+  "persistentReload": {
+    "status": 200,
+    "weapon": "Laetum",
+    "kpm": 3.736574394240632,
+    "polarity": "AP_ATTACK",
+    "slotPolarity": "AP_ATTACK",
+    "slotCount": 4,
+    "slotLabel": "4",
+    "tierOneSent": false,
+    "capacity": 30,
+    "width": 1859,
+    "bodyWidth": 1849,
+    "riven": {
+      "stats": [
+        {
+          "code": "1",
+          "value": 46.403139853187184,
+          "negative": false
+        },
+        {
+          "code": "2",
+          "value": 46.403139853187184,
+          "negative": false
+        },
+        {
+          "code": "VI",
+          "value": 46.403139853187184,
+          "negative": false
+        },
+        {
+          "code": "M",
+          "value": 37.122511882549745,
+          "negative": true
+        }
+      ],
+      "polarity": "AP_ATTACK",
+      "slot": 3
+    },
+    "mods": [
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "slot": 0,
+        "rank": 10
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+        "slot": 1,
+        "rank": 10
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+        "slot": 2,
+        "rank": 5
+      }
+    ]
+  },
+  "archgunConfigRoundTrip": {
+    "secondArcaneMatches": true,
+    "secondArcaneForceRestored": true,
+    "requestArcaneCount": 2,
+    "switchedWeaponClearsSecondArcane": true
+  },
+  "desktop": {
+    "width": 1440,
+    "height": 1000,
+    "overflow": false,
+    "fixedRadios": 0,
+    "tiers": [
+      "进化 1",
+      "进化 2",
+      "进化 3",
+      "进化 4",
+      "进化 5"
+    ],
+    "slotLabel": "4"
+  },
+  "mobile": {
+    "width": 390,
+    "height": 844,
+    "horizontalOverflow": false,
+    "fixedTierRadioCount": 0,
+    "tiers": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  }
+}

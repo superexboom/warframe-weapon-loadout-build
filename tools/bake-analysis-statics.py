@@ -62,22 +62,36 @@ def _shard_worker(args: tuple[str, str, str, int]) -> dict:
     persistence_guard = app._disable_analysis_statics_persistence()
     worker_inputs = app._analysis_inputs_fingerprint()
     app.ANALYSIS_STATICS_CACHE.clear()
-    bases = app.RIVEN_BASE_VALUES.get(_weapon_type_of(weapon_path), {})
-    stats = []
-    # 通用三正假想卡（数值夹进合法区间由 app 层校验放宽——直接用 nominal）。
-    # 假想卡只是触发器：statics（基准/推荐/上限）不随单卡数值变化。
-    codes = [code for code in ("D", "S", "0") if code in bases][:3]
-    if len(codes) < 3:
-        # 近战等无 S/0 的类型退化为任意三码。
-        codes = list(bases)[:3]
+    # Catalog rows use ``companion`` for sentinel/pet weapons, while the
+    # optimizer deliberately maps that family to the ordinary riven pool by
+    # slot/ancestry.  Feeding the catalog label directly produced empty
+    # nominal stats and a misleading "2 to 4 stat objects" failure.
     raw_weapon = app.optimizer.resolve_record(
         app.EXPORTS["weapons"], weapon_path, kind="weapon"
     )
+    weapon_type = app.optimizer._weapon_type(None, raw_weapon)
+    bases = app.RIVEN_BASE_VALUES.get(weapon_type, {})
+    # The trigger card has exactly three positives. Use that structure when
+    # generating its legal wire values, including the correct family scale.
+    candidates, _ = app.optimizer._candidate_lines(
+        weapon_type,
+        float(raw_weapon.get("omegaAttenuation") or 1.0),
+        (),
+        negative=False,
+        bases=bases,
+        structure_scale=app.optimizer.theoretical_structure_scale(3, False),
+        available_fusion_codes=frozenset(),
+    )
+    stats = []
+    selected = []
+    for preferred in ("D", "S", "0"):
+        line = next((row for row in candidates if row.code == preferred), None)
+        if line is not None:
+            selected.append(line)
+    selected.extend(row for row in candidates if row.code not in {line.code for line in selected})
+    for line in selected[:3]:
+        stats.append({"code": line.code, "value": line.value, "negative": False})
     disposition = float(raw_weapon.get("omegaAttenuation") or 1.0)
-    for code in codes:
-        base = bases.get(code, 100.0)
-        nominal = abs(base * disposition * 0.757525)
-        stats.append({"code": code, "value": nominal, "negative": False})
     request = {
         "weapon": weapon_path,
         "disposition": disposition,

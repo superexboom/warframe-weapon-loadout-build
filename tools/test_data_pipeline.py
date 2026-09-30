@@ -47,7 +47,7 @@ class PipelineTest(unittest.TestCase):
             pipeline.copy_runtime(pipeline.ROOT, root)
             pipeline.copy_runtime(pipeline.ROOT, candidate)
             (candidate / "frontend/assets/pipeline-probe.txt").write_text("snapshot asset", encoding="utf-8")
-            for name in ("app.py", "data_sources.py"):
+            for name in ("app.py", "data_sources.py", "enemy_assets.py"):
                 shutil.copy2(pipeline.ROOT / name, root / name)
             shutil.copytree(pipeline.ROOT / "vendor", root / "vendor", ignore=shutil.ignore_patterns("__pycache__"))
             candidate_lock = load_source_lock(candidate)

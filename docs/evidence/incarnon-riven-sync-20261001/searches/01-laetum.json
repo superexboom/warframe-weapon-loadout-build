@@ -1,0 +1,3277 @@
+{
+  "name": "Laetum",
+  "request": {
+    "weapon": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+    "fireMode": 1,
+    "incarnonChoices": {
+      "tier5": "5-3"
+    },
+    "scenario": {
+      "incarnonCycle": true,
+      "distance": 10.0
+    },
+    "metric": "killsPerMinute",
+    "profile": "fast",
+    "slotCount": 4,
+    "minFill": 3,
+    "maxFill": 4,
+    "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+    "level": 9999,
+    "steelPath": true,
+    "enemyEnhancements": {
+      "eximus": true
+    },
+    "headshotChance": 0.5,
+    "budgetSeconds": 10.0,
+    "topLimit": 3
+  },
+  "fingerprint": "6c26cf3664e91c9c",
+  "recommendation": {
+    "combos": [
+      {
+        "build": {
+          "mods": [
+            {
+              "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+              "nameInternal": "WeaponFireDamageModExpert",
+              "nameEn": "Primed Heated Charge",
+              "nameZh": "火焰装填 Prime",
+              "rank": 10,
+              "slot": 0,
+              "maxRank": 10,
+              "compatible": true,
+              "displayEffects": [
+                {
+                  "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+                  "damageType": "DT_FIRE",
+                  "operation": "ADD",
+                  "value": 1.65000011
+                }
+              ]
+            },
+            {
+              "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+              "nameInternal": "WeaponWeakpointCriticalChanceMod",
+              "nameEn": "Pistol Acuity",
+              "nameZh": "敏锐手枪",
+              "rank": 10,
+              "slot": 1,
+              "maxRank": 10,
+              "compatible": true,
+              "displayEffects": [
+                {
+                  "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+                  "damageType": "DT_ANY",
+                  "operation": "ADD",
+                  "value": 3.49799989
+                },
+                {
+                  "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+                  "damageType": "DT_ANY",
+                  "operation": "STACKING_MULTIPLY",
+                  "value": 3.49799989
+                },
+                {
+                  "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+                  "damageType": null,
+                  "operation": "SET",
+                  "value": 1.0
+                }
+              ]
+            },
+            {
+              "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+              "nameInternal": "PrimedWeaponCritDamageMod",
+              "nameEn": "Primed Target Cracker",
+              "nameZh": "弱点专精 Prime",
+              "rank": 10,
+              "slot": 2,
+              "maxRank": 10,
+              "compatible": true,
+              "displayEffects": [
+                {
+                  "upgradeType": "WEAPON_CRIT_DAMAGE",
+                  "damageType": "DT_ANY",
+                  "operation": "STACKING_MULTIPLY",
+                  "value": 1.1
+                }
+              ]
+            }
+          ],
+          "includesRiven": true,
+          "victimStatusCount": 3,
+          "shotDamage": 629.9864640685647,
+          "burstDps": 5039.891964543103,
+          "sustainedDps": 4535.902745409278,
+          "attackDps": 5039.891964543103,
+          "heavyDamage": 5039.891964543103,
+          "heavyComponents": [],
+          "heavySupport": null,
+          "heavyAttackDps": 5039.891964543103,
+          "unsupported": [
+            "laetum_incarnon:radial-payload-unmodeled",
+            "projectile-component-damage-unapplied"
+          ],
+          "riven": {
+            "slot": 3,
+            "polarity": "AP_ATTACK",
+            "stats": [
+              {
+                "code": "1",
+                "value": 46.403139853187184,
+                "negative": false
+              },
+              {
+                "code": "2",
+                "value": 46.403139853187184,
+                "negative": false
+              },
+              {
+                "code": "VI",
+                "value": 46.403139853187184,
+                "negative": false
+              },
+              {
+                "code": "M",
+                "value": 37.122511882549745,
+                "negative": true
+              }
+            ]
+          },
+          "rivenLines": [
+            {
+              "code": "VI",
+              "label": "病毒伤害",
+              "value": 46.403139853187184,
+              "low": 0.0,
+              "high": 46.403139853187184,
+              "negative": false,
+              "unit": "percent"
+            },
+            {
+              "code": "1",
+              "label": "暴击伤害",
+              "value": 46.403139853187184,
+              "low": 0.0,
+              "high": 46.403139853187184,
+              "negative": false,
+              "unit": "percent"
+            },
+            {
+              "code": "2",
+              "label": "触发几率",
+              "value": 46.403139853187184,
+              "low": 0.0,
+              "high": 46.403139853187184,
+              "negative": false,
+              "unit": "percent"
+            },
+            {
+              "code": "M",
+              "label": "弹药最大值",
+              "value": 37.122511882549745,
+              "low": 0.0,
+              "high": 37.122511882549745,
+              "negative": true,
+              "unit": "percent"
+            }
+          ],
+          "damageTypes": {
+            "DT_IMPACT": 100.0,
+            "DT_FIRE": 165.000011,
+            "DT_VIRAL": 46.403139853187184
+          },
+          "specialMods": [],
+          "exilus": null,
+          "stance": null
+        },
+        "stats": [
+          {
+            "code": "1",
+            "label": "暴击伤害",
+            "value": 46.403139853187184,
+            "negative": false,
+            "unit": "percent"
+          },
+          {
+            "code": "2",
+            "label": "触发几率",
+            "value": 46.403139853187184,
+            "negative": false,
+            "unit": "percent"
+          },
+          {
+            "code": "VI",
+            "label": "病毒伤害",
+            "value": 46.403139853187184,
+            "negative": false,
+            "unit": "percent"
+          },
+          {
+            "code": "M",
+            "label": "弹药最大值",
+            "value": 37.122511882549745,
+            "negative": true,
+            "unit": "percent"
+          }
+        ],
+        "score": 4.016960217567025,
+        "gain": 34.056308650154946,
+        "stage": "beam-negative"
+      },
+      {
+        "build": {
+          "mods": [
+            {
+              "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+              "nameInternal": "WeaponFireDamageModExpert",
+              "nameEn": "Primed Heated Charge",
+              "nameZh": "火焰装填 Prime",
+              "rank": 10,
+              "slot": 0,
+              "maxRank": 10,
+              "compatible": true,
+              "displayEffects": [
+                {
+                  "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+                  "damageType": "DT_FIRE",
+                  "operation": "ADD",
+                  "value": 1.65000011
+                }
+              ]
+            },
+            {
+              "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+              "nameInternal": "WeaponWeakpointCriticalChanceMod",
+              "nameEn": "Pistol Acuity",
+              "nameZh": "敏锐手枪",
+              "rank": 10,
+              "slot": 1,
+              "maxRank": 10,
+              "compatible": true,
+              "displayEffects": [
+                {
+                  "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+                  "damageType": "DT_ANY",
+                  "operation": "ADD",
+                  "value": 3.49799989
+                },
+                {
+                  "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+                  "damageType": "DT_ANY",
+                  "operation": "STACKING_MULTIPLY",
+                  "value": 3.49799989
+                },
+                {
+                  "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+                  "damageType": null,
+                  "operation": "SET",
+                  "value": 1.0
+                }
+              ]
+            },
+            {
+              "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+              "nameInternal": "PrimedWeaponCritDamageMod",
+              "nameEn": "Primed Target Cracker",
+              "nameZh": "弱点专精 Prime",
+              "rank": 10,
+              "slot": 2,
+              "maxRank": 10,
+              "compatible": true,
+              "displayEffects": [
+                {
+                  "upgradeType": "WEAPON_CRIT_DAMAGE",
+                  "damageType": "DT_ANY",
+                  "operation": "STACKING_MULTIPLY",
+                  "value": 1.1
+                }
+              ]
+            }
+          ],
+          "includesRiven": true,
+          "victimStatusCount": 3,
+          "shotDamage": 629.9864640685647,
+          "burstDps": 5039.891964543103,
+          "sustainedDps": 4535.902745409278,
+          "attackDps": 5039.891964543103,
+          "heavyDamage": 5039.891964543103,
+          "heavyComponents": [],
+          "heavySupport": null,
+          "heavyAttackDps": 5039.891964543103,
+          "unsupported": [
+            "laetum_incarnon:radial-payload-unmodeled",
+            "projectile-component-damage-unapplied"
+          ],
+          "riven": {
+            "slot": 3,
+            "polarity": "AP_ATTACK",
+            "stats": [
+              {
+                "code": "1",
+                "value": 46.403139853187184,
+                "negative": false
+              },
+              {
+                "code": "2",
+                "value": 46.403139853187184,
+                "negative": false
+              },
+              {
+                "code": "VI",
+                "value": 46.403139853187184,
+                "negative": false
+              },
+              {
+                "code": "Z",
+                "value": 37.122511882549745,
+                "negative": true
+              }
+            ]
+          },
+          "rivenLines": [
+            {
+              "code": "VI",
+              "label": "病毒伤害",
+              "value": 46.403139853187184,
+              "low": 0.0,
+              "high": 46.403139853187184,
+              "negative": false,
+              "unit": "percent"
+            },
+            {
+              "code": "1",
+              "label": "暴击伤害",
+              "value": 46.403139853187184,
+              "low": 0.0,
+              "high": 46.403139853187184,
+              "negative": false,
+              "unit": "percent"
+            },
+            {
+              "code": "2",
+              "label": "触发几率",
+              "value": 46.403139853187184,
+              "low": 0.0,
+              "high": 46.403139853187184,
+              "negative": false,
+              "unit": "percent"
+            },
+            {
+              "code": "Z",
+              "label": "武器后坐力",
+              "value": 37.122511882549745,
+              "low": 0.0,
+              "high": 37.122511882549745,
+              "negative": true,
+              "unit": "percent"
+            }
+          ],
+          "damageTypes": {
+            "DT_IMPACT": 100.0,
+            "DT_FIRE": 165.000011,
+            "DT_VIRAL": 46.403139853187184
+          },
+          "specialMods": [],
+          "exilus": null,
+          "stance": null
+        },
+        "stats": [
+          {
+            "code": "1",
+            "label": "暴击伤害",
+            "value": 46.403139853187184,
+            "negative": false,
+            "unit": "percent"
+          },
+          {
+            "code": "2",
+            "label": "触发几率",
+            "value": 46.403139853187184,
+            "negative": false,
+            "unit": "percent"
+          },
+          {
+            "code": "VI",
+            "label": "病毒伤害",
+            "value": 46.403139853187184,
+            "negative": false,
+            "unit": "percent"
+          },
+          {
+            "code": "Z",
+            "label": "武器后坐力",
+            "value": 37.122511882549745,
+            "negative": true,
+            "unit": "percent"
+          }
+        ],
+        "score": 4.016960217567025,
+        "gain": 34.056308650154946,
+        "stage": "beam-negative"
+      },
+      {
+        "build": {
+          "mods": [
+            {
+              "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+              "nameInternal": "WeaponFireDamageModExpert",
+              "nameEn": "Primed Heated Charge",
+              "nameZh": "火焰装填 Prime",
+              "rank": 10,
+              "slot": 0,
+              "maxRank": 10,
+              "compatible": true,
+              "displayEffects": [
+                {
+                  "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+                  "damageType": "DT_FIRE",
+                  "operation": "ADD",
+                  "value": 1.65000011
+                }
+              ]
+            },
+            {
+              "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+              "nameInternal": "WeaponWeakpointCriticalChanceMod",
+              "nameEn": "Pistol Acuity",
+              "nameZh": "敏锐手枪",
+              "rank": 10,
+              "slot": 1,
+              "maxRank": 10,
+              "compatible": true,
+              "displayEffects": [
+                {
+                  "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+                  "damageType": "DT_ANY",
+                  "operation": "ADD",
+                  "value": 3.49799989
+                },
+                {
+                  "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+                  "damageType": "DT_ANY",
+                  "operation": "STACKING_MULTIPLY",
+                  "value": 3.49799989
+                },
+                {
+                  "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+                  "damageType": null,
+                  "operation": "SET",
+                  "value": 1.0
+                }
+              ]
+            },
+            {
+              "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+              "nameInternal": "PrimedWeaponCritDamageMod",
+              "nameEn": "Primed Target Cracker",
+              "nameZh": "弱点专精 Prime",
+              "rank": 10,
+              "slot": 2,
+              "maxRank": 10,
+              "compatible": true,
+              "displayEffects": [
+                {
+                  "upgradeType": "WEAPON_CRIT_DAMAGE",
+                  "damageType": "DT_ANY",
+                  "operation": "STACKING_MULTIPLY",
+                  "value": 1.1
+                }
+              ]
+            }
+          ],
+          "includesRiven": true,
+          "victimStatusCount": 3,
+          "shotDamage": 629.9864640685647,
+          "burstDps": 5039.891964543103,
+          "sustainedDps": 4535.902745409278,
+          "attackDps": 5039.891964543103,
+          "heavyDamage": 5039.891964543103,
+          "heavyComponents": [],
+          "heavySupport": null,
+          "heavyAttackDps": 5039.891964543103,
+          "unsupported": [
+            "laetum_incarnon:radial-payload-unmodeled",
+            "projectile-component-damage-unapplied"
+          ],
+          "riven": {
+            "slot": 3,
+            "polarity": "AP_ATTACK",
+            "stats": [
+              {
+                "code": "1",
+                "value": 46.403139853187184,
+                "negative": false
+              },
+              {
+                "code": "2",
+                "value": 46.403139853187184,
+                "negative": false
+              },
+              {
+                "code": "VI",
+                "value": 46.403139853187184,
+                "negative": false
+              },
+              {
+                "code": "A",
+                "value": 49.495446082912494,
+                "negative": true
+              }
+            ]
+          },
+          "rivenLines": [
+            {
+              "code": "VI",
+              "label": "病毒伤害",
+              "value": 46.403139853187184,
+              "low": 0.0,
+              "high": 46.403139853187184,
+              "negative": false,
+              "unit": "percent"
+            },
+            {
+              "code": "1",
+              "label": "暴击伤害",
+              "value": 46.403139853187184,
+              "low": 0.0,
+              "high": 46.403139853187184,
+              "negative": false,
+              "unit": "percent"
+            },
+            {
+              "code": "2",
+              "label": "触发几率",
+              "value": 46.403139853187184,
+              "low": 0.0,
+              "high": 46.403139853187184,
+              "negative": false,
+              "unit": "percent"
+            },
+            {
+              "code": "A",
+              "label": "切割伤害",
+              "value": 49.495446082912494,
+              "low": 0.0,
+              "high": 49.495446082912494,
+              "negative": true,
+              "unit": "percent"
+            }
+          ],
+          "damageTypes": {
+            "DT_IMPACT": 100.0,
+            "DT_FIRE": 165.000011,
+            "DT_VIRAL": 46.403139853187184
+          },
+          "specialMods": [],
+          "exilus": null,
+          "stance": null
+        },
+        "stats": [
+          {
+            "code": "1",
+            "label": "暴击伤害",
+            "value": 46.403139853187184,
+            "negative": false,
+            "unit": "percent"
+          },
+          {
+            "code": "2",
+            "label": "触发几率",
+            "value": 46.403139853187184,
+            "negative": false,
+            "unit": "percent"
+          },
+          {
+            "code": "VI",
+            "label": "病毒伤害",
+            "value": 46.403139853187184,
+            "negative": false,
+            "unit": "percent"
+          },
+          {
+            "code": "A",
+            "label": "切割伤害",
+            "value": 49.495446082912494,
+            "negative": true,
+            "unit": "percent"
+          }
+        ],
+        "score": 4.016960217567025,
+        "gain": 34.056308650154946,
+        "stage": "beam-negative"
+      }
+    ],
+    "budget": 10.0,
+    "elapsed": 10.004126100015128,
+    "evaluations": 1083,
+    "memoHits": 0,
+    "refined": 0,
+    "stages": {
+      "coarse": "single-stat ranking (keep 2)",
+      "beam": "beam width 10 × sizes 2/3 (keep 7/6/5), negatives head 4 on 2/3-positive combos",
+      "refined": "keep 7..0 full ladder of head"
+    },
+    "scope": {
+      "slotCount": 4,
+      "minFill": 3,
+      "maxFill": 4,
+      "requiredDamageType": null
+    },
+    "searchStatus": "heuristic-best-found",
+    "baselineScore": 2.996472346594322,
+    "weapon": {
+      "path": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+      "nameInternal": "ZarimanHeavyPistol",
+      "nameEn": "Laetum",
+      "nameZh": "奏凯"
+    },
+    "weaponType": "pistol",
+    "disposition": 0.5,
+    "baselineBuild": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 0,
+          "maxRank": 10,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+          "nameInternal": "WeaponWeakpointCriticalChanceMod",
+          "nameEn": "Pistol Acuity",
+          "nameZh": "敏锐手枪",
+          "rank": 10,
+          "slot": 1,
+          "maxRank": 10,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 3.49799989
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 3.49799989
+            },
+            {
+              "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+              "damageType": null,
+              "operation": "SET",
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+          "nameInternal": "CorruptedFireRateDamagePistol",
+          "nameEn": "Anemic Agility",
+          "nameZh": "乏能迅敏",
+          "rank": 5,
+          "slot": 2,
+          "maxRank": 5,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            },
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": -0.15000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+          "nameInternal": "PrimedWeaponCritDamageMod",
+          "nameEn": "Primed Target Cracker",
+          "nameZh": "弱点专精 Prime",
+          "rank": 10,
+          "slot": 3,
+          "maxRank": 10,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.1
+            }
+          ]
+        }
+      ],
+      "objectiveScore": 2.996472346594322,
+      "capacity": 28
+    },
+    "metric": "killsPerMinute",
+    "fireMode": 1,
+    "incarnonChoices": {
+      "tier2": "2-2",
+      "tier3": "3-1",
+      "tier4": "4-1",
+      "tier5": "5-3"
+    },
+    "innateElement": null,
+    "optimizeWithArcanes": true,
+    "evaluationContext": {
+      "level": 9999,
+      "armour_strip": 0.0,
+      "elemental_armour_strip": 0.0,
+      "steel_path": true,
+      "enemy_enhancements": {
+        "eximus": true,
+        "archimedea": false,
+        "empowered": false,
+        "playerCount": null,
+        "magneticStacks": 0
+      },
+      "hit_location": "body",
+      "stanceMultiplier": 1.0,
+      "statusRateMultiplier": 1.0,
+      "windowSeconds": 30.0,
+      "headshotChance": 0.5,
+      "forcedProcs": {}
+    },
+    "evaluationTarget": {
+      "path": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+      "nameInternal": "DuviriMeleeAvatar",
+      "nameEn": "Thrax Centurion",
+      "nameZh": "凶魂百夫长"
+    },
+    "scoringModel": "loadout-events-v1",
+    "evaluationScenario": {
+      "aiming": false,
+      "incarnonCycle": true,
+      "heavyAttack": false,
+      "triggerPolicy": "emergent",
+      "distance": 10.0,
+      "cloaked": false,
+      "nearestEnemyDistance": null,
+      "comboTier": 0,
+      "detonationDelaySeconds": 0.0,
+      "detonationBatchSize": 1,
+      "includeArcanes": true
+    },
+    "skipped": [
+      "recommend-budget: 10 秒 anytime 预算（粗排 → beam 组合 → 精排，时间耗尽返回当前最优）",
+      "recommend-candidates: 36 正面 / 18 负面词条（理论满数值口径）",
+      "recommend-basis: 每个组合的分数 = 该紫卡下基准配装子集的最优 KPM（与配装页解算同口径）"
+    ]
+  },
+  "replays": [
+    {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-1",
+          "tier4": "4-1",
+          "tier5": "5-3"
+        },
+        "scenario": {
+          "aiming": false,
+          "incarnonCycle": true,
+          "heavyAttack": false,
+          "triggerPolicy": "emergent",
+          "distance": 10.0,
+          "cloaked": false,
+          "nearestEnemyDistance": null,
+          "comboTier": 0,
+          "detonationDelaySeconds": 0.0,
+          "detonationBatchSize": 1,
+          "includeArcanes": true
+        },
+        "metric": "killsPerMinute",
+        "profile": "fast",
+        "slotCount": 4,
+        "minFill": 3,
+        "maxFill": 4,
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "headshotChance": 0.5,
+        "budgetSeconds": 10.0,
+        "topLimit": 3,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "nameInternal": "WeaponFireDamageModExpert",
+            "nameEn": "Primed Heated Charge",
+            "nameZh": "火焰装填 Prime",
+            "rank": 10,
+            "slot": 0,
+            "maxRank": 10,
+            "compatible": true,
+            "displayEffects": [
+              {
+                "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+                "damageType": "DT_FIRE",
+                "operation": "ADD",
+                "value": 1.65000011
+              }
+            ]
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "nameInternal": "WeaponWeakpointCriticalChanceMod",
+            "nameEn": "Pistol Acuity",
+            "nameZh": "敏锐手枪",
+            "rank": 10,
+            "slot": 1,
+            "maxRank": 10,
+            "compatible": true,
+            "displayEffects": [
+              {
+                "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+                "damageType": "DT_ANY",
+                "operation": "ADD",
+                "value": 3.49799989
+              },
+              {
+                "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+                "damageType": "DT_ANY",
+                "operation": "STACKING_MULTIPLY",
+                "value": 3.49799989
+              },
+              {
+                "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+                "damageType": null,
+                "operation": "SET",
+                "value": 1.0
+              }
+            ]
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "nameInternal": "PrimedWeaponCritDamageMod",
+            "nameEn": "Primed Target Cracker",
+            "nameZh": "弱点专精 Prime",
+            "rank": 10,
+            "slot": 2,
+            "maxRank": 10,
+            "compatible": true,
+            "displayEffects": [
+              {
+                "upgradeType": "WEAPON_CRIT_DAMAGE",
+                "damageType": "DT_ANY",
+                "operation": "STACKING_MULTIPLY",
+                "value": 1.1
+              }
+            ]
+          }
+        ],
+        "riven": {
+          "slot": 3,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 46.403139853187184,
+              "negative": false
+            },
+            {
+              "code": "2",
+              "value": 46.403139853187184,
+              "negative": false
+            },
+            {
+              "code": "VI",
+              "value": 46.403139853187184,
+              "negative": false
+            },
+            {
+              "code": "M",
+              "value": 37.122511882549745,
+              "negative": true
+            }
+          ]
+        },
+        "exilus": null,
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "manualKpm": 4.016960217567025,
+      "score": 4.016960217567025,
+      "matches": true,
+      "legalRiven": true,
+      "triggers": [
+        {
+          "id": "/Lotus/Upgrades/Evolutions/Pistol/EvoPistolReloadSpeedOnHeadshot:0:0",
+          "label": "灵化 3-1",
+          "kind": "on-headshot",
+          "maxStacks": 3.0,
+          "series": [
+            0.5,
+            1.0,
+            1.5,
+            1.5,
+            2.0,
+            2.5,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "conditionText": "命中头部弱点时触发。",
+          "resetOn": [],
+          "simulationMode": "events",
+          "avgStacks": 2.925,
+          "uptime": 1.0
+        },
+        {
+          "id": "/Lotus/Upgrades/Evolutions/Pistol/EvoPistolDamageOnNoCritAndNoProcHit:0:0",
+          "label": "灵化 5-3",
+          "kind": "on-noncrit-no-proc",
+          "maxStacks": 3.0,
+          "series": [
+            0.2679248205506398,
+            0.5358496411012796,
+            0.8037744616519195,
+            0.8037744616519195,
+            1.0716992822025593,
+            1.339624102753199,
+            1.6075489233038387,
+            1.8754737438544784,
+            1.8754737438544784,
+            2.143398564405118,
+            2.411323384955758,
+            2.411323384955758,
+            2.6792482055063975,
+            2.9471730260570372,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "conditionText": "伤害实例既未暴击、也未施加异常状态时触发。",
+          "resetOn": [],
+          "simulationMode": "events",
+          "avgStacks": 2.8397800812233696,
+          "uptime": 1.0
+        }
+      ],
+      "unsupported": [
+        "incarnon-policy-adapter-missing",
+        "projectile-component-damage-unapplied"
+      ]
+    },
+    {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-1",
+          "tier4": "4-1",
+          "tier5": "5-3"
+        },
+        "scenario": {
+          "aiming": false,
+          "incarnonCycle": true,
+          "heavyAttack": false,
+          "triggerPolicy": "emergent",
+          "distance": 10.0,
+          "cloaked": false,
+          "nearestEnemyDistance": null,
+          "comboTier": 0,
+          "detonationDelaySeconds": 0.0,
+          "detonationBatchSize": 1,
+          "includeArcanes": true
+        },
+        "metric": "killsPerMinute",
+        "profile": "fast",
+        "slotCount": 4,
+        "minFill": 3,
+        "maxFill": 4,
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "headshotChance": 0.5,
+        "budgetSeconds": 10.0,
+        "topLimit": 3,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "nameInternal": "WeaponFireDamageModExpert",
+            "nameEn": "Primed Heated Charge",
+            "nameZh": "火焰装填 Prime",
+            "rank": 10,
+            "slot": 0,
+            "maxRank": 10,
+            "compatible": true,
+            "displayEffects": [
+              {
+                "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+                "damageType": "DT_FIRE",
+                "operation": "ADD",
+                "value": 1.65000011
+              }
+            ]
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "nameInternal": "WeaponWeakpointCriticalChanceMod",
+            "nameEn": "Pistol Acuity",
+            "nameZh": "敏锐手枪",
+            "rank": 10,
+            "slot": 1,
+            "maxRank": 10,
+            "compatible": true,
+            "displayEffects": [
+              {
+                "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+                "damageType": "DT_ANY",
+                "operation": "ADD",
+                "value": 3.49799989
+              },
+              {
+                "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+                "damageType": "DT_ANY",
+                "operation": "STACKING_MULTIPLY",
+                "value": 3.49799989
+              },
+              {
+                "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+                "damageType": null,
+                "operation": "SET",
+                "value": 1.0
+              }
+            ]
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "nameInternal": "PrimedWeaponCritDamageMod",
+            "nameEn": "Primed Target Cracker",
+            "nameZh": "弱点专精 Prime",
+            "rank": 10,
+            "slot": 2,
+            "maxRank": 10,
+            "compatible": true,
+            "displayEffects": [
+              {
+                "upgradeType": "WEAPON_CRIT_DAMAGE",
+                "damageType": "DT_ANY",
+                "operation": "STACKING_MULTIPLY",
+                "value": 1.1
+              }
+            ]
+          }
+        ],
+        "riven": {
+          "slot": 3,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 46.403139853187184,
+              "negative": false
+            },
+            {
+              "code": "2",
+              "value": 46.403139853187184,
+              "negative": false
+            },
+            {
+              "code": "VI",
+              "value": 46.403139853187184,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 37.122511882549745,
+              "negative": true
+            }
+          ]
+        },
+        "exilus": null,
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "manualKpm": 4.016960217567025,
+      "score": 4.016960217567025,
+      "matches": true,
+      "legalRiven": true,
+      "triggers": [
+        {
+          "id": "/Lotus/Upgrades/Evolutions/Pistol/EvoPistolReloadSpeedOnHeadshot:0:0",
+          "label": "灵化 3-1",
+          "kind": "on-headshot",
+          "maxStacks": 3.0,
+          "series": [
+            0.5,
+            1.0,
+            1.5,
+            1.5,
+            2.0,
+            2.5,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "conditionText": "命中头部弱点时触发。",
+          "resetOn": [],
+          "simulationMode": "events",
+          "avgStacks": 2.925,
+          "uptime": 1.0
+        },
+        {
+          "id": "/Lotus/Upgrades/Evolutions/Pistol/EvoPistolDamageOnNoCritAndNoProcHit:0:0",
+          "label": "灵化 5-3",
+          "kind": "on-noncrit-no-proc",
+          "maxStacks": 3.0,
+          "series": [
+            0.2679248205506398,
+            0.5358496411012796,
+            0.8037744616519195,
+            0.8037744616519195,
+            1.0716992822025593,
+            1.339624102753199,
+            1.6075489233038387,
+            1.8754737438544784,
+            1.8754737438544784,
+            2.143398564405118,
+            2.411323384955758,
+            2.411323384955758,
+            2.6792482055063975,
+            2.9471730260570372,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "conditionText": "伤害实例既未暴击、也未施加异常状态时触发。",
+          "resetOn": [],
+          "simulationMode": "events",
+          "avgStacks": 2.8397800812233696,
+          "uptime": 1.0
+        }
+      ],
+      "unsupported": [
+        "incarnon-policy-adapter-missing",
+        "projectile-component-damage-unapplied"
+      ]
+    },
+    {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-1",
+          "tier4": "4-1",
+          "tier5": "5-3"
+        },
+        "scenario": {
+          "aiming": false,
+          "incarnonCycle": true,
+          "heavyAttack": false,
+          "triggerPolicy": "emergent",
+          "distance": 10.0,
+          "cloaked": false,
+          "nearestEnemyDistance": null,
+          "comboTier": 0,
+          "detonationDelaySeconds": 0.0,
+          "detonationBatchSize": 1,
+          "includeArcanes": true
+        },
+        "metric": "killsPerMinute",
+        "profile": "fast",
+        "slotCount": 4,
+        "minFill": 3,
+        "maxFill": 4,
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "headshotChance": 0.5,
+        "budgetSeconds": 10.0,
+        "topLimit": 3,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "nameInternal": "WeaponFireDamageModExpert",
+            "nameEn": "Primed Heated Charge",
+            "nameZh": "火焰装填 Prime",
+            "rank": 10,
+            "slot": 0,
+            "maxRank": 10,
+            "compatible": true,
+            "displayEffects": [
+              {
+                "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+                "damageType": "DT_FIRE",
+                "operation": "ADD",
+                "value": 1.65000011
+              }
+            ]
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+            "nameInternal": "WeaponWeakpointCriticalChanceMod",
+            "nameEn": "Pistol Acuity",
+            "nameZh": "敏锐手枪",
+            "rank": 10,
+            "slot": 1,
+            "maxRank": 10,
+            "compatible": true,
+            "displayEffects": [
+              {
+                "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+                "damageType": "DT_ANY",
+                "operation": "ADD",
+                "value": 3.49799989
+              },
+              {
+                "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+                "damageType": "DT_ANY",
+                "operation": "STACKING_MULTIPLY",
+                "value": 3.49799989
+              },
+              {
+                "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+                "damageType": null,
+                "operation": "SET",
+                "value": 1.0
+              }
+            ]
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "nameInternal": "PrimedWeaponCritDamageMod",
+            "nameEn": "Primed Target Cracker",
+            "nameZh": "弱点专精 Prime",
+            "rank": 10,
+            "slot": 2,
+            "maxRank": 10,
+            "compatible": true,
+            "displayEffects": [
+              {
+                "upgradeType": "WEAPON_CRIT_DAMAGE",
+                "damageType": "DT_ANY",
+                "operation": "STACKING_MULTIPLY",
+                "value": 1.1
+              }
+            ]
+          }
+        ],
+        "riven": {
+          "slot": 3,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 46.403139853187184,
+              "negative": false
+            },
+            {
+              "code": "2",
+              "value": 46.403139853187184,
+              "negative": false
+            },
+            {
+              "code": "VI",
+              "value": 46.403139853187184,
+              "negative": false
+            },
+            {
+              "code": "A",
+              "value": 49.495446082912494,
+              "negative": true
+            }
+          ]
+        },
+        "exilus": null,
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "manualKpm": 4.016960217567025,
+      "score": 4.016960217567025,
+      "matches": true,
+      "legalRiven": true,
+      "triggers": [
+        {
+          "id": "/Lotus/Upgrades/Evolutions/Pistol/EvoPistolReloadSpeedOnHeadshot:0:0",
+          "label": "灵化 3-1",
+          "kind": "on-headshot",
+          "maxStacks": 3.0,
+          "series": [
+            0.5,
+            1.0,
+            1.5,
+            1.5,
+            2.0,
+            2.5,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "conditionText": "命中头部弱点时触发。",
+          "resetOn": [],
+          "simulationMode": "events",
+          "avgStacks": 2.925,
+          "uptime": 1.0
+        },
+        {
+          "id": "/Lotus/Upgrades/Evolutions/Pistol/EvoPistolDamageOnNoCritAndNoProcHit:0:0",
+          "label": "灵化 5-3",
+          "kind": "on-noncrit-no-proc",
+          "maxStacks": 3.0,
+          "series": [
+            0.2679248205506398,
+            0.5358496411012796,
+            0.8037744616519195,
+            0.8037744616519195,
+            1.0716992822025593,
+            1.339624102753199,
+            1.6075489233038387,
+            1.8754737438544784,
+            1.8754737438544784,
+            2.143398564405118,
+            2.411323384955758,
+            2.411323384955758,
+            2.6792482055063975,
+            2.9471730260570372,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "conditionText": "伤害实例既未暴击、也未施加异常状态时触发。",
+          "resetOn": [],
+          "simulationMode": "events",
+          "avgStacks": 2.8397800812233696,
+          "uptime": 1.0
+        }
+      ],
+      "unsupported": [
+        "incarnon-policy-adapter-missing",
+        "projectile-component-damage-unapplied"
+      ]
+    }
+  ],
+  "passed": true,
+  "analysis": {
+    "buildLabel": "2026.08.13.13.24",
+    "schemaVersion": 3,
+    "weapon": {
+      "path": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+      "nameInternal": "ZarimanHeavyPistol",
+      "nameEn": "Laetum",
+      "nameZh": "奏凯"
+    },
+    "fireMode": 1,
+    "metric": "killsPerMinute",
+    "scoreMetric": "windowedDps",
+    "contextHash": "31ba2b191653c4f51cc0",
+    "evaluationScenario": {
+      "aiming": false,
+      "incarnonCycle": true,
+      "heavyAttack": false,
+      "triggerPolicy": "emergent",
+      "distance": 10.0,
+      "cloaked": false,
+      "nearestEnemyDistance": null,
+      "comboTier": 0,
+      "detonationDelaySeconds": 0.0,
+      "detonationBatchSize": 1
+    },
+    "requestedTarget": {
+      "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+      "level": 9999,
+      "steelPath": true,
+      "eximus": true,
+      "windowSeconds": 30.0,
+      "headshotChance": 0.0
+    },
+    "evaluationTarget": {
+      "enemyPath": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+      "enemyName": "Thrax Centurion",
+      "level": 9999,
+      "steelPath": true,
+      "enemyEnhancements": {
+        "eximus": true
+      },
+      "armourStrip": 0.0,
+      "elementalArmourStrip": 0.0,
+      "hitLocation": "body",
+      "headshotChance": 0.0,
+      "windowSeconds": 30.0
+    },
+    "targetCalibration": {
+      "version": "target-calibration-v2",
+      "status": "calibrated",
+      "requestedLevel": 9999,
+      "evaluationLevel": 9999,
+      "iterations": [
+        {
+          "iteration": 0,
+          "level": 9999,
+          "probes": {
+            "baseline": {
+              "killsPerMinute": 0.4347487838925057,
+              "killsInWindow": 0.21737439194625285,
+              "firstKillTime": null,
+              "minKillInterval": null,
+              "maxKillsPerStep": 0,
+              "directEventLedger": {
+                "model": "direct-event-ledger-v1",
+                "attacks": 279,
+                "kills": 0,
+                "killsPerMinute": 0.0,
+                "firstKillTime": null,
+                "staleComponents": 0,
+                "targetGeneration": 0,
+                "remainingHealth": 33280382.08922838,
+                "traceCollected": false,
+                "trace": [],
+                "status": "diagnostic-static-defense",
+                "perShotDamage": 1327.442666666667
+              },
+              "pressureReasons": [],
+              "pressureInsufficient": false,
+              "pressureDiagnostics": {
+                "maxKillsPerStep": 0,
+                "attackPeriod": 0.4166666666666667,
+                "resolutionFloor": 0.375,
+                "eventLedgerStatus": "diagnostic-static-defense",
+                "multipleKillsPerStepIsDiagnosticOnly": true
+              }
+            },
+            "actual": {
+              "killsPerMinute": 0.3458391657075795,
+              "killsInWindow": 0.17291958285378972,
+              "firstKillTime": null,
+              "minKillInterval": null,
+              "maxKillsPerStep": 0,
+              "directEventLedger": {
+                "model": "direct-event-ledger-v1",
+                "attacks": 279,
+                "kills": 0,
+                "killsPerMinute": 0.0,
+                "firstKillTime": null,
+                "staleComponents": 0,
+                "targetGeneration": 0,
+                "remainingHealth": 32935627.96382907,
+                "traceCollected": false,
+                "trace": [],
+                "status": "diagnostic-static-defense",
+                "perShotDamage": 2563.120535482972
+              },
+              "pressureReasons": [],
+              "pressureInsufficient": false,
+              "pressureDiagnostics": {
+                "maxKillsPerStep": 0,
+                "attackPeriod": 0.4166666666666667,
+                "resolutionFloor": 0.375,
+                "eventLedgerStatus": "diagnostic-static-defense",
+                "multipleKillsPerStepIsDiagnosticOnly": true
+              }
+            }
+          }
+        }
+      ],
+      "maxIterations": 5,
+      "postSearchProbe": {
+        "killsPerMinute": 0.5249941301940497,
+        "killsInWindow": 0.26249706509702486,
+        "firstKillTime": null,
+        "minKillInterval": null,
+        "maxKillsPerStep": 0,
+        "directEventLedger": {
+          "model": "direct-event-ledger-v1",
+          "attacks": 279,
+          "kills": 0,
+          "killsPerMinute": 0.0,
+          "firstKillTime": null,
+          "staleComponents": 0,
+          "targetGeneration": 0,
+          "remainingHealth": 33286152.919711582,
+          "traceCollected": false,
+          "trace": [],
+          "status": "diagnostic-static-defense",
+          "perShotDamage": 1306.7586864403245
+        },
+        "pressureReasons": [],
+        "pressureInsufficient": false,
+        "pressureDiagnostics": {
+          "maxKillsPerStep": 0,
+          "attackPeriod": 0.4166666666666667,
+          "resolutionFloor": 0.375,
+          "eventLedgerStatus": "diagnostic-static-defense",
+          "multipleKillsPerStepIsDiagnosticOnly": true
+        }
+      }
+    },
+    "searchQuality": {
+      "objectiveMetric": "killsPerMinute",
+      "scoreMetric": "windowedDps",
+      "fallbackReason": "kpm-pressure-or-plateau",
+      "targetCalibrated": true,
+      "targetCalibrationStatus": "calibrated",
+      "qualityCalibrated": true,
+      "qualityCacheHit": false,
+      "profile": "fast",
+      "bakeStaticsOnly": false
+    },
+    "scoreBasis": "best-known-search-result",
+    "modelStatus": "partial",
+    "targetStatus": "calibrated",
+    "searchStatus": {
+      "profile": "fast",
+      "scope": "beam-and-hill-climb",
+      "status": "heuristic-best-found",
+      "scoreBasis": "best-known-search-result"
+    },
+    "optimalityStatus": {
+      "baseline": "heuristic",
+      "recommended": "heuristic",
+      "optimal": "heuristic",
+      "actualIncludedAsLowerBound": false,
+      "scope": "beam-and-hill-climb"
+    },
+    "scoringValues": {
+      "baseline": 243826.96134151221,
+      "actual": 193962.38934209943,
+      "optimal": 294440.6706356517
+    },
+    "score": null,
+    "grade": "UNRESOLVED",
+    "scoreStatus": "unresolved-model-partial",
+    "scoreStatusReason": "model-missing:laetum_incarnon:radial-payload-unmodeled,projectile-component-damage-unapplied",
+    "actualGain": -20.450803194635558,
+    "optimalGain": 20.758044563926713,
+    "rollQuality": 52.63819095477381,
+    "details": [
+      {
+        "code": "D",
+        "label": "基础伤害",
+        "value": 103.97030625000001,
+        "low": 92.53357256250003,
+        "high": 113.22366350625002,
+        "quality": 55.276381909547666,
+        "delta": 8.2374179704229,
+        "ablationDelta": 8.2374179704229,
+        "reoptimizedDelta": 8.2374179704229,
+        "recommended": false,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "S",
+        "label": "多重射击",
+        "value": 56.672339062499994,
+        "low": 50.438381765625,
+        "high": 61.716177239062496,
+        "quality": 55.27638190954769,
+        "delta": 52.23353730445979,
+        "ablationDelta": 52.23353730445979,
+        "reoptimizedDelta": 52.23353730445979,
+        "recommended": true,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "0",
+        "label": "暴击几率",
+        "value": 71.01513229232812,
+        "low": 63.20346774017204,
+        "high": 77.33547906634533,
+        "quality": 55.276381909547666,
+        "delta": 21.861035482046965,
+        "ablationDelta": 21.861035482046965,
+        "reoptimizedDelta": 21.861035482046965,
+        "recommended": true,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "3",
+        "label": "触发时间",
+        "value": 37.872462375,
+        "low": 33.706491513749995,
+        "high": 41.243111526374996,
+        "quality": 44.723618090452234,
+        "delta": -17.98617148056988,
+        "ablationDelta": -17.98617148056988,
+        "reoptimizedDelta": -17.98617148056988,
+        "recommended": false,
+        "fatalNegative": true,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      }
+    ],
+    "recommendedPositive": [
+      "多重射击",
+      "触发几率",
+      "暴击几率"
+    ],
+    "recommendedPositiveTiers": [
+      {
+        "tier": "T0",
+        "stats": [
+          {
+            "code": "S",
+            "label": "多重射击",
+            "gain": 46.07333684863746,
+            "score": 100.0
+          }
+        ]
+      },
+      {
+        "tier": "T1",
+        "stats": [
+          {
+            "code": "2",
+            "label": "触发几率",
+            "gain": 30.514080104206155,
+            "score": 66.2293686356007
+          }
+        ]
+      },
+      {
+        "tier": "T2",
+        "stats": [
+          {
+            "code": "0",
+            "label": "暴击几率",
+            "gain": 23.5901536895339,
+            "score": 51.20131360798439
+          },
+          {
+            "code": "SD",
+            "label": "状态伤害",
+            "gain": 20.343339733059416,
+            "score": 44.1542573742649
+          }
+        ]
+      },
+      {
+        "tier": "T3",
+        "stats": [
+          {
+            "code": "1",
+            "label": "暴击伤害",
+            "gain": 15.421316788670513,
+            "score": 33.471239210073776
+          },
+          {
+            "code": "4",
+            "label": "火焰伤害",
+            "gain": 14.632794217431666,
+            "score": 31.759788238269103
+          },
+          {
+            "code": "F",
+            "label": "装填速度",
+            "gain": 11.490022657685305,
+            "score": 24.938551109143514
+          }
+        ]
+      }
+    ],
+    "recommendedRoutes": null,
+    "recommendedNegative": [
+      "变焦",
+      "弹药最大值",
+      "武器后坐力"
+    ],
+    "fatalNegative": [
+      "触发时间"
+    ],
+    "baseline": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 0,
+          "maxRank": 5,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 1,
+          "maxRank": 3,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+          "nameInternal": "WeaponFireIterationsMod",
+          "nameEn": "Barrel Diffusion",
+          "nameZh": "弹头扩散",
+          "rank": 5,
+          "slot": 3,
+          "maxRank": 5,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        }
+      ],
+      "includesRiven": false,
+      "victimStatusCount": 3,
+      "shotDamage": 1327.4427279332517,
+      "burstDps": 14159.38980592414,
+      "sustainedDps": 12332.371686886368,
+      "attackDps": 14159.389805924142,
+      "heavyDamage": 5056.9249306871925,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 5056.9249306871925,
+      "unsupported": [
+        "laetum_incarnon:radial-payload-unmodeled",
+        "projectile-component-damage-unapplied"
+      ],
+      "forma": {
+        "regular": 3,
+        "umbra": 0,
+        "stance": 0,
+        "total": 3
+      },
+      "objectiveScore": 0.4347487838925057,
+      "scoringScore": 243826.96134151221
+    },
+    "actual": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 0,
+          "maxRank": 5,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 1,
+          "maxRank": 10,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 2,
+          "maxRank": 3,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 3,
+      "shotDamage": 2563.1206537808425,
+      "burstDps": 27339.955007326673,
+      "sustainedDps": 23812.218723721817,
+      "attackDps": 27339.955007326673,
+      "heavyDamage": 12618.110426841497,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 12618.110426841497,
+      "unsupported": [
+        "laetum_incarnon:radial-payload-unmodeled",
+        "projectile-component-damage-unapplied"
+      ],
+      "riven": {
+        "slot": 3,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "D",
+            "value": 103.97030625000001,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 56.672339062499994,
+            "negative": false
+          },
+          {
+            "code": "0",
+            "value": 71.01513229232812,
+            "negative": false
+          },
+          {
+            "code": "3",
+            "value": 37.872462375,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "D",
+          "label": "基础伤害",
+          "value": 103.97030625000001,
+          "low": 92.53357256250003,
+          "high": 113.22366350625002,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "S",
+          "label": "多重射击",
+          "value": 56.672339062499994,
+          "low": 50.438381765625,
+          "high": 61.716177239062496,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "0",
+          "label": "暴击几率",
+          "value": 71.01513229232812,
+          "low": 63.20346774017204,
+          "high": 77.33547906634533,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "3",
+          "label": "触发时间",
+          "value": 37.872462375,
+          "low": 33.706491513749995,
+          "high": 41.243111526374996,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 3,
+        "umbra": 0,
+        "stance": 0,
+        "total": 3
+      },
+      "objectiveScore": 0.3458391657075795,
+      "scoringScore": 193962.38934209943,
+      "alternateModes": [
+        {
+          "fireMode": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+          "isAlternateFire": false,
+          "isIncarnonForm": false,
+          "shotDamage": 4100.993174205381,
+          "burstDps": 16403.972696821525,
+          "sustainedDps": 9842.383618092916,
+          "attackDps": 16403.972696821525
+        }
+      ]
+    },
+    "bestFound": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 0,
+          "maxRank": 5,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 1,
+          "maxRank": 3,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 3,
+      "shotDamage": 1306.758746752264,
+      "burstDps": 13938.760662295483,
+      "sustainedDps": 12140.210821094704,
+      "attackDps": 13938.76066229548,
+      "heavyDamage": 6286.758519774675,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 6286.758519774675,
+      "unsupported": [
+        "laetum_incarnon:radial-payload-unmodeled",
+        "projectile-component-damage-unapplied"
+      ],
+      "riven": {
+        "slot": 3,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "S",
+            "value": 61.7161772390625,
+            "negative": false
+          },
+          {
+            "code": "2",
+            "value": 46.403139853187184,
+            "negative": false
+          },
+          {
+            "code": "0",
+            "value": 77.33547906634534,
+            "negative": false
+          },
+          {
+            "code": "M",
+            "value": 37.122511882549745,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "S",
+          "label": "多重射击",
+          "value": 61.7161772390625,
+          "low": 0.0,
+          "high": 61.7161772390625,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "2",
+          "label": "触发几率",
+          "value": 46.403139853187184,
+          "low": 0.0,
+          "high": 46.403139853187184,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "0",
+          "label": "暴击几率",
+          "value": 77.33547906634534,
+          "low": 0.0,
+          "high": 77.33547906634534,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "M",
+          "label": "弹药最大值",
+          "value": 37.122511882549745,
+          "low": 0.0,
+          "high": 37.122511882549745,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 3,
+        "umbra": 0,
+        "stance": 0,
+        "total": 3
+      },
+      "objectiveScore": 0.5249941301940497,
+      "scoringScore": 294440.6706356517
+    },
+    "optimal": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 0,
+          "maxRank": 5,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 1,
+          "maxRank": 3,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 3,
+      "shotDamage": 1306.758746752264,
+      "burstDps": 13938.760662295483,
+      "sustainedDps": 12140.210821094704,
+      "attackDps": 13938.76066229548,
+      "heavyDamage": 6286.758519774675,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 6286.758519774675,
+      "unsupported": [
+        "laetum_incarnon:radial-payload-unmodeled",
+        "projectile-component-damage-unapplied"
+      ],
+      "riven": {
+        "slot": 3,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "S",
+            "value": 61.7161772390625,
+            "negative": false
+          },
+          {
+            "code": "2",
+            "value": 46.403139853187184,
+            "negative": false
+          },
+          {
+            "code": "0",
+            "value": 77.33547906634534,
+            "negative": false
+          },
+          {
+            "code": "M",
+            "value": 37.122511882549745,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "S",
+          "label": "多重射击",
+          "value": 61.7161772390625,
+          "low": 0.0,
+          "high": 61.7161772390625,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "2",
+          "label": "触发几率",
+          "value": 46.403139853187184,
+          "low": 0.0,
+          "high": 46.403139853187184,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "0",
+          "label": "暴击几率",
+          "value": 77.33547906634534,
+          "low": 0.0,
+          "high": 77.33547906634534,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "M",
+          "label": "弹药最大值",
+          "value": 37.122511882549745,
+          "low": 0.0,
+          "high": 37.122511882549745,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 3,
+        "umbra": 0,
+        "stance": 0,
+        "total": 3
+      },
+      "objectiveScore": 0.5249941301940497,
+      "scoringScore": 294440.6706356517
+    },
+    "incarnonChoices": {
+      "tier2": "2-1",
+      "tier3": "3-1",
+      "tier4": "4-1",
+      "tier5": "5-3"
+    },
+    "incarnonPolicy": {
+      "adapter": "",
+      "strategyKey": "",
+      "sampledAt": "2026-08-18T00:00:00+08:00",
+      "gameBuild": "2026.08.13.13.24",
+      "matched": false,
+      "reason": "weapon-adapter-missing",
+      "appliedTiers": []
+    },
+    "arcaneStates": [],
+    "stance": null,
+    "unsupported": [
+      "incarnon-policy-adapter-missing",
+      "incarnon-tier2-auto-selected-static-objective",
+      "incarnon-tier3-auto-selected-static-objective",
+      "incarnon-tier4-auto-selected-static-objective",
+      "laetum_incarnon:radial-payload-unmodeled",
+      "projectile-component-damage-unapplied",
+      "score-unresolved-model-partial"
+    ],
+    "skipped": [
+      "riven-score-fallback: KPM 评分切换到窗口 DPS（连续指标）；三曲线已按连续指标重搜并重绑; 战斗 KPI 仍为 KPM",
+      "optimizer-assumption: 8 slots, 60 capacity, Catalyst and matching Forma",
+      "optimizer-objective: 评价靶 KPM（Lv9999 钢铁之路卓越者超宏凶魂百夫长，30s 击杀数）；触发从零层爬升、护甲/超宏/等级缩放全部参与，流派不钳制（实战双修口径）",
+      "optimizer-fire-mode: 灵化武器默认使用灵化形态（模式 2），其余模式仅展示",
+      "mod-family exclusivity checked by exported nameTag and weapon compatibility tags; account-specific conflicts are not exported",
+      "Riven template values recovered from frozen build 2026.08.13.13.24",
+      "recommended Riven stats use theoretical max-roll values from the active frozen build",
+      "optimizer-profile: 快速档（beam 12/32，无爬山；词条分层为粗排口径）",
+      "optimizer-search: profile fast, 89 candidate mods, 16 unsupported mods rejected",
+      "optimizer-scope: 必选 0 张 · 禁选 0 张 · 数量范围 3–4",
+      "target-calibration: calibrated · requested Lv9999 → evaluation Lv9999 · iterations 1",
+      "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol: unsupported[projectile-component-damage-unapplied]"
+    ],
+    "profile": "fast",
+    "disposition": 0.5,
+    "innateElement": null,
+    "innateElementCandidates": []
+  },
+  "analysisReplays": {
+    "baseline": {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+        "disposition": 0.5,
+        "profile": "fast",
+        "scenario": {
+          "incarnonCycle": true,
+          "distance": 10.0
+        },
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-1",
+          "tier3": "3-1",
+          "tier4": "4-1",
+          "tier5": "5-3"
+        },
+        "slotCount": 4,
+        "minFill": 3,
+        "maxFill": 4,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 3
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          null,
+          null,
+          null,
+          null
+        ],
+        "metric": "killsPerMinute"
+      },
+      "objectiveScore": 0.4347487838925057,
+      "manualKpm": 0.4347487838925057,
+      "passed": true,
+      "unsupported": [
+        "incarnon-policy-adapter-missing",
+        "projectile-component-damage-unapplied"
+      ],
+      "shots": 72,
+      "transforms": 0,
+      "rivenSlot": null,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    "actual": {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+        "disposition": 0.5,
+        "profile": "fast",
+        "scenario": {
+          "incarnonCycle": true,
+          "distance": 10.0
+        },
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-1",
+          "tier3": "3-1",
+          "tier4": "4-1",
+          "tier5": "5-3"
+        },
+        "slotCount": 4,
+        "minFill": 3,
+        "maxFill": 4,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 2
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          null,
+          null,
+          null,
+          null
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 3,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "D",
+              "value": 103.97030625000001,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 56.672339062499994,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 71.01513229232812,
+              "negative": false
+            },
+            {
+              "code": "3",
+              "value": 37.872462375,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 0.3458391657075795,
+      "manualKpm": 0.3458391657075795,
+      "passed": true,
+      "unsupported": [
+        "incarnon-policy-adapter-missing",
+        "projectile-component-damage-unapplied"
+      ],
+      "shots": 72,
+      "transforms": 0,
+      "rivenSlot": 3,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    "optimal": {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+        "disposition": 0.5,
+        "profile": "fast",
+        "scenario": {
+          "incarnonCycle": true,
+          "distance": 10.0
+        },
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-1",
+          "tier3": "3-1",
+          "tier4": "4-1",
+          "tier5": "5-3"
+        },
+        "slotCount": 4,
+        "minFill": 3,
+        "maxFill": 4,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          null,
+          null,
+          null,
+          null
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 3,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "S",
+              "value": 61.7161772390625,
+              "negative": false
+            },
+            {
+              "code": "2",
+              "value": 46.403139853187184,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 77.33547906634534,
+              "negative": false
+            },
+            {
+              "code": "M",
+              "value": 37.122511882549745,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 0.5249941301940497,
+      "manualKpm": 0.5249941301940497,
+      "passed": true,
+      "unsupported": [
+        "incarnon-policy-adapter-missing",
+        "projectile-component-damage-unapplied"
+      ],
+      "shots": 72,
+      "transforms": 0,
+      "rivenSlot": 3,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    }
+  },
+  "elapsedSeconds": 57.188119900005404
+}

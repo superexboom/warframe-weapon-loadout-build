@@ -22,6 +22,7 @@ def test_returned_riven_slot_preserves_element_order_on_manual_replay():
     outcome=replace(outcome,riven_index=0)
     build=o._build_payload(w,outcome,riven)
     assert build['riven']['slot']==0
+    assert build['riven']['polarity']==riven.polarity
     assert [m['slot'] for m in build['mods']]==[1,2,3]
     ordered=[riven,*cards]
     fx=o._effects(ordered,sc)

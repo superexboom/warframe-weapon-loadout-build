@@ -1,0 +1,75 @@
+{
+  "createdAt": "2026-09-30T20:58:56.240806+00:00",
+  "sourceCommit": "2f2c9002953cdea6cd880a8af8e9207c6d1e0d4d",
+  "fingerprint": "6c26cf3664e91c9c",
+  "cacheVersion": 12,
+  "scope": "Six constrained searches, 18 recommendation and 18 analysis replays, plus browser checks. Full-roster bake remains separate.",
+  "files": [
+    {
+      "path": "searches/00-dera-vandal.json",
+      "source": ".local/reports/incarnon-riven-sync-20261001/final-searches/00-dera-vandal.json",
+      "size": 114962,
+      "sha256": "9c0093de4bf651634d2dc92f099a76dce43439a1b71d28c85bb9554c8aaa9035"
+    },
+    {
+      "path": "searches/01-laetum.json",
+      "source": ".local/reports/incarnon-riven-sync-20261001/final-searches/01-laetum.json",
+      "size": 93782,
+      "sha256": "12e018c94698d6ee3a7803739ef8a66c52c5e541b22c764799937d6b77855b64"
+    },
+    {
+      "path": "searches/02-felarx.json",
+      "source": ".local/reports/incarnon-riven-sync-20261001/final-searches/02-felarx.json",
+      "size": 102202,
+      "sha256": "8a9eb7970272ee0114c17eddc07b8a1f09e29f84afabee3f1f86b4cee0e3aca7"
+    },
+    {
+      "path": "searches/03-phenmor.json",
+      "source": ".local/reports/incarnon-riven-sync-20261001/final-searches/03-phenmor.json",
+      "size": 108775,
+      "sha256": "524f270697085bbf1a2b579b376ab0f3bd1d18705b5d131f08a6ea58c06a336b"
+    },
+    {
+      "path": "searches/04-burston-prime.json",
+      "source": ".local/reports/incarnon-riven-sync-20261001/final-searches/04-burston-prime.json",
+      "size": 118960,
+      "sha256": "56d1bc5889f9e2ace45501de39ac825f8e93d456c99192f9ebabe3dc88ef9a96"
+    },
+    {
+      "path": "searches/05-torid.json",
+      "source": ".local/reports/incarnon-riven-sync-20261001/final-searches/05-torid.json",
+      "size": 108177,
+      "sha256": "667bccf2e6d82207ad2cc1042d685a035d775bf8f69722f154b08f4d4a9bd326"
+    },
+    {
+      "path": "searches/summary.json",
+      "source": ".local/reports/incarnon-riven-sync-20261001/final-searches/summary.json",
+      "size": 956,
+      "sha256": "33bf5bafee41b0bbcb170ca2649d1f8b48beff4538e6c96b44701d89879fc97f"
+    },
+    {
+      "path": "browser-verification.json",
+      "source": ".local/reports/incarnon-riven-sync-20261001/browser-verification.json",
+      "size": 2325,
+      "sha256": "87d9d186a06d4e7faa3e775922b7693cbde5c21d5db3b7089927a83cf14d8704"
+    },
+    {
+      "path": "incarnon-desktop-final.png",
+      "source": ".local/reports/incarnon-riven-sync-20261001/incarnon-desktop-final.png",
+      "size": 452366,
+      "sha256": "709221de6c7eddc21f0e7dd0f1dd9508eda79e270c83d204793dd69f7a845bca"
+    },
+    {
+      "path": "native-descriptions.json",
+      "source": ".local/reports/incarnon-riven-sync-20260930/native-descriptions.json",
+      "size": 122024,
+      "sha256": "f8436d701bffa99b6d9cd0f034dac1cfec35fb21a1e0e9b1372a159b3f427d10"
+    },
+    {
+      "path": "incarnon-mobile.png",
+      "source": ".local/reports/incarnon-riven-sync-20260930/incarnon-mobile-focus.png",
+      "size": 116268,
+      "sha256": "6ab56c6d80222d917749fdb0e90376c73c5fed0f6cc71cef461b9d4a625d5c04"
+    }
+  ]
+}

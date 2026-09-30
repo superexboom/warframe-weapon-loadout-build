@@ -183,6 +183,14 @@ from wfarsenal.warframe import (  # noqa: E402
 
 EXPORTS = load_exports(EXPORT_DIR)
 
+# The exported canonical templates own Riven values. Keep admission, sliders,
+# validation and both recommenders on the same numbers instead of retaining
+# hand-converted advanced-trait values beside the current template values.
+for _riven_type in RIVEN_BASE_VALUES:
+    RIVEN_BASE_VALUES[_riven_type].update(
+        optimizer._template_bases(EXPORTS.get('rivenTemplates') or {}, _riven_type)
+    )
+
 
 # ---------------------------------------------------------------------------
 # 冻结导出快照的运行时数据修正。
@@ -588,7 +596,7 @@ if getattr(sys, "frozen", False):
         Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
         / "Warframe-Weapon-Loadout-Build" / "cache" / "riven-analysis-statics.json"
     )
-ANALYSIS_STATICS_CACHE_VERSION = 11
+ANALYSIS_STATICS_CACHE_VERSION = 12
 
 
 def _stances_fingerprint() -> str:
@@ -1086,7 +1094,7 @@ INCARNON_UPGRADE_LABELS = {
     "WEAPON_EXPLOSION_RADIUS": "爆炸半径",
     "WEAPON_PROC_DAMAGE": "异常伤害",
     "WEAPON_PROC_TIME": "异常持续",
-    "WEAPON_NOCRIT_CHANCE": "非暴击几率",
+    "WEAPON_NOCRIT_CHANCE": "非暴击增伤触发概率",
     "WEAPON_NOCRIT_DAMAGE": "非暴击伤害",
     "WEAPON_NOISE_REDUCTION": "噪音降低",
     "WEAPON_PARRY_ANGLE": "格挡角度",
@@ -1135,30 +1143,42 @@ def _fusion_stat_codes(weapon_type: str) -> frozenset[str]:
 
 
 
-def _incarnon_effect_text(effect: Mapping[str, Any]) -> str | None:
+def _incarnon_effect_text(effect: Mapping[str, Any], *, annotate: bool = True) -> str | None:
+    from wfarsenal.incarnon_conditions import clean_text
     upgrade = str(effect.get("upgradeType") or "")
-    # NONE 是脚本占位词条（真实效果在 runtimeScripts 里），不渲染进描述；
-    # 脚本部分由 unsupported 单独注明。
+    official = clean_text(INCARNON_STRINGS.get(str(effect.get('locTag') or '')))
+    # A NONE row may carry the actual fixed-form description, not a zero stat.
+    if official and '|' not in official:
+        return official
     if not upgrade or upgrade.upper() == "NONE":
         return None
     label = INCARNON_UPGRADE_LABELS.get(upgrade, upgrade.replace("WEAPON_", "").replace("_", " ").lower())
     value = effect.get("valuePerRank")
     if not isinstance(value, (int, float)) or isinstance(value, bool):
         value = effect.get("value")
-    # 脚本占位/解锁类词条没有数值属正常，只显示标签，不填「数值未知」噪音。
     op_key = str(effect.get("operation") or "")
     if isinstance(value, (int, float)) and not isinstance(value, bool):
-        # 乘算口径（×1.5）不带符号；加算口径（+51）带符号。
-        value_text = f"{float(value):g}" if op_key == "MULTIPLY" else f"{float(value):+g}"
+        value = float(value)
+        chance_types = {'WEAPON_CRIT_CHANCE', 'WEAPON_PROC_CHANCE', 'WEAPON_CRIT_CHANCE_WEAKPOINT', 'WEAPON_NOCRIT_CHANCE'}
+        if op_key == 'MULTIPLY':
+            value_text = f'×{value:g}'
+        elif upgrade in chance_types and op_key in {'ADD', 'ADD_BASE'}:
+            value_text = f'{value * 100:+g} 个百分点'
+        elif effect.get('displayAsPercent') or op_key == 'STACKING_MULTIPLY':
+            value_text = f'{value * 100:+g}%'
+        else:
+            unit = {
+                'WEAPON_RANGE': ' 米', 'WEAPON_PUNCTURE_DEPTH': ' 米',
+                'WEAPON_RELOAD_TIME': ' 秒', 'WEAPON_MELEE_COMBO_DURATION_BONUS': ' 秒',
+                'WEAPON_CLIP_MAX': ' 发', 'WEAPON_AMMO_MAX': ' 发',
+            }.get(upgrade, '')
+            value_text = f'{value:+g}{unit}'
+        if op_key == 'ADD_BASE' and upgrade not in chance_types:
+            value_text += '（基础值）'
     else:
         value_text = ""
-    operation = INCARNON_OPERATION_LABELS.get(op_key, "") if value_text else ""
-    # ── 灵化 SubUpgrade（条件性子词条）描述渲染 ────────────────────────
-    # 主进化的 SubUpgrades 子词条（装填叠层/弹药效率等）带条件元数据；
-    # 渲染时标注触发条件，避免与无条件主词条混淆（螺钉 2-2 描述错误
-    # 的根源：子词条此前未导出，描述只剩主词条一半）。
     sub_prefix = ""
-    if effect.get("isSubUpgrade"):
+    if annotate and effect.get("isSubUpgrade"):
         chance = effect.get("UpgradeChance")
         duration = effect.get("UpgradeDuration")
         stacks = effect.get("MaxConditionalStacks")
@@ -1170,15 +1190,19 @@ def _incarnon_effect_text(effect: Mapping[str, Any]) -> str | None:
         if isinstance(stacks, (int, float)) and not isinstance(stacks, bool):
             gate_bits.append(f"最多 {stacks:g} 层")
         sub_prefix = f"[条件{'，'.join(gate_bits)}] " if gate_bits else "[条件] "
-    # 以引擎当前支持表为准（冻结快照的 supported 标记滞后于引擎实现）。
-    support = "" if upgrade in SUPPORTED_WEAPON_UPGRADE_TYPES else "（当前不计入）"
-    if effect.get("isSubUpgrade"):
-        support = "（条件触发，当前不计入）"
-    return f"{sub_prefix}{label} {operation}{value_text}{support}".strip()
+    support = ''
+    if annotate:
+        if upgrade not in SUPPORTED_WEAPON_UPGRADE_TYPES:
+            support = '（当前不计入计算）'
+        elif effect.get('isSubUpgrade') and (effect.get('UpgradeDuration') or effect.get('MaxConditionalStacks')):
+            support = '（条件效果，不计入常驻面板）'
+    return f"{sub_prefix}{label} {value_text}{support}".strip()
 
 
 def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
     from wfarsenal.incarnon_conditions import describe as describe_condition
+    from wfarsenal.manual_combat import condition_kind
+    from wfarsenal.runtime_adapters import verified_stug_condition, verified_torid_field_duration
     rows = []
     incarnon = weapon.get("incarnon")
     adapter_key = optimizer._path_basename(incarnon.get("adapter")) if isinstance(incarnon, Mapping) else ""
@@ -1192,71 +1216,99 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
     for tier in (incarnon.get("tiers") or ()) if isinstance(incarnon, Mapping) else ():
         tier_number = optimizer._tier_number(tier.get("tier")) if isinstance(tier, Mapping) else None
         branches = [branch for branch in (tier.get("branches") or ()) if isinstance(branch, Mapping)] if isinstance(tier, Mapping) else []
-        if tier_number not in {2, 3, 4} or not branches:
+        if tier_number not in {1, 2, 3, 4, 5} or not branches:
             continue
+        selectable = tier_number != 1 and (tier.get('selectable') is True or len(branches) > 1)
         options = []
         for branch in branches:
-            conditional_sources = {str(c.get('sourcePath') or branch.get('path')) for c in branch.get('conditionalEffects') or []}
-            effects = [
-                text
-                for text in (
-                    _incarnon_effect_text(effect)
-                    for effect in branch.get("effects") or ()
-                    if isinstance(effect, Mapping) and str(effect.get('sourcePath') or branch.get('path')) not in conditional_sources
-                )
-                if text
-            ]
+            details = []
+            unsupported = []
+            conditional_sources = {str(c.get('sourcePath') or branch.get('path')) for c in branch.get('conditionalEffects') or ()}
+            static, _ = optimizer._branch_effects(branch) if tier_number != 1 else ([], [])
+            static_keys = {(e.source_path, e.upgrade_type, e.operation, e.value) for e in static}
+            for effect in branch.get('effects') or ():
+                if not isinstance(effect, Mapping):
+                    continue
+                source = str(effect.get('sourcePath') or branch.get('path'))
+                # Fixed-form prose often sits in the conditional child block.
+                official_form = tier_number == 1 and effect.get('locTag') and effect.get('upgradeType') == 'NONE'
+                if source in conditional_sources and not official_form:
+                    continue
+                text = _incarnon_effect_text(effect, annotate=False)
+                if not text:
+                    continue
+                descriptive = effect.get('upgradeType') == 'NONE' or (tier_number == 1 and '充能' in text)
+                modeled = (source, effect.get('upgradeType'), effect.get('operation'), effect.get('valuePerRank')) in static_keys
+                calculation = '' if descriptive else ('已计入' if modeled else '未计入武器伤害计算')
+                if not descriptive and not modeled:
+                    unsupported.append(text + '：' + calculation)
+                details.append({'text': text, 'calculation': calculation, 'modeled': None if descriptive else modeled})
             for conditional in branch.get("conditionalEffects") or ():
                 if not isinstance(conditional, Mapping):
                     continue
-                terms = conditional.get('effects') or []
+                normalized = verified_stug_condition(branch, conditional) or conditional
+                terms = [e for e in normalized.get('effects') or () if isinstance(e, Mapping) and e.get('upgradeType') != 'NONE']
                 if (terms and not conditional.get('conditions') and not conditional.get('runtimeScripts')
                         and all(e.get('upgradeType') == 'WEAPON_LAST_MULTISHOT' and e.get('operation') == 'ADD'
                                 and isinstance(e.get('valuePerRank'), (int, float)) for e in terms)):
                     bonus = sum(float(e['valuePerRank']) for e in terms)
-                    effects.append(f'基础形态弹匣最后一次射击：额外 +{bonus:g} 多重射击；真实循环基础形态计入，灵化弹池不计入')
+                    details.append({'text': f'基础形态弹匣最后一次射击：额外 +{bonus:g} 多重射击',
+                                    'calculation': '已计入基础形态；灵化弹池不触发', 'modeled': True})
                     continue
-                condition = describe_condition(conditional, INCARNON_STRINGS)
-                effects.extend(
-                    f"{condition}：{text}"
-                    for effect in conditional.get("effects") or ()
-                    if isinstance(effect, Mapping)
-                    for text in (_incarnon_effect_text(effect),)
-                    if text
-                )
-            unsupported = []
-            for conditional in branch.get('conditionalEffects') or []:
-                terms = conditional.get('effects') or []
-                if (terms and not conditional.get('conditions') and not conditional.get('runtimeScripts')
-                        and all(e.get('upgradeType') == 'WEAPON_LAST_MULTISHOT' and e.get('operation') == 'ADD'
-                                and isinstance(e.get('valuePerRank'), (int, float)) for e in terms)):
-                    continue
-                condition_text = describe_condition(conditional, INCARNON_STRINGS)
-                if not conditional.get('effects'):effects.append(condition_text)
-                source = str(conditional.get('sourcePath') or '')
-                if 'Burston' in source and ('Tier1ASubMod' in source or 'Tier2B' in source or 'Tier3A' in source):
-                    effects.append('此条件在真实循环回放中逐事件结算；面板不作为常驻加成')
-                else:unsupported.append(condition_text+'：未建模的事件/角色条件不计入，不能当作常驻')
-            from wfarsenal.runtime_adapters import verified_torid_field_duration
+                condition = describe_condition(normalized, INCARNON_STRINGS)
+                gate = []
+                duration = normalized.get('duration')
+                stacks = normalized.get('maxStacks')
+                if isinstance(duration, (int, float)) and duration > 0:
+                    gate.append(f'持续 {duration:g} 秒')
+                if isinstance(stacks, (int, float)) and stacks > 1:
+                    gate.append(f'最多 {stacks:g} 层')
+                values = [_incarnon_effect_text(e, annotate=False) for e in terms]
+                values = [v for v in values if v]
+                supported = bool(terms) and all(optimizer.ModEffect.from_export(e, 0).supported for e in terms)
+                modeled = tier_number != 1 and supported and not normalized.get('runtimeScripts') and bool(
+                    normalized.get('formGate') or normalized.get('eventKind') or condition_kind(normalized))
+                if 'Burston' in str(branch.get('path')) and branch.get('id') == '2-1' and 'OnLastBurstCondition.lua' in str(conditional.get('runtimeScripts')):
+                    modeled = True
+                calculation = '已计入：按触发和叠层结算' if modeled else '尚未建模，不计入伤害'
+                if normalized.get('formGate') and modeled:
+                    condition = '灵化形态激活期间'
+                    calculation = '仅灵化形态计入'
+                if normalized.get('conditionText'):
+                    text = condition
+                else:
+                    text = condition + ('：' + '、'.join(values) if values else '')
+                    if gate:
+                        text += '；' + '，'.join(gate)
+                details.append({'text': text, 'calculation': calculation, 'modeled': modeled})
+                if not modeled:
+                    unsupported.append(text + '：' + calculation)
             field_duration = verified_torid_field_duration(branch)
             if field_duration:
-                effects = [field_duration['conditionText']]
+                details.append({'text': field_duration['conditionText'], 'calculation': '已计入基础形态事件', 'modeled': True})
             elif branch.get('runtimeScripts') and not branch.get('conditionalEffects'):
-                effects.append(describe_condition({'runtimeScripts':branch['runtimeScripts']}, INCARNON_STRINGS))
-                unsupported.append('脚本参数可读，尚未建立完整事件适配')
+                if tier_number == 1:
+                    if not details:
+                        details.append({'text': '解锁灵化形态', 'calculation': '', 'modeled': None})
+                else:
+                    text = describe_condition({'runtimeScripts':branch['runtimeScripts']}, INCARNON_STRINGS)
+                    details.append({'text': text, 'calculation': '脚本效果尚未建模', 'modeled': False})
+                    unsupported.append(text + '：脚本效果尚未建模')
             if branch.get("unresolvedReferences"):
                 unsupported.append("含未解析引用")
             options.append({
                 "id": str(branch.get("id") or branch.get("path") or ""),
                 "index": int(branch.get("index") or len(options) + 1),
                 "label": str(INCARNON_STRINGS.get(str(branch.get("nameTag") or "")) or branch.get("id") or "未知路线"),
-                "description": "；".join(effects) or "该路线的效果由游戏内脚本实现（无静态词条）",
+                "description": "；".join(row['text'] for row in details) or "该路线的效果由游戏内脚本实现（无静态词条）",
+                "details": details,
                 "unsupported": unsupported,
-                "complete": not unsupported and bool(effects),
+                "complete": not unsupported and bool(details),
             })
         rows.append({
             "tier": tier_number,
             "label": f"进化 {tier_number}",
+            "selectable": selectable,
             "recommended": str(route.get(f"tier{tier_number}") or ""),
             "options": options,
         })
@@ -1700,6 +1752,7 @@ def build_catalog() -> dict[str, Any]:
             "nameInternal": str(weapon.get("nameInternal") or ""),
             "slot": slot,
             "weaponType": weapon_type,
+            "rivenType": optimizer._weapon_type(None, weapon),
             "ancestry": list(weapon.get("ancestry") or ()),
             "compatTags": list(weapon.get("compatTags") or ()),
             "polarities": list(weapon.get("polarities") or ()),
@@ -2735,7 +2788,8 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     # 融合词条（Advanced Traits）仅正面、每卡限 1 条。fail-closed 校验：
     # 负面融合词条直接拒绝；正面融合词条超过 1 条直接拒绝。
     # 类型可用性来自显式 AdvancedTrait 模板；配方缺失不能推断该词条不存在。
-    _fusion_codes = _fusion_stat_codes(weapon["weaponType"])
+    portable_weapon_type = optimizer._weapon_type(None, weapon)
+    _fusion_codes = _fusion_stat_codes(portable_weapon_type)
     fusion_lines = [
         s for s in raw_stats
         if str(s.get("code") or "").strip().upper() in _fusion_codes
@@ -2757,7 +2811,9 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
                 "（该类型当前模板没有该融合词条）"
             )
 
-    bases = RIVEN_BASE_VALUES.get(weapon["weaponType"], {})
+    # Catalog companion rows retain ``weaponType=companion`` for UI grouping,
+    # but their Riven rules follow the canonical optimizer family.
+    bases = RIVEN_BASE_VALUES.get(portable_weapon_type, {})
     normalized_stats = []
     for raw in raw_stats:
         code = str(raw.get("code") or "").strip().upper()
@@ -3530,7 +3586,7 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
     # 之上定义的。
     build_result, engine = build_weapon_payload({**payload, 'riven': None}, return_engine_context=True)
     weapon_record = engine["weapon"]
-    weapon_type = engine["weaponType"]
+    weapon_type = optimizer._weapon_type(None, weapon_record)
     baseline = engine["evaluation"]
     benchmark_context = engine["benchmarkContext"]
     # Keep the user's actual target throughout; there is no 240-KPM timestep ceiling.
@@ -3540,10 +3596,12 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
     )
     fusable = optimizer._fusion_codes_from_templates(EXPORTS.get('rivenTemplates') or {}, weapon_type)
     positive_candidates, _ = optimizer._candidate_lines(
-        weapon_type, disposition, (), negative=False, bases=template_bases, available_fusion_codes=fusable
+        weapon_type, disposition, (), negative=False, bases=template_bases, available_fusion_codes=fusable,
+        structure_scale=optimizer.theoretical_structure_scale(3, False),
     )
     negative_candidates, _ = optimizer._candidate_lines(
-        weapon_type, disposition, (), negative=True, bases=template_bases, available_fusion_codes=fusable
+        weapon_type, disposition, (), negative=True, bases=template_bases, available_fusion_codes=fusable,
+        structure_scale=optimizer.theoretical_structure_scale(3, False, negative=True),
     )
     special = build_result.get('exilus')
     special_card = _utility_card_at_rank(special, engine['scenario'], special['rank']) if special else None
@@ -3576,6 +3634,13 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
         "capacity": build_result["capacity"],
     }
     recommendation["metric"] = engine["metric"]
+    recommendation['fireMode'] = build_result['fireMode']
+    recommendation['incarnonChoices'] = build_result['incarnonChoices']
+    recommendation['innateElement'] = build_result.get('innateElement')
+    recommendation['optimizeWithArcanes'] = build_result['optimizeWithArcanes']
+    for combo in recommendation.get('combos') or ():
+        combo['build']['exilus'] = special
+        combo['build']['stance'] = build_result.get('stance')
     recommendation['evaluationContext'] = build_result['evaluationContext']
     recommendation['evaluationTarget'] = build_result['evaluationTarget']
     recommendation['scoringModel'] = build_result['scoringModel']

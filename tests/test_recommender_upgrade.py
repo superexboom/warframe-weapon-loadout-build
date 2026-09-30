@@ -33,10 +33,12 @@ class RecommendOptimalRivenTests(unittest.TestCase):
             app.EXPORTS.get("rivenTemplates") or {}, weapon_type
         )
         positive_candidates, _ = app.optimizer._candidate_lines(
-            weapon_type, disposition, (), negative=False, bases=template_bases
+            weapon_type, disposition, (), negative=False, bases=template_bases,
+            structure_scale=app.optimizer.theoretical_structure_scale(3, False),
         )
         negative_candidates, _ = app.optimizer._candidate_lines(
-            weapon_type, disposition, (), negative=True, bases=template_bases
+            weapon_type, disposition, (), negative=True, bases=template_bases,
+            structure_scale=app.optimizer.theoretical_structure_scale(3, False, negative=True),
         )
         result = recommend_optimal_riven(
             weapon_record,
@@ -79,10 +81,12 @@ class RecommendOptimalRivenTests(unittest.TestCase):
             app.EXPORTS.get("rivenTemplates") or {}, weapon_type
         )
         positive_candidates, _ = app.optimizer._candidate_lines(
-            weapon_type, 1.35, (), negative=False, bases=template_bases
+            weapon_type, 1.35, (), negative=False, bases=template_bases,
+            structure_scale=app.optimizer.theoretical_structure_scale(3, False),
         )
         negative_candidates, _ = app.optimizer._candidate_lines(
-            weapon_type, 1.35, (), negative=True, bases=template_bases
+            weapon_type, 1.35, (), negative=True, bases=template_bases,
+            structure_scale=app.optimizer.theoretical_structure_scale(3, False, negative=True),
         )
         result = recommend_optimal_riven(
             weapon_record,

@@ -192,7 +192,7 @@ RIVEN_RULES: dict[str, tuple[str, str, str, str | None, str | None, str, float, 
     # can_negative 一律 False（提取数据的 CanBeCurse 标志是融合原料的
     # 旧口径，不适用于融合结果词条）。
     "W": ("弱点伤害", "WEAPON_DAMAGE_WEAKPOINT", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
-    "Y": ("弱点暴击几率", "WEAPON_CRIT_CHANCE_WEAKPOINT", "ADD", None, None, "percent", 1, True, False),
+    "Y": ("弱点暴击几率", "WEAPON_CRIT_CHANCE_WEAKPOINT", "STACKING_MULTIPLY", None, None, "percent", 1, True, False),
     # 双字符码避免与既有单字母冲突（wire 上 code.upper() 去重）。
     "GA": ("毒气伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_GAS", None, "percent", 1, True, False),
     "CO": ("腐蚀伤害", "WEAPON_PERCENT_BASE_DAMAGE_ADDED", "ADD", "DT_CORROSIVE", None, "percent", 1, True, False),
@@ -246,6 +246,11 @@ def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, f
         if not isinstance(stat, Mapping):
             continue
         upgrades = stat.get("upgrades") or ()
+        if stat.get('tag') == 'WeaponCritChanceMod' and len(upgrades) == 2:
+            # Melee repeats the same scalar for its heavy-attack-only bonus.
+            # Read the unqualified normal value; the wire rule adds the heavy
+            # qualifier separately and must not lose melee crit candidates.
+            upgrades = [u for u in upgrades if isinstance(u, Mapping) and not u.get('validModifiers')]
         if len(upgrades) != 1 or not isinstance(upgrades[0], Mapping):
             continue
         upgrade = upgrades[0]
@@ -264,7 +269,7 @@ def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, f
                 continue
             if symbol_filter and symbol_filter != raw_symbol:
                 continue
-            if not symbol_filter and raw_symbol:
+            if not symbol_filter and raw_symbol and not (code == 'HR' and raw_symbol == 'Holstered'):
                 continue
             matches.append((code, unit))
         raw_value = upgrade.get("rawValue")
@@ -352,6 +357,11 @@ def _weapon_type(requested: Any, weapon: Mapping[str, Any]) -> str:
         return "melee"
     if "shotgun" in ancestry:
         return "shotgun"
+    if slot == "companion":
+        if "/lotus/weapons/tenno/melee/playermeleeweapon" in ancestry:
+            return "melee"
+        if "/lotus/weapons/tenno/pistol/lotuspistol" in ancestry:
+            return "pistol"
     if slot == "secondary":
         return "pistol"
     if "archwing" in ancestry or "archgun" in ancestry:
@@ -2869,7 +2879,7 @@ def _recommend_positive(
 # 单调改进，时间耗尽即返回当前最优——结果完整性随预算增加而提高。
 
 def _riven_combo_key(lines: Sequence[_RivenLine]) -> tuple[str, ...]:
-    return tuple(sorted(line.code for line in lines))
+    return tuple(sorted(('-' if line.negative else '+') + line.code for line in lines))
 
 
 def recommend_optimal_riven(
@@ -3073,7 +3083,8 @@ def recommend_optimal_riven(
         outcome, riven_card = witnesses[key]
         witness = _build_payload(weapon, outcome, riven_card, passives)
         witness['damageTypes'] = dict(outcome.stats.damage_types)
-        witness['riven'] = {'slot': outcome.riven_index, 'stats': [{'code':line.code,'value':line.value,'negative':line.negative} for line in ordered]}
+        witness['riven'] = {'slot': outcome.riven_index, 'polarity': riven_card.polarity,
+                            'stats': [{'code':line.code,'value':line.value,'negative':line.negative} for line in ordered]}
         for index, row in enumerate(witness['mods']):
             row['slot'] = index + (index >= outcome.riven_index)
         witness['specialMods'] = [{'path':c.record['path'],'rank':c.rank} for c in special_cards if c.record]
@@ -3653,6 +3664,7 @@ def _build_payload(
     if riven is not None:
         result['riven'] = {
             'slot':evaluation.riven_index,
+            'polarity': riven.polarity,
             'stats':[{'code':line.code,'value':line.value,'negative':line.negative} for line in riven.riven_lines],
         }
         result["rivenLines"] = [

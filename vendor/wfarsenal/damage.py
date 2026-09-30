@@ -288,6 +288,7 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "WEAPON_MELEE_COMBO_USAGE_EFFICIENCY": "heavy_attack_efficiency",
     "GAMEPLAY_FACTION_DAMAGE": "faction_damage_multipliers",
     "WEAPON_NOCRIT_DAMAGE": "noncrit_damage_multiplier",
+    "WEAPON_NOCRIT_CHANCE": "noncrit_damage_chance",
     # ── 词条融合新词条（2026.09.22，引擎乘区已逆向裁决）──────────────
     # WEAPON_CRIT_CHANCE_WEAKPOINT：与 WEAPON_CRIT_CHANCE 加算进同一次
     # 判定（fn 0x1406dc47e 链 244-248，IsWeakpoint 门控）——引擎侧门控在
@@ -1476,7 +1477,10 @@ def apply_mods(
             0.0, buckets["WEAPON_MELEE_COMBO_USAGE_EFFICIENCY"]
         ),
         faction_damage_multipliers=faction_damage_multipliers,
-        noncrit_damage_multiplier=_combine(1.0, buckets["WEAPON_NOCRIT_DAMAGE"]),
+        noncrit_damage_multiplier=1.0 + max(0.0, _combine(1.0, buckets["WEAPON_NOCRIT_DAMAGE"]) - 1.0) * (
+            min(1.0, max(0.0, _combine(0.0, buckets['WEAPON_NOCRIT_CHANCE'])))
+            if buckets['WEAPON_NOCRIT_CHANCE'] else 1.0
+        ),
         # The export calls this a percent-like multiplier (STACKING_MULTIPLY in
         # synthetic records, ADD in the Vigilante shell).  Accumulate from 1x and
         # convert back to a probability so both operation types work.

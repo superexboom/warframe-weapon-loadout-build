@@ -26,7 +26,8 @@ def test_raw_signature_controls_event_adapter_and_ui_description():
     assert '完成换弹' in ui['description'] and '不延长异常状态' in ui['description']
     last=next(x for t in app._incarnon_options(weapon()) for x in t['options'] if x['id']=='2-1')
     assert last['complete'] and not last['unsupported']
-    assert '额外 +3 多重射击' in last['description'] and '真实循环基础形态计入' in last['description']
+    assert '额外 +3 多重射击' in last['description']
+    assert any(row['modeled'] and '灵化弹池不触发' in row['calculation'] for row in last['details'])
 
 @pytest.mark.parametrize('mutate',[
     lambda b:b.update(path='/unknown'),
