@@ -348,6 +348,8 @@ def _rebuild_scenario(
     nearest_enemy_distance: float | None,
     trigger_policy: str,
     incarnon_cycle: bool = False,
+    detonation_delay_seconds: float = 0.0,
+    detonation_batch_size: int = 1,
 ) -> "Scenario":
     """Scenario.__reduce__ 的重建入口（pickle 反序列化路径）。"""
     return Scenario(
@@ -361,6 +363,8 @@ def _rebuild_scenario(
         nearest_enemy_distance=nearest_enemy_distance,
         trigger_policy=trigger_policy,
         incarnon_cycle=incarnon_cycle,
+        detonation_delay_seconds=detonation_delay_seconds,
+        detonation_batch_size=detonation_batch_size,
     )
 
 
@@ -396,6 +400,9 @@ class Scenario:
     #     折算可用率（灵化段窗口 × availability；availability 由灵化池
     #     容量与充能时长估计，缺数据时 0.5 并在 unsupported 注记）。
     incarnon_cycle: bool = False
+    # Explicit player cadence for remote mines; no spatial hit-loss model.
+    detonation_delay_seconds: float = 0.0
+    detonation_batch_size: int = 1
 
     def __post_init__(self) -> None:
         if (
@@ -408,6 +415,11 @@ class Scenario:
             raise TypeError("incarnon_cycle must be a boolean")
         _require_int("combo_tier", self.combo_tier, maximum=11)
         _require_int("victim_status_count", self.victim_status_count)
+        object.__setattr__(self, 'detonation_delay_seconds',
+                           _require_nonnegative_finite('detonation_delay_seconds', self.detonation_delay_seconds))
+        _require_int('detonation_batch_size', self.detonation_batch_size, maximum=8)
+        if self.detonation_batch_size == 0:
+            raise ValueError('detonation_batch_size must be at least one')
         if self.trigger_policy not in ("assumed_max", "emergent"):
             raise TypeError("trigger_policy must be assumed_max or emergent")
         if self.distance is not None:
@@ -451,6 +463,8 @@ class Scenario:
                 self.nearest_enemy_distance,
                 self.trigger_policy,
                 self.incarnon_cycle,
+                self.detonation_delay_seconds,
+                self.detonation_batch_size,
             ),
         )
 

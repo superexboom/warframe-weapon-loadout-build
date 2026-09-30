@@ -1228,6 +1228,7 @@ body.is-modal-open { overflow: hidden; }
 .external-buff-panel .external-buff-value:last-child { grid-column: -2 / -1; }
 .scenario-fields { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
 .scenario-fields .field, .scenario-fields .check-field { min-width: 0; }
+#build-manual-detonation { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .scenario-fields output { display: block; color: var(--ice); font-size: 10px; margin-top: 3px; }
 .manual-results { display: grid; gap: 12px; padding: 16px; border-top: 1px solid var(--line-soft); }
 .probability-panel, .timeline-panel { padding: 11px; border: 1px solid var(--line-soft); background: rgba(0,0,0,.14); }
@@ -1582,14 +1583,18 @@ body.is-modal-open { overflow: hidden; }
   .build-control-fields { grid-template-columns: 1fr; }
   .scenario-fields { grid-template-columns: 1fr; }
   .build-scenario-fold .scenario-fields { grid-template-columns: 1fr; }
-  .scenario-group .scenario-fields { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .scenario-group .scenario-fields,
+  .build-scenario-fold .scenario-group .scenario-fields,
+  .build-scenario-fold .scenario-group:first-child .scenario-fields { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .enemy-stats-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
   .external-buff-panel .external-buff-group { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
   .topbar { height: 62px; gap: 10px; padding: 0 12px; }
-  .scenario-group .scenario-fields { grid-template-columns: 1fr; }
+  .scenario-group .scenario-fields,
+  .build-scenario-fold .scenario-group .scenario-fields,
+  .build-scenario-fold .scenario-group:first-child .scenario-fields { grid-template-columns: 1fr; }
   .enemy-stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .topbar-actions { gap: 5px; }
   .topbar-actions .button { min-width: 0; padding: 0 9px; }

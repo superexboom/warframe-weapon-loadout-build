@@ -12,7 +12,7 @@ NAMES = ["Braton Prime", "Soma Prime", "Latron Prime", "Burston Prime", "Boltor 
 def evaluate_payload(p):
     ctx = app._manual_resolve_sim_context(p)
     common = ctx["common"]
-    sc = replace(common["scenario"], trigger_policy=p.get("triggerPolicy") or "emergent")
+    sc = common['scenario']
     w, _ = o._select_fire_mode(ctx["weapon_record"], common["fire_mode"], weapon_type=ctx["weapon"]["weaponType"])
     if common.get("weapon_override"):
         w = {**w, **common["weapon_override"]}

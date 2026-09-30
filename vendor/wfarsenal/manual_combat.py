@@ -454,6 +454,8 @@ def prepare(
             radial._additional_radials = tuple(radial_parts[1:])
         if extra.get('requiresFullAmmo'):
             st._requires_full_ammo = True
+        if extra.get('primaryDelaySeconds') is not None:
+            st._primary_delay_seconds = float(extra['primaryDelaySeconds'])
         if extra.get('charge'):
             st._charge_time = extra['charge']['seconds'] / max(st.fire_rate / float(modes[idx]['fireRate']), 1e-9)
         if extra.get('bow'):
@@ -526,4 +528,8 @@ def prepare(
         lastRoundMultishot=last_round_multishot,
         fieldDurationOnEmptyReload=field_duration,
         distance=scenario.distance,
+        manualDetonation=({**selected_attack['manualDetonation'],
+                           'delaySeconds':scenario.detonation_delay_seconds,
+                           'batchSize':scenario.detonation_batch_size}
+                          if selected_attack.get('manualDetonation') else None),
     )

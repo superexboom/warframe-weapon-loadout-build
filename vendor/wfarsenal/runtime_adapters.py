@@ -385,6 +385,7 @@ def resolve_projectile_runtime_adapters(
                 "kind": "runtimeRadialTransition",
                 "trigger": "projectile-death",
                 "baseSource": "shieldDamageData",
+                "conditionText": "Equip Buried Debts; when the orb is destroyed, explode using its absorbed projectile damage and the augment rank multiplier.",
                 "multipliers": list(params["_radialDmgPct"]),
                 "multiplierRange": [
                     min(params["_radialDmgPct"]),

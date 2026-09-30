@@ -129,6 +129,7 @@ const ui = Object.fromEntries([
   "build-enemy-stats", "build-enemy-stats-context",
   "build-setup-folds", "build-enemy-open", "build-enemy-current", "build-enemy-current-meta", "enemy-picker", "enemy-picker-close",
   "build-aiming", "build-headshot-chance", "build-headshot-output", "build-distance", "build-combo-tier", "build-heavy-attack", "build-damage-model",
+  "build-manual-detonation", "build-detonation-batch", "build-detonation-delay",
   "build-config-tabs", "build-config-status", "build-config-copy", "build-config-compare", "build-config-import", "build-config-export", "build-config-import-json", "build-config-import-rabbit", "build-config-export-json", "build-config-export-rabbit", "build-config-import-file", "build-config-compare-output",
   "custom-defense-fields", "build-custom-health", "build-custom-armor", "build-custom-shield", "build-custom-health-type", "build-custom-armor-type", "build-custom-shield-type", "custom-defense-note",
   "build-arcane-list", "special-loadout", "special-mod-slots",
@@ -290,6 +291,8 @@ function captureBuildConfig() {
     armourStrip: Number(get("build-armour-strip", 0) || 0),
     headshotChance: Number(get("build-headshot-chance", 0) || 0),
     distance: Number(get("build-distance", 0) || 0),
+    detonationBatchSize: ui["build-manual-detonation"]?.hidden === false ? Number(get("build-detonation-batch", 1)) : 1,
+    detonationDelaySeconds: ui["build-manual-detonation"]?.hidden === false ? Number(get("build-detonation-delay", 0)) : 0,
     comboTier: Number(get("build-combo-tier", 0) || 0),
     heavyAttack: checked("build-heavy-attack"),
     damageModel: get("build-damage-model", "panel"),
@@ -419,6 +422,8 @@ function applyBuildConfig(config) {
     state.incarnonChoices = {};
     if (ui["build-incarnon-cycle"]) ui["build-incarnon-cycle"].checked = false;
     if (ui["build-aiming"]) ui["build-aiming"].checked = false;
+    setControlValue("build-detonation-batch", 1);
+    setControlValue("build-detonation-delay", 0);
     state.requiredMods = [];
     state.forbiddenMods = [];
     setControlValue("build-min-fill", "");
@@ -444,6 +449,8 @@ function applyBuildConfig(config) {
   setControlValue("build-armour-strip", config.armourStrip ?? 0);
   setControlValue("build-headshot-chance", config.headshotChance ?? 0);
   setControlValue("build-distance", config.distance ?? 0);
+  setControlValue("build-detonation-batch", config.detonationBatchSize ?? 1);
+  setControlValue("build-detonation-delay", config.detonationDelaySeconds ?? 0);
   setControlValue("build-combo-tier", config.comboTier ?? 0);
   setControlValue("build-damage-model", config.damageModel || "panel");
   if (ui["build-steel-path"]) ui["build-steel-path"].checked = Boolean(config.steelPath);
@@ -778,6 +785,7 @@ function rabbitCompactConfig(wrapper) {
     if (Array.isArray(config.kitgunParts) && config.kitgunParts.length) result.g = config.kitgunParts.map(rabbitPathToken);
     if (config.incarnonCycle) result.ic = 1;
     if (config.aiming) result.aim = 1;
+    if (config.detonationDelaySeconds || Number(config.detonationBatchSize || 1) !== 1) result.dt = [Number(config.detonationBatchSize || 1), Number(config.detonationDelaySeconds || 0)];
     if (config.innateElement) result.e = config.innateElement;
     if (config.innateElement) result.b = Number(config.innateElementValue ?? 0.60);
     return result;
@@ -821,6 +829,7 @@ function rabbitExpandCompactConfig(kind, compact) {
       exilus: rabbitExpandPair(compact.x, byToken), weaponArcane: rabbitExpandPair(compact.a, byToken),
       incarnonChoices: Object.fromEntries((compact.i || []).map(([tier, choice]) => [String(tier), choice])),
       incarnonCycle: Boolean(compact.ic), aiming: Boolean(compact.aim),
+      detonationBatchSize: Number(compact.dt?.[0] ?? 1), detonationDelaySeconds: Number(compact.dt?.[1] ?? 0),
       innateElement: compact.e || null,
       innateElementValue: Number(compact.b ?? 0.60),
       specialSlotPolarities: compact.t && typeof compact.t === "object" ? Object.fromEntries(Object.entries(compact.t).map(([kind, polarity]) => [kind, rabbitWirePolarityValue(polarity) || "AP_UNIVERSAL"])) : undefined,
@@ -1055,6 +1064,7 @@ function rabbitWeaponConfig() {
     weaponArcane: source.weaponArcane,
     incarnonChoices: source.incarnonChoices,
     incarnonCycle: source.incarnonCycle, aiming: source.aiming,
+    detonationBatchSize: source.detonationBatchSize, detonationDelaySeconds: source.detonationDelaySeconds,
   };
   const parts = kitgunPartsPayload();
   if (parts) config.kitgunParts = parts;
@@ -2354,7 +2364,11 @@ const DIAGNOSTIC_CODE_LABELS = {
 
   'spread-hit-loss-not-modeled': '散布暂不参与命中、伤害及评分计算',
   'hema-player-health-cost-not-modeled': '血肢换弹消耗角色生命；当前仅计算输出，未模拟角色生命资源',
-  'talons-manual-detonation-timing-assumed': '鹰爪按投出后立即手动起爆计算，未计额外等待',
+  'talons-single-throw-deployment-overflow-unmodeled': '单次投掷超过 8 枚部署上限，超出部分暂不计伤',
+  'stug-projectile-stack-lifecycle-unmodeled': '史特克当前按孤立胶团结算；后续胶团命中旧胶团后的合并和叠层引爆尚未计入',
+  'stug-embed-ticks-unmodeled': '史特克嵌入期间的小额伤害跳数尚未核实，当前只计 1.5 秒后的爆炸',
+  'stug-bouncing-child-contact-unmodeled': '史特克灵化胶团引爆后的子弹弹跳、碰撞和最终爆炸尚未计入',
+  'stug-full-charge-stack-unmodeled': '史特克蓄满副射击形成初始堆层的规则尚未计入',
   'talons-multishot-spatial-hit-loss-unmodeled': '鹰爪多重投掷的分散落点与范围命中损失尚未计入',
   'talons-natural-status-reference-calibrated': '鹰爪自然触发率原生字段缺失，暂用固定参考版本的 10%',
 
@@ -3231,7 +3245,9 @@ function renderMods(build, target = ui["mod-grid"], slotCount = 8) {
     if (index >= 0 && index < slotCount) cells[index] = mod;
   }
   if (includesRiven) {
-    const rivenSlot = cells.map((cell, i) => (cell ? -1 : i)).filter((i) => i >= 0).pop();
+    const declaredSlot = build?.riven?.slot;
+    const rivenSlot = Number.isInteger(declaredSlot) && declaredSlot >= 0 && declaredSlot < slotCount && !cells[declaredSlot]
+      ? declaredSlot : cells.map((cell, i) => (cell ? -1 : i)).filter((i) => i >= 0).pop();
     if (rivenSlot !== undefined && rivenSlot >= 0) cells[rivenSlot] = "__riven__";
   }
   const nodes = cells.map((mod, index) => {
@@ -7111,6 +7127,8 @@ function drawBenchmarkReplay(bench) {
     const caveats = ["期望触发数模型（非随机模拟）"];
     caveats.push('散布暂不参与命中和伤害计算');
     if (bench.fieldDuration) caveats.push(`空仓换弹首发毒云延时已触发 ${bench.fieldDuration.boostedShots} 次`);
+    if (bench.manualDetonation) caveats.push(`每批 ${bench.manualDetonation.batchSize} 次投掷，等待 ${bench.manualDetonation.delaySeconds}s 起爆 · 已起爆 ${bench.manualDetonation.detonations} 批`);
+    if (bench.delayedAttackEvents) caveats.push(`已结算 ${bench.delayedAttackEvents} 次延迟爆炸`);
     if (bench.syndicateEvents?.length) caveats.push(`集团爆发 ${bench.syndicateEvents.length} 次，实际伤害 ${formatMetric(bench.syndicateWindow || 0)}`);
     if (bench.unsupported?.length) caveats.push(`另有 ${bench.unsupported.length} 项事件未建模，见提示`);
     note.textContent = `${parts.join(" · ") || "标准靶"} · ${tMax.toFixed(0)}s 窗口 · ${caveats.join(" · ")}`;
@@ -8656,6 +8674,7 @@ function selectBuildWeapon(weapon, writeInput = true) {
   if (state.buildWeapon && state.buildWeapon.path !== weapon?.path) persistActiveBuildConfig();
   state.buildWeapon = weapon;
   state.buildResult = null;
+  if (ui["build-manual-detonation"]) ui["build-manual-detonation"].hidden = weapon?.path !== "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives";
   const isKitgunBase = weapon && String(weapon.nameEn || "").trim() === "Kitgun";
   const isZawWeapon = isZawBase(weapon);
   const isAssemblyBase = isKitgunBase || isZawWeapon;
@@ -8876,6 +8895,8 @@ function buildPayloadFromForm() {
     armourStrip: Number(ui["build-armour-strip"]?.value || 0),
     headshotChance: Number(ui["build-headshot-chance"]?.value || 0),
     distance: Number(ui["build-distance"]?.value || 0) || null,
+    detonationBatchSize: ui["build-manual-detonation"]?.hidden === false ? Number(ui["build-detonation-batch"]?.value || 1) : 1,
+    detonationDelaySeconds: ui["build-manual-detonation"]?.hidden === false ? Number(ui["build-detonation-delay"]?.value || 0) : 0,
     comboTier: Number(ui["build-combo-tier"]?.value || 0),
     heavyAttack: Boolean(ui["build-heavy-attack"]?.checked),
     damageModel,
@@ -9001,6 +9022,9 @@ function renderWeaponStats(stats) {
 
 function renderWeaponBuildDiagnostics(result) {
   const lines = [
+    ...(result.projectileEvents?.events || result.build?.projectileEvents?.events || [])
+      .filter((event) => event.kind === "scriptRadial" && event.baseSource === "shieldDamageData")
+      .map(() => "触发条件：装备深埋之憾后，感染量子切割器球体被破坏时，按球体吸收弹丸得到的伤害及 MOD 等级倍率引爆。实际吸收伤害尚未恢复，此效果未计入评分。"),
     ...normalizeLabels(result.unsupported).map((item) => `未完整支持：${item}`),
     ...normalizeLabels(result.skipped).map((item) => `计算说明：${item}`),
     ...normalizeLabels(result.limitations).map((item) => `限制：${item}`),

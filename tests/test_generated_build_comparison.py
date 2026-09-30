@@ -83,3 +83,21 @@ def test_reference_progenitor_never_silently_falls_back_to_its_own_default():
     req,_=reference_request(q,weapons,{},{},10)
     assert req['valence_element']=='heat' and req['valence_bonus']==.6
     assert 'innateElement' not in p
+
+
+def test_fulmin_native_mode_zero_maps_to_semi_auto_and_mode_one_to_automatic():
+    from tools.compare_generated_builds import reference_identity_matches
+    p=dict(weapon='/fulmin',mods=[],level=9999,steelPath=True,headshotChance=1.,aiming=True)
+    weapons={'/fulmin':[{'id':'fulmin_prime','default_form':True}]}
+    semi,_=reference_request({**p,'fireMode':0},weapons,{},{},10)
+    auto,_=reference_request({**p,'fireMode':1},weapons,{},{},10)
+    assert semi['mode']=='alternate' and auto['mode']=='base'
+    reply={'combatants':[{'id':'wielder','weapon':'fulmin_prime'}],'apl':['shoot']}
+    assert not reference_identity_matches(reply,semi)
+    reply['apl']=['semi_auto']
+    assert reference_identity_matches(reply,semi)
+
+
+def test_manual_detonation_cadence_is_not_silently_dropped_in_reference():
+    with pytest.raises(ValueError,match='manual detonation'):
+        reference_request(dict(weapon='/talons',scenario={'detonationDelaySeconds':.5}),{},{},{},10)

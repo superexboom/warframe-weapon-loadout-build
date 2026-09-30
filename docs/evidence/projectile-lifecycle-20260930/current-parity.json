@@ -1,0 +1,635 @@
+{
+  "inputFingerprint": "be545d5a2e34da88",
+  "cases": [
+    {
+      "name": "Simulor",
+      "mode": 0,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 0.9965920535733406,
+      "manual": 0.9965920535733406,
+      "optimizer": 0.9965920535733406,
+      "delta": 0.0,
+      "shots": 45,
+      "transforms": 0,
+      "unsupported": [
+        "orb-merging-and-singularity-unmodeled",
+        "orb-multishot-merging-economy-unmodeled"
+      ],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO",
+        "WEAPON_PUNCTURE_DEPTH",
+        "projectile-component-damage-unapplied",
+        "stacking-damage-curve-unresolved"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Dera Vandal",
+      "mode": 0,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 1.9092561341626968,
+      "manual": 1.9092561341626968,
+      "optimizer": 1.9092561341626968,
+      "delta": 0.0,
+      "shots": 480,
+      "transforms": 0,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO",
+        "incarnon-3-1-WEAPON_PROJECTILE_SPEED-not-evaluated",
+        "incarnon-4-2-NONE-not-evaluated",
+        "incarnon-4-2-runtime-scripts-not-applied"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Dera Vandal",
+      "mode": 1,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 6.528027776112728,
+      "manual": 6.528027776112728,
+      "optimizer": 6.528027776112728,
+      "delta": 0.0,
+      "shots": 138,
+      "transforms": 3,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO",
+        "incarnon-3-1-WEAPON_PROJECTILE_SPEED-not-evaluated",
+        "incarnon-4-2-NONE-not-evaluated",
+        "incarnon-4-2-runtime-scripts-not-applied"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Arca Plasmor",
+      "mode": 0,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 1.71539604810716,
+      "manual": 1.71539604810716,
+      "optimizer": 1.71539604810716,
+      "delta": 0.0,
+      "shots": 30,
+      "transforms": 0,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO",
+        "WEAPON_PUNCTURE_DEPTH"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Kuva Quartakk",
+      "mode": 0,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 4.291129667551944,
+      "manual": 4.291129667551944,
+      "optimizer": 4.291129667551944,
+      "delta": 0.0,
+      "shots": 246,
+      "transforms": 0,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO",
+        "WEAPON_PUNCTURE_DEPTH"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Kuva Quartakk",
+      "mode": 1,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 2.0,
+      "manual": 2.0,
+      "optimizer": 2.0,
+      "delta": 0.0,
+      "shots": 91,
+      "transforms": 0,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_PUNCTURE_DEPTH"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Stug",
+      "mode": 0,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 2.0,
+      "manual": 2.0,
+      "optimizer": 2.0,
+      "delta": 0.0,
+      "shots": 140,
+      "transforms": 0,
+      "unsupported": [
+        "stug-projectile-stack-lifecycle-unmodeled",
+        "stug-embed-ticks-unmodeled"
+      ],
+      "manualUnsupported": [
+        "incarnon-3-2-WEAPON_PROJECTILE_SPEED-not-evaluated",
+        "projectile-component-damage-unapplied"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Stug",
+      "mode": 1,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 2.2848644612032865,
+      "manual": 2.2848644612032865,
+      "optimizer": 2.2848644612032865,
+      "delta": 0.0,
+      "shots": 252,
+      "transforms": 0,
+      "unsupported": [
+        "stug-projectile-stack-lifecycle-unmodeled",
+        "stug-embed-ticks-unmodeled",
+        "stug-full-charge-stack-unmodeled"
+      ],
+      "manualUnsupported": [
+        "incarnon-3-2-WEAPON_PROJECTILE_SPEED-not-evaluated",
+        "projectile-component-damage-unapplied"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Stug",
+      "mode": 2,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 2.481824772694803,
+      "manual": 2.481824772694803,
+      "optimizer": 2.481824772694803,
+      "delta": 0.0,
+      "shots": 188,
+      "transforms": 0,
+      "unsupported": [
+        "stug-projectile-stack-lifecycle-unmodeled",
+        "stug-embed-ticks-unmodeled",
+        "stug-bouncing-child-contact-unmodeled",
+        "incarnon-cycle-data-unavailable"
+      ],
+      "manualUnsupported": [
+        "incarnon-3-2-WEAPON_PROJECTILE_SPEED-not-evaluated",
+        "incarnon-cycle-data-unavailable",
+        "projectile-component-damage-unapplied",
+        "projectile-runtime-script",
+        "stug-death-transform-unverified",
+        "stug-secondary-projectile-unresolved",
+        "stug-stack-damage-unresolved"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Mutalist Quanta",
+      "mode": 0,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 1.0689399796676429,
+      "manual": 1.0689399796676429,
+      "optimizer": 1.0689399796676429,
+      "delta": 0.0,
+      "shots": 300,
+      "transforms": 0,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Mutalist Quanta",
+      "mode": 1,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 0.4883504034058064,
+      "manual": 0.4883504034058064,
+      "optimizer": 0.4883504034058064,
+      "delta": 0.0,
+      "shots": 119,
+      "transforms": 0,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO",
+        "WEAPON_PUNCTURE_DEPTH",
+        "projectile-component-damage-unapplied",
+        "projectile-runtime-script",
+        "script-radial-base-unresolved",
+        "script-radial-transition-unverified"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Synoid Simulor",
+      "mode": 0,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 1.6490622085032283,
+      "manual": 1.6490622085032283,
+      "optimizer": 1.6490622085032283,
+      "delta": 0.0,
+      "shots": 74,
+      "transforms": 0,
+      "unsupported": [
+        "orb-merging-and-singularity-unmodeled",
+        "orb-multishot-merging-economy-unmodeled"
+      ],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO",
+        "WEAPON_PUNCTURE_DEPTH",
+        "projectile-component-damage-unapplied",
+        "stacking-damage-curve-unresolved"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Fulmin Prime",
+      "mode": 0,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 2.6183903235919397,
+      "manual": 2.6183903235919397,
+      "optimizer": 2.6183903235919397,
+      "delta": 0.0,
+      "shots": 45,
+      "transforms": 0,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Fulmin Prime",
+      "mode": 1,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 1.558774281253524,
+      "manual": 1.558774281253524,
+      "optimizer": 1.558774281253524,
+      "delta": 0.0,
+      "shots": 444,
+      "transforms": 0,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO",
+        "WEAPON_PUNCTURE_DEPTH"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Scourge Prime",
+      "mode": 0,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 1.67719487824589,
+      "manual": 1.67719487824589,
+      "optimizer": 1.67719487824589,
+      "delta": 0.0,
+      "shots": 130,
+      "transforms": 0,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO",
+        "projectile-component-damage-unapplied"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Scourge Prime",
+      "mode": 1,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 1.4553098327555436,
+      "manual": 1.4553098327555436,
+      "optimizer": 1.4553098327555436,
+      "delta": 0.0,
+      "shots": 56,
+      "transforms": 0,
+      "unsupported": [],
+      "manualUnsupported": [
+        "WEAPON_CONVERT_AMMO",
+        "projectile-component-damage-unapplied"
+      ],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    },
+    {
+      "name": "Talons",
+      "mode": 0,
+      "passed": true,
+      "originalFingerprint": "38112bfd6db3e5d9507a4f9be53fa50b0f4f863b9adf9107fd3938373037fd91",
+      "automatic": 0.5637083616020984,
+      "manual": 0.5637083616020984,
+      "optimizer": 0.5637083616020984,
+      "delta": 0.0,
+      "shots": 88,
+      "transforms": 0,
+      "unsupported": [
+        "talons-multishot-spatial-hit-loss-unmodeled",
+        "talons-natural-status-reference-calibrated"
+      ],
+      "manualUnsupported": [],
+      "context": {
+        "level": 9999,
+        "steel_path": true,
+        "enemy_enhancements": {
+          "eximus": false,
+          "archimedea": false,
+          "empowered": false,
+          "playerCount": null,
+          "magneticStacks": 0
+        },
+        "windowSeconds": 30.0,
+        "headshotChance": 1.0,
+        "armour_strip": 0.0,
+        "elemental_armour_strip": 0.0,
+        "statusRateMultiplier": 1.0,
+        "stanceMultiplier": 1.0,
+        "forcedProcs": {}
+      }
+    }
+  ],
+  "passed": 17,
+  "total": 17,
+  "source": ".local\\reports\\projectile-extra-auto-20260930\\results.json"
+}

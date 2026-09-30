@@ -30,14 +30,14 @@ SPOOL_PROFILES = {
 
 def base_profile(weapon, fire_mode=0):
     from .manual_combat import reference
-    if weapon.get('isIncarnonForm'):
-        return {}
     selected = int(weapon.get('__selectedFireMode__', fire_mode))
     profile = {**reference().get('auditedAttacks', {}).get(weapon.get('path'), {}),
                **BATTERY_PROFILES.get(weapon.get('path'), {}),
                **SPOOL_PROFILES.get(weapon.get('path'), {})}
     if selected:
         profile = profile.get('modes', {}).get(str(selected), {})
+    if weapon.get('isIncarnonForm') and not profile.get('allowIncarnon'):
+        return {}
     cadence = reference().get('cadenceProfiles', {}).get(weapon.get('path'), {})
     if cadence.get('fireMode') == selected:
         profile = {**profile, **cadence}

@@ -21,6 +21,7 @@ import subprocess
 import sys
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -53,9 +54,13 @@ def _shard_worker(args: tuple[str, str, str, int]) -> dict:
     合并阶段执行一次写入（见 main()）。
     """
     shard_path, profile, weapon_path, fire_mode = args
+    # Outer bake workers already own parallelism. Without this guard each one
+    # starts an additional eight-process search pool on Windows.
+    os.environ['WF_ANALYZER_SERIAL'] = '1'
     import app  # noqa: PLC0415
 
     persistence_guard = app._disable_analysis_statics_persistence()
+    worker_inputs = app._analysis_inputs_fingerprint()
     app.ANALYSIS_STATICS_CACHE.clear()
     bases = app.RIVEN_BASE_VALUES.get(_weapon_type_of(weapon_path), {})
     stats = []
@@ -100,6 +105,8 @@ def _shard_worker(args: tuple[str, str, str, int]) -> dict:
     # The persistence guard above makes this structural: even the indirect
     # write path through analyze_payload() is a no-op in this process.
     assert not persistence_guard.enabled
+    if app._analysis_inputs_fingerprint() != worker_inputs:
+        return {'weapon':weapon_path,'ok':False,'error':'inputs changed during analysis; shard rejected'}
     try:
         shard = Path(shard_path)
         shard.parent.mkdir(parents=True, exist_ok=True)
@@ -113,7 +120,7 @@ def _shard_worker(args: tuple[str, str, str, int]) -> dict:
                 {
                     "schemaVersion": SHARD_SCHEMA_VERSION,
                     "cacheVersion": app.ANALYSIS_STATICS_CACHE_VERSION,
-                    "inputs": _worker_inputs_fingerprint(app),
+                    "inputs": worker_inputs,
                     "profile": profile,
                     "entries": entries,
                 },
@@ -168,6 +175,16 @@ def _default_analysis_modes(raw_weapon: dict) -> list[int]:
     return [modes[0]]
 
 
+def _supported_bake_modes(raw_weapon: dict) -> list[int]:
+    # Match the analyzer's actual selectable attacks. Inherited gun-butt modes
+    # cannot become successful ranged cache tasks merely because damage exists.
+    return [index for index, mode in enumerate(raw_weapon.get('fireModes') or ())
+            if isinstance(mode, dict) and isinstance(mode.get('damage'), dict)
+            and sum(float(v or 0.) for v in (mode['damage'].get('types') or {}).values()) > 0.
+            and not (mode.get('behaviorKind') == 'auxiliary-melee'
+                     and raw_weapon.get('slot') in ('primary','secondary','arch_gun'))]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", default="standard", choices=["fast", "standard", "deep"])
@@ -175,6 +192,8 @@ def main() -> int:
     parser.add_argument("--weapon", action="append", default=None, help="只烘焙指定武器（可多次）")
     parser.add_argument("--limit", type=int, default=None, help="只烘焙前 N 把（冒烟用）")
     parser.add_argument("--fire-modes", action="store_true", help="烘焙全部开火模式（默认与普通分析同口径：灵化取末模式，其余取主模式）")
+    parser.add_argument('--report', type=Path, help='写入覆盖与失败报告，运行时逐项更新')
+    parser.add_argument('--dry-run', action='store_true', help='仅列出任务和当前分片覆盖')
     args = parser.parse_args()
 
     import app
@@ -211,6 +230,10 @@ def main() -> int:
 
     shard_dir.mkdir(parents=True, exist_ok=True)
     tasks = []
+    expected_shards = set()
+    failures = []
+    completed = []
+    excluded_modes = 0
     skipped = 0
     skipped_no_damage = 0
     for weapon in weapons:
@@ -225,11 +248,14 @@ def main() -> int:
                 and isinstance(mode.get("damage"), dict)
             ]
         except Exception:
+            raw_weapon = {}
             raw_modes = []
+        supported_modes = _supported_bake_modes(raw_weapon)
+        excluded_modes += len(raw_modes)-len(supported_modes)
         if args.fire_modes:
-            modes = [int(mode.get("index", index)) for index, mode in enumerate(raw_modes)]
+            modes = supported_modes
         else:
-            modes = _default_analysis_modes(raw_weapon)
+            modes = [mode for mode in _default_analysis_modes(raw_weapon) if mode in supported_modes]
             if not modes and raw_modes:
                 # 有开火模式但都缺 damage 数据：显式跳过并计数（不静默 0 模式）。
                 modes = []
@@ -238,6 +264,7 @@ def main() -> int:
             # 分片名用武器 path 哈希：与列表顺序解耦（--weapon 过滤/续跑稳定）。
             tag = hashlib.sha1(f"{weapon['path']}#{mode}".encode()).hexdigest()[:12]
             shard = shard_dir / f"{tag}.json"
+            expected_shards.add(shard)
             # 幂等续跑：分片已存在且非空则跳过（烘焙被中断后可续）。
             if shard.is_file() and shard_is_current(shard):
                 skipped += 1
@@ -249,20 +276,43 @@ def main() -> int:
         print(f"skipping {skipped_no_damage} raw fire modes without damage data")
 
     started = time.time()
+    def report(status):
+        if not args.report:
+            return
+        payload = dict(status=status, updatedAt=datetime.now(timezone.utc).isoformat(),
+                       profile=args.profile, fireModes=args.fire_modes, workers=args.workers,
+                       cacheVersion=cache_version, inputs=input_fingerprint,
+                       weapons=len(weapons), expectedShards=len(expected_shards),
+                       skippedCurrent=skipped, completed=len(completed),
+                       excludedModes=excluded_modes, failures=failures,
+                       elapsedSeconds=round(time.time()-started,3))
+        args.report.parent.mkdir(parents=True,exist_ok=True)
+        temp=args.report.with_suffix('.tmp')
+        temp.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        temp.replace(args.report)
+    report('planned' if args.dry_run else 'running')
+    if args.dry_run:
+        print(f'expected {len(expected_shards)}, current {skipped}, pending {len(tasks)}, excluded {excluded_modes}')
+        return 0
     done = failed = 0
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
         futures = {pool.submit(_shard_worker, task): task for task in tasks}
         for future in as_completed(futures):
-            outcome = future.result()
+            try:
+                outcome = future.result()
+            except Exception as exc:
+                outcome = {'ok':False,'weapon':futures[future][2], 'error':f'{type(exc).__name__}: {exc}'}
             done += 1
             if outcome["ok"]:
-                failed = failed
+                completed.append(outcome)
             else:
                 failed += 1
+                failures.append({**outcome,'fireMode':futures[future][3]})
                 print(f"  FAIL {outcome['weapon']}: {outcome['error']}")
             if done % 25 == 0:
                 elapsed = time.time() - started
                 print(f"  {done}/{len(tasks)} ({elapsed:.0f}s, {failed} failed)")
+            report('running')
 
     # 合并分片到主缓存
     # Preserve other profiles already baked into the main cache.
@@ -275,7 +325,7 @@ def main() -> int:
         if isinstance(value, dict)
     }
     rejected_shards = 0
-    for shard in sorted(shard_dir.glob("*.json")):
+    for shard in sorted(expected_shards):
         try:
             payload = json.loads(shard.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
@@ -294,6 +344,15 @@ def main() -> int:
         for key, value in (payload.get("entries") or {}).items():
             if isinstance(value, dict):
                 merged[key] = value
+    missing = [str(shard) for shard in expected_shards if not shard_is_current(shard)]
+    if missing:
+        failures.append(dict(error='missing-current-shards', shards=sorted(missing)))
+        failed = max(failed,len(missing))
+    if app._analysis_inputs_fingerprint() != input_fingerprint:
+        failures.append(dict(error='inputs-changed-during-bake'))
+        report('failed-inputs-changed')
+        print('inputs changed during bake; refusing to publish cache')
+        return 1
     app.ANALYSIS_STATICS_CACHE.clear()
     app.ANALYSIS_STATICS_CACHE.update(merged)
     app.ANALYSIS_STATICS_CACHE["__dirty__"] = True
@@ -302,6 +361,7 @@ def main() -> int:
     if rejected_shards:
         print(f"rejected {rejected_shards} stale/unreadable shards")
     print(f"total {time.time()-started:.0f}s, {failed} failed of {len(tasks)}")
+    report('complete' if not failed else 'partial')
     # F14 边界：有失败时不得报 0——「条目非空、worker 没抛异常」不等于
     # 语义正确。失败数 > 0 时返回 1，让 CI/批处理能感知部分失败。
     if failed:

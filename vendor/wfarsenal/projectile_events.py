@@ -198,6 +198,7 @@ def _event_identity(event: Mapping[str, Any]) -> dict[str, Any]:
             "multipliers",
             "multiplierRange",
             "baseSource",
+            "conditionText",
         )
         if event.get(key) is not None
     }

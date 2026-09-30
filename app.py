@@ -588,7 +588,7 @@ if getattr(sys, "frozen", False):
         Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
         / "Warframe-Weapon-Loadout-Build" / "cache" / "riven-analysis-statics.json"
     )
-ANALYSIS_STATICS_CACHE_VERSION = 10
+ANALYSIS_STATICS_CACHE_VERSION = 11
 
 
 def _stances_fingerprint() -> str:
@@ -686,6 +686,10 @@ def _load_analysis_statics_cache() -> dict[str, Any]:
     return dict(entries) if isinstance(entries, dict) else {}
 
 
+try:
+    ANALYSIS_STATICS_RUNTIME_INPUTS = _analysis_inputs_fingerprint()
+except SimulationError:
+    ANALYSIS_STATICS_RUNTIME_INPUTS = None
 ANALYSIS_STATICS_CACHE: dict[str, Any] = _load_analysis_statics_cache()
 
 
@@ -710,6 +714,14 @@ def _persist_analysis_statics_cache() -> None:
         # 依赖缺失时既不能读旧缓存也不能写入新缓存：放弃本次持久化，
         # 下次启动（依赖恢复后）自然整体失效重算。
         return
+    if inputs_fingerprint != ANALYSIS_STATICS_RUNTIME_INPUTS:
+        # A running preview may still hold code from before a workspace update.
+        # It cannot label those in-memory results with the new on-disk engine.
+        return
+    disk_entries = _load_analysis_statics_cache()
+    disk_entries.update({key:value for key,value in ANALYSIS_STATICS_CACHE.items()
+                         if isinstance(value,dict)})
+    ANALYSIS_STATICS_CACHE.update(disk_entries)
     payload = {
         "buildLabel": EXPORTS.get("buildLabel"),
         "stances": _stances_fingerprint(),
@@ -5072,7 +5084,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                 # 触发源打包：已配赋能 + 镀层 MOD + 灵化 on-kill 进化的层数
                 # 规格，窗口模型按 emergent 模拟爬升并输出覆盖率折线。
                 # Replay creates verified sources from raw condition records.
-                _policy = str(payload.get("triggerPolicy") or "emergent")
+                _policy = common['scenario'].trigger_policy
                 from wfarsenal.manual_combat import prepare as prepare_combat
                 from wfarsenal.combat_replay import replay as replay_combat
                 engine = {}
@@ -5116,6 +5128,8 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     "stacks": windowed.get("averagedStacks") or {},
                     "triggerSeries": windowed.get("triggerSeries") or [],
                     'fieldDuration': windowed.get('fieldDuration'),
+                    'manualDetonation': windowed.get('manualDetonation'),
+                    'delayedAttackEvents': windowed.get('delayedAttackEvents'),
                     "cryogenic": windowed.get("cryogenic"),
                     "empowered": windowed.get("empowered"),
                     "triggerPolicy": _policy,

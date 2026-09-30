@@ -1,0 +1,2933 @@
+{
+  "path": ".local\\research\\luau-raw\\Debug\\Lotus\\Scripts\\WeaponAttachments\\GooGun.lua_B",
+  "sha256": "2bd380cb21a72f74e4c68aa976831c984c70f22bd253820d080075ecb0b55ac1",
+  "bytes": 1959,
+  "version": 9,
+  "mainProto": 5,
+  "decoderSha256": "a87bf2baf60a6cac7c4289a9dd5572d17bce658219609655dc4f4e5182c23339",
+  "opcodeMapSha256": "4247946328a671a4d28a0e7323956dafd020e1cf898a054b2882c77917c39035",
+  "protos": [
+    {
+      "index": 0,
+      "lineDefined": 7,
+      "params": 1,
+      "upvalues": 0,
+      "children": [],
+      "constants": [
+        {
+          "tag": 1,
+          "offset": 425,
+          "kind": "private32",
+          "raw": 1579878006
+        },
+        {
+          "tag": 1,
+          "offset": 430,
+          "kind": "private32",
+          "raw": 1434228338
+        },
+        {
+          "tag": 1,
+          "offset": 435,
+          "kind": "private32",
+          "raw": 1695855112
+        },
+        {
+          "tag": 4,
+          "offset": 440,
+          "kind": "import",
+          "value": 1075838976
+        },
+        {
+          "tag": 1,
+          "offset": 445,
+          "kind": "private32",
+          "raw": 2936428436
+        },
+        {
+          "tag": 1,
+          "offset": 450,
+          "kind": "private32",
+          "raw": 3192802406
+        },
+        {
+          "tag": 4,
+          "offset": 455,
+          "kind": "import",
+          "value": 1078984704
+        },
+        {
+          "tag": 1,
+          "offset": 460,
+          "kind": "private32",
+          "raw": 680066140
+        },
+        {
+          "tag": 1,
+          "offset": 465,
+          "kind": "private32",
+          "raw": 2524748321
+        },
+        {
+          "tag": 4,
+          "offset": 470,
+          "kind": "import",
+          "value": 1082130432
+        },
+        {
+          "tag": 1,
+          "offset": 475,
+          "kind": "private32",
+          "raw": 2977573314
+        },
+        {
+          "tag": 1,
+          "offset": 480,
+          "kind": "private32",
+          "raw": 2624232137
+        },
+        {
+          "tag": 1,
+          "offset": 485,
+          "kind": "private32",
+          "raw": 3656004279
+        }
+      ],
+      "instructions": [
+        {
+          "pc": 0,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 1,
+          "b": 0,
+          "c": 118,
+          "sd": 30208,
+          "aux": 0,
+          "width": 2
+        },
+        {
+          "pc": 2,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 1,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 3,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 2,
+          "b": 0,
+          "c": 114,
+          "sd": 29184,
+          "aux": 1,
+          "width": 2
+        },
+        {
+          "pc": 5,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 6,
+          "op": 23,
+          "semantic": "FASTCALL1",
+          "a": 133,
+          "b": 2,
+          "c": 3,
+          "sd": 770,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 7,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 4,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 8,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 3,
+          "b": 3,
+          "c": 0,
+          "sd": 3,
+          "aux": 1075838976,
+          "width": 2
+        },
+        {
+          "pc": 10,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 3,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 11,
+          "op": 66,
+          "semantic": "JUMPIFNOT",
+          "a": 3,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1,
+          "target": 13
+        },
+        {
+          "pc": 12,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 13,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 3,
+          "b": 2,
+          "c": 148,
+          "sd": -27646,
+          "aux": 4,
+          "width": 2
+        },
+        {
+          "pc": 15,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 3,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 16,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 6,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 17,
+          "op": 76,
+          "semantic": "LENGTH",
+          "a": 4,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 18,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 5,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 19,
+          "op": 29,
+          "semantic": "FORNPREP",
+          "a": 4,
+          "b": 59,
+          "c": 0,
+          "sd": 59,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 20,
+          "op": 67,
+          "semantic": "GETTABLE",
+          "a": 7,
+          "b": 1,
+          "c": 6,
+          "sd": 1537,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 21,
+          "op": 23,
+          "semantic": "FASTCALL1",
+          "a": 133,
+          "b": 7,
+          "c": 3,
+          "sd": 775,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 22,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 9,
+          "b": 7,
+          "c": 0,
+          "sd": 7,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 23,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 8,
+          "b": 3,
+          "c": 0,
+          "sd": 3,
+          "aux": 1075838976,
+          "width": 2
+        },
+        {
+          "pc": 25,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 8,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 26,
+          "op": 70,
+          "semantic": "JUMPIF",
+          "a": 8,
+          "b": 51,
+          "c": 0,
+          "sd": 51,
+          "aux": null,
+          "width": 1,
+          "target": 78
+        },
+        {
+          "pc": 27,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 9,
+          "b": 6,
+          "c": 0,
+          "sd": 6,
+          "aux": 1078984704,
+          "width": 2
+        },
+        {
+          "pc": 29,
+          "op": 23,
+          "semantic": "FASTCALL1",
+          "a": 133,
+          "b": 9,
+          "c": 2,
+          "sd": 521,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 30,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 8,
+          "b": 3,
+          "c": 0,
+          "sd": 3,
+          "aux": 1075838976,
+          "width": 2
+        },
+        {
+          "pc": 32,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 8,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 33,
+          "op": 70,
+          "semantic": "JUMPIF",
+          "a": 8,
+          "b": 9,
+          "c": 0,
+          "sd": 9,
+          "aux": null,
+          "width": 1,
+          "target": 43
+        },
+        {
+          "pc": 34,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 10,
+          "b": 6,
+          "c": 0,
+          "sd": 6,
+          "aux": 1078984704,
+          "width": 2
+        },
+        {
+          "pc": 36,
+          "op": 49,
+          "semantic": "FASTCALL2",
+          "a": 134,
+          "b": 7,
+          "c": 3,
+          "sd": 775,
+          "aux": 10,
+          "width": 2
+        },
+        {
+          "pc": 38,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 8,
+          "b": 7,
+          "c": 92,
+          "sd": 23559,
+          "aux": 7,
+          "width": 2
+        },
+        {
+          "pc": 40,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 8,
+          "b": 3,
+          "c": 2,
+          "sd": 515,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 41,
+          "op": 66,
+          "semantic": "JUMPIFNOT",
+          "a": 8,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1,
+          "target": 43
+        },
+        {
+          "pc": 42,
+          "op": 41,
+          "semantic": "JUMP",
+          "a": 0,
+          "b": 35,
+          "c": 0,
+          "sd": 35,
+          "aux": null,
+          "width": 1,
+          "target": 78
+        },
+        {
+          "pc": 43,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 9,
+          "b": 9,
+          "c": 0,
+          "sd": 9,
+          "aux": 1082130432,
+          "width": 2
+        },
+        {
+          "pc": 45,
+          "op": 23,
+          "semantic": "FASTCALL1",
+          "a": 133,
+          "b": 9,
+          "c": 2,
+          "sd": 521,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 46,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 8,
+          "b": 3,
+          "c": 0,
+          "sd": 3,
+          "aux": 1075838976,
+          "width": 2
+        },
+        {
+          "pc": 48,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 8,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 49,
+          "op": 70,
+          "semantic": "JUMPIF",
+          "a": 8,
+          "b": 19,
+          "c": 0,
+          "sd": 19,
+          "aux": null,
+          "width": 1,
+          "target": 69
+        },
+        {
+          "pc": 50,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 10,
+          "b": 9,
+          "c": 0,
+          "sd": 9,
+          "aux": 1082130432,
+          "width": 2
+        },
+        {
+          "pc": 52,
+          "op": 49,
+          "semantic": "FASTCALL2",
+          "a": 134,
+          "b": 7,
+          "c": 3,
+          "sd": 775,
+          "aux": 10,
+          "width": 2
+        },
+        {
+          "pc": 54,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 8,
+          "b": 7,
+          "c": 92,
+          "sd": 23559,
+          "aux": 7,
+          "width": 2
+        },
+        {
+          "pc": 56,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 8,
+          "b": 3,
+          "c": 2,
+          "sd": 515,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 57,
+          "op": 66,
+          "semantic": "JUMPIFNOT",
+          "a": 8,
+          "b": 11,
+          "c": 0,
+          "sd": 11,
+          "aux": null,
+          "width": 1,
+          "target": 69
+        },
+        {
+          "pc": 58,
+          "op": 44,
+          "semantic": "JUMPIFEQ",
+          "a": 7,
+          "b": 6,
+          "c": 0,
+          "sd": 6,
+          "aux": 3,
+          "width": 2,
+          "target": 65
+        },
+        {
+          "pc": 60,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 10,
+          "b": 3,
+          "c": 0,
+          "sd": 3,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 61,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 8,
+          "b": 7,
+          "c": 194,
+          "sd": -15865,
+          "aux": 10,
+          "width": 2
+        },
+        {
+          "pc": 63,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 8,
+          "b": 3,
+          "c": 2,
+          "sd": 515,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 64,
+          "op": 70,
+          "semantic": "JUMPIF",
+          "a": 8,
+          "b": 13,
+          "c": 0,
+          "sd": 13,
+          "aux": null,
+          "width": 1,
+          "target": 78
+        },
+        {
+          "pc": 65,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 8,
+          "b": 2,
+          "c": 201,
+          "sd": -14078,
+          "aux": 11,
+          "width": 2
+        },
+        {
+          "pc": 67,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 8,
+          "b": 2,
+          "c": 1,
+          "sd": 258,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 68,
+          "op": 41,
+          "semantic": "JUMP",
+          "a": 0,
+          "b": 9,
+          "c": 0,
+          "sd": 9,
+          "aux": null,
+          "width": 1,
+          "target": 78
+        },
+        {
+          "pc": 69,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 8,
+          "b": 7,
+          "c": 183,
+          "sd": -18681,
+          "aux": 12,
+          "width": 2
+        },
+        {
+          "pc": 71,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 8,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 72,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 9,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 73,
+          "op": 83,
+          "semantic": "JUMPIFNOTLT",
+          "a": 9,
+          "b": 4,
+          "c": 0,
+          "sd": 4,
+          "aux": 8,
+          "width": 2,
+          "target": 78
+        },
+        {
+          "pc": 75,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 8,
+          "b": 2,
+          "c": 201,
+          "sd": -14078,
+          "aux": 11,
+          "width": 2
+        },
+        {
+          "pc": 77,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 8,
+          "b": 2,
+          "c": 1,
+          "sd": 258,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 78,
+          "op": 81,
+          "semantic": "FORNLOOP",
+          "a": 4,
+          "b": 197,
+          "c": 255,
+          "sd": -59,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 79,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        }
+      ],
+      "unknownPcs": [],
+      "invalidJumpPcs": []
+    },
+    {
+      "index": 1,
+      "lineDefined": 32,
+      "params": 1,
+      "upvalues": 2,
+      "children": [],
+      "constants": [
+        {
+          "tag": 2,
+          "offset": 852,
+          "kind": "number",
+          "value": 2.0
+        },
+        {
+          "tag": 1,
+          "offset": 861,
+          "kind": "private32",
+          "raw": 783067913
+        },
+        {
+          "tag": 4,
+          "offset": 866,
+          "kind": "import",
+          "value": 1074790400
+        },
+        {
+          "tag": 1,
+          "offset": 871,
+          "kind": "private32",
+          "raw": 3377688903
+        },
+        {
+          "tag": 2,
+          "offset": 876,
+          "kind": "number",
+          "value": 0.02
+        },
+        {
+          "tag": 2,
+          "offset": 885,
+          "kind": "number",
+          "value": 0.01
+        },
+        {
+          "tag": 2,
+          "offset": 894,
+          "kind": "number",
+          "value": 5.0
+        },
+        {
+          "tag": 1,
+          "offset": 903,
+          "kind": "private32",
+          "raw": 3022047322
+        },
+        {
+          "tag": 4,
+          "offset": 908,
+          "kind": "import",
+          "value": 1081081856
+        },
+        {
+          "tag": 1,
+          "offset": 913,
+          "kind": "private32",
+          "raw": 3068333219
+        },
+        {
+          "tag": 1,
+          "offset": 918,
+          "kind": "private32",
+          "raw": 1078117028
+        },
+        {
+          "tag": 4,
+          "offset": 923,
+          "kind": "import",
+          "value": 2156931072
+        },
+        {
+          "tag": 1,
+          "offset": 928,
+          "kind": "private32",
+          "raw": 253825976
+        },
+        {
+          "tag": 1,
+          "offset": 933,
+          "kind": "private32",
+          "raw": 3673693945
+        },
+        {
+          "tag": 4,
+          "offset": 938,
+          "kind": "import",
+          "value": 1087373312
+        }
+      ],
+      "instructions": [
+        {
+          "pc": 0,
+          "op": 18,
+          "semantic": "GETUPVAL",
+          "a": 3,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 1,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 5,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": 1074790400,
+          "width": 2
+        },
+        {
+          "pc": 3,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 5,
+          "b": 1,
+          "c": 2,
+          "sd": 513,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 4,
+          "op": 36,
+          "semantic": "MULK",
+          "a": 4,
+          "b": 5,
+          "c": 0,
+          "sd": 5,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 5,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 6,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": 1074790400,
+          "width": 2
+        },
+        {
+          "pc": 7,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 6,
+          "b": 1,
+          "c": 2,
+          "sd": 513,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 8,
+          "op": 36,
+          "semantic": "MULK",
+          "a": 5,
+          "b": 6,
+          "c": 0,
+          "sd": 6,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 9,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 6,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 10,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 7,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 11,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 1,
+          "b": 0,
+          "c": 71,
+          "sd": 18176,
+          "aux": 3,
+          "width": 2
+        },
+        {
+          "pc": 13,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 1,
+          "b": 7,
+          "c": 1,
+          "sd": 263,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 14,
+          "op": 18,
+          "semantic": "GETUPVAL",
+          "a": 3,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 15,
+          "op": 22,
+          "semantic": "LOADK",
+          "a": 5,
+          "b": 4,
+          "c": 0,
+          "sd": 4,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 16,
+          "op": 22,
+          "semantic": "LOADK",
+          "a": 7,
+          "b": 5,
+          "c": 0,
+          "sd": 5,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 17,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 8,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": 1074790400,
+          "width": 2
+        },
+        {
+          "pc": 19,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 8,
+          "b": 1,
+          "c": 2,
+          "sd": 513,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 20,
+          "op": 31,
+          "semantic": "MUL",
+          "a": 6,
+          "b": 7,
+          "c": 8,
+          "sd": 2055,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 21,
+          "op": 48,
+          "semantic": "ADD",
+          "a": 4,
+          "b": 5,
+          "c": 6,
+          "sd": 1541,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 22,
+          "op": 22,
+          "semantic": "LOADK",
+          "a": 6,
+          "b": 4,
+          "c": 0,
+          "sd": 4,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 23,
+          "op": 22,
+          "semantic": "LOADK",
+          "a": 8,
+          "b": 5,
+          "c": 0,
+          "sd": 5,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 24,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 9,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": 1074790400,
+          "width": 2
+        },
+        {
+          "pc": 26,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 9,
+          "b": 1,
+          "c": 2,
+          "sd": 513,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 27,
+          "op": 31,
+          "semantic": "MUL",
+          "a": 7,
+          "b": 8,
+          "c": 9,
+          "sd": 2312,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 28,
+          "op": 48,
+          "semantic": "ADD",
+          "a": 5,
+          "b": 6,
+          "c": 7,
+          "sd": 1798,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 29,
+          "op": 22,
+          "semantic": "LOADK",
+          "a": 7,
+          "b": 4,
+          "c": 0,
+          "sd": 4,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 30,
+          "op": 22,
+          "semantic": "LOADK",
+          "a": 9,
+          "b": 5,
+          "c": 0,
+          "sd": 5,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 31,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 10,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": 1074790400,
+          "width": 2
+        },
+        {
+          "pc": 33,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 10,
+          "b": 1,
+          "c": 2,
+          "sd": 513,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 34,
+          "op": 31,
+          "semantic": "MUL",
+          "a": 8,
+          "b": 9,
+          "c": 10,
+          "sd": 2569,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 35,
+          "op": 48,
+          "semantic": "ADD",
+          "a": 6,
+          "b": 7,
+          "c": 8,
+          "sd": 2055,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 36,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 7,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 37,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 1,
+          "b": 0,
+          "c": 71,
+          "sd": 18176,
+          "aux": 3,
+          "width": 2
+        },
+        {
+          "pc": 39,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 1,
+          "b": 7,
+          "c": 1,
+          "sd": 263,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 40,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 1,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 41,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 2,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 42,
+          "op": 83,
+          "semantic": "JUMPIFNOTLT",
+          "a": 2,
+          "b": 22,
+          "c": 0,
+          "sd": 22,
+          "aux": 1,
+          "width": 2,
+          "target": 65
+        },
+        {
+          "pc": 44,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 3,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 45,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 6,
+          "b": 8,
+          "c": 0,
+          "sd": 8,
+          "aux": 1081081856,
+          "width": 2
+        },
+        {
+          "pc": 47,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 6,
+          "b": 1,
+          "c": 2,
+          "sd": 513,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 48,
+          "op": 36,
+          "semantic": "MULK",
+          "a": 5,
+          "b": 6,
+          "c": 6,
+          "sd": 1542,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 49,
+          "op": 82,
+          "semantic": "SUB",
+          "a": 4,
+          "b": 1,
+          "c": 5,
+          "sd": 1281,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 50,
+          "op": 49,
+          "semantic": "FASTCALL2",
+          "a": 18,
+          "b": 3,
+          "c": 3,
+          "sd": 771,
+          "aux": 4,
+          "width": 2
+        },
+        {
+          "pc": 52,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 2,
+          "b": 11,
+          "c": 0,
+          "sd": 11,
+          "aux": 2156931072,
+          "width": 2
+        },
+        {
+          "pc": 54,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 3,
+          "c": 2,
+          "sd": 515,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 55,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 1,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 56,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 4,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 57,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 2,
+          "b": 0,
+          "c": 184,
+          "sd": -18432,
+          "aux": 12,
+          "width": 2
+        },
+        {
+          "pc": 59,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 3,
+          "c": 1,
+          "sd": 259,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 60,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 2,
+          "b": 14,
+          "c": 0,
+          "sd": 14,
+          "aux": 1087373312,
+          "width": 2
+        },
+        {
+          "pc": 62,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 3,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 63,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 1,
+          "sd": 258,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 64,
+          "op": 0,
+          "semantic": "raw_0x00",
+          "a": 0,
+          "b": 232,
+          "c": 255,
+          "sd": -24,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 65,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        }
+      ],
+      "unknownPcs": [
+        64
+      ],
+      "invalidJumpPcs": []
+    },
+    {
+      "index": 2,
+      "lineDefined": 43,
+      "params": 1,
+      "upvalues": 0,
+      "children": [],
+      "constants": [
+        {
+          "tag": 1,
+          "offset": 1335,
+          "kind": "private32",
+          "raw": 1459044931
+        },
+        {
+          "tag": 1,
+          "offset": 1340,
+          "kind": "private32",
+          "raw": 1695855112
+        },
+        {
+          "tag": 4,
+          "offset": 1345,
+          "kind": "import",
+          "value": 1074790400
+        },
+        {
+          "tag": 1,
+          "offset": 1350,
+          "kind": "private32",
+          "raw": 1287976175
+        },
+        {
+          "tag": 4,
+          "offset": 1355,
+          "kind": "import",
+          "value": 1076887552
+        },
+        {
+          "tag": 1,
+          "offset": 1360,
+          "kind": "private32",
+          "raw": 680066140
+        },
+        {
+          "tag": 1,
+          "offset": 1365,
+          "kind": "private32",
+          "raw": 1076506982
+        },
+        {
+          "tag": 1,
+          "offset": 1370,
+          "kind": "private32",
+          "raw": 1594925564
+        },
+        {
+          "tag": 1,
+          "offset": 1375,
+          "kind": "private32",
+          "raw": 2936428436
+        },
+        {
+          "tag": 1,
+          "offset": 1380,
+          "kind": "private32",
+          "raw": 3755552089
+        },
+        {
+          "tag": 1,
+          "offset": 1385,
+          "kind": "private32",
+          "raw": 2467257763
+        },
+        {
+          "tag": 4,
+          "offset": 1390,
+          "kind": "import",
+          "value": 1084227584
+        },
+        {
+          "tag": 1,
+          "offset": 1395,
+          "kind": "private32",
+          "raw": 2977573314
+        },
+        {
+          "tag": 1,
+          "offset": 1400,
+          "kind": "private32",
+          "raw": 3504833859
+        },
+        {
+          "tag": 1,
+          "offset": 1405,
+          "kind": "private32",
+          "raw": 344059839
+        },
+        {
+          "tag": 1,
+          "offset": 1410,
+          "kind": "private32",
+          "raw": 2084128416
+        }
+      ],
+      "instructions": [
+        {
+          "pc": 0,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 1,
+          "b": 0,
+          "c": 67,
+          "sd": 17152,
+          "aux": 0,
+          "width": 2
+        },
+        {
+          "pc": 2,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 1,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 3,
+          "op": 23,
+          "semantic": "FASTCALL1",
+          "a": 133,
+          "b": 1,
+          "c": 3,
+          "sd": 769,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 4,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 3,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 5,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 2,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": 1074790400,
+          "width": 2
+        },
+        {
+          "pc": 7,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 8,
+          "op": 70,
+          "semantic": "JUMPIF",
+          "a": 2,
+          "b": 15,
+          "c": 0,
+          "sd": 15,
+          "aux": null,
+          "width": 1,
+          "target": 24
+        },
+        {
+          "pc": 9,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 4,
+          "b": 4,
+          "c": 0,
+          "sd": 4,
+          "aux": 1076887552,
+          "width": 2
+        },
+        {
+          "pc": 11,
+          "op": 49,
+          "semantic": "FASTCALL2",
+          "a": 134,
+          "b": 1,
+          "c": 3,
+          "sd": 769,
+          "aux": 4,
+          "width": 2
+        },
+        {
+          "pc": 13,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 2,
+          "b": 1,
+          "c": 92,
+          "sd": 23553,
+          "aux": 5,
+          "width": 2
+        },
+        {
+          "pc": 15,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 3,
+          "c": 2,
+          "sd": 515,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 16,
+          "op": 66,
+          "semantic": "JUMPIFNOT",
+          "a": 2,
+          "b": 7,
+          "c": 0,
+          "sd": 7,
+          "aux": null,
+          "width": 1,
+          "target": 24
+        },
+        {
+          "pc": 17,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 2,
+          "b": 1,
+          "c": 102,
+          "sd": 26113,
+          "aux": 6,
+          "width": 2
+        },
+        {
+          "pc": 19,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 20,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 2,
+          "b": 2,
+          "c": 252,
+          "sd": -1022,
+          "aux": 7,
+          "width": 2
+        },
+        {
+          "pc": 22,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 23,
+          "op": 66,
+          "semantic": "JUMPIFNOT",
+          "a": 2,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1,
+          "target": 25
+        },
+        {
+          "pc": 24,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 25,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 2,
+          "b": 0,
+          "c": 148,
+          "sd": -27648,
+          "aux": 8,
+          "width": 2
+        },
+        {
+          "pc": 27,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 28,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 3,
+          "b": 0,
+          "c": 89,
+          "sd": 22784,
+          "aux": 9,
+          "width": 2
+        },
+        {
+          "pc": 30,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 3,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 31,
+          "op": 23,
+          "semantic": "FASTCALL1",
+          "a": 133,
+          "b": 2,
+          "c": 3,
+          "sd": 770,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 32,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 5,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 33,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 4,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": 1074790400,
+          "width": 2
+        },
+        {
+          "pc": 35,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 4,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 36,
+          "op": 70,
+          "semantic": "JUMPIF",
+          "a": 4,
+          "b": 22,
+          "c": 0,
+          "sd": 22,
+          "aux": null,
+          "width": 1,
+          "target": 59
+        },
+        {
+          "pc": 37,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 6,
+          "b": 4,
+          "c": 0,
+          "sd": 4,
+          "aux": 1076887552,
+          "width": 2
+        },
+        {
+          "pc": 39,
+          "op": 49,
+          "semantic": "FASTCALL2",
+          "a": 134,
+          "b": 2,
+          "c": 3,
+          "sd": 770,
+          "aux": 6,
+          "width": 2
+        },
+        {
+          "pc": 41,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 4,
+          "b": 2,
+          "c": 92,
+          "sd": 23554,
+          "aux": 5,
+          "width": 2
+        },
+        {
+          "pc": 43,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 4,
+          "b": 3,
+          "c": 2,
+          "sd": 515,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 44,
+          "op": 66,
+          "semantic": "JUMPIFNOT",
+          "a": 4,
+          "b": 14,
+          "c": 0,
+          "sd": 14,
+          "aux": null,
+          "width": 1,
+          "target": 59
+        },
+        {
+          "pc": 45,
+          "op": 23,
+          "semantic": "FASTCALL1",
+          "a": 133,
+          "b": 3,
+          "c": 3,
+          "sd": 771,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 46,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 5,
+          "b": 3,
+          "c": 0,
+          "sd": 3,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 47,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 4,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": 1074790400,
+          "width": 2
+        },
+        {
+          "pc": 49,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 4,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 50,
+          "op": 70,
+          "semantic": "JUMPIF",
+          "a": 4,
+          "b": 8,
+          "c": 0,
+          "sd": 8,
+          "aux": null,
+          "width": 1,
+          "target": 59
+        },
+        {
+          "pc": 51,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 6,
+          "b": 11,
+          "c": 0,
+          "sd": 11,
+          "aux": 1084227584,
+          "width": 2
+        },
+        {
+          "pc": 53,
+          "op": 49,
+          "semantic": "FASTCALL2",
+          "a": 134,
+          "b": 3,
+          "c": 3,
+          "sd": 771,
+          "aux": 6,
+          "width": 2
+        },
+        {
+          "pc": 55,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 4,
+          "b": 3,
+          "c": 92,
+          "sd": 23555,
+          "aux": 5,
+          "width": 2
+        },
+        {
+          "pc": 57,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 4,
+          "b": 3,
+          "c": 2,
+          "sd": 515,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 58,
+          "op": 70,
+          "semantic": "JUMPIF",
+          "a": 4,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1,
+          "target": 60
+        },
+        {
+          "pc": 59,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 60,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 6,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 61,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 4,
+          "b": 2,
+          "c": 194,
+          "sd": -15870,
+          "aux": 12,
+          "width": 2
+        },
+        {
+          "pc": 63,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 4,
+          "b": 3,
+          "c": 2,
+          "sd": 515,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 64,
+          "op": 70,
+          "semantic": "JUMPIF",
+          "a": 4,
+          "b": 11,
+          "c": 0,
+          "sd": 11,
+          "aux": null,
+          "width": 1,
+          "target": 76
+        },
+        {
+          "pc": 65,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 4,
+          "b": 3,
+          "c": 67,
+          "sd": 17155,
+          "aux": 13,
+          "width": 2
+        },
+        {
+          "pc": 67,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 4,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 68,
+          "op": 66,
+          "semantic": "JUMPIFNOT",
+          "a": 4,
+          "b": 7,
+          "c": 0,
+          "sd": 7,
+          "aux": null,
+          "width": 1,
+          "target": 76
+        },
+        {
+          "pc": 69,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 4,
+          "b": 3,
+          "c": 191,
+          "sd": -16637,
+          "aux": 14,
+          "width": 2
+        },
+        {
+          "pc": 71,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 4,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 72,
+          "op": 70,
+          "semantic": "JUMPIF",
+          "a": 4,
+          "b": 3,
+          "c": 0,
+          "sd": 3,
+          "aux": null,
+          "width": 1,
+          "target": 76
+        },
+        {
+          "pc": 73,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 4,
+          "b": 3,
+          "c": 160,
+          "sd": -24573,
+          "aux": 15,
+          "width": 2
+        },
+        {
+          "pc": 75,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 4,
+          "b": 2,
+          "c": 1,
+          "sd": 258,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 76,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        }
+      ],
+      "unknownPcs": [],
+      "invalidJumpPcs": []
+    },
+    {
+      "index": 3,
+      "lineDefined": 60,
+      "params": 2,
+      "upvalues": 1,
+      "children": [],
+      "constants": [
+        {
+          "tag": 1,
+          "offset": 1570,
+          "kind": "private32",
+          "raw": 3673693945
+        },
+        {
+          "tag": 4,
+          "offset": 1575,
+          "kind": "import",
+          "value": 1073741824
+        },
+        {
+          "tag": 1,
+          "offset": 1580,
+          "kind": "private32",
+          "raw": 1695855112
+        },
+        {
+          "tag": 4,
+          "offset": 1585,
+          "kind": "import",
+          "value": 1075838976
+        }
+      ],
+      "instructions": [
+        {
+          "pc": 0,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 2,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": 1073741824,
+          "width": 2
+        },
+        {
+          "pc": 2,
+          "op": 8,
+          "semantic": "LOADN",
+          "a": 3,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 3,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 1,
+          "sd": 258,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 4,
+          "op": 23,
+          "semantic": "FASTCALL1",
+          "a": 133,
+          "b": 0,
+          "c": 3,
+          "sd": 768,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 5,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 3,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 6,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 2,
+          "b": 3,
+          "c": 0,
+          "sd": 3,
+          "aux": 1075838976,
+          "width": 2
+        },
+        {
+          "pc": 8,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 9,
+          "op": 66,
+          "semantic": "JUMPIFNOT",
+          "a": 2,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1,
+          "target": 11
+        },
+        {
+          "pc": 10,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 11,
+          "op": 18,
+          "semantic": "GETUPVAL",
+          "a": 2,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 12,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 3,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 13,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 1,
+          "sd": 258,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 14,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        }
+      ],
+      "unknownPcs": [],
+      "invalidJumpPcs": []
+    },
+    {
+      "index": 4,
+      "lineDefined": 69,
+      "params": 1,
+      "upvalues": 1,
+      "children": [],
+      "constants": [
+        {
+          "tag": 1,
+          "offset": 1711,
+          "kind": "private32",
+          "raw": 1695855112
+        },
+        {
+          "tag": 4,
+          "offset": 1716,
+          "kind": "import",
+          "value": 1073741824
+        },
+        {
+          "tag": 1,
+          "offset": 1721,
+          "kind": "private32",
+          "raw": 1353218134
+        },
+        {
+          "tag": 1,
+          "offset": 1726,
+          "kind": "private32",
+          "raw": 2780582809
+        },
+        {
+          "tag": 1,
+          "offset": 1731,
+          "kind": "private32",
+          "raw": 4282625630
+        }
+      ],
+      "instructions": [
+        {
+          "pc": 0,
+          "op": 23,
+          "semantic": "FASTCALL1",
+          "a": 133,
+          "b": 0,
+          "c": 3,
+          "sd": 768,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 1,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 2,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 2,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 1,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": 1073741824,
+          "width": 2
+        },
+        {
+          "pc": 4,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 1,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 5,
+          "op": 66,
+          "semantic": "JUMPIFNOT",
+          "a": 1,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1,
+          "target": 7
+        },
+        {
+          "pc": 6,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 7,
+          "op": 18,
+          "semantic": "GETUPVAL",
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 8,
+          "op": 12,
+          "semantic": "MOVE",
+          "a": 2,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 9,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 1,
+          "b": 2,
+          "c": 1,
+          "sd": 258,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 10,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 1,
+          "b": 0,
+          "c": 86,
+          "sd": 22016,
+          "aux": 2,
+          "width": 2
+        },
+        {
+          "pc": 12,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 1,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 13,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 2,
+          "b": 0,
+          "c": 153,
+          "sd": -26368,
+          "aux": 3,
+          "width": 2
+        },
+        {
+          "pc": 15,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 16,
+          "op": 4,
+          "semantic": "JUMPIFNOTLE",
+          "a": 2,
+          "b": 4,
+          "c": 0,
+          "sd": 4,
+          "aux": 1,
+          "width": 2,
+          "target": 21
+        },
+        {
+          "pc": 18,
+          "op": 64,
+          "semantic": "NAMECALL",
+          "a": 2,
+          "b": 0,
+          "c": 94,
+          "sd": 24064,
+          "aux": 4,
+          "width": 2
+        },
+        {
+          "pc": 20,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 2,
+          "b": 2,
+          "c": 1,
+          "sd": 258,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 21,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        }
+      ],
+      "unknownPcs": [],
+      "invalidJumpPcs": []
+    },
+    {
+      "index": 5,
+      "lineDefined": 1,
+      "params": 0,
+      "upvalues": 0,
+      "children": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "constants": [
+        {
+          "tag": 1,
+          "offset": 1884,
+          "kind": "private32",
+          "raw": 1039586949
+        },
+        {
+          "tag": 4,
+          "offset": 1889,
+          "kind": "import",
+          "value": 1073741824
+        },
+        {
+          "tag": 3,
+          "offset": 1894,
+          "kind": "string",
+          "stringId": 1,
+          "value": "UvOffset"
+        },
+        {
+          "tag": 3,
+          "offset": 1896,
+          "kind": "string",
+          "stringId": 2,
+          "value": "VolumeOffsetScale"
+        },
+        {
+          "tag": 6,
+          "offset": 1898,
+          "kind": "closure",
+          "proto": 0
+        },
+        {
+          "tag": 3,
+          "offset": 1900,
+          "kind": "string",
+          "stringId": 3,
+          "value": "OnContact"
+        },
+        {
+          "tag": 6,
+          "offset": 1902,
+          "kind": "closure",
+          "proto": 1
+        },
+        {
+          "tag": 3,
+          "offset": 1904,
+          "kind": "string",
+          "stringId": 4,
+          "value": "ProjectileInit"
+        },
+        {
+          "tag": 6,
+          "offset": 1906,
+          "kind": "closure",
+          "proto": 2
+        },
+        {
+          "tag": 6,
+          "offset": 1908,
+          "kind": "closure",
+          "proto": 3
+        },
+        {
+          "tag": 3,
+          "offset": 1910,
+          "kind": "string",
+          "stringId": 5,
+          "value": "OnProjectileStopped"
+        },
+        {
+          "tag": 6,
+          "offset": 1912,
+          "kind": "closure",
+          "proto": 4
+        },
+        {
+          "tag": 3,
+          "offset": 1914,
+          "kind": "string",
+          "stringId": 6,
+          "value": "OnProjectileStacked"
+        }
+      ],
+      "instructions": [
+        {
+          "pc": 0,
+          "op": 11,
+          "semantic": "PREPVARARGS",
+          "a": 0,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 1,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": 1073741824,
+          "width": 2
+        },
+        {
+          "pc": 3,
+          "op": 22,
+          "semantic": "LOADK",
+          "a": 1,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 4,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 0,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 5,
+          "op": 53,
+          "semantic": "GETIMPORT",
+          "a": 1,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": 1073741824,
+          "width": 2
+        },
+        {
+          "pc": 7,
+          "op": 22,
+          "semantic": "LOADK",
+          "a": 2,
+          "b": 3,
+          "c": 0,
+          "sd": 3,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 8,
+          "op": 71,
+          "semantic": "CALL",
+          "a": 1,
+          "b": 2,
+          "c": 2,
+          "sd": 514,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 9,
+          "op": 13,
+          "semantic": "DUPCLOSURE",
+          "a": 2,
+          "b": 4,
+          "c": 0,
+          "sd": 4,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 10,
+          "op": 75,
+          "semantic": "SETGLOBAL",
+          "a": 2,
+          "b": 0,
+          "c": 120,
+          "sd": 30720,
+          "aux": 5,
+          "width": 2
+        },
+        {
+          "pc": 12,
+          "op": 13,
+          "semantic": "DUPCLOSURE",
+          "a": 2,
+          "b": 6,
+          "c": 0,
+          "sd": 6,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 13,
+          "op": 65,
+          "semantic": "CAPTURE",
+          "a": 0,
+          "b": 0,
+          "c": 0,
+          "sd": 0,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 14,
+          "op": 65,
+          "semantic": "CAPTURE",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 15,
+          "op": 75,
+          "semantic": "SETGLOBAL",
+          "a": 2,
+          "b": 0,
+          "c": 98,
+          "sd": 25088,
+          "aux": 7,
+          "width": 2
+        },
+        {
+          "pc": 17,
+          "op": 13,
+          "semantic": "DUPCLOSURE",
+          "a": 2,
+          "b": 8,
+          "c": 0,
+          "sd": 8,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 18,
+          "op": 13,
+          "semantic": "DUPCLOSURE",
+          "a": 3,
+          "b": 9,
+          "c": 0,
+          "sd": 9,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 19,
+          "op": 65,
+          "semantic": "CAPTURE",
+          "a": 0,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 20,
+          "op": 75,
+          "semantic": "SETGLOBAL",
+          "a": 3,
+          "b": 0,
+          "c": 27,
+          "sd": 6912,
+          "aux": 10,
+          "width": 2
+        },
+        {
+          "pc": 22,
+          "op": 13,
+          "semantic": "DUPCLOSURE",
+          "a": 3,
+          "b": 11,
+          "c": 0,
+          "sd": 11,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 23,
+          "op": 65,
+          "semantic": "CAPTURE",
+          "a": 0,
+          "b": 2,
+          "c": 0,
+          "sd": 2,
+          "aux": null,
+          "width": 1
+        },
+        {
+          "pc": 24,
+          "op": 75,
+          "semantic": "SETGLOBAL",
+          "a": 3,
+          "b": 0,
+          "c": 63,
+          "sd": 16128,
+          "aux": 12,
+          "width": 2
+        },
+        {
+          "pc": 26,
+          "op": 27,
+          "semantic": "RETURN",
+          "a": 0,
+          "b": 1,
+          "c": 0,
+          "sd": 1,
+          "aux": null,
+          "width": 1
+        }
+      ],
+      "unknownPcs": [],
+      "invalidJumpPcs": []
+    }
+  ]
+}

@@ -3299,17 +3299,24 @@ def _requested_scenario(request: Mapping[str, Any], metric: str) -> Scenario:
     policy = str(value('triggerPolicy', 'emergent') or 'emergent')
     if policy not in {'emergent', 'assumed_max'}:
         raise SimulationError('triggerPolicy must be emergent or assumed_max')
+    delay = distance('detonationDelaySeconds')
+    batch = value('detonationBatchSize', 1)
+    if isinstance(batch, bool) or not isinstance(batch, int) or not 1 <= batch <= 8:
+        raise SimulationError('detonationBatchSize must be an integer between 1 and 8')
     return Scenario(aiming=boolean('aiming'), incarnon_cycle=boolean('incarnonCycle'),
         heavy_attack=boolean('heavyAttack') or _scenario(metric).heavy_attack,
         distance=distance('distance'), nearest_enemy_distance=distance('nearestEnemyDistance'),
-        cloaked=boolean('cloaked'), combo_tier=combo, trigger_policy=policy)
+        cloaked=boolean('cloaked'), combo_tier=combo, trigger_policy=policy,
+        detonation_delay_seconds=delay or 0., detonation_batch_size=batch)
 
 
 def _scenario_context(scenario: Scenario) -> dict[str, Any]:
     return dict(aiming=scenario.aiming, incarnonCycle=scenario.incarnon_cycle,
                 heavyAttack=scenario.heavy_attack, triggerPolicy=scenario.trigger_policy,
                 distance=scenario.distance, cloaked=scenario.cloaked,
-                nearestEnemyDistance=scenario.nearest_enemy_distance, comboTier=scenario.combo_tier)
+                nearestEnemyDistance=scenario.nearest_enemy_distance, comboTier=scenario.combo_tier,
+                detonationDelaySeconds=scenario.detonation_delay_seconds,
+                detonationBatchSize=scenario.detonation_batch_size)
 
 
 def _default_analysis_scenario(scenario: Scenario, metric: str) -> bool:
@@ -3559,7 +3566,7 @@ def _build_payload(
     for card in evaluation.cards:
         if card.record is not None and (set_id := _set_key(card.record.get("modSet"))):
             set_counts[set_id] = set_counts.get(set_id, 0) + 1
-    for card in evaluation.cards:
+    for card_index, card in enumerate(evaluation.cards):
         assert card.record is not None
         set_id = _set_key(card.record.get("modSet"))
         pieces = set_counts.get(set_id, 0)
@@ -3591,6 +3598,7 @@ def _build_payload(
             {
                 **record_identity(card.record),
                 "rank": card.rank,
+                "slot": card_index + int(riven is not None and card_index >= evaluation.riven_index),
                 "maxRank": card.record.get("maxRank"),
                 "compatible": True,
                 "displayEffects": display_effects,
@@ -3643,6 +3651,10 @@ def _build_payload(
         "unsupported": unsupported,
     }
     if riven is not None:
+        result['riven'] = {
+            'slot':evaluation.riven_index,
+            'stats':[{'code':line.code,'value':line.value,'negative':line.negative} for line in riven.riven_lines],
+        }
         result["rivenLines"] = [
             {
                 "code": line.code,
@@ -4953,7 +4965,8 @@ def analyze_riven_request(
 
     # actual 反超保护：actual（含紫卡）理论上不应超过满数值上限；若超过
     # （beam 搜索找到上限没找到的路径），以 actual 为上限并记录诊断。
-    if actual.score > optimal.score:
+    optimal_uses_actual = actual.score > optimal.score
+    if optimal_uses_actual:
         unsupported.append("optimizer-optimum-lower-bound-used-actual-riven")
         optimal_lines = list(actual_lines)
         optimal_card = actual_card
@@ -4998,7 +5011,6 @@ def analyze_riven_request(
                         }
                         for line in actual_lines
                     ],
-                    "optimal": [line.code for line in optimal_lines],
                 },
                 ensure_ascii=False,
                 sort_keys=True,
@@ -5021,6 +5033,28 @@ def analyze_riven_request(
                     for key in ("baseline", "actual", "optimal")
                 )
             ):
+                restored_quality = {}
+                snapshots = cached_quality.get('builds') or {}
+                try:
+                    for key in ('baseline','actual','optimal'):
+                        snapshot = snapshots[key]
+                        wire = snapshot.get('riven')
+                        card = _card_from_lines(_wire_lines(wire)[0]) if wire else None
+                        if (key == 'baseline') != (card is None):
+                            raise ValueError('cached Riven role differs')
+                        if key == 'actual' and [{field:item[field] for field in ('code','value','negative')} for item in wire] != [dict(code=line.code,value=line.value,negative=line.negative) for line in actual_lines]:
+                            raise ValueError('cached actual roll differs')
+                        rebuilt = _reconstruct(snapshot['cards'],card)
+                        if rebuilt is None or not math.isclose(
+                                _score(rebuilt.stats,score_metric,target_context=benchmark_context),
+                                cached_quality[key],rel_tol=1e-9,abs_tol=1e-7):
+                            raise ValueError('cached build score differs')
+                        restored_quality[key] = (rebuilt,card)
+                except (KeyError, TypeError, ValueError, SimulationError):
+                    restored_quality = {}
+            else:
+                restored_quality = {}
+            if restored_quality:
                 quality_scores = {
                     key: float(cached_quality[key])
                     for key in ("baseline", "actual", "optimal")
@@ -5033,6 +5067,13 @@ def analyze_riven_request(
                         if isinstance(delta, (int, float))
                     }
                 quality_cache_hit = True
+                baseline = restored_quality['baseline'][0]
+                actual = restored_quality['actual'][0]
+                optimal, optimal_card = restored_quality['optimal']
+                optimal_lines = list(optimal_card.riven_lines)
+                optimal_uses_actual = bool(cached_quality.get('actualIncludedAsLowerBound'))
+                if optimal_uses_actual:
+                    unsupported.append('optimizer-optimum-lower-bound-used-actual-riven')
             else:
                 # Re-run the three card searches with the continuous metric. A
                 # mere revaluation of KPM-selected cards can still make an
@@ -5178,8 +5219,11 @@ def analyze_riven_request(
                     ),
                     actual_quality_card,
                 )
-                if actual_quality_candidate.score > quality_evaluations["optimal"].score:
+                actual_quality_won = actual_quality_candidate.score > quality_evaluations["optimal"].score
+                if actual_quality_won:
                     quality_evaluations["optimal"] = actual_quality_candidate
+                    unsupported.append('optimizer-optimum-lower-bound-used-actual-riven')
+                optimal_uses_actual = actual_quality_won
                 quality_scores = {
                     key: evaluation.score
                     for key, evaluation in quality_evaluations.items()
@@ -5199,10 +5243,10 @@ def analyze_riven_request(
                 # 提交词条。optimal_lines 与之一致。静态缓存回写因此写入
                 # 质量阶段的赢家（热缓存路径重建的配卡与缓存数值可互相
                 # 复现——S03 重放合同）。
-                if quality_lines:
+                if quality_lines and not actual_quality_won:
                     optimal_lines = list(quality_lines)
                     optimal_card = _card_from_lines(optimal_lines)
-                if actual is quality_evaluations["optimal"]:
+                if actual_quality_won:
                     optimal_lines = list(actual_lines)
                     optimal_card = actual_quality_card
                 baseline_fresh = True   # 缓存回写用重绑后的质量赢家
@@ -5241,11 +5285,14 @@ def analyze_riven_request(
         if recommended_fresh:
             write_bundle["recommended"] = [line.code for line in recommended]
             write_bundle["tiers"] = recommended_tiers
-        if optimal_fresh:
+        if optimal_fresh and not optimal_uses_actual:
             write_bundle[opt_slot] = {
                 "cards": [card.key for card in optimal.cards],
                 "riven": [line.code for line in optimal_lines],
             }
+        elif optimal_uses_actual:
+            # Shared theoretical statics cannot contain one user's actual roll.
+            write_bundle.pop(opt_slot,None)
         statics_cache["__dirty__"] = True
 
     # ── 评分（恢复连续公式）：score = (actual - baseline) / (optimal -
@@ -5404,6 +5451,14 @@ def analyze_riven_request(
             "actual": quality_scores["actual"],
             "optimal": quality_scores["optimal"],
             "details": quality_detail_cache,
+            'actualIncludedAsLowerBound':optimal_uses_actual,
+            'builds': {key:dict(cards=[card.key for card in evaluation.cards],
+                               riven=[dict(code=line.code,value=line.value,negative=line.negative,
+                                           low=line.low,high=line.high,unit=line.unit,label=line.label)
+                                      for line in card.riven_lines] if card else None)
+                       for key,evaluation,card in [('baseline',baseline,None),
+                                                  ('actual',actual,actual_card),
+                                                  ('optimal',optimal,optimal_card)]},
         }
         while len(quality_map) > 32:
             quality_map.pop(next(iter(quality_map)))
@@ -5458,7 +5513,12 @@ def analyze_riven_request(
             if stance_info
             else None
         ),
-        "targetCalibration": target_calibration,
+        "targetCalibration": {
+            'version':TARGET_CALIBRATION_VERSION,
+            'status':target_calibration.get('status'),
+            'requestedLevel':target_calibration.get('requestedLevel'),
+            'evaluationLevel':target_calibration.get('evaluationLevel'),
+        },
     }
     context_hash = _evaluation_context_hash(context_payload)
     # ── F10（审计修复）：三轴状态合同统一 ──────────────────────────────
@@ -5693,7 +5753,10 @@ def analyze_riven_request(
         payload["forma"] = _forma_summary(weapon, evaluation.cards, riven_card, stance_info)
         # 解算目标的原始分数（KPM 口径下即标准靶每分钟击杀数）：前端头条
         # 直接读取，不再从提升百分比反推。
-        payload["objectiveScore"] = evaluation.score
+        payload["objectiveScore"] = _score(evaluation.stats, objective_metric,
+                                            target_context=benchmark_context)
+        payload['scoringScore'] = quality_scores['baseline' if evaluation is baseline
+                                                else ('actual' if evaluation is actual else 'optimal')]
         if stance_multiplier != 1.0:
             for key in ("attackDps", "burstDps", "sustainedDps"):
                 value = payload.get(key)
@@ -5744,6 +5807,7 @@ def analyze_riven_request(
         "metric": metric,
         "scoreMetric": score_metric,
         "contextHash": context_hash,
+        "evaluationScenario": _scenario_context(scenario),
         "requestedTarget": requested_target_payload,
         "evaluationTarget": evaluation_target,
         "targetCalibration": target_calibration,

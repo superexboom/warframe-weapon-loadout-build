@@ -1912,7 +1912,7 @@
       "sha256": "807070d5a89804e533f4d284703ffdea7601a0ead1050a47aa03aa5e42e845ab",
       "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
       "directTotal": 200.0,
-      "scope": "exported base explosion only; no duplicate radial child",
+      "scope": "isolated projectile at the aimed target; native expiry clock; merging and derived children excluded",
       "compression": {
         "effectiveness": 1.0,
         "stacking": "multiplies",
@@ -1925,7 +1925,17 @@
       "unmodeled": [
         "orb-merging-and-singularity-unmodeled",
         "orb-multishot-merging-economy-unmodeled"
-      ]
+      ],
+      "projectile": "/Lotus/Weapons/Cephalon/Primary/CephPrimary/CephPrimaryProjectile",
+      "primaryDelaySeconds": 1.0,
+      "allowIncarnon": false,
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Cephalon/Primary/CephPrimary/CephPrimaryProjectile",
+          "sha256": "8d45ed0e6d3c71a9cdde7c35dbf7a33f4ace2c44b15e806d328817e3240433f6"
+        }
+      ],
+      "sourceBuild": "2026.09.22.16.46"
     },
     "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSSimulor": {
       "name": "Synoid Simulor",
@@ -1933,7 +1943,7 @@
       "sha256": "7122fa9b03ea589e9b05d56ac24f6b032903d43b3795fdc9b8cee861e26bed48",
       "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
       "directTotal": 240.0,
-      "scope": "exported base explosion only; no duplicate radial child",
+      "scope": "isolated projectile at the aimed target; native expiry clock; merging and derived children excluded",
       "compression": {
         "effectiveness": 1.0,
         "stacking": "multiplies",
@@ -1946,7 +1956,17 @@
       "unmodeled": [
         "orb-merging-and-singularity-unmodeled",
         "orb-multishot-merging-economy-unmodeled"
-      ]
+      ],
+      "projectile": "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSCephPrimaryProjectile",
+      "primaryDelaySeconds": 1.0,
+      "allowIncarnon": false,
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSCephPrimaryProjectile",
+          "sha256": "3db5d9395b2da374f63db1f2f5833a38eb9eb382deb28f441631efe3c898b03b"
+        }
+      ],
+      "sourceBuild": "2026.09.22.16.46"
     },
     "/Lotus/Weapons/Tenno/Pistols/TnYareliPistol/TnYareliPistolWeapon": {
       "name": "Kompressa",
@@ -2405,7 +2425,10 @@
       "directTotal": 250.0,
       "pureRadial": true,
       "statusChanceFallback": 0.1,
-      "scope": "single-target embedded mine, immediate manual detonation after each throw",
+      "scope": "single-target embedded mines; explicit throw batches and manual detonation delay",
+      "manualDetonation": {
+        "maxProjectiles": 8
+      },
       "source": "data/weapons/secondary/talons.yaml",
       "sourceSha256": "eba9e3857416234f40f12a30cba3ec5179744f9b73b42e6c88c35d328ce8fbc8",
       "nativeSources": [
@@ -2420,7 +2443,6 @@
       ],
       "sourceBuild": "2026.09.22.16.46",
       "unmodeled": [
-        "talons-manual-detonation-timing-assumed",
         "talons-multishot-spatial-hit-loss-unmodeled",
         "talons-natural-status-reference-calibrated"
       ]
@@ -2577,6 +2599,67 @@
             "quanta-player-shot-detonation-unmodeled",
             "quanta-idle-detonation-unmodeled",
             "quanta-cube-chain-unmodeled"
+          ]
+        }
+      }
+    },
+    "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun": {
+      "name": "Stug",
+      "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+      "directTotal": 75.0,
+      "primaryDelaySeconds": 1.5,
+      "allowIncarnon": false,
+      "scope": "isolated projectile at the aimed target; native expiry clock; merging and derived children excluded",
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+          "sha256": "e81d4e5056616fb1953244e827f7dd69fc35bd6caef41129994429b94ed4a701"
+        }
+      ],
+      "sourceBuild": "2026.09.22.16.46",
+      "unmodeled": [
+        "stug-projectile-stack-lifecycle-unmodeled",
+        "stug-embed-ticks-unmodeled"
+      ],
+      "modes": {
+        "1": {
+          "name": "Stug",
+          "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+          "directTotal": 75.0,
+          "primaryDelaySeconds": 1.5,
+          "allowIncarnon": false,
+          "scope": "isolated projectile at the aimed target; native expiry clock; merging and derived children excluded",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+              "sha256": "e81d4e5056616fb1953244e827f7dd69fc35bd6caef41129994429b94ed4a701"
+            }
+          ],
+          "sourceBuild": "2026.09.22.16.46",
+          "unmodeled": [
+            "stug-projectile-stack-lifecycle-unmodeled",
+            "stug-embed-ticks-unmodeled",
+            "stug-full-charge-stack-unmodeled"
+          ]
+        },
+        "2": {
+          "name": "Stug",
+          "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/IncarnonAdapterGrineerCrossbow/IncarnonGooProjectile",
+          "directTotal": 200.0,
+          "primaryDelaySeconds": 1.5,
+          "allowIncarnon": true,
+          "scope": "isolated projectile at the aimed target; native expiry clock; merging and derived children excluded",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/IncarnonAdapterGrineerCrossbow/IncarnonGooProjectile",
+              "sha256": "11dc088fc4feb707252d87b8627c35fab13f96131307a2e84352390a5b3aa316"
+            }
+          ],
+          "sourceBuild": "2026.09.22.16.46",
+          "unmodeled": [
+            "stug-projectile-stack-lifecycle-unmodeled",
+            "stug-embed-ticks-unmodeled",
+            "stug-bouncing-child-contact-unmodeled"
           ]
         }
       }

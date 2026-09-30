@@ -99,10 +99,11 @@ def refresh(packages, ref, export, output, *, update_export=True):
     if update_export and before!=w:original=patch_json_bytes(original,before,w)
     # No radial child: the primary attack is the explosion itself.
     payload['auditedAttacks'][TALONS]=dict(name='Talons',directTotal=250.,pureRadial=True,statusChanceFallback=.1,
-        scope='single-target embedded mine, immediate manual detonation after each throw',
+        scope='single-target embedded mines; explicit throw batches and manual detonation delay',
+        manualDetonation={'maxProjectiles':8},
         source=p.relative_to(ref).as_posix(),sourceSha256=hashlib.sha256(p.read_bytes()).hexdigest(),
         nativeSources=[source(TALONS),source(TALONS+'Projectile')],sourceBuild=packages.parent.name,
-        unmodeled=['talons-manual-detonation-timing-assumed','talons-multishot-spatial-hit-loss-unmodeled',
+        unmodeled=['talons-multishot-spatial-hit-loss-unmodeled',
                    'talons-natural-status-reference-calibrated'])
     evidence.append(dict(name='Talons',before=before,after=w,profile=payload['auditedAttacks'][TALONS]))
     rendered=(json.dumps(payload,ensure_ascii=False,indent=2)+chr(10)).encode('utf-8')

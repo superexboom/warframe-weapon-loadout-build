@@ -1,0 +1,5147 @@
+{
+  "mapping": {
+    "1": [
+      "FASTCALL2K",
+      2
+    ],
+    "3": [
+      "SETLIST",
+      2
+    ],
+    "4": [
+      "JUMPIFNOTLE",
+      2
+    ],
+    "6": [
+      "NOT",
+      1
+    ],
+    "8": [
+      "LOADN",
+      1
+    ],
+    "9": [
+      "SETTABLEKS",
+      2
+    ],
+    "10": [
+      "GETGLOBAL",
+      2
+    ],
+    "11": [
+      "PREPVARARGS",
+      1
+    ],
+    "12": [
+      "MOVE",
+      1
+    ],
+    "13": [
+      "DUPCLOSURE",
+      1
+    ],
+    "14": [
+      "NEWTABLE",
+      2
+    ],
+    "16": [
+      "NEWCLOSURE",
+      1
+    ],
+    "17": [
+      "FORGLOOP",
+      2
+    ],
+    "18": [
+      "GETUPVAL",
+      1
+    ],
+    "19": [
+      "JUMPIFLT",
+      2
+    ],
+    "21": [
+      "FORGPREP_NEXT",
+      1
+    ],
+    "22": [
+      "LOADK",
+      1
+    ],
+    "23": [
+      "FASTCALL1",
+      1
+    ],
+    "24": [
+      "SUBRK",
+      1
+    ],
+    "25": [
+      "JUMPXEQKN",
+      2
+    ],
+    "27": [
+      "RETURN",
+      1
+    ],
+    "29": [
+      "FORNPREP",
+      1
+    ],
+    "31": [
+      "MUL",
+      1
+    ],
+    "32": [
+      "DIVRK",
+      1
+    ],
+    "33": [
+      "JUMPIFNOTEQ",
+      2
+    ],
+    "34": [
+      "CLOSEUPVALS",
+      1
+    ],
+    "35": [
+      "LOADNIL",
+      1
+    ],
+    "36": [
+      "MULK",
+      1
+    ],
+    "37": [
+      "JUMPIFLE",
+      2
+    ],
+    "38": [
+      "GETTABLEN",
+      1
+    ],
+    "40": [
+      "FASTCALL",
+      1
+    ],
+    "41": [
+      "JUMP",
+      1
+    ],
+    "44": [
+      "JUMPIFEQ",
+      2
+    ],
+    "47": [
+      "DIV",
+      1
+    ],
+    "48": [
+      "ADD",
+      1
+    ],
+    "49": [
+      "FASTCALL2",
+      2
+    ],
+    "50": [
+      "ADDK",
+      1
+    ],
+    "52": [
+      "FORGPREP_INEXT",
+      1
+    ],
+    "53": [
+      "GETIMPORT",
+      2
+    ],
+    "54": [
+      "MINUS",
+      1
+    ],
+    "56": [
+      "LOADB",
+      1
+    ],
+    "57": [
+      "DUPTABLE",
+      1
+    ],
+    "58": [
+      "SETUPVAL",
+      1
+    ],
+    "59": [
+      "GETTABLEKS",
+      2
+    ],
+    "61": [
+      "SETTABLE",
+      1
+    ],
+    "64": [
+      "NAMECALL",
+      2
+    ],
+    "65": [
+      "CAPTURE",
+      1
+    ],
+    "66": [
+      "JUMPIFNOT",
+      1
+    ],
+    "67": [
+      "GETTABLE",
+      1
+    ],
+    "69": [
+      "SETTABLEN",
+      1
+    ],
+    "70": [
+      "JUMPIF",
+      1
+    ],
+    "71": [
+      "CALL",
+      1
+    ],
+    "72": [
+      "JUMPXEQKNIL",
+      2
+    ],
+    "75": [
+      "SETGLOBAL",
+      2
+    ],
+    "76": [
+      "LENGTH",
+      1
+    ],
+    "77": [
+      "JUMPXEQKB",
+      2
+    ],
+    "78": [
+      "DIVK",
+      1
+    ],
+    "79": [
+      "CONCAT",
+      1
+    ],
+    "80": [
+      "SUBK",
+      1
+    ],
+    "81": [
+      "FORNLOOP",
+      1
+    ],
+    "82": [
+      "SUB",
+      1
+    ],
+    "83": [
+      "JUMPIFNOTLT",
+      2
+    ]
+  },
+  "sources": [
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Alchemist\\Abilities\\AlchemistDistill.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Alchemist\\Abilities\\AlchemistDistill.lua_B",
+      "oldSha256": "69b941673b1ca338ee1aa1deff83ae2459f4c5a51a7d23cf1ddb2b2c76104455",
+      "newSha256": "254d72891a588c400e64f5f41a64f1d30b25b03adc8a50f5bf142e0bb35cc811",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Alchemist\\Abilities\\AlchemistSerpent.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Alchemist\\Abilities\\AlchemistSerpent.lua_B",
+      "oldSha256": "2290eadb92610ba5e6c4d3e25797cd9492a51e158ea70103590fa3acc0d09942",
+      "newSha256": "249a59a0caf8f6b53bee254e5d29f33c7c033bf9c90b2e98b96dd4cdaaa20fff",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Alchemist\\Abilities\\AlchemistTransmute.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Alchemist\\Abilities\\AlchemistTransmute.lua_B",
+      "oldSha256": "673dcba85ce81b714fa8e5dbc19d8231beb9067d5de2734181770d69e05446bd",
+      "newSha256": "bde39c86a86b68da7bc6693b936611aff98c3a069bfc04017b68ea8dc0db2ff7",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Alchemist\\Abilities\\AlchemistVial.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Alchemist\\Abilities\\AlchemistVial.lua_B",
+      "oldSha256": "60aa92f5b2242e158e85b30f325f5c02b75ae575ab192e56dd36c490d9fa6599",
+      "newSha256": "a12b2fe52c44a913ec770fa4af7aa1dc0d6aae0749a6754c0159db7cfb92c524",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Alchemist\\AlchemistPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Alchemist\\AlchemistPassive.lua_B",
+      "oldSha256": "dc3eb11d1775f935de321175acbdb5926233db009c3c7d627b88b614aa7555d4",
+      "newSha256": "1aaab4c50df24403863eac509d90312c1a20a2c68fdfa6c6a950683ffa5a2ae7",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        8,
+        10,
+        16,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\AntiMatter\\Abilities\\MolecularPrime.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\AntiMatter\\Abilities\\MolecularPrime.lua_B",
+      "oldSha256": "96f38eb5aa19da1d03e7f401cee02c250f70726376c485738ebeb17feb5dadf8",
+      "newSha256": "14f3d4d92b47137d1430a07979e2ce83a52bea45d58c83b2985650c7ba8f823a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        14,
+        16,
+        23
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\AntiMatter\\Abilities\\NovaDrop.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\AntiMatter\\Abilities\\NovaDrop.lua_B",
+      "oldSha256": "59998d70418eafecee1fa5722d6cc3d7b269415162be2615d31ca792d6637fe1",
+      "newSha256": "6bd20676d9142fb2791057873b117f1925f44baaac58375ae3d66db20703bc22",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        14,
+        21,
+        22,
+        23,
+        25
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\AntiMatter\\Abilities\\NullStar.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\AntiMatter\\Abilities\\NullStar.lua_B",
+      "oldSha256": "da26c0f53799cd59f04c9588c7a426d58302503d3c08bba681790df5d7566afa",
+      "newSha256": "20595cd6f1e17c3a62a08988187501be3bda9d0789a1414219bb30b49c2f08e8",
+      "matchedProtos": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        15,
+        16,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        26
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\AntiMatter\\Abilities\\WormHole.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\AntiMatter\\Abilities\\WormHole.lua_B",
+      "oldSha256": "37d406799da602262ef4cbf9b3f80ff1864448939c296906f3c3ebb94cc93d6f",
+      "newSha256": "3e288686463c539dbeac2714ef223ef0454eb681bee4ca150c17a2d9b286ed24",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        30
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\AntiMatter\\NovaPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\AntiMatter\\NovaPassive.lua_B",
+      "oldSha256": "226886347312c9f95b1495418fe88fdbbb6227d75d8e08a508f32b7632efcce6",
+      "newSha256": "4ff842651943d865d5254abcb48a2cc2d084b5f1a2972b55df53d46155a91ac7",
+      "matchedProtos": [
+        0,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\ArtilleryBarrage.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\ArtilleryBarrage.lua_B",
+      "oldSha256": "cedd0dc9fcc9f447401273d06d648315de4ed6dcf15c2f9d82c8752104a3226a",
+      "newSha256": "10662692d48731dc3ab24211e1b8f68db43690f3203f7ddc9a69e41fbf8a5804",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        7,
+        9,
+        12
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\BigBoy.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\BigBoy.lua_B",
+      "oldSha256": "ff05ec3ca3dea002af11e201a187af99e1555842ed09648dde4f1dba80308149",
+      "newSha256": "3142d48a3bda64d00e3e0016bc60f43ac3e11ea2c88ee1435ef90e6d951acd6e",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        8,
+        9
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\Blink.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\Blink.lua_B",
+      "oldSha256": "cd6d25f544c91755bcb0d2951f81363f4f9062e26e0d00845f88f62e4725cf09",
+      "newSha256": "b53e2f8b6cfcc25a0c41aa738efe8f2ddf38f88c64c2147d29b31fb6593f4cdb",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        9
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\Cloaking.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\Cloaking.lua_B",
+      "oldSha256": "3b7ec356656ce3060c87ec995fc63fb69ea1c41c99a6fe78e794b8dccd56d56f",
+      "newSha256": "e0a1c0d765db27769b642ed84d0586563893795de76c78e4073d2aa9061ad18a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        6,
+        8
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\DistractionDrones.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\DistractionDrones.lua_B",
+      "oldSha256": "c173ffe0888fb64d63922b6d86ed36b4fa1e14ac34f198f9af7a3dd58af0d538",
+      "newSha256": "150fe07f22331df73c7fe4d81b84a38a2a2f1d4c4c428699ee55905f536fc861",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        9
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\EMPPush.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\EMPPush.lua_B",
+      "oldSha256": "57b6b3a86cc1993172429b1abfa279e0f402ff5ce92f0d9fc68349b129ccdcdc",
+      "newSha256": "3188fb0348512ce755b6658a50551c9bdcda818ef4764f21e3eac62b5eecaf8e",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        7
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\ExhaustTrail.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\ExhaustTrail.lua_B",
+      "oldSha256": "fa86e2cd296685d4f513d53fec39cb57e475185a44145cee72b7a2e04603f746",
+      "newSha256": "a6c2b2ed9ae543d8dd91d8dc0aba5066817addb35f832206a4ab58637d8f5e9c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\FireShield.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\FireShield.lua_B",
+      "oldSha256": "ec7cbca4f0cd25b76595d2ae3f021b8d3eddf67f55bba909fd7bf6842580368c",
+      "newSha256": "81da63247a330bf4840d9ec1eab0b46920b5c19f695d9e8e6d8546fd5ee3f18a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\FlareCounterMeasure.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\FlareCounterMeasure.lua_B",
+      "oldSha256": "c134ca42f6ef4b5da1da9713c42ff06c02ee58e66d7d58021a66edb724f0f9c5",
+      "newSha256": "6737f43f032f2ed6ddd8c456ac6e2f0d9ba76bbc90dbd9840ac89f1c609b889d",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        7,
+        8
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\GravitationalInstability.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\GravitationalInstability.lua_B",
+      "oldSha256": "8bf92e8c98be1918606bc986ddc07d8a28e4dfbac5459cff72f379e2e0891613",
+      "newSha256": "904ef609754526eb1e1d5126f721c7274b3cc05cce9737079fc2d507fb9d228c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\MissileVolley.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\MissileVolley.lua_B",
+      "oldSha256": "439c44a4964915dd6c8bb3ffb18643ed2ee337b46e74b08d1b8a5dc777bda629",
+      "newSha256": "4980ff8f89b5045143aa530e5271c54b37c281fc1739e44b0bfe019737d9ebb0",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\SupportAnchors.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\SupportAnchors.lua_B",
+      "oldSha256": "331d95f86ddc440a498d51ba909e633233964b869d4c7ca6ca44d9bd2f93e373",
+      "newSha256": "a4114cf6c617ac478ca5e147ee0bca53200a9c3a3f10d20a4cd4ef315e31da2c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\SupportDrones.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\SupportDrones.lua_B",
+      "oldSha256": "f862f2fab5fa345aeae5cb26d3076d877477db1e005022125d5e4cc2efebac7f",
+      "newSha256": "e6d9e075343e843d4fb1fe9c8bd1ba3375832980346a6fb368f25537621d2435",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        7,
+        9
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\SupportEnergy.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\SupportEnergy.lua_B",
+      "oldSha256": "5947b967f7f7e72652c9fd2004a48174ff29038df74c96daba581b025a9e2fae",
+      "newSha256": "bf11fb18e9ecc89db061924cab3dcfef3021e700d19381f88849e2e7f5a062dc",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\SupportWard.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\SupportWard.lua_B",
+      "oldSha256": "7c423c86e80b148bd1670924cef49912c1b51f3458835aff3e64ae797deb9c40",
+      "newSha256": "4db9a8506146f1a7d1511e075efcb6e2e7a3c2d1949f1ed9765629b24871515f",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\TnT.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Archwing\\ArchwingAbilities\\TnT.lua_B",
+      "oldSha256": "c78bb7a095230fc3140e556fdb72d29c7c2af97f1c9c5b04b8686b78d7b32ed7",
+      "newSha256": "e149a95d50f43fdfe9e4cd794a31ff6fb54576e920cf54752187a0f810701b81",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        7
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Banshee\\Abilities\\Push.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Banshee\\Abilities\\Push.lua_B",
+      "oldSha256": "5412c1befd1489a38ee8d304589c462b48d5df9d3ea29e33a1b10184e0f0d4ca",
+      "newSha256": "b9aa2f1431952b621b063a18495482dff141cd5b7990809967b18735afbd68cc",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Banshee\\Abilities\\SilenceTwo.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Banshee\\Abilities\\SilenceTwo.lua_B",
+      "oldSha256": "e53a52ada9d91bd9b2ef6a88fd1618220a92b3e60fe30a73852e83b8c2cef129",
+      "newSha256": "cd186e9d2789bfd027bf91714023f74a0de9c32c145a67aedf56046f8dfa9e82",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Banshee\\Abilities\\Sonar.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Banshee\\Abilities\\Sonar.lua_B",
+      "oldSha256": "387a3c8632ebb5b28e1e9f017a0831ed37632225bb95485dc0ec2c78f4ac06cd",
+      "newSha256": "7b21ba2380c4d90b7c6cb3741a11c4a8b1aec16a38f29bba0b46403e71a1a397",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Banshee\\Abilities\\SonicEarthQuake.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Banshee\\Abilities\\SonicEarthQuake.lua_B",
+      "oldSha256": "af2660f4b6109aa2a9a4cd1d62569cddf57929b271d98657839497af1ffd90d1",
+      "newSha256": "6231ce6bdb73ad036624f13db75a342cbb06419b92335bea1f299cef44e314b0",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Banshee\\BansheePassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Banshee\\BansheePassive.lua_B",
+      "oldSha256": "f5021d7b30af49c97266806f887d368b09fbb51b73bc64c776ea405021cec889",
+      "newSha256": "4848988ce5f60ae903226097b14f08e13cdb30026c38940086fcb1736496476a",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Bard\\Abilities\\BardAmplify.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Bard\\Abilities\\BardAmplify.lua_B",
+      "oldSha256": "cc60b7e05457efb38332e7180336320edf2285861cbd2588b6813bd6880957a0",
+      "newSha256": "5647f3c201fce041bf1a05962ee61ad358ab7e312e8c8c8e6aec88355e1e7797",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Bard\\Abilities\\BardCharm.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Bard\\Abilities\\BardCharm.lua_B",
+      "oldSha256": "203ed4ee7ea8c3e97ab117c8f8b4b79ea8b48025a9cac5cc784e76c19276aa29",
+      "newSha256": "f918311999b350087269b26cb561438caf1e3cd4ee88e2c34088cd5599ebf1be",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        18,
+        22,
+        24,
+        28,
+        30
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Bard\\Abilities\\BardJam.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Bard\\Abilities\\BardJam.lua_B",
+      "oldSha256": "b90d78b09209407a56cb7353b42f303ba7aa95d685879ac581f3020d05917d6a",
+      "newSha256": "300589644138a42917e17a1ee5ed014dd38b37a5c876f8a1d0b049139aea190a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        22,
+        23,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        32,
+        34
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Bard\\Abilities\\BardMusic.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Bard\\Abilities\\BardMusic.lua_B",
+      "oldSha256": "c0cf04fc388092533c3084e459ba4ae9050571934c82e3473385823f8e2a6390",
+      "newSha256": "c713c4d6bf32adb06f7b3ff71d03f00feb53ccd0b651bd2cdf2382106882299f",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        12,
+        13,
+        15,
+        17,
+        18,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Bard\\BardPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Bard\\BardPassive.lua_B",
+      "oldSha256": "3b02ed01c5b61fae9a222da1605e19701c84c8dd86d134b305314b24e3e79e1e",
+      "newSha256": "82b7e6aaeb76baceda7907230cd3111614ecd8454f1fe1a5f9baef6cbf3dff5b",
+      "matchedProtos": [
+        0,
+        1,
+        5,
+        7
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Berserker\\Abilities\\BerserkerScream.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Berserker\\Abilities\\BerserkerScream.lua_B",
+      "oldSha256": "0d28b066c720f045d396cc81043068c35ad88a7a0259be9e724e52bc3a265860",
+      "newSha256": "ee64bc6f6db4f1879a0ea1f891ea3ae45dc82a3da69efd7142059c16f489afab",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        13,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        25
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Berserker\\Abilities\\GrappleHookPower.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Berserker\\Abilities\\GrappleHookPower.lua_B",
+      "oldSha256": "f08c20e10902dff11307f5ca62bc0ae32245b4f595447c6de75f54bdbcd90049",
+      "newSha256": "31c584f1de21f42638533dd51640691451f8ba9b50cdd386536384d4e2dc4d6a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        22,
+        24,
+        28,
+        29,
+        30
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Berserker\\Abilities\\LastStand.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Berserker\\Abilities\\LastStand.lua_B",
+      "oldSha256": "a96f14f3d832639f5ed6dbc62c186a03bc44181956707c893282a6d89f937bc7",
+      "newSha256": "b64e7863a3cd4d191b62885fa996fdeb6b943c24460c1df26671c7d3c551c614",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        18,
+        19,
+        20,
+        21,
+        22,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        34,
+        35,
+        36,
+        38
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Berserker\\Abilities\\ShieldBash.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Berserker\\Abilities\\ShieldBash.lua_B",
+      "oldSha256": "80c6bfa644dbc37d00385957459991bd0e547a6a8cf85be0d6973fe40e0bfade",
+      "newSha256": "13bdb401b230f144ed2238cb32a47cdce4d480b475a26fcd4808a9e77dc67689",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        11,
+        13
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Berserker\\BerserkerPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Berserker\\BerserkerPassive.lua_B",
+      "oldSha256": "39fb18f2d81557c6f7796ea753f0f8640442fed5aff4566d20cd3ff0bf983b47",
+      "newSha256": "ce3b7afa0c83b0dc398fb607d37c016a8f939774df144376647b58f316568856",
+      "matchedProtos": [
+        0,
+        5
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Brawler\\Abilities\\BrawlerBarrier.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Brawler\\Abilities\\BrawlerBarrier.lua_B",
+      "oldSha256": "8c30a8a8922843c7a4080e48c09823e83a0b8015a49561b89d6ca8a880722761",
+      "newSha256": "311df3570099d7403b71de48d9fd1c8fe5b3bd08eca88ae40dc99d47b4699dfa",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        12,
+        13,
+        14,
+        17,
+        19,
+        20
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Brawler\\Abilities\\BrawlerGaze.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Brawler\\Abilities\\BrawlerGaze.lua_B",
+      "oldSha256": "240eb25e9ae083b6a0c6ccb5c4c2019db1ded8e19a560958f76b8745f5e4e6ab",
+      "newSha256": "10cc9e5c13f631b57df435af2de3b2cdbe71aea8b019ce180ee60ac622cee0a5",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        16,
+        18,
+        20,
+        21,
+        26,
+        27
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Brawler\\Abilities\\BrawlerSummon.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Brawler\\Abilities\\BrawlerSummon.lua_B",
+      "oldSha256": "d151e80fe5117c0bc254477f791144fc7d80c0e6f58b62e2352fcb968cd88070",
+      "newSha256": "f48fcb78184f5529840f4f7045bc7d1094da64a18766bb67ca247f55a304d7a1",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        15,
+        16,
+        17,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        29,
+        31
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Brawler\\BrawlerPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Brawler\\BrawlerPassive.lua_B",
+      "oldSha256": "ccf91020fe5c85ed165771abe2522e371642f5578e634035b9640aa40d258970",
+      "newSha256": "a98d5576b7304c9f518b3560d4c63a3a520c23d26108ba5208c30ed06430c1b0",
+      "matchedProtos": [
+        1,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\BrokenFrame\\Abilities\\BrokenDestruct.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\BrokenFrame\\Abilities\\BrokenDestruct.lua_B",
+      "oldSha256": "6eb1bdf2afee4e41a5367a035024b2a5275cee828b262ec636725f4782437146",
+      "newSha256": "bac3e5cb2aa0b5e4ea90d537ec9113a51a3947a9b881975b8133837dd0e4a698",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        12,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\BrokenFrame\\Abilities\\BrokenEmbrace.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\BrokenFrame\\Abilities\\BrokenEmbrace.lua_B",
+      "oldSha256": "00e01a34137356dee0cb262a4f6110804d844dd6363508be7d269c5c118950b7",
+      "newSha256": "de8a737441994487761af27f74e5b052752529b1dc3aaa7a23672381129632e5",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        11,
+        12,
+        16,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        30,
+        31,
+        33
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\BrokenFrame\\Abilities\\BrokenGrasp.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\BrokenFrame\\Abilities\\BrokenGrasp.lua_B",
+      "oldSha256": "471bb735fb09219d2bf94dc1c5a2e58cbf4c7aae2f1e61b0135bccd77d8b72eb",
+      "newSha256": "f529af15ae78f67449dc2ff6d332eb5d8205b541a52af956a984e39615008b0c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\BrokenFrame\\Abilities\\BrokenRot.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\BrokenFrame\\Abilities\\BrokenRot.lua_B",
+      "oldSha256": "f4b8c3293fc0c0903d51907d1ad732548131c0efb2428d5b638253b6e88c5198",
+      "newSha256": "90da844d64ae6a634d5b933ba178621efca89b59ad329e79e785e065d21452f4",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        9
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\BrokenFrame\\BrokenFramePassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\BrokenFrame\\BrokenFramePassive.lua_B",
+      "oldSha256": "abd1d6a35dce0b05a80a0bef1013ffa709c52bdbfd513af210531b64a4137013",
+      "newSha256": "98c86a539fa8a632afce8f752f14e373108d472a2aa83f7dfc8436db03ce159c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        5,
+        8
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Choir\\Abilities\\ChoirChorus.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Choir\\Abilities\\ChoirChorus.lua_B",
+      "oldSha256": "8f177bfc6ad1e4d9881610a61e63ea75850f15b58c81a76c9249608e2ba91afd",
+      "newSha256": "96d03f870c1bae428e16a4318fdefe98daf892653a0bb192997e9145504d0ede",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        21,
+        22,
+        23,
+        24,
+        25
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Choir\\Abilities\\ChoirErupt.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Choir\\Abilities\\ChoirErupt.lua_B",
+      "oldSha256": "0807a0a9a212d9645435e3aeee54f30b02f62d26dd7f393d99374d00d3a54888",
+      "newSha256": "89b7cd8fba41e2c22048d20e499dcfed0d27669d7258ea3ebe33bd605165c984",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        19,
+        20,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Choir\\Abilities\\ChoirEyes.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Choir\\Abilities\\ChoirEyes.lua_B",
+      "oldSha256": "3a1548c154e215fdd92fc355d5423530974fba977016a314386a3c080153c450",
+      "newSha256": "bb2eab4abe71461a1c10992c33dbdfecaa4904452285f0af7d1594bc94940fbc",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        10,
+        12,
+        13,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Choir\\Abilities\\ChoirPool.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Choir\\Abilities\\ChoirPool.lua_B",
+      "oldSha256": "ae5e93e66d240c919223d638cf306ed35fc893244e8ad1249efc3083cb5a6ca6",
+      "newSha256": "2cba275c50be95027d9452229d344e4828cd62dc52381ae7745a771677457762",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        19,
+        24,
+        27,
+        28,
+        29
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Choir\\ChoirPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Choir\\ChoirPassive.lua_B",
+      "oldSha256": "dcabf58fe9e26f889686aa5cc613b3ce8195a15a635fb924e4c4895561c61c64",
+      "newSha256": "57732cee3593f58b5c6a185cbf2a2fef709561ae73a88dcfde86cafe53f52db2",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\ConcreteFrame\\Abilities\\ConcreteAura.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\ConcreteFrame\\Abilities\\ConcreteAura.lua_B",
+      "oldSha256": "4b177418e2f2571988b1c4866abb283bce6a63471e13fc292025d99e3b4f4219",
+      "newSha256": "f7b8ad4d08e64ca0f0f32644a086bdaf0517a03fbca7d5dbe816d50f49b11e7d",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\ConcreteFrame\\Abilities\\ConcreteLaser.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\ConcreteFrame\\Abilities\\ConcreteLaser.lua_B",
+      "oldSha256": "48ff7526606326baa659812ebfc68750afaea211cf4602606b25b639b1ce7f0b",
+      "newSha256": "45e0d797150437b2dc892cd3cbd8effe58293e59a10d5855332605815f40ad45",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\ConcreteFrame\\Abilities\\ConcretePillar.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\ConcreteFrame\\Abilities\\ConcretePillar.lua_B",
+      "oldSha256": "78a95c982593b2e5284d317b7919a86c1cbeb1a3174673fb24bf501715f064ff",
+      "newSha256": "9ca0eb8bb4c8bc16212b980b67b3045b8b1cd89e90e9db564908b1fe4da53d5f",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        14,
+        15,
+        16,
+        17,
+        19,
+        20,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\ConcreteFrame\\Abilities\\ConcreteWall.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\ConcreteFrame\\Abilities\\ConcreteWall.lua_B",
+      "oldSha256": "e1e136ad820fb33feaefb2cb101fb252e7407f411a3db859bc70c6580b8d550d",
+      "newSha256": "a475b5f92b769636da2eacf18d4f062229257d06633ff740bcc15d4fc90de1f1",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        14,
+        16,
+        17,
+        18,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\ConcreteFrame\\ConcretePassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\ConcreteFrame\\ConcretePassive.lua_B",
+      "oldSha256": "06fe9d5810a5780548f92917b672bf5b44d7fcf5604bb12503ca65ca05d6d8a6",
+      "newSha256": "9c24c3fcb9c80095b293791857106ac2f0032a9d0a3a4241b15cf02ab649ade1",
+      "matchedProtos": [
+        0,
+        1,
+        4,
+        5
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Cowgirl\\Abilities\\BallisticBattery.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Cowgirl\\Abilities\\BallisticBattery.lua_B",
+      "oldSha256": "3d745fabfc3525adc740e15fc59e1c1c9394370dee7b1082779c93fd7d17a410",
+      "newSha256": "55ad97ea4d7c0068e3c2cfb5aed220b8570f2a5c72d36bc1be1dd601a8d3c885",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        13
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Cowgirl\\Abilities\\GunFu.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Cowgirl\\Abilities\\GunFu.lua_B",
+      "oldSha256": "cfca435fed626c557edfdaf252266ae6facdcdd1537a363a37c721bb689d4fcb",
+      "newSha256": "83d80e3c5d44ab61da4335c9693977c7460f5494f43d36658dd1932621a74223",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        24,
+        25,
+        26
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Cowgirl\\Abilities\\RicochetArmor.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Cowgirl\\Abilities\\RicochetArmor.lua_B",
+      "oldSha256": "2afcc165e9d3bb4ed0eb8e21c618ad5fa2a335d534fc518fc9f8a5ba49c1454d",
+      "newSha256": "e2ccbd80d5213e872936ca1ba13d85137d92b9c6429b12a6ded1e6930efa179a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        13,
+        14,
+        15,
+        16,
+        17,
+        20
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Cowgirl\\Abilities\\RussianRoulette.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Cowgirl\\Abilities\\RussianRoulette.lua_B",
+      "oldSha256": "0ee18b509c2561b4d6d409a34c8586d3e5c9cf5c1ec21c2ff5138fc8a8b919f0",
+      "newSha256": "3fb5393c3a97a4c61f2d5c3a6e88506ef424cb95aa5aac16dba30c40c8c05b3a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        14,
+        15,
+        18,
+        24,
+        25,
+        27
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Cowgirl\\CowgirlPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Cowgirl\\CowgirlPassive.lua_B",
+      "oldSha256": "02682e2342ade22f28186ffb13a9b7ef31323b02450b9fbafc5c63247ebc6267",
+      "newSha256": "2e02ea530101f6690efeebdb12083863292fbe74999e1cf97724efd340d4d6bb",
+      "matchedProtos": [
+        0,
+        1,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dagath\\Abilities\\DagathApparition.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dagath\\Abilities\\DagathApparition.lua_B",
+      "oldSha256": "9898515fab0bfa255012fa4b566d0d8b3c764a89c6563d4168bcf52ead15f7ca",
+      "newSha256": "b0f35840d406554ff3ce7b8ef65226a8647871ce5d2a1619df1d99da131738ce",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        18,
+        20,
+        24,
+        27
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dagath\\Abilities\\DagathCurse.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dagath\\Abilities\\DagathCurse.lua_B",
+      "oldSha256": "08f4e032f98eece3e4d81d001d90a83265478086a72394680ca75ff580969106",
+      "newSha256": "f7a2f0e735c90593a06739ce2fd2c2ec3e55246c8da6fea90bf0850af97dd8ec",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        4,
+        10,
+        11
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dagath\\Abilities\\DagathHorse.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dagath\\Abilities\\DagathHorse.lua_B",
+      "oldSha256": "7bbaa2f2d34011ad0f64d504f6d55910460807462d0923bf5aaa506b35234edb",
+      "newSha256": "a349c8a445a4f77b7d801ab9b625b7fa182d914e761509ed9a9c49de160636b7",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        4,
+        8,
+        10,
+        18
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dagath\\Abilities\\DagathVolley.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dagath\\Abilities\\DagathVolley.lua_B",
+      "oldSha256": "79f3e6bb1a7c34efa96c68dd8d4d2c854a0c465d22afe615e01dced39c414f0d",
+      "newSha256": "003ce41486a9130c00522c49a3d7469246e723cd424dfbf0fff28b62e76bb862",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        7,
+        8,
+        10,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dagath\\DagathPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dagath\\DagathPassive.lua_B",
+      "oldSha256": "597409c96f34cb10d633d00eaeda90ad8f2d9649b1c6a260359b6958dba8477b",
+      "newSha256": "5fe4b64ed272c2f0f1f00cd0be9f6c4e9d2bbdfbdeadcc8ec04a9a479aa5ba34",
+      "matchedProtos": [
+        0,
+        6
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\DemonFrame\\Abilities\\DemonFrameBrimstone.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\DemonFrame\\Abilities\\DemonFrameBrimstone.lua_B",
+      "oldSha256": "9f7286b5a1899e2d5b952483a79478f7495049cc72c3c5ba1a74984e818e472a",
+      "newSha256": "121ef03209a742df19a7c0ddeef15edf5a8d5d954bc833dd9d8b5abd72e1298b",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        11,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\DemonFrame\\Abilities\\DemonFrameClone.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\DemonFrame\\Abilities\\DemonFrameClone.lua_B",
+      "oldSha256": "de480cd4127da01509297ff11395736435b36301127be03b1eafb88d996b6825",
+      "newSha256": "403a60cd7e8003dda7e417bd0a77ab8896355f77396b2fc82e3b1469c309d7a5",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12,
+        15,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\DemonFrame\\Abilities\\DemonFrameFireBall.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\DemonFrame\\Abilities\\DemonFrameFireBall.lua_B",
+      "oldSha256": "ee02cd9cc458bde8ce395fce386cd8755da864d3b45d9dcf7c67eefb096284e4",
+      "newSha256": "b8b5e5c5f8200d405731258efccd7f9b13f5001af61b864cab1160209a193dca",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\DemonFrame\\Abilities\\DemonFrameHeal.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\DemonFrame\\Abilities\\DemonFrameHeal.lua_B",
+      "oldSha256": "9151a86a9022c9fec134660f6a09e37f564aae647444e1a07b1424d5b199ebb9",
+      "newSha256": "c41a0d1f10a0514fba9f76e78caabf09eeff5e35f15ea82fcec66f8d19a29efd",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\DemonFrame\\DemonFramePassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\DemonFrame\\DemonFramePassive.lua_B",
+      "oldSha256": "c30a919b4c49be79b8b82e23d3ed5746cc3a24b1a5c35e3eb7dec07a9aca7ade",
+      "newSha256": "efc7052b02d68baeb5ab7b36ebc8f7a46780454cc4226e2f2c4c7fda71a6b9a0",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Devourer\\Abilities\\DevourerBowl.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Devourer\\Abilities\\DevourerBowl.lua_B",
+      "oldSha256": "4b243d0eff7c01d258c355e3a55ac712347503be95244d04f13fe7b29ae5903e",
+      "newSha256": "22603f37fd776e8e8c4944759b2789ce19b4910ca93a909e109357597c873bdd",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        23
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Devourer\\Abilities\\DevourerConsume.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Devourer\\Abilities\\DevourerConsume.lua_B",
+      "oldSha256": "b366ac888945a17296ff9835fc4b587d77b4e0d1f2cf19273d4dd83ef7040c6e",
+      "newSha256": "2ea888f9bab41f060ae5a4deba71320f6cf940814531cac11fb19bbebd319de8",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        23,
+        25,
+        28,
+        31
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Devourer\\Abilities\\DevourerDevour.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Devourer\\Abilities\\DevourerDevour.lua_B",
+      "oldSha256": "f60014470511faa586761e558a87a7899409c4658eb47a036d8bbb338da121bd",
+      "newSha256": "a7b3433eb870f9f69f6bf6dcd7acc0d16e184bd6a242c604fa042c27a625011a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        17,
+        32
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Devourer\\Abilities\\DevourerRegurgitate.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Devourer\\Abilities\\DevourerRegurgitate.lua_B",
+      "oldSha256": "28a6cdb25b141b790321191c90ea1551aa5c6c65331d5ab7179ad5a5e1f40ca4",
+      "newSha256": "89cbb5b3cb1308debfda4b3199b3bc5b97674da7ffffdfa06b82e06185508968",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Devourer\\DevourerPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Devourer\\DevourerPassive.lua_B",
+      "oldSha256": "c9f535c48f2ac6e1b228543d3bac9bdae39b16fbddb43c27fa0aa79065fc26b8",
+      "newSha256": "a0f55233113ea954114c38fba77bab771873a20fac6e73c14b75961d6487b1ec",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dragon\\Abilities\\DragonBreath.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dragon\\Abilities\\DragonBreath.lua_B",
+      "oldSha256": "f9aebdb18733f2656e87b244b01dbd8317623fd921f3e3c78f23ec86df8729fe",
+      "newSha256": "223fe973c4900862af05f79b01bc0e0c448143b60e113d9fded73c88b4392e86",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        24
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dragon\\Abilities\\DragonLuck.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dragon\\Abilities\\DragonLuck.lua_B",
+      "oldSha256": "aace06f0cf2295be48b3d3466fd4b8cfea598f8c4612c7f39934c376c400c905",
+      "newSha256": "a7122c4ea180010ca1c20221df6e28823fdaab67e5daff2413b47c5306e4c7f1",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        24
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dragon\\Abilities\\DragonPelt.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dragon\\Abilities\\DragonPelt.lua_B",
+      "oldSha256": "4a0e1ccbd73abb62d01e267e78c278995027e5872b0957b36a2a134ae015f8ef",
+      "newSha256": "ebecfd7b8e4a4da733f34f66b75dc219d18b08d89b157f6946e6585504bb9d37",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        18,
+        19,
+        25,
+        27,
+        28,
+        29,
+        32,
+        33,
+        34
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dragon\\Abilities\\DragonScales.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dragon\\Abilities\\DragonScales.lua_B",
+      "oldSha256": "d16fe2662dea468c4c6c06fbc1cad45cdb0d90b969ec8f02de5848021002e44c",
+      "newSha256": "38146b7b822bc7dd5d33381b76355b5afa9a8f4b6d70a75448c8e464b04aca18",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        14,
+        20,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dragon\\DragonPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dragon\\DragonPassive.lua_B",
+      "oldSha256": "ae10e61fd4e515a287f195ec13dd221c22948da410fb430094eed0fb17181362",
+      "newSha256": "8b6bcf1a1f212d8fdbf9803181563781f32986f2d2dcb0c196cb74c047dc00bf",
+      "matchedProtos": [
+        1,
+        2
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dragon\\PeltAbilities\\Flap.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dragon\\PeltAbilities\\Flap.lua_B",
+      "oldSha256": "020b91a23b2fd2a3eacc89c777d482b1ec5bfccaa17a88b3ab7164416cfeb7ca",
+      "newSha256": "3d12606ea03daaa6b145f069e2bbadc52e9a9489197649fcd79d142d4c49277e",
+      "matchedProtos": [
+        0,
+        2,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Dragon\\PeltAbilities\\Scream.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Dragon\\PeltAbilities\\Scream.lua_B",
+      "oldSha256": "19102fc5f810c63122539f727a50b34fb9af65b25a6682e97d9afa1618731c90",
+      "newSha256": "462d80fd499988171d1dbc9f00346be4bb0d2aec82d218eb0a9d2ab9e88ce57a",
+      "matchedProtos": [
+        0,
+        2
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Ember\\Abilities\\EmberImmolation.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Ember\\Abilities\\EmberImmolation.lua_B",
+      "oldSha256": "80a2dc69747bc385de7062cea8ea07fa4764b2d559167790ffab08f765f16a59",
+      "newSha256": "448aa52c287b1632df2a942335c62765603a206a56f0fcc3acaaf32efbb4bafe",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13,
+        14,
+        18,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Ember\\Abilities\\EmberInferno.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Ember\\Abilities\\EmberInferno.lua_B",
+      "oldSha256": "8a0c85ddc0d32480dd9a9e620aca1fa394626623a583007b8764007a573bdd12",
+      "newSha256": "77b27f0c19babdea392879f839ba23b68f5b2ad40a508480a87229595a83972d",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Ember\\Abilities\\FireBall.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Ember\\Abilities\\FireBall.lua_B",
+      "oldSha256": "bca5315eb0792a0a65da5d14bf0b43ae0d644687cbf330f0f38255901ea35830",
+      "newSha256": "443d73046eb6c43e80b0ec455c9dc98a129302dbdd4c3517363aa7d202ec8eb4",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        17
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Ember\\Abilities\\FireBlastAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Ember\\Abilities\\FireBlastAbility.lua_B",
+      "oldSha256": "66ee87c7f26f9da3a3231f1c6a08c4391876a5dbdeec87e91cbbbc9ed868fc76",
+      "newSha256": "1916119eb447ba75757d9cc323b25ec2d28d22c95d6a3584e4f0808ad7fba4db",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        19,
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Ember\\EmberPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Ember\\EmberPassive.lua_B",
+      "oldSha256": "a5a000147257e34b965119914f58c2b3b1af883268b680f1d08f0f6232cf7191",
+      "newSha256": "9135346bb48eaae879965f7dd2ed81836bcde14832d0114d18f02b316b72cccd",
+      "matchedProtos": [
+        0,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\EntratiMechShieldBash.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\EntratiMechShieldBash.lua_B",
+      "oldSha256": "0f1c46e94cf3aa32e4436f9293f779757b45cdf9642a2b3ca5186542fe79ebd9",
+      "newSha256": "e7ad57380f652bb3e3e52c176360c6e5a4317318f8368c747654b1a2317f7835",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        7,
+        8
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\EntratiMechTurretModeAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\EntratiMechTurretModeAbility.lua_B",
+      "oldSha256": "afc65b78fd25ca582adc7952ca51a446eddba7fc9c7e3771f34314b0ec0dd512",
+      "newSha256": "a57be4a79e3715b09c6909932645416ffc587e785ae925bd5e6b6e565489f1ea",
+      "matchedProtos": [
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\GrapplerAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\GrapplerAbility.lua_B",
+      "oldSha256": "fb0311f0f46cc8e16564381084f635fe7d72bb248879539887ebdffa16fa6145",
+      "newSha256": "dfaa30242f8a535558ef23d62dba71833d4a1a1f8ed9dc8dce64482570cef8d2",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        13,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\MinefieldAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\MinefieldAbility.lua_B",
+      "oldSha256": "3402259b36797aaca17d1fe762dfa74faaa4895b014558833527b10499bf8b1f",
+      "newSha256": "f43227b4aa59e9894b319dc010a6ba88512f08a3fe19d08a0f5c4831fb3ffd14",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\OilGrenadeAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\OilGrenadeAbility.lua_B",
+      "oldSha256": "35fd9b7144804e56214caf776ea2fc922160da532541b222b7653f24221915ca",
+      "newSha256": "3b3984d52325765a694676aad1b879df986b9cacb0f43b2ace4a409b6df9d7cc",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        11,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\RepulseAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\RepulseAbility.lua_B",
+      "oldSha256": "b6d56ae47f9014d1dc1209228a0705b4cc0bb3441428e83c3bc3c760eee289cb",
+      "newSha256": "53e5e4449d83aefdfa0a4bba754f6308bb7ebb5e2544ce09496e47fa39560e62",
+      "matchedProtos": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        11
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\RiotShieldAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\RiotShieldAbility.lua_B",
+      "oldSha256": "fcc53c3ebe1ddb987349a7321f55e63364212751c11cf8791b8c63b62171202e",
+      "newSha256": "982bbfe1de7fa5c2601913cb9fa7fefa3a1bc6e775c93fec0496977148feeecf",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        8,
+        16,
+        19,
+        20,
+        24,
+        25
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\RocketSlideNPCAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\RocketSlideNPCAbility.lua_B",
+      "oldSha256": "8954f019ff58854193a5c68a8149d056a804b842ad0546029c8367ec77815ca3",
+      "newSha256": "7b6b0b4021c803bc394a964e3b171982050d75f7406af10097c4a3cfb5660e76",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        4,
+        5
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\ShockingIronAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\ShockingIronAbility.lua_B",
+      "oldSha256": "44db91f27363e964ffdb72f126b860eda61a19260bbd335c2ca9ddd01ff27996",
+      "newSha256": "0a639eeec1e40bd5c5a83d250c23e3001e6d7cee245643767be623caec453d42",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        9
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\Snake.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\Snake.lua_B",
+      "oldSha256": "a51dd6ba76bd5889e6e61a7f51d9a201f75d26113e0743c1c76a3e9c2fb400c1",
+      "newSha256": "4b8c6f620fe0d0707f12314eaaffc2b25a7810fdf847340e14114c401e5a7e0b",
+      "matchedProtos": [
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\EntratiMech\\SwordAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\EntratiMech\\SwordAbility.lua_B",
+      "oldSha256": "626d73b0ac74114b25c899d64997c12ed0420dbb23bb55355eb47eec071b37ff",
+      "newSha256": "24039c944c074ab73f527eaeb9332e592f0b9913dd32b1ef8ce1e1dee32e614f",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        15,
+        17,
+        18,
+        22
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Excalibur\\Abilities\\RadialBlindAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Excalibur\\Abilities\\RadialBlindAbility.lua_B",
+      "oldSha256": "4461c8b846a72f1dd5003fd2a7a9d8bcbd3a351da78e939cbbe267a23973e24b",
+      "newSha256": "ac4576741ebabc2faff881a207b4b29ef7683b3bd9d1ce9b78ac49a2a94f4ae2",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        16,
+        17,
+        20,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Excalibur\\Abilities\\RadialJavelinAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Excalibur\\Abilities\\RadialJavelinAbility.lua_B",
+      "oldSha256": "c91e3b6f3c69a4041288ecccfd7e3c814ad28ff593116d271bbc3aab806bc0a2",
+      "newSha256": "87df93884e6d97ff1ecc1b70e6beaa781c324037325863bbb09bac242d21bad4",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        16,
+        19,
+        22
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Excalibur\\Abilities\\SlashDashNew.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Excalibur\\Abilities\\SlashDashNew.lua_B",
+      "oldSha256": "d0d994a77642e1a3baafc173fbc4998668dfba0f2e70cd9a206228a34df2ed1e",
+      "newSha256": "4bb19aa0f75994010f7d2baab00619c170ba367e89cdc0d3ff6136135c054ac0",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        11,
+        12,
+        15,
+        16,
+        17,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Excalibur\\Abilities\\SwordOfDoom.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Excalibur\\Abilities\\SwordOfDoom.lua_B",
+      "oldSha256": "93fb67b5b8ae71ddea92a536f000f3abd2d72e80f7400eb77852e5e697975121",
+      "newSha256": "e68f47c3ccd7d9ee5155638366b11880c5203b2d1634b43c763aeaa0d2e53cc5",
+      "matchedProtos": [
+        0,
+        35
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Excalibur\\ExcaliburPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Excalibur\\ExcaliburPassive.lua_B",
+      "oldSha256": "512fb7bb4deebe3a13a0f9b48fd15abc615055c09efe49d8716a11d59943a152",
+      "newSha256": "714d0a70ad5e302800c4d19a97f402bd572b383f05bb422fddfd1f0e0823882e",
+      "matchedProtos": [
+        0,
+        1,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Fairy\\Abilities\\FairyDust.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Fairy\\Abilities\\FairyDust.lua_B",
+      "oldSha256": "983083a4dbd90a59cb77ab44144e1353a86e6dfc944a3d7a79421c491d0dac97",
+      "newSha256": "e3079b1467ab5e8b9e39b357cee9fe9e1a9d8aec4feeb26e77c3b126bf662da7",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        11,
+        13,
+        16,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Fairy\\Abilities\\FairyFlight.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Fairy\\Abilities\\FairyFlight.lua_B",
+      "oldSha256": "b977fa728c39a0eea28d9c56d67bc2110a9b1d5f80eaf75dbaec9cdbfb9ce854",
+      "newSha256": "d208979c44cb00a03e2dfe8e72192af5d2a08a2b4f13e2bc0dad56b6a6c31ced",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        14,
+        15,
+        18,
+        20,
+        22,
+        24,
+        25,
+        27
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Fairy\\Abilities\\FairyLight.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Fairy\\Abilities\\FairyLight.lua_B",
+      "oldSha256": "b4f28370cfe4e03927c7a859f0fd449dca79887a26d395c9e65b365173043379",
+      "newSha256": "f84debba20a6a200f971946f88c4cdc5a2557aceccdf57b391a36ac5d7758432",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        12,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        24,
+        25
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Fairy\\Abilities\\FairySoul.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Fairy\\Abilities\\FairySoul.lua_B",
+      "oldSha256": "a07990337d6d68f965b0a665e3211f5687ff2a80d08b63ded878a8c83ed30813",
+      "newSha256": "b203ec8d48db6edecdfb93b7507930ef9971dac79bf62f0ddf9c69e688e2f07b",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        5,
+        7,
+        9,
+        10,
+        13,
+        16,
+        20,
+        21,
+        24,
+        25,
+        26
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Fairy\\FairyPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Fairy\\FairyPassive.lua_B",
+      "oldSha256": "cd10e693a13f74beef64fc388bd37ef30586cf22434411d8990e4511913bfe8e",
+      "newSha256": "66dae9997649dacd8d26e8aa0633c69c11dd034a4b70ce10a47910004a1ccacc",
+      "matchedProtos": [
+        0,
+        1,
+        4,
+        6
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frost\\Abilities\\Avalanche.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frost\\Abilities\\Avalanche.lua_B",
+      "oldSha256": "98863d6efbbb100c14ea114aca376c3fe8b2a93dea9c1dd9955ecf42064f112b",
+      "newSha256": "d371469f8c29576cd5a4a7ea7411b739ef8752bba0ac9734c2cd2813833ee760",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frost\\Abilities\\Iceicle.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frost\\Abilities\\Iceicle.lua_B",
+      "oldSha256": "7642b2b7cc023aca8d15d490165f52deddad5669b269b4b30d12b51d35d4d1bd",
+      "newSha256": "af59795820bd390456e08c568d2379dd792ecda7e68ed49c344e97723815b7f3",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        12,
+        13
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frost\\Abilities\\IceShield.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frost\\Abilities\\IceShield.lua_B",
+      "oldSha256": "b60886c7f29edb03809df00f063841c0f7370f7b0727ab091756555244c70394",
+      "newSha256": "42b84ff2e89a5880e4dcede20297ef97378c7aa9433b7cad28987b5b0886e163",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frost\\Abilities\\IceSpike.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frost\\Abilities\\IceSpike.lua_B",
+      "oldSha256": "5c657567b9471a46e78603d4da2f8d2c792a5ba18c4dacb4609d59d423a6fc69",
+      "newSha256": "f903720dee7828506f2a3e668204860f5300a27c27fc53f4e86781cab276f3c5",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frost\\FrostPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frost\\FrostPassive.lua_B",
+      "oldSha256": "58f2ef704f659c0ca36002b55b2e304bc118304810e853505d94b127c67473b6",
+      "newSha256": "2d4b64831b89190c18b4553ba76474f78d98c0994ead84d016841da2723bc56f",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frumentarius\\Abilities\\FrumentariusAmmo.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frumentarius\\Abilities\\FrumentariusAmmo.lua_B",
+      "oldSha256": "83fde902d1fec2139845e5566c6921afb414ecfdee01a2ade66ad3ae083d6c25",
+      "newSha256": "8832e74a2065398f70b97bf009df566fe27ac21256d06efc9a19e20d7fa08fe4",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12,
+        13,
+        20
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frumentarius\\Abilities\\FrumentariusCloak.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frumentarius\\Abilities\\FrumentariusCloak.lua_B",
+      "oldSha256": "d13c8e8463debd8de06c6251f9af926fbeb7a4cc429e24d577596636697d7653",
+      "newSha256": "a4cea4f2f50c849c966cd23ff75af4cd82a62b79592476221b36cd2e1ec4cc85",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        11
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frumentarius\\Abilities\\FrumentariusScan.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frumentarius\\Abilities\\FrumentariusScan.lua_B",
+      "oldSha256": "85238c6ff28e4c8bc0f711553098d4de3f700e5bfef84e06551575f60e27feff",
+      "newSha256": "fe12ace9b79d178286aea3302bc35d7ea9843318e0d1ff931c98dc44fd353a9e",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frumentarius\\Abilities\\FrumentariusSniper.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frumentarius\\Abilities\\FrumentariusSniper.lua_B",
+      "oldSha256": "afd1574fda540c4f508a51028d88cc9842b295f83b421462dd896e4bbd7efaa5",
+      "newSha256": "26b2a172416156c87ffae372d38a24997f2e92499e54afba5c5d960273eefecc",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        25,
+        27,
+        28
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frumentarius\\ElementalAmmo.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frumentarius\\ElementalAmmo.lua_B",
+      "oldSha256": "d818a4154bce02e59dee0f74745f47201285fa2692d890713c388ba40ac29d6c",
+      "newSha256": "7925de168f11da1399d5a9db713f842352fba06073997743cf06be4a3a82a85e",
+      "matchedProtos": [
+        0,
+        2,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frumentarius\\ElementalAmmoManager.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frumentarius\\ElementalAmmoManager.lua_B",
+      "oldSha256": "8062b8dea9246c5ab54b29aeac52b67d26658e50add974c48befddc6c9032b2d",
+      "newSha256": "4336b2791e2237f5f9a6221f434fe6a3f620891b8d270d3dc5b03b12dbc0165b",
+      "matchedProtos": [
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Frumentarius\\FrumentariusPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Frumentarius\\FrumentariusPassive.lua_B",
+      "oldSha256": "60df9b79cfc8600c45e33923e88461efc8e4e2420ce9d94bfe2f9116cd1d5ab7",
+      "newSha256": "4ec7e166ccae7f60732b26b5975f798ed52c833dd3d286ff7fbedbf9948ffdab",
+      "matchedProtos": [
+        0,
+        1,
+        5
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Garuda\\Abilities\\GarudaBlood.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Garuda\\Abilities\\GarudaBlood.lua_B",
+      "oldSha256": "67fe9f2eba84ee96936ba1da3bc415d243b971ffb1d596827ee3eb0b12a676c4",
+      "newSha256": "eeb96e961a527df4591afd2468bfbb37861215ec214c06f9ddbd13a8ce783fb4",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        11
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Garuda\\Abilities\\GarudaShield.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Garuda\\Abilities\\GarudaShield.lua_B",
+      "oldSha256": "5566b138e12761e5bc37747ced526695a61c130ae7a6cf73ce49e7b035144d23",
+      "newSha256": "588de8fad624fab0b678a2344481405a5b21098320497f8627c999d29f567621",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        12,
+        13,
+        15,
+        24
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Garuda\\Abilities\\GarudaSiphon.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Garuda\\Abilities\\GarudaSiphon.lua_B",
+      "oldSha256": "25a19844ddc01360896148b0b10415c375b21a2fa782b9aafa2bcd7e12447214",
+      "newSha256": "9345f41fb9a24c176087c7f382fa813b21cefb41cc9e5d791cc9e6171ea8797e",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Garuda\\Abilities\\GarudaUnstoppable.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Garuda\\Abilities\\GarudaUnstoppable.lua_B",
+      "oldSha256": "85bd904d0423f13fd62fce4dc3e88c61cd59429fee44247686935b99454c20f2",
+      "newSha256": "980c79a277c08de6487d5d3106e7d3c2eca693ba3143af7da74269d767457007",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        19,
+        20,
+        22
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Garuda\\GarudaPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Garuda\\GarudaPassive.lua_B",
+      "oldSha256": "ea86448c6a35a5461b4c9521a73d469c1709f2f0f059b35b569f01da9e4270b9",
+      "newSha256": "3c66516a9c5d4f395f29e31a8efb6b22f39b321c83295bfb93433cfaff452e00",
+      "matchedProtos": [
+        0,
+        4,
+        7,
+        8,
+        10
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Geode\\Abilities\\GeodeCrystal.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Geode\\Abilities\\GeodeCrystal.lua_B",
+      "oldSha256": "226599dbe4c0722d766ec0ce8c1a2a9d8c599e5de596f775c4b653e5f5bf47ee",
+      "newSha256": "bf20781128e4ba97b7358042956ae6d15b54b5f405f5c1c16807536c267dd96d",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        12,
+        13,
+        14,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        26,
+        27,
+        28
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Geode\\Abilities\\GeodeGrowths.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Geode\\Abilities\\GeodeGrowths.lua_B",
+      "oldSha256": "3a8c1905e81649c85100cd82fb17c809cc6b32ca07036a14871d19294f4f5dcb",
+      "newSha256": "a292a4401f6d9451b1c1b4e442bac7873d768022afe3117650e0216f30593168",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        15,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Geode\\Abilities\\GeodeShards.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Geode\\Abilities\\GeodeShards.lua_B",
+      "oldSha256": "7ed3d089f9bfe020a04dfed18abc22534e9c16b75fe1ae160f2614d766b3baa9",
+      "newSha256": "2b260c898b7c44b0bcbbb9f5a6ec6fa5c95d0b5668493ea0d2147b9aafcfd8c6",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        10
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Geode\\Abilities\\GeodeShell.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Geode\\Abilities\\GeodeShell.lua_B",
+      "oldSha256": "e4430e3005fde1a8af6d44d7b819ac20d228bcea8e5a7380516c812a56979595",
+      "newSha256": "86df3b96a69b6f4f41da6b767301f68d50fbdbc296770efca620d8f457aa8f32",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        11
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Geode\\GeodePassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Geode\\GeodePassive.lua_B",
+      "oldSha256": "d545da4b781c2bf3f7ca0405c1e9b6c35cee84e0e80bb57845be1b0cd224f476",
+      "newSha256": "6656df7b664f9bcd41fcdc5b445b64e8b3070bf3bf92019d5c5214796b572c04",
+      "matchedProtos": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        8,
+        10
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Glass\\Abilities\\GlassFragment.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Glass\\Abilities\\GlassFragment.lua_B",
+      "oldSha256": "27ab90a75aa56aa8165a48d6bec7b5a41b085dbcf54c4375169e45674380f71c",
+      "newSha256": "f6134325c55dca92fc86cce62f332457852f86ef83848a3c5d80ed01b5348b5c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        11,
+        14
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Glass\\Abilities\\GlassRing.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Glass\\Abilities\\GlassRing.lua_B",
+      "oldSha256": "34d7208650de9ebd5fbe5e3f4f947ff7bb9605b2c649f11b71ec0ff7d02c7298",
+      "newSha256": "cbfb92ba2c3ffecd42cc91b381df18ecace6664f14312431322023534f6241cd",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Glass\\Abilities\\GlassShank.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Glass\\Abilities\\GlassShank.lua_B",
+      "oldSha256": "6372c65eba6d77a51eb827f681f3b77dce21f3bf48f4a174108e6d1906943b71",
+      "newSha256": "c6ac28d047366d1ed5e99a2868e6a490e9642c728e39abc0ca7fdcb2cb689618",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Glass\\Abilities\\GlassShatter.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Glass\\Abilities\\GlassShatter.lua_B",
+      "oldSha256": "177ed990c1dc2d3425bd1cdacf7c89a767c47d2ae5e1982a5bb03ea37f8800ea",
+      "newSha256": "3396e5fa9d489c574b2c9f52788dac7ec84f7e89b0ff4a2238f79b855f7d839f",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Glass\\GlassPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Glass\\GlassPassive.lua_B",
+      "oldSha256": "a6618a63d5c3cc28740bcf60d051960ff1fc556f99adc6f40faffb08d472aeea",
+      "newSha256": "50ac30ca4ea9f86c094307f8097629b8efd9743387c7be68fa3d484f3cffb0ac",
+      "matchedProtos": [
+        0,
+        1,
+        3,
+        4,
+        6
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Gyre\\Abilities\\GyreEnergized.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Gyre\\Abilities\\GyreEnergized.lua_B",
+      "oldSha256": "d0479feabf5d82e5e0565fada288b5bbe0e7fce7e9a261146d6cc488a8b77c7e",
+      "newSha256": "f5645ef473a8110a982d4a76efbb648d02137d9ca9774d6ec49c8d39e820359d",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Gyre\\Abilities\\GyreOvercharged.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Gyre\\Abilities\\GyreOvercharged.lua_B",
+      "oldSha256": "8f1606f6fd095b735a0c697eaf11defda2e97c3accfde6d848e405ba78e0b1c0",
+      "newSha256": "cab4703787fb2bf4596a47cb5d213cec14879221d031cf14ed7521ca76e6ba1d",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        11,
+        13,
+        14,
+        16,
+        19,
+        21,
+        23
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Gyre\\Abilities\\GyrePulse.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Gyre\\Abilities\\GyrePulse.lua_B",
+      "oldSha256": "e130fe5383cab39a5cf3f74acc47b5a47dd6d2cb652c3691d06fb7bcab5ced6e",
+      "newSha256": "6148f1780cba77a25fa44886497276c636cee30af023c01b4d1913ca6e5541ae",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        12,
+        13,
+        15,
+        16,
+        18,
+        19,
+        21,
+        24
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Gyre\\Abilities\\GyreSphere.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Gyre\\Abilities\\GyreSphere.lua_B",
+      "oldSha256": "c3ea272286899fede04361e5b3ff2146776c429d1115cea19ced9075bad2fe59",
+      "newSha256": "9889798e4c4f7f7cd91f3d538e29cbbde07713757886600f43c33749819017da",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        17,
+        19,
+        20,
+        22,
+        23,
+        24
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Gyre\\GyrePassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Gyre\\GyrePassive.lua_B",
+      "oldSha256": "39991655969c383afcab8461e6b711fafbf89625eccb9d2a27d458aea8f2551e",
+      "newSha256": "92dde7beee77c8b91e3c44535385583859895a054bea71cda8bb4469004f2cb6",
+      "matchedProtos": [
+        0,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Harlequin\\Abilities\\HarlequinObjectChange.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Harlequin\\Abilities\\HarlequinObjectChange.lua_B",
+      "oldSha256": "2e65d8d0b083854ebc9069567a6539b039f99e53b93d9f5645b4e84313b9ac5c",
+      "newSha256": "455ca6804cd46f948a9f0d97a070bd9b0b2bde4de6b4d724d7c08ccf401fb490",
+      "matchedProtos": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        22,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        49,
+        51,
+        54,
+        57,
+        58,
+        59,
+        60,
+        63,
+        65,
+        67,
+        68,
+        69,
+        71,
+        73
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Harlequin\\Abilities\\Illusion.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Harlequin\\Abilities\\Illusion.lua_B",
+      "oldSha256": "7a433c13186ab49a2dfbcfb951400137903dd2f6991f423fe536b5ec7ead8f6d",
+      "newSha256": "2ea2e5358351e54369bdaf3f9ced123ba206770710be995a28bd521af7d8b51b",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Harlequin\\Abilities\\Light.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Harlequin\\Abilities\\Light.lua_B",
+      "oldSha256": "200abbe0198ea763a9987bc9d20d8aa044b84a0bd33e03c9371f95d4ddc17582",
+      "newSha256": "fd7e1002fe6aca2109aa364a5d7cebb17ced9be988c291effab489fe83246eb3",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        12,
+        13,
+        14,
+        15,
+        16,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        32,
+        33
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Harlequin\\Abilities\\Prism.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Harlequin\\Abilities\\Prism.lua_B",
+      "oldSha256": "7c886f8f861e033e2ba720c8dda974b8052e4ba2bc651ea921cf96122659885e",
+      "newSha256": "46163cd6c2ceaeac197bc220fafe96c09946af3903140b843626366763f57fc9",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        17
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Harlequin\\HarlequinPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Harlequin\\HarlequinPassive.lua_B",
+      "oldSha256": "b8fb69feb6622c89f532d6a78cc215f49c9e4c6e74f996124e2b0dfd5fe577e7",
+      "newSha256": "b123a4e8a239d9e25ebda95de29100c70468e073b590ac125fb0eca96785c35f",
+      "matchedProtos": [
+        0,
+        1,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Hoplite\\Abilities\\HopliteArmy.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Hoplite\\Abilities\\HopliteArmy.lua_B",
+      "oldSha256": "d4d3a167bef21beb7197803a5fb89179dea6719a387f36dff8fb31194c2328dd",
+      "newSha256": "702c341928a5cf80a9d3cdf9f63677e879592626117420e13c4383fec10034e0",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        14,
+        15,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Hoplite\\Abilities\\HopliteBash.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Hoplite\\Abilities\\HopliteBash.lua_B",
+      "oldSha256": "646e5ae1edc119d6aba96877cb2ecdd4844055a398112d77b84ccfd3b271f373",
+      "newSha256": "2140b983782ce9fe54404ed5b7302ee0a88892fd06b9ffcc83fc74c6ca0f48f6",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        14
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Hoplite\\Abilities\\HopliteImpale.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Hoplite\\Abilities\\HopliteImpale.lua_B",
+      "oldSha256": "e58501db649d6fe827defa80720e64b51a34234ed354a75cfa82f2304bc32584",
+      "newSha256": "c4bdffda0f7657e55ac889a50e510c650f37ef41e049fffdde3253b5bb53ea47",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        13,
+        15,
+        20,
+        21,
+        22
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Hoplite\\Abilities\\HopliteRally.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Hoplite\\Abilities\\HopliteRally.lua_B",
+      "oldSha256": "95ace6f8b52716d090dbcd2dc149465a0b73e676741c4670860c91960795a665",
+      "newSha256": "5b9c6cfe828b46fcd79c45f6d208988f21b9f07e75d76283c8c260a3000891b9",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Hoplite\\HoplitePassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Hoplite\\HoplitePassive.lua_B",
+      "oldSha256": "dcc92d1b2f1222e21b65e84d5a937c2deb4e154447d9552ee0ddee8ff3c1c8e9",
+      "newSha256": "58259ba87b9027890d69d8f0f8ee92fbe01be7b7cc132581d2d1bee50000f0fa",
+      "matchedProtos": [
+        0,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Infestation\\Abilities\\InfestLink.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Infestation\\Abilities\\InfestLink.lua_B",
+      "oldSha256": "980ffeccb7405cba279d4afd6d91eb940e0ed0ba1da7b18b4cfaa9d5724ab0fe",
+      "newSha256": "9c78db907953f96b0d0d383150ad1fb395c6628c6554ca8b64a546fcfbfc3d53",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Infestation\\Abilities\\InfestPods.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Infestation\\Abilities\\InfestPods.lua_B",
+      "oldSha256": "ba3e2cb02caea66fc43f156c8ee0bcae79f46f0e10d087b0c583fb226a082a8a",
+      "newSha256": "5b5a275121b186cf5f502728b45b91b281dd57eeca1d7bd3a304550f4c671d82",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16,
+        20,
+        37
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Infestation\\Abilities\\InfestRupture.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Infestation\\Abilities\\InfestRupture.lua_B",
+      "oldSha256": "e60520864a51bcf159cf1f6702ca5f3040510eb3c610d87619320cc3878de6e2",
+      "newSha256": "938bd25c5231a33a548d4b279803b98cb70d5c7936619c5be1d9515076b4f700",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        16,
+        17,
+        18,
+        19,
+        21,
+        22,
+        24,
+        26
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Infestation\\Abilities\\InfestTendrils.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Infestation\\Abilities\\InfestTendrils.lua_B",
+      "oldSha256": "b302bfbe6af50be28492a2b608db7ccd39c9e8fbbbd865a3518cc454a5693471",
+      "newSha256": "ea95d352b3c405725ac7e7decae4e5e741bd0759323ab139d80925a763606f39",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15,
+        17,
+        18,
+        19,
+        20,
+        22,
+        26
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Infestation\\InfestationPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Infestation\\InfestationPassive.lua_B",
+      "oldSha256": "f5bcb179aab0e86bdcc58df6a72e5648163f96e1631171ec4f701ae7b4e74c67",
+      "newSha256": "69ad92e40037037fff6f8fc1f85b8b9791b09134fcfcc8566618a3d1573642b7",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        10,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        19,
+        20,
+        23,
+        24,
+        25,
+        26
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Inkblot\\Abilities\\InkBalloon.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Inkblot\\Abilities\\InkBalloon.lua_B",
+      "oldSha256": "e7fa17ceb6745029fd02813ccdfef418150d3c13033f641b2c254d1ff73f37e3",
+      "newSha256": "5a3e97d10acd4416da7decb86db55b47a3ce18ff1ca6e39aba35ffbce20a82da",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        11,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Inkblot\\Abilities\\InkClone.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Inkblot\\Abilities\\InkClone.lua_B",
+      "oldSha256": "047a9d8dbace27873a74b46889a11e31476edac3a74998fb4bb316fe9c347ae9",
+      "newSha256": "c1fdefa83653d272ddd9bd860b84d6971933bb6ad1f1cdf4f58f21fd56c3b4ef",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        9,
+        14,
+        16,
+        18,
+        20,
+        25,
+        27
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Inkblot\\Abilities\\InkField.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Inkblot\\Abilities\\InkField.lua_B",
+      "oldSha256": "5927aedf765fa5ee3d0cb6ed383985de56cc7f130c6966905123b706eeea81e6",
+      "newSha256": "c401f119b0b57a59192cd52b03bdbd8a257f9f9fb230b7214b332ea6ea11e51f",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13,
+        14,
+        19,
+        20
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Inkblot\\Abilities\\InkSketch.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Inkblot\\Abilities\\InkSketch.lua_B",
+      "oldSha256": "f12ade33ebd0319cd2dbade3e6df982067264ddbb7611401c8f71faa6e2576e3",
+      "newSha256": "16997fca5f90e84138158625ca7f884804c5c01e22faea4edc2554ae9ee35fc7",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        8,
+        9,
+        10,
+        12,
+        14,
+        15,
+        17,
+        22,
+        33,
+        36,
+        37,
+        42,
+        43
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Inkblot\\InkJumpPad.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Inkblot\\InkJumpPad.lua_B",
+      "oldSha256": "85c6fefddf4d30c05d6d996a1bfbff0ceb6b1840e6500d90650011ecb3912e1b",
+      "newSha256": "93a0548209fa7cb0826446c6b0a87a5312f37bda18b34739d48ad0c693555dfb",
+      "matchedProtos": [
+        0,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Inkblot\\InkPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Inkblot\\InkPassive.lua_B",
+      "oldSha256": "f10b6c044c35721094ef64ff1cdea07689a169a3b2c0dab47e5a03963c0c9646",
+      "newSha256": "dfae46761d0ee2130b872b26896ae75085124031640df97ec941a433f28a7791",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Inkblot\\ScriptedExplosiveBarrel.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Inkblot\\ScriptedExplosiveBarrel.lua_B",
+      "oldSha256": "0f3afe9b7a8acce0738a2348ae8a8776f9efcaf096a2574aadc2d997e2a58632",
+      "newSha256": "07320399e37433904fd0fc3eb51b60d48aa39fcff91e90b17d14e5956afd8fc9",
+      "matchedProtos": [
+        1
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\IronFrame\\Abilities\\IronFrameAura.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\IronFrame\\Abilities\\IronFrameAura.lua_B",
+      "oldSha256": "a448759f8ba19b4db0b809713b7c22583a55a0b9499b49785059837075f3bb61",
+      "newSha256": "b982b2d154d93457eac7b9bc3d6003704f3671ff7dcc0ac970e041d6ffdd4847",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        8
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\IronFrame\\Abilities\\IronFrameBlast.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\IronFrame\\Abilities\\IronFrameBlast.lua_B",
+      "oldSha256": "f2a1b152a22e1f4b419598bd372589ee446ccf64d829f4f31d6bec00f3f3fedd",
+      "newSha256": "8f7c45f4aa3513b3481a7b504279526fdae159273524544eb990a863c3257c97",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        17,
+        18,
+        19,
+        22,
+        23,
+        24,
+        25,
+        28
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\IronFrame\\Abilities\\IronFrameEruption.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\IronFrame\\Abilities\\IronFrameEruption.lua_B",
+      "oldSha256": "25cc8411fb9093d25ec407a237ee326df5733033262979e2eb69def6bceec4ad",
+      "newSha256": "827bd9328b75bd0ae5fbbbc069aa26ee7160856e733e38debead136ad9d81866",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\IronFrame\\Abilities\\IronFrameStrip.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\IronFrame\\Abilities\\IronFrameStrip.lua_B",
+      "oldSha256": "d3bf922cfbcf7a0f08b9002ecdaaad29251ba02d014ed3fbae2702195f7db679",
+      "newSha256": "60bfa5f47d34fb677e5988003576186e6e5417e9df746e40e83ebb8f3e897a33",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        13,
+        14,
+        15,
+        17
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\IronFrame\\IronFramePassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\IronFrame\\IronFramePassive.lua_B",
+      "oldSha256": "e9965da5b7046729a6a035013b6b17f41ed2fdd3733851955901b4bde6348c98",
+      "newSha256": "488a45c3100aed020abc10be49fdbd9d5b57fe534bff44eac4be7d43adc3e7fe",
+      "matchedProtos": [
+        3,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Jade\\Abilities\\Chaos.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Jade\\Abilities\\Chaos.lua_B",
+      "oldSha256": "5c0d1b708ca6a365ee5e1e5e73ea03633ef00d696c49b332efbe13e95c579c14",
+      "newSha256": "ea3f937a7b30bc8722046e2c0982313a96ee32fef30a68eaf396c2fd16d3389a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        12,
+        13,
+        18,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Jade\\Abilities\\MindControl.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Jade\\Abilities\\MindControl.lua_B",
+      "oldSha256": "5fe0b15761fa998aa669c5b7d533660b19749bcc9543d7788deee6fde2871a33",
+      "newSha256": "f32e3c23c5d21608edaad685b3f5c284fb97daa3c81e8a7feb1853d65215b6b4",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        12,
+        13,
+        15,
+        16,
+        17,
+        18,
+        21,
+        22,
+        23,
+        24,
+        26,
+        27,
+        28,
+        29,
+        30
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Jade\\Abilities\\PsychicDagger.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Jade\\Abilities\\PsychicDagger.lua_B",
+      "oldSha256": "bd0574b7b36dd405cda16475d84dafe11c7ddf21f273999bc9e7e831548d67e6",
+      "newSha256": "c3e41928102b80b02a8ef26c8bc6c17025aea7f31d95863cfdd103f69d1082f8",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Jade\\Abilities\\SelfBulletAttractor.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Jade\\Abilities\\SelfBulletAttractor.lua_B",
+      "oldSha256": "f261373b65aaff661eda991fbba4fde1454928112570b5adabad71e8b136f4fb",
+      "newSha256": "07b521242b199e6b04ef31b0da9d546df4a072520db5026e19c7f8506b2e9324",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        14,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Jade\\JadePassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Jade\\JadePassive.lua_B",
+      "oldSha256": "06de4613dfa02a5845a0ad0ddab2fb06f2861b2663c2ef68f4a8137d0eba15c5",
+      "newSha256": "a04b67527c61dc1628e7ca6f9d2f0e18f00e85e5a4b8fca1c06a9e428625507c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        5
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Khora\\Abilities\\KhoraCage.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Khora\\Abilities\\KhoraCage.lua_B",
+      "oldSha256": "8792aa6f58fc142935e889dc9769a34cfa07c8a36236e4f419e618bc31d1c124",
+      "newSha256": "ebd596511635104238183547358b46c3440988fafda13c5c971c33a755b95f2e",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        13,
+        15,
+        16,
+        17,
+        20
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Khora\\Abilities\\KhoraCrack.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Khora\\Abilities\\KhoraCrack.lua_B",
+      "oldSha256": "ca13ba608296d01a6bfe26614030f692981a801452e9d6e2a6d4d9958de6f8f5",
+      "newSha256": "d7c8a004a7d78b763a5df5156d9e62659ffba29de85a5440f375a63986fa6ffb",
+      "matchedProtos": []
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Khora\\Abilities\\KhoraKavat.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Khora\\Abilities\\KhoraKavat.lua_B",
+      "oldSha256": "0acf580273bc0e9b1bbf1d171264ef23a94888fd7118b0a8c6d9cec85a83e77c",
+      "newSha256": "1a15b5c8b33954f7bab6163359b3880a775e8990d948582be9ea74a9c76e8551",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11,
+        13,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Khora\\Abilities\\KhoraTwirl.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Khora\\Abilities\\KhoraTwirl.lua_B",
+      "oldSha256": "da5559b592d4ff0e7ffee5d8c178d638c9e718ec5ae799ee1308990c8fa95bc3",
+      "newSha256": "3f7c30c0e2a77aebbdaa5a15b9f645ba58c6dba7ad99cc9e8cf37a1598a1fe46",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        13,
+        14,
+        17,
+        18
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Khora\\Kavat\\KhorvatAura.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Khora\\Kavat\\KhorvatAura.lua_B",
+      "oldSha256": "d6ab939019ac51de4d5439a5504679bc9b9ed5431226285d0e73e59a95450338",
+      "newSha256": "221bcbdc2b13314011bebffb82f9cc103977b88d6ec709a8bb2fdf7c3443b372",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        6
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Khora\\Kavat\\KhorvatDervish.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Khora\\Kavat\\KhorvatDervish.lua_B",
+      "oldSha256": "9e1abc660d58d5407e0a79a80be2f970e1de4b52b08da9d16648fa8b851dae4b",
+      "newSha256": "62b5b38b8196d15b589d4da1d5f01362b4c79cf198d9d2316a0551eedd17124e",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        5
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Khora\\Kavat\\KhorvatDisarm.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Khora\\Kavat\\KhorvatDisarm.lua_B",
+      "oldSha256": "c003a1256537175ecf44fdd52144cc042d150d5c221ba5f8d2405bda3348b78a",
+      "newSha256": "4309bbbaad02b737fcb52e7f3d63e163432f6435a020b178f9f74da274711ed0",
+      "matchedProtos": [
+        0,
+        1,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Khora\\Kavat\\KhorvatMeleeWeapon.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Khora\\Kavat\\KhorvatMeleeWeapon.lua_B",
+      "oldSha256": "c91d101109bfd9c194856b0b4f7b8ec6d5c8afd120ffed1e5b5b44b5018c8684",
+      "newSha256": "e78949d21f0cc6eb0d1d61d08bbef4cf4b82040a88328f7211eda0009a2f26e1",
+      "matchedProtos": [
+        1
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Khora\\KhoraPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Khora\\KhoraPassive.lua_B",
+      "oldSha256": "e5bdd1a298c6be2fbacce409a8921844e90871e087aa11d35e8d216f59cd5f83",
+      "newSha256": "ee13fc99ddc285f08a43abdc8d08e3d22bf027f7d2f88954c604e33b058d4802",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        16,
+        17,
+        18,
+        19,
+        20,
+        23,
+        25
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Koumei\\Abilities\\KoumeiBlock.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Koumei\\Abilities\\KoumeiBlock.lua_B",
+      "oldSha256": "8a9f7ddf558229857b2858cb1bc31c97e6134a424bd6ed8222f05f003fcfbeb7",
+      "newSha256": "64cb0bb6fc7c5eecc9780dfb84db1e510839e1c474edb593650634f56ee85c1c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Koumei\\Abilities\\KoumeiFortune.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Koumei\\Abilities\\KoumeiFortune.lua_B",
+      "oldSha256": "e03bc5b789169659d347b896fa717fbddef3cb74b770d502cd654d2c14adf59a",
+      "newSha256": "af8d3e0b9bc22a5e42a9238614ddaa60c49ace45b509b1ec4352f31e2aea309d",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        25,
+        31,
+        32,
+        35,
+        37,
+        40,
+        41,
+        42
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Koumei\\Abilities\\KoumeiPuppets.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Koumei\\Abilities\\KoumeiPuppets.lua_B",
+      "oldSha256": "c658681466000be0fb7daadeaf6b90bfa02f39a53f896e6181332e37c57f5172",
+      "newSha256": "d72fb3dd937f522c50dab7a9a835f4527907a720f33a4fd0b13fc95d20df398a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        8,
+        10,
+        11,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Koumei\\Abilities\\KoumeiStrings.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Koumei\\Abilities\\KoumeiStrings.lua_B",
+      "oldSha256": "8ee51f02cd9dcbd0917434a012aba2047bc20173e3944c912363f61ae3c2fbb9",
+      "newSha256": "c79f05e1e4a316bb2fa10dc3b5145e5bf9c7b2f1a4c281db08119f63a9316001",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        19,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Koumei\\KoumeiIdles.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Koumei\\KoumeiIdles.lua_B",
+      "oldSha256": "25eeb1c494562023c5b3dea9b84ca8a2264d37c4eb492bab9682593921ba7eb5",
+      "newSha256": "0c7b61ce64130950d040bd85102b6d819f3fde217d59b1f9a38d878085e08be7",
+      "matchedProtos": [
+        0,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Koumei\\KoumeiPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Koumei\\KoumeiPassive.lua_B",
+      "oldSha256": "5c38decb3d592ce7551e58046f70e1ddcdabffdcf3d8e89e13d09a3d1fb873e6",
+      "newSha256": "0a98d4214fb6f64b32937caf5bb7aa1a49f1c8e172e7b5009f5ea9c751a358b4",
+      "matchedProtos": [
+        0,
+        1,
+        4,
+        8
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Loki\\Abilities\\DecoyAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Loki\\Abilities\\DecoyAbility.lua_B",
+      "oldSha256": "9bebabe34bec9a4d502b42e7c5a5f787873d55fed4da526e8093ae73c1a0736b",
+      "newSha256": "9c5fb6a777643794b1cf17d284de4d30ce56b5115da296dd5a233145aa48a3a0",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        13,
+        15,
+        16,
+        18,
+        19,
+        22,
+        23,
+        24,
+        25,
+        26,
+        32
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Loki\\Abilities\\InvisibilityAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Loki\\Abilities\\InvisibilityAbility.lua_B",
+      "oldSha256": "9ddb18a47382678f292ac22be7a446ad7b56e5943fb1ec4628649e6d401fed52",
+      "newSha256": "6a5a3ae9d481753452e28a0e7b5d811635ddbff5fbc3281491cf6cb7a26abc4a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        11,
+        12
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Loki\\Abilities\\RadialDisarm.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Loki\\Abilities\\RadialDisarm.lua_B",
+      "oldSha256": "ab803e4dcf4e0ef3e61954d12f9e16576025f43bd3020a7701da5ce4f63d35a8",
+      "newSha256": "faf35e10cf2eeb40a8afed4f84c30f48c8bd2218192336bb312d8753d0514793",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        14
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Loki\\Abilities\\SwitchTeleportAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Loki\\Abilities\\SwitchTeleportAbility.lua_B",
+      "oldSha256": "3e37fbe7c4f015f1d0fa6cf7316ade2b924f5c81c0d9f3aa1531daf4520b6bdc",
+      "newSha256": "f4aa5a394df4e889785f1ebfd9fd1bca49ac80dd3fdf55770ff4168a6009b0e3",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        10,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Loki\\LokiPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Loki\\LokiPassive.lua_B",
+      "oldSha256": "363e8c8790e2c1ab0330591ea06beea402b5e3d7ff815be20375df48649818b8",
+      "newSha256": "9c59d8434a8d5e49d94a80054b332197633073c9553c7fde239a508e31e48fe3",
+      "matchedProtos": [
+        0,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Mag\\Abilities\\BulletAttractor.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Mag\\Abilities\\BulletAttractor.lua_B",
+      "oldSha256": "e0238a79cb21278931170fb974ad09d67442a7a6a8f63e6e31a283b97ea16410",
+      "newSha256": "0bedc55df14486313a686809366bcbb9f7ef331ff4944eafc5642c2803a23eff",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        18,
+        20,
+        21,
+        25,
+        26,
+        27,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Mag\\Abilities\\Crush.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Mag\\Abilities\\Crush.lua_B",
+      "oldSha256": "2bd3845096e23c960890e5f5274740955265ee6125a7b2ce954daf9e2b2251d8",
+      "newSha256": "6a23fdc40c1f41bab5996d3fd454e7f4b8662b29d18dbafa07218e3ac9596698",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        17,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Mag\\Abilities\\Pull.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Mag\\Abilities\\Pull.lua_B",
+      "oldSha256": "f8c009a4bee13f6bfa5dfddf4d692bb130eee160ca4007d73f6aca865d5891c0",
+      "newSha256": "99d0964b4784cc63cd4a30970353120b5c89391149754cfb9d83f9aa676c88a4",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        13,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Mag\\Abilities\\ShieldRegen.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Mag\\Abilities\\ShieldRegen.lua_B",
+      "oldSha256": "384984dd51f95b32cdb6665bd339b8e4f6085302e88e5393feeaa7025c366c27",
+      "newSha256": "a2f046a637a046be7926c7c6355270d6ce43ca63d4e03b3c709b5e8e1aadad31",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        13,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Mag\\MagPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Mag\\MagPassive.lua_B",
+      "oldSha256": "fb1ce67234743e5b61b8300884fec69a8aeda4e2f31aade23c5b9921726031cf",
+      "newSha256": "2fd6915563077f9a266ffeacc7d0693502c18425edcabbdaec2218ae0bfb7344",
+      "matchedProtos": [
+        0,
+        1,
+        3,
+        5
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Magician\\Abilities\\Banish.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Magician\\Abilities\\Banish.lua_B",
+      "oldSha256": "52dbc547952bc828314989d9904d1c3d0f7b2cb7ed47bdb7d2a1e71ddfa5b5d9",
+      "newSha256": "cb8e8caa09d2c5b501672192dd901fcc52b360207a13675497367a20e3c72209",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        10,
+        11,
+        12,
+        18,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Magician\\Abilities\\MagicianStasis.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Magician\\Abilities\\MagicianStasis.lua_B",
+      "oldSha256": "b1c8eef24fae3e36b6f675153015ed091a1b5558e74a5f52e79fb5d0974fe6ad",
+      "newSha256": "c332a85609f87797d23176199f9a2bf20b25f486d722a0d4f941dd2af1b9cd31",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Magician\\Abilities\\TearInSpace.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Magician\\Abilities\\TearInSpace.lua_B",
+      "oldSha256": "95b5cd3fae359cf2bee190c0e571868671b7e1a1fee8f8c326c93350e887e9c5",
+      "newSha256": "16f731271e8769c0e8d5589efca790f7d2128078921162f1fe3430a7594dcbd8",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Magician\\Abilities\\Volatile.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Magician\\Abilities\\Volatile.lua_B",
+      "oldSha256": "0993f28d63c9db8cfddb9fcf867c3b43b05dabec27fc69f7c1c567fed291f6e9",
+      "newSha256": "12dcfcb8593ae15464521ac0ec650c95ee9fc013e56b9628ecb9cce5846312df",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Magician\\MagicianPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Magician\\MagicianPassive.lua_B",
+      "oldSha256": "cc239ff6858520e61ca59a7417fa38577a51b43824e21dbcf33d7fc585285c47",
+      "newSha256": "1ce49cf40bc6abb0407d2f3093ad7743f155530cc54f96ea4528167b23e1e6a8",
+      "matchedProtos": [
+        0,
+        1,
+        5,
+        6,
+        7,
+        10
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\MonkeyKing\\Abilities\\MonkeyCloud.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\MonkeyKing\\Abilities\\MonkeyCloud.lua_B",
+      "oldSha256": "d1af9b526f19206c35d215aaecd7de0f71cf2182d2c862424fd98b6d012a32d8",
+      "newSha256": "4024f048ead28e06f1fb35e14f14dbc56ee9cd6f0e722944f34cecfc379f51b6",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        17,
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\MonkeyKing\\Abilities\\MonkeyDeathNew.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\MonkeyKing\\Abilities\\MonkeyDeathNew.lua_B",
+      "oldSha256": "47ee0705a14b1a71f4455929ca38c85cc52e2d1b449d658c00993405c97ef333",
+      "newSha256": "7791e88792a10380bb837aba84b75e8b0dba85bff36cf5aa71e8e9e69e7a5457",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        8,
+        13,
+        14
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\MonkeyKing\\Abilities\\MonkeyHair.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\MonkeyKing\\Abilities\\MonkeyHair.lua_B",
+      "oldSha256": "3a681065c70a90a847b976421fd65599deb6c2717e7ffff1af80d7e4c7d46ef8",
+      "newSha256": "539dd2f985a1d0a3ebd88ae2f67c359a2e914503df140b9460dce60ded9e8379",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        15,
+        16,
+        17,
+        19,
+        20,
+        21,
+        24
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\MonkeyKing\\Abilities\\MonkeyPoke.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\MonkeyKing\\Abilities\\MonkeyPoke.lua_B",
+      "oldSha256": "8856aa339aed8baebe0f1b4b8a33c2ea8c5842a1bea377eb851575f28a71720b",
+      "newSha256": "63996e40addf9f32bbd7da93a7976181532369c44e034aad7b3e67d4f4f25c32",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        11
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\MonkeyKing\\Abilities\\MonkeyStaff.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\MonkeyKing\\Abilities\\MonkeyStaff.lua_B",
+      "oldSha256": "442fbd9de6369d4f774ba6c42dc20da68c33138990e5c9817fc724cb4d0f5f6a",
+      "newSha256": "f354b8a74c2a6b65259c1c651de3ece8d5c8ef93f811929c0aa31d0f24d6b14d",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        16,
+        17,
+        18,
+        19,
+        20,
+        23,
+        24,
+        26,
+        27,
+        28,
+        29
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\MonkeyKing\\HairAugmentStomp.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\MonkeyKing\\HairAugmentStomp.lua_B",
+      "oldSha256": "667e0297adbec89834c449e555cde290b3cc96490e1322d0338c2ad7518474db",
+      "newSha256": "0107de1c5af8ab42cd50fbcfca853f63f2d774ac0b09862fa58e892290a7d05d",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        7
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\MonkeyKing\\MonkeyKingPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\MonkeyKing\\MonkeyKingPassive.lua_B",
+      "oldSha256": "b0c69770d360c74786eaa7fec35a8bd2678b6de4feac77f1862c0c49fb808109",
+      "newSha256": "16a88c8774559b9bdb9cd0439a8ad0232742bda3d4626d71882834884a887cf7",
+      "matchedProtos": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        22,
+        27,
+        28,
+        29,
+        30
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Necro\\Abilities\\CloneTheDead.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Necro\\Abilities\\CloneTheDead.lua_B",
+      "oldSha256": "8a622a13ef9ea718c1e91a9eb63278bc15e549ecdb161d44d285c9421778484c",
+      "newSha256": "dff0ea253f6a2d173eeb47e67bdf33cb028b52e60a60a04a8c1aeeb5fb56d166",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        15,
+        20
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Necro\\Abilities\\SearchTheDead.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Necro\\Abilities\\SearchTheDead.lua_B",
+      "oldSha256": "4c7f3745f4815beceab2f1e079844a28556c911b6b0a65f18bde170bfe84532c",
+      "newSha256": "0a33168581468da3713111c74ed033904e722dc439fd27cc37c70f9b24e8ab30",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        15,
+        16,
+        18,
+        19,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Necro\\Abilities\\SoulPunch.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Necro\\Abilities\\SoulPunch.lua_B",
+      "oldSha256": "f46e63808deb19c3c22da0767c6f51fd8b3a87b9639829fa2c2986f853d30fc1",
+      "newSha256": "569df8e68a1dcc11abc366a3481bb3638bf4fdab5e758de805cc31f62410766c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Necro\\Abilities\\TerrorTotem.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Necro\\Abilities\\TerrorTotem.lua_B",
+      "oldSha256": "a9816a980d494a71c57efbd2dacc69e250fd4545d94edada0f2d09b3a69ee019",
+      "newSha256": "74af804fa07401ef82e989db23b1db49f76b0c7dc87e6bea5117b168dc594387",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        16,
+        17
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Necro\\NecroPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Necro\\NecroPassive.lua_B",
+      "oldSha256": "792905cc7d02fd9054c007f01ff6b359c1ff2760669d4c42468fdec8f791d310",
+      "newSha256": "468ee9ec8ec264bb597493847a58c3c825c01acd8c58b4a2e3f9c726319020a4",
+      "matchedProtos": [
+        0,
+        3,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Nezha\\Abilities\\NezhaRing.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Nezha\\Abilities\\NezhaRing.lua_B",
+      "oldSha256": "ff44d2dd45b40408c50e22f62277db25b0da5700e0edd33f30a4103bf08ec0cf",
+      "newSha256": "bb4d02d477510869fcbd3c81b600482f719debfbbfa7017d9133ca20bf37e276",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        11,
+        13,
+        16
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Nezha\\Abilities\\NezhaSash.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Nezha\\Abilities\\NezhaSash.lua_B",
+      "oldSha256": "eb87804e23bd1a9212a4b06a664408f44e9c1aec065ae35a28c47f211116807d",
+      "newSha256": "2dc1d43bc6b041e3c0e1dce075359ec65a7356b50bbd62cbd7aa432237d62efe",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        11,
+        12,
+        15,
+        17,
+        18
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Nezha\\Abilities\\NezhaSpear.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Nezha\\Abilities\\NezhaSpear.lua_B",
+      "oldSha256": "9aa8d25524aaa6bf0d32d14b8385fbd6b1cba9601b50527459ec50910517976f",
+      "newSha256": "7cfad37acf2ac8da80fd461f7043428dd55d5f373b0b4df9a0bf87e9be710651",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        13,
+        14,
+        15,
+        16,
+        17,
+        20,
+        21
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Nezha\\Abilities\\NezhaTrail.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Nezha\\Abilities\\NezhaTrail.lua_B",
+      "oldSha256": "b2e00cac699c94c21d5c1ba4e26f803860c4491f52032ddb8c61b3f959f82f39",
+      "newSha256": "de7f3703d60b41d999941218a6bac1308ca234135c5f4086679cefcfdf9ccea4",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        13,
+        18
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Nezha\\NezhaPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Nezha\\NezhaPassive.lua_B",
+      "oldSha256": "ca066d8908ef9505d05299d8de1d0991af64fa31d168cff689e7d045bcf48e00",
+      "newSha256": "8c3f23b37ee7dfdfe8c7236bfb982576148f83ceac6fe92f0d1d0f7477e14e58",
+      "matchedProtos": [
+        0,
+        1,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Ninja\\Abilities\\Glaive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Ninja\\Abilities\\Glaive.lua_B",
+      "oldSha256": "570fc03d1abbdd5c5ea63fc59c63ddb18e04d957fd2013bca9ebf70009789a9a",
+      "newSha256": "e18c68ddafd3b52aa945a65184051f3f21f52bf89646125b356a917a15dbacaf",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        18
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Ninja\\Abilities\\NinjaStormNew.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Ninja\\Abilities\\NinjaStormNew.lua_B",
+      "oldSha256": "baf083cab6cd06701a205e5eec82e863c1e909842d59df56bb81835b172729b2",
+      "newSha256": "e74b865e6e23172e99f526705323ca6f71976d2389a5523420e3b772137cac70",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        13,
+        14,
+        53
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Ninja\\Abilities\\SmokeScreen.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Ninja\\Abilities\\SmokeScreen.lua_B",
+      "oldSha256": "daf92aa7cc940953f9d295a96c9f84dcfd42a74b9fe156bd87f3bd4632308938",
+      "newSha256": "ba03c771f54fb459837ac70dddf8ac839e3ac3d1c2edde11a752874eb266878e",
+      "matchedProtos": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        14,
+        15,
+        16,
+        22,
+        23,
+        24,
+        27
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Ninja\\Abilities\\TeleportTo.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Ninja\\Abilities\\TeleportTo.lua_B",
+      "oldSha256": "a0f30d3c4aad6f836704775c5cdbf12c75216f57692d144c8c2168cfd0a1ee2d",
+      "newSha256": "e960a9dbc346a22237e366801e2d06e3fd6d7210aadbffe7c3b5975ae6dd0311",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Ninja\\NinjaPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Ninja\\NinjaPassive.lua_B",
+      "oldSha256": "18873bf056d145af942e69f8c782d0416db2698350f7ec19c3431b30491f79bd",
+      "newSha256": "67a17a5392f23f152b1081beffc085f297d6f0ed849e437dde167bd1ef94c947",
+      "matchedProtos": [
+        0,
+        3,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Nokko\\Abilities\\NokkoLaunch.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Nokko\\Abilities\\NokkoLaunch.lua_B",
+      "oldSha256": "77c03875d21952773438a9a0eba65b1184ef0ff3e10ad8a88f9633e531733ae6",
+      "newSha256": "c5ff4e7f7f804308a6e62350a8a5a7153e65ecdfa80293fbfdd182363c4d4193",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        7,
+        8,
+        10,
+        12,
+        13,
+        14,
+        16,
+        19,
+        23
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Nokko\\Abilities\\NokkoPowerShroom.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Nokko\\Abilities\\NokkoPowerShroom.lua_B",
+      "oldSha256": "e0dd6329cca8844ad242e8c93ce2baa0fc21d8c6c096271871ba9ff2b1d62c1a",
+      "newSha256": "08966d8d44dfeec406a43b821961a3cadf14db08bf384dd7303ca30c7f867d00",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        10,
+        12,
+        16,
+        17,
+        18,
+        23,
+        24,
+        25,
+        26
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Nokko\\Abilities\\NokkoShrink.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Nokko\\Abilities\\NokkoShrink.lua_B",
+      "oldSha256": "feac27e9db599a4f56a55618d5bb0e597246e71776f2ea458d3b884d287cb2c1",
+      "newSha256": "dd67860d02f95fd992661b7c02aec1a747444dd0b9a5a9cc3efd7113ae808998",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        17,
+        18,
+        20,
+        21,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        30
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Nokko\\Abilities\\NokkoToxicShroom.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Nokko\\Abilities\\NokkoToxicShroom.lua_B",
+      "oldSha256": "8093c1ca6d3aaa846894f8d3f08a87a1d447f574a652814f724c3b64a4e47b6e",
+      "newSha256": "df2c4b461cbe76214f20d3d7afc7985728ddac63af94fb7c8462d6168931ba6a",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        9,
+        12,
+        15,
+        18,
+        19
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Nokko\\NokkoPassive.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Nokko\\NokkoPassive.lua_B",
+      "oldSha256": "7a245f705bacaa67fd81a8f0ea052ce690cc5e5c79f803124ecfa3bcb044ccae",
+      "newSha256": "8cb174aaeedd33566be6b21b620c692552719dafc8b0683276e7c4db1cc3a4c7",
+      "matchedProtos": [
+        0,
+        2,
+        3,
+        6,
+        9,
+        10,
+        11,
+        12,
+        18,
+        22
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\ConservationAbilities\\InfestedCreatureSpit.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\ConservationAbilities\\InfestedCreatureSpit.lua_B",
+      "oldSha256": "f2b0d5509fee180502b1fc03f8661add67d8350c04e050bc2a148d85c0b79f35",
+      "newSha256": "a9395b8cc6cc96025e891c8c1741bc7e2b88c07b70ef7a92bad45e8a25e7babe",
+      "matchedProtos": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\ConservationAbilities\\LegendaryKubrowRoar.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\ConservationAbilities\\LegendaryKubrowRoar.lua_B",
+      "oldSha256": "0e0287f1f8662855940055c5e1c3b642d625259fdf1f9cb7c8ff8ecd5e6fb170",
+      "newSha256": "e4590d8f973932af9885b0c384b184c2731823b0093f7e2863f41542734cdb9a",
+      "matchedProtos": [
+        0,
+        2
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\ConservationAbilities\\UndazoaBelch.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\ConservationAbilities\\UndazoaBelch.lua_B",
+      "oldSha256": "0154f5cac15ac0838b5de2fa4b88ea123d00b9d0eb2306f9c969b393f34974bf",
+      "newSha256": "b4885f76534a9d91231f80232f8410a35ee5cbf0f9432eab059677f472e86f6b",
+      "matchedProtos": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\ConservationAbilities\\UndazoaWail.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\ConservationAbilities\\UndazoaWail.lua_B",
+      "oldSha256": "b0b7763b2ce195fc278e2cf0ee01c36689985f3eb234835f164d793fd9c3a5c7",
+      "newSha256": "6670c5530f00ed16a4747541f6f7464a62e0c0ec28e909ddf22b5f857afc0c30",
+      "matchedProtos": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NokkoColony\\DroneThrowEnergyBall.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NokkoColony\\DroneThrowEnergyBall.lua_B",
+      "oldSha256": "f9b7148ba80a907bcd860c74e2ebdb1f749ae049250053de70cdb8744f0d7687",
+      "newSha256": "319461e7ff34277104a5c08c4bbfca454c4a05a7bbdf7c598a1916061c3af23c",
+      "matchedProtos": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NokkoColony\\NokkoThrowMine.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NokkoColony\\NokkoThrowMine.lua_B",
+      "oldSha256": "a8b6c7be50de5b18041eb8308dfc0e22e1cf36259d8c637f9cd45c7c405845c3",
+      "newSha256": "0d14616e1a3f9859e533cf920c119cb4fe956d9fbc76580007e564d242283af5",
+      "matchedProtos": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NokkoColony\\Vip\\NokkoVIPWardingHalo.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NokkoColony\\Vip\\NokkoVIPWardingHalo.lua_B",
+      "oldSha256": "76b84a4e39a32795d9debbc09598b02acaa7c03362ceb60e8bf85cf23b36bd7a",
+      "newSha256": "4b90878290ecec1870c234ec2e9b20056f8afc4701bfed5f9f541a689ce588cc",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        9,
+        11,
+        12
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AbilityCancelAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AbilityCancelAbility.lua_B",
+      "oldSha256": "29db2584d2d87cfd614e3b6877f1ece6cbd630299309ad29612eaf63a9a69ea6",
+      "newSha256": "f74f94bc895df772fdb4c2a7c4d41511adb9b5026c3b39a96273dbfeca1984b8",
+      "matchedProtos": [
+        2
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AbilityGlobalCooldownUtility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AbilityGlobalCooldownUtility.lua_B",
+      "oldSha256": "888d8618378744f9c8e51df460f57db703d69838fa8560954f18adf24b5a6f87",
+      "newSha256": "29db799191aa953e8831f02f7ad887fa8f69468d99c22bb33c03b6f870bc5d72",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        12
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\ActivateAura.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\ActivateAura.lua_B",
+      "oldSha256": "0b71b619e09aad4929b93bb109071f89ee7c829336e248de572bcb80a5fad40d",
+      "newSha256": "fce36877f2204e7eb4a50cb1c97ba211c2f01d5038dcb224079d04fc5df6e4f5",
+      "matchedProtos": [
+        0,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AladPetMissileLauncher.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AladPetMissileLauncher.lua_B",
+      "oldSha256": "fec6852ea6f9a9576452bfda4397b0173827c3abb2c5e559058c5d867b9515cf",
+      "newSha256": "5e45b62f96a06700235172cf292efc26edf01afd59cdc5be0623e5b00c048388",
+      "matchedProtos": [
+        0,
+        2
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AladPlacedShield.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AladPlacedShield.lua_B",
+      "oldSha256": "34c3a306c399d457a1dcc6b498c010a512ca167a44d92d518e11211b4b06f040",
+      "newSha256": "8692414260d2ea0ac1b4af9f3188ea3e1ea5329004f0341112378aab78d2a114",
+      "matchedProtos": [
+        0,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AladPushback.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AladPushback.lua_B",
+      "oldSha256": "f058bad3de76ace242a83f62e5e80e84f3802cd21327be5c832846d81272383f",
+      "newSha256": "7136f8158cad2aee26c8e731b8ea4bcd07470b03cc3eef4fe8c10d6293248409",
+      "matchedProtos": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AladRadialBlindAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AladRadialBlindAbility.lua_B",
+      "oldSha256": "c18386b762a869a818c18e33edb4af2e92afbbf531a57f0489420cf49b8a4bda",
+      "newSha256": "018dc16252ce10de2a5463a6999895f25db2280a140732cab69d2a7eef4e5d7b",
+      "matchedProtos": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AladSpawnSupport.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AladSpawnSupport.lua_B",
+      "oldSha256": "d8ee16615c11abde33259dd9072d8f4f1c4cbb5317a48e9e78352442483652f2",
+      "newSha256": "810195fb4d3eacacf76e51d8174f36137f6778f87c2ac09f27d8d6f076beb83a",
+      "matchedProtos": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AllyBulletAttractor.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AllyBulletAttractor.lua_B",
+      "oldSha256": "21a8455934d4f636b814a92dd6811ed7b68d2e3ddb043fd5877eb3143a959ae0",
+      "newSha256": "9b98f7ca575fa02232106189dea5799ff3cab97409682929fe6d738e66678063",
+      "matchedProtos": [
+        0,
+        5
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamCarrusBeamAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamCarrusBeamAbility.lua_B",
+      "oldSha256": "6a6d4c3730e6159b6f3701024cfae687634347d9fad7efb4bfb0539d0a641806",
+      "newSha256": "c8e84a5f03bcd37c2e1eaf731cefc254a02551caf77aeab68bec6db120b1c86d",
+      "matchedProtos": [
+        0,
+        1,
+        3,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamCorpusOverrideFinisherScript.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamCorpusOverrideFinisherScript.lua_B",
+      "oldSha256": "4e26f88799b61663fc1ff0b3cba438c467250b9c835bec35d7f108975455a464",
+      "newSha256": "dd28d8a596630ec8b8b295d4acdadad11a1cc633a39dad8c8d6b2db14bd24874",
+      "matchedProtos": [
+        0,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamDroneDeploy.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamDroneDeploy.lua_B",
+      "oldSha256": "82be8c3ce09fb2465613df0c1f5a486573a8c0e2bf345d728f28ed822a33dc4d",
+      "newSha256": "2114ab3b4c8cca2a23bf896f6d248d19de70975a4aef0a32075aa257860443c8",
+      "matchedProtos": [
+        0,
+        3
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamMetronome.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamMetronome.lua_B",
+      "oldSha256": "4ec7d904a7b845aab579dccefb64355ea47349a43f6a539b168bc8f3095f96d5",
+      "newSha256": "00549e8a4c550f53764a6d05061c00f875d8190acca52b7e7a19690b34cacb06",
+      "matchedProtos": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamReincarnateAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamReincarnateAbility.lua_B",
+      "oldSha256": "73a7ddec4b3b4e55c439004dcabd1084d6c7501d69988eef57555f997394941a",
+      "newSha256": "1715a816d48ba0b5499e50d2401fc6c282c7a0ac94f83553c71c0af5fa9bc582",
+      "matchedProtos": [
+        1,
+        6
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamSatyrNukeAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamSatyrNukeAbility.lua_B",
+      "oldSha256": "02ea9e68467c0fcd423ce604634880d21cca86806a38a71aff597b0bf0cbbbd8",
+      "newSha256": "0e13fba2629ffc3d50aaf96be97c5a722c8fa1aa465e478d0b094cb157d997af",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamSatyrTackleAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamSatyrTackleAbility.lua_B",
+      "oldSha256": "b24bb93152d34e74b7cd1010c1dad6a2476b2f298f2e9e90d61cc0c1d56d41e8",
+      "newSha256": "35686e7b5a37a92dfd25799f62cae4de230902d1b9a21b36205c10de16fe4223",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamShieldDrainAuraAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmalgamShieldDrainAuraAbility.lua_B",
+      "oldSha256": "2c4d58c26af57af62232be61c1ff2a53e3877ab69d0b53ea78cbae70623f5f52",
+      "newSha256": "c81d5703dc0e06700f36cacff3d2c0261fa8a3bcf35526f6a963b66dad604da3",
+      "matchedProtos": [
+        0,
+        2,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmbulasGrenadeLauncher.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmbulasGrenadeLauncher.lua_B",
+      "oldSha256": "28bbe0352e484ea7b86792a37539f678c3631d6b84b35346d16ed3164e17c429",
+      "newSha256": "3fdae77a6d7d82b7ed0ba25ca8a52ba54f5cca28c6077d636b59209bbf58746c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmbulasJumpBeam.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\NpcPowersuits\\NpcPowersuitAbilities\\AmbulasJumpBeam.lua_B",
+      "oldSha256": "07fc78111be2489c9f47950a8b4cc80b772e7c27132654b09ba85dde8a31108b",
+      "newSha256": "a23d8690b1ce02a8f6cf632cc9c9d8e9aeedc8a489b236612cd843c053184008",
+      "matchedProtos": [
+        0,
+        1,
+        4
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Revenant\\Abilities\\RevenantReborn.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Revenant\\Abilities\\RevenantReborn.lua_B",
+      "oldSha256": "9c40d2113de9268b2f6002dc7a55f0120c1223edc08cf4c154e360efd8028864",
+      "newSha256": "f2f68a56686a5d6ca2861801bbb7e73018581bf23636892ac352671338f41e5c",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Rhino\\Abilities\\IronSkin.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Rhino\\Abilities\\IronSkin.lua_B",
+      "oldSha256": "cc0d31b3ae4eb1578630561d361ce75dbb98356864fa1c0a28a0ab47ce20ee70",
+      "newSha256": "e8a4924191f0495d3c030d6fb42731036fea56cbc2e689583ddda0bfd0dfbe36",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        15
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Trinity\\Abilities\\LinkAbility.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Trinity\\Abilities\\LinkAbility.lua_B",
+      "oldSha256": "f3d22d9efaf5591dc816828b1ca6c7dd91927167d5268c54ae888df2f46a1e52",
+      "newSha256": "bc2e8879082d588ad5ee570df0d09bba0b7644ba2df3732eab17012cb2894cf9",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        13
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\Yareli\\Abilities\\YareliSpout.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\Yareli\\Abilities\\YareliSpout.lua_B",
+      "oldSha256": "5bbafd3c28b7574840b3c03dffe5996f14f91b2e529869c3a1ee004b53d0a980",
+      "newSha256": "a828cf4098d8b929522fc742f675706c443619fd433f2eae91684a57d0db7f01",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    {
+      "old": ".local\\temp\\legacy-dot-tmp\\ability-font-full\\Debug\\Lotus\\Powersuits\\YinYang\\Abilities\\YinYangSwitch.lua_B",
+      "new": ".local\\research\\luau-raw\\Debug\\Lotus\\Powersuits\\YinYang\\Abilities\\YinYangSwitch.lua_B",
+      "oldSha256": "c8a936d5804cf1c8333f6c7165bc736827399c8d7866233055e738a9fb0a776c",
+      "newSha256": "b76cd522b25002ba0cd415f339f814d3a674b4a3ee69379c3279f44405cee141",
+      "matchedProtos": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        13,
+        14,
+        17
+      ]
+    }
+  ]
+}

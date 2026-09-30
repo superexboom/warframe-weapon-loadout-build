@@ -1,0 +1,139 @@
+{
+  "createdAt": "2026-09-30T12:39:32.443647+00:00",
+  "sourceCommit": "ddcaa3b9e9aacc081b814e50aa41a2753d34a52b",
+  "contract": "Exact artifacts; original tool fingerprints and failures are preserved; no full-bake completion claim.",
+  "files": [
+    {
+      "path": "auto-results.json",
+      "source": ".local/reports/projectile-extra-auto-20260930/results.json",
+      "size": 378530,
+      "sha256": "dc1d5ac7f70360f53226c00356ad6dafcaef6406534eebd29f958731884e5938"
+    },
+    {
+      "path": "auto-meta.json",
+      "source": ".local/reports/projectile-extra-auto-20260930/meta.json",
+      "size": 1501,
+      "sha256": "93de8d8734fc37391f719ae75eb13c7964f9c5500cd7bd180a8ad2a5d85fe636"
+    },
+    {
+      "path": "current-parity.json",
+      "source": ".local/reports/projectile-delivery-parity-20260930.json",
+      "size": 18864,
+      "sha256": "33d2a017bd444c446e8e9ce24c7d2c32fdd471fd8e75d5455dde5f783e7b850b"
+    },
+    {
+      "path": "reference-comparison.json",
+      "source": ".local/reports/projectile-extra-reference-final-20260930/comparison.json",
+      "size": 125118,
+      "sha256": "8507a08548781fac2718fb2a3f99d1b23a4ecd07893707c061a1a15725f16802"
+    },
+    {
+      "path": "reference-distance-probe.json",
+      "source": ".local/reports/projectile-reference-distance-probe-20260930/summary.json",
+      "size": 1598,
+      "sha256": "a0718cd82659e9d44ce8376cc907d0da46ae5067414f0f265d0f810d7b6df6e1"
+    },
+    {
+      "path": "native-stackable.json",
+      "source": ".local/research/cases/wf-projectile-lifecycle-20260930/evidence/native-stackable-verified.json",
+      "size": 40560,
+      "sha256": "477d8b8957285e87f8624a34c96ed9ede737cdeb1ed44e64278e3d8116feca66"
+    },
+    {
+      "path": "native-delay-profiles.json",
+      "source": ".local/research/cases/wf-projectile-lifecycle-20260930/evidence/delayed-import.json",
+      "size": 4196,
+      "sha256": "c1267c8564a3ea6748e5f78298de8a5dcfb1ae45f60c7ca4d56b6cc52309196a"
+    },
+    {
+      "path": "talons-mobile.png",
+      "source": ".local/research/cases/wf-projectile-lifecycle-20260930/evidence/talons-mobile-final.png",
+      "size": 138924,
+      "sha256": "54281ea58c44e0f43a04172377bd950e10c7a2c38b59a485cd1141ceab3f9efa"
+    },
+    {
+      "path": "ir/CephalonPrimary.json",
+      "source": ".local\\research\\cases\\wf-projectile-lifecycle-20260930\\work\\ir-final\\CephalonPrimary.json",
+      "size": 15814,
+      "sha256": "bbb8fd036e8e2df8ea7952c818aa67b585b05d2ef29febafc9c10cbe3284e5b0"
+    },
+    {
+      "path": "ir/GooGun.json",
+      "source": ".local\\research\\cases\\wf-projectile-lifecycle-20260930\\work\\ir-final\\GooGun.json",
+      "size": 60290,
+      "sha256": "400fcf9ab410804eaa68d286b49434669ffed8ddb2e13aa16c7875816db9dcd7"
+    },
+    {
+      "path": "ir/InfCrpShockSwarm.json",
+      "source": ".local\\research\\cases\\wf-projectile-lifecycle-20260930\\work\\ir-final\\InfCrpShockSwarm.json",
+      "size": 189581,
+      "sha256": "1e85c893e399ee2c873dfc90825d21cd37db1992fccf6d565d0c782fc9672012"
+    },
+    {
+      "path": "ir/opcode-map.json",
+      "source": ".local\\research\\cases\\wf-projectile-lifecycle-20260930\\work\\ir-final\\opcode-map.json",
+      "size": 161505,
+      "sha256": "6f05f01988750fffb399c825bcc6676b212f4f1faa2428a1574af47d5c19a816"
+    },
+    {
+      "path": "ir/StickyBomb.json",
+      "source": ".local\\research\\cases\\wf-projectile-lifecycle-20260930\\work\\ir-final\\StickyBomb.json",
+      "size": 25563,
+      "sha256": "3eb0f8f23c5649cdd04c914721041cf915a418563dc70593ea06679b254f1337"
+    },
+    {
+      "path": "ir/StugIncarnon.json",
+      "source": ".local\\research\\cases\\wf-projectile-lifecycle-20260930\\work\\ir-final\\StugIncarnon.json",
+      "size": 146053,
+      "sha256": "1b54ac4694c3e5702c79c10a1a016f540e2158a4fba1330308f2c01aee001cc5"
+    },
+    {
+      "path": "analysis/00-torid.json",
+      "source": ".local\\reports\\riven-acceptance-v11-20260930\\00-torid.json",
+      "size": 115864,
+      "sha256": "5fc0754182efa13dd51eba6fa985cc36fbeb3603735cbe92c733a9355b697976"
+    },
+    {
+      "path": "analysis/01-torid.json",
+      "source": ".local\\reports\\riven-acceptance-v11-20260930\\01-torid.json",
+      "size": 56642,
+      "sha256": "199280b56f05122414fac54362e1fb0e888082a0419d595f90950c368f622428"
+    },
+    {
+      "path": "analysis/02-talons.json",
+      "source": ".local\\reports\\riven-acceptance-v11-20260930\\02-talons.json",
+      "size": 63672,
+      "sha256": "66cccf8de9404a6be1c5e59df2a4465bded747fccb79d05e20a280e764e73d76"
+    },
+    {
+      "path": "analysis/03-fulmin-prime.json",
+      "source": ".local\\reports\\riven-acceptance-v11-20260930\\03-fulmin-prime.json",
+      "size": 56286,
+      "sha256": "1a138240c9f9047d866e8bae38b6e5275365b54aabfd7da2a38e227690a8d93c"
+    },
+    {
+      "path": "analysis/04-arca-plasmor.json",
+      "source": ".local\\reports\\riven-acceptance-v11-20260930\\04-arca-plasmor.json",
+      "size": 49258,
+      "sha256": "755d251ca84975b2d389f1b444a681783bbfcc420ec0051930cab0b863d82c34"
+    },
+    {
+      "path": "analysis/05-dera-vandal.json",
+      "source": ".local\\reports\\riven-acceptance-v11-20260930\\05-dera-vandal.json",
+      "size": 59369,
+      "sha256": "f6032dce2ba09d6436ee8de0c52a859c840c938a5ecec9ad18c45a1312ac99ce"
+    },
+    {
+      "path": "analysis/06-scourge-prime.json",
+      "source": ".local\\reports\\riven-acceptance-v11-20260930\\06-scourge-prime.json",
+      "size": 59133,
+      "sha256": "89d2e8796e9fc38a5a36681cad105b46605f1249a3a70615271879984ee722de"
+    },
+    {
+      "path": "regression-summary.txt",
+      "source": "recorded completed test commands and results",
+      "size": 946,
+      "sha256": "f2125f6d49df3078eb20737a9e485f0feacb225f19b9441bd5443b74a579bdec"
+    }
+  ]
+}

@@ -164,6 +164,13 @@ def replay(
     field_duration_ready = False
     field_duration_used = 0
     field_events = []
+    manual_detonation = combat.get('manualDetonation')
+    pending_mines = []
+    pending_throws = 0
+    waiting_mines = 0.0
+    detonation_count = 0
+    detonation_events = []
+    delayed_attack_count = 0
     first_round = True
     model_cache = {}
     combat['lastRound'] = False
@@ -180,6 +187,14 @@ def replay(
         if t < window + 1e-9:
             seq += 1
             heapq.heappush(heap, (max(0.0, t), seq, kind, payload, generation))
+
+    def queue_mines(t):
+        nonlocal pending_mines, pending_throws, waiting_mines
+        batch = pending_mines
+        pending_mines = []
+        pending_throws = 0
+        waiting_mines += sum(part.multishot for part, _ in batch)
+        push(t + manual_detonation['delaySeconds'], 'manual-detonation', batch)
 
     def count(dtype):
         if dtype == "DT_FIRE":
@@ -759,6 +774,36 @@ def replay(
             radial_packet = packet(part, 0.0)
             if not take(radial_packet[0], t, 'direct'):
                 add_procs(part, 0.0, t, radial_packet)
+        elif kind == 'delayed-attack':
+            part, aim = payload
+            delayed_attack_count += 1
+            direct_packet = packet(part, aim)
+            if not take({k:v*damage_rate_multiplier for k,v in direct_packet[0].items()}, t, 'direct', not part.radial_only):
+                add_procs(part, aim, t, direct_packet)
+            enervate_hit(part, t, 0. if part.radial_only else live_crit()[0], aim)
+            signal('on-hit', t, part.multishot)
+            signal('on-headshot', t, aim*part.multishot)
+            signal('on-crit', t, min(part.crit_chance,1.)*part.multishot)
+        elif kind == 'manual-detonation':
+            detonation_count += 1
+            before = totals['direct']
+            mines = sum(part.multishot for part, _ in payload)
+            waiting_mines = max(0., waiting_mines-mines)
+            discarded = 0.0
+            for part, generation in payload:
+                if generation != gen:
+                    stale += 1
+                    discarded += part.multishot
+                    continue
+                radial_packet = packet(part, 0.)
+                if not take(radial_packet[0], t, 'direct'):
+                    add_procs(part, 0., t, radial_packet)
+                enervate_hit(part, t, 0., 0.)
+                signal('on-hit', t, part.multishot)
+                signal('on-crit', t, min(part.crit_chance, 1.) * part.multishot)
+            if collect_timeline:
+                detonation_events.append(dict(time=t, expectedMines=mines,
+                                              staleMines=discarded, damage=totals['direct']-before))
         elif kind == 'lingering':
             part = payload
             vec, _, _, _ = attack_data(part, 0.0)
@@ -831,6 +876,16 @@ def replay(
             speed = active.fire_rate if combat else rate
             if speed <= 0.0:
                 continue
+            if manual_detonation:
+                # A player detonates the existing batch before another throw
+                # could exceed the native eight-projectile deployment limit.
+                pending_mines = [(part, g) for part, g in pending_mines if g == gen]
+                if not pending_mines:
+                    pending_throws = 0
+                if pending_mines and sum(part.multishot for part, _ in pending_mines) + active.multishot > manual_detonation['maxProjectiles'] + 1e-9:
+                    queue_mines(t)
+                    push(t + max(manual_detonation['delaySeconds'], 1./speed), 'fire')
+                    continue
             if cycle and form == "base" and gauge >= cycle["hits"] - 1e-9:
                 push(t + cycle["enterSeconds"], "transform", "incarnon")
                 continue
@@ -908,15 +963,27 @@ def replay(
             hit_count = 1.0 if active.continuous else active.multishot
             shot_puncture=0.0 if active.radial_only else live_crit()[0]
             aim = 0.0 if active.radial_only else head
-            direct_packet = packet(active, aim)
-            vector, _, _, _ = direct_packet
-            died = take(
+            primary_delay = getattr(active, '_primary_delay_seconds', 0.)
+            if manual_detonation:
+                if active.multishot > manual_detonation['maxProjectiles']:
+                    unsupported.append('talons-single-throw-deployment-overflow-unmodeled')
+                    active = replace(active, multishot=float(manual_detonation['maxProjectiles']))
+                pending_mines.append((copy(active), generation))
+                pending_throws += 1
+                died = False
+            elif primary_delay:
+                push(t + primary_delay, 'delayed-attack', (copy(active), aim), generation)
+                died = False
+            else:
+                direct_packet = packet(active, aim)
+                vector, _, _, _ = direct_packet
+                died = take(
                 {k: v * damage_rate_multiplier for k, v in vector.items()},
                 t,
                 "direct",
                 not active.radial_only,
-            )
-            if not died:
+                )
+            if not died and not manual_detonation and not primary_delay:
                 add_procs(active, aim, t, direct_packet)
                 field = getattr(active, '_lingering', None)
                 if field and gen == generation:
@@ -944,11 +1011,13 @@ def replay(
                         add_procs(part, 0.0, t, radial_packet)
             if (form == "base" or combat.get("baseMode")) and burst_round == 2:
                 signal("on-burst-hit", t)
-            enervate_hit(active,t,shot_puncture,aim)
+            if not manual_detonation and not primary_delay:
+                enervate_hit(active,t,shot_puncture,aim)
             signal('on-fire', t)
-            signal("on-hit", t, hit_count)
-            signal("on-headshot", t, aim * hit_count)
-            signal(
+            if not manual_detonation and not primary_delay:
+                signal("on-hit", t, hit_count)
+                signal("on-headshot", t, aim * hit_count)
+                signal(
                 "on-crit",
                 t,
                 min(
@@ -962,7 +1031,7 @@ def replay(
                     1.0,
                 )
                 * hit_count,
-            )
+                )
             if cycle and form == "base" and not active.radial_only:
                 gauge = min(cycle["hits"], gauge + (1.0 if cycle.get('chargeOn') == 'direct_hits' else head) * active.multishot)
             if combat:
@@ -987,6 +1056,9 @@ def replay(
                     )
                 else:
                     burst_round = 0
+            if manual_detonation and (pending_throws >= manual_detonation['batchSize'] or ammo <= 1e-9):
+                queue_mines(t)
+                delay = max(delay, manual_detonation['delaySeconds'])
             push(t + delay, "fire")
         elif kind == "sample":
             dt = t - sample_time
@@ -1032,6 +1104,8 @@ def replay(
                 point['enervate']=enervate.snapshot()
                 point['triggerStacks'][enervate.config['id']]=point['enervate']['stacks']
                 enervate.sample()
+            if manual_detonation:
+                point['deployedMines'] = sum(part.multishot for part, _ in pending_mines) + waiting_mines
             timeline.append(point)
             last_totals = totals.copy()
             for q in sources:
@@ -1092,6 +1166,10 @@ def replay(
         "staleComponents": stale,
         'fieldDuration': ({**field_duration, 'boostedShots':field_duration_used,
                            'ready':field_duration_ready, 'events':field_events} if field_duration else None),
+        'manualDetonation': ({**manual_detonation, 'detonations':detonation_count,
+                              'pendingMines':sum(part.multishot for part, _ in pending_mines)+waiting_mines,
+                              'events':detonation_events} if manual_detonation else None),
+        'delayedAttackEvents': delayed_attack_count,
         "shots": attacks,
         "reloads": reloads,
         "recharges": recharges,
@@ -1149,6 +1227,7 @@ def replay(
             "magnetic-break-six-ticks-pinned-reference-contract",
             'spread-hit-loss-not-modeled',
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
+          + (['talons-expected-projectile-capacity','manual-detonation-explicit-player-cadence'] if manual_detonation else [])
           + (ASSUMPTIONS if enervate else [])
           + (['encumber-poisson-status-presence','encumber-single-target-expected-procs'] if encumber else [])
           + (['cryogenic-single-target-expected-procs-no-neighbor-burst'] if cryogenic else [])

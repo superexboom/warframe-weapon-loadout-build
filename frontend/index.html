@@ -454,6 +454,10 @@
                       <label class="field"><span>爆头率</span><input id="build-headshot-chance" type="range" min="0" max="1" step="0.01" value="0"><output id="build-headshot-output">0%</output></label>
                     <label class="check-field" title="瞄准与命中弱点是不同条件；镀层氩晶等效果需要瞄准。"><input type="checkbox" id="build-aiming"><span>射击时瞄准（ADS）</span></label>
                       <label class="field"><span>距离</span><input id="build-distance" type="number" min="0" max="1000" step="1" value="0"><small>大于 0 计入距离衰减；散布暂不参与计算</small></label>
+                      <div id="build-manual-detonation" class="scenario-fields" hidden>
+                        <label class="field"><span>每批投掷次数</span><input id="build-detonation-batch" type="number" min="1" max="8" step="1" value="1"></label>
+                        <label class="field"><span>起爆等待（秒）</span><input id="build-detonation-delay" type="number" min="0" step="0.1" value="0"></label>
+                      </div>
                       <label class="field melee-only-field"><span>近战连击层数</span><input id="build-combo-tier" type="number" min="0" max="11" step="1" value="0"></label>
                       <label class="check-field melee-only-field"><input id="build-heavy-attack" type="checkbox"><span>重击场景</span></label>
                     </div>

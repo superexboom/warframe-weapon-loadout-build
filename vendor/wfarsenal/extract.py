@@ -1513,7 +1513,8 @@ def _events_for_projectile(
                 "kind": "scriptRadial",
                 "trigger": "projectile-death",
                 "projectile": projectile_path,
-                "baseSource": "ExplosiveAttack",
+                "baseSource": radial.get('baseSource','ExplosiveAttack'),
+                **({'conditionText':radial['conditionText']} if radial.get('conditionText') else {}),
                 "countRange": [0, 1],
                 "multipliers": radial["multipliers"],
                 "multiplierRange": [
@@ -1567,7 +1568,11 @@ def _script_radial_parameters(projectile: Mapping[str, Any]) -> dict[str, Any] |
             if isinstance(value, (int, float)) and not isinstance(value, bool)
         ]
         if multipliers:
-            return {"multipliers": multipliers, "radius": script.get("_radialRadius")}
+            result = {"multipliers": multipliers, "radius": script.get("_radialRadius")}
+            if (str(script.get('Script') or '').endswith('/InfCrpShockSwarm.lua')
+                    and script.get('Function') == 'OnOrbDestroyed'):
+                result.update(baseSource='shieldDamageData',conditionText='Equip Buried Debts; when the orb is destroyed, explode using its absorbed projectile damage and the augment rank multiplier.')
+            return result
     return None
 
 
