@@ -61,3 +61,25 @@ def test_torid_base_evolution_mapping_does_not_claim_cycle_or_form_parity():
         reference_request({**p,'incarnonCycle':True},weapons,{}, {},1000)
     with pytest.raises(ValueError,match='unmapped exact weapon form'):
         reference_request({**p,'fireMode':1},weapons,{}, {},1000)
+
+
+@pytest.mark.parametrize('name',['quanta','quanta_vandal','tenet_quanta'])
+def test_quanta_alternate_is_validated_as_cube_not_beam(name):
+    from tools.compare_generated_builds import reference_identity_matches
+    p=dict(weapon='/q',fireMode=1,mods=[],level=9999,steelPath=True,headshotChance=0,aiming=True,scenario={'distance':.5})
+    q,_=reference_request(p,{'/q':[{'id':name,'default_form':True}]},{},{},50)
+    assert q['weapon']==name and q['mode']=='alternate'
+    r={'combatants':[{'id':'wielder','weapon':name}],'apl':['shoot']}
+    assert not reference_identity_matches(r,q)
+    r['apl']=['alt_fire'];assert reference_identity_matches(r,q)
+
+
+def test_reference_progenitor_never_silently_falls_back_to_its_own_default():
+    from tools.compare_generated_builds import resolved_reference_payload
+    p=dict(weapon='/tenet',fireMode=0,mods=[],level=9999,steelPath=True,headshotChance=0,aiming=True,scenario={'distance':.5})
+    weapons={'/tenet':[{'id':'tenet_quanta','default_form':True,'valence':{'min':.25,'max':.6}}]}
+    with pytest.raises(ValueError,match='progenitor'):reference_request(p,weapons,{},{},10)
+    q=resolved_reference_payload(p,{'innateElement':{'damageType':'DT_FIRE','value':.6}})
+    req,_=reference_request(q,weapons,{},{},10)
+    assert req['valence_element']=='heat' and req['valence_bonus']==.6
+    assert 'innateElement' not in p

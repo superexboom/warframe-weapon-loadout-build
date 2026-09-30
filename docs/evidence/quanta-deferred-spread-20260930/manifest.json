@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-30",
+  "spreadStatus": "preserved-unreferenced",
+  "files": [
+    {
+      "path": "auto-meta.json",
+      "sha256": "4b8ab70c98dec7df79a7f5aaa2addb6871e85dfeb93bfa762092b48fd5b0eeb4"
+    },
+    {
+      "path": "auto-results.json",
+      "sha256": "3f0bca7003f081a7339181db278adb0c13a4ef31a5a208faa5b328fd95985aa9"
+    },
+    {
+      "path": "automatic-builds.json",
+      "sha256": "e9608999f5d5219277f71a62a7c839df1e0df8f6d1445ea7d589ecce4e44b0ee"
+    },
+    {
+      "path": "final-import-check.json",
+      "sha256": "8ec7c9d3e6b62c88b7b165ad3996a0bc7b1073c1b811ea0fba798f460e20f7b5"
+    },
+    {
+      "path": "final-native-contact.json",
+      "sha256": "7c866b222ba19b55dde984509c791ea0feb944312671cee1ad7fb289a2dc424d"
+    },
+    {
+      "path": "import-check.json",
+      "sha256": "d73adb342574090476809c09b361bdfbb5bc4256bbd48f1cfd7d03134c32c219"
+    },
+    {
+      "path": "native-contact.json",
+      "sha256": "75a8e8c342cc55e783c4d0bcf91292fb33d0cc8f5d0b3586e85f6b3af2dd63ef"
+    },
+    {
+      "path": "reference-comparison.json",
+      "sha256": "ff242c381d1a1946c166ad3817fe8c5fe1bd3ee5b54bbbdb49dd64d20d47d085"
+    },
+    {
+      "path": "reference-progenitor-probe.json",
+      "sha256": "afbc271d8fd8a7cc4e332506f7dc77575c2440c52ec5a05c8920ac6f4927e02f"
+    },
+    {
+      "path": "reference-runtime-comparison.json",
+      "sha256": "ab2f58d53d98a8054c808a8783da413e308066317e7ee9db1d9cac448eb808e1"
+    },
+    {
+      "path": "regression.txt",
+      "sha256": "32a7214a4458cf4893fe4da1cdb5a6d8d7d7dcc3504fb5f1ca71a8526b23a29f"
+    }
+  ]
+}

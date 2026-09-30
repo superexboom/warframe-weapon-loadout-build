@@ -2424,6 +2424,162 @@
         "talons-multishot-spatial-hit-loss-unmodeled",
         "talons-natural-status-reference-calibrated"
       ]
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle": {
+      "modes": {
+        "1": {
+          "name": "Quanta",
+          "referenceId": "quanta_cube",
+          "source": "data/weapons/primary/quanta_cube.yaml",
+          "sourceSha256": "7e12a45f280484377dfa0947e3cb245729adea34e962eb128c66268799e50bd5",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle",
+              "sha256": "45b8d22e6b975f760ccfe97d27f4c2a7e7f4cb0eb1f3ab344cb99301c060d28b"
+            },
+            {
+              "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifleProjectile",
+              "sha256": "5eaffa7ce6678db754d99724f8aaf87b79b99b661deeb841c80c50ede522399b"
+            }
+          ],
+          "packageBuild": "2026.09.22.16.46",
+          "projectile": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifleProjectile",
+          "directTotal": 100.0,
+          "ammoCost": 10,
+          "requiresFullAmmo": true,
+          "scope": "Alternate cube collides with the aimed target: one 100 Electricity direct hit and one 150 Blast contact explosion.",
+          "radials": [
+            {
+              "damage": {
+                "blast": 150.0
+              },
+              "crit_chance": 0.050000001,
+              "crit_multiplier": 1.5,
+              "status_chance": 0.25999999,
+              "forced_procs": [],
+              "takes_multishot": true,
+              "takes_condition_overload": false,
+              "impact_delay_seconds": 0.0
+            }
+          ],
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 0.5,
+            "takesRadiusMods": true
+          },
+          "unmodeled": [
+            "quanta-player-shot-detonation-unmodeled",
+            "quanta-idle-detonation-unmodeled",
+            "quanta-cube-chain-unmodeled"
+          ]
+        }
+      }
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/QuantaVandal": {
+      "modes": {
+        "1": {
+          "name": "Quanta Vandal",
+          "referenceId": "quanta_vandal_cube",
+          "source": "data/weapons/primary/quanta_vandal_cube.yaml",
+          "sourceSha256": "3da163528f00ebe70b355109b633ee396b1fbd0385fa46040002dda0161e95d8",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/QuantaVandal",
+              "sha256": "7fb174fae15974f5d47216567b7638f0cfcb2535fce80243bdd904b25a30cb1c"
+            },
+            {
+              "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifleProjectile",
+              "sha256": "5eaffa7ce6678db754d99724f8aaf87b79b99b661deeb841c80c50ede522399b"
+            }
+          ],
+          "packageBuild": "2026.09.22.16.46",
+          "projectile": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifleProjectile",
+          "directTotal": 100.0,
+          "ammoCost": 10,
+          "requiresFullAmmo": true,
+          "scope": "Alternate cube collides with the aimed target: one 100 Electricity direct hit and one 150 Blast contact explosion.",
+          "radials": [
+            {
+              "damage": {
+                "blast": 150.0
+              },
+              "crit_chance": 0.050000001,
+              "crit_multiplier": 1.5,
+              "status_chance": 0.25999999,
+              "forced_procs": [],
+              "takes_multishot": true,
+              "takes_condition_overload": false,
+              "impact_delay_seconds": 0.0
+            }
+          ],
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 0.5,
+            "takesRadiusMods": true
+          },
+          "unmodeled": [
+            "quanta-player-shot-detonation-unmodeled",
+            "quanta-idle-detonation-unmodeled",
+            "quanta-cube-chain-unmodeled"
+          ]
+        }
+      }
+    },
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta": {
+      "modes": {
+        "1": {
+          "name": "Tenet Quanta",
+          "referenceId": "tenet_quanta_cube",
+          "source": "data/weapons/primary/tenet_quanta_cube.yaml",
+          "sourceSha256": "43e5581720a9f81049be820a0d4ad58da859517b0b27fb1e77aa8bda6992fe10",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta",
+              "sha256": "4d44f313f3546bea2f526a0fa49df641dd37e6ca71ed6472bab80e71ecef27b0"
+            },
+            {
+              "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuantaProjectile",
+              "sha256": "83b7f449064cc39018ac09537a0012ca30f5422be2cf782f1f70837c73cf2497"
+            }
+          ],
+          "packageBuild": "2026.09.22.16.46",
+          "projectile": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuantaProjectile",
+          "directTotal": 180.0,
+          "ammoCost": 10,
+          "requiresFullAmmo": true,
+          "scope": "Alternate cube collides with the aimed target: one 180 Electricity direct hit and one 150 Blast contact explosion.",
+          "radials": [
+            {
+              "damage": {
+                "blast": 150.0
+              },
+              "crit_chance": 0.050000001,
+              "crit_multiplier": 1.5,
+              "status_chance": 0.25999999,
+              "forced_procs": [],
+              "takes_multishot": true,
+              "takes_condition_overload": false,
+              "impact_delay_seconds": 0.0
+            }
+          ],
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 0.5,
+            "takesRadiusMods": true
+          },
+          "unmodeled": [
+            "quanta-player-shot-detonation-unmodeled",
+            "quanta-idle-detonation-unmodeled",
+            "quanta-cube-chain-unmodeled"
+          ]
+        }
+      }
     }
   },
   "nativeTriggers": {
@@ -2460,312 +2616,44 @@
       "sha256": "5f8b95b3c3bb37ade2e762b6af40f73fcaff43c073115751d76bc24532aff825"
     }
   },
-  "spreadProfiles": {
-    "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun": {
-      "directTotal": 16.0,
-      "referenceId": "baza_prime",
-      "fireMode": 0,
-      "model": "uniform-native-min-angle",
-      "geometry": "pinned-reference-ray-circle",
-      "bodyRadiusM": 0.25,
-      "sourceBuild": "2026.09.22.16.46",
-      "limitations": [
-        "spread-bloom-not-modeled",
-        "target-hitbox-reference-assumption"
-      ],
-      "nativeSources": [
-        {
-          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
-          "sha256": "6278c5bbf79d955a3439e294d534c2f2c617bb45483ee3e20de8c4d5f6b55253"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/TnSMGAimAccuracyInfo",
-          "sha256": "c484a497348a4324668754b78247961cbb2979ab6052169135ee6e8592fb881a"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/TnSMGHipAccuracyInfo",
-          "sha256": "638f6ab0f616238078a4f531614d59824e2b2f098a2a10477cce0fe86ed5000c"
-        }
-      ],
-      "referenceSource": "data/weapons/primary/baza_prime.yaml",
-      "referenceSha256": "4697606363ae16f86b11d45885c5958627668da22d618fcdef3d513978081749",
-      "spreadAim": {
-        "min_deg": 1.0,
-        "max_deg": 1.5
-      },
-      "spreadHip": {
-        "min_deg": 2.0,
-        "max_deg": 3.0
-      }
-    },
-    "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto": {
-      "directTotal": 35.999999,
-      "referenceId": "akstiletto_prime",
-      "fireMode": 0,
-      "model": "uniform-native-min-angle",
-      "geometry": "pinned-reference-ray-circle",
-      "bodyRadiusM": 0.25,
-      "sourceBuild": "2026.09.22.16.46",
-      "limitations": [
-        "spread-bloom-not-modeled",
-        "target-hitbox-reference-assumption"
-      ],
-      "nativeSources": [
-        {
-          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
-          "sha256": "a6c7f9568c96ade6a4e19db119ae8ba4110f69c2ad5494d589fbb865e1936a41"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/TennoUziAimAccuracyInfo",
-          "sha256": "3efb24b6ca78fb3dc4ff7c5bfebea0d7c5d530ad458f5830ccdc185ad5ceaa68"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/TennoUziHipAccuracyInfo",
-          "sha256": "4e7ecf1bba4a8125d767383e54d83f148feadb9f014dde2ba13934d5c03d660a"
-        }
-      ],
-      "referenceSource": "data/weapons/secondary/akstiletto_prime.yaml",
-      "referenceSha256": "1040a18f112aa0e1fddfe7716c059d3dfd1c1f06e324463466382da1fd2e45ce",
-      "spreadAim": {
-        "min_deg": 1.5,
-        "max_deg": 7.0
-      },
-      "spreadHip": {
-        "min_deg": 4.0,
-        "max_deg": 12.0
-      }
-    },
-    "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal": {
-      "directTotal": 39.999999,
-      "referenceId": "supra_vandal",
-      "fireMode": 0,
-      "model": "uniform-native-min-angle",
-      "geometry": "pinned-reference-ray-circle",
-      "bodyRadiusM": 0.25,
-      "sourceBuild": "2026.09.22.16.46",
-      "limitations": [
-        "spread-bloom-not-modeled",
-        "target-hitbox-reference-assumption"
-      ],
-      "nativeSources": [
-        {
-          "path": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
-          "sha256": "7086fffb68f7b0dd5b9b51f17f965cbe72dfea96ac80cdbc310c9fc6876af8dc"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/SupraVandalAimAccuracyInfo",
-          "sha256": "80d84509aa356cc9b885f97a7652c6b65eacb25860018225a5a5c38e9e26b98b"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/SupraVandalHipAccuracyInfo",
-          "sha256": "d62ac3f398555c00428cd2300726e899d874b8b751ebf7896899d1e039a079fd"
-        }
-      ],
-      "referenceSource": "data/weapons/primary/supra_vandal.yaml",
-      "referenceSha256": "a727aab39a9303061b2a8b21954f8497d15e73f36b52a3994010019af54aa878",
-      "spreadAim": {
-        "min_deg": 3.0,
-        "max_deg": 4.0
-      },
-      "spreadHip": {
-        "min_deg": 5.0,
-        "max_deg": 10.0
-      }
-    },
-    "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/KarakWraith": {
-      "directTotal": 31.0,
-      "referenceId": "karak_wraith",
-      "fireMode": 0,
-      "model": "uniform-native-min-angle",
-      "geometry": "pinned-reference-ray-circle",
-      "bodyRadiusM": 0.25,
-      "sourceBuild": "2026.09.22.16.46",
-      "limitations": [
-        "spread-bloom-not-modeled",
-        "target-hitbox-reference-assumption"
-      ],
-      "nativeSources": [
-        {
-          "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/KarakWraith",
-          "sha256": "6a5321814fa1c51fbdffcd5d42907261a25ef5c53ff59791a25c2231489ca321"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/GrineerAssaultRifleAimAccuracyInfo",
-          "sha256": "e9a4b9897ebcc5e854073735e213bcc1afc4215fbe0a9b40a5e2e61436344b3d"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/GrineerAssaultRifleHipAccuracyInfo",
-          "sha256": "bd2fbcd16b0f386866f51f448912a5953c73de4ecb0cc53e6311538b95b2e075"
-        }
-      ],
-      "referenceSource": "data/weapons/primary/karak_wraith.yaml",
-      "referenceSha256": "b6f625da1ecab3bbf5377446d203ef235d607c062e461e686211ee9037097882",
-      "spreadAim": {
-        "min_deg": 2.0,
-        "max_deg": 5.0
-      },
-      "spreadHip": {
-        "min_deg": 8.0,
-        "max_deg": 11.0
-      }
-    },
-    "/Lotus/Weapons/Grineer/Pistols/WraithSingleViper/WraithSingleViper": {
-      "directTotal": 17.999999,
-      "referenceId": "viper_wraith",
-      "fireMode": 0,
-      "model": "uniform-native-min-angle",
-      "geometry": "pinned-reference-ray-circle",
-      "bodyRadiusM": 0.25,
-      "sourceBuild": "2026.09.22.16.46",
-      "limitations": [
-        "spread-bloom-not-modeled",
-        "target-hitbox-reference-assumption"
-      ],
-      "nativeSources": [
-        {
-          "path": "/Lotus/Weapons/Grineer/Pistols/WraithSingleViper/WraithSingleViper",
-          "sha256": "644a636e1707349ad164a2a0107f1e603d88611275697cb0f1717a1a323eb4d3"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/WraithSingleViperAimAccuracyInfo",
-          "sha256": "3a219c373e2199a29cf863ef9c4c6e5c25721a950151fa3b6952327f149632dd"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/WraithSingleViperHipAccuracyInfo",
-          "sha256": "37f209cfbdec0e1877d19f7e5dcb69b463de31d42dc6c0940531d3084bac3110"
-        }
-      ],
-      "referenceSource": "data/weapons/secondary/viper_wraith.yaml",
-      "referenceSha256": "1f52f2eb0412a783b1807bf01ca16a6f6eeaffda84660b2a97c8a0ef0d7839f8",
-      "spreadAim": {
-        "min_deg": 1.0,
-        "max_deg": 6.0
-      },
-      "spreadHip": {
-        "min_deg": 3.0,
-        "max_deg": 10.0
-      }
-    },
+  "cadenceProfiles": {
     "/Lotus/Weapons/Tenno/LongGuns/DrakeRifle/DrakeRifle": {
       "directTotal": 44.0,
       "referenceId": "tiberon",
       "fireMode": 0,
-      "model": "uniform-native-min-angle",
-      "geometry": "pinned-reference-ray-circle",
-      "bodyRadiusM": 0.25,
       "sourceBuild": "2026.09.22.16.46",
-      "limitations": [
-        "spread-bloom-not-modeled",
-        "target-hitbox-reference-assumption"
-      ],
+      "referenceSource": "data/weapons/primary/tiberon.yaml",
+      "referenceSha256": "db69b3166c4a302db70666c1d734a398f413948173a9c5ac9d67c508e5cb707d",
+      "burst": {
+        "count": 3,
+        "delay_seconds": 0.059999999
+      },
       "nativeSources": [
         {
           "path": "/Lotus/Weapons/Tenno/LongGuns/DrakeRifle/DrakeRifle",
           "sha256": "664324de83a29823acf98872ef9104a9aa578d4dc5e18e8123afa0e3137333c6"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/GrnBurstRifleAimAccuracyInfo",
-          "sha256": "e47f8cbe04e2ead3674326100feaeb006798d6354f7c2e1a5a839988c295ba09"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/GrnBurstRifleHipAccuracyInfo",
-          "sha256": "7f29b5281eb6f403152152a1494e89b21173adabb98aec97a5c6f9cc7c243bc3"
         }
-      ],
-      "referenceSource": "data/weapons/primary/tiberon.yaml",
-      "referenceSha256": "db69b3166c4a302db70666c1d734a398f413948173a9c5ac9d67c508e5cb707d",
-      "spreadAim": {
-        "min_deg": 0.0,
-        "max_deg": 6.0
-      },
-      "spreadHip": {
-        "min_deg": 2.0,
-        "max_deg": 8.0
-      },
-      "burst": {
-        "count": 3,
-        "delay_seconds": 0.059999999
-      }
-    },
-    "/Lotus/Weapons/Tenno/Pistol/CrossBow": {
-      "directTotal": 63.999998999999995,
-      "referenceId": "bolto",
-      "fireMode": 0,
-      "model": "uniform-native-min-angle",
-      "geometry": "pinned-reference-ray-circle",
-      "bodyRadiusM": 0.25,
-      "sourceBuild": "2026.09.22.16.46",
-      "limitations": [
-        "spread-bloom-not-modeled",
-        "target-hitbox-reference-assumption"
-      ],
-      "nativeSources": [
-        {
-          "path": "/Lotus/Weapons/Tenno/Pistol/CrossBow",
-          "sha256": "06f68c0a23c916ef0c65b5e1724444527c8fed5635e7dea33ad69c225d266bca"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/AkimboBoltoAimAccuracyInfo",
-          "sha256": "0e5ba385ba01650612d9195cc0f3241dad346a0b208b3e522b264f3804dbf450"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/AkimboBoltoHipAccuracyInfo",
-          "sha256": "29958ea01aaeac86e8cc3432119534eb39f02aa4e71e15127831c34e0a5f9ed0"
-        }
-      ],
-      "referenceSource": "data/weapons/secondary/bolto.yaml",
-      "referenceSha256": "d50cd04cabf593ebd23463457e790604602e5ae7c44833015765f5d759e9d7eb",
-      "spreadAim": {
-        "min_deg": 0.5,
-        "max_deg": 7.0
-      },
-      "spreadHip": {
-        "min_deg": 6.5,
-        "max_deg": 13.0
-      }
+      ]
     },
     "/Lotus/Weapons/Infested/LongGuns/InfWFAccompanyingPri/InfestedBurstRifle": {
       "directTotal": 47.0,
       "referenceId": "hema",
       "fireMode": 0,
-      "model": "uniform-native-min-angle",
-      "geometry": "pinned-reference-ray-circle",
-      "bodyRadiusM": 0.25,
       "sourceBuild": "2026.09.22.16.46",
-      "limitations": [
-        "spread-bloom-not-modeled",
-        "target-hitbox-reference-assumption"
-      ],
-      "nativeSources": [
-        {
-          "path": "/Lotus/Weapons/Infested/LongGuns/InfWFAccompanyingPri/InfestedBurstRifle",
-          "sha256": "4fa5ecd2f1ab0c724d8c1bffccd3899700f56f3156f687959c1f110293867085"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/InfBurstRifleAimAccuracyInfo",
-          "sha256": "267949968f33a7f47c870a7b65cd41cfc50bc7617d2dfd8449eea25c1ea6a1fd"
-        },
-        {
-          "path": "/Lotus/Types/Game/WeaponProperties/Accuracy/Weapon/InfBurstRifleHipAccuracyInfo",
-          "sha256": "3021ce3c37549b594e6bc97ed3c8ed2348d593e7a525e80e25ce0147fa062393"
-        }
-      ],
       "referenceSource": "data/weapons/primary/hema.yaml",
       "referenceSha256": "d95988d30049cc8e83a5c8361d77cebf1f4075079cdcf692c5073309189ceae3",
-      "spreadAim": {
-        "min_deg": 0.0,
-        "max_deg": 10.0
-      },
-      "spreadHip": {
-        "min_deg": 1.0,
-        "max_deg": 20.0
-      },
       "burst": {
         "count": 3,
         "delay_seconds": 0.1
       },
       "unmodeled": [
         "hema-player-health-cost-not-modeled"
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Infested/LongGuns/InfWFAccompanyingPri/InfestedBurstRifle",
+          "sha256": "4fa5ecd2f1ab0c724d8c1bffccd3899700f56f3156f687959c1f110293867085"
+        }
       ]
     }
   }

@@ -38,12 +38,14 @@ def base_profile(weapon, fire_mode=0):
                **SPOOL_PROFILES.get(weapon.get('path'), {})}
     if selected:
         profile = profile.get('modes', {}).get(str(selected), {})
-    spread = reference().get('spreadProfiles', {}).get(weapon.get('path'), {})
-    if spread.get('fireMode') == selected:
-        profile = {**profile, **spread}
+    cadence = reference().get('cadenceProfiles', {}).get(weapon.get('path'), {})
+    if cadence.get('fireMode') == selected:
+        profile = {**profile, **cadence}
     if not profile:
         return {}
     mode = (weapon.get('fireModes') or [{}])[fire_mode]
+    if profile.get('ammoCost') is not None and mode.get('ammoCost') != profile['ammoCost']:
+        return {}
     if profile.get('projectile') and (mode.get('damage') or {}).get('projectile') != profile['projectile']:
         return {}
     total = sum(((mode.get('damage') or {}).get('types') or {}).values())

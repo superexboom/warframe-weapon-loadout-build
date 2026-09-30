@@ -31,7 +31,6 @@ def replay(
     # Mechanics: WFSim 69e6a139, data/debuffs/ignite.yaml and syndicates/.
     from .damage import (
         enemy_defenses,
-        spread_hit_probability,
         expected_status_damage,
         damage_against_cached_armour,
         _hit_location_info,
@@ -115,7 +114,6 @@ def replay(
     gen = 0
     kills = 0
     attacks = 0
-    initial_spread = None
     stale = 0
     first_kill = None
     last_kill = None
@@ -511,10 +509,6 @@ def replay(
                 **row,
                 "perProc": row["perProc"] * (1 - aim) + hr["perProc"] * aim,
             }
-        hit_probability = spread_hit_probability(st, combat.get('distance'))
-        if hit_probability < 1.0:
-            vector = {k: v * hit_probability for k, v in vector.items()}
-            procs = {k: v * hit_probability for k, v in procs.items()}
         result = (vector, procs, rows, non)
         probes[key] = (
             st,
@@ -570,8 +564,7 @@ def replay(
             # part and status ticks do not masquerade as extra direct pellets.
             p=(1-aim)*big_crit_probability(cc,st.double_crit_chance)
             p+=aim*big_crit_probability(cc+weak,st.double_crit_chance)
-            landing = spread_hit_probability(st, combat.get('distance'))
-            probabilities[stacks]=any_probability(p * landing,1.0 if st.continuous else st.multishot)
+            probabilities[stacks]=any_probability(p,1.0 if st.continuous else st.multishot)
         gain=not (combat['enervate'].get('ignoreSelected') and form != 'base')
         enervate.advance(t,probabilities,gain=gain)
 
@@ -602,8 +595,7 @@ def replay(
             from .status_arcanes import STATUS_POOL, encumber_roll
             if abs(t - encumber_time) > 1e-9:
                 encumber_time=t;encumber_remaining=1.0
-            landing = spread_hit_probability(st, combat.get('distance'))
-            probability, merged_seed=encumber_roll(st, encumber['chance'], forced_procs, hit_probability=landing)
+            probability, merged_seed=encumber_roll(st, encumber['chance'], forced_procs)
             weight=encumber_remaining*probability*encumber.get('uptime',1.0)
             encumber_remaining*=1-probability*encumber.get('uptime',1.0)
             if weight > 0:
@@ -819,10 +811,11 @@ def replay(
                 gauge = 0.0
             push(t, "fire")
         elif kind == "reload-complete":
-            if field_duration:
+            if field_duration and payload:
                 field_duration_ready = True
             signal("on-reload-complete", t)
-            signal("on-reload-empty-complete", t)
+            if payload:
+                signal("on-reload-empty-complete", t)
             push(t, "fire")
         elif kind == "fire":
             if t >= window - 1e-9 or rate <= 0.0:
@@ -845,7 +838,8 @@ def replay(
             if battery and math.isfinite(last_fire_time):
                 delay = battery['delayEmptySeconds'] if ammo <= 1e-9 else battery['delayPartialSeconds']
                 ammo = min(active.magazine, ammo + max(0, t - last_fire_time - delay) * battery['regenPerSecond'])
-            if ammo <= 1e-9 and active.magazine > 0.0 and combat:
+            insufficient_ammo = getattr(active, '_requires_full_ammo', False) and ammo + 1e-9 < max(active.ammo_cost, 0.0)
+            if (ammo <= 1e-9 or insufficient_ammo) and active.magazine > 0.0 and combat:
                 if cycle and form == "incarnon":
                     push(t + cycle["exitSeconds"], "transform", "base")
                 else:
@@ -857,9 +851,12 @@ def replay(
                     reloads += 1
                     first_round = True
                     burst_round = 0
-                    # Fractional ammo overdraw remains owed after a reload.
-                    ammo += active.magazine
-                    signal("on-reload-empty", t)
+                    # Fractional ammo overdraw remains owed; a partial reload
+                    # fills to capacity and cannot bank its remaining rounds.
+                    was_empty = ammo <= 1e-9
+                    ammo = active.magazine + min(ammo, 0.0)
+                    if was_empty:
+                        signal("on-reload-empty", t)
                     signal("on-reload", t)
                     for q in sources:
                         if q.get("kind") == "on-burst-hit":
@@ -876,7 +873,7 @@ def replay(
                             )
                     if combat.get('spool') and reload_time >= combat['spool']['spindown']:
                         spool_shots=0
-                    push(t + reload_time, "reload-complete")
+                    push(t + reload_time, "reload-complete", was_empty)
                 continue
             spool=combat.get('spool')
             if spool:
@@ -908,14 +905,7 @@ def replay(
             first_round = False
             field_duration_boost = field_duration_ready
             field_duration_ready = False  # A shot consumes it, even when that shot kills.
-            landing = spread_hit_probability(active, combat.get('distance'))
-            if initial_spread is None and active.spread_min_deg is not None:
-                initial_spread = dict(
-                    model='uniform-native-min-angle',geometry='pinned-reference-ray-circle',
-                    centreDistanceM=combat.get('distance'),bodyRadiusM=.25,
-                    initialMinDeg=active.spread_min_deg,initialMaxDeg=active.spread_max_deg,
-                    initialHitProbability=landing)
-            hit_count = (1.0 if active.continuous else active.multishot) * landing
+            hit_count = 1.0 if active.continuous else active.multishot
             shot_puncture=0.0 if active.radial_only else live_crit()[0]
             aim = 0.0 if active.radial_only else head
             direct_packet = packet(active, aim)
@@ -974,7 +964,7 @@ def replay(
                 * hit_count,
             )
             if cycle and form == "base" and not active.radial_only:
-                gauge = min(cycle["hits"], gauge + (1.0 if cycle.get('chargeOn') == 'direct_hits' else head) * active.multishot * landing)
+                gauge = min(cycle["hits"], gauge + (1.0 if cycle.get('chargeOn') == 'direct_hits' else head) * active.multishot)
             if combat:
                 ammo -= (
                     1.0
@@ -1100,7 +1090,6 @@ def replay(
         "minKillInterval": min_interval,
         "maxKillsPerStep": max_per_step,
         "staleComponents": stale,
-        'spread': initial_spread,
         'fieldDuration': ({**field_duration, 'boostedShots':field_duration_used,
                            'ready':field_duration_ready, 'events':field_events} if field_duration else None),
         "shots": attacks,
@@ -1158,7 +1147,8 @@ def replay(
             "fractional-proc-refresh-approximates-uptime",
             "single-target-syndicate-no-player-buffs",
             "magnetic-break-six-ticks-pinned-reference-contract",
-        ] + list(combat.get('spatialLimitations') or []) + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
+            'spread-hit-loss-not-modeled',
+        ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
           + (ASSUMPTIONS if enervate else [])
           + (['encumber-poisson-status-presence','encumber-single-target-expected-procs'] if encumber else [])
           + (['cryogenic-single-target-expected-procs-no-neighbor-burst'] if cryogenic else [])

@@ -234,6 +234,8 @@ payload = {
     "packageEvidence": evidence,
 }
 sys.path.insert(0, str(root))
+from tools.import_quanta_contact_profiles import import_profiles as import_quanta_profiles
+import_quanta_profiles(a.packages, ref, json.loads((exports / 'weapons.json').read_text(encoding='utf-8')), payload)
 from tools.import_native_radial_profiles import import_profiles
 import_profiles(a.packages, ref, json.loads((exports / "weapons.json").read_text(encoding="utf-8")), payload)
 (out / "combat-reference.json").write_text(

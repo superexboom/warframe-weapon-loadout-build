@@ -5146,7 +5146,6 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     "points": windowed.get("timeline") or [],
                     "stacks": windowed.get("averagedStacks") or {},
                     "triggerSeries": windowed.get("triggerSeries") or [],
-                    'spread': windowed.get('spread'),
                     'fieldDuration': windowed.get('fieldDuration'),
                     "cryogenic": windowed.get("cryogenic"),
                     "empowered": windowed.get("empowered"),

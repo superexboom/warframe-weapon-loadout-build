@@ -11745,6 +11745,7 @@
     {
      "ammoCost": 0,
      "ammoType": "",
+     "behaviorKind": "auxiliary-melee",
      "chargeTime": null,
      "damage": {
       "critChance": 0.0,
@@ -12200,6 +12201,7 @@
     {
      "ammoCost": 0,
      "ammoType": "",
+     "behaviorKind": "auxiliary-melee",
      "chargeTime": null,
      "damage": {
       "critChance": 0.0,

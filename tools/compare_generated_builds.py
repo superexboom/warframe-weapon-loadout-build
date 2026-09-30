@@ -9,7 +9,7 @@ from tools.compare_archgun_board_builds import BATCH_JS, registry, ELEMENTS
 # Audited from StugEvoTier1A/2B/3C + their exported effects and WFSim YAML.
 # Explicit mapping: no name-based substitutions or implicit reference defaults.
 # Exact local mode to reference form, verified from native projectile and YAML.
-WEAPON_FORMS = {('stahlta', 1): 'alternate'}
+WEAPON_FORMS = {(key, 1): 'alternate' for key in ('stahlta','quanta','quanta_vandal','tenet_quanta')}
 
 EVOLUTIONS = {'torid': {
     'tier2': {'2-1':'torid_final_fusillade','2-2':'torid_plentiful_mayhem'},
@@ -43,6 +43,8 @@ def reference_request(payload, weapons, mods, arcanes, runs):
     if len(rows) != 1:
         raise ValueError('unmapped exact weapon form')
     weapon = rows[0]
+    if weapon.get('valence') and (not payload.get('innateElement') or payload.get('innateElementValue') is None):
+        raise ValueError('explicit resolved progenitor element and value required for reference comparison')
     play_mode = 'base'
     mode = payload.get('fireMode', 0)
     if mode != 0:
@@ -76,11 +78,22 @@ def reference_request(payload, weapons, mods, arcanes, runs):
                  valence_bonus=payload['innateElementValue'])
     return q, weapon.get('unmodeled', [])
 
+def resolved_reference_payload(payload, manual):
+    """Use the actual local resolved progenitor, never the reference's default."""
+    result=dict(payload)
+    innate=manual.get('innateElement')
+    if isinstance(innate,dict) and innate.get('damageType'):
+        result.update(innateElement=innate['damageType'],innateElementValue=innate['value'])
+    return result
+
+
 def reference_identity_matches(response, request):
     """The reference silently defaults unknown weapon ids; never accept that."""
     wielders = [c for c in response.get('combatants', []) if c.get('id') == 'wielder']
     if len(wielders) != 1 or wielders[0].get('weapon') != request['weapon']:
         return False
+    if request['weapon'] in ('quanta','quanta_vandal','tenet_quanta') and request.get('mode')=='alternate':
+        return 'alt_fire' in response.get('apl', [])
     if request['weapon'] == 'stahlta' and request.get('mode') == 'alternate':
         return 'charged' in response.get('apl', [])
     return True
@@ -103,8 +116,10 @@ def main():
         c=dict(name=row['name'], automaticKpm=row.get('automatic'), originalFingerprint=row.get('inputFingerprint'))
         rows.append(c)
         try:
-            payload=row['manualRequest'];q,limits=reference_request(payload,weapons,mods,arcs,a.runs)
-            manual=app.simulate_manual_payload(payload)
+            original=row['manualRequest'];manual=app.simulate_manual_payload(original)
+            payload=resolved_reference_payload(original,manual)
+            q,limits=reference_request(payload,weapons,mods,arcs,a.runs)
+            c['originalManualRequest']=original
             kpm=manual['benchmarkTimeline']['killsPerMinute']
             c.update(request=q, manualRequest=payload, manualKpm=kpm, localUnsupported=manual.get('unsupported', []),
                 referenceLimitations=limits, currentManualMatchesAutomatic=math.isclose(kpm,row['automatic'],rel_tol=1e-9,abs_tol=1e-9))

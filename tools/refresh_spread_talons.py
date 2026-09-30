@@ -1,4 +1,4 @@
-"""Refresh exact single-target spread profiles and the audited Talons export."""
+"""Refresh verified cadence and Talons. Historical CLI name; spread is deferred."""
 from __future__ import annotations
 import argparse, hashlib, json, subprocess, sys
 from copy import deepcopy
@@ -43,7 +43,8 @@ def refresh(packages, ref, export, output, *, update_export=True):
         if isinstance(spec,dict) and spec.get('internal_name'):
             reference.setdefault(spec['internal_name'],[]).append((p,spec))
     evidence=[]
-    profiles=payload.setdefault('spreadProfiles',{})
+    payload.pop('spreadProfiles', None)
+    profiles=payload.setdefault('cadenceProfiles',{})
     for name in NAMES:
         w=records[name];raw=pkg.resolve(w['path']);b=raw['Behaviors'][0]
         f=next(v for k,v in b.items() if k.startswith('fire:') and isinstance(v,dict))
@@ -51,23 +52,12 @@ def refresh(packages, ref, export, output, *, update_export=True):
         if len(candidates)!=1:raise ValueError('ambiguous reference: '+name)
         path,spec=candidates[0];atk=spec['attack']
         if atk.get('radial') or atk.get('lingering') or atk.get('beam') or atk.get('cluster'):
-            raise ValueError('not an audited single-hit spread weapon: '+name)
+            raise ValueError('not an audited single-hit weapon: '+name)
         total=sum(w['fireModes'][0]['damage']['types'].values())
         if abs(total-sum(atk['damage'].values()))>.02:raise ValueError('base vector mismatch: '+name)
-        entry=dict(directTotal=total,referenceId=spec['id'],fireMode=0,model='uniform-native-min-angle',
-                   geometry='pinned-reference-ray-circle',bodyRadiusM=.25,sourceBuild=packages.parent.name,
-                   limitations=['spread-bloom-not-modeled','target-hitbox-reference-assumption'],
+        entry=dict(directTotal=total,referenceId=spec['id'],fireMode=0,sourceBuild=packages.parent.name,
                    nativeSources=[source(w['path'])],referenceSource=path.relative_to(ref).as_posix(),
                    referenceSha256=hashlib.sha256(path.read_bytes()).hexdigest())
-        for field,dest in [('AIMED_ACCURACY','spreadAim'),('HIP_FIRE_ACCURACY','spreadHip')]:
-            location=f.get(field);accuracy=pkg.resolve(location) if location else {}
-            shooting=(accuracy.get('Spread') or {}).get('SHOOTING') or {}
-            bounds=shooting.get('range')
-            if not isinstance(bounds,list) or len(bounds)!=2:
-                raise ValueError('native cone missing: '+name+' '+field)
-            entry[dest]=dict(min_deg=float(bounds[0]),max_deg=float(bounds[1]))
-            entry['nativeSources'].append(source(location))
-        if entry['spreadAim']!=atk['spread']:raise ValueError('reference/native cone mismatch: '+name)
         if name in ('Tiberon','Hema'):
             expected_delay = .06 if name=='Tiberon' else .1
             state=b.get('state:WeaponBurstStateBehavior') or {}
@@ -79,7 +69,7 @@ def refresh(packages, ref, export, output, *, update_export=True):
                 raise ValueError(name+' burst contract changed')
             entry['burst']=dict(count=3,delay_seconds=float(state['BurstDelay']))
         if name=='Hema':entry['unmodeled']=['hema-player-health-cost-not-modeled']
-        profiles[w['path']]=entry
+        if entry.get('burst'):profiles[w['path']]=entry
         before=deepcopy(w)
         extracted=_extract_fire_modes(pkg,w['path'],raw)
         if len(extracted)!=len(w['fireModes']):raise ValueError('mode inventory changed: '+name)
@@ -119,7 +109,7 @@ def refresh(packages, ref, export, output, *, update_export=True):
     output.write_bytes(preserve_lines(original_profile,rendered))
     if update_export:export.write_bytes(original)
     return dict(packageBuild=packages.parent.name,sourceCommit=subprocess.check_output(['git','-C',str(ref),'rev-parse','HEAD'],text=True).strip(),
-                geometrySources=[dict(path=p,sha256=hashlib.sha256((ref/p).read_bytes()).hexdigest()) for p in ['engine/src/model/shape.rs','engine/src/rules/space.rs']],cases=evidence)
+                cases=evidence)
 
 
 def main():
@@ -133,5 +123,5 @@ def main():
     evidence=refresh(a.packages,a.wfsim,a.export,a.output)
     a.evidence.parent.mkdir(parents=True,exist_ok=True)
     a.evidence.write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    print('refreshed native spread / Talons cases:',len(evidence['cases']))
+    print('refreshed native cadence / Talons cases:',len(evidence['cases']))
 if __name__=='__main__':main()

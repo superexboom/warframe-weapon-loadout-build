@@ -316,8 +316,6 @@ def prepare(
     selected_attack = base_profile(weapon, mode_index)
     if selected_attack:
         notes.extend(selected_attack.get('unmodeled') or [])
-        if selected_attack.get('spreadAim') and scenario.distance is None:
-            notes.append('spread-distance-unspecified-assumed-all-hit')
         minimum=(selected_attack.get('radial') or {}).get('armingDistance')
         if minimum is not None and scenario.distance is None:
             notes.append('radial-arming-distance-assumed-armed')
@@ -454,6 +452,8 @@ def prepare(
         if radial_parts:
             radial = radial_parts[0]
             radial._additional_radials = tuple(radial_parts[1:])
+        if extra.get('requiresFullAmmo'):
+            st._requires_full_ammo = True
         if extra.get('charge'):
             st._charge_time = extra['charge']['seconds'] / max(st.fire_rate / float(modes[idx]['fireRate']), 1e-9)
         if extra.get('bow'):
@@ -526,5 +526,4 @@ def prepare(
         lastRoundMultishot=last_round_multishot,
         fieldDurationOnEmptyReload=field_duration,
         distance=scenario.distance,
-        spatialLimitations=selected_attack.get('limitations', []),
     )

@@ -913,9 +913,11 @@ class ModdedStats:
     # Native forced statuses per projectile; explicit caller forced_procs remain
     # additional per-trigger counts. Never inherit a different component here.
     native_forced_procs: dict[str, float] = field(default_factory=dict)
-    # WFSim spread geometry: resolved cone radius in degrees after native spread effects.
+    # Inactive compatibility fields for deferred_spread research. Production
+    # apply_mods leaves these unset; replay/scoring never consumes them.
     spread_min_deg: float | None = None
     spread_max_deg: float | None = None
+
 
     @property
     def total_damage(self) -> float:
@@ -1402,7 +1404,6 @@ def apply_mods(
                 reload_time = float(profile['enterSeconds']) + float(profile['exitSeconds'])
         elif scenario.incarnon_cycle:
             unsupported.add('incarnon-cycle-data-unavailable')
-    spread_profile = event_profile.get('spreadAim' if scenario.aiming else 'spreadHip')
     return ModdedStats(
         damage_types=damage_types,
         crit_chance=_combine(damage.get("critChance", 0.0), buckets["WEAPON_CRIT_CHANCE"]),
@@ -1420,8 +1421,6 @@ def apply_mods(
         )(damage.get("critMultiplier", 1.0), buckets["WEAPON_CRIT_DAMAGE"]),
         explosion_radius_multiplier=_combine(1.0, buckets['WEAPON_EXPLOSION_RADIUS']),
         radial_only=damage.get('source') in ('ExplosiveAttack', 'RadialDamage', 'EmbedDeathAttack', 'StackingAttack'),
-        spread_min_deg=(max(0.0, _combine(spread_profile['min_deg'], buckets['WEAPON_SPREAD'])) if spread_profile else None),
-        spread_max_deg=(max(0.0, _combine(spread_profile['max_deg'], buckets['WEAPON_SPREAD'])) if spread_profile else None),
         native_forced_procs={dtype: float((damage.get('forcedProcs') or []).count(proc))
             for proc, dtype in [('PT_ELECTROCUTION', 'DT_ELECTRICITY'), ('PT_CHILLED', 'DT_FREEZE'), ('PT_FRAILTY', 'DT_PUNCTURE')]
             if proc in (damage.get('forcedProcs') or ())},
@@ -2795,26 +2794,6 @@ def enemy_kill_metrics(
         + (["elemental-armour-strip-is-explicit-snapshot"] if elemental_armour_strip else [])
         + (["head-hit-proxy-multiplier-applied"] if location == "head" and not hit_unsupported else []),
     }
-
-
-def spread_hit_probability(stats: ModdedStats, distance: float | None, *, body_radius: float = 0.25) -> float:
-    """Expected one-target landing probability for the aimed spread cone.
-
-    WFSim samples a deviation uniformly from [0, min_deg] and accepts a ray
-    crossing the target circle. This is the one-target expectation; crowd
-    epicentres and sustained-fire bloom remain outside this scalar API.
-    """
-    if distance is None or distance <= 0.0 or stats.spread_min_deg is None or stats.spread_min_deg <= 0.0:
-        return 1.0
-    # min_deg is already resolved with native ADD/relative spread effects.
-    effective = float(stats.spread_min_deg)
-    if effective <= 0.0:
-        return 1.0
-    range_to_centre = max(float(distance) - float(body_radius), 0.0)
-    if range_to_centre <= 0.0 or range_to_centre <= body_radius:
-        return 1.0
-    threshold = math.degrees(math.asin(min(1.0, body_radius / range_to_centre)))
-    return min(1.0, max(0.0, threshold / effective))
 
 
 def expected_status_procs(

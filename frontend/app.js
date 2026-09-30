@@ -2348,10 +2348,12 @@ function renderContributions() {
 }
 
 const DIAGNOSTIC_CODE_LABELS = {
+  'quanta-player-shot-detonation-unmodeled': '量子切割器副模式按立方体碰撞引爆；另外射击立方体的强化引爆尚未计入',
+  'quanta-idle-detonation-unmodeled': '未碰撞立方体的 9 秒自然引爆未计入当前单目标接触模型',
+  'quanta-cube-chain-unmodeled': '立方体之间的连锁引爆与射击转换尚未计入',
+
+  'spread-hit-loss-not-modeled': '散布暂不参与命中、伤害及评分计算',
   'hema-player-health-cost-not-modeled': '血肢换弹消耗角色生命；当前仅计算输出，未模拟角色生命资源',
-  'spread-distance-unspecified-assumed-all-hit': '未设置交战距离：散布按全部命中处理',
-  'spread-bloom-not-modeled': '连续射击的散布扩张速度未知；暂用初始散布角',
-  'target-hitbox-reference-assumption': '命中几何采用固定参考模型的半径 0.25 米圆形目标，并非游戏实测',
   'talons-manual-detonation-timing-assumed': '鹰爪按投出后立即手动起爆计算，未计额外等待',
   'talons-multishot-spatial-hit-loss-unmodeled': '鹰爪多重投掷的分散落点与范围命中损失尚未计入',
   'talons-natural-status-reference-calibrated': '鹰爪自然触发率原生字段缺失，暂用固定参考版本的 10%',
@@ -7107,12 +7109,7 @@ function drawBenchmarkReplay(bench) {
     if (enh.archimedea) parts.push("科研");
     if (enh.empowered) parts.push("强化");
     const caveats = ["期望触发数模型（非随机模拟）"];
-    if (bench.spread) {
-      const spread = bench.spread;
-      const distance = spread.centreDistanceM;
-      caveats.push(distance == null ? '距离未设置，散布按全命中' : `中心距 ${Number(distance).toFixed(1)}m · 初始期望命中 ${(Number(spread.initialHitProbability) * 100).toFixed(1)}%`);
-      caveats.push('使用初始散布角；命中体型为参考假设');
-    }
+    caveats.push('散布暂不参与命中和伤害计算');
     if (bench.fieldDuration) caveats.push(`空仓换弹首发毒云延时已触发 ${bench.fieldDuration.boostedShots} 次`);
     if (bench.syndicateEvents?.length) caveats.push(`集团爆发 ${bench.syndicateEvents.length} 次，实际伤害 ${formatMetric(bench.syndicateWindow || 0)}`);
     if (bench.unsupported?.length) caveats.push(`另有 ${bench.unsupported.length} 项事件未建模，见提示`);
