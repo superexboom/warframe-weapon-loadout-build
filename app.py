@@ -3101,21 +3101,7 @@ def build_weapon_payload(
     #                         导出无充能时长，用基础形态装填时长保守折算）。
     #   缺省/false          — 常驻灵化（170 充能池近似零装填；紫卡分析
     #                         维持此口径）。
-    incarnon_cycle_flag = _manual_bool(_scenario_input(payload, 'incarnonCycle', False), 'incarnonCycle')
-    scenario = optimizer._scenario(metric, incarnon_cycle=incarnon_cycle_flag,
-        aiming=_manual_bool(_scenario_input(payload, 'aiming', False), 'aiming'))
-    distance = _scenario_input(payload, 'distance')
-    nearest = _scenario_input(payload, 'nearestEnemyDistance')
-    scenario = replace(
-        scenario, heavy_attack=_manual_bool(_scenario_input(payload, 'heavyAttack', False), 'heavyAttack') or scenario.heavy_attack,
-        trigger_policy=str(payload.get('triggerPolicy') or 'emergent'),
-        distance=_manual_number(distance, 'distance', low=0.) if distance is not None else None,
-        combo_tier=_manual_int(_scenario_input(payload, 'comboTier', 0), 'comboTier', high=11),
-        cloaked=_manual_bool(_scenario_input(payload, 'cloaked', False), 'cloaked'),
-        nearest_enemy_distance=_manual_number(nearest, 'nearestEnemyDistance', low=0.) if nearest is not None else None,
-    )
-    if scenario.trigger_policy not in {'emergent', 'assumed_max'}:
-        raise SimulationError('triggerPolicy must be emergent or assumed_max')
+    scenario = optimizer._requested_scenario(payload, metric)
     stance = _resolve_stance(
         selected_weapon, catalog_weapon["weaponType"], payload.get("stancePath")
     )
@@ -3447,7 +3433,7 @@ def build_weapon_payload(
         "metric": metric,
         "scoringModel": "loadout-events-v1" if dual_route else "panel-heavy",
         'scoreMetric': 'killsPerMinute' if dual_route else objective,
-        'evaluationScenario': {'aiming': scenario.aiming, 'incarnonCycle': scenario.incarnon_cycle, 'triggerPolicy': scenario.trigger_policy, 'includeArcanes': optimize_with_arcanes},
+        'evaluationScenario': {**optimizer._scenario_context(scenario), 'includeArcanes': optimize_with_arcanes},
         "evaluationContext": {k: v for k, v in benchmark_context.items() if k != "target"},
         "evaluationTarget": optimizer.record_identity(benchmark_context.get("target") or {}),
         "buildArchetype": build_archetype,
@@ -4160,24 +4146,7 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
     headshot_chance = _manual_number(payload.get("headshotChance", 0.0), "headshotChance", low=0.0, high=1.0)
     if headshot_chance and not enemy.get("hasHeadProxy"):
         raise SimulationError("headshotChance requires an enemy with a verified head proxy")
-    scenario_raw = payload.get("scenario") if isinstance(payload.get("scenario"), Mapping) else {}
-    if "conditionalStacks" in payload or "conditionalStacks" in scenario_raw:
-        raise SimulationError("conditionalStacks is derived from equipped MODs and cannot be overridden")
-    scenario = Scenario(
-        aiming=_manual_bool(scenario_raw.get("aiming", payload.get("aiming", False)), "aiming"),
-        heavy_attack=_manual_bool(scenario_raw.get("heavyAttack", payload.get("heavyAttack", False)), "heavyAttack"),
-        combo_tier=_manual_int(scenario_raw.get("comboTier", payload.get("comboTier", 0)), "comboTier", high=11),
-        victim_status_count=0,
-        conditional_stacks={},
-        distance=_manual_number(_scenario_input(payload, 'distance'), 'distance', low=0.) if _scenario_input(payload, 'distance') is not None else None,
-        cloaked=_manual_bool(_scenario_input(payload, 'cloaked', False), 'cloaked'),
-        nearest_enemy_distance=_manual_number(_scenario_input(payload, 'nearestEnemyDistance'), 'nearestEnemyDistance', low=0.) if _scenario_input(payload, 'nearestEnemyDistance') is not None else None,
-        # 灵化循环口径开关（缺省常驻灵化——紫卡分析维持常驻口径）。
-        incarnon_cycle=_manual_bool(
-            scenario_raw.get("incarnonCycle", payload.get("incarnonCycle", False)),
-            "incarnonCycle",
-        ),
-    )
+    scenario = optimizer._requested_scenario(payload, 'manual')
     weapon_record = optimizer.resolve_record(EXPORTS["weapons"], weapon_path.strip(), kind="weapon")
     weapon_record = _special_slot_override(payload, weapon_record, weapon["weaponType"])
     # Kitgun bases have no fire modes of their own; the engine assembles the

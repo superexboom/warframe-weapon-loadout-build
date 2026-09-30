@@ -3267,6 +3267,57 @@ def _scenario(metric: str, *, incarnon_cycle: bool = False, aiming: bool = False
     )
 
 
+def _requested_scenario(request: Mapping[str, Any], metric: str) -> Scenario:
+    """Shared public request parser for builds, manual replay and Riven analysis.
+
+    Nested explicit values win, including false/0/null. Distance remains damage
+    falloff/arming input; deferred spread is never consulted here.
+    """
+    nested = request.get('scenario')
+    if nested is not None and not isinstance(nested, Mapping):
+        raise SimulationError('scenario must be an object')
+    nested = nested or {}
+    if 'conditionalStacks' in request or 'conditionalStacks' in nested:
+        raise SimulationError('conditionalStacks is derived from equipped MODs and cannot be overridden')
+    def value(key, default=None):
+        return nested.get(key, request.get(key, default))
+    def boolean(key):
+        raw = value(key, False)
+        if not isinstance(raw, bool):
+            raise SimulationError(f'{key} must be a boolean')
+        return raw
+    def distance(key):
+        raw = value(key)
+        if raw is None:
+            return None
+        if isinstance(raw, bool) or not isinstance(raw, (int, float)) or not math.isfinite(raw) or raw < 0:
+            raise SimulationError(f'{key} must be a finite non-negative number')
+        return float(raw)
+    combo = value('comboTier', 0)
+    if isinstance(combo, bool) or not isinstance(combo, int) or not 0 <= combo <= 11:
+        raise SimulationError('comboTier must be an integer between 0 and 11')
+    policy = str(value('triggerPolicy', 'emergent') or 'emergent')
+    if policy not in {'emergent', 'assumed_max'}:
+        raise SimulationError('triggerPolicy must be emergent or assumed_max')
+    return Scenario(aiming=boolean('aiming'), incarnon_cycle=boolean('incarnonCycle'),
+        heavy_attack=boolean('heavyAttack') or _scenario(metric).heavy_attack,
+        distance=distance('distance'), nearest_enemy_distance=distance('nearestEnemyDistance'),
+        cloaked=boolean('cloaked'), combo_tier=combo, trigger_policy=policy)
+
+
+def _scenario_context(scenario: Scenario) -> dict[str, Any]:
+    return dict(aiming=scenario.aiming, incarnonCycle=scenario.incarnon_cycle,
+                heavyAttack=scenario.heavy_attack, triggerPolicy=scenario.trigger_policy,
+                distance=scenario.distance, cloaked=scenario.cloaked,
+                nearestEnemyDistance=scenario.nearest_enemy_distance, comboTier=scenario.combo_tier)
+
+
+def _default_analysis_scenario(scenario: Scenario, metric: str) -> bool:
+    # Existing baked statics describe only this state. Non-default scenarios must
+    # not read them, including the fallback that only changes enemy level.
+    return _scenario_context(scenario) == _scenario_context(_scenario(metric))
+
+
 def _percent_gain(value: float, baseline: float) -> float:
     return (value / baseline - 1.0) * 100.0 if baseline > 0 else 0.0
 
@@ -3835,11 +3886,7 @@ def analyze_riven_request(
             f"requested-metric-{request.get('metric')}-ignored-using-{metric}"
         )
     objective_metric = metric
-    scenario = _scenario(metric, incarnon_cycle=request.get("incarnonCycle") is True, aiming=request.get("aiming") is True)
-    policy = str(request.get('triggerPolicy') or 'emergent')
-    if policy not in {'emergent', 'assumed_max'}:
-        raise SimulationError('triggerPolicy must be emergent or assumed_max')
-    scenario = replace(scenario, trigger_policy=policy)
+    scenario = _requested_scenario(request, metric)
     # 偏好复合元素（elementTarget）：软约束——最终配装必须包含该元素
     # （与配装页的元素限制同一套伤害类型映射）。空值/未知值保持无约束。
     element_target_raw = str(request.get("elementTarget") or "").strip()
@@ -4078,9 +4125,7 @@ def analyze_riven_request(
         and (not record_overridden or bool(request.get("_cacheDefaultInnate")))
         and request.get("incarnonChoices") is None
         and request.get("arcanes") is None
-        and not scenario.incarnon_cycle
-        and not scenario.aiming
-        and scenario.trigger_policy == 'emergent'
+        and _default_analysis_scenario(scenario, metric)
         and timeline_seconds is None
         and not has_search_constraints
     )
@@ -5398,11 +5443,8 @@ def analyze_riven_request(
         "capacityLimit": capacity_limit,
         "disposition": disposition,
         "scenario": {
-            "heavyAttack": bool(scenario.heavy_attack),
+            **_scenario_context(scenario),
             "throwable": throwable,
-            "aiming": scenario.aiming,
-            "incarnonCycle": scenario.incarnon_cycle,
-            "triggerPolicy": scenario.trigger_policy,
             "incarnonChoices": resolved_choices,
             "arcanes": request.get("arcanes"),
         },

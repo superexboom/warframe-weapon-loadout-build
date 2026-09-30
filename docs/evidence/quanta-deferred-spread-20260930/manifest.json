@@ -24,12 +24,28 @@
       "sha256": "7c866b222ba19b55dde984509c791ea0feb944312671cee1ad7fb289a2dc424d"
     },
     {
+      "path": "final-regression.txt",
+      "sha256": "c2e8b949849ba9d56734b717fdd84f5b3cbee1d318f37c572e480afed66983f8"
+    },
+    {
       "path": "import-check.json",
       "sha256": "d73adb342574090476809c09b361bdfbb5bc4256bbd48f1cfd7d03134c32c219"
     },
     {
       "path": "native-contact.json",
       "sha256": "75a8e8c342cc55e783c4d0bcf91292fb33d0cc8f5d0b3586e85f6b3af2dd63ef"
+    },
+    {
+      "path": "quanta-contact-ammo-native.json",
+      "sha256": "7c866b222ba19b55dde984509c791ea0feb944312671cee1ad7fb289a2dc424d"
+    },
+    {
+      "path": "quanta-contact-native.json",
+      "sha256": "7c866b222ba19b55dde984509c791ea0feb944312671cee1ad7fb289a2dc424d"
+    },
+    {
+      "path": "quanta-progenitor-probe.json",
+      "sha256": "afbc271d8fd8a7cc4e332506f7dc77575c2440c52ec5a05c8920ac6f4927e02f"
     },
     {
       "path": "reference-comparison.json",
