@@ -18,6 +18,7 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--acceptance',type=Path)
     parser.add_argument('--bake',type=Path)
+    parser.add_argument('--test-report',type=Path,action='append',default=[])
     args=parser.parse_args()
     if args.output.exists():
         parser.error('choose a new evidence directory')
@@ -39,7 +40,8 @@ def main():
                                ('decompiled-onos-mq-final',['140ef69d0.c']),
                                ('decompiled-canonical',['1415a16b0.c'])]:
         files.update({f'native/code/{name}':research/folder/name for name in native_names})
-    for folder in ['burston-completion-20261001','archgun-board-current-20261001','archgun-charge-verified-20261001',
+    for folder in ['burston-completion-20261001','burston-delivery-final-20261001',
+                   'archgun-board-current-20261001','archgun-charge-verified-20261001',
                    'archgun-charge-no-enervate-20261001','nonmelee-untransformed-current-20261001',
                    'incarnon-board-final2-20261001','latron-double-tap-20261001',
                    'incarnon-cycle-board-final-20261001','latron-compression-cycle-final-20261001']:
@@ -56,17 +58,25 @@ def main():
     burston=ROOT/'.local/reports/burston-completion-20261001'
     for name in ['case-0-request.json','case-1-request.json','wfsim-current-response.json']:
         files[f'comparisons/burston/{name}']=burston/name
+    burston_final=ROOT/'.local/reports/burston-delivery-final-20261001'
+    for source in burston_final.glob('case-*-request.json'):
+        files[f'comparisons/burston-final/{source.name}']=source
     source=ROOT/'.local/wfsim-live-20261001/source.json'
     files['reference-runtime.json']=source
     files['ui-desktop.png']=ROOT/'.local/reports/incarnon-ui-desktop-final-20261001.png'
     files['ui-mobile.png']=ROOT/'.local/reports/incarnon-ui-mobile-final-20261001.png'
-    for name in ['incarnon-completion-20261001-final4.xml']:
-        source=ROOT/'.local/reports'/name
+    test_reports=[ROOT/'.local/reports'/name for name in
+                  ['incarnon-completion-20261001-final4.xml','runtime-tail-final2-20261001.xml']]
+    test_reports.extend(args.test_report)
+    for source in test_reports:
         if source.is_file():
             suite=next(ET.parse(source).getroot().iter('testsuite'))
             result=dict(suite.attrib)
             result['failures']=[dict(classname=t.get('classname'),name=t.get('name')) for t in suite.iter('testcase') if t.find('failure') is not None]
-            (args.output/'tests.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
+            target=(args.output/'tests.json' if source.name=='incarnon-completion-20261001-final4.xml'
+                    else args.output/'tests'/(source.stem+'.json'))
+            target.parent.mkdir(parents=True,exist_ok=True)
+            target.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     for path,label in [(args.acceptance,'riven-search'),(args.bake,'cache-bake')]:
         if path:
             files.update({f'{label}/{p.name}':p for p in path.glob('*.json')})
