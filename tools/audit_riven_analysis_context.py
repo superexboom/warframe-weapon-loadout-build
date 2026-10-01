@@ -24,7 +24,22 @@ def request_for(name: str, scenario: dict) -> dict:
     stats.append(dict(code='3',value=abs(bases['3']*disposition*.757525),negative=True))
     return dict(weapon=raw['path'],disposition=disposition,stats=stats,profile='fast',
                 scenario=scenario,benchmarkTarget=dict(enemy=app._BENCHMARK_ENEMY_PATH,
-                    level=9999,steelPath=True,eximus=True,windowSeconds=30.,headshotChance=0.))
+                    level=9999,steelPath=True,eximus=True,windowSeconds=30.,
+                    headshotChance=float(scenario.get('headshotChance',0.))))
+
+
+def cycle_coverage_passed(name,request,replays):
+    required=(name=='Felarx' and request.get('scenario',{}).get('incarnonCycle')
+              and request.get('scenario',{}).get('headshotChance',0.)>0.)
+    return not required or (request.get('benchmarkTarget',{}).get('headshotChance',0.)>0.
+                           and all((replays.get(key) or {}).get('transforms',0)>0
+                                   for key in ('baseline','actual','optimal')))
+
+
+def case_reusable(row,request,inputs):
+    return (row.get('inputFingerprint')==inputs and row.get('passed')
+            and row.get('request')==request
+            and cycle_coverage_passed(row.get('name'),request,row.get('replays') or {}))
 
 
 def replay_returned(request: dict, result: dict, build: dict) -> dict:
@@ -86,13 +101,13 @@ def main() -> int:
     for index,(name,scenario) in enumerate(cases):
         tag=f'{index:02d}-{name.replace(" ","-").lower()}'
         output=args.output/(tag+'.json')
+        request=request_for(name,scenario)
         if output.exists():
             row=json.loads(output.read_text(encoding='utf-8'))
-            if row.get('inputFingerprint')==app._analysis_inputs_fingerprint() and row.get('passed'):
+            if case_reusable(row,request,app._analysis_inputs_fingerprint()):
                 summary.append(row)
                 continue
             ap.error('existing case has another context or failure; choose a new output')
-        request=request_for(name,scenario)
         started=time.perf_counter()
         row=dict(name=name,request=request,inputFingerprint=app._analysis_inputs_fingerprint())
         print('search',tag,flush=True)
@@ -101,6 +116,8 @@ def main() -> int:
             row['analysis']=result
             row['replays']={key:replay_returned(request,result,result[key]) for key in ('baseline','actual','optimal')}
             row['passed']=all(r['passed'] for r in row['replays'].values())
+            row['cycleCoveragePassed']=cycle_coverage_passed(name,request,row['replays'])
+            row['passed']=row['passed'] and row['cycleCoveragePassed']
             if not scenario:
                 warm=app.analyze_payload(request)
                 row['warmAnalysis']=warm
