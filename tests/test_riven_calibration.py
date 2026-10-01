@@ -202,7 +202,7 @@ class ContextContractTests(unittest.TestCase):
         self.assertGreater(gain["gainPercent"], 0.0)
         self.assertGreater(gain["value"], gain["baseValue"])
 
-    def test_double_tap_is_visible_but_fail_closed(self) -> None:
+    def test_double_tap_is_visible_and_contribution_is_computed(self) -> None:
         path = "/Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod"
         self.assertIn(path, app.MANUAL_MODS_BY_PATH)
         result = app.mod_gains_payload(
@@ -214,8 +214,10 @@ class ContextContractTests(unittest.TestCase):
             }
         )
         gain = result["gains"][path]
-        self.assertIsNone(gain["gainPercent"])
-        self.assertEqual(gain["reason"], "event-mechanic-unmodeled")
+        self.assertGreater(gain["gainPercent"], 0.0)
+        self.assertGreater(gain["value"], gain["baseValue"])
+        self.assertEqual(gain["metric"], "killsPerMinute")
+        self.assertNotEqual(gain.get("reason"), "event-mechanic-unmodeled")
 
 
 if __name__ == "__main__":
