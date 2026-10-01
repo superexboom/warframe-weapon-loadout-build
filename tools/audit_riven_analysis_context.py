@@ -77,6 +77,7 @@ def main() -> int:
         cases += [('Miter',{}),('Laetum',{}),('Strun Prime',{}),('Zylok Prime',{}),
                   ('Sicarus Prime',{'headshotChance':0.}),('Gorgon',{}),('Synoid Gammacor',{}),
                   ('Dual Toxocyst',{'combatState':{'abilityUses':20,'energyPool':300}})]
+        cases += [('Felarx',{}),('Felarx',{'incarnonCycle':True,'headshotChance':1.})]
     if args.limit:
         cases=cases[:args.limit]
     if args.weapons:

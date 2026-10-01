@@ -7,7 +7,7 @@ import app
 from wfarsenal.damage import Scenario, ModEffect, apply_mods
 from wfarsenal.manual_combat import prepare
 from wfarsenal.combat_replay import replay
-from tests.test_combat_replay import target
+from tests.test_combat_replay import guard_replay_progress, target
 
 
 def weapon(name):
@@ -116,6 +116,20 @@ def test_felarx_mode_switch_only_grants_rounds_missing_from_base_magazine():
     assert [(e['source'],e['form'],e['rounds']) for e in first_two] == [('mode-switch','incarnon',1.),('mode-switch','base',1.)]
     branch = next(b for t in w['incarnon']['tiers'] for b in t['branches'] if b['id']=='3-3')
     assert not app.optimizer._branch_effects(branch)[1]
+
+
+def test_fixed_felarx_incarnon_runs_beyond_first_charge_pool(monkeypatch):
+    guard_replay_progress(monkeypatch)
+    w=weapon('Felarx')
+    w['isIncarnonForm']=True
+    combat=prepare(dict(weapon=w,fire_mode=1,effects=[],scenario=Scenario(trigger_policy='emergent')),
+                   [],[],incarnon_choices={'tier3':'3-3'})
+    st,_=combat['resolve']('selected',{},0)
+    result=replay(st,target(),attacks_per_second=st.fire_rate,window_seconds=60.,
+                  combat=combat,trigger_sources=combat['trigger_sources'])
+    assert result['shots']>st.magazine
+    assert result['reloads']>0 and result['transforms']==0
+    assert result['reloadShellEvents']==[]
 
 
 @pytest.mark.parametrize('name,branch_id,source_type,target_type,fraction,cap', [

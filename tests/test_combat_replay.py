@@ -1,5 +1,6 @@
 from dataclasses import replace
 from copy import deepcopy
+from types import SimpleNamespace
 import pytest
 import app
 from wfarsenal.damage import ModdedStats, mod_effects, arcane_effects, apply_mods
@@ -43,6 +44,21 @@ def run(st=None, tg=None, **kw):
     )
     args.update(kw)
     return replay(st, tg or target(), **args)
+
+
+def guard_replay_progress(monkeypatch):
+    queue=replay.__globals__['heapq']
+    original=queue.heappop
+    last_time=None
+    repeated=0
+    def pop(heap):
+        nonlocal last_time,repeated
+        event=original(heap)
+        repeated=repeated+1 if event[0]==last_time else 0
+        last_time=event[0]
+        assert repeated<100, 'events repeated without advancing simulation time'
+        return event
+    monkeypatch.setitem(replay.__globals__,'heapq',SimpleNamespace(heappop=pop,heappush=queue.heappush))
 
 
 def test_negative_duration_refresh_still_ticks_and_stacks():
@@ -288,6 +304,22 @@ def test_selected_incarnon_ignores_ammo_efficiency():
     combat = {"resolve": lambda *args: (st, None), "selectedIncarnon": True}
     r = run(st, combat=combat, window_seconds=1.0)
     assert r["timeline"][-1]["ammo"] == 590.0
+
+
+@pytest.mark.parametrize('reload_time,shots', [(0.,5),(1.,4)])
+def test_selected_incarnon_pool_refills_without_base_shell_reload(monkeypatch,reload_time,shots):
+    guard_replay_progress(monkeypatch)
+    st=stats(fire_rate=1.,magazine=2.,reload_time=reload_time,status_chance=0.)
+    def resolve(*args):
+        return st,None
+    combat={'resolve':resolve,'selectedIncarnon':True,
+            'shellReload':{'start':.8,'perShell':.4,'end':.5,'modeSwitchLoadsShell':True}}
+    result=run(st,combat=combat,window_seconds=5.)
+    reference=run(st,combat={'resolve':resolve,'selectedIncarnon':True},window_seconds=5.)
+    assert result['shots']==reference['shots']==shots
+    assert result['totalWindowDamage']==pytest.approx(reference['totalWindowDamage'])
+    assert result['reloadShellEvents']==[]
+    assert result['timeline'][-1]['ammo']==reference['timeline'][-1]['ammo']
 
 
 def test_mod_gain_cache_changes_with_ads():

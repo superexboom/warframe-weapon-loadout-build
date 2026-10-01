@@ -13,3 +13,4 @@ docs/evidence/projectile-lifecycle-20260930/** -text whitespace=cr-at-eol
 docs/evidence/incarnon-riven-sync-20261001/** -text whitespace=cr-at-eol
 docs/evidence/runtime-completion-20261001/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
 docs/evidence/runtime-completion-v21-20261001/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+docs/evidence/felarx-reload-loop-20261001/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

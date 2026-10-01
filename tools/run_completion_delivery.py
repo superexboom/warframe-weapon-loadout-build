@@ -41,9 +41,9 @@ def main():
                  '--fire-modes','--report',str(args.output/(profile+('-shards' if shards else '')+'.json'))]
         return command+(['--shards-only'] if shards else [])
 
-    launch('acceptance',[sys.executable,'-u','tools/audit_riven_analysis_context.py','--extra-weapons','--output',str(args.acceptance)])
-    launch('fast',bake('fast',10))
-    launch('standard-shards',bake('standard',6,True))
+    launch('regression',[sys.executable,'-m','pytest','tests','-q',
+                         '--junitxml='+str(args.output/'regression.xml')])
+    baking=False
     publishing=False
     try:
         while True:
@@ -59,6 +59,14 @@ def main():
             if failed:
                 status.update(status='failed',failedJobs=failed)
                 return 1
+            if status['jobs']['regression']['status']=='complete' and not baking:
+                launch('acceptance',[sys.executable,'-u','tools/audit_riven_analysis_context.py','--extra-weapons','--output',str(args.acceptance)])
+                launch('fast',bake('fast',10))
+                launch('standard-shards',bake('standard',6,True))
+                baking=True
+            if not baking:
+                time.sleep(5)
+                continue
             if status['jobs']['fast']['status']=='complete' and not publishing:
                 child=children['standard-shards']
                 if child.poll() is None:
@@ -67,13 +75,13 @@ def main():
                     logs['standard-shards'].close()
                 launch('standard',bake('standard',12))
                 publishing=True
-            if publishing and all(status['jobs'][name]['status']=='complete' for name in ('acceptance','fast','standard')):
+            if publishing and all(status['jobs'][name]['status']=='complete' for name in ('regression','acceptance','fast','standard')):
                 command=[sys.executable,'tools/validate_baked_statics.py','--bake',str(args.output),
                          '--output',str(args.output/'validation.json')]
                 result=subprocess.run(command,cwd=ROOT,env=env,capture_output=True,text=True)
                 (args.output/'validation.log').write_text(result.stdout+result.stderr,encoding='utf-8')
                 rows=json.loads((args.acceptance/'summary.json').read_bytes())
-                passed=result.returncode==0 and len(rows)>=15 and all(r.get('passed') and r.get('inputFingerprint')==inputs for r in rows)
+                passed=result.returncode==0 and len(rows)>=17 and all(r.get('passed') and r.get('inputFingerprint')==inputs for r in rows)
                 status.update(status='complete' if passed else 'failed-final-validation',acceptanceCases=len(rows),
                               finishedAt=datetime.now(timezone.utc).isoformat())
                 return int(not passed)

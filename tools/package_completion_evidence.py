@@ -65,15 +65,24 @@ def main():
     files['reference-runtime.json']=source
     files['ui-desktop.png']=ROOT/'.local/reports/incarnon-ui-desktop-final-20261001.png'
     files['ui-mobile.png']=ROOT/'.local/reports/incarnon-ui-mobile-final-20261001.png'
+    files['diagnostics/felarx-reload-loop-before.json']=ROOT/'.local/research/felarx-reload-loop-20261001/snapshot.json'
+    files['diagnostics/felarx-reload-loop-profile.txt']=ROOT/'.local/reports/felarx-fast-tail-profile-20261001.txt'
     test_reports=[ROOT/'.local/reports'/name for name in
                   ['incarnon-completion-20261001-final4.xml','runtime-tail-final2-20261001.xml']]
     test_reports.extend(args.test_report)
+    primary_report=test_reports[0]
+    if args.bake:
+        current_regression=args.bake/'regression.xml'
+        test_reports.append(current_regression)
+        if current_regression.is_file():
+            primary_report=current_regression
     for source in test_reports:
         if source.is_file():
             suite=next(ET.parse(source).getroot().iter('testsuite'))
             result=dict(suite.attrib)
+            result['sourceReport']=str(source)
             result['failures']=[dict(classname=t.get('classname'),name=t.get('name')) for t in suite.iter('testcase') if t.find('failure') is not None]
-            target=(args.output/'tests.json' if source.name=='incarnon-completion-20261001-final4.xml'
+            target=(args.output/'tests.json' if source==primary_report
                     else args.output/'tests'/(source.stem+'.json'))
             target.parent.mkdir(parents=True,exist_ok=True)
             target.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')

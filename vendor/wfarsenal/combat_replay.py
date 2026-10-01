@@ -1085,7 +1085,8 @@ def replay(
                     # fills to capacity and cannot bank its remaining rounds.
                     was_empty = ammo <= 1e-9
                     before_reload_ammo = ammo
-                    if not shell_reload:
+                    # Fixed Incarnon pools do not run the base shell-loading loop.
+                    if not (shell_reload and magazine_form):
                         ammo = active.magazine + min(ammo, 0.0)
                     if was_empty:
                         signal("on-reload-empty", t)
