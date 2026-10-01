@@ -12,6 +12,14 @@ import time
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
+MAX_BAKE_WORKERS=8
+
+
+def limited_workers(value) -> int:
+    count=int(value)
+    if count<1:
+        raise ValueError('workers must be positive')
+    return min(count,MAX_BAKE_WORKERS)
 
 
 def write(path: Path, value: dict) -> None:
@@ -44,7 +52,7 @@ def main() -> int:
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--acceptance',type=Path,required=True)
-    ap.add_argument('--workers',type=int,default=4)
+    ap.add_argument('--workers',type=limited_workers,default=4,help='Parallel workers, capped at 8')
     args=ap.parse_args()
     import app
     inputs=app._analysis_inputs_fingerprint()

@@ -9,22 +9,41 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+import xml.etree.ElementTree as ET
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-from tools.run_riven_acceptance_bake import stop_child,write
+from tools.run_riven_acceptance_bake import MAX_BAKE_WORKERS,stop_child,write
+
+
+def cached_regression(output,inputs,version):
+    try:
+        previous=json.loads((output/'delivery-status.json').read_bytes())
+        row=previous['jobs']['regression']
+        suites=list(ET.parse(output/'regression.xml').getroot().iter('testsuite'))
+        passed=(previous.get('inputs')==inputs and previous.get('cacheVersion')==version
+                and row.get('status')=='complete' and row.get('exitCode')==0
+                and suites and sum(int(s.get('tests',0)) for s in suites)>0
+                and all(int(s.get('failures',0))==0 and int(s.get('errors',0))==0 for s in suites))
+        return {**row,'reused':True} if passed else None
+    except (OSError,ValueError,KeyError,TypeError,ET.ParseError):
+        return None
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--acceptance',type=Path,required=True)
+    parser.add_argument('--resume',action='store_true',help='Reuse a passed regression with matching inputs and version')
     args=parser.parse_args()
     import app
     inputs=app._analysis_inputs_fingerprint()
+    previous_regression=cached_regression(args.output,inputs,app.ANALYSIS_STATICS_CACHE_VERSION) if args.resume else None
+    if args.resume and previous_regression is None:
+        parser.error('resume requires a passed regression with matching inputs and cache version')
     args.output.mkdir(parents=True,exist_ok=True)
     status=dict(status='running',pid=os.getpid(),inputs=inputs,cacheVersion=app.ANALYSIS_STATICS_CACHE_VERSION,
-                startedAt=datetime.now(timezone.utc).isoformat(),jobs={})
+                startedAt=datetime.now(timezone.utc).isoformat(),workerLimit=MAX_BAKE_WORKERS,jobs={})
     path=args.output/'delivery-status.json'
     env={**os.environ,'WF_ANALYZER_SERIAL':'1','PYTHONUNBUFFERED':'1'}
     children={}
@@ -41,8 +60,12 @@ def main():
                  '--fire-modes','--report',str(args.output/(profile+('-shards' if shards else '')+'.json'))]
         return command+(['--shards-only'] if shards else [])
 
-    launch('regression',[sys.executable,'-m','pytest','tests','-q',
-                         '--junitxml='+str(args.output/'regression.xml')])
+    if previous_regression:
+        status['jobs']['regression']=previous_regression
+        write(path,status)
+    else:
+        launch('regression',[sys.executable,'-m','pytest','tests','-q',
+                             '--junitxml='+str(args.output/'regression.xml')])
     baking=False
     publishing=False
     try:
@@ -61,8 +84,10 @@ def main():
                 return 1
             if status['jobs']['regression']['status']=='complete' and not baking:
                 launch('acceptance',[sys.executable,'-u','tools/audit_riven_analysis_context.py','--extra-weapons','--output',str(args.acceptance)])
-                launch('fast',bake('fast',10))
-                launch('standard-shards',bake('standard',6,True))
+                # Reserve one compute slot for the serial search acceptance.
+                fast_workers=MAX_BAKE_WORKERS//2
+                launch('fast',bake('fast',fast_workers))
+                launch('standard-shards',bake('standard',MAX_BAKE_WORKERS-fast_workers-1,True))
                 baking=True
             if not baking:
                 time.sleep(5)
@@ -73,7 +98,8 @@ def main():
                     stop_child(child)
                     status['jobs']['standard-shards'].update(status='resumed-with-more-workers')
                     logs['standard-shards'].close()
-                launch('standard',bake('standard',12))
+                reserved=int(status['jobs']['acceptance']['status']=='running')
+                launch('standard',bake('standard',MAX_BAKE_WORKERS-reserved))
                 publishing=True
             if publishing and all(status['jobs'][name]['status']=='complete' for name in ('regression','acceptance','fast','standard')):
                 command=[sys.executable,'tools/validate_baked_statics.py','--bake',str(args.output),

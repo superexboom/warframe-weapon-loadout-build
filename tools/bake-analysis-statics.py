@@ -27,6 +27,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from tools.run_riven_acceptance_bake import MAX_BAKE_WORKERS, limited_workers
 
 SHARD_ROOT = ROOT / ".local" / "cache"
 SHARD_SCHEMA_VERSION = 3
@@ -202,7 +203,9 @@ def _supported_bake_modes(raw_weapon: dict) -> list[int]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", default="standard", choices=["fast", "standard", "deep"])
-    parser.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 4) - 1))
+    parser.add_argument("--workers", type=limited_workers,
+                        default=min(MAX_BAKE_WORKERS,max(1,(os.cpu_count() or 4)-1)),
+                        help="Parallel workers, capped at 8")
     parser.add_argument("--weapon", action="append", default=None, help="只烘焙指定武器（可多次）")
     parser.add_argument("--limit", type=int, default=None, help="只烘焙前 N 把（冒烟用）")
     parser.add_argument("--fire-modes", action="store_true", help="烘焙全部开火模式（默认与普通分析同口径：灵化取末模式，其余取主模式）")

@@ -1,6 +1,9 @@
 import json
 from pathlib import Path
 import importlib.util
+import xml.etree.ElementTree as ET
+
+import pytest
 
 import app
 
@@ -51,3 +54,36 @@ def test_bake_excludes_inherited_ranged_melee_and_zero_damage_modes():
         {'behaviorKind':'auxiliary-melee','damage':{'types':{'DT_IMPACT':40.}}},
         {'damage':{'types':{'DT_IMPACT':0.}}}])
     assert module._supported_bake_modes(weapon)==[0]
+
+
+def test_bake_worker_limit_applies_to_default_and_explicit_cli(monkeypatch,tmp_path):
+    spec=importlib.util.spec_from_file_location('bake_worker_limit',app.ROOT/'tools/bake-analysis-statics.py')
+    module=importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    monkeypatch.setattr(module.os,'cpu_count',lambda:64)
+    monkeypatch.setattr(module,'_catalog_weapons',lambda:[])
+    monkeypatch.setattr(module,'SHARD_ROOT',tmp_path)
+    for requested in ([],['--workers','64'],['--workers','3']):
+        report=tmp_path/'plan.json'
+        monkeypatch.setattr(module.sys,'argv',['bake','--dry-run','--report',str(report),*requested])
+        assert module.main()==0
+        assert json.loads(report.read_text())['workers']==(3 if requested==['--workers','3'] else 8)
+    monkeypatch.setattr(module.sys,'argv',['bake','--workers','0','--dry-run'])
+    with pytest.raises(SystemExit):
+        module.main()
+
+
+def test_delivery_resume_requires_current_successful_regression(tmp_path):
+    from tools.run_completion_delivery import cached_regression
+    report=dict(inputs='current',cacheVersion=14,jobs={'regression':dict(status='complete',exitCode=0)})
+    status_path=tmp_path/'delivery-status.json'
+    status_path.write_text(json.dumps(report))
+    suite=ET.Element('testsuite',tests='10',failures='0',errors='0')
+    xml_path=tmp_path/'regression.xml'
+    ET.ElementTree(suite).write(xml_path)
+    assert cached_regression(tmp_path,'current',14)['reused']
+    assert cached_regression(tmp_path,'old',14) is None
+    assert cached_regression(tmp_path,'current',13) is None
+    suite.set('failures','1')
+    ET.ElementTree(suite).write(xml_path)
+    assert cached_regression(tmp_path,'current',14) is None
