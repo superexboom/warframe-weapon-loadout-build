@@ -8764,7 +8764,7 @@ function appendIncarnonDetails(copy, option) {
     return;
   }
   for (const detail of option.details) {
-    const line = create("small", "incarnon-detail", detail.text);
+    const line = create("small", "incarnon-detail", String(detail.text || "").replace(/[。.]:?：/g, "："));
     if (detail.calculation) {
       line.append(create("em", detail.modeled ? "is-modeled" : "is-unmodeled", detail.calculation));
     }
