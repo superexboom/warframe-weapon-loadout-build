@@ -35,6 +35,16 @@
 
 ## 最后补充批次
 
+- 长批次已交接给后台监督器 `tools/run_completion_delivery.py`，状态写入
+  `.local/reports/riven-full-run-v22-20261001/delivery-status.json`。续跑时使用
+  当前指纹分片，不重复烘焙已经完成的模式。fast 完成后扩大 standard 到
+  12 workers 并顺序发布，最后执行 `tools/validate_baked_statics.py`。
+- 当前对话的每小时自动检查 `wf-riven` 已启用，负责实际失败处理、完成后
+  打包最终证据、更新报告和推送；完成收尾后停用。报告此刻仍不将全量缓存
+  勾选为完成。
+- Double Tap 官方卡图、背景、alpha 和四等级描述已补齐，569 张 MOD 索引
+  指向 388 个不同原始图；空战 UI 的 53 张可用 MOD 卡图文件全部存在。
+
 - 首轮完整实现提交 `08a982a` 已推送到 `codex/riven-anomaly-fix-20260922`，
   推送后本地/远端差异为 0/0，检出计算指纹未变化。
 - 最后公开循环样本发现 Primary Compression 的灵化配置未绑定。已从
