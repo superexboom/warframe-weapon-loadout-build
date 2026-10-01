@@ -77,9 +77,16 @@ def main():
             profile.update(allowIncarnon=True,directTotal=sum(damage['types'].values()),radial=radial)
             if damage.get('projectile'):
                 profile['projectile']=damage['projectile']
+            reference_path=args.wfsim/incarnation['source']
+            attack=yaml.safe_load(reference_path.read_text(encoding='utf-8')).get('attack') or {}
+            compression=attack.get('compression')
+            if compression:
+                profile['compression']={**compression,'radius':radial['radius'],'takesRadiusMods':True}
+                profile['compressionSourceCommit']=revision
+                profile['compressionSourceSha256']=hashlib.sha256(reference_path.read_bytes()).hexdigest()
             if mode['trigger']=='/Lotus/Language/Menu/Loadout_TriggerCharge' and not mode.get('chargeTime'):
                 path=args.wfsim/incarnation['source']
-                seconds=(yaml.safe_load(path.read_text(encoding='utf-8')).get('attack') or {}).get('charge_seconds')
+                seconds=attack.get('charge_seconds')
                 if seconds:
                     profile['charge']=dict(seconds=seconds,source='WFSim-charge-duration-native-default-not-serialized',revision=revision)
             path=index._path_to_file(source).with_suffix('.txt')

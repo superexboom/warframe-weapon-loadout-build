@@ -45,6 +45,16 @@ def test_unknown_compression_weapon_never_guesses_a_multiplier():
     assert not arcane_effects(malformed,rank=5)
 
 
+@pytest.mark.parametrize('name',['Latron Prime','Latron Wraith','Braton Prime','Strun Prime'])
+def test_incarnon_compression_uses_its_own_attack_profile(name):
+    original=weapon(name)
+    selected,_=app.optimizer._select_fire_mode(original,1,weapon_type=app.optimizer._weapon_type(None,original))
+    plain=apply_mods(selected,[],scenario=Scenario(aiming=True))
+    enhanced=apply_mods(selected,arcane_effects(compression(),rank=5),scenario=Scenario(aiming=True))
+    assert 'primary-compression-weapon-profile-unverified' not in enhanced.unsupported
+    assert enhanced.total_damage>plain.total_damage
+
+
 def test_compression_adds_profile_joins_base_bucket():
     w=weapon('Kuva Ogris')
     w={**w,'__compressionProfile__':dict(radius=5.,stacking='adds')}

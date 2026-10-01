@@ -28,7 +28,8 @@ def main():
            'onos-schema-symbols.json','shield-schema-verification.json','mq-proxy-scale-callers.json',
            'charged-delegates-final-20261001.json','co-reference-delegates-final-20261001.json',
            'native-condition-tail-final-20261001.json','runtime-links-tail-20261001.json',
-           'incarnon-radials-final-20261001.json','zylok-profiles-final-20261001.json','tail-native-bindings.json']
+           'incarnon-radials-final-20261001.json','incarnon-radials-compression-final-20261001.json',
+           'zylok-profiles-final-20261001.json','tail-native-bindings.json']
     files={f'native/{name}':research/name for name in names}
     for folder in ['ir','actor-ir','energy-ir','stat-conversion-ir','latron-ir','utility-ir','tail-ir-v2','double-tap-ir']:
         files.update({f'luau/{folder}/{p.name}':p for p in (research/folder).glob('*.txt')})
@@ -40,7 +41,8 @@ def main():
         files.update({f'native/code/{name}':research/folder/name for name in native_names})
     for folder in ['burston-completion-20261001','archgun-board-current-20261001','archgun-charge-verified-20261001',
                    'archgun-charge-no-enervate-20261001','nonmelee-untransformed-current-20261001',
-                   'incarnon-board-final2-20261001','latron-double-tap-20261001']:
+                   'incarnon-board-final2-20261001','latron-double-tap-20261001',
+                   'incarnon-cycle-board-final-20261001','latron-compression-cycle-final-20261001']:
         source=ROOT/'.local/reports'/folder/'comparison.json'
         if source.is_file():
             payload=json.loads(source.read_bytes())

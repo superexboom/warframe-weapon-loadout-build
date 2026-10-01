@@ -208,6 +208,7 @@ def main() -> int:
     parser.add_argument("--fire-modes", action="store_true", help="烘焙全部开火模式（默认与普通分析同口径：灵化取末模式，其余取主模式）")
     parser.add_argument('--report', type=Path, help='写入覆盖与失败报告，运行时逐项更新')
     parser.add_argument('--dry-run', action='store_true', help='仅列出任务和当前分片覆盖')
+    parser.add_argument('--shards-only',action='store_true',help='只生成并校验分片；不发布主缓存，允许不同档位并行准备')
     args = parser.parse_args()
 
     import app
@@ -367,6 +368,10 @@ def main() -> int:
         report('failed-inputs-changed')
         print('inputs changed during bake; refusing to publish cache')
         return 1
+    if args.shards_only:
+        report('partial' if failed else 'shards-complete')
+        print(f'verified {len(expected_shards)-len(missing)}/{len(expected_shards)} shards; main cache unchanged')
+        return int(bool(failed))
     app.ANALYSIS_STATICS_CACHE.clear()
     app.ANALYSIS_STATICS_CACHE.update(merged)
     app.ANALYSIS_STATICS_CACHE["__dirty__"] = True

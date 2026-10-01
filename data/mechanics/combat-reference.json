@@ -3052,7 +3052,16 @@
             "crit_multiplier": 3.3,
             "status_chance": 0.56
           },
-          "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/MiterAltFireProjectile"
+          "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/MiterAltFireProjectile",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 3,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "a2859b33d3e45c0e8b74cbb5eecd65a253de12a92c1497a9ffe390123f506738"
         }
       }
     },
@@ -3567,7 +3576,16 @@
             ],
             "impact_delay_seconds": 0.76999998
           },
-          "projectile": "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/GorgonPrismaAltProjectile"
+          "projectile": "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/GorgonPrismaAltProjectile",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 5,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "4268bd2c414583df140a284115b4baec20443cba47ccb4a64072d7bcfa62172c"
         }
       }
     },
@@ -3592,7 +3610,16 @@
             ],
             "impact_delay_seconds": 0.89999998
           },
-          "projectile": "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/GorgonWraithAltProjectile"
+          "projectile": "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/GorgonWraithAltProjectile",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 5,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "7d6d25e453fd941b184fdc0fb93b5c6431c38ae49c93935d468f5bd4c55c14cf"
         }
       }
     },
@@ -3618,7 +3645,16 @@
               "PT_KNOCKBACK"
             ]
           },
-          "projectile": "/Lotus/Weapons/MK1Series/MkIStrunAltProjectile"
+          "projectile": "/Lotus/Weapons/MK1Series/MkIStrunAltProjectile",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 4,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "9dbeda182ca39a7b439d5735821d1a5e96ef6cec1cbc4bbf485fd3700e176fbf"
         }
       }
     },
@@ -3694,7 +3730,16 @@
               "PT_KNOCKBACK"
             ]
           },
-          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeStrun/PrimeStrunAltProjectile"
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeStrun/PrimeStrunAltProjectile",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 4,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "f0d0d99a72261985c0984f132a9bd797e1e6da8c5984e0c1ac0aca8ca28ce5e7"
         }
       }
     },
@@ -3718,7 +3763,17 @@
               "PT_CHILLED"
             ]
           },
-          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/IncarnonAdaptorPrimeVectis/IncarnonVectisPrimeProj"
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/IncarnonAdaptorPrimeVectis/IncarnonVectisPrimeProj",
+          "compression": {
+            "effectiveness": 0.04,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "reads_radius_m": 0.1,
+            "radius": 6.6999998,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "c76aee1946e22f2c9ebc8d481db18db516d21d167687308f24cb4e65a6192faa"
         }
       }
     },
@@ -3740,7 +3795,16 @@
             "crit_multiplier": 3.4000001,
             "status_chance": 0.28
           },
-          "projectile": "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatronIncarnonAltFireWaveProj"
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatronIncarnonAltFireWaveProj",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 4,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "de65ad991eed23da318ace79e7ac814fb5ededc8383f80d08989f26abcaa7cc6"
         }
       }
     },
@@ -3760,7 +3824,16 @@
             "crit_multiplier": 2,
             "status_chance": 0.30000001,
             "falloff": 0.1
-          }
+          },
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "adds",
+            "radius_calculation": "snapshot",
+            "radius": 3,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "4c8e325163724b410894b70e9b308697df92e63c986d251087bf401f48e78f15"
         }
       }
     },
@@ -3785,7 +3858,16 @@
             ],
             "impact_delay_seconds": 1.08
           },
-          "projectile": "/Lotus/Weapons/Tenno/Rifle/GorgonAltProjectile"
+          "projectile": "/Lotus/Weapons/Tenno/Rifle/GorgonAltProjectile",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 5,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "86ff6859c7506e1a3f135282760e543925c11238b66fbe62af3239d843dfde69"
         }
       }
     },
@@ -3807,7 +3889,16 @@
             "crit_multiplier": 3.4000001,
             "status_chance": 0.30000001
           },
-          "projectile": "/Lotus/Weapons/Tenno/Rifle/PrimeLatronIncarnonAltFireWaveProj"
+          "projectile": "/Lotus/Weapons/Tenno/Rifle/PrimeLatronIncarnonAltFireWaveProj",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 4,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "643cb60928b2d300921358a503bea8547f3a59ba18c5b998583946573da1a238"
         }
       }
     },
@@ -3827,7 +3918,16 @@
             "crit_multiplier": 2,
             "status_chance": 0.12,
             "falloff": 0.1
-          }
+          },
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "adds",
+            "radius_calculation": "snapshot",
+            "radius": 3,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "f02d50a15edb48ebb2f9ea6f9d0b7f9ac88c44a4b5887467267c30865c6f9c1a"
         }
       }
     },
@@ -3849,7 +3949,16 @@
             "crit_multiplier": 3.0,
             "status_chance": 0.23999999
           },
-          "projectile": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonAltFireWaveProj"
+          "projectile": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonAltFireWaveProj",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 4,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "a3b630075e746007c20118c40904ecb5c4afd4276ecbeb96131cd854f4fae266"
         }
       }
     },
@@ -3869,7 +3978,16 @@
             "crit_multiplier": 2,
             "status_chance": 0.1,
             "falloff": 0.1
-          }
+          },
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "adds",
+            "radius_calculation": "snapshot",
+            "radius": 3,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "37cee96bca942523ab206ee6243d98e39ce36f61257433494e706b3752a4238e"
         }
       }
     },
@@ -3893,7 +4011,17 @@
               "PT_CHILLED"
             ]
           },
-          "projectile": "/Lotus/Weapons/Tenno/Rifle/IncarnonTennoSniperRifleProj"
+          "projectile": "/Lotus/Weapons/Tenno/Rifle/IncarnonTennoSniperRifleProj",
+          "compression": {
+            "effectiveness": 0.04,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "reads_radius_m": 0.1,
+            "radius": 6.6999998,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "30ed0a2cf522220c52f3e37bcf66c342d570d1df492dc2a9ad619745758ef5b9"
         }
       }
     },
@@ -3913,7 +4041,16 @@
             "crit_multiplier": 2,
             "status_chance": 0.22,
             "falloff": 0.1
-          }
+          },
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "adds",
+            "radius_calculation": "snapshot",
+            "radius": 3,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "8de81c510134dcfdd4c68cb88a72ab8486ec711853f8cf98d213669154d068df"
         }
       }
     },
@@ -3939,7 +4076,16 @@
               "PT_KNOCKBACK"
             ]
           },
-          "projectile": "/Lotus/Weapons/Tenno/Shotgun/StrunAltProjectile"
+          "projectile": "/Lotus/Weapons/Tenno/Shotgun/StrunAltProjectile",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 4,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "a742d95014597bf3c24402967ccb7653d059e11c208cce8a10c0800ce4961f8f"
         }
       }
     },
@@ -3965,7 +4111,16 @@
               "PT_KNOCKBACK"
             ]
           },
-          "projectile": "/Lotus/Weapons/Tenno/Shotgun/StrunVandalAltProjectile"
+          "projectile": "/Lotus/Weapons/Tenno/Shotgun/StrunVandalAltProjectile",
+          "compression": {
+            "effectiveness": 1.0,
+            "stacking": "multiplies",
+            "radius_calculation": "snapshot",
+            "radius": 4,
+            "takesRadiusMods": true
+          },
+          "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+          "compressionSourceSha256": "2bde7d996800c3ec942d57138efdeafde37494b5899653667250b4040d26fc2f"
         }
       }
     },
