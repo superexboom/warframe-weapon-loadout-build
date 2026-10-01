@@ -41,6 +41,7 @@ def main():
                                ('decompiled-canonical',['1415a16b0.c'])]:
         files.update({f'native/code/{name}':research/folder/name for name in native_names})
     for folder in ['burston-completion-20261001','burston-delivery-final-20261001',
+                   'burston-delivery-v23-20261002',
                    'archgun-board-current-20261001','archgun-charge-verified-20261001',
                    'archgun-charge-no-enervate-20261001','nonmelee-untransformed-current-20261001',
                    'incarnon-board-final2-20261001','latron-double-tap-20261001',
@@ -61,6 +62,8 @@ def main():
     burston_final=ROOT/'.local/reports/burston-delivery-final-20261001'
     for source in burston_final.glob('case-*-request.json'):
         files[f'comparisons/burston-final/{source.name}']=source
+    for source in (ROOT/'.local/reports/burston-delivery-v23-20261002').glob('case-*-request.json'):
+        files[f'comparisons/burston-v23/{source.name}']=source
     source=ROOT/'.local/wfsim-live-20261001/source.json'
     files['reference-runtime.json']=source
     files['ui-desktop.png']=ROOT/'.local/reports/incarnon-ui-desktop-final-20261001.png'
