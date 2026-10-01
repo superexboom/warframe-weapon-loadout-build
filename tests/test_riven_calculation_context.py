@@ -36,4 +36,4 @@ def test_build_evaluation_scenario_preserves_extended_fields(monkeypatch):
     scenario=optimizer._requested_scenario({'scenario':{'distance':10.,'cloaked':True,'nearestEnemyDistance':3.,'comboTier':2}},'killsPerMinute')
     fields=optimizer._scenario_context(scenario)
     assert fields=={'aiming':False,'incarnonCycle':False,'heavyAttack':False,'triggerPolicy':'emergent','distance':10.,'cloaked':True,'nearestEnemyDistance':3.,'comboTier':2,
-                    'detonationDelaySeconds':0., 'detonationBatchSize':1}
+                    'detonationDelaySeconds':0., 'detonationBatchSize':1, 'combatState':{}}

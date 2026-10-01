@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Torid",
+    "passed": true,
+    "inputFingerprint": "d37888967f467449",
+    "elapsedSeconds": 589.9700632999884,
+    "error": null
+  },
+  {
+    "name": "Torid",
+    "passed": true,
+    "inputFingerprint": "d37888967f467449",
+    "elapsedSeconds": 396.75771559996065,
+    "error": null
+  },
+  {
+    "name": "Talons",
+    "passed": true,
+    "inputFingerprint": "d37888967f467449",
+    "elapsedSeconds": 194.8492164000054,
+    "error": null
+  },
+  {
+    "name": "Fulmin Prime",
+    "passed": true,
+    "inputFingerprint": "d37888967f467449",
+    "elapsedSeconds": 57.370676499966066,
+    "error": null
+  },
+  {
+    "name": "Arca Plasmor",
+    "passed": true,
+    "inputFingerprint": "d37888967f467449",
+    "elapsedSeconds": 62.0614783000201,
+    "error": null
+  },
+  {
+    "name": "Dera Vandal",
+    "passed": true,
+    "inputFingerprint": "d37888967f467449",
+    "elapsedSeconds": 294.7232644999749,
+    "error": null
+  },
+  {
+    "name": "Scourge Prime",
+    "passed": true,
+    "inputFingerprint": "d37888967f467449",
+    "elapsedSeconds": 136.9494624999934,
+    "error": null
+  },
+  {
+    "name": "Miter",
+    "passed": true,
+    "inputFingerprint": "d37888967f467449",
+    "elapsedSeconds": 463.35938780003926,
+    "error": null
+  }
+]

@@ -1,0 +1,306 @@
+sha256=f01469ae4c0b707637220fc39101d5ef45b24865e0c7eb28dfe604afedf235e8
+
+P0 line=5 params=1 upvalues=0
+  K0: {"tag": 1, "offset": 206, "kind": "private32", "raw": 2347504324}
+  K1: {"tag": 2, "offset": 211, "kind": "number", "value": 1.0}
+  K2: {"tag": 1, "offset": 220, "kind": "private32", "raw": 2961064855}
+  K3: {"tag": 1, "offset": 225, "kind": "private32", "raw": 1695855112}
+  K4: {"tag": 4, "offset": 230, "kind": "import", "value": 1076887552}
+  K5: {"tag": 1, "offset": 235, "kind": "private32", "raw": 3144563745}
+  K6: {"tag": 1, "offset": 240, "kind": "private32", "raw": 2222237047}
+     0 LOADN              A=3 B=1 C=0 D=1
+     1 NAMECALL           A=4 B=0 C=196 D=-15360 aux=0x00000000
+     3 CALL               A=4 B=2 C=2 D=514
+     4 MOVE               A=1 B=4 C=0 D=4
+     5 LOADN              A=2 B=1 C=0 D=1
+     6 FORNPREP           A=1 B=21 C=0 D=21
+     7 SUBK               A=6 B=3 C=1 D=259
+     8 NAMECALL           A=4 B=0 C=151 D=-26880 aux=0x00000002
+    10 CALL               A=4 B=3 C=2 D=515
+    11 FASTCALL1          A=133 B=4 C=3 D=772
+    12 MOVE               A=6 B=4 C=0 D=4
+    13 GETIMPORT          A=5 B=4 C=0 D=4 aux=0x40300000
+    15 CALL               A=5 B=2 C=2 D=514
+    16 JUMPIF             A=5 B=10 C=0 D=10 -> 27
+    17 NAMECALL           A=5 B=4 C=33 D=8452 aux=0x00000005
+    19 CALL               A=5 B=2 C=2 D=514
+    20 LOADN              A=6 B=0 C=0 D=0
+    21 JUMPIFEQ           A=5 B=5 C=0 D=5 -> 27 aux=0x00000006
+    23 NAMECALL           A=5 B=4 C=119 D=30468 aux=0x00000006
+    25 CALL               A=5 B=2 C=2 D=514
+    26 RETURN             A=5 B=2 C=0 D=2
+    27 FORNLOOP           A=1 B=235 C=255 D=-21
+    28 LOADNIL            A=1 B=0 C=0 D=0
+    29 RETURN             A=1 B=2 C=0 D=2
+  unknown=[] invalidJumps=[]
+
+P1 line=16 params=1 upvalues=0
+  K0: {"tag": 1, "offset": 389, "kind": "private32", "raw": 1729430757}
+  K1: {"tag": 4, "offset": 394, "kind": "import", "value": 1073741824}
+  K2: {"tag": 1, "offset": 399, "kind": "private32", "raw": 1695855112}
+  K3: {"tag": 4, "offset": 404, "kind": "import", "value": 1075838976}
+  K4: {"tag": 1, "offset": 409, "kind": "private32", "raw": 3251661497}
+     0 GETIMPORT          A=1 B=1 C=0 D=1 aux=0x40000000
+     2 LOADN              A=2 B=14 C=0 D=14
+     3 JUMPIFNOTEQ        A=1 B=3 C=0 D=3 -> 7 aux=0x00000002
+     5 LOADB              A=1 B=1 C=0 D=1
+     6 RETURN             A=1 B=2 C=0 D=2
+     7 FASTCALL1          A=133 B=0 C=3 D=768
+     8 MOVE               A=2 B=0 C=0 D=0
+     9 GETIMPORT          A=1 B=3 C=0 D=3 aux=0x40200000
+    11 CALL               A=1 B=2 C=2 D=514
+    12 JUMPIF             A=1 B=9 C=0 D=9 -> 22
+    13 NAMECALL           A=1 B=0 C=185 D=-18176 aux=0x00000004
+    15 CALL               A=1 B=2 C=2 D=514
+    16 GETIMPORT          A=2 B=1 C=0 D=1 aux=0x40000000
+    18 JUMPIFNOTEQ        A=1 B=3 C=0 D=3 -> 22 aux=0x00000002
+    20 LOADB              A=1 B=1 C=0 D=1
+    21 RETURN             A=1 B=2 C=0 D=2
+    22 LOADB              A=1 B=0 C=0 D=0
+    23 RETURN             A=1 B=2 C=0 D=2
+  unknown=[] invalidJumps=[]
+
+P2 line=30 params=4 upvalues=0
+  K0: {"tag": 1, "offset": 656, "kind": "private32", "raw": 3009740064}
+  K1: {"tag": 4, "offset": 661, "kind": "import", "value": 1073741824}
+  K2: {"tag": 1, "offset": 666, "kind": "private32", "raw": 3458369393}
+  K3: {"tag": 1, "offset": 671, "kind": "private32", "raw": 2347504324}
+  K4: {"tag": 2, "offset": 676, "kind": "number", "value": 1.0}
+  K5: {"tag": 1, "offset": 685, "kind": "private32", "raw": 2961064855}
+  K6: {"tag": 1, "offset": 690, "kind": "private32", "raw": 1695855112}
+  K7: {"tag": 4, "offset": 695, "kind": "import", "value": 1080033280}
+  K8: {"tag": 1, "offset": 700, "kind": "private32", "raw": 3144563745}
+  K9: {"tag": 1, "offset": 705, "kind": "private32", "raw": 3486636201}
+  K10: {"tag": 1, "offset": 710, "kind": "private32", "raw": 4274909202}
+  K11: {"tag": 1, "offset": 715, "kind": "private32", "raw": 170741486}
+  K12: {"tag": 1, "offset": 720, "kind": "private32", "raw": 2622987876}
+     0 GETIMPORT          A=4 B=1 C=0 D=1 aux=0x40000000
+     2 FASTCALL1          A=135 B=4 C=2 D=516
+     3 NAMECALL           A=4 B=4 C=113 D=28932 aux=0x00000002
+     5 CALL               A=4 B=2 C=2 D=514
+     6 JUMPIF             A=4 B=1 C=0 D=1 -> 8
+     7 RETURN             A=0 B=1 C=0 D=1
+     8 LOADN              A=6 B=1 C=0 D=1
+     9 NAMECALL           A=7 B=2 C=196 D=-15358 aux=0x00000003
+    11 CALL               A=7 B=2 C=2 D=514
+    12 MOVE               A=4 B=7 C=0 D=7
+    13 LOADN              A=5 B=1 C=0 D=1
+    14 FORNPREP           A=4 B=34 C=0 D=34
+    15 SUBK               A=9 B=6 C=4 D=1030
+    16 NAMECALL           A=7 B=2 C=151 D=-26878 aux=0x00000005
+    18 CALL               A=7 B=3 C=2 D=515
+    19 FASTCALL1          A=133 B=7 C=3 D=775
+    20 MOVE               A=9 B=7 C=0 D=7
+    21 GETIMPORT          A=8 B=7 C=0 D=7 aux=0x40600000
+    23 CALL               A=8 B=2 C=2 D=514
+    24 JUMPIF             A=8 B=23 C=0 D=23 -> 48
+    25 NAMECALL           A=8 B=7 C=33 D=8455 aux=0x00000008
+    27 CALL               A=8 B=2 C=2 D=514
+    28 LOADN              A=9 B=0 C=0 D=0
+    29 JUMPIFEQ           A=8 B=18 C=0 D=18 -> 48 aux=0x00000009
+    31 MOVE               A=10 B=7 C=0 D=7
+    32 NAMECALL           A=11 B=2 C=169 D=-22270 aux=0x00000009
+    34 CALL               A=11 B=2 C=0 D=2
+    35 NAMECALL           A=8 B=1 C=18 D=4609 aux=0x0000000a
+    37 CALL               A=8 B=0 C=1 D=256
+    38 JUMPIFNOT          A=3 B=5 C=0 D=5 -> 44
+    39 MOVE               A=10 B=7 C=0 D=7
+    40 NAMECALL           A=8 B=0 C=238 D=-4608 aux=0x0000000b
+    42 CALL               A=8 B=3 C=1 D=259
+    43 JUMP               A=0 B=4 C=0 D=4 -> 48
+    44 MOVE               A=10 B=7 C=0 D=7
+    45 NAMECALL           A=8 B=0 C=100 D=25600 aux=0x0000000c
+    47 CALL               A=8 B=3 C=1 D=259
+    48 FORNLOOP           A=4 B=222 C=255 D=-34
+    49 RETURN             A=0 B=1 C=0 D=1
+  unknown=[] invalidJumps=[]
+
+P3 line=48 params=5 upvalues=2
+  K0: {"tag": 1, "offset": 1522, "kind": "private32", "raw": 1695855112}
+  K1: {"tag": 4, "offset": 1527, "kind": "import", "value": 1073741824}
+  K2: {"tag": 1, "offset": 1532, "kind": "private32", "raw": 3673693945}
+  K3: {"tag": 4, "offset": 1537, "kind": "import", "value": 1075838976}
+  K4: {"tag": 1, "offset": 1542, "kind": "private32", "raw": 1747763031}
+  K5: {"tag": 1, "offset": 1547, "kind": "private32", "raw": 365901512}
+  K6: {"tag": 1, "offset": 1552, "kind": "private32", "raw": 2843727361}
+  K7: {"tag": 1, "offset": 1557, "kind": "private32", "raw": 2865391824}
+  K8: {"tag": 1, "offset": 1562, "kind": "private32", "raw": 1275821180}
+  K9: {"tag": 4, "offset": 1567, "kind": "import", "value": 2154831872}
+  K10: {"tag": 3, "offset": 1572, "kind": "string", "stringId": 1, "value": "instigator"}
+  K11: {"tag": 3, "offset": 1574, "kind": "string", "stringId": 2, "value": "affected"}
+  K12: {"tag": 1, "offset": 1576, "kind": "private32", "raw": 3913866968}
+  K13: {"tag": 4, "offset": 1581, "kind": "import", "value": 1086324736}
+  K14: {"tag": 3, "offset": 1586, "kind": "string", "stringId": 3, "value": "buffType"}
+  K15: {"tag": 1, "offset": 1588, "kind": "private32", "raw": 1234390706}
+  K16: {"tag": 4, "offset": 1593, "kind": "import", "value": 1089470464}
+  K17: {"tag": 2, "offset": 1598, "kind": "number", "value": 100.0}
+  K18: {"tag": 3, "offset": 1607, "kind": "string", "stringId": 4, "value": "buffDataExtra"}
+  K19: {"tag": 3, "offset": 1609, "kind": "string", "stringId": 5, "value": "abilityType"}
+  K20: {"tag": 3, "offset": 1611, "kind": "string", "stringId": 6, "value": "buffData"}
+  K21: {"tag": 1, "offset": 1613, "kind": "private32", "raw": 3737946617}
+  K22: {"tag": 1, "offset": 1618, "kind": "private32", "raw": 2113058268}
+  K23: {"tag": 1, "offset": 1623, "kind": "private32", "raw": 3022047322}
+  K24: {"tag": 4, "offset": 1628, "kind": "import", "value": 1097859072}
+  K25: {"tag": 1, "offset": 1633, "kind": "private32", "raw": 455643221}
+  K26: {"tag": 1, "offset": 1638, "kind": "private32", "raw": 1729430757}
+  K27: {"tag": 4, "offset": 1643, "kind": "import", "value": 1101004800}
+  K28: {"tag": 1, "offset": 1648, "kind": "private32", "raw": 3251661497}
+     0 FASTCALL1          A=133 B=0 C=3 D=768
+     1 MOVE               A=6 B=0 C=0 D=0
+     2 GETIMPORT          A=5 B=1 C=0 D=1 aux=0x40000000
+     4 CALL               A=5 B=2 C=2 D=514
+     5 JUMPIF             A=5 B=6 C=0 D=6 -> 12
+     6 FASTCALL1          A=133 B=4 C=3 D=772
+     7 MOVE               A=6 B=4 C=0 D=4
+     8 GETIMPORT          A=5 B=1 C=0 D=1 aux=0x40000000
+    10 CALL               A=5 B=2 C=2 D=514
+    11 JUMPIFNOT          A=5 B=1 C=0 D=1 -> 13
+    12 RETURN             A=0 B=1 C=0 D=1
+    13 GETIMPORT          A=5 B=3 C=0 D=3 aux=0x40200000
+    15 LOADN              A=6 B=0 C=0 D=0
+    16 CALL               A=5 B=2 C=1 D=258
+    17 NAMECALL           A=5 B=0 C=87 D=22272 aux=0x00000004
+    19 CALL               A=5 B=2 C=2 D=514
+    20 NAMECALL           A=6 B=5 C=200 D=-14331 aux=0x00000005
+    22 CALL               A=6 B=2 C=2 D=514
+    23 LOADN              A=7 B=1 C=0 D=1
+    24 JUMPIFNOTEQ        A=6 B=2 C=0 D=2 -> 27 aux=0x00000007
+    26 RETURN             A=0 B=1 C=0 D=1
+    27 NAMECALL           A=6 B=4 C=1 D=260 aux=0x00000006
+    29 CALL               A=6 B=2 C=2 D=514
+    30 GETUPVAL           A=7 B=0 C=0 D=0
+    31 MOVE               A=8 B=4 C=0 D=4
+    32 CALL               A=7 B=2 C=2 D=514
+    33 GETIMPORT          A=8 B=9 C=0 D=9 aux=0x80702000
+    35 CALL               A=8 B=1 C=2 D=513
+    36 SETTABLEKS         A=0 B=8 C=243 D=-3320 aux=0x0000000a
+    38 NEWTABLE           A=9 B=0 C=0 D=0 aux=0x00000001
+    40 MOVE               A=10 B=0 C=0 D=0
+    41 SETLIST            A=9 B=10 C=2 D=522 aux=0x00000001
+    43 SETTABLEKS         A=9 B=8 C=1 D=264 aux=0x0000000b
+    45 GETIMPORT          A=9 B=13 C=0 D=13 aux=0x40c00000
+    47 JUMPIFNOT          A=9 B=19 C=0 D=19 -> 67
+    48 FASTCALL1          A=133 B=7 C=3 D=775
+    49 MOVE               A=10 B=7 C=0 D=7
+    50 GETIMPORT          A=9 B=1 C=0 D=1 aux=0x40000000
+    52 CALL               A=9 B=2 C=2 D=514
+    53 JUMPIF             A=9 B=13 C=0 D=13 -> 67
+    54 LOADN              A=9 B=3 C=0 D=3
+    55 SETTABLEKS         A=9 B=8 C=204 D=-13304 aux=0x0000000e
+    57 GETIMPORT          A=9 B=16 C=0 D=16 aux=0x40f00000
+    59 JUMPIFNOT          A=9 B=4 C=0 D=4 -> 64
+    60 MULK               A=9 B=7 C=17 D=4359
+    61 SETTABLEKS         A=9 B=8 C=223 D=-8440 aux=0x00000012
+    63 JUMP               A=0 B=6 C=0 D=6 -> 70
+    64 SETTABLEKS         A=7 B=8 C=223 D=-8440 aux=0x00000012
+    66 JUMP               A=0 B=3 C=0 D=3 -> 70
+    67 LOADN              A=9 B=1 C=0 D=1
+    68 SETTABLEKS         A=9 B=8 C=204 D=-13304 aux=0x0000000e
+    70 SETTABLEKS         A=4 B=8 C=142 D=-29176 aux=0x00000013
+    72 SETTABLEKS         A=6 B=8 C=224 D=-8184 aux=0x00000014
+    74 LOADB              A=9 B=1 C=0 D=1
+    75 LOADN              A=10 B=0 C=0 D=0
+    76 LOADB              A=11 B=0 C=0 D=0
+    77 LOADNIL            A=12 B=0 C=0 D=0
+    78 FASTCALL1          A=133 B=1 C=3 D=769
+    79 MOVE               A=14 B=1 C=0 D=1
+    80 GETIMPORT          A=13 B=1 C=0 D=1 aux=0x40000000
+    82 CALL               A=13 B=2 C=2 D=514
+    83 JUMPIF             A=13 B=97 C=0 D=97 -> 181
+    84 FASTCALL1          A=133 B=0 C=3 D=768
+    85 MOVE               A=14 B=0 C=0 D=0
+    86 GETIMPORT          A=13 B=1 C=0 D=1 aux=0x40000000
+    88 CALL               A=13 B=2 C=2 D=514
+    89 JUMPIF             A=13 B=91 C=0 D=91 -> 181
+    90 NAMECALL           A=13 B=0 C=249 D=-1792 aux=0x00000015
+    92 CALL               A=13 B=2 C=2 D=514
+    93 JUMPIF             A=13 B=87 C=0 D=87 -> 181
+    94 LOADN              A=15 B=0 C=0 D=0
+    95 NAMECALL           A=13 B=5 C=220 D=-9211 aux=0x00000016
+    97 CALL               A=13 B=3 C=2 D=515
+    98 LOADN              A=14 B=0 C=0 D=0
+    99 JUMPIFNOTLT        A=14 B=5 C=0 D=5 -> 105 aux=0x0000000a
+   101 GETIMPORT          A=14 B=24 C=0 D=24 aux=0x41700000
+   103 CALL               A=14 B=1 C=2 D=513
+   104 SUB                A=10 B=10 C=14 D=3594
+   105 JUMPIFEQ           A=13 B=2 C=0 D=2 -> 108 aux=0x00000001
+   107 LOADB              A=11 B=1 C=0 D=1
+   108 JUMPIFNOT          A=9 B=20 C=0 D=20 -> 129
+   109 JUMPIFNOTEQ        A=13 B=4 C=0 D=4 -> 114 aux=0x00000001
+   111 LOADN              A=14 B=0 C=0 D=0
+   112 JUMPIFNOTLE        A=10 B=16 C=0 D=16 -> 129 aux=0x0000000e
+   114 LOADB              A=9 B=0 C=0 D=0
+   115 GETUPVAL           A=14 B=1 C=0 D=1
+   116 MOVE               A=15 B=5 C=0 D=5
+   117 MOVE               A=16 B=1 C=0 D=1
+   118 MOVE               A=17 B=4 C=0 D=4
+   119 LOADB              A=18 B=0 C=0 D=0
+   120 CALL               A=14 B=5 C=1 D=261
+   121 MOVE               A=16 B=8 C=0 D=8
+   122 LOADB              A=17 B=0 C=0 D=0
+   123 LOADB              A=18 B=1 C=0 D=1
+   124 NAMECALL           A=14 B=0 C=85 D=21760 aux=0x00000019
+   126 CALL               A=14 B=5 C=1 D=261
+   127 LOADN              A=10 B=0 C=0 D=0
+   128 JUMP               A=0 B=46 C=0 D=46 -> 175
+   129 JUMPIF             A=9 B=45 C=0 D=45 -> 175
+   130 JUMPIFNOTEQ        A=13 B=44 C=0 D=44 -> 175 aux=0x00000001
+   132 JUMPIFNOT          A=11 B=42 C=0 D=42 -> 175
+   133 MOVE               A=15 B=12 C=0 D=12
+   134 GETIMPORT          A=16 B=27 C=0 D=27 aux=0x41a00000
+   136 LOADN              A=17 B=14 C=0 D=14
+   137 JUMPIFNOTEQ        A=16 B=3 C=0 D=3 -> 141 aux=0x00000011
+   139 LOADB              A=14 B=1 C=0 D=1
+   140 JUMP               A=0 B=16 C=0 D=16 -> 157
+   141 FASTCALL1          A=133 B=15 C=3 D=783
+   142 MOVE               A=17 B=15 C=0 D=15
+   143 GETIMPORT          A=16 B=1 C=0 D=1 aux=0x40000000
+   145 CALL               A=16 B=2 C=2 D=514
+   146 JUMPIF             A=16 B=9 C=0 D=9 -> 156
+   147 NAMECALL           A=16 B=15 C=185 D=-18161 aux=0x0000001c
+   149 CALL               A=16 B=2 C=2 D=514
+   150 GETIMPORT          A=17 B=27 C=0 D=27 aux=0x41a00000
+   152 JUMPIFNOTEQ        A=16 B=3 C=0 D=3 -> 156 aux=0x00000011
+   154 LOADB              A=14 B=1 C=0 D=1
+   155 JUMP               A=0 B=1 C=0 D=1 -> 157
+   156 LOADB              A=14 B=0 C=0 D=0
+   157 JUMPIFNOT          A=14 B=16 C=0 D=16 -> 174
+   158 LOADB              A=9 B=1 C=0 D=1
+   159 GETUPVAL           A=14 B=1 C=0 D=1
+   160 MOVE               A=15 B=5 C=0 D=5
+   161 MOVE               A=16 B=1 C=0 D=1
+   162 MOVE               A=17 B=4 C=0 D=4
+   163 LOADB              A=18 B=1 C=0 D=1
+   164 CALL               A=14 B=5 C=1 D=261
+   165 SETTABLEKS         A=6 B=8 C=224 D=-8184 aux=0x00000014
+   167 MOVE               A=16 B=8 C=0 D=8
+   168 LOADB              A=17 B=1 C=0 D=1
+   169 LOADB              A=18 B=1 C=0 D=1
+   170 NAMECALL           A=14 B=0 C=85 D=21760 aux=0x00000019
+   172 CALL               A=14 B=5 C=1 D=261
+   173 MOVE               A=10 B=6 C=0 D=6
+   174 LOADB              A=11 B=0 C=0 D=0
+   175 MOVE               A=12 B=13 C=0 D=13
+   176 GETIMPORT          A=14 B=3 C=0 D=3 aux=0x40200000
+   178 LOADN              A=15 B=0 C=0 D=0
+   179 CALL               A=14 B=2 C=1 D=258
+   180 raw_0x00           A=0 B=153 C=255 D=-103
+   181 RETURN             A=0 B=1 C=0 D=1
+  unknown=[180] invalidJumps=[]
+
+P4 line=1 params=0 upvalues=0
+  K0: {"tag": 6, "offset": 1893, "kind": "closure", "proto": 0}
+  K1: {"tag": 6, "offset": 1895, "kind": "closure", "proto": 1}
+  K2: {"tag": 6, "offset": 1897, "kind": "closure", "proto": 2}
+  K3: {"tag": 6, "offset": 1899, "kind": "closure", "proto": 3}
+  K4: {"tag": 3, "offset": 1901, "kind": "string", "stringId": 7, "value": "StartMod"}
+     0 PREPVARARGS        A=0 B=0 C=0 D=0
+     1 DUPCLOSURE         A=0 B=0 C=0 D=0
+     2 DUPCLOSURE         A=1 B=1 C=0 D=1
+     3 DUPCLOSURE         A=2 B=2 C=0 D=2
+     4 DUPCLOSURE         A=3 B=3 C=0 D=3
+     5 CAPTURE            A=0 B=0 C=0 D=0
+     6 CAPTURE            A=0 B=2 C=0 D=2
+     7 SETGLOBAL          A=3 B=0 C=51 D=13056 aux=0x00000004
+     9 RETURN             A=0 B=1 C=0 D=1
+  unknown=[] invalidJumps=[]

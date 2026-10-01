@@ -42,6 +42,8 @@ def replay_returned(request: dict, result: dict, build: dict) -> dict:
     if build.get('riven'):
         payload['riven']=build['riven']
         payload['slotPolarities'][build['riven']['slot']]='AP_ATTACK'
+    if build.get('exilus'):
+        payload['exilus']={k:build['exilus'][k] for k in ('path','rank')}
     innate=result.get('innateElement')
     if innate:
         payload.update(innateElement=innate['damageType'],innateElementValue=innate['value'])
@@ -61,6 +63,8 @@ def main() -> int:
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--limit',type=int)
+    ap.add_argument('--extra-weapons',action='store_true',help='Include the additional repaired Incarnon families')
+    ap.add_argument('--weapons',nargs='+',help='Run explicit weapon names instead of the default suite')
     args=ap.parse_args()
     args.output.mkdir(parents=True,exist_ok=True)
     app._disable_analysis_statics_persistence()
@@ -69,8 +73,14 @@ def main() -> int:
            ('Talons',{'detonationDelaySeconds':.5,'detonationBatchSize':2}),
            ('Fulmin Prime',{'distance':10.,'aiming':True}),('Arca Plasmor',{'distance':10.}),
            ('Dera Vandal',{'distance':10.}),('Scourge Prime',{'distance':10.})]
+    if args.extra_weapons:
+        cases += [('Miter',{}),('Laetum',{}),('Strun Prime',{}),('Zylok Prime',{}),
+                  ('Sicarus Prime',{'headshotChance':0.}),('Gorgon',{}),('Synoid Gammacor',{}),
+                  ('Dual Toxocyst',{'combatState':{'abilityUses':20,'energyPool':300}})]
     if args.limit:
         cases=cases[:args.limit]
+    if args.weapons:
+        cases=[(name,{}) for name in args.weapons]
     summary=[]
     for index,(name,scenario) in enumerate(cases):
         tag=f'{index:02d}-{name.replace(" ","-").lower()}'

@@ -462,6 +462,52 @@
                       <label class="check-field melee-only-field"><input id="build-heavy-attack" type="checkbox"><span>重击场景</span></label>
                     </div>
                   </div>
+                  <details class="scenario-group" id="build-combat-state">
+                    <summary class="scenario-group-title">战甲与武器状态</summary>
+                    <div class="scenario-fields">
+                      <label class="field"><span>战甲护甲</span><input data-combat-state="frameArmor" type="number" min="0" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>最大能量</span><input data-combat-state="energyPool" type="number" min="0" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>冲刺速度</span><input data-combat-state="sprintMultiplier" type="number" min="0" step="0.05" placeholder="未设置"></label>
+                      <label class="field"><span>近期已消耗能量</span><input data-combat-state="energySpent" type="number" min="0" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>每秒消耗能量</span><input data-combat-state="energySpendPerSecond" type="number" min="0" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>附近敌人数</span><input data-combat-state="nearbyEnemies" type="number" min="0" max="1000" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>自身护盾首次击破（秒）</span><input data-combat-state="selfShieldBreakAt" type="number" min="0" step="0.1" placeholder="未设置"></label>
+                      <label class="field"><span>自身护盾击破间隔（秒）</span><input data-combat-state="selfShieldBreakInterval" type="number" min="0" step="0.1" placeholder="仅首次"></label>
+                      <label class="field"><span>自身超宏首次击破（秒）</span><input data-combat-state="selfOverguardBreakAt" type="number" min="0" step="0.1" placeholder="未设置"></label>
+                      <label class="field"><span>自身超宏击破间隔（秒）</span><input data-combat-state="selfOverguardBreakInterval" type="number" min="0" step="0.1" placeholder="仅首次"></label>
+                      <label class="field"><span>自身护盾首次受击（秒）</span><input data-combat-state="selfShieldHitAt" type="number" min="0" step="0.1" placeholder="未设置"></label>
+                      <label class="field"><span>自身护盾受击间隔（秒）</span><input data-combat-state="selfShieldHitInterval" type="number" min="0" step="0.1" placeholder="仅首次"></label>
+                      <label class="field"><span>每次穿透后续目标数</span><input data-combat-state="punchthroughTargets" type="number" min="0" max="100" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>已施放战甲技能次数</span><input data-combat-state="abilityUses" type="number" min="0" max="100000" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>首次施放技能时间（秒）</span><input data-combat-state="abilityUseAt" type="number" min="0" step="0.1" placeholder="未设置"></label>
+                      <label class="field"><span>施放技能间隔（秒）</span><input data-combat-state="abilityUseInterval" type="number" min="0" step="0.1" placeholder="未设置"></label>
+                      <label class="field"><span>从主武器切入时刻（秒）</span><input data-combat-state="equipFromPrimaryAt" type="number" min="0" step="0.1" placeholder="未设置"></label>
+                      <label class="field"><span>再次切入间隔（秒）</span><input data-combat-state="equipFromPrimaryInterval" type="number" min="0" step="0.1" placeholder="仅首次"></label>
+                      <label class="field"><span>敌人统计半径（米）</span><input data-combat-state="nearbyRadius" type="number" min="0" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>异融量子球吸收伤害</span><input data-combat-state="orbAbsorbedDamage" type="number" min="0" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>穿过量子球次数</span><input data-combat-state="orbPasses" type="number" min="0" max="3" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>量子球合并层数</span><input data-combat-state="orbStacks" type="number" min="1" max="3" step="1" placeholder="未设置"></label>
+                      <label class="check-field"><input data-combat-state="orbSpecialShield" type="checkbox"><span>同时穿过满层辐射屏障</span></label>
+                      <label class="check-field"><input data-combat-state="onosRadialHit" type="checkbox"><span>Onos 爆炸覆盖当前目标</span></label>
+                      <label class="field"><span>吸收伤害类型</span><select data-combat-state="orbAbsorbedDamageType"><option value="">未设置</option><option value="DT_IMPACT">冲击</option><option value="DT_PUNCTURE">穿刺</option><option value="DT_SLASH">切割</option><option value="DT_FIRE">火焰</option><option value="DT_FREEZE">冰冻</option><option value="DT_ELECTRICITY">电击</option><option value="DT_POISON">毒素</option><option value="DT_EXPLOSION">爆炸</option><option value="DT_RADIATION">辐射</option><option value="DT_GAS">毒气</option><option value="DT_MAGNETIC">磁力</option><option value="DT_VIRAL">病毒</option><option value="DT_CORROSIVE">腐蚀</option></select></label>
+                      <label class="field"><span>投射物落点模式</span><select data-combat-state="projectileMode"><option value="">默认</option><option value="stacked">同一落点叠加</option><option value="isolated">独立落点</option><option value="manual">分批手动起爆</option></select></label>
+                      <label class="field"><span>每批射击次数</span><input data-combat-state="detonateAfterShots" type="number" min="1" max="20" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>分批起爆等待（秒）</span><input data-combat-state="detonationWaitSeconds" type="number" min="0" step="0.1" placeholder="未设置"></label>
+                      <label class="field"><span>Stug 派生弹命中数</span><input data-combat-state="stugChildHits" type="number" min="0" max="5" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>Stug 弹跳命中次数</span><input data-combat-state="stugBounceHits" type="number" min="0" max="2" step="1" placeholder="未设置"></label>
+                      <label class="field"><span>弹跳命中间隔（秒）</span><input data-combat-state="stugBounceDelaySeconds" type="number" min="0" step="0.1" placeholder="未设置"></label>
+                      <label class="field"><span>Stug 派生弹死亡时间（秒）</span><input data-combat-state="stugChildDetonateSeconds" type="number" min="0" max="4" step="0.1" placeholder="默认 4 秒"></label>
+                      <label class="check-field"><input data-combat-state="overshields" type="checkbox"><span>过载护盾</span></label>
+                      <label class="check-field"><input data-combat-state="channeling" type="checkbox"><span>持续消耗能量的技能</span></label>
+                      <label class="check-field"><input data-combat-state="aimGliding" type="checkbox"><span>瞄准滑翔</span></label>
+                      <label class="check-field"><input data-combat-state="sliding" type="checkbox"><span>滑行</span></label>
+                      <label class="check-field melee-only-field"><input data-combat-state="incarnonMeleeActive" type="checkbox"><span>近战灵化已激活</span></label>
+                      <details class="scenario-group"><summary>量子球吸收伤害组成</summary><div class="scenario-fields" id="build-orb-damage-vector"></div></details>
+                      <label class="field"><span>主武器</span><select data-combat-gear="primary"></select></label>
+                      <label class="field"><span>副武器</span><select data-combat-gear="secondary"></select></label>
+                      <label class="field"><span>近战武器</span><select data-combat-gear="melee"></select></label>
+                    </div>
+                  </details>
                   <div class="custom-defense-fields" id="custom-defense-fields" hidden>
                     <label class="field"><span>自定义生命值</span><input id="build-custom-health" type="number" min="1" step="1" value="100000"></label>
                     <label class="field"><span>自定义护甲</span><input id="build-custom-armor" type="number" min="0" step="1" value="0"></label>

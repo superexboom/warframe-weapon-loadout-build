@@ -1,5 +1,5 @@
 # Source-lock hashes require byte-identical files across checkouts.
-data/** -text
+data/** -text whitespace=cr-at-eol
 frontend/assets/** -text
 tools/extract_ability_luau_ir.py -text
 tools/diff_ability_runtime_fields.py -text
@@ -11,3 +11,5 @@ docs/evidence/remaining-events-20260928/** -text whitespace=cr-at-eol
 docs/evidence/quanta-deferred-spread-20260930/** -text
 docs/evidence/projectile-lifecycle-20260930/** -text whitespace=cr-at-eol
 docs/evidence/incarnon-riven-sync-20261001/** -text whitespace=cr-at-eol
+docs/evidence/runtime-completion-20261001/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+docs/evidence/runtime-completion-v21-20261001/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

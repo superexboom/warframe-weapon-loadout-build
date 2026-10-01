@@ -596,7 +596,7 @@ if getattr(sys, "frozen", False):
         Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
         / "Warframe-Weapon-Loadout-Build" / "cache" / "riven-analysis-statics.json"
     )
-ANALYSIS_STATICS_CACHE_VERSION = 12
+ANALYSIS_STATICS_CACHE_VERSION = 14
 
 
 def _stances_fingerprint() -> str:
@@ -654,6 +654,8 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("status_arcanes.py"),
         Path(optimizer.__file__).with_name("search_combat.py"),
         Path(optimizer.__file__).with_name("event_profiles.py"),
+        Path(optimizer.__file__).with_name("stackable_projectiles.py"),
+        Path(optimizer.__file__).with_name("consecutive_hits.py"),
         Path(optimizer.__file__).with_name("riven_fusion.py"),
         EXPORT_DIR / "arcanes.json",
         Path(__file__),  # app.py — 运行时补丁与分析入口语义
@@ -661,7 +663,8 @@ def _analysis_inputs_fingerprint() -> str:
     for path in engine_paths:
         try:
             digest.update(path.name.encode("utf-8"))
-            digest.update(path.read_bytes())
+            data = path.read_bytes()
+            digest.update(data.replace(b'\r\n',b'\n') if path.suffix=='.py' else data)
         except OSError:
             # F13：文件读取失败不得回退成空指纹——空指纹会与「另一个同样
             # 读不到文件的进程」碰撞，让两份语义不同的缓存互相命中。缺失
@@ -1040,11 +1043,7 @@ def _fire_mode_options(
                 "index": index,
                 "trigger": str(mode.get("trigger") or ""),
                 "isAlternateFire": bool(mode.get("isAlternateFire")),
-                # 灵化武器的灵化形态恒为最后一个开火模式（导出数据核验），
-                # 前端用它做标签与默认选中。
-                "isIncarnonForm": bool(weapon.get("isIncarnon"))
-                and mode_count > 1
-                and index == mode_count - 1,
+                "isIncarnonForm": optimizer._select_fire_mode(weapon,index,weapon_type=weapon_type)[0].get('isIncarnonForm',False) if available else False,
                 "damageTotal": _finite_positive(damage.get("total")),
                 "available": available,
                 "issue": None if available else (f"fire mode {index} is auxiliary melee, outside nonmelee scope" if auxiliary else f"fire mode {index} has no direct damage types"),
@@ -1202,7 +1201,7 @@ def _incarnon_effect_text(effect: Mapping[str, Any], *, annotate: bool = True) -
 def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
     from wfarsenal.incarnon_conditions import describe as describe_condition
     from wfarsenal.manual_combat import condition_kind
-    from wfarsenal.runtime_adapters import verified_stug_condition, verified_torid_field_duration
+    from wfarsenal.runtime_adapters import verified_incarnon_condition, verified_torid_field_duration, incarnon_stat_conversion, miter_charge_aoe
     rows = []
     incarnon = weapon.get("incarnon")
     adapter_key = optimizer._path_basename(incarnon.get("adapter")) if isinstance(incarnon, Mapping) else ""
@@ -1223,6 +1222,7 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
         for branch in branches:
             details = []
             unsupported = []
+            conversion = incarnon_stat_conversion(branch)
             conditional_sources = {str(c.get('sourcePath') or branch.get('path')) for c in branch.get('conditionalEffects') or ()}
             static, _ = optimizer._branch_effects(branch) if tier_number != 1 else ([], [])
             static_keys = {(e.source_path, e.upgrade_type, e.operation, e.value) for e in static}
@@ -1238,16 +1238,29 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
                 if not text:
                     continue
                 descriptive = effect.get('upgradeType') == 'NONE' or (tier_number == 1 and '充能' in text)
+                if effect.get('valuePerRank')==0 and effect.get('upgradeType') not in {'NONE','WEAPON_NOISE_REDUCTION'}:
+                    continue
+                if effect.get('upgradeType') in {'WEAPON_AUTO_RELOAD_RATE','WEAPON_RANGE','WEAPON_ZOOM','WEAPON_NOISE_REDUCTION','AVATAR_MOVEMENT_SPEED'}:
+                    details.append({'text':text,'calculation':'工具属性；持续持枪和单目标伤害口径不触发额外增伤','modeled':None})
+                    continue
                 modeled = (source, effect.get('upgradeType'), effect.get('operation'), effect.get('valuePerRank')) in static_keys
                 calculation = '' if descriptive else ('已计入' if modeled else '未计入武器伤害计算')
                 if not descriptive and not modeled:
                     unsupported.append(text + '：' + calculation)
                 details.append({'text': text, 'calculation': calculation, 'modeled': None if descriptive else modeled})
-            for conditional in branch.get("conditionalEffects") or ():
+            from wfarsenal.runtime_adapters import incarnon_condition_rows
+            for conditional in incarnon_condition_rows(branch):
                 if not isinstance(conditional, Mapping):
                     continue
-                normalized = verified_stug_condition(branch, conditional) or conditional
+                normalized = verified_incarnon_condition(branch, conditional) or conditional
+                if normalized.get('utilityOnly'):
+                    details.append({'text':describe_condition(normalized,INCARNON_STRINGS),
+                                    'calculation':'角色防御效果；当前单目标伤害口径无额外贡献','modeled':None})
+                    continue
                 terms = [e for e in normalized.get('effects') or () if isinstance(e, Mapping) and e.get('upgradeType') != 'NONE']
+                if (not terms and not normalized.get('runtimeScripts') and not normalized.get('runtimeExtraMods')
+                        and not normalized.get('sequenceGate') and not normalized.get('actorGate')):
+                    continue
                 if (terms and not conditional.get('conditions') and not conditional.get('runtimeScripts')
                         and all(e.get('upgradeType') == 'WEAPON_LAST_MULTISHOT' and e.get('operation') == 'ADD'
                                 and isinstance(e.get('valuePerRank'), (int, float)) for e in terms)):
@@ -1256,6 +1269,10 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
                                     'calculation': '已计入基础形态；灵化弹池不触发', 'modeled': True})
                     continue
                 condition = describe_condition(normalized, INCARNON_STRINGS)
+                if terms and all(e.get('upgradeType')=='WEAPON_CRIT_CHANCE_BODY_PART' for e in terms):
+                    details.append({'text':'身体命中无法暴击；头部弱点命中 +150% 暴击率，按武器基础暴击率计算，与暴击 MOD 加算。',
+                                    'calculation':'已计入：按每次伤害的命中部位计算，不改变面板暴击率或暴击转触发的源属性','modeled':True})
+                    continue
                 gate = []
                 duration = normalized.get('duration')
                 stacks = normalized.get('maxStacks')
@@ -1265,15 +1282,31 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
                     gate.append(f'最多 {stacks:g} 层')
                 values = [_incarnon_effect_text(e, annotate=False) for e in terms]
                 values = [v for v in values if v]
-                supported = bool(terms) and all(optimizer.ModEffect.from_export(e, 0).supported for e in terms)
-                modeled = tier_number != 1 and supported and not normalized.get('runtimeScripts') and bool(
-                    normalized.get('formGate') or normalized.get('eventKind') or condition_kind(normalized))
+                supported = bool(terms) and any(optimizer.ModEffect.from_export(e, 0).supported for e in terms)
+                partial = supported and not all(optimizer.ModEffect.from_export(e, 0).supported for e in terms)
+                modeled = bool(normalized.get('sequenceGate')) or (supported and not normalized.get('runtimeScripts') and bool(
+                    normalized.get('actorGate') or normalized.get('formGate') or normalized.get('eventKind') or condition_kind(normalized))
+                )
+                if (supported and not normalized.get('conditions') and not normalized.get('runtimeScripts')
+                        and not any(normalized.get(k) for k in ('actorGate','energyGate','formGate','eventKind','sequenceGate'))):
+                    modeled = True
+                    condition = '无额外触发事件'
+                if normalized.get('actorGate') and normalized.get('runtimeExtraMods'):
+                    modeled=True
+                if terms and all(e.get('upgradeType') in {'WEAPON_SPREAD','WEAPON_RECOIL','WEAPON_PUNCTURE_DEPTH','WEAPON_ZOOM','WEAPON_RANGE'} for e in terms):
+                    details.append({'text':condition+('：'+'、'.join(values) if values else ''),
+                                    'calculation':'工具属性；散布按设置停用，穿透不增加单目标伤害','modeled':None})
+                    continue
                 if 'Burston' in str(branch.get('path')) and branch.get('id') == '2-1' and 'OnLastBurstCondition.lua' in str(conditional.get('runtimeScripts')):
                     modeled = True
                 calculation = '已计入：按触发和叠层结算' if modeled else '尚未建模，不计入伤害'
                 if normalized.get('formGate') and modeled:
                     condition = '灵化形态激活期间'
                     calculation = '仅灵化形态计入'
+                elif normalized.get('actorGate') and modeled:
+                    calculation = '按战斗状态计入；未提供所需状态时不触发'
+                if modeled and partial:
+                    calculation += '；非伤害工具属性单独展示'
                 if normalized.get('conditionText'):
                     text = condition
                 else:
@@ -1287,7 +1320,15 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
             if field_duration:
                 details.append({'text': field_duration['conditionText'], 'calculation': '已计入基础形态事件', 'modeled': True})
             elif branch.get('runtimeScripts') and not branch.get('conditionalEffects'):
-                if tier_number == 1:
+                if miter_charge_aoe(branch):
+                    details.append({'text':'基础形态完全蓄力后再保持 1 秒：首次撞击产生 1400 爆炸伤害，半径 5 米，无距离衰减；灵化形态不触发。',
+                                    'calculation':'已计入：包含额外 1 秒射击周期，直击与范围伤害分别结算；不假定额外反弹命中','modeled':True})
+                elif conversion:
+                    source_label = '触发几率' if conversion['source'] == 'WEAPON_PROC_CHANCE' else '暴击几率'
+                    target_label = '暴击几率' if conversion['target'] == 'WEAPON_CRIT_CHANCE' else '触发几率'
+                    details.append({'text': f"以配卡后{source_label}的 {conversion['fraction']*100:g}% 提高基础{target_label}，最多增加 {conversion['maximum']*100:g} 个百分点",
+                                    'calculation': '已计入；增加后的基础属性再受对应 MOD 加成', 'modeled': True})
+                elif tier_number == 1:
                     if not details:
                         details.append({'text': '解锁灵化形态', 'calculation': '', 'modeled': None})
                 else:
@@ -5195,6 +5236,10 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     'fieldDuration': windowed.get('fieldDuration'),
                     'manualDetonation': windowed.get('manualDetonation'),
                     'delayedAttackEvents': windowed.get('delayedAttackEvents'),
+                    'projectileEvents': windowed.get('projectileEvents'),
+                    'projectileLifecycle': windowed.get('projectileLifecycle'),
+                    'onosSequence': windowed.get('onosSequence'),
+                    'reloadShellEvents': windowed.get('reloadShellEvents'),
                     "cryogenic": windowed.get("cryogenic"),
                     "empowered": windowed.get("empowered"),
                     "triggerPolicy": _policy,

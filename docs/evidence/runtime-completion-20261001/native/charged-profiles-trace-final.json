@@ -1,0 +1,1059 @@
+[
+  {
+    "name": "Vulcax",
+    "mode": 0,
+    "profile": {
+      "directTotal": 500.0,
+      "projectile": null,
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 1.0,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Ogris",
+    "mode": 0,
+    "profile": {
+      "name": "Ogris",
+      "source": "data/weapons/primary/ogris.yaml",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "sha256": "87bc517f22788cd04d4dc5726606a2f3d5dce0b69ee5fc7db9b9422a998dc31f",
+      "directTotal": 100.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/ClanTech/Chemical/RocketProjectile",
+      "scope": "direct-hit target at explosion centre; native ordered radial events",
+      "radials": [
+        {
+          "damage": {
+            "blast": 600.0
+          },
+          "radius_m": 7.0999999,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.80000001,
+          "crit_chance": 0.050000001,
+          "crit_multiplier": 2,
+          "status_chance": 0.34999999,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/ClanTech/Chemical/RocketProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "one radial event per spawned projectile",
+          "referenceTakesMultishot": true
+        }
+      ],
+      "packageBuild": "2026.09.22.16.46",
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/ClanTech/Chemical/RocketLauncher",
+          "sha256": "76f0f96cfd430b5e0b890d4869b0e4f293d5df802dba9845bf7e82668c2e5ec9"
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/Chemical/RocketProjectile",
+          "sha256": "052257d529b699dae210075b4a541e257174465240a06ca14cfd935509de7dd3"
+        }
+      ],
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 7.0999999,
+        "takesRadiusMods": true
+      },
+      "chargeEvidence": {
+        "nativeSeconds": 0.30000001,
+        "referenceSeconds": 0.3,
+        "nativeSource": "/Lotus/Weapons/ClanTech/Chemical/RocketLauncher",
+        "nativeField": "Behaviors[0].state.ChargeTime"
+      },
+      "charge": {
+        "seconds": 0.30000001,
+        "source": "native-ChargeTime"
+      },
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Lanka",
+    "mode": 0,
+    "profile": {
+      "directTotal": 525.0,
+      "projectile": "/Lotus/Weapons/ClanTech/Energy/RailgunProjectile",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 1.0,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Tenet Ferrox",
+    "mode": 1,
+    "profile": {
+      "directTotal": 199.999996,
+      "projectile": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerroxChargedProjectile",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Tenet Plinx",
+    "mode": 1,
+    "profile": {
+      "directTotal": 100.0,
+      "projectile": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAltFireProj",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.80000001,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Lenz",
+    "mode": 0,
+    "profile": {
+      "name": "Lenz",
+      "source": "data/weapons/primary/lenz.yaml",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "sha256": "d674d807ab2064659e8e4cf6f86b6e646df832883b26abc085d1678abda1294c",
+      "directTotal": 50.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowArrow",
+      "scope": "direct-hit target at explosion centre; native ordered radial events",
+      "radials": [
+        {
+          "damage": {
+            "cold": 10.0
+          },
+          "radius_m": 7.1999998,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.69999999,
+          "crit_chance": 0.5,
+          "crit_multiplier": 2,
+          "status_chance": 0.050000001,
+          "forced_procs": [
+            "cold"
+          ],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowArrow",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "one radial event per spawned projectile",
+          "referenceTakesMultishot": false
+        },
+        {
+          "damage": {
+            "blast": 660.0
+          },
+          "radius_m": 7.1999998,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.69999999,
+          "crit_chance": 0.5,
+          "crit_multiplier": 2,
+          "status_chance": 0.050000001,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 1.3,
+          "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowArrow",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "one radial event per spawned projectile",
+          "referenceTakesMultishot": false
+        }
+      ],
+      "packageBuild": "2026.09.22.16.46",
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBow",
+          "sha256": "da4b2fb18e0d62e2af1fcf7e1bd8a7d3606c7eb974c96375cb7e83332a0d1b73"
+        },
+        {
+          "path": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowArrowBase",
+          "sha256": "93d5e834bd5983a5a04fafa87e1182e25010dd7fd8c564a10fdf64909e173e78"
+        },
+        {
+          "path": "/Lotus/Types/Weapons/BoltoProjectile",
+          "sha256": "11175ce995d25967e04e0b3b0a6e8ba845dc652c90e6ec074d763f692195a6fb"
+        }
+      ],
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 7.1999998,
+        "takesRadiusMods": true
+      },
+      "chargeEvidence": {
+        "nativeSeconds": 1.2,
+        "referenceSeconds": 1.2,
+        "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBow",
+        "nativeField": "Behaviors[0].state.ChargeTime"
+      },
+      "bow": true,
+      "drawSeconds": 1.2,
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Prisma Lenz",
+    "mode": 0,
+    "profile": {
+      "name": "Prisma Lenz",
+      "source": "data/weapons/primary/prisma_lenz.yaml",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "sha256": "729cb42246ea68b0f3c1eea526e065016366a78374517dca83197d452535e4e7",
+      "directTotal": 56.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzArrow",
+      "scope": "direct-hit target at explosion centre; native ordered radial events",
+      "radials": [
+        {
+          "damage": {
+            "cold": 10.0
+          },
+          "radius_m": 7.1999998,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.69999999,
+          "crit_chance": 0.5,
+          "crit_multiplier": 2.8,
+          "status_chance": 0.16,
+          "forced_procs": [
+            "cold"
+          ],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzArrow",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "one radial event per spawned projectile",
+          "referenceTakesMultishot": false
+        },
+        {
+          "damage": {
+            "blast": 740.0
+          },
+          "radius_m": 7.1999998,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.69999999,
+          "crit_chance": 0.5,
+          "crit_multiplier": 2.8,
+          "status_chance": 0.16,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 1.3,
+          "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzArrow",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "one radial event per spawned projectile",
+          "referenceTakesMultishot": false
+        }
+      ],
+      "packageBuild": "2026.09.22.16.46",
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon",
+          "sha256": "e0f2b4607cfe970896db337a5ff8477385a666ffa1d895fc53a57259d87869c0"
+        },
+        {
+          "path": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzArrow",
+          "sha256": "c3cb252bc1526d95954db3f70304682b4264be09e4fcb73240da4d54d060a695"
+        },
+        {
+          "path": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowArrowBase",
+          "sha256": "93d5e834bd5983a5a04fafa87e1182e25010dd7fd8c564a10fdf64909e173e78"
+        },
+        {
+          "path": "/Lotus/Types/Weapons/BoltoProjectile",
+          "sha256": "11175ce995d25967e04e0b3b0a6e8ba845dc652c90e6ec074d763f692195a6fb"
+        }
+      ],
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 7.1999998,
+        "takesRadiusMods": true
+      },
+      "chargeEvidence": {
+        "nativeSeconds": 0.80000001,
+        "referenceSeconds": 1.2,
+        "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon",
+        "nativeField": "Behaviors[0].state.ChargeTime"
+      },
+      "referenceDifferences": [
+        "native-charge-duration-differs-from-reference"
+      ],
+      "bow": true,
+      "drawSeconds": 0.80000001,
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Opticor",
+    "mode": 0,
+    "profile": {
+      "directTotal": 499.999986,
+      "projectile": null,
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 2.0,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Opticor Vandal",
+    "mode": 0,
+    "profile": {
+      "name": "Opticor Vandal",
+      "source": "data/weapons/primary/opticor_vandal_quick.yaml",
+      "sha256": "0784f6cc6d461a4a35f2520a5930f6d67d4f73d46981d4fcf1ac9450e8718712",
+      "directTotal": 199.999996,
+      "scope": "base mode, direct-hit target at centre",
+      "radial": {
+        "radius_m": 4.6,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.6,
+        "crit_chance": 0.24,
+        "crit_multiplier": 2.6,
+        "status_chance": 0.3,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "magnetic": 100
+        }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "adds",
+        "radius_calculation": "snapshot",
+        "radius": 4.6,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "projectile": null,
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.60000002,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Ferrox",
+    "mode": 1,
+    "profile": {
+      "directTotal": 149.999997,
+      "projectile": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgunChargedProjectile",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Staticor",
+    "mode": 0,
+    "profile": {
+      "directTotal": 44.0,
+      "projectile": "/Lotus/Weapons/Corpus/Pistols/CrpElectroMag/CrpElectroMagProjectileCharged",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 1.0,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Kuva Bramma",
+    "mode": 0,
+    "profile": {
+      "name": "Kuva Bramma",
+      "source": "data/weapons/primary/kuva_bramma.yaml",
+      "sha256": "5753f83d8a6fc70152cb3cf35edf7744ed1783fd4decaec9a089f862c6c6f01d",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 187.0,
+      "scope": "base mode; direct-hit target at explosion centre",
+      "radial": {
+        "radius_m": 8.3,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.9,
+        "crit_chance": 0.35,
+        "crit_multiplier": 2.1,
+        "status_chance": 0.21,
+        "takes_multishot": false,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "blast": 839.0
+        }
+      },
+      "bow": true,
+      "drawSeconds": 0.40000001,
+      "unmodeled": [
+        "cluster-submunitions-unmodeled"
+      ],
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 8.3,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "projectile": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterProjectile",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Kuva Drakgoon",
+    "mode": 0,
+    "profile": {
+      "directTotal": 46.0,
+      "projectile": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoonChargedProjectile",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.30000001,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Kuva Ogris",
+    "mode": 0,
+    "profile": {
+      "name": "Kuva Ogris",
+      "source": "data/weapons/primary/kuva_ogris.yaml",
+      "sha256": "d7916e7f2daefe09943b8b4708345faf80e688b9c3f46e46d57e18f95b18a321",
+      "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "directTotal": 27.0,
+      "scope": "base mode; direct-hit target at explosion centre",
+      "radial": {
+        "radius_m": 7.9,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.8,
+        "crit_chance": 0.09,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.47,
+        "takes_blast_radius_mods": true,
+        "damage": {
+          "puncture": 183.0,
+          "slash": 155.0,
+          "blast": 349.0
+        }
+      },
+      "compression": {
+        "effectiveness": 1.0,
+        "stacking": "multiplies",
+        "radius_calculation": "snapshot",
+        "radius": 7.9,
+        "takesRadiusMods": true
+      },
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "projectile": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgrisProjectile",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Drakgoon",
+    "mode": 0,
+    "profile": {
+      "directTotal": 70.000001,
+      "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrineerFlakCannon/ChargedFlakProjectile",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.5,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Miter",
+    "mode": 0,
+    "profile": {
+      "directTotal": 249.999995,
+      "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeWaveProjectileCharged",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.75,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Javlok",
+    "mode": 1,
+    "profile": {
+      "directTotal": 149.999999,
+      "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpearChargedProjectile",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Mutalist Cernos",
+    "mode": 0,
+    "profile": {
+      "directTotal": 409.999997,
+      "projectile": "/Lotus/Weapons/Infested/Bow/InfCernosBow/ChargeInfCernosArrowProjectile",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.5
+    }
+  },
+  {
+    "name": "EFV-8 Mars",
+    "mode": 1,
+    "profile": {
+      "directTotal": 35.0,
+      "projectile": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolAltFire/LasrianGooPistolPlayerAltFireProjectileFullcharge",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 1.5,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "MK1-Paris",
+    "mode": 0,
+    "profile": {
+      "directTotal": 229.999997,
+      "projectile": "/Lotus/Weapons/MK1Series/Arrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.5,
+      "modes": {
+        "1": {
+          "directTotal": 300.0,
+          "projectile": "/Lotus/Weapons/Tenno/Bows/MkIHuntingBowIncarnonAltFireWaveProj",
+          "allowIncarnon": true,
+          "bow": true,
+          "drawSeconds": 0.80000001
+        }
+      }
+    }
+  },
+  {
+    "name": "MK1-Paris",
+    "mode": 1,
+    "profile": {
+      "directTotal": 300.0,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/MkIHuntingBowIncarnonAltFireWaveProj",
+      "allowIncarnon": true,
+      "bow": true,
+      "drawSeconds": 0.80000001
+    }
+  },
+  {
+    "name": "Rakta Cernos",
+    "mode": 0,
+    "profile": {
+      "directTotal": 469.999997,
+      "projectile": "/Lotus/Weapons/Syndicates/RedVeil/Bows/ChargeRVCernosArrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.25
+    }
+  },
+  {
+    "name": "Rakta Ballistica",
+    "mode": 0,
+    "profile": {
+      "directTotal": 299.999998,
+      "projectile": "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVAutoCrossChargedBolt",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 1.0,
+      "modes": {
+        "2": {
+          "directTotal": 734.0,
+          "projectile": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/IncarnonBallistica/RVBallisticaIncarnonChargedWaveProjectile",
+          "allowIncarnon": true,
+          "bow": true,
+          "drawSeconds": 0.40000001
+        }
+      }
+    }
+  },
+  {
+    "name": "Rakta Ballistica",
+    "mode": 2,
+    "profile": {
+      "directTotal": 734.0,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/IncarnonBallistica/RVBallisticaIncarnonChargedWaveProjectile",
+      "allowIncarnon": true,
+      "bow": true,
+      "drawSeconds": 0.40000001
+    }
+  },
+  {
+    "name": "Corvas",
+    "mode": 0,
+    "profile": {
+      "directTotal": 79.99999799999999,
+      "projectile": null,
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.5,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Corvas Prime",
+    "mode": 0,
+    "profile": {
+      "directTotal": 960.0,
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeCorvas/PrimeCorvasChargedWaveHWProj",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.5,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Larkspur Prime",
+    "mode": 1,
+    "profile": {
+      "directTotal": 840.0,
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurHeavyProjectile",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.5,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Velocitus",
+    "mode": 0,
+    "profile": {
+      "directTotal": 3200.0,
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/Railgun/RailGunChargedHeavyWavProj",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 1.0,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Mausolon",
+    "mode": 1,
+    "profile": {
+      "directTotal": 1500.0,
+      "projectile": null,
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.80000001,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Mandonel",
+    "mode": 0,
+    "profile": {
+      "directTotal": 180.0,
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunHeavyProjectile",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 1.5,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Larkspur",
+    "mode": 1,
+    "profile": {
+      "directTotal": 840.0,
+      "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameHeavyArchgunProjectile",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.5,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Cernos",
+    "mode": 0,
+    "profile": {
+      "directTotal": 379.999997,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/AntlerBow/ChargeAntlerArrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.5
+    }
+  },
+  {
+    "name": "Daikyu",
+    "mode": 0,
+    "profile": {
+      "directTotal": 699.9999789999999,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/AsymetricalBow/AsymArrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 1.0
+    }
+  },
+  {
+    "name": "Cinta",
+    "mode": 0,
+    "profile": {
+      "name": "Cinta",
+      "source": "data/weapons/primary/cinta.yaml",
+      "sha256": "f70d647dadb7ed31a2ea1c0e5c1fbe29194f7e15450bb24108b0c0893e6baf07",
+      "directTotal": 800.0,
+      "scope": "base mode, direct-hit target at centre",
+      "drawSeconds": 1.5,
+      "bow": true,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/DaxDuviriAsymetricalBow/DuviriDaxLongBowFullChargePlayerProjectile",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Paris",
+    "mode": 0,
+    "profile": {
+      "directTotal": 319.999997,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/Arrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.5,
+      "modes": {
+        "1": {
+          "directTotal": 460.0,
+          "projectile": "/Lotus/Weapons/Tenno/Bows/HuntingBowIncarnonAltFireWaveProj",
+          "allowIncarnon": true,
+          "bow": true,
+          "drawSeconds": 0.80000001
+        }
+      }
+    }
+  },
+  {
+    "name": "Paris",
+    "mode": 1,
+    "profile": {
+      "directTotal": 460.0,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/HuntingBowIncarnonAltFireWaveProj",
+      "allowIncarnon": true,
+      "bow": true,
+      "drawSeconds": 0.80000001
+    }
+  },
+  {
+    "name": "Nataruk",
+    "mode": 0,
+    "profile": {
+      "name": "Nataruk",
+      "source": "data/weapons/primary/nataruk.yaml",
+      "sha256": "af210092fae50a82e32aa9727ab6997c1f6461281ac520921722a4cb836a0263",
+      "directTotal": 900.0,
+      "scope": "base mode, direct-hit target at centre",
+      "drawSeconds": 1.0,
+      "bow": true,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWavePlayerProj",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Cernos Prime",
+    "mode": 0,
+    "profile": {
+      "directTotal": 183.999998,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/PrimeCernos/ChargePrimeArrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.5,
+      "modes": {
+        "1": {
+          "directTotal": 183.999998,
+          "projectile": "/Lotus/Weapons/Tenno/Bows/PrimeCernos/ChargePrimeAltArrow",
+          "allowIncarnon": false,
+          "bow": true,
+          "drawSeconds": 0.5
+        }
+      }
+    }
+  },
+  {
+    "name": "Cernos Prime",
+    "mode": 1,
+    "profile": {
+      "directTotal": 183.999998,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/PrimeCernos/ChargePrimeAltArrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.5
+    }
+  },
+  {
+    "name": "Daikyu Prime",
+    "mode": 0,
+    "profile": {
+      "directTotal": 749.999978,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/PrimeDaikyu/PrimeDaikyuArrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 1.0
+    }
+  },
+  {
+    "name": "Proboscis Cernos",
+    "mode": 0,
+    "profile": {
+      "directTotal": 278.999994,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernosChargedArrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.69999999
+    }
+  },
+  {
+    "name": "Paris Prime",
+    "mode": 0,
+    "profile": {
+      "name": "Paris Prime",
+      "source": "data/weapons/primary/paris_prime_uncharged.yaml",
+      "sha256": "c5b3519e752c6a03455709d9947d9c50f30335895ec5d08c47e3b62b996df0f3",
+      "directTotal": 360.000008,
+      "scope": "base mode, direct-hit target at centre",
+      "drawSeconds": 0.5,
+      "bow": true,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/PrimeArrow",
+      "allowIncarnon": false,
+      "modes": {
+        "1": {
+          "directTotal": 520.0,
+          "projectile": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBowIncarnonAltFireWaveProj",
+          "allowIncarnon": true,
+          "bow": true,
+          "drawSeconds": 0.80000001
+        }
+      }
+    }
+  },
+  {
+    "name": "Paris Prime",
+    "mode": 1,
+    "profile": {
+      "directTotal": 520.0,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBowIncarnonAltFireWaveProj",
+      "allowIncarnon": true,
+      "bow": true,
+      "drawSeconds": 0.80000001
+    }
+  },
+  {
+    "name": "Dread",
+    "mode": 0,
+    "profile": {
+      "directTotal": 335.999993,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/StalkerBow/StalkerArrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.5,
+      "modes": {
+        "1": {
+          "directTotal": 400.0,
+          "projectile": "/Lotus/Weapons/Tenno/Bows/StalkerBowIncarnonAltFireWaveProj",
+          "allowIncarnon": true,
+          "bow": true,
+          "drawSeconds": 0.60000002
+        }
+      }
+    }
+  },
+  {
+    "name": "Dread",
+    "mode": 1,
+    "profile": {
+      "directTotal": 400.0,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/StalkerBowIncarnonAltFireWaveProj",
+      "allowIncarnon": true,
+      "bow": true,
+      "drawSeconds": 0.60000002
+    }
+  },
+  {
+    "name": "Evensong",
+    "mode": 0,
+    "profile": {
+      "directTotal": 500.0,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/TnChoirBow/ChargedChoirArrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 1.2
+    }
+  },
+  {
+    "name": "Paris",
+    "mode": 0,
+    "profile": {
+      "directTotal": 319.999997,
+      "projectile": "/Lotus/Weapons/Tenno/Bows/Arrow",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.40000001
+    }
+  },
+  {
+    "name": "Panthera",
+    "mode": 0,
+    "profile": {
+      "directTotal": 99.999999,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/Miter/TnoMiterBladeWaveProjectile",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Panthera Prime",
+    "mode": 0,
+    "profile": {
+      "directTotal": 99.999999,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimePanthera/PrimePantheraBladeWaveProjectile",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Scourge Prime",
+    "mode": 1,
+    "profile": {
+      "directTotal": 299.999994,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Scourge",
+    "mode": 1,
+    "profile": {
+      "directTotal": 149.999997,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
+      "allowIncarnon": false
+    }
+  },
+  {
+    "name": "Quellor",
+    "mode": 1,
+    "profile": {
+      "directTotal": 1400.0,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnRailjackRifle/RailJackRifleAltFireProj",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 1.2,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Aeolak",
+    "mode": 1,
+    "profile": {
+      "directTotal": 96.999997,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzRifleChargeProj",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.30000001,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Ballistica",
+    "mode": 0,
+    "profile": {
+      "directTotal": 99.999997,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossChargedBolt",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 1.0,
+      "modes": {
+        "2": {
+          "directTotal": 640.0,
+          "projectile": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/IncarnonBallistica/AutoCrossIncarnonChargedWaveProjectile",
+          "allowIncarnon": true,
+          "bow": true,
+          "drawSeconds": 0.40000001
+        }
+      }
+    }
+  },
+  {
+    "name": "Ballistica",
+    "mode": 2,
+    "profile": {
+      "directTotal": 640.0,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/IncarnonBallistica/AutoCrossIncarnonChargedWaveProjectile",
+      "allowIncarnon": true,
+      "bow": true,
+      "drawSeconds": 0.40000001
+    }
+  },
+  {
+    "name": "Ballistica Prime",
+    "mode": 0,
+    "profile": {
+      "directTotal": 75.999999,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/PrimeBallistica/PrimeBallisticaChargedCrossBolt",
+      "allowIncarnon": false,
+      "bow": true,
+      "drawSeconds": 0.80000001,
+      "modes": {
+        "1": {
+          "directTotal": 830.0,
+          "projectile": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/IncarnonBallistica/PrimeBallisticaIncarnonChargedWaveProjectile",
+          "allowIncarnon": true,
+          "bow": true,
+          "drawSeconds": 0.40000001
+        }
+      }
+    }
+  },
+  {
+    "name": "Ballistica Prime",
+    "mode": 1,
+    "profile": {
+      "directTotal": 830.0,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/IncarnonBallistica/PrimeBallisticaIncarnonChargedWaveProjectile",
+      "allowIncarnon": true,
+      "bow": true,
+      "drawSeconds": 0.40000001
+    }
+  },
+  {
+    "name": "Epitaph Prime",
+    "mode": 0,
+    "profile": {
+      "directTotal": 315.000003,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/PrimeEpitaph/PrimeEpitaphDamageProj",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.36000001,
+        "source": "native-ChargeTime"
+      }
+    }
+  },
+  {
+    "name": "Epitaph",
+    "mode": 0,
+    "profile": {
+      "directTotal": 300.000003,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/TnWraitheSidearm/TnWraitheDamageProj",
+      "allowIncarnon": false,
+      "charge": {
+        "seconds": 0.36000001,
+        "source": "native-ChargeTime"
+      }
+    }
+  }
+]

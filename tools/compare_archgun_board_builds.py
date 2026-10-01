@@ -13,7 +13,8 @@ from wfarsenal.damage import Scenario, ModEffectList, enemy_defenses
 from wfarsenal.manual_combat import prepare
 from wfarsenal.combat_replay import replay
 from wfarsenal.simulator import _mod_matches_weapon
-FORMS={'corvas':{'alternate':0},'corvas_prime':{'alternate':0},'velocitus':{'alternate':0},
+FORMS={'corvas':{'base':0},'corvas_prime':{'base':0},'velocitus':{'base':0},
+       'fulmin':{'base':1,'alternate':0},'fulmin_prime':{'base':1,'alternate':0},
        'larkspur':{'base':0,'alternate':1},'larkspur_prime':{'base':0,'alternate':1}}
 WEAPONS=('corvas','corvas_prime','mausolon','larkspur','larkspur_prime','imperator',
  'imperator_vandal','grattler','kuva_grattler','fluctus','cyngas','velocitus','morgha',
@@ -38,6 +39,26 @@ def registry(root):
   row=yaml.safe_load(file.read_text(encoding='utf-8'))
   if isinstance(row,dict) and row.get('id'):rows[row['id']]=row
  return rows
+
+def public_evolutions(weapon,wid,ids,definitions):
+ """Map only unique weapon/tier/icon identities; reject ambiguous routes."""
+ def icon(value):
+  name=str(value or '').rsplit('/',1)[-1]
+  return name.replace('(xWhite)','').casefold()
+ choices={};proof=[]
+ for eid in ids or []:
+  row=definitions.get(eid)
+  if not row or row.get('weapon')!=wid:raise ValueError('evolution weapon identity mismatch: '+eid)
+  tier=row.get('tier')
+  if tier==1:continue
+  matches=[b for t in (weapon.get('incarnon') or {}).get('tiers',[]) if t.get('tier')==tier
+           for b in t.get('branches',[]) if row.get('icon') and icon(row['icon']) in
+           {icon(s.get('icon')) for s in b.get('sources',[]) if s.get('icon')}]
+  if len(matches)!=1:raise ValueError('unmapped or ambiguous evolution icon: '+eid)
+  key='tier'+str(tier)
+  if key in choices:raise ValueError('duplicate public evolution tier: '+key)
+  choices[key]=matches[0]['id'];proof.append(dict(reference=eid,native=matches[0]['path'],icon=row['icon']))
+ return choices,proof
 def exact_record(row,records):
  matches=[r for r in records if r['path']==row.get('internal_name')]
  if not matches and not row.get('internal_name'):matches=[r for r in records if r.get('nameEn')==row.get('name')]
@@ -104,7 +125,7 @@ def local_replay(payload,*,duration,include_arcanes=True):
   passive=app._manual_passive_effects(card)
  override={'innateElements':[{'damageType':payload['innateElement'],'value':payload['innateElementValue']}]} if payload.get('innateElement') else None
  engine={}
- if payload.get('riven'):
+ if payload.get('riven') or payload.get('incarnonChoices'):
   ctx=app._manual_resolve_sim_context({**payload,'arcanes':payload['arcanes'] if include_arcanes else []})
   # Use the production passive/slot path so elemental order and numeric values survive.
   passives=ctx['build_passives'](None)['passive_effects']
@@ -115,7 +136,7 @@ def local_replay(payload,*,duration,include_arcanes=True):
    scenario=Scenario(aiming=True, trigger_policy="emergent", distance=(payload.get("scenario") or {}).get("distance")),weapon_override=override,passive_effects=passive,engine_context_sink=engine)
  stats=app._benchmark_timeline_stats(result['moddedStats'])
  target=app.MANUAL_ENEMIES_BY_PATH[payload['enemy']]
- combat=prepare(engine,mods,arcs,assumed=False,affinity_target=target,level=payload['level'])
+ combat=prepare(engine,mods,arcs,assumed=False,affinity_target=target,level=payload['level'],incarnon_choices=payload.get('incarnonChoices'),cycle_enabled=bool((payload.get('scenario') or {}).get('incarnonCycle')))
  window=replay(stats,target,attacks_per_second=stats.sustained_attack_rate,window_seconds=duration,
   level=payload['level'],steel_path=True,headshot_chance=1,trigger_sources=combat['trigger_sources'],combat=combat)
  initial=combat['resolve']('selected',{q['id']:q.get('initialStacks',0) for q in combat['trigger_sources']},0)
@@ -142,7 +163,7 @@ def main():
  subprocess.run(['node',str(ROOT/'tools/run_reference_wasm.mjs'),str(args.wfsim),'/api/meta',str(args.output/'empty.json'),str(meta)],check=True)
  metadata=json.loads(meta.read_text(encoding='utf-8'));wm={w['id']:w for w in metadata['weapons']}
  mods=registry(args.wfsim/'data/mods');arcanes=registry(args.wfsim/'data/arcanes')
- weapons=registry(args.wfsim/'data/weapons');cases=[];skips=[];requests=[];sources=[]
+ weapons=registry(args.wfsim/'data/weapons');evolutions=registry(args.wfsim/'data/evolutions');cases=[];skips=[];requests=[];sources=[]
  for wid in args.weapons:
   path=(args.output if args.fetch else args.board_dir)/f'wfsim-board-{wid}.json'
   if args.fetch:
@@ -155,6 +176,10 @@ def main():
   snapshot=json.loads(path.read_text(encoding='utf-8'));dump(args.output/f'board-{wid}.json',snapshot)
   sources.append(dict(weapon=wid,url=f'https://wfsim.app/board/{wid}.json',sha256=digest(path)))
   forms=FORMS.get(wid,{'base':0})
+  native_weapon=exact_record(weapons[wid],app.EXPORTS['weapons'])
+  incarnon_modes=[i for i,m in enumerate(native_weapon.get('fireModes',[])) if m.get('isIncarnonForm')]
+  if len(incarnon_modes)==1:forms={**forms,'incarnon':incarnon_modes[0]}
+  if len(incarnon_modes)==1:forms['cycle']=incarnon_modes[0]
   rows=[(i,r) for i,r in enumerate(snapshot) if r.get('benchmark')=='standard_single_target' and r.get('mode') in forms]
   rows.sort(key=lambda pair:pair[1]['score'],reverse=True)
   if not rows:skips.append(dict(weapon=wid,reason='no-single-target-row-in-exported-form'));continue
@@ -162,9 +187,10 @@ def main():
   for index,row in rows:
    if accepted >= args.per_weapon:break
    try:
-    if row.get('evolutions') or row.get('warframe') or row.get('buffs'):
-     raise ValueError('unmapped board evolutions or external buffs')
+    if row.get('warframe') or row.get('buffs'):
+     raise ValueError('unmapped external buffs')
     weapon=exact_record(weapons[wid],app.EXPORTS['weapons'])
+    choices,evolution_proof=public_evolutions(weapon,wid,row.get('evolutions'),evolutions)
     if str(weapon.get('slot') or '').casefold() == 'melee':
      raise ValueError('melee outside audit contract')
     equipped_arcanes=[a for a in row['arcanes'] if not args.without_enervate or a!='secondary_enervate']
@@ -177,6 +203,8 @@ def main():
      level=9999,steelPath=True,headshotChance=1.0,aiming=True,triggerPolicy='emergent',
      slotPolarities=[m.get('polarity') for m in cards],scenario={'distance':0.5})
     spec=public_riven_spec(row)
+    if choices:payload['incarnonChoices']=choices
+    if row['mode']=='cycle':payload['scenario']['incarnonCycle']=True
     resolved_riven=None
     if spec:
      request_file=args.output/f'riven-{wid}-{index}-request.json'
@@ -194,7 +222,7 @@ def main():
      exilus=exact_record(mods[row['exilus']],app.EXPORTS['mods'])
      payload['exilus']=dict(path=exilus['path'],rank=exilus['maxRank'])
     if row.get('valence'):payload.update(innateElement=ELEMENTS[row['valence']],innateElementValue=0.60)
-    request=dict(weapon=wid,mode=row['mode'],mods=row['mods'],arcane=equipped_arcanes,evolutions=[],
+    request=dict(weapon=wid,mode=row['mode'],mods=row['mods'],arcane=equipped_arcanes,evolutions=row.get('evolutions') or [],
      evolutions_as_given=True,enemy='thrax_centurion',level=9999,steel_path=True,headshot_pct=100,
      aiming=True,duration=args.duration,runs=args.runs,seed=12648430,infinite_ammo=True,
      class_rules={'archgun':{'infinite_ammo':True}},ammo_drops=False,
@@ -207,7 +235,7 @@ def main():
     blockers=[m['path'] for m in cards if m['path'] not in app.MANUAL_MODS_BY_PATH]+[a['path'] for a in arcs if a['path'] not in app.MANUAL_ARCANES_BY_PATH]
     if row.get('exilus') and exilus['path'] not in app.UTILITY_MODS_BY_PATH:blockers.append(exilus['path'])
     case=dict(id=f'{wid}-{index}',weapon=wid,name=weapon['nameEn'],boardRowIndex=index,board=row,
-     manualPayload=payload,referenceRequest=request,catalogBlockers=blockers,nativeIncompatibleMods=[m['path'] for m in cards if not _mod_matches_weapon(m,weapon)],referenceLimitations=wm[wid].get('unmodeled',[]))
+     manualPayload=payload,referenceRequest=request,evolutionMapping=evolution_proof,catalogBlockers=blockers,nativeIncompatibleMods=[m['path'] for m in cards if not _mod_matches_weapon(m,weapon)],referenceLimitations=wm[wid].get('unmodeled',[]))
     if spec:case.update(referenceRiven=resolved_riven,rivenSpec=spec)
     if not args.allow_partial and (blockers or case['nativeIncompatibleMods']):
      skips.append(dict(weapon=wid,rowIndex=index,reason='catalog-blocked-or-native-incompatible',
@@ -247,5 +275,5 @@ def main():
   localInputFingerprint=app._analysis_inputs_fingerprint(),toolSha256=digest(Path(__file__)),release=release,wasmSha256=digest(args.wfsim/'site/pkg'/f"wfsim_wasm_bg.{release['wasm']}.wasm"),
   duration=args.duration,runs=args.runs,seed=12648430,recordedAt=datetime.now(timezone.utc).isoformat(),ablation=args.without_enervate,sources=sources,cases=cases,skips=skips,
   contract='Lv9999 SP Thrax, headshots, ADS, single target, infinite resupply explicitly set by archgun class rule, timed buffs start at zero. Offline kernel audit when catalogBlockers is nonempty. Board score uses separate 180s contract.'))
- print('cases',len(cases),'skips',skips)
+ print('cases',len(cases),'skips',len(skips))
 if __name__=='__main__':main()

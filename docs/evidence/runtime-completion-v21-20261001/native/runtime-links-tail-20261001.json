@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Dread",
+    "id": "2-2",
+    "kind": "equipment-children",
+    "children": [
+      {
+        "sourcePath": "/Lotus/Weapons/Tenno/Bows/StalkerBow/DreadIncarnonEvolutions/DreadEvoTier1BExtraMod",
+        "effects": [
+          {
+            "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+            "operation": "ADD_BASE",
+            "valuePerRank": 10,
+            "damageType": "DT_ANY",
+            "supportedBy": [
+              "weapon"
+            ],
+            "supported": true,
+            "locTag": "/Lotus/Language/Upgrades/IncarnonAddDamageModDesc",
+            "displayAsPercent": 0,
+            "displayAsMultiplier": 0,
+            "reverseValueSymbol": 0,
+            "symbolFilter": "",
+            "validType": "",
+            "invalidModifiers": [],
+            "validModifiers": [],
+            "validProcTypes": [],
+            "validPostures": [],
+            "autoType": 1
+          },
+          {
+            "upgradeType": "WEAPON_FIRE_RATE",
+            "operation": "STACKING_MULTIPLY",
+            "valuePerRank": 0.1,
+            "damageType": "DT_ANY",
+            "supportedBy": [
+              "weapon"
+            ],
+            "supported": true,
+            "locTag": "/Lotus/Language/Upgrades/WeaponFireRateSimple",
+            "displayAsPercent": 1,
+            "displayAsMultiplier": 0,
+            "reverseValueSymbol": 0,
+            "symbolFilter": "",
+            "validType": "",
+            "invalidModifiers": [],
+            "validModifiers": [],
+            "validProcTypes": [],
+            "validPostures": [],
+            "autoType": 1
+          }
+        ],
+        "conditions": [
+          "DreadOnConsecutiveHit"
+        ],
+        "maxStacks": 5,
+        "duration": 0,
+        "nativeInfinite": true
+      }
+    ]
+  },
+  {
+    "name": "Bronco Prime",
+    "id": "4-1",
+    "kind": "nearby-enemy-count",
+    "condition": {
+      "sourcePath": "/Lotus/Weapons/Tenno/Pistol/BroncoIncarnonEvolutions/Prime/PrimeBroncoEvoTier3A",
+      "conditionTag": null,
+      "conditions": [],
+      "duration": null,
+      "maxStacks": 1,
+      "runtimeScripts": {
+        "apply": {
+          "Function": "StartMod",
+          "Script": "/Lotus/Scripts/Mods/RequireEnemyCount.lua",
+          "_enemyCheckTimer": 0.1,
+          "_enemyPerStack": 6,
+          "_enemyRange": 6,
+          "_maxStacks": 1
+        }
+      },
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "displayAsMultiplier": 0,
+          "displayAsPercent": 1,
+          "invalidModifiers": [],
+          "locTag": "/Lotus/Language/Upgrades/IncarnonEnemyProxAmmoEfficiencyDesc",
+          "operation": "STACKING_MULTIPLY",
+          "reverseValueSymbol": 1,
+          "sourcePath": "/Lotus/Weapons/Tenno/Pistol/BroncoIncarnonEvolutions/Prime/PrimeBroncoEvoTier3A",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.80000001
+        }
+      ],
+      "chance": 1
+    }
+  },
+  {
+    "name": "Bronco",
+    "id": "4-1",
+    "kind": "nearby-enemy-count",
+    "condition": {
+      "sourcePath": "/Lotus/Weapons/Tenno/Pistol/BroncoIncarnonEvolutions/BroncoEvoTier3A",
+      "conditionTag": null,
+      "conditions": [],
+      "duration": null,
+      "maxStacks": 1,
+      "runtimeScripts": {
+        "apply": {
+          "Function": "StartMod",
+          "Script": "/Lotus/Scripts/Mods/RequireEnemyCount.lua",
+          "_enemyCheckTimer": 0.1,
+          "_enemyPerStack": 6,
+          "_enemyRange": 6,
+          "_maxStacks": 1
+        }
+      },
+      "effects": [
+        {
+          "autoType": 1,
+          "damageType": "DT_ANY",
+          "displayAsMultiplier": 0,
+          "displayAsPercent": 1,
+          "invalidModifiers": [],
+          "locTag": "/Lotus/Language/Upgrades/IncarnonEnemyProxAmmoEfficiencyDesc",
+          "operation": "STACKING_MULTIPLY",
+          "reverseValueSymbol": 1,
+          "sourcePath": "/Lotus/Weapons/Tenno/Pistol/BroncoIncarnonEvolutions/BroncoEvoTier3A",
+          "supported": false,
+          "supportedBy": [],
+          "symbolFilter": "",
+          "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+          "validModifiers": [],
+          "validPostures": [],
+          "validProcTypes": [],
+          "validType": "",
+          "valuePerRank": -0.80000001
+        }
+      ],
+      "chance": 1
+    }
+  }
+]

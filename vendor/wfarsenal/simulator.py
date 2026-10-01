@@ -823,9 +823,8 @@ def simulate(
     # fire_mode 下标取模式），另存 __baseFireModes__ 供循环口径读取
     # 基础形态装填。
     _modes = weapon_record.get("fireModes") or []
-    if weapon_record.get("isIncarnon") and (
-        len(_modes) == 1 or fire_mode == len(_modes) - 1
-    ):
+    from .event_profiles import is_incarnon_mode
+    if is_incarnon_mode(weapon_record,fire_mode):
         weapon_record = {
             **weapon_record,
             "isIncarnonForm": True,

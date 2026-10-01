@@ -276,6 +276,9 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "WEAPON_FIRE_RATE": "fire_rate",
     "WEAPON_CLIP_MAX": "magazine",
     "WEAPON_RELOAD_SPEED": "reload_time",
+    "WEAPON_RELOAD_TIME": "reload_time_multiplier",
+    "WEAPON_PROJECTILE_SPEED": "projectile_speed",
+    "WEAPON_CHARGE_RATE": "charge_rate",
     "WEAPON_AMMO_CONSUME_RATE": "ammo_cost",
     "WEAPON_SPREAD": "spread_multiplier",
     "WEAPON_RECOIL": "recoil_multiplier",
@@ -289,6 +292,24 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "GAMEPLAY_FACTION_DAMAGE": "faction_damage_multipliers",
     "WEAPON_NOCRIT_DAMAGE": "noncrit_damage_multiplier",
     "WEAPON_NOCRIT_CHANCE": "noncrit_damage_chance",
+    "WEAPON_ADD_CHARGE_COUNTER_MULTIPLIER": "incarnon_charge_multiplier",
+    "RUNTIME_INCARNON_STAT_CONVERSION": "incarnon_stat_conversion",
+    "WEAPON_LOW_CRIT_VALUE": "low_crit_threshold",
+    "WEAPON_LOW_CRIT_DAMAGE": "low_crit_damage",
+    "WEAPON_CRIT_UNDER_PROC_THRESHOLD_MAX": "anti_proc_crit_threshold",
+    "WEAPON_CRIT_UNDER_PROC_THRESHOLD_BONUS": "anti_proc_crit_bonus",
+    "WEAPON_AMMO_POOL_MULTISHOT_DAMAGE": "ammo_pool_multishot_damage",
+    "WEAPON_VICTIM_CRIT_CHANCE": "victim_crit_chance",
+    "WEAPON_VICTIM_CRIT_DAMAGE": "victim_crit_damage",
+    "WEAPON_VICTIM_DAMAGE_AMOUNT": "victim_damage",
+    "RUNTIME_MQ_AUGMENT": "event_only",
+    "RUNTIME_ONOS_CRITS_FOR_HITS": "event_only",
+    "RUNTIME_RESERVE_AMMO_REFUND": "event_only",
+    "RUNTIME_RELOAD_PROJECTILE_TOGGLE": "event_only",
+    "RUNTIME_PUNCTURE_ARMOR_STRIP": "event_only",
+    "RUNTIME_MAGAZINE_RESTORE": "event_only",
+    "RUNTIME_MITER_CHARGE_AOE": "event_only",
+    "RUNTIME_CONSECUTIVE_HIT_DAMAGE": "event_only",
     # ── 词条融合新词条（2026.09.22，引擎乘区已逆向裁决）──────────────
     # WEAPON_CRIT_CHANCE_WEAKPOINT：与 WEAPON_CRIT_CHANCE 加算进同一次
     # 判定（fn 0x1406dc47e 链 244-248，IsWeakpoint 门控）——引擎侧门控在
@@ -296,6 +317,7 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     # 折算（headshot_chance 加权），与 headshot_bonus_multiplier 同一
     # 折算通道。
     "WEAPON_CRIT_CHANCE_WEAKPOINT": "weakpoint_crit_chance",
+    "WEAPON_CRIT_CHANCE_BODY_PART": "bodypart_crit_chance",
     # WEAPON_DAMAGE_WEAKPOINT：条件升级管线（与 IF_VICTIM_PROC_ACTIVE
     # 同系统，enum 266），独立乘区于部位倍率：
     #   伤害 × DamageAtten(部位) × (1 + 弱点加成)
@@ -351,6 +373,7 @@ def _rebuild_scenario(
     incarnon_cycle: bool = False,
     detonation_delay_seconds: float = 0.0,
     detonation_batch_size: int = 1,
+    combat_state: Mapping[str, Any] | None = None,
 ) -> "Scenario":
     """Scenario.__reduce__ 的重建入口（pickle 反序列化路径）。"""
     return Scenario(
@@ -366,6 +389,7 @@ def _rebuild_scenario(
         incarnon_cycle=incarnon_cycle,
         detonation_delay_seconds=detonation_delay_seconds,
         detonation_batch_size=detonation_batch_size,
+        combat_state=combat_state or {},
     )
 
 
@@ -404,6 +428,7 @@ class Scenario:
     # Explicit player cadence for remote mines; no spatial hit-loss model.
     detonation_delay_seconds: float = 0.0
     detonation_batch_size: int = 1
+    combat_state: Mapping[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if (
@@ -439,6 +464,51 @@ class Scenario:
             )
         if not isinstance(self.conditional_stacks, Mapping):
             raise TypeError("conditional_stacks must be a mapping")
+        if not isinstance(self.combat_state, Mapping):
+            raise TypeError('combatState must be an object')
+        numeric = {'frameArmor','energyPool','sprintMultiplier','energySpent','energySpendPerSecond','nearbyRadius','detonationWaitSeconds','stugBounceDelaySeconds','stugChildDetonateSeconds','orbAbsorbedDamage',
+                   'selfShieldBreakAt','selfShieldBreakInterval','selfOverguardBreakAt','selfOverguardBreakInterval','selfShieldHitAt','selfShieldHitInterval'}
+        numeric |= {'equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval'}
+        binary = {'overshields','channeling','aimGliding','sliding','incarnonMeleeActive','orbSpecialShield','onosRadialHit'}
+        integers = {'nearbyEnemies':1000,'stugBounceHits':2,'stugChildHits':5,'detonateAfterShots':20,'orbPasses':3,'orbStacks':3,'orbRank':6,'punchthroughTargets':100,'abilityUses':100000}
+        allowed = numeric | binary | set(integers) | {'projectileMode','equippedWeapons','emptySlots','orbAbsorbedDamageType','orbAbsorbedDamageTypes'}
+        if set(self.combat_state) - allowed:
+            raise ValueError('combatState has unsupported fields: ' + ', '.join(sorted(set(self.combat_state)-allowed)))
+        state = {}
+        for key,value in self.combat_state.items():
+            if key in numeric:
+                state[key] = _require_nonnegative_finite('combatState.'+key,value)
+            elif key in binary:
+                if not isinstance(value,bool):
+                    raise TypeError('combatState.'+key+' must be a boolean')
+                state[key] = value
+            elif key in integers:
+                state[key] = _require_int('combatState.'+key,value,maximum=integers[key])
+                if key in {'detonateAfterShots','orbStacks'} and not value:
+                    raise ValueError('combatState.'+key+' must be at least one')
+            elif key=='projectileMode':
+                if value not in {'stacked','isolated','manual'}:
+                    raise ValueError('combatState.projectileMode must be stacked, isolated or manual')
+                state[key] = value
+            elif key=='orbAbsorbedDamageType':
+                if value not in {*BASE_ELEMENTS,*PHYSICAL_TYPES,*ELEMENT_COMBINATIONS.values()}:
+                    raise ValueError('combatState.orbAbsorbedDamageType must be a native damage type')
+                state[key] = value
+            elif key=='orbAbsorbedDamageTypes':
+                try:
+                    vector = dict(value)
+                except (TypeError,ValueError):
+                    raise TypeError('combatState.orbAbsorbedDamageTypes must be a damage vector') from None
+                if not vector or set(vector)-{*BASE_ELEMENTS,*PHYSICAL_TYPES,*ELEMENT_COMBINATIONS.values()}:
+                    raise ValueError('combatState.orbAbsorbedDamageTypes must contain native damage types')
+                state[key] = tuple(sorted((dtype,_require_nonnegative_finite('combatState.orbAbsorbedDamageTypes.'+dtype,amount)) for dtype,amount in vector.items()))
+            else:
+                if not isinstance(value,(list,tuple)) or len(value)>3 or any(not isinstance(x,str) or not x for x in value):
+                    raise TypeError('combatState.'+key+' must contain up to three strings')
+                if key=='emptySlots' and any(x not in {'primary','secondary','melee'} for x in value):
+                    raise ValueError('combatState.emptySlots contains an unsupported slot')
+                state[key] = tuple(value)
+        object.__setattr__(self,'combat_state',MappingProxyType(state))
 
         stacks: dict[str, int] = {}
         for key, value in self.conditional_stacks.items():
@@ -466,6 +536,7 @@ class Scenario:
                 self.incarnon_cycle,
                 self.detonation_delay_seconds,
                 self.detonation_batch_size,
+                dict(self.combat_state),
             ),
         )
 
@@ -568,6 +639,10 @@ def mod_effects(
         )
     scenario = scenario or Scenario()
     source_path = mod.get("path") or None
+    from .runtime_adapters import mq_augment_multiplier
+    multiplier = mq_augment_multiplier(mod,rank)
+    if multiplier is not None:
+        return ModEffectList([ModEffect('RUNTIME_MQ_AUGMENT','ADD',multiplier,source_path=source_path)])
     runtime_scripts = mod.get("runtimeScripts") or {}
     adapter = resolve_runtime_adapter(mod, rank) if runtime_scripts else None
     if runtime_scripts and adapter is None:
@@ -578,7 +653,7 @@ def mod_effects(
     # the explicit scenario condition is active; never leave the placeholder as an
     # unconditional bonus.  Prototype retains its normal elemental effect.
     raw_effects = mod.get("effects") or ()
-    if adapter is not None and adapter.kind in {"range_damage", "cloak_damage"}:
+    if adapter is not None and adapter.kind in {"range_damage", "cloak_damage","consecutive_hit_damage"}:
         raw_effects = ()
     elif adapter is not None and adapter.kind == "impact_conversion":
         # Current records contain only a NONE placeholder.  Keep any future
@@ -595,6 +670,9 @@ def mod_effects(
     )
 
     if adapter is not None:
+        if adapter.kind=='consecutive_hit_damage':
+            effects.append(ModEffect('RUNTIME_CONSECUTIVE_HIT_DAMAGE','ADD',adapter.damage_bonus,
+                                     source_path=source_path,runtime_threshold=adapter.duration))
         if adapter.kind == 'lock_fire_rate':
             effects.append(ModEffect('RUNTIME_LOCK_FIRE_RATE','SET',1.,source_path=source_path))
         if adapter.kind == 'lock_multishot':
@@ -913,6 +991,7 @@ class ModdedStats:
     # 弱点命中门控；面板按弱命中期望折算）。
     weakpoint_crit_chance_bonus: float = 0.0
     weakpoint_crit_chance_relative: float = 0.0
+    bodyshot_crit_multiplier: float = 1.0
     base_crit_chance: float = 0.0
     # Per-trigger ammo cost in sustained rate（Twin Grakatas 类 ammoCost=2）
     ammo_cost: float = 1.0
@@ -928,6 +1007,19 @@ class ModdedStats:
     # Native forced statuses per projectile; explicit caller forced_procs remain
     # additional per-trigger counts. Never inherit a different component here.
     native_forced_procs: dict[str, float] = field(default_factory=dict)
+    incarnon_charge_multiplier: float = 1.0
+    low_crit_threshold: float | None = None
+    low_crit_damage_base: float | None = None
+    low_crit_damage_bonus: float = 0.0
+    ammo_pool_multishot_cost: float = 0.0
+    ammo_pool_damage_bonus: float = 0.0
+    victim_full_crit_chance: float = 0.0
+    victim_full_crit_damage: float = 0.0
+    victim_low_health_multiplier: float = 1.0
+    projectile_speed_multiplier: float = 1.0
+    charge_rate_multiplier: float = 1.0
+    charge_seconds: float = 0.0
+    bow_draw_seconds: float | None = None
     # Inactive compatibility fields for deferred_spread research. Production
     # apply_mods leaves these unset; replay/scoring never consumes them.
     spread_min_deg: float | None = None
@@ -939,12 +1031,18 @@ class ModdedStats:
         return sum(self.damage_types.values())
 
     @property
+    def trigger_interval(self) -> float:
+        if self.bow_draw_seconds is not None:
+            return self.bow_draw_seconds
+        return (1./self.fire_rate+self.charge_seconds) if self.fire_rate>0 else math.inf
+
+    @property
     def burst_dps(self) -> float:
         """Damage per second while the trigger is held, ignoring reloads."""
         return (
             self.total_damage
             * self.multishot
-            * self.fire_rate
+            * (1./self.trigger_interval if self.trigger_interval>0 else self.fire_rate)
             * self.falloff_multiplier
         )
 
@@ -957,13 +1055,17 @@ class ModdedStats:
         """
         if not self.magazine or not self.fire_rate:
             return self.burst_dps
-        shots = self.magazine + self.first_shot_damage_bonus
-        firing = self.magazine / self.fire_rate
-        cycle = firing + (self.reload_time or 0.0)
+        cost=max(self.ammo_cost,0.)
+        if cost==0 and self.bow_draw_seconds is not None:
+            cost=1.
+        if cost==0:
+            return self.burst_dps
+        shots = self.magazine/cost
+        cycle = shots*self.trigger_interval+(self.reload_time or 0.)
         return (
             self.total_damage
             * self.multishot
-            * shots
+            * (shots+self.first_shot_damage_bonus)
             * self.falloff_multiplier
             / cycle
             if cycle
@@ -986,14 +1088,16 @@ class ModdedStats:
         wfsim 实测 413 shots / 6 reloads 吻合）。
         """
         if not self.magazine or not self.fire_rate:
-            return max(float(self.fire_rate), 0.0)
+            return 1./self.trigger_interval if self.trigger_interval>0 and math.isfinite(self.trigger_interval) else max(float(self.fire_rate),0.)
         ammo_cost = max(float(self.ammo_cost), 0.0)
+        if ammo_cost==0 and self.bow_draw_seconds is not None:
+            ammo_cost=1.
         if ammo_cost == 0.0:
-            return self.fire_rate
+            return 1./self.trigger_interval if self.trigger_interval>0 else self.fire_rate
         triggers = max(float(self.magazine) / ammo_cost, 0.0)
         if triggers <= 0.0:
             return 0.0
-        cycle = triggers / self.fire_rate + (self.reload_time or 0.0)
+        cycle = triggers*self.trigger_interval+(self.reload_time or 0.)
         return max(float(triggers / cycle), 0.0) if cycle else 0.0
 
     @property
@@ -1169,8 +1273,9 @@ def apply_mods(
     if (mode.get('behaviorKind') == 'auxiliary-melee'
             and weapon.get('slot') in ('primary','secondary','arch_gun')):
         raise ValueError(f"fire mode {fire_mode} is auxiliary melee, outside nonmelee scope")
-    from .event_profiles import base_profile
+    from .event_profiles import base_profile, co_profile
     event_profile = base_profile(weapon, fire_mode)
+    gunco = co_profile(weapon,fire_mode)
     spool = event_profile.get('spool')
     if spool:
         damage = mode['damage']
@@ -1182,6 +1287,8 @@ def apply_mods(
         if mode.get('falloffMinDamage') is not None:
             mode['falloffMinDamage'] *= event_profile['playerDamageMultiplier']
     base = (mode.get("damage") or {}).get("types")
+    if base and mode.get('chargeDamageMultiplier'):
+        base={k:v*mode['chargeDamageMultiplier'] for k,v in base.items()}
     if not base:
         raise ValueError(f"{weapon.get('name')} fire mode {fire_mode} has no damage data")
 
@@ -1309,8 +1416,26 @@ def apply_mods(
             unsupported.add('primary-compression-weapon-profile-unverified')
     ordinary_scale = _combine(1.0, damage_scale_effects)
     damage_scale = _combine(1.0, damage_scale_effects + status_damage_effects)
+    if gunco and status_damage_effects:
+        fraction = gunco['baseFraction']
+        excluded_flat = sum(e.value for e in buckets['WEAPON_DAMAGE_AMOUNT'] if e.operation=='ADD_BASE'
+                            and e.source_path in gunco['excludeFlatSources'])
+        total = sum(base.values())+damage_flat_base
+        fraction *= max(total-excluded_flat,0.)/total if total else 0.
+        raw_co = _combine(1.,status_damage_effects)-1.
+        damage_scale = ordinary_scale*(1.+raw_co*fraction) if gunco['behavior']=='independent' else ordinary_scale+raw_co*fraction
     # Multiplying Compression amplifies the ordinary bucket, not adding GunCO.
     damage_scale += ordinary_scale * (compression_mult - 1.0)
+    victim_damage = _combine(1.,buckets['WEAPON_VICTIM_DAMAGE_AMOUNT'])-1.
+    original_total = sum(base.values())
+    co_fraction = gunco.get('baseFraction',1.)*original_total/max(original_total+damage_flat_base,1e-9)
+    victim_low_health_multiplier = 1.
+    if victim_damage:
+        if gunco.get('behavior')=='independent':
+            co_current = _combine(1.,status_damage_effects)
+            victim_low_health_multiplier = 1.+victim_damage*co_fraction/max(co_current,1e-9)
+        else:
+            victim_low_health_multiplier = 1.+victim_damage*co_fraction/max(damage_scale,1e-9)
     if damage_flat_base:
         base_total_unscaled = sum(base.values())
         if base_total_unscaled > 0:
@@ -1350,7 +1475,11 @@ def apply_mods(
         damage_types = _apply_innate_elements(
             damage_types, base_total=base_total * damage_scale, entries=innate_entries
         )
-    falloff_multiplier = _falloff_multiplier(mode, base_total, scenario.distance)
+    projectile_speed_multiplier = max(0.,_combine(1.,buckets['WEAPON_PROJECTILE_SPEED']))
+    falloff_mode = mode
+    if projectile_speed_multiplier!=1. and mode.get('falloffRange'):
+        falloff_mode = {**mode,'falloffRange':[x*projectile_speed_multiplier for x in mode['falloffRange']]}
+    falloff_multiplier = _falloff_multiplier(falloff_mode, base_total, scenario.distance)
 
     damage = mode["damage"]
     # Audited native profiles are consumed by manual_combat/replay. Their
@@ -1406,7 +1535,7 @@ def apply_mods(
     reload_base = mode.get('reloadTime') or 0.0
     if event_profile.get('reloadPerShell') is not None:
         reload_base = event_profile['reloadStart'] + event_profile['reloadPerShell'] * magazine + event_profile['reloadEnd']
-    reload_time = _divide(reload_base, buckets['WEAPON_RELOAD_SPEED'])
+    reload_time = _divide(_combine(reload_base,buckets['WEAPON_RELOAD_TIME']), buckets['WEAPON_RELOAD_SPEED'])
     battery = event_profile.get('battery')
     if battery:
         reload_time = _divide(battery['delayEmptySeconds'], buckets['WEAPON_RELOAD_SPEED']) + magazine / battery['regenPerSecond']
@@ -1419,32 +1548,110 @@ def apply_mods(
                 reload_time = float(profile['enterSeconds']) + float(profile['exitSeconds'])
         elif scenario.incarnon_cycle:
             unsupported.add('incarnon-cycle-data-unavailable')
+    damage = dict(damage)
+    for conversion in buckets['RUNTIME_INCARNON_STAT_CONVERSION']:
+        if conversion.runtime_kind == 'WEAPON_PROC_CHANCE':
+            source_chance = _combine(per_pellet_proc, buckets['WEAPON_PROC_CHANCE'])
+            bonus = min(conversion.runtime_threshold, max(0., source_chance) * conversion.value)
+            damage['critChance'] = float(damage.get('critChance') or 0.) + bonus
+        elif conversion.runtime_kind == 'WEAPON_CRIT_CHANCE':
+            source_chance = _combine(damage.get('critChance', 0.), buckets['WEAPON_CRIT_CHANCE'])
+            bonus = min(conversion.runtime_threshold, max(0., source_chance) * conversion.value)
+            per_pellet_proc += bonus
+    crit_chance = _combine(damage.get('critChance',0.),buckets['WEAPON_CRIT_CHANCE'])
+    fire_rate=(mode.get('fireRate') or 0.) if buckets['RUNTIME_LOCK_FIRE_RATE'] else _combine(mode.get('fireRate') or 0.,buckets['WEAPON_FIRE_RATE'])
+    charge_rate=max(1e-9,_combine(1.,buckets['WEAPON_CHARGE_RATE']))
+    charge_fire_scale=1. if weapon.get('slot')=='arch_gun' else max(fire_rate/max(mode.get('fireRate') or 0.,1e-9),1e-9)
+    charge_seconds=(event_profile.get('charge') or {}).get('seconds',0.)/(charge_fire_scale*charge_rate)
+    bow_draw=event_profile.get('drawSeconds',0.)/(charge_fire_scale*charge_rate) if event_profile.get('bow') else None
+    crit_flat, crit_relative = _split_crit_damage_bucket(buckets['WEAPON_CRIT_DAMAGE'])
+    crit_base = damage.get('critMultiplier',1.)+sum(e.value for e in crit_flat)
+    crit_multiplier = _combine(quantize_base_crit_damage(crit_base),crit_relative)
+    anti_threshold = _combine(0.,buckets['WEAPON_CRIT_UNDER_PROC_THRESHOLD_MAX'])
+    if anti_threshold>0 and scenario.victim_status_count<anti_threshold:
+        crit_multiplier += _combine(0.,buckets['WEAPON_CRIT_UNDER_PROC_THRESHOLD_BONUS'])
+    low_threshold = _combine(0.,buckets['WEAPON_LOW_CRIT_VALUE']) if buckets['WEAPON_LOW_CRIT_VALUE'] else None
+    low_bonus = (_combine(quantize_base_crit_damage(_combine(crit_base,buckets['WEAPON_LOW_CRIT_DAMAGE'])),crit_relative)
+                 -_combine(quantize_base_crit_damage(crit_base),crit_relative)) if low_threshold is not None else 0.
+    multishot = innate_multishot if buckets['RUNTIME_LOCK_MULTISHOT'] else _combine(innate_multishot,buckets['WEAPON_FIRE_ITERATIONS'])
+    continuous = mode.get('trigger')=='/Lotus/Language/Menu/Loadout_TriggerContinous'
+    pool_cost = 0.
+    pool_bonus = buckets['WEAPON_AMMO_POOL_MULTISHOT_DAMAGE']
+    pool_multiplier = 1.
+    if pool_bonus:
+        source_base = sum(base.values())
+        pool_multiplier = _combine(source_base,pool_bonus)/source_base if source_base else 1.
+    if pool_bonus and multishot>1.:
+        pool_cost = multishot-1.
+        amplified = 1.+(multishot-1.)*pool_multiplier
+        if continuous:
+            multishot = amplified
+        else:
+            factor = amplified/multishot
+            damage_types = {k:v*factor for k,v in damage_types.items()}
+            compression_mult *= factor
+    dot_basis = elemental_base_total * _combine(1.0, damage_scale_effects) * compression_mult
+    dot_elements = _dot_elemental_multipliers(buckets['WEAPON_PERCENT_BASE_DAMAGE_ADDED'],
+                                            buckets['WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE'])
+    weapon_crit_chance = crit_chance
+    shield_crit_damage_multiplier = 1.
+    passes = scenario.combat_state.get('orbPasses',0)
+    radial_only = damage.get('source') in ('ExplosiveAttack','RadialDamage','EmbedDeathAttack','StackingAttack')
+    if passes and not radial_only and weapon.get('slot') not in MELEE_SLOTS:
+        # ShieldInfo is applied after weapon element coalescing. SetCount uses
+        # newCount/maxCount for merged orbs; an untouched orb keeps its minimum.
+        # The collision list grants critical damage only for its first entry.
+        stacks = scenario.combat_state.get('orbStacks',1)
+        electric = 1. if stacks==1 else 1.+4.*stacks/3.
+        special = scenario.combat_state.get('orbSpecialShield',False)
+        shields = passes*(2 if special else 1)
+        atten = .66**shields
+        electric_bonus = passes*electric
+        damage_types = dict(damage_types)
+        damage_types['DT_ELECTRICITY'] = damage_types.get('DT_ELECTRICITY',0.)+elemental_base_total*damage_scale*electric_bonus
+        if special:
+            damage_types['DT_RADIATION'] = damage_types.get('DT_RADIATION',0.)+elemental_base_total*damage_scale*2.*passes
+        damage_types = {k:v*atten for k,v in damage_types.items()}
+        dot_basis *= atten
+        dot_elements['DT_ELECTRICITY'] = dot_elements.get('DT_ELECTRICITY',1.)+electric_bonus
+        crit_chance += .25*shields
+        crit_multiplier *= 1.25
+        low_bonus *= 1.25
+        shield_crit_damage_multiplier = 1.25
     return ModdedStats(
         damage_types=damage_types,
-        crit_chance=_combine(damage.get("critChance", 0.0), buckets["WEAPON_CRIT_CHANCE"]),
+        crit_chance=crit_chance,
         # 基础暴伤量化（wfsim §5）：flat CD 先加进基础值 → 量化到 32/4095
         # 步长 → 相对 CD（%）后乘。旧的 _combine 单序列在 flat+relative 混合
         # 时会以错误顺序合并（flat 落在量化之外或之内不定）。
-        crit_multiplier=(
-            lambda base, bucket: _combine(
-                quantize_base_crit_damage(
-                    base
-                    + sum(e.value for e in _split_crit_damage_bucket(bucket)[0])
-                ),
-                _split_crit_damage_bucket(bucket)[1],
-            )
-        )(damage.get("critMultiplier", 1.0), buckets["WEAPON_CRIT_DAMAGE"]),
+        crit_multiplier=crit_multiplier+(low_bonus if low_threshold is not None and crit_chance<low_threshold else 0.),
+        low_crit_threshold=low_threshold,
+        low_crit_damage_base=crit_multiplier if low_threshold is not None else None,
+        low_crit_damage_bonus=low_bonus,
+        ammo_pool_multishot_cost=pool_cost,
+        ammo_pool_damage_bonus=pool_multiplier-1. if pool_bonus else 0.,
+        victim_full_crit_chance=_combine(damage.get('critChance',0.),[*buckets['WEAPON_CRIT_CHANCE'],
+            *[replace(e,upgrade_type='WEAPON_CRIT_CHANCE') for e in buckets['WEAPON_VICTIM_CRIT_CHANCE']]])-weapon_crit_chance,
+        victim_full_crit_damage=(_combine(quantize_base_crit_damage(crit_base+sum(e.value for e in buckets['WEAPON_VICTIM_CRIT_DAMAGE'])),crit_relative)
+            -_combine(quantize_base_crit_damage(crit_base),crit_relative))*shield_crit_damage_multiplier,
+        victim_low_health_multiplier=victim_low_health_multiplier,
+        projectile_speed_multiplier=projectile_speed_multiplier,
+        charge_rate_multiplier=charge_rate,
+        charge_seconds=charge_seconds,
+        bow_draw_seconds=bow_draw,
         explosion_radius_multiplier=_combine(1.0, buckets['WEAPON_EXPLOSION_RADIUS']),
-        radial_only=damage.get('source') in ('ExplosiveAttack', 'RadialDamage', 'EmbedDeathAttack', 'StackingAttack'),
+        incarnon_charge_multiplier=max(0.0, _combine(1.0, buckets['WEAPON_ADD_CHARGE_COUNTER_MULTIPLIER'])),
+        radial_only=radial_only,
         native_forced_procs={dtype: float((damage.get('forcedProcs') or []).count(proc))
-            for proc, dtype in [('PT_ELECTROCUTION', 'DT_ELECTRICITY'), ('PT_CHILLED', 'DT_FREEZE'), ('PT_FRAILTY', 'DT_PUNCTURE')]
+            for proc, dtype in [('PT_KNOCKBACK','DT_IMPACT'),('PT_FRAILTY','DT_PUNCTURE'),('PT_BLEEDING','DT_SLASH'),
+                ('PT_IMMOLATION','DT_FIRE'),('PT_CHILLED','DT_FREEZE'),('PT_ELECTROCUTION','DT_ELECTRICITY'),
+                ('PT_POISONED','DT_POISON'),('PT_FLASHBANG','DT_EXPLOSION'),('PT_RAD_TOX','DT_RADIATION'),
+                ('PT_ASPHYXIATION','DT_GAS'),('PT_MAGNETIZED','DT_MAGNETIC'),('PT_INFECTED','DT_VIRAL'),('PT_CAUSTIC_BURN','DT_CORROSIVE')]
             if proc in (damage.get('forcedProcs') or ())},
-        continuous=mode.get('trigger') == '/Lotus/Language/Menu/Loadout_TriggerContinous',
+        continuous=continuous,
         status_chance=_combine(per_pellet_proc, buckets["WEAPON_PROC_CHANCE"]),
-        multishot=(innate_multishot if buckets['RUNTIME_LOCK_MULTISHOT'] else _combine(
-            innate_multishot, buckets['WEAPON_FIRE_ITERATIONS']
-        )),
-        fire_rate=(mode.get("fireRate") or 0.0) if buckets["RUNTIME_LOCK_FIRE_RATE"] else _combine(mode.get("fireRate") or 0.0, buckets["WEAPON_FIRE_RATE"]),
+        multishot=multishot,
+        fire_rate=fire_rate,
         magazine=magazine,
         # 装填时长在上方按灵化口径预计算（reload_time 局部变量）。
         reload_time=reload_time,
@@ -1506,14 +1713,13 @@ def apply_mods(
         # 0x1406dc47e 同链）。STACKING_MULTIPLY 卡（Primary Acuity
         # ×0.318/级）从 1 累乘再减回 1；ADD 卡直接累加。
         weakpoint_crit_chance_bonus=sum(e.value for e in buckets['WEAPON_CRIT_CHANCE_WEAKPOINT'] if e.operation == 'ADD'),
-        weakpoint_crit_chance_relative=sum(e.value for e in buckets['WEAPON_CRIT_CHANCE_WEAKPOINT'] if e.operation == 'STACKING_MULTIPLY'),
+        weakpoint_crit_chance_relative=sum(e.value for e in buckets['WEAPON_CRIT_CHANCE_WEAKPOINT'] if e.operation == 'STACKING_MULTIPLY')
+            + sum(e.value for e in buckets['WEAPON_CRIT_CHANCE_BODY_PART'] if e.symbol_filter=='HEAD' and e.operation=='STACKING_MULTIPLY'),
+        bodyshot_crit_multiplier=_combine(1.,[e for e in buckets['WEAPON_CRIT_CHANCE_BODY_PART'] if e.symbol_filter=='TORSO']),
         base_crit_chance=_combine(damage.get('critChance', 0.0), [e for e in buckets['WEAPON_CRIT_CHANCE'] if e.operation in ('ADD_BASE', 'SET_BASE')]),
         falloff_multiplier=falloff_multiplier,
-        dot_base_damage=elemental_base_total * _combine(1.0, damage_scale_effects) * compression_mult,
-        dot_elemental_multipliers=_dot_elemental_multipliers(
-            buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED"],
-            buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE"],
-        ),
+        dot_base_damage=dot_basis,
+        dot_elemental_multipliers=dot_elements,
         impact_proc_conversions=impact_proc_conversions,
         independent_proc_chances=independent_proc_chances,
         innate_damage_types={
@@ -1651,7 +1857,12 @@ def _qualifier_rejection(
     source = effect.source_path or effect.upgrade_type
     if effect.operation not in SUPPORTED_OPERATIONS:
         return f"{source}: cannot evaluate operation {effect.operation}"
-    if effect.symbol_filter and effect.upgrade_type != "GAMEPLAY_FACTION_DAMAGE":
+    victim_gate = (effect.upgrade_type in {'WEAPON_VICTIM_CRIT_CHANCE','WEAPON_VICTIM_CRIT_DAMAGE'}
+                   and effect.symbol_filter=='VictimFullHealthShield') or (
+                   effect.upgrade_type=='WEAPON_VICTIM_DAMAGE_AMOUNT' and effect.symbol_filter=='VictimLessThanHalfHealth')
+    bodypart_gate=(effect.upgrade_type=='WEAPON_CRIT_CHANCE_BODY_PART'
+                   and effect.symbol_filter in {'TORSO','HEAD','ARM_LEFT','ARM_RIGHT','LEG_LEFT','LEG_RIGHT'})
+    if effect.symbol_filter and effect.upgrade_type != "GAMEPLAY_FACTION_DAMAGE" and not victim_gate and not bodypart_gate:
         return f"{source}: cannot evaluate symbol filter {effect.symbol_filter}"
     # Empty symbol-filter faction damage means "all factions" (Roar-style
     # external buffs); it flows into the "" row of faction_damage_multipliers.
@@ -2536,6 +2747,14 @@ def _apply_weakpoint_folding(
         return raw
     weakpoint_share = 1.0 if hit_multiplier > 1.0 + 1e-9 else 0.0
     if weakpoint_share <= 0.0:
+        if stats.bodyshot_crit_multiplier!=1.:
+            cc=max(stats.crit_chance+crit_chance_add,0.)
+            cd=max(stats.crit_multiplier+crit_multiplier_add,1.)
+            original=effective_hit_multiplier(cc,cd,stats.noncrit_damage_multiplier,
+                hit_critical_multiplier,double_crit_chance=stats.double_crit_chance)
+            modified=effective_hit_multiplier(cc*stats.bodyshot_crit_multiplier,cd,stats.noncrit_damage_multiplier,
+                hit_critical_multiplier,double_crit_chance=stats.double_crit_chance)
+            raw*=modified/original if original else 1.
         return raw
     if getattr(stats, "weakpoint_damage_bonus", 0.0) > 0.0:
         raw *= (hit_multiplier + 1.5 * float(stats.weakpoint_damage_bonus)) / hit_multiplier

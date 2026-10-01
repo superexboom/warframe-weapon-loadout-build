@@ -34,6 +34,8 @@ class RuntimeAdapter:
     range_required: float | None = None
     # IndependentStatusProcOnDamage (Prototype Shock Coils).
     proc_type: str | None = None
+    duration: float | None = None
+    max_stacks: int | None = None
 
 
 def resolve_runtime_adapter(
@@ -57,6 +59,10 @@ def resolve_runtime_adapter(
     scripts = _apply_scripts(mod.get("runtimeScripts"))
     if not scripts:
         return None
+    tap=double_tap_configuration(mod,rank)
+    if tap:
+        return RuntimeAdapter(key='double-tap',kind='consecutive_hit_damage',source_path=path,rank=rank,
+                              damage_bonus=tap['perHit'],duration=tap['duration'],max_stacks=tap['maximum'])
 
     # Only the three canonical Acuity cards use this stat override contract.
     acuity_paths = {
@@ -702,6 +708,354 @@ def compression_configuration(record, rank):
 
 
 STUG_EVOLUTIONS = '/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/StugIncarnonEvolutions/'
+MQ_AUGMENT = '/Lotus/Upgrades/Mods/Rifle/Event/Arbitration/InfCrpShockSwarmRifleArbitrationMod'
+
+
+def mq_augment_multiplier(record,rank):
+    if record.get('path')!=MQ_AUGMENT or not isinstance(rank,int) or isinstance(rank,bool) or not 0<=rank<=5:
+        return None
+    effects = record.get('effects') or []
+    if len(effects)!=1 or effects[0].get('upgradeType')!='NONE' or effects[0].get('valuePerRank')!=0:
+        return None
+    script = effects[0].get('localizationScript') or {}
+    values = script.get('_radialDmgPct') or []
+    if (script.get('Script')!='/Lotus/Scripts/WeaponAttachments/InfCrpShockSwarm.lua'
+            or script.get('Function')!='GetLocValues' or script.get('_radialRadius')!=15
+            or len(values)!=6 or not all(_close(a,b) for a,b in zip(values,(.5,.8,1.1,1.4,1.7,2.)))):
+        return None
+    return float(values[rank])
+
+
+def double_tap_configuration(record,rank):
+    if (record.get('path')!='/Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod'
+            or record.get('maxRank')!=3 or not isinstance(rank,int) or isinstance(rank,bool) or not 0<=rank<=3):
+        return None
+    script=(record.get('runtimeScripts') or {}).get('apply') or {}
+    if (script.get('Script')=='/Lotus/Upgrades/CosmeticEnhancers/Offensive/BonusDamageOnNextHit.lua'
+            and script.get('Function')=='ApplyUpgrade' and _close(script.get('_bonusDamagePercent'),.05)
+            and _close(script.get('_multTimeWindow'),.5)):
+        per=.05*(rank+1)
+        return dict(perHit=per,maximum=int(math.floor(4./per+1e-9)),duration=.5*(rank+1))
+    return None
+
+
+def miter_charge_aoe(record):
+    if record.get('path')!='/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/MiterIncarnonEvolutions/MiterEvoTier3A':
+        return None
+    from .incarnon_conditions import script_entries
+    scripts=list(script_entries(record.get('runtimeScripts')))
+    if (len(scripts)==1 and scripts[0].get('Script')=='ProjectileIndexOnExtraCharge.lua'
+            and scripts[0].get('Function')=='StartMod'):
+        # Native charged projectile supplies Amount=700 and radius=5. The
+        # charged state's multiplier supplies 2x; the one-second hold is fixed.
+        return dict(damage=700.,radius=5.,holdSeconds=1.)
+    return None
+
+
+def incarnon_stat_conversion(record):
+    """Native base-stat conversion, evaluated after the source's MOD bucket."""
+    from .incarnon_conditions import script_entries
+    scripts = list(script_entries(record.get('runtimeScripts')))
+    effects = record.get('effects') or []
+    if (record.get('conditionalEffects') or len(scripts) != 1 or len(effects) != 1
+            or effects[0].get('upgradeType') != 'NONE' or effects[0].get('valuePerRank') != 0):
+        return None
+    script = scripts[0]
+    if (script.get('Script') != '/Lotus/Scripts/Mods/WeaponAddBaseStatForModdedStat.lua'
+            or script.get('Function') != 'OnUpgradeApplied' or script.get('_isDynamic') != 1):
+        return None
+    source, target = script.get('_sourceModdedStatType'), script.get('_targetBaseStatType')
+    if {source, target} != {'WEAPON_CRIT_CHANCE', 'WEAPON_PROC_CHANCE'}:
+        return None
+    fraction, maximum = script.get('_bonusPercentage'), script.get('_bonusMaxCap')
+    if not ((source == 'WEAPON_PROC_CHANCE' and _close(fraction, .25) and _close(maximum, .35))
+            or (source == 'WEAPON_CRIT_CHANCE' and _close(fraction, .3) and _close(maximum, .4))):
+        return None
+    return dict(source=source, target=target, fraction=float(fraction), maximum=float(maximum))
+
+
+def verified_incarnon_condition(record, condition):
+    verified = verified_stug_condition(record, condition)
+    if verified:
+        return verified
+    path = str(record.get('path') or '')
+    source = str(condition.get('sourcePath') or '')
+    terms = condition.get('effects') or []
+    script = (condition.get('runtimeScripts') or {}).get('apply') or {}
+    names={str(x).rsplit('/',1)[-1] for x in condition.get('conditions') or []}
+    if (path.endswith('/EntratiWristGunEvoTier4B') and len(terms)==1
+            and terms[0].get('upgradeType')=='WEAPON_DAMAGE_AMOUNT'
+            and _close(terms[0].get('valuePerRank'),2.)
+            and names=={'EvoTier4BOnPunchthroughCondition','EvoTier4BOnIncarnonPunchthroughCondition'}):
+        return {**condition,'runtimeScripts':{},'eventKind':'on-onos-damage-condition',
+                'conditionText':'基础形态穿透命中后续敌人，或灵化爆发攻击累计命中 2 次后：+200% 武器伤害，持续 10 秒。'}
+    if 'EvoRifleOnTwoHeadshotsCondition' in names and str(record.get('path') or '').endswith('EvoRifleDamageOnHeadshots'):
+        return {**condition,'runtimeScripts':{},'eventKind':'on-headshot','requiredCount':2,'requiredTime':2,'maxStacks':1,
+                'conditionText':'2 秒内命中头部 2 次后，爆头伤害增加 50%，持续 8 秒。'}
+    if names=={'OnSybarisIncarnonActivatedCondition'} and 'SybarisEvoTier3ASubMod' in source:
+        return {**condition,'formGate':True,'runtimeScripts':{}}
+    if names=={'RifleOnFullBurstHit'} and 'SybarisEvoTier3B' in source:
+        return {**condition,'eventKind':'on-burst-hit','resetOn':['on-reload']}
+    if (names=={'OnWarframeOnlyAbilityCondition'} and '/DualToxocystIncarnonEvolutions/' in path
+            and len(terms)==1 and terms[0].get('upgradeType')=='WEAPON_FIRE_ITERATIONS'
+            and _close(terms[0].get('valuePerRank'),.05) and condition.get('maxStacks')==20):
+        return {**condition,'eventKind':'on-warframe-ability','initialStateKey':'abilityUses',
+                'conditionText':'玩家施放战甲技能后增加一层多重射击，每层 +5%，最多 20 层；从显式战斗状态读取已施法次数和后续施法时点。'}
+    if (names=={'ZylokOnBurstHeadshot'} and '/ZylokIncarnonEvolutions/' in path
+            and len(terms)==1 and terms[0].get('upgradeType')=='WEAPON_DAMAGE_AMOUNT'
+            and terms[0].get('operation')=='ADD_BASE' and terms[0].get('valuePerRank')==20
+            and condition.get('maxStacks')==3):
+        return {**condition,'eventKind':'on-burst-headshot','resetOn':['on-reload','on-transform'],
+                'conditionText':'基础形态一次按下和松开扳机的两发都爆头后，增加 +20 基础伤害，最多 3 层；换弹、进入或退出灵化形态时清空。'}
+    if (script.get('Script')=='/Lotus/Scripts/Mods/ShieldOnCondition.lua' and script.get('Function')=='StartMod'
+            and script.get('_shieldAmount')==100 and script.get('_allowOvershields')==1
+            and '/SomaIncarnonEvolutions/' in path):
+        return {**condition,'runtimeScripts':{},'utilityOnly':True,
+                'conditionText':'武器的切割异常跳伤击杀后恢复 100 护盾，允许形成过载护盾；当前伤害基准不模拟玩家受击，所需过载护盾状态由场景输入。'}
+    if (names=={'OnHitwithElecPistolCondition'} and '/FurisIncarnonEvolutions/' in path
+            and len(terms)==1 and terms[0].get('upgradeType')=='WEAPON_FIRE_ITERATIONS'
+            and terms[0].get('operation')=='ADD' and _close(terms[0].get('valuePerRank'),.4)
+            and condition.get('maxStacks')==3 and condition.get('duration')==2):
+        # The EE challenge is binary-only in this dump; the pinned WFSim
+        # Stormburst contract supplies per-stack expiry and the victim gate.
+        return {**condition,'eventKind':'on-hit','stackMode':'per-stack',
+                'nativeEvent':dict(kind='on-hit',victimProcType='DT_ELECTRICITY',requiredCount=1),
+                'conditionText':'命中已经带有电击异常的目标后，额外 +0.4 多重射击，最多 3 层；每层独立持续 2 秒。'}
+    if (path=='/Lotus/Upgrades/Evolutions/Shotgun/EvoShotgunAmmoEffOnPunchThrough'
+            and names=={'EvoShotgunOnPunchthroughCondition'} and len(terms)==1
+            and terms[0].get('upgradeType')=='WEAPON_AMMO_CONSUME_RATE'
+            and _close(terms[0].get('valuePerRank'),-.7) and condition.get('duration')==20):
+        return {**condition,'eventKind':'on-three-enemy-punchthrough',
+                'conditionText':'同一个弹丸穿透并命中 3 名不同敌人后，弹药消耗减少 70%，持续 20 秒；后续目标数需显式设置为至少 2。'}
+    if (script.get('Script')=='/Lotus/Scripts/Mods/WeaponEquipBuffs.lua' and script.get('Function')=='StartMod'
+            and script.get('_previousWeaponSlot')=='SLOT_2' and condition.get('duration') in {3,4}
+            and terms and all(e.get('upgradeType') in {'WEAPON_CRIT_CHANCE','WEAPON_CRIT_DAMAGE'} for e in terms)):
+        return {**condition,'runtimeScripts':{},'eventKind':'on-equip-from-primary','resetOn':['on-holster'],
+                'conditionText':f"从主武器切换至当前武器后，获得暴击基数加成，持续 {condition['duration']:g} 秒。"}
+    if (script.get('Script')=='/Lotus/Scripts/Mods/NoEnemiesInRangeBuff.lua' and script.get('Function')=='ApplyUpgrade'
+            and script.get('_upgradeType')=='WEAPON_FIRE_ITERATIONS' and script.get('_operation')=='STACKING_MULTIPLY'
+            and script.get('_rangeRequired')==[5] and len(terms)==1):
+        return {**condition,'runtimeScripts':{},'actorGate':dict(kind='no-enemies',radius=5.),
+                'conditionText':f"5 米内没有敌人时，多重射击增加 {terms[0]['valuePerRank']*100:g}%。"}
+    if (script.get('Script')=='/Lotus/Scripts/Mods/RestoreAmmoOnCondition.lua' and script.get('Function')=='StartMod'
+            and script.get('_restoreFromAmmoPool')==1 and len(terms)==1
+            and terms[0].get('upgradeType')=='WEAPON_CLIP_MAX' and terms[0].get('operation')=='ADD_BASE'
+            and _close(terms[0].get('valuePerRank'),script.get('_ammoAmount'))
+            and (condition.get('nativeEvent') or {}).get('kind')=='on-reload-empty-complete'):
+        return {**condition,'runtimeScripts':{},'refillMagazineGrowth':True}
+    if ammo_restore_configuration(record):
+        return {**condition,'runtimeScripts':{},'sequenceGate':'ammo-restore',
+                'conditionText':'按已验证的命中条件将备用弹药移入弹匣；不恢复灵化充能，也不省略正常装填事件。'}
+    if onos_ammo_refund(record):
+        return {**condition,'runtimeScripts':{},'sequenceGate':'reserve-ammo',
+                'conditionText':'武器击杀后补充 10 发备用弹药；当前采用无限备用弹药口径，不改变弹匣、装填和伤害。'}
+    if reserve_ammo_refund(record):
+        return {**condition,'runtimeScripts':{},'sequenceGate':'reserve-ammo',
+                'conditionText':'穿透命中后续目标时有 20% 概率恢复 10% 备用弹药；无限备用弹药口径下不改变弹匣、装填和伤害。'}
+    if latron_puncture_strip(record):
+        return {**condition,'runtimeScripts':{},'sequenceGate':'target-armor-strip',
+                'conditionText':'每个施加穿刺异常的武器弹丸永久削减目标 20% 初始护甲，同一弹丸多层穿刺只削一次；五次合格弹丸完全削甲。'}
+    if (path=='/Lotus/Upgrades/Evolutions/Shotgun/EvoShotgunShellReloadToggle'
+            and script=={'Script':'EvoShotgunShellReloadToggle.lua','Function':'ToggleUpgrade'}):
+        return {**condition,'runtimeScripts':{},'eventKind':'on-reload-toggle','toggleOn':'on-reload-complete',
+                'maxStacks':1,'duration':0,'effects':[dict(upgradeType='WEAPON_PROJECTILE_SPEED',operation='STACKING_MULTIPLY',valuePerRank=1.)],
+                'conditionText':'完整装填后在 +4 米穿透和 +100% 投射物速度之间切换；投射物速度作用于衰减距离，穿透不增加单目标伤害。'}
+    if onos_crits_for_hits(record):
+        return {**condition,'runtimeScripts':{},'sequenceGate':'onos-charge',
+                'conditionText':'灵化蓄力阶段命中敌人（含武器异常跳伤）增加一层；每层使最终爆发的暴击率和暴击伤害增加 5%，最多 50 层；进入爆发后清空。'}
+    if (path.endswith('/EntratiWristGunEvoTier4A')
+            and condition.get('conditions')==['EvoTier4AOnConsecutiveHeadshotCondition']
+            and condition.get('maxStacks')==4 and len(terms)==1
+            and terms[0].get('upgradeType')=='WEAPON_HEADSHOT_MULTIPLIER'
+            and _close(terms[0].get('valuePerRank'),.3)
+            and 'EntratiWristGunIncarnonConsecutiveHeadshots.lua' in str(record.get('runtimeScripts'))):
+        return {**condition,'runtimeScripts':{},'eventKind':'on-consecutive-headshot','minimumConsecutive':2,
+                'conditionText':'连续爆头达到 2 次后，每次增加 +30% 爆头伤害，最多 4 层；身体命中会清空。'}
+    felarx = '/Lotus/Upgrades/Evolutions/Shotgun/EvoShotgunShellReloadFireRate'
+    if (path == source == felarx
+            and condition.get('conditions') == ['EvoShotgunShellReloadCondition']
+            and condition.get('maxStacks') == 99 and condition.get('duration') == 1
+            and script == {'Script': 'EvoShotgunReloadShellFireRate.lua', 'Function': 'ApplyUpgrade'}
+            and len(terms) == 1 and terms[0].get('upgradeType') == 'WEAPON_FIRE_RATE'
+            and terms[0].get('operation') == 'STACKING_MULTIPLY'
+            and _close(terms[0].get('valuePerRank'), .1)):
+        # Native IsInfinite=1; the Challenge emits RELOAD once per shell and
+        # resets on PRE_RELOAD/HolsterItem. Duration=1 is not a one-second buff.
+        return {**condition, 'runtimeScripts': {}, 'eventKind': 'on-shell-reloaded',
+                'duration': 0, 'resetOn': ['on-reload', 'on-holster'],
+                'conditionText': '每装入一发弹药获得 +10% 射速，最多 99 层；下一次装填开始或收枪时清空。'}
+    from .incarnon_conditions import script_entries
+    scripts = list(script_entries(condition.get('runtimeScripts')))
+    if len(scripts) != 1:
+        return None
+    script = scripts[0]
+    root = '/Lotus/Scripts/Mods/'
+    name = str(script.get('Script') or '')
+    if (name=='/Lotus/Upgrades/Mods/ModOnAimGlideOrSlide.lua' and script.get('Function')=='ModApplied'
+            and script.get('_mustMatchWeapon')==1 and script.get('_upgradeType')=='WEAPON_AMMO_CONSUME_RATE'
+            and script.get('_stackingMode')=='ADD' and len(terms)==1
+            and _close(terms[0].get('valuePerRank'),script.get('_value'))):
+        return {**condition,'runtimeScripts':{},'actorGate':dict(kind='anyBoolean',keys=['aimGliding','sliding']),
+                'conditionText':f"瞄准滑翔或滑行期间：弹药消耗减少 {abs(script['_value'])*100:g}%。"}
+    gates = {
+        root+'RequireArmor.lua': ('frameArmor','_minArmorRequired'),
+        root+'RequireEnergyPool.lua': ('energyPool','_minEnergyPoolRequired'),
+        root+'RequireSprintSpeed.lua': ('sprintMultiplier','_minSpeedMultiplier'),
+    }
+    gate = None
+    if name in gates and script.get('Function') == 'StartMod':
+        key, parameter = gates[name]
+        minimum = script.get(parameter)
+        if isinstance(minimum,(int,float)) and not isinstance(minimum,bool) and math.isfinite(minimum) and minimum >= 0:
+            gate = dict(kind='minimum', key=key, minimum=float(minimum))
+    elif name==root+'RequireEnergySpent.lua' and script.get('Function')=='StartMod':
+        required = script.get('_energySpentRequired')
+        if isinstance(required,(int,float)) and not isinstance(required,bool) and required>0:
+            return {**condition,'runtimeScripts':{},'energyGate':float(required),'eventKind':'on-energy-spent'}
+    elif name in {root+'RequireOvershields.lua',root+'ChannelAbilityMod.lua'} and script.get('Function')=='StartMod':
+        gate = dict(kind='boolean',key='overshields' if name.endswith('RequireOvershields.lua') else 'channeling')
+    elif (name in {root+'UnlockAltMelee.lua','/Lotus/Scripts/WeaponAttachments/ZarimanDagger.lua',
+                   '/Lotus/Scripts/WeaponAttachments/ZarimanTonfaWeapon.lua'}
+          and script.get('Function')=='OnActivateVoidMode'
+          and all(e.get('upgradeType') in {'NONE','WEAPON_MELEE_DAMAGE','WEAPON_RANGE','WEAPON_FIRE_RATE',
+                                          'AVATAR_SPRINT_SPEED','AVATAR_PARKOUR_BOOST'} for e in terms)):
+        gate = dict(kind='boolean',key='incarnonMeleeActive')
+    elif name==root+'RequireEnemyCount.lua' and script.get('Function')=='StartMod':
+        radius,per,maximum = (script.get(k) for k in ('_enemyRange','_enemyPerStack','_maxStacks'))
+        if all(isinstance(x,(int,float)) and not isinstance(x,bool) and math.isfinite(x) and x>0 for x in (radius,per,maximum)):
+            gate = dict(kind='enemies',radius=float(radius),per=float(per),maximum=float(maximum))
+    elif name==root+'OnSelectiveSlotEquipped.lua' and script.get('Function')=='OnUpgradeApplied':
+        required = [script[k] for k in ('_equippedRifleWeaponType','_equippedPistolWeaponType','_equippedMeleeWeaponType') if script.get(k)]
+        empty = script.get('_unequippedSlots') or []
+        if required or empty:
+            gate = dict(kind='equipment',required=required,empty=empty)
+    if not gate:
+        return None
+    return {**condition,'runtimeScripts':{},'actorGate':gate}
+
+
+def onos_crits_for_hits(record):
+    if record.get('path')!='/Lotus/Weapons/Thanotech/EntratiWristGun/WristGunIncarnonEvolutions/EntratiWristGunEvoTier4C':
+        return None
+    conditions = record.get('conditionalEffects') or []
+    if len(conditions)!=1:
+        return None
+    script = (conditions[0].get('runtimeScripts') or {}).get('apply') or {}
+    if (script.get('Script')=='EntratiWristGunIncarnonCritsForHits.lua'
+            and script.get('Function')=='OnApplySubUpgrade'
+            and _close(script.get('_critValuePerTarget'),.05) and script.get('_maxStacks')==50):
+        return dict(perHit=.05,maximum=50)
+    return None
+
+
+def onos_ammo_refund(record):
+    if record.get('path')!='/Lotus/Weapons/Thanotech/EntratiWristGun/WristGunIncarnonEvolutions/EntratiWristGunEvoTier2C':
+        return None
+    for condition in record.get('conditionalEffects') or []:
+        script=(condition.get('runtimeScripts') or {}).get('apply') or {}
+        if (str(script.get('Script') or '').rsplit('/',1)[-1]=='EntratiWristGunIncarnonReplenishAmmoOnKill.lua'
+                and script.get('Function')=='OnApplyUpgrade' and script.get('_replenishAmount')==10):
+            return dict(amount=10)
+    return None
+
+
+def latron_puncture_strip(record):
+    if '/LatronIncarnonEvolutions/' not in str(record.get('path') or ''):
+        return None
+    for condition in record.get('conditionalEffects') or []:
+        script=(condition.get('runtimeScripts') or {}).get('apply') or {}
+        if (script.get('Script')=='/Lotus/Upgrades/Boons/Offensive/ReduceArmor.lua'
+                and script.get('Function')=='ReduceArmor' and _close(script.get('_armorReduction'),.2)
+                and script.get('_operationType')=='STACKING_MULTIPLY'
+                and (condition.get('nativeEvent') or {}).get('kind')=='proc-DT_PUNCTURE'):
+            return .2
+    return None
+
+
+def ammo_restore_configuration(record):
+    for condition in record.get('conditionalEffects') or []:
+        script=(condition.get('runtimeScripts') or {}).get('apply') or {}
+        event=condition.get('nativeEvent') or {}
+        if (record.get('path')=='/Lotus/Upgrades/Evolutions/Rifle/EvoRifleInstantReloadChanceOnHeadshot'
+                and script.get('Script')=='/Lotus/Scripts/WeaponAttachments/ZarimanHeavyRifle.lua'
+                and script.get('Function')=='GiveInstantReloadOnHeadshotUpgrade'
+                and _close(condition.get('chance'),.2)):
+            return dict(kind='on-headshot-kill',fraction=1.,chance=.2)
+        if (script.get('Script')=='/Lotus/Scripts/Mods/InstantReloadOnCondition.lua' and script.get('Function')=='StartMod'
+                and event.get('kind') in {'on-headshot','on-kill'} and _close(script.get('_amountPct'),1.)
+                and script.get('_customChance')==1 and not script.get('_customChanceScaleWithLevel')
+                and not script.get('_chanceIncrease') and not script.get('_specificAmount')):
+            value=dict(kind=event['kind'],fraction=1.)
+            if condition.get('chance',1.)!=1.:
+                value['chance']=condition['chance']
+            return value
+        if (script.get('Script')=='/Lotus/Scripts/Mods/RestoreAmmoOnCondition.lua' and script.get('Function')=='StartMod'
+                and event.get('victimProcType')=='DT_ELECTRICITY' and script.get('_ammoAmount')==1
+                and script.get('_restoreFromAmmoPool')==1):
+            if _close(condition.get('chance'),.4):
+                return dict(kind='on-hit',victimProcType='DT_ELECTRICITY',amount=1.,chance=.4,oncePerShot=True)
+    return None
+
+
+def reserve_ammo_refund(record):
+    value=onos_ammo_refund(record)
+    if value:
+        return value
+    if '/BratonIncarnonEvolutions/' not in str(record.get('path') or ''):
+        return None
+    for condition in record.get('conditionalEffects') or []:
+        script=(condition.get('runtimeScripts') or {}).get('apply') or {}
+        if (script.get('Script')=='/Lotus/Scripts/Mods/RestoreAmmoMod.lua'
+                and script.get('Function')=='OnUpgradeApplied' and _close(script.get('_ammoRestorePercent'),.1)
+                and (condition.get('nativeEvent') or {}).get('kind')=='on-punchthrough'
+                and _close(condition.get('chance'),.2)):
+            return dict(fraction=.1,chance=.2,kind='on-punchthrough')
+    return None
+
+
+def incarnon_condition_rows(record):
+    for raw in record.get('conditionalEffects') or ():
+        condition = verified_incarnon_condition(record,raw) or raw
+        yield condition
+        for child in condition.get('runtimeExtraMods') or ():
+            if (condition.get('actorGate') and child.get('conditions')==['DreadOnConsecutiveHit']
+                    and child.get('maxStacks')==5 and child.get('nativeInfinite')):
+                yield {**child,'runtimeScripts':{},'equipmentGate':condition['actorGate'],
+                       'eventKind':'on-hit','resetOn':['on-miss'],
+                       'conditionText':'装备绝望和憎恨时，每次命中增加 +10 基础伤害与 +10% 射速，最多 5 层；整次射击未命中时清空。'}
+
+
+def incarnon_actor_stacks(condition, scenario, weapon=None):
+    gate = condition.get('actorGate') or {}
+    state = scenario.combat_state
+    kind = gate.get('kind')
+    if kind=='minimum':
+        value = state.get(gate['key'])
+        return 1. if value is not None and value>=gate['minimum'] else 0.
+    if kind=='no-enemies':
+        if scenario.nearest_enemy_distance is not None:
+            return float(scenario.nearest_enemy_distance>gate['radius'])
+        return float(state.get('nearbyEnemies')==0 and state.get('nearbyRadius',0)>=gate['radius'])
+    if kind=='boolean':
+        return float(state.get(gate['key']) is True)
+    if kind=='anyBoolean':
+        return float(any(state.get(key) is True for key in gate['keys']))
+    if kind=='enemies':
+        if 'nearbyEnemies' not in state or state.get('nearbyRadius',math.inf)>gate['radius']:
+            return 0.
+        return min(gate['maximum'],math.floor(state['nearbyEnemies']/gate['per']))
+    if kind=='equipment':
+        if 'equippedWeapons' not in state and gate['required']:
+            return 0.
+        # Exact native families; the selected weapon may itself be one of the
+        # required items. Other gear is an explicit user/account state.
+        available = set(state.get('equippedWeapons') or ()) | set((weapon or {}).get('ancestry') or ())
+        if (weapon or {}).get('path'):
+            available.add(weapon['path'])
+        empty_slots = {'LONG_GUN_SLOT':'primary','PISTOL_SLOT':'secondary','MELEE_SLOT':'melee'}
+        return float(all(p in available for p in gate['required'])
+                     and all(empty_slots.get(s) in state.get('emptySlots',()) for s in gate['empty']))
+    return 0.
 
 def verified_stug_condition(record, condition):
     # Source + effect signatures, backed by stug-evolution-conditions.json.

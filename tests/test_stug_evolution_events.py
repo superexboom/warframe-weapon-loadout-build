@@ -140,7 +140,7 @@ def test_torid_last_round_gate_enters_replay_before_ammo_payment():
     assert observed==[False,True]
 
 
-def test_cestra_overguard_break_evolution_uses_shared_event_signal():
+def test_cestra_own_overguard_break_evolution_uses_player_event_signal():
     import app
     from wfarsenal.damage import Scenario
     from wfarsenal.manual_combat import prepare
@@ -161,4 +161,9 @@ def test_cestra_overguard_break_evolution_uses_shared_event_signal():
     st,_=original('selected',{},0)
     replay(st,dict(health=1e12,shield=0,armour=0,overguard=10,baseLevel=1),
            attacks_per_second=st.fire_rate,window_seconds=.5,combat=c,trigger_sources=c['trigger_sources'])
-    assert any(x>0 for x in seen)
+    assert not any(x>0 for x in seen)
+    w=dict(w)
+    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent',combat_state={'selfOverguardBreakAt':.1})),[],[],incarnon_choices={'tier2':'2-1'})
+    result=replay(st,dict(health=1e12,shield=0,armour=0,overguard=0,baseLevel=1),
+                  attacks_per_second=st.fire_rate,window_seconds=.5,combat=c,trigger_sources=c['trigger_sources'])
+    assert max(next(row['series'] for row in result['triggerSeries'] if row['kind']=='on-overguard-broken'))>0

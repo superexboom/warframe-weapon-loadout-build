@@ -45,6 +45,37 @@ def describe(condition, strings=None):
     parts = []
     if condition.get('conditionText'):
         return clean_text(condition['conditionText'])
+    native=condition.get('nativeEvent') or {}
+    if native:
+        from .manual_combat import EVENT_CONDITION_TEXT
+        actor_labels={'on-shield-broken':'玩家自身护盾被击破时触发。','on-overguard-broken':'玩家自身超宏被击破时触发。',
+                      'on-shield-hit':'玩家自身护盾受到伤害时触发。'}
+        text=(actor_labels.get(native['kind']) if native.get('actorOnly') else None) or EVENT_CONDITION_TEXT.get(native['kind'])
+        if text:
+            if native.get('requiredCount',1)>1:
+                text+=f"每 {native['requiredCount']} 次满足事件获得一层。"
+            return text
+    actor = condition.get('actorGate') or condition.get('equipmentGate') or {}
+    labels = {'frameArmor':'战甲护甲','energyPool':'最大能量','sprintMultiplier':'冲刺速度',
+              'overshields':'过载护盾','channeling':'持续消耗能量的技能','incarnonMeleeActive':'近战灵化已激活',
+              'aimGliding':'瞄准滑翔','sliding':'滑行'}
+    if actor.get('kind')=='minimum':
+        return labels.get(actor['key'],actor['key'])+f"达到 {actor['minimum']:g}"
+    if actor.get('kind')=='boolean':
+        return labels.get(actor['key'],actor['key'])+'期间'
+    if actor.get('kind')=='anyBoolean':
+        return '或'.join(labels.get(key,key) for key in actor['keys'])+'期间'
+    if actor.get('kind')=='enemies':
+        return f"{actor['radius']:g} 米内每 {actor['per']:g} 名敌人一层，上限 {actor['maximum']:g}"
+    if actor.get('kind')=='equipment':
+        names = {'/Lotus/Weapons/Tenno/Bows/StalkerBow':'恐惧','/Lotus/Weapons/Tenno/ThrowingWeapons/StalkerKunai':'绝望',
+                 '/Lotus/Weapons/Tenno/Melee/Scythe/StalkerScytheWeapon':'憎恨'}
+        slots = {'LONG_GUN_SLOT':'主武器','PISTOL_SLOT':'副武器','MELEE_SLOT':'近战武器'}
+        parts = ["装备 "+'、'.join(names.get(p,p.rsplit('/',1)[-1]) for p in actor['required'])] if actor['required'] else []
+        parts.extend(slots.get(p,p)+'空槽' for p in actor['empty'])
+        return '；'.join(parts)
+    if condition.get('energyGate'):
+        return f"每消耗 {condition['energyGate']:g} 能量增加一层"
     tag = str(condition.get("conditionTag") or "")
     unresolved = []
     for raw in [*(condition.get("conditions") or []), tag]:
@@ -75,7 +106,7 @@ def describe(condition, strings=None):
             "UnlockAltMelee.lua": "灵化近战形态激活期间",
             "ZarimanTonfaWeapon.lua": "灵化近战形态激活期间",
             "ZarimanDagger.lua": "灵化近战形态激活期间",
-            "EntratiWristGunIncarnonReplenishAmmoOnKill.lua": f'击杀后 {100*float(script.get("_replenishChance",0)):.1f}% 概率恢复 {script.get("_replenishAmount","?")} 发',
+            "EntratiWristGunIncarnonReplenishAmmoOnKill.lua": f'武器击杀后补充 {script.get("_replenishAmount","?")} 发备用弹药；触发概率由原生条件控制',
             "EntratiFistClawIncarnonSpeedPerCombo.lua": f'每连击倍率提供 {100*float(script.get("_speedPerComboTier",0)):.1f}% 速度',
         }
         text = descriptions.get(name)

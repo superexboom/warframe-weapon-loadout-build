@@ -574,6 +574,7 @@ def _candidate_mods(
     rejected = 0
     shells = _set_shells(exports["mods"])
     reach: Mapping[str, Any] | None = None
+    from .runtime_adapters import double_tap_configuration
     for mod in exports["mods"]:
         path = str(mod.get("path") or "")
         # 「蓄力装填 Prime」（SniperReloadDamageModExpert）与开发者版「压迫点」
@@ -589,7 +590,7 @@ def _candidate_mods(
         if (
             mod.get("selectable") is not True
             or not mod.get("compatibility")
-            or "/PvPMods/" in path
+            or ("/PvPMods/" in path and not double_tap_configuration(mod,int(mod.get('maxRank') or 0)))
             or not _mod_matches_weapon(mod, weapon)
         ):
             continue
@@ -653,12 +654,8 @@ def _select_fire_mode(
     # 充能——保留完整模式列表供 apply_mods 读取。
     if weapon.get("isIncarnon"):
         selected["__baseFireModes__"] = list(modes)
-    # Tag the Incarnon form explicitly: a multi-mode Incarnon weapon's LAST
-    # mode is its transformed form (single-mode Incarnons are the form itself),
-    # and downstream consumers (charge-pool ammo) key off this flag because the
-    # trimmed fireModes list no longer reveals the original position.
-    if weapon.get("isIncarnon") and (len(modes) == 1 or index == len(modes) - 1):
-        selected["isIncarnonForm"] = True
+    from .event_profiles import is_incarnon_mode
+    selected['isIncarnonForm'] = is_incarnon_mode(weapon,index)
     return selected, index
 
 
@@ -667,19 +664,43 @@ def _path_basename(value: Any) -> str:
 
 
 def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[str]]:
-    from .runtime_adapters import verified_torid_field_duration
+    from .runtime_adapters import miter_charge_aoe
+    if miter_charge_aoe(branch):
+        return [ModEffect('RUNTIME_MITER_CHARGE_AOE','ADD',1.,source_path=branch['path'])], []
+    from .runtime_adapters import onos_crits_for_hits
+    if onos_crits_for_hits(branch):
+        return [ModEffect('RUNTIME_ONOS_CRITS_FOR_HITS','ADD',.05,source_path=branch['path'])], []
+    from .runtime_adapters import reserve_ammo_refund
+    if reserve_ammo_refund(branch):
+        return [ModEffect('RUNTIME_RESERVE_AMMO_REFUND','ADD',0.,source_path=branch['path'])], []
+    from .runtime_adapters import latron_puncture_strip
+    if latron_puncture_strip(branch):
+        return [ModEffect('RUNTIME_PUNCTURE_ARMOR_STRIP','ADD',.2,source_path=branch['path'])], []
+    from .runtime_adapters import ammo_restore_configuration
+    if ammo_restore_configuration(branch):
+        return [ModEffect('RUNTIME_MAGAZINE_RESTORE','ADD',1.,source_path=branch['path'])], []
+    if branch.get('path')=='/Lotus/Upgrades/Evolutions/Shotgun/EvoShotgunShellReloadToggle':
+        from .runtime_adapters import verified_incarnon_condition
+        if any(verified_incarnon_condition(branch,c) for c in branch.get('conditionalEffects') or []):
+            return [ModEffect('RUNTIME_RELOAD_PROJECTILE_TOGGLE','ADD',1.,source_path=branch['path'])], []
+    from .runtime_adapters import verified_torid_field_duration, incarnon_stat_conversion
     if verified_torid_field_duration(branch):
         # This perk is consumed by the shared event resolver, never as a stat buff.
         return [], []
+    conversion = incarnon_stat_conversion(branch)
+    if conversion:
+        return [ModEffect('RUNTIME_INCARNON_STAT_CONVERSION', 'ADD', conversion['fraction'],
+                          source_path=branch.get('path'), runtime_kind=conversion['source'],
+                          runtime_damage_type=conversion['target'], runtime_threshold=conversion['maximum'])], []
     source = str(branch.get("path") or branch.get("id") or "incarnon")
     effects: list[ModEffect] = []
     unsupported: list[str] = []
-    from .runtime_adapters import verified_stug_condition
+    from .runtime_adapters import verified_incarnon_condition
     from .manual_combat import condition_kind
     modeled_sources = set()
     for condition in branch.get('conditionalEffects') or ():
         source_path = str(condition.get('sourcePath') or source)
-        if verified_stug_condition(branch, condition):
+        if verified_incarnon_condition(branch, condition):
             modeled_sources.add(source_path)
             continue
         kind = condition.get('eventKind') or condition_kind(condition)
@@ -703,7 +724,16 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
     for raw in branch.get("effects") or ():
         if not isinstance(raw, Mapping):
             continue
+        if raw.get('upgradeType')=='NONE' and any(verified_incarnon_condition(branch,c) for c in branch.get('conditionalEffects') or []):
+            continue
         if str(raw.get('sourcePath') or source) in conditional_sources:
+            condition = next((c for c in branch.get('conditionalEffects') or () if str(c.get('sourcePath') or source)==str(raw.get('sourcePath') or source)),None)
+            if condition and not condition.get('conditions') and not condition.get('runtimeScripts'):
+                effect = ModEffect.from_export(raw,0,source_path=source)
+                if effect.supported:
+                    effects.append(effect)
+                    modeled_sources.add(str(raw.get('sourcePath') or source))
+                    continue
             if str(raw.get('sourcePath') or source) not in modeled_sources:
                 unsupported.append(f'incarnon-{branch.get("id")}-conditional-source-excluded')
             continue
@@ -764,7 +794,7 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
     if any(str(c.get('sourcePath') or source) not in modeled_sources
            for c in branch.get('conditionalEffects') or ()):
         unsupported.append(f"incarnon-{branch.get('id')}-conditional-effects-not-applied")
-    if branch.get("runtimeScripts"):
+    if branch.get("runtimeScripts") and not any(verified_incarnon_condition(branch, c) for c in branch.get('conditionalEffects') or ()):
         unsupported.append(f"incarnon-{branch.get('id')}-runtime-scripts-not-applied")
     if branch.get("unresolvedReferences"):
         unsupported.append(f"incarnon-{branch.get('id')}-unresolved-references")
@@ -774,12 +804,12 @@ def _branch_effects(branch: Mapping[str, Any]) -> tuple[list[ModEffect], list[st
 def _branch_trigger_specs(branch: Mapping[str, Any]) -> list[dict[str, Any]]:
     """Export only identified events; a duration alone does not imply on-hit."""
     from .manual_combat import condition_kind
-    from .runtime_adapters import verified_stug_condition
+    from .runtime_adapters import verified_incarnon_condition
     specs=[]
     for condition in branch.get('conditionalEffects') or []:
-        if condition.get('runtimeScripts'):continue
-        verified=verified_stug_condition(branch, condition)
+        verified=verified_incarnon_condition(branch, condition)
         if verified:condition=verified
+        if condition.get('runtimeScripts'):continue
         kind=condition.get('eventKind') or condition_kind(condition)
         if not kind:continue
         source=str(condition.get('sourcePath') or branch.get('path') or '')
@@ -797,6 +827,25 @@ def _branch_trigger_specs(branch: Mapping[str, Any]) -> list[dict[str, Any]]:
         if damage:spec['damagePerStack']=damage
         specs.append(spec)
     return specs
+
+
+def _incarnon_actor_effects(branch, scenario, weapon):
+    from .runtime_adapters import verified_incarnon_condition, incarnon_actor_stacks
+    effects = []
+    for raw in branch.get('conditionalEffects') or ():
+        condition = verified_incarnon_condition(branch,raw)
+        if not condition or not (condition.get('actorGate') or condition.get('energyGate')):
+            continue
+        stacks = (min(float(condition.get('maxStacks') or 1),
+                      math.floor(scenario.combat_state.get('energySpent',0)/condition['energyGate']))
+                  if condition.get('energyGate') else incarnon_actor_stacks(condition,scenario,weapon))
+        if stacks<=0:
+            continue
+        for term in condition.get('effects') or ():
+            effect = ModEffect.from_export(term,0,source_path=condition.get('sourcePath') or branch.get('path'))
+            if effect.supported:
+                effects.append(replace(effect,value=effect.value*stacks))
+    return effects
 
 
 # Incarnon evolution perks whose exported effect rows are UNCONDITIONAL but the
@@ -941,10 +990,9 @@ def _incarnon_card(
         if not isinstance(raw_tier, Mapping):
             continue
         tier = _tier_number(raw_tier.get("tier"))
-        # Tier 1 is the fixed Incarnon-form unlock (not a UI branch choice).
-        # The selected fire mode already represents that form; applying its
-        # runtime unlock again would only create false unsupported warnings.
         if tier == 1:
+            for fixed in raw_tier.get('branches') or ():
+                selected_effects.extend(_incarnon_actor_effects(fixed,scenario,weapon))
             continue
         branches = [
             branch for branch in (raw_tier.get("branches") or ())
@@ -999,6 +1047,7 @@ def _incarnon_card(
             best_score = -math.inf
             for candidate in branches:
                 candidate_effects, _ = _branch_effects(candidate)
+                candidate_effects.extend(_incarnon_actor_effects(candidate,scenario,weapon))
                 trial = ModEffectList([*selected_effects, *candidate_effects])
                 try:
                     stats = apply_mods(weapon, trial, scenario=scenario)
@@ -1006,14 +1055,29 @@ def _incarnon_card(
                         weapon, trial, scenario=scenario
                     )
                     candidate_score = _score(stats, metric, events)
+                    if weapon.get('slot') in {'primary','secondary','arch_gun'} and metric not in {'shotDamage','perShot','burstDps'}:
+                        from .manual_combat import prepare
+                        from .combat_replay import replay
+                        modes=weapon.get('__baseFireModes__') or weapon.get('fireModes') or []
+                        full_weapon={**weapon,'fireModes':modes,'incarnon':{**incarnon,'tiers':[t for t in tier_rows if _tier_number(t.get('tier'))<=tier]}}
+                        route={**selected,f'tier{tier}':str(candidate.get('id') or candidate['path'])}
+                        combat=prepare(dict(weapon=full_weapon,effects=trial,scenario=scenario,
+                                            fire_mode=weapon.get('__selectedFireMode__',0)),[],[],
+                                       cycle_enabled=scenario.incarnon_cycle,assumed=False,incarnon_choices=route)
+                        replayed=replay(stats,dict(health=1e12,shield=0.,armour=0.,overguard=0.,baseLevel=1),
+                                        attacks_per_second=stats.sustained_attack_rate,window_seconds=30.,
+                                        combat=combat,trigger_sources=combat['trigger_sources'],collect_timeline=False)
+                        candidate_score=(replayed['directWindow']+replayed['dotWindow']+replayed['nonDotWindow'])/30.
                 except (TypeError, ValueError):
                     candidate_score = -math.inf
                 if branch is None or candidate_score > best_score:
                     best_score, branch = candidate_score, candidate
-            unsupported.append(f"incarnon-tier{tier}-auto-selected-static-objective")
+            mode='event' if weapon.get('slot') in {'primary','secondary','arch_gun'} and metric not in {'shotDamage','perShot','burstDps'} else 'static'
+            unsupported.append(f"incarnon-tier{tier}-auto-selected-{mode}-objective")
 
         assert branch is not None
         branch_effects, branch_unsupported = _branch_effects(branch)
+        branch_effects.extend(_incarnon_actor_effects(branch,scenario,weapon))
         selected_effects.extend(branch_effects)
         unsupported.extend(branch_unsupported)
         # 条件 SubUpgrade 子词条 → 触发规格（事件化叠层，进 trigger_specs）。
@@ -1026,7 +1090,7 @@ def _incarnon_card(
     if policy_meta:
         policy_meta["appliedTiers"] = policy_used
 
-    if not selected_effects:
+    if not selected_effects and not selected:
         return None, selected, unsupported, policy_meta
     return (
         _Card(
@@ -3314,11 +3378,15 @@ def _requested_scenario(request: Mapping[str, Any], metric: str) -> Scenario:
     batch = value('detonationBatchSize', 1)
     if isinstance(batch, bool) or not isinstance(batch, int) or not 1 <= batch <= 8:
         raise SimulationError('detonationBatchSize must be an integer between 1 and 8')
-    return Scenario(aiming=boolean('aiming'), incarnon_cycle=boolean('incarnonCycle'),
-        heavy_attack=boolean('heavyAttack') or _scenario(metric).heavy_attack,
-        distance=distance('distance'), nearest_enemy_distance=distance('nearestEnemyDistance'),
-        cloaked=boolean('cloaked'), combo_tier=combo, trigger_policy=policy,
-        detonation_delay_seconds=delay or 0., detonation_batch_size=batch)
+    try:
+        return Scenario(aiming=boolean('aiming'), incarnon_cycle=boolean('incarnonCycle'),
+            heavy_attack=boolean('heavyAttack') or _scenario(metric).heavy_attack,
+            distance=distance('distance'), nearest_enemy_distance=distance('nearestEnemyDistance'),
+            cloaked=boolean('cloaked'), combo_tier=combo, trigger_policy=policy,
+            detonation_delay_seconds=delay or 0., detonation_batch_size=batch,
+            combat_state=value('combatState',{}))
+    except (TypeError,ValueError) as exc:
+        raise SimulationError(str(exc)) from exc
 
 
 def _scenario_context(scenario: Scenario) -> dict[str, Any]:
@@ -3327,7 +3395,8 @@ def _scenario_context(scenario: Scenario) -> dict[str, Any]:
                 distance=scenario.distance, cloaked=scenario.cloaked,
                 nearestEnemyDistance=scenario.nearest_enemy_distance, comboTier=scenario.combo_tier,
                 detonationDelaySeconds=scenario.detonation_delay_seconds,
-                detonationBatchSize=scenario.detonation_batch_size)
+                detonationBatchSize=scenario.detonation_batch_size,
+                combatState=dict(scenario.combat_state))
 
 
 def _default_analysis_scenario(scenario: Scenario, metric: str) -> bool:
@@ -3483,6 +3552,7 @@ def _alternate_mode_payloads(
     *,
     selected_fire_mode: int = 0,
 ) -> list[dict[str, Any]]:
+    from .event_profiles import is_incarnon_mode
     if _weapon_type(None, weapon) == "melee":
         return []
     effects = _selected_effects(evaluation, riven, Scenario(), passives)
@@ -3498,9 +3568,7 @@ def _alternate_mode_payloads(
             "fireMode": index,
             "trigger": mode.get("trigger"),
             "isAlternateFire": bool(mode.get("isAlternateFire")),
-            "isIncarnonForm": bool(weapon.get("isIncarnon"))
-            and mode_count > 1
-            and index == mode_count - 1,
+            "isIncarnonForm": is_incarnon_mode(weapon,index),
         }
         unsupported: list[str] = []
         events: dict[str, Any] | None = None

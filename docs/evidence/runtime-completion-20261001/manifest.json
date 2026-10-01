@@ -1,0 +1,263 @@
+{
+  "engineFingerprint": "6303b804b5314de0",
+  "cacheVersion": 14,
+  "clientSha256": "45fa6ad0769cc8ca7fa7e0ffdee65c0c0932e11744146781ad18c45b16e4a81c",
+  "sourceBuild": "2026.09.22.16.46",
+  "files": [
+    {
+      "path": "comparisons/archgun-board-current-20261001.json",
+      "bytes": 818379,
+      "sha256": "45c1f14f2c2bba6e90fe6660059eb79c5df948b3844251537ebbc50e5b5893f2"
+    },
+    {
+      "path": "comparisons/archgun-charge-no-enervate-20261001.json",
+      "bytes": 72686,
+      "sha256": "dbde83ae97e4a7ba6c5dfadfcac977ee6ffb4066fb69172431b0bbcd1e1edacc"
+    },
+    {
+      "path": "comparisons/archgun-charge-verified-20261001.json",
+      "bytes": 81068,
+      "sha256": "1c658a88cb53cf2f1f6aa999600037541f77c1917e3d07385b9b024c3474a949"
+    },
+    {
+      "path": "comparisons/burston/case-0-request.json",
+      "bytes": 3607,
+      "sha256": "7fb88f86df56c8a56c7a461a768fc6a55992a9daf052097c4e56af88a0631261"
+    },
+    {
+      "path": "comparisons/burston/case-1-request.json",
+      "bytes": 3610,
+      "sha256": "3524c0985a69fb13bbafb714569e3c538deb7660b86bba913f700600a6256e5e"
+    },
+    {
+      "path": "comparisons/burston/wfsim-current-response.json",
+      "bytes": 4603,
+      "sha256": "f184f09a6791246bbf45a272cb2ae17ada7f286cca90305d197ed12260e8a87c"
+    },
+    {
+      "path": "comparisons/burston-completion-20261001.json",
+      "bytes": 1883,
+      "sha256": "bb7f3499aa9a6dac2a83209d72e7c6d646f8b43a0a39f62413fbfb6f9d8fff50"
+    },
+    {
+      "path": "comparisons/nonmelee-untransformed-current-20261001.json",
+      "bytes": 337338,
+      "sha256": "5d369325389bcb9be037fc332d52cc41d88ec9c13cabdf8457621a1c2f104a19"
+    },
+    {
+      "path": "luau/actor-ir/ChannelAbilityMod.txt",
+      "bytes": 9210,
+      "sha256": "670f1b8595860f0d8e8e5f50c9bbcffe5c155301e7c8c4b5f4cd26d60a0a59b5"
+    },
+    {
+      "path": "luau/actor-ir/RequireArmor.txt",
+      "bytes": 10754,
+      "sha256": "360526200f7203e6fc67c8890601efdaa6506b25c92cabfe97cb2be4c43aca89"
+    },
+    {
+      "path": "luau/actor-ir/RequireEnergyPool.txt",
+      "bytes": 11084,
+      "sha256": "b0c5a6629667d0e5b1d363f2c4c5414fe8537e8d91c25edc90970ca49a693786"
+    },
+    {
+      "path": "luau/energy-ir/RequireEnergySpent.txt",
+      "bytes": 14747,
+      "sha256": "cfb119e0af29185eee51d89613ee4f9357b6cb6e234f3ba3461518ff0517a5a4"
+    },
+    {
+      "path": "luau/ir/EntratiWristGunIncarnonConsecutiveHeadshots.txt",
+      "bytes": 18575,
+      "sha256": "844a1325f799f06ed6238492d5495e53c409981d23c4aa1f57f02b535512c1b4"
+    },
+    {
+      "path": "luau/ir/EntratiWristGunIncarnonCritsForHits.txt",
+      "bytes": 19886,
+      "sha256": "2abd9c7927e0924ed0db67d041be89743981792ca10511d3330be3528e4297a1"
+    },
+    {
+      "path": "luau/ir/EntratiWristGunIncarnonReplenishAmmoOnKill.txt",
+      "bytes": 5508,
+      "sha256": "e81e76f014c709bbae7397ef99d912348eb4c45fc2c9513ce8cf1d911ad34e71"
+    },
+    {
+      "path": "luau/ir/EvoShotgunReloadShellFireRate.txt",
+      "bytes": 8507,
+      "sha256": "665c802bd8ed26ae87292e1e6b128ff7f971798fe706e47abf0e4ecddfbb908a"
+    },
+    {
+      "path": "luau/ir/EvoShotgunShellReloadToggle.txt",
+      "bytes": 11170,
+      "sha256": "62c73af87907860dc11de54c1ac65fafa7570c0100a557ccfa9791dd0bd8145f"
+    },
+    {
+      "path": "luau/latron-ir/ReduceArmor.txt",
+      "bytes": 5681,
+      "sha256": "e3ace7d24e21d268c4c228503047e0250c5cb71fe74f4b9ba3af14bd401ae96a"
+    },
+    {
+      "path": "luau/stat-conversion-ir/WeaponAddBaseStatForModdedStat.txt",
+      "bytes": 21136,
+      "sha256": "76a490c877394718ef59525de89e30b27e2476d0d4055d80e0249da9feb900da"
+    },
+    {
+      "path": "luau/utility-ir/InstantReloadOnCondition.txt",
+      "bytes": 20077,
+      "sha256": "2d5989f2c9f77223806e4005bbc5dad3c014e0654850e2d2b6ddbf42065a1abf"
+    },
+    {
+      "path": "luau/utility-ir/NoEnemiesInRangeBuff.txt",
+      "bytes": 18674,
+      "sha256": "5d404f137c236fc03879fd43050269b85f2fc7908c6a29a83547f6a3ae0ac963"
+    },
+    {
+      "path": "luau/utility-ir/RestoreAmmoMod.txt",
+      "bytes": 5170,
+      "sha256": "2423346115604c62d720d343ce0400cce65819782200f281127a6523ba110c59"
+    },
+    {
+      "path": "luau/utility-ir/RestoreAmmoOnCondition.txt",
+      "bytes": 15527,
+      "sha256": "c0ca2ba32a147aea4991d60c1c2846713592f1c20cccd568483c0b96485ce506"
+    },
+    {
+      "path": "luau/utility-ir/WeaponEquipBuffs.txt",
+      "bytes": 16398,
+      "sha256": "83c5d033631e43e6eca6486c62eca671a6216844d6259cf49b8ef259afbca716"
+    },
+    {
+      "path": "native/charged-ground-modes.json",
+      "bytes": 104559,
+      "sha256": "484bd3dd2ad0897ab06a13f8ce180e105975e240bb8226ec9ce9a5165ef05de4"
+    },
+    {
+      "path": "native/charged-profiles-trace-final.json",
+      "bytes": 31083,
+      "sha256": "f010432d79c86b34baf49c0d36f58d844ad07882aa85e02c496b799b3fa02d10"
+    },
+    {
+      "path": "native/charged-trace-final.json",
+      "bytes": 104583,
+      "sha256": "aabe65ca60128a0e0fd9d8d7fb7c6a7754c604a9f7559465a29e23f3128916b0"
+    },
+    {
+      "path": "native/co-reference-ground-final.json",
+      "bytes": 263685,
+      "sha256": "fb60b3f17f23b4c72dd9e68911f93be6083a1e5c2a4b0f0e04aa5a4ae9ae67c1"
+    },
+    {
+      "path": "native/code/1404ac060.c",
+      "bytes": 5188,
+      "sha256": "d16e9cb7aaa102c12835eae0a41966c4e60ef9bfa0806c479b884ac421d48a89"
+    },
+    {
+      "path": "native/code/140a3e6c0.c",
+      "bytes": 9209,
+      "sha256": "e285f335fb3b3c786f3ec21b596a6554d1ae81a0e1babb1dbf09d92f57a8b5d2"
+    },
+    {
+      "path": "native/code/140ef69d0.c",
+      "bytes": 5734,
+      "sha256": "75107a06a66bf59e3f9e3c3df56fa9a8b352147c1d07d2657ce739b05ae612c8"
+    },
+    {
+      "path": "native/code/141095210.c",
+      "bytes": 422,
+      "sha256": "15ed44ce3d2cc49d8f702a8b6c536d01ce1dddfce099bf4ef398dd5a7de4afcf"
+    },
+    {
+      "path": "native/code/1415a16b0.c",
+      "bytes": 9684,
+      "sha256": "ef12200530a375714690ff3228f73943626924698b7ad7a0f1a4e67882ab6ab2"
+    },
+    {
+      "path": "native/incarnon-mode-identities.json",
+      "bytes": 12250,
+      "sha256": "a85b439536f8ba3b507615674e57f67ba093e50112208a65ba18a6efc4bb8239"
+    },
+    {
+      "path": "native/mq-proxy-scale-callers.json",
+      "bytes": 5247,
+      "sha256": "e78ec1c2f305f25b7690a3a55dd9ca6290333d731186f91fde8296f0b3f20cfe"
+    },
+    {
+      "path": "native/native-event-conditions-final.json",
+      "bytes": 49790,
+      "sha256": "c31b1f85f31a80a99a9ce88b00dff16f4a66c129abef2635539e931ef1289ac7"
+    },
+    {
+      "path": "native/onos-schema-symbols.json",
+      "bytes": 1417,
+      "sha256": "e834da48411d2c5144f9ad15b0cf5c41c297060255604327edc0aa8c0ba8f0b3"
+    },
+    {
+      "path": "native/onos-sequence-final.json",
+      "bytes": 701,
+      "sha256": "bbd4cc72ef873dcb9445438933480e608d281a88887851dd63550973814c3801"
+    },
+    {
+      "path": "native/runtime-links-probabilities-final.json",
+      "bytes": 1851,
+      "sha256": "0e22b8dfd0291d7b787a978c779ab05d750b1fc7b01a2ee01e8832cc75367dfa"
+    },
+    {
+      "path": "native/shield-schema-verification.json",
+      "bytes": 1532,
+      "sha256": "82902b6387d0d89da59b7b3969d60ac017dfffb683fa46724594ef23473f84ff"
+    },
+    {
+      "path": "reference-runtime.json",
+      "bytes": 925,
+      "sha256": "4402a4b3de3fde94540d5a8ddb3639abafb1459211d9872932ad1bf96c9f8e49"
+    },
+    {
+      "path": "riven-search/00-torid.json",
+      "bytes": 115776,
+      "sha256": "0d253b99ce062aa210ad5f3553a4c589765302f711a40fcd4cb65bb7057ec007"
+    },
+    {
+      "path": "riven-search/01-torid.json",
+      "bytes": 56593,
+      "sha256": "b3181baa082deee1270eaf59e86f46605c0182ae43d5520482bbb041b9f8d817"
+    },
+    {
+      "path": "riven-search/02-talons.json",
+      "bytes": 63904,
+      "sha256": "aebcc0f7283c1eeab74e58a98b5f0665f96a3fc16e76bba987906483e2d0ff16"
+    },
+    {
+      "path": "riven-search/03-fulmin-prime.json",
+      "bytes": 56482,
+      "sha256": "d41d9c0de86316565c4a37aa8727769512fe796d024f69efe74a537d16920ee8"
+    },
+    {
+      "path": "riven-search/04-arca-plasmor.json",
+      "bytes": 49457,
+      "sha256": "2dda7d59071cdfa7fd98b0f0714f335497ac36296abd4bedc31cd6dcd4d3eb10"
+    },
+    {
+      "path": "riven-search/05-dera-vandal.json",
+      "bytes": 59138,
+      "sha256": "27e4a063a72cc5d10a6a2768bbab9206e117665302735c77253a8a4d632bf9eb"
+    },
+    {
+      "path": "riven-search/06-scourge-prime.json",
+      "bytes": 59355,
+      "sha256": "056af79f698f2d2ad8571a97b0a5d0acab662f4c3a1da594a6279fcebba9a117"
+    },
+    {
+      "path": "riven-search/summary.json",
+      "bytes": 1156,
+      "sha256": "46d956d429c3e55a32dd10caa0fc8c190e048b75d5bfb95a87eeb36365f04c71"
+    },
+    {
+      "path": "tests.json",
+      "bytes": 209,
+      "sha256": "232648420df8608956873b4a82a632c2af38db8b02405d0496225cf2f796131b"
+    },
+    {
+      "path": "ui-desktop.png",
+      "bytes": 452762,
+      "sha256": "5ee8102e0c8ad5ad21d35e961ea532040a7e0900bc5e776ed510ed4a6671c1ff"
+    }
+  ]
+}

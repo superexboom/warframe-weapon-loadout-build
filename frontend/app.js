@@ -293,6 +293,7 @@ function captureBuildConfig() {
     distance: Number(get("build-distance", 0) || 0),
     detonationBatchSize: ui["build-manual-detonation"]?.hidden === false ? Number(get("build-detonation-batch", 1)) : 1,
     detonationDelaySeconds: ui["build-manual-detonation"]?.hidden === false ? Number(get("build-detonation-delay", 0)) : 0,
+    combatState: combatStatePayload(),
     comboTier: Number(get("build-combo-tier", 0) || 0),
     heavyAttack: checked("build-heavy-attack"),
     damageModel: get("build-damage-model", "panel"),
@@ -322,6 +323,53 @@ function captureBuildConfig() {
     // 最优紫卡求解的预算档位（10/20/30/60s）随配置持久化。
     rivenSolveBudget: state.rivenSolveBudget || 10,
   };
+}
+
+function combatStatePayload() {
+  const result = {};
+  document.querySelectorAll('[data-combat-state]').forEach((control) => {
+    const key = control.dataset.combatState;
+    if (control.type === 'checkbox') {
+      if (control.checked) result[key] = true;
+    } else if (control.value !== '') {
+      result[key] = control.type === 'number' ? Number(control.value) : control.value;
+    }
+  });
+  document.querySelectorAll('[data-combat-gear]').forEach((control) => {
+    if (control.value === 'empty') (result.emptySlots ||= []).push(control.dataset.combatGear);
+    else if (control.value) (result.equippedWeapons ||= []).push(control.value);
+  });
+  document.querySelectorAll('[data-combat-orbtype]').forEach((control) => {
+    if (control.value !== '') (result.orbAbsorbedDamageTypes ||= {})[control.dataset.combatOrbtype] = Number(control.value);
+  });
+  return result;
+}
+
+function restoreCombatState(value = {}) {
+  const vector = Array.isArray(value.orbAbsorbedDamageTypes) ? Object.fromEntries(value.orbAbsorbedDamageTypes) : value.orbAbsorbedDamageTypes || {};
+  const host = document.getElementById('build-orb-damage-vector');
+  if (host && !host.children.length) {
+    const choices = document.querySelector('[data-combat-state="orbAbsorbedDamageType"]')?.options || [];
+    Array.from(choices).filter((option) => option.value).forEach((option) => {
+      const label = document.createElement('label'); label.className = 'field';
+      const name = document.createElement('span'); name.textContent = option.textContent;
+      const input = document.createElement('input'); input.type = 'number'; input.min = '0'; input.step = '1'; input.placeholder = '未设置'; input.dataset.combatOrbtype = option.value;
+      label.append(name, input); host.append(label);
+    });
+  }
+  document.querySelectorAll('[data-combat-orbtype]').forEach((control) => { control.value = vector[control.dataset.combatOrbtype] ?? ''; });
+  document.querySelectorAll('[data-combat-state]').forEach((control) => {
+    if (control.type === 'checkbox') control.checked = Boolean(value[control.dataset.combatState]);
+    else control.value = value[control.dataset.combatState] ?? '';
+  });
+  document.querySelectorAll('[data-combat-gear]').forEach((control) => {
+    const family = control.dataset.combatGear;
+    const weapons = state.catalog?.weapons || [];
+    const belongs = (weapon) => family === 'melee' ? ['melee', 'zaw'].includes(weapon.weaponType) : weapon.slot === family;
+    const options = weapons.filter(belongs);
+    control.replaceChildren(new Option('未设置', ''), new Option('空槽', 'empty'), ...options.map((w) => new Option(w.nameZh || w.nameEn, w.path)));
+    control.value = (value.emptySlots || []).includes(family) ? 'empty' : (value.equippedWeapons || []).find((path) => options.some((w) => w.path === path)) || '';
+  });
 }
 
 function persistActiveBuildConfig() {
@@ -425,6 +473,7 @@ function applyBuildConfig(config) {
     if (ui["build-aiming"]) ui["build-aiming"].checked = false;
     setControlValue("build-detonation-batch", 1);
     setControlValue("build-detonation-delay", 0);
+    restoreCombatState();
     state.requiredMods = [];
     state.forbiddenMods = [];
     setControlValue("build-min-fill", "");
@@ -454,6 +503,7 @@ function applyBuildConfig(config) {
   setControlValue("build-distance", config.distance ?? 0);
   setControlValue("build-detonation-batch", config.detonationBatchSize ?? 1);
   setControlValue("build-detonation-delay", config.detonationDelaySeconds ?? 0);
+  restoreCombatState(config.combatState);
   setControlValue("build-combo-tier", config.comboTier ?? 0);
   setControlValue("build-damage-model", config.damageModel || "panel");
   if (ui["build-steel-path"]) ui["build-steel-path"].checked = Boolean(config.steelPath);
@@ -789,6 +839,7 @@ function rabbitCompactConfig(wrapper) {
     if (Array.isArray(config.kitgunParts) && config.kitgunParts.length) result.g = config.kitgunParts.map(rabbitPathToken);
     if (config.incarnonCycle) result.ic = 1;
     if (config.aiming) result.aim = 1;
+    if (config.combatState && Object.keys(config.combatState).length) result.cs = config.combatState;
     if (config.detonationDelaySeconds || Number(config.detonationBatchSize || 1) !== 1) result.dt = [Number(config.detonationBatchSize || 1), Number(config.detonationDelaySeconds || 0)];
     if (config.innateElement) result.e = config.innateElement;
     if (config.innateElement) result.b = Number(config.innateElementValue ?? 0.60);
@@ -833,6 +884,7 @@ function rabbitExpandCompactConfig(kind, compact) {
       exilus: rabbitExpandPair(compact.x, byToken), weaponArcane: rabbitExpandPair(compact.a, byToken),
       incarnonChoices: Object.fromEntries((compact.i || []).map(([tier, choice]) => [String(tier), choice])),
       incarnonCycle: Boolean(compact.ic), aiming: Boolean(compact.aim),
+      combatState: compact.cs || {},
       detonationBatchSize: Number(compact.dt?.[0] ?? 1), detonationDelaySeconds: Number(compact.dt?.[1] ?? 0),
       innateElement: compact.e || null,
       innateElementValue: Number(compact.b ?? 0.60),
@@ -1068,6 +1120,7 @@ function rabbitWeaponConfig() {
     weaponArcane: source.weaponArcane,
     incarnonChoices: source.incarnonChoices,
     incarnonCycle: source.incarnonCycle, aiming: source.aiming,
+    combatState: source.combatState,
     detonationBatchSize: source.detonationBatchSize, detonationDelaySeconds: source.detonationDelaySeconds,
   };
   const parts = kitgunPartsPayload();
@@ -8946,6 +8999,7 @@ function buildPayloadFromForm() {
     distance: Number(ui["build-distance"]?.value || 0) || null,
     detonationBatchSize: ui["build-manual-detonation"]?.hidden === false ? Number(ui["build-detonation-batch"]?.value || 1) : 1,
     detonationDelaySeconds: ui["build-manual-detonation"]?.hidden === false ? Number(ui["build-detonation-delay"]?.value || 0) : 0,
+    combatState: combatStatePayload(),
     comboTier: Number(ui["build-combo-tier"]?.value || 0),
     heavyAttack: Boolean(ui["build-heavy-attack"]?.checked),
     damageModel,

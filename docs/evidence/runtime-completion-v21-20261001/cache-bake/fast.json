@@ -1,0 +1,16 @@
+{
+  "status": "running",
+  "updatedAt": "2026-10-01T09:10:41.026219+00:00",
+  "profile": "fast",
+  "fireModes": true,
+  "workers": 12,
+  "cacheVersion": 14,
+  "inputs": "d37888967f467449",
+  "weapons": 642,
+  "expectedShards": 878,
+  "skippedCurrent": 0,
+  "completed": 367,
+  "excludedModes": 6,
+  "failures": [],
+  "elapsedSeconds": 2675.487
+}

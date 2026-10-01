@@ -1,5 +1,20 @@
 from __future__ import annotations
 
+
+def is_incarnon_mode(weapon,index):
+    modes = weapon.get('__baseFireModes__') or weapon.get('fireModes') or ()
+    if not weapon.get('isIncarnon') or index<0 or index>=len(modes):
+        return False
+    if 'isIncarnonForm' in modes[index]:
+        return bool(modes[index]['isIncarnonForm'])
+    # Compatibility for historical exports. Melee activation is actor state,
+    # and Onos has both a charge beam and a blast in its transformed form.
+    if weapon.get('slot') in {'melee','arch_melee'}:
+        return False
+    if weapon.get('path')=='/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon':
+        return index>0
+    return len(modes)>1 and index==len(modes)-1
+
 # Tenet Cycron battery: pinned WFSim b98b3d4 data/weapons/secondary/tenet_cycron.yaml
 # sha256 24a9ba2a2800b940dba97f1489039775a2ec8642ede06c818b850a27304e1bc1.
 # Raw build 2026.09.22.16.46 CrpBECycron.txt confirms both 0.5s delays; the
@@ -50,5 +65,16 @@ def base_profile(weapon, fire_mode=0):
         return {}
     total = sum(((mode.get('damage') or {}).get('types') or {}).values())
     if abs(total - profile.get('directTotal', total)) > 0.02:
+        return {}
+    return profile
+
+
+def co_profile(weapon,fire_mode=0):
+    from .manual_combat import reference
+    selected = int(weapon.get('__selectedFireMode__',fire_mode))
+    profile = reference().get('coProfiles',{}).get(weapon.get('path'),{}).get(str(selected)) or {}
+    damage = (weapon.get('fireModes') or [{}])[fire_mode].get('damage') or {}
+    if (profile.get('projectile')!=damage.get('projectile')
+            or abs(profile.get('directTotal',-1)-sum((damage.get('types') or {}).values()))>.02):
         return {}
     return profile

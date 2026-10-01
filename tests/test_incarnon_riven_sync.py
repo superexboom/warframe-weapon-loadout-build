@@ -20,7 +20,7 @@ def test_fixed_evolution_displays_official_unlock_and_passive():
     assert '毒素光束' in tiers[0]['options'][0]['description']
     dagger = app._incarnon_options(weapon('Ceramic Dagger'))[0]['options'][0]
     assert '6x' in dagger['description'] and '重击发射光谱匕首' in dagger['description']
-    assert any('100%' in row['text'] and row['modeled'] is False for row in dagger['details'])
+    assert any('100%' in row['text'] and row['modeled'] is True for row in dagger['details'])
 
 
 def test_fifth_evolution_and_readable_model_status_are_exposed():
@@ -32,7 +32,15 @@ def test_fifth_evolution_and_readable_model_status_are_exposed():
     assert branch['complete'] is True
     stug = next(b for t in app._incarnon_options(weapon('Stug')) for b in t['options'] if b['id'] == '2-2')
     assert '700' in stug['description'] and '+50%' in stug['description']
-    assert any(row['modeled'] is False for row in stug['details'])
+    assert all(row['modeled'] is True for row in stug['details'])
+    assert any('战斗状态' in row['calculation'] for row in stug['details'])
+
+
+def test_native_actor_conditions_and_passive_multishot_status_are_not_labeled_unmodeled():
+    atomos=next(b for t in app._incarnon_options(weapon('Atomos')) for b in t['options'] if b['id']=='2-2')
+    assert any('玩家自身护盾' in row['text'] for row in atomos['details'])
+    torid=next(b for t in app._incarnon_options(weapon('Torid')) for b in t['options'] if b['id']=='2-2')
+    assert not any('尚未建模' in row['calculation'] for row in torid['details'])
 
 
 def test_dera_arbitrary_status_condition_changes_live_fire_rate():

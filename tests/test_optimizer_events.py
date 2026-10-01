@@ -25,7 +25,7 @@ def event(name, mode=0, effects=(), scenario=None, seconds=30):
     o._bind_combat_inputs(st, w, [], fx, sc, None)
     return st, o._event_window(st, dict(target=neutral(), level=1, windowSeconds=seconds, headshotChance=0))
 
-@pytest.mark.parametrize('name,shots', [('Nataruk',50),('Cinta',50),('Paris Prime',43),('Felarx',35)])
+@pytest.mark.parametrize('name,shots', [('Nataruk',19),('Cinta',15),('Paris Prime',26),('Felarx',35)])
 def test_audited_cadence(name,shots):
     st, result = event(name)
     assert result['shots'] == shots

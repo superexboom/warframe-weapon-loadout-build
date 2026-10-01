@@ -166,7 +166,8 @@ def test_actual_build_and_manual_replay_accept_the_same_distance(field,monkeypat
         slotCount=1,minFill=0,maxFill=0,enemy=app._BENCHMARK_ENEMY_PATH,
         level=9999,steelPath=True,headshotChance=1.,aiming=True,**field)
     built=app.build_weapon_payload(p)
-    manual=app.simulate_manual_payload(p)
+    exilus=built.get('exilus')
+    manual=app.simulate_manual_payload({**p,'exilus':{'path':exilus['path'],'rank':exilus['rank']} if exilus else None})
     assert built['build']['objectiveScore']==pytest.approx(manual['benchmarkTimeline']['killsPerMinute'],rel=1e-9)
 
 
@@ -194,5 +195,5 @@ def test_pure_radial_compression_has_no_duplicate_blast_or_head_trigger(name,rad
     plain=apply_mods(w,[],scenario=sc)
     assert st.total_damage==pytest.approx(plain.total_damage*(1+.8*radius))
     assert st.ammo_cost==pytest.approx(1-.055*.8*radius)
-    assert 'orb-merging-and-singularity-unmodeled' in combat['unsupported']
+    assert 'orb-merging-and-singularity-unmodeled' not in combat['unsupported']
     assert 'primary-compression-weapon-profile-unverified' not in st.unsupported

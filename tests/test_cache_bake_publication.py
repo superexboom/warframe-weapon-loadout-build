@@ -5,6 +5,17 @@ import importlib.util
 import app
 
 
+def test_python_checkout_line_endings_do_not_change_cache_identity(monkeypatch):
+    from pathlib import Path
+    read = Path.read_bytes
+    fingerprint = app._analysis_inputs_fingerprint()
+    def windows_lines(path):
+        data = read(path)
+        return data.replace(b'\r\n',b'\n').replace(b'\n',b'\r\n') if path.suffix=='.py' else data
+    monkeypatch.setattr(Path,'read_bytes',windows_lines)
+    assert app._analysis_inputs_fingerprint()==fingerprint
+
+
 def test_live_process_preserves_entries_published_by_a_bake(monkeypatch,tmp_path):
     path=tmp_path/'cache.json'
     fingerprint=app._analysis_inputs_fingerprint()

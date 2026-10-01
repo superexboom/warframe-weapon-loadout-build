@@ -1,0 +1,1262 @@
+[
+  {
+    "weapon": "/Lotus/Weapons/ClanTech/Energy/DeraVandal",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/ClanTech/Energy/DeraIncarnonEvolutions/Vandal/VandalDeraEvoTier1ASubMod",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnKillCondition",
+      "sha256": "8139ba12024d7c4f36575104479c1ff958b57325bdaba87cd26ff9b2a46fb509"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/ClanTech/Energy/DeraVandal",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/ClanTech/Energy/DeraIncarnonEvolutions/Vandal/VandalDeraEvoTier1BSubMod",
+    "event": {
+      "kind": "on-proc",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcALLCondition",
+      "sha256": "757b4f0ef2255f41ff74e561edb66a183b8f431b687475b12060456b1d793053"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/ClanTech/Energy/EnergyRifle",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/ClanTech/Energy/DeraIncarnonEvolutions/DeraEvoTier1ASubMod",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnKillCondition",
+      "sha256": "8139ba12024d7c4f36575104479c1ff958b57325bdaba87cd26ff9b2a46fb509"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/ClanTech/Energy/EnergyRifle",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/ClanTech/Energy/DeraIncarnonEvolutions/DeraEvoTier1BSubMod",
+    "event": {
+      "kind": "on-proc",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcALLCondition",
+      "sha256": "757b4f0ef2255f41ff74e561edb66a183b8f431b687475b12060456b1d793053"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Corpus/Pistols/CorpusMinigun/CestraIncarnonEvolutions/CestraEvoTier2B",
+    "event": {
+      "kind": "on-hit",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitPistolCondition",
+      "sha256": "6d98ad48e5b66058a45cb68a1aafb96e3839e57c6bae0d390e9da3b6dc40bba5"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/MiterIncarnonEvolutions/MiterEvoTier2B",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnReloadFromEmptyClipCondition",
+      "sha256": "19ba2e215f4e45181fb14b546261fb680237292a0939f3e8cf20dc060fb94261"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/VTGorgon",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Rifle/GorgonIncarnonEvolutions/Prisma/PrismaGorgonEvoTier1BSubMod",
+    "event": {
+      "kind": "on-shield-broken",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Grineer/Melee/GrineerTylAxeAndBoar/AckAndBruntIncarnonEvolutions/OnShieldBreak",
+      "sha256": "95f38a9d8cba533f18310d0658decec1ac61b4825d28b2fd27ddd7a7170022ea",
+      "actorOnly": true
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/VTGorgon",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/GorgonIncarnonEvolutions/GorgonEvoTier2A",
+    "event": {
+      "kind": "on-reload-empty-complete",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/GorgonIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "66960435f3b3a184bc26bf6b5dea666e90c5bf34998c0583daacf003011b82be"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/WraithGorgon",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Rifle/GorgonIncarnonEvolutions/Wraith/WraithGorgonEvoTier1BSubMod",
+    "event": {
+      "kind": "on-shield-broken",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Grineer/Melee/GrineerTylAxeAndBoar/AckAndBruntIncarnonEvolutions/OnShieldBreak",
+      "sha256": "95f38a9d8cba533f18310d0658decec1ac61b4825d28b2fd27ddd7a7170022ea",
+      "actorOnly": true
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/WraithGorgon",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/GorgonIncarnonEvolutions/GorgonEvoTier2A",
+    "event": {
+      "kind": "on-reload-empty-complete",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/GorgonIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "66960435f3b3a184bc26bf6b5dea666e90c5bf34998c0583daacf003011b82be"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/StugIncarnonEvolutions/StugEvoTier1ASubMod",
+    "event": {
+      "kind": "on-fire",
+      "requiredCount": 1,
+      "resetOn": [
+        "on-reload",
+        "on-transform",
+        "on-transform"
+      ],
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/StugIncarnonEvolutions/PistolOnShootReloadResetCondition",
+      "sha256": "517ea1ee526df97d9348d77d7843106076fb368318fbc726746846ad03d4ae7a"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/StugIncarnonEvolutions/StugEvoTier2C",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/StugIncarnonEvolutions/StugOnReloadFromEmptyClipCondition",
+      "sha256": "c88658f4a63df64ddb837e5e4f95d845c1d6a59f4e52e8716fb1ded1ab0c34e6"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Grineer/Pistols/HeatGun/AtomosIncarnonEvolutions/AtomosEvoTier1BSubMod",
+    "event": {
+      "kind": "on-shield-broken",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Grineer/Melee/GrineerTylAxeAndBoar/AckAndBruntIncarnonEvolutions/OnShieldBreak",
+      "sha256": "95f38a9d8cba533f18310d0658decec1ac61b4825d28b2fd27ddd7a7170022ea",
+      "actorOnly": true
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Grineer/Pistols/HeatGun/AtomosIncarnonEvolutions/AtomosEvoTier2C",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Grineer/Pistols/HeatGun/AtomosIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "1803267bcf0d946f5f6b98a5849eb0944d7be58e69bb43e18f7892f4ca59d4ff"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/DualToxocystIncarnonEvolutions/DualToxocystEvoTier2A",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/DualToxocystIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "686c0feea7dba4ceec34014620d3f3755e1879f825c0c027496ae7adfd617daa"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep",
+    "branch": "4-2",
+    "source": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/DualToxocystIncarnonEvolutions/DualToxocystEvoTier3B",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+      "sha256": "f08e773ee93fd28b4ef4a6b11aa7c3e461d26c45faee4e775ae8ad10a084c234"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep",
+    "branch": "4-3",
+    "source": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/DualToxocystIncarnonEvolutions/DualToxocystEvoTier3C",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillPistolCondition",
+      "sha256": "0ddf0d9296231087e467adcd7d95f19db3207cdfbeb767fd9f19fb5874d0d05f"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Furis",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Pistol/FurisIncarnonEvolutions/FurisEvoTier2C",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+      "sha256": "f08e773ee93fd28b4ef4a6b11aa7c3e461d26c45faee4e775ae8ad10a084c234"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Furis",
+    "branch": "4-1",
+    "source": "/Lotus/Weapons/Tenno/Pistol/FurisIncarnonEvolutions/MkOne/MkOneFurisEvoTier3A",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+      "sha256": "f08e773ee93fd28b4ef4a6b11aa7c3e461d26c45faee4e775ae8ad10a084c234"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Kunai",
+    "branch": "4-2",
+    "source": "/Lotus/Weapons/Tenno/ThrowingWeapons/KunaiIncarnonEvolutions/MkOne/MkOneKunaiEvoTier3B",
+    "event": {
+      "kind": "on-fire",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/KunaiIncarnonEvolutions/OnShootCondition",
+      "sha256": "5be2c5cc85f7f334962821a29a754a6731aefb5cd36f9ebda020bd7348847cf2"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Paris",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Tenno/Bows/ParisIncarnonEvolutions/ParisEvoTier2A",
+    "event": {
+      "kind": "on-punchthrough",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Bows/ParisIncarnonEvolutions/ParisEvoOnPunchthroughCondition",
+      "sha256": "6d26c1a8d157f5d59739c9aff2ccd270336b90f1deac3eafe9c0d40703c0705a"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Paris",
+    "branch": "4-3",
+    "source": "/Lotus/Weapons/Tenno/Bows/ParisIncarnonEvolutions/MkOne/MkOneParisEvoTier3C",
+    "event": {
+      "kind": "on-hit",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnBowHitCondition",
+      "sha256": "1989d1ba08e0bb40afeae07e0a2c0b79ae342b94dfcb8a9bab841db3827ee214"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Strun",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/MkOne/MkOneStrunEvoTier1BSubMod",
+    "event": {
+      "kind": "on-fire",
+      "requiredCount": 1,
+      "resetOn": [
+        "on-reload"
+      ],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/StrunOnShootReloadResetCondition",
+      "sha256": "9cf4f7f67a5e43d39ea098d3ced9fc4188bbd79a432599eb29c188e1c022a374"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Strun",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/MkOne/MkOneStrunEvoTier2B",
+    "event": {
+      "kind": "on-hit",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/StrunOnElectrifiedVictimHit",
+      "sha256": "cb6c991e3f5539e5c6d1f766857d9f623b3bd209e10d7353bedfc61f62a40703",
+      "victimProcType": "DT_ELECTRICITY"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Syndicates/ArbitersOfHexis/LongGuns/AHBoltor",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/Telos/TelosBoltorEvoTier1BSubMod",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillRifleCondition",
+      "sha256": "48b557e72bcf042e432f140db349c283861a08d522ce4b3d397b750589fcf5f7"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/BallisticaIncarnonEvolutions/Rakta/RaktaBallisticaEvoTier1ASubMod",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/Mods/PvPMods/Conditions/OnPistolHeadshotCondition",
+      "sha256": "3291584cfa40df847c2813be0b6cbd149ed66b334e227fe5a67db9037a8271bd"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/BallisticaIncarnonEvolutions/Rakta/RaktaBallisticaEvoTier1BSubMod",
+    "event": {
+      "kind": "on-punchthrough",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/BallisticaIncarnonEvolutions/BallisticaEvoOnPunchthroughCondition",
+      "sha256": "d634963a83e942a835428d1b6c1a909b37b3004431f7370a54087af8aaec6286"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/HuntingBow",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Tenno/Bows/ParisIncarnonEvolutions/ParisEvoTier2A",
+    "event": {
+      "kind": "on-punchthrough",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Bows/ParisIncarnonEvolutions/ParisEvoOnPunchthroughCondition",
+      "sha256": "6d26c1a8d157f5d59739c9aff2ccd270336b90f1deac3eafe9c0d40703c0705a"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/HuntingBow",
+    "branch": "4-3",
+    "source": "/Lotus/Weapons/Tenno/Bows/ParisIncarnonEvolutions/ParisEvoTier3C",
+    "event": {
+      "kind": "on-hit",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnBowHitCondition",
+      "sha256": "1989d1ba08e0bb40afeae07e0a2c0b79ae342b94dfcb8a9bab841db3827ee214"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Tenno/Bows/ParisIncarnonEvolutions/ParisEvoTier2A",
+    "event": {
+      "kind": "on-punchthrough",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Bows/ParisIncarnonEvolutions/ParisEvoOnPunchthroughCondition",
+      "sha256": "6d26c1a8d157f5d59739c9aff2ccd270336b90f1deac3eafe9c0d40703c0705a"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow",
+    "branch": "4-3",
+    "source": "/Lotus/Weapons/Tenno/Bows/ParisIncarnonEvolutions/Prime/PrimeParisEvoTier3C",
+    "event": {
+      "kind": "on-hit",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnBowHitCondition",
+      "sha256": "1989d1ba08e0bb40afeae07e0a2c0b79ae342b94dfcb8a9bab841db3827ee214"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/SybarisIncarnonEvolutions/Dex/DexSybarisEvoTier1ASubMod",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 2,
+      "resetOn": [
+        "on-reload",
+        "on-transform",
+        "on-transform"
+      ],
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/IncarnonSybaris/OnConsecutiveHeadshotResetOnReloadCondition",
+      "sha256": "8b12e6c84f22045410684d940a372455f029c2b44bdf21f68b7888716f9caaa0"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/SybarisIncarnonEvolutions/Dex/DexSybarisEvoTier1BSubMod",
+    "event": {
+      "kind": "on-fire",
+      "requiredCount": 1,
+      "resetOn": [
+        "on-reload",
+        "on-transform",
+        "on-transform"
+      ],
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/IncarnonSybaris/RifleOnShootReloadResetCondition",
+      "sha256": "2e0d1acf94f7ce34a14996e1ef0c034ebbb4bf51c66db5bc3391404416c17592"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/SybarisIncarnonEvolutions/SybarisEvoTier2B",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/IncarnonSybaris/OnReloadFromEmptyClipGenericRifleCondition",
+      "sha256": "a6860f78c4e4f2c92d7afe3b5b93f17999f66946cdee2a49b46749227d82f80c"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBoltor/PrimeBoltor",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/Prime/PrimeBoltorEvoTier1BSubMod",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillRifleCondition",
+      "sha256": "48b557e72bcf042e432f140db349c283861a08d522ce4b3d397b750589fcf5f7"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/Rifle/BurstonIncarnonEvolutions/BurstonEvoTier2B",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnReloadFromEmptyClipCondition",
+      "sha256": "19ba2e215f4e45181fb14b546261fb680237292a0939f3e8cf20dc060fb94261"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeSoma/PrimeSomaRifle",
+    "branch": "4-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/SomaIncarnonEvolutions/Prime/PrimeSomaEvoTier3A",
+    "event": {
+      "kind": "on-reload-empty-complete",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/SomaIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "2711b098f184010d438bc91f4269a4b5e4fa7b07e9a65816c87b06f6c7abb08e"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeStrun/PrimeStrunWeapon",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/Prime/PrimeStrunEvoTier1BSubMod",
+    "event": {
+      "kind": "on-fire",
+      "requiredCount": 1,
+      "resetOn": [
+        "on-reload"
+      ],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/StrunOnShootReloadResetCondition",
+      "sha256": "9cf4f7f67a5e43d39ea098d3ced9fc4188bbd79a432599eb29c188e1c022a374"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeStrun/PrimeStrunWeapon",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/Prime/PrimeStrunEvoTier2B",
+    "event": {
+      "kind": "on-hit",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/StrunOnElectrifiedVictimHit",
+      "sha256": "cb6c991e3f5539e5c6d1f766857d9f623b3bd209e10d7353bedfc61f62a40703",
+      "victimProcType": "DT_ELECTRICITY"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeSybaris/PrimeSybarisRifle",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/SybarisIncarnonEvolutions/Prime/PrimeSybarisEvoTier1ASubMod",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 2,
+      "resetOn": [
+        "on-reload",
+        "on-transform",
+        "on-transform"
+      ],
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/IncarnonSybaris/OnConsecutiveHeadshotResetOnReloadCondition",
+      "sha256": "8b12e6c84f22045410684d940a372455f029c2b44bdf21f68b7888716f9caaa0"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeSybaris/PrimeSybarisRifle",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/SybarisIncarnonEvolutions/Prime/PrimeSybarisEvoTier1BSubMod",
+    "event": {
+      "kind": "on-fire",
+      "requiredCount": 1,
+      "resetOn": [
+        "on-reload",
+        "on-transform",
+        "on-transform"
+      ],
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/IncarnonSybaris/RifleOnShootReloadResetCondition",
+      "sha256": "2e0d1acf94f7ce34a14996e1ef0c034ebbb4bf51c66db5bc3391404416c17592"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeSybaris/PrimeSybarisRifle",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/SybarisIncarnonEvolutions/SybarisEvoTier2B",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/IncarnonSybaris/OnReloadFromEmptyClipGenericRifleCondition",
+      "sha256": "a6860f78c4e4f2c92d7afe3b5b93f17999f66946cdee2a49b46749227d82f80c"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/TnoLeverActionRifle",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/SybarisIncarnonEvolutions/SybarisEvoTier1ASubMod",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 2,
+      "resetOn": [
+        "on-reload",
+        "on-transform",
+        "on-transform"
+      ],
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/IncarnonSybaris/OnConsecutiveHeadshotResetOnReloadCondition",
+      "sha256": "8b12e6c84f22045410684d940a372455f029c2b44bdf21f68b7888716f9caaa0"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/TnoLeverActionRifle",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/SybarisIncarnonEvolutions/SybarisEvoTier1BSubMod",
+    "event": {
+      "kind": "on-fire",
+      "requiredCount": 1,
+      "resetOn": [
+        "on-reload",
+        "on-transform",
+        "on-transform"
+      ],
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/IncarnonSybaris/RifleOnShootReloadResetCondition",
+      "sha256": "2e0d1acf94f7ce34a14996e1ef0c034ebbb4bf51c66db5bc3391404416c17592"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/TnoLeverActionRifle",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/SybarisIncarnonEvolutions/SybarisEvoTier2B",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/IncarnonSybaris/OnReloadFromEmptyClipGenericRifleCondition",
+      "sha256": "a6860f78c4e4f2c92d7afe3b5b93f17999f66946cdee2a49b46749227d82f80c"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/Wraith/WraithLatronEvoTier1ASubMod",
+    "event": {
+      "kind": "proc-DT_PUNCTURE",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/OnPierceProcCondition",
+      "sha256": "0b75ca5891567a2ea5cc22de42715dcada1932ee79179619e4dbff05c37ad9ca"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron",
+    "branch": "4-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/Wraith/WraithLatronEvoTier3A",
+    "event": {
+      "kind": "proc-DT_PUNCTURE",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/OnPierceProcCondition",
+      "sha256": "0b75ca5891567a2ea5cc22de42715dcada1932ee79179619e4dbff05c37ad9ca"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Pistol/FurisIncarnonEvolutions/FurisEvoTier2C",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+      "sha256": "f08e773ee93fd28b4ef4a6b11aa7c3e461d26c45faee4e775ae8ad10a084c234"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+    "branch": "4-1",
+    "source": "/Lotus/Weapons/Tenno/Pistol/FurisIncarnonEvolutions/FurisEvoTier3A",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+      "sha256": "f08e773ee93fd28b4ef4a6b11aa7c3e461d26c45faee4e775ae8ad10a084c234"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/CoHLoanerPistol",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/LatoEvoTier1BSubMod",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "27bd013f650e02212d2d74aa3e16c91a5127a2a681e8b546ee6cd107056a2370"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/CoHLoanerPistol",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/LatoEvoTier2B",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotPistolCondition",
+      "sha256": "e683c2852c88710ee6583d398af01146a5c0faecb03d5d60918c65463be21a14"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/CoHLoanerPistol",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/LatoEvoTier2C",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillPistolCondition",
+      "sha256": "0ddf0d9296231087e467adcd7d95f19db3207cdfbeb767fd9f19fb5874d0d05f"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/HeavyPistol",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LexIncarnonEvolutions/LexEvoTier1A",
+    "event": {
+      "kind": "on-shield-hit",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnShieldDamageCondition",
+      "sha256": "d7cd03fe8d993c66702ce3cb0677bf93befed6dc991f580b07ce7112912a32bd",
+      "actorOnly": true
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/HeavyPistol",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LexIncarnonEvolutions/LexEvoTier1ASubMod",
+    "event": {
+      "kind": "on-shield-broken",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Grineer/Melee/GrineerTylAxeAndBoar/AckAndBruntIncarnonEvolutions/OnShieldBreak",
+      "sha256": "95f38a9d8cba533f18310d0658decec1ac61b4825d28b2fd27ddd7a7170022ea",
+      "actorOnly": true
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/HeavyPistol",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LexIncarnonEvolutions/LexEvoTier2A",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+      "sha256": "f08e773ee93fd28b4ef4a6b11aa7c3e461d26c45faee4e775ae8ad10a084c234"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/HeavyPistol",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LexIncarnonEvolutions/LexEvoTier2C",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistol/LexIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "63e94e48638fbd16746effc04d3521e38ac479f0cf85eb838865f0c44dc6101e"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/LatoPrime",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/Prime/PrimeLatoEvoTier1BSubMod",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "27bd013f650e02212d2d74aa3e16c91a5127a2a681e8b546ee6cd107056a2370"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/LatoPrime",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/LatoEvoTier2B",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotPistolCondition",
+      "sha256": "e683c2852c88710ee6583d398af01146a5c0faecb03d5d60918c65463be21a14"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/LatoPrime",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/Prime/PrimeLatoEvoTier2C",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillPistolCondition",
+      "sha256": "0ddf0d9296231087e467adcd7d95f19db3207cdfbeb767fd9f19fb5874d0d05f"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/LatoVandal",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/Vandal/VandalLatoEvoTier1BSubMod",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "27bd013f650e02212d2d74aa3e16c91a5127a2a681e8b546ee6cd107056a2370"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/LatoVandal",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/LatoEvoTier2B",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotPistolCondition",
+      "sha256": "e683c2852c88710ee6583d398af01146a5c0faecb03d5d60918c65463be21a14"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/LatoVandal",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/LatoEvoTier2C",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillPistolCondition",
+      "sha256": "0ddf0d9296231087e467adcd7d95f19db3207cdfbeb767fd9f19fb5874d0d05f"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/Pistol",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/LatoEvoTier1BSubMod",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "27bd013f650e02212d2d74aa3e16c91a5127a2a681e8b546ee6cd107056a2370"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/Pistol",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/LatoEvoTier2B",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotPistolCondition",
+      "sha256": "e683c2852c88710ee6583d398af01146a5c0faecb03d5d60918c65463be21a14"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/Pistol",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LatoIncarnonEvolutions/LatoEvoTier2C",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillPistolCondition",
+      "sha256": "0ddf0d9296231087e467adcd7d95f19db3207cdfbeb767fd9f19fb5874d0d05f"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/RevolverPistol",
+    "branch": "4-3",
+    "source": "/Lotus/Weapons/Tenno/Pistol/VastoIncarnonEvolutions/VastoEvoTier3C",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+      "sha256": "f08e773ee93fd28b4ef4a6b11aa7c3e461d26c45faee4e775ae8ad10a084c234"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/BallisticaIncarnonEvolutions/BallisticaEvoTier1ASubMod",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/Mods/PvPMods/Conditions/OnPistolHeadshotCondition",
+      "sha256": "3291584cfa40df847c2813be0b6cbd149ed66b334e227fe5a67db9037a8271bd"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/BallisticaIncarnonEvolutions/BallisticaEvoTier1BSubMod",
+    "event": {
+      "kind": "on-punchthrough",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/BallisticaIncarnonEvolutions/BallisticaEvoOnPunchthroughCondition",
+      "sha256": "d634963a83e942a835428d1b6c1a909b37b3004431f7370a54087af8aaec6286"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ConclaveLeverPistol",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ZylokIncarnonEvolutions/ZylokEvoTier1BSubMod",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ZylokIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "076e50ba5197b671a9ae5d87314660c6b2335521b51b8e4b86b60fb51988cf5c"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeBallistica/PrimeBallistica",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/BallisticaIncarnonEvolutions/Prime/PrimeBallisticaEvoTier1ASubMod",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/Mods/PvPMods/Conditions/OnPistolHeadshotCondition",
+      "sha256": "3291584cfa40df847c2813be0b6cbd149ed66b334e227fe5a67db9037a8271bd"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeBallistica/PrimeBallistica",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/BallisticaIncarnonEvolutions/BallisticaEvoTier1BSubMod",
+    "event": {
+      "kind": "on-punchthrough",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/BallisticaIncarnonEvolutions/BallisticaEvoOnPunchthroughCondition",
+      "sha256": "d634963a83e942a835428d1b6c1a909b37b3004431f7370a54087af8aaec6286"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LexIncarnonEvolutions/Prime/PrimeLexEvoTier1A",
+    "event": {
+      "kind": "on-shield-hit",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnShieldDamageCondition",
+      "sha256": "d7cd03fe8d993c66702ce3cb0677bf93befed6dc991f580b07ce7112912a32bd",
+      "actorOnly": true
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LexIncarnonEvolutions/Prime/PrimeLexEvoTier1ASubMod",
+    "event": {
+      "kind": "on-shield-broken",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Grineer/Melee/GrineerTylAxeAndBoar/AckAndBruntIncarnonEvolutions/OnShieldBreak",
+      "sha256": "95f38a9d8cba533f18310d0658decec1ac61b4825d28b2fd27ddd7a7170022ea",
+      "actorOnly": true
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LexIncarnonEvolutions/LexEvoTier2A",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+      "sha256": "f08e773ee93fd28b4ef4a6b11aa7c3e461d26c45faee4e775ae8ad10a084c234"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Pistol/LexIncarnonEvolutions/LexEvoTier2C",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistol/LexIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "63e94e48638fbd16746effc04d3521e38ac479f0cf85eb838865f0c44dc6101e"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeVasto/PrimeVastoPistol",
+    "branch": "4-3",
+    "source": "/Lotus/Weapons/Tenno/Pistol/VastoIncarnonEvolutions/Prime/PrimeVastoEvoTier3C",
+    "event": {
+      "kind": "on-headshot",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+      "sha256": "f08e773ee93fd28b4ef4a6b11aa7c3e461d26c45faee4e775ae8ad10a084c234"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeZylok/ZylokPrimePistol",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ZylokIncarnonEvolutions/ZylokEvoTier1BSubMod",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ZylokIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "076e50ba5197b671a9ae5d87314660c6b2335521b51b8e4b86b60fb51988cf5c"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/BoltoRifle",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/BoltorEvoTier1BSubMod",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillRifleCondition",
+      "sha256": "48b557e72bcf042e432f140db349c283861a08d522ce4b3d397b750589fcf5f7"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/BratonPrime",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Rifle/BratonIncarnonEvolutions/BratonEvoTier2C",
+    "event": {
+      "kind": "on-punchthrough",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/BratonIncarnonEvolutions/BratonIncarnonChallenges/BratonEvoOnPunchthroughCondition",
+      "sha256": "69131b155bf8d0e04c1e193d5d1aab2611a76604011aac9a7d4bf7d3a92c8537"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/BurstRifle",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/Rifle/BurstonIncarnonEvolutions/BurstonEvoTier2B",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnReloadFromEmptyClipCondition",
+      "sha256": "19ba2e215f4e45181fb14b546261fb680237292a0939f3e8cf20dc060fb94261"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/HeavyRifle",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Rifle/GorgonIncarnonEvolutions/GorgonEvoTier1BSubMod",
+    "event": {
+      "kind": "on-shield-broken",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Grineer/Melee/GrineerTylAxeAndBoar/AckAndBruntIncarnonEvolutions/OnShieldBreak",
+      "sha256": "95f38a9d8cba533f18310d0658decec1ac61b4825d28b2fd27ddd7a7170022ea",
+      "actorOnly": true
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/HeavyRifle",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/GorgonIncarnonEvolutions/GorgonEvoTier2A",
+    "event": {
+      "kind": "on-reload-empty-complete",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/GorgonIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "66960435f3b3a184bc26bf6b5dea666e90c5bf34998c0583daacf003011b82be"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/LatronPrime",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/Prime/PrimeLatronEvoTier1ASubMod",
+    "event": {
+      "kind": "proc-DT_PUNCTURE",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/OnPierceProcCondition",
+      "sha256": "0b75ca5891567a2ea5cc22de42715dcada1932ee79179619e4dbff05c37ad9ca"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/LatronPrime",
+    "branch": "4-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/Prime/PrimeLatronEvoTier3A",
+    "event": {
+      "kind": "proc-DT_PUNCTURE",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/OnPierceProcCondition",
+      "sha256": "0b75ca5891567a2ea5cc22de42715dcada1932ee79179619e4dbff05c37ad9ca"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/Rifle",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Rifle/BratonIncarnonEvolutions/BratonEvoTier2C",
+    "event": {
+      "kind": "on-punchthrough",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/BratonIncarnonEvolutions/BratonIncarnonChallenges/BratonEvoOnPunchthroughCondition",
+      "sha256": "69131b155bf8d0e04c1e193d5d1aab2611a76604011aac9a7d4bf7d3a92c8537"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/LatronEvoTier1ASubMod",
+    "event": {
+      "kind": "proc-DT_PUNCTURE",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/OnPierceProcCondition",
+      "sha256": "0b75ca5891567a2ea5cc22de42715dcada1932ee79179619e4dbff05c37ad9ca"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle",
+    "branch": "4-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/LatronEvoTier3A",
+    "event": {
+      "kind": "proc-DT_PUNCTURE",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/OnPierceProcCondition",
+      "sha256": "0b75ca5891567a2ea5cc22de42715dcada1932ee79179619e4dbff05c37ad9ca"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/StartingRifle",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Rifle/BratonIncarnonEvolutions/BratonEvoTier2C",
+    "event": {
+      "kind": "on-punchthrough",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/BratonIncarnonEvolutions/BratonIncarnonChallenges/BratonEvoOnPunchthroughCondition",
+      "sha256": "69131b155bf8d0e04c1e193d5d1aab2611a76604011aac9a7d4bf7d3a92c8537"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/TennoAR",
+    "branch": "4-1",
+    "source": "/Lotus/Weapons/Tenno/Rifle/SomaIncarnonEvolutions/SomaEvoTier3A",
+    "event": {
+      "kind": "on-reload-empty-complete",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/SomaIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "2711b098f184010d438bc91f4269a4b5e4fa7b07e9a65816c87b06f6c7abb08e"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/VIPRifle",
+    "branch": "3-3",
+    "source": "/Lotus/Weapons/Tenno/Rifle/BratonIncarnonEvolutions/BratonEvoTier2C",
+    "event": {
+      "kind": "on-punchthrough",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Rifle/BratonIncarnonEvolutions/BratonIncarnonChallenges/BratonEvoOnPunchthroughCondition",
+      "sha256": "69131b155bf8d0e04c1e193d5d1aab2611a76604011aac9a7d4bf7d3a92c8537"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/BoarIncarnonEvolutions/BoarEvoTier1ASubMod",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/BoarIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "2ebd423bdeb0b13388f9b66539f0d056898ca77a669c76bc46c7c047ea0447e3"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/BoarIncarnonEvolutions/BoarEvoTier2A",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/BoarIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "2ebd423bdeb0b13388f9b66539f0d056898ca77a669c76bc46c7c047ea0447e3"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/PrimeBoar",
+    "branch": "2-1",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/BoarIncarnonEvolutions/BoarEvoTier1ASubMod",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/BoarIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "2ebd423bdeb0b13388f9b66539f0d056898ca77a669c76bc46c7c047ea0447e3"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/PrimeBoar",
+    "branch": "3-1",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/BoarIncarnonEvolutions/BoarEvoTier2A",
+    "event": {
+      "kind": "on-reload-empty",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/BoarIncarnonEvolutions/OnReloadFromEmptyClipCondition",
+      "sha256": "2ebd423bdeb0b13388f9b66539f0d056898ca77a669c76bc46c7c047ea0447e3"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/StrunEvoTier1BSubMod",
+    "event": {
+      "kind": "on-fire",
+      "requiredCount": 1,
+      "resetOn": [
+        "on-reload"
+      ],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/StrunOnShootReloadResetCondition",
+      "sha256": "9cf4f7f67a5e43d39ea098d3ced9fc4188bbd79a432599eb29c188e1c022a374"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/StrunEvoTier2B",
+    "event": {
+      "kind": "on-hit",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/StrunOnElectrifiedVictimHit",
+      "sha256": "cb6c991e3f5539e5c6d1f766857d9f623b3bd209e10d7353bedfc61f62a40703",
+      "victimProcType": "DT_ELECTRICITY"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/ShotgunVandal",
+    "branch": "2-2",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/Wraith/WraithStrunEvoTier1BSubMod",
+    "event": {
+      "kind": "on-fire",
+      "requiredCount": 1,
+      "resetOn": [
+        "on-reload"
+      ],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/StrunOnShootReloadResetCondition",
+      "sha256": "9cf4f7f67a5e43d39ea098d3ced9fc4188bbd79a432599eb29c188e1c022a374"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/ShotgunVandal",
+    "branch": "3-2",
+    "source": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/Wraith/WraithStrunEvoTier2B",
+    "event": {
+      "kind": "on-hit",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/Shotgun/StrunIncarnonEvolutions/StrunOnElectrifiedVictimHit",
+      "sha256": "cb6c991e3f5539e5c6d1f766857d9f623b3bd209e10d7353bedfc61f62a40703",
+      "victimProcType": "DT_ELECTRICITY"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/ThrowingWeapons/Kunai",
+    "branch": "4-2",
+    "source": "/Lotus/Weapons/Tenno/ThrowingWeapons/KunaiIncarnonEvolutions/KunaiEvoTier3B",
+    "event": {
+      "kind": "on-fire",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/KunaiIncarnonEvolutions/OnShootCondition",
+      "sha256": "5be2c5cc85f7f334962821a29a754a6731aefb5cd36f9ebda020bd7348847cf2"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanPumpShotgun",
+    "branch": "3-1",
+    "source": "/Lotus/Upgrades/Evolutions/Shotgun/EvoShotgunShellReloadToggleSubUpgrade",
+    "event": {
+      "kind": "on-reload-complete",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnReloadShotgunCondition",
+      "sha256": "318a1e64fbc7c24d27f3eba227b2c0e45495db6c0680b64bf477c7851b78f78a"
+    }
+  },
+  {
+    "weapon": "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon",
+    "branch": "4-1",
+    "source": "/Lotus/Weapons/Thanotech/EntratiWristGun/WristGunIncarnonEvolutions/EntratiWristGunEvoTier3A",
+    "event": {
+      "kind": "on-kill",
+      "requiredCount": 1,
+      "resetOn": [],
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnKillCondition",
+      "sha256": "8139ba12024d7c4f36575104479c1ff958b57325bdaba87cd26ff9b2a46fb509"
+    }
+  }
+]

@@ -1,0 +1,226 @@
+{
+  "apl": [
+    "transform_in,if=gauge.pct>=1",
+    "transform_out,if=gauge.pct<=0",
+    "reload,if=!can_fire",
+    "shoot"
+  ],
+  "armor_left": 0.5223637112310394,
+  "big_crit_rate": 0.993157614483493,
+  "bodies": [
+    {
+      "aimed": true,
+      "at": [
+        0,
+        0.5
+      ],
+      "damage": 1451659182.2312171,
+      "id": "e1"
+    }
+  ],
+  "burst_dps": 60485799.25963405,
+  "combatants": [
+    {
+      "big_crit_rate": 0.993157614483493,
+      "crit_rate": 1,
+      "crit_tier": 2.2781948881789136,
+      "damage": 1451659182.2312171,
+      "finishes": 55.333333333333336,
+      "id": "wielder",
+      "pellets": 1252,
+      "procs": 1295.5666666666666,
+      "reloads": 0,
+      "shots": 1252,
+      "transforms": 2,
+      "weapon": "burston_prime"
+    }
+  ],
+  "crit_rate": 1,
+  "crit_tier": 2.2781948881789136,
+  "damage_per_pellet": 1159472.190280525,
+  "damage_per_shot": 1159472.190280525,
+  "damage_sources": [
+    {
+      "by_type": [
+        {
+          "dmg": 1067755715.5541081,
+          "type": "Viral"
+        },
+        {
+          "dmg": 362448627.1283402,
+          "type": "Heat"
+        },
+        {
+          "dmg": 2011420.5216224033,
+          "type": "Slash"
+        },
+        {
+          "dmg": 1547246.5550941555,
+          "type": "Impact"
+        },
+        {
+          "dmg": 1547246.5550941555,
+          "type": "Puncture"
+        }
+      ],
+      "dmg": 1435310256.3142722,
+      "source": "direct"
+    },
+    {
+      "by_type": [
+        {
+          "dmg": 6494250.569297738,
+          "type": "Viral"
+        },
+        {
+          "dmg": 2234580.8410486975,
+          "type": "Heat"
+        }
+      ],
+      "dmg": 8728831.410346473,
+      "source": "radial"
+    },
+    {
+      "dmg": 373374.6040840993,
+      "source": "Heat"
+    },
+    {
+      "by_type": [
+        {
+          "dmg": 1000,
+          "type": "Gas"
+        }
+      ],
+      "dmg": 1000,
+      "source": "syndicate"
+    },
+    {
+      "dmg": 500.5,
+      "source": "Gas"
+    }
+  ],
+  "downtime": 6,
+  "dps": 48388639.40770724,
+  "dps_runs": [],
+  "dps_se": 89571.053555719,
+  "duration": 30,
+  "field_ticks": 0,
+  "first_magazine": 3402699.8399681,
+  "forma": {
+    "cap": 60,
+    "legal": true,
+    "omni": 0,
+    "rank": 30,
+    "regular": 6,
+    "total_drain": 58,
+    "umbra": 0,
+    "used": 6
+  },
+  "frame": {
+    "ability_strength": 1,
+    "summon_strength": null
+  },
+  "ghosts": null,
+  "ghosts_peak": null,
+  "headshot_rate": 1,
+  "kills": 55.333333333333336,
+  "kills_max": 56,
+  "kills_min": 54,
+  "kills_std": 0.5962847939997998,
+  "max_hit": 3032473.560037477,
+  "mean_max_hit": 3024532.4668890177,
+  "ok": true,
+  "overkill": 42461636.85753109,
+  "overkill_rate": 0.030131784572667037,
+  "panel": {
+    "co_per_type": 0,
+    "crit_chance": 0.5,
+    "crit_damage": 13.410659999999998,
+    "damage": [
+      {
+        "type": "Heat",
+        "value": 46.75
+      },
+      {
+        "type": "Viral",
+        "value": 135.70986445113283
+      }
+    ],
+    "fire_rate": 54,
+    "modified_base": 46.75,
+    "multishot": 1,
+    "status_chance": 0.54,
+    "total": 182.45986445113283
+  },
+  "pellets": 1252,
+  "picked_up_ammo": null,
+  "procs": 1295.5666666666666,
+  "reloads": 0,
+  "replay": null,
+  "run": [
+    2175735121,
+    1932706443
+  ],
+  "runs": 30,
+  "sample": {
+    "dps": 48147132.094289884,
+    "kills": 55,
+    "score": 55.70727184086708
+  },
+  "score": 55.93981927129342,
+  "score_runs": [],
+  "score_se": 0.106835175788528,
+  "self_damage": null,
+  "shots": 1252,
+  "spilled": 0,
+  "target": {
+    "armor": 2700,
+    "eximus": false,
+    "health": 9667913.963695768,
+    "level": 9999,
+    "name": "Thrax Centurion",
+    "overguard": 15523399.911299936,
+    "shield": 0,
+    "steel_path": true
+  },
+  "timeline": [
+    3353121.356832652,
+    0,
+    3507992.37939539,
+    14086035.083334208,
+    29443722.478357177,
+    53278752.16235493,
+    68054275.83142672,
+    67310357.14028324,
+    71659036.13388805,
+    70077373.04599015,
+    68148838.09564416,
+    71199370.06267294,
+    73050720.01018448,
+    55624817.603132226,
+    5220568.612004068,
+    7516516.165404141,
+    0,
+    25300389.070753787,
+    74106195.5772111,
+    73546686.2745303,
+    72612045.66673592,
+    66224410.178590186,
+    73186631.88583736,
+    70483061.58452895,
+    68973647.33570677,
+    71074386.58876176,
+    69360439.49765834,
+    70961927.01971571,
+    43647545.52781625,
+    3405100.459945502
+  ],
+  "transforms": 2,
+  "ttk": {
+    "mean": 4.240740740740741,
+    "median": 4.248148148148149,
+    "p90": 4.303703703703704,
+    "runs": 30
+  },
+  "virus_stacks": 9.731316278798515
+}

@@ -43,6 +43,10 @@ def replay(
     )
 
     combat = combat or {}
+    from .consecutive_hits import ConsecutiveHits
+    tap_spec=combat.get('doubleTap')
+    tap=ConsecutiveHits(tap_spec['perHit'],tap_spec['maximum'],tap_spec['duration']) if tap_spec else None
+    tap_events=[]
     from .enervate import EnervateState, big_crit_probability, any_probability, ASSUMPTIONS
     enervate = EnervateState(combat['enervate']) if combat.get('enervate') else None
     target = target or {}
@@ -107,6 +111,7 @@ def replay(
     blast_procs = deque()
     heat = dict(count=0.0, seed=0.0, acc=0.0, start=0.0, end=-1.0, scale=1.0, token=0)
     old_heat_strip = (0.0, -1.0, 1.0)
+    puncture_strip = 0.
     frozen_until = -1.0
     frozen_scale = 1.0
     heap = []
@@ -144,6 +149,8 @@ def replay(
     for src in trigger_sources or []:
         q = dict(src)
         q.update(stacks=float(q.get("initialStacks", 0)), expires=math.inf, series=[])
+        if q.get('initialDuration') and q['stacks']:
+            q['expires'] = float(q['initialDuration'])
         q.setdefault("maxStacks", 1.0)
         q.setdefault("duration", 0.0)
         q.setdefault("perEvent", 1.0)
@@ -154,12 +161,19 @@ def replay(
     gauge = 0.0
     transforms = 0
     ammo = stats.magazine
+    pending_magazine_restore = 0.0
+    shot_in_progress = False
+    onos_condition_hits = 0.0
     reloads = 0
+    shell_reload = combat.get('shellReload')
+    reload_shell_events = []
+    mode_switch_shells_owed = 0.0
     recharges = 0
     last_fire_time = -math.inf
     spool_shots = 0
     spool_trace = []
     burst_round = 0
+    burst_head_probability = 1.0
     field_duration = combat.get('fieldDurationOnEmptyReload')
     field_duration_ready = False
     field_duration_used = 0
@@ -171,6 +185,13 @@ def replay(
     detonation_count = 0
     detonation_events = []
     delayed_attack_count = 0
+    projectile_events = [] if collect_timeline else None
+    projectiles = None
+    onos = combat.get('onosCharge')
+    onos_ticks = 0
+    onos_hits = 0.
+    onos_start = 0.
+    onos_events = []
     first_round = True
     model_cache = {}
     combat['lastRound'] = False
@@ -195,6 +216,12 @@ def replay(
         pending_throws = 0
         waiting_mines += sum(part.multishot for part, _ in batch)
         push(t + manual_detonation['delaySeconds'], 'manual-detonation', batch)
+
+    def deliver_projectile(part,t):
+        result = packet(part,0.)
+        if not take(result[0],t,'direct'):
+            add_procs(part,0.,t,result)
+        noncrit_no_proc_hit(part,0.,t)
 
     def count(dtype):
         if dtype == "DT_FIRE":
@@ -252,7 +279,7 @@ def replay(
         c = count("DT_CORROSIVE")
         cs = 0.26 * c if c < 1 else min(0.26 + 0.06 * (c - 1), 0.8)
         return (
-            armour_base * (1 - elemental_armour_strip) * (1 - cs) * (1 - heat_strip(t))
+            armour_base * (1 - elemental_armour_strip) * (1 - cs) * (1 - heat_strip(t)) * (1-puncture_strip)
         )
 
     def vulnerability(n):
@@ -260,13 +287,38 @@ def replay(
 
     def signal(kind, t, weight=1.0):
         for q in sources:
+            if q.get('actorOnly') and not combat.get('_actorSignal'):
+                continue
+            if q.get('toggleOn')==kind and q['perEvent']!=0:
+                q['stacks'] = 1.-q['stacks']
+                q['expires'] = math.inf
+                continue
+            if q.get('victimProcType') and not combat.get('victimProcTypesBeforeHit',{}).get(q['victimProcType']):
+                continue
             if kind in q.get('resetOn', ()) and q['perEvent'] != 0:
                 q['stacks'] = 0.0
                 q['expires'] = math.inf
                 q['expiries'] = []
+                q['progress'] = deque()
             if q.get("kind") != kind:
                 continue
-            delta = weight * q["perEvent"]
+            required=max(q.get('requiredCount',1),1)
+            if required>1:
+                progress=q.setdefault('progress',deque())
+                if q.get('requiredTime'):
+                    while progress and progress[0][0]<t-q['requiredTime']:
+                        progress.popleft()
+                progress.append((t,weight))
+                completed=math.floor((sum(n for _,n in progress)+1e-9)/required)
+                consumed=completed*required
+                while consumed>1e-9 and progress:
+                    when,n=progress.popleft()
+                    if n>consumed:
+                        progress.appendleft((when,n-consumed))
+                    consumed-=n
+                delta=completed*q['perEvent']
+            else:
+                delta=weight*q['perEvent']
             if delta <= 0:
                 continue
             if q.get("decay") == "per-stack":
@@ -283,8 +335,23 @@ def replay(
             q["stacks"] = min(q["maxStacks"], q["stacks"] + delta)
             q["expires"] = t + q["duration"] if q["duration"] else math.inf
 
+    def consecutive_heads(t,probability):
+        for q in sources:
+            if q['kind']!='on-consecutive-headshot' or q['perEvent']==0:
+                continue
+            minimum = int(q.get('minimumConsecutive') or 1)
+            cap = minimum+int(q['maxStacks'])-1
+            before = q.get('runDistribution',{0:1.})
+            after = {0:1.-probability}
+            for run,weight in before.items():
+                n = min(run+1,cap)
+                after[n] = after.get(n,0.)+weight*probability
+            q['runDistribution'] = after
+            q['stacks'] = sum(max(run-minimum+1,0)*weight for run,weight in after.items())
+            q['expires'] = math.inf
+
     def die(t, weak_kill=False, weapon_kill=True):
-        nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, old_heat_strip, frozen_until
+        nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, old_heat_strip, frozen_until, puncture_strip, ammo, pending_magazine_restore
         kills += 1
         gen += 1
         if first_kill is None:
@@ -303,6 +370,7 @@ def replay(
         blast_procs.clear()
         heat.update(count=0.0, seed=0.0, end=-1.0, token=heat["token"] + 1)
         old_heat_strip = (0.0, -1.0, 1.0)
+        puncture_strip = 0.
         signal("on-kill", t)
         slot = str(combat.get("weaponSlot") or "").lower()
         if "longgun" in slot or slot in ("primary", "rifle"):
@@ -314,6 +382,15 @@ def replay(
             signal("on-close-kill", t)
         if weak_kill:
             signal("on-headshot-kill", t, head)
+        restore=combat.get('magazineRestore')
+        if (weapon_kill and restore and restore['kind'] in {'on-kill','on-headshot-kill'}
+                and (form=='base' or not combat.get('selectedIncarnon'))):
+            chance=restore.get('chance',1.)*(head if restore['kind']=='on-headshot-kill' and weak_kill else
+                0. if restore['kind']=='on-headshot-kill' else 1.)*restore.get('fraction',0.)
+            if shot_in_progress:
+                pending_magazine_restore=1.-(1.-pending_magazine_restore)*(1.-chance)
+            else:
+                ammo+=max(0.,model(t)[0].magazine-ammo)*chance
         if syndrome and weapon_kill and t >= syndicate_ready:
             affinity += float(combat.get("affinityPerKill") or 0.0)
             if affinity >= syndrome["affinityToFill"]:
@@ -337,7 +414,10 @@ def replay(
     def take(vector, t, source, weak_kill=False):
         # Spend one attack fraction across pools. Shield bypass acts in parallel.
         # Residual damage never leaks to the next target.
-        nonlocal fortifier_damage, fortifier_stolen, self_overguard
+        nonlocal fortifier_damage, fortifier_stolen, self_overguard, onos_hits
+        if (onos and combat.get('onosCrits') and form!='base' and onos_ticks<onos['alignmentShots']
+                and source in {'dot','nonDot'} and any(v>0 for v in vector.values())):
+            onos_hits = min(50.,onos_hits+1.)
         left = 1.0
         applied = 0.0
 
@@ -419,13 +499,17 @@ def replay(
             else 0
         )
         last_round = bool(combat.get('lastRound'))
-        key = (form, tuple(q["stacks"] for q in sources), live_types, last_round)
+        onos_values = {'__onosPower':bool(onos and onos_ticks>=onos['alignmentShots']),
+                       '__onosHits':onos_hits,
+                       '__onosBeamSeconds':round(min(onos['rampSeconds'],max(0.,t-onos_start)),6) if onos else 0.}
+        key = (form, tuple(q["stacks"] for q in sources), live_types, last_round,
+               tuple(onos_values.values()) if onos and form!='base' else ())
         if key not in model_cache:
             resolver = combat.get("resolve")
             if resolver:
                 try:
                     model_cache[key] = resolver(
-                        form, {q["id"]: q["stacks"] for q in sources}, live_types, last_round
+                        form, {**{q["id"]: q["stacks"] for q in sources},**onos_values}, live_types, last_round
                     )
                 except TypeError as exc:
                     # Test/custom resolvers from older callers use the original
@@ -540,8 +624,16 @@ def replay(
         return .05*count('DT_PUNCTURE'),cd
 
     def packet(st, aim):
+        if getattr(st,'_fixed_radial',False):
+            return attack_data(st,0.)
         puncture,cold=live_crit()
         if st.radial_only:puncture=0.0
+        undamaged = abs(pools[1]-full[1])<1e-7 and abs(pools[2]-full[2])<1e-7
+        if undamaged and (st.victim_full_crit_chance or st.victim_full_crit_damage):
+            st = replace(st,crit_chance=st.crit_chance+st.victim_full_crit_chance,
+                         crit_multiplier=st.crit_multiplier+st.victim_full_crit_damage)
+        if full[2]>0 and pools[2]<full[2]*.5 and st.victim_low_health_multiplier!=1.:
+            st = replace(st,damage_types={k:v*st.victim_low_health_multiplier for k,v in st.damage_types.items()})
         if not enervate and not puncture and not cold:
             return attack_data(st, aim)
         vector, procs, rows, non = {}, {}, {}, {}
@@ -552,7 +644,9 @@ def replay(
             if key not in crit_views:
                 view=copy(st)
                 view.crit_chance=max(0.0,st.crit_chance + stacks*.1 + puncture)
-                view.crit_multiplier=st.crit_multiplier+cold
+                view.crit_multiplier=(st.low_crit_damage_base + (st.low_crit_damage_bonus
+                    if view.crit_chance<st.low_crit_threshold else 0.)
+                    if st.low_crit_threshold is not None else st.crit_multiplier)+cold
                 crit_views[key]=(st,view)
             v,p,r,n=attack_data(crit_views[key][1],aim)
             for k,value in v.items():vector[k]=vector.get(k,0.0)+weight*value
@@ -577,7 +671,7 @@ def replay(
             cc=max(0.0,st.crit_chance+stacks*.1+puncture)
             # The direct pellet rolls aggregate one grouped Hit. The radial
             # part and status ticks do not masquerade as extra direct pellets.
-            p=(1-aim)*big_crit_probability(cc,st.double_crit_chance)
+            p=(1-aim)*big_crit_probability(cc*st.bodyshot_crit_multiplier,st.double_crit_chance)
             p+=aim*big_crit_probability(cc+weak,st.double_crit_chance)
             probabilities[stacks]=any_probability(p,1.0 if st.continuous else st.multishot)
         gain=not (combat['enervate'].get('ignoreSelected') and form != 'base')
@@ -594,7 +688,7 @@ def replay(
         noncrit = 0.0
         for stacks, weight in marginal.items():
             cc = max(0.0, st.crit_chance + stacks * .1 + puncture)
-            noncrit += weight * ((1-aim) * max(0.0, 1-cc) + aim * max(0.0, 1-cc-weak))
+            noncrit += weight * ((1-aim) * max(0.0, 1-cc*st.bodyshot_crit_multiplier) + aim * max(0.0, 1-cc-weak))
         no_proc = max(0.0, 1-st.status_chance)
         for chance in st.independent_proc_chances.values():
             no_proc *= max(0.0, 1-chance)
@@ -623,9 +717,22 @@ def replay(
         return died
 
     def add_procs(st, aim, t, data=None, allow_encumber=True):
-        nonlocal frozen_until,frozen_scale,encumber_time,encumber_remaining,encumber_expected,cryogenic_expected
+        nonlocal frozen_until,frozen_scale,encumber_time,encumber_remaining,encumber_expected,cryogenic_expected,puncture_strip
         generation = gen
         _, procs, rows, non = data if data is not None else packet(st, aim)
+        if combat.get('punctureArmorStrip') and not st.radial_only and allow_encumber:
+            from .damage import expected_status_procs
+            forced=st.native_forced_procs.get('DT_PUNCTURE',0.)+(forced_procs or {}).get('DT_PUNCTURE',0.)
+            if forced:
+                probability=1.
+            else:
+                status=max(0.,st.status_chance)
+                share=expected_status_procs(st).get('DT_PUNCTURE',0.)/max(status*st.multishot,1e-9)
+                share=min(1.,max(0.,share))
+                whole=math.floor(status)
+                probability=1.-(1.-share)**whole*(1.-(status-whole)*share)
+            bullets=1. if st.continuous else st.multishot
+            puncture_strip=min(1.,puncture_strip+combat['punctureArmorStrip']*bullets*probability)
         if encumber and allow_encumber and status_rate_multiplier > 0:
             from .status_arcanes import STATUS_POOL, encumber_roll
             if abs(t - encumber_time) > 1e-9:
@@ -745,6 +852,20 @@ def replay(
     if combat:
         ammo = model(0.0)[0].magazine
     push(0.0, "fire")
+    state=combat.get('projectileState') or {}
+    for key,kind in [('selfShieldBreak','on-shield-broken'),('selfOverguardBreak','on-overguard-broken'),('selfShieldHit','on-shield-hit'),('equipFromPrimary','on-equip-from-primary'),('abilityUse','on-warframe-ability')]:
+        if key+'At' in state:
+            first=state[key+'At']
+            interval=state.get(key+'Interval',0.)
+            total=int(max(0.,window-first)/interval)+1 if interval>0 else 1
+            for i in range(min(total,10000)):
+                push(first+i*interval,'actor-event',kind)
+    energy_rate = float(combat.get('energySpendPerSecond') or 0.)
+    for q in sources:
+        if q.get('energyThreshold') and energy_rate>0:
+            interval = q['energyThreshold']/energy_rate
+            for n in range(1,int(window/interval)+1):
+                push(n*interval,'energy-spent',q)
     if collect_timeline:
         for i in range(1, int(math.ceil(window / step)) + 1):
             push(min(i * step, window), "sample")
@@ -757,7 +878,13 @@ def replay(
         clean(t)
         if event_gen is not None and event_gen != gen:
             continue
-        if kind == "heat":
+        if kind in {'stackable-life','stackable-child'}:
+            projectiles.event(t,payload,child=kind=='stackable-child')
+        elif kind == 'energy-spent':
+            q = payload
+            q['stacks'] = min(q['maxStacks'],q['stacks']+q['perEvent'])
+            q['expires'] = t+q['duration'] if q['duration'] else math.inf
+        elif kind == "heat":
             if heat["count"] and payload == heat["token"] and t <= heat["end"] + 1e-9:
                 token = heat["token"]
                 generation = gen
@@ -791,6 +918,7 @@ def replay(
                 )
         elif kind == 'delayed-radial':
             part = payload
+            delayed_attack_count += 1
             radial_packet = packet(part, 0.0)
             if not take(radial_packet[0], t, 'direct'):
                 add_procs(part, 0.0, t, radial_packet)
@@ -866,23 +994,46 @@ def replay(
                 if dtype in ("DT_GAS", "DT_POISON"):
                     for j in (range(6) if dtype == "DT_GAS" else range(1, 7)):
                         push(t + j, "dot", (dtype, 500.5, t + 6.0), gen)
+        elif kind=='actor-event':
+            combat['_actorSignal']=True
+            signal(payload,t)
+            combat['_actorSignal']=False
         elif kind == "transform":
+            if tap:
+                tap.swap(t)
             form = payload
+            if onos:
+                onos_ticks,onos_hits,onos_start = 0,0.,t
             signal('on-transform', t)
             transforms += 1
             first_round = True
             burst_round = 0
             active, _ = model(t)
+            if shell_reload and shell_reload.get('modeSwitchLoadsShell'):
+                loaded = min(1., mode_switch_shells_owed) if form == 'incarnon' else mode_switch_shells_owed
+                if loaded > 0:
+                    signal('on-shell-reloaded', t, loaded)
+                    reload_shell_events.append(dict(time=t, rounds=loaded, source='mode-switch', form=form))
+                    mode_switch_shells_owed -= loaded
             ammo = cycle["pool"] if form == "incarnon" else active.magazine
             if form == "base":
                 gauge = 0.0
             push(t, "fire")
+        elif kind == 'reload-shell':
+            amount, limit = payload
+            ammo = min(limit, ammo + amount)
+            signal('on-shell-reloaded', t, amount)
+            reload_shell_events.append(dict(time=t, rounds=amount, source='reload', form=form))
         elif kind == "reload-complete":
             if field_duration and payload:
                 field_duration_ready = True
+            old_magazine=model(t)[0].magazine
             signal("on-reload-complete", t)
             if payload:
                 signal("on-reload-empty-complete", t)
+            if combat.get('refillMagazineGrowth'):
+                grown=model(t)[0].magazine
+                ammo=min(grown,ammo+max(0.,grown-old_magazine))
             push(t, "fire")
         elif kind == "fire":
             if t >= window - 1e-9 or rate <= 0.0:
@@ -909,6 +1060,8 @@ def replay(
                     push(t + max(manual_detonation['delaySeconds'], 1./speed), 'fire')
                     continue
             if cycle and form == "base" and gauge >= cycle["hits"] - 1e-9:
+                if shell_reload:
+                    mode_switch_shells_owed = max(0., math.ceil(active.magazine - max(ammo, 0.) - 1e-9))
                 push(t + cycle["enterSeconds"], "transform", "incarnon")
                 continue
             battery = combat.get('battery')
@@ -931,7 +1084,9 @@ def replay(
                     # Fractional ammo overdraw remains owed; a partial reload
                     # fills to capacity and cannot bank its remaining rounds.
                     was_empty = ammo <= 1e-9
-                    ammo = active.magazine + min(ammo, 0.0)
+                    before_reload_ammo = ammo
+                    if not shell_reload:
+                        ammo = active.magazine + min(ammo, 0.0)
                     if was_empty:
                         signal("on-reload-empty", t)
                     signal("on-reload", t)
@@ -940,6 +1095,19 @@ def replay(
                             q["stacks"] = 0.0
                     active, _ = model(t)
                     reload_time = active.reload_time
+                    if shell_reload and magazine_form:
+                        target_ammo = active.magazine + min(before_reload_ammo, 0.)
+                        missing = max(0., target_ammo - before_reload_ammo)
+                        total_rounds = int(math.ceil(missing - 1e-9))
+                        raw_full_time = shell_reload['start'] + shell_reload['perShell'] * active.magazine + shell_reload['end']
+                        speed_scale = reload_time / raw_full_time if raw_full_time > 0 else 1.
+                        # Load each round at its native loop boundary. The end
+                        # animation still blocks firing after the last round.
+                        for i in range(total_rounds):
+                            amount = min(1., max(0., missing-i))
+                            push(t + (shell_reload['start'] + shell_reload['perShell'] * (i+1)) * speed_scale,
+                                 'reload-shell', (amount, target_ammo))
+                        reload_time = (shell_reload['start'] + shell_reload['perShell'] * total_rounds + shell_reload['end']) * speed_scale
                     for q in sources:
                         if (
                             q.get("kind") in ("on-reload-empty", "on-reload")
@@ -964,6 +1132,19 @@ def replay(
                 if collect_timeline:spool_trace.append(dict(time=t,pellets=pellets,fireRate=speed,ammoCost=active.ammo_cost))
                 spool_shots+=1
             attacks += 1
+            shot_in_progress = True
+            if tap:
+                incarnon_form=form=='incarnon' or combat.get('selectedIncarnon')
+                tap_hits=active.multishot*(2. if incarnon_form and radial else 1.)
+                factor=tap.shot(t,tap_hits)
+                if not incarnon_form:
+                    active=replace(active,damage_types={k:v*factor for k,v in active.damage_types.items()},
+                                   dot_base_damage=active.dot_base_damage*factor if active.dot_base_damage is not None else None)
+                if radial:
+                    radial=replace(radial,damage_types={k:v*factor for k,v in radial.damage_types.items()},
+                                   dot_base_damage=radial.dot_base_damage*factor if radial.dot_base_damage is not None else None)
+                if collect_timeline:
+                    tap_events.append(dict(time=t,hits=tap.hits,multiplier=factor,form=form,radialOnly=bool(incarnon_form)))
             last_fire_time = t
             generation = gen
             if (
@@ -980,13 +1161,36 @@ def replay(
                 if active.dot_base_damage is not None:
                     active.dot_base_damage *= factor
             first_round = False
+            if (active.ammo_pool_multishot_cost and (form=='incarnon' or combat.get('selectedIncarnon'))
+                    and ammo<1.+active.ammo_pool_multishot_cost):
+                afforded = max(ammo-1.,0.)
+                normal = 1.+active.ammo_pool_multishot_cost
+                factor = 1.+active.ammo_pool_damage_bonus
+                previous = 1.+active.ammo_pool_multishot_cost*factor
+                reduced = 1.+afforded*factor
+                if active.continuous:
+                    active = replace(active,multishot=reduced,ammo_pool_multishot_cost=afforded)
+                else:
+                    adjustment = (reduced/(1.+afforded))/(previous/normal)
+                    active = replace(active,multishot=1.+afforded,ammo_pool_multishot_cost=afforded,
+                                     damage_types={k:v*adjustment for k,v in active.damage_types.items()},
+                                     dot_base_damage=active.dot_base_damage*adjustment if active.dot_base_damage is not None else None)
             field_duration_boost = field_duration_ready
             field_duration_ready = False  # A shot consumes it, even when that shot kills.
             hit_count = 1.0 if active.continuous else active.multishot
+            combat['victimProcTypesBeforeHit'] = {dtype:count(dtype)>0 for dtype in states}
             shot_puncture=0.0 if active.radial_only else live_crit()[0]
             aim = 0.0 if active.radial_only else head
             primary_delay = getattr(active, '_primary_delay_seconds', 0.)
-            if manual_detonation:
+            stackable = getattr(active,'_stackable',None)
+            projectile_wait = 0.
+            if stackable:
+                if projectiles is None:
+                    from .stackable_projectiles import StackableProjectiles
+                    projectiles = StackableProjectiles(combat.get('projectileState') or {},push,deliver_projectile,projectile_events)
+                projectile_wait = projectiles.deploy(t,active,generation)
+                died = gen!=generation
+            elif manual_detonation:
                 if active.multishot > manual_detonation['maxProjectiles']:
                     unsupported.append('talons-single-throw-deployment-overflow-unmodeled')
                     active = replace(active, multishot=float(manual_detonation['maxProjectiles']))
@@ -1006,7 +1210,7 @@ def replay(
                 not active.radial_only,
                 )
                 noncrit_no_proc_hit(active, aim, t)
-            if not died and not manual_detonation and not primary_delay:
+            if not died and not manual_detonation and not primary_delay and not stackable:
                 add_procs(active, aim, t, direct_packet)
                 field = getattr(active, '_lingering', None)
                 if field and gen == generation:
@@ -1020,7 +1224,7 @@ def replay(
                                                  multiplier=field_duration['multiplier'] if boosted else 1.))
                     for tick in range(int(math.ceil(duration * tick_rate - 1e-9))):
                         push(t + tick / tick_rate, 'lingering', part, gen)
-            radial_parts = (radial, *getattr(radial, '_additional_radials', ())) if radial else ()
+            radial_parts = (radial, *getattr(radial, '_additional_radials', ())) if radial and not stackable else ()
             for part in radial_parts:
                 if gen != generation:
                     stale += 1
@@ -1033,43 +1237,90 @@ def replay(
                     if not take(radial_packet[0], t, "direct"):
                         add_procs(part, 0.0, t, radial_packet)
                     noncrit_no_proc_hit(part, 0.0, t)
-            if (form == "base" or combat.get("baseMode")) and burst_round == 2:
+            if (form == "base" or combat.get("baseMode")) and combat.get('baseBurst') and burst_round==int(combat['baseBurst']['count'])-1:
                 signal("on-burst-hit", t)
-            if not manual_detonation and not primary_delay:
+            if (form=='base' or combat.get('baseMode')) and combat.get('baseBurst'):
+                burst_head_probability*=1.-(1.-aim)**hit_count
+                if burst_round==int(combat['baseBurst']['count'])-1:
+                    signal('on-burst-headshot',t,burst_head_probability)
+                    burst_head_probability=1.
+            if not manual_detonation and not primary_delay and not stackable:
                 enervate_hit(active,t,shot_puncture,aim)
             signal('on-fire', t)
-            if not manual_detonation and not primary_delay:
+            through=(combat.get('projectileState') or {}).get('punchthroughTargets',0)
+            if through:
+                signal('on-punchthrough',t,through)
+                if form=='base' or not combat.get('selectedIncarnon'):
+                    signal('on-onos-damage-condition',t)
+                if through>=2:
+                    signal('on-three-enemy-punchthrough',t)
+            if onos and (form=='incarnon' or combat.get('selectedIncarnon')) and onos_ticks>=onos['alignmentShots']:
+                onos_condition_hits+=hit_count
+                completed=math.floor(onos_condition_hits/2.)
+                onos_condition_hits-=completed*2.
+                if completed:
+                    signal('on-onos-damage-condition',t,completed)
+            if not manual_detonation and not primary_delay and not stackable:
                 signal("on-hit", t, hit_count)
+                if aim<1.:
+                    signal('on-body-hit',t,(1.-aim)*hit_count)
                 signal("on-headshot", t, aim * hit_count)
+                consecutive_heads(t,aim)
                 signal(
                 "on-crit",
                 t,
                 min(
-                    active.crit_chance
-                    + aim
-                    * (
+                    (1.-aim)*min(max(active.crit_chance*active.bodyshot_crit_multiplier,0.),1.)+aim*min(max(active.crit_chance
+                    + (
                         active.weakpoint_crit_chance_bonus
                         + active.base_crit_chance
                         * active.weakpoint_crit_chance_relative
-                    ),
+                    ),0.),1.),
                     1.0,
                 )
                 * hit_count,
                 )
             if cycle and form == "base" and not active.radial_only:
-                gauge = min(cycle["hits"], gauge + (1.0 if cycle.get('chargeOn') == 'direct_hits' else head) * active.multishot)
+                gauge = min(cycle["hits"], gauge + (1.0 if cycle.get('chargeOn') == 'direct_hits' else head)
+                            * active.multishot * active.incarnon_charge_multiplier)
             if combat:
                 ammo -= (
-                    1.0
+                    getattr(active,'_charge_pool_cost',1.) + active.ammo_pool_multishot_cost
                     if form == "incarnon" or combat.get("selectedIncarnon")
                     else (1.0 if hasattr(active, '_bow_draw') and active.ammo_cost == 0 else max(active.ammo_cost, 0.0))
                 )
+                restore=combat.get('magazineRestore')
+                if restore and restore['kind'] in {'on-headshot','on-hit'} and (form=='base' or not combat.get('selectedIncarnon')):
+                    eligible=not restore.get('victimProcType') or combat.get('victimProcTypesBeforeHit',{}).get(restore['victimProcType'])
+                    if eligible:
+                        probability=1.-(1.-aim)**hit_count if restore['kind']=='on-headshot' else 1.
+                        events=1. if restore.get('oncePerShot') else hit_count
+                        restored=(max(0.,active.magazine-ammo)*restore.get('fraction',0.)+restore.get('amount',0.)*events)*probability*restore.get('chance',1.)
+                        ammo=min(active.magazine,ammo+restored)
+                if pending_magazine_restore:
+                    ammo+=max(0.,active.magazine-ammo)*pending_magazine_restore
+                    pending_magazine_restore=0.
+                shot_in_progress=False
             burst = (
                 combat.get("baseBurst")
                 if (form == "base" or combat.get("baseMode"))
                 else None
             )
             delay = getattr(active, '_bow_draw', 1.0 / speed + getattr(active, '_charge_time', 0.0))
+            if onos and form!='base':
+                power = onos_ticks>=onos['alignmentShots']
+                if collect_timeline:
+                    onos_events.append(dict(time=t,kind='power' if power else 'beam',critStacks=onos_hits,
+                                            ammoCost=getattr(active,'_charge_pool_cost',1.),critChance=active.crit_chance))
+                if power:
+                    onos_ticks,onos_hits = 0,0.
+                    delay = onos['postFireSeconds']
+                    onos_start = t+delay
+                else:
+                    onos_ticks += 1
+                    if combat.get('onosCrits'):
+                        onos_hits = min(50.,onos_hits+hit_count)
+            delay += projectile_wait
             if delay == 0 and ammo > 0:
                 delay = active.reload_time or 1.0 / speed
             if burst:
@@ -1105,6 +1356,7 @@ def replay(
                 "stacks": stacks,
                 "armour": armour(t),
                 "heatArmourStrip": heat_strip(t),
+                'punctureArmourStrip':puncture_strip,
                 "heatSeedPerTick": heat['seed'],
                 "punctureCritChance": live_crit()[0],
                 "coldCritDamage": live_crit()[1],
@@ -1194,8 +1446,13 @@ def replay(
                               'pendingMines':sum(part.multishot for part, _ in pending_mines)+waiting_mines,
                               'events':detonation_events} if manual_detonation else None),
         'delayedAttackEvents': delayed_attack_count,
+        'projectileEvents': projectile_events or [],
+        'projectileLifecycle': projectiles.stats if projectiles else {},
+        'onosSequence': {'events':onos_events,'alignmentShots':onos['alignmentShots'],'powerCost':onos['powerCost']} if onos else None,
+        'doubleTap':{'events':tap_events,'maximum':tap.maximum,'duration':tap.duration} if tap else None,
         "shots": attacks,
         "reloads": reloads,
+        'reloadShellEvents': reload_shell_events,
         "recharges": recharges,
         'spoolTrace':spool_trace,
         "transforms": transforms,
@@ -1252,6 +1509,7 @@ def replay(
             'spread-hit-loss-not-modeled',
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
           + (['talons-expected-projectile-capacity','manual-detonation-explicit-player-cadence'] if manual_detonation else [])
+          + (['onos-native-alignment-shots-held-rate-and-postfire-cadence','onos-radial-target-coverage-explicit'] if onos else [])
           + (ASSUMPTIONS if enervate else [])
           + (['encumber-poisson-status-presence','encumber-single-target-expected-procs'] if encumber else [])
           + (['cryogenic-single-target-expected-procs-no-neighbor-burst'] if cryogenic else [])

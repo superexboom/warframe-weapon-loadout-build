@@ -228,6 +228,14 @@ def _build_weapon(
         if ground:
             modes, ground_source = ground
     incarnon = _extract_incarnon_evolutions(index, path, weapon)
+    if incarnon:
+        behavior_source = ground_source or 'Behaviors'
+        behavior_rows = weapon.get(behavior_source) or []
+        for mode in modes:
+            position = mode.get('index')
+            entry = behavior_rows[position] if isinstance(position,int) and position < len(behavior_rows) else {}
+            fire = _sub_behaviour(entry, 'fire:') or {}
+            mode['isIncarnonForm'] = bool(fire.get('ConsumesChargesForFire'))
     variant_type = item.get("VariantType") or weapon.get("VariantType")
     record = {
         "path": path,
@@ -349,9 +357,20 @@ def _flatten_behaviours(
             # 全部蓄力武器的 compact 导出 chargeTime=null。
             mode["chargeTime"] = state.get("ChargeTime", state.get("chargeTime"))
         if fire:
+            charged = fire.get('chargedProjectileType')
+            if isinstance(charged,str) and charged:
+                fire = {**fire,'projectileType':charged}
+                mode['chargedProjectile'] = True
+            if weapon.get('isIncarnon'):
+                mode['isIncarnonForm'] = bool(fire.get('ConsumesChargesForFire'))
             mode["multishot"] = fire.get("fireIterations", 1)
             mode["ammoCost"] = fire.get("ammoRequirement")
             mode["ammoType"] = fire.get("ammoType")
+        projectile_name=(fire or {}).get('projectileType')
+        charge_delegate=(not projectile_name or bool(_resolve_weapon_reference(index,weapon_path,projectile_name)[1].get('DealDamageThroughImpactBehavior')))
+        if (state and mode.get('trigger')=='/Lotus/Language/Menu/Loadout_TriggerCharge' and charge_delegate
+                and isinstance(state.get('DamageMultiplier'),(int,float)) and state['DamageMultiplier']>1):
+            mode['chargeDamageMultiplier']=state['DamageMultiplier']
         mode["damage"] = _resolve_damage(
             index, weapon_path, fire or {}, impact or {}
         )

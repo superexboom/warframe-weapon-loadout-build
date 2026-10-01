@@ -62,7 +62,7 @@
     "/Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod": {
       "mechanicId": "latron-double-tap",
       "status": "conditional-supported",
-      "simulatorImplemented": false,
+      "simulatorImplemented": true,
       "kind": "next-shot-multiplier",
       "maxRank": 3,
       "enginePath": {
@@ -83,9 +83,9 @@
       "stacking": {
         "bonusDamagePercentAtSampledRank": 0.050000001,
         "windowSeconds": 0.5,
-        "capPercent": 100,
-        "consumption": "consume-on-use",
-        "note": "单次增益、命中消耗：直击伤害包携带 bonus 表（引擎 0x1400e2212 路径）；径向包为空表不乘。buff 载荷（proto 0.4）CAP=100；无叠加计数器、无失误重置分支。"
+        "capPercent": 400,
+        "consumption": "consecutive-hit-window",
+        "note": "当前客户端 cf78271f 的运行脚本按等级缩放增益和期限，层数上限 floor(4 / perHit)。每次射击按本次多重命中一并累计；独立乘区。灵化范围伤害采用已确认实测行为，两个形态分别保留状态和剩余期限。"
       },
       "pveAvailability": {
         "availableOnPve": true,
@@ -97,6 +97,7 @@
         "incarnonRadial": "applied（实测：灵化径向吃 buff——群内测试+wiki 一致；引擎接线为空哨兵表但实际生效→bug）"
       },
       "notes": [
+        "2026-10-01 已接入共享手动回放、自动候选池、紫卡评分与贡献消融。以下旧静态分析保留为历史证据，其 CAP=100 与单次增益结论已由当前运行脚本和 WFSim M102 验证修正。",
         "原始参数来自导出 mod JSON 的 Script 字段（UpgradeType NONE，数值全部在脚本参数）：_bonusDamagePercent 0.05（5%）、_multTimeWindow 0.5s。",
         "机制为「下一发乘数」（BonusDamageOnNextHit.lua；HUD 图标 NextShotDamageMultiplier.png；Buff 描述 DoubleTapBuffDesc）。",
         "引擎逆向（2026-09-23，nextshot-bonus-path.json）：mUseNextShotDamageBonus = proj+0x658 的 per-hit-type bonus 表引用；直击伤害包携带该表（乘直击，fn 0x1400e2212），径向包构造传入空哨兵表（径向不乘，fn 0x14148be10）。",
@@ -228,6 +229,8 @@
       "incarnonDirectReceivesDoubleTap": true,
       "incarnonRadialReceivesDoubleTap": "not-multiplied (engine: radial packet built with empty sentinel table — fn 0x14148be10)",
       "status": "conditional-supported",
+      "simulatorImplemented": true,
+      "appliedBehavior": "live-override: Incarnon direct x1; radial receives consecutive-hit multiplier",
       "incarnonRadialContract": {
         "damageType": "DT_EXPLOSION-mixed",
         "damage": 140,
@@ -252,6 +255,8 @@
       "incarnonDirectReceivesDoubleTap": true,
       "incarnonRadialReceivesDoubleTap": "not-multiplied (engine: radial packet built with empty sentinel table — fn 0x14148be10)",
       "status": "conditional-supported",
+      "simulatorImplemented": true,
+      "appliedBehavior": "live-override: Incarnon direct x1; radial receives consecutive-hit multiplier",
       "incarnonRadialContract": {
         "damageType": "DT_EXPLOSION-mixed",
         "damage": 100,
