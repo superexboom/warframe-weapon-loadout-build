@@ -2,11 +2,11 @@
  "schemaVersion": 1,
  "buildLabel": "2026.08.13.13.24",
  "counts": {
-  "eligibleMods": 568,
-  "mappedMods": 568,
-  "uniqueArtFiles": 265,
+  "eligibleMods": 569,
+  "mappedMods": 569,
+  "uniqueArtFiles": 266,
   "missingMods": 0,
-  "effectTextZh": 566,
+  "effectTextZh": 567,
   "conditionTextZh": 38,
   "setTextZh": 20
  },
@@ -92,6 +92,25 @@
   "RankSlotEmpty": "/assets/mods/frame/RankSlotEmpty.png"
  },
  "mods": {
+  "/Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/PvP/Rifle/LatronThree.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "双重连击",
+   "nameEn": "Double Tap",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 13,
+   "description": "连续命中叠层；基础形态直击生效，灵化形态仅范围伤害生效。不同形态分别保留层数和剩余期限。",
+   "effectsZh": ["命中后：下一次射击 +20% 独立伤害，持续 2 秒，最多 20 层。多重命中分别累积；超时清空。"],
+   "effectsZhByRank": [
+    ["命中后：下一次射击 +5% 独立伤害，持续 0.5 秒，最多 80 层。"],
+    ["命中后：下一次射击 +10% 独立伤害，持续 1 秒，最多 40 层。"],
+    ["命中后：下一次射击 +15% 独立伤害，持续 1.5 秒，最多 26 层。"],
+    ["命中后：下一次射击 +20% 独立伤害，持续 2 秒，最多 20 层。多重命中分别累积；超时清空。"]
+   ],
+   "textSource": "current-native-script-rank-values-and-confirmed-live-form-behavior"
+  },
   "/Lotus/Upgrades/Mods/DualSource/Melee/CritDamageChargeSpeedMod": {
    "art": "/assets/mods/art/Lotus/Interface/Cards/Images/DualSource/SwiftShatter.png",
    "artSource": "official-export",
