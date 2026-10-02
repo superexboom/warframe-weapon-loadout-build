@@ -1,0 +1,90 @@
+{
+  "status": "complete",
+  "pid": 28900,
+  "inputs": "695e803101081cda",
+  "cacheVersion": 14,
+  "startedAt": "2026-10-01T19:34:39.473060+00:00",
+  "workerLimit": 8,
+  "jobs": {
+    "regression": {
+      "pid": 24112,
+      "command": [
+        "C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-m",
+        "pytest",
+        "tests",
+        "-q",
+        "--junitxml=.local\\reports\\riven-full-run-v23-20261001\\regression.xml"
+      ],
+      "status": "complete",
+      "exitCode": 0,
+      "reused": true
+    },
+    "acceptance": {
+      "pid": 10340,
+      "command": [
+        "C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-u",
+        "tools/audit_riven_analysis_context.py",
+        "--extra-weapons",
+        "--output",
+        ".local\\reports\\riven-acceptance-v23-20261001"
+      ],
+      "status": "complete",
+      "exitCode": 0
+    },
+    "fast": {
+      "pid": 29692,
+      "command": [
+        "C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-u",
+        "tools/bake-analysis-statics.py",
+        "--profile",
+        "fast",
+        "--workers",
+        "4",
+        "--fire-modes",
+        "--report",
+        ".local\\reports\\riven-full-run-v23-20261001\\fast.json"
+      ],
+      "status": "complete",
+      "exitCode": 0
+    },
+    "standard-shards": {
+      "pid": 36716,
+      "command": [
+        "C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-u",
+        "tools/bake-analysis-statics.py",
+        "--profile",
+        "standard",
+        "--workers",
+        "3",
+        "--fire-modes",
+        "--report",
+        ".local\\reports\\riven-full-run-v23-20261001\\standard-shards.json",
+        "--shards-only"
+      ],
+      "status": "resumed-with-more-workers"
+    },
+    "standard": {
+      "pid": 32784,
+      "command": [
+        "C:\\Users\\SuperExboom\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-u",
+        "tools/bake-analysis-statics.py",
+        "--profile",
+        "standard",
+        "--workers",
+        "8",
+        "--fire-modes",
+        "--report",
+        ".local\\reports\\riven-full-run-v23-20261001\\standard.json"
+      ],
+      "status": "complete",
+      "exitCode": 0
+    }
+  },
+  "acceptanceCases": 17,
+  "finishedAt": "2026-10-02T08:35:19.102684+00:00"
+}

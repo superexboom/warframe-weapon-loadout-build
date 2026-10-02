@@ -1,0 +1,664 @@
+[
+  {
+    "weapon": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/ClanTech/Energy/DeraVandal",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/ClanTech/Energy/EnergyRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Corpus/Melee/KickAndPunch/KickPunchWeapon",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Corpus/Melee/KickAndPunch/PrismaObex",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/VTGorgon",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/WraithGorgon",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/Melee/GrineerTylAxeAndBoar/RegorAxeShield",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+    "forms": [
+      false,
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Bo",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Furax",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Furis",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Kunai",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Paris",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/MK1Series/MK1Strun",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Syndicates/ArbitersOfHexis/LongGuns/AHBoltor",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSDroidArray",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSSynoidGammacor",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Syndicates/NewLoka/Melee/NLMagistar",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica",
+    "forms": [
+      false,
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/HuntingBow",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/StalkerBow",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBoltor/PrimeBoltor",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeSoma/PrimeSomaRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeStrun/PrimeStrunWeapon",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeSybaris/PrimeSybarisRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/TnoLeverActionRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Axe/DualInfestedAxesWeapon",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Dagger/CeramicDagger",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Fist/Fist",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Fist/FuraxWraith",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Hammer/IceHammer/IceHammer",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/LongSword/SkanaPrime",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Maces/PaladinMace/PaladinMaceWeapon",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Scythe/ParisScythe/ParisScythe",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Scythe/StalkerScytheWeapon",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Staff/PrimeBo/PrimeBoWeapon",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Staff/Staff",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Swords/CutlassAndPoignard/TennoCutlass",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Swords/PRapier/DestrezaPrime",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeOkina/PrimeOkina",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Swords/TennoSai/TennoSais",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Melee/Swords/TnoRapier/TnoRapier",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/BroncoPrime",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/BurstPistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/CoHLoanerPistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/HandShotGun",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/HeavyPistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/LatoPrime",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/LatoVandal",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/Pistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/RevolverPistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow",
+    "forms": [
+      false,
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ConclaveLeverPistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeBallistica/PrimeBallistica",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeSicarus/PrimeSicarusPistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeVasto/PrimeVastoPistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeZylok/ZylokPrimePistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/BoltoRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/BratonPrime",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/BurstRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/HeavyRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/LatronPrime",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/Rifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/StartingRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/TennoAR",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/TennoSniperRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/VIPRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/PrimeBoar",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Shotgun/ShotgunVandal",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/ThrowingWeapons/Kunai",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/ThrowingWeapons/StalkerKunai",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanPumpShotgun",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Zariman/LongGuns/SemiAutoRifle/ZarimanSemiAutoRifle",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Zariman/Melee/Dagger/ZarimanDaggerWeapon",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Zariman/Melee/HeavyScythe/ZarimanHeavyScythe/ZarimanHeavyScytheWeapon",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Zariman/Melee/Tonfas/ZarimanTonfaWeapon",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+    "forms": [
+      false,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Thanotech/EntFistIncarnon/EntFistIncarnon",
+    "forms": [
+      false
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon",
+    "forms": [
+      false,
+      true,
+      true
+    ]
+  },
+  {
+    "weapon": "/Lotus/Weapons/VoidTrader/PrismaSkana",
+    "forms": [
+      false
+    ]
+  }
+]

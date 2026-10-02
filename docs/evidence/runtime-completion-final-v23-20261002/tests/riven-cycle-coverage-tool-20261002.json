@@ -1,0 +1,11 @@
+{
+  "name": "pytest",
+  "errors": "0",
+  "failures": [],
+  "skipped": "0",
+  "tests": "18",
+  "time": "3.323",
+  "timestamp": "2026-10-02T03:37:36.211274+08:00",
+  "hostname": "DESKTOP-BFB9HVK",
+  "sourceReport": ".local\\reports\\riven-cycle-coverage-tool-20261002.xml"
+}

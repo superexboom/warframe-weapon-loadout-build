@@ -1,0 +1,2262 @@
+{
+  "sourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
+  "localInputFingerprint": "cca2b97395eaba2d",
+  "toolSha256": "641bc0e65e5bb7ced3f7f55dbf123502555460eabcbae7d4a1fc9d0d8af72b4e",
+  "release": {
+    "commit": "1fb4f45a+",
+    "release": "251d3e94139e",
+    "wasm": "969ba21311de"
+  },
+  "wasmSha256": "969ba21311dec793cec81a22e9ff208d3b8c98b2ccc91d960f698a602e9cbca0",
+  "duration": 30,
+  "runs": 300,
+  "seed": 12648430,
+  "recordedAt": "2026-10-01T08:08:07.898669+00:00",
+  "ablation": false,
+  "sources": [
+    {
+      "weapon": "latron_prime",
+      "url": "https://wfsim.app/board/latron_prime.json",
+      "sha256": "9923b60a78f0b71e9f4f3e254a47cd79b4d9a088d1baa81e4f68301fe398f70a"
+    }
+  ],
+  "cases": [
+    {
+      "id": "latron_prime-425",
+      "weapon": "latron_prime",
+      "name": "Latron Prime",
+      "boardRowIndex": 425,
+      "board": {
+        "arcanes": [
+          "primary_merciless"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [
+          "latron_prime_evo1_incarnon_form",
+          "latron_prime_riddled_target",
+          "latron_prime_marksmans_hand",
+          "latron_prime_critical_parallel"
+        ],
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "malignant_force",
+          "riven",
+          "galvanized_chamber",
+          "serration",
+          "double_tap",
+          "galvanized_aptitude",
+          "vile_acceleration"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_chance",
+            "critical_damage",
+            "heat"
+          ],
+          "malus": null,
+          "rolls": [
+            1.1,
+            1.1,
+            1.1
+          ]
+        },
+        "score": 29.15256763412648,
+        "shown": "29.1526",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Rifle/LatronPrime",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/PvPMods/Rifle/MoreDamageonTripleTapRifleMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamageOnKill",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_TACTIC"
+        ],
+        "scenario": {
+          "distance": 0.5
+        },
+        "incarnonChoices": {
+          "tier2": "2-1",
+          "tier3": "3-1",
+          "tier4": "4-3"
+        },
+        "riven": {
+          "slot": 2,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 160.86857465250003,
+              "negative": false
+            },
+            {
+              "code": "1",
+              "value": 128.6967825,
+              "negative": false
+            },
+            {
+              "code": "4",
+              "value": 96.52499806950001,
+              "negative": false
+            }
+          ]
+        }
+      },
+      "referenceRequest": {
+        "weapon": "latron_prime",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "malignant_force",
+          "riven:board",
+          "galvanized_chamber",
+          "serration",
+          "double_tap",
+          "galvanized_aptitude",
+          "vile_acceleration"
+        ],
+        "arcane": [
+          "primary_merciless"
+        ],
+        "evolutions": [
+          "latron_prime_evo1_incarnon_form",
+          "latron_prime_riddled_target",
+          "latron_prime_marksmans_hand",
+          "latron_prime_critical_parallel"
+        ],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 300,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "rivens": [
+          {
+            "id": "board",
+            "spec": {
+              "rank": 8,
+              "polarity": "madurai",
+              "bonuses": [
+                {
+                  "id": "critical_chance",
+                  "roll": 1.1
+                },
+                {
+                  "id": "critical_damage",
+                  "roll": 1.1
+                },
+                {
+                  "id": "heat",
+                  "roll": 1.1
+                }
+              ],
+              "malus": null
+            }
+          }
+        ]
+      },
+      "evolutionMapping": [
+        {
+          "reference": "latron_prime_riddled_target",
+          "native": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/Prime/PrimeLatronEvoTier1A",
+          "icon": "DamageAndOnPierce.png"
+        },
+        {
+          "reference": "latron_prime_marksmans_hand",
+          "native": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/LatronEvoTier2A",
+          "icon": "LessRecoil.png"
+        },
+        {
+          "reference": "latron_prime_critical_parallel",
+          "native": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/Prime/PrimeLatronEvoTier3C",
+          "icon": "CritChanceCritDamage.png"
+        }
+      ],
+      "catalogBlockers": [],
+      "nativeIncompatibleMods": [],
+      "referenceLimitations": [
+        "the projectile's BOUNCES are not counted. It bounces at most three times and the fourth contact ends it, a long flight ends it too, and each bounce is a REFLECTION off whatever it touched rather than a hop to the next enemy — so off a body that the collision just killed with a weak-point hit it leaves almost straight up, which is where most of them go. This plane has no surfaces to reflect off, so the shot is scored where it lands; in a tight corridor the bounces are worth up to three more collisions and three more explosions, and this number is a FLOOR"
+      ],
+      "referenceRiven": {
+        "class": "rifle",
+        "disposition": 1.3,
+        "drain": 18,
+        "illegal": [],
+        "name": "Crita-acripha",
+        "ok": true,
+        "stats": [
+          {
+            "bonus": true,
+            "decimals": 1,
+            "id": "critical_chance",
+            "max": 160.86857465250003,
+            "min": 131.6197428975,
+            "modeled": true,
+            "percentile": 100,
+            "roll": 1.1,
+            "shown": 160.86857465250003,
+            "slot": "0",
+            "text": "+160.9% Critical Chance",
+            "unit": "%",
+            "value": 1.6086857465250002
+          },
+          {
+            "bonus": true,
+            "decimals": 1,
+            "id": "critical_damage",
+            "max": 128.6967825,
+            "min": 105.29736750000001,
+            "modeled": true,
+            "percentile": 100,
+            "roll": 1.1,
+            "shown": 128.6967825,
+            "slot": "1",
+            "text": "+128.7% Critical Damage",
+            "unit": "%",
+            "value": 1.286967825
+          },
+          {
+            "bonus": true,
+            "decimals": 1,
+            "id": "heat",
+            "max": 96.52499806950001,
+            "min": 78.97499842050001,
+            "modeled": true,
+            "percentile": 100,
+            "roll": 1.1,
+            "shown": 96.52499806950001,
+            "slot": "2",
+            "text": "+96.5% Heat",
+            "unit": "%",
+            "value": 0.9652499806950001
+          }
+        ],
+        "unconfirmed": []
+      },
+      "rivenSpec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_chance",
+            "roll": 1.1
+          },
+          {
+            "id": "critical_damage",
+            "roll": 1.1
+          },
+          {
+            "id": "heat",
+            "roll": 1.1
+          }
+        ],
+        "malus": null
+      },
+      "local": {
+        "panel": {
+          "total": 1011.6600548035898,
+          "critChance": 1.1999954173146428,
+          "critMultiplier": 6.8625789093040295,
+          "fireRate": 7.916667550000021,
+          "multishot": 1.800029967,
+          "statusChance": 0.6239992121200294
+        },
+        "defenses": {
+          "level": 9999,
+          "baseLevel": 1.0,
+          "steelPath": true,
+          "steelPathMultiplier": 2.5,
+          "steelPathShieldMultiplier": 2.5,
+          "steelPathArmorMultiplier": 1.0,
+          "health": 9667913.96369529,
+          "shield": 0.0,
+          "armour": 2700.0,
+          "armourReduction": 0.9,
+          "elementalArmourStrip": 0.0,
+          "overguard": 15523399.911299936,
+          "overguardMultiplier": 0.0,
+          "magneticStacks": 0,
+          "empoweredMultiplier": 1.0,
+          "enhancements": {
+            "eximus": false,
+            "archimedea": false,
+            "empowered": false,
+            "playerCount": null,
+            "magneticStacks": 0
+          },
+          "unsupported": []
+        },
+        "replay": {
+          "model": "event-expected-v3",
+          "eventModel": "target-generation-events-v3",
+          "windowSeconds": 30.0,
+          "timeStep": 0.25,
+          "attacksPerSecond": 4.033333333333333,
+          "statusEventsPerSecond": 4.009740419117179,
+          "averagedStacks": {
+            "heat": 3.040883333333331,
+            "viral": 5.639291666666665,
+            "corrosive": 0.0,
+            "magnetic": 0.0,
+            "cold": 0.0,
+            "puncture": 2.2205166666666645
+          },
+          "steadyStacks": {
+            "heat": 0.0,
+            "viral": 0,
+            "corrosive": 0,
+            "magnetic": 0,
+            "cold": 0,
+            "puncture": 0
+          },
+          "killsPerMinute": 22.0,
+          "killsInWindow": 11.0,
+          "killEvents": 11,
+          "targetGeneration": 11,
+          "targetTotalEhp": 25191313.874995224,
+          "directWindow": 268154089.22055677,
+          "dotWindow": 8950363.404390821,
+          "arcaneWindow": 0.0,
+          "dotByType": {
+            "DT_CINEMATIC": 574782.6534175123,
+            "DT_FIRE": 8375580.7509733075
+          },
+          "procCounts": {
+            "DT_PUNCTURE": 46.77445842572231,
+            "DT_IMPACT": 5.846807222009616,
+            "DT_SLASH": 5.846805273073895,
+            "DT_FIRE": 56.43630432758168,
+            "DT_VIRAL": 131.55316834202344
+          },
+          "nonDotWindow": 0.0,
+          "syndicateWindow": 0.0,
+          "syndicateEvents": [],
+          "totalWindowDamage": 277104452.6249476,
+          "windowDps": 9236815.087498253,
+          "firstKillTime": 7.0,
+          "minKillInterval": 1.0105262030360223,
+          "maxKillsPerStep": 1,
+          "staleComponents": 0,
+          "fieldDuration": null,
+          "manualDetonation": null,
+          "delayedAttackEvents": 0,
+          "projectileEvents": [],
+          "projectileLifecycle": {},
+          "onosSequence": null,
+          "doubleTap": {
+            "events": [
+              {
+                "time": 0.0,
+                "hits": 1.800029967,
+                "multiplier": 1.1600059934,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 0.12631577537950262,
+                "hits": 3.6533529670080256,
+                "multiplier": 1.5306705934016052,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 0.25263155075900523,
+                "hits": 5.561546833404222,
+                "multiplier": 1.9123093666808444,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 0.37894732613850785,
+                "hits": 7.526236114083466,
+                "multiplier": 2.3052472228166936,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 0.5052631015180105,
+                "hits": 9.549093454520214,
+                "multiplier": 2.7098186909040427,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 0.631578876897513,
+                "hits": 11.631841021781405,
+                "multiplier": 3.126368204356281,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 0.7578946522770156,
+                "hits": 13.776251970699748,
+                "multiplier": 3.55525039413995,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 0.8842104276565181,
+                "hits": 15.984151953455648,
+                "multiplier": 3.9968303906911298,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 1.0105262030360207,
+                "hits": 18.25742067385292,
+                "multiplier": 4.451484134770585,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 1.1368419784155233,
+                "hits": 20.597993487611568,
+                "multiplier": 4.919598697522314,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 1.2631577537950258,
+                "hits": 23.007863050040026,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 1.3894735291745284,
+                "hits": 25.489081012489613,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 1.515789304554031,
+                "hits": 28.04375976903549,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 1.6421050799335335,
+                "hits": 30.674074254871144,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 1.768420855313036,
+                "hits": 33.382263797947516,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 3.740890539568278,
+                "hits": 36.1706340254331,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 3.8672063149477807,
+                "hits": 38.9706639924331,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 3.9935220903272834,
+                "hits": 41.7706939594331,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 4.119837865706786,
+                "hits": 44.570723926433104,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 4.246153641086289,
+                "hits": 47.370753893433104,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 4.372469416465791,
+                "hits": 50.170783860433104,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 4.498785191845294,
+                "hits": 52.970813827433105,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 4.625100967224797,
+                "hits": 55.770843794433105,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 4.7514167426043,
+                "hits": 58.570873761433106,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 4.8777325179838025,
+                "hits": 61.370903728433106,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 5.004048293363305,
+                "hits": 64.1709336954331,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 5.130364068742808,
+                "hits": 66.9709636624331,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 5.256679844122311,
+                "hits": 69.77099362943311,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 5.382995619501814,
+                "hits": 72.57102359643311,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 5.509311394881316,
+                "hits": 75.37105356343311,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 7.481781079136558,
+                "hits": 78.47105353043311,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 7.608096854516061,
+                "hits": 81.57105349743311,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 7.734412629895564,
+                "hits": 84.67105346443311,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 7.860728405275067,
+                "hits": 87.77105343143312,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 7.98704418065457,
+                "hits": 90.87105339843312,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 8.113359956034072,
+                "hits": 93.97105336543312,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 8.239675731413575,
+                "hits": 97.07105333243312,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 8.365991506793078,
+                "hits": 100.17105329943313,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 8.49230728217258,
+                "hits": 103.27105326643313,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 8.618623057552083,
+                "hits": 106.37105323343313,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 8.744938832931586,
+                "hits": 109.47105320043313,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 8.871254608311089,
+                "hits": 112.57105316743313,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 8.997570383690592,
+                "hits": 115.67105313443314,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 9.123886159070095,
+                "hits": 118.77105310143314,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 9.250201934449597,
+                "hits": 121.87105306843314,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 11.22267161870484,
+                "hits": 125.27102303543315,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 11.348987394084343,
+                "hits": 128.67099300243314,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 11.475303169463846,
+                "hits": 132.07096296943314,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 11.601618944843349,
+                "hits": 135.47093293643314,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 11.727934720222851,
+                "hits": 138.87090290343315,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 11.854250495602354,
+                "hits": 142.27087287043315,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 11.980566270981857,
+                "hits": 145.67084283743316,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 12.10688204636136,
+                "hits": 149.07081280443316,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 12.233197821740863,
+                "hits": 152.47078277143316,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 12.359513597120365,
+                "hits": 155.87075273843317,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 12.485829372499868,
+                "hits": 159.27072270543317,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 12.612145147879371,
+                "hits": 162.97066267243318,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 12.738460923258874,
+                "hits": 166.67060263943318,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 12.864776698638376,
+                "hits": 170.3705426064332,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 12.99109247401788,
+                "hits": 174.0704825734332,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 14.96356215827312,
+                "hits": 177.7704225404332,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 15.089877933652623,
+                "hits": 181.4703625074332,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 15.216193709032126,
+                "hits": 185.1703024744332,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 15.342509484411629,
+                "hits": 188.87024244143322,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 15.468825259791132,
+                "hits": 192.57018240843323,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 15.595141035170634,
+                "hits": 196.57009237543323,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 15.721456810550137,
+                "hits": 200.57000234243324,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 15.84777258592964,
+                "hits": 204.56991230943325,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 15.974088361309143,
+                "hits": 208.56982227643326,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 16.100404136688645,
+                "hits": 212.56973224343326,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 16.22671991206815,
+                "hits": 216.56964221043327,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 16.35303568744765,
+                "hits": 220.56955217743328,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 16.479351462827154,
+                "hits": 224.5694621444333,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 16.605667238206657,
+                "hits": 228.5693721114333,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 16.73198301358616,
+                "hits": 232.8692520784333,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 18.7044526978414,
+                "hits": 237.16913204543332,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 18.830768473220903,
+                "hits": 241.46901201243332,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 18.957084248600406,
+                "hits": 245.76889197943333,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 19.08340002397991,
+                "hits": 250.06877194643334,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 19.20971579935941,
+                "hits": 254.36865191343335,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 19.336031574738914,
+                "hits": 258.66853188043336,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 19.462347350118417,
+                "hits": 262.96841184743334,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 19.58866312549792,
+                "hits": 267.2682918144333,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 19.714978900877423,
+                "hits": 271.5681717814333,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 19.841294676256926,
+                "hits": 275.8680517484333,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 19.96761045163643,
+                "hits": 280.16793171543327,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 20.09392622701593,
+                "hits": 284.46781168243325,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 20.220242002395434,
+                "hits": 288.76769164943323,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 20.346557777774937,
+                "hits": 293.0675716164332,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 20.47287355315444,
+                "hits": 297.3674515834332,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 22.44534323740968,
+                "hits": 301.6673315504332,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 22.571659012789183,
+                "hits": 305.96721151743316,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 22.697974788168686,
+                "hits": 310.26709148443314,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 22.82429056354819,
+                "hits": 314.5669714514331,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 22.95060633892769,
+                "hits": 318.8668514184331,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 23.076922114307195,
+                "hits": 323.1667313854331,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 23.203237889686697,
+                "hits": 327.46661135243306,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 23.3295536650662,
+                "hits": 331.76649131943304,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 23.455869440445703,
+                "hits": 336.066371286433,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 23.582185215825206,
+                "hits": 340.366251253433,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 23.70850099120471,
+                "hits": 344.666131220433,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 23.83481676658421,
+                "hits": 348.96601118743297,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 23.961132541963714,
+                "hits": 353.26589115443295,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 24.087448317343217,
+                "hits": 357.56577112143293,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 24.21376409272272,
+                "hits": 361.8656510884329,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 26.18623377697796,
+                "hits": 366.1655310554329,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 26.312549552357464,
+                "hits": 370.4654110224329,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 26.438865327736966,
+                "hits": 374.76529098943286,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 26.56518110311647,
+                "hits": 379.06517095643284,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 26.691496878495972,
+                "hits": 383.3650509234328,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 26.817812653875475,
+                "hits": 387.6649308904328,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 26.944128429254977,
+                "hits": 391.9648108574328,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 27.07044420463448,
+                "hits": 396.26469082443276,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 27.196759980013983,
+                "hits": 400.56457079143274,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 27.323075755393486,
+                "hits": 404.8644507584327,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 27.44939153077299,
+                "hits": 409.1643307254327,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 27.57570730615249,
+                "hits": 413.4642106924327,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 27.702023081531994,
+                "hits": 417.76409065943267,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 27.828338856911497,
+                "hits": 422.06397062643265,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 27.954654632291,
+                "hits": 426.36385059343263,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              },
+              {
+                "time": 29.92712431654624,
+                "hits": 430.6637305604326,
+                "multiplier": 5.0,
+                "form": "selected",
+                "radialOnly": false
+              }
+            ],
+            "maximum": 20,
+            "duration": 2.0
+          },
+          "shots": 121,
+          "reloads": 8,
+          "reloadShellEvents": [],
+          "recharges": 0,
+          "spoolTrace": [],
+          "transforms": 0,
+          "directEventLedger": {
+            "model": "direct-event-ledger-v1",
+            "attacks": 121,
+            "kills": 3,
+            "killsPerMinute": 6.0,
+            "firstKillTime": 9.476922700239639,
+            "staleComponents": 0,
+            "targetGeneration": 3,
+            "remainingHealth": 22573887.295103855,
+            "traceCollected": false,
+            "trace": [],
+            "status": "diagnostic-static-defense",
+            "perShotDamage": 654356.6449728417
+          },
+          "emergent": {
+            "onKillStacks": "events"
+          },
+          "enervate": null,
+          "magneticBreaks": [],
+          "fortifier": null,
+          "encumber": null,
+          "empowered": null,
+          "cryogenic": null,
+          "triggerSeries": [
+            {
+              "id": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPSubMod:0:0",
+              "label": "镀层 分裂膛室",
+              "kind": "on-kill",
+              "maxStacks": 5.0,
+              "series": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0
+              ],
+              "conditionText": "击杀时触发。",
+              "resetOn": [],
+              "simulationMode": "events",
+              "avgStacks": 2.9916666666666667,
+              "uptime": 0.7666666666666667
+            },
+            {
+              "id": "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPSubMod:0:0",
+              "label": "镀层 步枪才能",
+              "kind": "on-kill",
+              "maxStacks": 2.0,
+              "series": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0
+              ],
+              "conditionText": "击杀时触发。",
+              "resetOn": [],
+              "simulationMode": "events",
+              "avgStacks": 1.4583333333333333,
+              "uptime": 0.7666666666666667
+            },
+            {
+              "id": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamageOnKill:0:0",
+              "label": "主要·无情",
+              "kind": "on-kill",
+              "maxStacks": 12.0,
+              "series": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                2.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                3.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                5.0,
+                6.0,
+                6.0,
+                6.0,
+                6.0,
+                7.0,
+                7.0,
+                7.0,
+                7.0,
+                7.0,
+                7.0,
+                7.0,
+                7.0,
+                7.0,
+                7.0,
+                7.0,
+                7.0,
+                8.0,
+                8.0,
+                8.0,
+                8.0,
+                8.0,
+                8.0,
+                8.0,
+                8.0,
+                8.0,
+                8.0,
+                8.0,
+                9.0,
+                9.0,
+                9.0,
+                9.0,
+                10.0,
+                10.0,
+                10.0,
+                10.0,
+                10.0,
+                10.0,
+                10.0,
+                10.0,
+                10.0,
+                10.0,
+                10.0,
+                11.0
+              ],
+              "conditionText": "击杀时触发。",
+              "resetOn": [],
+              "simulationMode": "events",
+              "avgStacks": 4.141666666666667,
+              "uptime": 0.7666666666666667
+            },
+            {
+              "id": "/Lotus/Weapons/Tenno/Rifle/LatronIncarnonEvolutions/Prime/PrimeLatronEvoTier1ASubMod:0:0",
+              "label": "灵化 2-1",
+              "kind": "proc-DT_PUNCTURE",
+              "maxStacks": 4.0,
+              "series": [
+                0.4326555975847874,
+                0.891309493746991,
+                1.3775239276733762,
+                1.8929550135890847,
+                2.439358381713837,
+                3.0185951581835004,
+                3.632638304305477,
+                3.953361041942342,
+                3.953361041942342,
+                3.953361041942342,
+                3.953361041942342,
+                3.953361041942342,
+                3.953361041942342,
+                3.953361041942342,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0,
+                4.0
+              ],
+              "conditionText": "proc-DT_PUNCTURE",
+              "resetOn": [],
+              "simulationMode": "events",
+              "avgStacks": 3.877988026419945,
+              "uptime": 1.0
+            }
+          ],
+          "perAttack": {
+            "dot": {
+              "perType": {
+                "DT_SLASH": {
+                  "expectedProcs": 0.048849339779114445,
+                  "coefficient": 0.35,
+                  "durationSeconds": 6.0,
+                  "elementalMultiplier": 1.0,
+                  "critMultiplier": 8.035067824810312,
+                  "seedTiers": [
+                    {
+                      "weight": 0.8000045826853572,
+                      "perSecond": 1406.5541859137834
+                    },
+                    {
+                      "weight": 0.19999541731464276,
+                      "perSecond": 2608.148369982367
+                    }
+                  ],
+                  "targetMultiplier": 1.0,
+                  "perSecond": 1646.9163655392065,
+                  "seedPerSecondPerProc": 1646.8675161994274,
+                  "accumulatorPerSecondPerAttack": 0.048849339779114445,
+                  "accumulatorSharedGroup": false,
+                  "perProc": 9881.498193235238,
+                  "expectedDamage": 482.70466276805365
+                },
+                "DT_FIRE": {
+                  "expectedProcs": 0.4715183894821504,
+                  "coefficient": 0.5,
+                  "durationSeconds": 6.0,
+                  "elementalMultiplier": 1.9652499806950001,
+                  "critMultiplier": 8.035067824810312,
+                  "seedTiers": [
+                    {
+                      "weight": 0.8000045826853572,
+                      "perSecond": 3948.9008381621925
+                    },
+                    {
+                      "weight": 0.19999541731464276,
+                      "perSecond": 7322.37647679649
+                    }
+                  ],
+                  "targetMultiplier": 1.0,
+                  "perSecond": 4625.545756292336,
+                  "seedPerSecondPerProc": 4623.58050631164,
+                  "accumulatorPerSecondPerAttack": 1.9652499806950001,
+                  "accumulatorSharedGroup": true,
+                  "perProc": 27753.274537754012,
+                  "expectedDamage": 13086.179312897744
+                }
+              },
+              "total": 13568.883975665798,
+              "expectedProcs": {
+                "DT_IMPACT": 0.048849356062233125,
+                "DT_PUNCTURE": 0.3907948539255712,
+                "DT_SLASH": 0.048849339779114445,
+                "DT_VIRAL": 1.0991105602495996,
+                "DT_FIRE": 0.4715183894821504
+              },
+              "durationSeconds": 6.0,
+              "falloffMultiplier": 1.0,
+              "factionMultiplier": 1.0,
+              "armour": 2700.0,
+              "armourReduction": 0.9,
+              "elementalArmourStrip": 0.0,
+              "overguard": 15523399.911299936,
+              "hitLocation": "body",
+              "hitMultiplier": 1.0,
+              "unsupported": []
+            },
+            "nonDot": {
+              "perType": {},
+              "total": 0.0,
+              "aoePotential": 0.0
+            },
+            "dotTotal": 13568.883975665798,
+            "nonDotTotal": 0.0,
+            "total": 13568.883975665798,
+            "expectedProcs": {
+              "DT_IMPACT": 0.048849356062233125,
+              "DT_PUNCTURE": 0.3907948539255712,
+              "DT_SLASH": 0.048849339779114445,
+              "DT_VIRAL": 1.0991105602495996,
+              "DT_FIRE": 0.4715183894821504
+            },
+            "aoePotential": 0.0,
+            "unsupported": []
+          },
+          "continuousKillEvents": true,
+          "activePool": "overguard",
+          "unsupported": [],
+          "limitations": [
+            "expected-proc-counts-not-Monte-Carlo",
+            "single-target",
+            "non-heat-stacking-procs-expected",
+            "fractional-proc-refresh-approximates-uptime",
+            "single-target-syndicate-no-player-buffs",
+            "magnetic-break-six-ticks-pinned-reference-contract",
+            "spread-hit-loss-not-modeled"
+          ]
+        },
+        "unsupported": [],
+        "skipped": []
+      },
+      "manualKpm": 22.0,
+      "manualKernelMatches": true,
+      "reference": {
+        "apl": [
+          "reload,if=!can_fire",
+          "shoot"
+        ],
+        "armor_left": 0.6433547887307393,
+        "big_crit_rate": 0.32394587667366403,
+        "bodies": [
+          {
+            "aimed": true,
+            "at": [
+              0,
+              0.5
+            ],
+            "damage": 236849818.94170493,
+            "id": "e1"
+          }
+        ],
+        "burst_dps": 15550745.68809178,
+        "combatants": [
+          {
+            "big_crit_rate": 0.32394587667366403,
+            "crit_rate": 1,
+            "crit_tier": 1.323945876673664,
+            "damage": 236849818.94170493,
+            "finishes": 8.803333333333333,
+            "id": "wielder",
+            "pellets": 423.97,
+            "procs": 260.0933333333333,
+            "reloads": 8,
+            "shots": 121,
+            "transforms": 0,
+            "weapon": "latron_prime"
+          }
+        ],
+        "crit_rate": 1,
+        "crit_tier": 1.323945876673664,
+        "damage_per_pellet": 558647.5904939144,
+        "damage_per_shot": 1957436.5201793795,
+        "damage_sources": [
+          {
+            "by_type": [
+              {
+                "dmg": 125150642.22583196,
+                "type": "Viral"
+              },
+              {
+                "dmg": 53884304.2916776,
+                "type": "Heat"
+              },
+              {
+                "dmg": 45193287.47043924,
+                "type": "Puncture"
+              },
+              {
+                "dmg": 5214610.092742993,
+                "type": "Impact"
+              },
+              {
+                "dmg": 5214610.092742993,
+                "type": "Slash"
+              }
+            ],
+            "dmg": 234657454.17343447,
+            "source": "direct"
+          },
+          {
+            "dmg": 2090266.1608888803,
+            "source": "Heat"
+          },
+          {
+            "dmg": 230718.915291984,
+            "source": "Slash"
+          }
+        ],
+        "downtime": 14.769230769230811,
+        "dps": 7894993.964723498,
+        "dps_runs": [],
+        "dps_se": 20268.82167322383,
+        "duration": 30,
+        "field_ticks": 0,
+        "first_magazine": 7597909.123975488,
+        "forma": {
+          "cap": 60,
+          "legal": true,
+          "omni": 0,
+          "rank": 30,
+          "regular": 4,
+          "total_drain": 57,
+          "umbra": 0,
+          "used": 4
+        },
+        "frame": {
+          "ability_strength": 1,
+          "summon_strength": null
+        },
+        "ghosts": null,
+        "ghosts_peak": null,
+        "headshot_rate": 1,
+        "kills": 8.803333333333333,
+        "kills_max": 10,
+        "kills_min": 7,
+        "kills_std": 0.4523887217378008,
+        "max_hit": 2072865.0276077478,
+        "mean_max_hit": 1747469.8797289748,
+        "ok": true,
+        "overkill": 4169750.6694777384,
+        "overkill_rate": 0.017920532258909612,
+        "panel": {
+          "co_per_type": 0,
+          "crit_chance": 1.1999954434015,
+          "crit_damage": 6.860903475000001,
+          "damage": [
+            {
+              "type": "Impact",
+              "value": 24
+            },
+            {
+              "type": "Puncture",
+              "value": 192
+            },
+            {
+              "type": "Slash",
+              "value": 24
+            },
+            {
+              "type": "Heat",
+              "value": 231.6599953668
+            },
+            {
+              "type": "Viral",
+              "value": 539.9999999999999
+            }
+          ],
+          "fire_rate": 7.922999999999999,
+          "modified_base": 239.99999999999997,
+          "multishot": 1.8,
+          "status_chance": 0.624,
+          "total": 1011.6599953667999
+        },
+        "pellets": 423.97,
+        "picked_up_ammo": null,
+        "procs": 260.0933333333333,
+        "reloads": 8,
+        "replay": null,
+        "run": [
+          169508840,
+          3077410736
+        ],
+        "runs": 300,
+        "sample": {
+          "dps": 7899281.308320509,
+          "kills": 9,
+          "score": 9.239885234930497
+        },
+        "score": 9.236519755453491,
+        "score_runs": [],
+        "score_se": 0.02358926478090862,
+        "self_damage": null,
+        "shots": 121,
+        "spilled": 0,
+        "target": {
+          "armor": 2700,
+          "eximus": false,
+          "health": 9667913.963695768,
+          "level": 9999,
+          "name": "Thrax Centurion",
+          "overguard": 15523399.911299936,
+          "shield": 0,
+          "steel_path": true
+        },
+        "transforms": 0,
+        "ttk": {
+          "mean": 7.2667445638630745,
+          "median": 7.604967038514943,
+          "p90": 8.109826308993298,
+          "runs": 300
+        },
+        "virus_stacks": 9.353445414718703
+      },
+      "comparisonKind": "public-board-build",
+      "panelDifferences": {},
+      "targetMatches": true,
+      "uiImportable": true,
+      "fullBuildComparable": true,
+      "panelMatches": true,
+      "referenceKpm": 18.473039510906982,
+      "referenceKpmSe": 0.04717852956181724,
+      "localKpm": 22.0,
+      "deltaPercent": 19.09247520967301
+    }
+  ],
+  "skips": [
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 357,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 362,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 378,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 383,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 385,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 386,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 388,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 390,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 391,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 392,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 396,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 399,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 400,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 405,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 406,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 407,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 410,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 411,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 413,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 416,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 418,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 420,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 422,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    },
+    {
+      "weapon": "latron_prime",
+      "rowIndex": 423,
+      "reason": "unmapped or ambiguous evolution icon: latron_prime_extended_volley"
+    }
+  ],
+  "contract": "Lv9999 SP Thrax, headshots, ADS, single target, infinite resupply explicitly set by archgun class rule, timed buffs start at zero. Offline kernel audit when catalogBlockers is nonempty. Board score uses separate 180s contract."
+}

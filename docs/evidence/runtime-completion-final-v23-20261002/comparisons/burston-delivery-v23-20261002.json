@@ -1,0 +1,83 @@
+{
+  "inputSha256": "ed1c58baa76bfbfa787fd10ba66cac81f77d979d471a0f9347613160192a991e",
+  "engineFingerprint": "695e803101081cda",
+  "seconds": 30.0,
+  "cases": [
+    {
+      "archimedea": true,
+      "aiming": false,
+      "cycle": true,
+      "kpm": 91.48042156001648,
+      "ehp": 30025270.856842868,
+      "shots": 1255,
+      "transforms": 4,
+      "heatMax": 27.672,
+      "heatStripMax": 0.5,
+      "syndicate": [
+        {
+          "time": 6.133333241481464,
+          "id": "truth",
+          "damage": 1000.0
+        }
+      ],
+      "unsupported": []
+    },
+    {
+      "archimedea": false,
+      "aiming": false,
+      "cycle": true,
+      "kpm": 111.40731619691138,
+      "ehp": 25191313.874995224,
+      "shots": 1255,
+      "transforms": 4,
+      "heatMax": 20.2,
+      "heatStripMax": 0.5,
+      "syndicate": [
+        {
+          "time": 5.466666589629615,
+          "id": "truth",
+          "damage": 1000.0
+        }
+      ],
+      "unsupported": []
+    },
+    {
+      "archimedea": false,
+      "aiming": true,
+      "cycle": true,
+      "kpm": 173.83629687504518,
+      "ehp": 25191313.874995224,
+      "shots": 1255,
+      "transforms": 4,
+      "heatMax": 16.603,
+      "heatStripMax": 0.5,
+      "syndicate": [
+        {
+          "time": 4.725925865349784,
+          "id": "truth",
+          "damage": 1000.0
+        }
+      ],
+      "unsupported": []
+    },
+    {
+      "archimedea": false,
+      "aiming": false,
+      "cycle": false,
+      "kpm": 151.17981196857866,
+      "ehp": 25191313.874995224,
+      "shots": 1621,
+      "transforms": 0,
+      "heatMax": 26.288,
+      "heatStripMax": 0.5,
+      "syndicate": [
+        {
+          "time": 3.0925925238683023,
+          "id": "truth",
+          "damage": 1000.0
+        }
+      ],
+      "unsupported": []
+    }
+  ]
+}

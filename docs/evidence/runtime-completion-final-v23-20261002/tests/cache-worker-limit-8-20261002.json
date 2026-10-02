@@ -1,0 +1,11 @@
+{
+  "name": "pytest",
+  "errors": "0",
+  "failures": [],
+  "skipped": "0",
+  "tests": "14",
+  "time": "3.130",
+  "timestamp": "2026-10-02T01:46:19.758400+08:00",
+  "hostname": "DESKTOP-BFB9HVK",
+  "sourceReport": ".local\\reports\\cache-worker-limit-8-20261002.xml"
+}
