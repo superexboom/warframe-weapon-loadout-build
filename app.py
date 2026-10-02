@@ -718,10 +718,10 @@ def _refresh_analysis_statics_cache_if_newer() -> None:
     if mtime <= ANALYSIS_STATICS_CACHE_MTIME_NS:
         return
     loaded = _load_analysis_statics_cache()
+    ANALYSIS_STATICS_CACHE_MTIME_NS = mtime
     if loaded:
         ANALYSIS_STATICS_CACHE.clear()
         ANALYSIS_STATICS_CACHE.update(loaded)
-        ANALYSIS_STATICS_CACHE_MTIME_NS = mtime
 
 
 def _persist_analysis_statics_cache() -> None:
