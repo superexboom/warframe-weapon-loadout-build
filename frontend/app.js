@@ -103,6 +103,7 @@ const ui = Object.fromEntries([
   "weapon", "weapon-options", "build-weapon-options", "weapon-caption", "disposition-value", "disposition-dots",
   "weapon-issue", "weapon-issue-text", "stat-rows", "stat-row-template", "add-stat",
   "analysis-innate-element-field", "analysis-innate-element-select", "analysis-innate-element-icon", "analysis-preferred-element-select", "analysis-preferred-element-icon",
+  "analysis-headshot-chance",
   "form-message", "analyze-button", "riven-stage", "riven-card", "card-name",
   "card-polarity", "card-stats", "card-mr", "card-rerolls",
   "result-badge", "result-idle", "result-loading", "result-error", "result-content",
@@ -2167,6 +2168,9 @@ function payloadFromForm() {
     return { code: entry.code, value: Number(entry.value.toFixed(3)), negative: entry.negative };
   });
   const payload = { weapon: state.weapon.path, disposition: state.weapon.disposition, stats, profile: solveProfile() };
+  const headshots = Number(ui["analysis-headshot-chance"]?.value || 0);
+  if (!Number.isFinite(headshots) || headshots < 0 || headshots > 100) throw new Error("弱点命中率必须在 0% 到 100% 之间");
+  payload.headshotChance = headshots / 100;
   // 天生元素（赤毒/信条/终幕）：候选存在时随请求下发，参与分析与配装。
   const innateCandidates = Array.isArray(state.weapon.innateElementCandidates) ? state.weapon.innateElementCandidates : [];
   if (innateCandidates.length) {
@@ -2380,10 +2384,10 @@ function renderContributions() {
   const fusionByCode = new Map(fusionDefs.map((d) => [d.code, d]));
   const rows = details.map((detail) => {
     const negative = state.submittedStats.find((entry) => entry.code === detail.code)?.negative;
-    const delta = finite(detail.delta) ?? 0;
+    const delta = detail.delta == null ? null : finite(detail.delta);
     const reoptimized = finite(detail.reoptimizedDelta);
     const fusionDef = fusionByCode.get(detail.code) || null;
-    const row = create("article", `contribution-row${delta < 0 ? " is-harmful" : ""}${fusionDef ? " is-fusion" : ""}`);
+    const row = create("article", `contribution-row${delta !== null && delta < 0 ? " is-harmful" : ""}${fusionDef ? " is-fusion" : ""}`);
     const head = create("div", "contribution-head");
     const title = create("div");
     title.append(create("span", "contribution-sign", negative ? "−" : "+"), create("strong", "", `${detail.label || detail.code}${fusionDef ? " ★" : ""}`));
@@ -2395,10 +2399,10 @@ function renderContributions() {
     // F08：主数值是「同一配卡移除此词条」的消融口径；重优化收益（删词条
     // 并重选 MOD）单独展示，两者不再混为一谈。
     value.append(
-      create("b", "", `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}%`),
+      create("b", "", delta === null ? "未计算" : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}%`),
       create("span", "", `数值 ${formatQuality(detail.quality)}`),
     );
-    if (reoptimized !== null && Math.abs(reoptimized - delta) > 0.05) {
+    if (!detail.inactiveReason && delta !== null && reoptimized !== null && Math.abs(reoptimized - delta) > 0.05) {
       const tag = create("span", "contribution-reopt", `重优化 ${reoptimized >= 0 ? "+" : ""}${reoptimized.toFixed(1)}%`);
       tag.title = "移除该词条并允许重选普通 MOD 后的目标指标变化（联合收益口径）";
       value.append(tag);
@@ -2406,9 +2410,10 @@ function renderContributions() {
     head.append(title, value);
     const track = create("div", "contribution-track");
     const fill = create("i");
-    fill.style.width = `${Math.max(delta === 0 ? 2 : 7, Math.abs(delta) / max * 100)}%`;
+    fill.style.width = `${delta === null ? 0 : Math.max(delta === 0 ? 2 : 7, Math.abs(delta) / max * 100)}%`;
     track.append(fill);
     row.append(head, track);
+    if (detail.inactiveReason || detail.condition) row.append(create("small", "contribution-condition", detail.inactiveReason || detail.condition));
     return row;
   });
   ui["contribution-list"].replaceChildren(...(rows.length ? rows : [create("p", "empty-copy", "没有可显示的贡献明细")]))
@@ -2534,13 +2539,11 @@ function buildMetrics(build, weapon = state.weapon) {
   return preferred.filter((key) => finite(build?.[key]) !== null).slice(0, 5);
 }
 
-// 栏位语义（2026-09-24 修复）：objectiveScore 的标签必须与评分指标一致——
-// KPM 口径显示「标准靶 KPM」，KPM 饱和切换 windowedDps 后显示「标准靶 DPS」。
-// 旧实现恒显「标准靶 KPM」，5M 量级的窗口 DPS 塞进 KPM 栏有强误导性。
-function metricLabel(key) {
+// The optimization value and quality-score value can use different units.
+function metricLabel(key, build = null) {
   if (key !== "objectiveScore") return METRIC_LABELS[key];
-  const metric = String(state.result?.searchQuality?.scoreMetric || state.result?.scoreMetric || "").toLowerCase();
-  return metric.includes("dps") ? "标准靶 DPS" : "标准靶 KPM";
+  const metric = build?.objectiveMetric || state.result?.metric || state.result?.searchQuality?.objectiveMetric || "killsPerMinute";
+  return ({ killsPerMinute: "标准靶 KPM", windowedDps: "标准靶 DPS", heavyDamage: "标准靶重击伤害" })[metric] || METRIC_LABELS[metric] || metric;
 }
 
 function renderMetrics(build, target = ui["damage-metrics"], weapon = state.weapon) {
@@ -2553,7 +2556,7 @@ function renderMetrics(build, target = ui["damage-metrics"], weapon = state.weap
     card.title = new Intl.NumberFormat("zh-CN", { maximumFractionDigits: 2 }).format(build[key]);
     const text = formatMetric(build[key]);
     card.dataset.liveValue = text;
-    const label = metricLabel(key);
+    const label = metricLabel(key, build);
     const value = create("strong", "", text);
     if (previousValues.has(label) && previousValues.get(label) !== text) value.classList.add("is-flash");
     card.append(create("span", "", label), value);
@@ -2721,6 +2724,13 @@ function renderEffectLines(mod, details = false) {
   const setName = String(mod?.setName || modAssetFields(mod)?.setName || setId).trim();
   // 套装标签行已移除（用户反馈卡面不需要"套装：xx"标签，保留详细加成说明即可）
   if (details) {
+    const category = MOD_CATEGORY_LABELS[modCategory(mod)] || "其他";
+    const compat = modCompatLabel(mod, modAssetFields(mod));
+    frag.append(create("p", "mod-effect-line is-meta is-set-detail", `分类：${category} · 适用：${compat}`));
+    const officialDescription = cleanOfficialText(mod.description || modAssetFields(mod)?.description || "");
+    if (officialDescription && !lines.some((line) => String(line.label || "").includes(officialDescription))) {
+      frag.append(create("p", "mod-effect-line is-description is-set-detail", officialDescription));
+    }
     const setText = isSacrificeSetMod(mod) ? "" : modSetText(mod);
     if (setText) frag.append(create("p", "mod-effect-line is-set is-set-detail", setText));
     // 镀层「实战满叠层」摘要不再渲染进卡面（会挤占卡面空间）——它保留在
@@ -3139,6 +3149,8 @@ function modCompatLabel(mod, metadata) {
       compatZh = ["melee", "zaw"].includes(state.buildWeapon?.weaponType) ? "近战" : "武器";
     } else compatZh = "MOD";
   }
+  const compatibilityTags = mod?.compatibilityTags || metadata?.compatibilityTags || [];
+  if (compatibilityTags.includes("SEMI_AUTO")) compatZh = `半自动${compatZh}`;
   if (mod?.modSet) return `套装: ${compatZh}`;
   return compatZh;
 }
@@ -5117,10 +5129,11 @@ function effectLabel(effect) {
 
 function modAssetFields(mod) {
   const asset = state.modAssets?.mods?.[mod?.path] || {};
+  const catalog = state.catalog?.manualMods?.find((entry) => entry.path === mod?.path) || {};
   // The frozen Warframe sidecar is newer and more specific than the shared
   // weapon-art index.  Merge art/frame metadata underneath the selected row so
   // stale generic fields can never overwrite rank, slot type, text or sets.
-  const merged = { ...asset };
+  const merged = { ...asset, ...catalog };
   for (const [key, value] of Object.entries(mod || {})) {
     if (value !== null && value !== undefined && value !== "") merged[key] = value;
   }

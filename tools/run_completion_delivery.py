@@ -35,7 +35,10 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--acceptance',type=Path,required=True)
     parser.add_argument('--resume',action='store_true',help='Reuse a passed regression with matching inputs and version')
+    parser.add_argument('--allow-full-bake',action='store_true',help='Use only after explicit user authorization for full-roster generation')
     args=parser.parse_args()
+    if not args.allow_full_bake:
+        parser.error('full-roster delivery requires explicit user authorization and --allow-full-bake')
     import app
     inputs=app._analysis_inputs_fingerprint()
     previous_regression=cached_regression(args.output,inputs,app.ANALYSIS_STATICS_CACHE_VERSION) if args.resume else None
@@ -57,7 +60,7 @@ def main():
 
     def bake(profile,workers,shards=False):
         command=[sys.executable,'-u','tools/bake-analysis-statics.py','--profile',profile,'--workers',str(workers),
-                 '--fire-modes','--report',str(args.output/(profile+('-shards' if shards else '')+'.json'))]
+                 '--fire-modes','--allow-full-bake','--report',str(args.output/(profile+('-shards' if shards else '')+'.json'))]
         return command+(['--shards-only'] if shards else [])
 
     if previous_regression:

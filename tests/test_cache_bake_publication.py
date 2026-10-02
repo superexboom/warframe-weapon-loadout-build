@@ -87,3 +87,17 @@ def test_delivery_resume_requires_current_successful_regression(tmp_path):
     suite.set('failures','1')
     ET.ElementTree(suite).write(xml_path)
     assert cached_regression(tmp_path,'current',14) is None
+
+
+def test_live_engine_refreshes_a_newer_published_cache(monkeypatch,tmp_path):
+    cache_path=tmp_path/'cache.json'
+    fingerprint=app._analysis_inputs_fingerprint()
+    payload=dict(buildLabel=app.EXPORTS['buildLabel'],stances=app._stances_fingerprint(),
+                 inputs=fingerprint,cacheVersion=app.ANALYSIS_STATICS_CACHE_VERSION,
+                 entries={'new':{'contextHash':'a'*20}})
+    cache_path.write_text(json.dumps(payload),encoding='utf-8')
+    monkeypatch.setattr(app,'ANALYSIS_STATICS_CACHE_PATH',cache_path)
+    monkeypatch.setattr(app,'ANALYSIS_STATICS_CACHE_MTIME_NS',0)
+    app.ANALYSIS_STATICS_CACHE.clear()
+    app._refresh_analysis_statics_cache_if_newer()
+    assert 'new' in app.ANALYSIS_STATICS_CACHE

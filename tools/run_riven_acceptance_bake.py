@@ -53,7 +53,10 @@ def main() -> int:
     ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--acceptance',type=Path,required=True)
     ap.add_argument('--workers',type=limited_workers,default=4,help='Parallel workers, capped at 8')
+    ap.add_argument('--allow-full-bake',action='store_true',help='Use only after explicit user authorization for full-roster generation')
     args=ap.parse_args()
+    if not args.allow_full_bake:
+        ap.error('full-roster acceptance and baking requires explicit user authorization and --allow-full-bake')
     import app
     inputs=app._analysis_inputs_fingerprint()
     args.output.mkdir(parents=True,exist_ok=True)
@@ -65,7 +68,7 @@ def main() -> int:
     commands=[('analysis-acceptance',[sys.executable,'-u','tools/audit_riven_analysis_context.py','--output',str(args.acceptance)])]
     for profile in ('fast','standard'):
         commands.append((profile,[sys.executable,'-u','tools/bake-analysis-statics.py','--profile',profile,
-                                 '--workers',str(args.workers),'--fire-modes','--report',str(args.output/(profile+'.json'))]))
+                                 '--workers',str(args.workers),'--fire-modes','--allow-full-bake','--report',str(args.output/(profile+'.json'))]))
     for phase,command in commands:
         entry=dict(phase=phase,status='running',command=command,startedAt=datetime.now(timezone.utc).isoformat())
         status['phases'].append(entry)

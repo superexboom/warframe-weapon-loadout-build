@@ -2519,10 +2519,18 @@ def _best_fixed(
     capacity_limit: int = 60,
     target_context: Mapping[str, Any] | None = None,
     max_keep_cap: int | None = None,
+    preserve_base: bool = False,
 ) -> _Evaluation:
     required = tuple(card for card in base_cards if card.required)
     optional = tuple(card for card in base_cards if not card.required)
     max_keep = min(len(optional), 7 - len(required))
+    preserved = None
+    if preserve_base:
+        preserved = _evaluate(
+            weapon, base_cards, riven, scenario=scenario, metric=metric,
+            passives=passives, capacity_limit=capacity_limit,
+            target_context=target_context,
+        )
     if max_keep_cap is not None:
         max_keep = min(max_keep, max_keep_cap)
     for keep in range(max_keep, -1, -1):
@@ -2541,7 +2549,12 @@ def _best_fixed(
             )) is not None
         ]
         if evaluated:
-            return max(evaluated, key=lambda value: value.score)
+            candidate = max(evaluated, key=lambda value: value.score)
+            if preserved is None:
+                return candidate
+            return max((preserved, candidate), key=lambda value: value.score)
+    if preserved is not None:
+        return preserved
     raise SimulationError("no capacity-valid build can equip the Riven")
 
 
@@ -3679,6 +3692,8 @@ def _build_payload(
                 "rank": card.rank,
                 "slot": card_index + int(riven is not None and card_index >= evaluation.riven_index),
                 "maxRank": card.record.get("maxRank"),
+                "compatibility": card.record.get("compatibility"),
+                "compatibilityTags": list(card.record.get("compatibilityTags") or ()),
                 "compatible": True,
                 "displayEffects": display_effects,
                 **({"setPieces": pieces} if set_id else {}),
@@ -5079,7 +5094,14 @@ def analyze_riven_request(
             not request.get("_bakeStaticsOnly")
             and benchmark_context is not None
         ):
-            score_metric = "windowedDps"
+            if profile == "fast":
+                # Fast is explicitly a bounded ranking pass. Preserve the
+                # requested KPM metric instead of launching a second full
+                # continuous-DPS search when the pressure probe saturates.
+                unsupported.append("fast-profile-quality-rerank-skipped")
+                score_metric = objective_metric
+            else:
+                score_metric = "windowedDps"
             quality_cache_key = json.dumps(
                 {
                     "metric": score_metric,
@@ -5399,10 +5421,11 @@ def analyze_riven_request(
     details = []
     fatal_negative: list[str] = []
     details_keep_cap = {"fast": 3, "standard": 5, "deep": None}[profile]
+    reoptimized_contributions = bool(request.get("includeReoptimizedContributions"))
     for line in actual_lines:
-        if score_metric != objective_metric and line.code in quality_detail_cache:
+        if reoptimized_contributions and score_metric != objective_metric and line.code in quality_detail_cache:
             delta = quality_detail_cache[line.code]
-        else:
+        elif reoptimized_contributions:
             without = _card_from_lines(
                 [item for item in actual_lines if item.code != line.code]
             )
@@ -5416,6 +5439,7 @@ def analyze_riven_request(
                 capacity_limit=capacity_limit,
                 target_context=benchmark_context,
                 max_keep_cap=details_keep_cap,
+                preserve_base=True,
             )
             removed_score = removed.score
             if score_metric != objective_metric:
@@ -5425,6 +5449,11 @@ def analyze_riven_request(
                     target_context=benchmark_context,
                 )
             delta = _percent_gain(quality_scores["actual"], removed_score)
+        else:
+            # Fixed-build ablation is the default contribution contract. The
+            # second "remove then re-optimize" search is opt-in because it is
+            # the dominant source of multi-minute first requests.
+            delta = None
             if score_metric != objective_metric:
                 quality_detail_cache[line.code] = delta
         # ── F08（审计修复）：词条贡献拆成两个明确口径 ─────────────────────
@@ -5460,6 +5489,15 @@ def analyze_riven_request(
             ablation_delta = _percent_gain(quality_scores["actual"], ablated_score)
         else:
             ablation_delta = None
+        inactive_reason = None
+        condition = None
+        if line.code in {'W','Y'}:
+            condition = '弱点命中时'
+            if benchmark_context is not None and float(benchmark_context.get('headshotChance') or 0.) == 0.:
+                inactive_reason = '当前评价靶弱点命中率为 0%'
+        elif line.code == 'HR':
+            condition = '武器收起时自动装填'
+            inactive_reason = '当前持续持枪，没有收起装填事件'
         fatal = line.negative and (
             (ablation_delta if ablation_delta is not None else delta) < -5.0
         )
@@ -5491,6 +5529,10 @@ def analyze_riven_request(
                 "delta": ablation_delta if ablation_delta is not None else delta,
                 "ablationDelta": ablation_delta,
                 "reoptimizedDelta": delta,
+                "contributionMetric": score_metric,
+                "condition": condition,
+                "inactiveReason": inactive_reason,
+                "contributionStatus": 'inactive' if inactive_reason else ('computed' if ablation_delta is not None else 'unavailable'),
                 "recommended": (
                     line.code in negative_codes if line.negative else line.code in recommended_codes
                 ),
@@ -5835,6 +5877,8 @@ def analyze_riven_request(
         # 直接读取，不再从提升百分比反推。
         payload["objectiveScore"] = _score(evaluation.stats, objective_metric,
                                             target_context=benchmark_context)
+        payload['objectiveMetric'] = objective_metric
+        payload['scoringMetric'] = score_metric
         payload['scoringScore'] = quality_scores['baseline' if evaluation is baseline
                                                 else ('actual' if evaluation is actual else 'optimal')]
         if stance_multiplier != 1.0:

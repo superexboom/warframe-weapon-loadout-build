@@ -702,6 +702,26 @@ try:
 except SimulationError:
     ANALYSIS_STATICS_RUNTIME_INPUTS = None
 ANALYSIS_STATICS_CACHE: dict[str, Any] = _load_analysis_statics_cache()
+try:
+    ANALYSIS_STATICS_CACHE_MTIME_NS = ANALYSIS_STATICS_CACHE_PATH.stat().st_mtime_ns
+except OSError:
+    ANALYSIS_STATICS_CACHE_MTIME_NS = 0
+
+
+def _refresh_analysis_statics_cache_if_newer() -> None:
+    """Refresh a live server when an external bake publishes a newer cache."""
+    global ANALYSIS_STATICS_CACHE_MTIME_NS
+    try:
+        mtime = ANALYSIS_STATICS_CACHE_PATH.stat().st_mtime_ns
+    except OSError:
+        return
+    if mtime <= ANALYSIS_STATICS_CACHE_MTIME_NS:
+        return
+    loaded = _load_analysis_statics_cache()
+    if loaded:
+        ANALYSIS_STATICS_CACHE.clear()
+        ANALYSIS_STATICS_CACHE.update(loaded)
+        ANALYSIS_STATICS_CACHE_MTIME_NS = mtime
 
 
 def _persist_analysis_statics_cache() -> None:
@@ -715,6 +735,7 @@ def _persist_analysis_statics_cache() -> None:
     落盘，绕过了「只写分片」的注释承诺）。只有父进程在显式合并阶段重新
     打开持久化，单次写入主缓存。
     """
+    global ANALYSIS_STATICS_CACHE_MTIME_NS
     if not ANALYSIS_STATICS_PERSISTENCE.enabled:
         return
     if not ANALYSIS_STATICS_CACHE.pop("__dirty__", None):
@@ -745,6 +766,7 @@ def _persist_analysis_statics_cache() -> None:
         tmp = ANALYSIS_STATICS_CACHE_PATH.with_suffix(".tmp")
         tmp.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         tmp.replace(ANALYSIS_STATICS_CACHE_PATH)
+        ANALYSIS_STATICS_CACHE_MTIME_NS = ANALYSIS_STATICS_CACHE_PATH.stat().st_mtime_ns
     except OSError:
         pass  # 缓存写不进去不影响解算，下次启动重算即可
 
@@ -2784,6 +2806,7 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     if not isinstance(payload, Mapping):
         raise SimulationError("request body must be a JSON object")
     request = dict(payload)
+    _refresh_analysis_statics_cache_if_newer()
     legacy = request.get("disposition") is None and request.get("sourceWeapon")
     weapon_path = request.get("sourceWeapon") if legacy else request.get("weapon")
     if not isinstance(weapon_path, str) or not weapon_path.strip():

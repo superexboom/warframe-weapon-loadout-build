@@ -212,7 +212,10 @@ def main() -> int:
     parser.add_argument('--report', type=Path, help='写入覆盖与失败报告，运行时逐项更新')
     parser.add_argument('--dry-run', action='store_true', help='仅列出任务和当前分片覆盖')
     parser.add_argument('--shards-only',action='store_true',help='只生成并校验分片；不发布主缓存，允许不同档位并行准备')
+    parser.add_argument('--allow-full-bake',action='store_true',help='Use only after explicit user authorization for a full-roster bake')
     args = parser.parse_args()
+    if not args.dry_run and not args.allow_full_bake and not (args.weapon or args.limit):
+        parser.error('full-roster baking requires explicit user authorization and --allow-full-bake')
 
     import app
 
@@ -240,10 +243,13 @@ def main() -> int:
         )
 
     weapons = _catalog_weapons()
+    full_roster_size=len(weapons)
     if args.weapon:
         weapons = [w for w in weapons if w["path"] in set(args.weapon)]
     if args.limit:
         weapons = weapons[: args.limit]
+    if not args.dry_run and not args.allow_full_bake and full_roster_size and len(weapons)==full_roster_size:
+        parser.error('selected weapons cover the full roster; explicit authorization and --allow-full-bake are required')
     print(f"baking {len(weapons)} weapons, profile={args.profile}, workers={args.workers}")
 
     shard_dir.mkdir(parents=True, exist_ok=True)
