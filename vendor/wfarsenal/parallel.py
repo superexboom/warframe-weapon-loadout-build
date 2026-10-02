@@ -84,7 +84,10 @@ def worker_count() -> int:
     """Number of parallel evaluation workers (physical cores, 1 = serial)."""
     if os.environ.get("WF_ANALYZER_SERIAL") == "1":
         return 1
-    return _physical_core_count()
+    # Interactive analysis and background cache work share the same user
+    # machine. Keep one global ceiling so a live request cannot fan out across
+    # every physical core behind the cache worker limit.
+    return min(_physical_core_count(), 8)
 
 
 def get_pool(context: dict[str, Any] | None = None) -> ProcessPoolExecutor | None:

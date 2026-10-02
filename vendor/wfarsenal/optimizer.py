@@ -13,6 +13,7 @@ import itertools
 import hashlib
 import json
 import math
+import os
 from dataclasses import dataclass, replace
 from pathlib import Path
 from statistics import median
@@ -5422,6 +5423,24 @@ def analyze_riven_request(
     fatal_negative: list[str] = []
     details_keep_cap = {"fast": 3, "standard": 5, "deep": None}[profile]
     reoptimized_contributions = bool(request.get("includeReoptimizedContributions"))
+    ablation_scores: dict[str, float] = {}
+    if score_metric == objective_metric and os.environ.get("WF_ANALYZER_SERIAL") != "1":
+        from wfarsenal import parallel as _parallel
+        _pool = _parallel.get_pool()
+        if _pool is not None:
+            _ctx = {"weapon": weapon, "scenario": scenario, "metric": objective_metric,
+                    "passives": passives, "slot_limit": 8, "capacity_limit": capacity_limit,
+                    "target_context": benchmark_context}
+            _jobs = {}
+            for _line in actual_lines:
+                if _line.code in {'W','Y'} and benchmark_context is not None and not float(benchmark_context.get('headshotChance') or 0.):
+                    continue
+                _without = _card_from_lines([item for item in actual_lines if item.code != _line.code])
+                _jobs[_line.code] = _pool.submit(_parallel._score_job, (actual.cards, _without, _ctx))
+            for _code, _future in _jobs.items():
+                _value = _future.result()
+                if _value is not None:
+                    ablation_scores[_code] = float(_value)
     for line in actual_lines:
         if reoptimized_contributions and score_metric != objective_metric and line.code in quality_detail_cache:
             delta = quality_detail_cache[line.code]
@@ -5465,24 +5484,21 @@ def analyze_riven_request(
         #   价值」与「删词条+换卡后的联合收益」。
         # 旧实现只返回 delta 但解释文案写成消融口径——零作用词条可能因
         #   子集重优化删掉其他 MOD 而显示巨大「贡献」。
-        without_line = _card_from_lines(
-            [item for item in actual_lines if item.code != line.code]
-        )
-        ablated = _evaluate(
-            weapon,
-            actual.cards,
-            without_line,
-            scenario=scenario,
-            metric=objective_metric,
-            passives=passives,
-            capacity_limit=capacity_limit,
-            target_context=benchmark_context,
-        )
-        if ablated is not None:
-            ablated_score = ablated.score
+        without_line = _card_from_lines([item for item in actual_lines if item.code != line.code])
+        if line.code in ablation_scores:
+            ablated_score = ablation_scores[line.code]
+            ablated = True
+        else:
+            ablated = _evaluate(
+                weapon, actual.cards, without_line, scenario=scenario,
+                metric=objective_metric, passives=passives,
+                capacity_limit=capacity_limit, target_context=benchmark_context,
+            )
+            ablated_score = ablated.score if ablated is not None else None
+        if ablated_score is not None:
             if score_metric != objective_metric:
                 ablated_score = _score(
-                    ablated.stats,
+                    ablated.stats if hasattr(ablated, 'stats') else actual.stats,
                     score_metric,
                     target_context=benchmark_context,
                 )

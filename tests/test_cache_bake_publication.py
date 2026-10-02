@@ -73,6 +73,11 @@ def test_bake_worker_limit_applies_to_default_and_explicit_cli(monkeypatch,tmp_p
         module.main()
 
 
+def test_interactive_parallel_pool_has_same_eight_worker_ceiling():
+    from wfarsenal.parallel import worker_count
+    assert worker_count() <= 8
+
+
 def test_delivery_resume_requires_current_successful_regression(tmp_path):
     from tools.run_completion_delivery import cached_regression
     report=dict(inputs='current',cacheVersion=14,jobs={'regression':dict(status='complete',exitCode=0)})
