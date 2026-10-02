@@ -14,14 +14,14 @@ remains deferred.
 
 ## Checklist
 
-- [ ] Capture exact screenshot inputs and separate cold, cached, and repeated requests.
-- [ ] Verify advanced traits by fixed-build ablation under actual trigger conditions.
-- [ ] Keep objective KPM and quality windowed DPS attached to their own values.
-- [ ] Restore Cannonade compatibility text and its native fire-rate lock description.
-- [ ] Refresh valid published cache before solving and reduce repeated searches.
-- [ ] Add an explicit authorization gate to full-roster bake entry points.
-- [ ] Run focused engine, API, and browser regressions, including extra ranged weapons.
-- [ ] Record measured timings, remaining limitations, and current calculation identity.
+- [x] Capture exact screenshot inputs and separate cold, cached, and repeated requests.
+- [x] Verify advanced traits by fixed-build ablation under actual trigger conditions.
+- [x] Keep objective KPM and quality windowed DPS attached to their own values.
+- [x] Restore Cannonade compatibility text and its native fire-rate lock description.
+- [x] Refresh valid published cache before solving and reduce repeated searches.
+- [x] Add an explicit authorization gate to full-roster bake entry points.
+- [x] Run focused engine, API, and browser regressions, including extra ranged weapons.
+- [x] Record measured timings, remaining limitations, and current calculation identity.
 
 ## Confirmed Starting Findings
 
@@ -63,3 +63,17 @@ remains deferred.
 - Full-roster baking now requires `--allow-full-bake` on every supervisor and
   direct bake entry point. The flag is an explicit authorization gate and has
   not been enabled in this audit.
+
+## Validation
+
+The focused regression report `.local/reports/riven-ui-audit-focused-20261003.xml`
+contains 21 passing tests. The serial targeted Vectis probe took 75.77 seconds on
+the first run and 62.89 seconds on the repeated run before the contribution
+parallelization change; it confirmed the expensive stages were calibration,
+quality/payload contribution work rather than cache loading. Interactive worker
+pool fan-out is now capped at eight, and fixed ablation jobs can run in that pool.
+
+The current engine fingerprint is `c87fc70541a7dcac`. The previously baked cache
+has a different identity and is intentionally ignored by the live server until a
+new, explicitly authorized bake is performed. No full-roster bake was started by
+this audit.
