@@ -2728,9 +2728,6 @@ function renderEffectLines(mod, details = false) {
   const setName = String(mod?.setName || modAssetFields(mod)?.setName || setId).trim();
   // 套装标签行已移除（用户反馈卡面不需要"套装：xx"标签，保留详细加成说明即可）
   if (details) {
-    const category = MOD_CATEGORY_LABELS[modCategory(mod)] || "其他";
-    const compat = modCompatLabel(mod, modAssetFields(mod));
-    frag.append(create("p", "mod-effect-line is-meta is-set-detail", `分类：${category} · 适用：${compat}`));
     const officialDescription = cleanOfficialText(mod.description || modAssetFields(mod)?.description || "");
     if (officialDescription && !lines.some((line) => String(line.label || "").includes(officialDescription))) {
       frag.append(create("p", "mod-effect-line is-description is-set-detail", officialDescription));
