@@ -163,6 +163,8 @@ const TYPE_LABELS = {
 };
 
 const METRIC_LABELS = {
+  killsPerMinute: "标准靶 KPM",
+  windowedDps: "窗口 DPS",
   shotDamage: "单发伤害", burstDps: "爆发 DPS", sustainedDps: "持续 DPS",
   attackDps: "攻击 DPS", heavyDamage: "重击伤害", heavyAttackDps: "重击 DPS",
   statusSustainedDps: "持续 DPS（触发+直伤）", targetSustainedDps: "目标持续 DPS",
@@ -2072,7 +2074,7 @@ function updateAnalyzeAvailability() {
   const validShape = shape.total >= 2 && shape.total <= 4 && (shape.positive === 2 || shape.positive === 3) && shape.negative <= 1;
   const isAssembly = state.assemblyFor === "analysis" && state.kitgunBase && state.kitgunBase.path === state.weapon?.path;
   const weaponReady = Boolean(state.weapon) && (isAssembly ? assemblyWeaponReady() : state.weapon.analysisAvailable !== false);
-  ui["analyze-button"].disabled = !weaponReady || !validShape;
+  ui["analyze-button"].disabled = !weaponReady || !validShape || ui["analyze-button"].classList.contains("is-loading");
   ui["add-stat"].disabled = shape.total >= 4 || !state.weapon;
 }
 
@@ -2209,6 +2211,7 @@ function clearResult() {
 
 async function submitAnalysis(event) {
   event?.preventDefault();
+  if (ui["analyze-button"].classList.contains("is-loading")) return;
   let payload;
   try {
     payload = payloadFromForm();
@@ -2231,6 +2234,7 @@ async function submitAnalysis(event) {
     calibration: "评分靶压力校准",
     actual: "当前紫卡配装求解",
     recommendation: "词条优先级排序",
+    optimal: "参考上限配装求解",
     quality: "连续指标复评",
     payload: "结果构建",
   };
@@ -2246,14 +2250,14 @@ async function submitAnalysis(event) {
       .catch(() => {})
       .finally(() => {
         const stageList = beat?.stages || [];
-        const stage = stageList[stageList.length - 1] || "";
+        const stage = beat?.currentStage || stageList[stageList.length - 1] || "";
         const pct = beat ? Math.round(beat.percent) : null;
         const stageLabel = STAGE_LABELS[stage] || (stage ? stage : "准备中");
         const elapsedText = elapsed < 60 ? `${elapsed.toFixed(0)}s` : `${Math.floor(elapsed / 60)}m${Math.round(elapsed % 60)}s`;
         // 无心跳数据（旧后端/轮询失败）：只显示阶段文案循环 + 计时。
         if (beat) {
           const bar = `${"█".repeat(Math.round((pct || 0) / 10))}${"░".repeat(10 - Math.round((pct || 0) / 10))}`;
-          ui["loading-copy"].textContent = `${stageLabel} ${bar} ${pct}% · ${elapsedText}${beat.secondsSinceBeat > 30 ? " · 长时间无阶段推进" : ""}`;
+          ui["loading-copy"].textContent = `${stageLabel} ${bar} ${pct}% · ${elapsedText}${beat.evaluations ? ` · 已评估 ${beat.evaluations} 个候选` : ""}${beat.secondsSinceBeat > 30 ? " · 长时间无计算进展" : ""}`;
         } else {
           ui["loading-copy"].textContent = `${STAGE_LABELS[stage] || "解算中"} · 已用 ${elapsedText}`;
         }
@@ -2344,7 +2348,7 @@ function renderScore() {
     if (target.level != null) bits.push(`Lv${target.level}`);
     if (target.steelPath) bits.push("钢铁之路");
     if (target.enemyEnhancements?.eximus) bits.push("卓越者");
-    if (quality.scoreMetric) bits.push(`指标 ${quality.scoreMetric}`);
+    if (quality.scoreMetric) bits.push(`评分指标 ${METRIC_LABELS[quality.scoreMetric] || quality.scoreMetric}`);
     if (calibration.status) bits.push(`校准 ${calibration.status}`);
     if (state.result.targetStatus && state.result.targetStatus !== "not-applicable") {
       bits.push(`目标 ${state.result.targetStatus}`);
@@ -2355,7 +2359,7 @@ function renderScore() {
     if (weaponMechanics.status && weaponMechanics.status !== "modeled") {
       bits.push(`武器机制 ${weaponMechanics.status}`);
     }
-    if (search.status) bits.push(`搜索 ${search.status}`);
+    if (search.status) bits.push(`搜索 ${{'heuristic-budget-limited':'预算内已找到的结果','heuristic-best-found':'启发式已找到的结果'}[search.status] || search.status}`);
     if (state.result.scoreBasis) bits.push(`基准 ${state.result.scoreBasis}`);
     // F10：按原因码区分「评分未归一化」的解释——模型缺失、目标过弱、
     // 下界未证明各说各话，不再一律显示「未证明全局最优」。
@@ -7239,7 +7243,8 @@ function renderBuild() {
     typeof state.result.fireMode === "number"
       ? `模式 ${state.result.fireMode + 1}${fireModeEntry?.isIncarnonForm ? " · 灵化形态" : ""}`
       : state.result.fireMode || "主模式";
-  ui["build-metric"].textContent = METRIC_LABELS[state.result.metric] || state.result.metric || "战斗伤害";
+  const optimizationMetric = state.result.searchStatus?.metric || state.result.metric;
+  ui["build-metric"].textContent = METRIC_LABELS[optimizationMetric] || optimizationMetric || "战斗伤害";
   // 无限极化口径的极化次数（只展示结果）：架势/Umbra 极化在提示里细分。
   const forma = build?.forma;
   const formaEl = ui["build-forma"];

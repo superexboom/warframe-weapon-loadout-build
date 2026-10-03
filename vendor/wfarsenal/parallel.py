@@ -87,7 +87,9 @@ def worker_count() -> int:
     # Interactive analysis and background cache work share the same user
     # machine. Keep one global ceiling so a live request cannot fan out across
     # every physical core behind the cache worker limit.
-    return min(_physical_core_count(), 8)
+    # The parent also replays surviving candidates. Reserve its CPU slot so
+    # workers plus parent stay within the user's total eight-computation cap.
+    return min(_physical_core_count(), 7)
 
 
 def get_pool(context: dict[str, Any] | None = None) -> ProcessPoolExecutor | None:
@@ -144,6 +146,7 @@ def _score_job(args: tuple) -> float | None:
             slot_limit=ctx.get("slot_limit", 8),
             capacity_limit=ctx["capacity_limit"],
             target_context=ctx["target_context"],
+            fixed_riven_index=ctx.get("fixed_riven_index"),
         )
         return None if evaluated is None else evaluated.score
     (

@@ -1,5 +1,11 @@
 # Riven Analysis Audit - 2026-10-03
 
+Historical first-pass notes. The checkmarks below overstated complete standard
+workflow and browser acceptance; they did not prove the reported Burston card
+finished. See [the subsequent stall investigation](RIVEN-ANALYSIS-STALL-2026-10-03.md)
+for the corrected root causes, complete request timings and actual browser/API
+evidence. The fingerprints and timings below describe that earlier revision.
+
 ## Scope
 
 Reproduce the supplied Vectis Prime and Burston Prime cards, then repair the

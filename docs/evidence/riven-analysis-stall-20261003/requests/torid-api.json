@@ -1,0 +1,2058 @@
+{
+  "name": "Torid",
+  "request": {
+    "weapon": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+    "disposition": 1.3,
+    "stats": [
+      {
+        "code": "D",
+        "value": 203.1110102527594,
+        "negative": false
+      },
+      {
+        "code": "S",
+        "value": 110.78802903423936,
+        "negative": false
+      },
+      {
+        "code": "0",
+        "value": 184.63934396005314,
+        "negative": false
+      },
+      {
+        "code": "3",
+        "value": 98.468402175,
+        "negative": true
+      }
+    ],
+    "profile": "fast",
+    "scenario": {},
+    "headshotChance": 0.5
+  },
+  "result": {
+    "buildLabel": "2026.08.13.13.24",
+    "schemaVersion": 3,
+    "weapon": {
+      "path": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+      "nameInternal": "BioWeapon",
+      "nameEn": "Torid",
+      "nameZh": "托里德"
+    },
+    "fireMode": 1,
+    "metric": "killsPerMinute",
+    "scoreMetric": "killsPerMinute",
+    "contextHash": "df9f37657abc3b43a405",
+    "evaluationScenario": {
+      "aiming": false,
+      "incarnonCycle": false,
+      "heavyAttack": false,
+      "triggerPolicy": "emergent",
+      "distance": null,
+      "cloaked": false,
+      "nearestEnemyDistance": null,
+      "comboTier": 0,
+      "detonationDelaySeconds": 0.0,
+      "detonationBatchSize": 1,
+      "combatState": {}
+    },
+    "requestedTarget": {
+      "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+      "level": 170,
+      "steelPath": true,
+      "eximus": true,
+      "windowSeconds": 30.0,
+      "armourStrip": 0.0,
+      "headshotChance": 0.5
+    },
+    "evaluationTarget": {
+      "enemyPath": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+      "enemyName": "Thrax Centurion",
+      "level": 522,
+      "steelPath": true,
+      "enemyEnhancements": {
+        "eximus": true
+      },
+      "armourStrip": 0.0,
+      "elementalArmourStrip": 0.0,
+      "hitLocation": "body",
+      "headshotChance": 0.5,
+      "windowSeconds": 30.0
+    },
+    "targetCalibration": {
+      "version": "target-calibration-v2",
+      "status": "post-search-saturated",
+      "requestedLevel": 170,
+      "evaluationLevel": 522,
+      "iterations": [
+        {
+          "iteration": 0,
+          "level": 170,
+          "probes": {
+            "baseline": {
+              "killsPerMinute": 17.593247559033184,
+              "killsInWindow": 8.796623779516594,
+              "firstKillTime": 3.3552630519390574,
+              "minKillInterval": 3.4210525235456757,
+              "maxKillsPerStep": 0,
+              "directEventLedger": {
+                "model": "direct-event-ledger-v1",
+                "attacks": 457,
+                "kills": 19,
+                "killsPerMinute": 38.0,
+                "firstKillTime": 1.4473683753462618,
+                "staleComponents": 0,
+                "targetGeneration": 19,
+                "remainingHealth": 251630.6097379889,
+                "traceCollected": false,
+                "trace": [],
+                "status": "diagnostic-static-defense",
+                "perShotDamage": 125723.00961747057
+              },
+              "pressureReasons": [],
+              "pressureInsufficient": false,
+              "pressureDiagnostics": {
+                "maxKillsPerStep": 0,
+                "attackPeriod": 0.06564551422319476,
+                "resolutionFloor": 0.375,
+                "eventLedgerStatus": "diagnostic-static-defense",
+                "multipleKillsPerStepIsDiagnosticOnly": true
+              }
+            },
+            "actual": {
+              "killsPerMinute": 24.68781379040258,
+              "killsInWindow": 12.34390689520129,
+              "firstKillTime": 2.3684209778393366,
+              "minKillInterval": 2.4342104494459615,
+              "maxKillsPerStep": 0,
+              "directEventLedger": {
+                "model": "direct-event-ledger-v1",
+                "attacks": 457,
+                "kills": 30,
+                "killsPerMinute": 60.0,
+                "firstKillTime": 0.9210526024930756,
+                "staleComponents": 0,
+                "targetGeneration": 30,
+                "remainingHealth": 1443663.5240185736,
+                "traceCollected": false,
+                "trace": [],
+                "status": "diagnostic-static-defense",
+                "perShotDamage": 188918.1825812611
+              },
+              "pressureReasons": [],
+              "pressureInsufficient": false,
+              "pressureDiagnostics": {
+                "maxKillsPerStep": 0,
+                "attackPeriod": 0.06564551422319476,
+                "resolutionFloor": 0.375,
+                "eventLedgerStatus": "diagnostic-static-defense",
+                "multipleKillsPerStepIsDiagnosticOnly": true
+              }
+            }
+          }
+        }
+      ],
+      "maxIterations": 5,
+      "postSearchProbe": {
+        "killsPerMinute": 57.019038252549464,
+        "killsInWindow": 28.509519126274732,
+        "firstKillTime": 0.986842074099724,
+        "minKillInterval": 1.0526315457063617,
+        "maxKillsPerStep": 0,
+        "directEventLedger": {
+          "model": "direct-event-ledger-v1",
+          "attacks": 457,
+          "kills": 45,
+          "killsPerMinute": 90.0,
+          "firstKillTime": 0.5921052444598344,
+          "staleComponents": 0,
+          "targetGeneration": 45,
+          "remainingHealth": 1346948.808404428,
+          "traceCollected": false,
+          "trace": [],
+          "status": "diagnostic-static-defense",
+          "perShotDamage": 555873.905114546
+        },
+        "pressureReasons": [
+          "first-kill-below-pressure-floor"
+        ],
+        "pressureInsufficient": true,
+        "pressureDiagnostics": {
+          "maxKillsPerStep": 0,
+          "attackPeriod": 0.06564551422319476,
+          "resolutionFloor": 0.375,
+          "eventLedgerStatus": "diagnostic-static-defense",
+          "multipleKillsPerStepIsDiagnosticOnly": true
+        }
+      },
+      "postSearchEscalation": {
+        "iterations": [
+          {
+            "iteration": 0,
+            "level": 298,
+            "outcome": "still-saturated"
+          },
+          {
+            "iteration": 1,
+            "level": 522,
+            "outcome": "pressure-ok"
+          }
+        ],
+        "finalLevel": 522
+      },
+      "formalSearchLevel": 522,
+      "formalSearchMetric": "windowedDps"
+    },
+    "searchQuality": {
+      "objectiveMetric": "killsPerMinute",
+      "scoreMetric": "killsPerMinute",
+      "fallbackReason": null,
+      "targetCalibrated": false,
+      "targetCalibrationStatus": "post-search-saturated",
+      "qualityCalibrated": false,
+      "qualityCacheHit": false,
+      "profile": "fast",
+      "bakeStaticsOnly": false
+    },
+    "scoreBasis": "best-known-search-result",
+    "modelStatus": "modeled",
+    "targetStatus": "saturated-unresolved",
+    "searchStatus": {
+      "profile": "fast",
+      "metric": "killsPerMinute",
+      "scope": "beam-and-hill-climb",
+      "status": "heuristic-budget-limited",
+      "scoreBasis": "best-known-search-result",
+      "work": {
+        "evaluations": 8492,
+        "memoHits": 0,
+        "limited": 13,
+        "elapsedSeconds": 45.76703350000025,
+        "budgetSeconds": 45.000000300000465,
+        "status": "heuristic-budget-limited"
+      }
+    },
+    "optimalityStatus": {
+      "baseline": "heuristic",
+      "recommended": "heuristic",
+      "optimal": "lower-bound",
+      "actualIncludedAsLowerBound": true,
+      "scope": "beam-and-hill-climb"
+    },
+    "scoringValues": {
+      "baseline": 1085271.0564664924,
+      "actual": 846340.3136075482,
+      "optimal": 4977824.897431338
+    },
+    "score": null,
+    "grade": "UNRESOLVED",
+    "scoreStatus": "unresolved-lower-bound",
+    "scoreStatusReason": "optimizer-optimum-lower-bound",
+    "actualGain": -22.015766608286125,
+    "optimalGain": 358.671118866702,
+    "rollQuality": 52.63819095477385,
+    "details": [
+      {
+        "code": "D",
+        "label": "基础伤害",
+        "value": 203.1110102527594,
+        "low": 180.7687991249559,
+        "high": 221.187890165255,
+        "quality": 55.27638190954768,
+        "delta": 12527988.10233923,
+        "ablationDelta": 12527988.10233923,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": true,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "S",
+        "label": "多重射击",
+        "value": 110.78802903423936,
+        "low": 98.60134584047304,
+        "high": 120.64816361828667,
+        "quality": 55.27638190954768,
+        "delta": 8730010.240343759,
+        "ablationDelta": 8730010.240343759,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": false,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "0",
+        "label": "暴击几率",
+        "value": 184.63934396005314,
+        "low": 164.3290161244473,
+        "high": 201.07224557249785,
+        "quality": 55.276381909547766,
+        "delta": 12028404.664984439,
+        "ablationDelta": 12028404.664984439,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": false,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "3",
+        "label": "触发时间",
+        "value": 98.468402175,
+        "low": 87.63687793575,
+        "high": 107.232089968575,
+        "quality": 44.72361809045226,
+        "delta": 3698367.2160755065,
+        "ablationDelta": 3698367.2160755065,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": false,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      }
+    ],
+    "recommendedPositive": [
+      "腐蚀伤害",
+      "暴击伤害",
+      "基础伤害"
+    ],
+    "recommendedPositiveTiers": [
+      {
+        "tier": "T0",
+        "stats": [
+          {
+            "code": "CO",
+            "label": "腐蚀伤害",
+            "gain": 146.7000506509098,
+            "score": 100.0
+          }
+        ]
+      },
+      {
+        "tier": "T2",
+        "stats": [
+          {
+            "code": "1",
+            "label": "暴击伤害",
+            "gain": 62.38883476264401,
+            "score": 42.52816170534641
+          }
+        ]
+      },
+      {
+        "tier": "T3",
+        "stats": [
+          {
+            "code": "Y",
+            "label": "弱点暴击几率",
+            "gain": 57.5088045146257,
+            "score": 39.2016255341825
+          },
+          {
+            "code": "W",
+            "label": "弱点伤害",
+            "gain": 49.405832388960704,
+            "score": 33.67812905976955
+          },
+          {
+            "code": "D",
+            "label": "基础伤害",
+            "gain": 44.35123160530512,
+            "score": 30.232594609557527
+          }
+        ]
+      }
+    ],
+    "recommendedRoutes": null,
+    "recommendedNegative": [
+      "变焦",
+      "弹药最大值",
+      "武器后坐力"
+    ],
+    "fatalNegative": [],
+    "baseline": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+          "nameInternal": "CorruptedDamageRecoilRifle",
+          "nameEn": "Heavy Caliber",
+          "nameZh": "重口径",
+          "rank": 10,
+          "slot": 0,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 55.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.97000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 14.96
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.97000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 9.89999978
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 3.9600001099999997
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 33.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 16.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 11.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 19.25
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+          "nameInternal": "WeaponWeakpointCriticalChanceMod",
+          "nameEn": "Primary Acuity",
+          "nameZh": "敏锐主武",
+          "rank": 10,
+          "slot": 1,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 3.49799989
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 3.49799989
+            },
+            {
+              "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+              "damageType": null,
+              "operation": "SET",
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+          "nameInternal": "WeaponFreezeDamageModExpert",
+          "nameEn": "Primed Cryo Rounds",
+          "nameZh": "低温弹头 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FREEZE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+          "nameInternal": "WeaponCritDamageMod",
+          "nameEn": "Vital Sense",
+          "nameZh": "弱点感应",
+          "rank": 5,
+          "slot": 3,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+          "nameInternal": "CorruptedFireRateDamageRifle",
+          "nameEn": "Vile Acceleration",
+          "nameZh": "卑劣加速",
+          "rank": 5,
+          "slot": 4,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            },
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": -0.15000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+          "nameInternal": "WeaponDamageAmountMod",
+          "nameEn": "Serration",
+          "nameZh": "膛线",
+          "rank": 10,
+          "slot": 5,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+          "nameInternal": "MagneticClipRifleMod",
+          "nameEn": "Magnetic Capacity",
+          "nameZh": "磁性弹容",
+          "rank": 3,
+          "slot": 6,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CLIP_MAX",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+          "nameInternal": "WeaponFireIterationsMod",
+          "nameEn": "Split Chamber",
+          "nameZh": "分裂膛室",
+          "rank": 5,
+          "slot": 7,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            }
+          ]
+        }
+      ],
+      "includesRiven": false,
+      "victimStatusCount": 2,
+      "shotDamage": 4901.771484183755,
+      "burstDps": 74506.92891244339,
+      "sustainedDps": 74506.9289124434,
+      "attackDps": 74506.92891244339,
+      "heavyDamage": 74506.92891244339,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 74506.92891244339,
+      "unsupported": [],
+      "forma": {
+        "regular": 8,
+        "umbra": 0,
+        "stance": 0,
+        "total": 8
+      },
+      "objectiveScore": 12.431355694126495,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 1085271.0564664924
+    },
+    "actual": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+          "nameInternal": "CorruptedDamageRecoilRifle",
+          "nameEn": "Heavy Caliber",
+          "nameZh": "重口径",
+          "rank": 10,
+          "slot": 0,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 55.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.97000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 14.96
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.97000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 9.89999978
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 3.9600001099999997
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 33.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 16.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 11.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 19.25
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+          "nameInternal": "WeaponWeakpointCriticalChanceMod",
+          "nameEn": "Primary Acuity",
+          "nameZh": "敏锐主武",
+          "rank": 10,
+          "slot": 1,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 3.49799989
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 3.49799989
+            },
+            {
+              "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+              "damageType": null,
+              "operation": "SET",
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+          "nameInternal": "WeaponFreezeDamageModExpert",
+          "nameEn": "Primed Cryo Rounds",
+          "nameZh": "低温弹头 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FREEZE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+          "nameInternal": "WeaponCritDamageMod",
+          "nameEn": "Vital Sense",
+          "nameZh": "弱点感应",
+          "rank": 5,
+          "slot": 3,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+          "nameInternal": "CorruptedFireRateDamageRifle",
+          "nameEn": "Vile Acceleration",
+          "nameZh": "卑劣加速",
+          "rank": 5,
+          "slot": 4,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            },
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": -0.15000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+          "nameInternal": "WeaponDamageAmountMod",
+          "nameEn": "Serration",
+          "nameZh": "膛线",
+          "rank": 10,
+          "slot": 5,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+          "nameInternal": "MagneticClipRifleMod",
+          "nameEn": "Magnetic Capacity",
+          "nameZh": "磁性弹容",
+          "rank": 3,
+          "slot": 6,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CLIP_MAX",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 2,
+      "shotDamage": 16997.6657247307,
+      "burstDps": 258364.5271747862,
+      "sustainedDps": 258364.52717478623,
+      "attackDps": 258364.5271747862,
+      "heavyDamage": 258364.5271747862,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 258364.5271747862,
+      "unsupported": [],
+      "riven": {
+        "slot": 7,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "D",
+            "value": 203.1110102527594,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 110.78802903423936,
+            "negative": false
+          },
+          {
+            "code": "0",
+            "value": 184.63934396005314,
+            "negative": false
+          },
+          {
+            "code": "3",
+            "value": 98.468402175,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "D",
+          "label": "基础伤害",
+          "value": 203.1110102527594,
+          "low": 180.7687991249559,
+          "high": 221.187890165255,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "S",
+          "label": "多重射击",
+          "value": 110.78802903423936,
+          "low": 98.60134584047304,
+          "high": 120.64816361828667,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "0",
+          "label": "暴击几率",
+          "value": 184.63934396005314,
+          "low": 164.3290161244473,
+          "high": 201.07224557249785,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "3",
+          "label": "触发时间",
+          "value": 98.468402175,
+          "low": 87.63687793575,
+          "high": 107.232089968575,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 8,
+        "umbra": 0,
+        "stance": 0,
+        "total": 8
+      },
+      "objectiveScore": 9.694497438261703,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 846340.3136075482,
+      "alternateModes": [
+        {
+          "fireMode": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+          "isAlternateFire": false,
+          "isIncarnonForm": false,
+          "shotDamage": 11843.040681014525,
+          "burstDps": 33752.667006765056,
+          "sustainedDps": 19946.700379528094,
+          "attackDps": 33752.667006765056
+        }
+      ]
+    },
+    "bestFound": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+          "nameInternal": "CorruptedDamageRecoilRifle",
+          "nameEn": "Heavy Caliber",
+          "nameZh": "重口径",
+          "rank": 10,
+          "slot": 0,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 55.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.97000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 14.96
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.97000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 9.89999978
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 3.9600001099999997
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 33.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 16.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 11.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 19.25
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+          "nameInternal": "WeaponWeakpointCriticalChanceMod",
+          "nameEn": "Primary Acuity",
+          "nameZh": "敏锐主武",
+          "rank": 10,
+          "slot": 1,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 3.49799989
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 3.49799989
+            },
+            {
+              "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+              "damageType": null,
+              "operation": "SET",
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+          "nameInternal": "WeaponFreezeDamageModExpert",
+          "nameEn": "Primed Cryo Rounds",
+          "nameZh": "低温弹头 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FREEZE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+          "nameInternal": "WeaponCritDamageMod",
+          "nameEn": "Vital Sense",
+          "nameZh": "弱点感应",
+          "rank": 5,
+          "slot": 3,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+          "nameInternal": "CorruptedFireRateDamageRifle",
+          "nameEn": "Vile Acceleration",
+          "nameZh": "卑劣加速",
+          "rank": 5,
+          "slot": 4,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            },
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": -0.15000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+          "nameInternal": "WeaponDamageAmountMod",
+          "nameEn": "Serration",
+          "nameZh": "膛线",
+          "rank": 10,
+          "slot": 5,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+          "nameInternal": "MagneticClipRifleMod",
+          "nameEn": "Magnetic Capacity",
+          "nameZh": "磁性弹容",
+          "rank": 3,
+          "slot": 6,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CLIP_MAX",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 3,
+      "shotDamage": 16653.720973791733,
+      "burstDps": 253136.56679542043,
+      "sustainedDps": 253136.56679542048,
+      "attackDps": 253136.5667954204,
+      "heavyDamage": 253136.5667954204,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 253136.5667954204,
+      "unsupported": [
+        "WEAPON_ZOOM"
+      ],
+      "riven": {
+        "slot": 7,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "CO",
+            "value": 120.64816361828669,
+            "negative": false
+          },
+          {
+            "code": "1",
+            "value": 160.86019976946565,
+            "negative": false
+          },
+          {
+            "code": "D",
+            "value": 221.18789016525503,
+            "negative": false
+          },
+          {
+            "code": "H",
+            "value": 64.33925398114499,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "CO",
+          "label": "腐蚀伤害",
+          "value": 120.64816361828669,
+          "low": 0.0,
+          "high": 120.64816361828669,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "1",
+          "label": "暴击伤害",
+          "value": 160.86019976946565,
+          "low": 0.0,
+          "high": 160.86019976946565,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "D",
+          "label": "基础伤害",
+          "value": 221.18789016525503,
+          "low": 0.0,
+          "high": 221.18789016525503,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "H",
+          "label": "变焦",
+          "value": 64.33925398114499,
+          "low": 0.0,
+          "high": 64.33925398114499,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 8,
+        "umbra": 0,
+        "stance": 0,
+        "total": 8
+      },
+      "objectiveScore": 57.019038252549464,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 4977824.897431338
+    },
+    "optimal": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+          "nameInternal": "CorruptedDamageRecoilRifle",
+          "nameEn": "Heavy Caliber",
+          "nameZh": "重口径",
+          "rank": 10,
+          "slot": 0,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 55.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.97000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 14.96
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.97000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 9.89999978
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 3.9600001099999997
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 33.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 16.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 11.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 19.25
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+          "nameInternal": "WeaponWeakpointCriticalChanceMod",
+          "nameEn": "Primary Acuity",
+          "nameZh": "敏锐主武",
+          "rank": 10,
+          "slot": 1,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_WEAKPOINT",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 3.49799989
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 3.49799989
+            },
+            {
+              "upgradeType": "RUNTIME_LOCK_MULTISHOT",
+              "damageType": null,
+              "operation": "SET",
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+          "nameInternal": "WeaponFreezeDamageModExpert",
+          "nameEn": "Primed Cryo Rounds",
+          "nameZh": "低温弹头 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FREEZE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+          "nameInternal": "WeaponCritDamageMod",
+          "nameEn": "Vital Sense",
+          "nameZh": "弱点感应",
+          "rank": 5,
+          "slot": 3,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+          "nameInternal": "CorruptedFireRateDamageRifle",
+          "nameEn": "Vile Acceleration",
+          "nameZh": "卑劣加速",
+          "rank": 5,
+          "slot": 4,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            },
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": -0.15000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+          "nameInternal": "WeaponDamageAmountMod",
+          "nameEn": "Serration",
+          "nameZh": "膛线",
+          "rank": 10,
+          "slot": 5,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+          "nameInternal": "MagneticClipRifleMod",
+          "nameEn": "Magnetic Capacity",
+          "nameZh": "磁性弹容",
+          "rank": 3,
+          "slot": 6,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CLIP_MAX",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 3,
+      "shotDamage": 16653.720973791733,
+      "burstDps": 253136.56679542043,
+      "sustainedDps": 253136.56679542048,
+      "attackDps": 253136.5667954204,
+      "heavyDamage": 253136.5667954204,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 253136.5667954204,
+      "unsupported": [
+        "WEAPON_ZOOM"
+      ],
+      "riven": {
+        "slot": 7,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "CO",
+            "value": 120.64816361828669,
+            "negative": false
+          },
+          {
+            "code": "1",
+            "value": 160.86019976946565,
+            "negative": false
+          },
+          {
+            "code": "D",
+            "value": 221.18789016525503,
+            "negative": false
+          },
+          {
+            "code": "H",
+            "value": 64.33925398114499,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "CO",
+          "label": "腐蚀伤害",
+          "value": 120.64816361828669,
+          "low": 0.0,
+          "high": 120.64816361828669,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "1",
+          "label": "暴击伤害",
+          "value": 160.86019976946565,
+          "low": 0.0,
+          "high": 160.86019976946565,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "D",
+          "label": "基础伤害",
+          "value": 221.18789016525503,
+          "low": 0.0,
+          "high": 221.18789016525503,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "H",
+          "label": "变焦",
+          "value": 64.33925398114499,
+          "low": 0.0,
+          "high": 64.33925398114499,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 8,
+        "umbra": 0,
+        "stance": 0,
+        "total": 8
+      },
+      "objectiveScore": 57.019038252549464,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 4977824.897431338
+    },
+    "incarnonChoices": {
+      "tier2": "2-1",
+      "tier3": "3-1",
+      "tier4": "4-2"
+    },
+    "incarnonPolicy": {
+      "adapter": "/Lotus/Types/Items/MiscItems/IncarnonAdapters/Primary/ToridIncarnonUnlocker",
+      "strategyKey": "ToridIncarnonUnlocker",
+      "sampledAt": "2026-08-18T00:00:00+08:00",
+      "gameBuild": "2026.08.13.13.24",
+      "matched": true,
+      "objective": "general status and Incarnon clear",
+      "confidence": "high",
+      "sources": [
+        "https://overframe.gg/build/472389/",
+        "https://overframe.gg/build/472595/",
+        "https://news.17173.com/z/xjzj/content/09252024/145906561.shtml"
+      ],
+      "builds": [
+        {
+          "id": 472389,
+          "votes": 2922,
+          "updated": "2026-06-03"
+        },
+        {
+          "id": 472595,
+          "votes": 252
+        }
+      ],
+      "alternatives": [
+        {
+          "tier2": "2-1",
+          "tier3": "3-1",
+          "tier4": "4-1"
+        }
+      ],
+      "sourceKind": "whole-build-votes",
+      "selectionMode": "community-default",
+      "appliedTiers": [
+        "tier2",
+        "tier3",
+        "tier4"
+      ]
+    },
+    "arcaneStates": [],
+    "stance": null,
+    "unsupported": [
+      "WEAPON_ZOOM",
+      "target-calibration-post-search-still-saturated"
+    ],
+    "skipped": [
+      "target-calibration: post-search winner saturated; escalated to Lv522 and re-ran the formal baseline/actual/bestFound search in the frozen final context",
+      "optimizer-assumption: 8 slots, 60 capacity, Catalyst and matching Forma",
+      "optimizer-objective: 评价靶 KPM（Lv522 钢铁之路卓越者超宏凶魂百夫长，30s 击杀数）；触发从零层爬升、护甲/超宏/等级缩放全部参与，流派不钳制（实战双修口径）",
+      "optimizer-fire-mode: 灵化武器默认使用灵化形态（模式 2），其余模式仅展示",
+      "mod-family exclusivity checked by exported nameTag and weapon compatibility tags; account-specific conflicts are not exported",
+      "Riven template values recovered from frozen build 2026.08.13.13.24",
+      "recommended Riven stats use theoretical max-roll values from the active frozen build",
+      "optimizer-profile: 快速档（beam 12/32，无爬山；词条分层为粗排口径）",
+      "optimizer-search: profile fast, 86 candidate mods, 20 unsupported mods rejected",
+      "target-calibration: post-search-saturated · requested Lv170 → evaluation Lv522 · iterations 1",
+      "riven:H: unsupported[no-handler]",
+      "riven:theoretical:H: unsupported[no-handler]",
+      "搜索达到交互预算，返回已找到的合法配装；未证明全局最优"
+    ],
+    "profile": "fast",
+    "searchWork": {
+      "evaluations": 8492,
+      "memoHits": 0,
+      "limited": 13,
+      "elapsedSeconds": 45.76703350000025,
+      "budgetSeconds": 45.000000300000465,
+      "status": "heuristic-budget-limited"
+    },
+    "responseCache": "miss",
+    "weaponMechanics": {
+      "mechanicIds": [
+        "torid-projectile-field"
+      ],
+      "status": "conditional-supported",
+      "parts": {
+        "direct": "supported",
+        "field": "conditional-supported"
+      },
+      "fieldContract": {
+        "damageType": "DT_POISON",
+        "damagePerTick": 40,
+        "procChance": 0.25,
+        "radius": 3.0,
+        "durationSeconds": 10.0,
+        "tickIntervalSeconds": 1.0,
+        "tickIntervalNote": "引擎逆向证实（2026-09-23）：fn_14189a0ad 的 tick 阈值常量 0x14203bf94=1.0f，计时器 obj+0x8d0 以 dt×[projConfig+0x294] 累积，≥1.0 结算一次 EmbedAttack。BioGrenadeProjectile 导出无 TickRate 字段→引擎默认 1.0/s。与 wfsim 实测一致。",
+        "evolutionRenewedHorror": "ToridEvoTier3B 将场时长 ×2（空仓装填后的第一发，脚本 ProjectileEmbedTimeOnCondition.lua，_embedDurationMultiplier=2）"
+      },
+      "fieldShareReference": 0.78,
+      "notes": [
+        "毒云没有独立游戏对象：完整 Fx 链（ToxicGrenadePoisonCloudSpawner→Smoke/Spots/BioPoisonImpact/RangeDeco）全部是纯视觉；伤害合同就是投射物的 EmbedAttack。",
+        "直击 100 DT_POISON / proc 0.23 / 暴击 15%/×2 / DamageRadius 10 / CanStick / 强制 PT_STAGGERED+PT_BIG_STAGGER。",
+        "EmbedAttack 40 DT_POISON / proc 0.25 / EmbedDamageRadius 3 / EmbedTime [10,10]——这是场的伤害合同。",
+        "tick 间隔 1.0s：引擎二进制逆向证实（fn_14189a0ad 常量 0x14203bf94=1.0f），不再依赖 wfsim 实测标注。",
+        "Incarnon 光束（Behaviors[1]）：51 DT_POISON / proc 0.39 / 暴击 29%/×3.1 / 8/s / 射程 37 / 光束半径 2.3 / 5 链×0.75@7m / 170 充能（+34/直击）——无场组件。",
+        "fieldShareReference 0.78 只是 wfsim 的社区参考比例，不得当作通用补偿乘率。",
+        "BioGrenade.lua 反汇编（Font 包提取）确认：仅 OnContact 播放嵌入动画（fast/slow anim rate lerp），无伤害逻辑。"
+      ],
+      "sources": [
+        "raw-export: Lotus/Weapons/ClanTech/Bio/BioGrenadeProjectile.json (AttackData, EmbedAttack, EmbedDamageRadius, EmbedTime, EmbedEffect)",
+        "raw-export: Lotus/Weapons/ClanTech/Bio/BioWeapon.json (Behaviors[1] Incarnon beam)",
+        "engine-reverse: Warframe.x64.exe fn_14189a0ad tick threshold 0x14203bf94=1.0f (see .local/research/engine-embed-tick.json)",
+        "luau-disasm: Font package BioGrenade.lua (animation-only)",
+        "cross-reference: wfsim field tick_rate 1/s (measured, agrees)"
+      ]
+    },
+    "disposition": 1.3,
+    "innateElement": null,
+    "innateElementCandidates": []
+  },
+  "coldSeconds": 45.77039709999917,
+  "warmSeconds": 0.002034299999650102,
+  "replays": {
+    "baseline": {
+      "request": {
+        "weapon": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+        "disposition": 1.3,
+        "profile": "fast",
+        "scenario": {},
+        "headshotChance": 0.5,
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-1",
+          "tier3": "3-1",
+          "tier4": "4-2"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 522,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute"
+      },
+      "objectiveScore": 12.431355694126495,
+      "manualKpm": 12.431355694126495,
+      "passed": true,
+      "unsupported": [],
+      "shots": 457,
+      "transforms": 0,
+      "rivenSlot": null,
+      "targetTotalEhp": 5238066.14420625,
+      "manualDetonation": null
+    },
+    "actual": {
+      "request": {
+        "weapon": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+        "disposition": 1.3,
+        "profile": "fast",
+        "scenario": {},
+        "headshotChance": 0.5,
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-1",
+          "tier3": "3-1",
+          "tier4": "4-2"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 6
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 522,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 7,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "D",
+              "value": 203.1110102527594,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 110.78802903423936,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 184.63934396005314,
+              "negative": false
+            },
+            {
+              "code": "3",
+              "value": 98.468402175,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 9.694497438261703,
+      "manualKpm": 9.694497438261703,
+      "passed": true,
+      "unsupported": [],
+      "shots": 457,
+      "transforms": 0,
+      "rivenSlot": 7,
+      "targetTotalEhp": 5238066.14420625,
+      "manualDetonation": null
+    },
+    "optimal": {
+      "request": {
+        "weapon": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+        "disposition": 1.3,
+        "profile": "fast",
+        "scenario": {},
+        "headshotChance": 0.5,
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-1",
+          "tier3": "3-1",
+          "tier4": "4-2"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 6
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 522,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 7,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "CO",
+              "value": 120.64816361828669,
+              "negative": false
+            },
+            {
+              "code": "1",
+              "value": 160.86019976946565,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 221.18789016525503,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 64.33925398114499,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 57.019038252549464,
+      "manualKpm": 57.019038252549464,
+      "passed": true,
+      "unsupported": [
+        "WEAPON_ZOOM"
+      ],
+      "shots": 457,
+      "transforms": 0,
+      "rivenSlot": 7,
+      "targetTotalEhp": 5238066.14420625,
+      "manualDetonation": null
+    }
+  },
+  "passed": true
+}

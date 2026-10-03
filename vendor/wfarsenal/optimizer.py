@@ -18,6 +18,7 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from statistics import median
 from typing import Any, Iterable, Mapping, Sequence
+from .search_session import SESSION, session_request, memoized_search, heartbeat, phase_deadline, expired
 
 from .damage import (
     BASE_ELEMENTS,
@@ -1824,11 +1825,15 @@ def _evaluate(
     special_cards: Sequence[_Card] = (),
     special_capacity_cost: int = 0,
     target_context: Mapping[str, Any] | None = None,
+    fixed_riven_index: int | None = None,
 ) -> _Evaluation | None:
+    heartbeat(1)
     if len(cards) + (1 if riven else 0) > slot_limit:
         return None
     positions: Iterable[int | None] = (None,)
-    if riven is not None:
+    if riven is not None and fixed_riven_index is not None:
+        positions = (fixed_riven_index,)
+    elif riven is not None:
         polarity_sensitive = False  # all cards use matching Forma in this model
         element_sensitive = any(
             effect.damage_type in BASE_ELEMENTS for effect in riven.effects
@@ -1888,6 +1893,7 @@ def _evaluate(
     return best
 
 
+@memoized_search
 def _optimize(
     weapon: Mapping[str, Any],
     candidates: Sequence[_Card],
@@ -1930,6 +1936,7 @@ def _optimize(
         beam_width = min(beam_width, 24)
         shortlist = min(shortlist, 40)
     climb_rounds = {"fast": 0, "standard": 3, "deep": 12}[profile]
+    deadline = phase_deadline()
     if isinstance(slot_count, bool) or not isinstance(slot_count, int) or not 1 <= slot_count <= 8:
         raise SimulationError("slot_count must be an integer between 1 and 8")
     if isinstance(capacity_limit, bool) or not isinstance(capacity_limit, int) or capacity_limit < 0:
@@ -2163,6 +2170,8 @@ def _optimize(
                 best = seed_eval
     for _ in range(limit):
         expanded: list[tuple[tuple[int, ...], _Evaluation]] = []
+        if expired(deadline):
+            break
         # ── 并行层扩展（物理核进程池；串行回退=1 核或 WF_ANALYZER_SERIAL）──
         # 每层数百次独立评估分发到 worker；worker 只回 score（避免 stats
         # 的深 pickle），beam 幸存者与 incumbent 在父进程串行重评估以附上
@@ -2182,16 +2191,21 @@ def _optimize(
         scores: list[float | None] = []
         if layer_jobs:
             if _pool_exec is not None and len(layer_jobs) >= 8:
-                futures = [
-                    _pool_exec.submit(
-                        _parallel._score_job, (cards, riven, _pool_ctx)
-                    )
-                    for _sel, cards in layer_jobs
-                ]
-                scores = [fut.result() for fut in futures]
+                # Keep only a bounded batch in flight. A deadline must not
+                # leave thousands of queued replay jobs running after return.
+                for offset in range(0, len(layer_jobs), 16):
+                    if expired(deadline):
+                        break
+                    batch = layer_jobs[offset:offset + 16]
+                    futures = [_pool_exec.submit(_parallel._score_job,
+                               (cards, riven, _pool_ctx)) for _sel, cards in batch]
+                    scores.extend(fut.result() for fut in futures)
+                    heartbeat(len(batch))
             else:
                 scores = []
                 for _sel, cards in layer_jobs:
+                    if expired(deadline):
+                        break
                     evaluated = _evaluate(
                         weapon,
                         cards,
@@ -2300,7 +2314,7 @@ def _optimize(
             max_fill=max_fill,
         )
 
-    while improved and climb_guard < climb_rounds:
+    while improved and climb_guard < climb_rounds and not expired(deadline):
         improved = False
         climb_guard += 1
         base_cards = list(best.cards)
@@ -2310,6 +2324,8 @@ def _optimize(
         # 被移除卡的槽位（保持元素边界，不追加到末尾）。
         for drop_pos, dropped in enumerate(base_optional):
             for card in pool:
+                if expired(deadline):
+                    break
                 if card.key in {c.key for c in base_cards}:
                     continue
                 if _mod_family(card) in {
@@ -2491,7 +2507,7 @@ def _optimize(
                 capacity_limit=capacity_limit,
                 target_context=target_context,
             )
-            if filled is None or not eligible(filled):
+            if filled is None or not eligible(filled) or filled.score < best.score:
                 continue
             best = filled
             used_keys.add(card.key)
@@ -2509,6 +2525,7 @@ def _optimize(
     return best
 
 
+@memoized_search
 def _best_fixed(
     weapon: Mapping[str, Any],
     base_cards: Sequence[_Card],
@@ -2532,8 +2549,9 @@ def _best_fixed(
             passives=passives, capacity_limit=capacity_limit,
             target_context=target_context,
         )
-    if max_keep_cap is not None:
-        max_keep = min(max_keep, max_keep_cap)
+    # A search budget cannot mean forcibly deleting equipped mods. Start at
+    # the largest legal subset (usually only 1 or 8 candidates), preserving
+    # the available build and avoiding C(8,5) repeated replay explosions.
     for keep in range(max_keep, -1, -1):
         evaluated = [
             value
@@ -2757,6 +2775,7 @@ def _recommend_positive(
     #   standard — 单词条粗排 + 头部组合枚举（shortlist 8）+ 边际贡献，
     #               _best_fixed 的子集枚举上限压到 5（2^5=32 而非 2^7=128）。
     #   deep     — 完整口径（现状）。
+    deadline = phase_deadline()
     keep_cap = {"fast": 3, "standard": 5, "deep": None}[profile]
     # ── 单词条粗排并行化（每词条一次 _best_fixed 的子集枚举——40+ 次
     # 独立的重量评估；物理核 worker 池，串行回退）──────────────────────
@@ -2851,6 +2870,8 @@ def _recommend_positive(
         )
     else:
         for combo in itertools.combinations(shortlist, count):
+            if best_result is not None and expired(deadline):
+                break
             # 融合词条每卡限 1 条（游戏规则）：含 2+ 融合的组合非法。
             if not _combo_allows_fusion(combo):
                 continue
@@ -2873,7 +2894,7 @@ def _recommend_positive(
     # mod slot it replaces even when that affix is valuable on a complete card.
     # 快速档跳过边际贡献阶段：单词条粗排已有分数，直接归一化出分层。
     marginal: list[tuple[float, _RivenLine]] = []
-    if profile == "fast":
+    if profile == "fast" or expired(deadline):
         # 单词条分数相对「同一基装配紫卡（空词条组）」归一化：粗排口径，
         # 分层只作参考（无组合上下文），但零组合枚举成本。
         bare_base = _best_fixed(
@@ -3862,6 +3883,7 @@ def _arcane_timeline(
     }
 
 
+@session_request
 def analyze_riven_request(
     export_dir: str | Path,
     request: Mapping[str, Any],
@@ -3887,6 +3909,8 @@ def analyze_riven_request(
     供 HTTP 层向前端报告分析进度；None 时零开销。
     """
     def _progress(stage: str) -> None:
+        if SESSION.get() is not None:
+            SESSION.get()['stage'] = stage
         if progress_hook is not None:
             try:
                 progress_hook(stage)
@@ -4228,6 +4252,12 @@ def analyze_riven_request(
     # 变化（推荐候选恒为理论满数值口径），仅依赖武器/开火模式/倾向/容量上限
     # 与默认灵化策略；组合装配、显式灵化/赋能、时间线请求与显式搜索约束
     # （必选/禁选/数量范围）绕过缓存——缓存是「无约束最优」口径。
+    # Standard/deep previously selected the final displayed builds by DPS in
+    # a second full pass. Rank on that final metric from the start instead;
+    # KPM remains a separately measured combat KPI for these same builds.
+    ranking_metric = ('windowedDps' if objective_metric == 'killsPerMinute'
+                      and benchmark_context is not None and profile != 'fast'
+                      else objective_metric)
     cacheable = (
         statics_cache is not None
         and (not record_overridden or bool(request.get("_cacheDefaultInnate")))
@@ -4254,7 +4284,7 @@ def analyze_riven_request(
         profile,
         disposition,
         capacity_limit,
-        objective_metric,
+        ranking_metric,
         _bm,
     )
     statics: dict[str, Any] | None = None
@@ -4263,7 +4293,7 @@ def analyze_riven_request(
         if (
             isinstance(candidate_entry, dict)
             and candidate_entry.get("disposition") == disposition
-            and candidate_entry.get("metric") == objective_metric
+            and candidate_entry.get("metric") == ranking_metric
             and candidate_entry.get("capacityLimit") == capacity_limit
         ):
             statics = candidate_entry
@@ -4317,7 +4347,7 @@ def analyze_riven_request(
                     and parsed_key.get("fireMode") == fire_mode
                     and parsed_key.get("elementTarget") == (element_target_raw or "-")
                     and parsed_key.get("profile") == profile
-                    and parsed_key.get("metric") == objective_metric
+                    and parsed_key.get("metric") == ranking_metric
                     and parsed_key.get("capacityLimit") == capacity_limit
                     and parsed_key.get("disposition") == round(float(disposition), 8)
                     and _benchmark_matches_except_level(parsed_key.get("benchmark"))
@@ -4352,7 +4382,7 @@ def analyze_riven_request(
             tuple(pool_by_key[key] for key in card_keys),
             riven_card,
             scenario=scenario,
-            metric=objective_metric,
+            metric=ranking_metric,
             passives=passives,
             capacity_limit=capacity_limit,
             target_context=benchmark_context,
@@ -4403,12 +4433,12 @@ def analyze_riven_request(
             **kwargs
         )
 
-    def _apply_riven_floor_profiled(result: _Evaluation, riven_card: _Card) -> _Evaluation:
+    def _apply_riven_floor_profiled(result: _Evaluation, riven_card: _Card, *, floor_metric: str | None = None) -> _Evaluation:
         # riven floor 修正（「无紫卡最优 − 最弱卡 + 紫卡」下限）在所有档位保留：
         # 它只花 ~9 次评估，却能挡住「窄 beam 剪掉显见路径导致带紫卡反而更差」
         # 的假性负收益（快速档 beam 12 实测出现 -5% 假性负收益）。真正按档位
         # 缩的是爬山轮数与 _best_fixed 的子集枚举。
-        return _apply_riven_floor(result, riven_card)
+        return _apply_riven_floor(result, riven_card, floor_metric=floor_metric)
 
     _progress("baseline")
     baseline = _reconstruct(statics.get("baselineCards"), None) if statics else None
@@ -4418,7 +4448,7 @@ def analyze_riven_request(
             weapon,
             None,
             scenario=scenario,
-            metric=objective_metric,
+            metric=ranking_metric,
             passives=passives,
             capacity_limit=capacity_limit,
         )
@@ -4447,12 +4477,12 @@ def analyze_riven_request(
             profile,
             disposition,
             capacity_limit,
-            objective_metric,
+            ranking_metric,
             _bm,
             scoring_level=step_level,
         )
         statics["disposition"] = disposition
-        statics["metric"] = objective_metric
+        statics["metric"] = ranking_metric
         statics["capacityLimit"] = capacity_limit
         statics["scoringLevel"] = step_level
         statics["counts"] = {}  # 旧等级语境的推荐/上限作废，新语境重算
@@ -4465,7 +4495,7 @@ def analyze_riven_request(
     # seed are available, before recommendations are ranked.  Do not promote
     # a baseline merely because a stepped KPM number crossed a hard ceiling.
 
-    def _apply_riven_floor(result: _Evaluation, riven_card: _Card) -> _Evaluation:
+    def _apply_riven_floor(result: _Evaluation, riven_card: _Card, *, floor_metric: str | None = None) -> _Evaluation:
         # 梁搜索在强制含紫卡时可能中途剪掉「无紫卡最优 − 最弱卡 + 紫卡」这条
         # 显而易见的路径（部分配装在前几层协同未成形就被淘汰）。用它做下限，
         # 避免「带紫卡反而比不带差」的假性负收益。required 卡（剑风 Prime）
@@ -4547,8 +4577,8 @@ def analyze_riven_request(
                 riven_card,
                 scenario=scenario,
                 metric=(
-                    target_calibration.get("formalSearchMetric")
-                    or objective_metric
+                    floor_metric or target_calibration.get("formalSearchMetric")
+                    or ranking_metric
                 ),
                 passives=passives,
                 capacity_limit=capacity_limit,
@@ -4567,7 +4597,7 @@ def analyze_riven_request(
             weapon,
             actual_card,
             scenario=scenario,
-            metric=objective_metric,
+            metric=ranking_metric,
             passives=passives,
             capacity_limit=capacity_limit,
         ),
@@ -4672,7 +4702,7 @@ def analyze_riven_request(
                 "capped-saturated", "post-search-saturated",
             }
             formal_metric = (
-                "windowedDps" if calibration_capped else objective_metric
+                ranking_metric
             )
             if calibration_capped:
                 unsupported.append(
@@ -4742,7 +4772,7 @@ def analyze_riven_request(
             positive_candidates,
             positive_count,
             scenario=scenario,
-            metric=objective_metric,
+            metric=ranking_metric,
             passives=passives,
             capacity_limit=capacity_limit,
             target_context=benchmark_context,
@@ -4779,7 +4809,7 @@ def analyze_riven_request(
             baseline.cards,
             _card_from_lines([*recommended, line]),
             scenario=scenario,
-            metric=objective_metric,
+            metric=ranking_metric,
             passives=passives,
             capacity_limit=capacity_limit,
             target_context=benchmark_context,
@@ -4792,6 +4822,7 @@ def analyze_riven_request(
         unsupported.append("no-objective-neutral-supported-negative-stat")
 
     has_negative = any(line.negative for line in actual_lines)
+    _progress("optimal")
     # ── 理论上限（恢复版：结构系数正确 + 全量缓存）──────────────────────
     # 「N 正 + 1 负」/「N 正无负」结构按用户紫卡结构选择槽位
     # （optimalNeg/optimalClean），全量 _optimize + riven floor，进静态
@@ -4835,7 +4866,7 @@ def analyze_riven_request(
     # 饱和感知的搜索口径：压力校准封顶后 KPM 无区分度，正式搜索（含
     # optimal/上限）与评分层同口径切 windowedDps。
     _formal_search_metric = (
-        target_calibration.get("formalSearchMetric") or objective_metric
+        target_calibration.get("formalSearchMetric") or ranking_metric
     )
     if optimal_fresh:
         optimal = _apply_riven_floor_profiled(
@@ -4894,7 +4925,7 @@ def analyze_riven_request(
                     weapon,
                     high_card,
                     scenario=scenario,
-                    metric=objective_metric,
+                    metric=ranking_metric,
                     passives=passives,
                     capacity_limit=capacity_limit,
                 ),
@@ -4986,7 +5017,7 @@ def analyze_riven_request(
                 # 与上方初次校准的 formalSearchMetric 切换一致。
                 if not target_calibration.get("formalSearchMetric"):
                     target_calibration["formalSearchMetric"] = (
-                        "windowedDps" if objective_metric == "killsPerMinute" else objective_metric
+                        "windowedDps" if objective_metric == "killsPerMinute" else ranking_metric
                     )
                 _formal_search_metric = target_calibration["formalSearchMetric"]
                 # 冻结的最终上下文里重跑三条正式曲线（旧赢家作为搜索的
@@ -5068,312 +5099,23 @@ def analyze_riven_request(
         optimal_card = actual_card
         optimal = actual
 
-    # KPM is a useful combat display metric, but it is a bounded stepped
-    # measure: with the current 250 ms window step its ceiling is 240 KPM.
-    # High-damage weapons can therefore make baseline/actual/optimal collapse
-    # onto the same integer-like rate even when their damage envelopes differ
-    # substantially.  Never turn that plateau into a false 100% Riven score;
-    # use the same target/window model's continuous DPS as the quality metric.
+    # All final builds, recommendations and ablations share the ranking metric.
+    # KPM is measured separately for display; never repeat the entire search
+    # solely to change the quality unit after it already selected these builds.
     _progress("quality")
-    score_metric = objective_metric
-    quality_scores = {
-        "baseline": baseline.score,
-        "actual": actual.score,
-        "optimal": optimal.score,
-    }
-    quality_cache_key: str | None = None
+    score_metric = ranking_metric
+    quality_scores = {"baseline":baseline.score, "actual":actual.score, "optimal":optimal.score}
     quality_detail_cache: dict[str, float] = {}
     quality_cache_hit = False
-    kpm_ceiling = 60.0 / 0.25
-    if objective_metric == "killsPerMinute":
-        kpm_span = max(abs(optimal.score - baseline.score), 0.0)
-        kpm_plateau = abs(optimal.score - actual.score) <= max(
-            1e-6, 0.005 * max(abs(optimal.score), 1.0)
-        )
-        kpm_at_ceiling = optimal.score >= kpm_ceiling - 1e-6
-        if (
-            not request.get("_bakeStaticsOnly")
-            and benchmark_context is not None
-        ):
-            if profile == "fast":
-                # Fast is explicitly a bounded ranking pass. Preserve the
-                # requested KPM metric instead of launching a second full
-                # continuous-DPS search when the pressure probe saturates.
-                unsupported.append("fast-profile-quality-rerank-skipped")
-                score_metric = objective_metric
-            else:
-                score_metric = "windowedDps"
-            quality_cache_key = json.dumps(
-                {
-                    "metric": score_metric,
-                    "actual": [
-                        {
-                            "code": line.code,
-                            "value": round(line.value, 6),
-                            "negative": line.negative,
-                        }
-                        for line in actual_lines
-                    ],
-                },
-                ensure_ascii=False,
-                sort_keys=True,
-                separators=(",", ":"),
-            )
-            cached_quality = None
-            if statics is not None:
-                cached_counts = statics.get("counts")
-                cached_bundle = cached_counts.get(count_key) if isinstance(cached_counts, dict) else None
-                cached_quality_map = cached_bundle.get("quality") if isinstance(cached_bundle, dict) else None
-                if isinstance(cached_quality_map, dict):
-                    candidate_quality = cached_quality_map.get(quality_cache_key)
-                    if isinstance(candidate_quality, dict):
-                        cached_quality = candidate_quality
-            if (
-                isinstance(cached_quality, dict)
-                and cached_quality.get("metric") == score_metric
-                and all(
-                    isinstance(cached_quality.get(key), (int, float))
-                    for key in ("baseline", "actual", "optimal")
-                )
-            ):
-                restored_quality = {}
-                snapshots = cached_quality.get('builds') or {}
-                try:
-                    for key in ('baseline','actual','optimal'):
-                        snapshot = snapshots[key]
-                        wire = snapshot.get('riven')
-                        card = _card_from_lines(_wire_lines(wire)[0]) if wire else None
-                        if (key == 'baseline') != (card is None):
-                            raise ValueError('cached Riven role differs')
-                        if key == 'actual' and [{field:item[field] for field in ('code','value','negative')} for item in wire] != [dict(code=line.code,value=line.value,negative=line.negative) for line in actual_lines]:
-                            raise ValueError('cached actual roll differs')
-                        rebuilt = _reconstruct(snapshot['cards'],card)
-                        if rebuilt is None or not math.isclose(
-                                _score(rebuilt.stats,score_metric,target_context=benchmark_context),
-                                cached_quality[key],rel_tol=1e-9,abs_tol=1e-7):
-                            raise ValueError('cached build score differs')
-                        restored_quality[key] = (rebuilt,card)
-                except (KeyError, TypeError, ValueError, SimulationError):
-                    restored_quality = {}
-            else:
-                restored_quality = {}
-            if restored_quality:
-                quality_scores = {
-                    key: float(cached_quality[key])
-                    for key in ("baseline", "actual", "optimal")
-                }
-                raw_detail_cache = cached_quality.get("details")
-                if isinstance(raw_detail_cache, dict):
-                    quality_detail_cache = {
-                        str(code): float(delta)
-                        for code, delta in raw_detail_cache.items()
-                        if isinstance(delta, (int, float))
-                    }
-                quality_cache_hit = True
-                baseline = restored_quality['baseline'][0]
-                actual = restored_quality['actual'][0]
-                optimal, optimal_card = restored_quality['optimal']
-                optimal_lines = list(optimal_card.riven_lines)
-                optimal_uses_actual = bool(cached_quality.get('actualIncludedAsLowerBound'))
-                if optimal_uses_actual:
-                    unsupported.append('optimizer-optimum-lower-bound-used-actual-riven')
-            else:
-                # Re-run the three card searches with the continuous metric. A
-                # mere revaluation of KPM-selected cards can still make an
-                # actual Riven look stronger than the theoretical card because
-                # KPM discarded all intra-step differences while ranking builds.
-                quality_evaluations = {
-                    "baseline": _optimize_archetype(
-                        weapon,
-                        None,
-                        scenario=scenario,
-                        metric=score_metric,
-                        passives=passives,
-                        capacity_limit=capacity_limit,
-                    ),
-                    # actual/optimal 带 floor 保护：quality 重搜同样受紫卡
-                    # 容量挤压影响（beam 剪掉「baseline 赢家 − 最贵卡」的
-                    # 显见路径），无 floor 时 1.22M 劣解会覆盖校准阶段
-                    # floor 修正后的结果（2026-09-24 actual<baseline 崩坏
-                    # 的直接根因）。
-                    "actual": _apply_riven_floor_profiled(
-                        _optimize_archetype(
-                            weapon,
-                            actual_card,
-                            scenario=scenario,
-                            metric=score_metric,
-                            passives=passives,
-                            capacity_limit=capacity_limit,
-                        ),
-                        actual_card,
-                    ),
-                    "optimal": _apply_riven_floor_profiled(
-                        _optimize_archetype(
-                            weapon,
-                            optimal_card,
-                            scenario=scenario,
-                            metric=score_metric,
-                            passives=passives,
-                            capacity_limit=capacity_limit,
-                        ),
-                        optimal_card,
-                    ),
-                }
-                # KPM ties can also make the cached recommended positive set
-                # pick an arbitrary elemental/utility line. Re-rank the
-                # theoretical positive set on the continuous metric before
-                # building its denominator.
-                quality_lines: list[_RivenLine] | None = None
-                try:
-                    quality_recommended, _quality_recommendation, _quality_tiers = _recommend_positive(
-                        weapon,
-                        quality_evaluations["baseline"],
-                        positive_candidates_neg,
-                        positive_count,
-                        scenario=scenario,
-                        metric=score_metric,
-                        passives=passives,
-                        capacity_limit=capacity_limit,
-                        target_context=benchmark_context,
-                        profile=profile,
-                    )
-                    # The returned recommendation must use the same
-                    # continuous metric as the normalized score, not the
-                    # earlier KPM coarse ranking.
-                    recommended = quality_recommended
-                    recommended_tiers = _quality_tiers
-                    quality_negative_ranked: list[tuple[float, _RivenLine]] = []
-                    for negative_line in negative_candidates:
-                        if negative_line.code in _neutral_negative_codes(weapon):
-                            quality_negative_ranked.append((float("inf"), negative_line))
-                            continue
-                        if negative_line.effect is None or not negative_line.effect.supported:
-                            continue
-                        negative_eval = _best_fixed(
-                            weapon,
-                            quality_evaluations["baseline"].cards,
-                            _card_from_lines([*quality_recommended, negative_line]),
-                            scenario=scenario,
-                            metric=score_metric,
-                            passives=passives,
-                            capacity_limit=capacity_limit,
-                            target_context=benchmark_context,
-                            max_keep_cap={"fast": 3, "standard": 5, "deep": None}[profile],
-                        )
-                        quality_negative_ranked.append((negative_eval.score, negative_line))
-                    quality_negative_ranked.sort(
-                        key=lambda item: (
-                            0 if item[1].code in _neutral_negative_codes(weapon) else 1,
-                            -item[0],
-                            item[1].code,
-                        )
-                    )
-                    recommended_negative = [line for _, line in quality_negative_ranked[:3]]
-                    quality_lines = [
-                        pos_by_code_neg.get(line.code, line)
-                        for line in quality_recommended
-                    ]
-                    if optimal_structure_negative:
-                        neutral_quality_negative = next(
-                            (
-                                line
-                                for line in negative_candidates_neg
-                                if line.code in _neutral_negative_codes(weapon)
-                                and line.effect is not None
-                                and line.effect.supported
-                            ),
-                            None,
-                        )
-                        fallback_negative = recommended_negative[0] if recommended_negative else None
-                        if neutral_quality_negative is not None or fallback_negative is not None:
-                            quality_lines.append(
-                                neutral_quality_negative
-                                or neg_by_code_neg.get(fallback_negative.code)
-                                or fallback_negative
-                            )
-                    quality_optimal_card = _card_from_lines(quality_lines)
-                    quality_evaluations["optimal"] = _optimize_archetype(
-                        weapon,
-                        quality_optimal_card,
-                        scenario=scenario,
-                        metric=score_metric,
-                        passives=passives,
-                        capacity_limit=capacity_limit,
-                    )
-                except (SimulationError, TypeError, ValueError):
-                    pass
-                # The current card's affix set is a mandatory lower-bound
-                # candidate for the theoretical search.  Without this guard a
-                # KPM-tied shortlist can omit (for example) D+MS+CC and make
-                # the user's full-roll card appear stronger than "optimal".
-                # Use the exact submitted lines for this lower-bound check.
-                # A theoretical max-roll remap would make a larger negative
-                # value look like a stronger candidate and can invert the
-                # comparison for otherwise neutral negatives.
-                actual_quality_card = _card_from_lines(actual_lines)
-                actual_quality_candidate = _apply_riven_floor_profiled(
-                    _optimize_archetype(
-                        weapon,
-                        actual_quality_card,
-                        scenario=scenario,
-                        metric=score_metric,
-                        passives=passives,
-                        capacity_limit=capacity_limit,
-                    ),
-                    actual_quality_card,
-                )
-                actual_quality_won = actual_quality_candidate.score > quality_evaluations["optimal"].score
-                if actual_quality_won:
-                    quality_evaluations["optimal"] = actual_quality_candidate
-                    unsupported.append('optimizer-optimum-lower-bound-used-actual-riven')
-                optimal_uses_actual = actual_quality_won
-                quality_scores = {
-                    key: evaluation.score
-                    for key, evaluation in quality_evaluations.items()
-                }
-                # ── F05（审计修复）：DPS 重搜赢家绑定到最终展示配卡 ────────
-                # 旧实现：scoringValues 来自 quality_evaluations，但
-                # baseline/actual/bestFound 的 payload 仍用 KPM 阶段的评价
-                # 对象构建——「屏幕上这套配卡」与「评分分母用的那套」可能
-                # 不是同一份。现在三条曲线全部重绑到连续指标阶段的质量
-                # 记录（同一 EvaluationRecord：配卡 + 数值 + 指标 + 目标），
-                # 评分、展示、贡献明细和缓存全部引用同一记录。
-                baseline = quality_evaluations["baseline"]
-                actual = quality_evaluations["actual"]
-                optimal = quality_evaluations["optimal"]
-                # optimal_card 同步为质量阶段的赢家紫卡：优先用重排后的
-                # 推荐组合（quality_lines）；若 actual 反超则用 actual 的
-                # 提交词条。optimal_lines 与之一致。静态缓存回写因此写入
-                # 质量阶段的赢家（热缓存路径重建的配卡与缓存数值可互相
-                # 复现——S03 重放合同）。
-                if quality_lines and not actual_quality_won:
-                    optimal_lines = list(quality_lines)
-                    optimal_card = _card_from_lines(optimal_lines)
-                if actual_quality_won:
-                    optimal_lines = list(actual_lines)
-                    optimal_card = actual_quality_card
-                baseline_fresh = True   # 缓存回写用重绑后的质量赢家
-                optimal_fresh = True
-                # 推荐集合若被连续指标重排，同样以重排结果回写缓存（热路径
-                # 重建的推荐与评分口径一致）。
-                recommended_fresh = quality_lines is not None
-            skipped_early.append(
-                "riven-score-fallback: KPM 评分切换到窗口 DPS（连续指标）"
-                + (
-                    "；KPM 平台化/触顶" if (kpm_plateau or kpm_at_ceiling) else ""
-                )
-                + (
-                    "；复用已烘焙数值" if quality_cache_hit else "；三曲线已按连续指标重搜并重绑"
-                )
-                + "; 战斗 KPI 仍为 KPM"
-            )
+    if score_metric != objective_metric:
+        skipped_early.append("评分与配装从一开始使用同靶窗口 DPS；KPM 为同一配装的独立战斗指标，无重复复评搜索")
 
     # 回写静态缓存（仅本次新算的部分；高数值/当前紫卡反超修正不影响缓存）。
     if cacheable and statics is not None and (
         baseline_fresh or recommended_fresh or optimal_fresh
     ):
         statics["disposition"] = disposition
-        statics["metric"] = objective_metric
+        statics["metric"] = ranking_metric
         statics["capacityLimit"] = capacity_limit
         if baseline_fresh:
             statics["baselineCards"] = [card.key for card in baseline.cards]
@@ -5430,7 +5172,7 @@ def analyze_riven_request(
         if _pool is not None:
             _ctx = {"weapon": weapon, "scenario": scenario, "metric": objective_metric,
                     "passives": passives, "slot_limit": 8, "capacity_limit": capacity_limit,
-                    "target_context": benchmark_context}
+                    "target_context": benchmark_context, "fixed_riven_index": actual.riven_index}
             _jobs = {}
             for _line in actual_lines:
                 if _line.code in {'W','Y'} and benchmark_context is not None and not float(benchmark_context.get('headshotChance') or 0.):
@@ -5453,7 +5195,7 @@ def analyze_riven_request(
                 actual.cards,
                 without,
                 scenario=scenario,
-                metric=objective_metric,
+                metric=score_metric,
                 passives=passives,
                 capacity_limit=capacity_limit,
                 target_context=benchmark_context,
@@ -5491,8 +5233,9 @@ def analyze_riven_request(
         else:
             ablated = _evaluate(
                 weapon, actual.cards, without_line, scenario=scenario,
-                metric=objective_metric, passives=passives,
+                metric=score_metric, passives=passives,
                 capacity_limit=capacity_limit, target_context=benchmark_context,
+                fixed_riven_index=actual.riven_index,
             )
             ablated_score = ablated.score if ablated is not None else None
         if ablated_score is not None:
@@ -5515,7 +5258,7 @@ def analyze_riven_request(
             condition = '武器收起时自动装填'
             inactive_reason = '当前持续持枪，没有收起装填事件'
         fatal = line.negative and (
-            (ablation_delta if ablation_delta is not None else delta) < -5.0
+            (ablation_delta if ablation_delta is not None else delta or 0.0) < -5.0
         )
         if (
             fatal
@@ -5560,47 +5303,6 @@ def analyze_riven_request(
                 ),
             }
         )
-
-    # Persist the expensive continuous fallback alongside the static bundle.
-    # The actual card fingerprint is part of quality_cache_key, so different
-    # rolls never reuse one another's contribution deltas.  Keep a bounded LRU
-    # by insertion order to avoid turning the on-disk cache into a history log.
-    if (
-        cacheable
-        and statics is not None
-        and score_metric != objective_metric
-        and quality_cache_key
-    ):
-        cached_counts = statics.get("counts")
-        if not isinstance(cached_counts, dict):
-            cached_counts = {}
-            statics["counts"] = cached_counts
-        cached_bundle = cached_counts.get(count_key)
-        if not isinstance(cached_bundle, dict):
-            cached_bundle = {}
-            cached_counts[count_key] = cached_bundle
-        quality_map = cached_bundle.get("quality")
-        if not isinstance(quality_map, dict):
-            quality_map = {}
-            cached_bundle["quality"] = quality_map
-        quality_map[quality_cache_key] = {
-            "metric": score_metric,
-            "baseline": quality_scores["baseline"],
-            "actual": quality_scores["actual"],
-            "optimal": quality_scores["optimal"],
-            "details": quality_detail_cache,
-            'actualIncludedAsLowerBound':optimal_uses_actual,
-            'builds': {key:dict(cards=[card.key for card in evaluation.cards],
-                               riven=[dict(code=line.code,value=line.value,negative=line.negative,
-                                           low=line.low,high=line.high,unit=line.unit,label=line.label)
-                                      for line in card.riven_lines] if card else None)
-                       for key,evaluation,card in [('baseline',baseline,None),
-                                                  ('actual',actual,actual_card),
-                                                  ('optimal',optimal,optimal_card)]},
-        }
-        while len(quality_map) > 32:
-            quality_map.pop(next(iter(quality_map)))
-        statics_cache["__dirty__"] = True
 
     evaluation_target = None
     if benchmark_context is not None:
@@ -5669,7 +5371,7 @@ def analyze_riven_request(
         "objectiveMetric": objective_metric,
         "scoreMetric": score_metric,
         "fallbackReason": (
-            "kpm-pressure-or-plateau" if score_metric != objective_metric else None
+            "continuous-ranking-from-start" if score_metric != objective_metric else None
         ),
         "targetCalibrated": calibration_status == "calibrated",
         "targetCalibrationStatus": calibration_status or None,
@@ -5765,6 +5467,7 @@ def analyze_riven_request(
     )
     search_status = {
         "profile": profile,
+        "metric": ranking_metric,
         "scope": optimality_status["scope"],
         "status": "heuristic-best-found",
         "scoreBasis": score_basis,
@@ -5894,6 +5597,7 @@ def analyze_riven_request(
         payload["objectiveScore"] = _score(evaluation.stats, objective_metric,
                                             target_context=benchmark_context)
         payload['objectiveMetric'] = objective_metric
+        payload['optimizationMetric'] = ranking_metric
         payload['scoringMetric'] = score_metric
         payload['scoringScore'] = quality_scores['baseline' if evaluation is baseline
                                                 else ('actual' if evaluation is actual else 'optimal')]

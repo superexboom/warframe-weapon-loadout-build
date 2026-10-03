@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
-from collections import Counter
+from collections import Counter, OrderedDict
+from copy import deepcopy
+from contextlib import contextmanager
 from dataclasses import replace
 import hashlib
 import json
@@ -653,6 +655,8 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("enervate.py"),
         Path(optimizer.__file__).with_name("status_arcanes.py"),
         Path(optimizer.__file__).with_name("search_combat.py"),
+        Path(optimizer.__file__).with_name("search_session.py"),
+        Path(optimizer.__file__).with_name("parallel.py"),
         Path(optimizer.__file__).with_name("event_profiles.py"),
         Path(optimizer.__file__).with_name("stackable_projectiles.py"),
         Path(optimizer.__file__).with_name("consecutive_hits.py"),
@@ -873,12 +877,25 @@ optimizer.load_exports = lambda _export_dir: EXPORTS
 # ponytail: this is a single-user desktop app; use a worker pool if concurrent
 # remote clients ever become a real requirement.
 ANALYZE_LOCK = threading.Lock()
+_ANALYSIS_RESULTS: OrderedDict[str, dict[str, Any]] = OrderedDict()
+
+
+@contextmanager
+def _interactive_analysis_gate():
+    # A second request must not sit silently behind an expensive search and
+    # make its own elapsed timer look like another stuck calculation.
+    if not ANALYZE_LOCK.acquire(blocking=False):
+        raise SimulationError('本地引擎正在计算其他请求，请待其完成后重试')
+    try:
+        yield
+    finally:
+        ANALYZE_LOCK.release()
 
 # ── 分析进度注册表（前端进度条数据源）───────────────────────────────────
 # 长分析（deep 档 1-3 分钟）期间前端轮询 /api/analyze/progress?id=<token>
 # 读取阶段心跳，区分「还在跑」与「卡死」。注册表条目在完成后保留 10 分钟
 # 供迟到查询，随后惰性清理。
-_ANALYZE_STAGES = ("baseline", "calibration", "actual", "recommendation", "quality", "payload")
+_ANALYZE_STAGES = ("baseline", "actual", "calibration", "recommendation", "optimal", "quality", "payload")
 _ANALYZE_PROGRESS: dict[str, dict[str, Any]] = {}
 _ANALYZE_PROGRESS_LOCK = threading.Lock()
 _ANALYZE_PROGRESS_TTL = 600.0
@@ -893,6 +910,7 @@ def _progress_token_for(payload: Mapping[str, Any]) -> str | None:
 
 
 def _report_analysis_progress(token: str, stage: str) -> None:
+    stage, _, evaluations = stage.partition('|')
     now = time.time()
     with _ANALYZE_PROGRESS_LOCK:
         entry = _ANALYZE_PROGRESS.get(token)
@@ -902,7 +920,10 @@ def _report_analysis_progress(token: str, stage: str) -> None:
         if stage not in stages:
             stages.append(stage)
         entry["stages"] = stages
-        entry["stageIndex"] = _ANALYZE_STAGES.index(stage) + 1 if stage in _ANALYZE_STAGES else len(stages)
+        entry['currentStage'] = stage
+        if evaluations.isdigit():
+            entry['evaluations'] = int(evaluations)
+        entry["stageIndex"] = max(entry.get('stageIndex',0), _ANALYZE_STAGES.index(stage) + 1 if stage in _ANALYZE_STAGES else 0)
         entry["lastBeat"] = now
 
 
@@ -2935,7 +2956,9 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
             "eximus": True,
             "windowSeconds": 30.0,
             "armourStrip": 0.0,
-            "headshotChance": 0.0,
+            "headshotChance": _manual_number(
+                request.get("headshotChance", 0.0), "headshotChance", low=0.0, high=1.0
+            ),
         }
     assembled_record = None
     analysis_record = None
@@ -2984,16 +3007,30 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
             _report_analysis_progress(progress_token, stage)
 
     try:
-        with ANALYZE_LOCK:
-            result = optimizer.analyze_riven_request(
-                EXPORT_DIR,
-                engine_request,
-                weapon_record=analysis_record if innate_selection is not None else assembled_record,
-                stance=analysis_stance,
-                statics_cache=ANALYSIS_STATICS_CACHE,
-                progress_hook=_stage_hook,
-            )
-            _persist_analysis_statics_cache()
+        with _interactive_analysis_gate():
+            result_key = json.dumps({'request':engine_request, 'record':analysis_record,
+                'stance':analysis_stance, 'inputs':ANALYSIS_STATICS_RUNTIME_INPUTS,
+                'cacheVersion':ANALYSIS_STATICS_CACHE_VERSION}, sort_keys=True, ensure_ascii=False)
+            cached_result = _ANALYSIS_RESULTS.get(result_key)
+            if cached_result is not None and not request.get('_bakeStaticsOnly'):
+                _ANALYSIS_RESULTS.move_to_end(result_key)
+                result = deepcopy(cached_result)
+                result['responseCache'] = 'exact-request-hit'
+            else:
+                result = optimizer.analyze_riven_request(
+                    EXPORT_DIR,
+                    engine_request,
+                    weapon_record=analysis_record if innate_selection is not None else assembled_record,
+                    stance=analysis_stance,
+                    statics_cache=ANALYSIS_STATICS_CACHE,
+                    progress_hook=_stage_hook,
+                )
+                _persist_analysis_statics_cache()
+                if not request.get('_bakeStaticsOnly'):
+                    _ANALYSIS_RESULTS[result_key] = deepcopy(result)
+                    while len(_ANALYSIS_RESULTS) > 32:
+                        _ANALYSIS_RESULTS.popitem(last=False)
+                result['responseCache'] = 'miss'
     except BaseException as exc:
         if progress_token is not None:
             _finish_analysis_progress(progress_token, str(exc) or type(exc).__name__)
@@ -3012,6 +3049,8 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     return {
         **result,
         "disposition": disposition,
+        "engineFingerprint": ANALYSIS_STATICS_RUNTIME_INPUTS,
+        "engineCacheVersion": ANALYSIS_STATICS_CACHE_VERSION,
         "innateElement": innate_selection,
         "innateElementCandidates": list(selected_catalog_weapon.get("innateElementCandidates") or ()),
     }
@@ -5251,6 +5290,8 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     "model": windowed.get("model"),
                     "windowSeconds": windowed.get("windowSeconds"),
                     "killsPerMinute": windowed.get("killsPerMinute"),
+                    "windowDps": windowed.get("windowDps"),
+                    "totalWindowDamage": windowed.get("totalWindowDamage"),
                     "killsInWindow": windowed.get("killsInWindow"),
                     "targetTotalEhp": windowed.get("targetTotalEhp"),
                     "points": windowed.get("timeline") or [],
@@ -5692,8 +5733,11 @@ class PortableHandler(BaseHTTPRequestHandler):
                     "token": token,
                     "stages": list(entry.get("stages") or []),
                     "stageIndex": stage_index,
+                    "currentStage": entry.get('currentStage'),
+                    "evaluations": int(entry.get('evaluations') or 0),
                     "totalStages": total_stages,
-                    "percent": round(min(stage_index / total_stages, 1.0) * 100, 1),
+                    "percent": (100.0 if entry.get('done') and not entry.get('error')
+                                else round(min(stage_index / total_stages, 1.0) * 100, 1)),
                     "elapsedSeconds": round(elapsed, 1),
                     "secondsSinceBeat": round(since_beat, 1),
                     "done": bool(entry.get("done")),

@@ -21,10 +21,16 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--repeat',type=int,default=1)
     parser.add_argument('--cprofile',action='store_true')
+    parser.add_argument('--parallel',action='store_true')
+    parser.add_argument('--headshots',type=float,default=0.)
+    parser.add_argument('--reported-card',action='store_true')
     args=parser.parse_args()
     if args.output.exists():
         parser.error('choose a new output directory')
-    os.environ['WF_ANALYZER_SERIAL']='1'
+    if not args.parallel:
+        os.environ['WF_ANALYZER_SERIAL']='1'
+    else:
+        os.environ.pop('WF_ANALYZER_SERIAL',None)
     import app
     app._disable_analysis_statics_persistence()
     names={'vectis':'Vectis Prime','burston':'Burston Prime'}
@@ -32,8 +38,11 @@ def main():
     values=([('W',231.9,False),('0',154.6,False),('1',123.7,False),('L',41.2,True)]
             if args.weapon=='vectis' else
             [('W',287.5,False),('6',115.,False),('1',153.3,False),('3',91.,True)])
+    if args.reported_card and args.weapon=='burston':
+        values=[('W',313.2,False),('6',125.2,False),('1',163.8,False),('3',91.,True)]
     request=dict(weapon=weapon['path'],disposition=float(weapon['omegaAttenuation']),
-                 stats=[dict(code=c,value=v,negative=n) for c,v,n in values],profile=args.profile)
+                 stats=[dict(code=c,value=v,negative=n) for c,v,n in values],profile=args.profile,
+                 headshotChance=args.headshots)
     args.output.mkdir(parents=True)
     (args.output/'request.json').write_text(json.dumps(request,indent=2)+'\n',encoding='utf-8')
     summaries=[]
@@ -64,12 +73,14 @@ def main():
                     pstats.Stats(profiler,stream=stream).sort_stats('cumulative').print_stats(45)
         elapsed=time.perf_counter()-started
         (args.output/(f'run-{index}-response.json')).write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-        summaries.append(dict(elapsedSeconds=elapsed,inputs=app._analysis_inputs_fingerprint(),
+        summaries.append(dict(elapsedSeconds=elapsed,inputs=app.ANALYSIS_STATICS_RUNTIME_INPUTS,
                               metric=result.get('metric'),scoreMetric=result.get('scoreMetric'),
                               searchQuality=result.get('searchQuality'),details=result.get('details'),
                               target=result.get('evaluationTarget'),stages=stages))
         (args.output/'summary.json').write_text(json.dumps(summaries,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         print(json.dumps(dict(run=index,elapsedSeconds=elapsed)),flush=True)
+    from wfarsenal.parallel import shutdown_pool
+    shutdown_pool()
 
 
 if __name__=='__main__':

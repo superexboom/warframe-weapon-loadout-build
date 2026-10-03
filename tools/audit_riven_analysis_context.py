@@ -66,8 +66,11 @@ def replay_returned(request: dict, result: dict, build: dict) -> dict:
     timeline=manual['benchmarkTimeline']
     score=timeline['killsPerMinute']
     expected=build['objectiveScore']
+    dps_matches = (build.get('scoringMetric') != 'windowedDps' or math.isclose(
+        timeline['windowDps'],build['scoringScore'],rel_tol=1e-8,abs_tol=1e-8))
     return dict(request=payload,objectiveScore=expected,manualKpm=score,
-                passed=math.isclose(score,expected,rel_tol=1e-8,abs_tol=1e-8),
+                manualWindowDps=timeline.get('windowDps'), scoringScore=build.get('scoringScore'),
+                passed=math.isclose(score,expected,rel_tol=1e-8,abs_tol=1e-8) and dps_matches,
                 unsupported=manual.get('unsupported'),shots=timeline['shots'],
                 transforms=timeline['transforms'],rivenSlot=(build.get('riven') or {}).get('slot'),
                 targetTotalEhp=timeline['targetTotalEhp'],

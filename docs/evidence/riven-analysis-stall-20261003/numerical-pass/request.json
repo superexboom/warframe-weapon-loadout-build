@@ -1,0 +1,28 @@
+{
+  "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+  "disposition": 1.35,
+  "stats": [
+    {
+      "code": "W",
+      "value": 313.2,
+      "negative": false
+    },
+    {
+      "code": "6",
+      "value": 125.2,
+      "negative": false
+    },
+    {
+      "code": "1",
+      "value": 163.8,
+      "negative": false
+    },
+    {
+      "code": "3",
+      "value": 91.0,
+      "negative": true
+    }
+  ],
+  "profile": "standard",
+  "headshotChance": 0.5
+}

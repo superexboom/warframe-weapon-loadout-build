@@ -1,0 +1,16 @@
+Process 9280: "C:\Users\SuperExboom\AppData\Local\Programs\Python\Python313\python.exe" "-c" "from multiprocessing.spawn import spawn_main; spawn_main(parent_pid=16988, pipe_handle=556)" "--multiprocessing-fork"
+Python v3.13.5 (C:\Users\SuperExboom\AppData\Local\Programs\Python\Python313\python.exe)
+
+Thread 27596 (active+gil): "MainThread"
+    replay (C:\Users\SuperExboom\Documents\WF-Riven-Portable\vendor\wfarsenal\combat_replay.py:1239)
+    window (C:\Users\SuperExboom\Documents\WF-Riven-Portable\vendor\wfarsenal\search_combat.py:39)
+    _event_window (C:\Users\SuperExboom\Documents\WF-Riven-Portable\vendor\wfarsenal\optimizer.py:1655)
+    _score (C:\Users\SuperExboom\Documents\WF-Riven-Portable\vendor\wfarsenal\optimizer.py:1700)
+    _evaluate (C:\Users\SuperExboom\Documents\WF-Riven-Portable\vendor\wfarsenal\optimizer.py:1879)
+    _score_job (C:\Users\SuperExboom\Documents\WF-Riven-Portable\vendor\wfarsenal\parallel.py:137)
+    _process_worker (C:\Users\SuperExboom\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\process.py:254)
+    run (C:\Users\SuperExboom\AppData\Local\Programs\Python\Python313\Lib\multiprocessing\process.py:108)
+    _bootstrap (C:\Users\SuperExboom\AppData\Local\Programs\Python\Python313\Lib\multiprocessing\process.py:313)
+    _main (C:\Users\SuperExboom\AppData\Local\Programs\Python\Python313\Lib\multiprocessing\spawn.py:135)
+    spawn_main (C:\Users\SuperExboom\AppData\Local\Programs\Python\Python313\Lib\multiprocessing\spawn.py:122)
+    <module> (<string>:1)

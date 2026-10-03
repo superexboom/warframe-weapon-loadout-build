@@ -1,0 +1,133 @@
+{
+  "engineFingerprint": "45708912701d9921",
+  "cacheVersion": 14,
+  "fullBakeStarted": false,
+  "files": [
+    {
+      "path": "tests/final-regression.xml",
+      "bytes": 103202,
+      "sha256": "67e932716be5037122a893c1f110cd64095f3efd69a2eefa2d05a08cd638399f"
+    },
+    {
+      "path": "tests/http-and-context.xml",
+      "bytes": 3547,
+      "sha256": "2db8bbb42cbf59a79e4cad1354d90be93b7962314d5ec64195dea2bac3f53262"
+    },
+    {
+      "path": "manual/headshot-ablation.json",
+      "bytes": 677,
+      "sha256": "4c451d1e81fc2edbe91ffbd9efbf9ecb45dcdb8721f8680689f19aedc6f23bd3"
+    },
+    {
+      "path": "manual/final-metric-replays.json",
+      "bytes": 69519,
+      "sha256": "4c03fa3445a7c0a50a04d9a3f89879097ddfcf222cdfd4fd65656f21364e3f48"
+    },
+    {
+      "path": "requests/api-replay-summary.json",
+      "bytes": 9908,
+      "sha256": "96eb4fef9ac09c2cdbc45125c8b33cc91a658c04e9ab512c5dd8cd4f68942296"
+    },
+    {
+      "path": "browser/final-50-response.json",
+      "bytes": 35654,
+      "sha256": "b781571c0da691054c27aacd3080f25134465786b5b90dea4990da5120ec1ed3"
+    },
+    {
+      "path": "browser/final-51-response.json",
+      "bytes": 36683,
+      "sha256": "3a9d530163049f04666b6482046a4990f8036d9e999602ec83e07c789f2a5f9e"
+    },
+    {
+      "path": "browser/final-51-progress.json",
+      "bytes": 4030,
+      "sha256": "92952457e32ce903784f201c09e3c7361f4a36de15878c49de07f4e98a8bec4c"
+    },
+    {
+      "path": "browser/before-submit-network.json",
+      "bytes": 46,
+      "sha256": "e7ab556dbf998240d5ed710065b9111fac80727fc77939b5cdc4cc48abe06504"
+    },
+    {
+      "path": "browser/cannonade-renderer.json",
+      "bytes": 252,
+      "sha256": "63ab7c5919e695c7f546858444a42b95921d584f58b8bfffc0b245f866317d7f"
+    },
+    {
+      "path": "browser/cannonade.png",
+      "bytes": 1188054,
+      "sha256": "f39e772bdc8c1ce25a3b411ee91db5d816cce75d86f21b2544db65f3f925fe38"
+    },
+    {
+      "path": "browser/burston.png",
+      "bytes": 982492,
+      "sha256": "8f2828224f1992a5cb8f73608e5926b9a6d3e8b39125151f0d0069c44fa590f0"
+    },
+    {
+      "path": "before/parent-stack.txt",
+      "bytes": 2723,
+      "sha256": "fbd4a351608bc9c06772f7d29f072b8f0b4387a604c508c359d94da92ebc4282"
+    },
+    {
+      "path": "before/worker-stack.txt",
+      "bytes": 1541,
+      "sha256": "b8153f2af73b4278bb515eff2ae8473d39487118115ff4e85c7f42d5a6f1973b"
+    },
+    {
+      "path": "numerical-pass/request.json",
+      "bytes": 502,
+      "sha256": "441b3ae0f92d82f86bdf8e28cf97cad8bd9134bf2040be34cb25b176e09cac92"
+    },
+    {
+      "path": "numerical-pass/summary.json",
+      "bytes": 17073,
+      "sha256": "1fe621b787e44169cd8cfca490f00a194b5bcd01731378635e7b42aad58418ec"
+    },
+    {
+      "path": "numerical-pass/stages.json",
+      "bytes": 7212,
+      "sha256": "d4e6976805220f1838cef6982f53f01bb1f44e19cfda356f0d71a5f3fa72f285"
+    },
+    {
+      "path": "numerical-pass/cold-response.json",
+      "bytes": 48743,
+      "sha256": "641cc6811e07d89e894cb5068b2b716686112c6391d452d6631a93f01d680da2"
+    },
+    {
+      "path": "numerical-pass/warm-response.json",
+      "bytes": 48756,
+      "sha256": "2ee7acc0cba38fb0b5cd49260bec1993347a804670f480fc1854a6a83a2420ae"
+    },
+    {
+      "path": "requests/arca-plasmor-api.json",
+      "bytes": 55233,
+      "sha256": "26f1679d77abf0e1aa6e84d5dbae48ccbb6e93be54e44fa8599bc5a1ff08a499"
+    },
+    {
+      "path": "requests/fulmin-prime-api.json",
+      "bytes": 61392,
+      "sha256": "67fdbdb1d7870388bd69c66f44e2bd0323233065a93ab57e34463c811db3cf6f"
+    },
+    {
+      "path": "requests/torid-api.json",
+      "bytes": 67048,
+      "sha256": "2bd412ac167e98a8d7e39ca41704b79db92ea8702f42ae9fb536bdd3ef42ab18"
+    },
+    {
+      "path": "requests/twin-grakatas-api.json",
+      "bytes": 67620,
+      "sha256": "e01486bf8790f0f984c309ccaff91b660dd775472d4322eeee30b45f1b941d97"
+    },
+    {
+      "path": "requests/vectis-prime-api.json",
+      "bytes": 65063,
+      "sha256": "edaeefa0bf73d777906e753f2d502c330b74950890200f24adbd7de622001459"
+    }
+  ],
+  "notes": [
+    "Numerical-pass snapshots predate the additive HTTP DTO/progress fields; their own fingerprint is retained.",
+    "All saved returned builds were replayed under the final fingerprint; metric comparisons are in manual/final-metric-replays.json.",
+    "725 full regressions and seven subtests passed; later HTTP/context additions passed 24 focused tests.",
+    "No cache files, shards, or different-fingerprint statics are published or mixed."
+  ]
+}
