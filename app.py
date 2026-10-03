@@ -656,6 +656,7 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("status_arcanes.py"),
         Path(optimizer.__file__).with_name("search_combat.py"),
         Path(optimizer.__file__).with_name("search_session.py"),
+        Path(optimizer.__file__).with_name("riven_recommendation.py"),
         Path(optimizer.__file__).with_name("parallel.py"),
         Path(optimizer.__file__).with_name("event_profiles.py"),
         Path(optimizer.__file__).with_name("stackable_projectiles.py"),
@@ -1205,7 +1206,7 @@ def _incarnon_effect_text(effect: Mapping[str, Any], *, annotate: bool = True) -
         if op_key == 'MULTIPLY':
             value_text = f'×{value:g}'
         elif upgrade in chance_types and op_key in {'ADD', 'ADD_BASE'}:
-            value_text = f'{value * 100:+g} 个百分点'
+            value_text = f'{value * 100:+g}%'
         elif effect.get('displayAsPercent') or op_key == 'STACKING_MULTIPLY':
             value_text = f'{value * 100:+g}%'
         else:
@@ -1369,7 +1370,7 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
                 elif conversion:
                     source_label = '触发几率' if conversion['source'] == 'WEAPON_PROC_CHANCE' else '暴击几率'
                     target_label = '暴击几率' if conversion['target'] == 'WEAPON_CRIT_CHANCE' else '触发几率'
-                    details.append({'text': f"以配卡后{source_label}的 {conversion['fraction']*100:g}% 提高基础{target_label}，最多增加 {conversion['maximum']*100:g} 个百分点",
+                    details.append({'text': f"以配卡后{source_label}的 {conversion['fraction']*100:g}% 提高基础{target_label}，最多增加 {conversion['maximum']*100:g}%",
                                     'calculation': '已计入；增加后的基础属性再受对应 MOD 加成', 'modeled': True})
                 elif tier_number == 1:
                     if not details:
@@ -3150,7 +3151,7 @@ def _scenario_input(payload: Mapping[str, Any], key: str, default=None):
 
 
 def build_weapon_payload(
-    payload: Any, *, return_engine_context: bool = False
+    payload: Any, *, return_engine_context: bool = False, fixed_mods: list | None = None
 ) -> dict[str, Any]:
     if not isinstance(payload, Mapping):
         raise SimulationError("request body must be a JSON object")
@@ -3478,9 +3479,31 @@ def build_weapon_payload(
     if not isinstance(forced, Mapping):
         raise SimulationError('forcedProcs must be an object')
     benchmark_context['forcedProcs'] = {str(k): _manual_number(v, 'forcedProcs', low=0) for k,v in forced.items()}
+    fixed_cards = None
+    if fixed_mods is not None:
+        normalized = _manual_normalize_mods(fixed_mods, slot_count)
+        if len({row.get('slot',i) for i,row in enumerate(normalized)}) != len(normalized):
+            raise SimulationError('mods contain duplicate slots')
+        ordered = sorted(enumerate(normalized),key=lambda pair:pair[1].get('slot',pair[0]))
+        fixed_cards = []
+        shells = optimizer._set_shells(EXPORTS['mods'])
+        for _, row in ordered:
+            record = optimizer.resolve_record(EXPORTS['mods'],row['path'],kind='mod')
+            if not optimizer._mod_matches_weapon(record, selected_weapon):
+                raise SimulationError('equipped MOD is incompatible with this weapon: '+row['path'])
+            fixed_cards.append(optimizer._mod_card(record,scenario,allow_empty=True,
+                required=row['path'] in required_mod_paths,
+                rank=row['rank'],set_shell=shells.get(optimizer._set_key(record.get('modSet')))))
+        violation = optimizer.validate_build(fixed_cards,None,slot_count=slot_count,
+            capacity_limit=capacity_limit,required_mod_keys=required_keys,forbidden_mod_keys=forbidden_keys)
+        if violation:
+            raise SimulationError('equipped build is invalid: '+violation)
     with ANALYZE_LOCK:
         try:
-            evaluation = optimizer._optimize(
+            evaluation = (optimizer._evaluate(selected_weapon,fixed_cards,None,scenario=scenario,
+                metric='killsPerMinute' if dual_route else objective,passives=arcane_passives,
+                slot_limit=slot_count,capacity_limit=capacity_limit,
+                target_context=benchmark_context if dual_route else None) if fixed_cards is not None else optimizer._optimize(
                 selected_weapon,
                 candidates,
                 equipped_riven,
@@ -3496,7 +3519,7 @@ def build_weapon_payload(
                 forbidden_mod_keys=forbidden_keys,
                 min_fill=min_fill,
                 max_fill=max_fill,
-            )
+            ))
         except SimulationError as exc:
             raise _translate_damage_type_failure(
                 exc, selected_weapon, required_damage_type, element_target
@@ -3517,16 +3540,31 @@ def build_weapon_payload(
             raise SimulationError(
                 f"optimizer returned no usable MOD build for fire mode {selected_fire_mode} metric {metric}"
             )
-        evaluation, selected_exilus = _auto_exilus(
-            selected_weapon,
-            catalog_weapon,
-            evaluation,
-            scenario=scenario,
-            metric="killsPerMinute" if dual_route else objective,
-            passives=arcane_passives,
-            target_context=benchmark_context if dual_route else None,
-            capacity_limit=capacity_limit,
-        )
+        if fixed_cards is not None:
+            selected_exilus = None
+            if payload.get('exilus'):
+                special = payload['exilus']
+                meta = UTILITY_MODS_BY_PATH.get(special.get('path'))
+                if not meta:
+                    raise SimulationError('exilus is not a supported utility MOD')
+                selected_exilus = {**meta,'rank':special.get('rank',meta.get('maxRank',0))}
+                card = _utility_card_at_rank(selected_exilus,scenario,selected_exilus['rank'])
+                evaluation = optimizer._evaluate(selected_weapon,fixed_cards,None,scenario=scenario,
+                    metric='killsPerMinute' if dual_route else objective,passives=arcane_passives,
+                    slot_limit=slot_count,capacity_limit=capacity_limit,
+                    special_cards=(card,), special_capacity_cost=int(selected_exilus.get('drain') or 0),
+                    target_context=benchmark_context if dual_route else None)
+        else:
+            evaluation, selected_exilus = _auto_exilus(
+                selected_weapon,
+                catalog_weapon,
+                evaluation,
+                scenario=scenario,
+                metric="killsPerMinute" if dual_route else objective,
+                passives=arcane_passives,
+                target_context=benchmark_context if dual_route else None,
+                capacity_limit=capacity_limit,
+            )
         build_archetype = "hybrid"
         if not evaluation.cards and (min_fill is None or min_fill > 0):
             raise SimulationError(
@@ -3667,10 +3705,9 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
       budgetSeconds: 求解预算 10/20/30/60 秒（默认 10）
       topLimit:      返回组合数上限（默认 10，1-20）
 
-    流程：先按当前语境解出「无紫卡最优配装」作为基准（与填充最优同一条
-    _optimize 路径），再在基准配装上搜索 KPM 最高的紫卡词条组合（2-3 正
-    + 0-1 负，理论满数值口径）。每个组合的分数是「该紫卡下基准配装子集
-    的最优 KPM」——与用户手上这张卡的评分同口径。
+    有装备时直接复用当前 MOD 卡池、等级、灵化、赋能与敌人；空卡池使用
+    自动配装基准。已建模触发按满状态计算。四种词条结构全部先建立候选，
+    负触发时间探索合法数值范围；每个组合附带可回放的完整配装。
     """
     if not isinstance(payload, Mapping):
         raise SimulationError("request body must be a JSON object")
@@ -3683,11 +3720,19 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
             "budgetSeconds must be one of " + ", ".join(str(int(v)) for v in _RECOMMEND_BUDGET_SECONDS)
         )
     top_limit = _manual_int(payload.get("topLimit", 10), "topLimit", low=1, high=20)
+    if payload.get('scenario') is not None and not isinstance(payload['scenario'],Mapping):
+        raise SimulationError('scenario must be an object')
+    if payload.get('mods') is not None and not isinstance(payload['mods'],list):
+        raise SimulationError('mods must be an array')
 
-    # 基准解算：与 /api/build 同路径（无紫卡最优配装）。求解语境里的
-    # 必选/禁选/数量约束全部参与——最优紫卡是在「当前限制下的最优配装」
-    # 之上定义的。
-    build_result, engine = build_weapon_payload({**payload, 'riven': None}, return_engine_context=True)
+    # 共享 /api/build 的输入、赋能、灵化和目标解析；有已装备 MOD 时直接
+    # 评估当前卡池，避免先自动换一套配装。空卡池才使用自动配装基准。
+    # This action evaluates the equipped pool. It must not replace it with a
+    # freshly optimized build before deciding which Riven fits that loadout.
+    recommendation_payload = {**payload, 'riven':None, 'optimizeWithArcanes':True,
+        'triggerPolicy':'assumed_max', 'scenario':{**(payload.get('scenario') or {}),'triggerPolicy':'assumed_max'}}
+    build_result, engine = build_weapon_payload(recommendation_payload, return_engine_context=True,
+        fixed_mods=payload.get('mods') if payload.get('mods') else None)
     weapon_record = engine["weapon"]
     weapon_type = optimizer._weapon_type(None, weapon_record)
     baseline = engine["evaluation"]
@@ -3748,10 +3793,13 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
     recommendation['evaluationTarget'] = build_result['evaluationTarget']
     recommendation['scoringModel'] = build_result['scoringModel']
     recommendation['evaluationScenario'] = build_result['evaluationScenario']
+    recommendation['basis'] = 'equipped-mod-pool' if payload.get('mods') else 'automatic-build'
+    recommendation['triggerPolicy'] = 'assumed_max'
+    recommendation['arcanes'] = payload.get('arcanes') or []
     recommendation["skipped"] = [
         f"recommend-budget: {int(budget)} 秒 anytime 预算（粗排 → beam 组合 → 精排，时间耗尽返回当前最优）",
         f"recommend-candidates: {len(positive_candidates)} 正面 / {len(negative_candidates)} 负面词条（理论满数值口径）",
-        "recommend-basis: 每个组合的分数 = 该紫卡下基准配装子集的最优 KPM（与配装页解算同口径）",
+        "recommend-basis: 当前 MOD 卡池加入紫卡后的合法配装；已装备赋能与已建模 MOD 触发按满状态计算，显式层数/覆盖率仍按输入",
     ]
     return recommendation
 

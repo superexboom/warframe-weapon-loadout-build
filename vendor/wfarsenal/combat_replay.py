@@ -1178,7 +1178,7 @@ def replay(
                                      dot_base_damage=active.dot_base_damage*adjustment if active.dot_base_damage is not None else None)
             field_duration_boost = field_duration_ready
             field_duration_ready = False  # A shot consumes it, even when that shot kills.
-            hit_count = 1.0 if active.continuous else active.multishot
+            hit_count = (1.0 if active.continuous else max(active.multishot,0.0))
             combat['victimProcTypesBeforeHit'] = {dtype:count(dtype)>0 for dtype in states}
             shot_puncture=0.0 if active.radial_only else live_crit()[0]
             aim = 0.0 if active.radial_only else head
@@ -1238,7 +1238,7 @@ def replay(
                     if not take(radial_packet[0], t, "direct"):
                         add_procs(part, 0.0, t, radial_packet)
                     noncrit_no_proc_hit(part, 0.0, t)
-            if (form == "base" or combat.get("baseMode")) and combat.get('baseBurst') and burst_round==int(combat['baseBurst']['count'])-1:
+            if hit_count > 0 and (form == "base" or combat.get("baseMode")) and combat.get('baseBurst') and burst_round==int(combat['baseBurst']['count'])-1:
                 signal("on-burst-hit", t)
             if (form=='base' or combat.get('baseMode')) and combat.get('baseBurst'):
                 burst_head_probability*=1.-(1.-aim)**hit_count

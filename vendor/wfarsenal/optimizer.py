@@ -545,8 +545,9 @@ def _mod_card(
     required: bool = False,
     allow_empty: bool = False,
     set_shell: Mapping[str, Any] | None = None,
+    rank: int | None = None,
 ) -> _Card | None:
-    rank = int(mod.get("maxRank") or 0)
+    rank = int(mod.get("maxRank") or 0) if rank is None else rank
     effects = mod_effects(mod, rank, _steady_state_scenario((mod,), scenario))
     active = tuple(
         effect
@@ -1233,7 +1234,7 @@ def _arcane_card(
     for index, raw in enumerate(requested):
         if not isinstance(raw, Mapping):
             raise SimulationError(f"arcane state {index} must be an object")
-        query_raw = raw.get("query")
+        query_raw = raw.get("query") or raw.get("path")
         if not isinstance(query_raw, str) or not query_raw.strip():
             raise SimulationError(f"arcane state {index} query is empty")
         query = query_raw.strip()
@@ -2752,7 +2753,7 @@ def _neutral_negative_codes(weapon: Mapping[str, Any]) -> frozenset[str]:
     """
     slot = str(weapon.get("slot") or "").casefold()
     if slot in MELEE_SLOTS:
-        return frozenset({"X", "N", "U", "H", "M", "E"})
+        return frozenset({"X", "E"})
     return frozenset({"Z", "H", "M", "E"})
 
 
@@ -3001,333 +3002,13 @@ def recommend_optimal_riven(
     special_cards: Sequence[_Card] = (),
     special_capacity_cost: int = 0,
 ) -> dict[str, Any]:
-    """Anytime 最优紫卡词条搜索（KPM 口径）。
-
-    组合分数语义：`_best_fixed` 全 keep 层最优——「基准配装卡池 + 该紫卡」
-    的最优子集（容量可行的前提下保留最多的协同卡）。这是「同一张卡在
-    配装页能拿到什么」的口径（与 _recommend_positive 的单词条分层同
-    基础），不重跑全量 beam（那会把每个组合的成本提高一个数量级）。
-
-    阶段（预算内单调改进，随时可返回当前 top）：
-      1. 单词条粗排——每个候选词条挂基准池单独评分（keep 上限 3）。
-      2. beam 组合——粗排头部正词条枚举 2/3 正组合（keep 上限 5），
-         负词条与 top 组合配对。
-      3. 精排——时间富余时 top 组合扩 keep 上限 6 复评。
-
-    _evaluate 按 (卡集合, 紫卡词条码) memo：2正组合的子集评估在
-    3正/带负组合间大量复用，实测去重率 >60%。
-
-    返回 {"combos": [...], "budget", "elapsed", "evaluations", ...}。
-    combos 按 score 降序去重（同词条集合只留最高分）。
-    """
-    import time as _time
-
-    started = _time.monotonic()
-    deadline = started + max(float(budget_seconds), 0.5)
-    # Keep a bounded slice for combination/negative evaluation.  Previously
-    # the single-stat sweep could consume the entire budget, returning only
-    # 2-stat cards and never testing the required 3+1 negative alternatives.
-    coarse_deadline = started + max(0.25, float(budget_seconds) * 0.4)
-    evaluations = 0
-    memo_hits = 0
-
-    supported_positives = [
-        line for line in positive_candidates
-        if line.effect is not None and line.effect.supported
-    ]
-    supported_negatives = [
-        line for line in negative_candidates
-        if line.effect is not None and line.effect.supported
-    ]
-    if len(supported_positives) < 2:
-        raise SimulationError("not enough supported positive Riven stats")
-
-    required_cards = tuple(card for card in baseline.cards if card.required)
-    optional_cards = tuple(card for card in baseline.cards if not card.required)
-    fill_low = max(1, min_fill if min_fill is not None else 1)
-    fill_high = min(slot_count, max_fill if max_fill is not None else slot_count)
-    optional_low = max(0, fill_low - len(required_cards) - 1)
-    optional_high = min(len(optional_cards), fill_high - len(required_cards) - 1)
-    if optional_high < optional_low:
-        raise SimulationError('Riven and required MODs cannot satisfy the selected slot/fill limits')
-    def legal_layers(layers):
-        return tuple(dict.fromkeys(min(max(n, optional_low), optional_high) for n in layers))
-    witnesses = {}
-    # memo：key = (保留卡下标 frozenset, 紫卡词条码 tuple)。
-    memo: dict[tuple[tuple[int, ...], tuple[str, ...]], float] = {}
-    # 已超过容量的子集跳过表：粗排阶段 keep=3 内容量更宽松，记下不可行
-    # 的卡集合避免组合阶段重复试。
-    results: dict[tuple[str, ...], dict[str, Any]] = {}
-
-    def _subset_score(
-        lines: Sequence[_RivenLine],
-        keep_indexes: tuple[int, ...],
-        riven_card: _Card,
-    ) -> float | None:
-        nonlocal evaluations, memo_hits
-        key = (keep_indexes, _riven_combo_key(lines))
-        cached = memo.get(key)
-        if cached is not None:
-            memo_hits += 1
-            return cached
-        evaluations += 1
-        cards = (
-            *required_cards,
-            *(optional_cards[index] for index in keep_indexes),
-        )
-        outcome = _evaluate(
-            weapon,
-            cards,
-            riven_card,
-            scenario=scenario,
-            metric=metric,
-            passives=passives,
-            capacity_limit=capacity_limit,
-            slot_limit=slot_count,
-            special_cards=special_cards,
-            special_capacity_cost=special_capacity_cost,
-            target_context=target_context,
-        )
-        if outcome is None or (required_damage_type and outcome.stats.damage_types.get(required_damage_type, 0) <= 0):
-            return None
-        memo[key] = outcome.score
-        combo_key = _riven_combo_key(lines)
-        if combo_key not in witnesses or outcome.score > witnesses[combo_key][0].score:
-            witnesses[combo_key] = (outcome, riven_card)
-        return outcome.score
-
-    def _structure_remap(
-        lines: Sequence[_RivenLine],
-    ) -> list[_RivenLine]:
-        """按组合实际结构重映射词条数值（官方 wiki 结构系数）。
-
-        候选行按 3+0 口径生成（正面 0.757525×1.089）；组合实际是
-        2 正（×1.0）、3 正带负（正面 ×1.25、负面独立档 0.757525 或
-        0.5）等——数值必须与结构一致，「2 正无负」的词条数值比
-        「3 正带负」更高，排序才有意义。effect 随 value 重建。
-        """
-        positives = [line for line in lines if not line.negative]
-        negatives = [line for line in lines if line.negative]
-        has_negative = bool(negatives)
-        if len(positives) == 3 and not has_negative:
-            # 生成口径即 3+0：无需重映射。
-            return list(lines)
-        source_positive = theoretical_structure_scale(3, False)
-        target_positive = theoretical_structure_scale(
-            len(positives), has_negative
-        )
-        target_negative = theoretical_structure_scale(
-            len(positives), has_negative, negative=True
-        )
-        source_negative = theoretical_structure_scale(3, False, negative=True)
-
-        def remap(line: _RivenLine) -> _RivenLine:
-            if line.negative:
-                ratio = target_negative / source_negative
-            else:
-                ratio = target_positive / source_positive
-            if abs(ratio - 1.0) < 1e-12:
-                return line
-            new_value = line.value * ratio
-            effect = _effect_from_code(
-                line.code,
-                new_value,
-                negative=line.negative,
-                source=f"riven:theoretical:{line.code}",
-            )
-            return replace(
-                line,
-                value=new_value,
-                low=0.0,
-                high=new_value,
-                effect=effect,
-            )
-
-        return [remap(line) for line in lines]
-
-    def evaluate_combo(
-        lines: Sequence[_RivenLine], keep_layers: Sequence[int]
-    ) -> float | None:
-        """指定 keep 层枚举：每层取最优，跨层比较。
-
-        评估前按组合结构重映射数值（2正/3正/带负的结构系数不同）。
-        keep 语义：从 baseline 可选卡中保留 keep 张 + 紫卡。keep=7 即
-        8 槽全满（紫卡换掉一张基准卡）——与「配装页挂这张紫卡」同口径；
-        更低的 keep 是容量不够时的回退。调用方按预算从浅到深传层
-        （先 [2] 粗排，再 [7, 6, 5] 全量），时间耗尽即停在当前最优。
-        """
-        remapped = _structure_remap(lines)
-        riven_card = _card_from_lines(remapped)
-        best: float | None = None
-        layer_cap = optional_high
-        for keep in legal_layers(keep_layers):
-            if keep > layer_cap or keep < 0:
-                continue
-            for indexes in itertools.combinations(range(len(optional_cards)), keep):
-                if _time.monotonic() > deadline:
-                    return best
-                score = _subset_score(lines, indexes, riven_card)
-                if score is not None and (best is None or score > best):
-                    best = score
-        return best
-
-    def record(lines: Sequence[_RivenLine], score: float, stage: str) -> None:
-        key = _riven_combo_key(lines)
-        existing = results.get(key)
-        if existing is not None and existing["score"] >= score:
-            return
-        # 输出数值按组合实际结构重映射（与评估口径一致）。
-        remapped = _structure_remap(lines)
-        ordered = sorted(remapped, key=lambda line: (line.negative, line.code))
-        outcome, riven_card = witnesses[key]
-        witness = _build_payload(weapon, outcome, riven_card, passives)
-        witness['damageTypes'] = dict(outcome.stats.damage_types)
-        witness['riven'] = {'slot': outcome.riven_index, 'polarity': riven_card.polarity,
-                            'stats': [{'code':line.code,'value':line.value,'negative':line.negative} for line in ordered]}
-        for index, row in enumerate(witness['mods']):
-            row['slot'] = index + (index >= outcome.riven_index)
-        witness['specialMods'] = [{'path':c.record['path'],'rank':c.rank} for c in special_cards if c.record]
-        results[key] = {
-            'build': witness,
-            "stats": [
-                {
-                    "code": line.code,
-                    "label": line.label,
-                    "value": line.value,
-                    "negative": line.negative,
-                    "unit": line.unit,
-                }
-                for line in ordered
-            ],
-            "score": score,
-            "gain": _percent_gain(score, baseline.score),
-            "stage": stage,
-        }
-
-    # ── 阶段 1：单词条粗排（keep 2 单层，排序信号足够）─────────────────
-    positive_ranked: list[tuple[float, _RivenLine]] = []
-    for line in supported_positives:
-        if _time.monotonic() > coarse_deadline:
-            break
-        score = evaluate_combo([line], (2,))
-        if score is not None:
-            positive_ranked.append((score, line))
-    positive_ranked.sort(key=lambda item: (-item[0], item[1].code))
-    if not positive_ranked:
-        raise SimulationError("no capacity-valid build for any single stat")
-
-    neutral_negative_codes = _neutral_negative_codes(weapon)
-    negative_ranked: list[tuple[float, _RivenLine]] = []
-    for line in supported_negatives:
-        if line.code in neutral_negative_codes:
-            # The current single-target model has no observable cost for these
-            # lines.  Keep them ahead of harmful negatives even when the KPM
-            # score is on a plateau; otherwise a time-limited solve can return
-            # -crit/-multishot/-damage simply because every candidate tied.
-            negative_ranked.append((float("inf"), line))
-            continue
-        if _time.monotonic() > coarse_deadline:
-            break
-        score = evaluate_combo([line], (2,))
-        if score is not None:
-            negative_ranked.append((score, line))
-    negative_ranked.sort(
-        key=lambda item: (
-            0 if item[1].code in neutral_negative_codes else 1,
-            -item[0],
-            item[1].code,
-        )
-    )
-
-    # beam 宽度随预算：10s → 头部 8；20/30s → 10；60s → 12。
-    # ── 反哺算法强化（2026-09-23）：自适应 beam——粗排提前完成（预算
-    # 富余）时 beam 吸收更多后续候选；负面头部随预算加宽（4→6→8）。
-    beam_width = 8 if budget_seconds <= 10 else (10 if budget_seconds <= 30 else 12)
-    if _time.monotonic() - started < (coarse_deadline - started) * 0.75:
-        # 粗排便宜（keep2 单层）：提前完成说明预算富余，beam 加宽一档。
-        beam_width = min(beam_width + 2, len(positive_ranked))
-    beam = [line for _, line in positive_ranked[:beam_width]]
-
-    # ── 阶段 2：组合枚举（2 正 / 3 正；keep 7→5 全量层）─────────────────
-    stage2_combos: list[tuple[_RivenLine, ...]] = []
-    for size in (2, 3):
-        if len(beam) < size:
-            break
-        for combo in itertools.combinations(beam, size):
-            # 融合词条每卡限 1 条（游戏规则）：含 2+ 融合的组合非法。
-            if not _combo_allows_fusion(combo):
-                continue
-            stage2_combos.append(combo)
-    # 负面头部随预算加宽：短预算只试头部 4 个，长预算 6/8 个——「3+1 vs
-    # 2+1 的最优负面」经常不同（2 正结构的负面系数 0.5，选错代价更大）。
-    negative_head_size = 4 if budget_seconds <= 10 else (6 if budget_seconds <= 30 else 8)
-    negative_head = [line for _, line in negative_ranked[:negative_head_size]]
-
-    evaluated_keys: set[tuple[str, ...]] = set()
-    for combo in stage2_combos:
-        if _time.monotonic() > deadline:
-            break
-        key = _riven_combo_key(combo)
-        if key in evaluated_keys:
-            continue
-        evaluated_keys.add(key)
-        score = evaluate_combo(combo, (7, 6, 5))
-        if score is not None:
-            record(combo, score, "beam")
-        # ── 反哺算法强化：负面配对同时覆盖 3 正与 2 正头部组合（旧实现
-        # 只给 3 正配负面——2+1 结构被系统性跳过，而它的负面系数档位
-        # 不同（0.5 vs 0.757525），最优负面可能完全不同）。
-        if len(combo) in (2, 3):
-            for negative in negative_head:
-                if _time.monotonic() > deadline:
-                    break
-                with_negative = (*combo, negative)
-                nkey = _riven_combo_key(with_negative)
-                if nkey in evaluated_keys:
-                    continue
-                evaluated_keys.add(nkey)
-                nscore = evaluate_combo(with_negative, (7, 6))
-                if nscore is not None:
-                    record(with_negative, nscore, "beam-negative")
-
-    # ── 阶段 3：精排头部候选（keep 7→0 全层，时间富余时）───────────────
-    # 反哺算法强化：精排用完整 keep 阶梯（含 keep 7——「紫卡换掉一张基准
-    # 卡」的挂卡口径）；头部数量随预算（top_limit/3 → /2）。
-    refined = 0
-    if results and _time.monotonic() <= deadline:
-        head_size = max(3, top_limit // 3 if budget_seconds <= 10 else top_limit // 2)
-        head = sorted(
-            results.values(), key=lambda row: -row["score"]
-        )[:head_size]
-        code_to_line = {
-            line.code: line for line in (*supported_positives, *supported_negatives)
-        }
-        for row in head:
-            if _time.monotonic() > deadline:
-                break
-            lines = tuple(code_to_line[stat["code"]] for stat in row["stats"])
-            score = evaluate_combo(lines, (7, 6, 5, 4, 3, 2, 1, 0))
-            if score is not None:
-                record(lines, score, "refined")
-                refined += 1
-
-    combos = sorted(results.values(), key=lambda row: -row["score"])[:top_limit]
-    return {
-        "combos": combos,
-        "budget": float(budget_seconds),
-        "elapsed": _time.monotonic() - started,
-        "evaluations": evaluations,
-        "memoHits": memo_hits,
-        "refined": refined,
-        "stages": {
-            "coarse": "single-stat ranking (keep 2)",
-            "beam": f"beam width {beam_width} × sizes 2/3 (keep 7/6/5), negatives head {len(negative_head)} on 2/3-positive combos",
-            "refined": "keep 7..0 full ladder of head",
-        },
-        'scope': {'slotCount':slot_count,'minFill':fill_low,'maxFill':fill_high,'requiredDamageType':required_damage_type},
-        'searchStatus': 'heuristic-best-found',
-        "baselineScore": baseline.score,
-    }
+    from .riven_recommendation import recommend
+    return recommend(weapon, baseline, positive_candidates, negative_candidates,
+        scenario=scenario, metric=metric, passives=passives, capacity_limit=capacity_limit,
+        target_context=target_context, budget_seconds=budget_seconds, top_limit=top_limit,
+        slot_count=slot_count, min_fill=min_fill, max_fill=max_fill,
+        required_damage_type=required_damage_type, special_cards=special_cards,
+        special_capacity_cost=special_capacity_cost)
 
 
 def _metric(requested: Any, weapon_type: str) -> tuple[str, str | None]:
@@ -4796,18 +4477,22 @@ def analyze_riven_request(
     neutral_negative_codes = _neutral_negative_codes(weapon)
     negative_keep_cap = {"fast": 3, "standard": 5, "deep": None}[profile]
     negative_ranked: list[tuple[float, _RivenLine]] = []
-    for line in negative_candidates:
-        if line.code in neutral_negative_codes:
-            # 无伤负面（无论有无 handler）：对目标口径零影响，直接按
-            # 「无代价」参与——它是纯数值杠杆（3+1 结构 +25% 正面数值）。
-            negative_ranked.append((float("inf"), line))
+    from .riven_recommendation import negative_rolls
+    ranked_positive, _ = _candidate_lines(weapon_type,disposition,(),negative=False,bases=template_bases,
+        structure_scale=theoretical_structure_scale(positive_count,True),available_fusion_codes=_fusable)
+    ranked_negative, _ = _candidate_lines(weapon_type,disposition,(),negative=True,bases=template_bases,
+        structure_scale=theoretical_structure_scale(positive_count,True,negative=True),available_fusion_codes=_fusable)
+    positive_map = {line.code:line for line in ranked_positive}
+    negative_seed = [positive_map[line.code] for line in recommended]
+    for line in negative_rolls(ranked_negative):
+        if line.code in {p.code for p in negative_seed}:
             continue
-        if line.effect is None or not line.effect.supported:
+        if line.code not in neutral_negative_codes and (line.effect is None or not line.effect.supported):
             continue
         result = _best_fixed(
             weapon,
             baseline.cards,
-            _card_from_lines([*recommended, line]),
+            _card_from_lines([*negative_seed, line]),
             scenario=scenario,
             metric=ranking_metric,
             passives=passives,
@@ -4816,8 +4501,11 @@ def analyze_riven_request(
             max_keep_cap=negative_keep_cap,
         )
         negative_ranked.append((result.score, line))
-    negative_ranked.sort(key=lambda item: (-item[0], item[1].code))
-    recommended_negative = [line for _, line in negative_ranked[:3]]
+    negative_ranked.sort(key=lambda item: (-item[0],item[1].code not in neutral_negative_codes,item[1].code))
+    recommended_negative = []
+    for _,line in negative_ranked:
+        if line.code not in {l.code for l in recommended_negative}:recommended_negative.append(line)
+        if len(recommended_negative)==3:break
     if not recommended_negative:
         unsupported.append("no-objective-neutral-supported-negative-stat")
 
@@ -4856,7 +4544,7 @@ def analyze_riven_request(
     opt_slot = "optimalNeg" if has_negative else "optimalClean"
     if has_negative and recommended_negative:
         first_neg = recommended_negative[0]
-        optimal_lines.append(neg_by_code_neg.get(first_neg.code, first_neg))
+        optimal_lines.append(first_neg)
     optimal_card = _card_from_lines(optimal_lines)
     optimal: _Evaluation | None = None
     cached_optimal = bundle.get(opt_slot) if bundle is not None else None
@@ -4881,6 +4569,22 @@ def analyze_riven_request(
             optimal_card,
         )
 
+    if has_negative:
+        # Heat duration is non-monotonic. Recheck curses on the fully equipped
+        # winner too; single-line probes can miss fast armour-strip synergy.
+        positive_lines=[l for l in optimal_lines if not l.negative]
+        duration_lines=[l for l in negative_candidates_neg if l.code=='3']
+        curse_checks=[*negative_rolls(duration_lines),*[l for l in negative_candidates_neg if l.code in neutral_negative_codes]]
+        for curse in curse_checks:
+            if curse.code in {l.code for l in positive_lines}:continue
+            lines=[*positive_lines,curse]
+            card=_card_from_lines(lines)
+            candidate=_evaluate(weapon,optimal.cards,card,scenario=scenario,metric=_formal_search_metric,
+                passives=passives,capacity_limit=capacity_limit,target_context=benchmark_context)
+            if candidate is not None and candidate.score>optimal.score:
+                optimal,optimal_card,optimal_lines=candidate,card,lines
+                optimal_fresh=True
+
     # ── 满数值反超修正（high_actual）：用户紫卡正词条集合 ≠ 推荐集合时，
     # 「用户的正词条（满数值 3+1 口径）+ 推荐负面」的额外一次求解——
     # 衡量「这张卡的词条组合若洗到满数值能到多少」。缓存按词条集合键控。
@@ -4902,7 +4606,7 @@ def analyze_riven_request(
         ]
         if has_negative and recommended_negative:
             first_neg = recommended_negative[0]
-            high_lines.append(neg_by_code_neg.get(first_neg.code, first_neg))
+            high_lines.append(first_neg)
         high_card = _card_from_lines(high_lines)
         high_cache_map = (
             bundle.get("high")
@@ -5090,7 +4794,7 @@ def analyze_riven_request(
             target_calibration["status"] = "post-search-saturated"
             unsupported.append("target-calibration-post-search-still-saturated")
 
-    # actual 反超保护：actual（含紫卡）理论上不应超过满数值上限；若超过
+    # actual 反超保护：actual（含紫卡）理论上不应超过已找到的参考上限；若超过
     # （beam 搜索找到上限没找到的路径），以 actual 为上限并记录诊断。
     optimal_uses_actual = actual.score > optimal.score
     if optimal_uses_actual:

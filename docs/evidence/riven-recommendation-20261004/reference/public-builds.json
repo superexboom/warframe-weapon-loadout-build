@@ -1,0 +1,514 @@
+{
+  "sourceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+  "runtime": {
+    "commit": "5809c383+",
+    "release": "dc8413a8fab9",
+    "wasm": "aaa8b8d4b23d"
+  },
+  "boardSources": [
+    {
+      "path": "board-burston_prime.json",
+      "url": "https://wfsim.app/board/burston_prime.json",
+      "sha256": "a4a221d5f6b89ac8f067e028128ab813b8e8e409bef0fa198bc2e42a493c847e"
+    },
+    {
+      "path": "board-furis.json",
+      "url": "https://wfsim.app/board/furis.json",
+      "sha256": "2a9a18ecca19b86e16987b510e127c9d8565d532a1952b877f40e8775c8f50eb"
+    }
+  ],
+  "cases": [
+    {
+      "weapon": "burston_prime",
+      "boardRowIndex": 1976,
+      "board": {
+        "arcanes": [
+          "primary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [
+          "burston_prime_evo1_incarnon_form",
+          "burston_prime_fortress_salvo",
+          "burston_prime_kinetic_battle",
+          "burston_prime_absolute_valor"
+        ],
+        "exilus": "vigilante_supplies",
+        "mode": "cycle",
+        "mods": [
+          "primed_cryo_rounds",
+          "riven",
+          "primary_acuity",
+          "galvanized_scope",
+          "bladed_rounds",
+          "vile_acceleration",
+          "vital_sense",
+          "gilded_truth"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_damage",
+            "damage",
+            "toxin"
+          ],
+          "malus": "zoom",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 101.57625216323456,
+        "shown": "101.5763",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+        "fireMode": 1,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Event/CritDamageWhileAimingRifleMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Syndicate/BurstonPrimeMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamageOnNoMelee",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5,
+          "incarnonCycle": true
+        },
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-3",
+          "tier4": "4-2"
+        },
+        "riven": {
+          "slot": 1,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 167.05832343750004,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 229.71050731406257,
+              "negative": false
+            },
+            {
+              "code": "6",
+              "value": 125.29687249406251,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 54.66953250000001,
+              "negative": true
+            }
+          ]
+        },
+        "exilus": {
+          "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+          "rank": 5
+        }
+      },
+      "referenceRequest": {
+        "weapon": "burston_prime",
+        "mode": "cycle",
+        "mods": [
+          "primed_cryo_rounds",
+          "riven:board",
+          "primary_acuity",
+          "galvanized_scope",
+          "bladed_rounds",
+          "vile_acceleration",
+          "vital_sense",
+          "gilded_truth",
+          "vigilante_supplies"
+        ],
+        "arcane": [
+          "primary_deadhead"
+        ],
+        "evolutions": [
+          "burston_prime_evo1_incarnon_form",
+          "burston_prime_fortress_salvo",
+          "burston_prime_kinetic_battle",
+          "burston_prime_absolute_valor"
+        ],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 100,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "rivens": [
+          {
+            "id": "board",
+            "spec": {
+              "rank": 8,
+              "polarity": "madurai",
+              "bonuses": [
+                {
+                  "id": "critical_damage",
+                  "roll": 1.1
+                },
+                {
+                  "id": "damage",
+                  "roll": 1.1
+                },
+                {
+                  "id": "toxin",
+                  "roll": 1.1
+                }
+              ],
+              "malus": {
+                "id": "zoom",
+                "roll": 0.9
+              }
+            }
+          }
+        ]
+      },
+      "evolutionMapping": [
+        {
+          "reference": "burston_prime_fortress_salvo",
+          "native": "/Lotus/Weapons/Tenno/Rifle/BurstonIncarnonEvolutions/Prime/PrimeBurstonEvoTier1B",
+          "icon": "PunchThroughWithArmorAboveX.png"
+        },
+        {
+          "reference": "burston_prime_kinetic_battle",
+          "native": "/Lotus/Weapons/Tenno/Rifle/BurstonIncarnonEvolutions/BurstonEvoTier2C",
+          "icon": "LessRecoil.png"
+        },
+        {
+          "reference": "burston_prime_absolute_valor",
+          "native": "/Lotus/Weapons/Tenno/Rifle/BurstonIncarnonEvolutions/Prime/PrimeBurstonEvoTier3B",
+          "icon": "HighCrit.png"
+        }
+      ],
+      "localKpm": 99.33316300727526,
+      "referenceKpm": 97.60722896746256,
+      "deltaPercent": 1.7682440717460057,
+      "panelDifferences": {},
+      "targetMatches": true
+    },
+    {
+      "weapon": "furis",
+      "boardRowIndex": 1588,
+      "board": {
+        "arcanes": [
+          "secondary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [
+          "furis_evo1_incarnon_form",
+          "furis_stormburst",
+          "furis_executioners_fortune",
+          "furis_elemental_balance"
+        ],
+        "mode": "cycle",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "galvanized_diffusion",
+          "galvanized_crosshairs",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_damage",
+            "fire_rate",
+            "weak_point_damage"
+          ],
+          "malus": "status_duration",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 166.2774855424903,
+        "shown": "166.2775",
+        "valence": ""
+      },
+      "manualPayload": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+        "fireMode": 1,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Event/CritChanceWhileAimingPistolSPMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 6
+          }
+        ],
+        "arcanes": [
+          {
+            "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnNoMelee",
+            "rank": 5
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 1.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "scenario": {
+          "distance": 0.5,
+          "incarnonCycle": true
+        },
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-3",
+          "tier4": "4-3"
+        },
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 125.29687249406251,
+              "negative": false
+            },
+            {
+              "code": "R",
+              "value": 103.99640499703129,
+              "negative": false
+            },
+            {
+              "code": "W",
+              "value": 125.29687249406251,
+              "negative": false
+            },
+            {
+              "code": "3",
+              "value": 91.1158875,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "referenceRequest": {
+        "weapon": "furis",
+        "mode": "cycle",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "galvanized_diffusion",
+          "galvanized_crosshairs",
+          "galvanized_shot",
+          "lethal_torrent",
+          "magnetic_might",
+          "riven:board"
+        ],
+        "arcane": [
+          "secondary_deadhead"
+        ],
+        "evolutions": [
+          "furis_evo1_incarnon_form",
+          "furis_stormburst",
+          "furis_executioners_fortune",
+          "furis_elemental_balance"
+        ],
+        "evolutions_as_given": true,
+        "enemy": "thrax_centurion",
+        "level": 9999,
+        "steel_path": true,
+        "headshot_pct": 100,
+        "aiming": true,
+        "duration": 30,
+        "runs": 100,
+        "seed": 12648430,
+        "infinite_ammo": true,
+        "class_rules": {
+          "archgun": {
+            "infinite_ammo": true
+          }
+        },
+        "ammo_drops": false,
+        "spectral_form": false,
+        "eximus": false,
+        "assume_max": false,
+        "frenzy": false,
+        "player_at": [
+          0,
+          0
+        ],
+        "target_at": [
+          0,
+          0.5
+        ],
+        "rivens": [
+          {
+            "id": "board",
+            "spec": {
+              "rank": 8,
+              "polarity": "madurai",
+              "bonuses": [
+                {
+                  "id": "critical_damage",
+                  "roll": 1.1
+                },
+                {
+                  "id": "fire_rate",
+                  "roll": 1.1
+                },
+                {
+                  "id": "weak_point_damage",
+                  "roll": 1.1
+                }
+              ],
+              "malus": {
+                "id": "status_duration",
+                "roll": 0.9
+              }
+            }
+          }
+        ]
+      },
+      "evolutionMapping": [
+        {
+          "reference": "furis_stormburst",
+          "native": "/Lotus/Weapons/Tenno/Pistol/FurisIncarnonEvolutions/FurisEvoTier1B",
+          "icon": "DamageAndOnHittingEnemyAffectedByElectricity(xWhite).png"
+        },
+        {
+          "reference": "furis_executioners_fortune",
+          "native": "/Lotus/Weapons/Tenno/Pistol/FurisIncarnonEvolutions/FurisEvoTier2C",
+          "icon": "ChanceToReplenishMagOnHeadshot(xWhite).png"
+        },
+        {
+          "reference": "furis_elemental_balance",
+          "native": "/Lotus/Weapons/Tenno/Pistol/FurisIncarnonEvolutions/FurisEvoTier3C",
+          "icon": "HighStatus(xWhite).png"
+        }
+      ],
+      "localKpm": 189.1312261164508,
+      "referenceKpm": 141.90483802213757,
+      "deltaPercent": 33.28032275188939,
+      "panelDifferences": {},
+      "targetMatches": true
+    }
+  ]
+}

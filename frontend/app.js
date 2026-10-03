@@ -275,6 +275,7 @@ function captureBuildConfig() {
     innateElementValue: Number(get("build-innate-element-value", 60) || 60) / 100,
     slotCount: Number(get("build-slot-count", 8) || 8),
     mode: state.buildInputMode,
+    triggerPolicy: document.getElementById("trigger-policy-select")?.value || "emergent",
     configId: state.activeConfig,
     configSchema: BUILD_CONFIG_SCHEMA,
     legacyModMigrations: state.buildMigrationHistory.length ? structuredClone(state.buildMigrationHistory) : undefined,
@@ -490,6 +491,8 @@ function applyBuildConfig(config) {
     return;
   }
   setControlValue("build-fire-mode-select", config.fireMode ?? 0);
+  const triggerPolicyControl = document.getElementById("trigger-policy-select");
+  if (triggerPolicyControl) triggerPolicyControl.value = config.triggerPolicy === "assumed_max" ? "assumed_max" : "emergent";
   refreshBuildMetrics();
   setControlValue("build-metric-select", config.metric || ui["build-metric-select"]?.value || "");
   setControlValue("build-element-select", config.elementTarget || "");
@@ -2729,9 +2732,13 @@ function renderEffectLines(mod, details = false) {
   // 套装标签行已移除（用户反馈卡面不需要"套装：xx"标签，保留详细加成说明即可）
   if (details) {
     const officialDescription = cleanOfficialText(mod.description || modAssetFields(mod)?.description || "");
-    if (officialDescription && !lines.some((line) => String(line.label || "").includes(officialDescription))) {
-      frag.append(create("p", "mod-effect-line is-description is-set-detail", officialDescription));
-    }
+    // The catalog may join the same official lines with semicolons. Compare
+    // complete text segments across all rendered lines, not one line against
+    // the whole paragraph; preserve only genuinely additional instructions.
+    const textKey = (text) => cleanOfficialText(String(text)).replace(/<[^>]+>/g, "").replace(/[\s；;，,。.!！:：]+/g, "");
+    const displayedText = textKey(shown.map((line) => line.value === undefined ? line.label : `${line.value >= 0 ? "+" : ""}${(line.value * 100).toFixed(1)}% ${line.label}`).join(" "));
+    const extraDescription = splitEffectSegments(officialDescription).flatMap((text) => text.split(/[；;\n]/)).filter((text) => textKey(text) && !displayedText.includes(textKey(text))).join("；");
+    if (extraDescription) frag.append(create("p", "mod-effect-line is-description is-set-detail", extraDescription));
     const setText = isSacrificeSetMod(mod) ? "" : modSetText(mod);
     if (setText) frag.append(create("p", "mod-effect-line is-set is-set-detail", setText));
     // 镀层「实战满叠层」摘要不再渲染进卡面（会挤占卡面空间）——它保留在
@@ -2948,10 +2955,12 @@ async function requestRivenRecommendation(budgetSeconds, hostElement) {
   delete payload.riven;
   payload.budgetSeconds = budgetSeconds;
   payload.topLimit = 10;
+  payload.triggerPolicy = "assumed_max";
+  payload.optimizeWithArcanes = true;
   state.rivenSolving = true;
   const existing = hostElement.querySelector(".riven-solve-results");
   const list = create("div", "riven-solve-results");
-  list.append(create("p", "riven-solve-progress", `正在搜索最优词条组合（预算 ${budgetSeconds} 秒，期间其他解算会排队）…`));
+  list.append(create("p", "riven-solve-progress", `正在按当前配卡搜索紫卡（预算 ${budgetSeconds} 秒，已装备赋能与 MOD 按满触发计算）…`));
   if (existing) existing.replaceWith(list);
   else hostElement.append(list);
   try {
@@ -3032,6 +3041,8 @@ function applyRecommendedRiven(combo) {
     incarnonChoices: recommendation.incarnonChoices,
     mods: build.mods.map((mod) => ({ path: mod.path, rank: mod.rank, slot: mod.slot })),
     riven: structuredClone(build.riven), exilus: build.exilus,
+    triggerPolicy: recommendation.triggerPolicy || recommendation.requestedConfig?.triggerPolicy || "emergent",
+    optimizeWithArcanes: recommendation.optimizeWithArcanes,
   };
   applyBuildConfig(config);
   syncAutoFormaFromSlots();

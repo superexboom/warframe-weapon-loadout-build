@@ -1573,7 +1573,7 @@ def apply_mods(
     low_threshold = _combine(0.,buckets['WEAPON_LOW_CRIT_VALUE']) if buckets['WEAPON_LOW_CRIT_VALUE'] else None
     low_bonus = (_combine(quantize_base_crit_damage(_combine(crit_base,buckets['WEAPON_LOW_CRIT_DAMAGE'])),crit_relative)
                  -_combine(quantize_base_crit_damage(crit_base),crit_relative)) if low_threshold is not None else 0.
-    multishot = innate_multishot if buckets['RUNTIME_LOCK_MULTISHOT'] else _combine(innate_multishot,buckets['WEAPON_FIRE_ITERATIONS'])
+    multishot = innate_multishot if buckets['RUNTIME_LOCK_MULTISHOT'] else max(0.0, _combine(innate_multishot,buckets['WEAPON_FIRE_ITERATIONS']))
     continuous = mode.get('trigger')=='/Lotus/Language/Menu/Loadout_TriggerContinous'
     pool_cost = 0.
     pool_bonus = buckets['WEAPON_AMMO_POOL_MULTISHOT_DAMAGE']
@@ -2727,8 +2727,8 @@ def damage_against_cached_armour(
         "overguard": overguard,
         "perType": per_type,
         "perHit": raw,
-        "perShot": raw * max(stats.multishot, 1.0),
-        "dps": raw * max(stats.multishot, 1.0) * stats.sustained_attack_rate,
+        "perShot": raw * max(stats.multishot, 0.0),
+        "dps": raw * max(stats.multishot, 0.0) * stats.sustained_attack_rate,
     }
 
 

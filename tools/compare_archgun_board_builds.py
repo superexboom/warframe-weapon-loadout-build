@@ -271,7 +271,13 @@ def main():
   case.update(referenceKpm=kpm,referenceKpmSe=ref.get('score_se',0)*60/ref['duration'],localKpm=lkpm,deltaPercent=100*(lkpm/kpm-1) if kpm else None)
   print(case['id'],round(lkpm,4),round(kpm,4),round(case['deltaPercent'] or 0,2),flush=True)
  release=json.loads((args.wfsim/'site/release.json').read_text(encoding='utf-8'))
- dump(args.output/'comparison.json',dict(sourceCommit=subprocess.check_output(['git','-C',str(args.wfsim),'rev-parse','HEAD'],text=True).strip(),
+ source_capture=args.wfsim/'capture-source.json'
+ # A captured runtime lives inside this repository but is not itself a Git
+ # checkout. git rev-parse there would incorrectly report our own commit.
+ source_commit=(json.loads(source_capture.read_text(encoding='utf-8')).get('commit') if source_capture.exists()
+                else subprocess.check_output(['git','-C',str(args.wfsim),'rev-parse','HEAD'],text=True).strip()
+                if (args.wfsim/'.git').exists() else None)
+ dump(args.output/'comparison.json',dict(sourceCommit=source_commit,
   localInputFingerprint=app._analysis_inputs_fingerprint(),toolSha256=digest(Path(__file__)),release=release,wasmSha256=digest(args.wfsim/'site/pkg'/f"wfsim_wasm_bg.{release['wasm']}.wasm"),
   duration=args.duration,runs=args.runs,seed=12648430,recordedAt=datetime.now(timezone.utc).isoformat(),ablation=args.without_enervate,sources=sources,cases=cases,skips=skips,
   contract='Lv9999 SP Thrax, headshots, ADS, single target, infinite resupply explicitly set by archgun class rule, timed buffs start at zero. Offline kernel audit when catalogBlockers is nonempty. Board score uses separate 180s contract.'))

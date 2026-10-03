@@ -16,3 +16,4 @@ docs/evidence/runtime-completion-v21-20261001/** -text whitespace=-blank-at-eol,
 docs/evidence/felarx-reload-loop-20261001/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
 docs/evidence/runtime-completion-final-v23-20261002/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
 docs/evidence/riven-analysis-stall-20261003/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+docs/evidence/riven-recommendation-20261004/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

@@ -1,0 +1,112 @@
+{
+  "engineFingerprint": "e6d2d6649923797c",
+  "cacheVersion": 14,
+  "fullBakeStarted": false,
+  "files": [
+    {
+      "path": "analysis/burston.json",
+      "bytes": 63446,
+      "sha256": "511b29f325ba4f4c2889d61858bfb30886a2092e3689b738ff9b6c7a8f0bb574"
+    },
+    {
+      "path": "browser/applied-complete.json",
+      "bytes": 164095,
+      "sha256": "201a6110d2ac386b24d2b3bbd41321cecd242b7c1bb84ba7e1947fa94acf9de1"
+    },
+    {
+      "path": "browser/card-render.json",
+      "bytes": 7970,
+      "sha256": "d9006101702607c3c53d3359d271703c9f410cdff47c49c518b55e436d226a32"
+    },
+    {
+      "path": "browser/card.png",
+      "bytes": 901255,
+      "sha256": "879815d14005e7565c694c54e8d6906efc15702951b9ec30d72e96ce2f8494ca"
+    },
+    {
+      "path": "browser/incarnon.json",
+      "bytes": 2272,
+      "sha256": "515c731461bb0999894e571dcbd33ae93466d39d353e036d1cceee442a2f7c48"
+    },
+    {
+      "path": "browser/recommend-complete.json",
+      "bytes": 59941,
+      "sha256": "770c31a57ab9007182f5ad36d513d0ef225cf39405a89c1fe57ff76ca7b7063d"
+    },
+    {
+      "path": "manual/final-replays.json",
+      "bytes": 5141,
+      "sha256": "41694549df5a4cbd2954cc687b679acb8fafa243ce4a4d8ff4d4b7bad7dd61c1"
+    },
+    {
+      "path": "recommendations/braton-final.json",
+      "bytes": 111170,
+      "sha256": "9075bd6fea5ba05df6976d89ce93b9f78c1204c0a6f1dba372c7cf6a8b4e0669"
+    },
+    {
+      "path": "recommendations/burston-delivery.json",
+      "bytes": 189239,
+      "sha256": "6933a647113b56f34bf084c135ba3c1b94dd373f3913c02e33d1a32f95828242"
+    },
+    {
+      "path": "recommendations/furis-delivery.json",
+      "bytes": 138766,
+      "sha256": "867f4a1e53fa9b30cc45801a2160e0d40858f901b92ac650c60fe15be529f635"
+    },
+    {
+      "path": "recommendations/hek-tie-fixed.json",
+      "bytes": 115308,
+      "sha256": "35967320b354c78644b7bdc6227d48bf021e8439c05bdbb9f69a548addfa41d2"
+    },
+    {
+      "path": "recommendations/lex-final.json",
+      "bytes": 122436,
+      "sha256": "290cd32c92de2577d61d42fa5ea590a09bd7de8bb66521839439018341104108"
+    },
+    {
+      "path": "recommendations/paris-final.json",
+      "bytes": 118763,
+      "sha256": "b7e4d472029d70adb89aa464aae4cc9f7f22e1248bb277d9093f1bd26199b934"
+    },
+    {
+      "path": "reference/heat-duration.json",
+      "bytes": 1459238,
+      "sha256": "a96695c95b1a91f36311c39a4105ee77a6050a4c92cd7131287cf3240a66e943"
+    },
+    {
+      "path": "reference/public-builds.json",
+      "bytes": 14283,
+      "sha256": "ebae60270e8b6ca35a67eced0d4b5e70dbb1f9d5cc66a52a99dd769e26adc19f"
+    },
+    {
+      "path": "reference/runtime.json",
+      "bytes": 925,
+      "sha256": "4e73414bfe9b4ee17f1bb886ffdf97a8162134fd4a1076a4e23759af932f63bf"
+    },
+    {
+      "path": "reference/source.json",
+      "bytes": 145,
+      "sha256": "91d70287e6ad78ce8691f6a1b44133ca8a8cf15b89eac12d3c52d5698cd919f3"
+    },
+    {
+      "path": "tests/negative-multishot.xml",
+      "bytes": 5942,
+      "sha256": "266fac2de588c1918c663a4e9e1b645baf6399892f55fbbdc877e3c926c9e595"
+    },
+    {
+      "path": "tests/rank-context.xml",
+      "bytes": 1761,
+      "sha256": "7255725dd98b8da2c88bd9542b5e421b57c51947fd75c3c672061ebca15515a8"
+    },
+    {
+      "path": "tests/regression.xml",
+      "bytes": 104700,
+      "sha256": "0542f21d9ddbc64f6bd56a9727b01afb176e53f1fa7be58de9005c043f973c13"
+    }
+  ],
+  "limitations": [
+    "Source HEAD and published WASM are captured separately; runtime manifest identifies executed binary.",
+    "Intermediate search fingerprints are preserved; 25 returned builds are rechecked on final engine.",
+    "Furis absolute KPM still differs materially from WFSim; no game-golden accuracy claim."
+  ]
+}
