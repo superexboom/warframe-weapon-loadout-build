@@ -607,11 +607,14 @@ def replay(
         rows = {}
         for dtype, r in b["dot"]["perType"].items():
             hr = h["dot"]["perType"].get(dtype, r)
-            rows[dtype] = {
-                **r,
-                "seedPerSecondPerProc": r["seedPerSecondPerProc"] * (1 - aim)
-                + hr["seedPerSecondPerProc"] * aim,
-            }
+            seed = r["seedPerSecondPerProc"] * (1 - aim) + hr["seedPerSecondPerProc"] * aim
+            # Crit-conditioned procs (Hunter Munitions) are likelier on the
+            # weak point, so the per-proc seed averages over procs, not hits.
+            count = r["expectedProcs"] * (1 - aim) + hr["expectedProcs"] * aim
+            if hr["expectedProcs"] != r["expectedProcs"] and count > 0:
+                seed = (r["expectedProcs"] * r["seedPerSecondPerProc"] * (1 - aim)
+                        + hr["expectedProcs"] * hr["seedPerSecondPerProc"] * aim) / count
+            rows[dtype] = {**r, "seedPerSecondPerProc": seed}
         procs = {
             k: (1 - aim) * b["expectedProcs"].get(k, 0.0)
             + aim * h["expectedProcs"].get(k, 0.0)
@@ -753,7 +756,7 @@ def replay(
             from .status_arcanes import STATUS_POOL, encumber_roll
             if abs(t - encumber_time) > 1e-9:
                 encumber_time=t;encumber_remaining=1.0
-            probability, merged_seed=encumber_roll(st, encumber['chance'], forced_procs)
+            probability, merged_seed=encumber_roll(st, encumber['chance'], forced_procs, aim=aim)
             weight=encumber_remaining*probability*encumber.get('uptime',1.0)
             encumber_remaining*=1-probability*encumber.get('uptime',1.0)
             if weight > 0:
@@ -763,7 +766,7 @@ def replay(
                 if key not in encumber_views:
                     probe=replace(st,status_chance=0.0,continuous=False,multishot=1.0,
                                   independent_proc_chances={k:1.0 for k in STATUS_POOL},
-                                  impact_proc_conversions={})
+                                  impact_proc_conversions={},crit_proc_chances={})
                     encumber_views[key]=(st,probe)
                 _,_,extra_rows,extra_non=packet(encumber_views[key][1],aim)
                 extra_rows={k:{**r,'seedPerSecondPerProc':r['seedPerSecondPerProc']*merged_seed} for k,r in extra_rows.items()}
@@ -793,7 +796,7 @@ def replay(
                 if empowered_hit(st, dtype, n, t, allow_encumber):
                     return
                 continue
-            absence=no_status_probability(st,dtype,forced_procs)**max(status_rate_multiplier,0.)
+            absence=no_status_probability(st,dtype,forced_procs,aim=aim)**max(status_rate_multiplier,0.)
             # Explicit derived event packets can supply procs independently
             # of this weapon's natural distribution.
             if absence>=1. and n>0.:absence=1.-min(n,1.)

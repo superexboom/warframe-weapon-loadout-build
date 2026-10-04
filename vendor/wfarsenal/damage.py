@@ -272,6 +272,9 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     # incorrectly turns non-critical hits into critical hits.
     "WEAPON_DOUBLE_CRIT_CHANCE": "double_crit_chance",
     "WEAPON_PROC_CHANCE": "status_chance",
+    # Hunter Munitions: a critical pellet rolls its own Slash status, outside
+    # status chance and damage-type weights (ModdedStats.crit_proc_chances).
+    "WEAPON_SLASH_PROC_ON_CRIT_CHANCE": "crit_proc_chance",
     "WEAPON_FIRE_ITERATIONS": "multishot",
     "WEAPON_FIRE_RATE": "fire_rate",
     "WEAPON_CLIP_MAX": "magazine",
@@ -974,6 +977,10 @@ class ModdedStats:
         default_factory=dict
     )
     independent_proc_chances: dict[str, float] = field(default_factory=dict)
+    # Crit-conditioned procs (Hunter Munitions): chance per damaging instance
+    # that rolled crit tier >= 1. Counted by expected_status_procs at the hit
+    # location's crit chance; the DoT seed reads E[crit multiplier | crit].
+    crit_proc_chances: dict[str, float] = field(default_factory=dict)
     innate_damage_types: dict[str, float] = field(default_factory=dict)
     innate_element_candidates: tuple[str, ...] = ()
     # Populated only for an exported single heavy attack. ``heavy_damage`` is
@@ -1156,6 +1163,14 @@ def crit_tier_seed_distribution(
     amplifiers (live armour strip, viral ramp) and the average of products no
     longer equals the product of averages.
     """
+    promoted=_crit_tier_weights(crit_chance,double_crit_chance)
+    cd=max(1.0,crit_multiplier*float(critical_multiplier_factor))
+    return [(weight, max(1.0,noncrit_damage_multiplier) if tier==0 else 1+tier*(cd-1))
+            for tier,weight in sorted(promoted.items()) if weight>0]
+
+
+def _crit_tier_weights(crit_chance: float, double_crit_chance: float = 0.0) -> dict[int, float]:
+    """Probability of each crit tier, Vigilante promotion included."""
     chance=max(float(crit_chance),0.0)
     whole=int(chance);fraction=chance-whole
     promotion=min(1.0,max(0.0,float(double_crit_chance)))
@@ -1166,9 +1181,74 @@ def crit_tier_seed_distribution(
         rate=promotion if tier>0 else 0.0
         promoted[tier]=promoted.get(tier,0.0)+weight*(1-rate)
         if rate:promoted[tier+1]=promoted.get(tier+1,0.0)+weight*rate
+    return promoted
+
+
+def critical_tier_seed_distribution(
+    crit_chance: float,
+    crit_multiplier: float,
+    critical_multiplier_factor: float = 1.0,
+    *, double_crit_chance: float = 0.0,
+) -> list[tuple[float, float]]:
+    """Seed distribution of a proc that only a critical hit can cause.
+
+    Hunter Munitions rolls on crit tier >= 1, so its Slash seed is the tier
+    decomposition conditioned on a crit: below 100% crit chance every such
+    proc is a yellow crit (or a promoted orange one), never the all-hit
+    average that :func:`crit_tier_seed_distribution` gives natural procs.
+    """
+    tiers={tier:weight for tier,weight in _crit_tier_weights(crit_chance,double_crit_chance).items()
+           if tier>0 and weight>0}
+    total=sum(tiers.values())
+    if total<=0:
+        return []
     cd=max(1.0,crit_multiplier*float(critical_multiplier_factor))
-    return [(weight, max(1.0,noncrit_damage_multiplier) if tier==0 else 1+tier*(cd-1))
-            for tier,weight in sorted(promoted.items()) if weight>0]
+    return [(weight/total, 1+tier*(cd-1)) for tier,weight in sorted(tiers.items())]
+
+
+def location_crit_chance(
+    stats: "ModdedStats", *, weakpoint: bool = False, crit_chance_add: float = 0.0
+) -> float:
+    """Crit chance one damage instance rolls at the body or a weak point.
+
+    Same arithmetic as :func:`_apply_weakpoint_folding` and the Enervate hit
+    model: body shots scale by ``WEAPON_CRIT_CHANCE_BODY_PART`` (TORSO), weak
+    points add the weak-point crit bonuses, and a radial part strikes no body
+    part.
+    """
+    cc=max(float(stats.crit_chance)+crit_chance_add,0.0)
+    if stats.radial_only:
+        return cc
+    if weakpoint:
+        return max(cc+stats.weakpoint_crit_chance_bonus
+                   +stats.base_crit_chance*stats.weakpoint_crit_chance_relative,0.0)
+    return cc*stats.bodyshot_crit_multiplier
+
+
+def crit_proc_probabilities(
+    stats: "ModdedStats",
+    *,
+    weakpoint: bool = False,
+    forced_procs: Mapping[str, float] | None = None,
+) -> dict[str, float]:
+    """Per-instance probability of each crit-conditioned proc (Hunter Munitions).
+
+    ``chance x P(crit tier >= 1)``, independent of status chance and damage
+    weights. WFSim skips the roll when the weapon already forces that status
+    (``pellet.rs`` ``slash_on_crit``), so a forced type yields nothing here.
+    """
+    chances=getattr(stats,'crit_proc_chances',None)  # absent on pre-channel pickles
+    if not chances:
+        return {}
+    crit=min(location_crit_chance(stats,weakpoint=weakpoint),1.0)
+    result={}
+    for dtype,chance in chances.items():
+        if stats.native_forced_procs.get(dtype) or (forced_procs or {}).get(dtype):
+            continue
+        p=min(max(float(chance),0.0),1.0)*crit
+        if p>0:
+            result[dtype]=p
+    return result
 
 
 def effective_hit_multiplier(
@@ -1357,6 +1437,10 @@ def apply_mods(
         independent_proc_chances[dtype] = (
             independent_proc_chances.get(dtype, 0.0) + float(chance)
         )
+    crit_proc_chances: dict[str, float] = {}
+    slash_on_crit = _combine(0.0, buckets["WEAPON_SLASH_PROC_ON_CRIT_CHANCE"])
+    if slash_on_crit > 0.0:
+        crit_proc_chances["DT_SLASH"] = slash_on_crit
     faction_groups: dict[str, list[ModEffect]] = {}
     for effect in buckets["GAMEPLAY_FACTION_DAMAGE"]:
         faction_groups.setdefault(effect.symbol_filter or "", []).append(effect)
@@ -1723,6 +1807,7 @@ def apply_mods(
         dot_elemental_multipliers=dot_elements,
         impact_proc_conversions=impact_proc_conversions,
         independent_proc_chances=independent_proc_chances,
+        crit_proc_chances=crit_proc_chances,
         innate_damage_types={
             dtype: base_total * damage_scale * value
             for dtype, value in innate_entries
@@ -2733,6 +2818,20 @@ def damage_against_cached_armour(
     }
 
 
+def _is_weakpoint_hit(stats: "ModdedStats", hit_multiplier: float) -> bool:
+    return not stats.radial_only and hit_multiplier > 1.0 + 1e-9
+
+
+def _weakpoint_noncrit_scale(stats: "ModdedStats", hit_multiplier: float) -> float:
+    """Weak-point factors that do not depend on the crit roll."""
+    if not _is_weakpoint_hit(stats, hit_multiplier):
+        return 1.0
+    scale = 1.0
+    if getattr(stats, "weakpoint_damage_bonus", 0.0) > 0.0:
+        scale *= (hit_multiplier + 1.5 * float(stats.weakpoint_damage_bonus)) / hit_multiplier
+    return scale * stats.headshot_bonus_multiplier
+
+
 def _apply_weakpoint_folding(
     raw: float,
     stats: "ModdedStats",
@@ -2746,8 +2845,7 @@ def _apply_weakpoint_folding(
     # established the gate, not the arithmetic (its openQuestions say so).
     if stats.radial_only:
         return raw
-    weakpoint_share = 1.0 if hit_multiplier > 1.0 + 1e-9 else 0.0
-    if weakpoint_share <= 0.0:
+    if not _is_weakpoint_hit(stats, hit_multiplier):
         if stats.bodyshot_crit_multiplier!=1.:
             cc=max(stats.crit_chance+crit_chance_add,0.)
             cd=max(stats.crit_multiplier+crit_multiplier_add,1.)
@@ -2757,9 +2855,7 @@ def _apply_weakpoint_folding(
                 hit_critical_multiplier,double_crit_chance=stats.double_crit_chance)
             raw*=modified/original if original else 1.
         return raw
-    if getattr(stats, "weakpoint_damage_bonus", 0.0) > 0.0:
-        raw *= (hit_multiplier + 1.5 * float(stats.weakpoint_damage_bonus)) / hit_multiplier
-    raw *= stats.headshot_bonus_multiplier
+    raw *= _weakpoint_noncrit_scale(stats, hit_multiplier)
     weak_crit = stats.weakpoint_crit_chance_bonus + stats.base_crit_chance * stats.weakpoint_crit_chance_relative
     if weak_crit != 0.0:
         base_cc = (
@@ -3038,6 +3134,7 @@ def expected_status_procs(
     stats: ModdedStats,
     *,
     forced_procs: Mapping[str, float] | None = None,
+    weakpoint: bool = False,
 ) -> dict[str, float]:
     """Return expected status-proc counts for one attack.
 
@@ -3046,6 +3143,9 @@ def expected_status_procs(
     output damage type to expected count; only the small explicitly verified native ``PT_*`` mapping is read
     from weapon metadata.  This keeps forced effects such as custom Lua
     attacks fail-closed until their mapping is verified.
+
+    ``weakpoint`` selects the crit chance that crit-conditioned procs (Hunter
+    Munitions) roll at; the default is a body shot.
     """
     chance = max(float(stats.status_chance), 0.0)
     shots = max(float(stats.multishot), 0.0)
@@ -3094,6 +3194,12 @@ def expected_status_procs(
     for dtype, proc_chance in stats.independent_proc_chances.items():
         result[dtype] = result.get(dtype, 0.0) + shots * max(float(proc_chance), 0.0)
 
+    # Hunter Munitions: each damaging instance that crits rolls its own proc.
+    for dtype, probability in crit_proc_probabilities(
+        stats, weakpoint=weakpoint, forced_procs=forced_procs
+    ).items():
+        result[dtype] = result.get(dtype, 0.0) + shots * probability
+
     if forced_procs is not None:
         if not isinstance(forced_procs, Mapping):
             raise TypeError("forced_procs must be a mapping of damage type to count")
@@ -3132,7 +3238,8 @@ def _proc_seed_merge_multiplier(stats, dtype, forced_procs=None):
         if merged <= 0 or probability <= 0:
             continue
         probe = replace(stats, continuous=False, multishot=1.0,
-                        status_chance=stats.status_chance * merged)
+                        status_chance=stats.status_chance * merged,
+                        crit_proc_chances={})
         n = expected_status_procs(probe, forced_procs=forced_procs).get(dtype, 0.0)
         count += probability * n
         seed += probability * n * merged
@@ -3185,7 +3292,16 @@ def expected_dot_damage(
     shield_bypass = _damage_type_set(
         target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
     )
-    procs = expected_status_procs(stats, forced_procs=forced_procs)
+    weakpoint = _is_weakpoint_hit(stats, hit_multiplier)
+    procs = expected_status_procs(stats, forced_procs=forced_procs, weakpoint=weakpoint)
+    # Crit-conditioned procs share their type's row but seed from a crit.
+    crit_shots = (1.0 if stats.multishot > 0 else 0.0) if stats.continuous else max(float(stats.multishot), 0.0)
+    crit_counts = {
+        dtype: crit_shots * probability
+        for dtype, probability in crit_proc_probabilities(
+            stats, weakpoint=weakpoint, forced_procs=forced_procs
+        ).items()
+    }
     dot_base = (
         stats.dot_base_damage
         if stats.dot_base_damage is not None
@@ -3209,8 +3325,18 @@ def expected_dot_damage(
         hit_critical_multiplier,
         double_crit_chance=stats.double_crit_chance,
     )
-    crit = sum(weight * factor for weight, factor in seed_tiers)
     weak_seed_scale = _apply_weakpoint_folding(1.0, stats, hit_multiplier, hit_critical_multiplier)
+    # A crit-only proc rolls at the location's own crit chance, so its tiers
+    # already carry the body/weak-point crit bonuses; only the non-crit
+    # weak-point factors still apply. A merged beam instance seeds at E[M].
+    crit_seed_tiers = critical_tier_seed_distribution(
+        location_crit_chance(stats, weakpoint=weakpoint),
+        stats.crit_multiplier,
+        hit_critical_multiplier,
+        double_crit_chance=stats.double_crit_chance,
+    ) if crit_counts else []
+    crit_location_scale = _weakpoint_noncrit_scale(stats, hit_multiplier)
+    crit_merge = max(float(stats.multishot), 0.0) if stats.continuous else 1.0
     proc_damage = max(float(stats.proc_damage_multiplier), 0.0)
     target_faction = str(target.get("faction") or "")
     faction_mod = stats.faction_damage_multipliers.get("", 1.0)
@@ -3259,23 +3385,36 @@ def expected_dot_damage(
         # The M58 +1 accumulator rides M (elemental/proc-damage), not the
         # seed, so it is added once per tick group at the averaged tier only
         # in the closed-form path (the stepped model re-derives it per step).
-        per_second_by_tier = [
-            (
-                weight,
-                coefficient
-                * seed_basis
+        seed_scale = (
+            coefficient
+            * seed_basis
+            * elemental_factor
+            * proc_damage
+            * stats.falloff_multiplier
+            * hit_multiplier
+            * target_multiplier
+            * max(float(faction_mod), 0.0) ** 2
+        )
+        crit_share = min(crit_counts.get(dtype, 0.0) / count, 1.0)
+        natural_share = 1.0 - crit_share
+        per_second_by_tier = []
+        crit_by_tier = []
+        if natural_share > 1e-12:
+            natural_scale = (
+                seed_scale
                 * _proc_seed_merge_multiplier(stats, dtype, forced_procs)
-                * elemental_factor
-                * factor
-                * proc_damage
-                * stats.falloff_multiplier
-                * hit_multiplier
                 * weak_seed_scale
-                * target_multiplier
-                * max(float(faction_mod), 0.0) ** 2,
             )
-            for weight, factor in seed_tiers
-        ]
+            for weight, factor in seed_tiers:
+                per_second_by_tier.append((natural_share * weight, natural_scale * factor))
+                crit_by_tier.append((natural_share * weight, factor))
+        if crit_share > 0.0:
+            for weight, factor in crit_seed_tiers:
+                per_second_by_tier.append(
+                    (crit_share * weight, seed_scale * crit_merge * crit_location_scale * factor)
+                )
+                crit_by_tier.append((crit_share * weight, factor))
+        crit = sum(weight * factor for weight, factor in crit_by_tier)
         seed_per_second_no_acc = sum(weight * ps for weight, ps in per_second_by_tier)
         per_second = seed_per_second_no_acc + (accumulator * accumulator_multiplier)
         damage = per_second * duration
@@ -3930,7 +4069,22 @@ def windowed_status_damage(
         head_probe = expected_status_damage(
             stats, target, forced_procs=forced_procs, hit_location='head', **target_kwargs
         )
-        probe = mix(probe, head_probe)
+        mixed = mix(probe, head_probe)
+        # Per-proc seeds average over procs, not hits: crit-conditioned procs
+        # (Hunter Munitions) land more often on the higher weak-point crit.
+        head_rows = head_probe["dot"]["perType"]
+        for dtype, row in mixed["dot"]["perType"].items():
+            body_row = probe["dot"]["perType"][dtype]
+            head_row = head_rows.get(dtype, body_row)
+            if head_row["expectedProcs"] == body_row["expectedProcs"]:
+                continue
+            weighted = (
+                (1.0 - head_weight) * body_row["expectedProcs"] * body_row["seedPerSecondPerProc"]
+                + head_weight * head_row["expectedProcs"] * head_row["seedPerSecondPerProc"]
+            )
+            if row["expectedProcs"] > 0.0:
+                row["seedPerSecondPerProc"] = weighted / row["expectedProcs"]
+        probe = mixed
     procs = probe["expectedProcs"]
     duration_scale = max(float(stats.proc_duration_multiplier), 0.0)
 

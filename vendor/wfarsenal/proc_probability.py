@@ -3,7 +3,7 @@ import math
 import heapq
 
 
-def no_status_probability(stats, damage_type, forced=None):
+def no_status_probability(stats, damage_type, forced=None, aim=0.):
     weights={k:max(float(v),0.) for k,v in stats.damage_types.items()}
     total=sum(weights.values())
     share=weights.get(damage_type,0.)/total if total else 0.
@@ -11,6 +11,7 @@ def no_status_probability(stats, damage_type, forced=None):
     multishot=max(float(stats.multishot),0.)
     forced_per=stats.native_forced_procs.get(damage_type,0.)
     independent=max(float(stats.independent_proc_chances.get(damage_type,0.)),0.)
+    on_crit=crit_proc_probability(stats,damage_type,forced,aim)
     def zero_rolls(chance):
         whole=math.floor(chance)
         return (1-share)**whole*(1-(chance-whole)*share)
@@ -18,11 +19,22 @@ def no_status_probability(stats, damage_type, forced=None):
         if pellets<=0:return 1.
         instances=1 if stats.continuous else pellets
         natural=zero_rolls(chance*pellets) if stats.continuous else zero_rolls(chance)**pellets
-        return natural*(1-min(1.,forced_per))**instances*(1-min(1.,independent))**instances
+        return natural*(1-min(1.,forced_per))**instances*(1-min(1.,independent))**instances*(1-on_crit)**instances
     whole=math.floor(multishot);fraction=multishot-whole
     zero=(1-fraction)*zero_for_pellets(whole)+fraction*zero_for_pellets(whole+1)
     extra=max(float((forced or {}).get(damage_type,0.)),0.)
     return min(1.,max(0.,zero*(1-min(1.,extra))))
+
+
+def crit_proc_probability(stats, damage_type, forced=None, aim=0.):
+    """Per-instance Hunter Munitions chance, mixed over body and weak point."""
+    from .damage import crit_proc_probabilities
+    if not getattr(stats,'crit_proc_chances',None):
+        return 0.
+    aim=min(max(float(aim),0.),1.)
+    body=crit_proc_probabilities(stats,forced_procs=forced).get(damage_type,0.)
+    head=crit_proc_probabilities(stats,weakpoint=True,forced_procs=forced).get(damage_type,0.) if aim else 0.
+    return (1-aim)*body+aim*head
 
 
 class FirstProcClock:

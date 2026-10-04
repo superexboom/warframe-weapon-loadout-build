@@ -1,0 +1,206 @@
+{
+ "sourceCommit": "b2e56376e61d250e4ff59eadda3a8649e0c7fe05",
+ "source": "https://github.com/magenie33/wfsim",
+ "endpoint": "/api/simulate (native build of wfsim-webapi route)",
+ "runs": 300,
+ "seed": 12648430,
+ "duration": 30.0,
+ "contract": "Lv170 Steel Path Thrax Centurion, body shots (headshot_pct=0), ADS, single target, 30 s, finite ammo; mods at max rank; reference totals are damage_sources sums, slash is the Slash DoT source.",
+ "cases": [
+  {
+   "weapon": "soma_prime",
+   "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeSoma/PrimeSomaRifle",
+   "mods": [
+    "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod"
+   ],
+   "hunterMunitions": "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod",
+   "reference": {
+    "without": {
+     "total": 464727.8340046794,
+     "direct": 448962.3780046794,
+     "slash": 15765.45600000003,
+     "kills": 0.27982534644518714
+    },
+    "with": {
+     "total": 546458.9872717999,
+     "direct": 417619.7171843961,
+     "slash": 128839.2700874038,
+     "kills": 0.32875750160137684
+    }
+   },
+   "referenceRequest": {
+    "weapon": "soma_prime",
+    "mode": "base",
+    "mods": [
+     "serration",
+     "split_chamber",
+     "point_strike",
+     "vital_sense",
+     "hammer_shot",
+     "infected_clip",
+     "high_voltage",
+     "hunter_munitions"
+    ],
+    "arcane": [],
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 300,
+    "seed": 12648430,
+    "infinite_ammo": false,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ]
+   }
+  },
+  {
+   "weapon": "baza_prime",
+   "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+   "mods": [
+    "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod"
+   ],
+   "hunterMunitions": "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod",
+   "reference": {
+    "without": {
+     "total": 540710.3118269652,
+     "direct": 532118.7638269652,
+     "slash": 8591.548000000004,
+     "kills": 0.3256895591831171
+    },
+    "with": {
+     "total": 653292.1073585884,
+     "direct": 511069.1453585917,
+     "slash": 142222.96199999674,
+     "kills": 0.39327895541716357
+    }
+   },
+   "referenceRequest": {
+    "weapon": "baza_prime",
+    "mode": "base",
+    "mods": [
+     "serration",
+     "split_chamber",
+     "point_strike",
+     "vital_sense",
+     "hammer_shot",
+     "infected_clip",
+     "high_voltage",
+     "hunter_munitions"
+    ],
+    "arcane": [],
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 300,
+    "seed": 12648430,
+    "infinite_ammo": false,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ]
+   }
+  },
+  {
+   "weapon": "stradavar_prime",
+   "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeStradavar/PrimeStradavarGun",
+   "mods": [
+    "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod"
+   ],
+   "hunterMunitions": "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod",
+   "reference": {
+    "without": {
+     "total": 524477.9365652528,
+     "direct": 506790.6585652529,
+     "slash": 17687.27799999997,
+     "kills": 0.3148834525116156
+    },
+    "with": {
+     "total": 623698.0475912719,
+     "direct": 480540.9495912732,
+     "slash": 143157.0979999987,
+     "kills": 0.37508501102767733
+    }
+   },
+   "referenceRequest": {
+    "weapon": "stradavar_prime",
+    "mode": "base",
+    "mods": [
+     "serration",
+     "split_chamber",
+     "point_strike",
+     "vital_sense",
+     "hammer_shot",
+     "infected_clip",
+     "high_voltage",
+     "hunter_munitions"
+    ],
+    "arcane": [],
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 300,
+    "seed": 12648430,
+    "infinite_ammo": false,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ]
+   }
+  }
+ ]
+}
