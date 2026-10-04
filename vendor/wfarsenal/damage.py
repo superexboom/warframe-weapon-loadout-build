@@ -1321,6 +1321,10 @@ def apply_mods(
             skipped.append(reason)
         else:
             applicable.append(effect)
+    # Sniper scope zoom bonus while aiming (data/mechanics/sniper-profiles.json).
+    from .sniper_combo import scope_effects
+    scope_terms, scope_post_crit = scope_effects(weapon, fire_mode) if scenario.aiming else ([], 0.0)
+    applicable.extend(scope_terms)
 
     buckets = _bucket(applicable)
     impact_proc_conversions: dict[str, list[dict[str, float]]] = {}
@@ -1558,7 +1562,8 @@ def apply_mods(
             source_chance = _combine(damage.get('critChance', 0.), buckets['WEAPON_CRIT_CHANCE'])
             bonus = min(conversion.runtime_threshold, max(0., source_chance) * conversion.value)
             per_pellet_proc += bonus
-    crit_chance = _combine(damage.get('critChance',0.),buckets['WEAPON_CRIT_CHANCE'])
+    # The Lanka's scope adds flat crit chance after mods, not to the bucket.
+    crit_chance = _combine(damage.get('critChance',0.),buckets['WEAPON_CRIT_CHANCE'])+scope_post_crit
     fire_rate=(mode.get('fireRate') or 0.) if buckets['RUNTIME_LOCK_FIRE_RATE'] else _combine(mode.get('fireRate') or 0.,buckets['WEAPON_FIRE_RATE'])
     charge_rate=max(1e-9,_combine(1.,buckets['WEAPON_CHARGE_RATE']))
     charge_fire_scale=1. if weapon.get('slot')=='arch_gun' else max(fire_rate/max(mode.get('fireRate') or 0.,1e-9),1e-9)
@@ -1632,7 +1637,7 @@ def apply_mods(
         ammo_pool_multishot_cost=pool_cost,
         ammo_pool_damage_bonus=pool_multiplier-1. if pool_bonus else 0.,
         victim_full_crit_chance=_combine(damage.get('critChance',0.),[*buckets['WEAPON_CRIT_CHANCE'],
-            *[replace(e,upgrade_type='WEAPON_CRIT_CHANCE') for e in buckets['WEAPON_VICTIM_CRIT_CHANCE']]])-weapon_crit_chance,
+            *[replace(e,upgrade_type='WEAPON_CRIT_CHANCE') for e in buckets['WEAPON_VICTIM_CRIT_CHANCE']]])+scope_post_crit-weapon_crit_chance,
         victim_full_crit_damage=(_combine(quantize_base_crit_damage(crit_base+sum(e.value for e in buckets['WEAPON_VICTIM_CRIT_DAMAGE'])),crit_relative)
             -_combine(quantize_base_crit_damage(crit_base),crit_relative))*shield_crit_damage_multiplier,
         victim_low_health_multiplier=victim_low_health_multiplier,

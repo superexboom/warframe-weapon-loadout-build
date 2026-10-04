@@ -2432,6 +2432,7 @@ const DIAGNOSTIC_CODE_LABELS = {
   'quanta-cube-chain-unmodeled': '立方体之间的连锁引爆与射击转换尚未计入',
 
   'spread-hit-loss-not-modeled': '散布暂不参与命中、伤害及评分计算',
+  'sniper-combo-every-pellet-lands-no-miss-reset': '狙击连击按每发均命中计算；未命中清零尚未模拟',
   'hema-player-health-cost-not-modeled': '血肢换弹消耗角色生命；当前仅计算输出，未模拟角色生命资源',
   'talons-single-throw-deployment-overflow-unmodeled': '单次投掷超过 8 枚部署上限，超出部分暂不计伤',
   'stug-projectile-stack-lifecycle-unmodeled': '史特克当前按孤立胶团结算；后续胶团命中旧胶团后的合并和叠层引爆尚未计入',

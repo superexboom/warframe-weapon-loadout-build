@@ -1,0 +1,13 @@
+[package]
+name = "wfsim-driver"
+version = "0.0.0"
+edition = "2021"
+
+[dependencies]
+wfsim-webapi = { path = "../wfsim/webapi" }
+serde_json = { version = "1", features = ["raw_value"] }
+
+[profile.release]
+debug = false
+
+[workspace]

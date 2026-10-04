@@ -655,6 +655,7 @@ def prepare(
         else None
     )
     from .beam_ramp import floor_for
+    from .sniper_combo import combat_configuration as sniper_combo_configuration
     return dict(
         resolve=resolve,
         beamRampFloors={
@@ -665,6 +666,7 @@ def prepare(
         cycle=cycle,
         onosCharge=onos_sequence,
         doubleTap=double_tap,
+        sniperCombo=sniper_combo_configuration(weapon, scenario),
         onosCrits=onos_crit,
         punctureArmorStrip=next((v for b in branches if (v:=latron_puncture_strip(b))),0.),
         magazineRestore=next((v for b in branches if (v:=ammo_restore_configuration(b))),None),

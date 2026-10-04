@@ -1,0 +1,3066 @@
+[
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 1.0,
+    "big_crit_rate": 0.00728112755131879,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 4654969.8864090685,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 387914.15720075567,
+    "combatants": [
+      {
+        "big_crit_rate": 0.00728112755131879,
+        "crit_rate": 0.9702029358442014,
+        "crit_tier": 1.0075047469785106,
+        "damage": 4654969.8864090685,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 85.495,
+        "procs": 32.6025,
+        "reloads": 9.0,
+        "shots": 45.0,
+        "transforms": 0.0,
+        "weapon": "rubico_prime"
+      }
+    ],
+    "crit_rate": 0.9702029358442014,
+    "crit_tier": 0.9774840633955202,
+    "damage_per_pellet": 54447.27628994758,
+    "damage_per_shot": 103443.77525353484,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 2764978.2599999974,
+            "type": "Corrosive"
+          },
+          {
+            "dmg": 1497696.5575000017,
+            "type": "Impact"
+          },
+          {
+            "dmg": 288018.56874999957,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 115207.42750000005,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 4665900.813750005,
+        "source": "direct"
+      }
+    ],
+    "downtime": 18.0,
+    "dps": 155165.6628803023,
+    "dps_runs": [],
+    "dps_se": 287.7636354110331,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 332215.70232765493,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 2,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 2
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 114795.32625,
+    "mean_max_hit": 76952.3040386722,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.95,
+      "crit_damage": 9.899999999999999,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 643.28
+        },
+        {
+          "type": "Puncture",
+          "value": 120.83
+        },
+        {
+          "type": "Slash",
+          "value": 39.99
+        },
+        {
+          "type": "Corrosive",
+          "value": 1206.15
+        }
+      ],
+      "fire_rate": 3.67,
+      "modified_base": 804.1,
+      "multishot": 1.9,
+      "status_chance": 0.384,
+      "total": 2010.25
+    },
+    "pellets": 85.495,
+    "picked_up_ammo": null,
+    "procs": 32.6025,
+    "reloads": 9.0,
+    "replay": null,
+    "run": [
+      2936950504,
+      100670953
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 155530.02712500017,
+      "kills": 0,
+      "score": 0.18521863674531414
+    },
+    "score": 0.18478472022173875,
+    "score_runs": [],
+    "score_se": 0.00034269387873809296,
+    "self_damage": null,
+    "shots": 45.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      282103.40812499996,
+      90676.09546874999,
+      0.0,
+      251878.04296874997,
+      156215.27109375,
+      0.0,
+      201502.43437499998,
+      251878.04296874997,
+      0.0,
+      0.0,
+      409111.0031249999,
+      120901.46062499998,
+      0.0,
+      302253.65156249993,
+      241802.92124999996,
+      0.0,
+      120901.46062499998,
+      423155.1121874999,
+      0.0,
+      0.0,
+      483605.84249999985,
+      120901.46062499998,
+      0.0,
+      241802.92124999996,
+      362704.3818749999,
+      0.0,
+      120901.46062499998,
+      483605.84249999985,
+      0.0,
+      0.0
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 1.0,
+    "big_crit_rate": 0.00728112755131879,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 7395013.132284069,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 616251.0943570058,
+    "combatants": [
+      {
+        "big_crit_rate": 0.00728112755131879,
+        "crit_rate": 0.9702029358442014,
+        "crit_tier": 1.0075047469785106,
+        "damage": 7395013.132284069,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 85.495,
+        "procs": 32.6025,
+        "reloads": 9.0,
+        "shots": 45.0,
+        "transforms": 0.0,
+        "weapon": "rubico_prime"
+      }
+    ],
+    "crit_rate": 0.9702029358442014,
+    "crit_tier": 0.9774840633955202,
+    "damage_per_pellet": 86496.43993548241,
+    "damage_per_shot": 164333.6251618682,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 2730301.4474999974,
+            "type": "Heat"
+          },
+          {
+            "dmg": 1478913.2840625017,
+            "type": "Impact"
+          },
+          {
+            "dmg": 284406.40078124957,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 113762.56031250003,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 4607383.692656255,
+        "source": "direct"
+      },
+      {
+        "dmg": 2835995.1874999986,
+        "source": "Heat"
+      },
+      {
+        "dmg": 33438.67799999999,
+        "source": "Slash"
+      }
+    ],
+    "downtime": 18.0,
+    "dps": 246500.4377428023,
+    "dps_runs": [],
+    "dps_se": 1473.7097190335546,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 340826.32310890564,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 2,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 2
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 319429.9749999999,
+    "mean_max_hit": 177229.23426484366,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.95,
+      "crit_damage": 9.899999999999999,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 643.28
+        },
+        {
+          "type": "Puncture",
+          "value": 120.83
+        },
+        {
+          "type": "Slash",
+          "value": 39.99
+        },
+        {
+          "type": "Heat",
+          "value": 1206.15
+        }
+      ],
+      "fire_rate": 3.67,
+      "modified_base": 804.1,
+      "multishot": 1.9,
+      "status_chance": 0.384,
+      "total": 2010.25
+    },
+    "pellets": 85.495,
+    "picked_up_ammo": null,
+    "procs": 32.6025,
+    "reloads": 9.0,
+    "replay": null,
+    "run": [
+      3724842959,
+      1694699751
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 249227.25193854194,
+      "kills": 0,
+      "score": 0.2968014131878046
+    },
+    "score": 0.29355408649900566,
+    "score_runs": [],
+    "score_se": 0.0017550212660756397,
+    "self_damage": null,
+    "shots": 45.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      214630.62328124998,
+      80600.97374999999,
+      19902.725,
+      312081.25484375,
+      221405.15937499996,
+      39804.2,
+      241306.63437499997,
+      311583.71796874993,
+      59705.67499999999,
+      59705.67499999999,
+      533112.0115624999,
+      210459.34812499996,
+      92344.44399999999,
+      394598.0955624999,
+      354048.8402499999,
+      122196.65649999997,
+      182647.38681249996,
+      545351.7686874998,
+      129360.83749999997,
+      129360.83749999997,
+      612966.6799999998,
+      262999.5921249999,
+      142098.13149999996,
+      383901.05274999986,
+      444351.7830624999,
+      152048.86899999995,
+      272950.3296249999,
+      632868.1549999998,
+      159213.04999999996,
+      159213.04999999996
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 1.0,
+    "big_crit_rate": 0.00728112755131879,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 3768325.5423981235,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 314027.12853317696,
+    "combatants": [
+      {
+        "big_crit_rate": 0.00728112755131879,
+        "crit_rate": 0.9702029358442014,
+        "crit_tier": 1.0075047469785106,
+        "damage": 3768325.5423981235,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 85.495,
+        "procs": 32.6025,
+        "reloads": 9.0,
+        "shots": 45.0,
+        "transforms": 0.0,
+        "weapon": "rubico_prime"
+      }
+    ],
+    "crit_rate": 0.9702029358442014,
+    "crit_tier": 0.9774840633955202,
+    "damage_per_pellet": 44076.56052866394,
+    "damage_per_shot": 83740.5676088472,
+    "damage_sources": [
+      {
+        "dmg": 2387208.125,
+        "source": "Heat"
+      },
+      {
+        "by_type": [
+          {
+            "dmg": 852265.5900000005,
+            "type": "Heat"
+          },
+          {
+            "dmg": 461643.86124999967,
+            "type": "Impact"
+          },
+          {
+            "dmg": 88777.66562500007,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 35511.06624999998,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 1438198.1831250011,
+        "source": "direct"
+      },
+      {
+        "dmg": 14186.423999999995,
+        "source": "Slash"
+      }
+    ],
+    "downtime": 18.0,
+    "dps": 125610.85141327078,
+    "dps_runs": [],
+    "dps_se": 1206.8919328669624,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 162346.4841659374,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 2,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 2
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 271183.9750000001,
+    "mean_max_hit": 149689.99318749993,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.95,
+      "crit_damage": 8.399999999999999,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 643.28
+        },
+        {
+          "type": "Puncture",
+          "value": 120.83
+        },
+        {
+          "type": "Slash",
+          "value": 39.99
+        },
+        {
+          "type": "Heat",
+          "value": 1206.15
+        }
+      ],
+      "fire_rate": 3.67,
+      "modified_base": 804.1,
+      "multishot": 1.9,
+      "status_chance": 0.384,
+      "total": 2010.25
+    },
+    "pellets": 85.495,
+    "picked_up_ammo": null,
+    "procs": 32.6025,
+    "reloads": 9.0,
+    "replay": null,
+    "run": [
+      1148492342,
+      260304613
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 127986.42440416674,
+      "kills": 0,
+      "score": 0.15241732730487123
+    },
+    "score": 0.14958828908635996,
+    "score_runs": [],
+    "score_se": 0.0014372715200832243,
+    "self_damage": null,
+    "shots": 45.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      121715.61187500002,
+      42638.6525,
+      8444.3,
+      93930.18125000001,
+      93719.105,
+      25330.399999999994,
+      93719.10500000001,
+      127702.38125,
+      50659.55,
+      50659.55,
+      195880.00999999998,
+      132682.775625,
+      83426.625,
+      186009.68249999997,
+      160258.38,
+      91869.675,
+      126064.02750000001,
+      194452.73249999995,
+      94234.079,
+      94234.079,
+      247897.58899999998,
+      153757.58150000003,
+      119563.229,
+      187951.934,
+      228224.9325,
+      134084.92500000002,
+      168279.2775,
+      247146.41062500002,
+      142527.97500000003,
+      142527.97500000003
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 1.0,
+    "big_crit_rate": 0.07709342560553634,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 6043657.867124995,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 436365.1889620906,
+    "combatants": [
+      {
+        "big_crit_rate": 0.07709342560553634,
+        "crit_rate": 0.9927681660899654,
+        "crit_tier": 1.0776550137673835,
+        "damage": 6043657.867124995,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 72.25,
+        "procs": 52.1625,
+        "reloads": 19.0,
+        "shots": 38.0,
+        "transforms": 0.0,
+        "weapon": "vectis_prime"
+      }
+    ],
+    "crit_rate": 0.9927681660899654,
+    "crit_tier": 1.0698615916955017,
+    "damage_per_pellet": 83649.24383564007,
+    "damage_per_shot": 159043.6280822367,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 3549112.5,
+            "type": "Corrosive"
+          },
+          {
+            "dmg": 1035157.8125,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 961217.96875,
+            "type": "Impact"
+          },
+          {
+            "dmg": 369699.21875,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 5915187.5,
+        "source": "direct"
+      },
+      {
+        "dmg": 126428.40000000005,
+        "source": "Slash"
+      }
+    ],
+    "downtime": 16.149999999999906,
+    "dps": 201455.26223749985,
+    "dps_runs": [],
+    "dps_se": 520.1285433797557,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 137237.1875,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 3,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 3
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 174687.5,
+    "mean_max_hit": 167673.125,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.95,
+      "crit_damage": 7.0,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 860.0
+        },
+        {
+          "type": "Puncture",
+          "value": 967.5
+        },
+        {
+          "type": "Slash",
+          "value": 322.5
+        },
+        {
+          "type": "Corrosive",
+          "value": 3225.0
+        }
+      ],
+      "fire_rate": 2.67,
+      "modified_base": 2150.0,
+      "multishot": 1.9,
+      "status_chance": 0.72,
+      "total": 5375.0
+    },
+    "pellets": 72.25,
+    "picked_up_ammo": null,
+    "procs": 52.1625,
+    "reloads": 19.0,
+    "replay": null,
+    "run": [
+      874221276,
+      1649894872
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 201387.1966666667,
+      "kills": 0,
+      "score": 0.23982932887024822
+    },
+    "score": 0.23991038725152758,
+    "score_runs": [],
+    "score_se": 0.000619414151195725,
+    "self_damage": null,
+    "shots": 38.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      118250.0,
+      212205.35,
+      5267.85,
+      231017.85,
+      118142.85,
+      136955.35,
+      311535.7,
+      155767.85,
+      155767.85,
+      236285.7,
+      15803.550000000001,
+      316803.55,
+      161035.7,
+      161035.7,
+      311535.69999999995,
+      155767.85,
+      279500.0,
+      338625.0,
+      0.0,
+      376250.0,
+      268750.0,
+      188125.0,
+      376250.0,
+      188125.0,
+      188125.0,
+      376250.0,
+      0.0,
+      376250.0,
+      94062.5,
+      188125.0
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "charged"
+    ],
+    "armor_left": 1.0,
+    "big_crit_rate": 0.12635243202559038,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 1863803.2874999996,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 66564.40312499998,
+    "combatants": [
+      {
+        "big_crit_rate": 0.12635243202559038,
+        "crit_rate": 1.0,
+        "crit_tier": 1.1263524320255904,
+        "damage": 1863803.2874999996,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 26.5725,
+        "procs": 15.9,
+        "reloads": 1.0,
+        "shots": 14.0,
+        "transforms": 0.0,
+        "weapon": "lanka"
+      }
+    ],
+    "crit_rate": 1.0,
+    "crit_tier": 1.1263524320255904,
+    "damage_per_pellet": 70140.30623765169,
+    "damage_per_shot": 133128.80624999997,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 1865259.3749999998,
+            "type": "Corrosive"
+          }
+        ],
+        "dmg": 1865259.3749999998,
+        "source": "direct"
+      }
+    ],
+    "downtime": 2.0,
+    "dps": 62126.77624999999,
+    "dps_runs": [],
+    "dps_se": 238.6615387352934,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 1198391.0531249999,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 4,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 4
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 143915.62499999997,
+    "mean_max_hit": 132251.40468749998,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 1.125,
+      "crit_damage": 5.6,
+      "damage": [
+        {
+          "type": "Corrosive",
+          "value": 5643.75
+        }
+      ],
+      "fire_rate": 1.0,
+      "modified_base": 2257.5,
+      "multishot": 1.9,
+      "status_chance": 0.6,
+      "total": 5643.75
+    },
+    "pellets": 26.5725,
+    "picked_up_ammo": null,
+    "procs": 15.9,
+    "reloads": 1.0,
+    "replay": null,
+    "run": [
+      56502946,
+      3877930276
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 62175.31249999999,
+      "kills": 0,
+      "score": 0.07404375112214423
+    },
+    "score": 0.07398594994880224,
+    "score_runs": [],
+    "score_se": 0.00028421884613043545,
+    "self_damage": null,
+    "shots": 14.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      63209.99999999999,
+      0.0,
+      94814.99999999999,
+      0.0,
+      133756.87499999997,
+      0.0,
+      126419.99999999999,
+      0.0,
+      126419.99999999999,
+      0.0,
+      178342.49999999997,
+      0.0,
+      178342.49999999997,
+      0.0,
+      126419.99999999999,
+      0.0,
+      126419.99999999999,
+      0.0,
+      158024.99999999997,
+      0.0,
+      0.0,
+      0.0,
+      158024.99999999997,
+      0.0,
+      158024.99999999997,
+      0.0,
+      158024.99999999997,
+      0.0,
+      79012.49999999999,
+      0.0
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 1.0,
+    "big_crit_rate": 0.0,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 1626828.7717500008,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 90379.37620833337,
+    "combatants": [
+      {
+        "big_crit_rate": 0.0,
+        "crit_rate": 0.5199620119078058,
+        "crit_tier": 1.0,
+        "damage": 1626828.7717500008,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 68.4425,
+        "procs": 41.22,
+        "reloads": 4.0,
+        "shots": 36.0,
+        "transforms": 0.0,
+        "weapon": "vulkar_wraith"
+      }
+    ],
+    "crit_rate": 0.5199620119078058,
+    "crit_tier": 0.5199620119078058,
+    "damage_per_pellet": 23769.277448222972,
+    "damage_per_shot": 45189.688104166686,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 972517.4550000008,
+            "type": "Corrosive"
+          },
+          {
+            "dmg": 587562.6290625002,
+            "type": "Impact"
+          },
+          {
+            "dmg": 60782.34093750005,
+            "type": "Puncture"
+          }
+        ],
+        "dmg": 1620862.4250000003,
+        "source": "direct"
+      }
+    ],
+    "downtime": 12.0,
+    "dps": 54227.62572500003,
+    "dps_runs": [],
+    "dps_se": 248.93982690525445,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 259583.7733125,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 3,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 3
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 49303.799999999996,
+    "mean_max_hit": 49303.800000000374,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.5,
+      "crit_damage": 5.6,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 1056.51
+        },
+        {
+          "type": "Puncture",
+          "value": 117.39
+        },
+        {
+          "type": "Corrosive",
+          "value": 1760.85
+        }
+      ],
+      "fire_rate": 2.0,
+      "modified_base": 1173.8999999999999,
+      "multishot": 1.9,
+      "status_chance": 0.6,
+      "total": 2934.75
+    },
+    "pellets": 68.4425,
+    "picked_up_ammo": null,
+    "procs": 41.22,
+    "reloads": 4.0,
+    "replay": null,
+    "run": [
+      1204995288,
+      4159140923
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 54028.74750000001,
+      "kills": 0,
+      "score": 0.06434211542292079
+    },
+    "score": 0.06457895685086726,
+    "score_runs": [],
+    "score_se": 0.00029645912254580326,
+    "self_damage": null,
+    "shots": 36.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      28173.6,
+      34923.524999999994,
+      44608.2,
+      77477.4,
+      0.0,
+      0.0,
+      0.0,
+      50477.7,
+      95379.375,
+      96846.75,
+      130596.375,
+      0.0,
+      0.0,
+      0.0,
+      63097.125,
+      96846.75,
+      89509.875,
+      89509.875,
+      0.0,
+      0.0,
+      0.0,
+      164346.0,
+      63097.125,
+      164346.0,
+      58695.0,
+      0.0,
+      0.0,
+      0.0,
+      116216.09999999998,
+      156715.65
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 1.0,
+    "big_crit_rate": 0.00728112755131879,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 1442413.899023127,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 120201.15825192725,
+    "combatants": [
+      {
+        "big_crit_rate": 0.00728112755131879,
+        "crit_rate": 0.9702029358442014,
+        "crit_tier": 1.0075047469785106,
+        "damage": 1442413.899023127,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 85.495,
+        "procs": 32.6025,
+        "reloads": 9.0,
+        "shots": 45.0,
+        "transforms": 0.0,
+        "weapon": "rubico_prime"
+      }
+    ],
+    "crit_rate": 0.9702029358442014,
+    "crit_tier": 0.9774840633955202,
+    "damage_per_pellet": 16871.324627441685,
+    "damage_per_shot": 32053.642200513932,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 854677.8900000005,
+            "type": "Corrosive"
+          },
+          {
+            "dmg": 462950.5237499997,
+            "type": "Impact"
+          },
+          {
+            "dmg": 89028.94687500007,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 35611.578749999986,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 1442268.9393750012,
+        "source": "direct"
+      }
+    ],
+    "downtime": 18.0,
+    "dps": 48080.4633007709,
+    "dps_runs": [],
+    "dps_se": 82.82826873618143,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 155036.24385343754,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 2,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 2
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 32158.974374999998,
+    "mean_max_hit": 21954.606145312395,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.95,
+      "crit_damage": 8.399999999999999,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 643.28
+        },
+        {
+          "type": "Puncture",
+          "value": 120.83
+        },
+        {
+          "type": "Slash",
+          "value": 39.99
+        },
+        {
+          "type": "Corrosive",
+          "value": 1206.15
+        }
+      ],
+      "fire_rate": 3.67,
+      "modified_base": 804.1,
+      "multishot": 1.9,
+      "status_chance": 0.384,
+      "total": 2010.25
+    },
+    "pellets": 85.495,
+    "picked_up_ammo": null,
+    "procs": 32.6025,
+    "reloads": 9.0,
+    "replay": null,
+    "run": [
+      3585159992,
+      3372642043
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 48075.63131250004,
+      "kills": 0,
+      "score": 0.05725262868510106
+    },
+    "score": 0.05725838303554275,
+    "score_runs": [],
+    "score_se": 0.00009863908148724122,
+    "self_damage": null,
+    "shots": 45.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      136777.41,
+      34194.3525,
+      0.0,
+      70424.083125,
+      53326.906875,
+      0.0,
+      68388.705,
+      85485.88125,
+      0.0,
+      0.0,
+      136777.41,
+      34194.3525,
+      0.0,
+      102583.05750000001,
+      68388.705,
+      0.0,
+      34194.3525,
+      119680.23375000001,
+      0.0,
+      0.0,
+      136777.41,
+      34194.3525,
+      0.0,
+      68388.705,
+      102583.05750000001,
+      0.0,
+      34194.3525,
+      121715.61187500002,
+      0.0,
+      0.0
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "charged"
+    ],
+    "armor_left": 1.0,
+    "big_crit_rate": 0.0,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 582288.2625,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 20796.009375,
+    "combatants": [
+      {
+        "big_crit_rate": 0.0,
+        "crit_rate": 0.6266817198231254,
+        "crit_tier": 1.0,
+        "damage": 582288.2625,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 26.5725,
+        "procs": 15.9,
+        "reloads": 1.0,
+        "shots": 14.0,
+        "transforms": 0.0,
+        "weapon": "lanka"
+      }
+    ],
+    "crit_rate": 0.6266817198231254,
+    "crit_tier": 0.6266817198231254,
+    "damage_per_pellet": 21913.190798758114,
+    "damage_per_shot": 41592.01875,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 573405.0,
+            "type": "Corrosive"
+          }
+        ],
+        "dmg": 573405.0,
+        "source": "direct"
+      }
+    ],
+    "downtime": 2.0,
+    "dps": 19409.60875,
+    "dps_runs": [],
+    "dps_se": 115.55819270097874,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 414271.003125,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 4,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 4
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 31604.999999999996,
+    "mean_max_hit": 31604.999999999996,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.625,
+      "crit_damage": 5.6,
+      "damage": [
+        {
+          "type": "Corrosive",
+          "value": 5643.75
+        }
+      ],
+      "fire_rate": 1.0,
+      "modified_base": 2257.5,
+      "multishot": 1.9,
+      "status_chance": 0.6,
+      "total": 5643.75
+    },
+    "pellets": 26.5725,
+    "picked_up_ammo": null,
+    "procs": 15.9,
+    "reloads": 1.0,
+    "replay": null,
+    "run": [
+      4028939899,
+      786401190
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 19113.5,
+      "kills": 0,
+      "score": 0.022762012447836155
+    },
+    "score": 0.023114644412333143,
+    "score_runs": [],
+    "score_se": 0.00013761671178534677,
+    "self_damage": null,
+    "shots": 14.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 9667913.963695768,
+      "level": 9999,
+      "name": "Thrax Centurion",
+      "overguard": 15523399.911299936,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      11287.5,
+      0.0,
+      63209.99999999999,
+      0.0,
+      63209.99999999999,
+      0.0,
+      11287.5,
+      0.0,
+      63209.99999999999,
+      0.0,
+      37248.75,
+      0.0,
+      37248.75,
+      0.0,
+      37248.75,
+      0.0,
+      37248.75,
+      0.0,
+      37248.75,
+      0.0,
+      0.0,
+      0.0,
+      63209.99999999999,
+      0.0,
+      37248.75,
+      0.0,
+      11287.5,
+      0.0,
+      63209.99999999999,
+      0.0
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.4852491615937313,
+    "big_crit_rate": 0.00611146850693023,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 2149165.5955570983,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 179097.1329630915,
+    "combatants": [
+      {
+        "big_crit_rate": 0.00611146850693023,
+        "crit_rate": 0.9674249956137786,
+        "crit_tier": 1.0063172530528353,
+        "damage": 2149165.5955570983,
+        "finishes": 0.9725,
+        "id": "wielder",
+        "pellets": 85.495,
+        "procs": 32.2025,
+        "reloads": 9.0,
+        "shots": 45.0,
+        "transforms": 0.0,
+        "weapon": "rubico_prime"
+      }
+    ],
+    "crit_rate": 0.9674249956137786,
+    "crit_tier": 0.9735364641207088,
+    "damage_per_pellet": 25137.909767320874,
+    "damage_per_shot": 47759.235456824405,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 1282886.6008449676,
+            "type": "Corrosive"
+          },
+          {
+            "dmg": 694896.9087910242,
+            "type": "Impact"
+          },
+          {
+            "dmg": 133634.02092135075,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 53453.60836854032,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 2164871.138925881,
+        "source": "direct"
+      },
+      {
+        "dmg": 8359.6695,
+        "source": "Slash"
+      }
+    ],
+    "downtime": 18.0,
+    "dps": 71638.85318523661,
+    "dps_runs": [],
+    "dps_se": 311.3384343970645,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 332215.70232765493,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 2,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 2
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.9725,
+    "kills_max": 1,
+    "kills_min": 0,
+    "kills_std": 0.16353516441426277,
+    "max_hit": 114795.32625,
+    "mean_max_hit": 60668.50774645823,
+    "ok": true,
+    "overkill": 11965.208762120521,
+    "overkill_rate": 0.005598543232562285,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.95,
+      "crit_damage": 9.899999999999999,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 643.28
+        },
+        {
+          "type": "Puncture",
+          "value": 120.83
+        },
+        {
+          "type": "Slash",
+          "value": 39.99
+        },
+        {
+          "type": "Corrosive",
+          "value": 1206.15
+        }
+      ],
+      "fire_rate": 3.67,
+      "modified_base": 804.1,
+      "multishot": 1.9,
+      "status_chance": 0.384,
+      "total": 2010.25
+    },
+    "pellets": 85.495,
+    "picked_up_ammo": null,
+    "procs": 32.2025,
+    "reloads": 9.0,
+    "replay": null,
+    "run": [
+      3211221569,
+      3014436658
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 72441.02694752936,
+      "kills": 1,
+      "score": 1.2966340279008808
+    },
+    "score": 1.2879321759722575,
+    "score_runs": [],
+    "score_se": 0.005580577805185115,
+    "self_damage": null,
+    "shots": 45.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 1264784.4,
+      "level": 170,
+      "name": "Thrax Centurion",
+      "overguard": 394620.0520874012,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      245873.6775,
+      54446.364843749994,
+      0.0,
+      153446.17524014506,
+      60905.249943963245,
+      0.0,
+      63170.63973806873,
+      141467.68426921655,
+      0.0,
+      0.0,
+      156851.42800290338,
+      43960.242228033705,
+      0.0,
+      94303.21070902904,
+      92684.4421832043,
+      0.0,
+      39474.52884552777,
+      175840.96891213485,
+      0.0,
+      0.0,
+      162098.14362076667,
+      53825.66150794628,
+      0.0,
+      78949.05769105554,
+      245049.69758829754,
+      0.0,
+      120901.46062499998,
+      184409.06197684005,
+      2786.5564999999997,
+      2786.5564999999997
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 23.963519959653443,
+      "median": 24.08174386920979,
+      "p90": 27.444141689373275,
+      "runs": 389
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.5069077110701031,
+    "big_crit_rate": 0.00538043160418738,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 2697141.4532119264,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 224761.7877676605,
+    "combatants": [
+      {
+        "big_crit_rate": 0.00538043160418738,
+        "crit_rate": 0.9665185098543775,
+        "crit_tier": 1.0055668169303846,
+        "damage": 2697141.4532119264,
+        "finishes": 1.0,
+        "id": "wielder",
+        "pellets": 85.495,
+        "procs": 32.335,
+        "reloads": 9.0,
+        "shots": 45.0,
+        "transforms": 0.0,
+        "weapon": "rubico_prime"
+      }
+    ],
+    "crit_rate": 0.9665185098543775,
+    "crit_tier": 0.9718989414585648,
+    "damage_per_pellet": 31547.358947446355,
+    "damage_per_shot": 59936.4767380428,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 1276847.1108804762,
+            "type": "Heat"
+          },
+          {
+            "dmg": 691625.5183935907,
+            "type": "Impact"
+          },
+          {
+            "dmg": 133004.9073833827,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 53201.96295335315,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 2154679.4996108003,
+        "source": "direct"
+      },
+      {
+        "dmg": 497616.23169780365,
+        "source": "Heat"
+      },
+      {
+        "dmg": 25079.008499999993,
+        "source": "Slash"
+      }
+    ],
+    "downtime": 18.0,
+    "dps": 89904.71510706421,
+    "dps_runs": [],
+    "dps_se": 303.20522598357906,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 340112.0402721832,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 2,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 2
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 1.0,
+    "kills_max": 1,
+    "kills_min": 1,
+    "kills_std": 0.0,
+    "max_hit": 114795.32625,
+    "mean_max_hit": 60895.34845949486,
+    "ok": true,
+    "overkill": 14296.047957664128,
+    "overkill_rate": 0.005328688686148595,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.95,
+      "crit_damage": 9.899999999999999,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 643.28
+        },
+        {
+          "type": "Puncture",
+          "value": 120.83
+        },
+        {
+          "type": "Slash",
+          "value": 39.99
+        },
+        {
+          "type": "Heat",
+          "value": 1206.15
+        }
+      ],
+      "fire_rate": 3.67,
+      "modified_base": 804.1,
+      "multishot": 1.9,
+      "status_chance": 0.384,
+      "total": 2010.25
+    },
+    "pellets": 85.495,
+    "picked_up_ammo": null,
+    "procs": 32.335,
+    "reloads": 9.0,
+    "replay": null,
+    "run": [
+      1444345612,
+      4229125315
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 89245.82466028685,
+      "kills": 1,
+      "score": 1.6130312850525912
+    },
+    "score": 1.6167519629584297,
+    "score_runs": [],
+    "score_se": 0.0054376349573649055,
+    "self_damage": null,
+    "shots": 45.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 1264784.4,
+      "level": 170,
+      "name": "Thrax Centurion",
+      "overguard": 394620.0520874012,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      282103.40812499996,
+      110578.82046875,
+      8469.931689361107,
+      117137.31393965232,
+      49338.54903689552,
+      11220.302668820408,
+      49704.01640379941,
+      123907.46473890466,
+      21243.113033517315,
+      21243.113033517315,
+      189757.37490764656,
+      72439.60912624793,
+      28479.36689821422,
+      157573.53708231536,
+      120849.54871897853,
+      39333.747695259575,
+      83293.98992329328,
+      233885.4189458018,
+      0.0,
+      0.0,
+      349318.35161763284,
+      32321.583682695986,
+      3618.5814372196182,
+      91539.06589328704,
+      124373.56780434927,
+      18091.089166613434,
+      81811.2382547229,
+      198582.63032260022,
+      28580.002596754908,
+      28580.002596754908
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 18.22661444141689,
+      "median": 17.62942779291552,
+      "p90": 20.44686648501361,
+      "runs": 400
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.5004760681781018,
+    "big_crit_rate": 0.006959471314111936,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 1592875.9429135867,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 132739.66190946556,
+    "combatants": [
+      {
+        "big_crit_rate": 0.006959471314111936,
+        "crit_rate": 0.9695011404175683,
+        "crit_tier": 1.0071784044638818,
+        "damage": 1592875.9429135867,
+        "finishes": 0.3075,
+        "id": "wielder",
+        "pellets": 85.495,
+        "procs": 32.56,
+        "reloads": 9.0,
+        "shots": 45.0,
+        "transforms": 0.0,
+        "weapon": "rubico_prime"
+      }
+    ],
+    "crit_rate": 0.9695011404175683,
+    "crit_tier": 0.9764606117316802,
+    "damage_per_pellet": 18631.217532178336,
+    "damage_per_shot": 35397.24317585748,
+    "damage_sources": [
+      {
+        "dmg": 917894.2516368555,
+        "source": "Heat"
+      },
+      {
+        "by_type": [
+          {
+            "dmg": 436035.2791994968,
+            "type": "Heat"
+          },
+          {
+            "dmg": 236185.77623306087,
+            "type": "Impact"
+          },
+          {
+            "dmg": 45420.34158328083,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 18168.136633312377,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 735809.5336491502,
+        "source": "direct"
+      }
+    ],
+    "downtime": 18.0,
+    "dps": 53095.86476378622,
+    "dps_runs": [],
+    "dps_se": 383.9007048134145,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 162346.4841659374,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 2,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 2
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.4925,
+    "kills_max": 1,
+    "kills_min": 0,
+    "kills_std": 0.49994374683558146,
+    "max_hit": 82888.45331867211,
+    "mean_max_hit": 53279.798267030186,
+    "ok": true,
+    "overkill": 12406.422593875637,
+    "overkill_rate": 0.00784983350477139,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.95,
+      "crit_damage": 8.399999999999999,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 643.28
+        },
+        {
+          "type": "Puncture",
+          "value": 120.83
+        },
+        {
+          "type": "Slash",
+          "value": 39.99
+        },
+        {
+          "type": "Heat",
+          "value": 1206.15
+        }
+      ],
+      "fire_rate": 3.67,
+      "modified_base": 804.1,
+      "multishot": 1.9,
+      "status_chance": 0.384,
+      "total": 2010.25
+    },
+    "pellets": 85.495,
+    "picked_up_ammo": null,
+    "procs": 32.56,
+    "reloads": 9.0,
+    "replay": null,
+    "run": [
+      1000565706,
+      2562341908
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 55123.459509533495,
+      "kills": 0,
+      "score": 0.9965646308865654
+    },
+    "score": 0.9524317705256296,
+    "score_runs": [],
+    "score_se": 0.006618348374878109,
+    "self_damage": null,
+    "shots": 45.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 1264784.4,
+      "level": 170,
+      "name": "Thrax Centurion",
+      "overguard": 394620.0520874012,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      136777.41,
+      42638.6525,
+      8444.3,
+      119470.40750000002,
+      89627.19075500543,
+      9210.232150849044,
+      34076.63179498933,
+      58126.21187409943,
+      15350.083914834302,
+      15350.083914834302,
+      61936.20917407241,
+      36993.061382882326,
+      24559.861560812187,
+      61859.4610270226,
+      52496.187086945094,
+      27629.787442804816,
+      40062.98726487495,
+      77285.83858403556,
+      36839.5650887827,
+      36839.5650887827,
+      86495.61623001345,
+      56441.40731267254,
+      49484.735983657105,
+      66468.00452368059,
+      78161.13292777036,
+      52554.66186564972,
+      64987.86168771986,
+      102287.46115393027,
+      55624.58774764236,
+      55624.58774764236
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 27.384154690936278,
+      "median": 27.444141689373275,
+      "p90": 29.0,
+      "runs": 197
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.35033232782629004,
+    "big_crit_rate": 0.05608996539792387,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 3149604.8617004184,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 227408.2932635666,
+    "combatants": [
+      {
+        "big_crit_rate": 0.05608996539792387,
+        "crit_rate": 0.9883391003460208,
+        "crit_tier": 1.0567517417638204,
+        "damage": 3149604.8617004184,
+        "finishes": 1.21,
+        "id": "wielder",
+        "pellets": 72.25,
+        "procs": 51.31,
+        "reloads": 19.0,
+        "shots": 38.0,
+        "transforms": 0.0,
+        "weapon": "vectis_prime"
+      }
+    ],
+    "crit_rate": 0.9883391003460208,
+    "crit_tier": 1.0444290657439446,
+    "damage_per_pellet": 43593.14687474628,
+    "damage_per_shot": 82884.3384658005,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 1843307.6887659742,
+            "type": "Corrosive"
+          },
+          {
+            "dmg": 537631.409223409,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 499229.16570745123,
+            "type": "Impact"
+          },
+          {
+            "dmg": 192011.21757978896,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 3072179.4812766234,
+        "source": "direct"
+      },
+      {
+        "dmg": 89553.45000000001,
+        "source": "Slash"
+      }
+    ],
+    "downtime": 16.149999999999906,
+    "dps": 104986.82872334728,
+    "dps_runs": [],
+    "dps_se": 436.12722291822297,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 137237.1875,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 3,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 3
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 1.2125,
+    "kills_max": 2,
+    "kills_min": 1,
+    "kills_std": 0.40907670429883947,
+    "max_hit": 174687.5,
+    "mean_max_hit": 97965.10111886059,
+    "ok": true,
+    "overkill": 28097.615977103444,
+    "overkill_rate": 0.009001297695399925,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.95,
+      "crit_damage": 7.0,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 860.0
+        },
+        {
+          "type": "Puncture",
+          "value": 967.5
+        },
+        {
+          "type": "Slash",
+          "value": 322.5
+        },
+        {
+          "type": "Corrosive",
+          "value": 3225.0
+        }
+      ],
+      "fire_rate": 2.67,
+      "modified_base": 2150.0,
+      "multishot": 1.9,
+      "status_chance": 0.72,
+      "total": 5375.0
+    },
+    "pellets": 72.25,
+    "picked_up_ammo": null,
+    "procs": 51.31,
+    "reloads": 19.0,
+    "replay": null,
+    "run": [
+      3668340012,
+      2099219409
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 105391.09770922082,
+      "kills": 1,
+      "score": 1.8901721036799701
+    },
+    "score": 1.8811009225609252,
+    "score_runs": [],
+    "score_se": 0.007704190575579889,
+    "self_damage": null,
+    "shots": 38.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 1264784.4,
+      "level": 170,
+      "name": "Thrax Centurion",
+      "overguard": 394620.0520874012,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      150500.0,
+      206937.5,
+      0.0,
+      75677.1974769084,
+      18426.93802211022,
+      42121.726044220435,
+      89616.56831263451,
+      72270.86232978522,
+      80976.16076020547,
+      205194.76113039113,
+      10535.7,
+      215165.7999591439,
+      95192.76848953072,
+      100460.61848953072,
+      221040.15980208284,
+      100460.61848953071,
+      150500.0,
+      260691.4158036534,
+      0.0,
+      109616.40836627505,
+      64913.05492536002,
+      72109.38807347146,
+      88050.57595025681,
+      92347.38648828212,
+      85751.14459626198,
+      189417.19266266425,
+      0.0,
+      195149.76293645456,
+      112406.14811191338,
+      56203.07405595669
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 17.320201779026217,
+      "median": 17.589700374531837,
+      "p90": 19.563295880149816,
+      "runs": 400
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "charged"
+    ],
+    "armor_left": 0.5887567965311191,
+    "big_crit_rate": 0.12635243202559038,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 839358.7142093182,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 29977.096936047077,
+    "combatants": [
+      {
+        "big_crit_rate": 0.12635243202559038,
+        "crit_rate": 1.0,
+        "crit_tier": 1.1263524320255904,
+        "damage": 839358.7142093182,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 26.5725,
+        "procs": 15.9,
+        "reloads": 1.0,
+        "shots": 14.0,
+        "transforms": 0.0,
+        "weapon": "lanka"
+      }
+    ],
+    "crit_rate": 1.0,
+    "crit_tier": 1.1263524320255904,
+    "damage_per_pellet": 31587.49512500962,
+    "damage_per_shot": 59954.193872094154,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 840119.3674420329,
+            "type": "Corrosive"
+          }
+        ],
+        "dmg": 840119.3674420329,
+        "source": "direct"
+      }
+    ],
+    "downtime": 2.0,
+    "dps": 27978.623806977273,
+    "dps_runs": [],
+    "dps_se": 99.24496516062884,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 649208.719643232,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 4,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 4
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 115132.49999999999,
+    "mean_max_hit": 77749.7645673968,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 1.125,
+      "crit_damage": 5.6,
+      "damage": [
+        {
+          "type": "Corrosive",
+          "value": 5643.75
+        }
+      ],
+      "fire_rate": 1.0,
+      "modified_base": 2257.5,
+      "multishot": 1.9,
+      "status_chance": 0.6,
+      "total": 5643.75
+    },
+    "pellets": 26.5725,
+    "picked_up_ammo": null,
+    "procs": 15.9,
+    "reloads": 1.0,
+    "replay": null,
+    "run": [
+      1135153805,
+      2850562869
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 28003.97891473443,
+      "kills": 0,
+      "score": 0.5062776385740249
+    },
+    "score": 0.5058192492815539,
+    "score_runs": [],
+    "score_se": 0.001794227411571571,
+    "self_damage": null,
+    "shots": 14.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 1264784.4,
+      "level": 170,
+      "name": "Thrax Centurion",
+      "overguard": 394620.0520874012,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      63209.99999999999,
+      0.0,
+      94814.99999999999,
+      0.0,
+      172698.74999999997,
+      0.0,
+      82111.91192914752,
+      0.0,
+      32596.25762569476,
+      0.0,
+      32596.25762569476,
+      0.0,
+      40268.08254562052,
+      0.0,
+      34713.68541838159,
+      0.0,
+      18415.556605534206,
+      0.0,
+      49367.42349111155,
+      0.0,
+      0.0,
+      0.0,
+      64947.72195701795,
+      0.0,
+      46038.89151383551,
+      0.0,
+      43392.10677297698,
+      0.0,
+      64947.72195701795,
+      0.0
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.3991014728973997,
+    "big_crit_rate": 0.0,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 913035.6706915376,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 50724.203927307644,
+    "combatants": [
+      {
+        "big_crit_rate": 0.0,
+        "crit_rate": 0.5199620119078058,
+        "crit_tier": 1.0,
+        "damage": 913035.6706915376,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 68.4425,
+        "procs": 41.22,
+        "reloads": 4.0,
+        "shots": 36.0,
+        "transforms": 0.0,
+        "weapon": "vulkar_wraith"
+      }
+    ],
+    "crit_rate": 0.5199620119078058,
+    "crit_tier": 0.5199620119078058,
+    "damage_per_pellet": 13340.185859539577,
+    "damage_per_shot": 25362.101963653822,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 542975.1099894649,
+            "type": "Corrosive"
+          },
+          {
+            "dmg": 328047.4622853014,
+            "type": "Impact"
+          },
+          {
+            "dmg": 33935.944374341554,
+            "type": "Puncture"
+          }
+        ],
+        "dmg": 904958.5166491079,
+        "source": "direct"
+      }
+    ],
+    "downtime": 12.0,
+    "dps": 30434.522356384587,
+    "dps_runs": [],
+    "dps_se": 152.32259585499148,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 259537.42216345388,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 3,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 3
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 41086.5,
+    "mean_max_hit": 38088.05664999568,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.5,
+      "crit_damage": 5.6,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 1056.51
+        },
+        {
+          "type": "Puncture",
+          "value": 117.39
+        },
+        {
+          "type": "Corrosive",
+          "value": 1760.85
+        }
+      ],
+      "fire_rate": 2.0,
+      "modified_base": 1173.8999999999999,
+      "multishot": 1.9,
+      "status_chance": 0.6,
+      "total": 2934.75
+    },
+    "pellets": 68.4425,
+    "picked_up_ammo": null,
+    "procs": 41.22,
+    "reloads": 4.0,
+    "replay": null,
+    "run": [
+      2549673544,
+      2324466288
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 30165.2838883036,
+      "kills": 0,
+      "score": 0.5453513852579704
+    },
+    "score": 0.5502188869886487,
+    "score_runs": [],
+    "score_se": 0.002753805963278635,
+    "self_damage": null,
+    "shots": 36.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 1264784.4,
+      "level": 170,
+      "name": "Thrax Centurion",
+      "overguard": 394620.0520874012,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      28173.6,
+      14673.75,
+      131476.8,
+      98607.59999999999,
+      0.0,
+      0.0,
+      0.0,
+      104477.09999999999,
+      50222.956183228365,
+      47540.434564167634,
+      13735.889848240062,
+      0.0,
+      0.0,
+      0.0,
+      24824.616068185424,
+      36073.15432680966,
+      41195.235496664034,
+      44817.63453390306,
+      0.0,
+      0.0,
+      0.0,
+      20852.843368155063,
+      32365.76390312636,
+      50339.88495408772,
+      32110.098913750662,
+      0.0,
+      0.0,
+      0.0,
+      67861.68535020057,
+      65609.46913858922
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "shoot"
+    ],
+    "armor_left": 0.4526879131235997,
+    "big_crit_rate": 0.00728112755131879,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 800767.298367621,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 66730.60819730176,
+    "combatants": [
+      {
+        "big_crit_rate": 0.00728112755131879,
+        "crit_rate": 0.9702029358442014,
+        "crit_tier": 1.0075047469785106,
+        "damage": 800767.298367621,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 85.495,
+        "procs": 32.6025,
+        "reloads": 9.0,
+        "shots": 45.0,
+        "transforms": 0.0,
+        "weapon": "rubico_prime"
+      }
+    ],
+    "crit_rate": 0.9702029358442014,
+    "crit_tier": 0.9774840633955202,
+    "damage_per_pellet": 9366.247129862812,
+    "damage_per_shot": 17794.8288526138,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 473924.7950790735,
+            "type": "Corrosive"
+          },
+          {
+            "dmg": 256709.2640011642,
+            "type": "Impact"
+          },
+          {
+            "dmg": 49367.16615407009,
+            "type": "Puncture"
+          },
+          {
+            "dmg": 19746.866461628022,
+            "type": "Slash"
+          }
+        ],
+        "dmg": 799748.0916959359,
+        "source": "direct"
+      }
+    ],
+    "downtime": 18.0,
+    "dps": 26692.2432789207,
+    "dps_runs": [],
+    "dps_se": 86.01817591265795,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 155036.24385343754,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 2,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 2
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 32158.974374999998,
+    "mean_max_hit": 17939.221792997912,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.95,
+      "crit_damage": 8.399999999999999,
+      "damage": [
+        {
+          "type": "Impact",
+          "value": 643.28
+        },
+        {
+          "type": "Puncture",
+          "value": 120.83
+        },
+        {
+          "type": "Slash",
+          "value": 39.99
+        },
+        {
+          "type": "Corrosive",
+          "value": 1206.15
+        }
+      ],
+      "fire_rate": 3.67,
+      "modified_base": 804.1,
+      "multishot": 1.9,
+      "status_chance": 0.384,
+      "total": 2010.25
+    },
+    "pellets": 85.495,
+    "picked_up_ammo": null,
+    "procs": 32.6025,
+    "reloads": 9.0,
+    "replay": null,
+    "run": [
+      2049390691,
+      1053813839
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 26658.269723197864,
+      "kills": 0,
+      "score": 0.4819488646604013
+    },
+    "score": 0.4825630649359291,
+    "score_runs": [],
+    "score_se": 0.0015551032625790995,
+    "self_damage": null,
+    "shots": 45.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 1264784.4,
+      "level": 170,
+      "name": "Thrax Centurion",
+      "overguard": 394620.0520874012,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      121715.61187500002,
+      17097.17625,
+      0.0,
+      102583.05750000001,
+      68388.705,
+      0.0,
+      68388.705,
+      53298.988017744035,
+      0.0,
+      0.0,
+      45576.6200374938,
+      13780.581805502796,
+      0.0,
+      47411.76359274175,
+      34352.600592681985,
+      0.0,
+      11164.513208836139,
+      49722.60174387253,
+      0.0,
+      0.0,
+      60172.258860112364,
+      15223.41941638885,
+      0.0,
+      19389.871151085576,
+      29236.46614781751,
+      0.0,
+      5574.064833116179,
+      36671.08666354183,
+      0.0,
+      0.0
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  },
+  {
+    "apl": [
+      "reload,if=!can_fire",
+      "charged"
+    ],
+    "armor_left": 0.6059632441786326,
+    "big_crit_rate": 0.0,
+    "bodies": [
+      {
+        "aimed": true,
+        "at": [
+          0.0,
+          0.5
+        ],
+        "damage": 449496.69104399264,
+        "id": "e1"
+      }
+    ],
+    "burst_dps": 16053.453251571165,
+    "combatants": [
+      {
+        "big_crit_rate": 0.0,
+        "crit_rate": 0.6266817198231254,
+        "crit_tier": 1.0,
+        "damage": 449496.69104399264,
+        "finishes": 0.0,
+        "id": "wielder",
+        "pellets": 26.5725,
+        "procs": 15.9,
+        "reloads": 1.0,
+        "shots": 14.0,
+        "transforms": 0.0,
+        "weapon": "lanka"
+      }
+    ],
+    "crit_rate": 0.6266817198231254,
+    "crit_tier": 0.6266817198231254,
+    "damage_per_pellet": 16915.860044933394,
+    "damage_per_shot": 32106.90650314233,
+    "damage_sources": [
+      {
+        "by_type": [
+          {
+            "dmg": 447790.5803006291,
+            "type": "Corrosive"
+          }
+        ],
+        "dmg": 447790.5803006291,
+        "source": "direct"
+      }
+    ],
+    "downtime": 2.0,
+    "dps": 14983.223034799756,
+    "dps_runs": [],
+    "dps_se": 35.60300013849932,
+    "duration": 30.0,
+    "field_ticks": 0.0,
+    "first_magazine": 391044.7288381343,
+    "forma": {
+      "cap": 60,
+      "legal": true,
+      "omni": 0,
+      "rank": 30,
+      "regular": 4,
+      "total_drain": 59,
+      "umbra": 0,
+      "used": 4
+    },
+    "frame": {
+      "ability_strength": 1.0,
+      "summon_strength": null
+    },
+    "ghosts": null,
+    "ghosts_peak": null,
+    "headshot_rate": 0.0,
+    "kills": 0.0,
+    "kills_max": 0,
+    "kills_min": 0,
+    "kills_std": 0.0,
+    "max_hit": 31604.999999999996,
+    "mean_max_hit": 31604.999999999996,
+    "ok": true,
+    "overkill": 0.0,
+    "overkill_rate": 0.0,
+    "panel": {
+      "co_per_type": 0.0,
+      "crit_chance": 0.625,
+      "crit_damage": 5.6,
+      "damage": [
+        {
+          "type": "Corrosive",
+          "value": 5643.75
+        }
+      ],
+      "fire_rate": 1.0,
+      "modified_base": 2257.5,
+      "multishot": 1.9,
+      "status_chance": 0.6,
+      "total": 5643.75
+    },
+    "pellets": 26.5725,
+    "picked_up_ammo": null,
+    "procs": 15.9,
+    "reloads": 1.0,
+    "replay": null,
+    "run": [
+      1753537420,
+      1354663569
+    ],
+    "runs": 400,
+    "sample": {
+      "dps": 14926.352676687637,
+      "kills": 0,
+      "score": 0.2698501741015237
+    },
+    "score": 0.27087832051948535,
+    "score_runs": [],
+    "score_se": 0.0006436586347660735,
+    "self_damage": null,
+    "shots": 14.0,
+    "spilled": 0.0,
+    "target": {
+      "armor": 2700.0,
+      "eximus": false,
+      "health": 1264784.4,
+      "level": 170,
+      "name": "Thrax Centurion",
+      "overguard": 394620.0520874012,
+      "shield": 0.0,
+      "steel_path": true
+    },
+    "timeline": [
+      37248.75,
+      0.0,
+      37248.75,
+      0.0,
+      37248.75,
+      0.0,
+      63209.99999999999,
+      0.0,
+      63209.99999999999,
+      0.0,
+      37248.75,
+      0.0,
+      37248.75,
+      0.0,
+      63209.99999999999,
+      0.0,
+      24136.79215029334,
+      0.0,
+      18415.556605534206,
+      0.0,
+      0.0,
+      0.0,
+      2729.4964822471948,
+      0.0,
+      9604.25447899935,
+      0.0,
+      3486.939927705147,
+      0.0,
+      13543.790655849825,
+      0.0
+    ],
+    "transforms": 0.0,
+    "ttk": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "runs": 0
+    },
+    "virus_stacks": null
+  }
+]

@@ -638,6 +638,7 @@ def _analysis_inputs_fingerprint() -> str:
         EXPORT_DIR / "incarnon_defaults.json",
         ROOT / "data" / "source-lock.json",
         ROOT / "data" / "mechanics" / "combat-reference.json",
+        ROOT / "data" / "mechanics" / "sniper-profiles.json",
         # The mechanics override sidecar currently feeds only the manual
         # simulation/audit path (fail-closed diagnostics); it is not consumed
         # by the static optimizer candidate set yet, so changing its notes
@@ -663,6 +664,7 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("event_profiles.py"),
         Path(optimizer.__file__).with_name("stackable_projectiles.py"),
         Path(optimizer.__file__).with_name("consecutive_hits.py"),
+        Path(optimizer.__file__).with_name("sniper_combo.py"),
         Path(optimizer.__file__).with_name("riven_fusion.py"),
         EXPORT_DIR / "arcanes.json",
         Path(__file__),  # app.py — 运行时补丁与分析入口语义
@@ -5353,6 +5355,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     'projectileEvents': windowed.get('projectileEvents'),
                     'projectileLifecycle': windowed.get('projectileLifecycle'),
                     'onosSequence': windowed.get('onosSequence'),
+                    'sniperCombo': windowed.get('sniperCombo'),
                     'reloadShellEvents': windowed.get('reloadShellEvents'),
                     "cryogenic": windowed.get("cryogenic"),
                     "empowered": windowed.get("empowered"),

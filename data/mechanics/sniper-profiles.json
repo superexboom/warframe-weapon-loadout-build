@@ -1,0 +1,273 @@
+{
+  "source": {
+    "repository": "magenie33/wfsim",
+    "commit": "7399c9e47591e966256bdea04d8378e051dc8936",
+    "reason": "game export has no sniper combo or zoom-bonus fields"
+  },
+  "weapons": {
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix": {
+      "referenceId": "coda_sporothrix",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/coda_sporothrix.yaml",
+      "referenceSha256": "43f97e18ed7739009700e13b720c41d3325609c1e7bc28f1e3100f30cee95461",
+      "sniperCombo": {
+        "min": 1,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 2.7,
+        "critMultiplier": 0.0,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.5
+      }
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniper": {
+      "referenceId": "komorex",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/komorex.yaml",
+      "referenceSha256": "9f453f35aaf6a1657fbfb828499f0c11ab5606e85c9146daed41a47f3515e3b7",
+      "sniperCombo": {
+        "min": 5,
+        "seconds": 2.0
+      }
+    },
+    "/Lotus/Weapons/ClanTech/Energy/Railgun": {
+      "referenceId": "lanka",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/lanka.yaml",
+      "referenceSha256": "e9066995acbe7be339ce9f49e3e2135bb052684e837043f3e72a0942c084e988",
+      "sniperCombo": {
+        "min": 2,
+        "seconds": 6.0
+      },
+      "scope": {
+        "magnification": 8.0,
+        "critMultiplier": 0.0,
+        "critChance": 0.0,
+        "critChancePostMod": 0.5,
+        "headshotDamage": 0.0
+      },
+      "referenceAliases": [
+        "lanka_uncharged"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniper": {
+      "referenceId": "perigale",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/perigale.yaml",
+      "referenceSha256": "c36b7b6c63f3860085addae62e4c7288c34c374eafccbfad8d8110f753ef39cf",
+      "sniperCombo": {
+        "min": 1,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 4.0,
+        "critMultiplier": 0.4,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.0
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePerigale/PrimePerigaleSniper": {
+      "referenceId": "perigale_prime",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/perigale_prime.yaml",
+      "referenceSha256": "757a3cd65210dbce05a1764bb590f50741c802a6047b073497890e1461b6f399",
+      "sniperCombo": {
+        "min": 1,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 4.0,
+        "critMultiplier": 0.4,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.0
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/FiveShotSniper/FiveShotSniper": {
+      "referenceId": "rubico",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/rubico.yaml",
+      "referenceSha256": "3b5ebee452a3fe722da615949fb9ce227d8d6b682de9ed29b8bf7871d28cd743",
+      "sniperCombo": {
+        "min": 1,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 6.0,
+        "critMultiplier": 0.5,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.0
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon": {
+      "referenceId": "rubico_prime",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/rubico_prime.yaml",
+      "referenceSha256": "c7f01d8dbb34fbf367d4c8703d685517448088f054f7ab743d19797e715555e2",
+      "sniperCombo": {
+        "min": 1,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 5.0,
+        "critMultiplier": 0.5,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.0
+      }
+    },
+    "/Lotus/Weapons/Tenno/Rifle/SniperRifle": {
+      "referenceId": "snipetron",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/snipetron.yaml",
+      "referenceSha256": "2fff1ecd4bd2cde22fcd924180a78a664fd3bcb221b7660fee71612208014cb5",
+      "sniperCombo": {
+        "min": 3,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 6.0,
+        "critMultiplier": 0.0,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.5
+      }
+    },
+    "/Lotus/Weapons/Tenno/Rifle/VandalSniperRifle": {
+      "referenceId": "snipetron_vandal",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/snipetron_vandal.yaml",
+      "referenceSha256": "2c4b1e73f03afe0cb0f4ca00e58b256bdb96f6153218c4d67d4d1ffc207ee8c2",
+      "sniperCombo": {
+        "min": 3,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 6.0,
+        "critMultiplier": 0.0,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.5
+      }
+    },
+    "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle": {
+      "referenceId": "sporothrix",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/sporothrix.yaml",
+      "referenceSha256": "1cc97d88544936237d960e67536f9b656172782e67012dd1e856f5744d32a07b",
+      "sniperCombo": {
+        "min": 1,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 2.7,
+        "critMultiplier": 0.0,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.5
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeLightningGun/PrimeLightningGun": {
+      "referenceId": "vadarya_prime",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/vadarya_prime.yaml",
+      "referenceSha256": "cfbb6f852cbb2e0c3de9998709bdb85b50d557f19dc694a945efcf7b3146b260",
+      "sniperCombo": {
+        "min": 3,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 8.0,
+        "critMultiplier": 0.5,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.0
+      }
+    },
+    "/Lotus/Weapons/Tenno/Rifle/TennoSniperRifle": {
+      "referenceId": "vectis",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/vectis.yaml",
+      "referenceSha256": "cc49d9040dc5d068c51b20ed43b14de1f5e8942c704dd3fcce2603401d65361c",
+      "sniperCombo": {
+        "min": 1,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 4.5,
+        "critMultiplier": 0.0,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.5
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle": {
+      "referenceId": "vectis_prime",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/vectis_prime.yaml",
+      "referenceSha256": "b05ea63efe5f8b991b405ec5fa5d6eb10596f0aa3f0eaec23eec7aa712c03e74",
+      "sniperCombo": {
+        "min": 5,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 6.0,
+        "critMultiplier": 0.0,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.6
+      }
+    },
+    "/Lotus/Weapons/Lasria/LasSilencedPistol/LasSilencedPistolWeapon": {
+      "referenceId": "vesper_77",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/secondary/vesper_77.yaml",
+      "referenceSha256": "6594167fe9ee2ae24993204cdc414d51ca4a46b54f7222ea8dcb4d259d1fa095",
+      "scope": {
+        "magnification": null,
+        "critMultiplier": 0.4,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.0
+      }
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/GrnSniperRifle": {
+      "referenceId": "vulkar",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/vulkar.yaml",
+      "referenceSha256": "bee88480783004b4bdd93b762b57bfbc5300f13ba27ee77f692c7a7887489052",
+      "sniperCombo": {
+        "min": 2,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 8.0,
+        "critMultiplier": 0.0,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.7
+      }
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/VulkarWraith": {
+      "referenceId": "vulkar_wraith",
+      "referenceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+      "referenceSource": "data/weapons/primary/vulkar_wraith.yaml",
+      "referenceSha256": "e200e864301f6afcddf261da5e0c88f906ef84285c9a6a9f7c58164046aaf71a",
+      "sniperCombo": {
+        "min": 2,
+        "seconds": 2.0
+      },
+      "scope": {
+        "magnification": 8.0,
+        "critMultiplier": 0.0,
+        "critChance": 0.0,
+        "critChancePostMod": 0.0,
+        "headshotDamage": 0.7
+      }
+    }
+  }
+}

@@ -1,0 +1,1535 @@
+{
+  "sourceCommit": "7399c9e47591e966256bdea04d8378e051dc8936",
+  "reference": {
+    "runner": "native-driver",
+    "driver": "/tmp/claude-0/-home-user-warframe-weapon-loadout-build/06b8aab1-9295-5210-a905-739f9c1fd517/scratchpad/wfsim-driver/target/release/wfsim-driver"
+  },
+  "runs": 400,
+  "duration": 30.0,
+  "seed": 12648430,
+  "contract": "Thrax Centurion, Steel Path, body shots, no arcanes, single target, infinite reserve ammo",
+  "cases": [
+    {
+      "weapon": "rubico_prime",
+      "build": "crit",
+      "level": 9999,
+      "aiming": true,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 0.36881844696518207,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 9.902417702446886,
+        "sniperCombo": {
+          "minimum": 1,
+          "seconds": 2.0,
+          "finalExpectedCount": 76.50000270000001
+        }
+      },
+      "localWithoutSniper": {
+        "kpm": 0.11424756664374836,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "referenceKpm": 0.3695694404434775,
+      "referenceKpmSe": 0.000685387757476186,
+      "referencePanel": {
+        "critChance": 0.95,
+        "critMultiplier": 9.899999999999999
+      },
+      "deltaPercent": -0.20320767793848837,
+      "deltaWithoutSniperPercent": -69.08630580855034,
+      "panelMatches": true
+    },
+    {
+      "weapon": "rubico_prime",
+      "build": "heat",
+      "level": 9999,
+      "aiming": true,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 0.6196952477379217,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 9.902417702446886,
+        "sniperCombo": {
+          "minimum": 1,
+          "seconds": 2.0,
+          "finalExpectedCount": 76.50000270000001
+        }
+      },
+      "localWithoutSniper": {
+        "kpm": 0.32722416196678794,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "referenceKpm": 0.5871081729980113,
+      "referenceKpmSe": 0.0035100425321512793,
+      "referencePanel": {
+        "critChance": 0.95,
+        "critMultiplier": 9.899999999999999
+      },
+      "deltaPercent": 5.550437932673913,
+      "deltaWithoutSniperPercent": -44.265098491841925,
+      "panelMatches": true
+    },
+    {
+      "weapon": "rubico_prime",
+      "build": "heat",
+      "level": 9999,
+      "aiming": false,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": false,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 0.32722416196678794,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "localWithoutSniper": {
+        "kpm": 0.32722416196678794,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "referenceKpm": 0.2991765781727199,
+      "referenceKpmSe": 0.0028745430401664485,
+      "referencePanel": {
+        "critChance": 0.95,
+        "critMultiplier": 8.399999999999999
+      },
+      "deltaPercent": 9.374926327914501,
+      "deltaWithoutSniperPercent": 9.374926327914501,
+      "panelMatches": true
+    },
+    {
+      "weapon": "vectis_prime",
+      "build": "crit",
+      "level": 9999,
+      "aiming": true,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ],
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-2"
+        }
+      },
+      "local": {
+        "kpm": 0.4820289864621119,
+        "shots": 38,
+        "critChance": 0.9500000200000001,
+        "critMultiplier": 7.001709501733822,
+        "sniperCombo": {
+          "minimum": 5,
+          "seconds": 2.0,
+          "finalExpectedCount": 72.20000228000002
+        }
+      },
+      "localWithoutSniper": {
+        "kpm": 0.23734965487294524,
+        "shots": 38,
+        "critChance": 0.9500000200000001,
+        "critMultiplier": 7.001709501733822,
+        "sniperCombo": null
+      },
+      "referenceKpm": 0.4798207745030551,
+      "referenceKpmSe": 0.00123882830239145,
+      "referencePanel": {
+        "critChance": 0.95,
+        "critMultiplier": 7.0
+      },
+      "deltaPercent": 0.4602159965549246,
+      "deltaWithoutSniperPercent": -50.5336851830216,
+      "panelMatches": true
+    },
+    {
+      "weapon": "lanka",
+      "build": "crit",
+      "level": 9999,
+      "aiming": true,
+      "payload": {
+        "weapon": "/Lotus/Weapons/ClanTech/Energy/Railgun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 0.1480627877146401,
+        "shots": 14,
+        "critChance": 1.125,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": {
+          "minimum": 2,
+          "seconds": 6.0,
+          "finalExpectedCount": 26.600000840000003
+        }
+      },
+      "localWithoutSniper": {
+        "kpm": 0.046195121118866034,
+        "shots": 14,
+        "critChance": 0.625,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": null
+      },
+      "referenceKpm": 0.14797189989760448,
+      "referenceKpmSe": 0.0005684376922608709,
+      "referencePanel": {
+        "critChance": 1.125,
+        "critMultiplier": 5.6
+      },
+      "deltaPercent": 0.06142234917474454,
+      "deltaWithoutSniperPercent": -68.78115294131337,
+      "panelMatches": true
+    },
+    {
+      "weapon": "vulkar_wraith",
+      "build": "crit",
+      "level": 9999,
+      "aiming": true,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/VulkarWraith",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 0.12947021430715955,
+        "shots": 36,
+        "critChance": 0.5,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": {
+          "minimum": 2,
+          "seconds": 2.0,
+          "finalExpectedCount": 64.40000216000001
+        }
+      },
+      "localWithoutSniper": {
+        "kpm": 0.05417741637014162,
+        "shots": 36,
+        "critChance": 0.5,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": null
+      },
+      "referenceKpm": 0.12915791370173452,
+      "referenceKpmSe": 0.0005929182450916065,
+      "referencePanel": {
+        "critChance": 0.5,
+        "critMultiplier": 5.6
+      },
+      "deltaPercent": 0.24179749925834493,
+      "deltaWithoutSniperPercent": -58.05335126792619,
+      "panelMatches": true
+    },
+    {
+      "weapon": "rubico_prime",
+      "build": "crit",
+      "level": 9999,
+      "aiming": false,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": false,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 0.11424756664374836,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "localWithoutSniper": {
+        "kpm": 0.11424756664374836,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "referenceKpm": 0.1145167660710855,
+      "referenceKpmSe": 0.00019727816297448244,
+      "referencePanel": {
+        "critChance": 0.95,
+        "critMultiplier": 8.399999999999999
+      },
+      "deltaPercent": -0.23507424857776016,
+      "deltaWithoutSniperPercent": -0.23507424857776016,
+      "panelMatches": true
+    },
+    {
+      "weapon": "lanka",
+      "build": "crit",
+      "level": 9999,
+      "aiming": false,
+      "payload": {
+        "weapon": "/Lotus/Weapons/ClanTech/Energy/Railgun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": false,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 0.046195121118866034,
+        "shots": 14,
+        "critChance": 0.625,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": null
+      },
+      "localWithoutSniper": {
+        "kpm": 0.046195121118866034,
+        "shots": 14,
+        "critChance": 0.625,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": null
+      },
+      "referenceKpm": 0.04622928882466629,
+      "referenceKpmSe": 0.00027523342357069355,
+      "referencePanel": {
+        "critChance": 0.625,
+        "critMultiplier": 5.6
+      },
+      "deltaPercent": -0.07390921787665539,
+      "deltaWithoutSniperPercent": -0.07390921787665539,
+      "panelMatches": true
+    },
+    {
+      "weapon": "rubico_prime",
+      "build": "crit",
+      "level": 170,
+      "aiming": true,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 170,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 2.5578569698722475,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 9.902417702446886,
+        "sniperCombo": {
+          "minimum": 1,
+          "seconds": 2.0,
+          "finalExpectedCount": 76.50000270000001
+        }
+      },
+      "localWithoutSniper": {
+        "kpm": 0.9533257857021717,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "referenceKpm": 2.575864351944515,
+      "referenceKpmSe": 0.01116115561037023,
+      "referencePanel": {
+        "critChance": 0.95,
+        "critMultiplier": 9.899999999999999
+      },
+      "deltaPercent": -0.6990811476028869,
+      "deltaWithoutSniperPercent": -62.990062540268944,
+      "panelMatches": true
+    },
+    {
+      "weapon": "rubico_prime",
+      "build": "heat",
+      "level": 170,
+      "aiming": true,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 170,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 3.2224656791518167,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 9.902417702446886,
+        "sniperCombo": {
+          "minimum": 1,
+          "seconds": 2.0,
+          "finalExpectedCount": 76.50000270000001
+        }
+      },
+      "localWithoutSniper": {
+        "kpm": 2.0,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "referenceKpm": 3.2335039259168594,
+      "referenceKpmSe": 0.010875269914729811,
+      "referencePanel": {
+        "critChance": 0.95,
+        "critMultiplier": 9.899999999999999
+      },
+      "deltaPercent": -0.3413710642677814,
+      "deltaWithoutSniperPercent": -38.14759326655525,
+      "panelMatches": true
+    },
+    {
+      "weapon": "rubico_prime",
+      "build": "heat",
+      "level": 170,
+      "aiming": false,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 170,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": false,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 2.0,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "localWithoutSniper": {
+        "kpm": 2.0,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "referenceKpm": 1.904863541051259,
+      "referenceKpmSe": 0.013236696749756218,
+      "referencePanel": {
+        "critChance": 0.95,
+        "critMultiplier": 8.399999999999999
+      },
+      "deltaPercent": 4.994397598488165,
+      "deltaWithoutSniperPercent": 4.994397598488165,
+      "panelMatches": true
+    },
+    {
+      "weapon": "vectis_prime",
+      "build": "crit",
+      "level": 170,
+      "aiming": true,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 170,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ],
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-2"
+        }
+      },
+      "local": {
+        "kpm": 3.6840308744672114,
+        "shots": 38,
+        "critChance": 0.9500000200000001,
+        "critMultiplier": 7.001709501733822,
+        "sniperCombo": {
+          "minimum": 5,
+          "seconds": 2.0,
+          "finalExpectedCount": 72.20000228000002
+        }
+      },
+      "localWithoutSniper": {
+        "kpm": 2.0824878363481294,
+        "shots": 38,
+        "critChance": 0.9500000200000001,
+        "critMultiplier": 7.001709501733822,
+        "sniperCombo": null
+      },
+      "referenceKpm": 3.7622018451218504,
+      "referenceKpmSe": 0.015408381151159778,
+      "referencePanel": {
+        "critChance": 0.95,
+        "critMultiplier": 7.0
+      },
+      "deltaPercent": -2.0777984242391745,
+      "deltaWithoutSniperPercent": -44.647099701778984,
+      "panelMatches": true
+    },
+    {
+      "weapon": "lanka",
+      "build": "crit",
+      "level": 170,
+      "aiming": true,
+      "payload": {
+        "weapon": "/Lotus/Weapons/ClanTech/Energy/Railgun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 170,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 1.057816331417512,
+        "shots": 14,
+        "critChance": 1.125,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": {
+          "minimum": 2,
+          "seconds": 6.0,
+          "finalExpectedCount": 26.600000840000003
+        }
+      },
+      "localWithoutSniper": {
+        "kpm": 0.5456870182903548,
+        "shots": 14,
+        "critChance": 0.625,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": null
+      },
+      "referenceKpm": 1.0116384985631077,
+      "referenceKpmSe": 0.003588454823143142,
+      "referencePanel": {
+        "critChance": 1.125,
+        "critMultiplier": 5.6
+      },
+      "deltaPercent": 4.564657525390103,
+      "deltaWithoutSniperPercent": -46.05908938168846,
+      "panelMatches": true
+    },
+    {
+      "weapon": "vulkar_wraith",
+      "build": "crit",
+      "level": 170,
+      "aiming": true,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/VulkarWraith",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 170,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": true,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 1.1130287064995958,
+        "shots": 36,
+        "critChance": 0.5,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": {
+          "minimum": 2,
+          "seconds": 2.0,
+          "finalExpectedCount": 64.40000216000001
+        }
+      },
+      "localWithoutSniper": {
+        "kpm": 0.6237385184855115,
+        "shots": 36,
+        "critChance": 0.5,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": null
+      },
+      "referenceKpm": 1.1004377739772975,
+      "referenceKpmSe": 0.00550761192655727,
+      "referencePanel": {
+        "critChance": 0.5,
+        "critMultiplier": 5.6
+      },
+      "deltaPercent": 1.144174874767434,
+      "deltaWithoutSniperPercent": -43.319055994311995,
+      "panelMatches": true
+    },
+    {
+      "weapon": "rubico_prime",
+      "build": "crit",
+      "level": 170,
+      "aiming": false,
+      "payload": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 170,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": false,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 0.9533257857021717,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "localWithoutSniper": {
+        "kpm": 0.9533257857021717,
+        "shots": 45,
+        "critChance": 0.95,
+        "critMultiplier": 8.402051402080586,
+        "sniperCombo": null
+      },
+      "referenceKpm": 0.9651261298718582,
+      "referenceKpmSe": 0.003110206525158199,
+      "referencePanel": {
+        "critChance": 0.95,
+        "critMultiplier": 8.399999999999999
+      },
+      "deltaPercent": -1.2226737837108592,
+      "deltaWithoutSniperPercent": -1.2226737837108592,
+      "panelMatches": true
+    },
+    {
+      "weapon": "lanka",
+      "build": "crit",
+      "level": 170,
+      "aiming": false,
+      "payload": {
+        "weapon": "/Lotus/Weapons/ClanTech/Energy/Railgun",
+        "fireMode": 0,
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "arcanes": [],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 170,
+        "steelPath": true,
+        "headshotChance": 0.0,
+        "aiming": false,
+        "triggerPolicy": "emergent",
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK"
+        ]
+      },
+      "local": {
+        "kpm": 0.5456870182903548,
+        "shots": 14,
+        "critChance": 0.625,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": null
+      },
+      "localWithoutSniper": {
+        "kpm": 0.5456870182903548,
+        "shots": 14,
+        "critChance": 0.625,
+        "critMultiplier": 5.601367601387057,
+        "sniperCombo": null
+      },
+      "referenceKpm": 0.5417566410389707,
+      "referenceKpmSe": 0.001287317269532147,
+      "referencePanel": {
+        "critChance": 0.625,
+        "critMultiplier": 5.6
+      },
+      "deltaPercent": 0.7254875997175558,
+      "deltaWithoutSniperPercent": 0.7254875997175558,
+      "panelMatches": true
+    }
+  ]
+}

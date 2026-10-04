@@ -47,6 +47,10 @@ def replay(
     tap_spec=combat.get('doubleTap')
     tap=ConsecutiveHits(tap_spec['perHit'],tap_spec['maximum'],tap_spec['duration']) if tap_spec else None
     tap_events=[]
+    from .sniper_combo import ShotCombo
+    combo_spec=combat.get('sniperCombo')
+    shot_combo=ShotCombo(combo_spec['minimum'],combo_spec['seconds']) if combo_spec else None
+    combo_events=[]
     from .enervate import EnervateState, big_crit_probability, any_probability, ASSUMPTIONS
     enervate = EnervateState(combat['enervate']) if combat.get('enervate') else None
     target = target or {}
@@ -1206,6 +1210,15 @@ def replay(
             field_duration_boost = field_duration_ready
             field_duration_ready = False  # A shot consumes it, even when that shot kills.
             hit_count = (1.0 if active.continuous else max(active.multishot,0.0))
+            # Shot Combo Counter: a final factor on this pull's direct and
+            # radial damage, never on its status payloads (WFSim InstanceScale).
+            combo_factor = 1.0
+            if (shot_combo and form != 'incarnon' and not combat.get('selectedIncarnon')
+                    and not active.radial_only):
+                combo_before = shot_combo.expected(t)
+                combo_factor = shot_combo.shot(t, hit_count)
+                if collect_timeline:
+                    combo_events.append(dict(time=t,expectedCount=combo_before,pellets=hit_count,multiplier=combo_factor))
             combat['victimProcTypesBeforeHit'] = {dtype:p.probability(t) for dtype,p in presence.items()}
             shot_puncture=0.0 if active.radial_only else live_crit()[0]
             aim = 0.0 if active.radial_only else head
@@ -1234,7 +1247,7 @@ def replay(
                 ramp = beam_ramp.tick(t,1./speed,(combat.get('beamRampFloors') or {}).get(
                     'base' if form=='base' else 'selected',.2)) if active.continuous and combat.get('beamRampFloors') else 1.
                 died = take(
-                {k: v * damage_rate_multiplier * ramp for k, v in vector.items()},
+                {k: v * damage_rate_multiplier * ramp * combo_factor for k, v in vector.items()},
                 t,
                 "direct",
                 not active.radial_only,
@@ -1264,7 +1277,7 @@ def replay(
                     push(t + delay, 'delayed-radial', part, generation)
                 else:
                     radial_packet = packet(part, 0.0)
-                    if not take(radial_packet[0], t, "direct"):
+                    if not take({k: v * combo_factor for k, v in radial_packet[0].items()}, t, "direct"):
                         add_procs(part, 0.0, t, radial_packet)
                     noncrit_no_proc_hit(part, 0.0, t)
             if hit_count > 0 and (form == "base" or combat.get("baseMode")) and combat.get('baseBurst') and burst_round==int(combat['baseBurst']['count'])-1:
@@ -1412,6 +1425,8 @@ def replay(
                 enervate.sample()
             if manual_detonation:
                 point['deployedMines'] = sum(part.multishot for part, _ in pending_mines) + waiting_mines
+            if shot_combo:
+                point['sniperComboCount'] = shot_combo.expected(t)
             timeline.append(point)
             last_totals = totals.copy()
             for q in sources:
@@ -1486,6 +1501,8 @@ def replay(
         'projectileLifecycle': projectiles.stats if projectiles else {},
         'onosSequence': {'events':onos_events,'alignmentShots':onos['alignmentShots'],'powerCost':onos['powerCost']} if onos else None,
         'doubleTap':{'events':tap_events,'maximum':tap.maximum,'duration':tap.duration} if tap else None,
+        'sniperCombo':({'minimum':shot_combo.minimum,'seconds':shot_combo.seconds,'events':combo_events,
+                        'finalExpectedCount':shot_combo.expected(window)} if shot_combo else None),
         "shots": attacks,
         "reloads": reloads,
         'reloadShellEvents': reload_shell_events,
@@ -1544,6 +1561,7 @@ def replay(
             "magnetic-break-six-ticks-pinned-reference-contract",
             'spread-hit-loss-not-modeled',
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
+          + (['sniper-combo-every-pellet-lands-no-miss-reset'] if shot_combo else [])
           + (['talons-expected-projectile-capacity','manual-detonation-explicit-player-cadence'] if manual_detonation else [])
           + (['onos-native-alignment-shots-held-rate-and-postfire-cadence','onos-radial-target-coverage-explicit'] if onos else [])
           + (ASSUMPTIONS if enervate else [])

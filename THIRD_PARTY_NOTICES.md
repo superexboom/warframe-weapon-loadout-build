@@ -122,6 +122,16 @@ the same license. The "WFSim" name and logo are not used here; see wfsim's
 `TRADEMARK.md` for its branding terms.
 
 
+### Sniper combo and scope profiles (2026-10-04)
+
+`data/mechanics/sniper-profiles.json` records WFSim source commit
+`7399c9e47591e966256bdea04d8378e051dc8936`; each row names its WFSim weapon
+YAML and that file's SHA-256 (`tools/import_sniper_profiles.py`). The game
+export carries no combo minimum, combo decay period or zoom bonus. The counter
+rules in `vendor/wfarsenal/sniper_combo.py` follow WFSim
+`engine/src/model/weapon.rs` (`SniperCombo`), `engine/src/fight/run.rs`
+(`combo_at`) and `engine/src/build/loadout/resolve.rs` (scope bucket terms).
+
 ### Pinned combat-reference refresh (2026-09-26)
 
 `data/mechanics/combat-reference.json` records WFSim source commit

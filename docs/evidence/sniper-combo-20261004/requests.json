@@ -1,0 +1,636 @@
+[
+  {
+    "weapon": "rubico_prime",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "rubico_prime",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "hellfire",
+      "thermite_rounds"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "rubico_prime",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "hellfire",
+      "thermite_rounds"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": false,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "vectis_prime",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [
+      "vectis_prime_evo1_incarnon_form",
+      "vectis_prime_lone_enforcer",
+      "vectis_prime_marksmans_hand",
+      "vectis_prime_critical_parallel"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "lanka",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "vulkar_wraith",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "rubico_prime",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": false,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "lanka",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": false,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "rubico_prime",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "rubico_prime",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "hellfire",
+      "thermite_rounds"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "rubico_prime",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "hellfire",
+      "thermite_rounds"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": false,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "vectis_prime",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [
+      "vectis_prime_evo1_incarnon_form",
+      "vectis_prime_lone_enforcer",
+      "vectis_prime_marksmans_hand",
+      "vectis_prime_critical_parallel"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "lanka",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "vulkar_wraith",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "rubico_prime",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": false,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  },
+  {
+    "weapon": "lanka",
+    "mode": "base",
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "hammer_shot",
+      "heavy_caliber",
+      "infected_clip",
+      "high_voltage"
+    ],
+    "arcane": [],
+    "evolutions": [],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 170,
+    "steel_path": true,
+    "headshot_pct": 0,
+    "aiming": false,
+    "duration": 30.0,
+    "runs": 400,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+      0,
+      0
+    ],
+    "target_at": [
+      0,
+      0.5
+    ]
+  }
+]
