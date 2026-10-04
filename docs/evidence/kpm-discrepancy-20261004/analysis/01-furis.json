@@ -1,0 +1,4316 @@
+{
+  "name": "Furis",
+  "request": {
+    "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+    "disposition": 1.35,
+    "stats": [
+      {
+        "code": "D",
+        "value": 280.719826875,
+        "negative": false
+      },
+      {
+        "code": "S",
+        "value": 153.01531546875,
+        "negative": false
+      },
+      {
+        "code": "0",
+        "value": 191.74085718928595,
+        "negative": false
+      },
+      {
+        "code": "3",
+        "value": 102.25564841250001,
+        "negative": true
+      }
+    ],
+    "profile": "fast",
+    "scenario": {},
+    "benchmarkTarget": {
+      "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+      "level": 9999,
+      "steelPath": true,
+      "eximus": true,
+      "windowSeconds": 30.0,
+      "headshotChance": 0.0
+    }
+  },
+  "inputFingerprint": "83d826eff558549d",
+  "analysis": {
+    "buildLabel": "2026.08.13.13.24",
+    "schemaVersion": 3,
+    "weapon": {
+      "path": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+      "nameInternal": "AutoPistol",
+      "nameEn": "Furis",
+      "nameZh": "盗贼"
+    },
+    "fireMode": 1,
+    "metric": "killsPerMinute",
+    "scoreMetric": "killsPerMinute",
+    "contextHash": "f6f9965cf9541d96fc62",
+    "evaluationScenario": {
+      "aiming": false,
+      "incarnonCycle": false,
+      "heavyAttack": false,
+      "triggerPolicy": "emergent",
+      "distance": null,
+      "cloaked": false,
+      "nearestEnemyDistance": null,
+      "comboTier": 0,
+      "detonationDelaySeconds": 0.0,
+      "detonationBatchSize": 1,
+      "combatState": {}
+    },
+    "requestedTarget": {
+      "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+      "level": 9999,
+      "steelPath": true,
+      "eximus": true,
+      "windowSeconds": 30.0,
+      "headshotChance": 0.0
+    },
+    "evaluationTarget": {
+      "enemyPath": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+      "enemyName": "Thrax Centurion",
+      "level": 9999,
+      "steelPath": true,
+      "enemyEnhancements": {
+        "eximus": true
+      },
+      "armourStrip": 0.0,
+      "elementalArmourStrip": 0.0,
+      "hitLocation": "body",
+      "headshotChance": 0.0,
+      "windowSeconds": 30.0
+    },
+    "targetCalibration": {
+      "version": "target-calibration-v2",
+      "status": "calibrated",
+      "requestedLevel": 9999,
+      "evaluationLevel": 9999,
+      "iterations": [
+        {
+          "iteration": 0,
+          "level": 9999,
+          "probes": {
+            "baseline": {
+              "killsPerMinute": 4.0,
+              "killsInWindow": 2.0,
+              "firstKillTime": 15.0,
+              "minKillInterval": 15.000000000000064,
+              "maxKillsPerStep": 0,
+              "directEventLedger": {
+                "model": "direct-event-ledger-v1",
+                "attacks": 576,
+                "kills": 0,
+                "killsPerMinute": 0.0,
+                "firstKillTime": null,
+                "staleComponents": 0,
+                "targetGeneration": 0,
+                "remainingHealth": 24628935.28520351,
+                "traceCollected": false,
+                "trace": [],
+                "status": "diagnostic-static-defense",
+                "perShotDamage": 15662.85296531976
+              },
+              "pressureReasons": [],
+              "pressureInsufficient": false,
+              "pressureDiagnostics": {
+                "maxKillsPerStep": 0,
+                "attackPeriod": 0.052083333333333336,
+                "resolutionFloor": 0.375,
+                "eventLedgerStatus": "diagnostic-static-defense",
+                "multipleKillsPerStepIsDiagnosticOnly": true
+              }
+            },
+            "actual": {
+              "killsPerMinute": 5.266846070284877,
+              "killsInWindow": 2.6334230351424384,
+              "firstKillTime": 11.583333333333304,
+              "minKillInterval": 11.541666666666806,
+              "maxKillsPerStep": 0,
+              "directEventLedger": {
+                "model": "direct-event-ledger-v1",
+                "attacks": 720,
+                "kills": 0,
+                "killsPerMinute": 0.0,
+                "firstKillTime": null,
+                "staleComponents": 0,
+                "targetGeneration": 0,
+                "remainingHealth": 5419092.94792369,
+                "traceCollected": false,
+                "trace": [],
+                "status": "diagnostic-static-defense",
+                "perShotDamage": 39210.618951812256
+              },
+              "pressureReasons": [],
+              "pressureInsufficient": false,
+              "pressureDiagnostics": {
+                "maxKillsPerStep": 0,
+                "attackPeriod": 0.041666666666666664,
+                "resolutionFloor": 0.375,
+                "eventLedgerStatus": "diagnostic-static-defense",
+                "multipleKillsPerStepIsDiagnosticOnly": true
+              }
+            }
+          }
+        }
+      ],
+      "maxIterations": 5,
+      "postSearchProbe": {
+        "killsPerMinute": 14.171185005348525,
+        "killsInWindow": 7.085592502674262,
+        "firstKillTime": 5.0,
+        "minKillInterval": 4.0104166666665755,
+        "maxKillsPerStep": 0,
+        "directEventLedger": {
+          "model": "direct-event-ledger-v1",
+          "attacks": 576,
+          "kills": 0,
+          "killsPerMinute": 0.0,
+          "firstKillTime": null,
+          "staleComponents": 0,
+          "targetGeneration": 0,
+          "remainingHealth": 8984812.887106348,
+          "traceCollected": false,
+          "trace": [],
+          "status": "diagnostic-static-defense",
+          "perShotDamage": 42822.78768424049
+        },
+        "pressureReasons": [],
+        "pressureInsufficient": false,
+        "pressureDiagnostics": {
+          "maxKillsPerStep": 0,
+          "attackPeriod": 0.052083333333333336,
+          "resolutionFloor": 0.375,
+          "eventLedgerStatus": "diagnostic-static-defense",
+          "multipleKillsPerStepIsDiagnosticOnly": true
+        }
+      }
+    },
+    "searchQuality": {
+      "objectiveMetric": "killsPerMinute",
+      "scoreMetric": "killsPerMinute",
+      "fallbackReason": null,
+      "targetCalibrated": true,
+      "targetCalibrationStatus": "calibrated",
+      "qualityCalibrated": false,
+      "qualityCacheHit": false,
+      "profile": "fast",
+      "bakeStaticsOnly": false
+    },
+    "scoreBasis": "best-known-search-result",
+    "modelStatus": "modeled",
+    "targetStatus": "calibrated",
+    "searchStatus": {
+      "profile": "fast",
+      "metric": "killsPerMinute",
+      "scope": "beam-and-hill-climb",
+      "status": "heuristic-budget-limited",
+      "scoreBasis": "best-known-search-result",
+      "work": {
+        "evaluations": 3181,
+        "memoHits": 0,
+        "limited": 8,
+        "elapsedSeconds": 44.428108299995074,
+        "budgetSeconds": 45.00000029998773,
+        "status": "heuristic-budget-limited"
+      }
+    },
+    "optimalityStatus": {
+      "baseline": "heuristic",
+      "recommended": "heuristic",
+      "optimal": "heuristic",
+      "actualIncludedAsLowerBound": false,
+      "scope": "beam-and-hill-climb"
+    },
+    "scoringValues": {
+      "baseline": 4.0,
+      "actual": 5.266846070284877,
+      "optimal": 14.171185005348525
+    },
+    "score": 12.455245574814585,
+    "grade": "F",
+    "scoreStatus": "available",
+    "scoreStatusReason": "ok",
+    "actualGain": 31.67115175712192,
+    "optimalGain": 254.27962513371313,
+    "rollQuality": 52.63819095477383,
+    "details": [
+      {
+        "code": "D",
+        "label": "基础伤害",
+        "value": 280.719826875,
+        "low": 249.84064591875008,
+        "high": 305.70389146687506,
+        "quality": 55.27638190954766,
+        "delta": 114.45019397687722,
+        "ablationDelta": 114.45019397687722,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": false,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "S",
+        "label": "多重射击",
+        "value": 153.01531546875,
+        "low": 136.1836307671875,
+        "high": 166.63367854546874,
+        "quality": 55.27638190954776,
+        "delta": 63.3242986350133,
+        "ablationDelta": 63.3242986350133,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": true,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "0",
+        "label": "暴击几率",
+        "value": 191.74085718928595,
+        "low": 170.64936289846452,
+        "high": 208.80579347913243,
+        "quality": 55.27638190954766,
+        "delta": 59.756773013440224,
+        "ablationDelta": 59.756773013440224,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": true,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "3",
+        "label": "触发时间",
+        "value": 102.25564841250001,
+        "low": 91.00752708712501,
+        "high": 111.3564011212125,
+        "quality": 44.72361809045224,
+        "delta": 3.1269316180221995,
+        "ablationDelta": 3.1269316180221995,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": false,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      }
+    ],
+    "recommendedPositive": [
+      "状态伤害",
+      "多重射击",
+      "暴击几率"
+    ],
+    "recommendedPositiveTiers": [
+      {
+        "tier": "T0",
+        "stats": [
+          {
+            "code": "SD",
+            "label": "状态伤害",
+            "gain": 121.21613439828826,
+            "score": 100.0
+          },
+          {
+            "code": "VI",
+            "label": "病毒伤害",
+            "gain": 100.95083322874405,
+            "score": 83.28168005840121
+          }
+        ]
+      },
+      {
+        "tier": "T2",
+        "stats": [
+          {
+            "code": "S",
+            "label": "多重射击",
+            "gain": 53.95960840154537,
+            "score": 44.515203086947594
+          },
+          {
+            "code": "0",
+            "label": "暴击几率",
+            "gain": 53.4424992438072,
+            "score": 44.08860215605249
+          }
+        ]
+      },
+      {
+        "tier": "T3",
+        "stats": [
+          {
+            "code": "D",
+            "label": "基础伤害",
+            "gain": 39.45768516733339,
+            "score": 32.551512521991945
+          },
+          {
+            "code": "1",
+            "label": "暴击伤害",
+            "gain": 38.30498429552984,
+            "score": 31.600565787445834
+          },
+          {
+            "code": "2",
+            "label": "触发几率",
+            "gain": 37.52024850258424,
+            "score": 30.953180192416756
+          }
+        ]
+      }
+    ],
+    "recommendedRoutes": null,
+    "recommendedNegative": [
+      "变焦",
+      "弹药最大值",
+      "武器后坐力"
+    ],
+    "fatalNegative": [],
+    "baseline": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+          "nameInternal": "WeaponFireIterationsMod",
+          "nameEn": "Barrel Diffusion",
+          "nameZh": "弹头扩散",
+          "rank": 5,
+          "slot": 0,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 1,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 2,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+          "nameInternal": "WeaponDamageAmountMod",
+          "nameEn": "Hornet Strike",
+          "nameZh": "黄蜂螫刺",
+          "rank": 10,
+          "slot": 3,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 4,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+          "nameInternal": "CorruptedDamageRecoilPistol",
+          "nameEn": "Magnum Force",
+          "nameZh": "重装火力",
+          "rank": 10,
+          "slot": 5,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 55.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.48999967
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 4.400000110000001
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.05000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 16.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+          "nameInternal": "FireEventPistolMod",
+          "nameEn": "Scorch",
+          "nameZh": "灼痕焦点",
+          "rank": 3,
+          "slot": 6,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_PROC_CHANCE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.60000004
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurPactMod",
+          "nameInternal": "SecondaryAugurPactMod",
+          "nameEn": "Augur Pact",
+          "nameZh": "预言 契约",
+          "rank": 5,
+          "slot": 7,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            }
+          ],
+          "setPieces": 1
+        }
+      ],
+      "includesRiven": false,
+      "victimStatusCount": 2,
+      "shotDamage": 15688.321793150737,
+      "burstDps": 301215.7784284942,
+      "sustainedDps": 301215.7784284942,
+      "attackDps": 301215.7784284942,
+      "heavyDamage": 107577.06372446219,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 107577.06372446219,
+      "unsupported": [
+        "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+      ],
+      "forma": {
+        "regular": 7,
+        "umbra": 0,
+        "stance": 0,
+        "total": 7
+      },
+      "objectiveScore": 4.0,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 4.0
+    },
+    "actual": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 0,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponProcTimeMod",
+          "nameInternal": "WeaponProcTimeMod",
+          "nameEn": "Perpetual Agony",
+          "nameZh": "永恒苦痛",
+          "rank": 5,
+          "slot": 1,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PROC_TIME",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 2,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurSeekerMod",
+          "nameInternal": "SecondaryAugurSeekerMod",
+          "nameEn": "Augur Seeker",
+          "nameZh": "预言 探求",
+          "rank": 5,
+          "slot": 3,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PROC_TIME",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            }
+          ],
+          "setPieces": 1
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/RadiationFireratePistolMod",
+          "nameInternal": "RadiationFireratePistolMod",
+          "nameEn": "Accelerated Isotope",
+          "nameZh": "迅发核素",
+          "rank": 3,
+          "slot": 4,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_RADIATION",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 5,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+          "nameInternal": "PrimedWeaponCritDamageMod",
+          "nameEn": "Primed Target Cracker",
+          "nameZh": "弱点专精 Prime",
+          "rank": 10,
+          "slot": 6,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.1
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 3,
+      "shotDamage": 39274.3779940149,
+      "burstDps": 942585.0718563576,
+      "sustainedDps": 942585.0718563576,
+      "attackDps": 942585.0718563576,
+      "heavyDamage": 301130.65568207344,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 301130.65568207344,
+      "unsupported": [
+        "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+      ],
+      "riven": {
+        "slot": 7,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "D",
+            "value": 280.719826875,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 153.01531546875,
+            "negative": false
+          },
+          {
+            "code": "0",
+            "value": 191.74085718928595,
+            "negative": false
+          },
+          {
+            "code": "3",
+            "value": 102.25564841250001,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "D",
+          "label": "基础伤害",
+          "value": 280.719826875,
+          "low": 249.84064591875008,
+          "high": 305.70389146687506,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "S",
+          "label": "多重射击",
+          "value": 153.01531546875,
+          "low": 136.1836307671875,
+          "high": 166.63367854546874,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "0",
+          "label": "暴击几率",
+          "value": 191.74085718928595,
+          "low": 170.64936289846452,
+          "high": 208.80579347913243,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "3",
+          "label": "触发时间",
+          "value": 102.25564841250001,
+          "low": 91.00752708712501,
+          "high": 111.3564011212125,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 7,
+        "umbra": 0,
+        "stance": 0,
+        "total": 7
+      },
+      "objectiveScore": 5.266846070284877,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 5.266846070284877,
+      "alternateModes": [
+        {
+          "fireMode": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto",
+          "isAlternateFire": false,
+          "isIncarnonForm": false,
+          "shotDamage": 3487.666679174745,
+          "burstDps": 69753.33358349488,
+          "sustainedDps": 47559.091079655605,
+          "attackDps": 69753.3335834949,
+          "unsupported": [
+            "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+          ]
+        }
+      ]
+    },
+    "bestFound": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 0,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+          "nameInternal": "WeaponDamageAmountMod",
+          "nameEn": "Hornet Strike",
+          "nameZh": "黄蜂螫刺",
+          "rank": 10,
+          "slot": 1,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+          "nameInternal": "CorruptedDamageRecoilPistol",
+          "nameEn": "Magnum Force",
+          "nameZh": "重装火力",
+          "rank": 10,
+          "slot": 3,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 55.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.48999967
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 4.400000110000001
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.05000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 16.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+          "nameInternal": "FireEventPistolMod",
+          "nameEn": "Scorch",
+          "nameZh": "灼痕焦点",
+          "rank": 3,
+          "slot": 4,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_PROC_CHANCE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.60000004
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 5,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+          "nameInternal": "WeaponFireIterationsMod",
+          "nameEn": "Barrel Diffusion",
+          "nameZh": "弹头扩散",
+          "rank": 5,
+          "slot": 6,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 2,
+      "shotDamage": 42892.42035008924,
+      "burstDps": 823534.4707217134,
+      "sustainedDps": 823534.4707217134,
+      "attackDps": 823534.4707217135,
+      "heavyDamage": 184387.0066860341,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 184387.0066860341,
+      "unsupported": [
+        "WEAPON_ZOOM"
+      ],
+      "riven": {
+        "slot": 7,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "SD",
+            "value": 125.28847760360541,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 166.63367854546877,
+            "negative": false
+          },
+          {
+            "code": "0",
+            "value": 208.80579347913243,
+            "negative": false
+          },
+          {
+            "code": "H",
+            "value": 89.20539583325932,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "SD",
+          "label": "状态伤害",
+          "value": 125.28847760360541,
+          "low": 0.0,
+          "high": 125.28847760360541,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "S",
+          "label": "多重射击",
+          "value": 166.63367854546877,
+          "low": 0.0,
+          "high": 166.63367854546877,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "0",
+          "label": "暴击几率",
+          "value": 208.80579347913243,
+          "low": 0.0,
+          "high": 208.80579347913243,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "H",
+          "label": "变焦",
+          "value": 89.20539583325932,
+          "low": 0.0,
+          "high": 89.20539583325932,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 7,
+        "umbra": 0,
+        "stance": 0,
+        "total": 7
+      },
+      "objectiveScore": 14.171185005348525,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 14.171185005348525
+    },
+    "optimal": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 0,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+          "nameInternal": "WeaponDamageAmountMod",
+          "nameEn": "Hornet Strike",
+          "nameZh": "黄蜂螫刺",
+          "rank": 10,
+          "slot": 1,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+          "nameInternal": "CorruptedDamageRecoilPistol",
+          "nameEn": "Magnum Force",
+          "nameZh": "重装火力",
+          "rank": 10,
+          "slot": 3,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 55.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.48999967
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 4.400000110000001
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.05000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 16.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+          "nameInternal": "FireEventPistolMod",
+          "nameEn": "Scorch",
+          "nameZh": "灼痕焦点",
+          "rank": 3,
+          "slot": 4,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_PROC_CHANCE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.60000004
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 5,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+          "nameInternal": "WeaponFireIterationsMod",
+          "nameEn": "Barrel Diffusion",
+          "nameZh": "弹头扩散",
+          "rank": 5,
+          "slot": 6,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 2,
+      "shotDamage": 42892.42035008924,
+      "burstDps": 823534.4707217134,
+      "sustainedDps": 823534.4707217134,
+      "attackDps": 823534.4707217135,
+      "heavyDamage": 184387.0066860341,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 184387.0066860341,
+      "unsupported": [
+        "WEAPON_ZOOM"
+      ],
+      "riven": {
+        "slot": 7,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "SD",
+            "value": 125.28847760360541,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 166.63367854546877,
+            "negative": false
+          },
+          {
+            "code": "0",
+            "value": 208.80579347913243,
+            "negative": false
+          },
+          {
+            "code": "H",
+            "value": 89.20539583325932,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "SD",
+          "label": "状态伤害",
+          "value": 125.28847760360541,
+          "low": 0.0,
+          "high": 125.28847760360541,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "S",
+          "label": "多重射击",
+          "value": 166.63367854546877,
+          "low": 0.0,
+          "high": 166.63367854546877,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "0",
+          "label": "暴击几率",
+          "value": 208.80579347913243,
+          "low": 0.0,
+          "high": 208.80579347913243,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "H",
+          "label": "变焦",
+          "value": 89.20539583325932,
+          "low": 0.0,
+          "high": 89.20539583325932,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 7,
+        "umbra": 0,
+        "stance": 0,
+        "total": 7
+      },
+      "objectiveScore": 14.171185005348525,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 14.171185005348525
+    },
+    "incarnonChoices": {
+      "tier2": "2-2",
+      "tier3": "3-2",
+      "tier4": "4-3"
+    },
+    "incarnonPolicy": {
+      "adapter": "/Lotus/Types/Items/MiscItems/IncarnonAdapters/Secondary/FurisIncarnonUnlocker",
+      "strategyKey": "FurisIncarnonUnlocker",
+      "sampledAt": "2026-08-18T00:00:00+08:00",
+      "gameBuild": "2026.08.13.13.24",
+      "matched": true,
+      "objective": "general secondary",
+      "confidence": "high-medium",
+      "sources": [
+        "https://overframe.gg/build/465709/",
+        "https://overframe.gg/build/492085/",
+        "https://news.17173.com/z/xjzj/content/09252024/145906561.shtml"
+      ],
+      "builds": [
+        {
+          "id": 465709,
+          "votes": 412
+        },
+        {
+          "id": 492085,
+          "votes": 147
+        }
+      ],
+      "alternatives": [],
+      "sourceKind": "whole-build-votes",
+      "selectionMode": "community-default",
+      "appliedTiers": [
+        "tier2",
+        "tier3",
+        "tier4"
+      ]
+    },
+    "arcaneStates": [],
+    "stance": null,
+    "unsupported": [
+      "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD",
+      "WEAPON_ZOOM"
+    ],
+    "skipped": [
+      "optimizer-assumption: 8 slots, 60 capacity, Catalyst and matching Forma",
+      "optimizer-objective: 评价靶 KPM（Lv9999 钢铁之路卓越者超宏凶魂百夫长，30s 击杀数）；触发从零层爬升、护甲/超宏/等级缩放全部参与，流派不钳制（实战双修口径）",
+      "optimizer-fire-mode: 灵化武器默认使用灵化形态（模式 2），其余模式仅展示",
+      "mod-family exclusivity checked by exported nameTag and weapon compatibility tags; account-specific conflicts are not exported",
+      "Riven template values recovered from frozen build 2026.08.13.13.24",
+      "recommended Riven stats use theoretical max-roll values from the active frozen build",
+      "optimizer-profile: 快速档（beam 12/32，无爬山；词条分层为粗排口径）",
+      "optimizer-search: profile fast, 90 candidate mods, 16 unsupported mods rejected",
+      "target-calibration: calibrated · requested Lv9999 → evaluation Lv9999 · iterations 1",
+      "/Lotus/Upgrades/Mods/Sets/Augur/AugurSetMod: unsupported[no-handler]",
+      "riven:H: unsupported[no-handler]",
+      "riven:theoretical:H: unsupported[no-handler]",
+      "搜索达到交互预算，返回已找到的合法配装；未证明全局最优"
+    ],
+    "profile": "fast",
+    "searchWork": {
+      "evaluations": 3181,
+      "memoHits": 0,
+      "limited": 8,
+      "elapsedSeconds": 44.428108299995074,
+      "budgetSeconds": 45.00000029998773,
+      "status": "heuristic-budget-limited"
+    },
+    "responseCache": "miss",
+    "disposition": 1.35,
+    "engineFingerprint": "83d826eff558549d",
+    "engineCacheVersion": 14,
+    "innateElement": null,
+    "innateElementCandidates": []
+  },
+  "replays": {
+    "baseline": {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-3"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurPactMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ],
+        "metric": "killsPerMinute"
+      },
+      "objectiveScore": 4.0,
+      "manualKpm": 4.0,
+      "manualWindowDps": 2243382.572881903,
+      "scoringScore": 4.0,
+      "passed": true,
+      "unsupported": [
+        "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+      ],
+      "shots": 576,
+      "transforms": 0,
+      "rivenSlot": null,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    "actual": {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-3"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponProcTimeMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurSeekerMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/RadiationFireratePistolMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 7,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "D",
+              "value": 280.719826875,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 153.01531546875,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 191.74085718928595,
+              "negative": false
+            },
+            {
+              "code": "3",
+              "value": 102.25564841250001,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 5.266846070284877,
+      "manualKpm": 5.266846070284877,
+      "manualWindowDps": 2953887.6720321556,
+      "scoringScore": 5.266846070284877,
+      "passed": true,
+      "unsupported": [
+        "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+      ],
+      "shots": 720,
+      "transforms": 0,
+      "rivenSlot": 7,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    "optimal": {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-3"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 7,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "SD",
+              "value": 125.28847760360541,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 166.63367854546877,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 208.80579347913243,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 89.20539583325932,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 14.171185005348525,
+      "manualKpm": 14.171185005348525,
+      "manualWindowDps": 7947847.369521073,
+      "scoringScore": 14.171185005348525,
+      "passed": true,
+      "unsupported": [
+        "WEAPON_ZOOM"
+      ],
+      "shots": 576,
+      "transforms": 0,
+      "rivenSlot": 7,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    }
+  },
+  "passed": true,
+  "cycleCoveragePassed": true,
+  "warmAnalysis": {
+    "buildLabel": "2026.08.13.13.24",
+    "schemaVersion": 3,
+    "weapon": {
+      "path": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+      "nameInternal": "AutoPistol",
+      "nameEn": "Furis",
+      "nameZh": "盗贼"
+    },
+    "fireMode": 1,
+    "metric": "killsPerMinute",
+    "scoreMetric": "killsPerMinute",
+    "contextHash": "f6f9965cf9541d96fc62",
+    "evaluationScenario": {
+      "aiming": false,
+      "incarnonCycle": false,
+      "heavyAttack": false,
+      "triggerPolicy": "emergent",
+      "distance": null,
+      "cloaked": false,
+      "nearestEnemyDistance": null,
+      "comboTier": 0,
+      "detonationDelaySeconds": 0.0,
+      "detonationBatchSize": 1,
+      "combatState": {}
+    },
+    "requestedTarget": {
+      "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+      "level": 9999,
+      "steelPath": true,
+      "eximus": true,
+      "windowSeconds": 30.0,
+      "headshotChance": 0.0
+    },
+    "evaluationTarget": {
+      "enemyPath": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+      "enemyName": "Thrax Centurion",
+      "level": 9999,
+      "steelPath": true,
+      "enemyEnhancements": {
+        "eximus": true
+      },
+      "armourStrip": 0.0,
+      "elementalArmourStrip": 0.0,
+      "hitLocation": "body",
+      "headshotChance": 0.0,
+      "windowSeconds": 30.0
+    },
+    "targetCalibration": {
+      "version": "target-calibration-v2",
+      "status": "calibrated",
+      "requestedLevel": 9999,
+      "evaluationLevel": 9999,
+      "iterations": [
+        {
+          "iteration": 0,
+          "level": 9999,
+          "probes": {
+            "baseline": {
+              "killsPerMinute": 4.0,
+              "killsInWindow": 2.0,
+              "firstKillTime": 15.0,
+              "minKillInterval": 15.000000000000064,
+              "maxKillsPerStep": 0,
+              "directEventLedger": {
+                "model": "direct-event-ledger-v1",
+                "attacks": 576,
+                "kills": 0,
+                "killsPerMinute": 0.0,
+                "firstKillTime": null,
+                "staleComponents": 0,
+                "targetGeneration": 0,
+                "remainingHealth": 24628935.28520351,
+                "traceCollected": false,
+                "trace": [],
+                "status": "diagnostic-static-defense",
+                "perShotDamage": 15662.85296531976
+              },
+              "pressureReasons": [],
+              "pressureInsufficient": false,
+              "pressureDiagnostics": {
+                "maxKillsPerStep": 0,
+                "attackPeriod": 0.052083333333333336,
+                "resolutionFloor": 0.375,
+                "eventLedgerStatus": "diagnostic-static-defense",
+                "multipleKillsPerStepIsDiagnosticOnly": true
+              }
+            },
+            "actual": {
+              "killsPerMinute": 5.266846070284877,
+              "killsInWindow": 2.6334230351424384,
+              "firstKillTime": 11.583333333333304,
+              "minKillInterval": 11.541666666666806,
+              "maxKillsPerStep": 0,
+              "directEventLedger": {
+                "model": "direct-event-ledger-v1",
+                "attacks": 720,
+                "kills": 0,
+                "killsPerMinute": 0.0,
+                "firstKillTime": null,
+                "staleComponents": 0,
+                "targetGeneration": 0,
+                "remainingHealth": 5419092.94792369,
+                "traceCollected": false,
+                "trace": [],
+                "status": "diagnostic-static-defense",
+                "perShotDamage": 39210.618951812256
+              },
+              "pressureReasons": [],
+              "pressureInsufficient": false,
+              "pressureDiagnostics": {
+                "maxKillsPerStep": 0,
+                "attackPeriod": 0.041666666666666664,
+                "resolutionFloor": 0.375,
+                "eventLedgerStatus": "diagnostic-static-defense",
+                "multipleKillsPerStepIsDiagnosticOnly": true
+              }
+            }
+          }
+        }
+      ],
+      "maxIterations": 5,
+      "postSearchProbe": {
+        "killsPerMinute": 14.171185005348525,
+        "killsInWindow": 7.085592502674262,
+        "firstKillTime": 5.0,
+        "minKillInterval": 4.0104166666665755,
+        "maxKillsPerStep": 0,
+        "directEventLedger": {
+          "model": "direct-event-ledger-v1",
+          "attacks": 576,
+          "kills": 0,
+          "killsPerMinute": 0.0,
+          "firstKillTime": null,
+          "staleComponents": 0,
+          "targetGeneration": 0,
+          "remainingHealth": 8984812.887106348,
+          "traceCollected": false,
+          "trace": [],
+          "status": "diagnostic-static-defense",
+          "perShotDamage": 42822.78768424049
+        },
+        "pressureReasons": [],
+        "pressureInsufficient": false,
+        "pressureDiagnostics": {
+          "maxKillsPerStep": 0,
+          "attackPeriod": 0.052083333333333336,
+          "resolutionFloor": 0.375,
+          "eventLedgerStatus": "diagnostic-static-defense",
+          "multipleKillsPerStepIsDiagnosticOnly": true
+        }
+      }
+    },
+    "searchQuality": {
+      "objectiveMetric": "killsPerMinute",
+      "scoreMetric": "killsPerMinute",
+      "fallbackReason": null,
+      "targetCalibrated": true,
+      "targetCalibrationStatus": "calibrated",
+      "qualityCalibrated": false,
+      "qualityCacheHit": false,
+      "profile": "fast",
+      "bakeStaticsOnly": false
+    },
+    "scoreBasis": "best-known-search-result",
+    "modelStatus": "modeled",
+    "targetStatus": "calibrated",
+    "searchStatus": {
+      "profile": "fast",
+      "metric": "killsPerMinute",
+      "scope": "beam-and-hill-climb",
+      "status": "heuristic-budget-limited",
+      "scoreBasis": "best-known-search-result",
+      "work": {
+        "evaluations": 3181,
+        "memoHits": 0,
+        "limited": 8,
+        "elapsedSeconds": 44.428108299995074,
+        "budgetSeconds": 45.00000029998773,
+        "status": "heuristic-budget-limited"
+      }
+    },
+    "optimalityStatus": {
+      "baseline": "heuristic",
+      "recommended": "heuristic",
+      "optimal": "heuristic",
+      "actualIncludedAsLowerBound": false,
+      "scope": "beam-and-hill-climb"
+    },
+    "scoringValues": {
+      "baseline": 4.0,
+      "actual": 5.266846070284877,
+      "optimal": 14.171185005348525
+    },
+    "score": 12.455245574814585,
+    "grade": "F",
+    "scoreStatus": "available",
+    "scoreStatusReason": "ok",
+    "actualGain": 31.67115175712192,
+    "optimalGain": 254.27962513371313,
+    "rollQuality": 52.63819095477383,
+    "details": [
+      {
+        "code": "D",
+        "label": "基础伤害",
+        "value": 280.719826875,
+        "low": 249.84064591875008,
+        "high": 305.70389146687506,
+        "quality": 55.27638190954766,
+        "delta": 114.45019397687722,
+        "ablationDelta": 114.45019397687722,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": false,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "S",
+        "label": "多重射击",
+        "value": 153.01531546875,
+        "low": 136.1836307671875,
+        "high": 166.63367854546874,
+        "quality": 55.27638190954776,
+        "delta": 63.3242986350133,
+        "ablationDelta": 63.3242986350133,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": true,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "0",
+        "label": "暴击几率",
+        "value": 191.74085718928595,
+        "low": 170.64936289846452,
+        "high": 208.80579347913243,
+        "quality": 55.27638190954766,
+        "delta": 59.756773013440224,
+        "ablationDelta": 59.756773013440224,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": true,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      },
+      {
+        "code": "3",
+        "label": "触发时间",
+        "value": 102.25564841250001,
+        "low": 91.00752708712501,
+        "high": 111.3564011212125,
+        "quality": 44.72361809045224,
+        "delta": 3.1269316180221995,
+        "ablationDelta": 3.1269316180221995,
+        "reoptimizedDelta": null,
+        "contributionMetric": "killsPerMinute",
+        "condition": null,
+        "inactiveReason": null,
+        "contributionStatus": "computed",
+        "recommended": false,
+        "fatalNegative": false,
+        "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+      }
+    ],
+    "recommendedPositive": [
+      "状态伤害",
+      "多重射击",
+      "暴击几率"
+    ],
+    "recommendedPositiveTiers": [
+      {
+        "tier": "T0",
+        "stats": [
+          {
+            "code": "SD",
+            "label": "状态伤害",
+            "gain": 121.21613439828826,
+            "score": 100.0
+          },
+          {
+            "code": "VI",
+            "label": "病毒伤害",
+            "gain": 100.95083322874405,
+            "score": 83.28168005840121
+          }
+        ]
+      },
+      {
+        "tier": "T2",
+        "stats": [
+          {
+            "code": "S",
+            "label": "多重射击",
+            "gain": 53.95960840154537,
+            "score": 44.515203086947594
+          },
+          {
+            "code": "0",
+            "label": "暴击几率",
+            "gain": 53.4424992438072,
+            "score": 44.08860215605249
+          }
+        ]
+      },
+      {
+        "tier": "T3",
+        "stats": [
+          {
+            "code": "D",
+            "label": "基础伤害",
+            "gain": 39.45768516733339,
+            "score": 32.551512521991945
+          },
+          {
+            "code": "1",
+            "label": "暴击伤害",
+            "gain": 38.30498429552984,
+            "score": 31.600565787445834
+          },
+          {
+            "code": "2",
+            "label": "触发几率",
+            "gain": 37.52024850258424,
+            "score": 30.953180192416756
+          }
+        ]
+      }
+    ],
+    "recommendedRoutes": null,
+    "recommendedNegative": [
+      "变焦",
+      "弹药最大值",
+      "武器后坐力"
+    ],
+    "fatalNegative": [],
+    "baseline": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+          "nameInternal": "WeaponFireIterationsMod",
+          "nameEn": "Barrel Diffusion",
+          "nameZh": "弹头扩散",
+          "rank": 5,
+          "slot": 0,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 1,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 2,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+          "nameInternal": "WeaponDamageAmountMod",
+          "nameEn": "Hornet Strike",
+          "nameZh": "黄蜂螫刺",
+          "rank": 10,
+          "slot": 3,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 4,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+          "nameInternal": "CorruptedDamageRecoilPistol",
+          "nameEn": "Magnum Force",
+          "nameZh": "重装火力",
+          "rank": 10,
+          "slot": 5,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 55.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.48999967
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 4.400000110000001
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.05000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 16.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+          "nameInternal": "FireEventPistolMod",
+          "nameEn": "Scorch",
+          "nameZh": "灼痕焦点",
+          "rank": 3,
+          "slot": 6,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_PROC_CHANCE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.60000004
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurPactMod",
+          "nameInternal": "SecondaryAugurPactMod",
+          "nameEn": "Augur Pact",
+          "nameZh": "预言 契约",
+          "rank": 5,
+          "slot": 7,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            }
+          ],
+          "setPieces": 1
+        }
+      ],
+      "includesRiven": false,
+      "victimStatusCount": 2,
+      "shotDamage": 15688.321793150737,
+      "burstDps": 301215.7784284942,
+      "sustainedDps": 301215.7784284942,
+      "attackDps": 301215.7784284942,
+      "heavyDamage": 107577.06372446219,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 107577.06372446219,
+      "unsupported": [
+        "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+      ],
+      "forma": {
+        "regular": 7,
+        "umbra": 0,
+        "stance": 0,
+        "total": 7
+      },
+      "objectiveScore": 4.0,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 4.0
+    },
+    "actual": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 0,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponProcTimeMod",
+          "nameInternal": "WeaponProcTimeMod",
+          "nameEn": "Perpetual Agony",
+          "nameZh": "永恒苦痛",
+          "rank": 5,
+          "slot": 1,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PROC_TIME",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 2,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurSeekerMod",
+          "nameInternal": "SecondaryAugurSeekerMod",
+          "nameEn": "Augur Seeker",
+          "nameZh": "预言 探求",
+          "rank": 5,
+          "slot": 3,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PROC_TIME",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.90000006
+            }
+          ],
+          "setPieces": 1
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/RadiationFireratePistolMod",
+          "nameInternal": "RadiationFireratePistolMod",
+          "nameEn": "Accelerated Isotope",
+          "nameZh": "迅发核素",
+          "rank": 3,
+          "slot": 4,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_RADIATION",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 5,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+          "nameInternal": "PrimedWeaponCritDamageMod",
+          "nameEn": "Primed Target Cracker",
+          "nameZh": "弱点专精 Prime",
+          "rank": 10,
+          "slot": 6,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.1
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 3,
+      "shotDamage": 39274.3779940149,
+      "burstDps": 942585.0718563576,
+      "sustainedDps": 942585.0718563576,
+      "attackDps": 942585.0718563576,
+      "heavyDamage": 301130.65568207344,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 301130.65568207344,
+      "unsupported": [
+        "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+      ],
+      "riven": {
+        "slot": 7,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "D",
+            "value": 280.719826875,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 153.01531546875,
+            "negative": false
+          },
+          {
+            "code": "0",
+            "value": 191.74085718928595,
+            "negative": false
+          },
+          {
+            "code": "3",
+            "value": 102.25564841250001,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "D",
+          "label": "基础伤害",
+          "value": 280.719826875,
+          "low": 249.84064591875008,
+          "high": 305.70389146687506,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "S",
+          "label": "多重射击",
+          "value": 153.01531546875,
+          "low": 136.1836307671875,
+          "high": 166.63367854546874,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "0",
+          "label": "暴击几率",
+          "value": 191.74085718928595,
+          "low": 170.64936289846452,
+          "high": 208.80579347913243,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "3",
+          "label": "触发时间",
+          "value": 102.25564841250001,
+          "low": 91.00752708712501,
+          "high": 111.3564011212125,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 7,
+        "umbra": 0,
+        "stance": 0,
+        "total": 7
+      },
+      "objectiveScore": 5.266846070284877,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 5.266846070284877,
+      "alternateModes": [
+        {
+          "fireMode": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto",
+          "isAlternateFire": false,
+          "isIncarnonForm": false,
+          "shotDamage": 3487.666679174745,
+          "burstDps": 69753.33358349488,
+          "sustainedDps": 47559.091079655605,
+          "attackDps": 69753.3335834949,
+          "unsupported": [
+            "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+          ]
+        }
+      ]
+    },
+    "bestFound": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 0,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+          "nameInternal": "WeaponDamageAmountMod",
+          "nameEn": "Hornet Strike",
+          "nameZh": "黄蜂螫刺",
+          "rank": 10,
+          "slot": 1,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+          "nameInternal": "CorruptedDamageRecoilPistol",
+          "nameEn": "Magnum Force",
+          "nameZh": "重装火力",
+          "rank": 10,
+          "slot": 3,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 55.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.48999967
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 4.400000110000001
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.05000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 16.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+          "nameInternal": "FireEventPistolMod",
+          "nameEn": "Scorch",
+          "nameZh": "灼痕焦点",
+          "rank": 3,
+          "slot": 4,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_PROC_CHANCE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.60000004
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 5,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+          "nameInternal": "WeaponFireIterationsMod",
+          "nameEn": "Barrel Diffusion",
+          "nameZh": "弹头扩散",
+          "rank": 5,
+          "slot": 6,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 2,
+      "shotDamage": 42892.42035008924,
+      "burstDps": 823534.4707217134,
+      "sustainedDps": 823534.4707217134,
+      "attackDps": 823534.4707217135,
+      "heavyDamage": 184387.0066860341,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 184387.0066860341,
+      "unsupported": [
+        "WEAPON_ZOOM"
+      ],
+      "riven": {
+        "slot": 7,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "SD",
+            "value": 125.28847760360541,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 166.63367854546877,
+            "negative": false
+          },
+          {
+            "code": "0",
+            "value": 208.80579347913243,
+            "negative": false
+          },
+          {
+            "code": "H",
+            "value": 89.20539583325932,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "SD",
+          "label": "状态伤害",
+          "value": 125.28847760360541,
+          "low": 0.0,
+          "high": 125.28847760360541,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "S",
+          "label": "多重射击",
+          "value": 166.63367854546877,
+          "low": 0.0,
+          "high": 166.63367854546877,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "0",
+          "label": "暴击几率",
+          "value": 208.80579347913243,
+          "low": 0.0,
+          "high": 208.80579347913243,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "H",
+          "label": "变焦",
+          "value": 89.20539583325932,
+          "low": 0.0,
+          "high": 89.20539583325932,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 7,
+        "umbra": 0,
+        "stance": 0,
+        "total": 7
+      },
+      "objectiveScore": 14.171185005348525,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 14.171185005348525
+    },
+    "optimal": {
+      "mods": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+          "nameInternal": "MagneticCritDamagePistolMod",
+          "nameEn": "Magnetic Might",
+          "nameZh": "磁吸巨力",
+          "rank": 3,
+          "slot": 0,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_MAGNETIC",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_CRIT_DAMAGE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.4
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+          "nameInternal": "WeaponDamageAmountMod",
+          "nameEn": "Hornet Strike",
+          "nameZh": "黄蜂螫刺",
+          "rank": 10,
+          "slot": 1,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+          "nameInternal": "WeaponFireDamageModExpert",
+          "nameEn": "Primed Heated Charge",
+          "nameZh": "火焰装填 Prime",
+          "rank": 10,
+          "slot": 2,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 1.65000011
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+          "nameInternal": "CorruptedDamageRecoilPistol",
+          "nameEn": "Magnum Force",
+          "nameZh": "重装火力",
+          "rank": 10,
+          "slot": 3,
+          "maxRank": 10,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 55.0
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.48999967
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.3799997799999995
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 4.400000110000001
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 6.05000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 16.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 1.65000011
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 5.5
+            },
+            {
+              "upgradeType": "WEAPON_SPREAD",
+              "damageType": "DT_ANY",
+              "operation": "ADD",
+              "value": 2.2
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+          "nameInternal": "FireEventPistolMod",
+          "nameEn": "Scorch",
+          "nameZh": "灼痕焦点",
+          "rank": 3,
+          "slot": 4,
+          "maxRank": 3,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+              "damageType": "DT_FIRE",
+              "operation": "ADD",
+              "value": 0.60000004
+            },
+            {
+              "upgradeType": "WEAPON_PROC_CHANCE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.60000004
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+          "nameInternal": "GrinderMod",
+          "nameEn": "Lethal Torrent",
+          "nameZh": "致命洪流",
+          "rank": 5,
+          "slot": 5,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 0.6000000000000001
+            }
+          ]
+        },
+        {
+          "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+          "nameInternal": "WeaponFireIterationsMod",
+          "nameEn": "Barrel Diffusion",
+          "nameZh": "弹头扩散",
+          "rank": 5,
+          "slot": 6,
+          "maxRank": 5,
+          "compatibility": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "compatibilityTags": [],
+          "compatible": true,
+          "displayEffects": [
+            {
+              "upgradeType": "WEAPON_FIRE_ITERATIONS",
+              "damageType": "DT_ANY",
+              "operation": "STACKING_MULTIPLY",
+              "value": 1.2000000000000002
+            }
+          ]
+        }
+      ],
+      "includesRiven": true,
+      "victimStatusCount": 2,
+      "shotDamage": 42892.42035008924,
+      "burstDps": 823534.4707217134,
+      "sustainedDps": 823534.4707217134,
+      "attackDps": 823534.4707217135,
+      "heavyDamage": 184387.0066860341,
+      "heavyComponents": [],
+      "heavySupport": null,
+      "heavyAttackDps": 184387.0066860341,
+      "unsupported": [
+        "WEAPON_ZOOM"
+      ],
+      "riven": {
+        "slot": 7,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "SD",
+            "value": 125.28847760360541,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 166.63367854546877,
+            "negative": false
+          },
+          {
+            "code": "0",
+            "value": 208.80579347913243,
+            "negative": false
+          },
+          {
+            "code": "H",
+            "value": 89.20539583325932,
+            "negative": true
+          }
+        ]
+      },
+      "rivenLines": [
+        {
+          "code": "SD",
+          "label": "状态伤害",
+          "value": 125.28847760360541,
+          "low": 0.0,
+          "high": 125.28847760360541,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "S",
+          "label": "多重射击",
+          "value": 166.63367854546877,
+          "low": 0.0,
+          "high": 166.63367854546877,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "0",
+          "label": "暴击几率",
+          "value": 208.80579347913243,
+          "low": 0.0,
+          "high": 208.80579347913243,
+          "negative": false,
+          "unit": "percent"
+        },
+        {
+          "code": "H",
+          "label": "变焦",
+          "value": 89.20539583325932,
+          "low": 0.0,
+          "high": 89.20539583325932,
+          "negative": true,
+          "unit": "percent"
+        }
+      ],
+      "forma": {
+        "regular": 7,
+        "umbra": 0,
+        "stance": 0,
+        "total": 7
+      },
+      "objectiveScore": 14.171185005348525,
+      "objectiveMetric": "killsPerMinute",
+      "optimizationMetric": "killsPerMinute",
+      "scoringMetric": "killsPerMinute",
+      "scoringScore": 14.171185005348525
+    },
+    "incarnonChoices": {
+      "tier2": "2-2",
+      "tier3": "3-2",
+      "tier4": "4-3"
+    },
+    "incarnonPolicy": {
+      "adapter": "/Lotus/Types/Items/MiscItems/IncarnonAdapters/Secondary/FurisIncarnonUnlocker",
+      "strategyKey": "FurisIncarnonUnlocker",
+      "sampledAt": "2026-08-18T00:00:00+08:00",
+      "gameBuild": "2026.08.13.13.24",
+      "matched": true,
+      "objective": "general secondary",
+      "confidence": "high-medium",
+      "sources": [
+        "https://overframe.gg/build/465709/",
+        "https://overframe.gg/build/492085/",
+        "https://news.17173.com/z/xjzj/content/09252024/145906561.shtml"
+      ],
+      "builds": [
+        {
+          "id": 465709,
+          "votes": 412
+        },
+        {
+          "id": 492085,
+          "votes": 147
+        }
+      ],
+      "alternatives": [],
+      "sourceKind": "whole-build-votes",
+      "selectionMode": "community-default",
+      "appliedTiers": [
+        "tier2",
+        "tier3",
+        "tier4"
+      ]
+    },
+    "arcaneStates": [],
+    "stance": null,
+    "unsupported": [
+      "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD",
+      "WEAPON_ZOOM"
+    ],
+    "skipped": [
+      "optimizer-assumption: 8 slots, 60 capacity, Catalyst and matching Forma",
+      "optimizer-objective: 评价靶 KPM（Lv9999 钢铁之路卓越者超宏凶魂百夫长，30s 击杀数）；触发从零层爬升、护甲/超宏/等级缩放全部参与，流派不钳制（实战双修口径）",
+      "optimizer-fire-mode: 灵化武器默认使用灵化形态（模式 2），其余模式仅展示",
+      "mod-family exclusivity checked by exported nameTag and weapon compatibility tags; account-specific conflicts are not exported",
+      "Riven template values recovered from frozen build 2026.08.13.13.24",
+      "recommended Riven stats use theoretical max-roll values from the active frozen build",
+      "optimizer-profile: 快速档（beam 12/32，无爬山；词条分层为粗排口径）",
+      "optimizer-search: profile fast, 90 candidate mods, 16 unsupported mods rejected",
+      "target-calibration: calibrated · requested Lv9999 → evaluation Lv9999 · iterations 1",
+      "/Lotus/Upgrades/Mods/Sets/Augur/AugurSetMod: unsupported[no-handler]",
+      "riven:H: unsupported[no-handler]",
+      "riven:theoretical:H: unsupported[no-handler]",
+      "搜索达到交互预算，返回已找到的合法配装；未证明全局最优"
+    ],
+    "profile": "fast",
+    "searchWork": {
+      "evaluations": 3181,
+      "memoHits": 0,
+      "limited": 8,
+      "elapsedSeconds": 44.428108299995074,
+      "budgetSeconds": 45.00000029998773,
+      "status": "heuristic-budget-limited"
+    },
+    "responseCache": "exact-request-hit",
+    "disposition": 1.35,
+    "engineFingerprint": "83d826eff558549d",
+    "engineCacheVersion": 14,
+    "innateElement": null,
+    "innateElementCandidates": []
+  },
+  "warmReplays": {
+    "baseline": {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-3"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurPactMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ],
+        "metric": "killsPerMinute"
+      },
+      "objectiveScore": 4.0,
+      "manualKpm": 4.0,
+      "manualWindowDps": 2243382.572881903,
+      "scoringScore": 4.0,
+      "passed": true,
+      "unsupported": [
+        "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+      ],
+      "shots": 576,
+      "transforms": 0,
+      "rivenSlot": null,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    "actual": {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-3"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponProcTimeMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurSeekerMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/RadiationFireratePistolMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 7,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "D",
+              "value": 280.719826875,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 153.01531546875,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 191.74085718928595,
+              "negative": false
+            },
+            {
+              "code": "3",
+              "value": 102.25564841250001,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 5.266846070284877,
+      "manualKpm": 5.266846070284877,
+      "manualWindowDps": 2953887.6720321556,
+      "scoringScore": 5.266846070284877,
+      "passed": true,
+      "unsupported": [
+        "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+      ],
+      "shots": 720,
+      "transforms": 0,
+      "rivenSlot": 7,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    "optimal": {
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-3"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 7,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "SD",
+              "value": 125.28847760360541,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 166.63367854546877,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 208.80579347913243,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 89.20539583325932,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 14.171185005348525,
+      "manualKpm": 14.171185005348525,
+      "manualWindowDps": 7947847.369521073,
+      "scoringScore": 14.171185005348525,
+      "passed": true,
+      "unsupported": [
+        "WEAPON_ZOOM"
+      ],
+      "shots": 576,
+      "transforms": 0,
+      "rivenSlot": 7,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    }
+  },
+  "warmContextMatches": true,
+  "elapsedSeconds": 44.62470149999717
+}

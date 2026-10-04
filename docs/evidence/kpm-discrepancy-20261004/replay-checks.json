@@ -1,0 +1,671 @@
+{
+  "engineFingerprint": "8395349795edf9a6",
+  "count": 10,
+  "checks": [
+    {
+      "name": "Burston Prime",
+      "build": "baseline",
+      "sourceFingerprint": "83d826eff558549d",
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-3",
+          "tier4": "4-2"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Syndicate/BurstonPrimeMod",
+            "rank": 3,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute"
+      },
+      "objectiveScore": 1.6873229776202305,
+      "manualKpm": 1.6873229776202305,
+      "manualWindowDps": 946327.7407041066,
+      "scoringScore": 1.6873229776202305,
+      "passed": true,
+      "unsupported": [
+        "WEAPON_SYNDICATE_POWER"
+      ],
+      "shots": 1080,
+      "transforms": 0,
+      "rivenSlot": null,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    {
+      "name": "Burston Prime",
+      "build": "actual",
+      "sourceFingerprint": "83d826eff558549d",
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-3",
+          "tier4": "4-2"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Syndicate/BurstonPrimeMod",
+            "rank": 3,
+            "slot": 6
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 7,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "D",
+              "value": 210.92297218555782,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 115.04910707401781,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 191.74085718928595,
+              "negative": false
+            },
+            {
+              "code": "3",
+              "value": 102.25564841250001,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 1.0406050666468711,
+      "manualKpm": 1.0406050666468711,
+      "manualWindowDps": 583618.8179420514,
+      "scoringScore": 1.0406050666468711,
+      "passed": true,
+      "unsupported": [
+        "WEAPON_SYNDICATE_POWER"
+      ],
+      "shots": 1080,
+      "transforms": 0,
+      "rivenSlot": 7,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    {
+      "name": "Burston Prime",
+      "build": "optimal",
+      "sourceFingerprint": "83d826eff558549d",
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-3",
+          "tier4": "4-2"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Syndicate/BurstonPrimeMod",
+            "rank": 3,
+            "slot": 6
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_DEFENSE",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 7,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "VI",
+              "value": 125.28847760360541,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 208.80579347913243,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 125.28847760360541,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 66.8138406727275,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 8.191236168782307,
+      "manualKpm": 8.191236168782307,
+      "manualWindowDps": 4594019.117851522,
+      "scoringScore": 8.191236168782307,
+      "passed": true,
+      "unsupported": [
+        "WEAPON_SYNDICATE_POWER",
+        "WEAPON_ZOOM"
+      ],
+      "shots": 1080,
+      "transforms": 0,
+      "rivenSlot": 7,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    {
+      "name": "Furis",
+      "build": "baseline",
+      "sourceFingerprint": "83d826eff558549d",
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-3"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurPactMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC"
+        ],
+        "metric": "killsPerMinute"
+      },
+      "objectiveScore": 4.0,
+      "manualKpm": 4.0,
+      "manualWindowDps": 2243382.572881903,
+      "scoringScore": 4.0,
+      "passed": true,
+      "unsupported": [
+        "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+      ],
+      "shots": 576,
+      "transforms": 0,
+      "rivenSlot": null,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    {
+      "name": "Furis",
+      "build": "actual",
+      "sourceFingerprint": "83d826eff558549d",
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-3"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponProcTimeMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurSeekerMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/RadiationFireratePistolMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 7,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "D",
+              "value": 280.719826875,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 153.01531546875,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 191.74085718928595,
+              "negative": false
+            },
+            {
+              "code": "3",
+              "value": 102.25564841250001,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 5.266846070284877,
+      "manualKpm": 5.266846070284877,
+      "manualWindowDps": 2953887.6720321556,
+      "scoringScore": 5.266846070284877,
+      "passed": true,
+      "unsupported": [
+        "AVATAR_ABILITY_ENERGY_TO_OVERSHIELD"
+      ],
+      "shots": 720,
+      "transforms": 0,
+      "rivenSlot": 7,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    {
+      "name": "Furis",
+      "build": "optimal",
+      "sourceFingerprint": "83d826eff558549d",
+      "request": {
+        "weapon": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+        "disposition": 1.35,
+        "profile": "fast",
+        "scenario": {},
+        "fireMode": 1,
+        "incarnonChoices": {
+          "tier2": "2-2",
+          "tier3": "3-2",
+          "tier4": "4-3"
+        },
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+        "level": 9999,
+        "steelPath": true,
+        "enemyEnhancements": {
+          "eximus": true
+        },
+        "armourStrip": 0.0,
+        "elementalArmourStrip": 0.0,
+        "headshotChance": 0.0,
+        "slotPolarities": [
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_TACTIC",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK",
+          "AP_ATTACK"
+        ],
+        "metric": "killsPerMinute",
+        "riven": {
+          "slot": 7,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "SD",
+              "value": 125.28847760360541,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 166.63367854546877,
+              "negative": false
+            },
+            {
+              "code": "0",
+              "value": 208.80579347913243,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 89.20539583325932,
+              "negative": true
+            }
+          ]
+        }
+      },
+      "objectiveScore": 14.171185005348525,
+      "manualKpm": 14.171185005348525,
+      "manualWindowDps": 7947847.369521073,
+      "scoringScore": 14.171185005348525,
+      "passed": true,
+      "unsupported": [
+        "WEAPON_ZOOM"
+      ],
+      "shots": 576,
+      "transforms": 0,
+      "rivenSlot": 7,
+      "targetTotalEhp": 33650738.59322861,
+      "manualDetonation": null
+    },
+    {
+      "name": "Furis recommendation",
+      "index": 0,
+      "expected": 195.37162783877747,
+      "actual": 195.37162783877747,
+      "passed": true
+    },
+    {
+      "name": "Furis recommendation",
+      "index": 1,
+      "expected": 195.35878102980612,
+      "actual": 195.35878102980612,
+      "passed": true
+    },
+    {
+      "name": "Furis recommendation",
+      "index": 2,
+      "expected": 194.1081405871576,
+      "actual": 194.1081405871576,
+      "passed": true
+    },
+    {
+      "name": "Furis recommendation",
+      "index": 3,
+      "expected": 164.49033274115175,
+      "actual": 164.49033274115175,
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Burston Prime",
+    "passed": true,
+    "inputFingerprint": "83d826eff558549d",
+    "elapsedSeconds": 61.49970790000225,
+    "error": null
+  },
+  {
+    "name": "Furis",
+    "passed": true,
+    "inputFingerprint": "83d826eff558549d",
+    "elapsedSeconds": 44.62470149999717,
+    "error": null
+  }
+]

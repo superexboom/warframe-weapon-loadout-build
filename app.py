@@ -651,6 +651,8 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("runtime_adapters.py"),
         Path(optimizer.__file__).with_name("combat_events.py"),
         Path(optimizer.__file__).with_name("combat_replay.py"),
+        Path(optimizer.__file__).with_name("proc_probability.py"),
+        Path(optimizer.__file__).with_name("beam_ramp.py"),
         Path(optimizer.__file__).with_name("manual_combat.py"),
         Path(optimizer.__file__).with_name("enervate.py"),
         Path(optimizer.__file__).with_name("status_arcanes.py"),

@@ -1,0 +1,28 @@
+{
+  "release": {
+    "commit": "5809c383+",
+    "release": "dc8413a8fab9",
+    "wasm": "aaa8b8d4b23d"
+  },
+  "files": [
+    {
+      "path": "site/release.json",
+      "url": "https://wfsim.app/release.json",
+      "sha256": "894eb8d8ae158cdb5d77f2a36419e3bf8a1e2123b336e2280e485e0bb3d8e0d0",
+      "bytes": 69
+    },
+    {
+      "path": "site/pkg/wfsim_wasm.aaa8b8d4b23d.js",
+      "url": "https://wfsim.app/pkg/wfsim_wasm.aaa8b8d4b23d.js",
+      "sha256": "1d6189fd75eb252f54a5f05e5937ab0e84e734be816a9a839ead4adc786c4d2d",
+      "bytes": 15846
+    },
+    {
+      "path": "site/pkg/wfsim_wasm_bg.aaa8b8d4b23d.wasm",
+      "url": "https://wfsim.app/pkg/wfsim_wasm_bg.aaa8b8d4b23d.wasm",
+      "sha256": "aaa8b8d4b23d33ef0bc5dbfdb89f1d98c3d4224ea6743bdfbf4156a2e0fb973a",
+      "bytes": 8762066
+    }
+  ],
+  "contract": "Published runtime captured atomically; YAML source is recorded separately"
+}

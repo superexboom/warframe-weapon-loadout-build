@@ -654,8 +654,12 @@ def prepare(
         if base_affinity is not None
         else None
     )
+    from .beam_ramp import floor_for
     return dict(
         resolve=resolve,
+        beamRampFloors={
+            'base':floor_for(base_attack if base_attack.get('source') else ref.get('coProfiles',{}).get(weapon.get('path'),{}).get('0',{})),
+            'selected':floor_for(selected_attack if selected_attack.get('source') else ref.get('coProfiles',{}).get(weapon.get('path'),{}).get(str(mode_index),{}))},
         enervate=enervate,
         **status_arcanes,
         cycle=cycle,

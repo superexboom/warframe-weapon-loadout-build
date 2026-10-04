@@ -1,0 +1,78 @@
+{
+  "engineFingerprint": "8395349795edf9a6",
+  "cacheVersion": 14,
+  "fullBakeStarted": false,
+  "files": [
+    {
+      "path": "analysis/00-burston-prime.json",
+      "bytes": 123214,
+      "sha256": "39fd936c63bb91c8d1593b4d86bd2de0619587a442a3d556c0a2329c31172da3"
+    },
+    {
+      "path": "analysis/01-furis.json",
+      "bytes": 137127,
+      "sha256": "d25da0aaf5242ec67bf56681461333fb03cd62ccabc046727790aa9345afbe77"
+    },
+    {
+      "path": "analysis/summary.json",
+      "bytes": 333,
+      "sha256": "7d2a57ea6c53ed290bb837351ff69019698b80f25a550c1f6fa56f5af238e857"
+    },
+    {
+      "path": "comparisons/ablation-summary.json",
+      "bytes": 27282,
+      "sha256": "62517c799de013073480e5672aa820b7283cbb1a6e467ee8593c00a049d27ed5"
+    },
+    {
+      "path": "comparisons/extra.json",
+      "bytes": 641700,
+      "sha256": "217a669fc43dda4d6d3e14990c0e651da97c6ef092c43ac2daf5213c5e742190"
+    },
+    {
+      "path": "comparisons/final.json",
+      "bytes": 1871091,
+      "sha256": "d57f81e4ec4b1680cf7f77242623878ee5cc46d500610f3eb3f3261157249fcd"
+    },
+    {
+      "path": "recommendation/furis.json",
+      "bytes": 138785,
+      "sha256": "8e9e35ef25f8a99ffc7c5c6d62c569f311af8deab67874395fe5f9a66efa1f31"
+    },
+    {
+      "path": "reference/event-evidence.json",
+      "bytes": 627285,
+      "sha256": "6cb2c8baba5755dd42c4ffe95106a513c8caeb81db70259d192878d0c4a85c0d"
+    },
+    {
+      "path": "reference/runtime.json",
+      "bytes": 925,
+      "sha256": "4e73414bfe9b4ee17f1bb886ffdf97a8162134fd4a1076a4e23759af932f63bf"
+    },
+    {
+      "path": "reference/source.json",
+      "bytes": 145,
+      "sha256": "91d70287e6ad78ce8691f6a1b44133ca8a8cf15b89eac12d3c52d5698cd919f3"
+    },
+    {
+      "path": "replay-checks.json",
+      "bytes": 18822,
+      "sha256": "034308a952d1c3ff2dd960de4d39bf9b612c035e671f0f26b2735401d070a9fc"
+    },
+    {
+      "path": "tests/regression.xml",
+      "bytes": 107629,
+      "sha256": "7fe090498e4aada61e60a1165cd4233f587aad635f17857f00a1e6aa5af6d263"
+    },
+    {
+      "path": "tests/targeted.xml",
+      "bytes": 19845,
+      "sha256": "4c8d6fc71eaf3b3960b1a3144aa79bdd2dad25699faa2fc2e91480b092f5dfb4"
+    }
+  ],
+  "notes": [
+    "Original requests are replayed against the same pinned runtime; no ratio compensation.",
+    "Mid-development ablations are diagnostics, final.json contains delivery values.",
+    "Analysis/recommendation snapshots retain their source fingerprints; replay-checks.json verifies current code.",
+    "Expected kill-attribution feedback remains unresolved for some builds; see report."
+  ]
+}

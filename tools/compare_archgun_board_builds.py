@@ -136,7 +136,7 @@ def local_replay(payload,*,duration,include_arcanes=True):
    scenario=Scenario(aiming=True, trigger_policy="emergent", distance=(payload.get("scenario") or {}).get("distance")),weapon_override=override,passive_effects=passive,engine_context_sink=engine)
  stats=app._benchmark_timeline_stats(result['moddedStats'])
  target=app.MANUAL_ENEMIES_BY_PATH[payload['enemy']]
- combat=prepare(engine,mods,arcs,assumed=False,affinity_target=target,level=payload['level'],incarnon_choices=payload.get('incarnonChoices'),cycle_enabled=bool((payload.get('scenario') or {}).get('incarnonCycle')))
+ combat=prepare(engine,mods,arcs,assumed=(payload.get('scenario') or {}).get('triggerPolicy',payload.get('triggerPolicy'))=='assumed_max',affinity_target=target,level=payload['level'],incarnon_choices=payload.get('incarnonChoices'),cycle_enabled=bool((payload.get('scenario') or {}).get('incarnonCycle')))
  window=replay(stats,target,attacks_per_second=stats.sustained_attack_rate,window_seconds=duration,
   level=payload['level'],steel_path=True,headshot_chance=1,trigger_sources=combat['trigger_sources'],combat=combat)
  initial=combat['resolve']('selected',{q['id']:q.get('initialStacks',0) for q in combat['trigger_sources']},0)

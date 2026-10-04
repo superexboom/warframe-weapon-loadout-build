@@ -110,7 +110,12 @@ def replay(
     gas_procs = deque()
     blast_procs = deque()
     heat = dict(count=0.0, seed=0.0, acc=0.0, start=0.0, end=-1.0, scale=1.0, token=0)
-    old_heat_strip = (0.0, -1.0, 1.0)
+    from .proc_probability import FirstProcClock, StatusPresence, no_status_probability
+    heat_clock=FirstProcClock()
+    presence={}
+    from .beam_ramp import BeamRamp
+    beam_ramp=BeamRamp()
+    old_heat_strip = ({}, -1.0, 1.0)
     puncture_strip = 0.
     frozen_until = -1.0
     frozen_scale = 1.0
@@ -118,6 +123,7 @@ def replay(
     seq = 0
     gen = 0
     kills = 0
+    weak_kill_events = 0.
     attacks = 0
     stale = 0
     first_kill = None
@@ -240,19 +246,22 @@ def replay(
     def heat_strip(t):
         up=0.0
         if heat["count"]:
-            n = min(4, int((t - heat["start"] + 1e-9) / max(0.5 * heat["scale"], 1e-9)))
-            up=(0.0, 0.15, 0.30, 0.40, 0.50)[max(0, n)]
-        value, ended, scale = old_heat_strip
+            up=heat_clock.strip(t,heat['scale'])
+        distribution, ended, scale = old_heat_strip
         if ended < 0:
             return up
         n = int(max(0.0, t - ended) / max(1.5 * scale, 1e-9))
-        descending = [v for v in (0.5, 0.4, 0.3, 0.15, 0.0) if v <= value + 1e-9]
-        return max(up,descending[min(n, len(descending) - 1)])
+        down=0.
+        for value,weight in distribution.items():
+            descending = [v for v in (0.5, 0.4, 0.3, 0.15, 0.0) if v <= value + 1e-9]
+            down+=weight*descending[min(n,len(descending)-1)]
+        return max(up,down)
 
     def clean(t):
-        nonlocal old_heat_strip, frozen_until
+        nonlocal old_heat_strip, frozen_until,heat_clock
         if frozen_until >= 0 and t >= frozen_until - 1e-9:
             states['DT_FREEZE']=deque([(frozen_until+6*frozen_scale,3.0)])
+            presence.setdefault('DT_FREEZE',StatusPresence()).add(frozen_until+6*frozen_scale,0.)
             frozen_until=-1.0
         while gas_procs and gas_procs[0]["end"] < t - 1e-9:
             gas_procs.popleft()
@@ -260,8 +269,9 @@ def replay(
             while rows and rows[0][0] < t - 1e-9:
                 rows.popleft()
         if heat["count"] and heat["end"] < t - 1e-9:
-            old_heat_strip = (heat_strip(heat["end"]), heat["end"], heat["scale"])
+            old_heat_strip = (heat_clock.distribution(heat["end"],heat['scale']), heat["end"], heat["scale"])
             heat["count"] = heat["seed"] = 0.0
+            heat_clock=FirstProcClock()
             heat["token"] += 1
         for q in sources:
             if q["duration"] and q["stacks"] and t >= q["expires"]:
@@ -293,7 +303,9 @@ def replay(
                 q['stacks'] = 1.-q['stacks']
                 q['expires'] = math.inf
                 continue
-            if q.get('victimProcType') and not combat.get('victimProcTypesBeforeHit',{}).get(q['victimProcType']):
+            gate_probability=(combat.get('victimProcTypesBeforeHit',{}).get(q['victimProcType'],0.)
+                              if q.get('victimProcType') else 1.)
+            if not gate_probability:
                 continue
             if kind in q.get('resetOn', ()) and q['perEvent'] != 0:
                 q['stacks'] = 0.0
@@ -308,7 +320,7 @@ def replay(
                 if q.get('requiredTime'):
                     while progress and progress[0][0]<t-q['requiredTime']:
                         progress.popleft()
-                progress.append((t,weight))
+                progress.append((t,weight*gate_probability))
                 completed=math.floor((sum(n for _,n in progress)+1e-9)/required)
                 consumed=completed*required
                 while consumed>1e-9 and progress:
@@ -318,7 +330,7 @@ def replay(
                     consumed-=n
                 delta=completed*q['perEvent']
             else:
-                delta=weight*q['perEvent']
+                delta=weight*gate_probability*q['perEvent']
             if delta <= 0:
                 continue
             if q.get("decay") == "per-stack":
@@ -351,7 +363,7 @@ def replay(
             q['expires'] = math.inf
 
     def die(t, weak_kill=False, weapon_kill=True):
-        nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, old_heat_strip, frozen_until, puncture_strip, ammo, pending_magazine_restore
+        nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, old_heat_strip, frozen_until, puncture_strip, ammo, pending_magazine_restore,heat_clock,weak_kill_events
         kills += 1
         gen += 1
         if first_kill is None:
@@ -365,11 +377,13 @@ def replay(
         last_kill = t
         pools[:] = full
         states.clear()
+        presence.clear()
         frozen_until=-1.0
         gas_procs.clear()
         blast_procs.clear()
         heat.update(count=0.0, seed=0.0, end=-1.0, token=heat["token"] + 1)
-        old_heat_strip = (0.0, -1.0, 1.0)
+        heat_clock=FirstProcClock()
+        old_heat_strip = ({}, -1.0, 1.0)
         puncture_strip = 0.
         signal("on-kill", t)
         slot = str(combat.get("weaponSlot") or "").lower()
@@ -380,13 +394,14 @@ def replay(
         distance = combat.get("distance")
         if distance is not None and distance <= 5.0:
             signal("on-close-kill", t)
-        if weak_kill:
-            signal("on-headshot-kill", t, head)
+        weak_probability=(head if weak_kill else 0.) if isinstance(weak_kill,bool) else min(1.,max(0.,weak_kill))
+        if weak_probability:
+            weak_kill_events += weak_probability
+            signal("on-headshot-kill", t, weak_probability)
         restore=combat.get('magazineRestore')
         if (weapon_kill and restore and restore['kind'] in {'on-kill','on-headshot-kill'}
-                and (form=='base' or not combat.get('selectedIncarnon'))):
-            chance=restore.get('chance',1.)*(head if restore['kind']=='on-headshot-kill' and weak_kill else
-                0. if restore['kind']=='on-headshot-kill' else 1.)*restore.get('fraction',0.)
+                and (form=='base' or (not cycle and not combat.get('selectedIncarnon')))):
+            chance=restore.get('chance',1.)*(weak_probability if restore['kind']=='on-headshot-kill' else 1.)*restore.get('fraction',0.)
             if shot_in_progress:
                 pending_magazine_restore=1.-(1.-pending_magazine_restore)*(1.-chance)
             else:
@@ -406,8 +421,10 @@ def replay(
         per_tick = full[pool_index] * .03 * stacks * multiplier ** 2 / 6
         magnetic_breaks.append(dict(time=t, pool=('overguard', 'shield')[pool_index],
                                     stacks=stacks, seedPerTick=per_tick, targetGeneration=gen))
-        states.setdefault('DT_ELECTRICITY', deque()).append((t + 6, 1.0))
-        proc_counts['DT_ELECTRICITY'] = proc_counts.get('DT_ELECTRICITY', 0) + 1
+        probability=presence['DT_MAGNETIC'].probability(t) if 'DT_MAGNETIC' in presence else 1.
+        states.setdefault('DT_ELECTRICITY', deque()).append((t + 6, probability))
+        presence.setdefault('DT_ELECTRICITY',StatusPresence()).add(t+6,1.-probability)
+        proc_counts['DT_ELECTRICITY'] = proc_counts.get('DT_ELECTRICITY', 0) + probability
         for tick in range(6):
             push(t + tick, 'dot', ('DT_ELECTRICITY', per_tick, t + 6), gen)
 
@@ -493,8 +510,7 @@ def replay(
 
     def model(t):
         live_types = (
-            (sum(-math.expm1(-count(k)) for k in set(states) | {'DT_FIRE'}) if encumber
-             else sum(count(k) > 0 for k in states) + int(heat["count"] > 0))
+            sum(p.probability(t) for p in presence.values())
             if combat.get("conditionOverload") or stats.co_bucket
             else 0
         )
@@ -777,7 +793,15 @@ def replay(
                 if empowered_hit(st, dtype, n, t, allow_encumber):
                     return
                 continue
+            absence=no_status_probability(st,dtype,forced_procs)**max(status_rate_multiplier,0.)
+            # Explicit derived event packets can supply procs independently
+            # of this weapon's natural distribution.
+            if absence>=1. and n>0.:absence=1.-min(n,1.)
+            if not allow_encumber:
+                absence=max(absence,1.-min(n,1.))
+            presence.setdefault(dtype,StatusPresence()).add(t+duration,absence)
             if dtype == "DT_FIRE" and row:
+                heat_clock.add(t,1.-absence)
                 if not heat["count"]:
                     heat.update(start=t, scale=scale, token=heat["token"] + 1)
                     push(t + 1.0, "heat", heat["token"], gen)
@@ -811,6 +835,7 @@ def replay(
                         "per": per,
                         "count": n,
                         "end": t + duration,
+                        "weakpointChance": aim if dtype in {'DT_ELECTRICITY','DT_GAS'} else 0.,
                     }
                     if dtype == "DT_GAS":
                         states[dtype].pop()
@@ -915,6 +940,7 @@ def replay(
                     },
                     t,
                     "dot",
+                    payload.get('weakpointChance',0.),
                 )
         elif kind == 'delayed-radial':
             part = payload
@@ -991,6 +1017,7 @@ def replay(
                     else (12.0 if dtype == "DT_RADIATION" else 6.0)
                 )
                 states.setdefault(dtype, deque()).append((t + duration, 1.0))
+                presence.setdefault(dtype,StatusPresence()).add(t+duration,0.)
                 if dtype in ("DT_GAS", "DT_POISON"):
                     for j in (range(6) if dtype == "DT_GAS" else range(1, 7)):
                         push(t + j, "dot", (dtype, 500.5, t + 6.0), gen)
@@ -1179,7 +1206,7 @@ def replay(
             field_duration_boost = field_duration_ready
             field_duration_ready = False  # A shot consumes it, even when that shot kills.
             hit_count = (1.0 if active.continuous else max(active.multishot,0.0))
-            combat['victimProcTypesBeforeHit'] = {dtype:count(dtype)>0 for dtype in states}
+            combat['victimProcTypesBeforeHit'] = {dtype:p.probability(t) for dtype,p in presence.items()}
             shot_puncture=0.0 if active.radial_only else live_crit()[0]
             aim = 0.0 if active.radial_only else head
             primary_delay = getattr(active, '_primary_delay_seconds', 0.)
@@ -1204,8 +1231,10 @@ def replay(
             else:
                 direct_packet = packet(active, aim)
                 vector, _, _, _ = direct_packet
+                ramp = beam_ramp.tick(t,1./speed,(combat.get('beamRampFloors') or {}).get(
+                    'base' if form=='base' else 'selected',.2)) if active.continuous and combat.get('beamRampFloors') else 1.
                 died = take(
-                {k: v * damage_rate_multiplier for k, v in vector.items()},
+                {k: v * damage_rate_multiplier * ramp for k, v in vector.items()},
                 t,
                 "direct",
                 not active.radial_only,
@@ -1291,12 +1320,12 @@ def replay(
                     else (1.0 if hasattr(active, '_bow_draw') and active.ammo_cost == 0 else max(active.ammo_cost, 0.0))
                 )
                 restore=combat.get('magazineRestore')
-                if restore and restore['kind'] in {'on-headshot','on-hit'} and (form=='base' or not combat.get('selectedIncarnon')):
+                if restore and restore['kind'] in {'on-headshot','on-hit'} and magazine_form:
                     eligible=not restore.get('victimProcType') or combat.get('victimProcTypesBeforeHit',{}).get(restore['victimProcType'])
                     if eligible:
                         probability=1.-(1.-aim)**hit_count if restore['kind']=='on-headshot' else 1.
                         events=1. if restore.get('oncePerShot') else hit_count
-                        restored=(max(0.,active.magazine-ammo)*restore.get('fraction',0.)+restore.get('amount',0.)*events)*probability*restore.get('chance',1.)
+                        restored=(max(0.,active.magazine-ammo)*restore.get('fraction',0.)+restore.get('amount',0.)*events)*probability*restore.get('chance',1.)*float(eligible)
                         ammo=min(active.magazine,ammo+restored)
                 if pending_magazine_restore:
                     ammo+=max(0.,active.magazine-ammo)*pending_magazine_restore
@@ -1388,6 +1417,11 @@ def replay(
             for q in sources:
                 q["series"].append(q["stacks"])
     score = kills + (1 - sum(pools) / ehp if ehp else 0.0)
+    random_damage=(any(abs(v-round(v))>1e-9 for v in (stats.crit_chance,stats.multishot,stats.status_chance))
+                   or stats.status_chance>0 and sum(v>0 for v in stats.damage_types.values())>1)
+    if (random_damage and head==1. and kills>=3 and weak_kill_events==0. and totals['direct']>0 and totals['dot']>0
+            and any(q['kind']=='on-headshot-kill' and q['perEvent']>0 for q in sources)):
+        unsupported.append('weakpoint-kill-feedback-unmodeled-variance')
     initial = damage_against_cached_armour(
         stats, armour_base, defenses, target=target, _target_cache=locations["body"]
     )
@@ -1425,6 +1459,7 @@ def replay(
         "killsPerMinute": score * 60 / window if window else 0.0,
         "killsInWindow": score,
         "killEvents": kills,
+        "weakpointKillEvents": weak_kill_events,
         "targetGeneration": gen,
         "targetTotalEhp": ehp,
         "directWindow": totals["direct"],
@@ -1465,7 +1500,7 @@ def replay(
                        'stolenTotal':fortifier_stolen,'selfOverguard':self_overguard,
                        'cap':fortifier['cap'],'selfDamageModeled':False} if fortifier else None),
         'encumber': ({'chance':encumber['chance'],'expectedExtraProcs':encumber_expected,
-                      'events':encumber_events,'typeCount':13,'coPresence':'poisson-occupancy'} if encumber else None),
+                      'events':encumber_events,'typeCount':13,'coPresence':'per-application-occurrence'} if encumber else None),
         'empowered': ({'damagePerStatus':empowered['damage'], 'expectedInstances':empowered_count,
                        'windowDamage':totals['arcane'], 'damageByType':empowered_by_type,
                        'sourcePolicy':'weapon-status-only-no-script-link-dot-recursion'} if empowered else None),
