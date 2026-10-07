@@ -1,0 +1,28 @@
+[
+  [
+    "/api/riven",
+    {
+      "weapon": "vectis_prime",
+      "rank": 8,
+      "polarity": "madurai",
+      "bonuses": [
+        {
+          "id": "critical_damage",
+          "roll": 1.1
+        },
+        {
+          "id": "damage",
+          "roll": 1.1
+        },
+        {
+          "id": "multishot",
+          "roll": 1.1
+        }
+      ],
+      "malus": {
+        "id": "ammo_maximum",
+        "roll": 0.9
+      }
+    }
+  ]
+]

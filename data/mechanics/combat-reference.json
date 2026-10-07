@@ -1724,7 +1724,53 @@
         "radius": 3.0,
         "takesRadiusMods": true
       },
-      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "modes": {
+        "1": {
+          "name": "Morgha",
+          "source": "data/weapons/archgun/morgha_alt.yaml",
+          "sha256": "4d0ecbc408f15d3a30f14c2ea04d5d52b9fd5cdce5f87e845507847422c4f80e",
+          "directTotal": 200.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanotechGrenadeAltProjectile",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "impact": 1200.0,
+                "puncture": 1600.0,
+                "slash": 2000.0,
+                "blast": 2400.0
+              },
+              "radius_m": 12,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.60000002,
+              "crit_chance": 0.40000001,
+              "crit_multiplier": 3.0,
+              "status_chance": 0.5,
+              "forced_procs": [],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanotechGrenadeAltProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "native-per-type",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher",
+              "sha256": "89e2aa1ae8ebbcd409d4d1e7d9366a566996a2f0788b2b9f5de93d5477ac61a8"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanotechGrenadeAltProjectile",
+              "sha256": "3123279b915291a94170bd8e75519fbe7c0aa5c83d423e423454313406e6b5dc"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      }
     },
     "/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolArray": {
       "name": "Sonicor",
@@ -1801,9 +1847,6 @@
       },
       "bow": true,
       "drawSeconds": 0.40000001,
-      "unmodeled": [
-        "cluster-submunitions-unmodeled"
-      ],
       "compression": {
         "effectiveness": 1.0,
         "stacking": "multiplies",
@@ -1813,7 +1856,53 @@
       },
       "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
       "projectile": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterProjectile",
-      "allowIncarnon": false
+      "allowIncarnon": false,
+      "clusters": [
+        {
+          "count": 3,
+          "direct": {
+            "damage": {
+              "impact": 49.0
+            },
+            "crit_chance": 0.34999999,
+            "crit_multiplier": 2.0999999,
+            "status_chance": 0.21,
+            "takes_multishot": false,
+            "nativeField": "AttackData",
+            "damageTypeSource": "native-explicit"
+          },
+          "radial": {
+            "damage": {
+              "blast": 57.0
+            },
+            "crit_chance": 0.34999999,
+            "crit_multiplier": 2.0999999,
+            "status_chance": 0.21,
+            "takes_multishot": false,
+            "nativeField": "ExplosiveAttack",
+            "damageTypeSource": "reference-confirmed-native-default",
+            "radius_m": 3.5,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.5
+          },
+          "nativeChild": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterProjectile",
+              "sha256": "3aa2a2947a1c416833ae41b7f198a958a796ca2974fc4715cfcfe916ab467558"
+            },
+            {
+              "path": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile",
+              "sha256": "118459483d99604d4e8527a022d7bb1445da953b29cea78e79b5ddebf8614c57"
+            }
+          ],
+          "reference": "data/weapons/primary/kuva_bramma.yaml",
+          "referenceSha256": "144f3e54127ed26d38c6611f9fda860659ee6e4ed2459b1e48a57e29e912f27b",
+          "referenceDifferences": [
+            "no CO catalog row: bomblets take no Condition Overload"
+          ]
+        }
+      ]
     },
     "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncher": {
       "name": "Penta",
@@ -1893,9 +1982,6 @@
           "blast": 175
         }
       },
-      "unmodeled": [
-        "cluster-submunitions-unmodeled"
-      ],
       "compression": {
         "effectiveness": 1.0,
         "stacking": "multiplies",
@@ -1903,7 +1989,61 @@
         "radius": 4.9,
         "takesRadiusMods": true
       },
-      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "clusters": [
+        {
+          "count": 6,
+          "direct": {
+            "damage": {
+              "impact": 15.0
+            },
+            "crit_chance": 0.15000001,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.2,
+            "takes_multishot": false,
+            "nativeField": "AttackData",
+            "damageTypeSource": "native-explicit",
+            "takes_condition_overload": true,
+            "coProfile": {
+              "behavior": "additive_with_base_damage",
+              "baseFraction": 1.6666666666666667,
+              "excludeFlatSources": [],
+              "source": "wiki CO catalog via WFSim unmodelled row",
+              "row": "Zarr | Cannon Child Bomb | Projectile | 15 | 25 | 167% | Adding"
+            }
+          },
+          "radial": {
+            "damage": {
+              "blast": 50.0
+            },
+            "crit_chance": 0.15000001,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.1,
+            "takes_multishot": false,
+            "nativeField": "ExplosiveAttack",
+            "damageTypeSource": "reference-confirmed-native-default",
+            "radius_m": 3.0,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.89999998
+          },
+          "nativeChild": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterProjectile",
+              "sha256": "c62afceef14b93b9d81d855c3892eadcd794d72741a6021b83de65ce5255454a"
+            },
+            {
+              "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
+              "sha256": "c978e2fee9093d9839323df3e8b491d46a354df7130d28cbc9da6de7d062846a"
+            }
+          ],
+          "reference": "data/weapons/primary/zarr.yaml",
+          "referenceSha256": "5fb2b7301a974f8626969af3cb13f8d0b48bf2f2e1b0d496cffd4ed7948c432c",
+          "referenceDifferences": [
+            "ExplosiveAttack: native status omitted; reference 0.1 used"
+          ]
+        }
+      ]
     },
     "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon": {
       "name": "Acceltra Prime",
@@ -2805,8 +2945,8 @@
             "kind": "stug",
             "maxStack": 10,
             "initialStack": 1,
-            "resetLifeOnStack": false,
-            "stackedLife": 8.0,
+            "resetLifeOnStack": true,
+            "stackedLife": 1.5,
             "maxLife": 8.0,
             "attachAtStack": 0,
             "stackHitProxyDamage": false,
@@ -2839,7 +2979,8 @@
               "forcedProcs": [],
               "takesConditionOverload": true
             },
-            "chargedStacks": true
+            "chargedStacks": true,
+            "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)"
           },
           "charge": {
             "seconds": 2.0,
@@ -2865,8 +3006,8 @@
             "kind": "stug",
             "maxStack": 5,
             "initialStack": 1,
-            "resetLifeOnStack": false,
-            "stackedLife": 8.0,
+            "resetLifeOnStack": true,
+            "stackedLife": 1.5,
             "maxLife": 8.0,
             "attachAtStack": 0,
             "stackHitProxyDamage": false,
@@ -2917,7 +3058,8 @@
             "childMinCount": 2,
             "childLife": 4.0,
             "childBounceCount": 2,
-            "childDeathMultiplier": 2.5
+            "childDeathMultiplier": 2.5,
+            "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)"
           }
         }
       },
@@ -2925,8 +3067,8 @@
         "kind": "stug",
         "maxStack": 10,
         "initialStack": 1,
-        "resetLifeOnStack": false,
-        "stackedLife": 8.0,
+        "resetLifeOnStack": true,
+        "stackedLife": 1.5,
         "maxLife": 8.0,
         "attachAtStack": 0,
         "stackHitProxyDamage": false,
@@ -2958,7 +3100,8 @@
           "statusChance": 0.0,
           "forcedProcs": [],
           "takesConditionOverload": true
-        }
+        },
+        "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)"
       }
     },
     "/Lotus/Weapons/ClanTech/Energy/Railgun": {
@@ -2977,7 +3120,44 @@
           "projectile": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerroxChargedProjectile",
           "allowIncarnon": false
         }
-      }
+      },
+      "name": "Tenet Ferrox",
+      "source": "data/weapons/primary/tenet_ferrox.yaml",
+      "sha256": "1cbae6b32d628956a6b851c403cf9a98aaf1592d8a3a6c2850047d6c9ff39244",
+      "directTotal": 199.999996,
+      "fireMode": 0,
+      "projectile": null,
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "impact": 6.0,
+            "puncture": 41.9999994,
+            "slash": 12.0
+          },
+          "radius_m": 4,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.34,
+          "crit_multiplier": 3.0,
+          "status_chance": 0.26,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox",
+          "nativeField": "RadialDamage",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox",
+          "sha256": "45ebf94616496ba1c9d0aa24915f33e962d74603f6d252d9d48e1bc032775184"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon": {
       "modes": {
@@ -2999,7 +3179,42 @@
           "projectile": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgunChargedProjectile",
           "allowIncarnon": false
         }
-      }
+      },
+      "name": "Ferrox",
+      "source": "data/weapons/primary/ferrox.yaml",
+      "sha256": "afc8f397cd5b4890fe7b680bc149906b14e9da485b2c996ee512abfacc1c262b",
+      "directTotal": 349.999993,
+      "fireMode": 0,
+      "projectile": null,
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "impact": 100.0
+          },
+          "radius_m": 3.5999999,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.40000001,
+          "crit_chance": 0.31999999,
+          "crit_multiplier": 2.8,
+          "status_chance": 0.1,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun",
+          "nativeField": "RadialDamage",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun",
+          "sha256": "2747aaa48b368b9e76572c3f304cdccfcaa7c0318e70c738a794177a6432a6e0"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Corpus/Pistols/CrpElectroMag/CrpElectroMag": {
       "directTotal": 44.0,
@@ -3008,7 +3223,44 @@
       "charge": {
         "seconds": 1.0,
         "source": "native-ChargeTime"
-      }
+      },
+      "name": "Staticor",
+      "source": "data/weapons/secondary/staticor.yaml",
+      "sha256": "74b41a1a0826728293e2ef0b943b3dd072b7b950177722da9bcd23b079f7552c",
+      "fireMode": 0,
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "radiation": 106.0
+          },
+          "radius_m": 9.6000004,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.89999998,
+          "crit_chance": 0.14,
+          "crit_multiplier": 2.2,
+          "status_chance": 0.28,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Corpus/Pistols/CrpElectroMag/CrpElectroMagProjectileCharged",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/CrpElectroMag/CrpElectroMag",
+          "sha256": "d4844c022250a3b853c2ed37be9e7abf786f51852b4a8f362f63c6515fb13ea2"
+        },
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/CrpElectroMag/CrpElectroMagProjectileCharged",
+          "sha256": "cdcffeadf1553d643bd33791f90ce14f7c9addb11250aa13bd815ade1795bbbc"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoon": {
       "directTotal": 46.0,
@@ -3070,16 +3322,129 @@
         "1": {
           "directTotal": 149.999999,
           "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpearChargedProjectile",
-          "allowIncarnon": false
+          "allowIncarnon": false,
+          "name": "Javlok",
+          "source": "data/weapons/primary/javlok_throw.yaml",
+          "sha256": "8ecdbcaeb5755edb97e599c88bca96e841e7ec3e1db0524af3725068284cb32d",
+          "fireMode": 1,
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "heat": 300.0
+              },
+              "radius_m": 6,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.60000002,
+              "crit_chance": 0.2,
+              "crit_multiplier": 2.0,
+              "status_chance": 0.25,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpearChargedProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "native-explicit",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpear",
+              "sha256": "77d2f0cef5fa8af49d28a0e9584b42643e1f71ddfaca85d10bb67107250a631e"
+            },
+            {
+              "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpearChargedProjectile",
+              "sha256": "cbabe0c8187de60300bead4493c7ff59c35e312f60a4174249c680c8f35d9889"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
         }
-      }
+      },
+      "name": "Javlok",
+      "source": "data/weapons/primary/javlok.yaml",
+      "sha256": "adc01f0aa042ab00e409bfc70273f6566c738a8227057486f8aaaebf411f23fd",
+      "directTotal": 160.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpearPrimaryWaveProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "heat": 120.0
+          },
+          "radius_m": 2.4000001,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.2,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.25,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpearPrimaryWaveProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpear",
+          "sha256": "77d2f0cef5fa8af49d28a0e9584b42643e1f71ddfaca85d10bb67107250a631e"
+        },
+        {
+          "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpearPrimaryWaveProjectile",
+          "sha256": "a997a267477825c7285d2fe61c8f184e659cdea46bea86e25d33d7f935206787"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Infested/Bow/InfCernosBow/InfCernos": {
       "directTotal": 409.999997,
       "projectile": "/Lotus/Weapons/Infested/Bow/InfCernosBow/ChargeInfCernosArrowProjectile",
       "allowIncarnon": false,
       "bow": true,
-      "drawSeconds": 0.5
+      "drawSeconds": 0.5,
+      "lingering": {
+        "damage": {
+          "toxin": 5.0
+        },
+        "tick_rate": 1.0,
+        "duration_seconds": 10.0,
+        "radius_m": 2.5,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.0,
+        "crit_chance": 0.15000001,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.49,
+        "forcedProcs": [
+          "PT_POISONED"
+        ],
+        "stacking": "stack",
+        "takes_condition_overload": true,
+        "nativeSource": "/Lotus/Weapons/Infested/Bow/InfCernosBow/ChargeInfCernosArrowProjectile",
+        "nativeField": "EmbedAttack",
+        "tickRateSource": "reference (native has no interval)"
+      },
+      "lingeringSource": {
+        "reference": "data/weapons/primary/mutalist_cernos.yaml",
+        "referenceSha256": "583757d74b5565d60ba0ff3612ec749de78330054ab1fe0284d9a19ca5e033f0",
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Infested/Bow/InfCernosBow/InfCernos",
+            "sha256": "e222d4dcb3d7fc0cb9a4448a76a86015cffde9c0fb3f0b652df38f6699d581c0"
+          },
+          {
+            "path": "/Lotus/Weapons/Infested/Bow/InfCernosBow/ChargeInfCernosArrowProjectile",
+            "sha256": "dc2eef5926d998d86ce87017e9221ad999bcb51bdd6f7495b71d99004c55a6fb"
+          }
+        ],
+        "generatedBy": "tools/import_embed_fields.py"
+      },
+      "name": "Mutalist Cernos"
     },
     "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon": {
       "modes": {
@@ -3209,7 +3574,44 @@
       "projectile": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernosChargedArrow",
       "allowIncarnon": false,
       "bow": true,
-      "drawSeconds": 0.69999999
+      "drawSeconds": 0.69999999,
+      "name": "Proboscis Cernos",
+      "source": "data/weapons/primary/proboscis_cernos.yaml",
+      "sha256": "e2cc07cc8974879b81d8401c5a0983bb672d2fdf8316f28fdcee544f4a2204bd",
+      "fireMode": 0,
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "viral": 1003.0
+          },
+          "radius_m": 7,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.5,
+          "crit_chance": 0.07,
+          "crit_multiplier": 1.9,
+          "status_chance": 0.43,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 1.7,
+          "nativeSource": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernosChargedArrow",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernos",
+          "sha256": "e5efe8be9e6a578fe574c32aacc20f29282a11714ae5a69e27debe6bc52a15f5"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernosChargedArrow",
+          "sha256": "46f1f4059e37f9772eaacb6a45204acc341004692402070098c14d2f22275713"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Tenno/Bows/StalkerBow": {
       "directTotal": 335.999993,
@@ -3232,7 +3634,45 @@
       "projectile": "/Lotus/Weapons/Tenno/Bows/TnChoirBow/ChargedChoirArrow",
       "allowIncarnon": false,
       "bow": true,
-      "drawSeconds": 1.2
+      "drawSeconds": 1.2,
+      "name": "Evensong",
+      "source": "data/weapons/primary/evensong.yaml",
+      "sha256": "af8dbc7cbe2791719c4f50244792f0f1fdb5817246b30302076043d96d68791a",
+      "fireMode": 0,
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "puncture": 45.0,
+            "slash": 105.0
+          },
+          "radius_m": 4,
+          "falloff_start_m": 0.9,
+          "falloff_reduction": 0.89999998,
+          "crit_chance": 0.25,
+          "crit_multiplier": 2.2,
+          "status_chance": 0.38,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/Bows/TnChoirBow/ChargedChoirArrow",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-physical-reference-split",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Bows/TnChoirBow/TnChoirBow",
+          "sha256": "73f8c7d7aa16f95b0929b6b4a0e9884a1a241bb6eb2d3aafd6e0684db1335f85"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Bows/TnChoirBow/ChargedChoirArrow",
+          "sha256": "95d7441ffaf8cbb88d4f1c7b52bb375b91008310cd667a2e6cc2bf9a1b4819e9"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Tenno/Bows/ValentinesConclaveVariantBow": {
       "directTotal": 319.999997,
@@ -3249,7 +3689,44 @@
     "/Lotus/Weapons/Tenno/LongGuns/PrimePanthera/PrimePanthera": {
       "directTotal": 99.999999,
       "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimePanthera/PrimePantheraBladeWaveProjectile",
-      "allowIncarnon": false
+      "allowIncarnon": false,
+      "name": "Panthera Prime",
+      "source": "data/weapons/primary/panthera_prime.yaml",
+      "sha256": "15af937c7c4237b88f4fc93c7461c8b9ceaa0579e894103d9922415aa7a397ed",
+      "fireMode": 0,
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "slash": 20.0
+          },
+          "radius_m": 1.6,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.2,
+          "crit_chance": 0.18000001,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.3,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePanthera/PrimePantheraBladeWaveProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePanthera/PrimePanthera",
+          "sha256": "8215442414c28dced909e3c06accae478b5f9612843123ee454820945bd0977c"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePanthera/PrimePantheraBladeWaveProjectile",
+          "sha256": "5ee473bb1c1629d479645da5e75ac91cff1c7dba44866b615d5642a09c950837"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon": {
       "modes": {
@@ -3258,16 +3735,131 @@
           "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
           "allowIncarnon": false
         }
-      }
+      },
+      "name": "Scourge Prime",
+      "source": "data/weapons/primary/scourge_prime.yaml",
+      "sha256": "a6f121e8e3e77296eb765224c8f67042a7989577ad493c9087d696be579e52f1",
+      "directTotal": 80.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgePrimaryFireWaveProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "corrosive": 60.0
+          },
+          "radius_m": 1.7,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.1,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.3,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgePrimaryFireWaveProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+          "sha256": "cbee770026b2996f1e192e2b869c16293d4dad09ff32341f4bb9d7a7e8e8babf"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgePrimaryFireWaveProjectile",
+          "sha256": "2971b48c22f5047ef0f72444a7d3d79d7d63c16c81534b58e0f966ab098add74"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun": {
       "modes": {
         "1": {
           "directTotal": 149.999997,
           "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
-          "allowIncarnon": false
+          "allowIncarnon": false,
+          "name": "Scourge",
+          "source": "data/weapons/primary/scourge_thrown.yaml",
+          "sha256": "42efd18b61c188d302907c9d915f73bbc5a8ea72319f673c1c34605afdcc0b63",
+          "fireMode": 1,
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "corrosive": 55.0
+              },
+              "radius_m": 7,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.60000002,
+              "crit_chance": 0.039999999,
+              "crit_multiplier": 2.0,
+              "status_chance": 0.3,
+              "forced_procs": [],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "native-explicit",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+              "sha256": "c4fd039c1291efb0aa3fb4b99d36ff9c7ffead4b2cfaf0bd3cc01dbdeff3b6b2"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
+              "sha256": "bbfe3676558895046f45c9dea3531b7aa14fc1927aeed59528bf8a18125e4c3e"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
         }
-      }
+      },
+      "name": "Scourge",
+      "source": "data/weapons/primary/scourge.yaml",
+      "sha256": "817813257e05a9680bfd248240a5375dc18c1f4cd4cf3cbb93117f8bbf4dfd16",
+      "directTotal": 70.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearPrimaryFireWaveProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "corrosive": 55.0
+          },
+          "radius_m": 1.7,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.02,
+          "crit_multiplier": 1.5,
+          "status_chance": 0.3,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearPrimaryFireWaveProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+          "sha256": "c4fd039c1291efb0aa3fb4b99d36ff9c7ffead4b2cfaf0bd3cc01dbdeff3b6b2"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearPrimaryFireWaveProjectile",
+          "sha256": "9c31300fdf3daefddb65d401127fdbd6ca5a49ac24400c17b21652664a4f1715"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Tenno/LongGuns/TnRailjackRifle/RailjackRifleGun": {
       "modes": {
@@ -3291,7 +3883,44 @@
           "charge": {
             "seconds": 0.30000001,
             "source": "native-ChargeTime"
-          }
+          },
+          "name": "Aeolak",
+          "source": "data/weapons/primary/aeolak_alt.yaml",
+          "sha256": "6d93ff8d490bf3192f20057199d31630a7aa406253f291ce76f5a66ac3425adf",
+          "fireMode": 1,
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "blast": 789.0
+              },
+              "radius_m": 7,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.5,
+              "crit_chance": 0.20999999,
+              "crit_multiplier": 2.3,
+              "status_chance": 0.33,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzRifleChargeProj",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "reference-confirmed-native-default",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzWeapon",
+              "sha256": "f10d4d2b9bd0801f4eb6fefa6df07e4f8360b9582ad45a7babf557b488684890"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzRifleChargeProj",
+              "sha256": "bff79b4bea593d97d1a283dd7ac9bb76218a98701977dfe8d27a18a68c15992a"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
         }
       }
     },
@@ -3450,7 +4079,40 @@
       "charge": {
         "seconds": 1.0,
         "source": "native-ChargeTime"
-      }
+      },
+      "name": "Vulcax",
+      "source": "data/weapons/sentinel/vulcax.yaml",
+      "sha256": "d6e4700a024e6d28958792112e25767af75d3b5810147364fea6a03c679344d1",
+      "fireMode": 0,
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "blast": 100.0
+          },
+          "radius_m": 5,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.5,
+          "crit_chance": 0.2,
+          "crit_multiplier": 2.5,
+          "status_chance": 0.2,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/ThermocorMoaWeapon",
+          "nativeField": "RadialDamage",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/ThermocorMoaWeapon",
+          "sha256": "06d42dcd3c6a0a44be67d7a80cd3d523d04c9ea8bf96de0871c5a181e2266fb6"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG": {
       "directTotal": 499.999986,
@@ -3459,7 +4121,40 @@
       "charge": {
         "seconds": 2.0,
         "source": "native-ChargeTime"
-      }
+      },
+      "name": "Opticor",
+      "source": "data/weapons/primary/opticor.yaml",
+      "sha256": "d3cb7fd35fdebec41af140970e2d6372f485d07f9d4bfb2feeb7b28bd4e8a47c",
+      "fireMode": 0,
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "magnetic": 200.0
+          },
+          "radius_m": 6,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.60000002,
+          "crit_chance": 0.2,
+          "crit_multiplier": 2.5,
+          "status_chance": 0.2,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG",
+          "nativeField": "RadialDamage",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG",
+          "sha256": "2c739641b4f76e357027036d379a8a4b6f6fb0604198ee96e454407f8656bfa8"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/LaunchGrenade/ArchCannon": {
       "directTotal": 79.99999799999999,
@@ -4166,6 +4861,2081 @@
           "projectile": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistolAltProjectile"
         }
       }
+    },
+    "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher": {
+      "name": "Kuva Ayanga",
+      "source": "data/weapons/archgun/kuva_ayanga.yaml",
+      "sha256": "ac358a6026802c524ea565cf2544a920ee4e21687630f9f56ea2f0da59141d5f",
+      "directTotal": 130.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncherProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "blast": 280.0
+          },
+          "radius_m": 6,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.5,
+          "crit_chance": 0.34999999,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.2,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncherProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher",
+          "sha256": "03722175eceff93d336c78951bb5a22701f96528d69f88411e4d6c14aada0c4a"
+        },
+        {
+          "path": "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncherProjectile",
+          "sha256": "cab5ba798ea5c3c078f79d574bc8b9abf14123841e0d7662c156051e4193b400"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearGunWeapon": {
+      "name": "Afentis",
+      "source": "data/weapons/primary/afentis.yaml",
+      "sha256": "9ea3bef0da95ec989fb8759fe22c9c7e4cc08ab5830ad6652c8acad18df6e8b6",
+      "directTotal": 100.000001,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpeargunPrimaryProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "blast": 800.0
+          },
+          "radius_m": 3,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.2,
+          "crit_chance": 0.25999999,
+          "crit_multiplier": 2.2,
+          "status_chance": 0.1,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.80000001,
+          "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpeargunPrimaryProjectile",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearGunWeapon",
+          "sha256": "24cdb7947e6528da374cb46130d6147489cc20dae5221063e30888b0f79dd5bd"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpeargunPrimaryProjectile",
+          "sha256": "5e941f6910df810dc42f620614e272508fca1bb01068db2177ee2f49b4a130d3"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py",
+      "referenceDifferences": [
+        "status-chance native 0.24 vs reference 0.1; reference used"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunGun": {
+      "name": "Astilla",
+      "source": "data/weapons/primary/astilla.yaml",
+      "sha256": "9ed1a533e65ba88c0e6ad0aa7a8146c0160535674f5dc473c1d83c797e736ed0",
+      "directTotal": 70.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "puncture": 42.0,
+            "slash": 78.0
+          },
+          "radius_m": 2.4000001,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.17,
+          "crit_multiplier": 1.9,
+          "status_chance": 0.33,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-physical-reference-split",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunGun",
+          "sha256": "ce9ac9454de3b92f58e95df8a8fd02c35b915ca40f9564b7c72607754ba0a234"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunProjectile",
+          "sha256": "616e4984c53e747e7f76a4b70e40e0ed92e028917aa712f9833abe9a13e17b93"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeAstilla/AstillaPrimeWeapon": {
+      "name": "Astilla Prime",
+      "source": "data/weapons/primary/astilla_prime.yaml",
+      "sha256": "cf15fcb34885542dfc213b75d1000c581e4fef75f8096dae5add4d63d2c65403",
+      "directTotal": 100.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeAstilla/AstillaPrimeProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "puncture": 49.0,
+            "slash": 91.0
+          },
+          "radius_m": 2.4000001,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.20999999,
+          "crit_multiplier": 1.9,
+          "status_chance": 0.37,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeAstilla/AstillaPrimeProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-physical-reference-split",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAstilla/AstillaPrimeWeapon",
+          "sha256": "b1e8ca6a40e7e9c25830ed64983712b1a6e691cd0b9c41ccb644b1ca17492062"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAstilla/AstillaPrimeProjectile",
+          "sha256": "416b75eeeb332b9ecabba5ac05e56a01d12a2c6d367ee6684a6c42c09db8ac9a"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleNewWarGun": {
+      "name": "Basmu",
+      "source": "data/weapons/primary/basmu.yaml",
+      "sha256": "63b06c84baeb0f7dbe90a9f3b4331fb29e0ccf65e99c412636594b4ce1a6de8a",
+      "directTotal": 39.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleProj",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "heat": 19.0
+          },
+          "radius_m": 1.7,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.2,
+          "crit_chance": 0.15000001,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.29,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleProj",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleNewWarGun",
+          "sha256": "ff99291547697d70024574e943cf6864f21a678f48158d7bde4b444b27639f8a"
+        },
+        {
+          "path": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleProj",
+          "sha256": "206d2543d381248162d9b8624418d57409843fe1738f58e57f738eb4ef22a241"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniper": {
+      "name": "Komorex",
+      "source": "data/weapons/primary/komorex.yaml",
+      "sha256": "9f453f35aaf6a1657fbfb828499f0c11ab5606e85c9146daed41a47f3515e3b7",
+      "directTotal": 97.000001,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniperProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "viral": 53.0
+          },
+          "radius_m": 3.5,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.40000001,
+          "crit_chance": 0.16,
+          "crit_multiplier": 2.0999999,
+          "status_chance": 0.34,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniperProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniper",
+          "sha256": "51810273d898cbda6f4ffbc8208d4c751289bfa8c1543b5178092dc6ecec5840"
+        },
+        {
+          "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniperProjectile",
+          "sha256": "6497b503b37f2295af3839eb5b7579391782a4ee127ebc5e398bbdc12887b22a"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Sentients/Shedu/SheduHeavyWeapon": {
+      "name": "Shedu",
+      "source": "data/weapons/primary/shedu.yaml",
+      "sha256": "8e686189ece450a4f593dba1255e692cdb11897b996458c6f86888180e368aeb",
+      "directTotal": 71.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Sentients/Shedu/SheduProj",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "electricity": 87.0
+          },
+          "radius_m": 6.5999999,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.60000002,
+          "crit_chance": 0.25,
+          "crit_multiplier": 2.0999999,
+          "status_chance": 0.29,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": false,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Sentients/Shedu/SheduProj",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Sentients/Shedu/SheduHeavyWeapon",
+          "sha256": "83d672abfeb7e85dfd6ee638cc243b88249a4cbd3364f032b20bfee5f692a34a"
+        },
+        {
+          "path": "/Lotus/Weapons/Sentients/Shedu/SheduProj",
+          "sha256": "eec3a40b50592b13a53bc4f6a349e7432ed23a20353c60da58935c5f4516ca16"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnGrenadeLauncher/GrnGrenadeLauncher": {
+      "name": "Tonkor",
+      "source": "data/weapons/primary/tonkor.yaml",
+      "sha256": "5ae88ef6b5f3170ac8acbb7778f9016ac8cd9b46e621165b75a02f21adfb379e",
+      "directTotal": 75.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrnGrenadeLauncher/GrnGrenadeLauncherProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "blast": 650.0
+          },
+          "radius_m": 7,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.69999999,
+          "crit_chance": 0.25,
+          "crit_multiplier": 2.5,
+          "status_chance": 0.1,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnGrenadeLauncher/GrnGrenadeLauncherProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGrenadeLauncher/GrnGrenadeLauncher",
+          "sha256": "ecbc6558fdcf6f1d1136b6b39b27a1df0536910b65a99031cac3d8d578ff8eed"
+        },
+        {
+          "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGrenadeLauncher/GrnGrenadeLauncherProjectile",
+          "sha256": "90f5ba5f647deb6ec6fac4147d8cf9ec6e92a8452a84ba761314de2fc8ac8935"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py",
+      "referenceDifferences": [
+        "status-chance native 0 vs reference 0.1; reference used"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeCrossbow": {
+      "name": "Zhuge Prime",
+      "source": "data/weapons/primary/zhuge_prime.yaml",
+      "sha256": "941d46ea43def6036249cb07f99ba7f16e0c61247fe05926df816290b21830bd",
+      "directTotal": 50.000001,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeArrow",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "impact": 11.2,
+            "puncture": 4.0,
+            "slash": 24.8
+          },
+          "radius_m": 2.5999999,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.25999999,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.3,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.60000002,
+          "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeArrow",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-physical-reference-split",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeCrossbow",
+          "sha256": "c69cd423460401f16aac21d1a98e41844aa36c669a47f121eee5b539284bc5d8"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeArrow",
+          "sha256": "6e9972b3c527eaf23ce07b679eb69018273629baaba6582f9252f4687e585c28"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/SapientPistol/SapientPistol": {
+      "name": "Akarius",
+      "source": "data/weapons/secondary/akarius.yaml",
+      "sha256": "d3ea08712941a938a74ab833e92eeccbe779846f67135f0b782e8208ae79ec40",
+      "directTotal": 68.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/SapientPistol/SapientSecondaryGlaiveProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "blast": 419.0
+          },
+          "radius_m": 7.1999998,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.69999999,
+          "crit_chance": 0.059999999,
+          "crit_multiplier": 1.8,
+          "status_chance": 0.28,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/Pistols/SapientPistol/SapientSecondaryGlaiveProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/SapientPistol/SapientPistol",
+          "sha256": "87f5652920c73be41556f3f7572d041a96dd8d05f6ab2b63d1061db5997bb38b"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/SapientPistol/SapientSecondaryGlaiveProjectile",
+          "sha256": "a3ef93a0dc554791d263e31f0ac7f5ef024f856b22ac1f0316c3c9899cff69b0"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py",
+      "referenceDifferences": [
+        "status-chance native 0 vs reference 0.28; reference used"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusWeapon": {
+      "name": "Akarius Prime",
+      "source": "data/weapons/secondary/akarius_prime.yaml",
+      "sha256": "c13898f05dc5a7e15d4c28d4109f4dca82b18c5d577f206f11f7a66ee850172d",
+      "directTotal": 68.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusGlaiveProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "blast": 509.0
+          },
+          "radius_m": 7.8000002,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.69999999,
+          "crit_chance": 0.18000001,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.34,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusGlaiveProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusWeapon",
+          "sha256": "ddc228cb62666e89ba4a113bcf75c231a86318be908c8590b0551c5bf7b35ec8"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusGlaiveProjectile",
+          "sha256": "c82c709db6269fd30a6c2a23a28b0b81c4855e6f33170fe47beea85f757c84ac"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire": {
+      "name": "Grimoire",
+      "source": "data/weapons/secondary/grimoire.yaml",
+      "sha256": "fc1e43e2f5d6293a2284145a644da1f291d538741fc958c48c6ca5168c44d660",
+      "directTotal": 100.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireGuidedProj",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "electricity": 50.0
+          },
+          "radius_m": 1,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.80000001,
+          "crit_chance": 0.2,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.26,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireGuidedProj",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+          "sha256": "b45479bb0e1e94a2ee47688b8f5c75293232498ab4cc09f5a518fc2e37d6d76c"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireGuidedProj",
+          "sha256": "d075dfc1459b3d5d94aad43e1897c586726712b1b57cc91861bb8a4cfab688d1"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressa": {
+      "name": "Kompressa Prime",
+      "source": "data/weapons/secondary/kompressa_prime.yaml",
+      "sha256": "767b2175bda71d596f47944eedb8f2f6ba24860953692eb3296dc4435499e0af",
+      "directTotal": 2.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressaBoltoProj",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "viral": 46.0
+          },
+          "radius_m": 2.8,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.2,
+          "crit_chance": 0.16,
+          "crit_multiplier": 1.8,
+          "status_chance": 0.36,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.700000015,
+          "nativeSource": "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressaBoltoProj",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressa",
+          "sha256": "80e7201924c9752dd69c893a97b63d1514de5c4dbc0826379869110f584f7d09"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressaBoltoProj",
+          "sha256": "ba60ea8eb77e4d044ea477eef3f292d56ff4445e026136e90dd1b10942084364"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py",
+      "referenceDifferences": [
+        "embed delay range 0.6-0.8s; expected midpoint used",
+        "status-chance native 0.3 vs reference 0.36; reference used"
+      ]
+    },
+    "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoPistol": {
+      "name": "Kulstar",
+      "source": "data/weapons/secondary/kulstar.yaml",
+      "sha256": "7c3bae99ed9b6a062d2bb03f56f74381835883443971e857ed9ee7594ad1e921",
+      "directTotal": 200.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "blast": 300.0
+          },
+          "radius_m": 3.9000001,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.40000001,
+          "crit_chance": 0.17,
+          "crit_multiplier": 2.3,
+          "status_chance": 0.19,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoPistol",
+          "sha256": "8502c7d020136a2fcce5d758447f3d134e893ec20857da868cc9f6ce885e3bd3"
+        },
+        {
+          "path": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoProjectile",
+          "sha256": "b87d959d71efcef40fa5899c120376afff2cd6518472778f341f97b65672d96a"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py",
+      "clusters": [
+        {
+          "count": 3,
+          "direct": {
+            "damage": {
+              "impact": 75.0
+            },
+            "crit_chance": 0.1,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.19,
+            "takes_multishot": false,
+            "nativeField": "AttackData",
+            "damageTypeSource": "native-explicit",
+            "takes_condition_overload": true,
+            "coProfile": {
+              "behavior": "additive_with_base_damage",
+              "baseFraction": 2.6666666666666665,
+              "excludeFlatSources": [],
+              "source": "wiki CO catalog via WFSim unmodelled row",
+              "row": "Kulstar | Cluster Bombs | Projectile | 75 | 200 | 257% | Adding — \"CO-bonus uses parent projectile damage value\""
+            }
+          },
+          "radial": {
+            "damage": {
+              "blast": 90.0
+            },
+            "crit_chance": 0.1,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.19,
+            "takes_multishot": false,
+            "nativeField": "ExplosiveAttack",
+            "damageTypeSource": "reference-confirmed-native-default",
+            "radius_m": 4.0,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 1.0
+          },
+          "nativeChild": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoClusterProjectile",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoProjectile",
+              "sha256": "b87d959d71efcef40fa5899c120376afff2cd6518472778f341f97b65672d96a"
+            },
+            {
+              "path": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoClusterProjectile",
+              "sha256": "26ce1c593c573524d80f9a390eea275892b5bb30529eaa5f85f675dc4175900b"
+            }
+          ],
+          "reference": "data/weapons/secondary/kulstar.yaml",
+          "referenceSha256": "7c3bae99ed9b6a062d2bb03f56f74381835883443971e857ed9ee7594ad1e921",
+          "referenceDifferences": [
+            "AttackData: crit native 0.1/2 vs reference 0.17/2.3",
+            "AttackData: native status omitted; reference 0.19 used",
+            "ExplosiveAttack: crit native 0.1/2 vs reference 0.17/2.3",
+            "ExplosiveAttack: native status omitted; reference 0.19 used"
+          ]
+        }
+      ]
+    },
+    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeer": {
+      "name": "Kuva Seer",
+      "source": "data/weapons/secondary/kuva_seer.yaml",
+      "sha256": "0d4d16b897cc8068d314ba245fccd476b10462b0111819ba0052e508df52accb",
+      "directTotal": 131.000001,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeerProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "corrosive": 69.0
+          },
+          "radius_m": 2.3,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.20999999,
+          "crit_multiplier": 1.9,
+          "status_chance": 0.33,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeerProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeer",
+          "sha256": "47a84fcb4789c49a546b41a82d9c1d4cfaa8d98e7667bd399a2fd9c71bd2c1ff"
+        },
+        {
+          "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeerProjectile",
+          "sha256": "03acfcdfc193cae3f6530790ca4530151193449ce6be2385aebbb6856569fb3c"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol": {
+      "name": "Sepulcrum",
+      "source": "data/weapons/secondary/sepulcrum.yaml",
+      "sha256": "e517925eef64f5762c85255331888d652378dcfaf0744a4cbf1c2e87669cbc11",
+      "directTotal": 48.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanoPistolProj",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "heat": 46.0
+          },
+          "radius_m": 1.6,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.2,
+          "crit_chance": 0.30000001,
+          "crit_multiplier": 2.2,
+          "status_chance": 0.14,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanoPistolProj",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol",
+          "sha256": "b1ef8f59783c7f9359853a9ed1984ab0a4a71c7c961126241006408e43f4c507"
+        },
+        {
+          "path": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanoPistolProj",
+          "sha256": "691e27d3bc959fb0959e6f543184abbe323927cd71a80268662a271e52a169cd"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py",
+      "modes": {
+        "1": {
+          "name": "Sepulcrum",
+          "source": "data/weapons/secondary/sepulcrum_lockon.yaml",
+          "sha256": "2e4afb6f7e995a32d0f28b4a1289e2e275ac8cabe8b326d97431ad20cb399f16",
+          "directTotal": 96.000001,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanoPistolGuidedProj",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "heat": 480.0
+              },
+              "radius_m": 3,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.2,
+              "crit_chance": 0.38,
+              "crit_multiplier": 3.0,
+              "status_chance": 0.26,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanoPistolGuidedProj",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "native-explicit",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol",
+              "sha256": "b1ef8f59783c7f9359853a9ed1984ab0a4a71c7c961126241006408e43f4c507"
+            },
+            {
+              "path": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanoPistolGuidedProj",
+              "sha256": "687f89ca0842d93195dfcb9f8fbe00e47f3ba639c0c27303926c50150de820cd"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      }
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol": {
+      "name": "Tenet Spirex",
+      "source": "data/weapons/secondary/tenet_spirex.yaml",
+      "sha256": "8ef948c8476df896898f039e3a8650ce74e9bc2dde501715f887945717b9380e",
+      "directTotal": 120.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistolProj",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "heat": 80.0
+          },
+          "radius_m": 2,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.2,
+          "crit_chance": 0.25999999,
+          "crit_multiplier": 2.4000001,
+          "status_chance": 0.4,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistolProj",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol",
+          "sha256": "26b47d6070a3046619ecf5ba38958fb6469f20f2d7fa4406fa1dbf7543b02f6f"
+        },
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistolProj",
+          "sha256": "c67b03d899abf44e2c4d7ab0e52b1c77ee34182cd3153af88d30629c26a3a2ba"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolGun": {
+      "name": "Zakti",
+      "source": "data/weapons/secondary/zakti.yaml",
+      "sha256": "c0bba517dddf0d79ac7c0508e71b99a6f21677d837dff42e132a9c349485629b",
+      "directTotal": 30.000001,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "gas": 80.0
+          },
+          "radius_m": 3.5,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.0,
+          "crit_chance": 0.02,
+          "crit_multiplier": 1.5,
+          "status_chance": 0.2,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 1.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolProjectile",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolGun",
+          "sha256": "058ba683829da676f5f5bcdb421dd4fd20469354844ae22c0f8af758d408c95b"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolProjectile",
+          "sha256": "1677d3c9b3fd32b3802b7fc09616398f13f49ecceb0eb28bf71dc5f9b918b8c7"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiPistol": {
+      "name": "Zakti Prime",
+      "source": "data/weapons/secondary/zakti_prime.yaml",
+      "sha256": "b44fb78f1ea50a18658d207233258217d5acd1f5036261b6865084504625e1e7",
+      "directTotal": 30.000001,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "gas": 100.0
+          },
+          "radius_m": 3.8,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.0,
+          "crit_chance": 0.079999998,
+          "crit_multiplier": 1.8,
+          "status_chance": 0.42,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 1.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiProjectile",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiPistol",
+          "sha256": "26bb1826d6cede26e7515f26715d9ea3bcb458ec2dd8f278d423c34a71b06eb8"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiProjectile",
+          "sha256": "c6c49b98be7da42508fe9f2501f51c8b029d88ed69d7a71a911b6f0315f24275"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziWeapon": {
+      "name": "Zymos",
+      "source": "data/weapons/secondary/zymos.yaml",
+      "sha256": "272cc3fd9652228bc1a7fb09fc9037c43e800dcea1d25aacac569d344b0250b4",
+      "directTotal": 23.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "toxin": 61.0
+          },
+          "radius_m": 3.3,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.050000001,
+          "crit_multiplier": 2.3,
+          "status_chance": 0.3,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziWeapon",
+          "sha256": "f3fea73cfcac9e9c5eebbc526d6b839095c2e7a4d9d3f7a622effd9402118d21"
+        },
+        {
+          "path": "/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziProjectile",
+          "sha256": "9e895a50b9d27783b93274d3f175e0fa16c3d27221ec51b6815e1591560336da"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py",
+      "referenceDifferences": [
+        "status-chance native 0 vs reference 0.3; reference used"
+      ]
+    },
+    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraWeapon": {
+      "name": "Multron",
+      "source": "data/weapons/sentinel/multron.yaml",
+      "sha256": "ee437f19b7bf5af2ebd9496f40a76fc1fab18833772332a716f4cf357e3c2f02",
+      "directTotal": 10.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraEmbedProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "blast": 100.0
+          },
+          "radius_m": 3,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.5,
+          "crit_chance": 0.15000001,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.22,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 1.5,
+          "nativeSource": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraEmbedProjectile",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraWeapon",
+          "sha256": "91c7239aa4d2319beeee4f89dd4c301aaf0cf724c9dbf42f4cf2337cb603a604"
+        },
+        {
+          "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraEmbedProjectile",
+          "sha256": "ae05d15cb2bf038419683af82c32e2b3d15eccdd322767ce14878eec2bb90737"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisWeapon": {
+      "name": "Afentis Prime",
+      "source": "data/weapons/primary/afentis_prime.yaml",
+      "sha256": "86ba2ab6a2d7b54825813f42f6d942947c5c6f53bdb04b3a84ba7a9d57f3f1bd",
+      "directTotal": 200.000002,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisPrimaryProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "blast": 800.0,
+            "heat": 250.0
+          },
+          "radius_m": 5.5,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.5,
+          "crit_chance": 0.25999999,
+          "crit_multiplier": 2.5999999,
+          "status_chance": 0.1,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.40000001,
+          "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisPrimaryProjectile",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisWeapon",
+          "sha256": "7df482517b7934b371294ece232a01797572c35cf7d188d5f5a2a7dbd5008579"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisPrimaryProjectile",
+          "sha256": "658d2859d2e8e4f0feea2d034f8dcdcc6fdfb45e1758ee290aa73f1926755b75"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py",
+      "referenceDifferences": [
+        "status-chance native 0.3 vs reference 0.1; reference used"
+      ]
+    },
+    "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannon": {
+      "modes": {
+        "1": {
+          "name": "Bubonico",
+          "source": "data/weapons/primary/bubonico_burst.yaml",
+          "sha256": "000c17672315ec17eaa065e14d78f3e2a5c460aa10b51e410111dea3d9954fe9",
+          "directTotal": 9.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannonAltProjectile",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "viral": 143.0
+              },
+              "radius_m": 7,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.5,
+              "crit_chance": 0.029999999,
+              "crit_multiplier": 3.5,
+              "status_chance": 0.57,
+              "forced_procs": [],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannonAltProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "native-explicit",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannon",
+              "sha256": "24baeea059920b5f005d514f6fc9ef16b357b3753ec5e4f90a03e3482126b633"
+            },
+            {
+              "path": "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannonAltProjectile",
+              "sha256": "4fabc4d21e334cd1f82f38d1ff76dfa112936330b55db38fa5f308ae34245c96"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgun": {
+      "modes": {
+        "1": {
+          "name": "Cedo",
+          "source": "data/weapons/primary/cedo_alt.yaml",
+          "sha256": "3bcad60e4b791f29834b2237d78f82627cfe750b7d24c8ef768d82381a3c5794",
+          "directTotal": 20.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgunGlaiveProjectile",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "blast": 10.0
+              },
+              "radius_m": 6,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.0,
+              "crit_chance": 0.02,
+              "crit_multiplier": 1.4,
+              "status_chance": 0.5,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgunGlaiveProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "reference-confirmed-native-default",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgun",
+              "sha256": "043b259764302e246022215444a0c370b2c47cdfe63937dd8ab961303cabecf9"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgunGlaiveProjectile",
+              "sha256": "98fdaf96912006448dd0a3a5c066d6645ce84d3997a6bb396ca8c653d512b070"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeapon": {
+      "modes": {
+        "1": {
+          "name": "Cedo Prime",
+          "source": "data/weapons/primary/cedo_prime_alt.yaml",
+          "sha256": "a8fd7106d2c038d5c34406ca3aa9696f0fb91d2b0d8f2acffc1ce37b37e5c5dd",
+          "directTotal": 20.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeaponGlaiveProjectile",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "blast": 10.0
+              },
+              "radius_m": 6,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.0,
+              "crit_chance": 0.1,
+              "crit_multiplier": 2.0,
+              "status_chance": 0.5,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeaponGlaiveProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "reference-confirmed-native-default",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeapon",
+              "sha256": "172648fa4f28046cb5336e3a680376763aa2dd932ab7069a6e64299bd4a38c55"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeaponGlaiveProjectile",
+              "sha256": "272e087f388f0c776caa60049189ff73c8e1722573a08a9c78cd4c8e6e3e64ce"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      }
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon": {
+      "modes": {
+        "1": {
+          "name": "Coda Bubonico",
+          "source": "data/weapons/primary/coda_bubonico_burst.yaml",
+          "sha256": "ef1813faa0a9fc7f3fc423629d0ab7ffcc9c5cbd907996c83d0100ad6612e90a",
+          "directTotal": 9.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannonAltProjectile",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "viral": 143.0
+              },
+              "radius_m": 7,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.5,
+              "crit_chance": 0.050000001,
+              "crit_multiplier": 3.5,
+              "status_chance": 0.57,
+              "forced_procs": [],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannonAltProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "native-explicit",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon",
+              "sha256": "5fc2a934316eb4e6430f537860deaa3e35e2d1807932db88b41d414aec2caacd"
+            },
+            {
+              "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannonAltProjectile",
+              "sha256": "09fa0156b8fe29017236e148731888feda1cf1dd21a6b1a180bf5738ac7aca22"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      }
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix": {
+      "name": "Coda Sporothrix",
+      "source": "data/weapons/primary/coda_sporothrix.yaml",
+      "sha256": "43f97e18ed7739009700e13b720c41d3325609c1e7bc28f1e3100f30cee95461",
+      "directTotal": 375.999989,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothixProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "slash": 25.0,
+            "viral": 23.0
+          },
+          "radius_m": 2,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.1,
+          "crit_chance": 0.050000001,
+          "crit_multiplier": 3.0,
+          "status_chance": 0.55,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.89999998,
+          "nativeSource": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothixProjectile",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix",
+          "sha256": "edf24c3ebddd8895bc9ab0e4f60d864103d6e5f36aa0465beeea7c84e30c1093"
+        },
+        {
+          "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothixProjectile",
+          "sha256": "7ad5cb5b3d04295fd9a30a458e777ad641a098b38c18d3a711c2a566b9eb0071"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunGun": {
+      "modes": {
+        "1": {
+          "name": "Corinth",
+          "source": "data/weapons/primary/corinth_airburst.yaml",
+          "sha256": "ad36dd173def4bb9c85fdd1549e90ad06cfe88c74bf109c536e9e93bb8029eb9",
+          "directTotal": 100.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunProjectile",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "blast": 404.0
+              },
+              "radius_m": 9.3999996,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.89999998,
+              "crit_chance": 0.039999999,
+              "crit_multiplier": 1.6,
+              "status_chance": 0.28,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "reference-confirmed-native-default",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunGun",
+              "sha256": "cd2fbcf915244675b814e9e3991d9246417bd686daf4530e9bd870dc14cd9d25"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunProjectile",
+              "sha256": "c11ab0069829d8d88a08be45c25044cf5920b210055d60062844b4223390145a"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeCorinth/PrimeCorinth": {
+      "modes": {
+        "1": {
+          "name": "Corinth Prime",
+          "source": "data/weapons/primary/corinth_prime_airburst.yaml",
+          "sha256": "38a5de98d872acd01fbee7e01465e0d6387191aeb91096a0d5ce886defa08722",
+          "directTotal": 100.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeCorinth/PrimeCorinthProjectile",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "blast": 2200.0
+              },
+              "radius_m": 9.8000002,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.89999998,
+              "crit_chance": 0.039999999,
+              "crit_multiplier": 1.6,
+              "status_chance": 0.5,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeCorinth/PrimeCorinthProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "reference-confirmed-native-default",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCorinth/PrimeCorinth",
+              "sha256": "1b43cbf3fdb71cf32483bc0cbd0efe5072d8fc2aaed5468dc6390f3032cf3dea"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCorinth/PrimeCorinthProjectile",
+              "sha256": "f468e4e4ffe73539250e8b8016037bbb35e690fec37b88d6626c1a1e667e4748"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkRifleWeapon": {
+      "modes": {
+        "1": {
+          "name": "Enkaus",
+          "source": "data/weapons/primary/enkaus_alt.yaml",
+          "sha256": "83b360244519367deec6c87eeb0191dc07f61520c87b3597682cb47fec3fdfd8",
+          "directTotal": 16.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkProjectile",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "corrosive": 10.0,
+                "puncture": 4.0
+              },
+              "radius_m": 8,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.5,
+              "crit_chance": 0.16,
+              "crit_multiplier": 1.8,
+              "status_chance": 0.32,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "native-per-type",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkRifleWeapon",
+              "sha256": "fa4052e91b6c7318c1350cad2e577d4aba79271debd2e09e60fb755c272c506a"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkProjectile",
+              "sha256": "49219cd69996ff190aa8781288cda7577633e5f35d8c5b3d838447760eb63331"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      }
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon": {
+      "name": "Kuva Chakkhurr",
+      "source": "data/weapons/primary/kuva_chakkhurr.yaml",
+      "sha256": "633ed247cdc75a91e98d6a6b1e74af6a21df581c788c0c8510531df5ed0e9b45",
+      "directTotal": 260.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "puncture": 52.0,
+            "slash": 29.0,
+            "blast": 25.0
+          },
+          "radius_m": 2.9000001,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.5,
+          "crit_multiplier": 2.3,
+          "status_chance": 0.27,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon",
+          "sha256": "e3c7d8f34cf1c1640a675cb14b9f4ad96738499a9f950ecc163c108c7ea097ba"
+        },
+        {
+          "path": "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleProjectile",
+          "sha256": "628d6454a79584d13482d63744de3ea20eac8db6f9ec4ed0b6318d9483e9ed08"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkor": {
+      "name": "Kuva Tonkor",
+      "source": "data/weapons/primary/kuva_tonkor.yaml",
+      "sha256": "6b6cd68aa4177cea51941e76533295148aba196b784c726ea81d764e19fac04a",
+      "directTotal": 59.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkorProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "puncture": 168.0,
+            "slash": 204.0,
+            "blast": 302.0
+          },
+          "radius_m": 7,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.69999999,
+          "crit_chance": 0.30000001,
+          "crit_multiplier": 2.5,
+          "status_chance": 0.17,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkorProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkor",
+          "sha256": "7bccf1198faabc84329a3dab0bff9221b365996aa34ff9456b4ca7cb191b17bf"
+        },
+        {
+          "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkorProjectile",
+          "sha256": "d8aebf7bb3ef45e0493d70c271dbc524c69fa91839a05523213192a97ab11c74"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr": {
+      "name": "Kuva Zarr",
+      "source": "data/weapons/primary/kuva_zarr.yaml",
+      "sha256": "86dfa715d11490630ad6f0980b09762bc92bd54d748deda1df07b2b954ce8153",
+      "directTotal": 50.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "blast": 673.0
+          },
+          "radius_m": 7,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.69999999,
+          "crit_chance": 0.25,
+          "crit_multiplier": 2.5,
+          "status_chance": 0.31,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "reference-confirmed-native-default",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr",
+          "sha256": "ab0e493330b005af374cd0b8abb50b61c1d311412c120f36f056a615ae7c4d23"
+        },
+        {
+          "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterProjectile",
+          "sha256": "b68736a10e50d6e8c9d81925ec4aa0b900477415b0d55a35c4f0c88c9af98f9d"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py",
+      "clusters": [
+        {
+          "count": 3,
+          "direct": {
+            "damage": {
+              "impact": 15.0
+            },
+            "crit_chance": 0.25,
+            "crit_multiplier": 2.5,
+            "status_chance": 0.31,
+            "takes_multishot": false,
+            "nativeField": "AttackData",
+            "damageTypeSource": "native-explicit",
+            "takes_condition_overload": true,
+            "coProfile": {
+              "behavior": "additive_with_base_damage",
+              "baseFraction": 3.3333333333333335,
+              "excludeFlatSources": [],
+              "source": "wiki CO catalog via WFSim unmodelled row",
+              "row": "Kuva Zarr | Cannon Child Bomb | Projectile | 15 | 50 | 333% | Adding"
+            }
+          },
+          "radial": {
+            "damage": {
+              "blast": 50.0
+            },
+            "crit_chance": 0.25,
+            "crit_multiplier": 2.5,
+            "status_chance": 0.31,
+            "takes_multishot": false,
+            "nativeField": "ExplosiveAttack",
+            "damageTypeSource": "reference-confirmed-native-default",
+            "radius_m": 3.0,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.1
+          },
+          "nativeChild": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterProjectile",
+              "sha256": "b68736a10e50d6e8c9d81925ec4aa0b900477415b0d55a35c4f0c88c9af98f9d"
+            },
+            {
+              "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
+              "sha256": "9bf5b39abac85bf1f200d3148e245628e6f45826e090c1170aa38fef7fef83a2"
+            }
+          ],
+          "reference": "data/weapons/primary/kuva_zarr.yaml",
+          "referenceSha256": "86dfa715d11490630ad6f0980b09762bc92bd54d748deda1df07b2b954ce8153"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle": {
+      "name": "Sporothrix",
+      "source": "data/weapons/primary/sporothrix.yaml",
+      "sha256": "1cc97d88544936237d960e67536f9b656172782e67012dd1e856f5744d32a07b",
+      "directTotal": 370.999989,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifleProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "slash": 22.0,
+            "viral": 19.0
+          },
+          "radius_m": 1.7,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.1,
+          "crit_chance": 0.0099999998,
+          "crit_multiplier": 3.0,
+          "status_chance": 0.53,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.89999998,
+          "nativeSource": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifleProjectile",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle",
+          "sha256": "281f11405c14f38efbea1aca67f90874757065616efcaeeec863b828d7f9cc7f"
+        },
+        {
+          "path": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifleProjectile",
+          "sha256": "6f2c04d50573b036d97bff63da03f6c9b835c73c89306ed330dc4f64ac0975c4"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra": {
+      "modes": {
+        "1": {
+          "name": "Tenet Tetra",
+          "source": "data/weapons/primary/tenet_tetra_grenade.yaml",
+          "sha256": "8c02cc68b84344c4dc83e65e6b128728c8edcdbf3ca5fceca301e754ccc91afc",
+          "directTotal": 200.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetraAltProjectile",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "blast": 1000.0
+              },
+              "radius_m": 8,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.60000002,
+              "crit_chance": 0.28,
+              "crit_multiplier": 2.2,
+              "status_chance": 0.3,
+              "forced_procs": [],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetraAltProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "reference-confirmed-native-default",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
+              "sha256": "f815cfaf96132ef3fb1a6c27734d14edac2690f0253ea714e576d78ec0797845"
+            },
+            {
+              "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetraAltProjectile",
+              "sha256": "291bf802ac397af5399bab8d90e7c8c9706b54e718eafa6956a96d43811d3a7f"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      }
+    },
+    "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle": {
+      "modes": {
+        "1": {
+          "name": "Trumna",
+          "source": "data/weapons/primary/trumna_grenade.yaml",
+          "sha256": "14fce1aa5b3fd49507ee56441b3358bceb2a4c07f4df7edba40654feb1648b3f",
+          "directTotal": 100.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanoRifleAltProj",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "heat": 1000.0
+              },
+              "radius_m": 6,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.40000001,
+              "crit_chance": 0.38,
+              "crit_multiplier": 2.4000001,
+              "status_chance": 0.5,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanoRifleAltProj",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "native-per-type",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle",
+              "sha256": "f1399aadc66621561087ec7c2aa8a5b5025045c215fb312e34e7feaf9a16d038"
+            },
+            {
+              "path": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanoRifleAltProj",
+              "sha256": "68f5a0470ea243ce9e7050c0f56372d000b38b5b39804f9441f05eeec25a6749"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      },
+      "name": "Trumna",
+      "source": "data/weapons/primary/trumna.yaml",
+      "sha256": "f47cc46130e24744f84a4ec6d7c8a12e9a3c6e6dcf70f8fecb62f42982135fb0",
+      "directTotal": 82.0,
+      "fireMode": 0,
+      "projectile": null,
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "heat": 50.0
+          },
+          "radius_m": 1.6,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.15000001,
+          "crit_chance": 0.23999999,
+          "crit_multiplier": 2.2,
+          "status_chance": 0.3,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle",
+          "nativeField": "RadialDamage",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle",
+          "sha256": "f1399aadc66621561087ec7c2aa8a5b5025045c215fb312e34e7feaf9a16d038"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon": {
+      "modes": {
+        "1": {
+          "name": "Trumna Prime",
+          "source": "data/weapons/primary/trumna_prime_grenade.yaml",
+          "sha256": "824b1975c07f52af5fc459bf21f3ead74876a9b1b8c7f9a33247c53780c508ee",
+          "directTotal": 100.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaAltProj",
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "heat": 1150.0
+              },
+              "radius_m": 6,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.40000001,
+              "crit_chance": 0.38,
+              "crit_multiplier": 2.4000001,
+              "status_chance": 0.5,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaAltProj",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "native-per-type",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon",
+              "sha256": "d805b21806811f2df02fac51b79609679a8fb1cf45b0abc29ddbd0d9ed115155"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaAltProj",
+              "sha256": "87f279a01a20d0c4e854522312603b9afc330d21c9b058c517987dc4df6d5190"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py"
+        }
+      },
+      "name": "Trumna Prime",
+      "source": "data/weapons/primary/trumna_prime.yaml",
+      "sha256": "6af2453840a2d3884e27cf3e7e6af182b58be9aac17177a7232dc1c03b52aa91",
+      "directTotal": 85.0,
+      "fireMode": 0,
+      "projectile": null,
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "heat": 50.0
+          },
+          "radius_m": 1.6,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.15000001,
+          "crit_chance": 0.23999999,
+          "crit_multiplier": 2.4000001,
+          "status_chance": 0.34,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon",
+          "nativeField": "RadialDamage",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon",
+          "sha256": "d805b21806811f2df02fac51b79609679a8fb1cf45b0abc29ddbd0d9ed115155"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/SwarmerWeapon": {
+      "name": "Helstrum",
+      "source": "data/weapons/sentinel/helstrum.yaml",
+      "sha256": "0d67ee3f97213bed52cd4d2784d8b190947b7b360504a02def19629d61b2c255",
+      "directTotal": 9.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/SwarmerWeaponMissileProjectile",
+      "scope": "direct-hit target at explosion centre; native radial event",
+      "radials": [
+        {
+          "damage": {
+            "impact": 6.0,
+            "heat": 24.0
+          },
+          "radius_m": 3,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.25,
+          "crit_chance": 0.050000001,
+          "crit_multiplier": 1.5,
+          "status_chance": 0.3,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/SwarmerWeaponMissileProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-per-type",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/SwarmerWeapon",
+          "sha256": "7145aebac3e3404ec42c8f6077131446f9e90ff51750bc751732af2584e45423"
+        },
+        {
+          "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/SwarmerWeaponMissileProjectile",
+          "sha256": "385034c2fe8ff2cf134fff92babb0bada54380e3166f3dc506ca5fbc2b31f52e"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py"
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPox": {
+      "lingering": {
+        "damage": {
+          "toxin": 35.0
+        },
+        "tick_rate": 1.0,
+        "duration_seconds": 5.0,
+        "radius_m": 2.8,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.0,
+        "crit_chance": 0.1,
+        "crit_multiplier": 2.2,
+        "status_chance": 0.45,
+        "forcedProcs": [],
+        "stacking": "stack",
+        "takes_condition_overload": false,
+        "nativeSource": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile",
+        "nativeField": "EmbedAttack",
+        "tickRateSource": "reference (native has no interval)"
+      },
+      "lingeringSource": {
+        "reference": "data/weapons/secondary/coda_pox.yaml",
+        "referenceSha256": "9291e0e9b13a18e2536c9df14ed3e05df1dfef807dde90ad144b32affd0d8c24",
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPox",
+            "sha256": "6bf6d29e755c84a42dc9b57ddd7244aa11b87d8a032fa9d3f9e9834becba846b"
+          },
+          {
+            "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile",
+            "sha256": "1c8746ef8541e94336a22bfee85b9828fd72d651d5f7f2287ba6365bd4cde192"
+          }
+        ],
+        "generatedBy": "tools/import_embed_fields.py",
+        "referenceDifferences": [
+          "duration native 5s vs reference 4.0s; native used"
+        ]
+      },
+      "name": "Coda Pox",
+      "directTotal": 55.0,
+      "projectile": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile"
+    },
+    "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars": {
+      "lingering": {
+        "damage": {
+          "toxin": 20.0
+        },
+        "tick_rate": 1.0,
+        "duration_seconds": 5.0,
+        "radius_m": 2.5,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.0,
+        "crit_chance": 0.0099999998,
+        "crit_multiplier": 2.0,
+        "status_chance": 0.35,
+        "forcedProcs": [],
+        "stacking": "stack",
+        "takes_condition_overload": true,
+        "nativeSource": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile",
+        "nativeField": "EmbedAttack",
+        "tickRateSource": "reference (native has no interval)"
+      },
+      "lingeringSource": {
+        "reference": "data/weapons/secondary/pox.yaml",
+        "referenceSha256": "63a9a3588a02fef76552465efdfb7de6fe8c866b9da747a8397d72abffccac38",
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars",
+            "sha256": "ad497088638709fbddf75fac5ab970e38069e4f04cea6de1f058581da7b2bc1d"
+          },
+          {
+            "path": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile",
+            "sha256": "8845d248203720f3ac0504f47cd921a9b3200adc0ae7e9257ab2d9e5a5774078"
+          }
+        ],
+        "generatedBy": "tools/import_embed_fields.py",
+        "referenceDifferences": [
+          "duration native 5s vs reference 4.0s; native used"
+        ]
+      },
+      "name": "Pox",
+      "directTotal": 50.0,
+      "projectile": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon": {
+      "modes": {
+        "1": {
+          "name": "Alternox",
+          "source": "data/weapons/primary/alternox_alt.yaml",
+          "sha256": "02ec53a5393fdc6ada52094d4d9cb89334b7b7bbb4c1de53fcdf06203c4069bf",
+          "directTotal": 49.999999,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
+          "scope": "single-target embedded remote mines; explicit throw batches and manual detonation delay",
+          "radials": [
+            {
+              "damage": {
+                "electricity": 100.0
+              },
+              "radius_m": 6,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.60000002,
+              "crit_chance": 0.02,
+              "crit_multiplier": 2.0,
+              "status_chance": 0.44,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 10.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
+              "nativeField": "EmbedDeathAttack",
+              "damageTypeSource": "native-explicit",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+              "sha256": "6d2d76a847f4ff22c1b0f96e88c2f44aa7ad94928d5b3b37d7f8fab90a182632"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
+              "sha256": "0d2808c97f1b7a618b9a0f920ccf251be97bfb47ca1c02199ff99d3fb517249a"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py",
+          "manualDetonation": {
+            "maxProjectiles": 1
+          }
+        }
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon": {
+      "modes": {
+        "1": {
+          "name": "Alternox Prime",
+          "source": "data/weapons/primary/alternox_prime_alt.yaml",
+          "sha256": "8eac4a7aae416c3818e2417c8ce754fc7139642f6672b6ef3b15762ac2ff7987",
+          "directTotal": 69.999999,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj",
+          "scope": "single-target embedded remote mines; explicit throw batches and manual detonation delay",
+          "radials": [
+            {
+              "damage": {
+                "electricity": 140.0
+              },
+              "radius_m": 6,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.60000002,
+              "crit_chance": 0.02,
+              "crit_multiplier": 2.0,
+              "status_chance": 0.5,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 10.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj",
+              "nativeField": "EmbedDeathAttack",
+              "damageTypeSource": "native-explicit",
+              "multishotSource": "reference takes_multishot"
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
+              "sha256": "313cad1c036f157f0d4f3f17b3c067f7b594cfce7934b66a7d31c63c54baf502"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj",
+              "sha256": "36520b4e56a9df1356205370c36219848518e432285d52ee56a78b62d4074a49"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py",
+          "manualDetonation": {
+            "maxProjectiles": 1
+          }
+        }
+      }
+    },
+    "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBomb": {
+      "name": "Aegrit",
+      "source": "data/weapons/secondary/aegrit.yaml",
+      "sha256": "1de905835dafd7d75592f9b6202145ec262c81c95a350ea125165b51a1a82eaa",
+      "directTotal": 9.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBombProj",
+      "scope": "single-target embedded remote mines; explicit throw batches and manual detonation delay",
+      "radials": [
+        {
+          "damage": {
+            "blast": 797.0
+          },
+          "radius_m": 9,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.69999999,
+          "crit_chance": 0.37,
+          "crit_multiplier": 1.9,
+          "status_chance": 0.19,
+          "forced_procs": [],
+          "takes_multishot": false,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBombProj",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "reference takes_multishot"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBomb",
+          "sha256": "ed9ab852f362df0f386d40178e9ca9922fe3b88983a85d011b2f14c5a8e5f8c9"
+        },
+        {
+          "path": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBombProj",
+          "sha256": "aceac27879918a4d78c7de1b4b82025c08cbf6ebcff28271f0ebf6aedc5a5b69"
+        }
+      ],
+      "generatedBy": "tools/import_projectile_components.py",
+      "manualDetonation": {
+        "maxProjectiles": 4
+      }
     }
   },
   "nativeTriggers": {
@@ -4241,6 +7011,42 @@
           "sha256": "4fa5ecd2f1ab0c724d8c1bffccd3899700f56f3156f687959c1f110293867085"
         }
       ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniper": {
+      "directTotal": 171.999998,
+      "referenceId": "perigale",
+      "fireMode": 0,
+      "sourceBuild": "2026.09.22.16.46",
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniper",
+          "sha256": "baf409df1a85d669d781ea0c9e0edcd727c606f900251c663f7b5005792cf281"
+        }
+      ],
+      "referenceSource": "data/weapons/primary/perigale.yaml",
+      "referenceSha256": "c36b7b6c63f3860085addae62e4c7288c34c374eafccbfad8d8110f753ef39cf",
+      "burst": {
+        "count": 4,
+        "delay_seconds": 0.039999999
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePerigale/PrimePerigaleSniper": {
+      "directTotal": 183.999998,
+      "referenceId": "perigale_prime",
+      "fireMode": 0,
+      "sourceBuild": "2026.09.22.16.46",
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePerigale/PrimePerigaleSniper",
+          "sha256": "20c4bcc1c11fa6dd2f808f82b5ba2fe57bb35a1cc9f26a0e953513c1adf64d91"
+        }
+      ],
+      "referenceSource": "data/weapons/primary/perigale_prime.yaml",
+      "referenceSha256": "757a3cd65210dbce05a1764bb590f50741c802a6047b073497890e1461b6f399",
+      "burst": {
+        "count": 4,
+        "delay_seconds": 0.039999999
+      }
     }
   },
   "coProfiles": {

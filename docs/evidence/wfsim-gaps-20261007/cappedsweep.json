@@ -1,0 +1,488 @@
+[
+ {
+  "weapon": "rubico_prime",
+  "combo": "viral",
+  "wfsim": 1.568466390423749,
+  "se": 0.006737293406891384,
+  "virusStacks": 4.218410900752924,
+  "new": 1.5484456116417529,
+  "errNew": -1.2764557088524642
+ },
+ {
+  "weapon": "rubico_prime",
+  "combo": "corrosive",
+  "wfsim": 2.188234644931091,
+  "se": 0.020033930083841644,
+  "virusStacks": null,
+  "new": 2.106345038269705,
+  "errNew": -3.7422680813083087
+ },
+ {
+  "weapon": "rubico_prime",
+  "combo": "magnetic",
+  "wfsim": 0.8992858389994604,
+  "se": 0.0013029560254330967,
+  "virusStacks": null,
+  "new": 0.8958993424766997,
+  "errNew": -0.3765762092427072
+ },
+ {
+  "weapon": "athodai",
+  "combo": "viral",
+  "wfsim": 0.8690348150326743,
+  "se": 0.005740918514783997,
+  "virusStacks": 6.237556174272923,
+  "new": 0.856671416468971,
+  "errNew": -1.4226586035265387
+ },
+ {
+  "weapon": "athodai",
+  "combo": "corrosive",
+  "wfsim": 0.7101599662480252,
+  "se": 0.0019694554526369155,
+  "virusStacks": null,
+  "new": 0.7043802662342844,
+  "errNew": -0.8138588893255472
+ },
+ {
+  "weapon": "athodai",
+  "combo": "magnetic",
+  "wfsim": 0.720365301622794,
+  "se": 0.002663028386329833,
+  "virusStacks": null,
+  "new": 0.711637727290685,
+  "errNew": -1.2115484064054827
+ },
+ {
+  "weapon": "plinx",
+  "combo": "viral",
+  "wfsim": 0.4886831730990794,
+  "se": 0.0009263485369200355,
+  "virusStacks": 2.4512285806803575,
+  "new": 0.48768207900561644,
+  "errNew": -0.20485544593531468
+ },
+ {
+  "weapon": "plinx",
+  "combo": "corrosive",
+  "wfsim": 0.4859751903396866,
+  "se": 0.0005592561282392123,
+  "virusStacks": null,
+  "new": 0.4857414122322629,
+  "errNew": -0.04810494693366918
+ },
+ {
+  "weapon": "plinx",
+  "combo": "magnetic",
+  "wfsim": 0.5314496568366809,
+  "se": 0.0017513361348796559,
+  "virusStacks": null,
+  "new": 0.5282123127745475,
+  "errNew": -0.6091534768133733
+ },
+ {
+  "weapon": "hek",
+  "combo": "viral",
+  "wfsim": 0.5713420336566879,
+  "se": 0.0006419082270627798,
+  "virusStacks": 9.914464196544813,
+  "new": 0.5727426378992129,
+  "errNew": 0.24514286714751865
+ },
+ {
+  "weapon": "hek",
+  "combo": "corrosive",
+  "wfsim": 0.6043347278063773,
+  "se": 0.0008087454591225011,
+  "virusStacks": null,
+  "new": 0.6053608656329845,
+  "errNew": 0.16979627007898124
+ },
+ {
+  "weapon": "hek",
+  "combo": "magnetic",
+  "wfsim": 0.5483547028657267,
+  "se": 0.00017222490076110563,
+  "virusStacks": null,
+  "new": 0.5480308689966562,
+  "errNew": -0.059055546962238914
+ },
+ {
+  "weapon": "tigris_prime",
+  "combo": "viral",
+  "wfsim": 0.8883115818955524,
+  "se": 0.002073698160511852,
+  "virusStacks": 9.88336419913097,
+  "new": 0.8894963428344457,
+  "errNew": 0.13337222693474704
+ },
+ {
+  "weapon": "tigris_prime",
+  "combo": "corrosive",
+  "wfsim": 0.9586714651897659,
+  "se": 0.0013318442589824208,
+  "virusStacks": null,
+  "new": 0.9594690347484216,
+  "errNew": 0.08319529553306726
+ },
+ {
+  "weapon": "tigris_prime",
+  "combo": "magnetic",
+  "wfsim": 0.6242516809983141,
+  "se": 0.0005543769782410883,
+  "virusStacks": null,
+  "new": 0.6226795788598025,
+  "errNew": -0.25183787026370474
+ },
+ {
+  "weapon": "steflos",
+  "combo": "viral",
+  "wfsim": 0.9090994282146635,
+  "se": 0.007078891541789141,
+  "virusStacks": 8.168507805383316,
+  "new": 0.9108624246501722,
+  "errNew": 0.19392779060163345
+ },
+ {
+  "weapon": "steflos",
+  "combo": "corrosive",
+  "wfsim": 0.7110282214742757,
+  "se": 0.0027600468928636606,
+  "virusStacks": null,
+  "new": 0.7134319939925937,
+  "errNew": 0.3380699170187462
+ },
+ {
+  "weapon": "steflos",
+  "combo": "magnetic",
+  "wfsim": 0.7335928979965325,
+  "se": 0.0026345399327392036,
+  "virusStacks": null,
+  "new": 0.7329138037406777,
+  "errNew": -0.09257099648993794
+ },
+ {
+  "weapon": "grakata",
+  "combo": "viral",
+  "wfsim": 0.37518718357771247,
+  "se": 0.0006467316733614961,
+  "virusStacks": null,
+  "new": 0.3777152312271532,
+  "errNew": 0.6738097035548396
+ },
+ {
+  "weapon": "grakata",
+  "combo": "corrosive",
+  "wfsim": 0.37518718357771247,
+  "se": 0.0006467316733614961,
+  "virusStacks": null,
+  "new": 0.3777152312271532,
+  "errNew": 0.6738097035548396
+ },
+ {
+  "weapon": "grakata",
+  "combo": "magnetic",
+  "wfsim": 0.5187854733055647,
+  "se": 0.00010149724068656846,
+  "virusStacks": null,
+  "new": 0.519514692232202,
+  "errNew": 0.14056271120912456
+ },
+ {
+  "weapon": "hind",
+  "combo": "viral",
+  "wfsim": 0.2319605272486803,
+  "se": 0.001048988955447757,
+  "virusStacks": null,
+  "new": 0.231080550364777,
+  "errNew": -0.3793649265850685
+ },
+ {
+  "weapon": "hind",
+  "combo": "corrosive",
+  "wfsim": 0.2319605272486803,
+  "se": 0.001048988955447757,
+  "virusStacks": null,
+  "new": 0.231080550364777,
+  "errNew": -0.3793649265850685
+ },
+ {
+  "weapon": "hind",
+  "combo": "magnetic",
+  "wfsim": 0.5031625206894285,
+  "se": 0.0001476704355612914,
+  "virusStacks": null,
+  "new": 0.5030585004442532,
+  "errNew": -0.02067328962276349
+ },
+ {
+  "weapon": "kohm",
+  "combo": "viral",
+  "wfsim": 1.0341489484416142,
+  "se": 0.0014113887525944349,
+  "virusStacks": 9.999999999999732,
+  "new": 0.8045618286751011,
+  "errNew": -22.20058533274959
+ },
+ {
+  "weapon": "kohm",
+  "combo": "corrosive",
+  "wfsim": 1.1951544234655738,
+  "se": 0.0017248174933516696,
+  "virusStacks": null,
+  "new": 0.8936976073489447,
+  "errNew": -25.22325234278083
+ },
+ {
+  "weapon": "kohm",
+  "combo": "magnetic",
+  "wfsim": 0.6585657321918674,
+  "se": 0.0003339272548531524,
+  "virusStacks": null,
+  "new": 0.6060347637875749,
+  "errNew": -7.976571788734987
+ },
+ {
+  "weapon": "tenora",
+  "combo": "viral",
+  "wfsim": 0.5945097676511069,
+  "se": 0.0007209215301666353,
+  "virusStacks": 10.000000000000007,
+  "new": 0.5948932979241438,
+  "errNew": 0.06451202215773666
+ },
+ {
+  "weapon": "tenora",
+  "combo": "corrosive",
+  "wfsim": 0.6255643908596586,
+  "se": 0.0008028515334314762,
+  "virusStacks": null,
+  "new": 0.625484298173653,
+  "errNew": -0.0128032680849266
+ },
+ {
+  "weapon": "tenora",
+  "combo": "magnetic",
+  "wfsim": 0.5570910730573829,
+  "se": 0.00021018450072784076,
+  "virusStacks": null,
+  "new": 0.5571576805480137,
+  "errNew": 0.011956301914017864
+ },
+ {
+  "weapon": "acceltra",
+  "combo": "viral",
+  "wfsim": 1.056065675872257,
+  "se": 0.0013351230235250828,
+  "virusStacks": 9.85275324926625,
+  "new": 0.5905500651416846,
+  "errNew": -44.08017620173859
+ },
+ {
+  "weapon": "acceltra",
+  "combo": "corrosive",
+  "wfsim": 1.290090286185027,
+  "se": 0.0016844957511339682,
+  "virusStacks": null,
+  "new": 0.6475191311155772,
+  "errNew": -49.808231404456215
+ },
+ {
+  "weapon": "acceltra",
+  "combo": "magnetic",
+  "wfsim": 0.653459500453209,
+  "se": 0.00039316913960826876,
+  "virusStacks": null,
+  "new": 0.5482439822933232,
+  "errNew": -16.101306674233562
+ },
+ {
+  "weapon": "quartakk",
+  "combo": "viral",
+  "wfsim": 0.6140513597082409,
+  "se": 0.0015143047158893473,
+  "virusStacks": 9.99991413339406,
+  "new": 0.615769599596294,
+  "errNew": 0.27982022364863024
+ },
+ {
+  "weapon": "quartakk",
+  "combo": "corrosive",
+  "wfsim": 0.6336942424872414,
+  "se": 0.0015787977890055825,
+  "virusStacks": null,
+  "new": 0.6343741849158552,
+  "errNew": 0.10729818625856424
+ },
+ {
+  "weapon": "quartakk",
+  "combo": "magnetic",
+  "wfsim": 0.5654089609118532,
+  "se": 0.0004096749969060511,
+  "virusStacks": null,
+  "new": 0.5656501392035675,
+  "errNew": 0.04265554817619588
+ },
+ {
+  "weapon": "baza_prime",
+  "combo": "viral",
+  "wfsim": 0.6852514669642683,
+  "se": 0.0008285349486088142,
+  "virusStacks": 10.000000000000016,
+  "new": 0.6869603766077181,
+  "errNew": 0.24938431011618523
+ },
+ {
+  "weapon": "baza_prime",
+  "combo": "corrosive",
+  "wfsim": 0.7512073764341496,
+  "se": 0.0009362528298793442,
+  "virusStacks": null,
+  "new": 0.752607160515548,
+  "errNew": 0.18633790419404495
+ },
+ {
+  "weapon": "baza_prime",
+  "combo": "magnetic",
+  "wfsim": 0.5766771141003395,
+  "se": 0.00022363470112353494,
+  "virusStacks": null,
+  "new": 0.5769366807989103,
+  "errNew": 0.04501075076921435
+ },
+ {
+  "weapon": "afentis",
+  "combo": "viral",
+  "wfsim": 0.5735459616345188,
+  "se": 0.0017454775338451931,
+  "virusStacks": 3.3990771579714583,
+  "new": 0.5702639113816483,
+  "errNew": -0.5722384032688654
+ },
+ {
+  "weapon": "afentis",
+  "combo": "corrosive",
+  "wfsim": 0.6125583010304048,
+  "se": 0.002645962700526264,
+  "virusStacks": null,
+  "new": 0.6069442041257158,
+  "errNew": -0.9165000123653955
+ },
+ {
+  "weapon": "afentis",
+  "combo": "magnetic",
+  "wfsim": 0.544801800247004,
+  "se": 0.0007004297651048382,
+  "virusStacks": null,
+  "new": 0.5442137187045899,
+  "errNew": -0.10794412612943338
+ },
+ {
+  "weapon": "akstiletto_prime",
+  "combo": "viral",
+  "wfsim": 0.47738071554467454,
+  "se": 0.0010950536923366686,
+  "virusStacks": 9.999999999999995,
+  "new": 0.4815668831864881,
+  "errNew": 0.8769033824580275
+ },
+ {
+  "weapon": "akstiletto_prime",
+  "combo": "corrosive",
+  "wfsim": 0.4788195675666057,
+  "se": 0.0011966572487135507,
+  "virusStacks": null,
+  "new": 0.48271454393135244,
+  "errNew": 0.8134538829608129
+ },
+ {
+  "weapon": "akstiletto_prime",
+  "combo": "magnetic",
+  "wfsim": 0.5345626765579707,
+  "se": 0.00025907747476586765,
+  "virusStacks": null,
+  "new": 0.5348151248831652,
+  "errNew": 0.047225205998291386
+ },
+ {
+  "weapon": "kompressa_prime",
+  "combo": "viral",
+  "wfsim": 0.1279471176378422,
+  "se": 0.00037961341586860404,
+  "virusStacks": null,
+  "new": 0.12519754299434327,
+  "errNew": -2.1489930326384354
+ },
+ {
+  "weapon": "kompressa_prime",
+  "combo": "corrosive",
+  "wfsim": 0.1279471176378422,
+  "se": 0.00037961341586860404,
+  "virusStacks": null,
+  "new": 0.12519754299434327,
+  "errNew": -2.1489930326384354
+ },
+ {
+  "weapon": "kompressa_prime",
+  "combo": "magnetic",
+  "wfsim": 0.5163676196347496,
+  "se": 0.0012561825144148074,
+  "virusStacks": 10.000000000000004,
+  "new": 0.5113597225402178,
+  "errNew": -0.9698317446927063
+ },
+ {
+  "weapon": "supra_vandal",
+  "combo": "viral",
+  "wfsim": 0.7458581716327284,
+  "se": 0.001169401019836668,
+  "virusStacks": 9.999999999999961,
+  "new": 0.7453756209133251,
+  "errNew": -0.0646973831964548
+ },
+ {
+  "weapon": "supra_vandal",
+  "combo": "corrosive",
+  "wfsim": 0.8160346628477373,
+  "se": 0.0010762003795542461,
+  "virusStacks": null,
+  "new": 0.815761167018239,
+  "errNew": -0.03351522207940549
+ },
+ {
+  "weapon": "supra_vandal",
+  "combo": "magnetic",
+  "wfsim": 0.5926894731878118,
+  "se": 0.0003058953631610346,
+  "virusStacks": null,
+  "new": 0.59245478740732,
+  "errNew": -0.039596751943227204
+ },
+ {
+  "weapon": "cedo",
+  "combo": "viral",
+  "wfsim": 0.5401013544140613,
+  "se": 0.0008960634166898567,
+  "virusStacks": 1.5066216766953038,
+  "new": 0.5427531537816617,
+  "errNew": 0.49098180293905
+ },
+ {
+  "weapon": "cedo",
+  "combo": "corrosive",
+  "wfsim": 0.5559118524665633,
+  "se": 0.0012753968524878338,
+  "virusStacks": null,
+  "new": 0.5600112434805695,
+  "errNew": 0.7374174513130827
+ },
+ {
+  "weapon": "cedo",
+  "combo": "magnetic",
+  "wfsim": 0.532981348788528,
+  "se": 0.000532534499368143,
+  "virusStacks": null,
+  "new": 0.5334070064640503,
+  "errNew": 0.07986352177047351
+ }
+]

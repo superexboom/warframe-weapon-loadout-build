@@ -1,0 +1,7944 @@
+{
+ "scale": 0.8402764137660713,
+ "headshotChance": 0.5,
+ "rows": [
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/AkLexPistols",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.05782183254006,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Larkspur",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 5.301736998403564,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Contagious Spread",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Kohm/KuvaKohm",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 14.823540437544588,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sweeper",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentShotgun",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.2809261415865748,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/Miter/TnoMiter",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 2.0656696213232317,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Krohkur",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnEgyptSwd/GrnEgyptSwdWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.168926643948163,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Redeemer",
+   "path": "/Lotus/Weapons/Tenno/Melee/Gunblade/TnoGunblade",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 8.743478272246454,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Infested/Pistols/InfBeamPistol/InfBeamPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 9.367627267187885,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/QuantaVandal",
+   "fireMode": 2,
+   "slot": "primary",
+   "kills": null,
+   "error": "fire mode 2 is auxiliary melee, outside nonmelee scope",
+   "mods": 8
+  },
+  {
+   "weapon": "Machete Wraith",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerMachetteAndCleaver/WraithMacheteWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.560121603471387,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Kraken/KuvaKraken",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 2.053448944149695,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tak & Lug",
+   "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/MortiforShieldAndSword/MortiforShieldAndSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.938123352632096,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Viciss",
+   "path": "/Lotus/Weapons/Lasria/LasGooSickle/LasGooSicklePlayerWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.4190272134112085,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenora Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTenora/TenoraPrimeWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.4576927433292951,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Argo & Vel",
+   "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/DaxDuviriMaceShieldWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 3.9938011125789226,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TennoStars",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.10754943002125428,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/1999EntHybridPistolWeapon/1999EntHybridPistolWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.8095697661417939,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistol/HeavyPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 8.60682144621931,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Zenith",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/LoginPrimary/SundialRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 2.6012096862897796,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sarpa",
+   "path": "/Lotus/Weapons/Tenno/Melee/Gunblade/GunbladeAutomatic/TnoGunbladeAutomatic",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 1.0153403923988749,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.8854556646471585,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTigris/PrimeTigris",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.3833335401446372,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/WraithGorgon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 5.878280655845086,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/Bows/TnChoirBow/TnChoirBow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.6361898799673673,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Silva & Aegis",
+   "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/MeleeContestWinnerOne/TennoSwordShield",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.8264185541282512,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TnWraitheSidearm/TnWraitheSidearmWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.5401503586200072,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ceramic Dagger",
+   "path": "/Lotus/Weapons/Tenno/Melee/Dagger/CeramicDagger",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 29.28242876992451,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/AkLexPrimePistols",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.006062992677259,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": null,
+   "error": "fire mode 1 is auxiliary melee, outside nonmelee scope",
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/QuantaVandal",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.1505937202627923,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerFlakCannon/FlakCannon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CorpusUMP/PrismaCorpusUMP",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.04625306045626376,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sun & Moon",
+   "path": "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwordsWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.74428756363617,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vinquibus (Melee)",
+   "path": "/Lotus/Weapons/Tenno/Bayonet/TnBayonetMeleeWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 4.018487097960198,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dark Dagger",
+   "path": "/Lotus/Weapons/Tenno/Melee/Dagger/DarkDaggerBase",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.7728136342656395,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StalkerKunai",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 15.601546420977588,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ekhein",
+   "path": "/Lotus/Weapons/Thanotech/EntSphereHammer/EntSphereHammer",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.0676636666749055,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Boltace",
+   "path": "/Lotus/Weapons/Tenno/Melee/Tonfa/Boltonfa/Boltonfa",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.003305924314471,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Orvius",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/TeshinGlaive/TnTeshinGlaiveWep",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.3188206199368466,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Mutalist Quanta",
+   "path": "/Lotus/Weapons/Infested/LongGuns/InfCrpShockSwarm/InfCrpShockSwarmRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.40085975962494624,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Ferrox",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 5.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Syndicates/CephalonSuda/LongGuns/CSSimulor",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.06571109624447191,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nikana",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/KatanaAndWakizashi/Katana",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.1213843954371752,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tatsu",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/TnTwoHandedKatana/TnTwoHandedKatana",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.0555747993768816,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboViperPistols",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.5848768066110464,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Corvas Prime",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeCorvas/PrimeCorvasWeapon",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 6.03953135819774,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Furax",
+   "path": "/Lotus/Weapons/Tenno/Melee/Fist/Fist",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 29.990757653913445,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrineerLightPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.6215039669357482,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Corufell",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Melee/ExaltedArchScythe/ExaltedAWScytheWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 2.3480461739218024,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Mios",
+   "path": "/Lotus/Weapons/Infested/Melee/Swords/Mios/Mios",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.119899950776639,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Wolf Sledge",
+   "path": "/Lotus/Weapons/Tenno/Melee/Hammer/ThrowingHammer",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.7168822497348473,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Larkspur Prime",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
+   "fireMode": 1,
+   "slot": "arch_gun",
+   "kills": 3.1031353477191597,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Imperator",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGun",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 5.021563429833509,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dread",
+   "path": "/Lotus/Weapons/Tenno/Bows/StalkerBow",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 12.525788192311815,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vaykor Hek",
+   "path": "/Lotus/Weapons/Syndicates/SteelMeridian/LongGuns/SMHek",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.932139954474385,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/GrnSniperRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.8274093342441553,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnWispRifle/TnWispRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.5742295540053395,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TnJetTurbine/TnJetTurbinePistolWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.2287303616261185,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Quanta",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 3.509592381126746,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Incendiary Coat",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/ShotgunVandal",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 20.1502138336289,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Quartakk/KuvaQuartakk",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 5.017540812494181,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Edun",
+   "path": "/Lotus/Weapons/Tenno/Melee/Polearms/DaxDuviriPolearm/DaxDuviriPolearmWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.092748937706597,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cyngas",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchBurstGun/ArchBurstGun",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 6.380737903010346,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Orthos",
+   "path": "/Lotus/Weapons/Tenno/Melee/Polearms/PolearmWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.634966824894222,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/AllNew1hSG/AllNew1hSG",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 3.002988700339159,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tekko",
+   "path": "/Lotus/Weapons/Tenno/Melee/Gauntlet/BrawlerKnuckles/BrawlerKnuckles",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.6152819658231086,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kogake Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/PrimeKogake/KogakePrimeKnuckles",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.1777705957157325,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Prisma Obex",
+   "path": "/Lotus/Weapons/Corpus/Melee/KickAndPunch/PrismaObex",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/QuillDartgun/QuillDartGunWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.7873669616770304,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Secura Penta",
+   "path": "/Lotus/Weapons/Syndicates/PerrinSequence/LongGuns/PSPenta",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.2881213412370935,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.0113635107219934,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sarofang Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Axe/PrimeVorunaAxeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 9.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathocyst",
+   "path": "/Lotus/Weapons/Infested/Melee/InfBoomerang/InfBoomerangWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 1.5395024865867235,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tatsu Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeTatsu/PrimeTatsuWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.597197669205843,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ghoulsaw",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnGhoulSaw/GrnGhoulSawPlayer",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.4806476759261615,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniper",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 5.275441411630983,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Heat Sword",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/HeatSword/HeatLongSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.0055882839934687,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimePyrana/PrimePyranaPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.222077985858745,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniper",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 6.397572808809981,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Solstice Scythe",
+   "path": "/Lotus/Weapons/Tenno/Melee/Scythe/ParisScythe/VariantXmasScythe",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.5778098926817408,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gazal Machete",
+   "path": "/Lotus/Weapons/Tenno/Melee/PersianMachete/DjinnMachete",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.150533117412659,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Prisma Machete",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerMachetteAndCleaver/PrismaMachete",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.2381015879909745,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Corvas",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/LaunchGrenade/ArchCannon",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 4.490693748335094,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Halikar",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnBoomerang/GrnBoomerang",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.7444942677524657,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Incendiary Coat",
+   "path": "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanPumpShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 9.05535673661607,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nikana Variant",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/KatanaAndWakizashi/VariantKatana",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.2898632530576354,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.0860374086142977,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Praedos",
+   "path": "/Lotus/Weapons/Tenno/Zariman/Melee/Tonfas/ZarimanTonfaWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.430128018548995,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.5936882290436016,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVasto/PrimeVastoPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 17.819654519775156,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cedo",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.1259536014769841,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dorrclave",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/TnDagathBladeWhip/TnDagathBladeWhip",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Livia",
+   "path": "/Lotus/Weapons/Corpus/Melee/CrpBriefcase2HKatana/CrpBriefcase2HKatana",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.480505483692646,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ankyros",
+   "path": "/Lotus/Weapons/Tenno/Melee/Gauntlet/Gauntlet",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressa",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.4980398793801969,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkRifleWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.614389174139437,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.02471975700006268,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/LaserAimRifle/LaserAimRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.0948359651700699,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Convectrix",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSplitLaser/CrpSplitLaser",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 5.957634536341169,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Fluctus",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/RocketArtillery/ArchRocketCrossbow",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 5.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Rakta Dark Dagger",
+   "path": "/Lotus/Weapons/Syndicates/RedVeil/Melee/RVDarkDagger",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.338821638947781,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.1252494316043617,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Carmine Penta",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/CarminePenta",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.6340334030334672,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cerata",
+   "path": "/Lotus/Weapons/Infested/Melee/Glaives/PunctureGlaive/PunctureGlaiveWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.5104863450950153,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ether Sword",
+   "path": "/Lotus/Weapons/Tenno/Melee/LongSword/EtherSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.770606973938152,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimePandero/PanderoPrimeWeapon",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 4.022529325774914,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deth Machine Rifle Prime",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeDethMachineRifle",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.1885050521428755,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Haalvu",
+   "path": "/Lotus/Weapons/Sentients/SentOctaMiniGun/SentOctaMiniGun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.469627033299692,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dark Sword",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/DarkSword/DarkLongSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.991908788058219,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Paris Prime",
+   "path": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 13.03165002393936,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnRevolverRifle/TnRevolverRifleGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.2133956336038902,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Tenno/Rifle/BoltoRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 16.465601210584126,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Infested/Pistols/InfestedPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.6846957324221408,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dex Sybaris",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 5.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Broken Scepter",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnQueenSceptre/GrnQueenSceptreWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.538227528664568,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Contagious Spread",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShapeBlast/CrpShapeBlastShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 7.823622156270257,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Arca Plasmor",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShotgun/CrpShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.2066982371920565,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Laser Rifle",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/LaserRifle",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.32263565715880227,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 8.271817978171962,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistol/Pistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 9.796480683729191,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Quassus Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Warfan/PrimeQuassus/PrimeQuassusWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.97884173002309,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vectis",
+   "path": "/Lotus/Weapons/Tenno/Rifle/TennoSniperRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.437521494378885,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StalkerKunai",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.7273596829522233,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Prisma Burst Laser",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/PrismaBurstLaserPistol",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.13016670472045389,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpear",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.006515544314295,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Karyst Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeKaryst/PrimeKrisDagger",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "MK1-Furax",
+   "path": "/Lotus/Weapons/MK1Series/MK1Furax",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 26.514540211330754,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Incendiary Coat",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 26.153221316067842,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/MK1Series/MK1Furis",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.0742536844450328,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Quassus",
+   "path": "/Lotus/Weapons/Tenno/Melee/Warfan/TnBrokenFrameWarfan/TnBrokenFrameWarfanWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 6.471172032342771,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/SawnOffShotgun/TennoHandShotgun",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.0264589816568096,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Innodem",
+   "path": "/Lotus/Weapons/Tenno/Zariman/Melee/Dagger/ZarimanDaggerWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.409298390457325,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeHystrix/PrimeHystrixWeapon",
+   "fireMode": 3,
+   "slot": "secondary",
+   "kills": 0.6404236143968294,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dakra Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/CronusSword/PrimeCronusLongSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.7319328268458065,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Synoid Heliocor",
+   "path": "/Lotus/Weapons/Syndicates/CephalonSuda/Melee/CSHeliocor",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.511691573671085,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/HeavyPistolVariant",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.13493455648834396,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPox",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.4111092795322446,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Multron",
+   "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraWeapon",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.14532576240096184,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/LaserAimRifle/LaserAimRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.6421672602873221,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Incendiary Coat",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeStrun/PrimeStrunWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 29.44326233706123,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Karak",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/GrineerM16Rifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.48510378974684054,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanPumpShotgun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 13.271081056186542,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Burston Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 10.231818505692651,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kama",
+   "path": "/Lotus/Weapons/Tenno/Melee/DualKamas/SingleKama",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.42790472921194433,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Zaw",
+   "path": "/Lotus/Weapons/Ostron/Melee/LotusModularWeaponVariant",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.006777448377003004,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrineerBulbousSMG/Prisma/PrismaTwinGremlinsWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.2542364621094126,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/PrimeAkimboShotGun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 7.8304437376076095,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kesheg",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerHalberd/GrnHalberd",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.5151192871381935,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Infested/LongGuns/QuantaFullyInfested/InfQuantaRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.4956289945317875,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.4430612756315355,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Phaedra",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchLongRifle/ArchLongRifle",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 6.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dex Sybaris",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.218016719403331,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Ichor",
+   "path": "/Lotus/Weapons/Tenno/Melee/Axe/DualInfestedAxesWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 51.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Contagious Spread",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Sobek/KuvaSobek",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 12.155448796013083,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "MK1-Braton",
+   "path": "/Lotus/Weapons/Tenno/Rifle/StartingRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 6.452028247775545,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deth Machine Rifle",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/DethMachineRifle",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.1338535454915568,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Helstrum",
+   "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/SwarmerWeapon",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.008748012993586962,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/1999InfSporePistol/1999InfSporePistolWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 5.038750791434544,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Caustacyst",
+   "path": "/Lotus/Weapons/Infested/Melee/InfEmbolistScythe/InfestedScythe",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.057830872814781,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Lasria/LasSilencedPistol/LasSilencedPistolWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.6284792410801685,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Karak/KuvaKarak",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.0115317770511796,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrineerLightPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.10045134762658525,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CorpusUMP/CorpusUMP",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.04625306045626376,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Gear/MiningLaserSolarisWeaponA",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.24442446870931867,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ruvox",
+   "path": "/Lotus/Weapons/Thanotech/EntFistIncarnon/EntFistIncarnon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.0184889025484014,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Burst Laser",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/BurstLaserPistol",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.1812589007527362,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Mutalist Cernos",
+   "path": "/Lotus/Weapons/Infested/Bow/InfCernosBow/InfCernos",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.0169610394799733,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Telos Boltace",
+   "path": "/Lotus/Weapons/Syndicates/ArbitersOfHexis/Melee/AHBoltace",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 9.170000286093218,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Lacera",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/StalkerMios/StalkerMios",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.0031167939426546,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Quartakk",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFourBarrelRifle/GrnFourBarrelRifleWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.3514110806787357,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 19.065172675574956,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Braton",
+   "path": "/Lotus/Weapons/Tenno/Rifle/Rifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 8.06119319113578,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/DoubleBarrelShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.159935831291093,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Nukor/KuvaNukor",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 4.038288781589614,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "War Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeWar/PrimeWarWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.021393435719036,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gram Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeGram/PrimeGram",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.023256383911723,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vaykor Sydon",
+   "path": "/Lotus/Weapons/Syndicates/SteelMeridian/Melee/SMSydon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 8.004855115115086,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/MK1Series/MK1Kunai",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 2.157310627210046,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/DualMagnus",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.1228087385384935,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrnScopedPistolPlayer",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.08996822159259932,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.08821131080603051,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpSonificBlastor/CrpBlastorWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.0356968556629738,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cadus",
+   "path": "/Lotus/Weapons/Tenno/Melee/Staff/SingleStaff",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.994793813734838,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Glaive Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/PrimeGlaive/PrimeGlaiveWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.7922983079583847,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/AutoPistolVariant",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.11607454399445372,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Phantasma Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.10383827339035967,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Mutalist Quanta",
+   "path": "/Lotus/Weapons/Infested/LongGuns/InfCrpShockSwarm/InfCrpShockSwarmRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.028859055556235136,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nataruk",
+   "path": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPlayerWep",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.795257190736555,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/Gunbrella/ShrineMaidenGunbrellaWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.8316055462538428,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Opticor",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.433452727553857,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Paracesis",
+   "path": "/Lotus/Weapons/Orokin/BallasSword/BallasSwordWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.0146347484270155,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sancti Tigris",
+   "path": "/Lotus/Weapons/Syndicates/NewLoka/LongGuns/NLTigris",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.553095135378641,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Verglas Prime",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentinelFreezeRayPrimeRifle",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 2.7308350307406157,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombs",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.06786637956080288,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBoltor/PrimeBoltor",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 15.062353553919728,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Melee",
+   "path": "/Lotus/Weapons/Mitw/MITWOctopedeSweepWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.009858155846514394,
+   "error": null,
+   "mods": 0
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.21105226138932887,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Argo & Vel",
+   "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/DaxDuviriMaceShieldWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.768048214787,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Reconifex",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnBeltFedRifle/TnBeltFedRifleWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.584299777971549,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Skana Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/LongSword/SkanaPrime",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 15.782780901483129,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tipedo Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Staff/TipedoPrime/TipedoPrimeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.7694419736586315,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Haalvu",
+   "path": "/Lotus/Weapons/Sentients/SentOctaMiniGun/SentOctaMiniGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.3229966463102407,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dera Vandal",
+   "path": "/Lotus/Weapons/ClanTech/Energy/DeraVandal",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 6.17876504834746,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/BurstRifle/GrnBurstRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.2997891408837441,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Arum Spinosa",
+   "path": "/Lotus/Weapons/Infested/Melee/InfWarfan/InfWarfanWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 8.006212128001017,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Zenistar",
+   "path": "/Lotus/Weapons/Tenno/Melee/SunDialAxe/SundialAxeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.130112538925029,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sweeper Prime",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeSentShotgun",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 1.655353457939651,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Tenno/Rifle/LatronPrime",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 12.883750466225289,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrnScopedPistolPlayer",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.34169388753460894,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Grigori",
+   "path": "/Lotus/Weapons/Corpus/Melee/CrpBriefcaseScythe/CrpBriefcaseScythe",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 8.680024506631753,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Galatine Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeGalatine/PrimeGalatine",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.371998227869673,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombs",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.263985899029762,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnOraxiaFlechette/TnOraxiaFlechette",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.7021349167512695,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.7141017426036118,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Redeemer Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Gunblade/RedeemerPrime/RedeemerPrimeWep",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.007243344440979,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TennoTommyGun/TennoTommyGunRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Braton Prime",
+   "path": "/Lotus/Weapons/Tenno/Rifle/BratonPrime",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.6325526091938247,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pulmonars",
+   "path": "/Lotus/Weapons/Infested/Melee/Nunchaku/InfNunchuck/InfNunchuck",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Rumblejack",
+   "path": "/Lotus/Weapons/Operator/Melee/DrifterTazer/DrifterTazerPlayerWep",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.9988345157433107,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Quellor",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnRailjackRifle/RailjackRifleGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.3367628546697998,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Melee",
+   "path": "/Lotus/Types/Game/LotusSpeedballMeleeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": null,
+   "error": "weapon slot polarity data is incomplete; capacity validation refuses to assume Forma",
+   "mods": 0
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 8.105818676699341,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/AutoPistolVariant",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.7541491055352704,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/LiDagger/LiDagger",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.09553465619057422,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Fang Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/DualDagger/FangPrimeDagger",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.179726266387689,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Mausolon",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+   "fireMode": 1,
+   "slot": "arch_gun",
+   "kills": 5.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/PistolVariant",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.6211206871181878,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sybaris",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/TnoLeverActionRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.9295050697106395,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Paracesis",
+   "path": "/Lotus/Weapons/Orokin/BallasSword/TNWQuestBallasSwordWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.2822875400089585,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/PrimeThrowingStar/PrimeHikou",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.11119866107680176,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Lasria/LasGooAK/LasGooAKPlayerWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 27.017032598337366,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Endura",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/ThreeLeaf/ThreeLeaf",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.172767524251754,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Buzlok",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.0023927249408216555,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Syndicates/SteelMeridian/Pistols/SMMarelok",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.0508445550297787,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.4783826494351686,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLotusPodShotgun/TnoLotusPodShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.8123698260396655,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Prime Laser Rifle",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeLaserRifle",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.5878476144467404,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 30.6902016465342,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/CrossBow",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.7360050559181077,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 10.564330809500758,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Burston",
+   "path": "/Lotus/Weapons/Tenno/Rifle/BurstRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 9.837799337396238,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistol/BurstPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.5340608884971556,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Wolf Sledge",
+   "path": "/Lotus/Weapons/Tenno/Melee/Hammer/ThrowingHammer",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 2.8434621390462045,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.9825776336436745,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tekko Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/PrimeTekko/PrimeTekko",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.625981655419059,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Syndicates/ArbitersOfHexis/LongGuns/AHBoltor",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 12.107815848165044,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Glaxion",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpFreezeRay/CrpFreezeRayRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.1221828203751816,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/GrnAssaultRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.7100845557220222,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vinquibus",
+   "path": "/Lotus/Weapons/Tenno/Bayonet/TnBayonetRifleWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.011163900794604387,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/HarlequinGun/HarlequinPistols",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.1499410566867878,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Skana",
+   "path": "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 22.633871130606206,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Infested/Pistols/InfestedDartPistol/InfestedDartPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.09649760919588446,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ohma",
+   "path": "/Lotus/Weapons/Corpus/Melee/CrpTonfa/CrpTonfa",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.919424021348074,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Fang",
+   "path": "/Lotus/Weapons/Tenno/Melee/DualDagger/DualDagger",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.9515525764000932,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.5926467358461152,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kestrel Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/PrimeKestrel/PrimeKestrel",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.9015271934022745,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nagantaka Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeNagantaka/PrimeNagantakaWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.4552899207870245,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Burst Laser Prime",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeBurstLaserPistol",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.18104672368922958,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Karak Wraith",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerM16Homage/KarakWraith",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.587950581999094,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cobra & Crane Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/PrimeCobraAndCrane/PrimeCobraAndCraneWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 1.2948530532055114,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deconstructor",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.03168858992736845,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Tenno/Rifle/HeavyRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.8409693308091394,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Zoren",
+   "path": "/Lotus/Weapons/Tenno/Melee/Axe/DualAxeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.4565588910302911,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Karyst",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/KrisDagger/KrisDagger",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Heat Swords",
+   "path": "/Lotus/Weapons/Tenno/Melee/DualShortSword/DualHeatSwords",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.098635166241165,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Syam",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/DaxDuviriKatana/DaxDuviriKatanaWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.27097467995379587,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnModQuestRifle/TnModQuestRifleWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.4225543475246645,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ack & Brunt",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerTylAxeAndBoar/RegorAxeShield",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 44.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Atterax",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerWhip/GrineerWhip",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.6644636531139607,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "MK1-Paris",
+   "path": "/Lotus/Weapons/MK1Series/MK1Paris",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 9.216760918480112,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Xoris",
+   "path": "/Lotus/Weapons/Corpus/Melee/Glaive/CrpGhostCatcherGlaive/CrpGhostCatcherGlaive",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.4954757557520244,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/QuillDartgun/QuillDartGunWeapon",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 3.1833930595392053,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistol/BurstPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 2.585161270941537,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistol/LatoPrime",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 23.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.22160551949688134,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 11.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/AllNew1hSG/AllNew1hSG",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.2436112454213015,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Phantasma",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 5.86870299215099,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/SundialGun/SundialPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.463455166373813,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vinquibus (Melee)",
+   "path": "/Lotus/Weapons/Tenno/Bayonet/TnBayonetMeleeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.018487097960198,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Venato",
+   "path": "/Lotus/Weapons/Sentients/SentJointedScythe/SentJointedScytheWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.3404588478077826,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tonbo",
+   "path": "/Lotus/Weapons/Tenno/Melee/Polearms/FlowerPowerPolearm/FlowerPowerPolearmWep",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.8997042697896207,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Coda Pathocyst",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/Melee/CodaPathocyst/CodaPathocyst",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.3239748327014995,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAfuris/PrimeAFurisWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.5201250764603715,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Mandonel",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunWeapon",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 2.6228522035539443,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Zenith",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/LoginPrimary/SundialRifle",
+   "fireMode": 2,
+   "slot": "primary",
+   "kills": 0.10904617479488499,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Twin Vipers Wraith",
+   "path": "/Lotus/Weapons/Grineer/Pistols/WraithTwinVipers/WraithTwinVipers",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.2524732507589937,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Tenno/Rifle/TennoAR",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.206028822156605,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sydon",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnTrident/GrnTridentWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.6137216073867577,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/VariantTennoStars",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.1530131144099952,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kreska",
+   "path": "/Lotus/Weapons/Corpus/Melee/CrpVenusHatchet/CrpVenusHatchet",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.5808537897526973,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Thalys",
+   "path": "/Lotus/Weapons/Tenno/Zariman/Melee/HeavyScythe/ZarimanHeavyScythe/ZarimanHeavyScytheWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.089939142603762,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.12552211453288475,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Exec",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/CrpBigSlash/CrpBigSlash",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.3774616953326655,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Afentis",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearGunWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.093087704446964,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Paris",
+   "path": "/Lotus/Weapons/Tenno/Bows/HuntingBow",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 9.380994815218335,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Orthos Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Polearms/PrimePolearmWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.6353037475658185,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrnAmphisPistol/GrnAmphisPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.17754907127470643,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 6.144034754339978,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/WraithGorgon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.3008584418929368,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TigrisRedeemerSetPistol/TnoBladedPistols",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.8555270829468526,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kuva Grattler",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 5.875170978819407,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dragon Nikana",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/KatanaAndWakizashi/LowKatana",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.78356393585511,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cronus",
+   "path": "/Lotus/Weapons/Tenno/Melee/CronusSword/CronusLongSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.8914106179334029,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSynapse",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 5.313094882667429,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAthodai/PrimeAthodaiPistolWeapon",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 6.2093730306691155,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Syndicates/PerrinSequence/Pistols/PSDualCestra",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.6124941373338393,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/Gunbrella/ShrineMaidenGunbrellaWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.4229956827547716,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/RepeatingCrossbow/RepeatingCrossbow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.7023098609952063,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Atterax",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerWhip/GrineerWhip",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.01558538983342972,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Amprex",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/ChainLightningGun/ChainLightningRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.083204886914769,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Halikar Wraith",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnBoomerang/HalikarWraithWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 1.4058126895342284,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Skana",
+   "path": "/Lotus/Weapons/Tenno/Melee/DualShortSword/DualShortSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.7839956767373931,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/PrimeThrowingStar/PrimeHikou",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.7418637038785314,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Falcor",
+   "path": "/Lotus/Weapons/Corpus/Melee/Glaive/CrpGlaive/CrpGlaive",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.7971231252517421,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Cleavers",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerMachetteAndCleaver/DualCleaverWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.4283680875042313,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Brakk/KuvaBrakk",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 14.769153754105602,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vastilok",
+   "path": "/Lotus/Weapons/Grineer/Melee/GunBlade/GrnGunBlade/GrnGunblade",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 13.017372406526052,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpSentExperimentPistol/CrpSentExperimentPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.2771098702596873,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Magistar",
+   "path": "/Lotus/Weapons/Tenno/Melee/Maces/PaladinMace/PaladinMaceWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 49.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Prisma Ohma",
+   "path": "/Lotus/Weapons/Corpus/Melee/CrpTonfa/CrpPrismaTonfa",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.508486473931299,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.303523126169301,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pupacyst",
+   "path": "/Lotus/Weapons/Infested/Melee/Staff/InfStaff/InfStaff",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpSentAmalgPistol/CrpSentAmalgPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 1.0265203516786559,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Raza",
+   "path": "/Lotus/Weapons/Tenno/Melee/Soma/SomaDualKamas",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.2440187744467903,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nami Solo",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/CutlassAndPoignard/TennoCutlass",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 23.884306167944267,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Decurion",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/ArchHeavyPistols",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 5.905035718565156,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sybaris Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeSybaris/PrimeSybarisRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.6752394069940255,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Azothane",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/DaxDuviriTwoHandedKatana/DaxDuviriTwoHandedKatanaWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.4500665874634766,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/FiveShotSniper/FiveShotSniper",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.7451916671761847,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Fragor",
+   "path": "/Lotus/Weapons/Tenno/Melee/Hammer/HammerWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.1843258115152038,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/GrnAssaultRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.04625306045626376,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Tetra",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.0319840950409294,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.24751526904416643,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Heat Dagger",
+   "path": "/Lotus/Weapons/Tenno/Melee/Dagger/Dagger",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.5606657364233785,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dex Dakra",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/DexTheSecond/DexTheSecond",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.0835921760843954,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpRubanRifle/CrpRubanRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 2.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Okina Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeOkina/PrimeOkina",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.023236454238508,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.4413116619712836,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ignis",
+   "path": "/Lotus/Weapons/ClanTech/Chemical/FlameThrower",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.251198218940734,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/PrimeLiDagger/PrimeLiDagger",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.412828437239722,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 1.5133656983835524,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Jat Kusar",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnKusarigama/GrnKusarigamaWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.02229321314571353,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpBriefcaseAkimbo/CrpBriefcaseAkimboPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.0195804140246834,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sibear",
+   "path": "/Lotus/Weapons/Tenno/Melee/Hammer/IceHammer/IceHammer",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 23.51711823718353,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Heliocor",
+   "path": "/Lotus/Weapons/Cephalon/Melee/Hammer/CephHammerWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.8864754684418075,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpChargeGun/CrpChargeGun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 6.0197272633019665,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.2614772076217241,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vastilok",
+   "path": "/Lotus/Weapons/Grineer/Melee/GunBlade/GrnGunBlade/GrnGunblade",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.42293630650355,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/QuillDartgun/QuillDartGunWeapon",
+   "fireMode": 2,
+   "slot": "secondary",
+   "kills": 0.6350777502028147,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.041492472554268245,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Edun",
+   "path": "/Lotus/Weapons/Tenno/Melee/Polearms/DaxDuviriPolearm/DaxDuviriPolearmWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 3.751696112986153,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/BroncoPrime",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 25.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistol/CoHLoanerPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 10.006153306187981,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TnBardPistol/TnBardPistolGun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.9258772996963358,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sancti Magistar",
+   "path": "/Lotus/Weapons/Syndicates/NewLoka/Melee/NLMagistar",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 23.546351940413242,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.633626446860562,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeSoma/PrimeSomaRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.006155644904737,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.5276730433954,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/RepeatingCrossbow/RepeatingCrossbow",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.061442453442093314,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Verdilac",
+   "path": "/Lotus/Weapons/Archon/Melee/Whip/ArchonWhipPlayerWep",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.719387899193623,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vulcax",
+   "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/ThermocorMoaWeapon",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.8264501657087943,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Braton Vandal",
+   "path": "/Lotus/Weapons/Tenno/Rifle/VIPRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 5.147354785106832,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.6425872163276747,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Agendus",
+   "path": "/Lotus/Weapons/Corpus/Melee/ShieldAndSword/CrpHammerShield/CrpHammerShield",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 13.068754319648814,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVelox/PrimeVeloxPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.03441050394928413,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Tenno/Rifle/HeavyRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 4.0368297876084345,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Bo Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Staff/PrimeBo/PrimeBoWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 25.537570438884636,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.239738382852434,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kestrel",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/Boomerang/BoomerangWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.12306351425502526,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenora",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnBardRifle/TnBardRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 2.1384661024985854,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Masseter",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/TnChiselKanabo/TnChiselKanabo",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.346395139754947,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Torid",
+   "path": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.3937536789264233,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Skiajati",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/UmbraKatana/UmbraKatana",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.024112379251368,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Arum Spinosa",
+   "path": "/Lotus/Weapons/Infested/Melee/InfWarfan/InfWarfanWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 7.187255449140071,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeHystrix/PrimeHystrixWeapon",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 6.0015136283746084,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTiberon/PrimeTiberonRifle",
+   "fireMode": 2,
+   "slot": "primary",
+   "kills": 1.7898210490325508,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVasto/AkPrimeVasto/AkPrimeVastoPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.7799345880661583,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sarofang",
+   "path": "/Lotus/Weapons/Tenno/Melee/Axe/WolfFrameAxeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.378601673404686,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Amphis",
+   "path": "/Lotus/Weapons/Tenno/Melee/Staff/GrnStaff",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.137003798370547,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Grattler",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/ArchGRNAAGun",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 5.2747615129545835,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAthodai/PrimeAthodaiPistolWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.064572696048654,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Redeemer",
+   "path": "/Lotus/Weapons/Tenno/Melee/Gunblade/TnoGunblade",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.5138643813885677,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Jat Kittag",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerJetPoweredPolearm/GrineerJetPolearm",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.334079883654649,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pangolin Sword",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PangolinSword/PangolinLongSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.054720931334165,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/MK1Series/MK1Kunai",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.10087978808933717,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ether Daggers",
+   "path": "/Lotus/Weapons/Tenno/Melee/DualDagger/DualEtherDagger",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrnKohmPistol/GrnKohmPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.0501312299570396,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Venka",
+   "path": "/Lotus/Weapons/Tenno/Melee/Claws/TennoClaws",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.982479587603894,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Afentis Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 4.054482097287011,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Convectrix",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSplitLaser/CrpSplitLaser",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 3.0006925124423782,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Grigori",
+   "path": "/Lotus/Weapons/Corpus/Melee/CrpBriefcaseScythe/CrpBriefcaseScythe",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.688255707553656,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkjagara/AkJagaraPrime",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.5499843899351047,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Quassus Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Warfan/PrimeQuassus/PrimeQuassusWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 7.187255449140071,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Coda Mire",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/Melee/CodaMire",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.632553458447039,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ambassador",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpArSniper/CrpArSniperRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.46134212322033,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+   "fireMode": 2,
+   "slot": "secondary",
+   "kills": 9.40113858584783,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Infested/Pistols/InfestedDartPistol/InfestedDartPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.7838098170075967,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/Kunai",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.18256411633395309,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Concussion Rounds",
+   "path": "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSSynoidGammacor",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 2.8011152919868194,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Flux Rifle",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFluxRifle/CrpBEFluxRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.414191122122502,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kuva Ghoulsaw",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/Melee/Ghoulsaw/KuvaGhoulSaw",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.782406644910632,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Venato Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Scythe/PrimeVento/PrimeVentoScythe",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.024818455260861,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Kraken/KuvaKraken",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.074188977031664,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/BurstRifle/GrnBurstRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.23819735979179057,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Glaxion",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEGlaxion/CrpBEGlaxion",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.112705669512204,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerLeverActionRifle/PrismaGrinlokWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.1834830660376072,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Infested/Pistols/InfestedPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.016976073963680394,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 3.0616449708535525,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cedo Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.15298578891981796,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.37633837391832925,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Sentients/Shedu/SheduHeavyWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.7657821879408309,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/GlassKunai/GlassKunaiWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.2943395934103801,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrnDWUniques/GrnTwinKohmaks",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 5.379897848279674,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kronen Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Tonfa/TonfaContestWinnerPrime/TonfaContestWinnerPrimeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.616559770299608,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 23.305710220255325,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow",
+   "fireMode": 2,
+   "slot": "secondary",
+   "kills": 18.898180478899985,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrineerMicrowavegun/GrnMicrowavePistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.343065293762253,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Scoliac",
+   "path": "/Lotus/Weapons/Infested/Melee/Whip/InfestedWhip/InfestedWhipWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.3297250097504443,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.712022088823463,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ambassador",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpArSniper/CrpArSniperRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.128494332953331,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.7060562485480129,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Piercing Hit",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnOrokinRifle/GrnOrokinRifleWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.5289089141548298,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Amphis",
+   "path": "/Lotus/Weapons/Tenno/Melee/Staff/GrnStaff",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.177160627859282,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAksomati/PrimeAksomati",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.8643322564872327,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Xoris",
+   "path": "/Lotus/Weapons/Corpus/Melee/Glaive/CrpGhostCatcherGlaive/CrpGhostCatcherGlaive",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.48859979397274056,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sybaris Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeSybaris/PrimeSybarisRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 5.9053937713818625,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CorpusMinigun/DualCorpusMinigun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.7004325505913171,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/DrakeRifle/DrakeRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": null,
+   "error": "fire mode 1 is auxiliary melee, outside nonmelee scope",
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/VulkarWraith",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnChoirframeKunai/TnChoirframeKunai",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.37075720656947975,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePanthera/PrimePanthera",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.2287329086709016,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/VoidTrader/VTDetron",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.4121850818345876,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Basmu",
+   "path": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleNewWarGun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.5701800502174303,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Guandao",
+   "path": "/Lotus/Weapons/Tenno/Melee/Polearms/TnGuandaoPolearm/TnGuandaoPolearmWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.518904821263051,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/VariantTennoStars",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.2677877384096067,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Contagious Spread",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hek/KuvaHekWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 10.470111815148055,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Spinnerex",
+   "path": "/Lotus/Weapons/Tenno/Melee/Whips/SpiderWhip/SpiderWhipWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.040201334432132,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vectis Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 8.067240365727491,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Scindo Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Axe/PrimeScindo/PrimeScindoWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.104725464558729,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vulklok",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentElecRailgun",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.06733283073638618,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/PrimeBoar",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 18.009910258651683,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/HandShotGun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.0557360910821454,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/ClanTech/Energy/CrpHeavyRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.04625306045626376,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Braton",
+   "path": "/Lotus/Weapons/Tenno/Rifle/Rifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.579111629917448,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Zaw",
+   "path": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.006777448377003004,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ConclaveLeverPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.3514475076576398,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeMagnus/PrimeMagnusWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.569024982627851,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpBriefcaseAkimbo/CrpBriefcaseAkimboPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.7128125178196217,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kronen",
+   "path": "/Lotus/Weapons/Tenno/Melee/Tonfa/TonfaContestWinner/TennoTonfa",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.126181293274114,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Buzlok",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.006048600559826,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEDetron/CrpBEDetron",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 8.052668992644097,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpRubanRifle/CrpRubanRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.1466866295255738,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Phenmor",
+   "path": "/Lotus/Weapons/Tenno/Zariman/LongGuns/SemiAutoRifle/ZarimanSemiAutoRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 14.960345412485887,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/Rifle/VandalSniperRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.2736829580744384,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Slaytra",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnSharbola/GrnSharbolaWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.1540759245854857,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tipedo",
+   "path": "/Lotus/Weapons/Tenno/Melee/Staff/MonkSpade/TnoMonkStaff",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.679837145641445,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.012959346634970004,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Korrudo",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnSparring/GrnSpiderSparring/GrnSpiderSparring",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.260901369584892,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeEpitaph/PrimeEpitaphSidearmWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.8315094325860313,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistol/BroncoPrime",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.72568233006461,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/QuadShotgunBase",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.7670182950624767,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Rupture",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.1856223803314059,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Afentis Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.6023805860253313,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/VTGorgon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 6.134555186798921,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Stormbringer",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 2.7569594951185916,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Glaive Variant",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/LightGlaive/LightGlaiveWeaponVariant",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.18057149588813948,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sigma & Octantis",
+   "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/SundialSwordBoard/SundialBoardSword",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 2.946506409537674,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Opticor Vandal",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.297188187892975,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Syam",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/DaxDuviriKatana/DaxDuviriKatanaWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.265032358016405,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.3269114818954362,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Prisma Skana",
+   "path": "/Lotus/Weapons/VoidTrader/PrismaSkana",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 53.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistol/LatoPrime",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.4886221474695622,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dark Dagger",
+   "path": "/Lotus/Weapons/Tenno/Melee/Dagger/DarkDagger",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.002995032478454,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Anku",
+   "path": "/Lotus/Weapons/Tenno/Melee/Scythe/ParisScythe/ParisScythe",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 28.560214822080994,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/ClanTech/Energy/CrpHeavyRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.5418990966586705,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/Bows/PrimeCernos/PrimeCernos",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.7863267736949633,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shaku",
+   "path": "/Lotus/Weapons/Tenno/Melee/Nunchaku/TnoNunchaku/TnoNunchaku",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.0323366364265762,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hate",
+   "path": "/Lotus/Weapons/Tenno/Melee/Scythe/StalkerScytheWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 20.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/GlassKunai/GlassKunaiWeapon",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 2.2959069891380257,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/VoidTrader/PrismaGrakata",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.6004599048357657,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeStradavar/PrimeStradavarGun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.7091896720750022,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ether Reaper",
+   "path": "/Lotus/Weapons/Tenno/Melee/Scythe/EtherScytheWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.1085588514527656,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Amanata",
+   "path": "/Lotus/Weapons/Tenno/Melee/Polearms/Naginata/ShrineMaidenNaginataWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.9336198476946396,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/MK1Series/MK1Furis",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 12.21891179517572,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkor",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.10376359961747628,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "MK1-Strun",
+   "path": "/Lotus/Weapons/MK1Series/MK1Strun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 9.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Falcor",
+   "path": "/Lotus/Weapons/Corpus/Melee/Glaive/CrpGlaive/CrpGlaive",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 1.7563635146862935,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TnJetTurbine/TnJetTurbinePistolWeapon",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 4.062454222932537,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Paris Prime",
+   "path": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.064087449584845,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Okina",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/TennoSai/TennoSais",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.062914658284782,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.017391986885615,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Paris",
+   "path": "/Lotus/Weapons/Tenno/Bows/HuntingBow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.1013407242988418,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/DexFuris/DexFuris",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cobra & Crane",
+   "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/PacifistShieldAndSword/PacifistShieldSword",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.007244728283768209,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.6236658316206858,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Infested/LongGuns/InfWFAccompanyingPri/InfestedBurstRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.7099090766137124,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Stropha",
+   "path": "/Lotus/Weapons/Corpus/Melee/Gunblade/CrpGunBlade/CrpGunbladeWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 6.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/SawnOffShotgun/TennoHandShotgun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.982403513906978,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistol/LatoVandal",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.8108813736594017,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/VoidTrader/PrismaGrakata",
+   "fireMode": 2,
+   "slot": "primary",
+   "kills": 1.404776696535446,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Contagious Spread",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/ShotgunVandal",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 14.600362583680273,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/TwinGrakatas",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 4.606247825834734,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Phenmor",
+   "path": "/Lotus/Weapons/Tenno/Zariman/LongGuns/SemiAutoRifle/ZarimanSemiAutoRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 5.037998896989562,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 3.620747311634493,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Ether",
+   "path": "/Lotus/Weapons/Tenno/Melee/DualShortSword/DualEtherSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.831297729944652,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hirudo",
+   "path": "/Lotus/Weapons/Infested/Melee/InfWFAccompanyingSparring/InfestedKogake",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.9384037987812244,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 3.265304892748437,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TennoStars",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.10636955254867064,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dera",
+   "path": "/Lotus/Weapons/ClanTech/Energy/EnergyRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.656890841441866,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrnQueenGuardDualPistol/GrnQueenGuardDualPistols",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 5.115674620342919,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nepheri",
+   "path": "/Lotus/Weapons/Archon/Melee/DualDaggers/ArchonDualDaggersPlayerWep",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.01112468392814,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Braton Vandal",
+   "path": "/Lotus/Weapons/Tenno/Rifle/VIPRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.0939543979028916,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Daikyu Prime",
+   "path": "/Lotus/Weapons/Tenno/Bows/PrimeDaikyu/PrimeDaikyuBow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.590108969848952,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Akaten",
+   "path": "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeaponPS",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.30985251665057634,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBoltor/PrimeBoltor",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.0069959078879522,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Zoren Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Axe/PrimeZoren/PrimeZorenAxeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.110483194508613,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kestrel",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/Boomerang/BoomerangWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.10123335195003791,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tonkor",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGrenadeLauncher/GrnGrenadeLauncher",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.18219674347701365,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cerata",
+   "path": "/Lotus/Weapons/Infested/Melee/Glaives/PunctureGlaive/PunctureGlaiveWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.3838846524955868,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePanthera/PrimePanthera",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.061129467094827,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Broken War",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/StalkerTwo/StalkerTwoSmallSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.013134721747748,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica",
+   "fireMode": 2,
+   "slot": "secondary",
+   "kills": 24.095712770749806,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Keratinos",
+   "path": "/Lotus/Weapons/Infested/Melee/InfTransformClaw/InfTransformClawsWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.180661532420167,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Stormbringer",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.882976302672918,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sigma & Octantis",
+   "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/SundialSwordBoard/SundialBoardSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.021285217031396,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.5962227610632054,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Galatine",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/GreatSword/TennoGreatSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.143060345124414,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Melee",
+   "path": "/Lotus/Types/Enemies/TennoReplicants/OraxiaEnemy/OraxiaEnemyMeleeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.00038299627225046873,
+   "error": null,
+   "mods": 0
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon",
+   "fireMode": 2,
+   "slot": "secondary",
+   "kills": 10.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.537025699580052,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Concussion Rounds",
+   "path": "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSDroidArray",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 2.096220856565272,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/Bows/PrimeCernos/PrimeCernos",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.7863267736949633,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.7504903915866948,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kestrel Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/PrimeKestrel/PrimeKestrel",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.035710266512241,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpElectroMag/CrpElectroMag",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.6155322364943383,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/ClanTech/Bio/AcidDartPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.1712106570460744,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cryotra",
+   "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionWeapon",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.0015136915684020869,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 29.20015093217477,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.6716411787704601,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Batoten",
+   "path": "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeaponIP",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.3029166408328051,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanas",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.5634714565736798,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Lecta",
+   "path": "/Lotus/Weapons/Corpus/Melee/Whip/CorpusWhipWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CorpusUMP/PrismaCorpusUMP",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.8580296872192568,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.04625306045626376,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.9074428500066697,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Latron Wraith",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 6.095689722965762,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cassowar",
+   "path": "/Lotus/Weapons/Tenno/Melee/Polearms/TnHalberdPolearm/TnHalberdPolearmWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.0152891846117065,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Korumm",
+   "path": "/Lotus/Weapons/Archon/Melee/Trident/ArchonTridentPlayerWep",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.25975860517155,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenora",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnBardRifle/TnBardRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.4842522309808648,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeSoma/PrimeSomaRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 16.421235927642336,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Phantasma Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 7.118270055882819,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Stropha",
+   "path": "/Lotus/Weapons/Corpus/Melee/Gunblade/CrpGunBlade/CrpGunbladeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.674360351034001,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Tenno/Rifle/TennoAR",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 7.142775188259552,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Destreza Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PRapier/DestrezaPrime",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.945696391397025,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cobra & Crane",
+   "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/PacifistShieldAndSword/PacifistShieldSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Piercing Hit",
+   "path": "/Lotus/Weapons/Tenno/Rifle/BoltoRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.9724854520792814,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistol/RevolverPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.2576312149105147,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "MK1-Braton",
+   "path": "/Lotus/Weapons/Tenno/Rifle/StartingRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.699179085155001,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.4049155895734564,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ceti Lacera",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/StalkerMios/OperationsLacera",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.0041560409602575,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Verdilac",
+   "path": "/Lotus/Weapons/Archon/Melee/Whip/ArchonWhipPlayerWep",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 3.0074373792349807,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.1572683179859966,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Morgha",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher",
+   "fireMode": 1,
+   "slot": "arch_gun",
+   "kills": 2.530307775651111,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.7538418118558253,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboShotGun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.9319722985340783,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/SundialGun/SundialPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.2286729591204264,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.0835462410584289,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Kamas Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/PrimeDualKamas/PrimeDualKamas",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.40510882231757,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Obex",
+   "path": "/Lotus/Weapons/Corpus/Melee/KickAndPunch/KickPunchWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.5158501176991166,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Larkspur Prime",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 5.392087022367261,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TnYareliPistol/TnYareliPistolWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.5654142725865232,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/WraithLatron/WraithLatron",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 14.112872029532214,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.8126918199868831,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.16430325009572055,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Tenno/Bows/DaxDuviriAsymetricalBow/DaxDuviriAsymmetricalLongBowPlayerWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.455718678465226,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sporothrix",
+   "path": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpear",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.139188246831104,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnOraxiaFlechette/TnOraxiaFlechette",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.958409592614619,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vitrica",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/NWIIIOrokinSword/NWOrokinSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.242397383970001,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "GrnMiniSawMeleeWeapon",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnMiniSaw/GrnMiniSawMeleeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.5468741249409413,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ConclaveLeverPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 5.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/ClanTech/Energy/CrpLaserRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.0257884075866839,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Tenno/Rifle/SniperRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.6905582553583893,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.811244245858477,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeSicarus/PrimeSicarusPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 8.866599562443398,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSSynoidGammacor",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.603202771430682,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.1725461632151637,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Incendiary Coat",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/QuadShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 5.500456644403545,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Grimoire/TnDoppelgangerGrimoire",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.023177880864869604,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle",
+   "fireMode": 2,
+   "slot": "primary",
+   "kills": null,
+   "error": "fire mode 2 is auxiliary melee, outside nonmelee scope",
+   "mods": 8
+  },
+  {
+   "weapon": "Lanka",
+   "path": "/Lotus/Weapons/ClanTech/Energy/Railgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.361424920614762,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "AX-52",
+   "path": "/Lotus/Weapons/Lasria/AK47/TC2024AK47Weapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.0229992371437517,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/Magnum/Magnum",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.0382429091169416,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 6.039013448790699,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Zenith",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/LoginPrimary/SundialRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.055699951000866,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVelox/PrimeVeloxPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.8403132001742772,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Proboscis Cernos",
+   "path": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernos",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.9026494223883894,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZylok/ZylokPrimePistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 6.01982756061403,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnSMG/TnSMGWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.1219395574625586,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunsen",
+   "path": "/Lotus/Weapons/Tenno/Melee/Warfan/WarfanWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.023457309262109,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulmin",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.158836168616697,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Glaive",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/LightGlaive/LightGlaiveWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.18057149588813948,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Braton Prime",
+   "path": "/Lotus/Weapons/Tenno/Rifle/BratonPrime",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 5.854848473333108,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVasto/AkPrimeVasto/AkPrimeVastoPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.09940911734769764,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Machete",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerMachetteAndCleaver/Machete",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.3716044481707175,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/VariantSnowBalls",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.5073507373930045,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistol/RevolverPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 16.07203261660909,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Imperator Vandal",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGunVandal",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 8.130890660960839,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deconstructor Prime",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.13948632495664115,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrineerAkimboPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.942533184336509,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeSicarus/PrimeSicarusPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 5.608168292894135,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vinquibus",
+   "path": "/Lotus/Weapons/Tenno/Bayonet/TnBayonetRifleWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.972241051765195,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "MK1-Bo",
+   "path": "/Lotus/Weapons/MK1Series/MK1Bo",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 13.299079043072421,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CorpusHandShotgun/CorpusHandCannon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.8737508712921958,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Halikar Wraith",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnBoomerang/HalikarWraithWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.104593989673163,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TnOdaliskSmg/TnOdaliskSmgPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.2423356672157602,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Piercing Hit",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CorpusUMP/CorpusUMP",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.39424596515125987,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kuva Ayanga",
+   "path": "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 4.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/ClanTech/Chemical/RocketLauncher",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.7292902645330478,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathocyst",
+   "path": "/Lotus/Weapons/Infested/Melee/InfBoomerang/InfBoomerangWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.5470679657211613,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEDetron/CrpBEDetron",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 5.154235771009534,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunsen Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Warfan/PrimeGunsen/PrimeGunsenWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.5946433508560975,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dark Split-Sword (HeavyBlade)",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/DarkSword/DarkSwordDaggerHybridWeapon#HeavyBlade",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.153069594437296,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Jat Kusar",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnKusarigama/GrnKusarigamaWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.777028599247062,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Ferrox",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.8540201583589642,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboBolto",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.9796277450377169,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/SomaSidearm/AkimboSomaPistols",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.6165472371515274,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.071410350934738,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "MK1-Strun",
+   "path": "/Lotus/Weapons/MK1Series/MK1Strun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 9.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenora Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTenora/TenoraPrimeWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.5633365953216933,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/HeavyPistolVariant",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.0879736499323358,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vectis Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 6.196160395476786,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.30646374871488435,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Piercing Hit",
+   "path": "/Lotus/Weapons/Syndicates/ArbitersOfHexis/LongGuns/AHBoltor",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.7033555794403326,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sheev",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerCombatKnife/GrineerCombatKnife",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.6951914587582286,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cobra & Crane Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/SwordsAndBoards/PrimeCobraAndCrane/PrimeCobraAndCraneWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.248798266797397,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBomb",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.10924591099537229,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/ClanTech/Bio/AcidDartPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.10337188251337415,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.0087753159333106,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vericres",
+   "path": "/Lotus/Weapons/Tenno/Melee/Warfan/TnMoonWarfan/MoonWarfanWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.0689731367391175,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Opticor Variant",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/ConclaveBFG",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.11860795979400762,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Coda Caustacyst",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/Melee/CodaCaustacyst/CodaCaustacyst",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.032837178800234,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.003318069743016,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Keres",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/QuillSword/QuillDualSwords",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.528845071100353,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Phantasma",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.10383827339035967,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/DrakeRifle/DrakeRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.5348448327082587,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Volnus Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/PrimeVolnus/VolnusPrimeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.694879454383706,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dex Nikana",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/KatanaAndWakizashi/Dex2023Nikana/Dex2023Nikana",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.698924026444802,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pangolin Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimePangolinSword/PrimePangolinSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.183537933436938,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgris",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.7741199722699807,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeer",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.8465001267335017,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nami Skyla Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeNamiSkyla/PrimeNamiSkyla",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.662907346424874,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeCrossbow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.3913732439656532,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nikana Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeKatana/PrimeNikana",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.0941423761093105,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Glaxion Vandal",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpFreezeRay/Vandal/CrpFreezeRayVandalRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.3687101580629664,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulmin",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.6969989361884084,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Masseter Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeMasseter/PrimeMasseter",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.007537804968574,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/QuantaVandal",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.48068958136738504,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nagantaka Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeNagantaka/PrimeNagantakaWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 3.4273680121257564,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/SniperPistol/CrpScopeGun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.8555269030468562,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Afentis",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearGunWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 2.473299542611952,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Tetra",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.3824534436365088,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Quellor",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnRailjackRifle/RailjackRifleGun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.1286344253119749,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.012959346634970004,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/QuillDartgun/QuillDartGunWeapon",
+   "fireMode": 3,
+   "slot": "secondary",
+   "kills": 0.36544682112216575,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/PistolVariant",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.10337188251337415,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Syndicates/CephalonSuda/Pistols/CSDroidArray",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.28177059290229256,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.4007338166178012,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Prisma Dual Decurions",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchwingHeavyPistols/Prisma/PrismaArchHeavyPistols",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 7.976566838875476,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/DoubleBarrelShotgun/TennoDoubleBarrelShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.593935598874258,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.7297433476312951,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZylok/ZylokPrimePistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 4.145614844184743,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Infested/LongGuns/InfestedRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.044210229746284,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sybaris",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/TnoLeverActionRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 4.060344586031272,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Prova",
+   "path": "/Lotus/Weapons/ClanTech/Energy/ElectroProd",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.3128485222567416,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Arca Plasmor",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cedo",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.041166010915931,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Syndicates/RedVeil/Bows/RVCernos",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.5380672385905043,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunGun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.2959128453230008,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/DualVastos",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.2269523113462721,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaCatabolyst",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 13.012852979735765,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Quanta",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 6.3333133454166495,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeBallistica/PrimeBallistica",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 26.14869198422035,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dread",
+   "path": "/Lotus/Weapons/Tenno/Bows/StalkerBow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.083668391681385,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Latron",
+   "path": "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.092225590499477,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Coda Hirudo",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/Melee/CodaHirudo",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.123812623745014,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Velocitus",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/Railgun/ArchRailgun",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 10.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Volnus",
+   "path": "/Lotus/Weapons/Tenno/Melee/Hammer/GlassHammer/GlassHammer",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.994091184698178,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Contagious Spread",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/1999InfShotgun/1999InfShotgunWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.092116730289285,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkRifleWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.026893845922503545,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistol/CoHLoanerPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.3752742557190185,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.3501838220320811,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hespar",
+   "path": "/Lotus/Weapons/Tenno/Melee/HeavyScythe/DuviriScythe/DuviriHeavyScytheWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.0060158923719174,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Redeemer Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Gunblade/RedeemerPrime/RedeemerPrimeWep",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 12.031030993944102,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nepheri",
+   "path": "/Lotus/Weapons/Archon/Melee/DualDaggers/ArchonDualDaggersPlayerWep",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 2.57708065683321,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/Miter/TnoMiter",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.6840886174053565,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Rupture",
+   "path": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.1856223803314059,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrineerLeverActionPistol/GLAPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.4326355591869283,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nagantaka",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/GarudaCrossbow/GarudaCrossbow",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 2.1411146485190713,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Syndicates/ArbitersOfHexis/Pistols/AHAkbolto",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.6721151591021273,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kohm",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnSpark/GrnSparkRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.2041515502519418,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Arbucep",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 3.9197327301704816,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeBallistica/PrimeBallistica",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 5.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dera",
+   "path": "/Lotus/Weapons/ClanTech/Energy/EnergyRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 4.977520439481749,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Lacerten",
+   "path": "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeaponIS",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.2765831439177934,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Purgator 1",
+   "path": "/Lotus/Weapons/Lasria/LasGrenadeLauncher/LasrianNoxPlayerWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.031551991236272,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistol/HandShotGunVariant",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.1407582919253747,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TennoUzi/TennoUzi",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.2393997805408001,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TennoTommyGun/TennoTommyGunRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.0982804592532873,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrnHeavyPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.3727711186007182,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Silva & Aegis Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/PrimeSilvaAegis/PrimeSilvaAegis",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Torid",
+   "path": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 6.0244572043282885,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnoPrmryXbow/TnoPrmryXbowWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.2987173136844038,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkbolto/PrimeAkBoltoWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.18660835769914041,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Gear/MiningLaserBWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.24442446870931867,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCorinth/PrimeCorinth",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.22208230675073637,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Plasma Sword",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PlasmaSword/PlasmaLongSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.7668582994555688,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaHema",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.055988561456107,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Paracesis",
+   "path": "/Lotus/Weapons/Orokin/BallasSword/TNWQuestBallasSwordWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 18.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Cephalon/Primary/CephPrimary/CephPrimary",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.05596080439861184,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Coda Motovore",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/Melee/InfestedHammer/InfLichHammerWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.036471181642767,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Arca Titron",
+   "path": "/Lotus/Weapons/Corpus/Melee/Hammer/CorpusHammerWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.332672459134957,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/GrnAssaultRifle",
+   "fireMode": 2,
+   "slot": "primary",
+   "kills": 0.7100845557220222,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Harmony",
+   "path": "/Lotus/Weapons/Tenno/Melee/Scythe/TnChoirScythe/TnChoirScythe",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.733630989365228,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Lesion",
+   "path": "/Lotus/Weapons/Infested/Melee/TipedoStaff/InfTipedoStaff",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.395097068591253,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Twin Krohkur",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnEgyptSwd/DualGrnEgyptSwdWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.005086098410514,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.2171015741033697,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Phage",
+   "path": "/Lotus/Weapons/Infested/LongGuns/Tentacluster/InfestedShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 7.987280943254404,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Agendus",
+   "path": "/Lotus/Weapons/Corpus/Melee/ShieldAndSword/CrpHammerShield/CrpHammerShield",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Prova Vandal",
+   "path": "/Lotus/Weapons/ClanTech/Energy/VandalElectroProd",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.738910879827899,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Paris",
+   "path": "/Lotus/Weapons/Tenno/Bows/ValentinesConclaveVariantBow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.9389469534310007,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Lasria/LasGooAK/LasGooAKPlayerWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.928665989410412,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pennant",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/TnRailjackGreatKatana/TnRailJackGreatKatanaWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.7660457389639497,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Mandonel",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunWeapon",
+   "fireMode": 1,
+   "slot": "arch_gun",
+   "kills": 8.854924681022375,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboAutoPistols",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PaxDuviricusShotgun/PaxDuviricusShotgun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.042481363790737,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pride",
+   "path": "/Lotus/Weapons/Tenno/Melee/HeavyScythe/TnOrionSiriusScythe/TnSiriusScytheWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.9477196250278337,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTiberon/PrimeTiberonRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.4671188760878344,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Fragor Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/PrimeFragor/PrimeFragor",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.366997800407665,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 5.005486426736057,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Guandao Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Polearms/PrimeGuandao/PrimeGuandaoWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.065390647036223,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Burston",
+   "path": "/Lotus/Weapons/Tenno/Rifle/BurstRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.0802536433245473,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Bo",
+   "path": "/Lotus/Weapons/Tenno/Melee/Staff/Staff",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 29.34186360436807,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Orvius",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/TeshinGlaive/TnTeshinGlaiveWep",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 0.5534569980486779,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Contagious Spread",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeStrun/PrimeStrunWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 14.824634003006993,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Serro",
+   "path": "/Lotus/Weapons/Corpus/Melee/Polearm/CorpusPolearm01/CorpusPolearmWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.091781420577287,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.2251714919592078,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeHystrix/PrimeHystrixWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.411703068201291,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.0106464523863976,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ninkondi",
+   "path": "/Lotus/Weapons/Tenno/Melee/Nunchaku/Nunchaku/Nunchaku",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.5197208319362696,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Jaw Sword",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/JawSword/JawLongSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.9476284037287986,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Glaive Variant",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/LightGlaive/LightGlaiveWeaponVariant",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.2804722205044551,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.020770110525917485,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Kamas",
+   "path": "/Lotus/Weapons/Tenno/Melee/DualKamas/DualKamas",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.0105888463400916,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Rupture",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.047809102289063,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Harpak",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnHarpoonGun/GrnHarpoonGun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 1.752174292761873,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanas",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.06786637956080288,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Hellfire",
+   "path": "/Lotus/Weapons/Infested/LongGuns/QuantaFullyInfested/InfQuantaRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.3815105197511114,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrnOrokinPistol/GrnOrokinPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.4881836784104037,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Gear/MiningLaserWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.24442446870931867,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/LiDagger/LiDagger",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.3215690234339368,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Furax Wraith",
+   "path": "/Lotus/Weapons/Tenno/Melee/Fist/FuraxWraith",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 57.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Destreza",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/TnoRapier/TnoRapier",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.0667152911321125,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kogake",
+   "path": "/Lotus/Weapons/Tenno/Melee/BrassKnuckles/BrassKnuckles",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.3312733008773097,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TennoUzi/TennoUzi",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.11152017876790865,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Latron Prime",
+   "path": "/Lotus/Weapons/Tenno/Rifle/LatronPrime",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 9.141893088651976,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Daikyu",
+   "path": "/Lotus/Weapons/Tenno/Bows/AsymetricalBow/AsymetricalBow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.3207974032005874,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Stinger",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentBioWeapon",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.03543960982346217,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sampotes",
+   "path": "/Lotus/Weapons/Tenno/Melee/Hammer/DaxDuviriHammer/DaxDuviriHammerWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 4.01053895137227,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.04625306045626376,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tonkkatt",
+   "path": "/Lotus/Weapons/Grineer/Melee/Tonfa/GrnChainSawTonfa/GrnChainSawTonfaWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.532190708052116,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Verglas",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentinelFreezeRayRifle",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 2.979804934896839,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ninkondi Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/PrimeNinkondi/PrimeNikondi",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.913290853294777,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeStradavar/PrimeStradavarGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.2927905420850216,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Prisma Dual Cleavers",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerMachetteAndCleaver/PrismaDualCleavers",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.055129794994355,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeLightningGun/PrimeLightningGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 13.369335249694744,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gram",
+   "path": "/Lotus/Weapons/Tenno/Melee/GreatSword/GreatSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.0423070219748087,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 9.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Harpak",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnHarpoonGun/GrnHarpoonGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.3296716616557474,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind",
+   "fireMode": 2,
+   "slot": "primary",
+   "kills": 4.227780018059643,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Vectis",
+   "path": "/Lotus/Weapons/Tenno/Rifle/TennoSniperRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 4.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerLeverActionRifle/GLARifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.3059804759870715,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "War",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/StalkerTwo/StalkerTwoGreatSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 7.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TnBardPistol/TnBardPistolGun",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 2.1973005632872455,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnWispRifle/TnWispRifle",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.5576036910099917,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Artax",
+   "path": "/Lotus/Types/Sentinels/SentinelWeapons/Gremlin",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 1.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/PrimeLiDagger/PrimeLiDagger",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.09940911734769764,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Kuva Shildeg",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnKuvaLichScythe/GrnKuvaLichScytheWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.472233719305814,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.36688458838849514,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrnUzi/GrnUziWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.4610709417035497,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 11.94495869701632,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Secura Lecta",
+   "path": "/Lotus/Weapons/Syndicates/PerrinSequence/Melee/PSLecta",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.1073620487502676,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/Pistols/WraithSingleViper/WraithSingleViper",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.8149594828786781,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Basmu",
+   "path": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleNewWarGun",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.8881396388524379,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/Kunai",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 3.728098264216806,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Coda Pathocyst",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/Melee/CodaPathocyst/CodaPathocyst",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 4.2833319816872235,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistol/HeavyPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.4563838726419689,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cedo Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.3680513011916275,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cortege",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 8.24164456260225,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.9790533295100543,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolGun",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.3406259108518076,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "MK1-Paris",
+   "path": "/Lotus/Weapons/MK1Series/MK1Paris",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.0317258953617765,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Reaper Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Scythe/ReaperWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.0126459686315314,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Knell Prime",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeKnell/PrimeKnellWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.9067061465477503,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Morgha",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 4.133367310600044,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Gear/MiningLaserCWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.24442446870931867,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.024698445000282843,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Mausolon",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+   "fireMode": 0,
+   "slot": "arch_gun",
+   "kills": 7.205517968475642,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaTysis",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.8233887072578,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Contagious Spread",
+   "path": "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 13.134161875800554,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrineerHandShotgun/GrineerHandCannon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 5.202480149039429,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Quartakk/KuvaQuartakk",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 2.06741359522979,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/HandShotGun",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 23.8872463457123,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nagantaka",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/GarudaCrossbow/GarudaCrossbow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.028188340422664,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Point Strike",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncher",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.04372412533726899,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ignis Wraith",
+   "path": "/Lotus/Weapons/ClanTech/Chemical/FlameThrowerWraith",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 3.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 7.086071885163179,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.25183532581168355,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Cortege",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+   "fireMode": 1,
+   "slot": "arch_gun",
+   "kills": 0.14867334486920214,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.5150282304559881,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ripkas",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrineerClaws/GrnClaws",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpSentAmalgPistol/CrpSentAmalgPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.8339748004584002,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Venka Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/PrimeVenKa/PrimeVenkaClaws",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.015779369926107,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.12037843785531332,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Sarpa",
+   "path": "/Lotus/Weapons/Tenno/Melee/Gunblade/GunbladeAutomatic/TnoGunbladeAutomatic",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.065054921478296,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 2.0718786236566125,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Akimbo/DualMagnusPrime",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 4.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Latron",
+   "path": "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 6.826735110226352,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dera Vandal",
+   "path": "/Lotus/Weapons/ClanTech/Energy/DeraVandal",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.344413182504661,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Rupture",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.2289415022784116,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tazicor",
+   "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/TazronWeapon",
+   "fireMode": 0,
+   "slot": "companion",
+   "kills": 0.047337258092571166,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.3352445793052232,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolArray",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.298677957961463,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/SapientPistol/SapientPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 1.4775054945536472,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/ClanTech/Energy/CrpLaserPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.2607868576378785,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.9188060466448525,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Twin Basolk",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnDualFireAxe/GrnDualFireAxe",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 2.4242007163424923,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CorpusModularPistol/Vandal/CrpLaserPistolVandal",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.9252658721154312,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Ankyros Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Gauntlet/PrimeAnkyros/PrimeAnkyros",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 5.196669504998247,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/Magnum/Magnum",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 0.08361329307646626,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistol/LatoVandal",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 22.0428452278832,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Wrath",
+   "path": "/Lotus/Weapons/Tenno/Melee/HeavyScythe/TnOrionSiriusScythe/TnOrionScytheWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.4683562992883954,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Infected Clip",
+   "path": "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/VTGorgon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 0.7627253819917147,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Quassus",
+   "path": "/Lotus/Weapons/Tenno/Melee/Warfan/TnBrokenFrameWarfan/TnBrokenFrameWarfanWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.1752546037984515,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Burston Prime",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 4.909973314911676,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Broken Scepter",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnQueenSceptre/GrnQueenSceptreWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.34790038262174,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Tenet Envoy",
+   "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncher",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 2.507720494235625,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeHystrix/PrimeHystrixWeapon",
+   "fireMode": 2,
+   "slot": "secondary",
+   "kills": 0.9910150400783682,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Glaive Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/PrimeGlaive/PrimeGlaiveWeapon",
+   "fireMode": 1,
+   "slot": "melee",
+   "kills": 1.1486550689771642,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/Bows/AntlerBow/AntlerBow",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.2027928677121746,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Tenno/Pistol/Pistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.3752742557190185,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Galvacord",
+   "path": "/Lotus/Weapons/Corpus/Melee/Whips/CrpShockGrip/CrpShockGripWhipWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.3667026491873673,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/Shotgun/PrimeBoar",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 6.001929288308348,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Glaive",
+   "path": "/Lotus/Weapons/Tenno/Melee/Glaives/LightGlaive/LightGlaiveWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.13916808525182944,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dual Keres Prime",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeDualKeres/PrimeDualKeresWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 6.112108986633245,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Galariak Prime",
+   "path": "/Lotus/Weapons/Grineer/Melee/Scythe/GrnDrillScythe/GrnDrillScythe",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.7113235789768186,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePerigale/PrimePerigaleSniper",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 7.200178294066175,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Contagious Spread",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hek/KuvaHekWeapon",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 8.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Deep Freeze",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.029273042160455,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": null,
+   "error": "fire mode 1 is auxiliary melee, outside nonmelee scope",
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher",
+   "fireMode": 1,
+   "slot": "secondary",
+   "kills": 9.40297524437444,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Pathogen Rounds",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVasto/PrimeVastoPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.0937501032466685,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Contagious Spread",
+   "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 21.820821263221966,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Stubba/KuvaStubba",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 2.3525151761241245,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Mire",
+   "path": "/Lotus/Weapons/Infested/Melee/Swords/Mire/MireSword",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 4.570111898717186,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAstilla/AstillaPrimeWeapon",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 1.9075506970476668,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Nami Skyla",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/CutlassAndPoignard/CutlassPoignardSwords",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.0,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/VoidTrader/PrismaGrakata",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 0.04625306045626376,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Shotgun Barrage",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCorinth/PrimeCorinth",
+   "fireMode": 0,
+   "slot": "primary",
+   "kills": 5.013035559884518,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Larkspur",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
+   "fireMode": 1,
+   "slot": "arch_gun",
+   "kills": 2.4240339145621324,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Tenno/Pistols/PrimePandero/PanderoPrimeWeapon",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 3.3723923486603113,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Gunslinger",
+   "path": "/Lotus/Weapons/Grineer/Pistols/GrnAmphisPistol/GrnAmphisPistol",
+   "fireMode": 0,
+   "slot": "secondary",
+   "kills": 0.3224480113943421,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Corufell",
+   "path": "/Lotus/Weapons/Tenno/Archwing/Melee/ExaltedArchScythe/ExaltedAWScytheWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.1026054305791624,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Halikar",
+   "path": "/Lotus/Weapons/Grineer/Melee/GrnBoomerang/GrnBoomerang",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 0.6020092311488363,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Dark Split-Sword (DualSwords)",
+   "path": "/Lotus/Weapons/Tenno/Melee/Swords/DarkSword/DarkSwordDaggerHybridWeapon#DualSwords",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 3.209096022576907,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Scindo",
+   "path": "/Lotus/Weapons/Tenno/Melee/Axe/AxeWeapon",
+   "fireMode": 0,
+   "slot": "melee",
+   "kills": 1.0723886719454625,
+   "error": null,
+   "mods": 8
+  },
+  {
+   "weapon": "Speed Trigger",
+   "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTiberon/PrimeTiberonRifle",
+   "fireMode": 1,
+   "slot": "primary",
+   "kills": 2.074633575337905,
+   "error": null,
+   "mods": 8
+  }
+ ]
+}

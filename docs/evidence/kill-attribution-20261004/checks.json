@@ -1,0 +1,112 @@
+{
+ "extraSamples": [
+  {
+   "weapon": "amprex",
+   "beforeKpm": 1.4788,
+   "afterKpm": 1.4788,
+   "referenceKpm": 1.4361,
+   "beforePercent": 2.97,
+   "afterPercent": 2.97
+  },
+  {
+   "weapon": "ignis_wraith",
+   "beforeKpm": 6.0337,
+   "afterKpm": 5.3847,
+   "referenceKpm": 5.3649,
+   "beforePercent": 12.46,
+   "afterPercent": 0.37
+  },
+  {
+   "weapon": "kuva_nukor",
+   "beforeKpm": 32.263,
+   "afterKpm": 32.263,
+   "referenceKpm": 33.7243,
+   "beforePercent": -4.33,
+   "afterPercent": -4.33
+  }
+ ],
+ "manualParity": [
+  {
+   "weapon": "burston_prime",
+   "roll": null,
+   "kpm": 98.43727175462672,
+   "manualKpm": 98.43727175462672,
+   "referenceKpm": 97.60722896746256
+  },
+  {
+   "weapon": "burston_prime",
+   "roll": 0.9,
+   "kpm": 147.25165024658358,
+   "manualKpm": 147.25165024658358,
+   "referenceKpm": 144.26256699605815
+  },
+  {
+   "weapon": "burston_prime",
+   "roll": 1.0,
+   "kpm": 31.497874046247976,
+   "manualKpm": 31.497874046247976,
+   "referenceKpm": 31.79786753825863
+  },
+  {
+   "weapon": "burston_prime",
+   "roll": 1.1,
+   "kpm": 31.497874046247976,
+   "manualKpm": 31.497874046247976,
+   "referenceKpm": 31.79786753825863
+  },
+  {
+   "weapon": "furis",
+   "roll": null,
+   "kpm": 75.89361240747077,
+   "manualKpm": 75.89361240747077,
+   "referenceKpm": 76.91323652599881
+  },
+  {
+   "weapon": "furis",
+   "roll": 0.9,
+   "kpm": 149.17077477993672,
+   "manualKpm": 149.17077477993672,
+   "referenceKpm": 141.90483802213757
+  },
+  {
+   "weapon": "furis",
+   "roll": 1.0,
+   "kpm": 1.4759677511183915,
+   "manualKpm": 1.4759677511183915,
+   "referenceKpm": 1.4768187868120026
+  },
+  {
+   "weapon": "furis",
+   "roll": 1.1,
+   "kpm": 1.4759677511183915,
+   "manualKpm": 1.4759677511183915,
+   "referenceKpm": 1.4768187868120026
+  }
+ ],
+ "rivenAnalysisSeconds": {
+  "burstonHeadshot100_HEAD": 105.68728009999904,
+  "burstonHeadshot100_new": 107.61893850000342,
+  "note": "tools/probe_riven_analysis.py --weapon burston --headshots 1, serial; full test suite ran concurrently"
+ },
+ "branchCountStability": {
+  "furis-neutral": {
+   "8": 75.61,
+   "16": 75.48,
+   "32": 75.35,
+   "64": 75.37
+  },
+  "furis-0.9": {
+   "8": 149.3,
+   "16": 149.17,
+   "32": 148.98,
+   "64": 149.07
+  },
+  "furis-0.9-noGS": {
+   "8": 68.9,
+   "16": 69.27,
+   "32": 70.37,
+   "64": 69.35
+  },
+  "note": "measured before the half-open period fix; relative stability only"
+ }
+}

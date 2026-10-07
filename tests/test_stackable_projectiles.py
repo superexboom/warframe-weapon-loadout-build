@@ -35,15 +35,22 @@ def run(name, window, **options):
     return replay(stats,target(1e12),attacks_per_second=stats.fire_rate,window_seconds=window,combat=combat)
 
 
-def test_stug_embed_ticks_and_stacked_expiry_replace_immediate_explosion():
-    result = run('Stug',1.51,rate=4.)
+def test_stug_stacks_refresh_the_blob_life_until_the_tenth_detonates_it():
+    # Native EmbedTime 1.5 after the blob sticks; every new stack refreshes it
+    # (GooGun.lua OnProjectileStacked, wiki Stug), so a 4/s stream reaches 10.
+    result = run('Stug',2.26,rate=4.)
     events = result['projectileEvents']
     explosion = next(e for e in events if e['kind']=='explosion')
-    assert explosion['time']==1.5 and explosion['stacks']==6
+    assert explosion['time']==2.25 and explosion['stacks']==10
     embeds = [e for e in events if e['kind']=='embed' and e['group']==1]
-    assert [e['time'] for e in embeds]==[0.,1.]
+    assert [e['time'] for e in embeds]==[0.,1.,2.]
     assert result['projectileLifecycle']['explosions']==1
-    assert result['directWindow']==pytest.approx(4.+4.*4.+75.*6.+4.)
+
+
+def test_stug_blob_expires_when_stacks_arrive_slower_than_its_life():
+    result = run('Stug',4.01,rate=.5)
+    explosions = [e for e in result['projectileEvents'] if e['kind']=='explosion']
+    assert [(e['time'],e['stacks']) for e in explosions]==[(1.5,1),(3.5,1)]
 
 
 def test_stug_multishot_reaches_cap_and_detonates_without_resetting_fuse():

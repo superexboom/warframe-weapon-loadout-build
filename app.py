@@ -598,7 +598,7 @@ if getattr(sys, "frozen", False):
         Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
         / "Warframe-Weapon-Loadout-Build" / "cache" / "riven-analysis-statics.json"
     )
-ANALYSIS_STATICS_CACHE_VERSION = 14
+ANALYSIS_STATICS_CACHE_VERSION = 22  # + perfect charge, Stug refresh, kill-charged alts, remote-mine blasts, spear reload-after-shot, Cold off AoE
 
 
 def _stances_fingerprint() -> str:
@@ -638,6 +638,7 @@ def _analysis_inputs_fingerprint() -> str:
         EXPORT_DIR / "incarnon_defaults.json",
         ROOT / "data" / "source-lock.json",
         ROOT / "data" / "mechanics" / "combat-reference.json",
+        ROOT / "data" / "mechanics" / "sniper-mechanics.json",
         # The mechanics override sidecar currently feeds only the manual
         # simulation/audit path (fail-closed diagnostics); it is not consumed
         # by the static optimizer candidate set yet, so changing its notes
@@ -663,6 +664,7 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("event_profiles.py"),
         Path(optimizer.__file__).with_name("stackable_projectiles.py"),
         Path(optimizer.__file__).with_name("consecutive_hits.py"),
+        Path(optimizer.__file__).with_name("sniper.py"),
         Path(optimizer.__file__).with_name("riven_fusion.py"),
         EXPORT_DIR / "arcanes.json",
         Path(__file__),  # app.py — 运行时补丁与分析入口语义
@@ -1314,6 +1316,11 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
                     details.append({'text': f'基础形态弹匣最后一次射击：额外 +{bonus:g} 多重射击',
                                     'calculation': '已计入基础形态；灵化弹池不触发', 'modeled': True})
                     continue
+                from wfarsenal.runtime_adapters import passive_incarnon_condition
+                if terms and passive_incarnon_condition(conditional):
+                    values = [v for v in (_incarnon_effect_text(e, annotate=False) for e in terms) if v]
+                    details.append({'text': '、'.join(values), 'calculation': '已计入：常驻生效', 'modeled': True})
+                    continue
                 condition = describe_condition(normalized, INCARNON_STRINGS)
                 if terms and all(e.get('upgradeType')=='WEAPON_CRIT_CHANCE_BODY_PART' for e in terms):
                     details.append({'text':'身体命中无法暴击；头部弱点命中 +150% 暴击率，按武器基础暴击率计算，与暴击 MOD 加算。',
@@ -1346,6 +1353,9 @@ def _incarnon_options(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
                 if 'Burston' in str(branch.get('path')) and branch.get('id') == '2-1' and 'OnLastBurstCondition.lua' in str(conditional.get('runtimeScripts')):
                     modeled = True
                 calculation = '已计入：按触发和叠层结算' if modeled else '尚未建模，不计入伤害'
+                from wfarsenal.runtime_adapters import self_break_condition
+                if modeled and self_break_condition(normalized):
+                    calculation = '已计入：需战甲配合，默认强制生效；关闭“自身护盾击破类灵化效果强制生效”后按自身护盾 / 超宏击破时间轴触发'
                 if normalized.get('formGate') and modeled:
                     condition = '灵化形态激活期间'
                     calculation = '仅灵化形态计入'
@@ -2327,21 +2337,15 @@ def _manual_mod_rows() -> list[dict[str, Any]]:
         if path == "/Lotus/Upgrades/Mods/Rifle/Expert/SniperReloadDamageModExpert":
             continue
         mechanic_override = WEAPON_MECHANICS_OVERRIDES.get("mods", {}).get(path)
-        if (
-            not support.get("weapon")
-            and not has_supported_effect
-            and not fixed_melee_range
-            and not first_shot_chamber
-            and not mechanic_override
-        ):
+        # Script-backed cards (Internal Bleeding, Hemorrhage, Magnetic Welt…)
+        # export an unsupported NONE effect; the verified runtime adapter is
+        # what the engine applies, so it admits the card too.
+        from wfarsenal.runtime_adapters import resolve_runtime_adapter
+        runtime_adapter = resolve_runtime_adapter(mod, int(mod.get("maxRank") or 0)) is not None
+        admitted = has_supported_effect or fixed_melee_range or first_shot_chamber or mechanic_override or runtime_adapter
+        if not support.get("weapon") and not admitted:
             continue
-        if (
-            mod.get("supported") is False
-            and not has_supported_effect
-            and not fixed_melee_range
-            and not first_shot_chamber
-            and not mechanic_override
-        ):
+        if mod.get("supported") is False and not admitted:
             continue
         # SubMods are implementation shells, not selectable cards.  Some
         # exports mark them selectable but still provide no effect payload.
@@ -2799,13 +2803,15 @@ CATALOG["kitgunParts"] = _kitgun_part_catalog()
 CATALOG["zawParts"] = _zaw_part_catalog()
 
 
-# 标准解算靶（用户指定的统一口径）：170 级钢铁之路、卓越者（超宏护盾）、
-# 凶魂百夫长（Duviri 派系——不属于任何有派系增伤卡的派系，无特殊护盾，
-# 仅弱虚空伤害而武器不可携带虚空），0 削甲 0 爯头，30 秒窗口按击杀数（KPM）
-# 排序配卡。分析页与配装页的自动求解都用这套基准。
+# 标准解算靶（用户指定的统一口径）：170 级钢铁之路凶魂百夫长（Duviri 派系——
+# 不属于任何有派系增伤卡的派系，仅弱虚空伤害而武器不可携带虚空），去掉天生
+# 超宏护盾（否则磁力对超宏的易伤与破盾电击额外获利），0 削甲 0 爆头，30 秒
+# 窗口。紫卡分析在此基础上按武器自身的无紫卡基线取三个硬度节点并对 KPM 取
+# 几何平均（见 optimizer hardness-integrated），同一武器的所有紫卡共用这组靶。
 _BENCHMARK_ENEMY_PATH = "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar"
 _BENCHMARK_LEVEL = 170
 _BENCHMARK_WINDOW_SECONDS = 30.0
+_BENCHMARK_ENHANCEMENTS = {"eximus": False, "noOverguard": True}
 
 
 def _benchmark_target_context(stance_multiplier: float = 1.0, status_rate_multiplier: float = 1.0) -> dict[str, Any]:
@@ -2818,7 +2824,7 @@ def _benchmark_target_context(stance_multiplier: float = 1.0, status_rate_multip
         "armour_strip": 0.0,
         "elemental_armour_strip": 0.0,
         "steel_path": True,
-        "enemy_enhancements": {"eximus": True},
+        "enemy_enhancements": dict(_BENCHMARK_ENHANCEMENTS),
         "hit_location": "body",
         "windowSeconds": _BENCHMARK_WINDOW_SECONDS,
         "stanceMultiplier": stance_multiplier,
@@ -2947,16 +2953,14 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     engine_request.pop("sourceDisposition", None)
     engine_request.pop("kitgunParts", None)
     engine_request.pop("progressToken", None)  # HTTP 进度令牌不进引擎层
-    # 标准配装靶（用户指定）：170 级钢铁之路、卓越者（超宏护盾）、凶魂百夫长，
-    # 0 削甲 0 爆头，30 秒窗口击杀数（KPM）为优化目标。该目标不属于任何有
-    # 派系增伤加成的派系、无特殊护盾，仅弱虚空伤害（武器不可携带）——
-    # 目标中立且数值可靠，适合作为默认解算口径。
+    # 标准配装靶：见 _BENCHMARK_ENEMY_PATH 处说明（去超宏、按武器固定血量倍率）。
     if not isinstance(engine_request.get("benchmarkTarget"), Mapping):
         engine_request["benchmarkTarget"] = {
             "enemy": _BENCHMARK_ENEMY_PATH,
-            "level": 170,
+            "level": _BENCHMARK_LEVEL,
             "steelPath": True,
-            "eximus": True,
+            "eximus": False,
+            "enemyEnhancements": dict(_BENCHMARK_ENHANCEMENTS),
             "windowSeconds": 30.0,
             "armourStrip": 0.0,
             "headshotChance": _manual_number(
@@ -3601,7 +3605,8 @@ def build_weapon_payload(
         (
             f"optimizer-profile: {_PROFILE_LABELS[profile]}档"
             + (
-                "（beam 12/32，无爬山）" if profile == "fast"
+                "（配装搜索同快速档）" if profile == "ultra"
+                else "（beam 12/32，无爬山）" if profile == "fast"
                 else "（beam 24/40，3 轮爬山）" if profile == "standard"
                 else "（beam 24/56，12 轮全邻域爬山）"
             )
@@ -3967,6 +3972,7 @@ def _manual_int(value: Any, label: str, *, low: int = 0, high: int | None = None
 
 # 解算档位（用户可调，避免干等）：fast/standard/deep。
 _PROFILE_LABELS = {
+    "ultra": "超快",
     "fast": "快速",
     "standard": "标准",
     "deep": "深度",
@@ -3979,7 +3985,7 @@ def _solve_profile(value: Any, default: str = "standard") -> str:
     profile = str(value).strip().casefold()
     if profile not in _PROFILE_LABELS:
         raise SimulationError(
-            "profile must be one of fast, standard, deep"
+            "profile must be one of ultra, fast, standard, deep"
         )
     return profile
 
@@ -5293,7 +5299,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                 "target": _fallback.get("target"),
                 "level": _BENCHMARK_LEVEL,
                 "steel_path": True,
-                "enemy_enhancements": {"eximus": True},
+                "enemy_enhancements": dict(_BENCHMARK_ENHANCEMENTS),
             }
         if _replay_ctx.get("target") is not None:
             modded = result.get("moddedStats") or {}
@@ -5348,6 +5354,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     "stacks": windowed.get("averagedStacks") or {},
                     "triggerSeries": windowed.get("triggerSeries") or [],
                     'fieldDuration': windowed.get('fieldDuration'),
+                    'sniperCombo': windowed.get('sniperCombo'),
                     'manualDetonation': windowed.get('manualDetonation'),
                     'delayedAttackEvents': windowed.get('delayedAttackEvents'),
                     'projectileEvents': windowed.get('projectileEvents'),

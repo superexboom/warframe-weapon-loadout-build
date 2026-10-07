@@ -1,0 +1,204 @@
+{
+ "eximus-HEAD": {
+  "evaluationTarget": {
+   "enemyPath": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+   "enemyName": "Thrax Centurion",
+   "level": 1600,
+   "steelPath": true,
+   "enemyEnhancements": {
+    "eximus": true
+   },
+   "armourStrip": 0.0,
+   "elementalArmourStrip": 0.0,
+   "hitLocation": "body",
+   "headshotChance": 1.0,
+   "windowSeconds": 30.0
+  },
+  "calibrationLevels": [
+   170,
+   298,
+   522
+  ],
+  "postSearchLevels": [
+   914,
+   1600
+  ],
+  "formalSearchMetric": "windowedDps",
+  "secondsByStage": {
+   "baseline": 15.2,
+   "actual": 17.6,
+   "calibration": 34.0,
+   "recommendation": 21.5,
+   "optimal": 16.6,
+   "quality": 0.6,
+   "payload": 0.1
+  },
+  "totalSeconds": 105.7,
+  "mods": {
+   "baseline": [
+    "Primary Acuity",
+    "Magnetic Capacity",
+    "Heavy Caliber",
+    "Serration",
+    "Hammer Shot",
+    "Thermite Rounds",
+    "Point Strike",
+    "Vital Sense"
+   ],
+   "actual": [
+    "Rime Rounds",
+    "Primed Cryo Rounds",
+    "High Voltage",
+    "Primary Acuity",
+    "Stormbringer",
+    "Heavy Caliber",
+    "Serration"
+   ],
+   "bestFound": [
+    "Primary Acuity",
+    "Point Strike",
+    "Vile Acceleration",
+    "Gilded Truth",
+    "Split Chamber",
+    "Thermite Rounds",
+    "Speed Trigger"
+   ]
+  }
+ },
+ "eximus": {
+  "evaluationTarget": {
+   "enemyPath": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+   "enemyName": "Thrax Centurion",
+   "level": 1600,
+   "steelPath": true,
+   "enemyEnhancements": {
+    "eximus": true
+   },
+   "armourStrip": 0.0,
+   "elementalArmourStrip": 0.0,
+   "hitLocation": "body",
+   "headshotChance": 1.0,
+   "windowSeconds": 30.0
+  },
+  "calibrationLevels": [
+   170,
+   298,
+   522
+  ],
+  "postSearchLevels": [
+   914,
+   1600
+  ],
+  "formalSearchMetric": "windowedDps",
+  "secondsByStage": {
+   "baseline": 15.3,
+   "actual": 18.6,
+   "calibration": 34.0,
+   "recommendation": 22.7,
+   "optimal": 16.5,
+   "quality": 0.4,
+   "payload": 0.1
+  },
+  "totalSeconds": 107.6,
+  "mods": {
+   "baseline": [
+    "Primary Acuity",
+    "Magnetic Capacity",
+    "Heavy Caliber",
+    "Serration",
+    "Hammer Shot",
+    "Thermite Rounds",
+    "Point Strike",
+    "Vital Sense"
+   ],
+   "actual": [
+    "Rime Rounds",
+    "Primed Cryo Rounds",
+    "High Voltage",
+    "Primary Acuity",
+    "Stormbringer",
+    "Heavy Caliber",
+    "Serration"
+   ],
+   "bestFound": [
+    "Primary Acuity",
+    "Point Strike",
+    "Vile Acceleration",
+    "Gilded Truth",
+    "Split Chamber",
+    "Thermite Rounds",
+    "Speed Trigger"
+   ]
+  }
+ },
+ "non-eximus": {
+  "evaluationTarget": {
+   "enemyPath": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+   "enemyName": "Thrax Centurion",
+   "level": 8575,
+   "steelPath": true,
+   "enemyEnhancements": {
+    "eximus": false
+   },
+   "armourStrip": 0.0,
+   "elementalArmourStrip": 0.0,
+   "hitLocation": "body",
+   "headshotChance": 1.0,
+   "windowSeconds": 30.0
+  },
+  "calibrationLevels": [
+   170,
+   298,
+   522,
+   914,
+   1600
+  ],
+  "postSearchLevels": [
+   2800,
+   4900,
+   8575
+  ],
+  "formalSearchMetric": "windowedDps",
+  "secondsByStage": {
+   "baseline": 15.3,
+   "actual": 18.8,
+   "calibration": 33.0,
+   "recommendation": 32.3,
+   "optimal": 19.7,
+   "quality": 0.2,
+   "payload": 0.2
+  },
+  "totalSeconds": 119.5,
+  "mods": {
+   "baseline": [
+    "Primary Acuity",
+    "Magnetic Capacity",
+    "Heavy Caliber",
+    "Serration",
+    "Hammer Shot",
+    "Thermite Rounds",
+    "Point Strike",
+    "Vital Sense"
+   ],
+   "actual": [
+    "Primary Acuity",
+    "Heavy Caliber",
+    "Serration",
+    "Magnetic Capacity",
+    "Point Strike",
+    "Primed Cryo Rounds",
+    "Split Chamber"
+   ],
+   "bestFound": [
+    "Primary Acuity",
+    "Magnetic Capacity",
+    "Heavy Caliber",
+    "Serration",
+    "Hammer Shot",
+    "Point Strike",
+    "Vital Sense"
+   ]
+  }
+ },
+ "note": "tools/probe_riven_analysis.py --weapon burston --headshots 1; non-eximus injects benchmarkTarget eximus=false only"
+}

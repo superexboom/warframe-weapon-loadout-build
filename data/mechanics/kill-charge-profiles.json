@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "packageBuild": "2026.08.13.13.24",
+  "generatedBy": "tools/import_kill_charged_alts.py",
+  "semantics": "the alternate mode fires shotsPerGauge shots per killsPerUse primary-fire kills; selecting it replays the primary + alternate cycle",
+  "weapons": {
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun": {
+      "name": "Mausolon",
+      "altMode": 1,
+      "primaryMode": 0,
+      "killsPerUse": 5,
+      "shotsPerGauge": 1,
+      "switchInSeconds": 0.0,
+      "switchOutSeconds": 0.0,
+      "native": {
+        "AddChargeConditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumChargesToAdd": 1.0,
+        "NumChargesToConsume": 5.0,
+        "MaxCharges": null,
+        "RequireFullCharges": null
+      },
+      "nativeSha256": "274a7096a887b20a0bbcba33b65d9a2ffd0bd94b0e7d0a9f14a217c7eba3d241"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher": {
+      "name": "Morgha",
+      "altMode": 1,
+      "primaryMode": 0,
+      "killsPerUse": 5,
+      "shotsPerGauge": 1,
+      "switchInSeconds": 0.0,
+      "switchOutSeconds": 0.0,
+      "native": {
+        "AddChargeConditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumChargesToAdd": 1.0,
+        "NumChargesToConsume": 5.0,
+        "MaxCharges": null,
+        "RequireFullCharges": null
+      },
+      "nativeSha256": "f4b5a336d84ddeade83f2791a23f4bda5efa134d514a7d9720f8b79e4cc76d96"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/Gunbrella/ShrineMaidenGunbrellaWeapon": {
+      "name": "Higasa",
+      "altMode": 1,
+      "primaryMode": 0,
+      "killsPerUse": 15,
+      "shotsPerGauge": 1,
+      "switchInSeconds": 0.0,
+      "switchOutSeconds": 0.0,
+      "native": {
+        "AddChargeConditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumChargesToAdd": 7.0,
+        "NumChargesToConsume": 100.0,
+        "MaxCharges": 100,
+        "RequireFullCharges": 1
+      },
+      "nativeSha256": "e04fd8882310f6de30cea7c983ef48c4bb36e07297bfe62f247eb3b64ed9c3a0"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon": {
+      "name": "Trumna Prime",
+      "altMode": 1,
+      "primaryMode": 0,
+      "killsPerUse": 5,
+      "shotsPerGauge": 1,
+      "switchInSeconds": 1.0,
+      "switchOutSeconds": 0.0,
+      "native": {
+        "AddChargeConditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumChargesToAdd": 1.0,
+        "NumChargesToConsume": 5.0,
+        "MaxCharges": null,
+        "RequireFullCharges": null
+      },
+      "nativeSha256": "0013994fdd9881337dcb41dea6e676ece608ba3fc381e454bdbe43046a8e6869"
+    },
+    "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol": {
+      "name": "Sepulcrum",
+      "altMode": 1,
+      "primaryMode": 0,
+      "killsPerUse": 5,
+      "shotsPerGauge": 1,
+      "switchInSeconds": 0.0,
+      "switchOutSeconds": 0.0,
+      "native": {
+        "AddChargeConditions": [
+          "DEFAULT_BEHAVIOR_KILL"
+        ],
+        "NumChargesToAdd": 1.0,
+        "NumChargesToConsume": 5.0,
+        "MaxCharges": null,
+        "RequireFullCharges": null
+      },
+      "nativeSha256": "ce7594df5fda56c128533dd30aaee1594e7d2f85d44bbe58e4557f64e5db249b"
+    },
+    "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle": {
+      "name": "Trumna",
+      "altMode": 1,
+      "primaryMode": 0,
+      "killsPerUse": 5,
+      "shotsPerGauge": 1,
+      "switchInSeconds": 1.0,
+      "switchOutSeconds": 0.0,
+      "native": {
+        "AddChargeConditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumChargesToAdd": 1.0,
+        "NumChargesToConsume": 5.0,
+        "MaxCharges": null,
+        "RequireFullCharges": null
+      },
+      "nativeSha256": "d9c4808683a82d6139708c12c3eba11f32248d1d4f38e2111062b5ba56ae894e"
+    }
+  },
+  "skipped": [
+    {
+      "name": "Battacor",
+      "reason": "NumChargesToConsume 0: charges scale the shot, not gate it"
+    },
+    {
+      "name": "Cortege",
+      "reason": "NumChargesToConsume 0: charges scale the shot, not gate it"
+    }
+  ]
+}

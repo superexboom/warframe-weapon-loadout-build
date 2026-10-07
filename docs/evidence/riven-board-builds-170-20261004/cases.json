@@ -1,0 +1,4794 @@
+{
+  "cases": [
+    {
+      "weapon": "acceltra_prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon",
+      "name": "Acceltra Prime",
+      "row": {
+        "arcanes": [
+          "primary_merciless"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "ammo_drum",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "infected_clip",
+          "amalgam_serration",
+          "galvanized_chamber",
+          "critical_delay",
+          "hammer_shot",
+          "vital_sense",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_chance",
+            "status_chance"
+          ],
+          "malus": "fire_rate",
+          "rolls": [
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 0.6002409721474529,
+        "shown": "0.6002",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_chance",
+            "roll": 1.1
+          },
+          {
+            "id": "status_chance",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "fire_rate",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+        "/Lotus/Upgrades/Mods/DualSource/Rifle/SerratedRushMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "0",
+            "value": 112.29863961318752,
+            "negative": false
+          },
+          {
+            "code": "2",
+            "value": 67.3818736523625,
+            "negative": false
+          },
+          {
+            "code": "R",
+            "value": 14.70885075,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/DualSource/Rifle/SerratedRushMod",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 112.29863961318752,
+              "negative": false
+            },
+            {
+              "code": "2",
+              "value": 67.3818736523625,
+              "negative": false
+            },
+            {
+              "code": "R",
+              "value": 14.70885075,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 0.9655460022782398,
+        "wfsimMods": [
+          "amalgam_serration",
+          "critical_delay",
+          "hammer_shot",
+          "primed_cryo_rounds",
+          "vital_sense",
+          "galvanized_chamber",
+          "infected_clip",
+          "riven:board"
+        ],
+        "wfsimKpm": 1.5610320309363936,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 112.29863961318752,
+              "negative": false
+            },
+            {
+              "code": "2",
+              "value": 67.3818736523625,
+              "negative": false
+            },
+            {
+              "code": "R",
+              "value": 14.70885075,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 2.0770141361409378,
+        "wfsimMods": [
+          "heavy_caliber",
+          "serration",
+          "hellfire",
+          "split_chamber",
+          "vital_sense",
+          "point_strike",
+          "thermite_rounds",
+          "riven:board"
+        ],
+        "wfsimKpm": 2.856943857629354,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "amprex",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/ChainLightningGun/ChainLightningRifle",
+      "name": "Amprex",
+      "row": {
+        "arcanes": [
+          "primary_bulwark"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "malignant_force",
+          "stormbringer",
+          "galvanized_chamber",
+          "primed_shred",
+          "critical_delay",
+          "vital_sense",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_damage",
+            "multishot"
+          ],
+          "malus": "damage_to_infested",
+          "rolls": [
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 0.4443867570591055,
+        "shown": "0.4444",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_damage",
+            "roll": 1.1
+          },
+          {
+            "id": "multishot",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "damage_to_infested",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponElectricityDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/PrimedShredMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "1",
+            "value": 138.84402881250003,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 104.1356229172875,
+            "negative": false
+          },
+          {
+            "code": "I",
+            "value": 17.0403746591925,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PrimedShredMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponElectricityDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 138.84402881250003,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 104.1356229172875,
+              "negative": false
+            },
+            {
+              "code": "I",
+              "value": 17.0403746591925,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 0.9265566424729097,
+        "wfsimMods": [
+          "critical_delay",
+          "malignant_force",
+          "primed_shred",
+          "primed_cryo_rounds",
+          "vital_sense",
+          "stormbringer",
+          "galvanized_chamber",
+          "riven:board"
+        ],
+        "wfsimKpm": 0.918074412146218,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponProcTimeMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/RifleStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 138.84402881250003,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 104.1356229172875,
+              "negative": false
+            },
+            {
+              "code": "I",
+              "value": 17.0403746591925,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 1.3345596697456588,
+        "wfsimMods": [
+          "heavy_caliber",
+          "continuous_misery",
+          "rifle_elementalist",
+          "high_voltage",
+          "point_strike",
+          "split_chamber",
+          "hammer_shot",
+          "riven:board"
+        ],
+        "wfsimKpm": 1.2986838853453677,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "basmu",
+      "path": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleNewWarGun",
+      "name": "Basmu",
+      "row": {
+        "arcanes": [
+          "primary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "malignant_force",
+          "primary_acuity",
+          "galvanized_aptitude",
+          "vital_sense",
+          "magnetic_capacity",
+          "radiated_reload",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_chance",
+            "critical_damage",
+            "damage"
+          ],
+          "malus": "zoom",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 16.072238662146642,
+        "shown": "16.0722",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_chance",
+            "roll": 1.1
+          },
+          {
+            "id": "critical_damage",
+            "roll": 1.1
+          },
+          {
+            "id": "damage",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "zoom",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/RadiationReloadRifleMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "0",
+            "value": 185.61758613749998,
+            "negative": false
+          },
+          {
+            "code": "1",
+            "value": 148.49628750000002,
+            "negative": false
+          },
+          {
+            "code": "D",
+            "value": 204.18711761250003,
+            "negative": false
+          },
+          {
+            "code": "H",
+            "value": 48.59514,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod"
+      ],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/RadiationReloadRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 185.61758613749998,
+              "negative": false
+            },
+            {
+              "code": "1",
+              "value": 148.49628750000002,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 204.18711761250003,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 48.59514,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 0.9252883546379626,
+        "wfsimMods": [
+          "magnetic_capacity",
+          "malignant_force",
+          "radiated_reload",
+          "primed_cryo_rounds",
+          "vital_sense",
+          "galvanized_aptitude",
+          "split_chamber",
+          "riven:board"
+        ],
+        "wfsimKpm": 3.1189718323425812,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/RifleStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 185.61758613749998,
+              "negative": false
+            },
+            {
+              "code": "1",
+              "value": 148.49628750000002,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 204.18711761250003,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 48.59514,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 1.7216857885507642,
+        "wfsimMods": [
+          "magnetic_capacity",
+          "split_chamber",
+          "infected_clip",
+          "high_voltage",
+          "hellfire",
+          "hammer_shot",
+          "rifle_elementalist",
+          "riven:board"
+        ],
+        "wfsimKpm": 1.986990544484724,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "bubonico",
+      "path": "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannon",
+      "name": "Bubonico",
+      "row": {
+        "arcanes": [
+          "primary_crux"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "incendiary_coat",
+          "blaze",
+          "scattering_inferno",
+          "hells_chamber",
+          "primed_point_blank",
+          "shotgun_elementalist",
+          "magnetic_strafe",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_damage",
+            "damage",
+            "status_chance"
+          ],
+          "malus": "magazine_capacity",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 0.9048683292439212,
+        "shown": "0.9049",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_damage",
+            "roll": 1.1
+          },
+          {
+            "id": "damage",
+            "roll": 1.1
+          },
+          {
+            "id": "status_chance",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "magazine_capacity",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponFireDamageMod",
+        "/Lotus/Upgrades/Mods/Shotgun/DualStat/BlazeMod",
+        "/Lotus/Upgrades/Mods/Shotgun/DualStat/FireEventShotgunMod",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+        "/Lotus/Upgrades/Mods/Shotgun/ShotgunStatusDamageDuoMod",
+        "/Lotus/Upgrades/Mods/Shotgun/DualStat/MagneticFireRateShotgunMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "1",
+            "value": 69.60937360781251,
+            "negative": false
+          },
+          {
+            "code": "D",
+            "value": 127.38516321093752,
+            "negative": false
+          },
+          {
+            "code": "2",
+            "value": 69.60937360781251,
+            "negative": false
+          },
+          {
+            "code": "L",
+            "value": 25.309969661250005,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/BlazeMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/FireEventShotgunMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/MagneticFireRateShotgunMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/ShotgunStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 69.60937360781251,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 127.38516321093752,
+              "negative": false
+            },
+            {
+              "code": "2",
+              "value": 69.60937360781251,
+              "negative": false
+            },
+            {
+              "code": "L",
+              "value": 25.309969661250005,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 0.986805925375591,
+        "wfsimMods": [
+          "blaze",
+          "scattering_inferno",
+          "magnetic_strafe",
+          "primed_point_blank",
+          "shotgun_elementalist",
+          "incendiary_coat",
+          "hells_chamber",
+          "riven:board"
+        ],
+        "wfsimKpm": 0.9166732984755577,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/MagneticFireRateShotgunMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponElectricityDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/CorruptedCritChanceFireRateShotgun",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponCritDamageModExpert",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireRateMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 69.60937360781251,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 127.38516321093752,
+              "negative": false
+            },
+            {
+              "code": "2",
+              "value": 69.60937360781251,
+              "negative": false
+            },
+            {
+              "code": "L",
+              "value": 25.309969661250005,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 5.970829111439067,
+        "wfsimMods": [
+          "magnetic_strafe",
+          "primed_charged_shell",
+          "hells_chamber",
+          "critical_deceleration",
+          "primed_point_blank",
+          "primed_ravage",
+          "shotgun_barrage",
+          "riven:board"
+        ],
+        "wfsimKpm": 4.200025800955341,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "corinth_prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCorinth/PrimeCorinth",
+      "name": "Corinth Prime",
+      "row": {
+        "arcanes": [
+          "shotgun_vendetta"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "galvanized_acceleration",
+        "mode": "base",
+        "mods": [
+          "primed_charged_shell",
+          "riven",
+          "galvanized_hell",
+          "primed_point_blank",
+          "primed_ravage",
+          "galvanized_savvy",
+          "critical_deceleration",
+          "magnetic_strafe"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_damage",
+            "fire_rate",
+            "toxin"
+          ],
+          "malus": "projectile_speed",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 18.51273303648626,
+        "shown": "18.5127",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_damage",
+            "roll": 1.1
+          },
+          {
+            "id": "fire_rate",
+            "roll": 1.1
+          },
+          {
+            "id": "toxin",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "projectile_speed",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponElectricityDamageModExpert",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+        "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponCritDamageModExpert",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Shotgun/DualStat/CorruptedCritChanceFireRateShotgun",
+        "/Lotus/Upgrades/Mods/Shotgun/DualStat/MagneticFireRateShotgunMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "1",
+            "value": 92.81249814375,
+            "negative": false
+          },
+          {
+            "code": "R",
+            "value": 92.81249814375,
+            "negative": false
+          },
+          {
+            "code": "6",
+            "value": 92.81249814375,
+            "negative": false
+          },
+          {
+            "code": "V",
+            "value": 60.749998785,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/CorruptedCritChanceFireRateShotgun",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/MagneticFireRateShotgunMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponCritDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponElectricityDamageModExpert",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 4,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 92.81249814375,
+              "negative": false
+            },
+            {
+              "code": "R",
+              "value": 92.81249814375,
+              "negative": false
+            },
+            {
+              "code": "6",
+              "value": 92.81249814375,
+              "negative": false
+            },
+            {
+              "code": "V",
+              "value": 60.749998785,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 8.784354146557112,
+        "wfsimMods": [
+          "critical_deceleration",
+          "magnetic_strafe",
+          "primed_ravage",
+          "primed_point_blank",
+          "riven:board",
+          "primed_charged_shell",
+          "galvanized_hell",
+          "galvanized_savvy"
+        ],
+        "wfsimKpm": 9.634220873001833,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/FireEventShotgunMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/CorruptedCritChanceFireRateShotgun",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/BlazeMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponCritDamageModExpert",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 1,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 92.81249814375,
+              "negative": false
+            },
+            {
+              "code": "R",
+              "value": 92.81249814375,
+              "negative": false
+            },
+            {
+              "code": "6",
+              "value": 92.81249814375,
+              "negative": false
+            },
+            {
+              "code": "V",
+              "value": 60.749998785,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 10.56641202523828,
+        "wfsimMods": [
+          "primed_point_blank",
+          "riven:board",
+          "primed_chilling_grasp",
+          "scattering_inferno",
+          "hells_chamber",
+          "critical_deceleration",
+          "blaze",
+          "primed_ravage"
+        ],
+        "wfsimKpm": 10.707484090205714,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "cyanex",
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpSentAmalgPistol/CrpSentAmalgPistol",
+      "name": "Cyanex",
+      "row": {
+        "arcanes": [
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "pistol_pestilence",
+          "riven",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "galvanized_shot",
+          "lethal_torrent",
+          "pistol_elementalist",
+          "magnetic_might"
+        ],
+        "riven": {
+          "bonuses": [
+            "cold",
+            "multishot"
+          ],
+          "malus": "weapon_recoil",
+          "rolls": [
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 7.146927371495378,
+        "shown": "7.1469",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "cold",
+            "roll": 1.1
+          },
+          {
+            "id": "multishot",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "weapon_recoil",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+        "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "5",
+            "value": 122.51249754975,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 162.941625,
+            "negative": false
+          },
+          {
+            "code": "Z",
+            "value": 40.0949991981,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 2,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "5",
+              "value": 122.51249754975,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 162.941625,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 40.0949991981,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 2.8738667266855833,
+        "wfsimMods": [
+          "lethal_torrent",
+          "magnetic_might",
+          "riven:board",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "pistol_elementalist",
+          "galvanized_diffusion",
+          "galvanized_shot"
+        ],
+        "wfsimKpm": 1.922956028655472,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 1,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "5",
+              "value": 122.51249754975,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 162.941625,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 40.0949991981,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 4.661777033014234,
+        "wfsimMods": [
+          "magnetic_might",
+          "riven:board",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "pistol_elementalist",
+          "hornet_strike",
+          "scorch",
+          "lethal_torrent"
+        ],
+        "wfsimKpm": 3.4449331757257933,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "fulmin_prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulmin",
+      "name": "Fulmin Prime",
+      "row": {
+        "arcanes": [
+          "primary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "vigilante_supplies",
+        "mode": "base",
+        "mods": [
+          "riven",
+          "primary_acuity",
+          "galvanized_aptitude",
+          "hammer_shot",
+          "vile_acceleration",
+          "vital_sense",
+          "magnetic_capacity",
+          "radiated_reload"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_damage",
+            "damage",
+            "toxin"
+          ],
+          "malus": "weapon_recoil",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 6.839269299795027,
+        "shown": "6.8393",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_damage",
+            "roll": 1.1
+          },
+          {
+            "id": "damage",
+            "roll": 1.1
+          },
+          {
+            "id": "toxin",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "weapon_recoil",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/RadiationReloadRifleMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "1",
+            "value": 92.81017968750001,
+            "negative": false
+          },
+          {
+            "code": "D",
+            "value": 127.61694850781251,
+            "negative": false
+          },
+          {
+            "code": "6",
+            "value": 69.60937360781251,
+            "negative": false
+          },
+          {
+            "code": "Z",
+            "value": 45.56249908875,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod"
+      ],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/RadiationReloadRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 92.81017968750001,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 127.61694850781251,
+              "negative": false
+            },
+            {
+              "code": "6",
+              "value": 69.60937360781251,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 45.56249908875,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 1.292768662642533,
+        "wfsimMods": [
+          "vile_acceleration",
+          "hammer_shot",
+          "magnetic_capacity",
+          "radiated_reload",
+          "vital_sense",
+          "galvanized_aptitude",
+          "split_chamber",
+          "riven:board"
+        ],
+        "wfsimKpm": 1.0683757915502659,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/ElectEventRifleMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 3,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 92.81017968750001,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 127.61694850781251,
+              "negative": false
+            },
+            {
+              "code": "6",
+              "value": 69.60937360781251,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 45.56249908875,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 3.5004847511440786,
+        "wfsimMods": [
+          "heavy_caliber",
+          "split_chamber",
+          "point_strike",
+          "riven:board",
+          "high_voltage",
+          "thermite_rounds",
+          "hellfire",
+          "vital_sense"
+        ],
+        "wfsimKpm": 1.963950221812606,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "flux_rifle",
+      "path": "/Lotus/Weapons/ClanTech/Energy/CrpLaserRifle",
+      "name": "Flux Rifle",
+      "row": {
+        "arcanes": [
+          "primary_crux"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "infected_clip",
+          "malignant_force",
+          "galvanized_chamber",
+          "galvanized_aptitude",
+          "rifle_elementalist",
+          "vile_acceleration",
+          "vital_sense",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_chance",
+            "damage_to_grineer",
+            "multishot"
+          ],
+          "malus": "slash",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 0.6441465952022212,
+        "shown": "0.6441",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_chance",
+            "roll": 1.1
+          },
+          {
+            "id": "damage_to_grineer",
+            "roll": 1.1
+          },
+          {
+            "id": "multishot",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "slash",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Rifle/RifleStatusDamageDuoMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "0",
+            "value": 239.75604876093755,
+            "negative": false
+          },
+          {
+            "code": "G",
+            "value": 71.92968606140624,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 143.8593721228125,
+            "negative": false
+          },
+          {
+            "code": "A",
+            "value": 125.54686125,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/RifleStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 239.75604876093755,
+              "negative": false
+            },
+            {
+              "code": "G",
+              "value": 71.92968606140624,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 143.8593721228125,
+              "negative": false
+            },
+            {
+              "code": "A",
+              "value": 125.54686125,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 0.6675494689206574,
+        "wfsimMods": [
+          "vile_acceleration",
+          "malignant_force",
+          "rifle_elementalist",
+          "vital_sense",
+          "galvanized_chamber",
+          "galvanized_aptitude",
+          "infected_clip",
+          "riven:board"
+        ],
+        "wfsimKpm": 0.6579385154937809,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Event/CorpusArena/FluxRifleCorpusArenaMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 239.75604876093755,
+              "negative": false
+            },
+            {
+              "code": "G",
+              "value": 71.92968606140624,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 143.8593721228125,
+              "negative": false
+            },
+            {
+              "code": "A",
+              "value": 125.54686125,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 3.5033531045632462,
+        "wfsimMods": [
+          "heavy_caliber",
+          "thermite_rounds",
+          "flux_overdrive",
+          "hellfire",
+          "split_chamber",
+          "serration",
+          "vital_sense",
+          "riven:board"
+        ],
+        "wfsimKpm": 2.4928593750702492,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "kompressa_prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressa",
+      "name": "Kompressa Prime",
+      "row": {
+        "arcanes": [
+          "secondary_fortifier"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "jolt",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "pistol_acuity",
+          "galvanized_shot",
+          "pistol_elementalist",
+          "magnetic_might",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_chance",
+            "critical_damage",
+            "damage"
+          ],
+          "malus": "zoom",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 5.222475465840684,
+        "shown": "5.2225",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_chance",
+            "roll": 1.1
+          },
+          {
+            "id": "critical_damage",
+            "roll": 1.1
+          },
+          {
+            "id": "damage",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "zoom",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "0",
+            "value": 92.80879306874999,
+            "negative": false
+          },
+          {
+            "code": "1",
+            "value": 55.68749888625,
+            "negative": false
+          },
+          {
+            "code": "D",
+            "value": 135.87750000000003,
+            "negative": false
+          },
+          {
+            "code": "H",
+            "value": 32.44049927100001,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [
+        "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod"
+      ],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 92.80879306874999,
+              "negative": false
+            },
+            {
+              "code": "1",
+              "value": 55.68749888625,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 135.87750000000003,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 32.44049927100001,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 1.611708053061277,
+        "wfsimMods": [
+          "jolt",
+          "magnetic_might",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "pistol_elementalist",
+          "galvanized_shot",
+          "lethal_torrent",
+          "riven:board"
+        ],
+        "wfsimKpm": 3.833735422784149,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 92.80879306874999,
+              "negative": false
+            },
+            {
+              "code": "1",
+              "value": 55.68749888625,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 135.87750000000003,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 32.44049927100001,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 1.8387175176014259,
+        "wfsimMods": [
+          "scorch",
+          "magnetic_might",
+          "primed_heated_charge",
+          "barrel_diffusion",
+          "pistol_elementalist",
+          "lethal_torrent",
+          "hornet_strike",
+          "riven:board"
+        ],
+        "wfsimKpm": 3.41030065760645,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "pyrana_prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimePyrana/PrimePyranaPistol",
+      "name": "Pyrana Prime",
+      "row": {
+        "arcanes": [
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "primed_steady_hands",
+        "mode": "base",
+        "mods": [
+          "primed_heated_charge",
+          "riven",
+          "hornet_strike",
+          "primed_target_cracker",
+          "primed_quickdraw",
+          "barrel_diffusion",
+          "lethal_torrent",
+          "expel_infested"
+        ],
+        "riven": {
+          "bonuses": [
+            "heat",
+            "multishot"
+          ],
+          "malus": "damage_to_grineer",
+          "rolls": [
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 2.0302162190751494,
+        "shown": "2.0302",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "heat",
+            "roll": 1.1
+          },
+          {
+            "id": "multishot",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "damage_to_grineer",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponReloadSpeedModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponPistolFactionDamageInfested"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "4",
+            "value": 79.63312340733751,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 105.91205624999999,
+            "negative": false
+          },
+          {
+            "code": "G",
+            "value": 13.0308747393825,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponReloadSpeedModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponPistolFactionDamageInfested",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 2,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "4",
+              "value": 79.63312340733751,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 105.91205624999999,
+              "negative": false
+            },
+            {
+              "code": "G",
+              "value": 13.0308747393825,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 1.8141339766170472,
+        "wfsimMods": [
+          "lethal_torrent",
+          "primed_target_cracker",
+          "riven:board",
+          "primed_heated_charge",
+          "primed_quickdraw",
+          "hornet_strike",
+          "barrel_diffusion",
+          "expel_infested"
+        ],
+        "wfsimKpm": 1.8128083114363271,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 2,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "4",
+              "value": 79.63312340733751,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 105.91205624999999,
+              "negative": false
+            },
+            {
+              "code": "G",
+              "value": 13.0308747393825,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 3.5183808057645547,
+        "wfsimMods": [
+          "lethal_torrent",
+          "hornet_strike",
+          "riven:board",
+          "primed_heated_charge",
+          "magnum_force",
+          "primed_target_cracker",
+          "primed_pistol_gambit",
+          "barrel_diffusion"
+        ],
+        "wfsimKpm": 3.527630670667621,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "rubico_prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+      "name": "Rubico Prime",
+      "row": {
+        "arcanes": [
+          "primary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "vigilante_supplies",
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "infected_clip",
+          "split_chamber",
+          "serration",
+          "critical_delay",
+          "semi_rifle_cannonade",
+          "vital_sense",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_chance",
+            "damage",
+            "multishot"
+          ],
+          "malus": "weapon_recoil",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 8.245567575293826,
+        "shown": "8.2456",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_chance",
+            "roll": 1.1
+          },
+          {
+            "id": "damage",
+            "roll": 1.1
+          },
+          {
+            "id": "multishot",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "weapon_recoil",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+        "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "0",
+            "value": 108.276925246875,
+            "negative": false
+          },
+          {
+            "code": "D",
+            "value": 119.10915194062501,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 64.968748700625,
+            "negative": false
+          },
+          {
+            "code": "Z",
+            "value": 42.5249991495,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 108.276925246875,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 119.10915194062501,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 64.968748700625,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 42.5249991495,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 1.679289985559757,
+        "wfsimMods": [
+          "critical_delay",
+          "primed_cryo_rounds",
+          "semi_rifle_cannonade",
+          "vital_sense",
+          "serration",
+          "split_chamber",
+          "infected_clip",
+          "riven:board"
+        ],
+        "wfsimKpm": 5.380189675907632,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 108.276925246875,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 119.10915194062501,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 64.968748700625,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 42.5249991495,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 3.341627206810229,
+        "wfsimMods": [
+          "thermite_rounds",
+          "semi_rifle_cannonade",
+          "vital_sense",
+          "hellfire",
+          "critical_delay",
+          "hammer_shot",
+          "split_chamber",
+          "riven:board"
+        ],
+        "wfsimKpm": 6.205618392302129,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "stahlta",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpRubanRifle/CrpRubanRifle",
+      "name": "Stahlta",
+      "row": {
+        "arcanes": [
+          "primary_bulwark"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primary_acuity",
+          "primed_bane_of_grineer",
+          "serration",
+          "galvanized_aptitude",
+          "critical_delay",
+          "vital_sense",
+          "argon_scope",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_chance",
+            "fire_rate",
+            "slash"
+          ],
+          "malus": "damage_to_infested",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 0.5437823806300769,
+        "shown": "0.5438",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_chance",
+            "roll": 1.1
+          },
+          {
+            "id": "fire_rate",
+            "roll": 1.1
+          },
+          {
+            "id": "slash",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "damage_to_infested",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/Expert/PrimedWeaponFactionDamageGrineer",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "0",
+            "value": 162.41538787031251,
+            "negative": false
+          },
+          {
+            "code": "R",
+            "value": 65.00123437500001,
+            "negative": false
+          },
+          {
+            "code": "A",
+            "value": 129.93425156250004,
+            "negative": false
+          },
+          {
+            "code": "I",
+            "value": 31.893749362125,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleMod"
+      ],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/PrimedWeaponFactionDamageGrineer",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 162.41538787031251,
+              "negative": false
+            },
+            {
+              "code": "R",
+              "value": 65.00123437500001,
+              "negative": false
+            },
+            {
+              "code": "A",
+              "value": 129.93425156250004,
+              "negative": false
+            },
+            {
+              "code": "I",
+              "value": 31.893749362125,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 0.9193815373375904,
+        "wfsimMods": [
+          "critical_delay",
+          "primed_bane_of_grineer",
+          "vital_sense",
+          "serration",
+          "galvanized_aptitude",
+          "hellfire",
+          "split_chamber",
+          "riven:board"
+        ],
+        "wfsimKpm": 0.8971951282652916,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+            "rank": 3,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 162.41538787031251,
+              "negative": false
+            },
+            {
+              "code": "R",
+              "value": 65.00123437500001,
+              "negative": false
+            },
+            {
+              "code": "A",
+              "value": 129.93425156250004,
+              "negative": false
+            },
+            {
+              "code": "I",
+              "value": 31.893749362125,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 1.978875509055009,
+        "wfsimMods": [
+          "heavy_caliber",
+          "hellfire",
+          "thermite_rounds",
+          "split_chamber",
+          "vital_sense",
+          "serration",
+          "hammer_shot",
+          "riven:board"
+        ],
+        "wfsimKpm": 1.9225459432466971,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "trumna_prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon",
+      "name": "Trumna Prime",
+      "row": {
+        "arcanes": [
+          "primary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_cryo_rounds",
+          "riven",
+          "galvanized_chamber",
+          "galvanized_aptitude",
+          "critical_delay",
+          "vile_acceleration",
+          "vital_sense",
+          "magnetic_capacity"
+        ],
+        "riven": {
+          "bonuses": [
+            "damage",
+            "multishot",
+            "toxin"
+          ],
+          "malus": "zoom",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 12.70999394646549,
+        "shown": "12.7100",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "damage",
+            "roll": 1.1
+          },
+          {
+            "id": "multishot",
+            "roll": 1.1
+          },
+          {
+            "id": "toxin",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "zoom",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "D",
+            "value": 110.60135537343751,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 60.328123793437506,
+            "negative": false
+          },
+          {
+            "code": "6",
+            "value": 60.328123793437506,
+            "negative": false
+          },
+          {
+            "code": "H",
+            "value": 26.322367500000006,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 3,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "D",
+              "value": 110.60135537343751,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 60.328123793437506,
+              "negative": false
+            },
+            {
+              "code": "6",
+              "value": 60.328123793437506,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 26.322367500000006,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 5.46568537294353,
+        "wfsimMods": [
+          "critical_delay",
+          "vile_acceleration",
+          "magnetic_capacity",
+          "riven:board",
+          "primed_cryo_rounds",
+          "vital_sense",
+          "galvanized_chamber",
+          "galvanized_aptitude"
+        ],
+        "wfsimKpm": 7.382447762954845,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/IceEventRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/RifleStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 2,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "D",
+              "value": 110.60135537343751,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 60.328123793437506,
+              "negative": false
+            },
+            {
+              "code": "6",
+              "value": 60.328123793437506,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 26.322367500000006,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 5.875377215910273,
+        "wfsimMods": [
+          "vile_acceleration",
+          "magnetic_capacity",
+          "riven:board",
+          "rime_rounds",
+          "heavy_caliber",
+          "rifle_elementalist",
+          "thermite_rounds",
+          "split_chamber"
+        ],
+        "wfsimKpm": 6.631183350691213,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "zakti_prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiPistol",
+      "name": "Zakti Prime",
+      "row": {
+        "arcanes": [
+          "secondary_enervate"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "galvanized_shot",
+          "pistol_elementalist",
+          "magnetic_might",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_damage",
+            "damage"
+          ],
+          "malus": "weapon_recoil",
+          "rolls": [
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 8.193982225625325,
+        "shown": "8.1940",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_damage",
+            "roll": 1.1
+          },
+          {
+            "id": "damage",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "weapon_recoil",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "1",
+            "value": 134.763747304725,
+            "negative": false
+          },
+          {
+            "code": "D",
+            "value": 328.8235500000001,
+            "negative": false
+          },
+          {
+            "code": "Z",
+            "value": 44.10449911791,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 134.763747304725,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 328.8235500000001,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 44.10449911791,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 3.349463425035727,
+        "wfsimMods": [
+          "frostbite",
+          "magnetic_might",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "pistol_elementalist",
+          "galvanized_diffusion",
+          "galvanized_shot",
+          "riven:board"
+        ],
+        "wfsimKpm": 5.3726082905621855,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStunChanceMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 134.763747304725,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 328.8235500000001,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 44.10449911791,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 2.3424994560127006,
+        "wfsimMods": [
+          "scorch",
+          "primed_heated_charge",
+          "lethal_torrent",
+          "pistol_elementalist",
+          "barrel_diffusion",
+          "hornet_strike",
+          "sure_shot",
+          "riven:board"
+        ],
+        "wfsimKpm": 3.174496720742681,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "akarius_prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusWeapon",
+      "name": "Akarius Prime",
+      "row": {
+        "arcanes": [
+          "cascadia_flare"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "primed_pistol_ammo_mutation",
+        "mode": "base",
+        "mods": [
+          "ice_storm",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "galvanized_shot",
+          "pistol_elementalist",
+          "magnetic_might",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_chance",
+            "damage",
+            "multishot"
+          ],
+          "malus": "status_duration",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 13.234517085414854,
+        "shown": "13.2345",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_chance",
+            "roll": 1.1
+          },
+          {
+            "id": "damage",
+            "roll": 1.1
+          },
+          {
+            "id": "multishot",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "status_duration",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/IceStormMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "0",
+            "value": 100.54285915781252,
+            "negative": false
+          },
+          {
+            "code": "D",
+            "value": 147.20062500000003,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 80.23640624999999,
+            "negative": false
+          },
+          {
+            "code": "3",
+            "value": 43.8706125,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceStormMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 100.54285915781252,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 147.20062500000003,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 80.23640624999999,
+              "negative": false
+            },
+            {
+              "code": "3",
+              "value": 43.8706125,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 1.6793476812345596,
+        "wfsimMods": [
+          "ice_storm",
+          "magnetic_might",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "pistol_elementalist",
+          "galvanized_diffusion",
+          "galvanized_shot",
+          "riven:board"
+        ],
+        "wfsimKpm": 11.998039349470695,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 100.54285915781252,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 147.20062500000003,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 80.23640624999999,
+              "negative": false
+            },
+            {
+              "code": "3",
+              "value": 43.8706125,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 2.0980778720860203,
+        "wfsimMods": [
+          "scorch",
+          "primed_heated_charge",
+          "pistol_elementalist",
+          "lethal_torrent",
+          "hornet_strike",
+          "primed_target_cracker",
+          "primed_pistol_gambit",
+          "riven:board"
+        ],
+        "wfsimKpm": 7.95639760529206,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "athodai_prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAthodai/PrimeAthodaiPistolWeapon",
+      "name": "Athodai Prime",
+      "row": {
+        "arcanes": [
+          "secondary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "primed_convulsion",
+          "riven",
+          "galvanized_diffusion",
+          "hornet_strike",
+          "primed_target_cracker",
+          "primed_pistol_gambit",
+          "lethal_torrent",
+          "magnetic_might"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_chance",
+            "critical_damage",
+            "toxin"
+          ],
+          "malus": "zoom",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 4.368343136428686,
+        "shown": "4.3683",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_chance",
+            "roll": 1.1
+          },
+          {
+            "id": "critical_damage",
+            "roll": 1.1
+          },
+          {
+            "id": "toxin",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "zoom",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "0",
+            "value": 100.54285915781252,
+            "negative": false
+          },
+          {
+            "code": "1",
+            "value": 60.328123793437506,
+            "negative": false
+          },
+          {
+            "code": "6",
+            "value": 60.328123793437506,
+            "negative": false
+          },
+          {
+            "code": "H",
+            "value": 35.143874210250004,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 3,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 100.54285915781252,
+              "negative": false
+            },
+            {
+              "code": "1",
+              "value": 60.328123793437506,
+              "negative": false
+            },
+            {
+              "code": "6",
+              "value": 60.328123793437506,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 35.143874210250004,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 2.8335316259533316,
+        "wfsimMods": [
+          "lethal_torrent",
+          "magnetic_might",
+          "primed_target_cracker",
+          "riven:board",
+          "primed_convulsion",
+          "primed_pistol_gambit",
+          "hornet_strike",
+          "galvanized_diffusion"
+        ],
+        "wfsimKpm": 2.8281859087678565,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 2,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 100.54285915781252,
+              "negative": false
+            },
+            {
+              "code": "1",
+              "value": 60.328123793437506,
+              "negative": false
+            },
+            {
+              "code": "6",
+              "value": 60.328123793437506,
+              "negative": false
+            },
+            {
+              "code": "H",
+              "value": 35.143874210250004,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 4.54093738475926,
+        "wfsimMods": [
+          "lethal_torrent",
+          "hornet_strike",
+          "riven:board",
+          "frostbite",
+          "primed_heated_charge",
+          "barrel_diffusion",
+          "primed_target_cracker",
+          "primed_pistol_gambit"
+        ],
+        "wfsimKpm": 4.552681959008767,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "knell_prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeKnell/PrimeKnellWeapon",
+      "name": "Knell Prime",
+      "row": {
+        "arcanes": [
+          "secondary_deadhead"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "frostbite",
+          "pistol_pestilence",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "galvanized_shot",
+          "primed_pistol_gambit",
+          "magnetic_might",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_chance",
+            "damage",
+            "multishot"
+          ],
+          "malus": "damage_to_corpus",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 33.977172019597795,
+        "shown": "33.9772",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_chance",
+            "roll": 1.1
+          },
+          {
+            "id": "damage",
+            "roll": 1.1
+          },
+          {
+            "id": "multishot",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "damage_to_corpus",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "0",
+            "value": 131.4791235140625,
+            "negative": false
+          },
+          {
+            "code": "D",
+            "value": 192.49312500000002,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 104.92453124999999,
+            "negative": false
+          },
+          {
+            "code": "C",
+            "value": 25.818749483624998,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 131.4791235140625,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 192.49312500000002,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 104.92453124999999,
+              "negative": false
+            },
+            {
+              "code": "C",
+              "value": 25.818749483624998,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 0.7016126850327876,
+        "wfsimMods": [
+          "frostbite",
+          "magnetic_might",
+          "pistol_pestilence",
+          "primed_pistol_gambit",
+          "primed_heated_charge",
+          "galvanized_diffusion",
+          "galvanized_shot",
+          "riven:board"
+        ],
+        "wfsimKpm": 0.6006481697606695,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+            "rank": 10,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/PistolStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+            "rank": 10,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedCritChanceFireRatePistol",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "0",
+              "value": 131.4791235140625,
+              "negative": false
+            },
+            {
+              "code": "D",
+              "value": 192.49312500000002,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 104.92453124999999,
+              "negative": false
+            },
+            {
+              "code": "C",
+              "value": 25.818749483624998,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 1.8444959539749173,
+        "wfsimMods": [
+          "scorch",
+          "primed_heated_charge",
+          "pistol_elementalist",
+          "primed_target_cracker",
+          "hornet_strike",
+          "barrel_diffusion",
+          "creeping_bullseye",
+          "riven:board"
+        ],
+        "wfsimKpm": 1.4452430286432474,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "sobek",
+      "path": "/Lotus/Weapons/Tenno/Shotgun/DoubleBarrelShotgun",
+      "name": "Sobek",
+      "row": {
+        "arcanes": [
+          "primary_crux"
+        ],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "exilus": "vigilante_supplies",
+        "mode": "base",
+        "mods": [
+          "toxic_barrage",
+          "chilling_reload",
+          "galvanized_hell",
+          "primed_point_blank",
+          "galvanized_savvy",
+          "shotgun_elementalist",
+          "magnetic_strafe",
+          "riven"
+        ],
+        "riven": {
+          "bonuses": [
+            "critical_damage",
+            "multishot",
+            "weapon_recoil"
+          ],
+          "malus": null,
+          "rolls": [
+            1.1,
+            1.1,
+            1.1
+          ]
+        },
+        "score": 1.913660524568307,
+        "shown": "1.9137",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "critical_damage",
+            "roll": 1.1
+          },
+          {
+            "id": "multishot",
+            "roll": 1.1
+          },
+          {
+            "id": "weapon_recoil",
+            "roll": 1.1
+          }
+        ],
+        "malus": null
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Shotgun/DualStat/PoisonEventShotgunMod",
+        "/Lotus/Upgrades/Mods/Shotgun/DualStat/ColdDmgReloadSpeedMod",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Shotgun/ShotgunStatusDamageDuoMod",
+        "/Lotus/Upgrades/Mods/Shotgun/DualStat/MagneticFireRateShotgunMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "1",
+            "value": 98.75249802495001,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 131.340825,
+            "negative": false
+          },
+          {
+            "code": "Z",
+            "value": 98.75249802495001,
+            "negative": false
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/ColdDmgReloadSpeedMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/MagneticFireRateShotgunMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/PoisonEventShotgunMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+            "rank": 10,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/ShotgunStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsSPMod",
+            "rank": 10,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponStatusChanceSPMod",
+            "rank": 10,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 98.75249802495001,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 131.340825,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 98.75249802495001,
+              "negative": false
+            }
+          ]
+        },
+        "localKpm": 1.63729142804034,
+        "wfsimMods": [
+          "chilling_reload",
+          "magnetic_strafe",
+          "toxic_barrage",
+          "primed_point_blank",
+          "shotgun_elementalist",
+          "galvanized_hell",
+          "galvanized_savvy",
+          "riven:board"
+        ],
+        "wfsimKpm": 1.6151554936298027,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/BlazeMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/DualStat/FireEventShotgunMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/Expert/WeaponDamageAmountModExpert",
+            "rank": 10,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/ShotgunStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Shotgun/WeaponFireRateMod",
+            "rank": 5,
+            "slot": 6
+          }
+        ],
+        "riven": {
+          "slot": 7,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "1",
+              "value": 98.75249802495001,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 131.340825,
+              "negative": false
+            },
+            {
+              "code": "Z",
+              "value": 98.75249802495001,
+              "negative": false
+            }
+          ]
+        },
+        "localKpm": 3.1388306692039674,
+        "wfsimMods": [
+          "blaze",
+          "scattering_inferno",
+          "primed_point_blank",
+          "shotgun_elementalist",
+          "hells_chamber",
+          "incendiary_coat",
+          "shotgun_barrage",
+          "riven:board"
+        ],
+        "wfsimKpm": 3.0682870129346815,
+        "wfsimError": null
+      }
+    },
+    {
+      "weapon": "verglas_prime",
+      "path": "/Lotus/Types/Sentinels/SentinelWeapons/SentinelFreezeRayPrimeRifle",
+      "name": "Verglas Prime",
+      "row": {
+        "arcanes": [],
+        "benchmark": "standard_single_target",
+        "evolutions": [],
+        "mode": "base",
+        "mods": [
+          "malignant_force",
+          "rime_rounds",
+          "hellfire",
+          "thermite_rounds",
+          "riven",
+          "split_chamber",
+          "vile_acceleration",
+          "magnetic_capacity"
+        ],
+        "riven": {
+          "bonuses": [
+            "damage",
+            "heat",
+            "multishot"
+          ],
+          "malus": "damage_to_infested",
+          "rolls": [
+            1.1,
+            1.1,
+            1.1,
+            0.9
+          ]
+        },
+        "score": 2.4801290809576364,
+        "shown": "2.4801",
+        "valence": ""
+      },
+      "spec": {
+        "rank": 8,
+        "polarity": "madurai",
+        "bonuses": [
+          {
+            "id": "damage",
+            "roll": 1.1
+          },
+          {
+            "id": "heat",
+            "roll": 1.1
+          },
+          {
+            "id": "multishot",
+            "roll": 1.1
+          }
+        ],
+        "malus": {
+          "id": "damage_to_infested",
+          "roll": 0.9
+        }
+      },
+      "publicMods": [
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/IceEventRifleMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod"
+      ],
+      "riven": {
+        "slot": 0,
+        "rank": 8,
+        "polarity": "AP_ATTACK",
+        "stats": [
+          {
+            "code": "D",
+            "value": 221.20271074687503,
+            "negative": false
+          },
+          {
+            "code": "4",
+            "value": 120.65624758687501,
+            "negative": false
+          },
+          {
+            "code": "S",
+            "value": 120.65624758687501,
+            "negative": false
+          },
+          {
+            "code": "I",
+            "value": 39.48749921025001,
+            "negative": true
+          }
+        ]
+      },
+      "removedWeakPoint": [],
+      "public": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 2
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/IceEventRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 1,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "D",
+              "value": 221.20271074687503,
+              "negative": false
+            },
+            {
+              "code": "4",
+              "value": 120.65624758687501,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 120.65624758687501,
+              "negative": false
+            },
+            {
+              "code": "I",
+              "value": 39.48749921025001,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 0.6765704165114376,
+        "wfsimMods": [
+          "vile_acceleration",
+          "riven:board",
+          "thermite_rounds",
+          "rime_rounds",
+          "magnetic_capacity",
+          "malignant_force",
+          "hellfire",
+          "split_chamber"
+        ],
+        "wfsimKpm": 0.65016939758193,
+        "wfsimError": null
+      },
+      "ours": {
+        "mods": [
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/IceEventRifleMod",
+            "rank": 3,
+            "slot": 0
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+            "rank": 3,
+            "slot": 1
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+            "rank": 3,
+            "slot": 3
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/RifleStatusDamageDuoMod",
+            "rank": 5,
+            "slot": 4
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/MagneticClipRifleMod",
+            "rank": 3,
+            "slot": 5
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+            "rank": 5,
+            "slot": 6
+          },
+          {
+            "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+            "rank": 5,
+            "slot": 7
+          }
+        ],
+        "riven": {
+          "slot": 2,
+          "rank": 8,
+          "polarity": "AP_ATTACK",
+          "stats": [
+            {
+              "code": "D",
+              "value": 221.20271074687503,
+              "negative": false
+            },
+            {
+              "code": "4",
+              "value": 120.65624758687501,
+              "negative": false
+            },
+            {
+              "code": "S",
+              "value": 120.65624758687501,
+              "negative": false
+            },
+            {
+              "code": "I",
+              "value": 39.48749921025001,
+              "negative": true
+            }
+          ]
+        },
+        "localKpm": 9.968896113924295,
+        "wfsimMods": [
+          "rime_rounds",
+          "malignant_force",
+          "riven:board",
+          "thermite_rounds",
+          "rifle_elementalist",
+          "magnetic_capacity",
+          "vile_acceleration",
+          "split_chamber"
+        ],
+        "wfsimKpm": 9.123892373239821,
+        "wfsimError": null
+      }
+    }
+  ],
+  "skips": [],
+  "weakPointExcluded": [
+    "/Lotus/Upgrades/Mods/DualSource/Rifle/DaikyuKatanaMod",
+    "/Lotus/Upgrades/Mods/Nightwave/NightwaveLasSilencedPistolAugmentMod",
+    "/Lotus/Upgrades/Mods/Nightwave/NightwaveTC2024AK47AugmentMod",
+    "/Lotus/Upgrades/Mods/Pistol/Event/CritChanceWhileAimingPistolMod",
+    "/Lotus/Upgrades/Mods/Pistol/Event/CritChanceWhileAimingPistolSPMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/Arbitration/GrnSniperRifleArbitrationMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/Nightwave/NightwaveTigrisAugmentMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/Nightwave/NightwaveZylokAugmentMod",
+    "/Lotus/Upgrades/Mods/Rifle/SniperHeadshotMultiplierMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+    "/Lotus/Upgrades/Mods/Shotgun/Event/CritChanceWhileAimingShotgunMod"
+  ]
+}

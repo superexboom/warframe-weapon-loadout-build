@@ -334,7 +334,9 @@ function combatStatePayload() {
   document.querySelectorAll('[data-combat-state]').forEach((control) => {
     const key = control.dataset.combatState;
     if (control.type === 'checkbox') {
-      if (control.checked) result[key] = true;
+      // Default-on switches are only sent when turned off.
+      if ('defaultOn' in control.dataset) { if (!control.checked) result[key] = false; }
+      else if (control.checked) result[key] = true;
     } else if (control.value !== '') {
       result[key] = control.type === 'number' ? Number(control.value) : control.value;
     }
@@ -363,7 +365,7 @@ function restoreCombatState(value = {}) {
   }
   document.querySelectorAll('[data-combat-orbtype]').forEach((control) => { control.value = vector[control.dataset.combatOrbtype] ?? ''; });
   document.querySelectorAll('[data-combat-state]').forEach((control) => {
-    if (control.type === 'checkbox') control.checked = Boolean(value[control.dataset.combatState]);
+    if (control.type === 'checkbox') control.checked = 'defaultOn' in control.dataset ? value[control.dataset.combatState] !== false : Boolean(value[control.dataset.combatState]);
     else control.value = value[control.dataset.combatState] ?? '';
   });
   document.querySelectorAll('[data-combat-gear]').forEach((control) => {
@@ -2085,7 +2087,7 @@ function solveProfile() {
   // 解算档位：两个选择器（分析页内联 / 配装页字段）共享 localStorage，
   // 任一处改动即全局生效。
   const value = window.localStorage.getItem("wf-solve-profile");
-  return ["fast", "standard", "deep"].includes(value) ? value : "standard";
+  return ["ultra", "fast", "standard", "deep"].includes(value) ? value : "standard";
 }
 
 function scopeFillValue(id) {
@@ -2147,7 +2149,7 @@ function renderScopeLists() {
 }
 
 function setSolveProfile(profile) {
-  const next = ["fast", "standard", "deep"].includes(profile) ? profile : "standard";
+  const next = ["ultra", "fast", "standard", "deep"].includes(profile) ? profile : "standard";
   window.localStorage.setItem("wf-solve-profile", next);
   for (const id of ["analysis-profile-select", "solve-profile-select"]) {
     const select = document.getElementById(id);
@@ -2233,12 +2235,10 @@ async function submitAnalysis(event) {
   const progressToken = `an-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
   payload.progressToken = progressToken;
   const STAGE_LABELS = {
-    baseline: "基准配装解算",
-    calibration: "评分靶压力校准",
+    baseline: "基准配装与武器靶",
     actual: "当前紫卡配装求解",
     recommendation: "词条优先级排序",
-    optimal: "参考上限配装求解",
-    quality: "连续指标复评",
+    quality: "词条贡献",
     payload: "结果构建",
   };
   const TOTAL_STAGES = Object.keys(STAGE_LABELS).length;
@@ -2310,73 +2310,54 @@ function formatQuality(value) {
 }
 
 function renderScore() {
-  const rawScore = finite(state.result.score);
-  const score = rawScore === null ? null : clamp(rawScore, 0, 100);
-  ui["score-value"].textContent = score === null ? "--" : score.toFixed(1);
-  ui["grade-value"].textContent = state.result.grade || "--";
+  // 不再有 0–100 评分与理论上限：头条是相对无紫卡基线的实际增益，
+  // 同一武器的所有紫卡都在同一个固定靶上比较。
+  const gain = finite(state.result.actualGain);
+  ui["score-value"].textContent = formatPercent(gain);
+  const target = state.result.evaluationTarget || {};
+  // 硬度积分靶：三个血量节点（无紫卡基线身体命中的击杀时间），KPM 为几何平均。
+  const nodes = state.result.targetCalibration?.hardnessNodes || [];
+  const ttkText = nodes.length ? nodes.map((node) => Number(node.ttkSeconds).toFixed(1)).join("/") : null;
+  ui["grade-value"].textContent = ttkText ? `基线 ${ttkText}s` : "--";
   const resultWeapon = state.result?.weapon;
   const displayWeapon = resultWeapon && (resultWeapon.nameZh || resultWeapon.nameEn) ? resultWeapon : state.weapon;
   ui["weapon-result-name"].textContent = `${weaponName(displayWeapon)} · ${TYPE_LABELS[state.weapon.weaponType] || state.weapon.weaponType}`;
-  ui["actual-gain"].textContent = formatPercent(state.result.actualGain);
-  ui["optimal-gain"].textContent = formatPercent(state.result.optimalGain);
-  ui["roll-quality"].textContent = formatQuality(state.result.rollQuality);
+  ui["actual-gain"].textContent = formatPercent(gain);
+  const kpm = (build) => {
+    const value = finite(build?.objectiveScore);
+    return value === null ? "--" : value.toFixed(1);
+  };
+  ui["optimal-gain"].textContent = kpm(state.result.baseline);
+  ui["roll-quality"].textContent = kpm(state.result.actual);
   ui["result-disposition"].textContent = formatDisposition(state.result.disposition);
   const circumference = 2 * Math.PI * 51;
+  const fill = gain === null ? 0 : Math.max(0, gain) / (Math.max(0, gain) + 100);
   ui["orbit-value"].style.strokeDasharray = String(circumference);
-  ui["orbit-value"].style.strokeDashoffset = String(
-    circumference * (score === null ? 1 : 1 - score / 100),
-  );
-  ui["score-orbit"].dataset.grade = String(state.result.grade || "").charAt(0).toUpperCase();
-  const target = state.result.evaluationTarget || {};
-  const quality = state.result.searchQuality || {};
+  ui["orbit-value"].style.strokeDashoffset = String(circumference * (1 - fill));
+  ui["score-orbit"].dataset.grade = "";
   const calibration = state.result.targetCalibration || {};
-  const search = state.result.searchStatus || {};
   const weaponMechanics = state.result.weaponMechanics || {};
   ui["score-value"].title = [
-    score === null ? `评分未归一化：${state.result.scoreStatusReason || state.result.scoreStatus || "上下文/最优性未决"}` : null,
-    quality.scoreMetric ? `评分指标：${quality.scoreMetric}` : null,
     target.level != null ? `评价等级：${target.level}` : null,
-    calibration.status ? `校准：${calibration.status}` : null,
-    state.result.scoreBasis ? `评分基准：${state.result.scoreBasis}` : null,
+    ttkText ? `靶血量取本武器无紫卡基线身体命中 ${ttkText}s 击杀的三个节点，KPM 为几何平均` : null,
     state.result.modelStatus ? `模型：${state.result.modelStatus}` : null,
     weaponMechanics.status ? `武器机制：${weaponMechanics.status}` : null,
   ].filter(Boolean).join(" · ");
   const contextNote = ui["score-context-note"];
   if (contextNote) {
     const bits = [];
-    // ── 评分靶信息前置（2026-09-24）：等级随压力校准逐次变化（170→
-    // 522→914…），不同次分析不能直接横向对比——靶名+等级必须显式可见。
     const enemyName = target.enemyName || target.enemyPath?.rsplit?.("/", 1)?.pop?.() || "";
     if (enemyName) bits.push(`靶 ${enemyName}`);
     if (target.level != null) bits.push(`Lv${target.level}`);
     if (target.steelPath) bits.push("钢铁之路");
-    if (target.enemyEnhancements?.eximus) bits.push("卓越者");
-    if (quality.scoreMetric) bits.push(`评分指标 ${METRIC_LABELS[quality.scoreMetric] || quality.scoreMetric}`);
-    if (calibration.status) bits.push(`校准 ${calibration.status}`);
-    if (state.result.targetStatus && state.result.targetStatus !== "not-applicable") {
-      bits.push(`目标 ${state.result.targetStatus}`);
-    }
+    if (target.enemyEnhancements?.noOverguard) bits.push("无超宏");
+    if (ttkText) bits.push(`硬度积分：基线 ${ttkText}s 击杀（同武器所有紫卡与弱点率共用）`);
+    if (state.result.unsupported?.includes?.("ultra-profile-baseline-approximate")) bits.push("超快：基线为近似，增益仅供参考");
     if (state.result.modelStatus && state.result.modelStatus !== "modeled") {
       bits.push(`模型 ${state.result.modelStatus}`);
     }
     if (weaponMechanics.status && weaponMechanics.status !== "modeled") {
       bits.push(`武器机制 ${weaponMechanics.status}`);
-    }
-    if (search.status) bits.push(`搜索 ${{'heuristic-budget-limited':'预算内已找到的结果','heuristic-best-found':'启发式已找到的结果'}[search.status] || search.status}`);
-    if (state.result.scoreBasis) bits.push(`基准 ${state.result.scoreBasis}`);
-    // F10：按原因码区分「评分未归一化」的解释——模型缺失、目标过弱、
-    // 下界未证明各说各话，不再一律显示「未证明全局最优」。
-    if (state.result.scoreStatus && state.result.scoreStatus !== "available") {
-      const reason = String(state.result.scoreStatusReason || "");
-      if (reason.startsWith("model-missing")) {
-        bits.push("评分未归一化：伤害模型有未建模机制");
-      } else if (reason === "target-pressure-insufficient") {
-        bits.push("评分未归一化：评价靶压力不足（目标过弱/饱和）");
-      } else if (reason === "optimizer-optimum-lower-bound") {
-        bits.push("评分未归一化：理论上限仍是下界（未证明全局最优）");
-      } else {
-        bits.push("评分未归一化：上下文未决");
-      }
     }
     contextNote.textContent = bits.join(" · ");
     contextNote.hidden = bits.length === 0;

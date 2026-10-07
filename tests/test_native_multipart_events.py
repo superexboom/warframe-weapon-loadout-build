@@ -48,7 +48,9 @@ def test_stahlta_profile_only_applies_to_exact_selected_projectile_mode():
     assert base_profile(selected)['radials'] == base_profile(w, 1)['radials']
     wrong = deepcopy(selected)
     wrong['fireModes'][0]['damage']['projectile'] = '/unverified-projectile'
-    assert base_profile(wrong) == {}
+    # The audited explosion needs the projectile; the native charge is the
+    # mode's state behaviour (tools/import_charge_profiles.py) and stays.
+    assert base_profile(wrong) == {'charge': {'seconds': 1.6, 'source': 'native-ChargeTime', 'scalesWithFireRate': True}}
 
 
 @pytest.mark.parametrize('name,mode,delay,before_damage,after_damage', [

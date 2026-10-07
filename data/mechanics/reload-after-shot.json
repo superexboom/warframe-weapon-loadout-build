@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "packageBuild": "2026.08.13.13.24",
+  "generatedBy": "tools/import_reload_after_shot.py",
+  "semantics": "after every shot of the mode the weapon reloads (ordinary reload time and reload-speed mods)",
+  "evidence": "Warframe.x64.exe LotusSpearGunStateBehavior vtable slot 45 -> state 8 / event 0x79 / weapon+0x2d0, as the generic reload path",
+  "weapons": {
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox": {
+      "name": "Tenet Ferrox",
+      "modes": {
+        "1": {
+          "behaviour": 1,
+          "stateType": "/Lotus/Types/Weapon/LotusSpearGunStateBehavior",
+          "reloadTime": 1.8,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+          "fireRate": 1.0
+        }
+      },
+      "nativeSha256": "4e6cc3c9e2eab4a5567f4985a58f26aebff9f380b47ce379638aaecce408eb86"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun": {
+      "name": "Ferrox",
+      "modes": {
+        "1": {
+          "behaviour": 1,
+          "stateType": "/Lotus/Types/Weapon/LotusSpearGunStateBehavior",
+          "reloadTime": 1.8,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+          "fireRate": 1.0
+        }
+      },
+      "nativeSha256": "7bc76814019a6c1d8b25102a4466538d8a388f2cae3432e105ae30e12792f423"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpear": {
+      "name": "Javlok",
+      "modes": {
+        "1": {
+          "behaviour": 1,
+          "stateType": "/Lotus/Types/Weapon/LotusSpearGunStateBehavior",
+          "reloadTime": 1.9,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+          "fireRate": 1.0
+        }
+      },
+      "nativeSha256": "60091dadb467cae2d20c13548381bb4402df0f2643b79e3269408dbec93b5b69"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisWeapon": {
+      "name": "Afentis Prime",
+      "modes": {
+        "1": {
+          "behaviour": 1,
+          "stateType": "/Lotus/Types/Weapon/LotusSpearGunStateBehavior",
+          "reloadTime": 1.8,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+          "fireRate": 1.0
+        }
+      },
+      "nativeSha256": "1521144c53efef2fc4bca2ff364dc0f9727ff0f701592125d48ce6ed1f456ae0"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon": {
+      "name": "Scourge Prime",
+      "modes": {
+        "1": {
+          "behaviour": 1,
+          "stateType": "/Lotus/Types/Weapon/LotusSpearGunStateBehavior",
+          "reloadTime": 2.2,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+          "fireRate": 1.0
+        }
+      },
+      "nativeSha256": "eaa16f218508f9930fb0daa5cb16fb1b3f2290cd7244e2700ab2b6d1dd88f87f"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearGunWeapon": {
+      "name": "Afentis",
+      "modes": {
+        "1": {
+          "behaviour": 1,
+          "stateType": "/Lotus/Types/Weapon/LotusSpearGunStateBehavior",
+          "reloadTime": 1.8,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+          "fireRate": 1.0
+        }
+      },
+      "nativeSha256": "4aa58c86e8eed4bb8c8dbb68f32ce1825727768c38103638f09b33e3d4b9aff8"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun": {
+      "name": "Scourge",
+      "modes": {
+        "1": {
+          "behaviour": 1,
+          "stateType": "/Lotus/Types/Weapon/LotusSpearGunStateBehavior",
+          "reloadTime": 2.5,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto",
+          "fireRate": 1.0
+        }
+      },
+      "nativeSha256": "5bd92693943fdf5a64c161423bc249c6e291f8f60f860c7bdc60e747ba904213"
+    }
+  }
+}

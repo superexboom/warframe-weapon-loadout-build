@@ -1,0 +1,2845 @@
+[
+ {
+  "weapon": "Amprex",
+  "hs": 0.0,
+  "mode": "cur",
+  "window": 30.0,
+  "seconds": 148.7776438999863,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 199.17540754631924,
+  "details": [
+   {
+    "code": "0",
+    "label": "暴击几率",
+    "value": 120.7,
+    "low": 107.44589768643118,
+    "high": 131.47031750620624,
+    "quality": 55.169291966247854,
+    "delta": 75.3563863175297,
+    "ablationDelta": 75.3563863175297,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 96.6,
+    "low": 85.95800239380681,
+    "high": 105.17782540096137,
+    "quality": 55.36990430261357,
+    "delta": 87.07492895773854,
+    "ablationDelta": 87.07492895773854,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "S",
+    "label": "多重射击",
+    "value": 72.4,
+    "low": 64.47011225879154,
+    "high": 78.88533960654381,
+    "quality": 55.01049376404703,
+    "delta": 29.214268126592245,
+    "ablationDelta": 29.214268126592245,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "Z",
+    "label": "武器后坐力",
+    "value": 58.0,
+    "low": 51.57608980703323,
+    "high": 63.10827168523504,
+    "quality": 44.295795359338896,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 336.9930536077705,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 85.34505468637768,
+      "score": 25.325464063040194
+     },
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 68.12672154332829,
+      "score": 20.216061077217823
+     },
+     {
+      "code": "4",
+      "label": "火焰伤害",
+      "gain": 64.79534653764159,
+      "score": 19.227502123250744
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Amprex",
+  "hs": 0.0,
+  "mode": "f10",
+  "window": 10.0,
+  "seconds": 108.53537379999761,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 190.35203424357366,
+  "details": [
+   {
+    "code": "0",
+    "label": "暴击几率",
+    "value": 120.7,
+    "low": 107.44589768643118,
+    "high": 131.47031750620624,
+    "quality": 55.169291966247854,
+    "delta": 73.12621143985237,
+    "ablationDelta": 73.12621143985237,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 96.6,
+    "low": 85.95800239380681,
+    "high": 105.17782540096137,
+    "quality": 55.36990430261357,
+    "delta": 86.39722896256403,
+    "ablationDelta": 86.39722896256403,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "S",
+    "label": "多重射击",
+    "value": 72.4,
+    "low": 64.47011225879154,
+    "high": 78.88533960654381,
+    "quality": 55.01049376404703,
+    "delta": 29.73388197662259,
+    "ablationDelta": 29.73388197662259,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "Z",
+    "label": "武器后坐力",
+    "value": 58.0,
+    "low": 51.57608980703323,
+    "high": 63.10827168523504,
+    "quality": 44.295795359338896,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 391.4014918989308,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 102.15139758330345,
+      "score": 26.09887792908091
+     },
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 78.46589320791293,
+      "score": 20.047418017551834
+     },
+     {
+      "code": "4",
+      "label": "火焰伤害",
+      "gain": 77.5191710525706,
+      "score": 19.805537959622267
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Amprex",
+  "hs": 0.0,
+  "mode": "f20",
+  "window": 20.0,
+  "seconds": 127.3342862999998,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 201.1974708571025,
+  "details": [
+   {
+    "code": "0",
+    "label": "暴击几率",
+    "value": 120.7,
+    "low": 107.44589768643118,
+    "high": 131.47031750620624,
+    "quality": 55.169291966247854,
+    "delta": 75.89306241495235,
+    "ablationDelta": 75.89306241495235,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 96.6,
+    "low": 85.95800239380681,
+    "high": 105.17782540096137,
+    "quality": 55.36990430261357,
+    "delta": 87.23616986314431,
+    "ablationDelta": 87.23616986314431,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "S",
+    "label": "多重射击",
+    "value": 72.4,
+    "low": 64.47011225879154,
+    "high": 78.88533960654381,
+    "quality": 55.01049376404703,
+    "delta": 29.36373073695371,
+    "ablationDelta": 29.36373073695371,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "Z",
+    "label": "武器后坐力",
+    "value": 58.0,
+    "low": 51.57608980703323,
+    "high": 63.10827168523504,
+    "quality": 44.295795359338896,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 342.6835599074633,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 78.25062899406781,
+      "score": 22.834660937687893
+     },
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 64.93105483944403,
+      "score": 18.94781729738588
+     },
+     {
+      "code": "4",
+      "label": "火焰伤害",
+      "gain": 61.455877686535906,
+      "score": 17.933710535495536
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Amprex",
+  "hs": 0.0,
+  "mode": "w10",
+  "window": 10.0,
+  "seconds": 103.7012851999898,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.009612561844703441,
+   "targetTtkSeconds": 2.0,
+   "minimumLevel": 0,
+   "healthScaleFloor": 0.007115837292110813
+  },
+  "actualGain": 139.72455665475908,
+  "details": [
+   {
+    "code": "0",
+    "label": "暴击几率",
+    "value": 120.7,
+    "low": 107.44589768643118,
+    "high": 131.47031750620624,
+    "quality": 55.169291966247854,
+    "delta": 42.58879638049453,
+    "ablationDelta": 42.58879638049453,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 96.6,
+    "low": 85.95800239380681,
+    "high": 105.17782540096137,
+    "quality": 55.36990430261357,
+    "delta": 50.25625253069621,
+    "ablationDelta": 50.25625253069621,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "S",
+    "label": "多重射击",
+    "value": 72.4,
+    "low": 64.47011225879154,
+    "high": 78.88533960654381,
+    "quality": 55.01049376404703,
+    "delta": 20.72317939508479,
+    "ablationDelta": 20.72317939508479,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "Z",
+    "label": "武器后坐力",
+    "value": 58.0,
+    "low": 51.57608980703323,
+    "high": 63.10827168523504,
+    "quality": 44.295795359338896,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 56.04257247422624,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T1",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 42.000299710500656,
+      "score": 74.94356139668005
+     },
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 40.6928650235292,
+      "score": 72.61063014593717
+     }
+    ]
+   },
+   {
+    "tier": "T2",
+    "stats": [
+     {
+      "code": "S",
+      "label": "多重射击",
+      "gain": 25.402509789881723,
+      "score": 45.327165881909224
+     },
+     {
+      "code": "D",
+      "label": "基础伤害",
+      "gain": 24.010914522972215,
+      "score": 42.8440620458933
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "6",
+      "label": "毒素伤害",
+      "gain": 9.542452299564118,
+      "score": 17.0271489659984
+     },
+     {
+      "code": "7",
+      "label": "电击伤害",
+      "gain": 9.542452299564118,
+      "score": 17.0271489659984
+     },
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 9.542452299564118,
+      "score": 17.0271489659984
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Burston Prime",
+  "hs": 0.0,
+  "mode": "cur",
+  "window": 30.0,
+  "seconds": 174.42723329999717,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": -26.588383122414104,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 287.5,
+    "low": 255.98426835937502,
+    "high": 313.22120027343755,
+    "quality": 55.061881527723685,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": "当前评价靶弱点命中率为 0%",
+    "contributionStatus": "inactive",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "6",
+    "label": "毒素伤害",
+    "value": 115.0,
+    "low": 102.39370529587586,
+    "high": 125.28847760360541,
+    "quality": 55.06189157368514,
+    "delta": 21.137117722120013,
+    "ablationDelta": 21.137117722120013,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 153.3,
+    "low": 136.52153000142192,
+    "high": 167.04713052982973,
+    "quality": 54.965241332316026,
+    "delta": 158.3498728099682,
+    "ablationDelta": 158.3498728099682,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "3",
+    "label": "触发时间",
+    "value": 91.0,
+    "low": 91.00752708712501,
+    "high": 111.3564011212125,
+    "quality": 100.0,
+    "delta": -12.47562620660444,
+    "ablationDelta": -12.47562620660444,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": true,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 192.31336332752224,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T1",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 123.26025894072181,
+      "score": 64.09344457816046
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 49.538449312408005,
+      "score": 25.759234020592103
+     },
+     {
+      "code": "S",
+      "label": "多重射击",
+      "gain": 44.21843021105369,
+      "score": 22.992905664983258
+     },
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 36.33506896752776,
+      "score": 18.89367870169623
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Burston Prime",
+  "hs": 0.0,
+  "mode": "f10",
+  "window": 10.0,
+  "seconds": 105.60177370000747,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": -25.23357795811867,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 287.5,
+    "low": 255.98426835937502,
+    "high": 313.22120027343755,
+    "quality": 55.061881527723685,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": "当前评价靶弱点命中率为 0%",
+    "contributionStatus": "inactive",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "6",
+    "label": "毒素伤害",
+    "value": 115.0,
+    "low": 102.39370529587586,
+    "high": 125.28847760360541,
+    "quality": 55.06189157368514,
+    "delta": 22.528718827246273,
+    "ablationDelta": 22.528718827246273,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 153.3,
+    "low": 136.52153000142192,
+    "high": 167.04713052982973,
+    "quality": 54.965241332316026,
+    "delta": 159.10037443630847,
+    "ablationDelta": 159.10037443630847,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "3",
+    "label": "触发时间",
+    "value": 91.0,
+    "low": 91.00752708712501,
+    "high": 111.3564011212125,
+    "quality": 100.0,
+    "delta": -12.246415705917968,
+    "ablationDelta": -12.246415705917968,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": true,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 218.69294859661764,
+      "score": 100.0
+     },
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 213.61245487703692,
+      "score": 97.6768827014392
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 70.39636142484504,
+      "score": 32.18958904554904
+     },
+     {
+      "code": "S",
+      "label": "多重射击",
+      "gain": 62.931976750553616,
+      "score": 28.776408729406533
+     },
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 56.52998038827446,
+      "score": 25.849018338741615
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Burston Prime",
+  "hs": 0.0,
+  "mode": "f20",
+  "window": 20.0,
+  "seconds": 152.37925779999932,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": -26.22256711272264,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 287.5,
+    "low": 255.98426835937502,
+    "high": 313.22120027343755,
+    "quality": 55.061881527723685,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": "当前评价靶弱点命中率为 0%",
+    "contributionStatus": "inactive",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "6",
+    "label": "毒素伤害",
+    "value": 115.0,
+    "low": 102.39370529587586,
+    "high": 125.28847760360541,
+    "quality": 55.06189157368514,
+    "delta": 20.282125457547572,
+    "ablationDelta": 20.282125457547572,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 153.3,
+    "low": 136.52153000142192,
+    "high": 167.04713052982973,
+    "quality": 54.965241332316026,
+    "delta": 158.7062702970113,
+    "ablationDelta": 158.7062702970113,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "3",
+    "label": "触发时间",
+    "value": 91.0,
+    "low": 91.00752708712501,
+    "high": 111.3564011212125,
+    "quality": 100.0,
+    "delta": -12.418314053401625,
+    "ablationDelta": -12.418314053401625,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": true,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 199.2727022665909,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T1",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 124.5110411169374,
+      "score": 62.48273832828548
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 47.689193825817064,
+      "score": 23.931623992340672
+     },
+     {
+      "code": "S",
+      "label": "多重射击",
+      "gain": 43.95412913060574,
+      "score": 22.05727559804105
+     },
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 37.689489209156335,
+      "score": 18.91352341814214
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Burston Prime",
+  "hs": 0.0,
+  "mode": "w10",
+  "window": 10.0,
+  "seconds": 117.86298850001185,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.2129761725951819,
+   "targetTtkSeconds": 2.0,
+   "minimumLevel": 0,
+   "healthScaleFloor": 0.007115837292110813
+  },
+  "actualGain": 30.169549845135002,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 287.5,
+    "low": 255.98426835937502,
+    "high": 313.22120027343755,
+    "quality": 55.061881527723685,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": "当前评价靶弱点命中率为 0%",
+    "contributionStatus": "inactive",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "6",
+    "label": "毒素伤害",
+    "value": 115.0,
+    "low": 102.39370529587586,
+    "high": 125.28847760360541,
+    "quality": 55.06189157368514,
+    "delta": 23.647397307246965,
+    "ablationDelta": 23.647397307246965,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 153.3,
+    "low": 136.52153000142192,
+    "high": 167.04713052982973,
+    "quality": 54.965241332316026,
+    "delta": 142.4010380269169,
+    "ablationDelta": 142.4010380269169,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "3",
+    "label": "触发时间",
+    "value": 91.0,
+    "low": 91.00752708712501,
+    "high": 111.3564011212125,
+    "quality": 100.0,
+    "delta": -10.267610473133427,
+    "ablationDelta": -10.267610473133427,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": true,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 223.87157986451447,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T2",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 99.99257303990905,
+      "score": 44.66514825170031
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "S",
+      "label": "多重射击",
+      "gain": 59.99405843192711,
+      "score": 26.79842544919507
+     },
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 54.009729781992924,
+      "score": 24.125317655183938
+     },
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 40.58430413393583,
+      "score": 18.12838599633646
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Burston Prime",
+  "hs": 1.0,
+  "mode": "cur",
+  "window": 30.0,
+  "seconds": 134.53999719998683,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 4.205396400628451,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 105.83306656471359,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 287.5,
+    "low": 255.98426835937502,
+    "high": 313.22120027343755,
+    "quality": 55.061881527723685,
+    "delta": 41.56635496149197,
+    "ablationDelta": 41.56635496149197,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "6",
+    "label": "毒素伤害",
+    "value": 115.0,
+    "low": 102.39370529587586,
+    "high": 125.28847760360541,
+    "quality": 55.06189157368514,
+    "delta": 21.137885531973865,
+    "ablationDelta": 21.137885531973865,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 153.3,
+    "low": 136.52153000142192,
+    "high": 167.04713052982973,
+    "quality": 54.965241332316026,
+    "delta": 145.22634616373313,
+    "ablationDelta": 145.22634616373313,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "3",
+    "label": "触发时间",
+    "value": 91.0,
+    "low": 91.00752708712501,
+    "high": 111.3564011212125,
+    "quality": 100.0,
+    "delta": -10.218699582343715,
+    "ablationDelta": -10.218699582343715,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": true,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 195.79220158738133,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T2",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 106.77344137941161,
+      "score": 54.53406239561539
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 45.52238125972512,
+      "score": 23.25035465695433
+     },
+     {
+      "code": "W",
+      "label": "弱点伤害",
+      "gain": 40.808568411460676,
+      "score": 20.84279561729529
+     },
+     {
+      "code": "Y",
+      "label": "弱点暴击几率",
+      "gain": 40.808430218361536,
+      "score": 20.84272503578182
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Burston Prime",
+  "hs": 1.0,
+  "mode": "f10",
+  "window": 10.0,
+  "seconds": 94.59282109999913,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 4.083794346375514,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 114.60472248958223,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 287.5,
+    "low": 255.98426835937502,
+    "high": 313.22120027343755,
+    "quality": 55.061881527723685,
+    "delta": 41.632395862595374,
+    "ablationDelta": 41.632395862595374,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "6",
+    "label": "毒素伤害",
+    "value": 115.0,
+    "low": 102.39370529587586,
+    "high": 125.28847760360541,
+    "quality": 55.06189157368514,
+    "delta": 20.64620022603556,
+    "ablationDelta": 20.64620022603556,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 153.3,
+    "low": 136.52153000142192,
+    "high": 167.04713052982973,
+    "quality": 54.965241332316026,
+    "delta": 143.6494332828373,
+    "ablationDelta": 143.6494332828373,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "3",
+    "label": "触发时间",
+    "value": 91.0,
+    "low": 91.00752708712501,
+    "high": 111.3564011212125,
+    "quality": 100.0,
+    "delta": -7.483624096787378,
+    "ablationDelta": -7.483624096787378,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": true,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 185.87439898594792,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T1",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 113.1327867210012,
+      "score": 60.8651795719076
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 41.04696683387192,
+      "score": 22.083173937780998
+     },
+     {
+      "code": "W",
+      "label": "弱点伤害",
+      "gain": 35.21542865813843,
+      "score": 18.94581978489717
+     },
+     {
+      "code": "Y",
+      "label": "弱点暴击几率",
+      "gain": 35.212455074301886,
+      "score": 18.94422000361865
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Burston Prime",
+  "hs": 1.0,
+  "mode": "f20",
+  "window": 20.0,
+  "seconds": 113.74762189999456,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 4.275709501107562,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 106.50490228736311,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 287.5,
+    "low": 255.98426835937502,
+    "high": 313.22120027343755,
+    "quality": 55.061881527723685,
+    "delta": 45.22272331897601,
+    "ablationDelta": 45.22272331897601,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "6",
+    "label": "毒素伤害",
+    "value": 115.0,
+    "low": 102.39370529587586,
+    "high": 125.28847760360541,
+    "quality": 55.06189157368514,
+    "delta": 24.765883901299233,
+    "ablationDelta": 24.765883901299233,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 153.3,
+    "low": 136.52153000142192,
+    "high": 167.04713052982973,
+    "quality": 54.965241332316026,
+    "delta": 148.70740472984605,
+    "ablationDelta": 148.70740472984605,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "3",
+    "label": "触发时间",
+    "value": 91.0,
+    "low": 91.00752708712501,
+    "high": 111.3564011212125,
+    "quality": 100.0,
+    "delta": -6.9180552936654145,
+    "ablationDelta": -6.9180552936654145,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": true,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 184.5333375635873,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T2",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 107.67643122741978,
+      "score": 58.35066587375637
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "W",
+      "label": "弱点伤害",
+      "gain": 41.086950494392106,
+      "score": 22.26532670837007
+     },
+     {
+      "code": "Y",
+      "label": "弱点暴击几率",
+      "gain": 41.08278411934163,
+      "score": 22.263068918473955
+     },
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 39.41210432101197,
+      "score": 21.357715002272244
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Burston Prime",
+  "hs": 1.0,
+  "mode": "w10",
+  "window": 10.0,
+  "seconds": 80.3234461999964,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 1.846251102797981,
+   "targetTtkSeconds": 2.0,
+   "minimumLevel": 0,
+   "healthScaleFloor": 0.007115837292110813
+  },
+  "actualGain": 195.01397541996744,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 287.5,
+    "low": 255.98426835937502,
+    "high": 313.22120027343755,
+    "quality": 55.061881527723685,
+    "delta": 32.43340690772565,
+    "ablationDelta": 32.43340690772565,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "6",
+    "label": "毒素伤害",
+    "value": 115.0,
+    "low": 102.39370529587586,
+    "high": 125.28847760360541,
+    "quality": 55.06189157368514,
+    "delta": 19.916915340167527,
+    "ablationDelta": 19.916915340167527,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 153.3,
+    "low": 136.52153000142192,
+    "high": 167.04713052982973,
+    "quality": 54.965241332316026,
+    "delta": 119.7768446440262,
+    "ablationDelta": 119.7768446440262,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "3",
+    "label": "触发时间",
+    "value": 91.0,
+    "low": 91.00752708712501,
+    "high": 111.3564011212125,
+    "quality": 100.0,
+    "delta": -6.609039044292553,
+    "ablationDelta": -6.609039044292553,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": true,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 149.81784152142149,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T1",
+    "stats": [
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 99.9999999999998,
+      "score": 66.74772442620022
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 40.62215174535044,
+      "score": 27.114361902979457
+     },
+     {
+      "code": "W",
+      "label": "弱点伤害",
+      "gain": 37.952242760755794,
+      "score": 25.332258411511855
+     },
+     {
+      "code": "Y",
+      "label": "弱点暴击几率",
+      "gain": 37.94757798740973,
+      "score": 25.329144781453717
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Kompressa Prime",
+  "hs": 0.5,
+  "mode": "cur",
+  "window": 30.0,
+  "seconds": 76.36743049998768,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 41.89516272327578,
+  "details": [
+   {
+    "code": "D",
+    "label": "基础伤害",
+    "value": 124.8,
+    "low": 111.04029077634291,
+    "high": 135.86840073644655,
+    "quality": 55.419881923221716,
+    "delta": 17.13815212430516,
+    "ablationDelta": 17.13815212430516,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "CO",
+    "label": "腐蚀伤害",
+    "value": 51.1,
+    "low": 45.508314981777495,
+    "high": 55.68376967995022,
+    "quality": 54.95267960090908,
+    "delta": 50.741744638682796,
+    "ablationDelta": 50.741744638682796,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "S",
+    "label": "多重射击",
+    "value": 68.0,
+    "low": 60.52606013628527,
+    "high": 74.05941515552207,
+    "quality": 55.226068133814564,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "Z",
+    "label": "武器后坐力",
+    "value": 40.9,
+    "low": 36.406651985421995,
+    "high": 44.54701574396017,
+    "quality": 44.80163113269885,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 18.64778040088546,
+      "score": 100.0
+     },
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 18.53208426953259,
+      "score": 99.37957156902503
+     },
+     {
+      "code": "2",
+      "label": "触发几率",
+      "gain": 16.792675593523686,
+      "score": 90.05187337323167
+     }
+    ]
+   },
+   {
+    "tier": "T1",
+    "stats": [
+     {
+      "code": "D",
+      "label": "基础伤害",
+      "gain": 14.493237858761777,
+      "score": 77.72098098105869
+     },
+     {
+      "code": "SD",
+      "label": "状态伤害",
+      "gain": 13.431975147770103,
+      "score": 72.0298869839346
+     },
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 12.685571590588607,
+      "score": 68.0272467708074
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "L",
+      "label": "弹匣容量",
+      "gain": 6.828096577282117,
+      "score": 36.61613570351727
+     },
+     {
+      "code": "F",
+      "label": "装填速度",
+      "gain": 3.6848950451578766,
+      "score": 19.760502139884196
+     },
+     {
+      "code": "4",
+      "label": "火焰伤害",
+      "gain": 3.4718273017470658,
+      "score": 18.617911768106254
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Kompressa Prime",
+  "hs": 0.5,
+  "mode": "f10",
+  "window": 10.0,
+  "seconds": 67.82760570000391,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 41.15488964598424,
+  "details": [
+   {
+    "code": "D",
+    "label": "基础伤害",
+    "value": 124.8,
+    "low": 111.04029077634291,
+    "high": 135.86840073644655,
+    "quality": 55.419881923221716,
+    "delta": 24.92747225628118,
+    "ablationDelta": 24.92747225628118,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "CO",
+    "label": "腐蚀伤害",
+    "value": 51.1,
+    "low": 45.508314981777495,
+    "high": 55.68376967995022,
+    "quality": 54.95267960090908,
+    "delta": 54.35564594378519,
+    "ablationDelta": 54.35564594378519,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "S",
+    "label": "多重射击",
+    "value": 68.0,
+    "low": 60.52606013628527,
+    "high": 74.05941515552207,
+    "quality": 55.226068133814564,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "Z",
+    "label": "武器后坐力",
+    "value": 40.9,
+    "low": 36.406651985421995,
+    "high": 44.54701574396017,
+    "quality": 44.80163113269885,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 17.75519592942294,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "D",
+      "label": "基础伤害",
+      "gain": 1.2703537149348687,
+      "score": 7.154827916202873
+     },
+     {
+      "code": "2",
+      "label": "触发几率",
+      "gain": 0.8852661353546898,
+      "score": 4.985955316255763
+     },
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 0.8723857642666477,
+      "score": 4.913411081096423
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Kompressa Prime",
+  "hs": 0.5,
+  "mode": "f20",
+  "window": 20.0,
+  "seconds": 73.47537070000544,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 3.989092893028867,
+  "details": [
+   {
+    "code": "D",
+    "label": "基础伤害",
+    "value": 124.8,
+    "low": 111.04029077634291,
+    "high": 135.86840073644655,
+    "quality": 55.419881923221716,
+    "delta": 10.658965751012417,
+    "ablationDelta": 10.658965751012417,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "CO",
+    "label": "腐蚀伤害",
+    "value": 51.1,
+    "low": 45.508314981777495,
+    "high": 55.68376967995022,
+    "quality": 54.95267960090908,
+    "delta": 22.30674023807766,
+    "ablationDelta": 22.30674023807766,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "S",
+    "label": "多重射击",
+    "value": 68.0,
+    "low": 60.52606013628527,
+    "high": 74.05941515552207,
+    "quality": 55.226068133814564,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "Z",
+    "label": "武器后坐力",
+    "value": 40.9,
+    "low": 36.406651985421995,
+    "high": 44.54701574396017,
+    "quality": 44.80163113269885,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 45.58774198351514,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T1",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 29.768338597628684,
+      "score": 65.29899771827509
+     }
+    ]
+   },
+   {
+    "tier": "T2",
+    "stats": [
+     {
+      "code": "2",
+      "label": "触发几率",
+      "gain": 24.100847243008094,
+      "score": 52.866946671153705
+     },
+     {
+      "code": "D",
+      "label": "基础伤害",
+      "gain": 23.482081132420095,
+      "score": 51.50963857984322
+     },
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 19.055236904332972,
+      "score": 41.79903648490308
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "SD",
+      "label": "状态伤害",
+      "gain": 18.014161427206776,
+      "score": 39.51536233955353
+     },
+     {
+      "code": "4",
+      "label": "火焰伤害",
+      "gain": 17.610537509225587,
+      "score": 38.629984164589
+     },
+     {
+      "code": "L",
+      "label": "弹匣容量",
+      "gain": 7.246210563332323,
+      "score": 15.895085494588887
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Kompressa Prime",
+  "hs": 0.5,
+  "mode": "w10",
+  "window": 10.0,
+  "seconds": 80.82515650001005,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.01876499272572215,
+   "targetTtkSeconds": 2.0,
+   "minimumLevel": 0,
+   "healthScaleFloor": 0.007115837292110813
+  },
+  "actualGain": 48.46231407898014,
+  "details": [
+   {
+    "code": "D",
+    "label": "基础伤害",
+    "value": 124.8,
+    "low": 111.04029077634291,
+    "high": 135.86840073644655,
+    "quality": 55.419881923221716,
+    "delta": 3.291887534456883,
+    "ablationDelta": 3.291887534456883,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "CO",
+    "label": "腐蚀伤害",
+    "value": 51.1,
+    "low": 45.508314981777495,
+    "high": 55.68376967995022,
+    "quality": 54.95267960090908,
+    "delta": 50.0,
+    "ablationDelta": 50.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "S",
+    "label": "多重射击",
+    "value": 68.0,
+    "low": 60.52606013628527,
+    "high": 74.05941515552207,
+    "quality": 55.226068133814564,
+    "delta": 1.8877120576107798,
+    "ablationDelta": 1.8877120576107798,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "Z",
+    "label": "武器后坐力",
+    "value": 40.9,
+    "low": 36.406651985421995,
+    "high": 44.54701574396017,
+    "quality": 44.80163113269885,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 15.743320611809208,
+      "score": 100.0
+     },
+     {
+      "code": "S",
+      "label": "多重射击",
+      "gain": 12.688258539701991,
+      "score": 80.59455087374904
+     }
+    ]
+   },
+   {
+    "tier": "T1",
+    "stats": [
+     {
+      "code": "F",
+      "label": "装填速度",
+      "gain": 11.22568940814701,
+      "score": 71.3044578392599
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "D",
+      "label": "基础伤害",
+      "gain": 5.8137990038697795,
+      "score": 36.928670559556515
+     },
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 5.67631740956247,
+      "score": 36.05540120490599
+     },
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 5.303542484606205,
+      "score": 33.687572116316865
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Vectis Prime",
+  "hs": 1.0,
+  "mode": "cur",
+  "window": 30.0,
+  "seconds": 72.30925289998413,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 110.06910344151781,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 231.9,
+    "low": 189.61797656250002,
+    "high": 232.01570390625,
+    "quality": 99.72709880104684,
+    "delta": 51.231809505915194,
+    "ablationDelta": 51.231809505915194,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "0",
+    "label": "暴击几率",
+    "value": 154.6,
+    "low": 126.40693548034407,
+    "high": 154.67095813269066,
+    "quality": 99.74894538699087,
+    "delta": 51.109886972006294,
+    "ablationDelta": 51.109886972006294,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 123.7,
+    "low": 101.1270592603125,
+    "high": 123.73861520728126,
+    "quality": 99.82922357323919,
+    "delta": 100.0,
+    "ablationDelta": 100.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "L",
+    "label": "弹匣容量",
+    "value": 41.2,
+    "low": 33.706492727305054,
+    "high": 41.243113011275504,
+    "quality": 0.5720470137947444,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 100.00000000000004,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T2",
+    "stats": [
+     {
+      "code": "W",
+      "label": "弱点伤害",
+      "gain": 50.885235487531254,
+      "score": 50.88523548753123
+     },
+     {
+      "code": "Y",
+      "label": "弱点暴击几率",
+      "gain": 50.88523548753123,
+      "score": 50.88523548753121
+     },
+     {
+      "code": "CO",
+      "label": "腐蚀伤害",
+      "gain": 50.88523548753117,
+      "score": 50.88523548753115
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "7",
+      "label": "电击伤害",
+      "gain": 0.5192771666352014,
+      "score": 0.5192771666352012
+     },
+     {
+      "code": "GA",
+      "label": "毒气伤害",
+      "gain": 0.5192771666352014,
+      "score": 0.5192771666352012
+     },
+     {
+      "code": "5",
+      "label": "冰冻伤害",
+      "gain": 0.44859026260333223,
+      "score": 0.44859026260333207
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Vectis Prime",
+  "hs": 1.0,
+  "mode": "f10",
+  "window": 10.0,
+  "seconds": 65.83329889999004,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 176.60273089218785,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 231.9,
+    "low": 189.61797656250002,
+    "high": 232.01570390625,
+    "quality": 99.72709880104684,
+    "delta": 2.87785440620012,
+    "ablationDelta": 2.87785440620012,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "0",
+    "label": "暴击几率",
+    "value": 154.6,
+    "low": 126.40693548034407,
+    "high": 154.67095813269066,
+    "quality": 99.74894538699087,
+    "delta": 2.4817017263806918,
+    "ablationDelta": 2.4817017263806918,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 123.7,
+    "low": 101.1270592603125,
+    "high": 123.73861520728126,
+    "quality": 99.82922357323919,
+    "delta": 72.74694173958531,
+    "ablationDelta": 72.74694173958531,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "L",
+    "label": "弹匣容量",
+    "value": 41.2,
+    "low": 33.706492727305054,
+    "high": 41.243113011275504,
+    "quality": 0.5720470137947444,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 69.22341840297246,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T2",
+    "stats": [
+     {
+      "code": "D",
+      "label": "基础伤害",
+      "gain": 35.457191956874404,
+      "score": 51.22138255361263
+     },
+     {
+      "code": "Y",
+      "label": "弱点暴击几率",
+      "gain": 34.74584679145713,
+      "score": 50.1937748713738
+     },
+     {
+      "code": "W",
+      "label": "弱点伤害",
+      "gain": 33.95668584681562,
+      "score": 49.05375468333924
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "5",
+      "label": "冰冻伤害",
+      "gain": 1.4001090538950933,
+      "score": 2.0225945008155977
+     },
+     {
+      "code": "6",
+      "label": "毒素伤害",
+      "gain": 1.4001090538950933,
+      "score": 2.0225945008155977
+     },
+     {
+      "code": "VI",
+      "label": "病毒伤害",
+      "gain": 1.4001090538950933,
+      "score": 2.0225945008155977
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Vectis Prime",
+  "hs": 1.0,
+  "mode": "f20",
+  "window": 20.0,
+  "seconds": 68.28551409998909,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.8402764137660713,
+   "targetTtkSeconds": 3.0,
+   "minimumLevel": 120,
+   "healthScaleFloor": 0.8402764137660713
+  },
+  "actualGain": 114.35080270946312,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 231.9,
+    "low": 189.61797656250002,
+    "high": 232.01570390625,
+    "quality": 99.72709880104684,
+    "delta": 48.852680474503394,
+    "ablationDelta": 48.852680474503394,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "0",
+    "label": "暴击几率",
+    "value": 154.6,
+    "low": 126.40693548034407,
+    "high": 154.67095813269066,
+    "quality": 99.74894538699087,
+    "delta": 48.85268047450333,
+    "ablationDelta": 48.85268047450333,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 123.7,
+    "low": 101.1270592603125,
+    "high": 123.73861520728126,
+    "quality": 99.82922357323919,
+    "delta": 48.852680474503416,
+    "ablationDelta": 48.852680474503416,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "L",
+    "label": "弹匣容量",
+    "value": 41.2,
+    "low": 33.706492727305054,
+    "high": 41.243113011275504,
+    "quality": 0.5720470137947444,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 95.00451409982279,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T2",
+    "stats": [
+     {
+      "code": "Y",
+      "label": "弱点暴击几率",
+      "gain": 49.48088601868399,
+      "score": 52.08266837372971
+     },
+     {
+      "code": "W",
+      "label": "弱点伤害",
+      "gain": 48.82475473410099,
+      "score": 51.392036680278196
+     },
+     {
+      "code": "0",
+      "label": "暴击几率",
+      "gain": 48.82475473410095,
+      "score": 51.39203668027814
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "weapon": "Vectis Prime",
+  "hs": 1.0,
+  "mode": "w10",
+  "window": 10.0,
+  "seconds": 70.14040150001529,
+  "targetCalibration": {
+   "version": "fixed-weapon-target-v1",
+   "status": "fixed-weapon-target",
+   "requestedLevel": 170,
+   "evaluationLevel": 170,
+   "iterations": [],
+   "maxIterations": 5,
+   "healthScale": 0.3100306758541488,
+   "targetTtkSeconds": 2.0,
+   "minimumLevel": 0,
+   "healthScaleFloor": 0.007115837292110813
+  },
+  "actualGain": 99.99999999999996,
+  "details": [
+   {
+    "code": "W",
+    "label": "弱点伤害",
+    "value": 231.9,
+    "low": 189.61797656250002,
+    "high": 232.01570390625,
+    "quality": 99.72709880104684,
+    "delta": 81.2194561905697,
+    "ablationDelta": 81.2194561905697,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": "弱点命中时",
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "0",
+    "label": "暴击几率",
+    "value": 154.6,
+    "low": 126.40693548034407,
+    "high": 154.67095813269066,
+    "quality": 99.74894538699087,
+    "delta": 80.2917465078426,
+    "ablationDelta": 80.2917465078426,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "1",
+    "label": "暴击伤害",
+    "value": 123.7,
+    "low": 101.1270592603125,
+    "high": 123.73861520728126,
+    "quality": 99.82922357323919,
+    "delta": 100.00000000000013,
+    "ablationDelta": 100.00000000000013,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": true,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   },
+   {
+    "code": "L",
+    "label": "弹匣容量",
+    "value": 41.2,
+    "low": 33.706492727305054,
+    "high": 41.243113011275504,
+    "quality": 0.5720470137947444,
+    "delta": 0.0,
+    "ablationDelta": 0.0,
+    "reoptimizedDelta": null,
+    "contributionMetric": "windowedDps",
+    "condition": null,
+    "inactiveReason": null,
+    "contributionStatus": "computed",
+    "recommended": false,
+    "fatalNegative": false,
+    "explanation": "消融口径（delta/ablationDelta）：同一配卡、同一目标与指标下移除此词条后的变化；重优化口径（reoptimizedDelta）：移除词条并允许重选普通 MOD 后的变化。负值代表该词条拖低目标指标"
+   }
+  ],
+  "recommendedPositiveTiers": [
+   {
+    "tier": "T0",
+    "stats": [
+     {
+      "code": "1",
+      "label": "暴击伤害",
+      "gain": 50.89802433363697,
+      "score": 100.0
+     }
+    ]
+   },
+   {
+    "tier": "T3",
+    "stats": [
+     {
+      "code": "D",
+      "label": "基础伤害",
+      "gain": 4.440892098500626e-14,
+      "score": 8.725077557805666e-14
+     },
+     {
+      "code": "Y",
+      "label": "弱点暴击几率",
+      "gain": 4.440892098500626e-14,
+      "score": 8.725077557805666e-14
+     }
+    ]
+   }
+  ]
+ }
+]

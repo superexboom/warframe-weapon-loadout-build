@@ -49,7 +49,7 @@ def configuration(record, rank):
             return dict(kind='fortifier',multiplier=3.+rank,steal=.01,cap=15000.)
     return None
 
-def encumber_roll(stats,chance,forced_procs=None):
+def encumber_roll(stats,chance,forced_procs=None,aim=0.):
     """One-success probability and conditional beam seed, over integer rolls.
     Extra statuses never feed back into their own trigger.
     """
@@ -59,6 +59,9 @@ def encumber_roll(stats,chance,forced_procs=None):
         if dtype in STATUS_POOL:q_ind*=1-min(max(float(p),0.),1.)
     for dtype,n in stats.native_forced_procs.items():
         if dtype in STATUS_POOL:q_ind*=1-min(max(float(n),0.),1.)
+    from .proc_probability import crit_proc_instance_probability
+    for dtype in stats.crit_proc_chances:
+        if dtype in STATUS_POOL:q_ind*=1-crit_proc_instance_probability(stats,dtype,aim)
     forced=min(sum(max(float(n),0.) for k,n in (forced_procs or {}).items() if k in STATUS_POOL),1.)
     sc=max(float(stats.status_chance),0.) if any(stats.damage_types.get(k,0)>0 for k in STATUS_POOL) else 0.
     probability=seed=0.

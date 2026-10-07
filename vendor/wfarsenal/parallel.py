@@ -147,6 +147,7 @@ def _score_job(args: tuple) -> float | None:
             capacity_limit=ctx["capacity_limit"],
             target_context=ctx["target_context"],
             fixed_riven_index=ctx.get("fixed_riven_index"),
+            reorder_elements=ctx.get("reorder_elements", True),
         )
         return None if evaluated is None else evaluated.score
     (

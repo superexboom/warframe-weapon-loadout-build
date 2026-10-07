@@ -1,0 +1,5 @@
+opticor                  m0 bare   wfsim   0.0273 +- 1.2% local   0.0290 (  +6.0%)
+opticor                  m0 build  wfsim   0.3189 +- 1.5% local   0.3236 (  +1.5%)
+opticor_vandal           m0 bare   wfsim   0.0492 +- 1.0% local   0.0492 (  -0.0%)
+opticor_vandal           m0 build  wfsim   0.4924 +- 0.2% local   0.4922 (  -0.0%)
+mean |err| 1.89 median 0.75 max 6.0

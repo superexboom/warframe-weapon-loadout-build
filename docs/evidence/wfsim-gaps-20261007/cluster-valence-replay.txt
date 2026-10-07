@@ -1,0 +1,21 @@
+# WFSim replay (1 run, seed 1, 3 s, 170 SP Thrax: damage lands on Overguard, no armour), per-shot increments by source x type.
+# Kuva Zarr shell: 50 Impact direct + 673 Blast radial; 3 bomblets: 15 Impact hit + 50 Blast radial each (crit x2.5).
+# Kuva Bramma shell: 187 Impact direct + 839 Blast radial; 3 bomblets: 49 Impact + 57 Blast (crit x2.1).
+== zarr mods=['hellfire'] valence=None
+  radial  Impact  per-shot increments [105, 90, 120]
+  radial  Heat    per-shot increments [526, 840, 539]
+  radial  Blast   per-shot increments [475, 838, 475]
+  direct  Impact  per-shot increments [63, 25, 25]
+  direct  Heat    per-shot increments [57, 22, 23]
+== kuva_zarr mods=['hellfire'] valence=heat
+  radial  Impact  per-shot increments [90, 45, 68, 67, 68]
+  radial  Heat    per-shot increments [1733, 1624, 1645, 1577, 1577]
+  radial  Blast   per-shot increments [973, 898, 898, 823, 823]
+  direct  Impact  per-shot increments [125, 125, 50, 50, 50]
+  direct  Heat    per-shot increments [256, 257, 102, 103, 102]
+== kuva_bramma mods=[] valence=heat
+  radial  Impact  per-shot increments [255, 147, 201]
+  radial  Heat    per-shot increments [503, 504, 503]
+  radial  Blast   per-shot increments [1135, 1073, 1135]
+  direct  Impact  per-shot increments [393, 392, 187]
+  direct  Heat    per-shot increments [236, 235, 112]

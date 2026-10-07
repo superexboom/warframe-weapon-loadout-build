@@ -201,7 +201,8 @@ def main():
      mods=[dict(path=m['path'],rank=m['maxRank'],slot=i) for i,m in zip(card_slots,cards,strict=True)],
      arcanes=[dict(path=a['path'],rank=a['maxRank']) for a in arcs],enemy=app._BENCHMARK_ENEMY_PATH,
      level=9999,steelPath=True,headshotChance=1.0,aiming=True,triggerPolicy='emergent',
-     slotPolarities=[m.get('polarity') for m in cards],scenario={'distance':0.5})
+     slotPolarities=[m.get('polarity') for m in cards],scenario={'distance':0.5},
+     combatState={'selfShieldBreakForced':False})  # WFSim leaves own-shield-break perks out of scope
     spec=public_riven_spec(row)
     if choices:payload['incarnonChoices']=choices
     if row['mode']=='cycle':payload['scenario']['incarnonCycle']=True

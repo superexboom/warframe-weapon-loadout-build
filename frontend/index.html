@@ -131,6 +131,7 @@
                 <label class="profile-inline">
                   <span>档位</span>
                   <select id="analysis-profile-select" aria-label="解算档位">
+                    <option value="ultra">超快</option>
                     <option value="fast">快速</option>
                     <option value="standard" selected>标准</option>
                     <option value="deep">深度</option>
@@ -175,13 +176,13 @@
                     <circle class="orbit-track" cx="60" cy="60" r="51"></circle>
                     <circle class="orbit-value" id="orbit-value" cx="60" cy="60" r="51"></circle>
                   </svg>
-                  <div><strong id="score-value">0.0</strong><span>综合评分</span></div>
+                  <div><strong id="score-value">--</strong><span>相对无紫卡</span></div>
                 </div>
-                <div class="grade-block"><span>评级</span><strong id="grade-value">--</strong><small id="weapon-result-name">--</small></div>
+                <div class="grade-block"><span>评价靶</span><strong id="grade-value">--</strong><small id="weapon-result-name">--</small></div>
                 <div class="score-metrics">
                   <div><span>实际提升</span><strong id="actual-gain">--</strong></div>
-                  <div><span>理论上限</span><strong id="optimal-gain">--</strong></div>
-                  <div><span>数值质量</span><strong id="roll-quality">--</strong></div>
+                  <div><span>无紫卡 KPM</span><strong id="optimal-gain">--</strong></div>
+                  <div><span>当前紫卡 KPM</span><strong id="roll-quality">--</strong></div>
                   <div><span>武器倾向</span><strong id="result-disposition">--</strong></div>
                 </div>
                 <p class="score-context-note" id="score-context-note" hidden></p>
@@ -217,7 +218,7 @@
                   <div><span>LOADOUT WORKBENCH</span><h3>包含当前紫卡的最佳配装</h3></div>
                   <div class="segmented-control" id="build-mode" role="group" aria-label="配装方案">
                     <button class="is-active" type="button" data-mode="actual" aria-pressed="true">当前数值</button>
-                    <button type="button" data-mode="optimal" aria-pressed="false">理论上限</button>
+                    <button type="button" data-mode="baseline" aria-pressed="false">无紫卡基线</button>
                   </div>
                 </div>
                 <div class="build-identity">
@@ -293,6 +294,7 @@
               <label class="field">
                 <span>解算档位</span>
                 <select id="solve-profile-select">
+                  <option value="ultra">超快 · 推荐只读缓存</option>
                   <option value="fast">快速 · 秒级预览</option>
                   <option value="standard" selected>标准 · 平衡（推荐）</option>
                   <option value="deep">深度 · 最优搜索</option>
@@ -504,6 +506,8 @@
                       <label class="field"><span>Stug 弹跳命中次数</span><input data-combat-state="stugBounceHits" type="number" min="0" max="2" step="1" placeholder="未设置"></label>
                       <label class="field"><span>弹跳命中间隔（秒）</span><input data-combat-state="stugBounceDelaySeconds" type="number" min="0" step="0.1" placeholder="未设置"></label>
                       <label class="field"><span>Stug 派生弹死亡时间（秒）</span><input data-combat-state="stugChildDetonateSeconds" type="number" min="0" max="4" step="0.1" placeholder="默认 4 秒"></label>
+                      <label class="check-field" title="Lex / Gorgon / Atomos / Cestra 等灵化进化的“自身护盾 / 超宏击破时”效果需要战甲配合；勾选时按常驻生效，取消后按上方“自身护盾 / 超宏击破”时间轴触发。"><input data-combat-state="selfShieldBreakForced" data-default-on type="checkbox" checked><span>自身护盾击破类灵化效果强制生效</span></label>
+                      <label class="check-field" title="带完美蓄力窗口的武器（如 Nataruk）按窗口起点松手、发射完美弹体；只在完美蓄力单位时间伤害不低于满蓄时启用（Cinta 的定时释放不划算，仍按满蓄）。取消后一律按满蓄。"><input data-combat-state="perfectCharge" data-default-on type="checkbox" checked><span>完美蓄力（时机释放）</span></label>
                       <label class="check-field"><input data-combat-state="overshields" type="checkbox"><span>过载护盾</span></label>
                       <label class="check-field"><input data-combat-state="channeling" type="checkbox"><span>持续消耗能量的技能</span></label>
                       <label class="check-field"><input data-combat-state="aimGliding" type="checkbox"><span>瞄准滑翔</span></label>

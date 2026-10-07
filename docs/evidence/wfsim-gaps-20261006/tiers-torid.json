@@ -1,0 +1,424 @@
+[
+ {
+  "weapon": "Torid",
+  "card": "0,1,S,Z",
+  "phase": "ultra-cold",
+  "seconds": 7.783317800000077,
+  "scale": 1.0,
+  "gain": 81.8850486306277,
+  "kpm": 12.830673095237527,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Point Strike",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "0": 25.24137913686797,
+   "1": 66.65964134890785,
+   "S": 24.821091144042363,
+   "Z": 0.0
+  },
+  "recommended": [],
+  "negative": [],
+  "unsupported": [
+   "ultra-profile-baseline-approximate",
+   "ultra-profile-contributions-center-node",
+   "ultra-profile-negative-ranking-not-cached",
+   "ultra-profile-recommendation-not-cached"
+  ]
+ },
+ {
+  "weapon": "Torid",
+  "card": "2,4,S,Z",
+  "phase": "ultra-cold",
+  "seconds": 12.052671999997983,
+  "scale": 1.0,
+  "gain": 54.73359988304838,
+  "kpm": 10.160920603699003,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Vital Sense",
+   "Point Strike",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "2": 3.2367558468548108,
+   "4": 110.52593665865969,
+   "S": 19.25191130346622,
+   "Z": 0.0
+  },
+  "recommended": [],
+  "negative": [],
+  "unsupported": [
+   "ultra-profile-baseline-approximate",
+   "ultra-profile-contributions-center-node",
+   "ultra-profile-negative-ranking-not-cached",
+   "ultra-profile-recommendation-not-cached"
+  ]
+ },
+ {
+  "weapon": "Torid",
+  "card": "D,1,F,Z",
+  "phase": "ultra-cold",
+  "seconds": 6.764216600000509,
+  "scale": 1.0,
+  "gain": 60.043720221293626,
+  "kpm": 13.00185207553047,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Point Strike",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "D": 37.127685728394425,
+   "1": 65.70483855549955,
+   "F": 0.0,
+   "Z": 0.0
+  },
+  "recommended": [],
+  "negative": [],
+  "unsupported": [
+   "ultra-profile-baseline-approximate",
+   "ultra-profile-contributions-center-node",
+   "ultra-profile-negative-ranking-not-cached",
+   "ultra-profile-recommendation-not-cached"
+  ]
+ },
+ {
+  "weapon": "Torid",
+  "card": "0,1,S,Z",
+  "phase": "fast-cold",
+  "seconds": 115.85704439999972,
+  "scale": 1.0,
+  "gain": 81.8850486306277,
+  "kpm": 12.830673095237527,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Point Strike",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "0": 28.19892659036598,
+   "1": 69.8927353259049,
+   "S": 25.34328971078299,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "Y",
+   "D",
+   "0",
+   "1",
+   "6",
+   "5",
+   "S"
+  ],
+  "negative": [
+   "变焦",
+   "弹药最大值",
+   "武器后坐力"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Torid",
+  "card": "2,4,S,Z",
+  "phase": "fast-warm-first",
+  "seconds": 20.06775750000088,
+  "scale": 1.0,
+  "gain": 54.73359988304838,
+  "kpm": 10.160920603699003,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Vital Sense",
+   "Point Strike",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "2": 13.565769938195672,
+   "4": 134.91033304601564,
+   "S": 28.05476579015693,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "Y",
+   "D",
+   "0",
+   "1",
+   "6",
+   "5",
+   "S"
+  ],
+  "negative": [
+   "变焦",
+   "弹药最大值",
+   "武器后坐力"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Torid",
+  "card": "D,1,F,Z",
+  "phase": "fast-warm-first",
+  "seconds": 10.53237259999878,
+  "scale": 1.0,
+  "gain": 60.043720221293626,
+  "kpm": 13.00185207553047,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Point Strike",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "D": 45.70056964089267,
+   "1": 82.95622386716278,
+   "F": 0.0,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "Y",
+   "D",
+   "0",
+   "1",
+   "6",
+   "5",
+   "S"
+  ],
+  "negative": [
+   "变焦",
+   "弹药最大值",
+   "武器后坐力"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Torid",
+  "card": "0,1,S,Z",
+  "phase": "ultra-warm",
+  "seconds": 2.326945100001467,
+  "scale": 1.0,
+  "gain": 81.64885930804557,
+  "kpm": 12.808639923115301,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Point Strike",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "0": 25.493638409504406,
+   "1": 66.86888056136759,
+   "S": 25.175565607491656,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "Y",
+   "D",
+   "0",
+   "1",
+   "6",
+   "5",
+   "S"
+  ],
+  "negative": [
+   "变焦",
+   "弹药最大值",
+   "武器后坐力"
+  ],
+  "unsupported": [
+   "ultra-profile-contributions-center-node"
+  ]
+ },
+ {
+  "weapon": "Torid",
+  "card": "2,4,S,Z",
+  "phase": "ultra-warm",
+  "seconds": 3.908998999999312,
+  "scale": 1.0,
+  "gain": 29.74966620089321,
+  "kpm": 11.927336860722558,
+  "mods": [
+   "Rime Rounds",
+   "Malignant Force",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Hellfire",
+   "Vital Sense",
+   "Point Strike"
+  ],
+  "details": {
+   "2": 6.194671582603917,
+   "4": 54.882334173459554,
+   "S": 25.68702941078458,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "Y",
+   "D",
+   "0",
+   "1",
+   "6",
+   "5",
+   "S"
+  ],
+  "negative": [
+   "变焦",
+   "弹药最大值",
+   "武器后坐力"
+  ],
+  "unsupported": [
+   "ultra-profile-contributions-center-node"
+  ]
+ },
+ {
+  "weapon": "Torid",
+  "card": "D,1,F,Z",
+  "phase": "ultra-warm",
+  "seconds": 1.8267611999981455,
+  "scale": 1.0,
+  "gain": 57.265391998351944,
+  "kpm": 12.894937861240516,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Point Strike",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "D": 37.420743063949025,
+   "1": 66.81250529135075,
+   "F": 0.0,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "Y",
+   "D",
+   "0",
+   "1",
+   "6",
+   "5",
+   "S"
+  ],
+  "negative": [
+   "变焦",
+   "弹药最大值",
+   "武器后坐力"
+  ],
+  "unsupported": [
+   "ultra-profile-contributions-center-node"
+  ]
+ },
+ {
+  "weapon": "Torid",
+  "card": "2,4,S,Z",
+  "phase": "fast-warm",
+  "seconds": 13.077590799999598,
+  "scale": 1.0,
+  "gain": 29.74966620089321,
+  "kpm": 11.927336860722558,
+  "mods": [
+   "Rime Rounds",
+   "Malignant Force",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Hellfire",
+   "Vital Sense",
+   "Point Strike"
+  ],
+  "details": {
+   "2": 8.123432292154975,
+   "4": 38.53791462433851,
+   "S": 28.992237733306926,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "Y",
+   "D",
+   "0",
+   "1",
+   "6",
+   "5",
+   "S"
+  ],
+  "negative": [
+   "变焦",
+   "弹药最大值",
+   "武器后坐力"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Torid",
+  "card": "D,1,F,Z",
+  "phase": "fast-warm",
+  "seconds": 10.32679890000145,
+  "scale": 1.0,
+  "gain": 57.265391998351944,
+  "kpm": 12.894937861240516,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Point Strike",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "D": 43.5277904512958,
+   "1": 80.52190884723215,
+   "F": 0.0,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "Y",
+   "D",
+   "0",
+   "1",
+   "6",
+   "5",
+   "S"
+  ],
+  "negative": [
+   "变焦",
+   "弹药最大值",
+   "武器后坐力"
+  ],
+  "unsupported": []
+ }
+]

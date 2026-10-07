@@ -1,0 +1,404 @@
+[
+ {
+  "weapon": "Verglas Prime",
+  "card": "0,1,S,Z",
+  "phase": "ultra-cold",
+  "seconds": 5.035561099997722,
+  "scale": 0.8402764137660713,
+  "gain": 211.00675527729103,
+  "kpm": 20.901798201464263,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Galvanized Aptitude",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "0": 71.0461493516827,
+   "1": 73.91990003549034,
+   "S": 41.741099220373634,
+   "Z": 0.0
+  },
+  "recommended": [],
+  "negative": [],
+  "unsupported": [
+   "ultra-profile-negative-ranking-not-cached",
+   "ultra-profile-recommendation-not-cached"
+  ]
+ },
+ {
+  "weapon": "Verglas Prime",
+  "card": "2,4,S,Z",
+  "phase": "ultra-cold",
+  "seconds": 9.076985100022284,
+  "scale": 0.8402764137660713,
+  "gain": 109.60459668294442,
+  "kpm": 14.086874023234786,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Galvanized Aptitude",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "2": 16.367693300887144,
+   "4": 52.14995695325191,
+   "S": 59.05512979234964,
+   "Z": 0.0
+  },
+  "recommended": [],
+  "negative": [],
+  "unsupported": [
+   "ultra-profile-negative-ranking-not-cached",
+   "ultra-profile-recommendation-not-cached"
+  ]
+ },
+ {
+  "weapon": "Verglas Prime",
+  "card": "D,1,F,Z",
+  "phase": "ultra-cold",
+  "seconds": 5.021726299979491,
+  "scale": 0.8402764137660713,
+  "gain": 138.1815088719814,
+  "kpm": 16.007439546847483,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Thermite Rounds",
+   "Galvanized Chamber",
+   "Hellfire",
+   "Vile Acceleration",
+   "Point Strike"
+  ],
+  "details": {
+   "D": 192.79820731363267,
+   "1": 81.5544336497498,
+   "F": 10.842006225833156,
+   "Z": 0.0
+  },
+  "recommended": [],
+  "negative": [],
+  "unsupported": [
+   "ultra-profile-negative-ranking-not-cached",
+   "ultra-profile-recommendation-not-cached"
+  ]
+ },
+ {
+  "weapon": "Verglas Prime",
+  "card": "0,1,S,Z",
+  "phase": "fast-cold",
+  "seconds": 120.11957509999047,
+  "scale": 0.8402764137660713,
+  "gain": 211.00675527729103,
+  "kpm": 20.901798201464263,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Galvanized Aptitude",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "0": 71.0461493516827,
+   "1": 73.91990003549034,
+   "S": 41.741099220373634,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "W",
+   "Y",
+   "D",
+   "S",
+   "1",
+   "4"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Verglas Prime",
+  "card": "2,4,S,Z",
+  "phase": "fast-warm-first",
+  "seconds": 16.083952399989357,
+  "scale": 0.8402764137660713,
+  "gain": 109.60459668294442,
+  "kpm": 14.086874023234786,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Galvanized Aptitude",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "2": 16.367693300887144,
+   "4": 52.14995695325191,
+   "S": 59.05512979234964,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "W",
+   "Y",
+   "D",
+   "S",
+   "1",
+   "4"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Verglas Prime",
+  "card": "D,1,F,Z",
+  "phase": "fast-warm-first",
+  "seconds": 11.151329399988754,
+  "scale": 0.8402764137660713,
+  "gain": 138.1815088719814,
+  "kpm": 16.007439546847483,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Thermite Rounds",
+   "Galvanized Chamber",
+   "Hellfire",
+   "Vile Acceleration",
+   "Point Strike"
+  ],
+  "details": {
+   "D": 192.79820731363267,
+   "1": 81.5544336497498,
+   "F": 10.842006225833156,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "W",
+   "Y",
+   "D",
+   "S",
+   "1",
+   "4"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Verglas Prime",
+  "card": "0,1,S,Z",
+  "phase": "ultra-warm",
+  "seconds": 3.3640906999935396,
+  "scale": 0.8402764137660713,
+  "gain": 202.6258384283108,
+  "kpm": 20.338542806691724,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Galvanized Aptitude",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "0": 68.37044165715437,
+   "1": 69.48785672243103,
+   "S": 39.28635093256156,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "W",
+   "Y",
+   "D",
+   "S",
+   "1",
+   "4"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Verglas Prime",
+  "card": "2,4,S,Z",
+  "phase": "ultra-warm",
+  "seconds": 7.507348500017542,
+  "scale": 0.8402764137660713,
+  "gain": 108.32730953573999,
+  "kpm": 14.001031520642238,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Galvanized Aptitude",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "2": 15.999055606022683,
+   "4": 52.04448198778893,
+   "S": 58.84864249900688,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "W",
+   "Y",
+   "D",
+   "S",
+   "1",
+   "4"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Verglas Prime",
+  "card": "D,1,F,Z",
+  "phase": "ultra-warm",
+  "seconds": 3.889758700010134,
+  "scale": 0.8402764137660713,
+  "gain": 149.88495133123848,
+  "kpm": 16.793991569898353,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Vile Acceleration",
+   "Galvanized Aptitude",
+   "Point Strike"
+  ],
+  "details": {
+   "D": 163.05361016237194,
+   "1": 98.07334387357092,
+   "F": 6.009192465770297,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "W",
+   "Y",
+   "D",
+   "S",
+   "1",
+   "4"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Verglas Prime",
+  "card": "2,4,S,Z",
+  "phase": "fast-warm",
+  "seconds": 15.559422699996503,
+  "scale": 0.8402764137660713,
+  "gain": 108.32730953573999,
+  "kpm": 14.001031520642238,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Heavy Caliber",
+   "Galvanized Aptitude",
+   "Vile Acceleration"
+  ],
+  "details": {
+   "2": 15.999055606022683,
+   "4": 52.04448198778893,
+   "S": 58.84864249900688,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "W",
+   "Y",
+   "D",
+   "S",
+   "1",
+   "4"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Verglas Prime",
+  "card": "D,1,F,Z",
+  "phase": "fast-warm",
+  "seconds": 11.771918399987044,
+  "scale": 0.8402764137660713,
+  "gain": 149.88495133123848,
+  "kpm": 16.793991569898353,
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Galvanized Chamber",
+   "Vile Acceleration",
+   "Galvanized Aptitude",
+   "Point Strike"
+  ],
+  "details": {
+   "D": 163.05361016237194,
+   "1": 98.07334387357092,
+   "F": 6.009192465770297,
+   "Z": 0.0
+  },
+  "recommended": [
+   "CO",
+   "W",
+   "Y",
+   "D",
+   "S",
+   "1",
+   "4"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ }
+]

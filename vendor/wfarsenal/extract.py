@@ -261,7 +261,8 @@ def _build_weapon(
         "magazineSize": (
             weapon.get("HeavyAmmoClipSize") or weapon.get("AmmoClipSize")
             if slot == "arch_gun"
-            else weapon.get("AmmoClipSize")
+            # An unserialized clip is the engine default (damage.NATIVE_DEFAULT_CLIP).
+            else weapon.get("AmmoClipSize", 6 if slot in ("primary", "secondary") else None)
         ),
         "defaultModTemplate": weapon.get("DefaultModTemplate"),
         "compatTags": weapon.get("CompatibilityTags") or [],
@@ -361,8 +362,6 @@ def _flatten_behaviours(
             if isinstance(charged,str) and charged:
                 fire = {**fire,'projectileType':charged}
                 mode['chargedProjectile'] = True
-            if weapon.get('isIncarnon'):
-                mode['isIncarnonForm'] = bool(fire.get('ConsumesChargesForFire'))
             mode["multishot"] = fire.get("fireIterations", 1)
             mode["ammoCost"] = fire.get("ammoRequirement")
             mode["ammoType"] = fire.get("ammoType")
@@ -2342,6 +2341,10 @@ def _conditional_effects(
             }
             if "ApplyUpgradesByDefault" in source:
                 entry["applyUpgradesByDefault"] = source["ApplyUpgradesByDefault"]
+            if source.get("IsInfinite"):
+                # The buff holds until its condition resets; UpgradeDuration
+                # is then not a lifetime (Boar Reified Bane, Lato 2-2).
+                entry["isInfinite"] = True
             if scripts:
                 entry["runtimeScripts"] = scripts
             effects.append(entry)

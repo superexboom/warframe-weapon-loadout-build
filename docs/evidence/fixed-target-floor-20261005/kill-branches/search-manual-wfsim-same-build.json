@@ -1,0 +1,602 @@
+[
+ {
+  "key": [
+   "Torid",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod"
+   ]
+  ],
+  "weapon": "Torid",
+  "label": "bot",
+  "card": "0,1,S,Z",
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Hellfire",
+   "Heavy Caliber",
+   "Galvanized Chamber",
+   "Thermite Rounds",
+   "Vile Acceleration"
+  ],
+  "manual": 4.053285018136857,
+  "search": 4.054330679605203,
+  "changed": false,
+  "wfsim": 1.4904212976102231
+ },
+ {
+  "key": [
+   "Torid",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+    "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+   ]
+  ],
+  "weapon": "Torid",
+  "label": "portable",
+  "card": "0,1,S,Z",
+  "mods": [
+   "Heavy Caliber",
+   "Primed Cryo Rounds",
+   "Primary Acuity",
+   "Serration",
+   "Hunter Munitions",
+   "Malignant Force",
+   "Hammer Shot"
+  ],
+  "manual": 3.089715471974287,
+  "search": 3.2106984312634994,
+  "changed": false,
+  "wfsim": 1.3509825972240705
+ },
+ {
+  "key": [
+   "Torid",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/IceEventRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/CritDamageWhileAimingRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod"
+   ]
+  ],
+  "weapon": "Torid",
+  "label": "bot",
+  "card": "2,4,S,Z",
+  "mods": [
+   "Rime Rounds",
+   "Galvanized Chamber",
+   "Infected Clip",
+   "Heavy Caliber",
+   "Galvanized Scope",
+   "Bladed Rounds",
+   "Hellfire"
+  ],
+  "manual": 2.1579837645282383,
+  "search": 2.160670744101235,
+  "changed": false,
+  "wfsim": 0.5942496299618668
+ },
+ {
+  "key": [
+   "Torid",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/IceEventRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+    "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+   ]
+  ],
+  "weapon": "Torid",
+  "label": "portable",
+  "card": "2,4,S,Z",
+  "mods": [
+   "Primary Acuity",
+   "Heavy Caliber",
+   "Serration",
+   "Hunter Munitions",
+   "Point Strike",
+   "Vital Sense",
+   "Rime Rounds"
+  ],
+  "manual": 4.41265774171657,
+  "search": 4.662298915739175,
+  "changed": false,
+  "wfsim": 1.6291326745570869
+ },
+ {
+  "key": [
+   "Torid",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod"
+   ]
+  ],
+  "weapon": "Torid",
+  "label": "bot",
+  "card": "D,1,F,Z",
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Thermite Rounds",
+   "Galvanized Chamber",
+   "Galvanized Scope",
+   "Hellfire",
+   "Vile Acceleration"
+  ],
+  "manual": 1.9497824051722088,
+  "search": 1.9829911691034534,
+  "changed": false,
+  "wfsim": 0.38514944493375564
+ },
+ {
+  "key": [
+   "Torid",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/IceEventRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+    "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod",
+    "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteArmamentsMod"
+   ]
+  ],
+  "weapon": "Torid",
+  "label": "portable",
+  "card": "D,1,F,Z",
+  "mods": [
+   "Primed Cryo Rounds",
+   "Primary Acuity",
+   "Heavy Caliber",
+   "Hunter Munitions",
+   "Rime Rounds",
+   "Serration",
+   "Vigilante Armaments"
+  ],
+  "manual": 2.0647418458566724,
+  "search": 2.132949142139953,
+  "changed": false,
+  "wfsim": 0.928264894783133
+ },
+ {
+  "key": [
+   "Rubico Prime",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/RadiationReloadRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod"
+   ]
+  ],
+  "weapon": "Rubico Prime",
+  "label": "bot",
+  "card": "0,1,S,Z",
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Thermite Rounds",
+   "Galvanized Aptitude",
+   "Galvanized Chamber",
+   "Radiated Reload",
+   "Galvanized Scope"
+  ],
+  "manual": 2.3157153770255716,
+  "search": 2.5019291666134205,
+  "changed": false,
+  "wfsim": 0.5780476182977027
+ },
+ {
+  "key": [
+   "Rubico Prime",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/WildfireMod",
+    "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod"
+   ]
+  ],
+  "weapon": "Rubico Prime",
+  "label": "portable",
+  "card": "0,1,S,Z",
+  "mods": [
+   "Primary Acuity",
+   "Hellfire",
+   "Thermite Rounds",
+   "Wildfire",
+   "Semi-Rifle Cannonade",
+   "Heavy Caliber",
+   "Serration"
+  ],
+  "manual": 10.0,
+  "search": 10.0,
+  "changed": false,
+  "wfsim": 4.785883910484979
+ },
+ {
+  "key": [
+   "Rubico Prime",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/RadiationReloadRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/CritDamageWhileAimingRifleMod",
+    "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod"
+   ]
+  ],
+  "weapon": "Rubico Prime",
+  "label": "bot",
+  "card": "2,4,S,Z",
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Galvanized Chamber",
+   "Galvanized Aptitude",
+   "Galvanized Scope",
+   "Bladed Rounds",
+   "Radiated Reload"
+  ],
+  "manual": 0.8761608772113465,
+  "search": 0.8953513379910528,
+  "changed": false,
+  "wfsim": 0.46959677937020117
+ },
+ {
+  "key": [
+   "Rubico Prime",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedCritRateFireRateRifle",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/WildfireMod",
+    "/Lotus/Upgrades/Mods/Rifle/RifleSemiAutoFantasyMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod"
+   ]
+  ],
+  "weapon": "Rubico Prime",
+  "label": "portable",
+  "card": "2,4,S,Z",
+  "mods": [
+   "Primary Acuity",
+   "Semi-Rifle Cannonade",
+   "Heavy Caliber",
+   "Serration",
+   "Critical Delay",
+   "Wildfire",
+   "Hellfire"
+  ],
+  "manual": 9.427814866155972,
+  "search": 9.664812908238606,
+  "changed": false,
+  "wfsim": 4.240770564505386
+ },
+ {
+  "key": [
+   "Rubico Prime",
+   [
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/WildfireMod",
+    "/Lotus/Upgrades/Mods/Rifle/Event/CritChanceWhileAimingRifleSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponStatusChanceSPMod",
+    "/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod"
+   ]
+  ],
+  "weapon": "Rubico Prime",
+  "label": "bot",
+  "card": "D,1,F,Z",
+  "mods": [
+   "Primed Cryo Rounds",
+   "Infected Clip",
+   "Galvanized Chamber",
+   "Wildfire",
+   "Galvanized Aptitude",
+   "Galvanized Scope",
+   "Hammer Shot"
+  ],
+  "manual": 2.655386588612775,
+  "search": 2.8730742690442037,
+  "changed": false,
+  "wfsim": 0.6990858205194624
+ },
+ {
+  "key": [
+   "Dual Toxocyst",
+   [
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+    "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+    "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponToxinDamageMod"
+   ]
+  ],
+  "weapon": "Dual Toxocyst",
+  "label": "bot",
+  "card": "0,1,S,Z",
+  "mods": [
+   "Primed Convulsion",
+   "Pathogen Rounds",
+   "Primed Heated Charge",
+   "Galvanized Shot",
+   "Galvanized Diffusion",
+   "Anemic Agility",
+   "Hornet Strike"
+  ],
+  "manual": 4.126692460941178,
+  "search": 4.126692460941178,
+  "changed": false,
+  "wfsim": 2.005266484351402
+ },
+ {
+  "key": [
+   "Dual Toxocyst",
+   [
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod",
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+    "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponFireRateMod",
+    "/Lotus/Upgrades/Mods/Sets/Augur/SecondaryAugurPactMod"
+   ]
+  ],
+  "weapon": "Dual Toxocyst",
+  "label": "portable",
+  "card": "0,1,S,Z",
+  "mods": [
+   "Primed Convulsion",
+   "Hornet Strike",
+   "Jolt",
+   "Magnum Force",
+   "Lethal Torrent",
+   "Augur Pact",
+   "Gunslinger"
+  ],
+  "manual": 3.0201214799516163,
+  "search": 3.0201214799516163,
+  "changed": false,
+  "wfsim": 1.4402830753711515
+ },
+ {
+  "key": [
+   "Dual Toxocyst",
+   [
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+    "/Lotus/Upgrades/Mods/Pistol/Event/CritChanceWhileAimingPistolSPMod",
+    "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+    "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponToxinDamageMod"
+   ]
+  ],
+  "weapon": "Dual Toxocyst",
+  "label": "bot",
+  "card": "2,4,S,Z",
+  "mods": [
+   "Primed Convulsion",
+   "Pathogen Rounds",
+   "Lethal Torrent",
+   "Galvanized Shot",
+   "Primed Target Cracker",
+   "Galvanized Crosshairs",
+   "Galvanized Diffusion"
+  ],
+  "manual": 1.2735471295715037,
+  "search": 1.2735471295715037,
+  "changed": false,
+  "wfsim": 0.636670664527865
+ },
+ {
+  "key": [
+   "Dual Toxocyst",
+   [
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol",
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod",
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+    "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponFreezeDamageMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod"
+   ]
+  ],
+  "weapon": "Dual Toxocyst",
+  "label": "portable",
+  "card": "2,4,S,Z",
+  "mods": [
+   "Pistol Acuity",
+   "Primed Convulsion",
+   "Frostbite",
+   "Jolt",
+   "Deep Freeze",
+   "Hornet Strike",
+   "Magnum Force"
+  ],
+  "manual": 1.1834729780214437,
+  "search": 1.1834729780214437,
+  "changed": false,
+  "wfsim": 0.6540089157753343
+ },
+ {
+  "key": [
+   "Dual Toxocyst",
+   [
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+    "/Lotus/Upgrades/Mods/Pistol/Event/CritChanceWhileAimingPistolSPMod",
+    "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+    "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponToxinDamageMod"
+   ]
+  ],
+  "weapon": "Dual Toxocyst",
+  "label": "bot",
+  "card": "D,1,F,Z",
+  "mods": [
+   "Primed Convulsion",
+   "Pathogen Rounds",
+   "Lethal Torrent",
+   "Galvanized Diffusion",
+   "Primed Heated Charge",
+   "Galvanized Shot",
+   "Galvanized Crosshairs"
+  ],
+  "manual": 1.61983120550564,
+  "search": 1.61983120550564,
+  "changed": false,
+  "wfsim": 0.8043818948266842
+ },
+ {
+  "key": [
+   "Dual Toxocyst",
+   [
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/ElectEventPistolMod",
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+    "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+    "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+    "/Lotus/Upgrades/Mods/Pistol/WeaponWeakpointCriticalChanceMod"
+   ]
+  ],
+  "weapon": "Dual Toxocyst",
+  "label": "portable",
+  "card": "D,1,F,Z",
+  "mods": [
+   "Primed Convulsion",
+   "Pistol Acuity",
+   "Jolt",
+   "Lethal Torrent",
+   "Galvanized Diffusion",
+   "Primed Pistol Gambit",
+   "Anemic Agility"
+  ],
+  "manual": 1.8766875373479783,
+  "search": 1.8766875373479783,
+  "changed": false,
+  "wfsim": 0.6059848625432331
+ },
+ {
+  "key": [
+   "Imperator Vandal",
+   [
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventColdStatusRifleMod",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventFireStatusRifleMod",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod"
+   ]
+  ],
+  "weapon": "Imperator Vandal",
+  "label": "portable",
+  "card": "0,1,S,Z",
+  "mods": [
+   "Primed Combustion Rounds",
+   "Magma Chamber",
+   "Primed Rubedo-Lined Barrel",
+   "Primed Dual Rounds",
+   "Primed Venomous Clip",
+   "Primed Polar Magazine",
+   "Hypothermic Shell"
+  ],
+  "manual": 3.1718682025421763,
+  "search": 17.87480589920469,
+  "changed": false,
+  "wfsim": 3.060992195697141
+ },
+ {
+  "key": [
+   "Imperator Vandal",
+   [
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingEventFireStatusRifleMod",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritDamageMod",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRiflePunchthroughMod",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod"
+   ]
+  ],
+  "weapon": "Imperator Vandal",
+  "label": "portable",
+  "card": "2,4,S,Z",
+  "mods": [
+   "Primed Rubedo-Lined Barrel",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Hollowed Bullets",
+   "Magma Chamber",
+   "Sabot Rounds",
+   "Automatic Trigger"
+  ],
+  "manual": 10.633745674164425,
+  "search": 10.633745674164425,
+  "changed": false,
+  "wfsim": 10.542469122672188
+ },
+ {
+  "key": [
+   "Imperator Vandal",
+   [
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleCritChanceDamageAimingMod",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/ArchwingRifleFireRateMod",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingRifleDamageAmountModExpert",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFireDamageModExpert",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponToxinDamageModExpert",
+    "/Lotus/Upgrades/Mods/Archwing/Rifle/PrimedArchwingRifleFireIterationsMod"
+   ]
+  ],
+  "weapon": "Imperator Vandal",
+  "label": "bot",
+  "card": "D,1,F,Z",
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Primed Rubedo-Lined Barrel",
+   "Automatic Trigger",
+   "Critical Focus"
+  ],
+  "manual": 18.483786110017196,
+  "search": 18.483786110017196,
+  "changed": false,
+  "wfsim": 18.264203687457556
+ }
+]

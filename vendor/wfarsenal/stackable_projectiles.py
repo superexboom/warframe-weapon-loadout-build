@@ -17,6 +17,7 @@ class Group:
     token: int = 0
     singularity: bool = False
     alive: bool = True
+    next_embed: float | None = None
 
 
 class StackableProjectiles:
@@ -56,7 +57,8 @@ class StackableProjectiles:
         self.schedule(group.expires,'explode',group)
         if profile['kind']=='stug':
             self.hit(group,'embed',time,stacks)
-            self.schedule(time+profile['embedInterval'],'embed',group)
+            group.next_embed = time+profile['embedInterval']
+            self.schedule(group.next_embed,'embed',group)
         self.record(time,'deploy',group)
         return group
 
@@ -85,6 +87,9 @@ class StackableProjectiles:
             group.expires = time+profile['stackedLife']
             group.token += 1
             self.schedule(group.expires,'explode',group)
+            if group.next_embed is not None:
+                # The refresh moves the fuse only; embed ticks keep their 1 s beat.
+                self.schedule(group.next_embed,'embed',group)
             if group.singularity:
                 self.schedule(time+profile['singularity']['interval'],'singularity',group)
         if profile['kind']=='stug' and group.stacks>=profile['maxStack']:
@@ -164,7 +169,8 @@ class StackableProjectiles:
             self.explode(time,group)
         elif action=='embed' and time<group.expires:
             self.hit(group,'embed',time,group.stacks)
-            self.schedule(time+group.profile['embedInterval'],'embed',group)
+            group.next_embed = time+group.profile['embedInterval']
+            self.schedule(group.next_embed,'embed',group)
         elif action=='singularity' and time<group.expires:
             interval = group.profile['singularity']['interval']
             self.hit(group,'singularity',time,interval)

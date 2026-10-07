@@ -1,0 +1,829 @@
+{
+  "schemaVersion": 1,
+  "packageBuild": "2026.08.13.13.24",
+  "generatedBy": "tools/import_burst_profiles.py",
+  "semantics": "per fire mode: count rounds per pull, delay_seconds apart (scaled by fire-rate mods unless ignoreFireRate), then 1 / fireRate to the next pull; remainingClip: count = rounds left",
+  "weapons": {
+    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraWeapon": {
+      "name": "Multron",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.40000001,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 2.5,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "424a10408df0812f4e01c65ff45bd3a36da3c72918641d14f4cf7cce7a4376e8"
+    },
+    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/SwarmerWeapon": {
+      "name": "Helstrum",
+      "modes": {
+        "0": {
+          "count": 4,
+          "delay_seconds": 0.1,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 0.25,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "b8460646b74f42d7dda05b9cec79429d687d678d614219a4dbea943929ef38ff"
+    },
+    "/Lotus/Types/Sentinels/SentinelWeapons/BurstLaserPistol": {
+      "name": "Burst Laser",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.40000001,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 1.5,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "8c348a5dbe4b572045760d80ed5f7fd04e6d009243cc760d1290c9e170ac3718"
+    },
+    "/Lotus/Types/Sentinels/SentinelWeapons/PrimeBurstLaserPistol": {
+      "name": "Burst Laser Prime",
+      "modes": {
+        "0": {
+          "count": 5,
+          "delay_seconds": 0.2,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 1.5,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "686508cdc188ffb0a1c5fdacecdc3d13a64a0158ba96f8b76e9dce3bd1c9547d"
+    },
+    "/Lotus/Types/Sentinels/SentinelWeapons/PrismaBurstLaserPistol": {
+      "name": "Prisma Burst Laser",
+      "modes": {
+        "0": {
+          "count": 4,
+          "delay_seconds": 0.30000001,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 1.5,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "69afa9cf9f0dd297e057500bd35de5fd6ec3ff5a7ff164b47ef3efcf90c7984b"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle": {
+      "name": "Battacor",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.079999998,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Weapons/CrpSentExperimentRiflePrimaryFire",
+          "fireRate": 2.5,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "b445dbd4159de843e4e72b09184d7b14c2a831ee77a5e4a891dcc4708d86a6bd"
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpSentAmalgPistol/CrpSentAmalgPistol": {
+      "name": "Cyanex",
+      "modes": {
+        "1": {
+          "count": 3,
+          "delay_seconds": 0.079999998,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 4.666667,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "1c4d1dd75f0c98977c448e2dee8d72bf13d2bc23c31653f6022f199819effd05"
+    },
+    "/Lotus/Weapons/Grineer/GrineerPistol/GrnHeavyPistol": {
+      "name": "Kraken",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.050000001,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 2.833333,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "6a96498756242d49b34d782e6831351e7c7f6ff9cfca006a0287e30813f14253"
+    },
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind": {
+      "name": "Kuva Hind",
+      "modes": {
+        "0": {
+          "count": 5,
+          "delay_seconds": 0.07,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "3a4cbb97542b5650d4438e18be22b9d15834b360dd82c224e3134413948f6b93"
+    },
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Quartakk/KuvaQuartakk": {
+      "name": "Kuva Quartakk",
+      "modes": {
+        "1": {
+          "count": 4,
+          "delay_seconds": 0.0,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 1.583333,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "36fc27380d1b8ca15593fd1abddf2fe560ff520a23cab75d850644a3e55546a4"
+    },
+    "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Kraken/KuvaKraken": {
+      "name": "Kuva Kraken",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.029999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 2.833333,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "d6ba7f6d94cbddb1f3d87993bca68457d7e9a0a8236cdbc6ee7bf365a8c81b41"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/BurstRifle/GrnBurstRifle": {
+      "name": "Hind",
+      "modes": {
+        "0": {
+          "count": 5,
+          "delay_seconds": 0.12,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "9b6f0f37d97ee78ac8f932f3d21792ff4a5efb3c55f6f75c3de843694e5573f4"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnFourBarrelRifle/GrnFourBarrelRifleWeapon": {
+      "name": "Quartakk",
+      "modes": {
+        "0": {
+          "count": 4,
+          "delay_seconds": 0.0,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 1.583333,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "7ab8723096c569a99787085af85833694d4f0f0fe4a1657c5b8bdac984c39bcc"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnHarpoonGun/GrnHarpoonGun": {
+      "name": "Harpak",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.1,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "9ebb4783f8410940336f79d993bdcb4ea789b3920b472f51e1e4caff456a8b48"
+    },
+    "/Lotus/Weapons/Grineer/Pistols/GrnAmphisPistol/GrnAmphisPistol": {
+      "name": "Quatz",
+      "modes": {
+        "1": {
+          "count": 4,
+          "delay_seconds": 0.0,
+          "ignoreFireRate": true,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 2.5,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "2292a70ca1f25e5e8868e444fc7f09ee5cf2336b57d3082971de46f4c3b54f76"
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon": {
+      "name": "Coda Bubonico",
+      "modes": {
+        "1": {
+          "count": 3,
+          "delay_seconds": 0.23,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 7.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "ea841033846648b76f65b706c3b0b93a49bc9cd576e9a54ae1d1c5411f29ef6a"
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaHema": {
+      "name": "Coda Hema",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.1,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.333333,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "c4a5281240baef7670cea530082d490cba9ec10cc0a248c354580c354ae22f20"
+    },
+    "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannon": {
+      "name": "Bubonico",
+      "modes": {
+        "1": {
+          "count": 3,
+          "delay_seconds": 0.23,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "86958b33b2681bfebfc0af59d375175dcd3876929689de99076091fa4bf103de"
+    },
+    "/Lotus/Weapons/Infested/LongGuns/InfWFAccompanyingPri/InfestedBurstRifle": {
+      "name": "Hema",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.1,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "b3dde4a63135d066a7601dd517af976cbe344d9c9760015369bb4dd5d1a55e06"
+    },
+    "/Lotus/Weapons/Infested/LongGuns/QuantaFullyInfested/InfQuantaRifle": {
+      "name": "Paracyst",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.050000001,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 8.333333,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "041a5ee787fe3435a5aafde15c6240b990dd65e575ed088078dc52351554ce7a"
+    },
+    "/Lotus/Weapons/Sentients/SentOctaMiniGun/SentOctaMiniGun": {
+      "name": "Haalvu",
+      "modes": {
+        "1": {
+          "count": 2,
+          "delay_seconds": 0.050000001,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 12.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "28f545f82ba2e27083265018b4caa854a5d7e8170bccd340c43d6e4573bf2a56"
+    },
+    "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica": {
+      "name": "Rakta Ballistica",
+      "modes": {
+        "1": {
+          "count": 4,
+          "delay_seconds": 0.050000001,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 6.666667,
+          "isIncarnonForm": false
+        }
+      },
+      "nativeSha256": "6239329688ceb06aae27b354609aaafe7fdb5075949ad0c191442571c3aca995"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ArchBurstGun/ArchBurstGun": {
+      "name": "Cyngas",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.059999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 6.666667,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "e3f052a5e48a21dd62b96be43f8e66fba334d76bca9944785dedea8c95a87822"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher": {
+      "name": "Morgha",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.0,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 3.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "f4b5a336d84ddeade83f2791a23f4bda5efa134d514a7d9720f8b79e4cc76d96"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird": {
+      "name": "Dex Sybaris",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.090000004,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 3.333333,
+          "isIncarnonForm": false
+        },
+        "1": {
+          "count": 4,
+          "delay_seconds": 0.090000004,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 3.333333,
+          "isIncarnonForm": true
+        }
+      },
+      "nativeSha256": "5c203814b754c691b41142054b26a1988c9ad7ef6bcafc34b7a675ccb216a40a"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/DrakeRifle/DrakeRifle": {
+      "name": "Tiberon",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.059999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 6.666667,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "7cc344d7c34c0487e9a54a09f20020a5ffb659d164a82b01271423dde86d6a93"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/GarudaCrossbow/GarudaCrossbow": {
+      "name": "Nagantaka",
+      "modes": {
+        "1": {
+          "count": 3,
+          "delay_seconds": 0.15000001,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "ae36b04451c3b820d71abaac99fc0710fc96b3efa38ac7716a9535f37bb9e16d"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/Gunbrella/ShrineMaidenGunbrellaWeapon": {
+      "name": "Higasa",
+      "modes": {
+        "0": {
+          "count": 5,
+          "delay_seconds": 0.1,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 2.5,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "e04fd8882310f6de30cea7c983ef48c4bb36e07297bfe62f247eb3b64ed9c3a0"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston": {
+      "name": "Burston Prime",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.039999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": false
+        }
+      },
+      "nativeSha256": "3578d0d11589bfc62b6281be7e24ba63d240123d5e7363b9a9f37d1b362d85f4"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeNagantaka/PrimeNagantakaWeapon": {
+      "name": "Nagantaka Prime",
+      "modes": {
+        "1": {
+          "count": 3,
+          "delay_seconds": 0.11,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "98dd25c1797025252d169776eca6efee4029b2b8f206605c66728a8b7a5985cb"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePerigale/PrimePerigaleSniper": {
+      "name": "Perigale Prime",
+      "modes": {
+        "0": {
+          "count": 4,
+          "delay_seconds": 0.039999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 2.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "8428d857ecce7f6369c960e30ab5e87b1d2a9d6be5f54396c05d02b2cef5b4c7"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeSybaris/PrimeSybarisRifle": {
+      "name": "Sybaris Prime",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.061999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 3.333333,
+          "isIncarnonForm": false
+        },
+        "1": {
+          "count": 4,
+          "delay_seconds": 0.061999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 3.333333,
+          "isIncarnonForm": true
+        }
+      },
+      "nativeSha256": "07330999c277b71f604339efb12a6cc3b885c2f1c0c69522cd11d54ff00e0faa"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeTiberon/PrimeTiberonRifle": {
+      "name": "Tiberon Prime",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.079999998,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "19a3b2d597f95e0d939bcd00f1944e75b94ef5c187afc0650fa58cf1b61506a8"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnModQuestRifle/TnModQuestRifleWeapon": {
+      "name": "Thornbak",
+      "modes": {
+        "0": {
+          "count": 4,
+          "delay_seconds": 0.066,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 6.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "2f99b9ef93f84bbeca8f20146840ab541dcd0e75165f121a7bcbdb4274d13f71"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniper": {
+      "name": "Perigale",
+      "modes": {
+        "0": {
+          "count": 4,
+          "delay_seconds": 0.039999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 2.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "7d904384542952aad68f4aaef166f41d0b72368d7a3ac7c0f97cc0c2fb896bcc"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnoLeverAction/TnoLeverActionRifle": {
+      "name": "Sybaris",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.101,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 3.333333,
+          "isIncarnonForm": false
+        },
+        "1": {
+          "count": 4,
+          "delay_seconds": 0.101,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 3.333333,
+          "isIncarnonForm": true
+        }
+      },
+      "nativeSha256": "e75b27a0e6d440f927e104871e57b55dc993077a874be341b16044fd8476dfe6"
+    },
+    "/Lotus/Weapons/Tenno/Pistol/BurstPistol": {
+      "name": "Sicarus",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.039999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 3.5,
+          "isIncarnonForm": false
+        },
+        "1": {
+          "count": 3,
+          "delay_seconds": 0.039999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 3.5,
+          "isIncarnonForm": true
+        }
+      },
+      "nativeSha256": "27917fd14c1a7d37c9ff38a3d02ed7800d5231e0421ef6ad5bbeb6ef98a2f12f"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow": {
+      "name": "Ballistica",
+      "modes": {
+        "1": {
+          "count": 4,
+          "delay_seconds": 0.050000001,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 6.666667,
+          "isIncarnonForm": false
+        }
+      },
+      "nativeSha256": "a948a65c8ed68f7057255b3a17bb62ec424ae364d4bd691aa3874ddd672b5993"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusWeapon": {
+      "name": "Akarius Prime",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.12,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 3.666667,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "13a2151ba9c4d990aad22dcfb448a9d894746632cd1197fe9cfd231d4f28defe"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeAkjagara/AkJagaraPrime": {
+      "name": "Akjagara Prime",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.0,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "ab64339afd82249dc19c24ba69c36f9ee4bc81408ce18bfdf953c1d01b27aab4"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeSicarus/PrimeSicarusPistol": {
+      "name": "Sicarus Prime",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.039999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": false
+        },
+        "1": {
+          "count": 3,
+          "delay_seconds": 0.039999999,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": true
+        }
+      },
+      "nativeSha256": "35f659d49a8afefc0b65e05f598eefbe5d23bd5dd43cb3f0a39fba03385cd6e7"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/SapientPistol/SapientPistol": {
+      "name": "Akarius",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.12,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 4.333333,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "9cf253c9305a45dfb0826bea0a5b7433faa40b2e6e108b9685f7d3fce4f54652"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TigrisRedeemerSetPistol/TnoBladedPistols": {
+      "name": "Akjagara",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.0,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "ae4160fed9e577e33b2bd0e57648264b7664e0623844397fe4da26093afc435b"
+    },
+    "/Lotus/Weapons/Tenno/Rifle/BurstRifle": {
+      "name": "Burston",
+      "modes": {
+        "0": {
+          "count": 3,
+          "delay_seconds": 0.061000001,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 5.0,
+          "isIncarnonForm": false
+        }
+      },
+      "nativeSha256": "e0b9c996ade1b5f3bdeed52a1858701f7f3a2ba4454d0792d8cbbb959bcba210"
+    },
+    "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol": {
+      "name": "Sepulcrum",
+      "modes": {
+        "0": {
+          "count": 2,
+          "delay_seconds": 0.0,
+          "ignoreFireRate": false,
+          "consumeAmmoOncePerBurst": false,
+          "remainingClip": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst",
+          "fireRate": 1.833333,
+          "isIncarnonForm": null
+        }
+      },
+      "nativeSha256": "ce7594df5fda56c128533dd30aaee1594e7d2f85d44bbe58e4557f64e5db249b"
+    }
+  },
+  "skipped": {}
+}

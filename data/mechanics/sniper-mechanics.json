@@ -1,0 +1,1342 @@
+{
+ "schemaVersion": 1,
+ "packageBuild": "2026.08.13.13.24",
+ "exportBuild": "2026.08.13.13.24",
+ "semantics": {
+  "combo": "multiplier(hits)=1 below min, else 1+tierBonus*(1+k) where k=max tier with hits>=min*tierFactor^k; read before the hit is counted; one count per landing direct pellet; loses 1 per `seconds` without a landing hit; multiplies direct and radial hit damage, not the status payload; paid only scoped in, never in an Incarnon form",
+  "zoom": "top zoom level whose upgrades are all buffs; injected as engine effects with the native upgrade operation (STACKING_MULTIPLY joins the mod bucket, ADD is flat after mods); snipers are evaluated scoped, other weapons only when the scenario is aiming; Incarnon forms receive none",
+  "reference": "WFSim engine/src/model/weapon.rs SniperCombo, fight/run.rs combo_at, fight/pellet.rs, build/loadout/resolve.rs (scope)"
+ },
+ "wfsimUnmatched": [],
+ "weapons": {
+  "/Lotus/Weapons/ClanTech/Energy/Railgun": {
+   "name": "Lanka",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 2,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 6.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 2,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 6,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 2,
+    "magnification": 8,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_CRIT_CHANCE",
+      "operation": "ADD",
+      "value": 0.5,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 3,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_CHANCE",
+        "operation": "ADD",
+        "value": 0.15,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_CHANCE",
+        "operation": "ADD",
+        "value": 0.25,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 8,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_CHANCE",
+        "operation": "ADD",
+        "value": 0.5,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/ClanTech/Energy/Railgun",
+     "sha256": "3f5b397f6623e82ffd537d4eff5914cd670e62d355939d64872e13d7a43452c7"
+    }
+   ],
+   "wfsim": {
+    "id": "lanka",
+    "file": "weapons/primary/lanka.yaml",
+    "sniperCombo": {
+     "min": 2,
+     "seconds": 6.0
+    },
+    "scope": {
+     "magnification": 8.0,
+     "crit_chance_post_mod": 0.5
+    },
+    "sha256": "e9066995acbe7be339ce9f49e3e2135bb052684e837043f3e72a0942c084e988",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniper": {
+   "name": "Komorex",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 5,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 5,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": null,
+    "effects": [],
+    "levels": [
+     {
+      "magnification": 2,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_RECOIL",
+        "operation": "STACKING_MULTIPLY",
+        "value": -0.5,
+        "damageType": "DT_ANY"
+       },
+       {
+        "upgradeType": "WEAPON_PUNCTURE_DEPTH",
+        "operation": "ADD",
+        "value": 2.0,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 3.5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+        "operation": "STACKING_MULTIPLY",
+        "value": 1.0,
+        "damageType": "DT_ANY"
+       },
+       {
+        "upgradeType": "WEAPON_EXPLOSION_RADIUS",
+        "operation": "ADD",
+        "value": 3.6,
+        "damageType": "DT_ANY"
+       },
+       {
+        "upgradeType": "WEAPON_FIRE_RATE",
+        "operation": "STACKING_MULTIPLY",
+        "value": -0.75,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ],
+    "excluded": "zoom-stat-trade-unmodeled"
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniper",
+     "sha256": "83412cca1bfbc69119318fe226dd251335b57e1d5bad42001258e2dc7de7dd09"
+    }
+   ],
+   "wfsim": {
+    "id": "komorex",
+    "file": "weapons/primary/komorex.yaml",
+    "sniperCombo": {
+     "min": 5
+    },
+    "scope": null,
+    "sha256": "9f453f35aaf6a1657fbfb828499f0c11ab5606e85c9146daed41a47f3515e3b7",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/GrnSniperRifle": {
+   "name": "Vulkar",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 2,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 2,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 2,
+    "magnification": 8,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.7,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 2.5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.35,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 4,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.55,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 8,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.7,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/GrnSniperRifle",
+     "sha256": "748feb62073195174479663162211a65117137aac7c58f58fd06a95807f07bf4"
+    }
+   ],
+   "wfsim": {
+    "id": "vulkar",
+    "file": "weapons/primary/vulkar.yaml",
+    "sniperCombo": {
+     "min": 2
+    },
+    "scope": {
+     "magnification": 8.0,
+     "headshot_damage": 0.7
+    },
+    "sha256": "bee88480783004b4bdd93b762b57bfbc5300f13ba27ee77f692c7a7887489052",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/VulkarWraith": {
+   "name": "Vulkar Wraith",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 2,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 2,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 2,
+    "magnification": 8,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.7,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 2.5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.35,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 4,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.55,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 8,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.7,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/GrnSniperRifle",
+     "sha256": "748feb62073195174479663162211a65117137aac7c58f58fd06a95807f07bf4"
+    },
+    {
+     "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/VulkarWraith",
+     "sha256": "bc672f8a71c58243fca4eb4b44273693260a2dc373390f4954b9919c6e9ff9dc"
+    }
+   ],
+   "wfsim": {
+    "id": "vulkar_wraith",
+    "file": "weapons/primary/vulkar_wraith.yaml",
+    "sniperCombo": {
+     "min": 2
+    },
+    "scope": {
+     "magnification": 8.0,
+     "headshot_damage": 0.7
+    },
+    "sha256": "e200e864301f6afcddf261da5e0c88f906ef84285c9a6a9f7c58164046aaf71a",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix": {
+   "name": "Coda Sporothrix",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 1,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 1,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 0,
+    "magnification": 2.7,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.5,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 2.7,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.5,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix",
+     "sha256": "c31de5331fad5dee681cb54e83a1ee94161f8cdba0ddb3ae076c303c908d8385"
+    },
+    {
+     "path": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle",
+     "sha256": "a35dc2c0941893adc997951c6d0d9a0566663b4e9681cc50e841c23ed743ecb5"
+    }
+   ],
+   "wfsim": {
+    "id": "coda_sporothrix",
+    "file": "weapons/primary/coda_sporothrix.yaml",
+    "sniperCombo": {
+     "min": 1
+    },
+    "scope": {
+     "magnification": 2.7,
+     "headshot_damage": 0.5
+    },
+    "sha256": "43f97e18ed7739009700e13b720c41d3325609c1e7bc28f1e3100f30cee95461",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle": {
+   "name": "Sporothrix",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 1,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 1,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 0,
+    "magnification": 2.7,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.5,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 2.7,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.5,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle",
+     "sha256": "a35dc2c0941893adc997951c6d0d9a0566663b4e9681cc50e841c23ed743ecb5"
+    }
+   ],
+   "wfsim": {
+    "id": "sporothrix",
+    "file": "weapons/primary/sporothrix.yaml",
+    "sniperCombo": {
+     "min": 1
+    },
+    "scope": {
+     "magnification": 2.7,
+     "headshot_damage": 0.5
+    },
+    "sha256": "1cc97d88544936237d960e67536f9b656172782e67012dd1e856f5744d32a07b",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Lasria/LasSilencedPistol/LasSilencedPistolWeapon": {
+   "name": "Vesper 77",
+   "sniper": false,
+   "source": "wfsim-yaml",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": null,
+   "zoom": {
+    "level": null,
+    "magnification": null,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_CRIT_DAMAGE",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.4,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "aimGated": true
+   },
+   "packageSources": [],
+   "wfsim": {
+    "id": "vesper_77",
+    "file": "weapons/secondary/vesper_77.yaml",
+    "sniperCombo": null,
+    "scope": {
+     "crit_multiplier": 0.4
+    },
+    "sha256": "6594167fe9ee2ae24993204cdc414d51ca4a46b54f7222ea8dcb4d259d1fa095",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/FiveShotSniper/FiveShotSniper": {
+   "name": "Rubico",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 1,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 1,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 1,
+    "magnification": 6,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_CRIT_DAMAGE",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.5,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 3.5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_DAMAGE",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.35,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 6,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_DAMAGE",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.5,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Tenno/LongGuns/FiveShotSniper/FiveShotSniper",
+     "sha256": "6366da4a82efee4fd2a4773125de49d4f7a1e6984dafa4dafb1dfb2e116ecf04"
+    }
+   ],
+   "wfsim": {
+    "id": "rubico",
+    "file": "weapons/primary/rubico.yaml",
+    "sniperCombo": {
+     "min": 1
+    },
+    "scope": {
+     "magnification": 6.0,
+     "crit_multiplier": 0.5
+    },
+    "sha256": "3b5ebee452a3fe722da615949fb9ce227d8d6b682de9ed29b8bf7871d28cd743",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/PrimeLightningGun/PrimeLightningGun": {
+   "name": "Vadarya Prime",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 3,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 3,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 1,
+    "magnification": 8,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_CRIT_DAMAGE",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.5,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 2.5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_MELEE_COMBO_GAIN_MISS_CHANCE",
+        "operation": "SET_MIN",
+        "value": 2.0,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 8,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_DAMAGE",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.5,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeLightningGun/PrimeLightningGun",
+     "sha256": "9583f2bc6ff689c427f815a2657a9596ac3a8cb3ebb8e20d3285d6a91004db3c"
+    }
+   ],
+   "wfsim": {
+    "id": "vadarya_prime",
+    "file": "weapons/primary/vadarya_prime.yaml",
+    "sniperCombo": {
+     "min": 3
+    },
+    "scope": {
+     "magnification": 8.0,
+     "crit_multiplier": 0.5
+    },
+    "sha256": "cfbb6f852cbb2e0c3de9998709bdb85b50d557f19dc694a945efcf7b3146b260",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/PrimePerigale/PrimePerigaleSniper": {
+   "name": "Perigale Prime",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 1,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 1,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 1,
+    "magnification": 4,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_CRIT_DAMAGE",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.4,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 2,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_DAMAGE",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.2,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 4,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_DAMAGE",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.4,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePerigale/PrimePerigaleSniper",
+     "sha256": "8428d857ecce7f6369c960e30ab5e87b1d2a9d6be5f54396c05d02b2cef5b4c7"
+    },
+    {
+     "path": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniper",
+     "sha256": "7d904384542952aad68f4aaef166f41d0b72368d7a3ac7c0f97cc0c2fb896bcc"
+    }
+   ],
+   "wfsim": {
+    "id": "perigale_prime",
+    "file": "weapons/primary/perigale_prime.yaml",
+    "sniperCombo": {
+     "min": 1
+    },
+    "scope": {
+     "magnification": 4.0,
+     "crit_multiplier": 0.4
+    },
+    "sha256": "757a3cd65210dbce05a1764bb590f50741c802a6047b073497890e1461b6f399",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle": {
+   "name": "Vectis Prime",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 5,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0,
+     1
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 5,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 1,
+    "magnification": 6,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.6,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 3.5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.4,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 6,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.6,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle",
+     "sha256": "cec9d1d9baf108231c67bf6cb7d2e8d77d83633c4b6a9c7704db45adeadb2708"
+    }
+   ],
+   "wfsim": {
+    "id": "vectis_prime",
+    "file": "weapons/primary/vectis_prime.yaml",
+    "sniperCombo": {
+     "min": 5
+    },
+    "scope": {
+     "magnification": 6.0,
+     "headshot_damage": 0.6
+    },
+    "sha256": "b05ea63efe5f8b991b405ec5fa5d6eb10596f0aa3f0eaec23eec7aa712c03e74",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon": {
+   "name": "Rubico Prime",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 1,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 1,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 1,
+    "magnification": 5,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_CRIT_DAMAGE",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.5,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 2.5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_DAMAGE",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.35,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_DAMAGE",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.5,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Tenno/LongGuns/RubicoPrime/RubicoPrimeWeapon",
+     "sha256": "b87c69c556b2874f366b4178784f798e8102245118518f65bd38d0a8eded3ff4"
+    }
+   ],
+   "wfsim": {
+    "id": "rubico_prime",
+    "file": "weapons/primary/rubico_prime.yaml",
+    "sniperCombo": {
+     "min": 1
+    },
+    "scope": {
+     "magnification": 5.0,
+     "crit_multiplier": 0.5
+    },
+    "sha256": "c7f01d8dbb34fbf367d4c8703d685517448088f054f7ab743d19797e715555e2",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniper": {
+   "name": "Perigale",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 1,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 1,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 1,
+    "magnification": 4,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_CRIT_DAMAGE",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.4,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 2,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_DAMAGE",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.2,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 4,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_CRIT_DAMAGE",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.4,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniper",
+     "sha256": "7d904384542952aad68f4aaef166f41d0b72368d7a3ac7c0f97cc0c2fb896bcc"
+    }
+   ],
+   "wfsim": {
+    "id": "perigale",
+    "file": "weapons/primary/perigale.yaml",
+    "sniperCombo": {
+     "min": 1
+    },
+    "scope": {
+     "magnification": 4.0,
+     "crit_multiplier": 0.4
+    },
+    "sha256": "c36b7b6c63f3860085addae62e4c7288c34c374eafccbfad8d8110f753ef39cf",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Tenno/Rifle/SniperRifle": {
+   "name": "Snipetron",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 3,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 3,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 1,
+    "magnification": 6,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.5,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 2.5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.3,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 6,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.5,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Tenno/Rifle/SniperRifle",
+     "sha256": "7a83d8d8d1900f4ce6322c9338b35ef22aa9ffdfca5e042fa0ff926c7891765b"
+    }
+   ],
+   "wfsim": {
+    "id": "snipetron",
+    "file": "weapons/primary/snipetron.yaml",
+    "sniperCombo": {
+     "min": 3
+    },
+    "scope": {
+     "magnification": 6.0,
+     "headshot_damage": 0.5
+    },
+    "sha256": "2fff1ecd4bd2cde22fcd924180a78a664fd3bcb221b7660fee71612208014cb5",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Tenno/Rifle/TennoSniperRifle": {
+   "name": "Vectis",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 1,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0,
+     1
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 1,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 1,
+    "magnification": 4.5,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.5,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 3,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.3,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 4.5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.5,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Tenno/Rifle/TennoSniperRifle",
+     "sha256": "74f67c79212655916ec959e16d0bff4e79a87e2a9960bc67121907a2c4d1e744"
+    }
+   ],
+   "wfsim": {
+    "id": "vectis",
+    "file": "weapons/primary/vectis.yaml",
+    "sniperCombo": {
+     "min": 1
+    },
+    "scope": {
+     "magnification": 4.5,
+     "headshot_damage": 0.5
+    },
+    "sha256": "cc49d9040dc5d068c51b20ed43b14de1f5e8942c704dd3fcce2603401d65361c",
+    "disagrees": []
+   }
+  },
+  "/Lotus/Weapons/Tenno/Rifle/VandalSniperRifle": {
+   "name": "Snipetron Vandal",
+   "sniper": true,
+   "source": "game-packages",
+   "packageBuild": "2026.08.13.13.24",
+   "combo": {
+    "min": 3,
+    "tierBonus": 0.5,
+    "tierFactor": 3.0,
+    "seconds": 2.0,
+    "timeOverDecay": true,
+    "missDecay": true,
+    "behaviors": [
+     0
+    ],
+    "native": {
+     "ComboHitsAlwaysEnabled": 0,
+     "BaseHitCount": 3,
+     "BaseHitMultipler": 0.5,
+     "HitReqNextTierOperator": 3,
+     "HitReqNextTierOperationType": "HTO_MULTIPLICATIVE",
+     "TimeBetweenHits": 2,
+     "ComboDecayEnabled": 1,
+     "ComboMissDecay": 1,
+     "ComboTimeOverDecay": 1,
+     "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    }
+   },
+   "zoom": {
+    "level": 1,
+    "magnification": 6,
+    "effects": [
+     {
+      "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+      "operation": "STACKING_MULTIPLY",
+      "value": 0.5,
+      "damageType": "DT_ANY"
+     }
+    ],
+    "levels": [
+     {
+      "magnification": 2.5,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.3,
+        "damageType": "DT_ANY"
+       }
+      ]
+     },
+     {
+      "magnification": 6,
+      "upgrades": [
+       {
+        "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+        "operation": "STACKING_MULTIPLY",
+        "value": 0.5,
+        "damageType": "DT_ANY"
+       }
+      ]
+     }
+    ]
+   },
+   "packageSources": [
+    {
+     "path": "/Lotus/Weapons/Tenno/Rifle/SniperRifle",
+     "sha256": "7a83d8d8d1900f4ce6322c9338b35ef22aa9ffdfca5e042fa0ff926c7891765b"
+    },
+    {
+     "path": "/Lotus/Weapons/Tenno/Rifle/VandalSniperRifle",
+     "sha256": "994261af30145ffb260b29a2971e7bd11472c5238edec6b4e762618cf097fef3"
+    }
+   ],
+   "wfsim": {
+    "id": "snipetron_vandal",
+    "file": "weapons/primary/snipetron_vandal.yaml",
+    "sniperCombo": {
+     "min": 3
+    },
+    "scope": {
+     "magnification": 6.0,
+     "headshot_damage": 0.5
+    },
+    "sha256": "2c4b1e73f03afe0cb0f4ca00e58b256bdb96f6153218c4d67d4d1ffc207ee8c2",
+    "disagrees": []
+   }
+  }
+ }
+}

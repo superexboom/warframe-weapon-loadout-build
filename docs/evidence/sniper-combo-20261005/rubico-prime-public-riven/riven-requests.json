@@ -1,0 +1,28 @@
+[
+  [
+    "/api/riven",
+    {
+      "weapon": "rubico_prime",
+      "rank": 8,
+      "polarity": "madurai",
+      "bonuses": [
+        {
+          "id": "critical_chance",
+          "roll": 1.1
+        },
+        {
+          "id": "damage",
+          "roll": 1.1
+        },
+        {
+          "id": "multishot",
+          "roll": 1.1
+        }
+      ],
+      "malus": {
+        "id": "weapon_recoil",
+        "roll": 0.9
+      }
+    }
+  ]
+]

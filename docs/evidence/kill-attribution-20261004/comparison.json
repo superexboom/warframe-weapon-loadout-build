@@ -1,0 +1,895 @@
+{
+ "rows": [
+  {
+   "weapon": "burston_prime",
+   "roll": "None",
+   "referenceKpm": 97.60722896746256,
+   "referenceKillsStd": 0.6013318551350664,
+   "beforeKpm": 98.43727175462672,
+   "afterKpm": 98.43727175462672,
+   "beforePercent": 0.8503906892396884,
+   "afterPercent": 0.8503906892396884,
+   "weakpointKillEvents": 48.6875,
+   "killEvents": 49.0,
+   "branchKpm": [
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672,
+    98.43727175462672
+   ],
+   "request": {
+    "weapon": "burston_prime",
+    "mode": "cycle",
+    "mods": [
+     "primed_cryo_rounds",
+     "riven:board",
+     "primary_acuity",
+     "galvanized_scope",
+     "bladed_rounds",
+     "vile_acceleration",
+     "vital_sense",
+     "gilded_truth",
+     "vigilante_supplies"
+    ],
+    "arcane": [
+     "primary_deadhead"
+    ],
+    "evolutions": [
+     "burston_prime_evo1_incarnon_form",
+     "burston_prime_fortress_salvo",
+     "burston_prime_kinetic_battle",
+     "burston_prime_absolute_valor"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 100,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+     "archgun": {
+      "infinite_ammo": true
+     }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ],
+    "rivens": [
+     {
+      "id": "board",
+      "spec": {
+       "rank": 8,
+       "polarity": "madurai",
+       "bonuses": [
+        {
+         "id": "critical_damage",
+         "roll": 1.1
+        },
+        {
+         "id": "damage",
+         "roll": 1.1
+        },
+        {
+         "id": "toxin",
+         "roll": 1.1
+        }
+       ],
+       "malus": {
+        "id": "zoom",
+        "roll": 0.9
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "weapon": "burston_prime",
+   "roll": "0.9",
+   "referenceKpm": 144.26256699605815,
+   "referenceKillsStd": 1.3807244475274016,
+   "beforeKpm": 147.25165024658358,
+   "afterKpm": 147.25165024658358,
+   "beforePercent": 2.071974256916631,
+   "afterPercent": 2.071974256916631,
+   "weakpointKillEvents": 72.96707990078995,
+   "killEvents": 73,
+   "branchKpm": null,
+   "request": {
+    "weapon": "burston_prime",
+    "mode": "cycle",
+    "mods": [
+     "primed_cryo_rounds",
+     "riven:board",
+     "primary_acuity",
+     "galvanized_scope",
+     "bladed_rounds",
+     "vile_acceleration",
+     "vital_sense",
+     "gilded_truth",
+     "vigilante_supplies"
+    ],
+    "arcane": [
+     "primary_deadhead"
+    ],
+    "evolutions": [
+     "burston_prime_evo1_incarnon_form",
+     "burston_prime_fortress_salvo",
+     "burston_prime_kinetic_battle",
+     "burston_prime_absolute_valor"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 100,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+     "archgun": {
+      "infinite_ammo": true
+     }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ],
+    "rivens": [
+     {
+      "id": "board",
+      "spec": {
+       "rank": 8,
+       "polarity": "madurai",
+       "bonuses": [
+        {
+         "id": "critical_damage",
+         "roll": 1.1
+        },
+        {
+         "id": "damage",
+         "roll": 1.1
+        },
+        {
+         "id": "toxin",
+         "roll": 1.1
+        }
+       ],
+       "malus": {
+        "id": "status_duration",
+        "roll": 0.9
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "weapon": "burston_prime",
+   "roll": "1.0",
+   "referenceKpm": 31.79786753825863,
+   "referenceKillsStd": 0.1399999999998876,
+   "beforeKpm": 31.54839570545071,
+   "afterKpm": 31.497874046247976,
+   "beforePercent": -0.7845552300252856,
+   "afterPercent": -0.9434390266885195,
+   "weakpointKillEvents": 14.765937097282197,
+   "killEvents": 15,
+   "branchKpm": null,
+   "request": {
+    "weapon": "burston_prime",
+    "mode": "cycle",
+    "mods": [
+     "primed_cryo_rounds",
+     "riven:board",
+     "primary_acuity",
+     "galvanized_scope",
+     "bladed_rounds",
+     "vile_acceleration",
+     "vital_sense",
+     "gilded_truth",
+     "vigilante_supplies"
+    ],
+    "arcane": [
+     "primary_deadhead"
+    ],
+    "evolutions": [
+     "burston_prime_evo1_incarnon_form",
+     "burston_prime_fortress_salvo",
+     "burston_prime_kinetic_battle",
+     "burston_prime_absolute_valor"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 100,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+     "archgun": {
+      "infinite_ammo": true
+     }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ],
+    "rivens": [
+     {
+      "id": "board",
+      "spec": {
+       "rank": 8,
+       "polarity": "madurai",
+       "bonuses": [
+        {
+         "id": "critical_damage",
+         "roll": 1.1
+        },
+        {
+         "id": "damage",
+         "roll": 1.1
+        },
+        {
+         "id": "toxin",
+         "roll": 1.1
+        }
+       ],
+       "malus": {
+        "id": "status_duration",
+        "roll": 1.0
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "weapon": "burston_prime",
+   "roll": "1.1",
+   "referenceKpm": 31.79786753825863,
+   "referenceKillsStd": 0.1399999999998876,
+   "beforeKpm": 31.54839570545071,
+   "afterKpm": 31.497874046247976,
+   "beforePercent": -0.7845552300252856,
+   "afterPercent": -0.9434390266885195,
+   "weakpointKillEvents": 14.765937097282197,
+   "killEvents": 15,
+   "branchKpm": null,
+   "request": {
+    "weapon": "burston_prime",
+    "mode": "cycle",
+    "mods": [
+     "primed_cryo_rounds",
+     "riven:board",
+     "primary_acuity",
+     "galvanized_scope",
+     "bladed_rounds",
+     "vile_acceleration",
+     "vital_sense",
+     "gilded_truth",
+     "vigilante_supplies"
+    ],
+    "arcane": [
+     "primary_deadhead"
+    ],
+    "evolutions": [
+     "burston_prime_evo1_incarnon_form",
+     "burston_prime_fortress_salvo",
+     "burston_prime_kinetic_battle",
+     "burston_prime_absolute_valor"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 100,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+     "archgun": {
+      "infinite_ammo": true
+     }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ],
+    "rivens": [
+     {
+      "id": "board",
+      "spec": {
+       "rank": 8,
+       "polarity": "madurai",
+       "bonuses": [
+        {
+         "id": "critical_damage",
+         "roll": 1.1
+        },
+        {
+         "id": "damage",
+         "roll": 1.1
+        },
+        {
+         "id": "toxin",
+         "roll": 1.1
+        }
+       ],
+       "malus": {
+        "id": "status_duration",
+        "roll": 1.1
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "weapon": "furis",
+   "roll": "None",
+   "referenceKpm": 76.91323652599881,
+   "referenceKillsStd": 1.1757550765360059,
+   "beforeKpm": 73.29340412295345,
+   "afterKpm": 75.89361240747077,
+   "beforePercent": -4.706384188918844,
+   "afterPercent": -1.3256809420357452,
+   "weakpointKillEvents": 33.0625,
+   "killEvents": 37.5,
+   "branchKpm": [
+    76.7118889004332,
+    76.7118889004332,
+    76.7118889004332,
+    76.7118889004332,
+    76.7118889004332,
+    76.7118889004332,
+    79.29340412295345,
+    74.7118889004332,
+    74.7118889004332,
+    74.7118889004332,
+    74.7118889004332,
+    74.7118889004332,
+    75.29340412295345,
+    75.29340412295345,
+    75.29340412295345,
+    75.29340412295345
+   ],
+   "request": {
+    "weapon": "furis",
+    "mode": "cycle",
+    "mods": [
+     "frostbite",
+     "pistol_pestilence",
+     "galvanized_diffusion",
+     "galvanized_crosshairs",
+     "galvanized_shot",
+     "lethal_torrent",
+     "magnetic_might",
+     "riven:board"
+    ],
+    "arcane": [
+     "secondary_deadhead"
+    ],
+    "evolutions": [
+     "furis_evo1_incarnon_form",
+     "furis_stormburst",
+     "furis_executioners_fortune",
+     "furis_elemental_balance"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 100,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+     "archgun": {
+      "infinite_ammo": true
+     }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ],
+    "rivens": [
+     {
+      "id": "board",
+      "spec": {
+       "rank": 8,
+       "polarity": "madurai",
+       "bonuses": [
+        {
+         "id": "critical_damage",
+         "roll": 1.1
+        },
+        {
+         "id": "fire_rate",
+         "roll": 1.1
+        },
+        {
+         "id": "weak_point_damage",
+         "roll": 1.1
+        }
+       ],
+       "malus": {
+        "id": "zoom",
+        "roll": 0.9
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "weapon": "furis",
+   "roll": "0.9",
+   "referenceKpm": 141.90483802213757,
+   "referenceKillsStd": 1.904835950941603,
+   "beforeKpm": 152.7118889004332,
+   "afterKpm": 149.17077477993672,
+   "beforePercent": 7.615702909727218,
+   "afterPercent": 5.120288257307792,
+   "weakpointKillEvents": 69.5,
+   "killEvents": 74.1875,
+   "branchKpm": [
+    152.7118889004332,
+    152.7118889004332,
+    152.7118889004332,
+    150.7118889004332,
+    150.7118889004332,
+    150.7118889004332,
+    152.7118889004332,
+    152.7118889004332,
+    146.7118889004332,
+    146.7118889004332,
+    145.3829759364615,
+    145.3829759364615,
+    146.7118889004332,
+    146.7118889004332,
+    146.7118889004332,
+    146.7118889004332
+   ],
+   "request": {
+    "weapon": "furis",
+    "mode": "cycle",
+    "mods": [
+     "frostbite",
+     "pistol_pestilence",
+     "galvanized_diffusion",
+     "galvanized_crosshairs",
+     "galvanized_shot",
+     "lethal_torrent",
+     "magnetic_might",
+     "riven:board"
+    ],
+    "arcane": [
+     "secondary_deadhead"
+    ],
+    "evolutions": [
+     "furis_evo1_incarnon_form",
+     "furis_stormburst",
+     "furis_executioners_fortune",
+     "furis_elemental_balance"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 100,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+     "archgun": {
+      "infinite_ammo": true
+     }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ],
+    "rivens": [
+     {
+      "id": "board",
+      "spec": {
+       "rank": 8,
+       "polarity": "madurai",
+       "bonuses": [
+        {
+         "id": "critical_damage",
+         "roll": 1.1
+        },
+        {
+         "id": "fire_rate",
+         "roll": 1.1
+        },
+        {
+         "id": "weak_point_damage",
+         "roll": 1.1
+        }
+       ],
+       "malus": {
+        "id": "status_duration",
+        "roll": 0.9
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "weapon": "furis",
+   "roll": "1.0",
+   "referenceKpm": 1.4768187868120026,
+   "referenceKillsStd": 0,
+   "beforeKpm": 1.4759677511183915,
+   "afterKpm": 1.4759677511183915,
+   "beforePercent": -0.05762627759146044,
+   "afterPercent": -0.05762627759146044,
+   "weakpointKillEvents": 0.0,
+   "killEvents": 0,
+   "branchKpm": null,
+   "request": {
+    "weapon": "furis",
+    "mode": "cycle",
+    "mods": [
+     "frostbite",
+     "pistol_pestilence",
+     "galvanized_diffusion",
+     "galvanized_crosshairs",
+     "galvanized_shot",
+     "lethal_torrent",
+     "magnetic_might",
+     "riven:board"
+    ],
+    "arcane": [
+     "secondary_deadhead"
+    ],
+    "evolutions": [
+     "furis_evo1_incarnon_form",
+     "furis_stormburst",
+     "furis_executioners_fortune",
+     "furis_elemental_balance"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 100,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+     "archgun": {
+      "infinite_ammo": true
+     }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ],
+    "rivens": [
+     {
+      "id": "board",
+      "spec": {
+       "rank": 8,
+       "polarity": "madurai",
+       "bonuses": [
+        {
+         "id": "critical_damage",
+         "roll": 1.1
+        },
+        {
+         "id": "fire_rate",
+         "roll": 1.1
+        },
+        {
+         "id": "weak_point_damage",
+         "roll": 1.1
+        }
+       ],
+       "malus": {
+        "id": "status_duration",
+        "roll": 1.0
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "weapon": "furis",
+   "roll": "1.1",
+   "referenceKpm": 1.4768187868120026,
+   "referenceKillsStd": 0,
+   "beforeKpm": 1.4759677511183915,
+   "afterKpm": 1.4759677511183915,
+   "beforePercent": -0.05762627759146044,
+   "afterPercent": -0.05762627759146044,
+   "weakpointKillEvents": 0.0,
+   "killEvents": 0,
+   "branchKpm": null,
+   "request": {
+    "weapon": "furis",
+    "mode": "cycle",
+    "mods": [
+     "frostbite",
+     "pistol_pestilence",
+     "galvanized_diffusion",
+     "galvanized_crosshairs",
+     "galvanized_shot",
+     "lethal_torrent",
+     "magnetic_might",
+     "riven:board"
+    ],
+    "arcane": [
+     "secondary_deadhead"
+    ],
+    "evolutions": [
+     "furis_evo1_incarnon_form",
+     "furis_stormburst",
+     "furis_executioners_fortune",
+     "furis_elemental_balance"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 100,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+     "archgun": {
+      "infinite_ammo": true
+     }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ],
+    "rivens": [
+     {
+      "id": "board",
+      "spec": {
+       "rank": 8,
+       "polarity": "madurai",
+       "bonuses": [
+        {
+         "id": "critical_damage",
+         "roll": 1.1
+        },
+        {
+         "id": "fire_rate",
+         "roll": 1.1
+        },
+        {
+         "id": "weak_point_damage",
+         "roll": 1.1
+        }
+       ],
+       "malus": {
+        "id": "status_duration",
+        "roll": 1.1
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "weapon": "furis",
+   "roll": "0.9-noGS",
+   "referenceKpm": 74.15550905944028,
+   "referenceKillsStd": 9.30953811958468,
+   "beforeKpm": 22.50843165343903,
+   "afterKpm": 76.16198991942598,
+   "beforePercent": -69.64698653016174,
+   "afterPercent": 2.7057745074305695,
+   "weakpointKillEvents": 31.4375,
+   "killEvents": 37.6875,
+   "branchKpm": [
+    90.91733118080897,
+    90.91733118080897,
+    94.08245250479874,
+    90.44834961432005,
+    90.44834961432005,
+    87.66540880092415,
+    81.53800512427354,
+    81.53800512427354,
+    68.66995484044355,
+    68.25251550243844,
+    68.25251550243844,
+    65.66540880092415,
+    76.08245250479874,
+    65.66540880092415,
+    38.448349614320044,
+    60.0
+   ],
+   "request": {
+    "weapon": "furis",
+    "mode": "cycle",
+    "mods": [
+     "frostbite",
+     "pistol_pestilence",
+     "galvanized_diffusion",
+     "galvanized_crosshairs",
+     "lethal_torrent",
+     "magnetic_might",
+     "riven:board"
+    ],
+    "arcane": [
+     "secondary_deadhead"
+    ],
+    "evolutions": [
+     "furis_evo1_incarnon_form",
+     "furis_stormburst",
+     "furis_executioners_fortune",
+     "furis_elemental_balance"
+    ],
+    "evolutions_as_given": true,
+    "enemy": "thrax_centurion",
+    "level": 9999,
+    "steel_path": true,
+    "headshot_pct": 100,
+    "aiming": true,
+    "duration": 30.0,
+    "runs": 100,
+    "seed": 12648430,
+    "infinite_ammo": true,
+    "class_rules": {
+     "archgun": {
+      "infinite_ammo": true
+     }
+    },
+    "ammo_drops": false,
+    "spectral_form": false,
+    "eximus": false,
+    "assume_max": false,
+    "frenzy": false,
+    "player_at": [
+     0,
+     0
+    ],
+    "target_at": [
+     0,
+     0.5
+    ],
+    "rivens": [
+     {
+      "id": "board",
+      "spec": {
+       "rank": 8,
+       "polarity": "madurai",
+       "bonuses": [
+        {
+         "id": "critical_damage",
+         "roll": 1.1
+        },
+        {
+         "id": "fire_rate",
+         "roll": 1.1
+        },
+        {
+         "id": "weak_point_damage",
+         "roll": 1.1
+        }
+       ],
+       "malus": {
+        "id": "status_duration",
+        "roll": 0.9
+       }
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "note": "after: DoT kills never weak-point kills; half-open period; no overkill carry"
+}

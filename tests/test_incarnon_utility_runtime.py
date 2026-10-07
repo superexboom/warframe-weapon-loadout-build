@@ -25,7 +25,8 @@ def test_furis_instant_headshot_reload_keeps_the_base_clip_loaded():
 def test_gorgon_empty_reload_growth_refills_only_added_magazine_capacity():
     _,combat,stats=setup('Gorgon',{'tier3':'3-1'})
     assert combat['refillMagazineGrowth']
-    result=replay(stats,target(),attacks_per_second=stats.fire_rate,window_seconds=40.,combat=combat,trigger_sources=combat['trigger_sources'])
+    # 60 s: three empty reloads complete even with the Gorgon's fire-rate spin-up.
+    result=replay(stats,target(),attacks_per_second=stats.fire_rate,window_seconds=60.,combat=combat,trigger_sources=combat['trigger_sources'])
     sources=result['triggerSeries']
     assert max(sources[0]['series'])==3
     source=combat['trigger_sources'][0]

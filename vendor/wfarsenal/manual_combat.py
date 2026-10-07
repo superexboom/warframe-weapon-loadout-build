@@ -17,6 +17,16 @@ def reference():
     )
 
 
+@lru_cache(maxsize=1)
+def infinite_condition_sources():
+    """Native IsInfinite buffs (tools/import_infinite_conditions.py)."""
+    root = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[2]))
+    try:
+        return frozenset(json.loads((root / "data/mechanics/infinite-conditions.json").read_text(encoding="utf-8"))["sources"])
+    except (OSError, ValueError, KeyError):
+        return frozenset()
+
+
 def condition_kind(condition):
     if condition.get('nativeEvent'):
         return condition['nativeEvent']['kind']
@@ -165,6 +175,8 @@ def prepare(
     miter_aoe=next((spec for b in branches if (spec:=miter_charge_aoe(b))),None)
     from .runtime_adapters import double_tap_configuration
     double_tap=next((spec for record,rank,_ in mod_records if (spec:=double_tap_configuration(record,rank))),None)
+    from .sniper import combo_spec
+    sniper_combo=combo_spec(weapon)
 
     # Final Fusillade / equivalent Incarnon terms are read from the base form's
     # last magazine pull. Keep this as an event gate; never fold it into the
@@ -224,11 +236,13 @@ def prepare(
             continue
         if ammo_restore_configuration(record):
             continue
-        from .runtime_adapters import incarnon_condition_rows
+        from .runtime_adapters import incarnon_condition_rows, passive_incarnon_condition, self_break_forced, self_break_condition
         for raw_condition in incarnon_condition_rows(record):
             raw_names = {str(x).rsplit("/", 1)[-1].casefold() for x in raw_condition.get("conditions") or ()}
             if 'evoonshieldbreakcondition' in raw_names and 'onoverguardbrokencondition' in raw_names:
-                for gate in ('EvoOnShieldBreakCondition', 'OnOverguardBrokenCondition'):
+                # Either break grants the one buff; forced, it is held once.
+                gates = ('EvoOnShieldBreakCondition',) if self_break_forced(scenario) else ('EvoOnShieldBreakCondition', 'OnOverguardBrokenCondition')
+                for gate in gates:
                     native_kind='on-shield-broken' if gate=='EvoOnShieldBreakCondition' else 'on-overguard-broken'
                     condition_rows.append({**raw_condition,'conditions':[gate],
                                            'nativeEvent':{'kind':native_kind,'actorOnly':True,'requiredCount':1,'resetOn':[]}})
@@ -238,6 +252,9 @@ def prepare(
             verified = verified_incarnon_condition(record, condition)
             if verified:
                 condition = verified
+            if condition.get('isInfinite') or condition.get('sourcePath') in infinite_condition_sources():
+                # Held until the condition resets; UpgradeDuration is no lifetime.
+                condition = {**condition, 'duration': 0, 'hold': True}
             if condition.get('nativeEvent'):
                 native=condition['nativeEvent']
                 merged=[*(condition.get('resetOn') or []),*(native.get('resetOn') or [])]
@@ -285,7 +302,8 @@ def prepare(
                 )
                 for e in condition.get("effects") or []
             ]
-            if not condition.get('effects'):
+            if not condition.get('effects') or passive_incarnon_condition(condition):
+                # Passive blocks stay in the static effects (optimizer._branch_effects).
                 continue
             if condition.get('actorGate'):
                 effects = [e for e in effects if e.supported]
@@ -317,7 +335,7 @@ def prepare(
             cap = float(condition.get("maxStacks") or 1.0)
             forced = (override or {}).get("stacks")
             uptime = (override or {}).get('uptime')
-            fixed = forced is not None or uptime is not None or (assumed and not condition.get('energyGate') and not condition.get('toggleOn')
+            fixed = forced is not None or uptime is not None or (self_break_condition(condition) and self_break_forced(scenario)) or (assumed and not condition.get('energyGate') and not condition.get('toggleOn')
                       and not any(k.startswith('on-self-') or k in {'on-equip-from-primary','on-warframe-ability','on-three-enemy-punchthrough','on-onos-damage-condition'} for k in kinds))
             initial = min(max(float(forced), 0.0), cap) if forced is not None else (cap if fixed else 0.0)
             if condition.get('initialStateKey') and not fixed:
@@ -331,6 +349,7 @@ def prepare(
                 sources.append(
                     dict(
                         id=key,
+                        hold=bool(condition.get('hold')),
                         resetOn=list(condition.get('resetOn') or []),
                         toggleOn=condition.get('toggleOn'),
                         victimProcType=(condition.get('nativeEvent') or {}).get('victimProcType'),
@@ -391,7 +410,7 @@ def prepare(
         dynamic.append((native_trigger['id'], [ModEffect(e['upgradeType'], e['operation'], e['value'], damage_type=e.get('damageType'), source_path=native_trigger['source']) for e in native_trigger['effects']]))
     profile = ref["incarnon"].get(weapon.get("path"))
     modes = weapon["fireModes"]
-    from .event_profiles import base_profile
+    from .event_profiles import base_profile, native_burst, reloads_after_every_shot
     base_attack = base_profile({**weapon, 'isIncarnonForm': False, '__selectedFireMode__': 0}, 0)
     if modes[0].get('trigger')=='/Lotus/Language/Menu/Loadout_TriggerSemiAutoFireOnUp':
         # Press/release pairs keep the native per-shot timer. No assumed
@@ -413,6 +432,11 @@ def prepare(
     )
     if cycle_enabled and weapon.get("isIncarnonForm") and not cycle:
         notes.append("incarnon-cycle-data-unavailable")
+    from .event_profiles import kill_charge_cycle
+    if not cycle and (kill_cycle := kill_charge_cycle(weapon, mode_index)):
+        # A kill-charged alternate cannot fire on its own: replay the primary
+        # until its kills fill the gauge, then the alternate (Trumna grenade).
+        cycle = kill_cycle
     if (
         profile
         and profile.get("radial")
@@ -522,6 +546,8 @@ def prepare(
                 headshot_bonus_multiplier=1.0,
             )
         extra = base_profile(wp, idx)
+        from .event_profiles import perfect_release
+        extra, _ = perfect_release(extra, modes[idx], scenario.combat_state)
         stackable = extra.get('stackable')
         if stackable:
             if stackable.get('chargedStacks'):
@@ -559,6 +585,10 @@ def prepare(
                     parts['orbRadial'] = part
             st._stackable = (stackable,parts)
         components = () if extra.get('pureRadial') else (extra.get('radials') or [extra.get('radial') or extra.get('lingering')])
+        # Cluster bomblets (tools/import_cluster_submunitions.py): each child
+        # lands its own hit and explosion, ``count`` per shell.
+        components = [*components, *(dict(cluster[key], count=cluster['count'])
+                                     for cluster in extra.get('clusters') or () for key in ('radial', 'direct'))]
         radial_parts = []
         for component in components:
             if component and component.get('requiresOnosRadialHit') and not scenario.combat_state.get('onosRadialHit'):
@@ -581,10 +611,22 @@ def prepare(
                     'procChance': (component['status_chance'] * float(rm.get('multishot') or 1) if component.get('status_chance') is not None else rm['damage'].get('procChance')),
                 }
                 part_fx = fx if component.get('takes_condition_overload') else ModEffectList(e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
-                part = apply_mods({**wp, 'fireModes': [rm], '__compressionProfile__': extra.get('compression')}, part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
+                if not (extra.get('radial') or extra.get('radials')):
+                    # A lingering field has its own native base damage: flat
+                    # "+N base damage" belongs to the shot (WFSim Torid: field
+                    # ticks 40 x crit with Plentiful Mayhem's +31 base). The
+                    # pool-multishot +60% follows each generated grenade into
+                    # its field, so it stays.
+                    part_fx = ModEffectList(e for e in part_fx
+                                            if not (e.upgrade_type == 'WEAPON_DAMAGE_AMOUNT' and e.operation == 'ADD_BASE'))
+                part = apply_mods({**wp, 'fireModes': [rm], '__compressionProfile__': extra.get('compression'),
+                                   **({'__coProfile__': component['coProfile']} if component.get('coProfile') else {})},
+                                  part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
                 part = replace(part, radial_only=True, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
                 if component.get('takes_multishot') is False:
                     part = replace(part, multishot=1.0)
+                if component.get('count'):
+                    part = replace(part, multishot=part.multishot * float(component['count']))
                 if component.get('impact_delay_seconds') is not None:
                     part._impact_delay = float(component['impact_delay_seconds'])
                 if extra.get('radial') or extra.get('radials'):
@@ -599,7 +641,8 @@ def prepare(
         if extra.get('primaryDelaySeconds') is not None:
             st._primary_delay_seconds = float(extra['primaryDelaySeconds'])
         if extra.get('charge'):
-            fire_scaling = 1. if wp.get('slot')=='arch_gun' else max(st.fire_rate / float(modes[idx]['fireRate']),1e-9)
+            scales = extra['charge'].get('scalesWithFireRate', wp.get('slot') != 'arch_gun')
+            fire_scaling = max(st.fire_rate / float(modes[idx]['fireRate']),1e-9) if scales else 1.
             st._charge_time = extra['charge']['seconds'] / (fire_scaling*st.charge_rate_multiplier)
         if extra.get('bow'):
             st._bow_draw = extra['drawSeconds'] / (max(st.fire_rate / float(modes[idx]['fireRate']), 1e-9)*st.charge_rate_multiplier)
@@ -665,6 +708,7 @@ def prepare(
         cycle=cycle,
         onosCharge=onos_sequence,
         doubleTap=double_tap,
+        sniperCombo=sniper_combo,
         onosCrits=onos_crit,
         punctureArmorStrip=next((v for b in branches if (v:=latron_puncture_strip(b))),0.),
         magazineRestore=next((v for b in branches if (v:=ammo_restore_configuration(b))),None),
@@ -681,15 +725,20 @@ def prepare(
         conditionOverload=any(
             e.upgrade_type in {"WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE","WEAPON_CRIT_UNDER_PROC_THRESHOLD_MAX"} for e in [*original, *(term for _, terms in dynamic for term in terms)]
         ),
-        baseBurst=(base_attack.get("burst") or (profile.get("burst") if profile else None)) if mode_index == 0 or cycle else None,
-        baseFireRate=modes[0].get("fireRate"),
+        baseBurst=((base_attack.get("burst") or (profile.get("burst") if profile else None)) if cycle
+                   else None if weapon.get("isIncarnonForm") else (base_attack if mode_index == 0 else selected_attack).get("burst")),
+        baseFireRate=modes[0 if cycle else mode_index].get("fireRate"),
+        incarnonBurst=(selected_attack.get("burst") or native_burst(weapon, mode_index)) if weapon.get("isIncarnonForm") else None,
+        incarnonFireRate=modes[mode_index].get("fireRate"),
         energySpendPerSecond=float(scenario.combat_state.get('energySpendPerSecond') or 0.),
         projectileState={**dict(scenario.combat_state),'mqAugmentEquipped':mq_augment is not None},
-        baseMode=mode_index == 0,
         selectedIncarnon=bool(weapon.get("isIncarnonForm")) and not cycle,
         weaponSlot=weapon.get("slot"),
         spool=base_attack.get("spool") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
-        battery=base_attack.get("battery") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
+        fireRateSpool=base_attack.get("fireRateSpool") if mode_index == 0 and not weapon.get("isIncarnonForm") else None,
+        # The battery belongs to the weapon: every non-Incarnon mode draws
+        # from (and regenerates) the same magazine.
+        battery=selected_attack.get("battery"),
         lastRoundMultishot=last_round_multishot,
         fieldDurationOnEmptyReload=field_duration,
         distance=scenario.distance,
@@ -697,7 +746,9 @@ def prepare(
                            'delaySeconds':scenario.detonation_delay_seconds,
                            'batchSize':scenario.detonation_batch_size}
                           if selected_attack.get('manualDetonation') else None),
+        reloadAfterEveryShot=(not weapon.get("isIncarnonForm") and not cycle
+                              and reloads_after_every_shot(weapon, mode_index)),
         shellReload=({'start': base_attack['reloadStart'], 'perShell': base_attack['reloadPerShell'],
-                      'end': base_attack['reloadEnd'], 'modeSwitchLoadsShell': True}
+                      'end': base_attack['reloadEnd'], 'modeSwitchLoadsShell': base_attack.get('modeSwitchLoadsShell', True)}
                      if base_attack.get('reloadPerShell') is not None else None),
     )

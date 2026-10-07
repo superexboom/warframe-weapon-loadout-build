@@ -1,0 +1,189 @@
+{
+  "added": [
+    {
+      "weapon": "alternox_alt",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+      "mode": 1,
+      "entry": {
+        "name": "Alternox",
+        "source": "data/weapons/primary/alternox_alt.yaml",
+        "sha256": "02ec53a5393fdc6ada52094d4d9cb89334b7b7bbb4c1de53fcdf06203c4069bf",
+        "directTotal": 49.999999,
+        "fireMode": 1,
+        "projectile": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
+        "scope": "single-target embedded remote mines; explicit throw batches and manual detonation delay",
+        "radials": [
+          {
+            "damage": {
+              "electricity": 100.0
+            },
+            "radius_m": 6,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.60000002,
+            "crit_chance": 0.02,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.44,
+            "forced_procs": [],
+            "takes_multishot": false,
+            "takes_blast_radius_mods": true,
+            "impact_delay_seconds": 10.0,
+            "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
+            "nativeField": "EmbedDeathAttack",
+            "damageTypeSource": "native-explicit",
+            "multishotSource": "reference takes_multishot"
+          }
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+            "sha256": "6d2d76a847f4ff22c1b0f96e88c2f44aa7ad94928d5b3b37d7f8fab90a182632"
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
+            "sha256": "0d2808c97f1b7a618b9a0f920ccf251be97bfb47ca1c02199ff99d3fb517249a"
+          }
+        ],
+        "generatedBy": "tools/import_projectile_components.py",
+        "manualDetonation": {
+          "maxProjectiles": 1
+        }
+      }
+    },
+    {
+      "weapon": "alternox_prime_alt",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
+      "mode": 1,
+      "entry": {
+        "name": "Alternox Prime",
+        "source": "data/weapons/primary/alternox_prime_alt.yaml",
+        "sha256": "8eac4a7aae416c3818e2417c8ce754fc7139642f6672b6ef3b15762ac2ff7987",
+        "directTotal": 69.999999,
+        "fireMode": 1,
+        "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj",
+        "scope": "single-target embedded remote mines; explicit throw batches and manual detonation delay",
+        "radials": [
+          {
+            "damage": {
+              "electricity": 140.0
+            },
+            "radius_m": 6,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.60000002,
+            "crit_chance": 0.02,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.5,
+            "forced_procs": [],
+            "takes_multishot": false,
+            "takes_blast_radius_mods": true,
+            "impact_delay_seconds": 10.0,
+            "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj",
+            "nativeField": "EmbedDeathAttack",
+            "damageTypeSource": "native-explicit",
+            "multishotSource": "reference takes_multishot"
+          }
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
+            "sha256": "313cad1c036f157f0d4f3f17b3c067f7b594cfce7934b66a7d31c63c54baf502"
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj",
+            "sha256": "36520b4e56a9df1356205370c36219848518e432285d52ee56a78b62d4074a49"
+          }
+        ],
+        "generatedBy": "tools/import_projectile_components.py",
+        "manualDetonation": {
+          "maxProjectiles": 1
+        }
+      }
+    },
+    {
+      "weapon": "aegrit",
+      "path": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBomb",
+      "mode": 0,
+      "entry": {
+        "name": "Aegrit",
+        "source": "data/weapons/secondary/aegrit.yaml",
+        "sha256": "1de905835dafd7d75592f9b6202145ec262c81c95a350ea125165b51a1a82eaa",
+        "directTotal": 9.0,
+        "fireMode": 0,
+        "projectile": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBombProj",
+        "scope": "single-target embedded remote mines; explicit throw batches and manual detonation delay",
+        "radials": [
+          {
+            "damage": {
+              "blast": 797.0
+            },
+            "radius_m": 9,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.69999999,
+            "crit_chance": 0.37,
+            "crit_multiplier": 1.9,
+            "status_chance": 0.19,
+            "forced_procs": [],
+            "takes_multishot": false,
+            "takes_blast_radius_mods": true,
+            "impact_delay_seconds": 0.0,
+            "nativeSource": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBombProj",
+            "nativeField": "EmbedDeathAttack",
+            "damageTypeSource": "native-explicit",
+            "multishotSource": "reference takes_multishot"
+          }
+        ],
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBomb",
+            "sha256": "ed9ab852f362df0f386d40178e9ca9922fe3b88983a85d011b2f14c5a8e5f8c9"
+          },
+          {
+            "path": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBombProj",
+            "sha256": "aceac27879918a4d78c7de1b4b82025c08cbf6ebcff28271f0ebf6aedc5a5b69"
+          }
+        ],
+        "generatedBy": "tools/import_projectile_components.py",
+        "manualDetonation": {
+          "maxProjectiles": 4
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "weapon": "arbucep",
+      "reason": "export mode has no projectile identity and no hitscan RadialDamage"
+    },
+    {
+      "weapon": "cortege_alt",
+      "reason": "native radial type differs from reference"
+    },
+    {
+      "weapon": "acceltra",
+      "reason": "0 export modes match the direct total 35"
+    },
+    {
+      "weapon": "mutalist_quanta_orb",
+      "reason": "0 export modes match the direct total 20"
+    },
+    {
+      "weapon": "scourge_prime_thrown",
+      "reason": "0 export modes match the direct total 200"
+    },
+    {
+      "weapon": "simulor",
+      "reason": "0 export modes match the direct total 0"
+    },
+    {
+      "weapon": "synoid_simulor",
+      "reason": "0 export modes match the direct total 0"
+    },
+    {
+      "weapon": "grimoire_active",
+      "reason": "0 export modes match the direct total 280"
+    },
+    {
+      "weapon": "tenet_plinx_charged",
+      "reason": "0 export modes match the direct total 1000"
+    }
+  ]
+}

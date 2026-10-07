@@ -51,7 +51,11 @@ def import_profiles(packages, export, reference):
             if kind=='stug':
                 if raw.get('EmbedTime')!=[1.5,1.5] or raw.get('Embed')!=1:
                     raise ValueError('Stug embed identity changed')
-                profile.update(embedSeconds=1.5, embedInterval=1.,
+                # The stacking rule lives in GooGun.lua (OnProjectileStacked), not
+                # in fields: the blob lives EmbedTime after it sticks and every
+                # new stack refreshes that life (wiki Stug); MaxLife 8 is flight.
+                profile.update(embedSeconds=1.5, embedInterval=1., resetLifeOnStack=True, stackedLife=1.5,
+                               lifeSource='native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)',
                                embed=component(raw['EmbedAttack'],raw),
                                explosion=component(raw['EmbedDeathAttack'],raw))
                 if i==1:

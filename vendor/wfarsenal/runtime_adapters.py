@@ -774,6 +774,39 @@ def incarnon_stat_conversion(record):
     return dict(source=source, target=target, fraction=float(fraction), maximum=float(maximum))
 
 
+SHIELD_DAMAGE_CONDITION = '/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnShieldDamageCondition'
+SELF_BREAK_EVENTS = ('on-shield-broken', 'on-overguard-broken')
+
+
+def passive_incarnon_condition(condition):
+    """A conditional block that is on without its trigger.
+
+    ApplyUpgradesByDefault = 1 (Lex Prime Hoplite Virtue +20), and the
+    untagged own-shield-damage gate the game shows as plain "+N Base Damage"
+    (Lex Hoplite Virtue +80; wiki: base damage, the shield-break +80 is the
+    separate tagged sub-upgrade).
+    """
+    if condition.get('applyUpgradesByDefault') == 1:
+        return True
+    return (condition.get('conditions') == [SHIELD_DAMAGE_CONDITION] and not condition.get('conditionTag')
+            and not condition.get('runtimeScripts'))
+
+
+def self_break_condition(condition):
+    """Gate on the player's own shield / overguard breaking."""
+    from .manual_combat import condition_kind
+    kind = condition_kind(condition)
+    if kind in ('on-self-shield-broken', 'on-self-overguard-broken'):
+        return True
+    return bool((condition.get('nativeEvent') or {}).get('actorOnly')) and kind in SELF_BREAK_EVENTS
+
+
+def self_break_forced(scenario):
+    """Own shield / overguard break gates need the Warframe; forced unless the
+    user switches to the event timeline (combatState.selfShieldBreakForced)."""
+    return scenario.combat_state.get('selfShieldBreakForced', True) is not False
+
+
 def verified_incarnon_condition(record, condition):
     verified = verified_stug_condition(record, condition)
     if verified:

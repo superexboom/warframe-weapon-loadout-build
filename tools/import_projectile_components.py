@@ -1,0 +1,251 @@
+"""Import explosion components for every weapon WFSim models with a radial.
+
+Each candidate needs three agreeing sources, otherwise it is skipped with a
+reason (fail closed):
+- the export weapon (internal path) and the fire mode whose direct total
+  matches the reference attack;
+- the native projectile record: an ExplosiveAttack/EmbedDeathAttack whose
+  Amount equals the reference radial total, its Type (or an omitted native
+  default the reference spells out), radius, falloff, crit and embed delay;
+- the pinned WFSim YAML radial block (status chance, takes_multishot).
+Already audited attacks are never overwritten.
+
+2026-10-07: a native attack with UseNewFormat = 1 spells each type as its own
+DT_* amount (Kuva Tonkor 168 puncture / 204 slash / 302 blast), which must
+equal the reference split; alt-fire forms (``inherits`` a base spec, e.g.
+bubonico_burst) resolve the parent's internal path; several export modes
+with the same direct total are told apart by IsAlternateFire, trigger and
+whether the mode's projectile carries an explosion component (Kuva Zarr).
+A hitscan mode has no projectile: its explosion is the weapon behaviour's
+``impact:RadialOnMissImpactBehavior.RadialDamage`` (baseAmount split by
+DamagePercent, its own crit / status / radius / fallOff; Trumna, Ferrox).
+"""
+from __future__ import annotations
+import argparse, hashlib, json, sys
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'vendor'))
+from wfarsenal.packages import PackageIndex
+
+DT = {'blast': 'DT_EXPLOSION', 'cold': 'DT_FREEZE', 'radiation': 'DT_RADIATION', 'heat': 'DT_FIRE',
+      'toxin': 'DT_POISON', 'electricity': 'DT_ELECTRICITY', 'gas': 'DT_GAS', 'viral': 'DT_VIRAL',
+      'corrosive': 'DT_CORROSIVE', 'magnetic': 'DT_MAGNETIC', 'impact': 'DT_IMPACT',
+      'puncture': 'DT_PUNCTURE', 'slash': 'DT_SLASH', 'void': 'DT_VOID'}
+FORCED = {'PT_CHILLED': 'cold', 'PT_ELECTROCUTION': 'electricity'}
+FIELDS = ('ExplosiveAttack', 'EmbedDeathAttack', 'RadialDamage')
+
+
+def close(a, b, rel=.01):
+    return abs(float(a) - float(b)) <= rel * max(abs(float(a)), abs(float(b)), 1e-9)
+
+
+def candidates(reference: Path):
+    import yaml
+    specs = {}
+    for file in sorted((reference / 'data/weapons').rglob('*.yaml')):
+        spec = yaml.safe_load(file.read_text(encoding='utf-8'))
+        if isinstance(spec, dict) and spec.get('id'):
+            specs[spec['id']] = (file, spec)
+    for file, spec in specs.values():
+        if not spec.get('internal_name') and spec.get('form') == 'alt_fire' and spec.get('inherits') in specs:
+            spec = {**spec, 'internal_name': specs[spec['inherits']][1].get('internal_name')}
+        if not spec.get('internal_name'):
+            continue
+        attack = spec.get('attack') or {}
+        radial = attack.get('radial')
+        if isinstance(radial, dict) and isinstance(radial.get('damage'), dict) and radial['damage']:
+            yield file, spec, attack, radial
+
+
+def hitscan_radial(pkg, row, mode):
+    """The RadialDamage of a hitscan behaviour, shaped like a projectile record."""
+    weapon = pkg.resolve(row['path']) or {}
+    behaviours = weapon.get('Behaviors') or []
+    position = mode.get('index')
+    if not isinstance(position, int) or position >= len(behaviours) or not isinstance(behaviours[position], dict):
+        return None
+    impact = next((v for k, v in behaviours[position].items() if k.startswith('impact:') and 'RadialOnMiss' in k
+                   and isinstance(v, dict)), None)
+    radial = (impact or {}).get('RadialDamage') or {}
+    amount = float(radial.get('baseAmount') or 0)
+    if amount <= 0:
+        return None
+    attack = {k: amount * float(v) for k, v in (radial.get('DamagePercent') or {}).items() if float(v or 0)}
+    attack.update(Amount=amount, UseNewFormat=1, ProcChance=radial.get('baseProcChance'))
+    return {'RadialDamage': attack, 'CriticalChance': radial.get('criticalChance'),
+            'CriticalMultiplier': radial.get('criticalMultiplier'), 'DamageRadius': radial.get('radius'),
+            'ExplosionFallOff': radial.get('fallOff')}
+
+
+def remote_mine(pkg, row, mode):
+    weapon = pkg.resolve(row['path']) or {}
+    behaviours = weapon.get('Behaviors') or []
+    position = mode.get('index')
+    if not isinstance(position, int) or position >= len(behaviours) or not isinstance(behaviours[position], dict):
+        return None
+    state = behaviours[position].get('state:RemoteMineStateBehavior')
+    return state if isinstance(state, dict) and state.get('DetonateManually') else None
+
+
+def build_entry(file, spec, attack, radial, row, mode_index, pkg, reference):
+    mode = row['fireModes'][mode_index]
+    projectile = (mode.get('damage') or {}).get('projectile')
+    if projectile:
+        native = pkg.resolve(projectile)
+        if not native:
+            raise ValueError('native projectile missing')
+    else:
+        native = hitscan_radial(pkg, row, mode)
+        if not native:
+            raise ValueError('export mode has no projectile identity and no hitscan RadialDamage')
+    native_path = projectile or row['path']
+    # The replay copies the mode into its radial part, so a charged mode's
+    # chargeDamageMultiplier scales the native explosion too (Opticor 200 x 2
+    # = the reference 400); compare and store the unscaled native amounts.
+    scale = float(mode.get('chargeDamageMultiplier') or 1)
+    reference_damage = {k: float(v) / scale for k, v in radial['damage'].items()}
+    total = sum(reference_damage.values())
+    matches = [f for f in FIELDS if isinstance(native.get(f), dict) and close(native[f].get('Amount', 0), total)]
+    mine = remote_mine(pkg, row, mode)
+    if mine and 'EmbedDeathAttack' in matches:
+        # A remote mine sticks and is detonated: its embedded death attack
+        # is the blast (Talons' audited 250); never both equal fields.
+        matches = ['EmbedDeathAttack']
+    if len(matches) != 1:
+        raise ValueError(f'native radial amount does not uniquely match reference {total:g}')
+    field = matches[0]
+    raw = native[field]
+    elements = list(radial['damage'])
+    damage = None
+    typed = {k: float(v) for k, v in raw.items() if k.startswith('DT_') and float(v or 0)} if raw.get('UseNewFormat') else {}
+    if typed:
+        reference_typed = {DT.get(k): v for k, v in reference_damage.items()}
+        if set(typed) != set(reference_typed) or any(not close(typed[k], reference_typed[k]) for k in typed):
+            raise ValueError('native per-type radial amounts differ from reference')
+        damage = {k: typed[DT[k]] for k in radial['damage']}
+        type_source = 'native-per-type'
+    elif raw.get('Type') == 'DT_PHYSICAL' and elements and set(elements) <= {'impact', 'puncture', 'slash'}:
+        # Native "physical" is an Impact/Puncture/Slash split the record does
+        # not spell out; take the reference split at the native amount.
+        amount = float(raw.get('Amount'))
+        damage = {k: v * amount / total for k, v in reference_damage.items()}
+        type_source = 'native-physical-reference-split'
+    elif raw.get('Type') is not None:
+        if len(elements) != 1 or DT.get(elements[0]) != raw['Type']:
+            raise ValueError('native radial type differs from reference')
+        type_source = 'native-explicit'
+    elif len(elements) == 1:
+        type_source = 'reference-confirmed-native-default'
+    else:
+        raise ValueError('native type omitted and reference is mixed')
+    delay = 0.
+    differences = []
+    if field == 'EmbedDeathAttack':
+        times = [float(t) for t in native.get('EmbedTime') or []]
+        if not times:
+            raise ValueError('native embed delay absent')
+        delay = (min(times) + max(times)) / 2
+        if max(times) - min(times) > 1e-6:
+            differences.append(f'embed delay range {min(times):g}-{max(times):g}s; expected midpoint used')
+    multishot = float(mode.get('multishot') or 1)
+    native_status = float(raw.get('ProcChance', 0.)) / multishot
+    status = float(radial.get('status_chance', native_status))
+    if not close(native_status, status, .15):
+        differences.append(f'status-chance native {native_status:.4g} vs reference {status:.4g}; reference used')
+    crit = (native.get('CriticalChance'), native.get('CriticalMultiplier'))
+    if None in crit:
+        crit = (radial.get('crit_chance'), radial.get('crit_multiplier'))
+        if None in crit:
+            raise ValueError('radial crit unavailable')
+        differences.append('crit from reference (native omitted)')
+    elif radial.get('crit_chance') is not None and not close(crit[0], radial['crit_chance'], .05):
+        differences.append(f"crit chance native {crit[0]} vs reference {radial['crit_chance']}")
+    radius = native.get('DamageRadius', radial.get('radius_m'))
+    falloff = native.get('ExplosionFallOff', radial.get('falloff_reduction', 0.))
+    forced = sorted({FORCED[p] for p in raw.get('ForcedProcs') or [] if p in FORCED})
+    component = dict(
+        damage=damage or ({elements[0]: float(raw.get('Amount'))} if len(elements) == 1 else dict(reference_damage)),
+        radius_m=radius, falloff_start_m=float(radial.get('falloff_start_m', 0.)), falloff_reduction=falloff,
+        crit_chance=float(crit[0]), crit_multiplier=float(crit[1]), status_chance=status,
+        forced_procs=forced, takes_multishot=bool(radial.get('takes_multishot', True)),
+        takes_blast_radius_mods=bool(radial.get('takes_blast_radius_mods', True)),
+        impact_delay_seconds=delay, nativeSource=native_path, nativeField=field,
+        damageTypeSource=type_source, multishotSource='reference takes_multishot')
+    sources = []
+    for path in dict.fromkeys((row['path'], native_path)):
+        f = pkg._path_to_file(path)
+        if not f.is_file():
+            f = f.with_suffix('.txt')
+        if f.is_file():
+            sources.append(dict(path=path, sha256=hashlib.sha256(f.read_bytes()).hexdigest()))
+    entry = dict(name=row['nameEn'], source=file.relative_to(reference).as_posix(),
+                 sha256=hashlib.sha256(file.read_bytes()).hexdigest(),
+                 directTotal=round(sum((mode['damage'].get('types') or {}).values()), 6), fireMode=mode_index,
+                 projectile=projectile, scope='direct-hit target at explosion centre; native radial event',
+                 radials=[component], nativeSources=sources, generatedBy='tools/import_projectile_components.py')
+    if mine:
+        entry['manualDetonation'] = dict(maxProjectiles=int(mine.get('MaxNumProjectiles') or 1))
+        entry['scope'] = 'single-target embedded remote mines; explicit throw batches and manual detonation delay'
+    if differences:
+        entry['referenceDifferences'] = differences
+    return entry
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--packages', type=Path, required=True)
+    ap.add_argument('--wfsim', type=Path, required=True)
+    ap.add_argument('--export', type=Path, default=ROOT / 'data/export/2026.08.13.13.24/weapons.json')
+    ap.add_argument('--output', type=Path, default=ROOT / 'data/mechanics/combat-reference.json')
+    ap.add_argument('--evidence', type=Path, required=True)
+    a = ap.parse_args()
+    if a.evidence.exists():
+        ap.error('preserve previous evidence; use a new file')
+    pkg = PackageIndex(a.packages, json.loads((a.packages.parent / 'parents.json').read_text(encoding='utf-8-sig')))
+    exported = {w['path']: w for w in json.loads(a.export.read_text(encoding='utf-8'))['data']}
+    payload = json.loads(a.output.read_text(encoding='utf-8'))
+    audited = payload['auditedAttacks']
+    added, skipped = [], []
+    for file, spec, attack, radial in candidates(a.wfsim):
+        row = exported.get(spec['internal_name'])
+        if not row:
+            continue
+        direct = sum(float(v) for v in (attack.get('damage') or {}).values())
+        # A charged mode's direct hit is the export total x chargeDamageMultiplier (Opticor 500 x 2).
+        modes = [i for i, m in enumerate(row.get('fireModes') or [])
+                 if close((sum((m.get('damage') or {}).get('types', {}).values()) or -1) * float(m.get('chargeDamageMultiplier') or 1), direct)]
+        if len(modes) > 1:
+            alternate = spec.get('form') == 'alt_fire'
+            narrowed = [i for i in modes if bool(row['fireModes'][i].get('isAlternateFire')) == alternate]
+            trigger = str(attack.get('trigger') or '').replace('_', '').lower()
+            if len(narrowed) > 1 and trigger:
+                narrowed = [i for i in narrowed if str(row['fireModes'][i].get('trigger') or '').lower().endswith('trigger' + trigger)]
+            modes = narrowed or modes
+        if len(modes) > 1:
+            modes = [i for i in modes if (row['fireModes'][i].get('damage') or {}).get('components')] or modes
+        if len(modes) != 1:
+            skipped.append(dict(weapon=spec['id'], reason=f'{len(modes)} export modes match the direct total {direct:g}'))
+            continue
+        index = modes[0]
+        current = audited.get(row['path'], {})
+        existing = current.get('modes', {}).get(str(index)) if index else current
+        if existing and (existing.get('radials') or existing.get('radial') or existing.get('pureRadial') or existing.get('lingering')):
+            continue
+        try:
+            entry = build_entry(file, spec, attack, radial, row, index, pkg, a.wfsim)
+        except (ValueError, KeyError, TypeError) as e:
+            skipped.append(dict(weapon=spec['id'], reason=str(e)))
+            continue
+        if index:
+            audited.setdefault(row['path'], {}).setdefault('modes', {})[str(index)] = {**(existing or {}), **entry}
+        else:
+            audited[row['path']] = {**(existing or {}), **entry}
+        added.append(dict(weapon=spec['id'], path=row['path'], mode=index, entry=entry))
+    a.output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+    a.evidence.parent.mkdir(parents=True, exist_ok=True)
+    a.evidence.write_text(json.dumps(dict(added=added, skipped=skipped), ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    print('added', len(added), 'skipped', len(skipped))
+
+
+if __name__ == '__main__':
+    main()

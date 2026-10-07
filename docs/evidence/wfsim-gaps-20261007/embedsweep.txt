@@ -1,0 +1,8 @@
+skip incarnon torid
+pox                      m0 bare   wfsim   0.0126 +- 0.4% local   0.0144 ( +14.4%)
+pox                      m0 build  wfsim   0.0927 +- 0.4% local   0.1054 ( +13.7%)
+coda_pox                 m0 bare   wfsim   0.0324 +- 0.2% local   0.0377 ( +16.1%)
+coda_pox                 m0 build  wfsim   0.2819 +- 0.2% local   0.3326 ( +18.0%)
+mutalist_cernos          m0 bare   wfsim   0.0215 +- 0.5% local   0.0263 ( +22.5%)
+mutalist_cernos          m0 build  wfsim   0.2169 +- 0.7% local   0.2565 ( +18.3%)
+mean |err| 17.17 median 17.07 max 22.5

@@ -1,0 +1,26 @@
+Torid, route tier2=2-2 (Plentiful Mayhem) / 3-1 / 4-2, 0% headshots, Thrax Centurion SP 170, 30 s.
+scripts/modsweep.py (WFSim pinned .local/wfsim-live-20261004, 200 runs). WFSim source shares: Toxin / field / direct.
+
+A. before (field excluded pool +60%):
+bare                               kpm 0.047/0.047 (1.01)  dmg  38892/ 38534  {'Toxin': 50, 'field': 36, 'direct': 14}
+split_chamber                      kpm 0.096/0.101 (0.95)  dmg  79537/ 83741
+vigilante_armaments                kpm 0.080/0.084 (0.96)  dmg  66744/ 69472
+split_chamber,vigilante_armaments  kpm 0.130/0.138 (0.94)  dmg 107855/114887
+serration,split_chamber            kpm 0.253/0.267 (0.95)  dmg 209808/220885
+
+B. now (field takes pool +60% of generated grenades; DoT also takes it):
+split_chamber                      kpm 0.114/0.101 (1.13)  dmg  94730/ 83741
+vigilante_armaments                kpm 0.093/0.084 (1.11)  dmg  76990/ 69472
+split_chamber,vigilante_armaments  kpm 0.161/0.138 (1.16)  dmg 133469/114887
+serration,split_chamber            kpm 0.301/0.267 (1.13)  dmg 250070/220885
+local split_chamber: direct+field 46094 (WFSim 46058), DoT 48635 (WFSim Toxin 37683).
+WFSim per-source scaling bare -> split_chamber: direct+field x2.39 (= 1 + 0.9 x 1.6 = 2.44 / proc mix), Toxin x1.96 (= multishot 1.9 only).
+
+C. control (not shipped): B with pool +60% removed from DoT basis only:
+split_chamber                      kpm 0.101/0.101 (1.00)
+vigilante_armaments                kpm 0.084/0.084 (1.00)
+split_chamber,vigilante_armaments  kpm 0.140/0.138 (1.01)
+serration,split_chamber            kpm 0.267/0.267 (1.00)
+
+=> The whole remaining gap is WFSim not feeding the multishot surcharge into status DoT. Local keeps it in the
+DoT basis (wiki: "multiplicative to base damage bonuses like Serration", i.e. the base-damage chain DoT reads).

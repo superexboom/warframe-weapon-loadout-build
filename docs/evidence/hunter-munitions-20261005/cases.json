@@ -1,0 +1,1089 @@
+{
+  "level": 170,
+  "runs": 100,
+  "duration": 30.0,
+  "rows": [
+    {
+      "weapon": "baza_prime",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 9230.380816541587,
+      "localKpm": 0.33374795897156173,
+      "localSlashProcs": 0.10533600332640002,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 9214.751062,
+      "wfsimKpm": 0.33318282533501564,
+      "wfsimSlashDot": 28183.624000000087
+    },
+    {
+      "weapon": "baza_prime",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeBaza/PrimeBazaGun",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 13448.246152085618,
+      "localKpm": 0.4862556371414497,
+      "localSlashProcs": 0.5043360239064003,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 13444.273996161024,
+      "wfsimKpm": 0.48611201371368706,
+      "wfsimSlashDot": 165122.4679999957
+    },
+    {
+      "weapon": "stahlta",
+      "weaponPath": "/Lotus/Weapons/Corpus/LongGuns/CrpRubanRifle/CrpRubanRifle",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 7998.328154810964,
+      "localKpm": 0.2891999528415154,
+      "localSlashProcs": 0.4062960272996312,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 8040.22379768342,
+      "wfsimKpm": 0.2907147966574209,
+      "wfsimSlashDot": 70394.85599999977
+    },
+    {
+      "weapon": "stahlta",
+      "weaponPath": "/Lotus/Weapons/Corpus/LongGuns/CrpRubanRifle/CrpRubanRifle",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 11082.950779612791,
+      "localKpm": 0.40073235065765433,
+      "localSlashProcs": 0.7482960306896307,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 11129.259202616855,
+      "wfsimKpm": 0.4024067497932944,
+      "wfsimSlashDot": 166059.88560000117
+    },
+    {
+      "weapon": "stradavar_prime",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeStradavar/PrimeStradavarGun",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 9127.12792012648,
+      "localKpm": 0.33001458717236587,
+      "localSlashProcs": 0.12312000388800001,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 9153.599964666708,
+      "wfsimKpm": 0.33097175145525165,
+      "wfsimSlashDot": 26125.225000000013
+    },
+    {
+      "weapon": "stradavar_prime",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeStradavar/PrimeStradavarGun",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 13315.481945102505,
+      "localKpm": 0.4814552086449874,
+      "localSlashProcs": 0.4651200072779995,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 13240.135875842852,
+      "wfsimKpm": 0.47873087935328945,
+      "wfsimSlashDot": 158499.87999999846
+    },
+    {
+      "weapon": "prisma_gorgon",
+      "weaponPath": "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/VTGorgon",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 11057.878847168033,
+      "localKpm": 0.3998258109983406,
+      "localSlashProcs": 0.05130000504000011,
+      "incarnonChoices": {
+        "tier2": "2-2",
+        "tier3": "3-3",
+        "tier4": "4-3"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "prisma_gorgon_hoplite_virtue",
+        "prisma_gorgon_voids_guidance",
+        "prisma_gorgon_absolute_valor"
+      ],
+      "wfsimDps": 10955.707459199972,
+      "wfsimKpm": 0.39613154389522853,
+      "wfsimSlashDot": 13141.83359999999
+    },
+    {
+      "weapon": "prisma_gorgon",
+      "weaponPath": "/Lotus/Weapons/Grineer/LongGuns/VoidTraderGorgon/VTGorgon",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 14372.720156184778,
+      "localKpm": 0.5196823524767238,
+      "localSlashProcs": 0.564300044325001,
+      "incarnonChoices": {
+        "tier2": "2-2",
+        "tier3": "3-3",
+        "tier4": "4-3"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "prisma_gorgon_hoplite_virtue",
+        "prisma_gorgon_voids_guidance",
+        "prisma_gorgon_absolute_valor"
+      ],
+      "wfsimDps": 14356.152356035103,
+      "wfsimKpm": 0.5190833014088607,
+      "wfsimSlashDot": 181645.51999999967
+    },
+    {
+      "weapon": "burston_prime",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 18941.719618457882,
+      "localKpm": 0.6848861805076358,
+      "localSlashProcs": 0.41040001325739056,
+      "incarnonChoices": {
+        "tier2": "2-2",
+        "tier3": "3-3",
+        "tier4": "4-2"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "burston_prime_fortress_salvo",
+        "burston_prime_kinetic_battle",
+        "burston_prime_absolute_valor"
+      ],
+      "wfsimDps": 18895.93042404506,
+      "wfsimKpm": 0.6832305554058954,
+      "wfsimSlashDot": 236451.02039999826
+    },
+    {
+      "weapon": "burston_prime",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 28417.101482363774,
+      "localKpm": 1.0274927771809557,
+      "localSlashProcs": 0.9804000426573909,
+      "incarnonChoices": {
+        "tier2": "2-2",
+        "tier3": "3-3",
+        "tier4": "4-2"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "burston_prime_fortress_salvo",
+        "burston_prime_kinetic_battle",
+        "burston_prime_absolute_valor"
+      ],
+      "wfsimDps": 28254.57956487805,
+      "wfsimKpm": 1.0216163827692137,
+      "wfsimSlashDot": 577570.7587999994
+    },
+    {
+      "weapon": "soma_prime",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeSoma/PrimeSomaRifle",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 14193.703754619051,
+      "localKpm": 0.5132095579264992,
+      "localSlashProcs": 0.17100000540000002,
+      "incarnonChoices": {
+        "tier2": "2-1",
+        "tier3": "3-1",
+        "tier4": "4-1"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "soma_prime_fortress_salvo",
+        "soma_prime_kinetic_battle",
+        "soma_prime_fresh_havoc"
+      ],
+      "wfsimDps": 14199.563025861045,
+      "wfsimKpm": 0.5134214148214138,
+      "wfsimSlashDot": 72285.66800000025
+    },
+    {
+      "weapon": "soma_prime",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeSoma/PrimeSomaRifle",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 18935.769433189802,
+      "localKpm": 0.6846710363842493,
+      "localSlashProcs": 0.598500041700001,
+      "incarnonChoices": {
+        "tier2": "2-1",
+        "tier3": "3-1",
+        "tier4": "4-1"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "soma_prime_fortress_salvo",
+        "soma_prime_kinetic_battle",
+        "soma_prime_fresh_havoc"
+      ],
+      "wfsimDps": 18941.730360523983,
+      "wfsimKpm": 0.6848865689144733,
+      "wfsimSlashDot": 306883.5559999986
+    },
+    {
+      "weapon": "gorgon",
+      "weaponPath": "/Lotus/Weapons/Tenno/Rifle/HeavyRifle",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 5682.813087111034,
+      "localKpm": 0.20547660023313277,
+      "localSlashProcs": 0.030780013420800438,
+      "incarnonChoices": {
+        "tier2": "2-2",
+        "tier3": "3-3",
+        "tier4": "4-3"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "gorgon_hoplite_virtue",
+        "gorgon_voids_guidance",
+        "gorgon_absolute_valor"
+      ],
+      "wfsimDps": 5693.622083333321,
+      "wfsimKpm": 0.2058674270581007,
+      "wfsimSlashDot": 4297.650000000001
+    },
+    {
+      "weapon": "gorgon",
+      "weaponPath": "/Lotus/Weapons/Tenno/Rifle/HeavyRifle",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 8508.169956585098,
+      "localKpm": 0.3076345834512815,
+      "localSlashProcs": 0.4725300362058008,
+      "incarnonChoices": {
+        "tier2": "2-2",
+        "tier3": "3-3",
+        "tier4": "4-3"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "gorgon_hoplite_virtue",
+        "gorgon_voids_guidance",
+        "gorgon_absolute_valor"
+      ],
+      "wfsimDps": 8513.902786666686,
+      "wfsimKpm": 0.30784186854350504,
+      "wfsimSlashDot": 90763.82000000031
+    },
+    {
+      "weapon": "gorgon_wraith",
+      "weaponPath": "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/WraithGorgon",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 7617.595126452238,
+      "localKpm": 0.27543357920499517,
+      "localSlashProcs": 0.035909972824000366,
+      "incarnonChoices": {
+        "tier2": "2-2",
+        "tier3": "3-3",
+        "tier4": "4-3"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "gorgon_wraith_hoplite_virtue",
+        "gorgon_wraith_voids_guidance",
+        "gorgon_wraith_absolute_valor"
+      ],
+      "wfsimDps": 7530.570893066644,
+      "wfsimKpm": 0.2722869961061186,
+      "wfsimSlashDot": 7595.884799999994
+    },
+    {
+      "weapon": "gorgon_wraith",
+      "weaponPath": "/Lotus/Weapons/Grineer/LongGuns/WraithGorgon/WraithGorgon",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 11832.691884022357,
+      "localKpm": 0.42784115237745596,
+      "localSlashProcs": 0.44916000838900133,
+      "incarnonChoices": {
+        "tier2": "2-2",
+        "tier3": "3-3",
+        "tier4": "4-3"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "gorgon_wraith_hoplite_virtue",
+        "gorgon_wraith_voids_guidance",
+        "gorgon_wraith_absolute_valor"
+      ],
+      "wfsimDps": 11627.706755466708,
+      "wfsimKpm": 0.4204293922740762,
+      "wfsimSlashDot": 125490.34680000131
+    },
+    {
+      "weapon": "soma",
+      "weaponPath": "/Lotus/Weapons/Tenno/Rifle/TennoAR",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 13530.933610847664,
+      "localKpm": 0.4892454130935633,
+      "localSlashProcs": 0.11970000378000002,
+      "incarnonChoices": {
+        "tier2": "2-1",
+        "tier3": "3-1",
+        "tier4": "4-1"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "soma_fortress_salvo",
+        "soma_kinetic_battle",
+        "soma_fresh_havoc"
+      ],
+      "wfsimDps": 13537.93396080032,
+      "wfsimKpm": 0.4894985285993563,
+      "wfsimSlashDot": 44942.310000000136
+    },
+    {
+      "weapon": "soma",
+      "weaponPath": "/Lotus/Weapons/Tenno/Rifle/TennoAR",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 17141.373549628162,
+      "localKpm": 0.6197900769061735,
+      "localSlashProcs": 0.547200040080001,
+      "incarnonChoices": {
+        "tier2": "2-1",
+        "tier3": "3-1",
+        "tier4": "4-1"
+      },
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [
+        "soma_fortress_salvo",
+        "soma_kinetic_battle",
+        "soma_fresh_havoc"
+      ],
+      "wfsimDps": 17158.219644004846,
+      "wfsimKpm": 0.6203991904114458,
+      "wfsimSlashDot": 264047.4899999996
+    },
+    {
+      "weapon": "supra",
+      "weaponPath": "/Lotus/Weapons/ClanTech/Energy/CrpHeavyRifle",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 7748.424195705196,
+      "localKpm": 0.28016403786160193,
+      "localSlashProcs": 0.15389998818749817,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 7835.3417486666585,
+      "wfsimKpm": 0.2833067636576592,
+      "wfsimSlashDot": 34505.22599999997
+    },
+    {
+      "weapon": "supra",
+      "weaponPath": "/Lotus/Weapons/ClanTech/Energy/CrpHeavyRifle",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 10894.989836949728,
+      "localKpm": 0.39393614341258654,
+      "localSlashProcs": 0.3248999970074983,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 10993.293431333224,
+      "wfsimKpm": 0.39749056057446736,
+      "wfsimSlashDot": 128433.87200000085
+    },
+    {
+      "weapon": "supra_vandal",
+      "weaponPath": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 10278.735488416429,
+      "localKpm": 0.3716538957872446,
+      "localSlashProcs": 0.15389998818749817,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 10381.101243333298,
+      "wfsimKpm": 0.3753551907230783,
+      "wfsimSlashDot": 42861.14000000003
+    },
+    {
+      "weapon": "supra_vandal",
+      "weaponPath": "/Lotus/Weapons/Corpus/LongGuns/Machinegun/SupraVandal",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 14157.478233144642,
+      "localKpm": 0.5118997318104732,
+      "localSlashProcs": 0.38189999994749835,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 14142.262223135936,
+      "wfsimKpm": 0.511349558162755,
+      "wfsimSlashDot": 179111.0999999972
+    },
+    {
+      "weapon": "tenora",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/TnBardRifle/TnBardRifle",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 7691.478874014254,
+      "localKpm": 0.2781050345262917,
+      "localSlashProcs": 0.1641599892239988,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 7704.7041849999905,
+      "wfsimKpm": 0.27858322937393193,
+      "wfsimSlashDot": 31522.820000000123
+    },
+    {
+      "weapon": "tenora",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/TnBardRifle/TnBardRifle",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 11311.94638136835,
+      "localKpm": 0.4090122706542734,
+      "localSlashProcs": 0.563160009803999,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 11305.668689666429,
+      "wfsimKpm": 0.40878528470059317,
+      "wfsimSlashDot": 137255.285999997
+    },
+    {
+      "weapon": "tenora_prime",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeTenora/TenoraPrimeWeapon",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod"
+      ],
+      "localDps": 12403.026743970688,
+      "localKpm": 0.4484630637829954,
+      "localSlashProcs": 0.24623997699599917,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 12395.455273133477,
+      "wfsimKpm": 0.44818929794508977,
+      "wfsimSlashDot": 71342.3088
+    },
+    {
+      "weapon": "tenora_prime",
+      "weaponPath": "/Lotus/Weapons/Tenno/LongGuns/PrimeTenora/TenoraPrimeWeapon",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "serration",
+        "split_chamber",
+        "point_strike",
+        "vital_sense",
+        "hammer_shot",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 15486.487295273573,
+      "localKpm": 0.5599534438680529,
+      "localSlashProcs": 0.6737400132960002,
+      "incarnonChoices": {},
+      "innateElement": null,
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 15461.191102752604,
+      "wfsimKpm": 0.5590387955138115,
+      "wfsimSlashDot": 227817.29879999766
+    },
+    {
+      "weapon": "coda_bubonico",
+      "weaponPath": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon",
+      "fireMode": 0,
+      "hunterMunitions": false,
+      "mods": [
+        "point_blank",
+        "hells_chamber",
+        "blunderbuss",
+        "ravage"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponCritDamageMod"
+      ],
+      "localDps": 14776.686534367194,
+      "localKpm": 0.5342887871288592,
+      "localSlashProcs": 0.4524085238414635,
+      "incarnonChoices": {},
+      "innateElement": {
+        "damageType": "DT_FIRE",
+        "value": 0.6,
+        "percent": 60.0
+      },
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 13978.069479603384,
+      "wfsimKpm": 0.5054127507740499,
+      "wfsimSlashDot": 22459.58680000001
+    },
+    {
+      "weapon": "coda_bubonico",
+      "weaponPath": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon",
+      "fireMode": 0,
+      "hunterMunitions": true,
+      "mods": [
+        "point_blank",
+        "hells_chamber",
+        "blunderbuss",
+        "ravage",
+        "hunter_munitions"
+      ],
+      "modPaths": [
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponCritChanceMod",
+        "/Lotus/Upgrades/Mods/Shotgun/WeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod"
+      ],
+      "localDps": 22684.05205978024,
+      "localKpm": 0.8201997541194381,
+      "localSlashProcs": 2.82246873386667,
+      "incarnonChoices": {},
+      "innateElement": {
+        "damageType": "DT_FIRE",
+        "value": 0.6,
+        "percent": 60.0
+      },
+      "skipped": [],
+      "evolutions": [],
+      "wfsimDps": 18913.177553164314,
+      "wfsimKpm": 0.6838541693451812,
+      "wfsimSlashDot": 289485.8489599921
+    }
+  ],
+  "summary": [
+    {
+      "weapon": "baza_prime",
+      "baselineRatio": 1.0016961667696094,
+      "localGain": 1.456954639182955,
+      "wfsimGain": 1.458994812307283,
+      "localKpmGain": 1.456954639182926,
+      "wfsimKpmGain": 1.45899481230733
+    },
+    {
+      "weapon": "stahlta",
+      "baselineRatio": 0.994789244189381,
+      "localGain": 1.385658423247668,
+      "wfsimGain": 1.3841976893508188,
+      "localKpmGain": 1.3856584232475995,
+      "wfsimKpmGain": 1.384197689350816
+    },
+    {
+      "weapon": "stradavar_prime",
+      "baselineRatio": 0.9971080181958563,
+      "localGain": 1.4588906895607512,
+      "wfsimGain": 1.4464402996580963,
+      "localKpmGain": 1.4588906895607145,
+      "wfsimKpmGain": 1.446440299658067
+    },
+    {
+      "weapon": "prisma_gorgon",
+      "baselineRatio": 1.0093258594525782,
+      "localGain": 1.2997718961142073,
+      "wfsimGain": 1.3103811332585038,
+      "localKpmGain": 1.2997718961142322,
+      "wfsimKpmGain": 1.3103811332584796
+    },
+    {
+      "weapon": "burston_prime",
+      "baselineRatio": 1.0024232304726608,
+      "localGain": 1.5002387351712536,
+      "wfsimGain": 1.4952732641798956,
+      "localKpmGain": 1.500238735171121,
+      "wfsimKpmGain": 1.495273264179892
+    },
+    {
+      "weapon": "soma_prime",
+      "baselineRatio": 0.9995873625666281,
+      "localGain": 1.3340964247635183,
+      "wfsimGain": 1.3339657231723423,
+      "localKpmGain": 1.334096424763598,
+      "wfsimKpmGain": 1.333965723172457
+    },
+    {
+      "weapon": "gorgon",
+      "baselineRatio": 0.9981015606473203,
+      "localGain": 1.497175751896916,
+      "wfsimGain": 1.4953403408331303,
+      "localKpmGain": 1.497175751897008,
+      "wfsimKpmGain": 1.4953403408331551
+    },
+    {
+      "weapon": "gorgon_wraith",
+      "baselineRatio": 1.0115561269685034,
+      "localGain": 1.5533369373928942,
+      "wfsimGain": 1.5440670993712142,
+      "localKpmGain": 1.5533369373929145,
+      "wfsimKpmGain": 1.5440670993712162
+    },
+    {
+      "weapon": "soma",
+      "baselineRatio": 0.9994829085462431,
+      "localGain": 1.2668285901488743,
+      "wfsimGain": 1.2674178861920307,
+      "localKpmGain": 1.2668285901489789,
+      "wfsimKpmGain": 1.2674178861919088
+    },
+    {
+      "weapon": "supra",
+      "baselineRatio": 0.9889069863511374,
+      "localGain": 1.4060910401612514,
+      "wfsimGain": 1.4030394313309889,
+      "localKpmGain": 1.4060910401612172,
+      "wfsimKpmGain": 1.403039431330997
+    },
+    {
+      "weapon": "supra_vandal",
+      "baselineRatio": 0.990139220057929,
+      "localGain": 1.3773560229368043,
+      "wfsimGain": 1.3623084768793716,
+      "localKpmGain": 1.3773560229367625,
+      "wfsimKpmGain": 1.362308476879457
+    },
+    {
+      "weapon": "tenora",
+      "baselineRatio": 0.9982834758261733,
+      "localGain": 1.4707114934146002,
+      "wfsimGain": 1.4673721947270897,
+      "localKpmGain": 1.4707114934145715,
+      "wfsimKpmGain": 1.4673721947271128
+    },
+    {
+      "weapon": "tenora_prime",
+      "baselineRatio": 1.0006108263609825,
+      "localGain": 1.2486054908171351,
+      "wfsimGain": 1.247327408478812,
+      "localKpmGain": 1.2486054908169786,
+      "wfsimKpmGain": 1.2473274084788668
+    },
+    {
+      "weapon": "coda_bubonico",
+      "baselineRatio": 1.0571335731253262,
+      "localGain": 1.5351244006579094,
+      "wfsimGain": 1.3530607771525371,
+      "localKpmGain": 1.535124400657922,
+      "wfsimKpmGain": 1.3530607771526235
+    }
+  ]
+}

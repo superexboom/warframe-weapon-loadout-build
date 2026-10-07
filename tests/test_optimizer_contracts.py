@@ -47,8 +47,8 @@ class StructureScaleContractTests(unittest.TestCase):
                     places=6,
                 )
 
-    def test_two_positive_optimum_not_three_positive(self) -> None:
-        """F06 end-to-end: a 2+0 card's theoretical high follows the 1.0 scale."""
+    def test_analysis_has_hardness_integrated_target_and_no_optimum_score(self) -> None:
+        """No theoretical optimum or 0-100 score; one target set per weapon."""
         payload = {
             "weapon": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
             "disposition": 1.35,
@@ -59,15 +59,86 @@ class StructureScaleContractTests(unittest.TestCase):
             "profile": "fast",
         }
         result = app.analyze_payload(payload)
-        best = result.get("bestFound") or {}
-        lines = best.get("rivenLines") or []
-        d_line = next((line for line in lines if line["code"] == "D"), None)
-        self.assertIsNotNone(d_line)
-        base = app.RIVEN_BASE_VALUES["pistol"]["D"]
-        expected_high = base * 1.35 * 1.0 * 1.089  # 2+0: scale 1.0
-        wrong_high = base * 1.35 * 0.757525 * 1.089  # 3+0 scale (old bug)
-        self.assertAlmostEqual(d_line["high"], expected_high, delta=1.0)
-        self.assertNotAlmostEqual(d_line["high"], wrong_high, delta=1.0)
+        for removed in ("optimal", "bestFound", "score", "grade", "optimalGain", "rollQuality"):
+            self.assertNotIn(removed, result)
+        self.assertEqual(len(result["recommendedPositive"]), 2)
+        self.assertTrue(result["evaluationTarget"]["enemyEnhancements"]["noOverguard"])
+        nodes = result["targetCalibration"]["hardnessNodes"]
+        self.assertEqual([round(n["ttkSeconds"], 1) for n in nodes], [1.4, 4.5, 14.3])
+        self.assertTrue(nodes[0]["healthScale"] < nodes[1]["healthScale"] < nodes[2]["healthScale"])
+        # A different card or headshot rate on the same weapon is judged on the same targets.
+        other = app.analyze_payload({**payload, "stats": [{"code": "D", "value": 265.0, "negative": False},
+                                                         {"code": "0", "value": 185.0, "negative": False}]})
+        self.assertEqual(other["targetCalibration"]["hardnessNodes"], nodes)
+        self.assertEqual(other["evaluationTarget"], result["evaluationTarget"])
+        # Ultra on the same weapon reuses the cached targets and baseline; its
+        # stat contributions are the middle-node approximation and say so.
+        ultra = app.analyze_payload({**payload, "profile": "ultra"})
+        self.assertEqual(ultra["profile"], "ultra")
+        self.assertEqual(ultra["targetCalibration"]["hardnessNodes"], nodes)
+        self.assertIn("ultra-profile-contributions-center-node", ultra["unsupported"])
+        self.assertEqual({d["code"] for d in ultra["details"]}, {"D", "0"})
+        self.assertTrue(all(d.get("ablationDelta") is not None for d in ultra["details"]))
+
+
+class HardnessIntegrationTests(unittest.TestCase):
+    def test_nodes_are_log_uniform_gauss_legendre_times(self) -> None:
+        import math
+        hits = app.optimizer._hardness_times()
+        low, high = app.optimizer.HARDNESS_TTK_RANGE
+        self.assertAlmostEqual(math.log(hits[1][0]), (math.log(low) + math.log(high)) / 2)
+        self.assertAlmostEqual(hits[0][0] * hits[2][0], hits[1][0] ** 2)
+        self.assertAlmostEqual(sum(w for _, w in hits), 1.0)
+
+    def test_score_is_geometric_mean_over_nodes(self) -> None:
+        import math
+        optimizer = app.optimizer
+        seen = []
+        original = optimizer._event_window
+
+        class Stats:
+            _combat_inputs = {}
+
+        def fake(stats, context):
+            scale = context["enemy_enhancements"]["healthScale"]
+            seen.append(scale)
+            return {"killsPerMinute": 60.0 / scale}
+        try:
+            optimizer._event_window = fake
+            nodes = [dict(ttkSeconds=n, healthScale=s, weight=w)
+                     for (n, w), s in zip(optimizer._hardness_times(), (1.0, 4.0, 16.0))]
+            value = optimizer._score(Stats(), "killsPerMinute", target_context={"hardnessNodes": nodes})
+        finally:
+            optimizer._event_window = original
+        self.assertEqual(seen, [1.0, 4.0, 16.0])
+        expected = math.exp(sum(n["weight"] * math.log(60.0 / n["healthScale"]) for n in nodes))
+        self.assertAlmostEqual(value, expected)
+
+
+class HealthSpreadTests(unittest.TestCase):
+    def test_node_averages_its_health_spread_and_stays_monotone(self) -> None:
+        import math
+        optimizer = app.optimizer
+        original = optimizer._event_window
+
+        class Stats:
+            _combat_inputs = {}
+
+        def score(damage, spread):
+            def fake(stats, context):
+                health = context["enemy_enhancements"]["healthScale"]
+                return {"killsPerMinute": 60.0 / math.ceil(health / damage - 1e-9)}  # shots-to-kill steps
+            optimizer._event_window = fake
+            nodes = [dict(ttkSeconds=1.0, healthScale=10.0, weight=1.0, healthSpread=spread)]
+            return optimizer._score(Stats(), "killsPerMinute", target_context={"hardnessNodes": nodes})
+        try:
+            self.assertAlmostEqual(score(4.0, .2), (60 / 2 + 60 / 3) / 2)  # health 8 and 12
+            # Each point is a monotone staircase, so their average never drops.
+            values = [score(2.0 + .05 * i, .2) for i in range(80)]
+            self.assertTrue(all(b >= a for a, b in zip(values, values[1:])))
+            self.assertGreater(len(set(values)), len(set(score(2.0 + .05 * i, 0.) for i in range(80))))
+        finally:
+            optimizer._event_window = original
 
 
 class BuildValidatorTests(unittest.TestCase):
@@ -292,30 +363,11 @@ class StatusReasonContractTests(unittest.TestCase):
             "profile": "fast",
         }
         result = app.analyze_payload(payload)
-        self.assertIn("scoreStatus", result)
-        self.assertIn("scoreStatusReason", result)
-        self.assertIn(result["scoreStatus"], {
-            "available",
-            "unresolved-lower-bound",
-            "unresolved-target-saturated",
-            "unresolved-model-partial",
-        })
-        if result["scoreStatus"] == "available":
-            self.assertEqual(result["scoreStatusReason"], "ok")
-        else:
-            self.assertNotEqual(result["scoreStatusReason"], "ok")
+        self.assertNotIn("scoreStatus", result)
         search_quality = result.get("searchQuality") or {}
-        self.assertIn("targetCalibrationStatus", search_quality)
-        # targetCalibrated must not be true when calibration was skipped or capped.
-        if search_quality.get("targetCalibrationStatus") in {
-            "capped-saturated",
-            "post-search-saturated",
-            "skipped-by-request",
-        }:
-            self.assertFalse(search_quality["targetCalibrated"])
-        self.assertIn(result.get("targetStatus"), {
-            "not-applicable", "calibrated", "saturated-unresolved", "skipped",
-        })
+        self.assertEqual(search_quality.get("targetCalibrationStatus"), "hardness-integrated")
+        self.assertEqual(result.get("targetStatus"), "hardness-integrated")
+        self.assertEqual(result["targetCalibration"]["aggregation"], "geometric-mean-kpm")
 
 
 class ContributionAblationTests(unittest.TestCase):
@@ -396,3 +448,23 @@ def test_torid_last_round_gate_is_not_reported_as_missing_condition():
     _,unsupported=_branch_effects(b)
     assert not any('conditional-effects-not-applied' in x or 'conditional-source-excluded' in x for x in unsupported)
     assert not any('WEAPON_LAST_MULTISHOT' in x for x in unsupported)
+
+
+def test_three_mod_elements_are_evaluated_in_every_pairing():
+    """Viral + Heat and Blast + Toxin come from the same MOD set in different
+    slot orders; a greedy build order must not hide the better pairing."""
+    from types import SimpleNamespace
+    from wfarsenal.optimizer import _element_orders, _pairing_key
+
+    def card(key, *types):
+        effects = tuple(SimpleNamespace(damage_type=t, value=.9) for t in types)
+        return SimpleNamespace(key=key, effects=effects)
+
+    heat, cold, toxin, base = card('heat', 'DT_FIRE'), card('cold', 'DT_FREEZE'), card('toxin', 'DT_POISON'), card('base')
+    orders = _element_orders((heat, base, cold, toxin))
+    assert orders[0] == (heat, base, cold, toxin)  # the given order stays first
+    assert len(orders) == 3
+    assert {_pairing_key(o)[0] for o in orders} == {
+        frozenset({'DT_FIRE', 'DT_FREEZE'}), frozenset({'DT_FIRE', 'DT_POISON'}), frozenset({'DT_FREEZE', 'DT_POISON'})}
+    assert all(o[1] is base for o in orders)  # non-element cards keep their slot
+    assert _element_orders((heat, base, cold)) == [(heat, base, cold)]

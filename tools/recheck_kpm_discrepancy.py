@@ -23,10 +23,10 @@ def main():
         manual=app.simulate_manual_payload(row['payload'])['benchmarkTimeline']['killsPerMinute']
         assert abs(new-manual)<=1e-8*max(new,1)
         rows.append(dict(weapon=row['weapon'],roll=row['roll'],payload=row['payload'],
-                         oldKpm=row['localKpm'],kpm=new,manualKpm=manual,referenceKpm=reference,
+                         oldKpm=row.get('localKpm',row.get('kpm')),kpm=new,manualKpm=manual,referenceKpm=reference,
                          differencePercent=(new/reference-1)*100 if reference else None,
                          local=current,reference=ref,referenceRequest=row['referenceRequest']))
-        print(row['weapon'],row['roll'],round(row['localKpm'],4),round(new,4),round(reference,4),flush=True)
+        print(row['weapon'],row['roll'],round(row.get('localKpm',row.get('kpm')),4),round(new,4),round(reference,4),flush=True)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(dict(engineFingerprint=app.ANALYSIS_STATICS_RUNTIME_INPUTS,
         runtime=source['runtime'],source=source['source'],rows=rows),ensure_ascii=False,indent=2),encoding='utf-8')

@@ -1,0 +1,13 @@
+# Incarnon cycle, 100% headshots (gauge charges), per tier-2 option; local scenario.incarnonCycle, WFSim mode incarnon + evo1. Radial = Incarnon-form explosion.
+strun            2-1 local   0.187 wfsim   0.196 (  -4.4%) shots 48/51 tf 2 dmg    155385/   161925 {'direct': 113758, 'Slash': 27258, 'radial': 18099, 'Blast': 2809}
+strun            2-2 local   0.225 wfsim   0.230 (  -2.2%) shots 48/51 tf 2 dmg    186815/   190806 {'direct': 139040, 'Slash': 27354, 'radial': 21011, 'Blast': 3400}
+latron           2-1 local   0.243 wfsim   0.243 (  -0.2%) shots 84/83.685 tf 2 dmg    201413/   205477 {'direct': 167322, 'radial': 28672, 'Heat': 9483}
+latron           2-2 local   0.114 wfsim   0.114 (  +0.1%) shots 84/84 tf 2 dmg     94458/    94544 {'direct': 72903, 'radial': 14080, 'Heat': 7562}
+vectis_prime     2-1 local   0.247 wfsim   0.247 (  +0.3%) shots 40/40 tf 1 dmg    205234/   207509 {'direct': 169500, 'radial': 32462, 'Slash': 5546}
+vectis_prime     2-2 local   0.214 wfsim   0.214 (  +0.3%) shots 40/40 tf 1 dmg    177847/   179760 {'direct': 152010, 'radial': 27750}
+braton           2-1 local   0.182 wfsim   0.195 (  -6.5%) shots 149/149 tf 1 dmg    151137/   162613 {'direct': 118421, 'radial': 17893, 'Slash': 13412, 'Heat': 12888}
+braton           2-2 local   0.205 wfsim   0.210 (  -2.3%) shots 148/147.625 tf 1 dmg    169954/   173949 {'direct': 131872, 'radial': 18150, 'Heat': 12453, 'Slash': 11474}
+burston          2-1 local   0.696 wfsim   0.698 (  -0.3%) shots 539/537 tf 1 dmg    577071/   577918 {'Heat': 343516, 'direct': 198725, 'radial': 33312, 'Slash': 2365}
+burston          2-2 local   0.696 wfsim   0.698 (  -0.3%) shots 539/537 tf 1 dmg    577071/   577918 {'Heat': 343516, 'direct': 198725, 'radial': 33312, 'Slash': 2365}
+gorgon           2-1 local   0.198 wfsim   0.202 (  -2.1%) shots 50/49 tf 1 dmg    164426/   166768 {'Heat': 127653, 'radial': 19912, 'direct': 17590, 'Slash': 1613}
+gorgon           2-2 local   0.198 wfsim   0.202 (  -2.1%) shots 50/49 tf 1 dmg    164426/   166768 {'Heat': 127653, 'radial': 19912, 'direct': 17590, 'Slash': 1613}

@@ -1,0 +1,5353 @@
+[
+  {
+    "weapon": "perigale_prime",
+    "build": "bare",
+    "level": 170,
+    "headshotPct": 0,
+    "mods": [],
+    "riven": null,
+    "local": {
+      "kpm": 0.1382632244909547,
+      "critMultiplier": 3.643076923076923,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.13810033887261855,
+    "wfsimRun": [
+      500282853,
+      1291689491
+    ],
+    "wfsimError": null,
+    "wfsimLog": {
+      "buffs": [
+        [
+          "sniper_combo"
+        ]
+      ],
+      "combatants": [
+        {
+          "id": "wielder",
+          "weapon": "perigale_prime"
+        }
+      ],
+      "debuffs": [
+        "virus",
+        "corrosion",
+        "disrupt",
+        "confusion",
+        "blast",
+        "freeze",
+        "frozen",
+        "stagger",
+        "weakened",
+        "attractor",
+        "bleed",
+        "poison",
+        "ignite",
+        "microwave",
+        "lifted",
+        "tesla",
+        "gas",
+        "knockdown"
+      ],
+      "dropped": 278,
+      "events": [
+        {
+          "id": 0,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 15,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 394620.1,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              0,
+              null
+            ]
+          ],
+          "cause": 0,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 184,
+          "head": false,
+          "id": 1,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 184,
+          "t": 0,
+          "type": "puncture"
+        },
+        {
+          "id": 2,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.04,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 14,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 394436.1,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              1,
+              null
+            ]
+          ],
+          "cause": 2,
+          "combatant": 0,
+          "effective": 276,
+          "head": false,
+          "id": 3,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 276,
+              "v": 1.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 276,
+          "t": 0.04,
+          "type": "puncture"
+        },
+        {
+          "id": 4,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.08,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 13,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 394160.1,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              2,
+              null
+            ]
+          ],
+          "cause": 4,
+          "combatant": 0,
+          "effective": 276,
+          "head": false,
+          "id": 5,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 276,
+              "v": 1.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 276,
+          "t": 0.08,
+          "type": "puncture"
+        },
+        {
+          "id": 6,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.12,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 12,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 393884.1,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              3,
+              null
+            ]
+          ],
+          "cause": 6,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1339.5,
+          "head": false,
+          "id": 7,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 669.8,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1339.5,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1339.5,
+          "t": 0.12,
+          "type": "puncture"
+        },
+        {
+          "id": 8,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.62,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 11,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 392544.5,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              4,
+              null
+            ]
+          ],
+          "cause": 8,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1339.5,
+          "head": false,
+          "id": 9,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 669.8,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1339.5,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1339.5,
+          "t": 0.62,
+          "type": "puncture"
+        },
+        {
+          "id": 10,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.66,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 10,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 391205,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              5,
+              null
+            ]
+          ],
+          "cause": 10,
+          "combatant": 0,
+          "effective": 368,
+          "head": false,
+          "id": 11,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 368,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "procs": [
+            "puncture"
+          ],
+          "raw": 368,
+          "t": 0.66,
+          "type": "puncture"
+        },
+        {
+          "id": 12,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.7,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 9,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 390837,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              6,
+              null
+            ]
+          ],
+          "cause": 12,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              10.7
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 368,
+          "head": false,
+          "id": 13,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 368,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 368,
+          "t": 0.7,
+          "type": "puncture"
+        },
+        {
+          "id": 14,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.74,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 8,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 390469,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              7,
+              null
+            ]
+          ],
+          "cause": 14,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1339.5,
+          "head": false,
+          "id": 15,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 669.8,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1339.5,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1339.5,
+          "t": 0.74,
+          "type": "puncture"
+        },
+        {
+          "id": 16,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.24,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 7,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 389129.5,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              8,
+              null
+            ]
+          ],
+          "cause": 16,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1339.5,
+          "head": false,
+          "id": 17,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 669.8,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1339.5,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1339.5,
+          "t": 1.24,
+          "type": "puncture"
+        },
+        {
+          "id": 18,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.28,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 6,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 387790,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              9,
+              null
+            ]
+          ],
+          "cause": 18,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1674.4,
+          "head": false,
+          "id": 19,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 669.8,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1674.4,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "procs": [
+            "impact"
+          ],
+          "raw": 1674.4,
+          "t": 1.28,
+          "type": "puncture"
+        },
+        {
+          "id": 20,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.32,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 5,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 386115.6,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              10,
+              null
+            ]
+          ],
+          "cause": 20,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              7.3
+            ],
+            [
+              1,
+              10.7
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 460,
+          "head": false,
+          "id": 21,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 460,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 460,
+          "t": 1.32,
+          "type": "puncture"
+        },
+        {
+          "id": 22,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.36,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 4,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 385655.6,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              11,
+              null
+            ]
+          ],
+          "cause": 22,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1674.4,
+          "head": false,
+          "id": 23,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 669.8,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1674.4,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1674.4,
+          "t": 1.36,
+          "type": "puncture"
+        },
+        {
+          "id": 24,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.86,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 3,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 383981.2,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              12,
+              null
+            ]
+          ],
+          "cause": 24,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1674.4,
+          "head": false,
+          "id": 25,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 669.8,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1674.4,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "procs": [
+            "puncture"
+          ],
+          "raw": 1674.4,
+          "t": 1.86,
+          "type": "puncture"
+        },
+        {
+          "id": 26,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.9,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 2,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 382306.8,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              13,
+              null
+            ]
+          ],
+          "cause": 26,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              7.3
+            ],
+            [
+              2,
+              10.7
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 1674.4,
+          "head": false,
+          "id": 27,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 669.8,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1674.4,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1674.4,
+          "t": 1.9,
+          "type": "puncture"
+        },
+        {
+          "id": 28,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.94,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 1,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 380632.4,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              14,
+              null
+            ]
+          ],
+          "cause": 28,
+          "combatant": 0,
+          "effective": 460,
+          "head": false,
+          "id": 29,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 460,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "procs": [
+            "puncture"
+          ],
+          "raw": 460,
+          "t": 1.94,
+          "type": "puncture"
+        },
+        {
+          "id": 30,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.98,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 0,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 380172.4,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              15,
+              null
+            ]
+          ],
+          "cause": 30,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              7.3
+            ],
+            [
+              3,
+              10.7
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 1674.4,
+          "head": false,
+          "id": 31,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 669.8,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1674.4,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1674.4,
+          "t": 1.98,
+          "type": "puncture"
+        },
+        {
+          "cause": 30,
+          "id": 32,
+          "kind": "reload_start",
+          "seconds": 3,
+          "t": 2.48
+        },
+        {
+          "cause": 30,
+          "id": 33,
+          "kind": "reload_end",
+          "t": 5.48,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 16,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "id": 34,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 5.48,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 15,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 378498,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "cause": 34,
+          "combatant": 0,
+          "effective": 460,
+          "head": false,
+          "id": 35,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 460,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 460,
+          "t": 5.48,
+          "type": "puncture"
+        },
+        {
+          "id": 36,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 5.52,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 14,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 378038,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              16,
+              null
+            ]
+          ],
+          "cause": 36,
+          "combatant": 0,
+          "effective": 460,
+          "head": false,
+          "id": 37,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 460,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 460,
+          "t": 5.52,
+          "type": "puncture"
+        },
+        {
+          "id": 38,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 5.56,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 13,
+            "magazine_max": 16,
+            "reserve": null
+          }
+        },
+        {
+          "base": 184,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 377578,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              17,
+              null
+            ]
+          ],
+          "cause": 38,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1674.4,
+          "head": false,
+          "id": 39,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  23,
+                  4,
+                  23
+                ],
+                [
+                  "puncture",
+                  103.5,
+                  18,
+                  103.5
+                ],
+                [
+                  "slash",
+                  57.5,
+                  10,
+                  57.5
+                ]
+              ],
+              "k": "q",
+              "o": 184,
+              "scale": 5.75
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 669.8,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1674.4,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1674.4,
+          "t": 5.56,
+          "type": "puncture"
+        }
+      ],
+      "factors": [
+        "base damage bracket",
+        "base damage mods",
+        "below half health",
+        "headshot damage",
+        "body part",
+        "critical",
+        "Condition Overload bracket",
+        "faction",
+        "arcane (final)",
+        "attrition",
+        "Warframe ability",
+        "Warframe ability element",
+        "beam ramp",
+        "Double Tap",
+        "Synth Charge",
+        "Chamber (first round)",
+        "sniper combo",
+        "multishot-as-damage",
+        "multishot-generated",
+        "damage falloff",
+        "radial falloff",
+        "hop falloff",
+        "merged beams",
+        "element bracket",
+        "element bracket + quantization",
+        "extra hit share",
+        "field damage",
+        "Secondary Fortifier",
+        "shield gate window",
+        "pool share",
+        "damage type column",
+        "Disrupt amp",
+        "Guardian aura",
+        "past the shield",
+        "shield gate",
+        "Viral amp",
+        "armour",
+        "attenuation",
+        "the pool ran out",
+        "stored damage seeds",
+        "accumulator (starts at 1)",
+        "target's own multiplier",
+        "the 1-damage floor",
+        "modified base",
+        "status coefficient",
+        "status damage",
+        "where the tick lands",
+        "burn (sum of Heat procs)"
+      ],
+      "from": 0,
+      "ok": true,
+      "run": [
+        500282853,
+        1291689491
+      ],
+      "skip": 0,
+      "to": null
+    }
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "bare",
+    "level": 170,
+    "headshotPct": 100,
+    "mods": [],
+    "riven": null,
+    "local": {
+      "kpm": 0.508312293805087,
+      "critMultiplier": 3.643076923076923,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.5075348939976796,
+    "wfsimRun": [
+      1844961108,
+      3751982120
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "bare",
+    "level": 9999,
+    "headshotPct": 0,
+    "mods": [],
+    "riven": null,
+    "local": {
+      "kpm": 0.009107687332975622,
+      "critMultiplier": 3.643076923076923,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.00909695771713805,
+    "wfsimRun": [
+      500282853,
+      1291689491
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "bare",
+    "level": 9999,
+    "headshotPct": 100,
+    "mods": [],
+    "riven": null,
+    "local": {
+      "kpm": 0.04784666858782893,
+      "critMultiplier": 3.643076923076923,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.04780894176208376,
+    "wfsimRun": [
+      2563012080,
+      4037432864
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "crit",
+    "level": 170,
+    "headshotPct": 0,
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "heavy_caliber",
+      "hammer_shot",
+      "primed_cryo_rounds",
+      "infected_clip"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 6.4677174957157995,
+      "critMultiplier": 8.32703307112088,
+      "comboFirst": [
+        1.2368,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 6.171367310011838,
+    "wfsimRun": [
+      2950289040,
+      1813768665
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "crit",
+    "level": 170,
+    "headshotPct": 100,
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "heavy_caliber",
+      "hammer_shot",
+      "primed_cryo_rounds",
+      "infected_clip"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 20.0,
+      "critMultiplier": 8.32703307112088,
+      "comboFirst": [
+        1.2368,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 21.024926494674023,
+    "wfsimRun": [
+      4112119918,
+      3807945884
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "crit",
+    "level": 9999,
+    "headshotPct": 0,
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "heavy_caliber",
+      "hammer_shot",
+      "primed_cryo_rounds",
+      "infected_clip"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 1.0103941672524326,
+      "critMultiplier": 8.32703307112088,
+      "comboFirst": [
+        1.2368,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 1.0113727092089728,
+    "wfsimRun": [
+      3337565999,
+      3918495054
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "crit",
+    "level": 9999,
+    "headshotPct": 100,
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "heavy_caliber",
+      "hammer_shot",
+      "primed_cryo_rounds",
+      "infected_clip"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 3.8586468072305875,
+      "critMultiplier": 8.32703307112088,
+      "comboFirst": [
+        1.2368,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 3.8083743097884994,
+    "wfsimRun": [
+      774553918,
+      4163381052
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "board",
+    "level": 170,
+    "headshotPct": 0,
+    "mods": [
+      "cryo_rounds",
+      "infected_clip",
+      "wildfire",
+      "heavy_caliber",
+      "primary_acuity",
+      "serration",
+      "vile_acceleration",
+      "vital_sense"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 3.0538730100330858,
+      "critMultiplier": 6.765714285714286,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 2.8468662042926285,
+    "wfsimRun": [
+      2380164703,
+      3529505454
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "board",
+    "level": 170,
+    "headshotPct": 100,
+    "mods": [
+      "cryo_rounds",
+      "infected_clip",
+      "wildfire",
+      "heavy_caliber",
+      "primary_acuity",
+      "serration",
+      "vile_acceleration",
+      "vital_sense"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 33.75154562055191,
+      "critMultiplier": 6.765714285714286,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 29.99200286583855,
+    "wfsimRun": [
+      147926635,
+      1980281599
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "board",
+    "level": 9999,
+    "headshotPct": 0,
+    "mods": [
+      "cryo_rounds",
+      "infected_clip",
+      "wildfire",
+      "heavy_caliber",
+      "primary_acuity",
+      "serration",
+      "vile_acceleration",
+      "vital_sense"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 0.27978349520649526,
+      "critMultiplier": 6.765714285714286,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.27638847874539985,
+    "wfsimRun": [
+      1218333825,
+      1568751595
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale_prime",
+    "build": "board",
+    "level": 9999,
+    "headshotPct": 100,
+    "mods": [
+      "cryo_rounds",
+      "infected_clip",
+      "wildfire",
+      "heavy_caliber",
+      "primary_acuity",
+      "serration",
+      "vile_acceleration",
+      "vital_sense"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 9.23940086884542,
+      "critMultiplier": 6.765714285714286,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 8.210945941233057,
+    "wfsimRun": [
+      3724842959,
+      1694699751
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "bare",
+    "level": 170,
+    "headshotPct": 0,
+    "mods": [],
+    "riven": null,
+    "local": {
+      "kpm": 0.09407315152662776,
+      "critMultiplier": 3.643076923076923,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.09434069366456904,
+    "wfsimRun": [
+      56502946,
+      3877930276
+    ],
+    "wfsimError": null,
+    "wfsimLog": {
+      "buffs": [
+        [
+          "sniper_combo"
+        ]
+      ],
+      "combatants": [
+        {
+          "id": "wielder",
+          "weapon": "perigale"
+        }
+      ],
+      "debuffs": [
+        "virus",
+        "corrosion",
+        "disrupt",
+        "confusion",
+        "blast",
+        "freeze",
+        "frozen",
+        "stagger",
+        "weakened",
+        "attractor",
+        "bleed",
+        "poison",
+        "ignite",
+        "microwave",
+        "lifted",
+        "tesla",
+        "gas",
+        "knockdown"
+      ],
+      "dropped": 220,
+      "events": [
+        {
+          "id": 0,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 11,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 394620.1,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              0,
+              null
+            ]
+          ],
+          "cause": 0,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 172,
+          "head": false,
+          "id": 1,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 172,
+          "t": 0,
+          "type": "puncture"
+        },
+        {
+          "id": 2,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.04,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 10,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 394448.1,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              1,
+              null
+            ]
+          ],
+          "cause": 2,
+          "combatant": 0,
+          "effective": 258,
+          "head": false,
+          "id": 3,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 258,
+              "v": 1.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 258,
+          "t": 0.04,
+          "type": "puncture"
+        },
+        {
+          "id": 4,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.08,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 9,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 394190.1,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              2,
+              null
+            ]
+          ],
+          "cause": 4,
+          "combatant": 0,
+          "effective": 258,
+          "head": false,
+          "id": 5,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 258,
+              "v": 1.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "procs": [
+            "slash"
+          ],
+          "raw": 258,
+          "t": 0.08,
+          "type": "puncture"
+        },
+        {
+          "id": 6,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.12,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 8,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 393932.1,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              3,
+              null
+            ]
+          ],
+          "cause": 6,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              1.1
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 344,
+          "head": false,
+          "id": 7,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 344,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 344,
+          "t": 0.12,
+          "type": "puncture"
+        },
+        {
+          "id": 8,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.62,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 7,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 393588.1,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              4,
+              null
+            ]
+          ],
+          "cause": 8,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1252.2,
+          "head": false,
+          "id": 9,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 626.1,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1252.2,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1252.2,
+          "t": 0.62,
+          "type": "puncture"
+        },
+        {
+          "id": 10,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.66,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 6,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 392335.9,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              5,
+              null
+            ]
+          ],
+          "cause": 10,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1252.2,
+          "head": false,
+          "id": 11,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 626.1,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1252.2,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1252.2,
+          "t": 0.66,
+          "type": "puncture"
+        },
+        {
+          "id": 12,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.7,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 5,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 391083.7,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              6,
+              null
+            ]
+          ],
+          "cause": 12,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1252.2,
+          "head": false,
+          "id": 13,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 626.1,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1252.2,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1252.2,
+          "t": 0.7,
+          "type": "puncture"
+        },
+        {
+          "id": 14,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 0.74,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 4,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 389831.6,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              7,
+              null
+            ]
+          ],
+          "cause": 14,
+          "combatant": 0,
+          "effective": 344,
+          "head": false,
+          "id": 15,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 344,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 344,
+          "t": 0.74,
+          "type": "puncture"
+        },
+        {
+          "base": 60.6,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 389487.6,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "cause": 4,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              2.1
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 60.6,
+          "id": 16,
+          "kind": "damage",
+          "layers": [
+            {
+              "f": 39,
+              "k": "s",
+              "o": 60.55,
+              "p": [
+                {
+                  "a": 60.2,
+                  "f": 39,
+                  "head": 172,
+                  "hf": 43,
+                  "of": [
+                    {
+                      "f": 44,
+                      "v": 0.35
+                    }
+                  ]
+                },
+                {
+                  "a": 0.35,
+                  "f": 40
+                }
+              ]
+            }
+          ],
+          "mitigation": [],
+          "origin": "status",
+          "pool": "overguard",
+          "pop_kind": "status",
+          "raw": 60.6,
+          "t": 1.08,
+          "type": "slash"
+        },
+        {
+          "id": 17,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.24,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 3,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 389427,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              8,
+              null
+            ]
+          ],
+          "cause": 17,
+          "combatant": 0,
+          "effective": 344,
+          "head": false,
+          "id": 18,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 344,
+              "v": 2
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 344,
+          "t": 1.24,
+          "type": "puncture"
+        },
+        {
+          "id": 19,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.28,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 2,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 389083,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              9,
+              null
+            ]
+          ],
+          "cause": 19,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1565.2,
+          "head": false,
+          "id": 20,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 626.1,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1565.2,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1565.2,
+          "t": 1.28,
+          "type": "puncture"
+        },
+        {
+          "id": 21,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.32,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 1,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 387517.8,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              10,
+              null
+            ]
+          ],
+          "cause": 21,
+          "combatant": 0,
+          "effective": 430,
+          "head": false,
+          "id": 22,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 430,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 430,
+          "t": 1.32,
+          "type": "puncture"
+        },
+        {
+          "id": 23,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 1.36,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 0,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 387087.8,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              11,
+              null
+            ]
+          ],
+          "cause": 23,
+          "combatant": 0,
+          "crit": 1,
+          "crit_damage": 3.64,
+          "effective": 1565.2,
+          "head": false,
+          "id": 24,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 5,
+              "head": 2.6,
+              "k": "m",
+              "o": 626.1,
+              "t": [
+                {
+                  "v": 1.04
+                }
+              ],
+              "v": 3.64
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 1565.2,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "crit",
+          "raw": 1565.2,
+          "t": 1.36,
+          "type": "puncture"
+        },
+        {
+          "cause": 23,
+          "id": 25,
+          "kind": "reload_start",
+          "seconds": 3,
+          "t": 1.86
+        },
+        {
+          "cause": 23,
+          "id": 26,
+          "kind": "reload_end",
+          "t": 4.86,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 12,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 60.6,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 385522.6,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "cause": 4,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              3.1
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 60.6,
+          "id": 27,
+          "kind": "damage",
+          "layers": [
+            {
+              "f": 39,
+              "k": "s",
+              "o": 60.55,
+              "p": [
+                {
+                  "a": 60.2,
+                  "f": 39,
+                  "head": 172,
+                  "hf": 43,
+                  "of": [
+                    {
+                      "f": 44,
+                      "v": 0.35
+                    }
+                  ]
+                },
+                {
+                  "a": 0.35,
+                  "f": 40
+                }
+              ]
+            }
+          ],
+          "mitigation": [],
+          "origin": "status",
+          "pool": "overguard",
+          "pop_kind": "status",
+          "raw": 60.6,
+          "t": 2.08,
+          "type": "slash"
+        },
+        {
+          "base": 60.6,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 385462.1,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "cause": 4,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              4.1
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 60.6,
+          "id": 28,
+          "kind": "damage",
+          "layers": [
+            {
+              "f": 39,
+              "k": "s",
+              "o": 60.55,
+              "p": [
+                {
+                  "a": 60.2,
+                  "f": 39,
+                  "head": 172,
+                  "hf": 43,
+                  "of": [
+                    {
+                      "f": 44,
+                      "v": 0.35
+                    }
+                  ]
+                },
+                {
+                  "a": 0.35,
+                  "f": 40
+                }
+              ]
+            }
+          ],
+          "mitigation": [],
+          "origin": "status",
+          "pool": "overguard",
+          "pop_kind": "status",
+          "raw": 60.6,
+          "t": 3.08,
+          "type": "slash"
+        },
+        {
+          "base": 60.6,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 385401.5,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "cause": 4,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              5.1
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 60.6,
+          "id": 29,
+          "kind": "damage",
+          "layers": [
+            {
+              "f": 39,
+              "k": "s",
+              "o": 60.55,
+              "p": [
+                {
+                  "a": 60.2,
+                  "f": 39,
+                  "head": 172,
+                  "hf": 43,
+                  "of": [
+                    {
+                      "f": 44,
+                      "v": 0.35
+                    }
+                  ]
+                },
+                {
+                  "a": 0.35,
+                  "f": 40
+                }
+              ]
+            }
+          ],
+          "mitigation": [],
+          "origin": "status",
+          "pool": "overguard",
+          "pop_kind": "status",
+          "raw": 60.6,
+          "t": 4.08,
+          "type": "slash"
+        },
+        {
+          "id": 30,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 4.86,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 11,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 385341,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "cause": 30,
+          "combatant": 0,
+          "effective": 430,
+          "head": false,
+          "id": 31,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 430,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "procs": [
+            "impact"
+          ],
+          "raw": 430,
+          "t": 4.86,
+          "type": "puncture"
+        },
+        {
+          "id": 32,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 4.9,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 10,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 384911,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              12,
+              null
+            ]
+          ],
+          "cause": 32,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              10.9
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              5.1
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 430,
+          "head": false,
+          "id": 33,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 430,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 430,
+          "t": 4.9,
+          "type": "puncture"
+        },
+        {
+          "id": 34,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 4.94,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 9,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 384481,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              13,
+              null
+            ]
+          ],
+          "cause": 34,
+          "combatant": 0,
+          "effective": 430,
+          "head": false,
+          "id": 35,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 430,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 430,
+          "t": 4.94,
+          "type": "puncture"
+        },
+        {
+          "id": 36,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 4.98,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 8,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        },
+        {
+          "base": 172,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 384051,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "buffs": [
+            [
+              14,
+              null
+            ]
+          ],
+          "cause": 36,
+          "combatant": 0,
+          "effective": 430,
+          "head": false,
+          "id": 37,
+          "kind": "damage",
+          "layers": [
+            {
+              "c": [
+                [
+                  "impact",
+                  21.5,
+                  4,
+                  21.5
+                ],
+                [
+                  "puncture",
+                  96.8,
+                  18,
+                  96.8
+                ],
+                [
+                  "slash",
+                  53.8,
+                  10,
+                  53.8
+                ]
+              ],
+              "k": "q",
+              "o": 172,
+              "scale": 5.375
+            },
+            {
+              "f": 16,
+              "k": "m",
+              "o": 430,
+              "v": 2.5
+            }
+          ],
+          "mitigation": [],
+          "origin": "own",
+          "part": "body",
+          "pellet": 1,
+          "pool": "overguard",
+          "pop_kind": "direct",
+          "raw": 430,
+          "t": 4.98,
+          "type": "puncture"
+        },
+        {
+          "base": 60.6,
+          "before": {
+            "armor": 2700,
+            "health": 1264784.4,
+            "overguard": 383621,
+            "shield": 0,
+            "shield_gate_until": null
+          },
+          "body": 0,
+          "cause": 4,
+          "combatant": 0,
+          "debuffs": [
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              10.9
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              1,
+              6.1
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              "inf"
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ],
+            [
+              0,
+              null
+            ]
+          ],
+          "effective": 60.6,
+          "id": 38,
+          "kind": "damage",
+          "layers": [
+            {
+              "f": 39,
+              "k": "s",
+              "o": 60.55,
+              "p": [
+                {
+                  "a": 60.2,
+                  "f": 39,
+                  "head": 172,
+                  "hf": 43,
+                  "of": [
+                    {
+                      "f": 44,
+                      "v": 0.35
+                    }
+                  ]
+                },
+                {
+                  "a": 0.35,
+                  "f": 40
+                }
+              ]
+            }
+          ],
+          "mitigation": [],
+          "origin": "status",
+          "pool": "overguard",
+          "pop_kind": "status",
+          "raw": 60.6,
+          "t": 5.08,
+          "type": "slash"
+        },
+        {
+          "id": 39,
+          "kind": "shot",
+          "pellets": 1,
+          "t": 5.48,
+          "weapon": {
+            "form": "transmuted",
+            "gauge": null,
+            "idle_magazine": null,
+            "magazine": 7,
+            "magazine_max": 12,
+            "reserve": null
+          }
+        }
+      ],
+      "factors": [
+        "base damage bracket",
+        "base damage mods",
+        "below half health",
+        "headshot damage",
+        "body part",
+        "critical",
+        "Condition Overload bracket",
+        "faction",
+        "arcane (final)",
+        "attrition",
+        "Warframe ability",
+        "Warframe ability element",
+        "beam ramp",
+        "Double Tap",
+        "Synth Charge",
+        "Chamber (first round)",
+        "sniper combo",
+        "multishot-as-damage",
+        "multishot-generated",
+        "damage falloff",
+        "radial falloff",
+        "hop falloff",
+        "merged beams",
+        "element bracket",
+        "element bracket + quantization",
+        "extra hit share",
+        "field damage",
+        "Secondary Fortifier",
+        "shield gate window",
+        "pool share",
+        "damage type column",
+        "Disrupt amp",
+        "Guardian aura",
+        "past the shield",
+        "shield gate",
+        "Viral amp",
+        "armour",
+        "attenuation",
+        "the pool ran out",
+        "stored damage seeds",
+        "accumulator (starts at 1)",
+        "target's own multiplier",
+        "the 1-damage floor",
+        "modified base",
+        "status coefficient",
+        "status damage",
+        "where the tick lands",
+        "burn (sum of Heat procs)"
+      ],
+      "from": 0,
+      "ok": true,
+      "run": [
+        56502946,
+        3877930276
+      ],
+      "skip": 0,
+      "to": null
+    }
+  },
+  {
+    "weapon": "perigale",
+    "build": "bare",
+    "level": 170,
+    "headshotPct": 100,
+    "mods": [],
+    "riven": null,
+    "local": {
+      "kpm": 0.4758648736705482,
+      "critMultiplier": 3.643076923076923,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.45869307290217215,
+    "wfsimRun": [
+      648209488,
+      3284488416
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "bare",
+    "level": 9999,
+    "headshotPct": 0,
+    "mods": [],
+    "riven": null,
+    "local": {
+      "kpm": 0.006196794944472339,
+      "critMultiplier": 3.643076923076923,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.00621441850380845,
+    "wfsimRun": [
+      56502946,
+      3877930276
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "bare",
+    "level": 9999,
+    "headshotPct": 100,
+    "mods": [],
+    "riven": null,
+    "local": {
+      "kpm": 0.03142477037321134,
+      "critMultiplier": 3.643076923076923,
+      "comboFirst": [
+        1.0,
+        1.5,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.031561384428984936,
+    "wfsimRun": [
+      648209488,
+      3284488416
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "crit",
+    "level": 170,
+    "headshotPct": 0,
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "heavy_caliber",
+      "hammer_shot",
+      "primed_cryo_rounds",
+      "infected_clip"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 3.8807717812229168,
+      "critMultiplier": 8.32703307112088,
+      "comboFirst": [
+        1.2368,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 3.934497498420549,
+    "wfsimRun": [
+      2563012080,
+      4037432864
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "crit",
+    "level": 170,
+    "headshotPct": 100,
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "heavy_caliber",
+      "hammer_shot",
+      "primed_cryo_rounds",
+      "infected_clip"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 14.746784016689059,
+      "critMultiplier": 8.32703307112088,
+      "comboFirst": [
+        1.2368,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 14.376797107333964,
+    "wfsimRun": [
+      2380164703,
+      3529505454
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "crit",
+    "level": 9999,
+    "headshotPct": 0,
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "heavy_caliber",
+      "hammer_shot",
+      "primed_cryo_rounds",
+      "infected_clip"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 0.6724631714216589,
+      "critMultiplier": 8.32703307112088,
+      "comboFirst": [
+        1.2368,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.6748500974499071,
+    "wfsimRun": [
+      3633419270,
+      3592479532
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "crit",
+    "level": 9999,
+    "headshotPct": 100,
+    "mods": [
+      "serration",
+      "split_chamber",
+      "vital_sense",
+      "point_strike",
+      "heavy_caliber",
+      "hammer_shot",
+      "primed_cryo_rounds",
+      "infected_clip"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 2.45942297829418,
+      "critMultiplier": 8.32703307112088,
+      "comboFirst": [
+        1.2368,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 2.4293532087613228,
+    "wfsimRun": [
+      1274836772,
+      1172751649
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "board",
+    "level": 170,
+    "headshotPct": 0,
+    "mods": [
+      "primed_cryo_rounds",
+      "hellfire",
+      "galvanized_chamber",
+      "galvanized_aptitude",
+      "galvanized_scope",
+      "vile_acceleration",
+      "vital_sense",
+      "magnetic_capacity"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 0.6137986079680966,
+      "critMultiplier": 6.765714285714286,
+      "comboFirst": [
+        1.2222,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.609191772146863,
+    "wfsimRun": [
+      3816266647,
+      4100406974
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "board",
+    "level": 170,
+    "headshotPct": 100,
+    "mods": [
+      "primed_cryo_rounds",
+      "hellfire",
+      "galvanized_chamber",
+      "galvanized_aptitude",
+      "galvanized_scope",
+      "vile_acceleration",
+      "vital_sense",
+      "magnetic_capacity"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 1.9325287511788347,
+      "critMultiplier": 6.765714285714286,
+      "comboFirst": [
+        1.2222,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 1.9847756139282169,
+    "wfsimRun": [
+      4260046554,
+      1505777517
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "board",
+    "level": 9999,
+    "headshotPct": 0,
+    "mods": [
+      "primed_cryo_rounds",
+      "hellfire",
+      "galvanized_chamber",
+      "galvanized_aptitude",
+      "galvanized_scope",
+      "vile_acceleration",
+      "vital_sense",
+      "magnetic_capacity"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 0.2213657105974172,
+      "critMultiplier": 6.765714285714286,
+      "comboFirst": [
+        1.2222,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 0.2041358983466002,
+    "wfsimRun": [
+      1549107837,
+      4044443210
+    ],
+    "wfsimError": null
+  },
+  {
+    "weapon": "perigale",
+    "build": "board",
+    "level": 9999,
+    "headshotPct": 100,
+    "mods": [
+      "primed_cryo_rounds",
+      "hellfire",
+      "galvanized_chamber",
+      "galvanized_aptitude",
+      "galvanized_scope",
+      "vile_acceleration",
+      "vital_sense",
+      "magnetic_capacity"
+    ],
+    "riven": null,
+    "local": {
+      "kpm": 1.2776559150820028,
+      "critMultiplier": 6.765714285714286,
+      "comboFirst": [
+        1.2222,
+        1.5,
+        2.0,
+        2.0,
+        2.0,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5,
+        2.5
+      ]
+    },
+    "evolutions": [],
+    "wfsimKpm": 1.2706061733395566,
+    "wfsimRun": [
+      3428989688,
+      2029234953
+    ],
+    "wfsimError": null
+  }
+]

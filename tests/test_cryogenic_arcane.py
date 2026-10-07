@@ -112,4 +112,5 @@ def test_one_magnetic_break_per_pool_and_target_generation():
     identities=[(b['targetGeneration'],b['pool']) for b in breaks]
     assert len(identities)==len(set(identities))
     assert len(breaks)<=event['killEvents']+1
-    assert event['procCounts']['DT_ELECTRICITY']==len(breaks)
+    # Each break's Electricity proc is weighted by P(Magnetic present) then.
+    assert len(breaks)-.05<event['procCounts']['DT_ELECTRICITY']<=len(breaks)+1e-9

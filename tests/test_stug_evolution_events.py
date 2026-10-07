@@ -146,7 +146,11 @@ def test_cestra_own_overguard_break_evolution_uses_player_event_signal():
     from wfarsenal.manual_combat import prepare
     from wfarsenal.combat_replay import replay
     w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Cestra')
-    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent')),[],[],incarnon_choices={'tier2':'2-1'})
+    # Default: the Warframe-side break is forced, held once (either gate grants the one buff).
+    forced=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent')),[],[],incarnon_choices={'tier2':'2-1'})
+    assert [(q['kind'],q['simulationMode'],q['initialStacks']) for q in forced['trigger_sources']]==[('on-shield-broken','fixed',1.)]
+    events={'selfShieldBreakForced':False}
+    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent',combat_state=events)),[],[],incarnon_choices={'tier2':'2-1'})
     assert not any('conditional-effects-not-applied' in x for x in c['unsupported'])
     assert {q['kind'] for q in c['trigger_sources']} == {'on-shield-broken','on-overguard-broken'}
     q=next(q for q in c['trigger_sources'] if q['kind']=='on-overguard-broken')
@@ -163,7 +167,24 @@ def test_cestra_own_overguard_break_evolution_uses_player_event_signal():
            attacks_per_second=st.fire_rate,window_seconds=.5,combat=c,trigger_sources=c['trigger_sources'])
     assert not any(x>0 for x in seen)
     w=dict(w)
-    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent',combat_state={'selfOverguardBreakAt':.1})),[],[],incarnon_choices={'tier2':'2-1'})
+    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent',combat_state={**events,'selfOverguardBreakAt':.1})),[],[],incarnon_choices={'tier2':'2-1'})
     result=replay(st,dict(health=1e12,shield=0,armour=0,overguard=0,baseLevel=1),
                   attacks_per_second=st.fire_rate,window_seconds=.5,combat=c,trigger_sources=c['trigger_sources'])
     assert max(next(row['series'] for row in result['triggerSeries'] if row['kind']=='on-overguard-broken'))>0
+
+
+@pytest.mark.parametrize('name,base,passive',[('Lex',130.,80.),('Lex Prime',180.,20.)])
+def test_lex_hoplite_virtue_base_is_passive_and_shield_break_is_a_default_on_switch(name,base,passive):
+    import app
+    from wfarsenal.damage import Scenario
+    from wfarsenal.manual_combat import prepare
+    w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')==name)
+    for state,mode in (({},'fixed'),({'selfShieldBreakForced':False},'events')):
+        c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent',combat_state=state)),[],[],incarnon_choices={'tier2':'2-1'})
+        (q,)=c['trigger_sources']
+        assert (q['kind'],q['simulationMode'])==('on-shield-broken',mode)
+        b=next(b for t in w['incarnon']['tiers'] for b in t['branches'] if b['id']=='2-1')
+        fx,_=app.optimizer._branch_effects(b)
+        assert [(e.upgrade_type,e.value) for e in fx]==[('WEAPON_DAMAGE_AMOUNT',passive)]
+        live,_=c['resolve']('selected',{q['id']:1},0)
+        assert sum(live.damage_types.values())==pytest.approx(base+80)

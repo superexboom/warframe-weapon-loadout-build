@@ -1,0 +1,404 @@
+[
+ {
+  "weapon": "Imperator Vandal",
+  "card": "0,1,S,Z",
+  "phase": "ultra-cold",
+  "seconds": 7.952202100015711,
+  "scale": 1.3398469115308738,
+  "gain": 67.31402142772123,
+  "kpm": 42.1960433094502,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Rubedo-Lined Barrel",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Hollowed Bullets",
+   "Automatic Trigger"
+  ],
+  "details": {
+   "0": 25.4498259727451,
+   "1": 16.244001945743403,
+   "S": 19.162852550909328,
+   "Z": 0.0
+  },
+  "recommended": [],
+  "negative": [],
+  "unsupported": [
+   "ultra-profile-negative-ranking-not-cached",
+   "ultra-profile-recommendation-not-cached"
+  ]
+ },
+ {
+  "weapon": "Imperator Vandal",
+  "card": "2,4,S,Z",
+  "phase": "ultra-cold",
+  "seconds": 17.37323669999023,
+  "scale": 1.3398469115308738,
+  "gain": 39.733611131380385,
+  "kpm": 36.0233577223123,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Rubedo-Lined Barrel",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Hollowed Bullets",
+   "Automatic Trigger"
+  ],
+  "details": {
+   "2": 13.57976409526751,
+   "4": 12.129987825086342,
+   "S": 17.388410502871988,
+   "Z": 0.0
+  },
+  "recommended": [],
+  "negative": [],
+  "unsupported": [
+   "ultra-profile-negative-ranking-not-cached",
+   "ultra-profile-recommendation-not-cached"
+  ]
+ },
+ {
+  "weapon": "Imperator Vandal",
+  "card": "D,1,F,Z",
+  "phase": "ultra-cold",
+  "seconds": 9.203442500001984,
+  "scale": 1.3398469115308738,
+  "gain": 45.21027644881745,
+  "kpm": 35.744490841711304,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Primed Rubedo-Lined Barrel",
+   "Automatic Trigger",
+   "Hollowed Bullets"
+  ],
+  "details": {
+   "D": 13.368625760497821,
+   "1": 13.367272376944106,
+   "F": 11.958741465302092,
+   "Z": 0.0
+  },
+  "recommended": [],
+  "negative": [],
+  "unsupported": [
+   "ultra-profile-negative-ranking-not-cached",
+   "ultra-profile-recommendation-not-cached"
+  ]
+ },
+ {
+  "weapon": "Imperator Vandal",
+  "card": "0,1,S,Z",
+  "phase": "fast-cold",
+  "seconds": 193.2858750000014,
+  "scale": 1.3398469115308738,
+  "gain": 67.31402142772123,
+  "kpm": 42.1960433094502,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Rubedo-Lined Barrel",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Hollowed Bullets",
+   "Automatic Trigger"
+  ],
+  "details": {
+   "0": 25.4498259727451,
+   "1": 16.244001945743403,
+   "S": 19.162852550909328,
+   "Z": 0.0
+  },
+  "recommended": [
+   "Y",
+   "W",
+   "CO",
+   "0",
+   "S",
+   "1",
+   "D"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Imperator Vandal",
+  "card": "2,4,S,Z",
+  "phase": "fast-warm-first",
+  "seconds": 23.670750299992505,
+  "scale": 1.3398469115308738,
+  "gain": 39.733611131380385,
+  "kpm": 36.0233577223123,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Rubedo-Lined Barrel",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Hollowed Bullets",
+   "Automatic Trigger"
+  ],
+  "details": {
+   "2": 13.57976409526751,
+   "4": 12.129987825086342,
+   "S": 17.388410502871988,
+   "Z": 0.0
+  },
+  "recommended": [
+   "Y",
+   "W",
+   "CO",
+   "0",
+   "S",
+   "1",
+   "D"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Imperator Vandal",
+  "card": "D,1,F,Z",
+  "phase": "fast-warm-first",
+  "seconds": 15.391057900007581,
+  "scale": 1.3398469115308738,
+  "gain": 45.21027644881745,
+  "kpm": 35.744490841711304,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Primed Rubedo-Lined Barrel",
+   "Automatic Trigger",
+   "Hollowed Bullets"
+  ],
+  "details": {
+   "D": 13.368625760497821,
+   "1": 13.367272376944106,
+   "F": 11.958741465302092,
+   "Z": 0.0
+  },
+  "recommended": [
+   "Y",
+   "W",
+   "CO",
+   "0",
+   "S",
+   "1",
+   "D"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Imperator Vandal",
+  "card": "0,1,S,Z",
+  "phase": "ultra-warm",
+  "seconds": 5.768178700003773,
+  "scale": 1.3398469115308738,
+  "gain": 67.05779708467077,
+  "kpm": 42.011239044437296,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Rubedo-Lined Barrel",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Hollowed Bullets",
+   "Automatic Trigger"
+  ],
+  "details": {
+   "0": 25.518954207374065,
+   "1": 16.133632023735057,
+   "S": 19.77841309125079,
+   "Z": 0.0
+  },
+  "recommended": [
+   "Y",
+   "W",
+   "CO",
+   "0",
+   "S",
+   "1",
+   "D"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Imperator Vandal",
+  "card": "2,4,S,Z",
+  "phase": "ultra-warm",
+  "seconds": 14.971353600005386,
+  "scale": 1.3398469115308738,
+  "gain": 38.968087405964134,
+  "kpm": 36.01392023373254,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Rubedo-Lined Barrel",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Hollowed Bullets",
+   "Automatic Trigger"
+  ],
+  "details": {
+   "2": 13.002606279064889,
+   "4": 11.565395400374667,
+   "S": 16.812807300501966,
+   "Z": 0.0
+  },
+  "recommended": [
+   "Y",
+   "W",
+   "CO",
+   "0",
+   "S",
+   "1",
+   "D"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Imperator Vandal",
+  "card": "D,1,F,Z",
+  "phase": "ultra-warm",
+  "seconds": 6.931318899994949,
+  "scale": 1.3398469115308738,
+  "gain": 44.644603680260666,
+  "kpm": 35.20036223207335,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Primed Rubedo-Lined Barrel",
+   "Automatic Trigger",
+   "Hollowed Bullets"
+  ],
+  "details": {
+   "D": 12.95369038158456,
+   "1": 12.952636444228283,
+   "F": 11.693715953578888,
+   "Z": 0.0
+  },
+  "recommended": [
+   "Y",
+   "W",
+   "CO",
+   "0",
+   "S",
+   "1",
+   "D"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Imperator Vandal",
+  "card": "2,4,S,Z",
+  "phase": "fast-warm",
+  "seconds": 23.773499599978095,
+  "scale": 1.3398469115308738,
+  "gain": 38.968087405964134,
+  "kpm": 36.01392023373254,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Rubedo-Lined Barrel",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Hollowed Bullets",
+   "Automatic Trigger"
+  ],
+  "details": {
+   "2": 13.002606279064889,
+   "4": 11.565395400374667,
+   "S": 16.812807300501966,
+   "Z": 0.0
+  },
+  "recommended": [
+   "Y",
+   "W",
+   "CO",
+   "0",
+   "S",
+   "1",
+   "D"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ },
+ {
+  "weapon": "Imperator Vandal",
+  "card": "D,1,F,Z",
+  "phase": "fast-warm",
+  "seconds": 15.579129600024316,
+  "scale": 1.3398469115308738,
+  "gain": 44.644603680260666,
+  "kpm": 35.20036223207335,
+  "mods": [
+   "Primed Polar Magazine",
+   "Primed Venomous Clip",
+   "Primed Combustion Rounds",
+   "Primed Dual Rounds",
+   "Primed Rubedo-Lined Barrel",
+   "Automatic Trigger",
+   "Hollowed Bullets"
+  ],
+  "details": {
+   "D": 12.95369038158456,
+   "1": 12.952636444228283,
+   "F": 11.693715953578888,
+   "Z": 0.0
+  },
+  "recommended": [
+   "Y",
+   "W",
+   "CO",
+   "0",
+   "S",
+   "1",
+   "D"
+  ],
+  "negative": [
+   "触发时间",
+   "变焦",
+   "弹药最大值"
+  ],
+  "unsupported": []
+ }
+]

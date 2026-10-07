@@ -7,7 +7,10 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'vendor'))
 from wfarsenal.packages import PackageIndex
 from wfarsenal.extract import _extract_fire_modes
-NAMES=('Baza Prime','Akstiletto Prime','Supra Vandal','Karak Wraith','Viper Wraith','Tiberon','Bolto','Hema')
+NAMES=('Baza Prime','Akstiletto Prime','Supra Vandal','Karak Wraith','Viper Wraith','Tiberon','Bolto','Hema',
+       'Perigale','Perigale Prime')
+# Native WeaponBurstStateBehavior (NumShots, BurstDelay) each audited weapon must still declare.
+BURSTS={'Tiberon':(3,.06),'Hema':(3,.1),'Perigale':(4,.04),'Perigale Prime':(4,.04)}
 TALONS='/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives'
 
 def patch_json_bytes(original, before, after):
@@ -58,16 +61,16 @@ def refresh(packages, ref, export, output, *, update_export=True):
         entry=dict(directTotal=total,referenceId=spec['id'],fireMode=0,sourceBuild=packages.parent.name,
                    nativeSources=[source(w['path'])],referenceSource=path.relative_to(ref).as_posix(),
                    referenceSha256=hashlib.sha256(path.read_bytes()).hexdigest())
-        if name in ('Tiberon','Hema'):
-            expected_delay = .06 if name=='Tiberon' else .1
+        if name in BURSTS:
+            expected_count, expected_delay = BURSTS[name]
             state=b.get('state:WeaponBurstStateBehavior') or {}
             burst=atk.get('burst') or {}
-            if (state.get('NumShots')!=3 or state.get('IgnoreFireRate')!=0
+            if (state.get('NumShots')!=expected_count or state.get('IgnoreFireRate')!=0
                     or state.get('ConsumeAmmoOncePerBurst')!=0
                     or abs(float(state.get('BurstDelay',0))-expected_delay)>1e-8
-                    or burst.get('count')!=3 or burst.get('delay_seconds')!=expected_delay):
+                    or burst.get('count')!=expected_count or burst.get('delay_seconds')!=expected_delay):
                 raise ValueError(name+' burst contract changed')
-            entry['burst']=dict(count=3,delay_seconds=float(state['BurstDelay']))
+            entry['burst']=dict(count=expected_count,delay_seconds=float(state['BurstDelay']))
         if name=='Hema':entry['unmodeled']=['hema-player-health-cost-not-modeled']
         if entry.get('burst'):profiles[w['path']]=entry
         before=deepcopy(w)

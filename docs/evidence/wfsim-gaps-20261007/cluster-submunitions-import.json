@@ -1,0 +1,233 @@
+{
+  "added": [
+    {
+      "weapon": "Kuva Bramma",
+      "path": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon",
+      "mode": 0,
+      "clusters": [
+        {
+          "count": 3,
+          "direct": {
+            "damage": {
+              "impact": 49.0
+            },
+            "crit_chance": 0.34999999,
+            "crit_multiplier": 2.0999999,
+            "status_chance": 0.21,
+            "takes_multishot": false,
+            "nativeField": "AttackData",
+            "damageTypeSource": "native-explicit"
+          },
+          "radial": {
+            "damage": {
+              "blast": 57.0
+            },
+            "crit_chance": 0.34999999,
+            "crit_multiplier": 2.0999999,
+            "status_chance": 0.21,
+            "takes_multishot": false,
+            "nativeField": "ExplosiveAttack",
+            "damageTypeSource": "reference-confirmed-native-default",
+            "radius_m": 3.5,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.5
+          },
+          "nativeChild": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterProjectile",
+              "sha256": "3aa2a2947a1c416833ae41b7f198a958a796ca2974fc4715cfcfe916ab467558"
+            },
+            {
+              "path": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile",
+              "sha256": "118459483d99604d4e8527a022d7bb1445da953b29cea78e79b5ddebf8614c57"
+            }
+          ],
+          "reference": "data/weapons/primary/kuva_bramma.yaml",
+          "referenceSha256": "144f3e54127ed26d38c6611f9fda860659ee6e4ed2459b1e48a57e29e912f27b",
+          "referenceDifferences": [
+            "no CO catalog row: bomblets take no Condition Overload"
+          ]
+        }
+      ]
+    },
+    {
+      "weapon": "Kuva Zarr",
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr",
+      "mode": 0,
+      "clusters": [
+        {
+          "count": 3,
+          "direct": {
+            "damage": {
+              "impact": 15.0
+            },
+            "crit_chance": 0.25,
+            "crit_multiplier": 2.5,
+            "status_chance": 0.31,
+            "takes_multishot": false,
+            "nativeField": "AttackData",
+            "damageTypeSource": "native-explicit",
+            "takes_condition_overload": true,
+            "coProfile": {
+              "behavior": "additive_with_base_damage",
+              "baseFraction": 3.3333333333333335,
+              "excludeFlatSources": [],
+              "source": "wiki CO catalog via WFSim unmodelled row",
+              "row": "Kuva Zarr | Cannon Child Bomb | Projectile | 15 | 50 | 333% | Adding"
+            }
+          },
+          "radial": {
+            "damage": {
+              "blast": 50.0
+            },
+            "crit_chance": 0.25,
+            "crit_multiplier": 2.5,
+            "status_chance": 0.31,
+            "takes_multishot": false,
+            "nativeField": "ExplosiveAttack",
+            "damageTypeSource": "reference-confirmed-native-default",
+            "radius_m": 3.0,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.1
+          },
+          "nativeChild": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterProjectile",
+              "sha256": "b68736a10e50d6e8c9d81925ec4aa0b900477415b0d55a35c4f0c88c9af98f9d"
+            },
+            {
+              "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
+              "sha256": "9bf5b39abac85bf1f200d3148e245628e6f45826e090c1170aa38fef7fef83a2"
+            }
+          ],
+          "reference": "data/weapons/primary/kuva_zarr.yaml",
+          "referenceSha256": "86dfa715d11490630ad6f0980b09762bc92bd54d748deda1df07b2b954ce8153"
+        }
+      ]
+    },
+    {
+      "weapon": "Zarr",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonWeapon",
+      "mode": 0,
+      "clusters": [
+        {
+          "count": 6,
+          "direct": {
+            "damage": {
+              "impact": 15.0
+            },
+            "crit_chance": 0.15000001,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.2,
+            "takes_multishot": false,
+            "nativeField": "AttackData",
+            "damageTypeSource": "native-explicit",
+            "takes_condition_overload": true,
+            "coProfile": {
+              "behavior": "additive_with_base_damage",
+              "baseFraction": 1.6666666666666667,
+              "excludeFlatSources": [],
+              "source": "wiki CO catalog via WFSim unmodelled row",
+              "row": "Zarr | Cannon Child Bomb | Projectile | 15 | 25 | 167% | Adding"
+            }
+          },
+          "radial": {
+            "damage": {
+              "blast": 50.0
+            },
+            "crit_chance": 0.15000001,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.1,
+            "takes_multishot": false,
+            "nativeField": "ExplosiveAttack",
+            "damageTypeSource": "reference-confirmed-native-default",
+            "radius_m": 3.0,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.89999998
+          },
+          "nativeChild": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterProjectile",
+              "sha256": "c62afceef14b93b9d81d855c3892eadcd794d72741a6021b83de65ce5255454a"
+            },
+            {
+              "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
+              "sha256": "c978e2fee9093d9839323df3e8b491d46a354df7130d28cbc9da6de7d062846a"
+            }
+          ],
+          "reference": "data/weapons/primary/zarr.yaml",
+          "referenceSha256": "5fb2b7301a974f8626969af3cb13f8d0b48bf2f2e1b0d496cffd4ed7948c432c",
+          "referenceDifferences": [
+            "ExplosiveAttack: native status omitted; reference 0.1 used"
+          ]
+        }
+      ]
+    },
+    {
+      "weapon": "Kulstar",
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoPistol",
+      "mode": 0,
+      "clusters": [
+        {
+          "count": 3,
+          "direct": {
+            "damage": {
+              "impact": 75.0
+            },
+            "crit_chance": 0.1,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.19,
+            "takes_multishot": false,
+            "nativeField": "AttackData",
+            "damageTypeSource": "native-explicit",
+            "takes_condition_overload": true,
+            "coProfile": {
+              "behavior": "additive_with_base_damage",
+              "baseFraction": 2.6666666666666665,
+              "excludeFlatSources": [],
+              "source": "wiki CO catalog via WFSim unmodelled row",
+              "row": "Kulstar | Cluster Bombs | Projectile | 75 | 200 | 257% | Adding — \"CO-bonus uses parent projectile damage value\""
+            }
+          },
+          "radial": {
+            "damage": {
+              "blast": 90.0
+            },
+            "crit_chance": 0.1,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.19,
+            "takes_multishot": false,
+            "nativeField": "ExplosiveAttack",
+            "damageTypeSource": "reference-confirmed-native-default",
+            "radius_m": 4.0,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 1.0
+          },
+          "nativeChild": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoClusterProjectile",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoProjectile",
+              "sha256": "b87d959d71efcef40fa5899c120376afff2cd6518472778f341f97b65672d96a"
+            },
+            {
+              "path": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoClusterProjectile",
+              "sha256": "26ce1c593c573524d80f9a390eea275892b5bb30529eaa5f85f675dc4175900b"
+            }
+          ],
+          "reference": "data/weapons/secondary/kulstar.yaml",
+          "referenceSha256": "7c3bae99ed9b6a062d2bb03f56f74381835883443971e857ed9ee7594ad1e921",
+          "referenceDifferences": [
+            "AttackData: crit native 0.1/2 vs reference 0.17/2.3",
+            "AttackData: native status omitted; reference 0.19 used",
+            "ExplosiveAttack: crit native 0.1/2 vs reference 0.17/2.3",
+            "ExplosiveAttack: native status omitted; reference 0.19 used"
+          ]
+        }
+      ]
+    }
+  ],
+  "skipped": []
+}

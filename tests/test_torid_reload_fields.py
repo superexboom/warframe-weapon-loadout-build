@@ -155,3 +155,17 @@ def test_explicit_event_metric_riven_and_mod_contributions_replay_removal(metric
         value=app.simulate_manual_payload({**p,**overrides})['benchmarkTimeline']['killsPerMinute']
         assert value>0
         assert gains['gains'][key]['value']==pytest.approx(value,abs=.001)
+
+
+def test_plentiful_mayhem_flat_base_stays_on_grenade_but_pool_bonus_follows_into_field():
+    def parts(fx):
+        c=prepare(dict(weapon=deepcopy(weapon()),fire_mode=0,effects=fx,scenario=Scenario(trigger_policy='emergent')),[],[])
+        st,_=c['resolve']('selected',{});return st,st._lingering[0]
+    mayhem=[ModEffect('WEAPON_DAMAGE_AMOUNT','ADD_BASE',31.),ModEffect('WEAPON_AMMO_POOL_MULTISHOT_DAMAGE','STACKING_MULTIPLY',.6)]
+    shot,field=parts(mayhem)
+    assert shot.total_damage==pytest.approx(131) and field.total_damage==pytest.approx(40)
+    # Only the 0.9 generated grenades take +60%, in the shot and in the fields
+    # they leave (WFSim torid_plentiful_mayhem: "follows a generated grenade
+    # into the CLOUD").
+    _,field=parts([*mayhem,ModEffect('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',.9)])
+    assert field.total_damage*field.multishot==pytest.approx(40*(1+.9*1.6))

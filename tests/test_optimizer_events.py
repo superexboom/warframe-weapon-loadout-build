@@ -25,10 +25,15 @@ def event(name, mode=0, effects=(), scenario=None, seconds=30):
     o._bind_combat_inputs(st, w, [], fx, sc, None)
     return st, o._event_window(st, dict(target=neutral(), level=1, windowSeconds=seconds, headshotChance=0))
 
-@pytest.mark.parametrize('name,shots', [('Nataruk',19),('Cinta',15),('Paris Prime',26),('Felarx',35)])
+@pytest.mark.parametrize('name,shots', [('Nataruk',24),('Cinta',15),('Paris Prime',26),('Felarx',35)])
 def test_audited_cadence(name,shots):
+    # Nataruk releases at its native perfect window (0.7 of 1 s) by default;
+    # Cinta's timed release (a 600 Heat shockwave) does not pay and stays full.
     st, result = event(name)
     assert result['shots'] == shots
+    if name == 'Nataruk':
+        _, full = event(name, scenario=Scenario(trigger_policy='emergent', combat_state={'perfectCharge': False}))
+        assert full['shots'] == 19
     if name == 'Felarx':
         assert st.magazine == 6
         assert st.reload_time == pytest.approx(3.7)

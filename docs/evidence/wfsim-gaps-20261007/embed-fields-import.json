@@ -1,0 +1,136 @@
+{
+  "added": [
+    {
+      "weapon": "mutalist_cernos",
+      "path": "/Lotus/Weapons/Infested/Bow/InfCernosBow/InfCernos",
+      "mode": 0,
+      "entry": {
+        "lingering": {
+          "damage": {
+            "toxin": 5.0
+          },
+          "tick_rate": 1.0,
+          "duration_seconds": 10.0,
+          "radius_m": 2.5,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.0,
+          "crit_chance": 0.15000001,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.49,
+          "forcedProcs": [
+            "PT_POISONED"
+          ],
+          "stacking": "stack",
+          "takes_condition_overload": true,
+          "nativeSource": "/Lotus/Weapons/Infested/Bow/InfCernosBow/ChargeInfCernosArrowProjectile",
+          "nativeField": "EmbedAttack",
+          "tickRateSource": "reference (native has no interval)"
+        },
+        "lingeringSource": {
+          "reference": "data/weapons/primary/mutalist_cernos.yaml",
+          "referenceSha256": "583757d74b5565d60ba0ff3612ec749de78330054ab1fe0284d9a19ca5e033f0",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Infested/Bow/InfCernosBow/InfCernos",
+              "sha256": "e222d4dcb3d7fc0cb9a4448a76a86015cffde9c0fb3f0b652df38f6699d581c0"
+            },
+            {
+              "path": "/Lotus/Weapons/Infested/Bow/InfCernosBow/ChargeInfCernosArrowProjectile",
+              "sha256": "dc2eef5926d998d86ce87017e9221ad999bcb51bdd6f7495b71d99004c55a6fb"
+            }
+          ],
+          "generatedBy": "tools/import_embed_fields.py"
+        }
+      }
+    },
+    {
+      "weapon": "coda_pox",
+      "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPox",
+      "mode": 0,
+      "entry": {
+        "lingering": {
+          "damage": {
+            "toxin": 35.0
+          },
+          "tick_rate": 1.0,
+          "duration_seconds": 5.0,
+          "radius_m": 2.8,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.0,
+          "crit_chance": 0.1,
+          "crit_multiplier": 2.2,
+          "status_chance": 0.45,
+          "forcedProcs": [],
+          "stacking": "stack",
+          "takes_condition_overload": false,
+          "nativeSource": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile",
+          "nativeField": "EmbedAttack",
+          "tickRateSource": "reference (native has no interval)"
+        },
+        "lingeringSource": {
+          "reference": "data/weapons/secondary/coda_pox.yaml",
+          "referenceSha256": "9291e0e9b13a18e2536c9df14ed3e05df1dfef807dde90ad144b32affd0d8c24",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPox",
+              "sha256": "6bf6d29e755c84a42dc9b57ddd7244aa11b87d8a032fa9d3f9e9834becba846b"
+            },
+            {
+              "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile",
+              "sha256": "1c8746ef8541e94336a22bfee85b9828fd72d651d5f7f2287ba6365bd4cde192"
+            }
+          ],
+          "generatedBy": "tools/import_embed_fields.py",
+          "referenceDifferences": [
+            "duration native 5s vs reference 4.0s; native used"
+          ]
+        }
+      }
+    },
+    {
+      "weapon": "pox",
+      "path": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars",
+      "mode": 0,
+      "entry": {
+        "lingering": {
+          "damage": {
+            "toxin": 20.0
+          },
+          "tick_rate": 1.0,
+          "duration_seconds": 5.0,
+          "radius_m": 2.5,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.0,
+          "crit_chance": 0.0099999998,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.35,
+          "forcedProcs": [],
+          "stacking": "stack",
+          "takes_condition_overload": true,
+          "nativeSource": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile",
+          "nativeField": "EmbedAttack",
+          "tickRateSource": "reference (native has no interval)"
+        },
+        "lingeringSource": {
+          "reference": "data/weapons/secondary/pox.yaml",
+          "referenceSha256": "63a9a3588a02fef76552465efdfb7de6fe8c866b9da747a8397d72abffccac38",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars",
+              "sha256": "ad497088638709fbddf75fac5ab970e38069e4f04cea6de1f058581da7b2bc1d"
+            },
+            {
+              "path": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile",
+              "sha256": "8845d248203720f3ac0504f47cd921a9b3200adc0ae7e9257ab2d9e5a5774078"
+            }
+          ],
+          "generatedBy": "tools/import_embed_fields.py",
+          "referenceDifferences": [
+            "duration native 5s vs reference 4.0s; native used"
+          ]
+        }
+      }
+    }
+  ],
+  "skipped": []
+}

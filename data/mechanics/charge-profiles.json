@@ -1,0 +1,1160 @@
+{
+  "schemaVersion": 1,
+  "packageBuild": "2026.08.13.13.24",
+  "generatedBy": "tools/import_charge_profiles.py",
+  "semantics": "per fire mode: charge seconds before each shot, divided by charge-rate mods and, when chargeModifier is WEAPON_FIRE_RATE, by the fire-rate scale; audited charge entries win",
+  "weapons": {
+    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/ThermocorMoaWeapon": {
+      "name": "Vulcax",
+      "modes": {
+        "0": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0.40000001,
+          "autoFire": true,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 1
+        }
+      },
+      "nativeSha256": "2649973089fe35b3562419b52a1c730c89ff2e001944e8a76746304150d07570"
+    },
+    "/Lotus/Weapons/ClanTech/Chemical/RocketLauncher": {
+      "name": "Ogris",
+      "modes": {
+        "0": {
+          "seconds": 0.30000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.5,
+          "exportChargeTime": 0.30000001
+        }
+      },
+      "nativeSha256": "e70470e24c92764bb81a732665935d6ec7c40fc3b472c7bd99f3c1767b5367f6"
+    },
+    "/Lotus/Weapons/ClanTech/Energy/Railgun": {
+      "name": "Lanka",
+      "modes": {
+        "0": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0.33333299,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": null,
+          "exportChargeTime": 1
+        }
+      },
+      "nativeSha256": "3f5b397f6623e82ffd537d4eff5914cd670e62d355939d64872e13d7a43452c7"
+    },
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox": {
+      "name": "Tenet Ferrox",
+      "modes": {
+        "0": {
+          "seconds": 0.40000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.666667,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "4e6cc3c9e2eab4a5567f4985a58f26aebff9f380b47ce379638aaecce408eb86"
+    },
+    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon": {
+      "name": "Tenet Plinx",
+      "modes": {
+        "1": {
+          "seconds": 0.80000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.80000001
+        }
+      },
+      "nativeSha256": "526e129b58ebf37f669ae7c1ed792d1950509a1286349640d932ff8d527daf19"
+    },
+    "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBow": {
+      "name": "Lenz",
+      "modes": {
+        "0": {
+          "seconds": 1.2,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 1.2
+        }
+      },
+      "nativeSha256": "a1a3fab2531470234599ce8729c697e7832105937fcd0e68c9cf551036b05db5"
+    },
+    "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon": {
+      "name": "Prisma Lenz",
+      "modes": {
+        "0": {
+          "seconds": 0.80000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.80000001
+        }
+      },
+      "nativeSha256": "4622d6dc78f762247b2b0f28871ba37329ba7bd1d5d33e80ad6036e70759f598"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpArSniper/CrpArSniperRifle": {
+      "name": "Ambassador",
+      "modes": {
+        "1": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "0c79bb6060f73a432093138f89e5bbbd755e70c53ee2fe7f96d3fa288d905625"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/ConclaveBFG": {
+      "name": "Opticor Variant",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "2d61a50647c7231327da3afd0e700a9febcdeba040f110891a0d24fc9ec64e46"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG": {
+      "name": "Opticor",
+      "modes": {
+        "0": {
+          "seconds": 2.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0.40000001,
+          "autoFire": true,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 2
+        }
+      },
+      "nativeSha256": "0c5219046912eacbf8f45ab96f43b12d1756967441b9b2780fc13c4cdcfddfcd"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG": {
+      "name": "Opticor Vandal",
+      "modes": {
+        "0": {
+          "seconds": 0.60000002,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0.40000001,
+          "autoFire": true,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.0,
+          "exportChargeTime": 0.60000002
+        }
+      },
+      "nativeSha256": "56d9f1ccdb54cdcd4a271af2c63136c89b88890bff2b46f50e58f75c0066c27a"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpRubanRifle/CrpRubanRifle": {
+      "name": "Stahlta",
+      "modes": {
+        "1": {
+          "seconds": 1.6,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 0.666667,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "c309123560f6305b5729329eb04ca4654e1a218531a8b8f0b9fb9c320127753c"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle": {
+      "name": "Battacor",
+      "modes": {
+        "1": {
+          "seconds": 0.40000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 5.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "b445dbd4159de843e4e72b09184d7b14c2a831ee77a5e4a891dcc4708d86a6bd"
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun": {
+      "name": "Ferrox",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.333333,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "7bc76814019a6c1d8b25102a4466538d8a388f2cae3432e105ae30e12792f423"
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpElectroMag/CrpElectroMag": {
+      "name": "Staticor",
+      "modes": {
+        "0": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.5,
+          "exportChargeTime": 1
+        }
+      },
+      "nativeSha256": "579afe187cbe78b068840273cc9092222549a983d47e37e6d5e61bf36ae14f14"
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher": {
+      "name": "Angstrum",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "0146d43c2976700acd4585b190a6c5b093fb570c6c7cd61fc20e9860c2622550"
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum": {
+      "name": "Prisma Angstrum",
+      "modes": {
+        "0": {
+          "seconds": 0.2,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "ec015f0ab6af8509f8a86bf7dbf412799f928684ac9071f5c06eae261689536a"
+    },
+    "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon": {
+      "name": "Kuva Bramma",
+      "modes": {
+        "0": {
+          "seconds": 0.40000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 0.666667,
+          "exportChargeTime": 0.40000001
+        }
+      },
+      "nativeSha256": "cb21af0653521320000c6ccd84f5eb87194fef117f12c03d32444afe92bf3183"
+    },
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoon": {
+      "name": "Kuva Drakgoon",
+      "modes": {
+        "0": {
+          "seconds": 0.30000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.333333,
+          "exportChargeTime": 0.30000001
+        }
+      },
+      "nativeSha256": "62c3168c7dc1ee58f801b788531be771a056cc3b897265eed0c0baf6ea168ca3"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrineerFlakCannon/FlakCannon": {
+      "name": "Drakgoon",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.333333,
+          "exportChargeTime": 0.5
+        }
+      },
+      "nativeSha256": "0ffad7cd8d6e04a07541d0e2805f8f24d20c116bbdc515eecbe75c46fef50200"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun": {
+      "name": "Miter",
+      "modes": {
+        "0": {
+          "seconds": 0.75,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0.033333302,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.5,
+          "exportChargeTime": 0.75
+        }
+      },
+      "nativeSha256": "03249ff0dff1ac0a0a68493641be5c518d5a3368eff7c85f899e3c1a0da6a7bd"
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpear": {
+      "name": "Javlok",
+      "modes": {
+        "0": {
+          "seconds": 0.30000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.333333,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "60091dadb467cae2d20c13548381bb4402df0f2643b79e3269408dbec93b5b69"
+    },
+    "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun": {
+      "name": "Stug",
+      "modes": {
+        "1": {
+          "seconds": 2.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 8.333333,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "9898b2cc59f600c5463b0aae88bcf856f6798cf9db066e83753180f450bc3086"
+    },
+    "/Lotus/Weapons/Infested/Bow/InfCernosBow/InfCernos": {
+      "name": "Mutalist Cernos",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.5
+        }
+      },
+      "nativeSha256": "e9a56270e8cf7b20b17e9518df724815516d749bfebba9730257168d080d1ac4"
+    },
+    "/Lotus/Weapons/Infested/LongGuns/QuantaFullyInfested/InfQuantaRifle": {
+      "name": "Paracyst",
+      "modes": {
+        "1": {
+          "seconds": 0.25,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 5.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "041a5ee787fe3435a5aafde15c6240b990dd65e575ed088078dc52351554ce7a"
+    },
+    "/Lotus/Weapons/Lasria/LasGooAK/LasGooAKPlayerWeapon": {
+      "name": "EFV-5 Jupiter",
+      "modes": {
+        "1": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 7.833333,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "1da71a0c58d6c7db5c4ec8bdbd0a57a2f5aabde77ff37fef1d5363492ccd7f18"
+    },
+    "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon": {
+      "name": "EFV-8 Mars",
+      "modes": {
+        "1": {
+          "seconds": 1.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.5,
+          "exportChargeTime": 1.5
+        }
+      },
+      "nativeSha256": "03c722951a9b47e69e9b75687069273c38f94cf4a29a62d626a873372fca4ddf"
+    },
+    "/Lotus/Weapons/MK1Series/MK1Paris": {
+      "name": "MK1-Paris",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.5
+        },
+        "1": {
+          "seconds": 0.80000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.80000001
+        }
+      },
+      "nativeSha256": "dfcdcf05edab1b73ec7825b6ab302da928e3d7768f0d85dcb333433bbc79b8c7"
+    },
+    "/Lotus/Weapons/Syndicates/RedVeil/Bows/RVCernos": {
+      "name": "Rakta Cernos",
+      "modes": {
+        "0": {
+          "seconds": 0.25,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.25
+        }
+      },
+      "nativeSha256": "963754b67466c2cac42e3873c7cbe575fe2f52b6a88f6b62489d912de30fc52f"
+    },
+    "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica": {
+      "name": "Rakta Ballistica",
+      "modes": {
+        "0": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.333333,
+          "exportChargeTime": 1
+        },
+        "2": {
+          "seconds": 0.40000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 2,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.333333,
+          "exportChargeTime": 0.40000001
+        }
+      },
+      "nativeSha256": "6239329688ceb06aae27b354609aaafe7fdb5075949ad0c191442571c3aca995"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/LaunchGrenade/ArchCannon": {
+      "name": "Corvas",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.0,
+          "exportChargeTime": 0.5
+        }
+      },
+      "nativeSha256": "b5db14b1ff1dcc6274eaae167451a370064887efdaa1f9b73f5a4f4a9993ffbf"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeCorvas/PrimeCorvasWeapon": {
+      "name": "Corvas Prime",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.0,
+          "exportChargeTime": 0.5
+        }
+      },
+      "nativeSha256": "2dbd7ae1adfe147cdc2412ad0b2a06271cc3e453c056970e88f543487b59acb1"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon": {
+      "name": "Larkspur Prime",
+      "modes": {
+        "1": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.0,
+          "exportChargeTime": 0.5
+        }
+      },
+      "nativeSha256": "74349216840525365c10507f08c27b65bf1ef4042a66e7b10ef4c4c2f1a44466"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/Railgun/ArchRailgun": {
+      "name": "Velocitus",
+      "modes": {
+        "0": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 5.0,
+          "exportChargeTime": 1
+        }
+      },
+      "nativeSha256": "f1dbc13fa2e3ad130e9e7e74c53cd00dc04e7a8941d1908dbce6923a4c05ee6d"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun": {
+      "name": "Mausolon",
+      "modes": {
+        "1": {
+          "seconds": 0.80000001,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 0.5,
+          "exportChargeTime": 0.80000001
+        }
+      },
+      "nativeSha256": "274a7096a887b20a0bbcba33b65d9a2ffd0bd94b0e7d0a9f14a217c7eba3d241"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunWeapon": {
+      "name": "Mandonel",
+      "modes": {
+        "0": {
+          "seconds": 1.5,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.0,
+          "exportChargeTime": 1.5
+        }
+      },
+      "nativeSha256": "936db4b6f0c6f9f1070c0d161499b35b20663cb0eb2994fd8d9cd8ea0702efa8"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun": {
+      "name": "Larkspur",
+      "modes": {
+        "1": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.5
+        }
+      },
+      "nativeSha256": "98868256f723807603c2e64645023ee5116af2e83b7967fc97f6b7de682da44f"
+    },
+    "/Lotus/Weapons/Tenno/Bows/AntlerBow/AntlerBow": {
+      "name": "Cernos",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.5
+        }
+      },
+      "nativeSha256": "f1d4c96ccd7689d11720480edd9104113a603ff4ce9f0a932282154ac2929c14"
+    },
+    "/Lotus/Weapons/Tenno/Bows/AsymetricalBow/AsymetricalBow": {
+      "name": "Daikyu",
+      "modes": {
+        "0": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 1
+        }
+      },
+      "nativeSha256": "a0a174a2b115dab60986b05e6ff45a9b09ab6cf53ae1d3805ba69321cc87d159"
+    },
+    "/Lotus/Weapons/Tenno/Bows/DaxDuviriAsymetricalBow/DaxDuviriAsymmetricalLongBowPlayerWeapon": {
+      "name": "Cinta",
+      "modes": {
+        "0": {
+          "seconds": 1.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 0.666667,
+          "exportChargeTime": 1.5,
+          "perfect": {
+            "ratio": 0.69999999,
+            "window": [
+              0.69999999,
+              0.89999998
+            ],
+            "projectile": "/Lotus/Weapons/Tenno/Bows/DaxDuviriAsymetricalBow/DuviriDaxBowTimedReleasePlayerWaveProjectile",
+            "damage": {
+              "total": 600.0,
+              "procChance": 0.34,
+              "shares": {
+                "DT_FIRE": 1.0
+              },
+              "types": {
+                "DT_FIRE": 600.0
+              },
+              "critChance": 0.2,
+              "critMultiplier": 2.0,
+              "forcedProcs": [
+                "PT_KNOCKED_DOWN"
+              ],
+              "projectile": "/Lotus/Weapons/Tenno/Bows/DaxDuviriAsymetricalBow/DuviriDaxBowTimedReleasePlayerWaveProjectile",
+              "flightSpeed": 50
+            },
+            "paysOff": false,
+            "unmoddedRate": {
+              "full": 655.238,
+              "perfect": 436.364
+            },
+            "fullProjectile": "/Lotus/Weapons/Tenno/Bows/DaxDuviriAsymetricalBow/DuviriDaxLongBowFullChargePlayerProjectile",
+            "fullTotal": 800.0
+          }
+        }
+      },
+      "nativeSha256": "a034cbdf33301b83243ab5954ff790e393129f52cc1411bfd25c5e0b88bc5e6b"
+    },
+    "/Lotus/Weapons/Tenno/Bows/HuntingBow": {
+      "name": "Paris",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.5
+        },
+        "1": {
+          "seconds": 0.80000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.80000001
+        }
+      },
+      "nativeSha256": "ad47f036907c527797397a6e6c649689337dd1c62f6438197cfa22fe4548be81"
+    },
+    "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPlayerWep": {
+      "name": "Nataruk",
+      "modes": {
+        "0": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 0.666667,
+          "exportChargeTime": 1,
+          "perfect": {
+            "ratio": 0.69999999,
+            "window": [
+              0.69999999,
+              1.0
+            ],
+            "projectile": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWavePlayerProj",
+            "damage": {
+              "total": 900.0,
+              "procChance": 0.5,
+              "shares": {
+                "DT_PUNCTURE": 0.72,
+                "DT_SLASH": 0.28
+              },
+              "types": {
+                "DT_PUNCTURE": 648.000027,
+                "DT_SLASH": 251.999973
+              },
+              "critChance": 0.60000002,
+              "critMultiplier": 2.4000001,
+              "projectile": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWavePlayerProj",
+              "flightSpeed": 80
+            },
+            "paysOff": true,
+            "unmoddedRate": {
+              "full": 900.0,
+              "perfect": 1273.846
+            },
+            "fullProjectile": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWavePlayerProj",
+            "fullTotal": 900.0
+          }
+        }
+      },
+      "nativeSha256": "f5393cf2b734e74bed9bbe90437a651aa60bef116c98a8c08acaee77a1a969a5"
+    },
+    "/Lotus/Weapons/Tenno/Bows/PrimeCernos/PrimeCernos": {
+      "name": "Cernos Prime",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.5
+        },
+        "1": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.5
+        }
+      },
+      "nativeSha256": "339bc13edfc660502c1d7cab113b3c9ecf9663dc9eeb0b2962380928866b1f19"
+    },
+    "/Lotus/Weapons/Tenno/Bows/PrimeDaikyu/PrimeDaikyuBow": {
+      "name": "Daikyu Prime",
+      "modes": {
+        "0": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0.25,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 1
+        }
+      },
+      "nativeSha256": "0381a358bbc7d135ca9dd99d81d60e96124963a81037d79c53ff9d5038b0ee91"
+    },
+    "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernos": {
+      "name": "Proboscis Cernos",
+      "modes": {
+        "0": {
+          "seconds": 0.69999999,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.69999999
+        }
+      },
+      "nativeSha256": "e7785d4320d894b08cfda2a9e179d6d33890519bb7f5f80a7eb249369972d3fe"
+    },
+    "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow": {
+      "name": "Paris Prime",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.5
+        },
+        "1": {
+          "seconds": 0.80000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.80000001
+        }
+      },
+      "nativeSha256": "12af0578cfd9bcaa11768b863eaba56e703a2ef77cd7640ceadf1fb245bbabc1"
+    },
+    "/Lotus/Weapons/Tenno/Bows/StalkerBow": {
+      "name": "Dread",
+      "modes": {
+        "0": {
+          "seconds": 0.5,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 0.5
+        },
+        "1": {
+          "seconds": 0.60000002,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.5,
+          "exportChargeTime": 0.60000002
+        }
+      },
+      "nativeSha256": "c4b2ef8cd47dabc5d5fb613bcf4461a7941422896481825fdc1fb92cd8082b78"
+    },
+    "/Lotus/Weapons/Tenno/Bows/TnChoirBow/TnChoirBow": {
+      "name": "Evensong",
+      "modes": {
+        "0": {
+          "seconds": 1.2,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 1.2
+        }
+      },
+      "nativeSha256": "c6574a55b83031666f83ae9f013e4530e28427baeb0aafc786270d478b518d7d"
+    },
+    "/Lotus/Weapons/Tenno/Bows/ValentinesConclaveVariantBow": {
+      "name": "Paris",
+      "modes": {
+        "0": {
+          "seconds": 0.40000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.666667,
+          "exportChargeTime": 0.40000001
+        }
+      },
+      "nativeSha256": "016b2fcd96f36832cea5d69a71a6c623ec54c469b374473ecc1c926a8e06a3a6"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/Gunbrella/ShrineMaidenGunbrellaWeapon": {
+      "name": "Higasa",
+      "modes": {
+        "1": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.2,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "e04fd8882310f6de30cea7c983ef48c4bb36e07297bfe62f247eb3b64ed9c3a0"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeLightningGun/PrimeLightningGun": {
+      "name": "Vadarya Prime",
+      "modes": {
+        "0": {
+          "seconds": 0.75,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.8,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "9583f2bc6ff689c427f815a2657a9596ac3a8cb3ebb8e20d3285d6a91004db3c"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun": {
+      "name": "Phantasma Prime",
+      "modes": {
+        "1": {
+          "seconds": 0.090899996,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "7802981858f6f378954cc4a6891ac856a6a2b969c256a4227850045b2a10475f"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeTenora/TenoraPrimeWeapon": {
+      "name": "Tenora Prime",
+      "modes": {
+        "1": {
+          "seconds": 0.80000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "ee128ba7caa297bb32b3ab9f414d52355ebe3984e4c2fdd7cd9eccddea04c007"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun": {
+      "name": "Phantasma",
+      "modes": {
+        "1": {
+          "seconds": 0.090899996,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "cc80291bf82d73030d7c60b931e8701e9cb63e2c94789265f8006c3bf580c474"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnBardRifle/TnBardRifle": {
+      "name": "Tenora",
+      "modes": {
+        "1": {
+          "seconds": 0.80000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 10.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "e8f9b9834de81c8184e2b63e400949c96682b5442067faa36cbe7e83c9006353"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnRailjackRifle/RailjackRifleGun": {
+      "name": "Quellor",
+      "modes": {
+        "1": {
+          "seconds": 1.2,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": 1.2
+        }
+      },
+      "nativeSha256": "6db1d575f0e11068a137082395cf896e32ff7ac221adaa5ee5135e7bace47ca6"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzWeapon": {
+      "name": "Aeolak",
+      "modes": {
+        "1": {
+          "seconds": 0.30000001,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.5,
+          "exportChargeTime": 0.30000001
+        }
+      },
+      "nativeSha256": "57fea25bf86284a22011077fcb12e07eccec1e255c6b6eb4339832e33826d74f"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow": {
+      "name": "Ballistica",
+      "modes": {
+        "0": {
+          "seconds": 1.0,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.333333,
+          "exportChargeTime": 1
+        },
+        "2": {
+          "seconds": 0.40000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 2,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.333333,
+          "exportChargeTime": 0.40000001
+        }
+      },
+      "nativeSha256": "a948a65c8ed68f7057255b3a17bb62ec424ae364d4bd691aa3874ddd672b5993"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ConclaveLeverPistol": {
+      "name": "Zylok",
+      "modes": {
+        "1": {
+          "seconds": 0.60000002,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "f92cd9579839db33ac5b5e4f2e9086b6da013000099a9e99f6858067bc078af5"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeBallistica/PrimeBallistica": {
+      "name": "Ballistica Prime",
+      "modes": {
+        "0": {
+          "seconds": 0.80000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.333333,
+          "exportChargeTime": 0.80000001
+        },
+        "1": {
+          "seconds": 0.40000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": true,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 3.333333,
+          "exportChargeTime": 0.40000001
+        }
+      },
+      "nativeSha256": "9a74997e2fa911867960ff31b3a7af08d1b5a504c74de056c5ecf3854f9faaeb"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeEpitaph/PrimeEpitaphSidearmWeapon": {
+      "name": "Epitaph Prime",
+      "modes": {
+        "0": {
+          "seconds": 0.36000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.75,
+          "exportChargeTime": 0.36000001
+        }
+      },
+      "nativeSha256": "dd4f514d615f3f28624847b388af205ddba18c0ee606b88462528d555f82b0e0"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeZylok/ZylokPrimePistol": {
+      "name": "Zylok Prime",
+      "modes": {
+        "1": {
+          "seconds": 0.60000002,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 1,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.0,
+          "exportChargeTime": null
+        }
+      },
+      "nativeSha256": "bee32a526cfb76a32ee4449a2885d7041a4ffd8b9e4cf027c4f9960e2472f149"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnWraitheSidearm/TnWraitheSidearmWeapon": {
+      "name": "Epitaph",
+      "modes": {
+        "0": {
+          "seconds": 0.36000001,
+          "chargeModifier": "WEAPON_FIRE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 0,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 1.5,
+          "exportChargeTime": 0.36000001
+        }
+      },
+      "nativeSha256": "86bae07cd91e92e347acae3699a37c39f25892fc7dd760bfc8c03593155c020f"
+    }
+  },
+  "auditedDisagreements": []
+}

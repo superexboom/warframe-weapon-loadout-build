@@ -1,0 +1,323 @@
+{
+  "schemaVersion": 1,
+  "packageBuild": "2026.08.13.13.24",
+  "generatedBy": "tools/import_battery_profiles.py",
+  "semantics": "empty-magazine refill = delayEmptySeconds / reload speed + magazine / regenPerSecond",
+  "weapons": {
+    "/Lotus/Weapons/ClanTech/Energy/CrpLaserRifle": {
+      "name": "Flux Rifle",
+      "membership": [
+        "wfsim",
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "native",
+        "delayEmptySeconds": "native"
+      },
+      "regenPerSecond": 40.0,
+      "delayEmptySeconds": 0.5,
+      "delayPartialSeconds": 0.5,
+      "nativeMagazine": 50,
+      "exportReloadTimes": [
+        2
+      ],
+      "nativeSha256": "ae7d929ce37cca8b6dd210755c55a6654e04f372cd5b9e93724ca7bdb7c8b4ec",
+      "wfsim": {
+        "id": "flux_rifle",
+        "source": "data/weapons/primary/flux_rifle.yaml",
+        "regenPerSecond": 40.0,
+        "delayEmptySeconds": 1.0
+      },
+      "wfsimDiffers": true
+    },
+    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron": {
+      "name": "Tenet Cycron",
+      "membership": [
+        "wfsim",
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "native",
+        "delayEmptySeconds": "native"
+      },
+      "regenPerSecond": 40.0,
+      "delayEmptySeconds": 0.5,
+      "delayPartialSeconds": 0.5,
+      "nativeMagazine": 40,
+      "exportReloadTimes": [
+        5
+      ],
+      "nativeSha256": "338aa94548b0a07a4a0e5c4766c1fc433082af93d381e6346f6017daab7e409c",
+      "wfsim": {
+        "id": "tenet_cycron",
+        "source": "data/weapons/secondary/tenet_cycron.yaml",
+        "regenPerSecond": 40.0,
+        "delayEmptySeconds": 0.5
+      }
+    },
+    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon": {
+      "name": "Tenet Plinx",
+      "membership": [
+        "wfsim",
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "native",
+        "delayEmptySeconds": "native-BatteryRegenDelay"
+      },
+      "regenPerSecond": 20.0,
+      "delayEmptySeconds": 0.80000001,
+      "delayPartialSeconds": 0.80000001,
+      "nativeMagazine": 10,
+      "exportReloadTimes": [
+        2,
+        2
+      ],
+      "nativeSha256": "526e129b58ebf37f669ae7c1ed792d1950509a1286349640d932ff8d527daf19",
+      "wfsim": {
+        "id": "tenet_plinx",
+        "source": "data/weapons/secondary/tenet_plinx.yaml",
+        "regenPerSecond": 20.0,
+        "delayEmptySeconds": 0.8
+      }
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpChargeGun/CrpChargeGun": {
+      "name": "Cycron",
+      "membership": [
+        "wfsim",
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "wfsim-native-absent",
+        "delayEmptySeconds": "wfsim-native-absent"
+      },
+      "regenPerSecond": 40.0,
+      "delayEmptySeconds": 1.0,
+      "delayPartialSeconds": 1.0,
+      "nativeMagazine": 40,
+      "exportReloadTimes": [
+        5
+      ],
+      "nativeSha256": "ee84635e3d4010cb4497d52aaab7cefe8d462dc63a038946083d2698ee73ec55",
+      "wfsim": {
+        "id": "cycron",
+        "source": "data/weapons/secondary/cycron.yaml",
+        "regenPerSecond": 40.0,
+        "delayEmptySeconds": 1.0
+      }
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpSonificBlastor/CrpBlastorWeapon": {
+      "name": "Plinx",
+      "membership": [
+        "wfsim",
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "native",
+        "delayEmptySeconds": "native-BatteryRegenDelay"
+      },
+      "regenPerSecond": 20.0,
+      "delayEmptySeconds": 0.80000001,
+      "delayPartialSeconds": 0.80000001,
+      "nativeMagazine": 10,
+      "exportReloadTimes": [
+        2
+      ],
+      "nativeSha256": "45d8cf63d5c2726c26a07f21267caffa9b48439358aa89585c3a6951a3a00e28",
+      "wfsim": {
+        "id": "plinx",
+        "source": "data/weapons/secondary/plinx.yaml",
+        "regenPerSecond": 20.0,
+        "delayEmptySeconds": 0.8
+      }
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon": {
+      "name": "Coda Bubonico",
+      "membership": [
+        "wfsim",
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "native",
+        "delayEmptySeconds": "native"
+      },
+      "regenPerSecond": 9.0,
+      "delayEmptySeconds": 0.1,
+      "delayPartialSeconds": 1.5,
+      "nativeMagazine": 36,
+      "exportReloadTimes": [
+        2,
+        2
+      ],
+      "nativeSha256": "ea841033846648b76f65b706c3b0b93a49bc9cd576e9a54ae1d1c5411f29ef6a",
+      "wfsim": {
+        "id": "coda_bubonico",
+        "source": "data/weapons/primary/coda_bubonico.yaml",
+        "regenPerSecond": 9.0,
+        "delayEmptySeconds": 0.1
+      }
+    },
+    "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/InfArmCannon": {
+      "name": "Bubonico",
+      "membership": [
+        "wfsim",
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "native",
+        "delayEmptySeconds": "native"
+      },
+      "regenPerSecond": 9.0,
+      "delayEmptySeconds": 0.1,
+      "delayPartialSeconds": 1.5,
+      "nativeMagazine": 27,
+      "exportReloadTimes": [
+        2,
+        2
+      ],
+      "nativeSha256": "86958b33b2681bfebfc0af59d375175dcd3876929689de99076091fa4bf103de",
+      "wfsim": {
+        "id": "bubonico",
+        "source": "data/weapons/primary/bubonico.yaml",
+        "regenPerSecond": 9.0,
+        "delayEmptySeconds": 0.1
+      }
+    },
+    "/Lotus/Weapons/Sentients/SentOctaMiniGun/SentOctaMiniGun": {
+      "name": "Haalvu",
+      "membership": [
+        "wfsim"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "native",
+        "delayEmptySeconds": "native"
+      },
+      "regenPerSecond": 300.0,
+      "delayEmptySeconds": 2.0,
+      "delayPartialSeconds": 0.5,
+      "nativeMagazine": 150,
+      "exportReloadTimes": [
+        2,
+        2
+      ],
+      "nativeSha256": "28f545f82ba2e27083265018b4caa854a5d7e8170bccd340c43d6e4573bf2a56",
+      "wfsim": {
+        "id": "haalvu",
+        "source": "data/weapons/primary/haalvu.yaml",
+        "regenPerSecond": 300.0,
+        "delayEmptySeconds": 0.5
+      },
+      "wfsimDiffers": true
+    },
+    "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleNewWarGun": {
+      "name": "Basmu",
+      "membership": [
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "native",
+        "delayEmptySeconds": "native"
+      },
+      "regenPerSecond": 42.0,
+      "delayEmptySeconds": 2.0,
+      "delayPartialSeconds": 0.2,
+      "nativeMagazine": 21,
+      "exportReloadTimes": [
+        2,
+        2
+      ],
+      "nativeSha256": "8c0f364ce51c6043b55453dc010c344441bafbe3dd21bd066a0375989f5d073f"
+    },
+    "/Lotus/Weapons/Sentients/Shedu/SheduHeavyWeapon": {
+      "name": "Shedu",
+      "membership": [
+        "wfsim",
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "native",
+        "delayEmptySeconds": "native-BatteryRegenDelay"
+      },
+      "regenPerSecond": 28.0,
+      "delayEmptySeconds": 0.40000001,
+      "delayPartialSeconds": 0.40000001,
+      "nativeMagazine": 7,
+      "exportReloadTimes": [
+        2
+      ],
+      "nativeSha256": "0c961abfda2693ded5a7ee4489a078ed359ea4ae3b583b60aefb8df6201e38fe",
+      "wfsim": {
+        "id": "shedu",
+        "source": "data/weapons/primary/shedu.yaml",
+        "regenPerSecond": 28.0,
+        "delayEmptySeconds": 1.0
+      },
+      "wfsimDiffers": true
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulmin": {
+      "name": "Fulmin Prime",
+      "membership": [
+        "wfsim",
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "native",
+        "delayEmptySeconds": "native"
+      },
+      "regenPerSecond": 40.0,
+      "delayEmptySeconds": 0.69999999,
+      "delayPartialSeconds": 0.69999999,
+      "nativeMagazine": 80,
+      "exportReloadTimes": [
+        3,
+        1
+      ],
+      "nativeSha256": "6f25058fd5dbabf03a59c79112f1ffae042d16c42aaf80099680cadf76b32130",
+      "wfsim": {
+        "id": "fulmin_prime",
+        "source": "data/weapons/primary/fulmin_prime.yaml",
+        "regenPerSecond": 30.0,
+        "delayEmptySeconds": 1.0
+      },
+      "wfsimDiffers": true
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnWispRifle/TnWispRifle": {
+      "name": "Fulmin",
+      "membership": [
+        "wfsim",
+        "native-tag"
+      ],
+      "valueSource": {
+        "regenPerSecond": "native",
+        "delayPartialSeconds": "wfsim-native-absent",
+        "delayEmptySeconds": "wfsim-native-absent"
+      },
+      "regenPerSecond": 30.0,
+      "delayEmptySeconds": 1.0,
+      "delayPartialSeconds": 1.0,
+      "nativeMagazine": 60,
+      "exportReloadTimes": [
+        3,
+        1
+      ],
+      "nativeSha256": "bbba1cae56c2a5702237c1b0ecfefb08aff140c931fc8fd6b695eef14855de3f",
+      "wfsim": {
+        "id": "fulmin",
+        "source": "data/weapons/primary/fulmin.yaml",
+        "regenPerSecond": 30.0,
+        "delayEmptySeconds": 1.0
+      }
+    }
+  }
+}

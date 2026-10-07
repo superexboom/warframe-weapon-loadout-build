@@ -14,7 +14,8 @@ def weapon(name):
 
 
 def test_defender_shield_break_does_not_follow_enemy_shield_break():
-    for state,expected in [({},0),({'selfShieldBreakAt':.1},1)]:
+    # Event timeline mode (the default forces the Warframe-side break).
+    for state,expected in [({'selfShieldBreakForced':False},0),({'selfShieldBreakForced':False,'selfShieldBreakAt':.1},1)]:
         combat=prepare(dict(weapon=weapon('Atomos'),fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent',combat_state=state)),
                        [],[],incarnon_choices={'tier2':'2-2'})
         assert combat['trigger_sources'][0]['kind']=='on-shield-broken'
