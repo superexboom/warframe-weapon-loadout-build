@@ -4090,6 +4090,26 @@ def analyze_riven_request(
             and candidate_entry.get("capacityLimit") == capacity_limit
         ):
             statics = candidate_entry
+        fallback_disposition = request.get("_cacheDisposition")
+        if statics is None and ultra and isinstance(fallback_disposition, (int, float)) and fallback_disposition > 0:
+            # Read-only callers (the Bot) may keep a card's own disposition yet
+            # read the entry baked at the catalog disposition: the baseline and
+            # hardness nodes do not depend on it and the recommendation ranking
+            # hardly does. Nothing is written back under this key.
+            fallback_key = _statics_cache_key(
+                weapon.get("path"), weapon.get("innateElements"), fire_mode, element_target_raw, profile,
+                float(fallback_disposition), capacity_limit, ranking_metric, _bm,
+            )
+            fallback_entry = statics_cache.get(fallback_key)
+            if (
+                isinstance(fallback_entry, dict)
+                and fallback_entry.get("metric") == ranking_metric
+                and fallback_entry.get("capacityLimit") == capacity_limit
+            ):
+                statics = fallback_entry
+                skipped_early.append(
+                    f"cache: 读取按目录倾向 {float(fallback_disposition):g} 烘焙的武器缓存（本卡倾向 {disposition:g}）"
+                )
         if statics is None:
             # 升靶缓存命中：同武器曾因秒杀饱和升级评分靶（缓存键已迁移到
             # #bm{scoringLevel}）。本请求的 benchmark level 落后于记录时，

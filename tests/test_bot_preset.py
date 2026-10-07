@@ -48,3 +48,18 @@ def test_infinite_ammo_removes_reloads():
         return replay(stats, target(1e12), attacks_per_second=stats.fire_rate, window_seconds=30, combat=combat)["reloads"]
     assert reloads({}) > 0
     assert reloads({"infiniteAmmo": True}) == 0
+
+
+def test_ultra_reads_the_entry_baked_at_the_catalog_disposition():
+    weapon = next(w for w in app.CATALOG["weapons"] if w.get("nameEn") == "Lato")
+    bases = app.RIVEN_BASE_VALUES["pistol"]
+    catalog = float(weapon["disposition"])
+    card = lambda d: [dict(code=c, value=bases[c] * d, negative=False) for c in ("D", "1")]
+    common = dict(weapon=weapon["path"], elementTarget="viral", headshotChance=0.5)
+    app.analyze_payload(dict(common, disposition=catalog, profile="fast", stats=card(catalog)))
+    other = round(catalog + 0.1, 2)
+    miss = app.analyze_payload(dict(common, disposition=other, profile="ultra", stats=card(other)))
+    hit = app.analyze_payload(dict(common, disposition=other, profile="ultra", stats=card(other), _cacheDisposition=catalog))
+    assert "ultra-profile-baseline-approximate" in miss["unsupported"]
+    assert "ultra-profile-baseline-approximate" not in hit["unsupported"]
+    assert any(item.startswith("cache: ") for item in hit["skipped"])
