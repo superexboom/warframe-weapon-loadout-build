@@ -528,7 +528,7 @@ def _trajectory(
         # reload when this shot empties the magazine (ammo is paid after the
         # hit resolves), else the next scheduled fire/reload-complete event.
         active = model(t)[0]
-        if (shot_in_progress and combat and active.magazine > 0
+        if (shot_in_progress and combat and active.magazine > 0 and not combat.get('infiniteAmmo')
                 and ammo - max(active.ammo_cost, 0.0) <= 1e-9):
             return t + 1.0 / max(active.fire_rate, 1e-9) + active.reload_time
         upcoming = [event[0] for event in heap if event[2] in ('fire', 'reload-complete')]
@@ -1241,6 +1241,8 @@ def _trajectory(
             if battery and math.isfinite(last_fire_time):
                 delay = battery['delayEmptySeconds'] if ammo <= 1e-9 else battery['delayPartialSeconds']
                 ammo = min(active.magazine, ammo + max(0, t - last_fire_time - delay) * battery['regenPerSecond'])
+            if combat.get('infiniteAmmo') and active.magazine > 0.0 and not (cycle and form == "incarnon"):
+                ammo = max(ammo, active.magazine)
             insufficient_ammo = getattr(active, '_requires_full_ammo', False) and ammo + 1e-9 < max(active.ammo_cost, 0.0)
             if (ammo <= 1e-9 or insufficient_ammo) and active.magazine > 0.0 and combat:
                 if cycle and form == "incarnon":

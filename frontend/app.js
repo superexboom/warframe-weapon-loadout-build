@@ -7258,6 +7258,21 @@ function renderBuild() {
   renderAnalysisIncarnonRoute();
 }
 
+// 诊断里的灵化路线：进化编号附中文分支名（与路线徽标同源）。
+function incarnonRouteText() {
+  const choices = state.result?.incarnonChoices;
+  const tiers = Array.isArray(state.weapon?.incarnon) ? state.weapon.incarnon : [];
+  if (!choices || typeof choices !== "object") return "";
+  return tiers
+    .map((tier) => {
+      const selectedId = choices[`tier${Number(tier.tier)}`];
+      const option = selectedId && (tier.options || []).find((row) => row.id === selectedId);
+      return option ? `${selectedId} ${option.label || ""}`.trim() : "";
+    })
+    .filter(Boolean)
+    .join("，");
+}
+
 // 灵化武器的最佳配装必须标注进化路线（Evo 2-X / 3-X / 4-X）：同把灵化武器
 // 不同路线的面板差异巨大，不标注就不知道配卡的基准是什么。
 function renderAnalysisIncarnonRoute() {
@@ -9531,9 +9546,13 @@ async function submitWeaponBuild(event, live = false) {
 
 function diagnosticLines() {
   const lines = [];
+  // 靶子与灵化路线说明由后端放在 skipped 开头（“靶子：”“灵化路线：”），原样置顶。
+  const notes = normalizeLabels(state.result.skipped);
+  const pinned = notes.filter((item) => /^(靶子|灵化路线|开火模式)：/.test(item));
+  const route = incarnonRouteText();
+  for (const item of pinned) lines.push(item.startsWith("灵化路线：") && route ? `${item}（${route}）` : item);
   for (const item of normalizeLabels(state.result.unsupported)) lines.push(`未完整支持：${item}`);
-  for (const item of normalizeLabels(state.result.skipped)) lines.push(`未计入：${item}`);
-  if (state.result.incarnonPolicy) lines.push(`灵化策略：${typeof state.result.incarnonPolicy === "string" ? state.result.incarnonPolicy : JSON.stringify(state.result.incarnonPolicy)}`);
+  for (const item of notes) if (!pinned.includes(item)) lines.push(`计算说明：${item}`);
   return [...new Set(lines)];
 }
 

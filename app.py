@@ -24,7 +24,9 @@ import webbrowser
 from data_sources import active_build, dataset_root, load_source_lock
 from enemy_assets import EnemyVisualCatalog
 
-ROOT = Path(__file__).resolve().parent
+# WF_RIVEN_ROOT: data root for an embedded runtime (the Bot bundle keeps the
+# Python sources under src/ and data/ beside it). Defaults to this checkout.
+ROOT = Path(os.environ.get("WF_RIVEN_ROOT") or Path(__file__).resolve().parent).resolve()
 VENDOR_DIR = ROOT / "vendor"
 SOURCE_LOCK = load_source_lock(ROOT)
 DATASET_ROOT = dataset_root(ROOT, SOURCE_LOCK)
@@ -593,12 +595,14 @@ _patch_utility_mod_rows()
 # 推荐候选恒为理论满数值口径，不随单张紫卡变化；底层数据（导出快照或架势
 # 表）变动时整个文件作废重算。缓存格式升级时递增版本号即可全量失效。
 ANALYSIS_STATICS_CACHE_PATH = ROOT / ".local" / "cache" / "riven-analysis-statics.json"
-if getattr(sys, "frozen", False):
+if os.environ.get("WF_ANALYSIS_STATICS_CACHE_PATH"):
+    ANALYSIS_STATICS_CACHE_PATH = Path(os.environ["WF_ANALYSIS_STATICS_CACHE_PATH"])
+if getattr(sys, "frozen", False) and not os.environ.get("WF_ANALYSIS_STATICS_CACHE_PATH"):
     ANALYSIS_STATICS_CACHE_PATH = (
         Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
         / "Warframe-Weapon-Loadout-Build" / "cache" / "riven-analysis-statics.json"
     )
-ANALYSIS_STATICS_CACHE_VERSION = 22  # + perfect charge, Stug refresh, kill-charged alts, remote-mine blasts, spear reload-after-shot, Cold off AoE
+ANALYSIS_STATICS_CACHE_VERSION = 23  # + spliced-trait server bases, ultra fixed-element seed, preset scenario cache key
 
 
 def _stances_fingerprint() -> str:

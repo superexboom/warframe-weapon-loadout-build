@@ -87,12 +87,7 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "C": 45.0, "D": 164.9997, "F": 49.995, "G": 45.0,
         "H": 59.994, "I": 45.0, "L": 49.995, "M": 49.95,
         "P": 2.7, "R": 60.03, "S": 90.0, "V": 90.0, "Z": 90.0,
-        # ── 词条融合新词条（base90/0.9/0.757525×100 换算显示基值）────
-        "W": 330.0, "Y": 363.0, "SD": 132.0,
-        "GA": 132.0, "CO": 132.0, "VI": 132.0, "RA": 132.0,
-        "BL": 132.0, "MA": 132.0,
-        "AE": 13.2, "HR": 132.0,
-        "FO": 66.0, "FT": 66.0, "FS": 66.0,
+        # 融合词条：见 FUSION_SERVER_BASES（服务器实际取值，_template_bases 合并）。
     },
     "shotgun": {
         "0": 90.0, "1": 90.0, "2": 90.0, "3": 99.99,
@@ -101,12 +96,7 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "C": 45.0, "D": 164.7, "F": 49.995, "G": 45.0,
         "I": 45.0, "L": 49.995, "M": 90.0, "P": 2.7,
         "R": 90.0, "S": 119.7, "V": 90.0, "Z": 90.0,
-        # 新词条（霰弹与步枪同值：弱点家族 base90=2.25/2.475）
-        "W": 330.0, "Y": 363.0, "SD": 132.0,
-        "GA": 132.0, "CO": 132.0, "VI": 132.0, "RA": 132.0,
-        "BL": 132.0, "MA": 132.0,
-        "AE": 13.2, "HR": 132.0,
-        "FO": 66.0, "FT": 66.0, "FS": 66.0,
+        # 融合词条：见 FUSION_SERVER_BASES（服务器实际取值，_template_bases 合并）。
     },
     "pistol": {
         "0": 149.994, "1": 90.0, "2": 90.0, "3": 99.99,
@@ -115,12 +105,7 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "C": 45.0, "D": 219.6, "F": 49.995, "G": 45.0,
         "H": 80.1, "I": 45.0, "L": 49.995, "M": 90.0,
         "P": 2.7, "R": 74.7, "S": 119.7, "V": 90.0, "Z": 90.0,
-        # 新词条（手枪弱点家族 base90=0.9/0.9——明显低于步枪）
-        "W": 132.0, "Y": 132.0, "SD": 132.0,
-        "GA": 132.0, "CO": 132.0, "VI": 132.0, "RA": 132.0,
-        "BL": 132.0, "MA": 132.0,
-        "AE": 13.2, "HR": 132.0,
-        "FO": 66.0, "FT": 66.0, "FS": 66.0,
+        # 融合词条：见 FUSION_SERVER_BASES（服务器实际取值，_template_bases 合并）。
     },
     "archgun": {
         "0": 99.9, "1": 80.1, "2": 60.3, "3": 99.99,
@@ -129,12 +114,7 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "C": 45.0, "D": 99.9, "F": 99.9, "G": 45.0,
         "H": 59.994, "L": 60.3, "M": 99.9, "P": 2.7,
         "R": 60.03, "S": 60.3, "Z": 90.0,
-        # 新词条（弓枪与步枪同值）
-        "W": 330.0, "Y": 363.0, "SD": 132.0,
-        "GA": 132.0, "CO": 132.0, "VI": 132.0, "RA": 132.0,
-        "BL": 132.0, "MA": 132.0,
-        "AE": 13.2, "HR": 132.0,
-        "FO": 66.0, "FT": 66.0, "FS": 66.0,
+        # 融合词条：见 FUSION_SERVER_BASES（服务器实际取值，_template_bases 合并）。
     },
     "melee": {
         "0": 180.0, "1": 90.0, "2": 90.0, "3": 99.99,
@@ -144,10 +124,8 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "I": 45.0, "J": 54.9, "K": 164.7, "N": 8.1,
         "O": 58.77, "Q": 104.85, "T": 1.9422, "U": 73.44,
         "X": 119.7,
-        # 新词条（近战专属：重击蓄力/格挡角度/震地伤害 base90=1.197/8.1/1.197）
-        "HC": 175.8, "PA": 1190.0, "SL": 175.8, "HD": 119.7,
-        "HR": 132.0,
-        "FO": 66.0, "FT": 66.0, "FS": 66.0,
+        # 近战融合词条（模板 base90：重击伤害/蓄力速度/震地 1.197，格挡角度 8.1）。
+        "HC": 119.7, "PA": 8.1, "SL": 119.7, "HD": 119.7,
     },
 }
 
@@ -285,7 +263,31 @@ def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, f
             continue
         code, unit = matches[0]
         result[code] = abs(float(raw_value)) * (90.0 if unit == "flat" else 9000.0)
+    # Rivens are rolled by the server; the client template is display data and
+    # disagrees with observed rolls for some spliced traits (a Dual Toxocyst
+    # Weakpoint roll of 310% needs base 225, the pistol template says 90).
+    # Server-observed bases (wiki Riven Mods, spliced trait table) win.
+    result.update({code: value for code, value in FUSION_SERVER_BASES.get(weapon_type, {}).items()
+                   if code in result or code in RIVEN_BASE_VALUES.get(weapon_type, {})})
     return result
+
+
+# Spliced (fusion) trait bases as rolled by the server, in display percent
+# (wiki Riven Mods, 2026-10-08). Same for every gun type; melee values match
+# the client template and are not overridden.
+_GUN_FUSION_BASES = {
+    "W": 225.0, "Y": 247.5, "AE": 45.0, "HR": 90.0, "SD": 90.0,
+    "GA": 90.0, "CO": 90.0, "VI": 90.0, "RA": 90.0, "BL": 90.0, "MA": 90.0,
+    "FO": 45.0, "FT": 45.0, "FS": 45.0,
+}
+FUSION_SERVER_BASES: dict[str, dict[str, float]] = {
+    "rifle": dict(_GUN_FUSION_BASES),
+    "shotgun": dict(_GUN_FUSION_BASES),
+    "pistol": dict(_GUN_FUSION_BASES),
+    "archgun": {code: value for code, value in _GUN_FUSION_BASES.items() if code != "HR"},
+}
+for _type, _bases in FUSION_SERVER_BASES.items():
+    RIVEN_BASE_VALUES[_type].update(_bases)
 
 # Filled only with weapon-specific choices that have been verified against the
 # current export.  Missing entries are selected from static branches by the
@@ -3259,6 +3261,10 @@ def _statics_cache_key(
         "playerCount": raw.get("playerCount", 1),
         "eventScoringVersion": "loadout-events-v1",
     }
+    if raw.get("scenario"):
+        # Only non-default (preset) scenarios carry this, so default-scenario
+        # keys and existing caches are unchanged.
+        benchmark_key["scenario"] = raw["scenario"]
     return json.dumps(
         {
             "weapon": str(weapon_path or ""),
@@ -4046,7 +4052,9 @@ def analyze_riven_request(
         and (not record_overridden or bool(request.get("_cacheDefaultInnate")))
         and request.get("incarnonChoices") is None
         and request.get("arcanes") is None
-        and _default_analysis_scenario(scenario, metric)
+        # A fixed caller preset (the Bot) may cache its own scenario; the
+        # scenario then joins the cache key below.
+        and (_default_analysis_scenario(scenario, metric) or bool(request.get("_cacheScenario")))
         and timeline_seconds is None
         and not has_search_constraints
     )
@@ -4059,6 +4067,8 @@ def analyze_riven_request(
             "heavyAttack": bool(scenario.heavy_attack),
         }
     )
+    if not _default_analysis_scenario(scenario, metric):
+        _bm["scenario"] = _scenario_context(scenario)
     cache_key = _statics_cache_key(
         weapon.get("path"),
         weapon.get("innateElements"),
@@ -4234,14 +4244,19 @@ def analyze_riven_request(
         if not ultra:
             results.append(_optimize_with_element_fallback(
                 weapon, mod_pool, riven, required_mod_keys=search_required_keys, **common, **kwargs))
+        seeds: tuple[tuple[str | None, tuple[str, ...]], ...] = ((None, ()), *ELEMENT_SEEDS.items())
         if required_damage_type:
-            return _rescore(results[0], riven, kwargs)
+            if not ultra:
+                return _rescore(results[0], riven, kwargs)
+            # Ultra with a fixed element (the Bot's viral policy): only that
+            # element's seed; the open seed is the fallback when infeasible.
+            seeds = ((required_damage_type, ELEMENT_SEEDS.get(required_damage_type, ())),)
         # Element seeds (open / viral / corrosive): searched on the cheap panel
         # proxy, then re-scored with the real metric. They can only add
         # candidates; the replay decides. Every profile runs all three, so a
         # deeper profile never ends below the ultra one.
         proxy = dict(kwargs, metric="statusSustainedDps", beam_width=4, shortlist=24)
-        for element, parts in ((None, ()), *ELEMENT_SEEDS.items()):
+        for element, parts in seeds:
             seeded = list(search_required_keys)
             for part in parts:
                 options = [(sum(float(e.value) for e in c.effects if e.damage_type == part), c.key)
@@ -4261,6 +4276,15 @@ def analyze_riven_request(
             scored = _evaluate(weapon, cards, riven, scenario=kwargs["scenario"], metric=kwargs["metric"],
                                passives=kwargs.get("passives"), capacity_limit=kwargs.get("capacity_limit", 60),
                                target_context=context, fixed_riven_index=len(cards) if ultra and riven is not None else None)
+            if scored is not None:
+                results.append(scored)
+        if not results and required_damage_type and ultra:
+            unsupported.append(f"element-target-infeasible-{required_damage_type}-using-unconstrained")
+            found = _optimize(weapon, mod_pool, riven, required_mod_keys=list(search_required_keys), **common, **proxy)
+            scored = _evaluate(weapon, tuple(pool_by_key.get(c.key, c) for c in found.cards), riven,
+                               scenario=kwargs["scenario"], metric=kwargs["metric"], passives=kwargs.get("passives"),
+                               capacity_limit=kwargs.get("capacity_limit", 60), target_context=context,
+                               fixed_riven_index=len(found.cards) if riven is not None else None)
             if scored is not None:
                 results.append(scored)
         if not results:
@@ -5012,19 +5036,37 @@ def analyze_riven_request(
                 "optimizer-objective: 面板普通攻击 DPS；派系歧视与敌方抗性不参与"
                 if weapon_type == "melee"
                 else (
-                    f"optimizer-objective: 硬度积分靶（Lv{evaluation_target.get('level') if evaluation_target else '?'} "
-                    "钢铁之路凶魂百夫长，无超宏；血量取本武器无紫卡基线身体命中击杀时间 "
-                    f"{HARDNESS_TTK_RANGE[0]:g}–{HARDNESS_TTK_RANGE[1]:g}s 的三个节点，KPM 取几何平均，30s 窗口）；"
-                    "触发从零层爬升、护甲参与，同武器所有紫卡与各弱点率共用此靶"
+                    f"靶子：Lv{evaluation_target.get('level') if evaluation_target else '?'} "
+                    f"{'钢铁之路' if evaluation_target and evaluation_target.get('steelPath') else ''}凶魂百夫长"
+                    "（去掉天生超宏，护甲 2700 参与）；"
+                    f"弱点命中 {float(benchmark_context.get('headshotChance') or 0.0) * 100:.0f}%，其余为身体命中；"
+                    "血量按本武器无紫卡基线的身体命中击杀时间取三个硬度节点"
+                    + (
+                        "（" + " / ".join(f"{node['ttkSeconds']:.1f}s" for node in target_calibration.get("hardnessNodes") or ()) + "）"
+                        if target_calibration.get("hardnessNodes")
+                        else f"（{HARDNESS_TTK_RANGE[0]:g}–{HARDNESS_TTK_RANGE[1]:g}s 区间）"
+                    )
+                    + f"，每个节点 {float(benchmark_context.get('windowSeconds') or 30.0):g}s 窗口回放，KPM 取加权几何平均并计入血量展布；"
+                    "异常从零层叠起；同一武器的所有紫卡共用这组靶，增益可直接比较"
                     if benchmark_context is not None
                     else "optimizer-objective: 面板口径 · 触发按期望堆叠计入持续 DPS；不挂固定目标，派系歧视与敌方抗性不参与"
                 )
             )
         ),
         (
-            f"optimizer-fire-mode: 灵化武器默认使用灵化形态（模式 {fire_mode + 1}），其余模式仅展示"
-            if fire_mode != 0
-            else "optimizer-fire-mode: primary mode 0 only; alternate modes are display-only"
+            "灵化路线："
+            + (f"使用灵化形态（模式 {fire_mode + 1}）" if fire_mode != 0 else "使用本体形态（模式 1）")
+            + (
+                "；进化 " + " / ".join(value for _, value in sorted(resolved_choices.items()))
+                + ("（显式指定）" if request.get("incarnonChoices") else "（按武器默认策略选取，可在配装页改选）")
+                if resolved_choices
+                else ""
+            )
+            + "；灵化形态按常驻计算，“自身护盾 / 超宏击破”类进化效果按强制生效"
+            if resolved_choices or weapon.get("isIncarnonForm")
+            else (
+                f"开火模式：使用模式 {fire_mode + 1}，其余模式仅展示"
+            )
         ),
         "mod-family exclusivity checked by exported nameTag and weapon compatibility tags; account-specific conflicts are not exported",
         f"Riven template values recovered from frozen build {template_build}",

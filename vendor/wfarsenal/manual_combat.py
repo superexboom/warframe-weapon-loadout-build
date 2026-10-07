@@ -746,6 +746,9 @@ def prepare(
                            'delaySeconds':scenario.detonation_delay_seconds,
                            'batchSize':scenario.detonation_batch_size}
                           if selected_attack.get('manualDetonation') else None),
+        # combatState.infiniteAmmo (Bot preset): the magazine never runs dry,
+        # so there are no reloads, recharges or reload-triggered effects.
+        infiniteAmmo=bool(scenario.combat_state.get('infiniteAmmo')),
         reloadAfterEveryShot=(not weapon.get("isIncarnonForm") and not cycle
                               and reloads_after_every_shot(weapon, mode_index)),
         shellReload=({'start': base_attack['reloadStart'], 'perShell': base_attack['reloadPerShell'],
