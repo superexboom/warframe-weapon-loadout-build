@@ -602,7 +602,7 @@ if getattr(sys, "frozen", False) and not os.environ.get("WF_ANALYSIS_STATICS_CAC
         Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
         / "Warframe-Weapon-Loadout-Build" / "cache" / "riven-analysis-statics.json"
     )
-ANALYSIS_STATICS_CACHE_VERSION = 24  # + 2026.10.08 update: templates, Toxocyst 3B, Latron Prime multishot copies, fast element seeds
+ANALYSIS_STATICS_CACHE_VERSION = 25  # + melee hit schedule (routes, live combo counter), glaive KPM
 
 
 def _stances_fingerprint() -> str:
@@ -1441,6 +1441,15 @@ def _weapon_build_issue(weapon: Mapping[str, Any], weapon_type: str) -> str | No
     return None if candidates else "weapon has no compatible supported MODs"
 
 
+def _with_melee_stance(scenario: Any, stance: Mapping[str, Any] | None) -> Any:
+    """Hand the chosen stance to the melee hit schedule (combatState)."""
+    path = (stance or {}).get("path") if isinstance(stance, Mapping) else None
+    if scenario is None or not path or (scenario.combat_state or {}).get("meleeStance"):
+        return scenario
+    from dataclasses import replace as _replace
+    return _replace(scenario, combat_state={**dict(scenario.combat_state), "meleeStance": str(path)})
+
+
 def _best_stance_combo(stance: Mapping[str, Any]) -> dict[str, Any] | None:
     combos = [
         combo for combo in stance.get("combos") or ()
@@ -1461,9 +1470,19 @@ def _compatible_stances(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
         if combo is None:
             continue
         rows.append({**source, "bestComboData": combo})
+    # Rank by the extracted hit loop (melee-mechanics.json: damage multiplier
+    # per second at 1.0 attack speed); the wiki multiplier is the fallback.
+    from wfarsenal.melee_sequence import build_schedule, loop_rate
+
+    def _rate(row: Mapping[str, Any]) -> float:
+        schedule = build_schedule(weapon, "combo", stance=str(row.get("path") or ""))
+        if schedule and schedule.get("stance") == row.get("path"):
+            return loop_rate(schedule["segments"])
+        return float(row["bestComboData"]["dpsMultiplier"])
+
     rows.sort(
         key=lambda row: (
-            -float(row["bestComboData"]["dpsMultiplier"]),
+            -_rate(row),
             str(row.get("nameZh") or row.get("nameEn") or "").casefold(),
         )
     )
@@ -5325,6 +5344,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                 from wfarsenal.combat_replay import replay as replay_combat
                 engine = {}
                 simulate(**common, hit_location='body', passive_effects=passive_effects, engine_context_sink=engine)
+                engine['scenario'] = _with_melee_stance(engine.get('scenario'), stance)
                 combat = prepare_combat(
                     engine,
                     [(optimizer.resolve_record(EXPORTS['mods'], item['path'], kind='mod'),
@@ -5367,6 +5387,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     "triggerSeries": windowed.get("triggerSeries") or [],
                     'fieldDuration': windowed.get('fieldDuration'),
                     'sniperCombo': windowed.get('sniperCombo'),
+                    'melee': windowed.get('melee'),
                     'manualDetonation': windowed.get('manualDetonation'),
                     'delayedAttackEvents': windowed.get('delayedAttackEvents'),
                     'projectileEvents': windowed.get('projectileEvents'),

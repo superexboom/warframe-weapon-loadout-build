@@ -103,7 +103,7 @@ const ui = Object.fromEntries([
   "weapon", "weapon-options", "build-weapon-options", "weapon-caption", "disposition-value", "disposition-dots",
   "weapon-issue", "weapon-issue-text", "stat-rows", "stat-row-template", "add-stat",
   "analysis-innate-element-field", "analysis-innate-element-select", "analysis-innate-element-icon", "analysis-preferred-element-select", "analysis-preferred-element-icon",
-  "analysis-headshot-chance",
+  "analysis-headshot-chance", "analysis-melee-route-field", "analysis-melee-route-select",
   "form-message", "analyze-button", "riven-stage", "riven-card", "card-name",
   "card-polarity", "card-stats", "card-mr", "card-rerolls",
   "result-badge", "result-idle", "result-loading", "result-error", "result-content",
@@ -1986,6 +1986,20 @@ function refreshAnalysisElementFields() {
     innateSelect.value = candidates.includes(previous) ? previous : analysisInnateElementDefault(candidates);
   }
   setAnalysisElementIcons();
+  refreshAnalysisMeleeRoute();
+}
+// 近战攻击路线（走 A / 震地两种高度 / 战刃重投引爆）：只对近战显示，战刃项只对战刃显示。
+function refreshAnalysisMeleeRoute() {
+  const field = ui["analysis-melee-route-field"];
+  const select = ui["analysis-melee-route-select"];
+  if (!field || !select) return;
+  const weapon = state.weapon || {};
+  const melee = ["melee", "zaw"].includes(String(weapon.weaponType || "").toLowerCase()) || weapon.slot === "melee";
+  field.hidden = !melee;
+  const glaive = (weapon.compatTags || []).some((tag) => String(tag).toUpperCase() === "GLAIVES_STANCE");
+  const option = select.querySelector('option[value="glaive"]');
+  if (option) option.hidden = !glaive;
+  if (!melee || (!glaive && select.value === "glaive")) select.value = "";
 }
 function setAnalysisElementIcons() {
   const innate = ui["analysis-innate-element-select"]?.value || "";
@@ -2185,6 +2199,8 @@ function payloadFromForm() {
     if (innate) payload.innateElement = innate;
   }
   // 偏好复合元素已移除（分析页不再下发 elementTarget）。
+  const meleeRoute = ui["analysis-melee-route-field"]?.hidden ? "" : ui["analysis-melee-route-select"]?.value;
+  if (meleeRoute) payload.meleeRoute = meleeRoute;
   if (typeof state.requestedFireMode === "number") payload.fireMode = state.requestedFireMode;
   if (isAssembly) {
     payload.kitgunParts = [state.kitgunParts.chamber, state.kitgunParts.grip, state.kitgunParts.loader];
@@ -9548,7 +9564,7 @@ function diagnosticLines() {
   const lines = [];
   // 靶子与灵化路线说明由后端放在 skipped 开头（“靶子：”“灵化路线：”），原样置顶。
   const notes = normalizeLabels(state.result.skipped);
-  const pinned = notes.filter((item) => /^(靶子|灵化路线|开火模式)：/.test(item));
+  const pinned = notes.filter((item) => /^(靶子|攻击路线|灵化路线|开火模式)：/.test(item));
   const route = incarnonRouteText();
   for (const item of pinned) lines.push(item.startsWith("灵化路线：") && route ? `${item}（${route}）` : item);
   for (const item of normalizeLabels(state.result.unsupported)) lines.push(`未完整支持：${item}`);
@@ -9639,6 +9655,9 @@ function bindEvents() {
   // 分析页元素选择：改动即重算（偏好复合元素已移除，只留天生元素）。
   ui["analysis-innate-element-select"]?.addEventListener("change", () => {
     setAnalysisElementIcons();
+    if (!ui["result-content"].hidden) submitAnalysis();
+  });
+  ui["analysis-melee-route-select"]?.addEventListener("change", () => {
     if (!ui["result-content"].hidden) submitAnalysis();
   });
   ui["sample-button"].addEventListener("click", sample);

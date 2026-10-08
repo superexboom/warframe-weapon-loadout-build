@@ -396,6 +396,34 @@ def prepare(
                     )
                 )
                 dynamic.append((key, effects))
+    # Melee hit schedule (melee_sequence): combo-tier conditions (Blood Rush,
+    # Weeping Wounds, ...) follow the replay's live combo counter instead of
+    # the static scenario tier. Each cap gets its own stack key.
+    from .melee_sequence import build_schedule
+    melee = None
+    combo_tier_keys = {}
+    if weapon.get("slot") in ("melee", "arch_melee") and mode_index == 0 and not weapon.get("isIncarnonForm"):
+        state = scenario.combat_state
+        melee = build_schedule(weapon, state.get("meleeRoute"), stance=state.get("meleeStance"),
+                               combo=state.get("meleeCombo"), target_distance=state.get("meleeTargetDistance"))
+    if melee:
+        notes.extend(melee["notes"])
+        for record, rank, _ in [*mod_records, *arcane_records]:
+            for condition in record.get("conditionalEffects") or ():
+                if not any(str(c).endswith("/OnComboTierCondition") for c in condition.get("conditions") or ()):
+                    continue
+                cap = int(condition.get("maxStacks") or 12)
+                source = condition.get("sourcePath") or record.get("path")
+                terms = [ModEffect.from_export(e, rank, stacks=1, source_path=source,
+                                               condition_tag=condition.get("conditionTag"))
+                         for e in condition.get("effects") or ()]
+                if not terms:
+                    continue
+                key = f"__comboTier:{cap}"
+                combo_tier_keys[key] = cap
+                dynamic.append((key, terms))
+                notes[:] = [n for n in notes if n != str(source) + ":event-condition-unmodeled"]
+                replaced_terms.update((source, e.upgrade_type, e.operation, e.damage_type) for e in terms)
     # Only conditional terms are replaced. Permanent rank unlocks remain active.
     static = [
         e
@@ -505,7 +533,8 @@ def prepare(
             fx,
             fire_mode=idx,
             scenario=replace(
-                scenario, incarnon_cycle=False, victim_status_count=count_ceiling
+                scenario, incarnon_cycle=False, victim_status_count=count_ceiling,
+                heavy_attack=bool(stacks.get('__heavy')) or scenario.heavy_attack,
             ),
         )
         if onos_sequence and form!='base':
@@ -701,6 +730,8 @@ def prepare(
     from .beam_ramp import floor_for
     return dict(
         resolve=resolve,
+        melee=melee,
+        comboTierKeys=combo_tier_keys,
         beamRampFloors={
             'base':floor_for(base_attack if base_attack.get('source') else ref.get('coProfiles',{}).get(weapon.get('path'),{}).get('0',{})),
             'selected':floor_for(selected_attack if selected_attack.get('source') else ref.get('coProfiles',{}).get(weapon.get('path'),{}).get(str(mode_index),{}))},

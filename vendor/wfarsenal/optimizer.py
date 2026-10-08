@@ -205,6 +205,7 @@ RIVEN_RULES: dict[str, tuple[str, str, str, str | None, str | None, str, float, 
 # ── 融合词条码集合（仅正面、每卡限 1 条——游戏规则，2026-09-24 确认）──
 # 推荐器的组合枚举（_recommend_positive 头部组合、recommend_optimal_riven
 # 的 beam 组合）用它过滤：任何含 2+ 融合词条的组合非法，直接跳过。
+from .melee_sequence import build_schedule, route_note
 from .riven_fusion import FUSION_CODES as _FUSION_LINE_CODES, available_codes as _available_fusion_codes
 
 
@@ -549,6 +550,17 @@ def _card_from_lines(lines: Sequence[_RivenLine]) -> _Card:
     )
 
 
+def _combo_tier_card(mod: Mapping[str, Any]) -> bool:
+    """Blood Rush / Weeping Wounds: empty at a static combo tier, but the melee
+    hit schedule raises their stacks with the live combo counter."""
+    return any(
+        any(str(c).endswith("/OnComboTierCondition") for c in conditional.get("conditions") or ())
+        and any(e.get("upgradeType") in SUPPORTED_WEAPON_UPGRADE_TYPES for e in conditional.get("effects") or ())
+        for conditional in mod.get("conditionalEffects") or ()
+        if isinstance(conditional, Mapping)
+    )
+
+
 def _mod_card(
     mod: Mapping[str, Any],
     scenario: Scenario,
@@ -565,7 +577,7 @@ def _mod_card(
         for effect in effects
         if effect.supported and effect.upgrade_type in SUPPORTED_WEAPON_UPGRADE_TYPES
     )
-    if not active and not allow_empty:
+    if not active and not allow_empty and not _combo_tier_card(mod):
         return None
     drain = max(0, int(mod.get("baseDrain") or 0) + rank)
     return _Card(
@@ -3218,7 +3230,9 @@ def _scenario_context(scenario: Scenario) -> dict[str, Any]:
 def _default_analysis_scenario(scenario: Scenario, metric: str) -> bool:
     # Existing baked statics describe only this state. Non-default scenarios must
     # not read them, including the fallback that only changes enemy level.
-    return _scenario_context(scenario) == _scenario_context(_scenario(metric))
+    # Melee route / stance keys are part of the cache key (benchmark "melee").
+    state = {k: v for k, v in scenario.combat_state.items() if not str(k).startswith("melee")}
+    return _scenario_context(replace(scenario, combat_state=state)) == _scenario_context(_scenario(metric))
 
 
 def _percent_gain(value: float, baseline: float) -> float:
@@ -3268,6 +3282,8 @@ def _statics_cache_key(
         # Only non-default (preset) scenarios carry this, so default-scenario
         # keys and existing caches are unchanged.
         benchmark_key["scenario"] = raw["scenario"]
+    if raw.get("melee"):
+        benchmark_key["melee"] = raw["melee"]
     return json.dumps(
         {
             "weapon": str(weapon_path or ""),
@@ -3781,16 +3797,10 @@ def analyze_riven_request(
             **weapon,
             "heavyAttack": {**heavy_route, "components": throw_components},
         }
-    metric = (
-        "heavyDamage"
-        if throwable
-        else (
-            # 标准靶 KPM 口径（近战与枪械统一）：170 级钢铁之路卓越者超宏
-            # 凶魂百夫长，30 秒窗口击杀数——触发从零层爬升、护甲/超宏/等级
-            # 缩放全部参与；架势倍率经 target_context.stanceMultiplier 计入。
-            "killsPerMinute"
-        )
-    )
+    # 标准靶 KPM 口径（近战与枪械统一）：170 级钢铁之路卓越者超宏凶魂百夫长，
+    # 30 秒窗口击杀数。近战按攻击路线逐次命中回放（melee_sequence）：
+    # 战刃走「蓄力重投 + 引爆」，不再用单发重投伤害。
+    metric = "killsPerMinute"
     requested_metric, requested_metric_warning = _metric(
         request.get("metric"), weapon_type
     )
@@ -3829,6 +3839,27 @@ def analyze_riven_request(
         else 1.0
     )
     status_rate_multiplier = float(stance_info.get("statusRateMultiplier") or 1.0) if stance_info else 1.0
+    melee_context: dict[str, Any] | None = None
+    melee_schedule: dict[str, Any] | None = None
+    if weapon_type == "melee":
+        # Melee hit schedule: the stance and route travel with the scenario;
+        # the replay uses discrete hits and ignores the stance multipliers.
+        state = dict(scenario.combat_state)
+        if stance_info and stance_info.get("path"):
+            state.setdefault("meleeStance", str(stance_info["path"]))
+        from .melee_sequence import ROUTES as _MELEE_ROUTES
+        if request.get("meleeRoute") and str(request["meleeRoute"]) not in _MELEE_ROUTES:
+            raise SimulationError("meleeRoute must be one of " + ", ".join(_MELEE_ROUTES))
+        for key in ("meleeRoute", "meleeCombo"):
+            if request.get(key):
+                state[key] = str(request[key])
+        scenario = replace(scenario, combat_state=state)
+        melee_schedule = build_schedule(weapon, state.get("meleeRoute"), stance=state.get("meleeStance"),
+                                        combo=state.get("meleeCombo"), target_distance=state.get("meleeTargetDistance"))
+        if melee_schedule:
+            melee_context = {"route": melee_schedule["route"], "label": melee_schedule.get("label"),
+                             "stance": melee_schedule.get("stance"), "combo": melee_schedule.get("combo")}
+            stance_multiplier = status_rate_multiplier = 1.0
     # 标准靶上下文（KPM 口径）：app 层注入 benchmarkTarget（enemy/level/
     # steelPath/eximus/windowSeconds），引擎解出真实目标记录参与窗口解算。
     benchmark = request.get("benchmarkTarget")
@@ -4072,6 +4103,8 @@ def analyze_riven_request(
     )
     if not _default_analysis_scenario(scenario, metric):
         _bm["scenario"] = _scenario_context(scenario)
+    if melee_context:
+        _bm["melee"] = melee_context
     cache_key = _statics_cache_key(
         weapon.get("path"),
         weapon.get("innateElements"),
@@ -5110,6 +5143,9 @@ def analyze_riven_request(
                 f"开火模式：使用模式 {fire_mode + 1}，其余模式仅展示"
             )
         ),
+        *([route_note(melee_schedule, (stance_info or {}).get("nameZh") or (stance_info or {}).get("nameEn")
+                      if melee_schedule and stance_info and stance_info.get("path") == melee_schedule.get("stance") else None)]
+          if melee_context else []),
         "mod-family exclusivity checked by exported nameTag and weapon compatibility tags; account-specific conflicts are not exported",
         f"Riven template values recovered from frozen build {template_build}",
         "recommended Riven stats use theoretical max-roll values from the active frozen build",

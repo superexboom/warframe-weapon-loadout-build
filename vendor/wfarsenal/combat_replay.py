@@ -115,6 +115,20 @@ def _trajectory(
     )
 
     combat = combat or {}
+    # Melee hit schedule (melee_sequence): discrete hits replace the abstract
+    # stance-multiplied attack; the stance multipliers must not apply twice.
+    melee = combat.get('melee')
+    melee_loop = melee_pending = None
+    melee_count = 0.0
+    melee_last_hit = -math.inf
+    melee_heavy_multiplier = 1.0
+    melee_events = []
+    if melee:
+        from .melee_sequence import Loop, apply_hit, combo_multiplier, combo_tier
+        melee_loop = Loop(melee)
+        damage_rate_multiplier = 1.0
+        status_rate_multiplier = 1.0
+    combo_tier_keys = combat.get('comboTierKeys') or {}
     from .consecutive_hits import ConsecutiveHits
     tap_spec=combat.get('doubleTap')
     tap=ConsecutiveHits(tap_spec['perHit'],tap_spec['maximum'],tap_spec['duration']) if tap_spec else None
@@ -644,7 +658,16 @@ def _trajectory(
             return True
         return False
 
-    def model(t):
+    def melee_stacks(heavy=False):
+        if not melee:
+            return {}
+        tier = combo_tier(melee['comboSpec'], melee_count)
+        out = {key: float(min(tier, cap)) for key, cap in combo_tier_keys.items()}
+        if heavy:
+            out['__heavy'] = True
+        return out
+
+    def model(t, heavy=False):
         live_types = (
             sum(p.probability(t) for p in presence.values())
             if combat.get("conditionOverload") or stats.co_bucket
@@ -654,14 +677,16 @@ def _trajectory(
         onos_values = {'__onosPower':bool(onos and onos_ticks>=onos['alignmentShots']),
                        '__onosHits':onos_hits,
                        '__onosBeamSeconds':round(min(onos['rampSeconds'],max(0.,t-onos_start)),6) if onos else 0.}
+        extra_stacks = melee_stacks(heavy)
         key = (form, tuple(q["stacks"] for q in sources), live_types, last_round,
-               tuple(onos_values.values()) if onos and form!='base' else ())
+               tuple(onos_values.values()) if onos and form!='base' else (),
+               tuple(sorted(extra_stacks.items())))
         if key not in model_cache:
             resolver = combat.get("resolve")
             if resolver:
                 try:
                     model_cache[key] = resolver(
-                        form, {**{q["id"]: q["stacks"] for q in sources},**onos_values}, live_types, last_round
+                        form, {**{q["id"]: q["stacks"] for q in sources},**onos_values,**extra_stacks}, live_types, last_round
                     )
                 except TypeError as exc:
                     # Test/custom resolvers from older callers use the original
@@ -1222,6 +1247,23 @@ def _trajectory(
             speed = active.fire_rate if combat else rate
             if speed <= 0.0:
                 continue
+            melee_hit = None
+            if melee:
+                if melee_pending is None:
+                    # Combo starts at the initial combo; heavy hits use its
+                    # multiplier (heavy attacks read the initial combo only).
+                    melee_count = float(active.initial_combo or 0.0)
+                    melee_heavy_multiplier = combo_multiplier(melee['comboSpec'], melee_count)
+                    melee_pending, wait = melee_loop.next(speed, active.heavy_charge_speed)
+                    push(t + wait, 'fire')
+                    continue
+                melee_hit = melee_pending
+                if t - melee_last_hit > max(active.combo_duration, 0.0) + 1e-9 and melee_last_hit > -math.inf:
+                    melee_count = float(active.initial_combo or 0.0)
+                active, radial = model(t, heavy=bool(melee_hit.get('heavy')))
+                active = apply_hit(active, melee_hit, melee_crit=melee['meleeCrit'],
+                                   heavy_multiplier=melee_heavy_multiplier)
+                radial = None
             if manual_detonation:
                 # A player detonates the existing batch before another throw
                 # could exceed the native eight-projectile deployment limit.
@@ -1542,6 +1584,18 @@ def _trajectory(
             if manual_detonation and (pending_throws >= manual_detonation['batchSize'] or ammo <= 1e-9):
                 queue_mines(t)
                 delay = max(delay, manual_detonation['delaySeconds'])
+            if melee_hit is not None:
+                gained = float(melee_hit.get('comboHits', 1.0)) * (1.0 + max(active.combo_extra_chance, 0.0))
+                melee_count += gained * min(max(1.0 - active.combo_miss_chance, 0.0), 1.0)
+                if melee_hit.get('consumesCombo'):
+                    retained = min(max(active.heavy_attack_efficiency, 0.0), 0.9)
+                    melee_count = max(float(active.initial_combo or 0.0), melee_count * retained)
+                melee_cap = float(melee['comboSpec'].get('cap') or 220.0)
+                melee_count = min(melee_count, melee_cap)
+                melee_last_hit = t
+                if collect_timeline:
+                    melee_events.append(dict(time=round(t, 6), kind=melee_hit['kind'], combo=round(melee_count, 3)))
+                melee_pending, delay = melee_loop.next(speed, active.heavy_charge_speed)
             rate_spool_due = t + delay
             push(t + delay, "fire")
         elif kind == "sample":
@@ -1661,6 +1715,8 @@ def _trajectory(
         'projectileLifecycle': projectiles.stats if projectiles else {},
         'onosSequence': {'events':onos_events,'alignmentShots':onos['alignmentShots'],'powerCost':onos['powerCost']} if onos else None,
         'doubleTap':{'events':tap_events,'maximum':tap.maximum,'duration':tap.duration} if tap else None,
+        'melee':{'route':melee['route'],'label':melee.get('label'),'combo':melee.get('combo'),'stance':melee.get('stance'),
+                 'events':melee_events[:400]} if melee else None,
         'sniperCombo':{'events':combo_events,'minimum':shot_combo.spec['min'],'seconds':shot_combo.spec['seconds']} if shot_combo else None,
         "shots": attacks,
         "reloads": reloads,

@@ -308,6 +308,11 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "WEAPON_MELEE_COMBO_INITIAL_BONUS": "initial_combo",
     "WEAPON_MELEE_COMBO_DURATION_BONUS": "combo_duration",
     "WEAPON_MELEE_COMBO_USAGE_EFFICIENCY": "heavy_attack_efficiency",
+    # Melee rework (2026-10-08): consumed by the melee hit schedule.
+    "WEAPON_MELEE_COMBO_GAIN_EXTRA_CHANCE": "combo_extra_chance",
+    "WEAPON_MELEE_COMBO_GAIN_MISS_CHANCE": "combo_miss_chance",
+    "WEAPON_MELEE_HEAVY_CHARGE_SPEED": "heavy_charge_speed",
+    "WEAPON_MELEE_SLAM_DAMAGE_BONUS": "slam_damage",
     "GAMEPLAY_FACTION_DAMAGE": "faction_damage_multipliers",
     "WEAPON_NOCRIT_DAMAGE": "noncrit_damage_multiplier",
     "WEAPON_NOCRIT_CHANCE": "noncrit_damage_chance",
@@ -357,6 +362,10 @@ MELEE_COMBO_UPGRADE_TYPES = frozenset(
         "WEAPON_MELEE_COMBO_INITIAL_BONUS",
         "WEAPON_MELEE_COMBO_DURATION_BONUS",
         "WEAPON_MELEE_COMBO_USAGE_EFFICIENCY",
+        "WEAPON_MELEE_COMBO_GAIN_EXTRA_CHANCE",
+        "WEAPON_MELEE_COMBO_GAIN_MISS_CHANCE",
+        "WEAPON_MELEE_HEAVY_CHARGE_SPEED",
+        "WEAPON_MELEE_SLAM_DAMAGE_BONUS",
     }
 )
 MELEE_SLOTS = frozenset({"melee", "arch_melee", "space_melee", "archmelee", "spacemelee"})
@@ -487,10 +496,11 @@ class Scenario:
             raise TypeError('combatState must be an object')
         numeric = {'frameArmor','energyPool','sprintMultiplier','energySpent','energySpendPerSecond','nearbyRadius','detonationWaitSeconds','stugBounceDelaySeconds','stugChildDetonateSeconds','orbAbsorbedDamage',
                    'selfShieldBreakAt','selfShieldBreakInterval','selfOverguardBreakAt','selfOverguardBreakInterval','selfShieldHitAt','selfShieldHitInterval'}
-        numeric |= {'equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval'}
+        numeric |= {'equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval','meleeTargetDistance'}
         binary = {'overshields','channeling','aimGliding','sliding','incarnonMeleeActive','orbSpecialShield','onosRadialHit','selfShieldBreakForced','perfectCharge','infiniteAmmo'}
         integers = {'nearbyEnemies':1000,'stugBounceHits':2,'stugChildHits':5,'detonateAfterShots':20,'orbPasses':3,'orbStacks':3,'orbRank':6,'punchthroughTargets':100,'abilityUses':100000}
-        allowed = numeric | binary | set(integers) | {'projectileMode','equippedWeapons','emptySlots','orbAbsorbedDamageType','orbAbsorbedDamageTypes'}
+        melee_text = {'meleeRoute','meleeStance','meleeCombo'}
+        allowed = numeric | binary | set(integers) | melee_text | {'projectileMode','equippedWeapons','emptySlots','orbAbsorbedDamageType','orbAbsorbedDamageTypes'}
         if set(self.combat_state) - allowed:
             raise ValueError('combatState has unsupported fields: ' + ', '.join(sorted(set(self.combat_state)-allowed)))
         state = {}
@@ -505,6 +515,15 @@ class Scenario:
                 state[key] = _require_int('combatState.'+key,value,maximum=integers[key])
                 if key in {'detonateAfterShots','orbStacks'} and not value:
                     raise ValueError('combatState.'+key+' must be at least one')
+            elif key=='meleeRoute':
+                from .melee_sequence import ROUTES
+                if value not in ROUTES:
+                    raise ValueError('combatState.meleeRoute must be one of ' + ', '.join(ROUTES))
+                state[key] = value
+            elif key in ('meleeStance','meleeCombo'):
+                if not isinstance(value,str):
+                    raise TypeError('combatState.'+key+' must be a string')
+                state[key] = value
             elif key=='projectileMode':
                 if value not in {'stacked','isolated','manual'}:
                     raise ValueError('combatState.projectileMode must be stacked, isolated or manual')
@@ -978,6 +997,13 @@ class ModdedStats:
     initial_combo: float = 0.0
     combo_duration: float = BASE_MELEE_COMBO_DURATION
     heavy_attack_efficiency: float = 0.0
+    # Expected extra / lost combo count per hit, heavy wind-up speed and the
+    # slam-attack damage factor relative to an ordinary hit (slam bonus shares
+    # the melee damage bucket: SlamAoE DamageUpgradeTypes).
+    combo_extra_chance: float = 0.0
+    combo_miss_chance: float = 0.0
+    heavy_charge_speed: float = 1.0
+    slam_damage_ratio: float = 1.0
     faction_damage_multipliers: dict[str, float] = field(default_factory=dict)
     noncrit_damage_multiplier: float = 1.0
     unsupported: list[str] = field(default_factory=list)
@@ -1426,6 +1452,13 @@ def apply_mods(
     # 正确口径：flat_base 先按类型份额摊入 base，再乘 damage_scale。
     damage_flat_base = 0.0
     damage_scale_effects = []
+    # Melee Incarnon evolutions grant flat base damage the same way
+    # (Magistar Evolution II: WEAPON_MELEE_DAMAGE ADD_BASE 100 is +100 damage,
+    # not +10000% on the melee damage multiplier).
+    melee_damage_effects = list(buckets["WEAPON_MELEE_DAMAGE"])
+    if weapon.get("slot") in MELEE_SLOTS:
+        damage_flat_base += sum(e.value for e in melee_damage_effects if e.operation == "ADD_BASE")
+        melee_damage_effects = [e for e in melee_damage_effects if e.operation != "ADD_BASE"]
     for effect in buckets["WEAPON_DAMAGE_AMOUNT"]:
         if effect.operation == "ADD_BASE":
             damage_flat_base += effect.value
@@ -1482,12 +1515,20 @@ def apply_mods(
             base = {dtype: amount * scale_up for dtype, amount in base.items()}
         # base_total_unscaled == 0（无基伤模式）：flat 无可加权的份额，
         # 维持原状并诊断（不虚构伤害类型）。
+    slam_damage_ratio = 1.0
     if weapon.get("slot") in MELEE_SLOTS:
+        pre_melee = damage_scale
         damage_scale = _combine(
             damage_scale,
-            buckets["WEAPON_MELEE_DAMAGE"],
+            melee_damage_effects,
             base_value=damage_scale,
         )
+        if buckets["WEAPON_MELEE_SLAM_DAMAGE_BONUS"] and damage_scale:
+            slam_damage_ratio = _combine(
+                pre_melee,
+                [*melee_damage_effects, *buckets["WEAPON_MELEE_SLAM_DAMAGE_BONUS"]],
+                base_value=pre_melee,
+            ) / damage_scale
 
     scaled_base = {dtype: amount * damage_scale for dtype, amount in base.items()}
     base_total = sum(base.values())
@@ -1754,6 +1795,10 @@ def apply_mods(
         heavy_attack_efficiency=_combine(
             0.0, buckets["WEAPON_MELEE_COMBO_USAGE_EFFICIENCY"]
         ),
+        combo_extra_chance=sum(e.value for e in buckets["WEAPON_MELEE_COMBO_GAIN_EXTRA_CHANCE"]),
+        combo_miss_chance=sum(e.value for e in buckets["WEAPON_MELEE_COMBO_GAIN_MISS_CHANCE"]),
+        heavy_charge_speed=max(0.05, 1.0 + sum(e.value for e in buckets["WEAPON_MELEE_HEAVY_CHARGE_SPEED"])),
+        slam_damage_ratio=slam_damage_ratio,
         faction_damage_multipliers=faction_damage_multipliers,
         noncrit_damage_multiplier=1.0 + max(0.0, _combine(1.0, buckets["WEAPON_NOCRIT_DAMAGE"]) - 1.0) * (
             min(1.0, max(0.0, _combine(0.0, buckets['WEAPON_NOCRIT_CHANCE'])))

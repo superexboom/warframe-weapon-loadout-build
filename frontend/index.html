@@ -84,6 +84,20 @@
               </label>
             </section>
 
+            <section class="analysis-element-fields" id="analysis-melee-route-field" hidden>
+              <label class="field">
+                <span>近战攻击路线</span>
+                <select id="analysis-melee-route-select">
+                  <option value="">默认（按武器类型）</option>
+                  <option value="combo">走 A（轻击连段）</option>
+                  <option value="slam">震地（原地跳）</option>
+                  <option value="slamBullet">震地（垂直子弹跳）</option>
+                  <option value="glaive">重投 + 引爆</option>
+                </select>
+                <small>默认：锤震地 · 战刃重投 · 其余走 A</small>
+              </label>
+            </section>
+
             <div class="weapon-issue" id="weapon-issue" role="alert" hidden>
               <strong>该武器暂不可分析</strong><span id="weapon-issue-text"></span>
             </div>
