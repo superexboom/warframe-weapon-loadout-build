@@ -347,6 +347,10 @@ def apply_hit(stats, hit: Mapping[str, Any], *, melee_crit, heavy_multiplier: fl
     )
 
 
+_DAMAGE_NAMES = {"DT_IMPACT": "冲击", "DT_PUNCTURE": "穿刺", "DT_SLASH": "切割", "DT_FIRE": "火焰",
+                 "DT_FREEZE": "冰冻", "DT_ELECTRICITY": "电击", "DT_POISON": "毒素", "DT_EXPLOSION": "爆炸",
+                 "DT_RADIATION": "辐射", "DT_GAS": "毒气", "DT_MAGNETIC": "磁力", "DT_VIRAL": "病毒",
+                 "DT_CORROSIVE": "腐蚀", "DT_RADIANT": "虚空"}
 _COMBO_NAMES = {"CC_GROUND": "中立", "CC_GROUND_BRANCH_A": "前进", "CC_GROUND_BRANCH_B": "前进格挡",
                 "CC_GROUND_BRANCH_C": "格挡"}
 
@@ -366,7 +370,7 @@ def route_note(schedule: Mapping[str, Any], stance_name: str | None = None) -> s
         jump = "原地跳到最高点" if route == "slam" else "垂直子弹跳"
         kind = "重击震地" if direct.get("heavy") else "震地"
         return (f"攻击路线：{kind}（{jump}，{schedule.get('slamHeight', 0):g} 米，1.0 攻速下 {seconds:.2f} 秒一轮）；"
-                f"直击 ×{direct['atten']:g} + 范围 ×{radial['atten']:g}（{radial.get('damageType')}，不暴击，靶在中心）"
+                f"直击 ×{direct['atten']:g} + 范围 ×{radial['atten']:g}（{_DAMAGE_NAMES.get(radial.get('damageType'), radial.get('damageType'))}，不暴击，靶在中心）"
                 + ("，重击按初始连击倍率" if direct.get("heavy") else ""))
     if route == "glaive":
         return (f"攻击路线：蓄力重投 + 立即引爆（1.0 攻速下 {seconds:.2f} 秒一轮）；投掷直击 ×{hits[0]['atten']:.2f} + "
