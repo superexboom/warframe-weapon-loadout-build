@@ -124,8 +124,11 @@ RIVEN_BASE_VALUES: dict[str, dict[str, float]] = {
         "I": 45.0, "J": 54.9, "K": 164.7, "N": 8.1,
         "O": 58.77, "Q": 104.85, "T": 1.9422, "U": 73.44,
         "X": 119.7,
-        # 近战融合词条（模板 base90：重击伤害/蓄力速度/震地 1.197，格挡角度 8.1）。
-        "HC": 119.7, "PA": 8.1, "SL": 119.7, "HD": 119.7,
+        # 近战融合词条（模板 base90：重击伤害/蓄力速度/震地 1.197，格挡角度 8.1；
+        # 2026.10.08 起近战也有状态伤害、复合元素 90 与新派系 45）。
+        "HC": 119.7, "PA": 8.1, "SL": 119.7, "HD": 119.7, "SD": 90.0,
+        "GA": 90.0, "CO": 90.0, "VI": 90.0, "RA": 90.0, "BL": 90.0, "MA": 90.0,
+        "FO": 45.0, "FT": 45.0, "FS": 45.0,
     },
 }
 
@@ -263,18 +266,18 @@ def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, f
             continue
         code, unit = matches[0]
         result[code] = abs(float(raw_value)) * (90.0 if unit == "flat" else 9000.0)
-    # Rivens are rolled by the server; the client template is display data and
-    # disagrees with observed rolls for some spliced traits (a Dual Toxocyst
-    # Weakpoint roll of 310% needs base 225, the pistol template says 90).
-    # Server-observed bases (wiki Riven Mods, spliced trait table) win.
+    # Rivens are rolled by the server. Until 2026.10.08 the client template
+    # disagreed with observed rolls for some spliced traits (a Dual Toxocyst
+    # Weakpoint roll of 310% needs base 225, the old pistol template said 90);
+    # the 10.08 templates match. Server-observed bases still win.
     result.update({code: value for code, value in FUSION_SERVER_BASES.get(weapon_type, {}).items()
                    if code in result or code in RIVEN_BASE_VALUES.get(weapon_type, {})})
     return result
 
 
 # Spliced (fusion) trait bases as rolled by the server, in display percent
-# (wiki Riven Mods, 2026-10-08). Same for every gun type; melee values match
-# the client template and are not overridden.
+# (wiki Riven Mods; the 2026.10.08 client templates agree). Same for every gun
+# type; melee values come from the template and are not overridden.
 _GUN_FUSION_BASES = {
     "W": 225.0, "Y": 247.5, "AE": 45.0, "HR": 90.0, "SD": 90.0,
     "GA": 90.0, "CO": 90.0, "VI": 90.0, "RA": 90.0, "BL": 90.0, "MA": 90.0,
@@ -4241,10 +4244,29 @@ def analyze_riven_request(
         except SimulationError as exc:
             if f"damage type {required_damage_type}" not in str(exc):
                 raise
-            unsupported.append(
-                f"element-target-infeasible-{required_damage_type}-using-unconstrained"
-            )
-            return _optimize(weapon, candidates, riven, **kwargs)
+        # A narrow beam ranks by score and may never keep a pure two-element
+        # combination (melee fast profile + viral); seed the strongest mod of
+        # each component, as the ultra seeds do, before giving up.
+        parts = ELEMENT_SEEDS.get(required_damage_type, ())
+        seeded = list(kwargs.get("required_mod_keys") or ())
+        forbidden = set(kwargs.get("forbidden_mod_keys") or ())
+        for part in parts:
+            options = [(sum(float(e.value) for e in c.effects if e.damage_type == part), c.key)
+                       for c in candidates if any(e.damage_type == part for e in c.effects)
+                       and c.key not in forbidden and c.key not in seeded]
+            if options:
+                seeded.append(max(options)[1])
+        if parts and len(seeded) > len(kwargs.get("required_mod_keys") or ()):
+            try:
+                return _optimize(weapon, candidates, riven, required_damage_type=required_damage_type,
+                                 **dict(kwargs, required_mod_keys=seeded))
+            except SimulationError as exc:
+                if f"damage type {required_damage_type}" not in str(exc):
+                    raise
+        unsupported.append(
+            f"element-target-infeasible-{required_damage_type}-using-unconstrained"
+        )
+        return _optimize(weapon, candidates, riven, **kwargs)
 
     def _optimize_archetype(
         weapon: Mapping[str, Any],

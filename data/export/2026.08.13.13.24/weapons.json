@@ -56488,7 +56488,7 @@
              "weapon"
             ],
             "symbolFilter": "",
-            "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+            "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
             "validModifiers": [],
             "validPostures": [],
             "validProcTypes": [],
@@ -56525,7 +56525,7 @@
            "weapon"
           ],
           "symbolFilter": "",
-          "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+          "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
           "validModifiers": [],
           "validPostures": [],
           "validProcTypes": [],
@@ -56563,7 +56563,7 @@
                "weapon"
               ],
               "symbolFilter": "",
-              "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
               "validModifiers": [],
               "validPostures": [],
               "validProcTypes": [],
@@ -56600,7 +56600,7 @@
              "weapon"
             ],
             "symbolFilter": "",
-            "upgradeType": "WEAPON_DAMAGE_AMOUNT",
+            "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
             "validModifiers": [],
             "validPostures": [],
             "validProcTypes": [],
@@ -201132,6 +201132,21 @@
      "isAlternateFire": false,
      "isIncarnonForm": true,
      "multishot": 1,
+     "multishotCopy": {
+      "direct": {
+       "critChance": 0.31999999,
+       "critMultiplier": 3.0,
+       "procChance": 0.23999999,
+       "scale": 1.0
+      },
+      "radial": {
+       "critChance": 0.31999999,
+       "critMultiplier": 3.0,
+       "procChance": 0.23999999,
+       "scale": 0.5714285714
+      },
+      "source": "/Lotus/Weapons/Tenno/Rifle/LatronIncAltFireWaveMSProj (MultiShotProjectileType, build 2026.10.08)"
+     },
      "reloadTime": 3,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }

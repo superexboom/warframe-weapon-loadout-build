@@ -599,6 +599,7 @@ def prepare(
                 component = None
             if component and component.get('damage'):
                 rm = deepcopy(modes[idx])
+                rm['__radialPart__'] = True
                 # This part detonates at the aimed target; shot flight distance is
                 # not distance from the explosion centre.
                 rm['falloffRange'] = [0, 0]

@@ -350,7 +350,9 @@ def test_fusion_availability_does_not_depend_on_recipe_presence():
         assert len(available_codes(data, kind)) == 14
     assert len(available_codes(data, "archgun")) == 13
     assert "HR" not in available_codes(data, "archgun")
-    assert available_codes(data, "melee") == {"HD", "HC", "PA", "SL"}
+    # 2026.10.08: melee also rolls status damage, the six combined elements and
+    # the three new factions.
+    assert available_codes(data, "melee") == {"HD", "HC", "PA", "SL", "SD", "GA", "CO", "VI", "RA", "BL", "MA", "FO", "FT", "FS"}
 
 
 def test_inactive_ads_mod_has_zero_gain_with_trigger_arcane():

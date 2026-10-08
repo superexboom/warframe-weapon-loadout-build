@@ -1642,6 +1642,25 @@ def apply_mods(
             factor = amplified/multishot
             damage_types = {k:v*factor for k,v in damage_types.items()}
             compression_mult *= factor
+    # MultiShotProjectileType: projectiles beyond the first may be a weaker
+    # copy (Latron Prime Incarnon wave since 2026.10.08). Blend per expected
+    # value: damage by the copy share, crit and status per projectile.
+    copy = (mode.get('multishotCopy') or {}).get('radial' if mode.get('__radialPart__') else 'direct')
+    if copy and multishot > 1. and not continuous:
+        extra, share = multishot - 1., float(copy.get('scale', 1.))
+        total = 1. + extra * share
+        factor = total / multishot
+        damage_types = {k: v * factor for k, v in damage_types.items()}
+        compression_mult *= factor
+        copy_chance = _combine(float(copy.get('critChance', damage.get('critChance', 0.))), buckets['WEAPON_CRIT_CHANCE'])
+        copy_multiplier = _combine(quantize_base_crit_damage(
+            float(copy.get('critMultiplier', damage.get('critMultiplier', 1.))) + sum(e.value for e in crit_flat)), crit_relative)
+        blended = (crit_chance + extra * share * copy_chance) / total
+        if blended > 0.:
+            crit_multiplier = 1. + (crit_chance * (crit_multiplier - 1.) + extra * share * copy_chance * (copy_multiplier - 1.)) / (total * blended)
+        crit_chance = blended
+        if copy.get('procChance') is not None:
+            per_pellet_proc = (per_pellet_proc + extra * float(copy['procChance'])) / multishot
     dot_basis = elemental_base_total * _combine(1.0, damage_scale_effects) * compression_mult
     dot_elements = _dot_elemental_multipliers(buckets['WEAPON_PERCENT_BASE_DAMAGE_ADDED'],
                                             buckets['WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE'])

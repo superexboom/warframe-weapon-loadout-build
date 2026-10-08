@@ -602,7 +602,7 @@ if getattr(sys, "frozen", False) and not os.environ.get("WF_ANALYSIS_STATICS_CAC
         Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
         / "Warframe-Weapon-Loadout-Build" / "cache" / "riven-analysis-statics.json"
     )
-ANALYSIS_STATICS_CACHE_VERSION = 23  # + spliced-trait server bases, ultra fixed-element seed, preset scenario cache key
+ANALYSIS_STATICS_CACHE_VERSION = 24  # + 2026.10.08 update: templates, Toxocyst 3B, Latron Prime multishot copies, fast element seeds
 
 
 def _stances_fingerprint() -> str:
@@ -1173,6 +1173,12 @@ INCARNON_UPGRADE_LABELS = {
     "SKILL_ABILITY_UNLOCK": "形态解锁",
     "SKILL_ABILITY_TACTICAL_EFFICIENCY": "技能效率",
 }
+INCARNON_ELEMENT_LABELS = {
+    "DT_IMPACT": "冲击", "DT_PUNCTURE": "穿刺", "DT_SLASH": "切割", "DT_FIRE": "火焰",
+    "DT_FREEZE": "冰冻", "DT_ELECTRICITY": "电击", "DT_POISON": "毒素", "DT_EXPLOSION": "爆炸",
+    "DT_RADIATION": "辐射", "DT_GAS": "毒气", "DT_MAGNETIC": "磁力", "DT_VIRAL": "病毒",
+    "DT_CORROSIVE": "腐蚀", "DT_RADIANT": "虚空",
+}
 INCARNON_OPERATION_LABELS = {
     # 数值自带符号（+51 / -0.6），操作符只标注口径，不再叠符号。
     "ADD": "",
@@ -1204,6 +1210,8 @@ def _incarnon_effect_text(effect: Mapping[str, Any], *, annotate: bool = True) -
     if not upgrade or upgrade.upper() == "NONE":
         return None
     label = INCARNON_UPGRADE_LABELS.get(upgrade, upgrade.replace("WEAPON_", "").replace("_", " ").lower())
+    if upgrade == "WEAPON_PERCENT_BASE_DAMAGE_ADDED":
+        label = INCARNON_ELEMENT_LABELS.get(str(effect.get("damageType") or ""), "元素") + "伤害"
     value = effect.get("valuePerRank")
     if not isinstance(value, (int, float)) or isinstance(value, bool):
         value = effect.get("value")

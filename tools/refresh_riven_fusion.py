@@ -15,7 +15,7 @@ from wfarsenal.riven_fusion import TAG_CODES, available_codes
 from generate_riven_templates import _upgrade_rows
 
 
-def refresh(payload, raw_packages):
+def refresh(payload, raw_packages, build_label=None):
     templates = payload["templates"]
     raw = {}
     hashes = {}
@@ -73,60 +73,58 @@ def refresh(payload, raw_packages):
             "sha256": hashes[source],
             "alias": source != t["id"],
         }
-    source_recipes = []
-    for opt in raw["LotusRifleRandomModRare"].get("MergeOptions") or []:
-        tags = [
-            opt.get(k)
-            for k in ("ResultTag", "PrimaryIngredient", "SecondaryIngredient")
-        ]
-        if not all(tags):
-            continue
-        codes = [TAG_CODES.get(k) for k in tags]
-        if not all(codes):
-            raise ValueError(f"unknown recipe tags {tags}")
-        source_recipes.append(
-            dict(zip(("result", "primary", "secondary"), codes))
-            | dict(zip(("resultTag", "primaryTag", "secondaryTag"), tags))
-        )
-    recipes = []
-    for wtype in ("rifle", "shotgun", "pistol", "archgun"):
-        allowed = available_codes(payload, wtype)
-        for recipe in source_recipes:
-            if recipe["result"] in allowed:
-                recipes.append(
-                    dict(
-                        recipe,
-                        weaponType=wtype,
-                        sourceKind=(
-                            "raw-merge-options"
-                            if wtype == "rifle"
-                            else "shared-ranged-recipe"
-                        ),
-                        sourceTemplate="LotusRifleRandomModRare",
-                    )
-                )
-    # Exact four pairs transcribed from the saved official Chinese workshop
-    # table. Values/availability still come from the game's advanced entries.
-    for result, primary, secondary in [
-        ("HD", "U", "O"),
-        ("HC", "U", "N"),
-        ("PA", "J", "T"),
-        ("SL", "J", "K"),
-    ]:
-        if result in available_codes(payload, "melee"):
-            recipes.append(
-                dict(
-                    weaponType="melee",
-                    result=result,
-                    primary=primary,
-                    secondary=secondary,
-                    sourceKind="official-workshop-table",
-                    sourceUrl="https://www.bilibili.com/opus/1250999307650203648",
-                )
+    # Since 2026.10.08 every canonical template publishes its own MergeOptions.
+    # A template without them falls back to the rifle table (ranged) or the
+    # official workshop pairs (melee), as before.
+    melee_tags = {
+        "WeaponMeleeDamageMod": "K", "WeaponFireRateMod": "J", "ComboDurationMod": "N",
+        "WeaponMeleeRangeIncMod": "T", "WeaponMeleeComboEfficiencyMod": "U",
+        "WeaponMeleeComboBonusOnHitMod": "O", "WeaponMeleeFactionDamageGrineer": "G",
+        "WeaponMeleeFactionDamageCorpus": "C", "WeaponMeleeFactionDamageInfested": "I",
+    }
+    canonical = {
+        "rifle": "LotusRifleRandomModRare", "shotgun": "LotusShotgunRandomModRare",
+        "pistol": "LotusPistolRandomModRare", "archgun": "LotusArchgunRandomModRare",
+        "melee": "PlayerMeleeWeaponRandomModRare",
+    }
+
+    def merge_options(wtype, template):
+        rows = []
+        for opt in raw[template].get("MergeOptions") or []:
+            tags = [opt.get(k) for k in ("ResultTag", "PrimaryIngredient", "SecondaryIngredient")]
+            if not all(tags):
+                continue
+            mapping = dict(TAG_CODES, **melee_tags) if wtype == "melee" else TAG_CODES
+            codes = [mapping.get(k) for k in tags]
+            if not all(codes):
+                raise ValueError(f"unknown recipe tags {tags}")
+            rows.append(
+                dict(zip(("result", "primary", "secondary"), codes))
+                | dict(zip(("resultTag", "primaryTag", "secondaryTag"), tags))
             )
+        return rows
+
+    recipes = []
+    for wtype, template in canonical.items():
+        allowed = available_codes(payload, wtype)
+        own = merge_options(wtype, template)
+        if own:
+            rows, kind, source = own, "raw-merge-options", template
+        elif wtype != "melee":
+            rows, kind, source = merge_options("rifle", canonical["rifle"]), "shared-ranged-recipe", canonical["rifle"]
+        else:
+            rows = [dict(result=r, primary=a, secondary=b) for r, a, b in
+                    (("HD", "U", "O"), ("HC", "U", "N"), ("PA", "J", "T"), ("SL", "J", "K"))]
+            kind, source = "official-workshop-table", None
+        for recipe in rows:
+            if recipe["result"] in allowed:
+                row = dict(recipe, weaponType=wtype, sourceKind=kind)
+                if source:
+                    row["sourceTemplate"] = source
+                recipes.append(row)
     payload["fusionRecipes"] = recipes
     payload["fusionSchema"] = {
-        "extractedFrom": raw_packages.parent.name,
+        "extractedFrom": build_label or raw_packages.parent.name,
         "availabilitySource": "canonical-template-IsAdvancedTrait",
         "note": "Missing MergeOptions is not evidence of absent traits. Shared ranged pairs require an explicit advanced result in the target template.",
         "templateHashes": hashes,
@@ -142,9 +140,10 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--raw-packages", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--build-label")
     a = p.parse_args()
     payload = refresh(
-        json.loads(a.output.read_text(encoding="utf-8-sig")), a.raw_packages
+        json.loads(a.output.read_text(encoding="utf-8-sig")), a.raw_packages, a.build_label
     )
     a.output.write_text(
         json.dumps(payload, ensure_ascii=False, indent=1, sort_keys=True) + chr(10),
