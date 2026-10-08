@@ -98,13 +98,14 @@ UNSET_CHARGE_TIME = 2.0
 
 
 def default_route(weapon: Mapping[str, Any]) -> str:
-    """Bot policy: hammers slam, glaives heavy-throw and detonate, others combo."""
+    """Bot policy: hammers slam from a vertical bullet jump, glaives heavy-throw and
+    detonate, others combo."""
     tags = {str(t).upper() for t in weapon.get("compatTags") or ()}
     row = (reference().get("weapons") or {}).get(str(weapon.get("path")), {})
     if "GLAIVES_STANCE" in tags and row.get("glaive"):
         return "glaive"
     if "HAMMERS_STANCE" in tags:
-        return "slam"
+        return "slamBullet"
     return "combo"
 
 

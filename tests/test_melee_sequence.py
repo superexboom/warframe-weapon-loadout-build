@@ -62,7 +62,7 @@ def test_attack_speed_scales_animation_not_movement():
 
 
 def test_default_routes_follow_the_bot_policy():
-    assert ms.default_route(_weapon("Fragor Prime")) == "slam"
+    assert ms.default_route(_weapon("Fragor Prime")) == "slamBullet"
     assert ms.default_route(_weapon("Glaive Prime")) == "glaive"
     assert ms.default_route(_weapon("Nikana Prime")) == "combo"
     glaive = ms.build_schedule(_weapon("Glaive Prime"))
