@@ -1,9 +1,19 @@
 """Shared loadout event scoring for optimizer candidates and final checks."""
 from __future__ import annotations
+import hashlib
 import json
 import math
+import pickle
+from collections import OrderedDict
 from collections.abc import Mapping
 from dataclasses import replace
+
+
+class ResolveCache(dict):
+    """Resolved stats of one loadout, shared by its replays; never pickled."""
+
+    def __reduce__(self):
+        return (ResolveCache, ())
 
 
 def bind(stats, weapon, cards, effects, scenario, passives):
@@ -18,6 +28,23 @@ def bind(stats, weapon, cards, effects, scenario, passives):
         "choices": dict(passives.incarnon_choices) if passives else {},
     }
     stats._combat_scores = {}
+    stats._resolve_cache = ResolveCache()
+
+
+# Replays of identical loadouts in identical contexts, across stats objects
+# (the same build is re-derived by every analysis of one weapon).
+_REPLAYS = OrderedDict()
+_REPLAYS_MAX = 4096
+_UNHASHED = {"_combat_inputs", "_combat_scores", "_resolve_cache"}
+
+
+def _replay_key(stats, data, context_key):
+    """Digest of everything a window replay reads; equal digests, equal replays."""
+    fields = stats.__dataclass_fields__
+    extras = sorted((k, repr(v)) for k, v in vars(stats).items() if k not in fields and k not in _UNHASHED)
+    blob = pickle.dumps((repr(stats), extras, data["engine"], data["mods"], data["arcanes"],
+                         data["choices"], context_key), protocol=5)
+    return hashlib.blake2b(blob, digest_size=20).digest()
 
 
 def window(stats, context):
@@ -28,6 +55,15 @@ def window(stats, context):
     cache = stats._combat_scores
     if key in cache:
         return cache[key]
+    shared = _replay_key(stats, data, key)
+    if shared in _REPLAYS:
+        _REPLAYS.move_to_end(shared)
+        result = _REPLAYS[shared]
+        for reason in result.get("unsupported") or []:
+            if reason not in stats.unsupported:
+                stats.unsupported.append(reason)
+        cache[key] = result
+        return result
     target = context.get("target") or {}
     scenario = data["engine"]["scenario"]
     enhancements = context.get("enemy_enhancements") or {}
@@ -35,7 +71,7 @@ def window(stats, context):
         data["engine"], data["mods"], data["arcanes"],
         cycle_enabled=scenario.incarnon_cycle, assumed=scenario.trigger_policy == "assumed_max",
         incarnon_choices=data["choices"], affinity_target=target, level=context.get("level"),
-        eximus=bool(enhancements.get("eximus")),
+        eximus=bool(enhancements.get("eximus")), resolve_cache=getattr(stats, "_resolve_cache", None),
     )
     result = replay(
         stats, target, combat=combat, trigger_sources=combat["trigger_sources"],
@@ -55,6 +91,9 @@ def window(stats, context):
         if reason not in stats.unsupported:
             stats.unsupported.append(reason)
     cache[key] = result
+    _REPLAYS[shared] = result
+    if len(_REPLAYS) > _REPLAYS_MAX:
+        _REPLAYS.popitem(last=False)
     return result
 
 
@@ -78,7 +117,7 @@ def body_ttk_health(stats, context, seconds):
         data["engine"], data["mods"], data["arcanes"],
         cycle_enabled=scenario.incarnon_cycle, assumed=scenario.trigger_policy == "assumed_max",
         incarnon_choices=data["choices"], affinity_target=target, level=context.get("level"),
-        eximus=bool(enhancements.get("eximus")),
+        eximus=bool(enhancements.get("eximus")), resolve_cache=getattr(stats, "_resolve_cache", None),
     )
     curve = []
     result = replay(

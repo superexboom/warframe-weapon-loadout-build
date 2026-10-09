@@ -139,7 +139,14 @@ def prepare(
     affinity_target=None,
     level=1,
     eximus=False,
+    resolve_cache=None,
 ):
+    """``resolve_cache`` shares resolved stats across prepares of one loadout.
+
+    ``resolve`` depends only on the engine inputs, records and the cycle /
+    trigger / Incarnon options; the target, level and Eximus flag feed only
+    affinity. Callers pass one cache per bound loadout (search_combat.bind).
+    """
     from .damage import ModEffect, ModEffectList, ModdedStats, apply_mods
     from .runtime_adapters import latron_puncture_strip,incarnon_condition_rows
     from .runtime_adapters import ammo_restore_configuration
@@ -728,6 +735,14 @@ def prepare(
         else None
     )
     from .beam_ramp import floor_for
+    if resolve_cache is not None:
+        uncached = resolve
+
+        def resolve(form, stacks, live_types=0, last_round=False):
+            key = (form, tuple(sorted(stacks.items())), live_types, last_round)
+            if key not in resolve_cache:
+                resolve_cache[key] = uncached(form, stacks, live_types, last_round)
+            return resolve_cache[key]
     return dict(
         resolve=resolve,
         melee=melee,
