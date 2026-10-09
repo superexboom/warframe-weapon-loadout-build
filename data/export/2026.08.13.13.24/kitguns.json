@@ -268,7 +268,7 @@
    "gunType": "GT_RIFLE",
    "nameEn": "Tombfinger",
    "nameZh": "墓指",
-   "omegaAttenuation": 0.85000002,
+   "omegaAttenuation": 0.89999998,
    "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelBPart",
    "primaryModes": [
     {
@@ -362,7 +362,7 @@
      "unsupported": []
     }
    ],
-   "primaryOmegaAttenuation": null,
+   "primaryOmegaAttenuation": 1.0,
    "primeOmegaAttenuation": null,
    "secondaryModes": [
     {
@@ -454,7 +454,7 @@
      "unsupported": []
     }
    ],
-   "primaryOmegaAttenuation": null,
+   "primaryOmegaAttenuation": 1.0,
    "primeOmegaAttenuation": null,
    "secondaryModes": [
     {
@@ -498,7 +498,7 @@
    "gunType": "GT_BEAM",
    "nameEn": "Gaze",
    "nameZh": "凝目",
-   "omegaAttenuation": 1,
+   "omegaAttenuation": 1.05,
    "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelDPart",
    "primaryModes": [
     {

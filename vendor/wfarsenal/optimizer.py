@@ -352,6 +352,24 @@ def _number(label: str, value: Any, default: float = 0.0) -> float:
     return value
 
 
+_KITGUN_BASE_PREFIXES = ("/lotus/weapons/solarisunited/primary/lotusmodularprimary",
+                         "/lotus/weapons/solarisunited/secondary/lotusmodularsecondary")
+
+
+def _riven_type(requested: Any, weapon: Mapping[str, Any]) -> str:
+    """Riven family for stat bases, templates and fusion traits.
+
+    Every Kitgun, primary or secondary, takes the one Kitgun Riven
+    (LotusModularPistolRandomModRare: pistol stats; a primary Kitgun only
+    swaps in the chamber's alternate disposition). Mechanics keep
+    ``_weapon_type``.
+    """
+    path = str(weapon.get("path") or "").casefold()
+    if weapon.get("kitgunParts") or path.startswith(_KITGUN_BASE_PREFIXES):
+        return "pistol"
+    return _weapon_type(requested, weapon)
+
+
 def _weapon_type(requested: Any, weapon: Mapping[str, Any]) -> str:
     value = str(requested or "").strip().casefold()
     slot = str(weapon.get("slot") or "").casefold()
@@ -3239,6 +3257,19 @@ def _percent_gain(value: float, baseline: float) -> float:
     return (value / baseline - 1.0) * 100.0 if baseline > 0 else 0.0
 
 
+def _statics_weapon_identity(weapon: Mapping[str, Any]) -> str:
+    """Cache identity of a weapon record: an assembled Kitgun / Zaw adds its parts.
+
+    Assemblies share their base record's path (every Zaw is LotusModularWeapon),
+    so the path alone would let one assembly read another's baked statics.
+    """
+    path = str(weapon.get("path") or "")
+    parts = weapon.get("kitgunParts") or weapon.get("zawParts")
+    if not parts:
+        return path
+    return path + "#" + "+".join(sorted(str(part) for part in parts))
+
+
 def _statics_cache_key(
     weapon_path: Any,
     innate_elements: Any,
@@ -3738,6 +3769,8 @@ def analyze_riven_request(
         raise SimulationError("weaponType must be a string")
     weapon_type = _weapon_type(request.get("weaponType"), weapon_record)
     inferred_type = _weapon_type(None, weapon_record)
+    statics_weapon = _statics_weapon_identity(weapon_record)
+    riven_type = _riven_type(request.get("weaponType"), weapon_record)
     if requested_type not in (None, "") and weapon_type != inferred_type:
         raise SimulationError(
             f"weaponType {weapon_type} does not match exported weapon type {inferred_type}"
@@ -4032,7 +4065,7 @@ def analyze_riven_request(
         unsupported.append("riven-disposition-missing-using-1.0")
     if metric_warning:
         unsupported.append(metric_warning)
-    template_bases = _template_bases(exports.get("rivenTemplates") or {}, weapon_type)
+    template_bases = _template_bases(exports.get("rivenTemplates") or {}, riven_type)
     template_build = str((exports.get("rivenTemplates") or {}).get("buildLabel") or RIVEN_TEMPLATE_BUILD)
     if not template_bases and exports["buildLabel"] != RIVEN_TEMPLATE_BUILD:
         unsupported.append(
@@ -4083,7 +4116,9 @@ def analyze_riven_request(
                       else objective_metric)
     cacheable = (
         statics_cache is not None
-        and (not record_overridden or bool(request.get("_cacheDefaultInnate")))
+        and (not record_overridden or bool(request.get("_cacheDefaultInnate"))
+             # A default-element Kitgun / Zaw assembly caches under its parts.
+             or (bool(request.get("_cacheAssembly")) and statics_weapon != weapon_record.get("path")))
         and request.get("incarnonChoices") is None
         and request.get("arcanes") is None
         # A fixed caller preset (the Bot) may cache its own scenario; the
@@ -4106,7 +4141,7 @@ def analyze_riven_request(
     if melee_context:
         _bm["melee"] = melee_context
     cache_key = _statics_cache_key(
-        weapon.get("path"),
+        statics_weapon,
         weapon.get("innateElements"),
         fire_mode,
         element_target_raw,
@@ -4133,7 +4168,7 @@ def analyze_riven_request(
             # hardness nodes do not depend on it and the recommendation ranking
             # hardly does. Nothing is written back under this key.
             fallback_key = _statics_cache_key(
-                weapon.get("path"), weapon.get("innateElements"), fire_mode, element_target_raw, profile,
+                statics_weapon, weapon.get("innateElements"), fire_mode, element_target_raw, profile,
                 float(fallback_disposition), capacity_limit, ranking_metric, _bm,
             )
             fallback_entry = statics_cache.get(fallback_key)
@@ -4191,7 +4226,7 @@ def analyze_riven_request(
                     continue
                 if (
                     isinstance(parsed_key, dict)
-                    and parsed_key.get("weapon") == weapon.get("path")
+                    and parsed_key.get("weapon") == statics_weapon
                     and parsed_key.get("innateElements") == list(weapon.get("innateElements") or ())
                     and parsed_key.get("fireMode") == fire_mode
                     and parsed_key.get("elementTarget") == (element_target_raw or "-")
@@ -4246,7 +4281,7 @@ def analyze_riven_request(
         # The cached no-Riven baseline is re-scored by every request of the
         # weapon; keep the scored build per exact inputs for the process.
         try:
-            key = hashlib.sha256(pickle.dumps((weapon.get("path"), tuple(card_keys), replace(scenario, conditional_stacks=dict(scenario.conditional_stacks)),
+            key = hashlib.sha256(pickle.dumps((statics_weapon, tuple(card_keys), replace(scenario, conditional_stacks=dict(scenario.conditional_stacks)),
                                                ranking_metric, passives, capacity_limit, benchmark_context), protocol=5)).digest()
         except (TypeError, pickle.PicklingError, AttributeError):
             return evaluate()
@@ -4600,15 +4635,15 @@ def analyze_riven_request(
                 unsupported.append("baseline-raised-by-reverse-floor")
 
     _fusable = _fusion_codes_from_templates(
-        exports.get("rivenTemplates") or {}, weapon_type
+        exports.get("rivenTemplates") or {}, riven_type
     )
     positive_candidates, _ = _candidate_lines(
-        weapon_type, disposition, (), negative=False, bases=template_bases,
+        riven_type, disposition, (), negative=False, bases=template_bases,
         available_fusion_codes=_fusable,
     )
     candidate_by_code = {line.code: line for line in positive_candidates}
     negative_candidates, _ = _candidate_lines(
-        weapon_type, disposition, (), negative=True, bases=template_bases,
+        riven_type, disposition, (), negative=True, bases=template_bases,
         available_fusion_codes=_fusable,
     )
     negative_by_code = {line.code: line for line in negative_candidates}
@@ -4720,9 +4755,9 @@ def analyze_riven_request(
     negative_keep_cap = {"fast": 3, "standard": 5, "deep": None}[profile]
     negative_ranked: list[tuple[float, _RivenLine]] = []
     from .riven_recommendation import negative_rolls
-    ranked_positive, _ = _candidate_lines(weapon_type,disposition,(),negative=False,bases=template_bases,
+    ranked_positive, _ = _candidate_lines(riven_type,disposition,(),negative=False,bases=template_bases,
         structure_scale=theoretical_structure_scale(positive_count,True),available_fusion_codes=_fusable)
-    ranked_negative, _ = _candidate_lines(weapon_type,disposition,(),negative=True,bases=template_bases,
+    ranked_negative, _ = _candidate_lines(riven_type,disposition,(),negative=True,bases=template_bases,
         structure_scale=theoretical_structure_scale(positive_count,True,negative=True),available_fusion_codes=_fusable)
     positive_map = {line.code:line for line in ranked_positive}
     negative_seed = [positive_map[line.code] for line in recommended]

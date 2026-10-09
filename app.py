@@ -1880,7 +1880,7 @@ def build_catalog() -> dict[str, Any]:
             "nameInternal": str(weapon.get("nameInternal") or ""),
             "slot": slot,
             "weaponType": weapon_type,
-            "rivenType": optimizer._weapon_type(None, weapon),
+            "rivenType": optimizer._riven_type(None, weapon),
             "ancestry": list(weapon.get("ancestry") or ()),
             "compatTags": list(weapon.get("compatTags") or ()),
             "polarities": list(weapon.get("polarities") or ()),
@@ -2913,7 +2913,7 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     # 融合词条（Advanced Traits）仅正面、每卡限 1 条。fail-closed 校验：
     # 负面融合词条直接拒绝；正面融合词条超过 1 条直接拒绝。
     # 类型可用性来自显式 AdvancedTrait 模板；配方缺失不能推断该词条不存在。
-    portable_weapon_type = optimizer._weapon_type(None, weapon)
+    portable_weapon_type = optimizer._riven_type(None, weapon)
     _fusion_codes = _fusion_stat_codes(portable_weapon_type)
     fusion_lines = [
         s for s in raw_stats
@@ -2980,6 +2980,16 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
         and request.get("progenitorBonus") in (None, "")
     ):
         engine_request["_cacheDefaultInnate"] = True
+    # A Kitgun / Zaw assembly with its default element caches under its parts
+    # (optimizer._statics_weapon_identity); explicit element choices do not.
+    if (
+        assembly_ready
+        and request.get("innateElement") in (None, "")
+        and request.get("progenitorElement") in (None, "")
+        and request.get("innateElementValue") in (None, "")
+        and request.get("progenitorBonus") in (None, "")
+    ):
+        engine_request["_cacheAssembly"] = True
     engine_request.pop("sourceWeapon", None)
     engine_request.pop("sourceDisposition", None)
     engine_request.pop("kitgunParts", None)
@@ -3772,7 +3782,7 @@ def recommend_riven_payload(payload: Any) -> dict[str, Any]:
     build_result, engine = build_weapon_payload(recommendation_payload, return_engine_context=True,
         fixed_mods=payload.get('mods') if payload.get('mods') else None)
     weapon_record = engine["weapon"]
-    weapon_type = optimizer._weapon_type(None, weapon_record)
+    weapon_type = optimizer._riven_type(None, weapon_record)
     baseline = engine["evaluation"]
     benchmark_context = engine["benchmarkContext"]
     # Keep the user's actual target throughout; there is no 240-KPM timestep ceiling.
