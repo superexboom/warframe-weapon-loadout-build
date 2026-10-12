@@ -1,6 +1,6 @@
 """Find the best Kitgun / Zaw assembly per Riven head for the Bot.
 
-    python tools/build_modular_winners.py [--workers 12] [--verify 4]
+    python tools/build_modular_winners.py [--workers 12] [--verify 4] [--family zaw] [--only Ooltha]
 
 One winner per Kitgun chamber and slot (primary and secondary carry the same
 Riven at different dispositions) and per Zaw strike: 6 x 2 + 11 = 23. The
@@ -13,7 +13,8 @@ benchmark enemy, 50% weak point):
    optimizer and keep the highest.
 
 Output: data/export/<build>/modular_winners.json (schema 2), bundled into the
-Bot by tools/sync_wfarsenal_component.ps1.
+Bot by tools/sync_wfarsenal_component.ps1. With ``--family`` / ``--only`` the
+heads computed replace their entries in the existing file; the rest stay.
 """
 from __future__ import annotations
 
@@ -121,11 +122,14 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) * 3 // 4))
     parser.add_argument("--verify", type=int, default=4, help="screened assemblies per head to rebuild in full")
     parser.add_argument("--only", action="append", default=[], help="limit to heads whose English name matches")
+    parser.add_argument("--family", choices=("kitgun", "zaw"), help="limit to one family")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     app = _app()
     exports = app.EXPORTS
-    todo = [h for h in heads(exports) if not args.only or h["name"]["nameEn"] in args.only]
+    todo = [h for h in heads(exports) if (not args.only or h["name"]["nameEn"] in args.only)
+            and (not args.family or h["family"] == args.family)]
+    output = args.output or ROOT / "data/export" / str(exports.get("buildLabel")) / "modular_winners.json"
     started = time.perf_counter()
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
         # 0. Bare screen: the strongest assembly with no mods seeds the build.
@@ -157,6 +161,14 @@ def main() -> int:
                                                 weakpointRate=WEAKPOINT_RATE, metric="killsPerMinute", profile="fast"),
                                     method=dict(screen="seed build x every assembly", verified=args.verify),
                                     kitgun={}, zaw={}, aliases={})
+    if (args.only or args.family) and output.exists():
+        previous = json.loads(output.read_text(encoding="utf-8"))
+        redone = {(h["family"], h["key"]) for h in todo}
+        for family in ("kitgun", "zaw"):
+            document[family] = {key: entry for key, entry in previous.get(family, {}).items()
+                                if (family, key) not in redone}
+        kept = {key for family in ("kitgun", "zaw") for key in document[family]}
+        document["aliases"] = {alias: key for alias, key in previous.get("aliases", {}).items() if key in kept}
     for head in todo:
         rows = builds[cursor:cursor + len(head["verify"])]
         cursor += len(rows)
@@ -178,7 +190,6 @@ def main() -> int:
     for family in ("kitgun", "zaw"):
         document[family] = dict(sorted(document[family].items()))
     document["aliases"] = dict(sorted(document["aliases"].items()))
-    output = args.output or ROOT / "data/export" / str(exports.get("buildLabel")) / "modular_winners.json"
     output.write_text(json.dumps(document, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {output} in {time.perf_counter() - started:.0f}s")
     return 0

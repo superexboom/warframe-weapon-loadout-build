@@ -1812,6 +1812,73 @@ FAST_KILL_BRANCHES = 4
 # Element seeds: the greedy beam fixes one element pairing early, so viral
 # and corrosive builds are also searched from their two component MODs.
 ELEMENT_SEEDS = {"DT_VIRAL": ("DT_FREEZE", "DT_POISON"), "DT_CORROSIVE": ("DT_ELECTRICITY", "DT_POISON")}
+# Every element target the build page offers, by the mods that make it. The
+# analysis' own seed list above stays the two it always searched.
+ELEMENT_TARGET_PARTS = {
+    "DT_EXPLOSION": ("DT_FIRE", "DT_FREEZE"),
+    "DT_RADIATION": ("DT_FIRE", "DT_ELECTRICITY"),
+    "DT_GAS": ("DT_FIRE", "DT_POISON"),
+    "DT_MAGNETIC": ("DT_FREEZE", "DT_ELECTRICITY"),
+    "DT_VIRAL": ("DT_FREEZE", "DT_POISON"),
+    "DT_CORROSIVE": ("DT_ELECTRICITY", "DT_POISON"),
+}
+
+
+def optimize_for_element(
+    weapon: Mapping[str, Any],
+    candidates: Sequence[_Card],
+    riven: _Card | None,
+    *,
+    required_damage_type: str | None = None,
+    **kwargs: Any,
+) -> _Evaluation:
+    """``_optimize`` with an element target that a narrow beam can miss.
+
+    The beam ranks single cards and keeps the best partial builds, so a pure
+    two-element pair (Boltor Prime + viral: nothing cold ranks well alone) may
+    never survive to be combined. Before calling the target infeasible, seed
+    one mod of each component -- the strongest, then the cheapest for tight
+    capacity -- and search again.
+    """
+    try:
+        return _optimize(weapon, candidates, riven, required_damage_type=required_damage_type, **kwargs)
+    except SimulationError as exc:
+        if not required_damage_type or f"damage type {required_damage_type}" not in str(exc):
+            raise
+        failure = exc
+    required = list(kwargs.pop("required_mod_keys", None) or ())
+    forbidden = set(kwargs.get("forbidden_mod_keys") or ())
+    parts = ELEMENT_TARGET_PARTS.get(required_damage_type, (required_damage_type,))
+    tried = set()
+    for prefer in ("strongest", "cheapest"):
+        seeded = list(required)
+        for part in parts:
+            options = [
+                (sum(float(e.value) for e in card.effects if e.damage_type == part), card)
+                for card in candidates
+                if card.key not in forbidden and card.key not in seeded
+                and any(e.damage_type == part and e.upgrade_type == "WEAPON_PERCENT_BASE_DAMAGE_ADDED"
+                        for e in card.effects)
+            ]
+            if not options:
+                break
+            if prefer == "strongest":
+                _, card = max(options, key=lambda item: (item[0], -item[1].drain, item[1].key))
+            else:
+                _, card = min(options, key=lambda item: (item[1].drain, -item[0], item[1].key))
+            seeded.append(card.key)
+        else:
+            if tuple(seeded) in tried:
+                continue
+            tried.add(tuple(seeded))
+            try:
+                return _optimize(weapon, candidates, riven, required_damage_type=required_damage_type,
+                                 required_mod_keys=seeded, **kwargs)
+            except SimulationError:
+                # The unseeded search already ran; a seed that does not fit
+                # (slots, capacity, a family clash) just is not the answer.
+                continue
+    raise failure
 
 
 def _with_health_scale(context: Mapping[str, Any], scale: float) -> dict[str, Any]:
@@ -2327,6 +2394,19 @@ def _optimize(
                 best is None or seed_eval.score > best.score
             ):
                 best = seed_eval
+    # One beam layer reaches the same MOD set from several parents, each time
+    # in a different slot order (AB+C, AC+B, BC+A: about half of a layer).
+    # _evaluate tries every element pairing, so without an elemental Riven
+    # the order does not change the score: replay each set once and share it.
+    # An elemental Riven is placed relative to the element cards' order, so
+    # there the order stays part of the key.
+    order_free = riven is None or not any(effect.damage_type in BASE_ELEMENTS for effect in riven.effects)
+
+    def score_key(cards: Sequence[_Card]) -> tuple[str, ...]:
+        keys = tuple(card.key for card in cards)
+        return tuple(sorted(keys)) if order_free else keys
+
+    layer_scores: dict[tuple[str, ...], float | None] = {}
     for _ in range(limit):
         expanded: list[tuple[tuple[int, ...], _Evaluation]] = []
         if expired(deadline):
@@ -2349,20 +2429,24 @@ def _optimize(
                 )
         scores: list[float | None] = []
         if layer_jobs:
-            if _pool_exec is not None and len(layer_jobs) >= 8:
+            todo: dict[tuple[str, ...], tuple[_Card, ...]] = {}
+            for _sel, cards in layer_jobs:
+                todo.setdefault(score_key(cards), cards)
+            unique = list(todo.items())
+            if _pool_exec is not None and len(unique) >= 8:
                 # Keep only a bounded batch in flight. A deadline must not
                 # leave thousands of queued replay jobs running after return.
-                for offset in range(0, len(layer_jobs), 16):
+                for offset in range(0, len(unique), 16):
                     if expired(deadline):
                         break
-                    batch = layer_jobs[offset:offset + 16]
+                    batch = unique[offset:offset + 16]
                     futures = [_pool_exec.submit(_parallel._score_job,
-                               (cards, riven, _pool_ctx)) for _sel, cards in batch]
-                    scores.extend(fut.result() for fut in futures)
+                               (cards, riven, _pool_ctx)) for _key, cards in batch]
+                    for (key, _cards), future in zip(batch, futures):
+                        layer_scores[key] = future.result()
                     heartbeat(len(batch))
             else:
-                scores = []
-                for _sel, cards in layer_jobs:
+                for key, cards in unique:
                     if expired(deadline):
                         break
                     evaluated = _evaluate(
@@ -2376,7 +2460,13 @@ def _optimize(
                         capacity_limit=capacity_limit,
                         target_context=target_context,
                     )
-                    scores.append(None if evaluated is None else evaluated.score)
+                    layer_scores[key] = None if evaluated is None else evaluated.score
+            for _sel, cards in layer_jobs:
+                key = score_key(cards)
+                if key not in layer_scores:
+                    break  # the budget ran out: the rest of the layer is unscored
+                scores.append(layer_scores[key])
+            layer_scores.clear()
         scored: list[tuple[tuple[int, ...], float]] = [
             (sel, score)
             for (sel, _cards), score in zip(layer_jobs, scores)

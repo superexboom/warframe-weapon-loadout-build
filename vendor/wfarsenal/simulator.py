@@ -347,23 +347,48 @@ def resolve_kitgun_record(
     return record
 
 
+def _zaw_legacy_paths(rules: Mapping[str, Any]) -> dict[str, str]:
+    return {
+        str(row["legacyPath"]): real
+        for table in ("strikes", "grips", "links")
+        for real, row in (rules.get(table) or {}).items()
+        if isinstance(row, Mapping) and row.get("legacyPath")
+    }
+
+
+def zaw_part_paths(parts: Sequence[Any], rules: Mapping[str, Any]) -> list[str]:
+    """Zaw parts as client paths. A selection saved before the parts were
+    matched to the client (wiki-frozen paths, ``legacyPath``) is recognised by
+    its strike and read as a whole in the old paths: the old grip paths
+    HandleOne..HandleSix name other grips in the client."""
+    paths = [str(p).strip().replace("\\", "/").rstrip("/") for p in parts if str(p).strip()]
+    legacy = _zaw_legacy_paths(rules)
+    strikes = rules.get("strikes") or {}
+    if any(path in legacy and legacy[path] in strikes for path in paths):
+        return [legacy.get(path, path) for path in paths]
+    return paths
+
+
+def is_zaw_assembly(parts: Sequence[Any], rules: Mapping[str, Any]) -> bool:
+    strikes = (rules or {}).get("strikes") or {}
+    return any(path in strikes for path in zaw_part_paths(parts, rules or {}))
+
+
 def resolve_zaw_record(
     base: Mapping[str, Any], parts: Sequence[str], rules: Mapping[str, Any]
 ) -> Mapping[str, Any]:
     """Assemble one Zaw from frozen strike, grip and link rows.
 
     Damage model (wiki-verified): every part contributes a flat damage bonus
-    to the strike's base total; attack speed is the grip's base speed plus the
-    strike's and link's speed modifiers; crit/status add the link's additive
-    share. The grip's handedness picks the 1H/2H weapon class from the strike.
+    to the strike's base total, and a two-handed Zaw multiplies it by the
+    strike's two-handed damage factor; attack speed is the grip's base speed
+    plus the strike's and link's speed modifiers; crit/status add the link's
+    additive share. The grip's handedness picks the 1H/2H weapon class from
+    the strike.
     """
     if not rules:
         raise SimulationError("Zaw component export is missing")
-    normalized = {
-        str(part).strip().replace("\\", "/").rstrip("/"): str(part).strip()
-        for part in parts
-        if str(part).strip()
-    }
+    normalized = {path: path for path in zaw_part_paths(parts, rules)}
     strikes = rules.get("strikes") or {}
     grips = rules.get("grips") or {}
     links = rules.get("links") or {}
@@ -388,6 +413,8 @@ def resolve_zaw_record(
     # the grip silently degraded every zaw to the Sword fallback.
     weapon_class = str((strike.get("twoHanded" if handed == "two" else "oneHanded")) or "Sword")
     record["zawWeaponClass"] = weapon_class
+    record["zawHanded"] = handed
+    record["zawStrike"] = next(path for path in normalized if path in strikes)
     stance_tag = ZAW_CLASS_STANCE_TAGS.get(weapon_class)
     if stance_tag:
         record["compatTags"] = sorted(
@@ -407,13 +434,14 @@ def resolve_zaw_record(
     crit_chance = float(strike.get("critChance") or 0.0) + float(link.get("critChance") or 0.0)
     crit_multiplier = float(strike.get("critMultiplier") or 2.0)
     proc_chance = float(strike.get("procChance") or 0.0) + float(link.get("statusChance") or 0.0)
-    total = max(0.0, base_total + flat_bonus)
+    factor = float(strike.get("twoHandedDamageFactor") or 1.0) if handed == "two" else 1.0
+    total = max(0.0, (base_total + flat_bonus) * factor)
     strike_types = {
         str(dtype): max(0.0, float(amount))
         for dtype, amount in (strike_damage.get("types") or {}).items()
         if isinstance(amount, (int, float))
     }
-    if flat_bonus and strike_types:
+    if (flat_bonus or factor != 1.0) and strike_types:
         scale = total / max(sum(strike_types.values()), 1e-9)
         strike_types = {dtype: amount * scale for dtype, amount in strike_types.items()}
 
@@ -801,11 +829,7 @@ def simulate(
     weapon_record = resolve_record(exports["weapons"], weapon, kind="weapon")
     if kitgun_parts:
         zaw_rules = exports.get("zaws") or {}
-        zaw_strike_paths = zaw_rules.get("strikes") or {}
-        if any(
-            str(part).strip().replace("\\", "/").rstrip("/") in zaw_strike_paths
-            for part in kitgun_parts
-        ):
+        if is_zaw_assembly(kitgun_parts, zaw_rules):
             weapon_record = resolve_zaw_record(weapon_record, kitgun_parts, zaw_rules)
         else:
             weapon_record = resolve_kitgun_record(

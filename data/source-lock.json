@@ -189,7 +189,7 @@
       "id": "wiki-zaws",
       "kind": "manual-audited",
       "path": "data/export/{build}/zaws.json",
-      "sha256": "7ded1f179e1378706eacd52a2f822ad9d3b8f1879ab8c0cecee12785def45bab",
+      "sha256": "6bf2cab3b0f388012705ad625e890daf0464b9ed5a2bf11a35df84acea8759fd",
       "pinnedBuild": "2026.08.13.13.24",
       "required": true,
       "usedBy": [

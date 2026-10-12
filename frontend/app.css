@@ -313,10 +313,14 @@ button:disabled { cursor: not-allowed; opacity: .42; }
 .score-orbit[data-grade="S"] .orbit-value, .score-orbit[data-grade="A"] .orbit-value { stroke: var(--orokin); }
 .score-orbit > div { display: flex; flex-direction: column; align-items: center; }
 .score-orbit strong { font-size: 28px; font-weight: 620; line-height: 1; }
+.score-orbit strong.is-long { font-size: 21px; }
 .score-orbit span { margin-top: 6px; color: var(--muted); font-size: 9px; }
 .grade-block { display: flex; min-height: 96px; flex-direction: column; align-items: center; justify-content: center; border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft); }
 .grade-block > span { color: var(--muted); font-size: 9px; }
 .grade-block > strong { color: var(--riven-bright); font-size: 35px; font-weight: 600; line-height: 1.2; }
+/* 硬度积分靶：三个基线击杀时间节点，逐行列出 */
+.grade-block > strong.ttk-nodes { display: flex; margin: 6px 0 4px; flex-direction: column; align-items: center; gap: 1px; font-size: 15px; line-height: 1.25; }
+.grade-block > strong.ttk-nodes em { color: var(--muted); font-size: 9px; font-style: normal; font-weight: 500; }
 .grade-block small { max-width: 105px; overflow: hidden; color: var(--text-soft); font-size: 9px; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
 .score-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); border: 1px solid var(--line-soft); }
 .score-metrics > div { min-width: 0; padding: 13px 12px; }
@@ -1227,10 +1231,22 @@ body.is-modal-open { overflow: hidden; }
 /* 宽工作区：场景字段三列排布 */
 .build-scenario-fold .scenario-fields { grid-template-columns: repeat(3, minmax(0,1fr)); }
 /* 宽工作区：加成行两列排布，勾选后滑条 / 输入 / 数值保持同一行 */
+/* 外部加成：每行 = 勾选 + 名称 / 具体加成 / 乘区说明，右侧是强度、人数或元素 */
 .external-buff-panel .external-buff-group { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px 10px; }
 .external-buff-panel .external-buff-group-title { grid-column: 1 / -1; }
-.external-buff-panel .external-buff-row { grid-template-columns: auto minmax(0,1fr) minmax(80px,150px) 56px 60px; }
-.external-buff-panel .external-buff-value:last-child { grid-column: -2 / -1; }
+.external-buff-panel .external-buff-row { grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; }
+.external-buff-panel .external-buff-row.is-enabled { border-color: rgba(229,207,145,.38); }
+.external-buff-panel .external-buff-row.is-inapplicable { opacity: .55; }
+.external-buff-toggle { display: grid; min-width: 0; grid-template-columns: auto minmax(0,1fr); align-items: start; gap: 8px; cursor: pointer; }
+.external-buff-toggle input[type="checkbox"] { margin: 2px 0 0; accent-color: var(--orokin); }
+.external-buff-panel .external-buff-copy small { line-height: 1.45; white-space: normal; }
+.external-buff-effects { color: var(--orokin); font-size: 10px; font-variant-numeric: tabular-nums; }
+.external-buff-tag { margin-left: 6px; padding: 0 4px; border: 1px solid var(--line); color: var(--muted); font-size: 8px; font-style: normal; font-weight: 500; vertical-align: 1px; }
+.external-buff-controls { display: flex; align-items: center; gap: 6px; }
+.external-buff-controls:empty { display: none; }
+.external-buff-controls select, .external-buff-number input { height: 24px; padding: 0 4px; border: 1px solid var(--line); border-radius: 3px; color: var(--text); background: #0b0f15; font-size: 10px; }
+.external-buff-number { display: inline-flex; align-items: center; gap: 3px; color: var(--muted); font-size: 9px; }
+.external-buff-number input { width: 56px; text-align: right; }
 .scenario-fields { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
 .scenario-fields .field, .scenario-fields .check-field { min-width: 0; }
 #build-manual-detonation { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1323,12 +1339,12 @@ body.is-modal-open { overflow: hidden; }
 .element-select-wrap select { padding-left: 36px !important; }
 .element-control-icon { position: absolute; z-index: 1; top: 50%; left: 10px; width: 18px; height: 18px; pointer-events: none; transform: translateY(-50%); object-fit: contain; }
 .element-control-icon[hidden] { display: none; }
-/* 分析页元素选择行：天生元素（赤毒/信条/终幕）——与配装页 element-select
-   同一套控件样式（暗底、图标左置、focus 紫晕） */
-.analysis-element-fields { display: grid; grid-template-columns: minmax(200px, 280px); gap: 10px; padding: 10px 0 0; }
+/* 分析页元素选择行：天生元素（赤毒/信条/终幕）、近战路线、弱点命中率——与配装页 element-select
+   同一套控件样式（暗底、图标左置、focus 紫晕）；与紫卡武器输入框同列对齐（右侧空出倾向框的宽度） */
+.analysis-element-fields { display: grid; grid-template-columns: minmax(0, 1fr) 92px; gap: 10px; padding: 10px 18px 0; }
 .analysis-element-fields[hidden] { display: none; }
 .analysis-element-fields .field select {
-  width: 100%; height: 38px; min-width: 0; padding: 0 11px 0 36px; border: 1px solid var(--line); border-radius: 3px; outline: 0;
+  width: 100%; height: 38px; min-width: 0; padding: 0 30px 0 11px; border: 1px solid var(--line); border-radius: 3px; outline: 0;
   background: #0d1117; color: var(--text); font-size: 12px; cursor: pointer; appearance: none; -webkit-appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
   background-position: calc(100% - 16px) 16px, calc(100% - 11px) 16px; background-size: 5px 5px; background-repeat: no-repeat;
@@ -1529,7 +1545,7 @@ body.is-modal-open { overflow: hidden; }
   .tool-layout { grid-template-columns: 1fr; }
   .input-pane { position: static; }
   .riven-composer { float: left; width: 45%; padding-right: 10px; }
-  .weapon-picker, .weapon-issue, .stat-editor, .submit-row, .form-message { margin-left: 45%; }
+  .weapon-picker, .weapon-issue, .stat-editor, .submit-row, .form-message, .analysis-element-fields, #analysis-assembly-slot { margin-left: 45%; }
   .weapon-picker { padding-top: 18px; }
   .weapon-issue { margin-top: 8px; margin-right: 18px; }
   .stat-editor { padding-top: 8px; border-top: 0; }
@@ -1568,7 +1584,7 @@ body.is-modal-open { overflow: hidden; }
   .capacity-bar-block { min-width: 0; max-width: none; flex: 1 1 100%; }
   .input-pane, .result-pane { box-shadow: 0 10px 30px rgba(0,0,0,.24); }
   .riven-composer { float: none; width: auto; padding-right: 18px; }
-  .weapon-picker, .weapon-issue, .stat-editor, .submit-row, .form-message { margin-left: 0; }
+  .weapon-picker, .weapon-issue, .stat-editor, .submit-row, .form-message, .analysis-element-fields, #analysis-assembly-slot { margin-left: 0; }
   .weapon-issue { margin-right: 18px; margin-left: 18px; }
   .stat-editor { border-top: 1px solid var(--line-soft); }
   .score-band { grid-template-columns: 120px 1fr; }
@@ -1764,7 +1780,9 @@ body.is-modal-open { overflow: hidden; }
 [data-theme="light"] .build-section, [data-theme="light"] .standalone-mod-grid { background-color: #f2f5f8; background-image: linear-gradient(rgba(29,127,149,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(29,127,149,.05) 1px,transparent 1px); }
 [data-theme="light"] .segmented-control { background: #dde3ea; }
 [data-theme="light"] .empty-mod-slot::before { border-color: #a9b4c2; background: #eef1f5; }
-[data-theme="light"] .external-buff-row input[type="number"] { background: #eef1f5; }
+[data-theme="light"] .external-buff-row input[type="number"], [data-theme="light"] .external-buff-controls select { background: #eef1f5; }
+[data-theme="light"] .external-buff-row { background: #f7f8fa; }
+[data-theme="light"] .external-buff-panel .external-buff-row.is-enabled { border-color: rgba(166,124,32,.45); background: #fdfaf1; }
 [data-theme="light"] .rank-stepper, [data-theme="light"] .special-slot-controls button, [data-theme="light"] .arcane-slot-controls button { background: #eef1f5; }
 [data-theme="light"] .damage-type-item { background: #f4f6f9; }
 [data-theme="light"] .damage-metrics { background: rgba(255,255,255,.85); }
@@ -1790,3 +1808,51 @@ body:not(.mod-slot) :is(.button, .tool-tab, input, select, textarea) { font-size
 .enemy-thumb [hidden] { display: none; }
 
 .build-config-migration-note { margin: 12px 18px; padding: 10px 12px; border-left: 2px solid var(--ice); color: var(--text); background: rgba(115,207,223,.08); font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
+
+/* 字号下限（2026-10-12）：上面的全局放大只覆盖了一部分类，面板上仍有大量 8–9px 的
+   标签、提示和数据。这里统一抬到：紧凑徽章 / 角标 10px，标签 / 说明 / 数据 11px，
+   分段按钮 12px。MOD 卡面与紫卡卡面是游戏素材，不在此列。 */
+.pane-badge,
+.result-section-title > div > span, .build-titlebar > div > span,
+.live-hud-title span, .special-loadout-head span, .combat-title span,
+.build-legend, .build-legend b, .build-legend .legend-forma, .diagnostics summary b,
+.dt-chip .dt-chip-label, .enemy-defense, .external-buff-tag, .enemy-missing-badge, .enemy-special-badge,
+.special-slot-lock, .analysis-stance-lock, .incarnon-option em, .rabbit-dialog-head span,
+.warframe-active-effect, .incarnon-route-chip i, .app-footer { font-size: 10px; }
+.disposition-readout span, .subheading > div > span, .score-metrics span, .result-section-title small,
+.contribution-values span, .contribution-values .contribution-reopt, .tier-stats small, .recommendation-foot span,
+.build-identity span, .damage-metric span, .fire-mode-item span, .fire-mode-strip-note, .incarnon-route-head,
+.analysis-stance-gain, .grade-block small, .diagnostics p, .fold-head span, .scope-hint, .scope-empty,
+.arcane-option-copy small, .external-buff-group-title, .external-buff-copy small, .external-buff-gain small,
+.external-buff-effects, .external-buff-number, .kitgun-part-group h4, .kitgun-pop-mode h5, .config-strip-status,
+.incarnon-option small, .incarnon-detail em, .live-hud-meta > span, .live-hud-pulse, .live-metric span,
+.mod-runtime-summary, .manual-slot-empty-card small, .special-slot-summary, .special-slot-empty small,
+.special-slot-head strong, .arcane-flag-toggle, .mod-picker-title small, .manual-mod-categories button,
+.weapon-option-copy em, .riven-builder-head small, .riven-builder-hint, .riven-solve-head small,
+.mod-picker-grid.is-list .manual-mod-option small, .mod-picker-grid.is-list .manual-mod-option em,
+.mod-picker-grid.is-list .mod-gain-badge, .mod-picker-hint,
+.enemy-target-label, .enemy-target-copy small, .enemy-target-action, .enemy-factions button, .enemy-picker-count,
+.enemy-option span, .enemy-option em, .scenario-group-title, .scenario-group-title small,
+.enemy-stats-head span, .enemy-stat span, .enemy-missing-toggle,
+.combat-title small, .kpi-sub span, .kpi-main span, .combat-chart-head strong, .combat-chart-head::after,
+.arcane-selected-row span, .status-breakdown-note, .status-row-dot i, .status-breakdown-total, .probability-row span,
+.timeline-caption, .slot-count-field small, .build-disposition-card span, .empty-copy,
+.warframe-selector-copy small, .warframe-selector-copy em, .warframe-profile span, .warframe-profile p,
+.warframe-passive p, .warframe-source-description, .warframe-passive > span,
+.warframe-image-select small, .warframe-image-select em, .warframe-hud span,
+.warframe-panel-stat span, .warframe-panel-stat small,
+.warframe-ability-scalars span, .warframe-ability-scalars small, .warframe-ability-scalar-group,
+.standalone-build-identity span, .weapon-stat-band span, .damage-type-item span, .damage-type-item strong,
+.forma-counter span, .bench-toolbar-right > span, .check-field span, .field output { font-size: 11px; }
+.fire-mode-item strong, .incarnon-route-chip b, .incarnon-route-chip i, .grade-block > strong.ttk-nodes em { font-size: 11px; }
+.segmented-control button, .recommendation-foot p { font-size: 12px; }
+.tier-stats strong { font-size: 13px; }
+.arcane-option-copy em.arcane-option-effect { font-size: 11px; }
+.warframe-selector-trigger.is-compact .warframe-selector-copy em, .warframe-selector-trigger.is-compact .warframe-selector-copy small { font-size: 11px; }
+/* 配装条件栏的说明文字换行显示，不再被省略号截断 */
+.build-control-fields .field small { overflow: visible; line-height: 1.4; text-overflow: clip; white-space: normal; }
+/* 宽屏（≥1500px）：左侧条件栏加宽，两列下拉框不再截断选项文字 */
+@media (min-width: 1500px) {
+  .build-workspace { grid-template-columns: 490px minmax(0, 1fr); }
+  .warframe-workspace { grid-template-columns: 420px minmax(0, 1fr); }
+}

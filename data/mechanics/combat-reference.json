@@ -5785,6 +5785,27 @@
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
           "multishotSource": "reference takes_multishot"
+        },
+        {
+          "damage": {
+            "toxin": 953.0
+          },
+          "radius_m": 3.3,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.30000001,
+          "crit_chance": 0.050000001,
+          "crit_multiplier": 2.3,
+          "status_chance": 0.5,
+          "forced_procs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 1.1,
+          "headOnly": true,
+          "nativeSource": "/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziProjectile",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-explicit",
+          "multishotSource": "one embed per projectile",
+          "embedPart": "HEAD"
         }
       ],
       "nativeSources": [

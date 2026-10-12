@@ -25742,6 +25742,21 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 1,
+     "multishotCopy": {
+      "direct": {
+       "critChance": 0.25,
+       "critMultiplier": 2.0,
+       "procChance": 0.25,
+       "scale": 1.0
+      },
+      "radial": {
+       "critChance": 0.25,
+       "critMultiplier": 2.0,
+       "procChance": 0.25,
+       "scale": 1.0
+      },
+      "source": "/Lotus/Weapons/Tenno/Archwing/Primary/RepurposedGrineerAntiAircraftGun/KuvaGrattlerWavProjMS (MultiShotProjectileType, build 2026.10.08)"
+     },
      "reloadTime": 2.5,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
     }

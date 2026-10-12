@@ -116,6 +116,51 @@ def get_pool(context: dict[str, Any] | None = None) -> ProcessPoolExecutor | Non
     return _POOL
 
 
+def map_jobs(fn, jobs: list) -> list:
+    """Run ``fn`` over ``jobs`` on the pool (serially without one), in order.
+
+    Each entry is the job's value or the exception it raised. A request that a
+    newer one superseded stops between results and drops the rest.
+    """
+    from .search_session import check_cancelled
+
+    pool = get_pool() if len(jobs) > 1 else None
+    results: list = []
+    if pool is None:
+        for job in jobs:
+            check_cancelled()
+            try:
+                results.append(fn(job))
+            except Exception as exc:  # reported per job, like a future's
+                results.append(exc)
+        return results
+    futures = [pool.submit(fn, job) for job in jobs]
+    try:
+        for future in futures:
+            check_cancelled()
+            try:
+                results.append(future.result())
+            except Exception as exc:
+                results.append(exc)
+    finally:
+        for future in futures:
+            future.cancel()  # no-op once finished
+    return results
+
+
+def _gain_replay_job(args: tuple) -> float:
+    """One MOD-gain measurement: prepare the loadout's combat and replay the
+    benchmark window. The parent resolves the stats (it holds the app's
+    records); the replay -- most of the cost -- runs here."""
+    from .combat_replay import replay
+    from .manual_combat import prepare
+
+    prepare_args, prepare_kwargs, stats, enemy, replay_kwargs = args
+    combat = prepare(*prepare_args, **prepare_kwargs)
+    return replay(stats, enemy, combat=combat, trigger_sources=combat["trigger_sources"],
+                  **replay_kwargs)["killsPerMinute"]
+
+
 def shutdown_pool() -> None:
     """Tear the pool down (tests / process exit)."""
     global _POOL

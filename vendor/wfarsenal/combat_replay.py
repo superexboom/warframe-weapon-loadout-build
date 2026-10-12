@@ -565,7 +565,20 @@ def _trajectory(
         for tick in range(6):
             push(t + tick, 'dot', ('DT_ELECTRICITY', per_tick, t + 6), gen)
 
-    def take(vector, t, source, weak_kill=False, cv2=0.0):
+    # Extra Hits (Toxic Lash, Xata's Whisper, Resupply): a second instance
+    # beside each weapon hit, worth a share of the finished hit in one type.
+    # Faction applies again and so does the body part (wiki Extra_Hit); a hit
+    # that kills fires none.
+    extra_hits = tuple(getattr(stats, 'extra_hits', ()) or ())
+    extra_scale = 1.0
+    if extra_hits:
+        extra_scale = stats.faction_damage_multipliers.get('', 1.0)
+        if cache['target_faction']:
+            extra_scale *= stats.faction_damage_multipliers.get(cache['target_faction'], 1.0)
+        head_part = float(locations['head']['hit_multiplier'] or 1.0)
+        extra_scale *= ((1 - head) + head * head_part * head_part) / ((1 - head) + head * head_part)
+
+    def take(vector, t, source, weak_kill=False, cv2=0.0, extra=False):
         # Spend one attack fraction across pools. Shield bypass acts in parallel.
         # Residual damage never leaks to the next target.
         nonlocal fortifier_damage, fortifier_stolen, self_overguard, onos_hits
@@ -656,6 +669,11 @@ def _trajectory(
         if ehp > 0.0 and pools[0] <= 1e-7 and pools[2] <= 1e-7:
             die(t, attribution.crossing(t, remaining, resume_time(t))[0], source != "syndicate")
             return True
+        if extra_hits and source == 'direct' and not extra:
+            trigger = sum(vector.values())
+            for dtype, share, _forced in extra_hits:
+                if trigger > 0.0 and take({dtype: trigger * share * extra_scale}, t, source, weak_kill, cv2, extra=True):
+                    return True
         return False
 
     def melee_stacks(heavy=False):
@@ -793,6 +811,7 @@ def _trajectory(
         return result
 
     crit_views = {}
+    head_only_parts = {}
     current_time=0.0
 
     def live_crit():
@@ -1263,6 +1282,15 @@ def _trajectory(
                 active, radial = model(t, heavy=bool(melee_hit.get('heavy')))
                 active = apply_hit(active, melee_hit, melee_crit=melee['meleeCrit'],
                                    heavy_multiplier=melee_heavy_multiplier)
+                duplicate = combat.get('duplicate')
+                if duplicate and melee_hit.get('canCrit', True):
+                    # Melee Duplicate: a yellow (tier-1) crit is replayed once,
+                    # its crit and status rolled anew; replays add no combo.
+                    chance = min(max(active.crit_chance, 0.0), 2.0)
+                    yellow = chance if chance < 1.0 else 2.0 - chance
+                    factor = 1.0 + duplicate['chance'] * duplicate.get('uptime', 1.0) * yellow
+                    if factor != 1.0:
+                        active = replace(active, multishot=active.multishot * factor)
                 radial = None
             if manual_detonation:
                 # A player detonates the existing batch before another throw
@@ -1479,6 +1507,17 @@ def _trajectory(
                 if gen != generation:
                     stale += 1
                     continue
+                if getattr(part, '_head_only', False):
+                    # Embeds in a head only (Zymos ValidEmbedPart HEAD): the
+                    # burst follows the shot's head share.
+                    key = (id(part), aim)
+                    if key not in head_only_parts:
+                        scaled = copy(part)
+                        scaled.multishot = part.multishot * aim
+                        head_only_parts[key] = scaled
+                    part = head_only_parts[key]
+                    if not part.multishot:
+                        continue
                 delay = max(0.0, getattr(part, '_impact_delay', 0.0))
                 if delay:
                     push(t + delay, 'delayed-radial', (part, sniper_factor), generation)

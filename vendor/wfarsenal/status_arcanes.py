@@ -7,6 +7,7 @@ ENCUMBER = '/Lotus/Upgrades/CosmeticEnhancers/Utility/ExtraProcOnProc'
 FORTIFIER = '/Lotus/Upgrades/CosmeticEnhancers/Offensive/OverguardSteal'
 CRYOGENIC = '/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture'
 EMPOWERED = '/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnStatusProcBonusDamage'
+DUPLICATE = '/Lotus/Upgrades/CosmeticEnhancers/Offensive/ReplayLightCritHits'
 STATUS_POOL = ('DT_IMPACT','DT_PUNCTURE','DT_SLASH','DT_FIRE','DT_FREEZE',
                'DT_ELECTRICITY','DT_POISON','DT_EXPLOSION','DT_CORROSIVE',
                'DT_MAGNETIC','DT_VIRAL','DT_GAS','DT_RADIATION')
@@ -37,6 +38,19 @@ def configuration(record, rank):
                 and len(conditions)==1 and conditions[0].get('conditions')==[
                     '/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcALLCondition']):
             return dict(kind='empowered',damage=values[rank])
+    if record.get('path') == DUPLICATE:
+        # Melee Duplicate (ReplayLightCritHits.lua on
+        # OnMeleeCritConditionNoIntermediates): a yellow crit replays once,
+        # 25% + 15% per rank (the localized ranks read 25..100%).
+        script=(record.get('runtimeScripts') or {}).get('apply',{})
+        trigger=record.get('trigger') or {}
+        fx=record.get('effects') or []
+        conditions=record.get('conditionalEffects') or []
+        if (script.get('Script')=='ReplayLightCritHits.lua' and script.get('Function')=='OnCritHit'
+                and math.isclose(float(trigger.get('chance') or 0),.25,abs_tol=1e-6)
+                and len(fx)==1 and math.isclose(float(fx[0].get('valuePerRank',0)),.15,abs_tol=1e-6)
+                and len(conditions)==1 and conditions[0].get('conditions')==['OnMeleeCritConditionNoIntermediates']):
+            return dict(kind='duplicate',chance=min(1.,.25+.15*rank))
     if record.get('path') == FORTIFIER:
         script=(record.get('runtimeScripts') or {}).get('apply',{})
         fx=record.get('extraEffects') or []

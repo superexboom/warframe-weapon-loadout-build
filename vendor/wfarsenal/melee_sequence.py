@@ -33,15 +33,27 @@ def reference() -> dict[str, Any]:
 _COSMETIC_SLAMS = frozenset({"GroundAttackEffect"})
 
 
+def _damaging_slam(slam: Mapping[str, Any] | None) -> bool:
+    """A Slams[] entry that reaches a body: fist / sparring punch and kick
+    effects, shield-bash and glaive-catch effects have a 0 m radius."""
+    if slam is None or slam.get("event") in _COSMETIC_SLAMS:
+        return False
+    radius = slam.get("radius")
+    return radius is None or float(radius) > 0
+
+
 def attack_hits(attack: Mapping[str, Any], slams: Mapping[str, Mapping[str, Any]] | None = None) -> list[dict[str, Any]]:
     """One row per landed hit, in time order.
 
     Sweep hits carry the attack's (or the per-swing override's) properties. An
     animation event that matches one of the weapon's Slams[] triggers adds a
-    radial hit with that slam's attenuation (``kind == 'slam'``).
+    radial hit with that slam's attenuation (``kind == 'slam'``). An attack
+    with no sweep event lands one hit at mid-animation: a gunblade shot is the
+    attack's hit plus the shot's blast (the wiki's stance totals count both).
     """
     events = list(attack.get("hits") or ())
     swings = list(attack.get("swings") or ())
+    slam_events = [e for e in attack.get("events") or () if _damaging_slam((slams or {}).get(e.get("event")))]
     count = max(len(events), 1)
     rows = []
     for index in range(count):
@@ -56,10 +68,8 @@ def attack_hits(attack: Mapping[str, Any], slams: Mapping[str, Mapping[str, Any]
             comboHits=float(props.get("comboHits", 1.0)),
             damagePct=dict(props.get("damagePct") or {}),
         ))
-    for event in attack.get("events") or ():
-        slam = (slams or {}).get(event.get("event"))
-        if slam is None or event.get("event") in _COSMETIC_SLAMS:
-            continue
+    for event in slam_events:
+        slam = slams[event["event"]]
         rows.append(dict(
             kind="slam", slam=event.get("event"), t=float(event.get("t") or 0.0),
             atten=float(slam.get("attenuation") or 1.0), procAtten=1.0,
@@ -69,9 +79,18 @@ def attack_hits(attack: Mapping[str, Any], slams: Mapping[str, Mapping[str, Any]
     return rows
 
 
-def weapon_slams(weapon_path: str) -> dict[str, Mapping[str, Any]]:
-    rows = (reference().get("weapons") or {}).get(weapon_path, {}).get("slams") or ()
-    return {row["event"]: row for row in rows if row.get("event")}
+def weapon_row(weapon: Mapping[str, Any]) -> dict[str, Any] | None:
+    """The weapon's melee-mechanics row. An assembled Zaw takes its melee tree
+    and Slams[] from its strike's one- or two-handed block; a hybrid's form
+    (Dark Split-Sword) reads its own entity (``meleePath``)."""
+    ref = reference()
+    row = (ref.get("weapons") or {}).get(str(weapon.get("meleePath") or weapon.get("path") or ""))
+    strike = weapon.get("zawStrike")
+    if row and strike:
+        hand = ((ref.get("zaws") or {}).get(str(strike)) or {}).get(str(weapon.get("zawHanded") or ""))
+        if hand:
+            row = dict(row, tree=hand.get("tree"), slams=list(hand.get("slams") or ()))
+    return row
 
 
 # -- Attack routes ------------------------------------------------------------
@@ -101,7 +120,7 @@ def default_route(weapon: Mapping[str, Any]) -> str:
     """Bot policy: hammers slam from a vertical bullet jump, glaives heavy-throw and
     detonate, others combo."""
     tags = {str(t).upper() for t in weapon.get("compatTags") or ()}
-    row = (reference().get("weapons") or {}).get(str(weapon.get("path")), {})
+    row = weapon_row(weapon) or {}
     if "GLAIVES_STANCE" in tags and row.get("glaive"):
         return "glaive"
     if "HAMMERS_STANCE" in tags:
@@ -174,7 +193,7 @@ def build_schedule(weapon: Mapping[str, Any], route: str | None = None, *, stanc
                    combo: str | None = None, target_distance: float | None = None) -> dict[str, Any] | None:
     """The hit loop of one melee route, or None when the weapon has no data."""
     ref = reference()
-    row = (ref.get("weapons") or {}).get(str(weapon.get("path") or ""))
+    row = weapon_row(weapon)
     if not row:
         return None
     route = route or default_route(weapon)

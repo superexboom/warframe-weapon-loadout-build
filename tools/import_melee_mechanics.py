@@ -36,6 +36,8 @@ from wfarsenal.ee import parse_ee  # noqa: E402
 
 SCHEMA_VERSION = 1
 WEAPONS = ROOT / "data" / "export" / "2026.08.13.13.24" / "weapons.json"
+ZAWS = ROOT / "data" / "export" / "2026.08.13.13.24" / "zaws.json"
+ZAW_DEFAULT_BLADE = "/Lotus/Weapons/Ostron/Melee/LotusWeaponBlade"
 STANCES = ROOT / "data" / "stances.json"
 CONTEXTS = ("CC_GROUND", "CC_GROUND_BRANCH_A", "CC_GROUND_BRANCH_B", "CC_GROUND_BRANCH_C",
             "CC_GROUND_HEAVY", "CC_GROUND_HELD_HEAVY", "CC_SLIDING", "CC_AIR", "CC_AIR_RIGHT", "CC_AIR_LEFT")
@@ -306,6 +308,31 @@ def weapon_row(packages: Packages, path: str) -> dict[str, Any]:
     )
 
 
+def zaw_rows(packages: Packages) -> dict[str, Any]:
+    """Per Zaw strike (zaws.json key = the Tip path) and handedness: the melee
+    tree and Slams[] the assembled weapon takes from the strike's OneHanded /
+    TwoHanded block (its two-handed damage factor lives in zaws.json). A
+    strike that states no tree uses the generic blade's; the per-folder
+    LotusWeaponBlade does not chain to it."""
+    out = {}
+    for tip in sorted(json.loads(ZAWS.read_text(encoding="utf-8"))["strikes"]):
+        raw = packages.resolve(tip)
+        hands = {}
+        for key, hand in (("one", "OneHanded"), ("two", "TwoHanded")):
+            block = raw.get(hand) or {}
+            tree = block.get("meleeTree") or (packages.resolve(ZAW_DEFAULT_BLADE).get(hand) or {}).get("meleeTree")
+            hands[key] = dict(tree=packages.locate(tip, tree) if tree else None,
+                              slams=slam_rows({"Slams": block.get("slams") or ()}))
+        out[tip] = hands
+    return out
+
+
+def hybrid_forms(packages: Packages, path: str) -> list[str]:
+    """A hybrid weapon's forms (LotusHybridWeapon.WeaponTypes), e.g. the Dark
+    Split-Sword's heavy blade and dual swords."""
+    return [p for p in (packages.locate(path, name) for name in packages.resolve(path).get("WeaponTypes") or ()) if p]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--packages-bin", type=Path, required=True)
@@ -317,10 +344,16 @@ def main() -> int:
     packages = Packages(args.packages_bin)
     exports = json.loads(WEAPONS.read_text(encoding="utf-8"))["data"]
     melee = [w for w in exports if w.get("slot") == "melee" and packages.exists(str(w.get("path")))]
-    weapons = {w["path"]: weapon_row(packages, w["path"]) for w in melee}
+    paths = [w["path"] for w in melee]
+    hybrids = {p: hybrid_forms(packages, p) for p in paths}
+    hybrids = {p: forms for p, forms in hybrids.items() if forms}
+    paths += [form for forms in hybrids.values() for form in forms]
+    weapons = {p: weapon_row(packages, p) for p in paths}
+    zaws = zaw_rows(packages)
     stance_paths = {row["path"] for row in json.loads(STANCES.read_text(encoding="utf-8"))["stances"]}
     stance_paths |= {row["stance"] for row in weapons.values() if row.get("stance")}
     tree_paths = {row["tree"] for row in weapons.values() if row.get("tree")}
+    tree_paths |= {hand["tree"] for hands in zaws.values() for hand in hands.values() if hand.get("tree")}
     trees = {p: tree_row(packages, p) for p in sorted(tree_paths | stance_paths) if packages.exists(p)}
     attack_paths = {a for t in trees.values() for attacks in t["contexts"].values() for a in attacks}
     attack_paths |= {a for t in trees.values() for a in t["aerial"].values()}
@@ -336,8 +369,9 @@ def main() -> int:
         schemaVersion=SCHEMA_VERSION, buildLabel=args.build_label,
         sources=dict(packagesBin=args.packages_bin.name, packagesBinSha256=packages.sha256,
                      animHeaders="Warframe-Exporter-CLI --write-raw /Lotus/Animations/... (_H, 1/duration before 'Take 001')"),
-        counts=dict(weapons=len(weapons), trees=len(trees), attacks=len(attacks), attacksWithoutDuration=len(missing)),
-        weapons=weapons, trees=trees, attacks=attacks,
+        counts=dict(weapons=len(weapons), trees=len(trees), attacks=len(attacks), attacksWithoutDuration=len(missing),
+                    zawStrikes=len(zaws), hybrids=len(hybrids)),
+        weapons=weapons, trees=trees, attacks=attacks, zaws=zaws, hybrids=hybrids,
     )
     args.output.write_text(json.dumps(payload, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
     print(payload["counts"])

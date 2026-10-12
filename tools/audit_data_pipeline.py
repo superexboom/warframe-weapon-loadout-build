@@ -152,6 +152,10 @@ def audit(build: str, *, root: Path = ROOT, source_paths: dict[str, Path] | None
     warframe_path = content_root / "data" / "warframe_build_data.json"
     warframe = _load(warframe_path) if warframe_path.is_file() else {}
     unique_abilities = {row["id"]: row for row in warframe.get("abilities") or [] if row.get("id")}
+    # Abilities supplemented after the pinned build (tools/supplement_narin.py)
+    # have no script in the pinned Luau package; the runtime sidecars cover
+    # the pinned build only.
+    pinned_abilities = {key: row for key, row in unique_abilities.items() if not row.get("postBuildSupplement")}
     ability_fields = [field for row in unique_abilities.values() for field in row.get("scalars") or []]
     field_sources = Counter(str(field.get("sourceKind") or "unknown") for field in ability_fields)
     runtime_path = content_root / "data" / "ability_runtime_fields.json"
@@ -236,8 +240,8 @@ def audit(build: str, *, root: Path = ROOT, source_paths: dict[str, Path] | None
     if runtime:
         if runtime_coverage["buildLabel"] != build:
             errors.append(f"ability runtime sidecar build mismatch: {runtime_coverage['buildLabel']} != {build}")
-        if runtime_coverage["abilities"] != len(unique_abilities):
-            errors.append(f"ability runtime sidecar ability count mismatch: {runtime_coverage['abilities']} != {len(unique_abilities)}")
+        if runtime_coverage["abilities"] != len(pinned_abilities):
+            errors.append(f"ability runtime sidecar ability count mismatch: {runtime_coverage['abilities']} != {len(pinned_abilities)}")
         expected_scripts = runtime_summary.get("uniqueScripts") if isinstance(runtime_summary, dict) else None
         if expected_scripts != runtime_coverage["uniqueScripts"]:
             errors.append("ability runtime sidecar script summary mismatch")
@@ -275,7 +279,7 @@ def audit(build: str, *, root: Path = ROOT, source_paths: dict[str, Path] | None
     if runtime_diff:
         if runtime_diff.get("buildLabel") != build:
             errors.append(f"ability runtime diff build mismatch: {runtime_diff.get('buildLabel')} != {build}")
-        if runtime_diff_summary.get("abilities") != len(unique_abilities):
+        if runtime_diff_summary.get("abilities") != len(pinned_abilities):
             errors.append("ability runtime diff ability count mismatch")
     promotion = warframe.get("provenance", {}).get("abilityRuntimePromotion") if isinstance(warframe, dict) else None
     if not isinstance(promotion, dict):

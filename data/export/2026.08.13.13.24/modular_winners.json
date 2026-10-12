@@ -541,28 +541,28 @@
      "slot": "melee",
      "disposition": 1.25,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/RapierHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFive",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/RapierHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFive",
        "nameEn": "Dehtat",
        "nameZh": "铁花"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
        "nameEn": "Seekalla",
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
        "nameEn": "Vargeet Jai II",
        "nameZh": "瓦吉·贾依 II"
       }
      ],
-     "kpm": 8.671071,
+     "kpm": 4.540505,
      "mods": [
       "剑风 Prime",
       "爆裂刀刃",
@@ -587,40 +587,40 @@
      "slot": "melee",
      "disposition": 1.0,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/MacheteHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFour",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/MacheteHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFour",
        "nameEn": "Cyath",
        "nameZh": "镰刃"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
        "nameEn": "Seekalla",
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
        "nameEn": "Vargeet Jai II",
        "nameZh": "瓦吉·贾依 II"
       }
      ],
-     "kpm": 7.701403,
+     "kpm": 3.760746,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
       "励磁加速",
-      "异况超量",
       "压迫点 Prime",
+      "爆裂刀刃",
+      "异况超量",
+      "狂暴 Prime",
       "牺牲 斩铁",
-      "肢解",
-      "狂暴 Prime"
+      "肢解"
      ],
      "screened": 160,
-     "verified": 4
+     "verified": 5
     }
    }
   },
@@ -633,37 +633,37 @@
      "slot": "melee",
      "disposition": 0.80000001,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/WeaponCaneSwordHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOne",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/WeaponCaneSwordHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOne",
        "nameEn": "Balla",
        "nameZh": "舞刺"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
        "nameEn": "Seekalla",
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive",
-       "nameEn": "Vargeet Jai II",
-       "nameZh": "瓦吉·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
+       "nameEn": "Ekwana Jai II",
+       "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 9.278783,
+     "kpm": 1.952499,
      "mods": [
       "剑风 Prime",
       "爆裂刀刃",
       "励磁加速",
-      "异况超量",
       "压迫点 Prime",
+      "异况超量",
       "狂暴 Prime",
-      "牺牲 斩铁",
-      "肢解"
+      "肢解",
+      "牺牲 斩铁"
      ],
      "screened": 160,
      "verified": 4
@@ -679,37 +679,37 @@
      "slot": "melee",
      "disposition": 1.3,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/HeavyBladeHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSix",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/HeavyBladeHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSix",
        "nameEn": "Kronsh",
        "nameZh": "碎骨"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
        "nameEn": "Seekalla",
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
        "nameEn": "Vargeet Jai II",
        "nameZh": "瓦吉·贾依 II"
       }
      ],
-     "kpm": 7.182401,
+     "kpm": 3.867172,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
-      "励磁加速",
-      "异况超量",
       "压迫点 Prime",
+      "热病打击 Prime",
+      "异况超量",
+      "伏打电能",
+      "爆裂刀刃",
       "狂暴 Prime",
-      "牺牲 斩铁",
-      "肢解"
+      "牺牲 斩铁"
      ],
      "screened": 160,
      "verified": 5
@@ -725,28 +725,28 @@
      "slot": "melee",
      "disposition": 1.15,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/SwordHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipThree",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/SwordHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipThree",
        "nameEn": "Mewan",
        "nameZh": "苏斫"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-       "nameEn": "Seekalla",
-       "nameZh": "希卡拉"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+       "nameEn": "Peye",
+       "nameZh": "佩耶"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
        "nameEn": "Vargeet Jai II",
        "nameZh": "瓦吉·贾依 II"
       }
      ],
-     "kpm": 7.735553,
+     "kpm": 5.650273,
      "mods": [
       "剑风 Prime",
       "爆裂刀刃",
@@ -771,28 +771,28 @@
      "slot": "melee",
      "disposition": 1.3,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/StaffHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipTwo",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/StaffHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipTwo",
        "nameEn": "Ooltha",
        "nameZh": "棍击"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-       "nameEn": "Seekalla",
-       "nameZh": "希卡拉"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+       "nameEn": "Peye",
+       "nameZh": "佩耶"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
        "nameEn": "Vargeet Jai II",
        "nameZh": "瓦吉·贾依 II"
       }
      ],
-     "kpm": 8.710029,
+     "kpm": 5.986763,
      "mods": [
       "剑风 Prime",
       "爆裂刀刃",
@@ -800,7 +800,7 @@
       "异况超量",
       "压迫点 Prime",
       "狂暴 Prime",
-      "牺牲 斩铁",
+      "急进猛突",
       "肢解"
      ],
      "screened": 160,
@@ -817,36 +817,36 @@
      "slot": "melee",
      "disposition": 0.75,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/ScytheHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipEleven",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/ScytheHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipEleven",
        "nameEn": "Dokrahm",
        "nameZh": "重割"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
        "nameEn": "Seekalla",
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
        "nameEn": "Vargeet Jai II",
        "nameZh": "瓦吉·贾依 II"
       }
      ],
-     "kpm": 10.16255,
+     "kpm": 8.547835,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
-      "励磁加速",
-      "异况超量",
       "压迫点 Prime",
+      "熔岩冲击",
+      "异况超量",
       "狂暴 Prime",
-      "牺牲 斩铁",
+      "急进猛突",
+      "创口溃烂",
       "肢解"
      ],
      "screened": 160,
@@ -863,28 +863,28 @@
      "slot": "melee",
      "disposition": 0.69999999,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/KatanaHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipNine",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/KatanaHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipNine",
        "nameEn": "Sepfahn",
        "nameZh": " sep"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-       "nameEn": "Seekalla",
-       "nameZh": "希卡拉"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+       "nameEn": "Peye",
+       "nameZh": "佩耶"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
        "nameEn": "Vargeet Jai II",
        "nameZh": "瓦吉·贾依 II"
       }
      ],
-     "kpm": 9.396005,
+     "kpm": 4.953481,
      "mods": [
       "剑风 Prime",
       "爆裂刀刃",
@@ -909,36 +909,36 @@
      "slot": "melee",
      "disposition": 1.3,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/HammerHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSix",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipTen",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/HammerHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipTen",
        "nameEn": "Rabvee",
        "nameZh": "锤锋"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSix",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
        "nameEn": "Peye",
        "nameZh": "佩耶"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
        "nameEn": "Vargeet Jai II",
        "nameZh": "瓦吉·贾依 II"
       }
      ],
-     "kpm": 4.804093,
+     "kpm": 2.980447,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
       "压迫点 Prime",
+      "熔岩冲击",
       "异况超量",
-      "励磁加速",
       "狂暴 Prime",
       "牺牲 斩铁",
+      "爆裂刀刃",
       "肢解"
      ],
      "screened": 160,
@@ -955,28 +955,28 @@
      "slot": "melee",
      "disposition": 0.64999998,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/PlagueKripathHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusThree"
+      "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipOne",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/PlagueKripathHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipOne",
        "nameEn": "Plague Kripath",
        "nameZh": "瘟疫克锐派"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
        "nameEn": "Seekalla",
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusThree",
-       "nameEn": "Ekwana II Jai",
-       "nameZh": "厄克瓦纳 II ·贾依"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
+       "nameEn": "Ekwana Jai II",
+       "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 12.828461,
+     "kpm": 7.312286,
      "mods": [
       "剑风 Prime",
       "爆裂刀刃",
@@ -1001,40 +1001,40 @@
      "slot": "melee",
      "disposition": 0.89999998,
      "parts": [
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/PlagueKeewarHead",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusFive"
+      "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipTwo",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritII"
      ],
      "partNames": [
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/PlagueKeewarHead",
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipTwo",
        "nameEn": "Plague Keewar",
        "nameZh": "瘟疫克瓦尔"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
-       "nameEn": "Seekalla",
-       "nameZh": "希卡拉"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+       "nameEn": "Peye",
+       "nameZh": "佩耶"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusFive",
-       "nameEn": "Ekwana Jai II",
-       "nameZh": "厄克瓦纳·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritII",
+       "nameEn": "Vargeet II Jai",
+       "nameZh": "瓦吉 II ·贾依"
       }
      ],
-     "kpm": 13.274143,
+     "kpm": 6.374183,
      "mods": [
       "剑风 Prime",
       "爆裂刀刃",
-      "狂暴 Prime",
-      "异况超量",
       "压迫点 Prime",
-      "励磁加速",
-      "加速",
-      "牺牲 斩铁"
+      "异况超量",
+      "狂暴 Prime",
+      "牺牲 斩铁",
+      "肢解",
+      "加速"
      ],
      "screened": 160,
-     "verified": 4
+     "verified": 5
     }
    }
   }
@@ -1042,17 +1042,6 @@
  "aliases": {
   "/lotus/weapons/infested/pistols/infkitgun/barrels/infbarrelbeam/infmodularbarrelbeampart": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelBeam/InfModularBarrelBeamPart",
   "/lotus/weapons/infested/pistols/infkitgun/barrels/infbarrelegg/infmodularbarreleggpart": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/InfModularBarrelEggPart",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/hammerhead": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipTen",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/heavybladehead": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSix",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/katanahead": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipNine",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/machetehead": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFour",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/plaguekeewarhead": "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipTwo",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/plaguekripathhead": "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipOne",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/rapierhead": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFive",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/scythehead": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipEleven",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/staffhead": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipTwo",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/swordhead": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipThree",
-  "/lotus/weapons/ostron/melee/modularmelee01/head/weaponcaneswordhead": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOne",
   "/lotus/weapons/ostron/melee/modularmelee01/tip/tipfive": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFive",
   "/lotus/weapons/ostron/melee/modularmelee01/tip/tipfour": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFour",
   "/lotus/weapons/ostron/melee/modularmelee01/tip/tipone": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOne",

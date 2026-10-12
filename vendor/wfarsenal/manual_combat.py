@@ -666,6 +666,8 @@ def prepare(
                     part = replace(part, multishot=part.multishot * float(component['count']))
                 if component.get('impact_delay_seconds') is not None:
                     part._impact_delay = float(component['impact_delay_seconds'])
+                if component.get('headOnly'):
+                    part._head_only = True
                 if extra.get('radial') or extra.get('radials'):
                     radial_parts.append(part)
                 else:

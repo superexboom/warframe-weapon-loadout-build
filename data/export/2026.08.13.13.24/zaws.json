@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "buildLabel": "2026.08.13.13.24",
-  "source": "warframe wiki (Zaw) — hand-frozen 2026-08-23",
+  "source": "warframe wiki (Zaw) — hand-frozen 2026-08-23; part paths, two-handed damage factors and dispositions from the client Packages.bin",
   "strikes": {
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/WeaponCaneSwordHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/WeaponCaneSwordHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOne": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOne",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOne",
       "nameEn": "Balla",
       "nameZh": "舞刺",
@@ -14,15 +14,25 @@
       "speedMod": 0.083,
       "damage": {
         "total": 224.0,
-        "types": { "DT_IMPACT": 11.2, "DT_PUNCTURE": 134.4, "DT_SLASH": 78.4 },
-        "shares": { "DT_IMPACT": 0.05, "DT_PUNCTURE": 0.6, "DT_SLASH": 0.35 }
+        "types": {
+          "DT_IMPACT": 11.2,
+          "DT_PUNCTURE": 134.4,
+          "DT_SLASH": 78.4
+        },
+        "shares": {
+          "DT_IMPACT": 0.05,
+          "DT_PUNCTURE": 0.6,
+          "DT_SLASH": 0.35
+        }
       },
       "critChance": 0.18,
       "critMultiplier": 2.0,
-      "procChance": 0.18
+      "procChance": 0.18,
+      "twoHandedDamageFactor": 1.0,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/WeaponCaneSwordHead"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/MacheteHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/MacheteHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFour": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFour",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFour",
       "nameEn": "Cyath",
       "nameZh": "镰刃",
@@ -32,15 +42,25 @@
       "speedMod": 0.0,
       "damage": {
         "total": 230.0,
-        "types": { "DT_IMPACT": 46.0, "DT_PUNCTURE": 11.5, "DT_SLASH": 172.5 },
-        "shares": { "DT_IMPACT": 0.2, "DT_PUNCTURE": 0.05, "DT_SLASH": 0.75 }
+        "types": {
+          "DT_IMPACT": 46.0,
+          "DT_PUNCTURE": 11.5,
+          "DT_SLASH": 172.5
+        },
+        "shares": {
+          "DT_IMPACT": 0.2,
+          "DT_PUNCTURE": 0.05,
+          "DT_SLASH": 0.75
+        }
       },
       "critChance": 0.18,
       "critMultiplier": 2.0,
-      "procChance": 0.18
+      "procChance": 0.18,
+      "twoHandedDamageFactor": 1.08,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/MacheteHead"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/RapierHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/RapierHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFive": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFive",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFive",
       "nameEn": "Dehtat",
       "nameZh": "铁花",
@@ -50,15 +70,25 @@
       "speedMod": 0.083,
       "damage": {
         "total": 224.0,
-        "types": { "DT_IMPACT": 22.4, "DT_PUNCTURE": 112.0, "DT_SLASH": 89.6 },
-        "shares": { "DT_IMPACT": 0.1, "DT_PUNCTURE": 0.5, "DT_SLASH": 0.4 }
+        "types": {
+          "DT_IMPACT": 22.4,
+          "DT_PUNCTURE": 112.0,
+          "DT_SLASH": 89.6
+        },
+        "shares": {
+          "DT_IMPACT": 0.1,
+          "DT_PUNCTURE": 0.5,
+          "DT_SLASH": 0.4
+        }
       },
       "critChance": 0.18,
       "critMultiplier": 2.0,
-      "procChance": 0.18
+      "procChance": 0.18,
+      "twoHandedDamageFactor": 1.09,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/RapierHead"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/ScytheHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/ScytheHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipEleven": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipEleven",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipEleven",
       "nameEn": "Dokrahm",
       "nameZh": "重割",
@@ -68,15 +98,25 @@
       "speedMod": 0.083,
       "damage": {
         "total": 309.0,
-        "types": { "DT_IMPACT": 46.4, "DT_PUNCTURE": 108.1, "DT_SLASH": 154.5 },
-        "shares": { "DT_IMPACT": 0.15, "DT_PUNCTURE": 0.35, "DT_SLASH": 0.5 }
+        "types": {
+          "DT_IMPACT": 46.4,
+          "DT_PUNCTURE": 108.1,
+          "DT_SLASH": 154.5
+        },
+        "shares": {
+          "DT_IMPACT": 0.15,
+          "DT_PUNCTURE": 0.35,
+          "DT_SLASH": 0.5
+        }
       },
       "critChance": 0.18,
       "critMultiplier": 2.0,
-      "procChance": 0.18
+      "procChance": 0.18,
+      "twoHandedDamageFactor": 0.93000001,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/ScytheHead"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/HeavyBladeHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/HeavyBladeHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSix": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSix",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSix",
       "nameEn": "Kronsh",
       "nameZh": "碎骨",
@@ -86,15 +126,23 @@
       "speedMod": -0.067,
       "damage": {
         "total": 234.0,
-        "types": { "DT_IMPACT": 163.8, "DT_SLASH": 70.2 },
-        "shares": { "DT_IMPACT": 0.7, "DT_SLASH": 0.3 }
+        "types": {
+          "DT_IMPACT": 163.8,
+          "DT_SLASH": 70.2
+        },
+        "shares": {
+          "DT_IMPACT": 0.7,
+          "DT_SLASH": 0.3
+        }
       },
       "critChance": 0.18,
       "critMultiplier": 2.0,
-      "procChance": 0.18
+      "procChance": 0.18,
+      "twoHandedDamageFactor": 1.0700001,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/HeavyBladeHead"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/SwordHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/SwordHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipThree": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipThree",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipThree",
       "nameEn": "Mewan",
       "nameZh": "苏斫",
@@ -104,15 +152,25 @@
       "speedMod": -0.067,
       "damage": {
         "total": 224.0,
-        "types": { "DT_IMPACT": 56.0, "DT_PUNCTURE": 78.4, "DT_SLASH": 89.6 },
-        "shares": { "DT_IMPACT": 0.25, "DT_PUNCTURE": 0.35, "DT_SLASH": 0.4 }
+        "types": {
+          "DT_IMPACT": 56.0,
+          "DT_PUNCTURE": 78.4,
+          "DT_SLASH": 89.6
+        },
+        "shares": {
+          "DT_IMPACT": 0.25,
+          "DT_PUNCTURE": 0.35,
+          "DT_SLASH": 0.4
+        }
       },
       "critChance": 0.18,
       "critMultiplier": 2.0,
-      "procChance": 0.18
+      "procChance": 0.18,
+      "twoHandedDamageFactor": 1.09,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/SwordHead"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/StaffHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/StaffHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipTwo": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipTwo",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipTwo",
       "nameEn": "Ooltha",
       "nameZh": "棍击",
@@ -122,15 +180,25 @@
       "speedMod": 0.0,
       "damage": {
         "total": 224.0,
-        "types": { "DT_IMPACT": 22.4, "DT_PUNCTURE": 89.6, "DT_SLASH": 112.0 },
-        "shares": { "DT_IMPACT": 0.1, "DT_PUNCTURE": 0.4, "DT_SLASH": 0.5 }
+        "types": {
+          "DT_IMPACT": 22.4,
+          "DT_PUNCTURE": 89.6,
+          "DT_SLASH": 112.0
+        },
+        "shares": {
+          "DT_IMPACT": 0.1,
+          "DT_PUNCTURE": 0.4,
+          "DT_SLASH": 0.5
+        }
       },
       "critChance": 0.18,
       "critMultiplier": 2.0,
-      "procChance": 0.18
+      "procChance": 0.18,
+      "twoHandedDamageFactor": 1.0,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/StaffHead"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/HammerHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/HammerHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipTen": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipTen",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipTen",
       "nameEn": "Rabvee",
       "nameZh": "锤锋",
@@ -140,15 +208,25 @@
       "speedMod": -0.067,
       "damage": {
         "total": 234.0,
-        "types": { "DT_IMPACT": 140.4, "DT_PUNCTURE": 11.7, "DT_SLASH": 81.9 },
-        "shares": { "DT_IMPACT": 0.6, "DT_PUNCTURE": 0.05, "DT_SLASH": 0.35 }
+        "types": {
+          "DT_IMPACT": 140.4,
+          "DT_PUNCTURE": 11.7,
+          "DT_SLASH": 81.9
+        },
+        "shares": {
+          "DT_IMPACT": 0.6,
+          "DT_PUNCTURE": 0.05,
+          "DT_SLASH": 0.35
+        }
       },
       "critChance": 0.18,
       "critMultiplier": 2.0,
-      "procChance": 0.18
+      "procChance": 0.18,
+      "twoHandedDamageFactor": 1.08,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/HammerHead"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/KatanaHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/KatanaHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipNine": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipNine",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipNine",
       "nameEn": "Sepfahn",
       "nameZh": " sep",
@@ -158,15 +236,25 @@
       "speedMod": 0.0,
       "damage": {
         "total": 226.0,
-        "types": { "DT_IMPACT": 22.6, "DT_PUNCTURE": 56.5, "DT_SLASH": 146.9 },
-        "shares": { "DT_IMPACT": 0.1, "DT_PUNCTURE": 0.25, "DT_SLASH": 0.65 }
+        "types": {
+          "DT_IMPACT": 22.6,
+          "DT_PUNCTURE": 56.5,
+          "DT_SLASH": 146.9
+        },
+        "shares": {
+          "DT_IMPACT": 0.1,
+          "DT_PUNCTURE": 0.25,
+          "DT_SLASH": 0.65
+        }
       },
       "critChance": 0.2,
       "critMultiplier": 2.0,
-      "procChance": 0.2
+      "procChance": 0.2,
+      "twoHandedDamageFactor": 1.0,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/KatanaHead"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/PlagueKeewarHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/PlagueKeewarHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipTwo": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipTwo",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipTwo",
       "nameEn": "Plague Keewar",
       "nameZh": "瘟疫克瓦尔",
@@ -176,15 +264,27 @@
       "speedMod": -0.033,
       "damage": {
         "total": 306.0,
-        "types": { "DT_IMPACT": 88.0, "DT_PUNCTURE": 57.0, "DT_SLASH": 91.0, "DT_VIRAL": 70.0 },
-        "shares": { "DT_IMPACT": 0.2876, "DT_PUNCTURE": 0.1863, "DT_SLASH": 0.2974, "DT_VIRAL": 0.2288 }
+        "types": {
+          "DT_IMPACT": 88.0,
+          "DT_PUNCTURE": 57.0,
+          "DT_SLASH": 91.0,
+          "DT_VIRAL": 70.0
+        },
+        "shares": {
+          "DT_IMPACT": 0.2876,
+          "DT_PUNCTURE": 0.1863,
+          "DT_SLASH": 0.2974,
+          "DT_VIRAL": 0.2288
+        }
       },
       "critChance": 0.18,
       "critMultiplier": 2.0,
-      "procChance": 0.22
+      "procChance": 0.22,
+      "twoHandedDamageFactor": 0.85000002,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/PlagueKeewarHead"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/PlagueKripathHead": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/PlagueKripathHead",
+    "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipOne": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipOne",
       "rivenPath": "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipOne",
       "nameEn": "Plague Kripath",
       "nameZh": "瘟疫克锐派",
@@ -194,240 +294,278 @@
       "speedMod": 0.033,
       "damage": {
         "total": 213.0,
-        "types": { "DT_IMPACT": 30.0, "DT_PUNCTURE": 70.0, "DT_SLASH": 49.0, "DT_VIRAL": 64.0 },
-        "shares": { "DT_IMPACT": 0.1408, "DT_PUNCTURE": 0.3286, "DT_SLASH": 0.2300, "DT_VIRAL": 0.3005 }
+        "types": {
+          "DT_IMPACT": 30.0,
+          "DT_PUNCTURE": 70.0,
+          "DT_SLASH": 49.0,
+          "DT_VIRAL": 64.0
+        },
+        "shares": {
+          "DT_IMPACT": 0.1408,
+          "DT_PUNCTURE": 0.3286,
+          "DT_SLASH": 0.23,
+          "DT_VIRAL": 0.3005
+        }
       },
       "critChance": 0.22,
       "critMultiplier": 2.2,
-      "procChance": 0.18
+      "procChance": 0.18,
+      "twoHandedDamageFactor": 1.08,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Head/PlagueKripathHead"
     }
   },
   "grips": {
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFive": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFive",
       "nameEn": "Jayap",
       "nameZh": "加雅",
       "handed": "two",
       "damageBonus": 0,
-      "baseSpeed": 0.917
+      "baseSpeed": 0.917,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleTwo": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleTwo",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Handle/HandleNine": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Handle/HandleNine",
       "nameEn": "Korb",
       "nameZh": "科布",
       "handed": "one",
       "damageBonus": 28,
-      "baseSpeed": 0.783
+      "baseSpeed": 0.783,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleTwo"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleThree": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleThree",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSix": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSix",
       "nameEn": "Kroostra",
       "nameZh": "克鲁斯塔",
       "handed": "two",
       "damageBonus": 14,
-      "baseSpeed": 0.85
+      "baseSpeed": 0.85,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleThree"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleThree": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleThree",
       "nameEn": "Kwath",
       "nameZh": "夸斯",
       "handed": "one",
       "damageBonus": 14,
-      "baseSpeed": 0.85
+      "baseSpeed": 0.85,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFive": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFive",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleTwo": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleTwo",
       "nameEn": "Laka",
       "nameZh": "拉卡",
       "handed": "one",
       "damageBonus": 0,
-      "baseSpeed": 0.917
+      "baseSpeed": 0.917,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFive"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSix": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSix",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
       "nameEn": "Peye",
       "nameZh": "佩耶",
       "handed": "one",
       "damageBonus": -4,
-      "baseSpeed": 1.0
+      "baseSpeed": 1.0,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSix"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
       "nameEn": "Seekalla",
       "nameZh": "希卡拉",
       "handed": "two",
       "damageBonus": -4,
-      "baseSpeed": 1.0
+      "baseSpeed": 1.0,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSeven"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleEight": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleEight",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Handle/HandleTen": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Handle/HandleTen",
       "nameEn": "Shtung",
       "nameZh": "什通",
       "handed": "two",
       "damageBonus": 28,
-      "baseSpeed": 0.783
+      "baseSpeed": 0.783,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleEight"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/PlagueAkwinHandle": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/PlagueAkwinHandle",
+    "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Handles/InfestedHandleOne": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Handles/InfestedHandleOne",
       "nameEn": "Plague Akwin",
       "nameZh": "瘟疫阿克文",
       "handed": "one",
       "damageBonus": -2,
-      "baseSpeed": 0.95
+      "baseSpeed": 0.95,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/PlagueAkwinHandle"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/PlagueBokwinHandle": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/PlagueBokwinHandle",
+    "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Handles/InfestedHandleTwo": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Handles/InfestedHandleTwo",
       "nameEn": "Plague Bokwin",
       "nameZh": "瘟疫博克文",
       "handed": "two",
       "damageBonus": 7,
-      "baseSpeed": 0.883
+      "baseSpeed": 0.883,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/PlagueBokwinHandle"
     }
   },
   "links": {
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceOne": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceOne",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedI": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedI",
       "nameEn": "Jai",
       "nameZh": "贾依",
       "speedBonus": 0.083,
       "critChance": 0,
       "statusChance": 0,
-      "damageBonus": -4
+      "damageBonus": -4,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceOne"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceTwo": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceTwo",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageI": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageI",
       "nameEn": "Ruhang",
       "nameZh": "如恒",
       "speedBonus": -0.067,
       "critChance": 0,
       "statusChance": 0,
-      "damageBonus": 14
+      "damageBonus": 14,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceTwo"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceThree": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceThree",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedII": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedII",
       "nameEn": "Jai II",
       "nameZh": "贾依 II",
       "speedBonus": 0.167,
       "critChance": 0,
       "statusChance": 0,
-      "damageBonus": -8
+      "damageBonus": -8,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceThree"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceFour": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceFour",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageII": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageII",
       "nameEn": "Ruhang II",
       "nameZh": "如恒 II",
       "speedBonus": -0.133,
       "critChance": 0,
       "statusChance": 0,
-      "damageBonus": 28
+      "damageBonus": 28,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceFour"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritOne": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritOne",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritI": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritI",
       "nameEn": "Vargeet Jai",
       "nameZh": "瓦吉·贾依",
       "speedBonus": 0.083,
       "critChance": 0.07,
       "statusChance": -0.04,
-      "damageBonus": -4
+      "damageBonus": -4,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritOne"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritTwo": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritTwo",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageICritI": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageICritI",
       "nameEn": "Vargeet Ruhang",
       "nameZh": "瓦吉·如恒",
       "speedBonus": -0.067,
       "critChance": 0.07,
       "statusChance": -0.04,
-      "damageBonus": 14
+      "damageBonus": 14,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritTwo"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusOne": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusOne",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusI": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusI",
       "nameEn": "Ekwana Jai",
       "nameZh": "厄克瓦纳·贾依",
       "speedBonus": 0.083,
       "critChance": -0.04,
       "statusChance": 0.07,
-      "damageBonus": -4
+      "damageBonus": -4,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusOne"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusTwo": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusTwo",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIStatusI": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIStatusI",
       "nameEn": "Ekwana Ruhang",
       "nameZh": "厄克瓦纳·如恒",
       "speedBonus": -0.067,
       "critChance": -0.04,
       "statusChance": 0.07,
-      "damageBonus": 14
+      "damageBonus": 14,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusTwo"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritThree": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritThree",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritII": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritII",
       "nameEn": "Vargeet II Jai",
       "nameZh": "瓦吉 II ·贾依",
       "speedBonus": 0.083,
       "critChance": 0.14,
       "statusChance": -0.08,
-      "damageBonus": -4
+      "damageBonus": -4,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritThree"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFour": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFour",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageICritII": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageICritII",
       "nameEn": "Vargeet II Ruhang",
       "nameZh": "瓦吉 II ·如恒",
       "speedBonus": -0.067,
       "critChance": 0.14,
       "statusChance": -0.08,
-      "damageBonus": 14
+      "damageBonus": 14,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFour"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusThree": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusThree",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
       "nameEn": "Ekwana II Jai",
       "nameZh": "厄克瓦纳 II ·贾依",
       "speedBonus": 0.083,
       "critChance": -0.08,
       "statusChance": 0.14,
-      "damageBonus": -4
+      "damageBonus": -4,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusThree"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusFour": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusFour",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIStatusII": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIStatusII",
       "nameEn": "Ekwana II Ruhang",
       "nameZh": "厄克瓦纳 II ·如恒",
       "speedBonus": -0.067,
       "critChance": -0.08,
       "statusChance": 0.14,
-      "damageBonus": 14
+      "damageBonus": 14,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusFour"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
       "nameEn": "Vargeet Jai II",
       "nameZh": "瓦吉·贾依 II",
       "speedBonus": 0.167,
       "critChance": 0.07,
       "statusChance": -0.04,
-      "damageBonus": -8
+      "damageBonus": -8,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritFive"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritSix": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritSix",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIICritI": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIICritI",
       "nameEn": "Vargeet Ruhang II",
       "nameZh": "瓦吉·如恒 II",
       "speedBonus": -0.133,
       "critChance": 0.07,
       "statusChance": -0.04,
-      "damageBonus": 28
+      "damageBonus": 28,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceCritSix"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusFive": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusFive",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
       "nameEn": "Ekwana Jai II",
       "nameZh": "厄克瓦纳·贾依 II",
       "speedBonus": 0.167,
       "critChance": -0.04,
       "statusChance": 0.07,
-      "damageBonus": -8
+      "damageBonus": -8,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusFive"
     },
-    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusSix": {
-      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusSix",
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIIStatusI": {
+      "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIIStatusI",
       "nameEn": "Ekwana Ruhang II",
       "nameZh": "厄克瓦纳·如恒 II",
       "speedBonus": -0.133,
       "critChance": -0.04,
       "statusChance": 0.07,
-      "damageBonus": 28
+      "damageBonus": 28,
+      "legacyPath": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceStatusSix"
     }
   }
 }

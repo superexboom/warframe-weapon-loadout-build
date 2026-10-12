@@ -217,6 +217,8 @@ def _enemy_enhancement_options(options: Mapping[str, Any] | None) -> dict[str, A
             "magneticStacks": 0,
             "noOverguard": False,
             "healthScale": 1.0,
+            "auraArmourReduction": 0.0,
+            "auraShieldReduction": 0.0,
         }
     if not isinstance(options, Mapping):
         raise TypeError("enemy_enhancements must be an object")
@@ -234,7 +236,16 @@ def _enemy_enhancement_options(options: Mapping[str, Any] | None) -> dict[str, A
         # health scale fixed before any Riven is evaluated.
         "noOverguard": options.get("noOverguard", False),
         "healthScale": options.get("healthScale", 1.0),
+        # Squad auras on the enemy (Corrosive Projection / Shield Disruption):
+        # the summed share, a multiplier on the scaled pool.
+        "auraArmourReduction": options.get("auraArmourReduction", 0.0),
+        "auraShieldReduction": options.get("auraShieldReduction", 0.0),
     }
+    for key in ("auraArmourReduction", "auraShieldReduction"):
+        share = result[key]
+        if isinstance(share, bool) or not isinstance(share, (int, float)) or not math.isfinite(share) or not 0.0 <= share <= 1.0:
+            raise ValueError(f"enemy_enhancements.{key} must be between 0 and 1")
+        result[key] = float(share)
     scale = result["healthScale"]
     if isinstance(scale, bool) or not isinstance(scale, (int, float)) or not math.isfinite(scale) or scale <= 0:
         raise ValueError("enemy_enhancements.healthScale must be a finite positive number")
@@ -334,6 +345,15 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "RUNTIME_MAGAZINE_RESTORE": "event_only",
     "RUNTIME_MITER_CHARGE_AOE": "event_only",
     "RUNTIME_CONSECUTIVE_HIT_DAMAGE": "event_only",
+    # External buffs (app EXTERNAL_BUFFS). A final multiplier on the hit and
+    # its statuses, applied once (Eclipse's "unique multiplier", Molecular
+    # Prime's vulnerability); a flat add to the finished critical multiplier
+    # (Arcane Crepuscular); and an Extra Hit -- a second instance worth
+    # ``value`` of the hit in ``damage_type`` (Toxic Lash, Xata's Whisper,
+    # Resupply; ``runtime_chance`` 1 = its status is guaranteed).
+    "RUNTIME_FINAL_DAMAGE": "final_damage",
+    "RUNTIME_FINAL_CRIT_DAMAGE": "final_crit_damage",
+    "RUNTIME_EXTRA_HIT": "extra_hits",
     # ── 词条融合新词条（2026.09.22，引擎乘区已逆向裁决）──────────────
     # WEAPON_CRIT_CHANCE_WEAKPOINT：与 WEAPON_CRIT_CHANCE 加算进同一次
     # 判定（fn 0x1406dc47e 链 244-248，IsWeakpoint 门控）——引擎侧门控在
@@ -1072,6 +1092,10 @@ class ModdedStats:
     # Per-pellet chance of an extra status of the keyed type, rolled only on a
     # critical hit (crit tier >= 1). Hunter Munitions is the DT_SLASH entry.
     crit_proc_chances: dict[str, float] = field(default_factory=dict)
+    # Extra Hits (RUNTIME_EXTRA_HIT): (damage type, share of the hit, whether
+    # its status is guaranteed). The replay fires each beside every weapon
+    # hit; a guaranteed status rides native_forced_procs.
+    extra_hits: tuple[tuple[str, float, bool], ...] = ()
 
 
     @property
@@ -1730,6 +1754,30 @@ def apply_mods(
         crit_multiplier *= 1.25
         low_bonus *= 1.25
         shield_crit_damage_multiplier = 1.25
+    # External final multipliers multiply each other and reach the hit and its
+    # statuses once; the final critical damage joins the finished multiplier.
+    final_damage = math.prod(1.0 + e.value for e in buckets['RUNTIME_FINAL_DAMAGE'] if not e.damage_type)
+    # A typed final multiplier (Hakchum's Cold vulnerability) reaches only that
+    # type's share of the hit -- pure Cold, not a compound containing it.
+    typed_final: dict[str, float] = {}
+    for effect in buckets['RUNTIME_FINAL_DAMAGE']:
+        if effect.damage_type:
+            typed_final[effect.damage_type] = typed_final.get(effect.damage_type, 1.0) * (1.0 + effect.value)
+    if final_damage != 1.0 or typed_final:
+        damage_types = {k: v * final_damage * typed_final.get(k, 1.0) for k, v in damage_types.items()}
+        dot_basis *= final_damage
+    crit_multiplier += sum(e.value for e in buckets['RUNTIME_FINAL_CRIT_DAMAGE'])
+    forced_statuses = {dtype: float((damage.get('forcedProcs') or []).count(proc))
+        for proc, dtype in [('PT_KNOCKBACK','DT_IMPACT'),('PT_FRAILTY','DT_PUNCTURE'),('PT_BLEEDING','DT_SLASH'),
+            ('PT_IMMOLATION','DT_FIRE'),('PT_CHILLED','DT_FREEZE'),('PT_ELECTROCUTION','DT_ELECTRICITY'),
+            ('PT_POISONED','DT_POISON'),('PT_FLASHBANG','DT_EXPLOSION'),('PT_RAD_TOX','DT_RADIATION'),
+            ('PT_ASPHYXIATION','DT_GAS'),('PT_MAGNETIZED','DT_MAGNETIC'),('PT_INFECTED','DT_VIRAL'),('PT_CAUSTIC_BURN','DT_CORROSIVE')]
+        if proc in (damage.get('forcedProcs') or ())}
+    extra_hits = tuple((e.damage_type, float(e.value), bool(e.runtime_chance))
+                       for e in buckets['RUNTIME_EXTRA_HIT'] if e.damage_type and e.value > 0)
+    for effect in buckets['RUNTIME_EXTRA_HIT']:
+        if effect.damage_type and effect.value > 0 and effect.runtime_chance:
+            forced_statuses[effect.damage_type] = forced_statuses.get(effect.damage_type, 0.0) + float(effect.runtime_chance)
     return ModdedStats(
         damage_types=damage_types,
         crit_chance=crit_chance,
@@ -1754,12 +1802,8 @@ def apply_mods(
         explosion_radius_multiplier=_combine(1.0, buckets['WEAPON_EXPLOSION_RADIUS']),
         incarnon_charge_multiplier=max(0.0, _combine(1.0, buckets['WEAPON_ADD_CHARGE_COUNTER_MULTIPLIER'])),
         radial_only=radial_only,
-        native_forced_procs={dtype: float((damage.get('forcedProcs') or []).count(proc))
-            for proc, dtype in [('PT_KNOCKBACK','DT_IMPACT'),('PT_FRAILTY','DT_PUNCTURE'),('PT_BLEEDING','DT_SLASH'),
-                ('PT_IMMOLATION','DT_FIRE'),('PT_CHILLED','DT_FREEZE'),('PT_ELECTROCUTION','DT_ELECTRICITY'),
-                ('PT_POISONED','DT_POISON'),('PT_FLASHBANG','DT_EXPLOSION'),('PT_RAD_TOX','DT_RADIATION'),
-                ('PT_ASPHYXIATION','DT_GAS'),('PT_MAGNETIZED','DT_MAGNETIC'),('PT_INFECTED','DT_VIRAL'),('PT_CAUSTIC_BURN','DT_CORROSIVE')]
-            if proc in (damage.get('forcedProcs') or ())},
+        native_forced_procs=forced_statuses,
+        extra_hits=extra_hits,
         continuous=continuous,
         status_chance=pellet_status(per_pellet_proc),
         multishot=multishot,
@@ -2646,6 +2690,8 @@ def enemy_defenses(
     health *= enhancements["healthScale"]
     if enhancements["noOverguard"]:
         overguard = 0.0
+    armour *= 1.0 - enhancements["auraArmourReduction"]
+    shield *= 1.0 - enhancements["auraShieldReduction"]
     if any(
         target.get(key)
         for key in (
@@ -3439,6 +3485,14 @@ def expected_dot_damage(
         # Physical-type and elemental mods do not amplify Bleed; GunCO is
         # excluded when apply_mods creates dot_base_damage above.
         seed_basis = dot_base
+        extra_share = sum(share for kind, share, forced in stats.extra_hits if forced and kind == dtype)
+        if extra_share:
+            # A status an Extra Hit forces (Toxic Lash, Resupply) burns off the
+            # Extra Hit's own damage, faction included (wiki Extra_Hit); the
+            # rolled ones keep the modified base.
+            forced_count = min(count, 1.0 if stats.continuous else max(float(stats.multishot), 0.0))
+            extra_basis = extra_share * sum(stats.damage_types.values()) * max(float(faction_mod), 0.0)
+            seed_basis = ((count - forced_count) * dot_base + forced_count * extra_basis) / count
         elemental_factor = (1.0 if dtype in ('DT_SLASH', 'DT_IMPACT', 'DT_PUNCTURE')
                             else max(float(elemental), 0.0))
         # +1 accumulator per tick group (wfsim MEASUREMENTS M58, AGPL-3.0):

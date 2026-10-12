@@ -9,6 +9,30 @@ from dataclasses import replace
 from collections.abc import Mapping
 
 SESSION = ContextVar('riven_search_session', default=None)
+# A live request (the build page re-solves on every edit) that a newer one
+# from the same page has replaced: the HTTP layer sets this predicate, and the
+# search stops at its next heartbeat instead of finishing for nobody.
+CANCEL = ContextVar('search_cancel', default=None)
+
+
+class SearchCancelled(BaseException):
+    """A newer request superseded this one.
+
+    A BaseException, like asyncio's CancelledError, so the engine's
+    ``except Exception`` fallbacks cannot swallow it and carry on.
+    """
+
+
+def check_cancelled():
+    cancelled = CANCEL.get()
+    if cancelled is not None and cancelled():
+        raise SearchCancelled()
+
+
+# A long search (the riven analysis) that lets waiting build-page requests use
+# the engine between two evaluations: the HTTP layer sets the hook, which
+# hands the engine over and takes it back.
+YIELD = ContextVar('search_yield', default=None)
 
 
 def session_request(fn):
@@ -44,6 +68,10 @@ def session_request(fn):
 
 
 def heartbeat(count=0):
+    check_cancelled()
+    hand_over = YIELD.get()
+    if hand_over is not None:
+        hand_over()
     state = SESSION.get()
     if state is None:
         return

@@ -39577,8 +39577,16 @@
  "counts": {
   "attacks": 939,
   "attacksWithoutDuration": 0,
+  "hybrids": 1,
   "trees": 109,
-  "weapons": 237
+  "weapons": 239,
+  "zawStrikes": 11
+ },
+ "hybrids": {
+  "/Lotus/Weapons/Tenno/Melee/Swords/DarkSword/DarkSwordDaggerHybridWeapon": [
+   "/Lotus/Weapons/Tenno/Melee/Swords/DarkSword/DarkSwordDaggerSingle",
+   "/Lotus/Weapons/Tenno/Melee/Swords/DarkSword/DarkSwordDaggerDuals"
+  ]
  },
  "schemaVersion": 1,
  "sources": {
@@ -66907,6 +66915,111 @@
    "stance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/IronPhoenixMeleeTree",
    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/SwordMeleeTree"
   },
+  "/Lotus/Weapons/Tenno/Melee/Swords/DarkSword/DarkSwordDaggerDuals": {
+   "attackSpeed": 1.1666666666666667,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 116.0,
+    "crit": 0.25,
+    "critMultiplier": 2.5,
+    "forcedProcs": [],
+    "procChance": 0.15000001,
+    "types": {
+     "DT_PUNCTURE": 56,
+     "DT_RADIATION": 32,
+     "DT_SLASH": 28
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.3125,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 25.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_KNOCKBACK"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 9.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "GroundAttackEffect",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 1.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DualSwordMeleeTree"
+  },
   "/Lotus/Weapons/Tenno/Melee/Swords/DarkSword/DarkSwordDaggerHybridWeapon": {
    "attackSpeed": 1.0,
    "combo": {
@@ -66942,6 +67055,130 @@
    "slams": [],
    "stance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DualSwordCmbOneMeleeTree",
    "tree": null
+  },
+  "/Lotus/Weapons/Tenno/Melee/Swords/DarkSword/DarkSwordDaggerSingle": {
+   "attackSpeed": 0.9166666666666666,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 230.0,
+    "crit": 0.15000001,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.25,
+    "types": {
+     "DT_PUNCTURE": 78,
+     "DT_RADIATION": 100,
+     "DT_SLASH": 52
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 1.2,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.3125,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 25.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_KNOCKBACK"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 5.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 9.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 10.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "AxeSlam",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 5.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "GroundAttackEffect",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 1.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AxeMeleeTree"
   },
   "/Lotus/Weapons/Tenno/Melee/Swords/DaxDuviriKatana/DaxDuviriKatanaWeapon": {
    "attackSpeed": 1.0,
@@ -74165,6 +74402,1615 @@
    ],
    "stance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/CrimsonDervishMeleeTree",
    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/SwordMeleeTree"
+  }
+ },
+ "zaws": {
+  "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFive": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 6.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 3.5,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/RapierMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 5.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "AxeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PolearmMeleeTree"
+   }
+  },
+  "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFour": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MacheteMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "AxeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PolearmMeleeTree"
+   }
+  },
+  "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOne": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 6.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DaggerMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 6.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/StaffMeleeTree"
+   }
+  },
+  "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSix": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MacheteMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 5.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "AxeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PolearmMeleeTree"
+   }
+  },
+  "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipThree": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/SwordMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 5.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "AxeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PolearmMeleeTree"
+   }
+  },
+  "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipTwo": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/SwordMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 6.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/StaffMeleeTree"
+   }
+  },
+  "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipEleven": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 5.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 9.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ScytheMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 5.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 9.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "AxeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AxeMeleeTree"
+   }
+  },
+  "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipNine": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 6.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KatanaMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 6.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/StaffMeleeTree"
+   }
+  },
+  "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipTen": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MacheteMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKED_DOWN"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 9.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 5.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 10.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "AxeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/HammerMeleeTree"
+   }
+  },
+  "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipOne": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 6.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 3.5,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/RapierMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 5.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": null,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "AxeSlam",
+      "falloff": true,
+      "falloffMax": null,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": null,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PolearmMeleeTree"
+   }
+  },
+  "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipTwo": {
+   "one": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 8.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 5.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 9.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ScytheMeleeTree"
+   },
+   "two": {
+    "slams": [
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "MeleeSlam",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_KNOCKBACK"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 6.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": true,
+      "amount": 50.0,
+      "attenuation": 4.0,
+      "canCrit": false,
+      "comboMultiplier": true,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "HeavySlam",
+      "falloff": false,
+      "falloffMax": 0.0,
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 7.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     },
+     {
+      "aerial": false,
+      "amount": 50.0,
+      "attenuation": 1.0,
+      "canCrit": false,
+      "comboMultiplier": false,
+      "currentAttack": false,
+      "damageType": "DT_EXPLOSION",
+      "event": "GroundHitEffect",
+      "falloff": true,
+      "falloffMax": 0.0,
+      "forcedProcs": [],
+      "modifiedRadius": true,
+      "procChance": 0.1,
+      "radius": 5.0,
+      "radiusMin": 0.0,
+      "weaponAmount": true,
+      "weaponProcChance": false
+     }
+    ],
+    "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/StaffMeleeTree"
+   }
   }
  }
 }

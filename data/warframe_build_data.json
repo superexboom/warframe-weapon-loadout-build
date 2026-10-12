@@ -38,10 +38,10 @@
  },
  "counts": {
   "warframes": 120,
-  "abilities": 472,
+  "abilities": 476,
   "mods": 397,
   "arcanes": 64,
-  "helminth": 79,
+  "helminth": 80,
   "helminthSubsumed": 66,
   "helminthNative": 13,
   "invigoration": 20,
@@ -122416,17 +122416,17 @@
    },
    "rank30Panel": {
     "health": 370,
-    "shield": 285,
+    "shield": 335.0,
     "armor": 160,
     "energy": 190,
     "sprint": 0.95
    },
    "rankGrowth": {
     "health": 100,
-    "shield": 50,
+    "shield": 100,
     "energy": 50
    },
-   "rankGrowthSource": "/Lotus/Powersuits/Wraith/ReaperBaseSuit",
+   "rankGrowthSource": "/Lotus/Powersuits/Wraith/Wraith LevelUpgrades",
    "slotPolarities": {
     "aura": null,
     "exilus": null,
@@ -123761,17 +123761,17 @@
    },
    "rank30Panel": {
     "health": 370,
-    "shield": 320,
+    "shield": 370.0,
     "armor": 185,
     "energy": 225,
     "sprint": 0.95
    },
    "rankGrowth": {
     "health": 100,
-    "shield": 50,
+    "shield": 100,
     "energy": 50
    },
-   "rankGrowthSource": "/Lotus/Powersuits/Wraith/ReaperBaseSuit",
+   "rankGrowthSource": "/Lotus/Powersuits/Wraith/SevagothPrime LevelUpgrades",
    "slotPolarities": {
     "aura": null,
     "exilus": null,
@@ -158878,14 +158878,18 @@
     "sprint": 1
    },
    "rank30Panel": {
-    "health": 270,
-    "shield": 455,
+    "health": 370.0,
+    "shield": 555.0,
     "armor": 105,
-    "energy": 200,
+    "energy": 300.0,
     "sprint": 1
    },
-   "rankGrowth": {},
-   "rankGrowthSource": "/Lotus/Powersuits/Yareli/BoardBaseSuit",
+   "rankGrowth": {
+    "health": 100,
+    "shield": 100,
+    "energy": 100
+   },
+   "rankGrowthSource": "/Lotus/Powersuits/Yareli/Yareli LevelUpgrades",
    "slotPolarities": {
     "aura": "AP_ATTACK",
     "exilus": null,
@@ -160720,14 +160724,18 @@
     "sprint": 1.1
    },
    "rank30Panel": {
-    "health": 270,
-    "shield": 550,
+    "health": 370.0,
+    "shield": 650.0,
     "armor": 105,
-    "energy": 215,
+    "energy": 315.0,
     "sprint": 1.1
    },
-   "rankGrowth": {},
-   "rankGrowthSource": "/Lotus/Powersuits/Yareli/BoardBaseSuit",
+   "rankGrowth": {
+    "health": 100,
+    "shield": 100,
+    "energy": 100
+   },
+   "rankGrowthSource": "/Lotus/Powersuits/Yareli/YareliPrime LevelUpgrades",
    "slotPolarities": {
     "aura": "AP_ATTACK",
     "exilus": null,
@@ -165045,24 +165053,22 @@
    },
    "rankGrowthSource": "/Lotus/Types/Game/PowerSuits/PlayerPowerSuit",
    "slotPolarities": {
-    "aura": "AP_UNIVERSAL",
-    "exilus": "AP_TACTIC",
+    "aura": "AP_TACTIC",
+    "exilus": null,
     "normal": [
-     "AP_UNIVERSAL",
-     "AP_ATTACK",
-     "AP_UNIVERSAL",
-     "AP_UNIVERSAL",
-     "AP_UNIVERSAL",
-     "AP_DEFENSE",
+     null,
      "AP_TACTIC",
-     "AP_UNIVERSAL",
-     "AP_UNIVERSAL",
-     "AP_UNIVERSAL"
+     null,
+     "AP_ATTACK",
+     null,
+     null,
+     null,
+     "AP_DEFENSE"
     ]
    },
-   "slotPolaritySource": "frozen-export.warframes[].polarities",
-   "auraPolarity": "AP_UNIVERSAL",
-   "exilusPolarity": "AP_TACTIC",
+   "slotPolaritySource": "client Packages.bin ArtifactSlots",
+   "auraPolarity": "AP_TACTIC",
+   "exilusPolarity": null,
    "abilities": [
     {
      "id": "/Lotus/Powersuits/Geode/Abilities/GeodeShardsAbility",
@@ -166568,10 +166574,10 @@
   {
    "id": "/Lotus/Powersuits/Duelist/Duelist",
    "path": "/Lotus/Powersuits/Duelist/Duelist",
-   "nameEn": "Duelist",
-   "nameZh": "Duelist",
-   "description": null,
-   "descriptionEn": null,
+   "nameEn": "Narin",
+   "nameZh": "Narin",
+   "description": "Narin 如旋涡般降临，她的利刃锋利无比，如同凛冽的寒风。她能巧妙地运用冰霜防御，如同她迅捷的细剑攻击一般。",
+   "descriptionEn": "Narin descends in swirling eddies, her blade keen and deadly as an icy wind, and she wields ice to defend as deftly as her swift rapier strikes.",
    "basePanel": {
     "health": 270.0,
     "shield": 550.0,
@@ -166583,117 +166589,1484 @@
     "health": 370.0,
     "shield": 650.0,
     "armor": 165.0,
-    "energy": 250.0,
+    "energy": 300.0,
     "sprint": 1.1
    },
    "rankGrowth": {
     "health": 100,
     "shield": 100,
-    "energy": 50
+    "energy": 100
    },
    "slotPolarities": {
-    "aura": "AP_UNIVERSAL",
-    "exilus": "AP_UNIVERSAL",
+    "aura": "AP_TACTIC",
+    "exilus": null,
     "normal": [
-     "AP_UNIVERSAL",
+     null,
+     null,
+     null,
      "AP_DEFENSE",
-     "AP_UNIVERSAL",
-     "AP_UNIVERSAL",
-     "AP_UNIVERSAL",
-     "AP_ATTACK",
-     "AP_TACTIC",
-     "AP_UNIVERSAL",
-     "AP_UNIVERSAL",
-     "AP_UNIVERSAL"
+     null,
+     null,
+     null,
+     "AP_ATTACK"
     ]
    },
-   "auraPolarity": "AP_UNIVERSAL",
-   "exilusPolarity": "AP_UNIVERSAL",
+   "auraPolarity": "AP_TACTIC",
+   "exilusPolarity": null,
    "masteryReq": 0,
    "abilities": [
     {
-     "id": "Abilities/DuelistThrustAbility",
-     "path": "Abilities/DuelistThrustAbility",
+     "id": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+     "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
      "slot": 0,
-     "nameEn": "Thrust",
-     "nameZh": null,
-     "description": null,
-     "descriptionEn": null,
-     "nameTag": null,
-     "descriptionTag": null,
-     "iconAsset": null,
+     "canonicalId": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+     "canonicalSource": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+     "postBuildSupplement": "Update 44 (2026-09-23)",
+     "nameEn": "Neote",
+     "nameZh": "寒霜疾剑",
+     "description": "挥舞 Narin 的细剑寒霜疾剑进行突刺，对正前方敌人造成冰冻伤害以及冰冻和穿刺异常状态。\n\n每击中一个敌人可获得冰能量。",
+     "descriptionEn": "Lunge with Narin's ice rapier Neote, inflicting <DT_FREEZE_COLOR> Cold Damage and <DT_FREEZE_COLOR> Cold and <DT_PUNCTURE_COLOR> Puncture Status Effect on foes directly ahead of her.\n\nGain Ice for each enemy hit.",
+     "nameTag": "/Lotus/Language/Iceblade/DuelistAbilityThrustName",
+     "descriptionTag": "/Lotus/Language/Iceblade/DuelistAbilityThrustDesc",
+     "iconAsset": "/assets/warframes/abilities/NarinThrust.png",
      "energyCost": {
-      "activation": null,
+      "activation": 25,
       "resource": "energy",
-      "sourceKind": "engine-dump"
+      "sourceKind": "wiki"
      },
-     "scalars": [],
-     "_scalarSource": "engine-pending-luau (DuelistThrust.lua etc.)"
+     "scalars": [
+      {
+       "id": "energy_cost_0",
+       "label": "Energy Cost",
+       "labelEn": "Energy Cost",
+       "labelZh": "能量消耗",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 25
+       },
+       "values": [
+        25
+       ],
+       "rankCount": 4,
+       "base": 25,
+       "unit": "",
+       "scale": "efficiency",
+       "modifier": "AVATAR_ABILITY_EFFICIENCY",
+       "group": null,
+       "variant": null,
+       "displayOrder": 0,
+       "isStatic": false,
+       "isEnergy": true,
+       "sourceKind": "wiki",
+       "rankValues": [
+        25,
+        25,
+        25,
+        25
+       ]
+      },
+      {
+       "id": "cold_damage_per_hit_1",
+       "label": "Cold Damage Per Hit",
+       "labelEn": "Cold Damage Per Hit",
+       "labelZh": "每击冰冻伤害",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 400
+       },
+       "values": [
+        400
+       ],
+       "rankCount": 4,
+       "base": 400,
+       "unit": "",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 1,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        250,
+        300,
+        350,
+        400
+       ]
+      },
+      {
+       "id": "hits_2",
+       "label": "Hits",
+       "labelEn": "Hits",
+       "labelZh": "命中次数",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 5
+       },
+       "values": [
+        5
+       ],
+       "rankCount": 1,
+       "base": 5,
+       "unit": "",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 2,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        5
+       ]
+      },
+      {
+       "id": "total_cold_damage_3",
+       "label": "Total Cold Damage",
+       "labelEn": "Total Cold Damage",
+       "labelZh": "冰冻总伤害",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 2000
+       },
+       "values": [
+        2000
+       ],
+       "rankCount": 4,
+       "base": 2000,
+       "unit": "",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 3,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        1250,
+        1500,
+        1750,
+        2000
+       ]
+      },
+      {
+       "id": "range_4",
+       "label": "Range",
+       "labelEn": "Range",
+       "labelZh": "范围",
+       "valueTemplate": "{}m",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 12
+       },
+       "values": [
+        12
+       ],
+       "rankCount": 4,
+       "base": 12,
+       "unit": "m",
+       "scale": "range",
+       "modifier": "AVATAR_ABILITY_RANGE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 4,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        9,
+        10,
+        11,
+        12
+       ]
+      },
+      {
+       "id": "cold_status_per_hit_5",
+       "label": "Cold Status Per Hit",
+       "labelEn": "Cold Status Per Hit",
+       "labelZh": "每击冰冻异常",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 2
+       },
+       "values": [
+        2
+       ],
+       "rankCount": 1,
+       "base": 2,
+       "unit": "",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 5,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        2
+       ]
+      },
+      {
+       "id": "puncture_status_per_hit_6",
+       "label": "Puncture Status Per Hit",
+       "labelEn": "Puncture Status Per Hit",
+       "labelZh": "每击穿刺异常",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 1
+       },
+       "values": [
+        1
+       ],
+       "rankCount": 1,
+       "base": 1,
+       "unit": "",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 6,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        1
+       ]
+      },
+      {
+       "id": "ice_per_cast_7",
+       "label": "Ice Per Cast",
+       "labelEn": "Ice Per Cast",
+       "labelZh": "每次施放获得冰能量",
+       "valueTemplate": "{}%",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 7
+       },
+       "values": [
+        7
+       ],
+       "rankCount": 1,
+       "base": 7,
+       "unit": "%",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 7,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        7
+       ]
+      },
+      {
+       "id": "ice_per_hit_8",
+       "label": "Ice Per Hit",
+       "labelEn": "Ice Per Hit",
+       "labelZh": "每次命中获得冰能量",
+       "valueTemplate": "{}%",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 0.5
+       },
+       "values": [
+        0.5
+       ],
+       "rankCount": 1,
+       "base": 0.5,
+       "unit": "%",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 8,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        0.5
+       ]
+      }
+     ],
+     "scalarGroups": [],
+     "supportLevel": "partial",
+     "unresolvedFields": [
+      "cone_angle"
+     ],
+     "validForCalculation": true,
+     "sourceEvidence": [
+      {
+       "kind": "wiki",
+       "url": "https://wiki.warframe.com/w/Neote",
+       "title": "Neote"
+      },
+      {
+       "kind": "packages",
+       "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+       "available": true,
+       "uniquePowerIdentifier": "DUELIST_THRUST",
+       "build": "client-cache 2026.10.08"
+      },
+      {
+       "kind": "official-site",
+       "url": "https://www.warframe.com/zh-hans/game/warframes/narin",
+       "field": "nameZh/description"
+      }
+     ],
+     "sourceRevision": "client 2026.10.08 + wiki 2026-10-12",
+     "sourceUrl": "https://wiki.warframe.com/w/Neote",
+     "fetchedAt": "2026-10-12T11:29:14Z",
+     "officialExportVersion": null,
+     "parserHash": null,
+     "localizationHash": null,
+     "localizationSource": "warframe.com/zh-hans (official)"
     },
     {
-     "id": "Abilities/DuelistRiposteAbility",
-     "path": "Abilities/DuelistRiposteAbility",
+     "id": "/Lotus/Powersuits/Duelist/Abilities/DuelistRiposteAbility",
+     "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistRiposteAbility",
      "slot": 1,
-     "nameEn": "Riposte",
-     "nameZh": null,
-     "description": null,
-     "descriptionEn": null,
-     "nameTag": null,
-     "descriptionTag": null,
-     "iconAsset": null,
+     "canonicalId": "/Lotus/Powersuits/Duelist/Abilities/DuelistRiposteAbility",
+     "canonicalSource": "/Lotus/Powersuits/Duelist/Abilities/DuelistRiposteAbility",
+     "postBuildSupplement": "Update 44 (2026-09-23)",
+     "nameEn": "Naraemagi",
+     "nameZh": "冰翎御盾",
+     "description": "通过吸收附近敌人施加的冰冻异常状态来恢复护盾。如果护盾已满，则获得超宏防护。\n\n每击中一个敌人可获得冰能量。",
+     "descriptionEn": "Recover Shields by absorbing <DT_FREEZE_COLOR> Cold Status Effect from nearby enemies. Gain Overguard if at full Shields.\n\nGain Ice for each enemy hit.",
+     "nameTag": "/Lotus/Language/Iceblade/DuelistAbilityRiposteName",
+     "descriptionTag": "/Lotus/Language/Iceblade/DuelistAbilityRiposteDesc",
+     "iconAsset": "/assets/warframes/abilities/NarinRiposte.png",
      "energyCost": {
-      "activation": null,
+      "activation": 50,
       "resource": "energy",
-      "sourceKind": "engine-dump"
+      "sourceKind": "wiki"
      },
-     "scalars": [],
-     "_scalarSource": "engine-pending-luau (DuelistThrust.lua etc.)"
+     "scalars": [
+      {
+       "id": "energy_cost_0",
+       "label": "Energy Cost",
+       "labelEn": "Energy Cost",
+       "labelZh": "能量消耗",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 50
+       },
+       "values": [
+        50
+       ],
+       "rankCount": 4,
+       "base": 50,
+       "unit": "",
+       "scale": "efficiency",
+       "modifier": "AVATAR_ABILITY_EFFICIENCY",
+       "group": null,
+       "variant": null,
+       "displayOrder": 0,
+       "isStatic": false,
+       "isEnergy": true,
+       "sourceKind": "wiki",
+       "rankValues": [
+        50,
+        50,
+        50,
+        50
+       ]
+      },
+      {
+       "id": "shield_per_cold_status_1",
+       "label": "Shields Restored / Overguard Per Cold Status",
+       "labelEn": "Shields Restored / Overguard Per Cold Status",
+       "labelZh": "每层冰冻恢复护盾 / 超宏防护",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 75
+       },
+       "values": [
+        75
+       ],
+       "rankCount": 4,
+       "base": 75,
+       "unit": "",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 1,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        40,
+        50,
+        60,
+        75
+       ]
+      },
+      {
+       "id": "overguard_cap_2",
+       "label": "Overguard Cap",
+       "labelEn": "Overguard Cap",
+       "labelZh": "超宏防护上限",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 15000
+       },
+       "values": [
+        15000
+       ],
+       "rankCount": 4,
+       "base": 15000,
+       "unit": "",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 2,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        9000,
+        11000,
+        13000,
+        15000
+       ]
+      },
+      {
+       "id": "range_3",
+       "label": "Range",
+       "labelEn": "Range",
+       "labelZh": "范围",
+       "valueTemplate": "{}m",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 14
+       },
+       "values": [
+        14
+       ],
+       "rankCount": 4,
+       "base": 14,
+       "unit": "m",
+       "scale": "range",
+       "modifier": "AVATAR_ABILITY_RANGE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 3,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        10,
+        12,
+        13,
+        14
+       ]
+      },
+      {
+       "id": "ice_per_cast_4",
+       "label": "Ice Per Cast",
+       "labelEn": "Ice Per Cast",
+       "labelZh": "每次施放获得冰能量",
+       "valueTemplate": "{}%",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 5
+       },
+       "values": [
+        5
+       ],
+       "rankCount": 1,
+       "base": 5,
+       "unit": "%",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 4,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        5
+       ]
+      },
+      {
+       "id": "ice_per_hit_5",
+       "label": "Ice Per Hit",
+       "labelEn": "Ice Per Hit",
+       "labelZh": "每次命中获得冰能量",
+       "valueTemplate": "{}%",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 1
+       },
+       "values": [
+        1
+       ],
+       "rankCount": 1,
+       "base": 1,
+       "unit": "%",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 5,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        1
+       ]
+      }
+     ],
+     "scalarGroups": [],
+     "supportLevel": "full",
+     "unresolvedFields": [],
+     "validForCalculation": true,
+     "sourceEvidence": [
+      {
+       "kind": "wiki",
+       "url": "https://wiki.warframe.com/w/Naraemagi",
+       "title": "Naraemagi"
+      },
+      {
+       "kind": "packages",
+       "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistRiposteAbility",
+       "available": true,
+       "uniquePowerIdentifier": "DUELIST_RIPOSTE",
+       "build": "client-cache 2026.10.08"
+      },
+      {
+       "kind": "official-site",
+       "url": "https://www.warframe.com/zh-hans/game/warframes/narin",
+       "field": "nameZh/description"
+      }
+     ],
+     "sourceRevision": "client 2026.10.08 + wiki 2026-10-12",
+     "sourceUrl": "https://wiki.warframe.com/w/Naraemagi",
+     "fetchedAt": "2026-10-12T11:29:14Z",
+     "officialExportVersion": null,
+     "parserHash": null,
+     "localizationHash": null,
+     "localizationSource": "warframe.com/zh-hans (official)"
     },
     {
-     "id": "Abilities/DuelistLeapAbility",
-     "path": "Abilities/DuelistLeapAbility",
+     "id": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
+     "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
      "slot": 2,
-     "nameEn": "Leap",
-     "nameZh": null,
-     "description": null,
-     "descriptionEn": null,
-     "nameTag": null,
-     "descriptionTag": null,
-     "iconAsset": null,
+     "canonicalId": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
+     "canonicalSource": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
+     "postBuildSupplement": "Update 44 (2026-09-23)",
+     "nameEn": "Hakchum",
+     "nameZh": "鹤影舞坠",
+     "description": "轻按可跃向空中，再次轻按即可落在目标位置。落地时，对大范围内的敌人施加冰冻伤害易伤和异常状态效果。\n\n每击中一个敌人可获得冰能量。",
+     "descriptionEn": "Tap to leap into the air, tap again to land at target location. Applies <DT_FREEZE_COLOR> Cold Damage Vulnerability and Status Effect in a large radius upon landing.\n\nGain Ice for each enemy hit.",
+     "nameTag": "/Lotus/Language/Iceblade/DuelistAbilityLeapName",
+     "descriptionTag": "/Lotus/Language/Iceblade/DuelistAbilityLeapDesc",
+     "iconAsset": "/assets/warframes/abilities/NarinLeap.png",
      "energyCost": {
-      "activation": null,
+      "activation": 75,
       "resource": "energy",
-      "sourceKind": "engine-dump"
+      "sourceKind": "wiki"
      },
-     "scalars": [],
-     "_scalarSource": "engine-pending-luau (DuelistThrust.lua etc.)"
+     "scalars": [
+      {
+       "id": "energy_cost_0",
+       "label": "Energy Cost",
+       "labelEn": "Energy Cost",
+       "labelZh": "能量消耗",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 75
+       },
+       "values": [
+        75
+       ],
+       "rankCount": 4,
+       "base": 75,
+       "unit": "",
+       "scale": "efficiency",
+       "modifier": "AVATAR_ABILITY_EFFICIENCY",
+       "group": null,
+       "variant": null,
+       "displayOrder": 0,
+       "isStatic": false,
+       "isEnergy": true,
+       "sourceKind": "wiki",
+       "rankValues": [
+        75,
+        75,
+        75,
+        75
+       ]
+      },
+      {
+       "id": "cold_landing_damage_1",
+       "label": "Cold Landing Damage",
+       "labelEn": "Cold Landing Damage",
+       "labelZh": "落地冰冻伤害",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 1000
+       },
+       "values": [
+        1000
+       ],
+       "rankCount": 4,
+       "base": 1000,
+       "unit": "",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 1,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        400,
+        600,
+        800,
+        1000
+       ]
+      },
+      {
+       "id": "cold_damage_per_second_2",
+       "label": "Cold Damage Per Second",
+       "labelEn": "Cold Damage Per Second",
+       "labelZh": "冰暴每秒冰冻伤害",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 100
+       },
+       "values": [
+        100
+       ],
+       "rankCount": 1,
+       "base": 100,
+       "unit": "",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 2,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        100
+       ]
+      },
+      {
+       "id": "cold_vulnerability_3",
+       "label": "Cold Damage Vulnerability",
+       "labelEn": "Cold Damage Vulnerability",
+       "labelZh": "冰冻伤害易伤",
+       "valueTemplate": "{}%",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 150
+       },
+       "values": [
+        150
+       ],
+       "rankCount": 4,
+       "base": 150,
+       "unit": "%",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 3,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        120,
+        130,
+        140,
+        150
+       ]
+      },
+      {
+       "id": "storm_radius_4",
+       "label": "Storm Radius",
+       "labelEn": "Storm Radius",
+       "labelZh": "冰暴半径",
+       "valueTemplate": "{}m",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 10
+       },
+       "values": [
+        10
+       ],
+       "rankCount": 4,
+       "base": 10,
+       "unit": "m",
+       "scale": "range",
+       "modifier": "AVATAR_ABILITY_RANGE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 4,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        7,
+        8,
+        9,
+        10
+       ]
+      },
+      {
+       "id": "storm_duration_5",
+       "label": "Storm Duration",
+       "labelEn": "Storm Duration",
+       "labelZh": "冰暴持续时间",
+       "valueTemplate": "{}s",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 15
+       },
+       "values": [
+        15
+       ],
+       "rankCount": 1,
+       "base": 15,
+       "unit": "s",
+       "scale": "duration",
+       "modifier": "AVATAR_ABILITY_DURATION",
+       "group": null,
+       "variant": null,
+       "displayOrder": 5,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        15
+       ]
+      },
+      {
+       "id": "flight_duration_6",
+       "label": "Maximum Flight Duration",
+       "labelEn": "Maximum Flight Duration",
+       "labelZh": "最长滞空时间",
+       "valueTemplate": "{}s",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 3
+       },
+       "values": [
+        3
+       ],
+       "rankCount": 1,
+       "base": 3,
+       "unit": "s",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 6,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        3
+       ]
+      },
+      {
+       "id": "cold_status_on_landing_7",
+       "label": "Cold Status On Landing",
+       "labelEn": "Cold Status On Landing",
+       "labelZh": "落地冰冻异常",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 6
+       },
+       "values": [
+        6
+       ],
+       "rankCount": 1,
+       "base": 6,
+       "unit": "",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 7,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        6
+       ]
+      },
+      {
+       "id": "cold_status_per_second_8",
+       "label": "Cold Status Per Second",
+       "labelEn": "Cold Status Per Second",
+       "labelZh": "每秒冰冻异常",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 1
+       },
+       "values": [
+        1
+       ],
+       "rankCount": 1,
+       "base": 1,
+       "unit": "",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 8,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        1
+       ]
+      },
+      {
+       "id": "ice_per_hit_9",
+       "label": "Ice Per Hit",
+       "labelEn": "Ice Per Hit",
+       "labelZh": "每次命中获得冰能量",
+       "valueTemplate": "{}%",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 1
+       },
+       "values": [
+        1
+       ],
+       "rankCount": 1,
+       "base": 1,
+       "unit": "%",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 9,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        1
+       ]
+      }
+     ],
+     "scalarGroups": [],
+     "supportLevel": "full",
+     "unresolvedFields": [],
+     "validForCalculation": true,
+     "sourceEvidence": [
+      {
+       "kind": "wiki",
+       "url": "https://wiki.warframe.com/w/Hakchum",
+       "title": "Hakchum"
+      },
+      {
+       "kind": "packages",
+       "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
+       "available": true,
+       "uniquePowerIdentifier": "DUELIST_LEAP",
+       "build": "client-cache 2026.10.08"
+      },
+      {
+       "kind": "official-site",
+       "url": "https://www.warframe.com/zh-hans/game/warframes/narin",
+       "field": "nameZh/description"
+      }
+     ],
+     "sourceRevision": "client 2026.10.08 + wiki 2026-10-12",
+     "sourceUrl": "https://wiki.warframe.com/w/Hakchum",
+     "fetchedAt": "2026-10-12T11:29:14Z",
+     "officialExportVersion": null,
+     "parserHash": null,
+     "localizationHash": null,
+     "localizationSource": "warframe.com/zh-hans (official)"
     },
     {
-     "id": "Abilities/DuelistBladeDanceAbility",
-     "path": "Abilities/DuelistBladeDanceAbility",
+     "id": "/Lotus/Powersuits/Duelist/Abilities/DuelistBladeDanceAbility",
+     "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistBladeDanceAbility",
      "slot": 3,
-     "nameEn": "BladeDance",
-     "nameZh": null,
-     "description": null,
-     "descriptionEn": null,
-     "nameTag": null,
-     "descriptionTag": null,
-     "iconAsset": null,
+     "canonicalId": "/Lotus/Powersuits/Duelist/Abilities/DuelistBladeDanceAbility",
+     "canonicalSource": "/Lotus/Powersuits/Duelist/Abilities/DuelistBladeDanceAbility",
+     "postBuildSupplement": "Update 44 (2026-09-23)",
+     "nameEn": "Nurinarim",
+     "nameZh": "降灵旋刃",
+     "description": "需要满冰能量才能施放。先祖之灵降临在 Narin 身上，她随即开始剑舞，对周围敌人造成持续伤害。按下攻击键即可发射粉碎性的冰刃斩击，削弱其护甲和护盾。击中被冻结的敌人会使其爆炸，造成大范围冰冻伤害。攻击被标记的目标不消耗冰能量，并造成更高伤害。",
+     "descriptionEn": "Requires full Ice to cast. An ancestral spirit descends upon Narin and she begins sword dancing for continuous nearby damage. Press Attack to launch shattering icy slashes that deplete Armor and Shields. Hitting Frozen enemies causes them to explode, dealing massive radial <DT_FREEZE_COLOR> Cold Damage. Attacks on Marked Targets cost no Ice and do more damage.",
+     "nameTag": "/Lotus/Language/Iceblade/DuelistAbilityBladedanceName",
+     "descriptionTag": "/Lotus/Language/Iceblade/DuelistAbilityBladedanceDesc",
+     "iconAsset": "/assets/warframes/abilities/NarinBladeDance.png",
      "energyCost": {
-      "activation": null,
+      "activation": 25,
       "resource": "energy",
-      "sourceKind": "engine-dump"
+      "sourceKind": "wiki"
      },
-     "scalars": [],
-     "_scalarSource": "engine-pending-luau (DuelistThrust.lua etc.)"
+     "scalars": [
+      {
+       "id": "energy_cost_0",
+       "label": "Energy Cost",
+       "labelEn": "Energy Cost",
+       "labelZh": "能量消耗",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 25
+       },
+       "values": [
+        25
+       ],
+       "rankCount": 4,
+       "base": 25,
+       "unit": "",
+       "scale": "efficiency",
+       "modifier": "AVATAR_ABILITY_EFFICIENCY",
+       "group": null,
+       "variant": null,
+       "displayOrder": 0,
+       "isStatic": false,
+       "isEnergy": true,
+       "sourceKind": "wiki",
+       "rankValues": [
+        25,
+        25,
+        25,
+        25
+       ]
+      },
+      {
+       "id": "cold_radial_damage_1",
+       "label": "Ice Aura Cold Damage Per Second",
+       "labelEn": "Ice Aura Cold Damage Per Second",
+       "labelZh": "冰霜光环每秒冰冻伤害",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 500
+       },
+       "values": [
+        500
+       ],
+       "rankCount": 4,
+       "base": 500,
+       "unit": "",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 1,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        200,
+        300,
+        400,
+        500
+       ]
+      },
+      {
+       "id": "icy_slash_damage_2",
+       "label": "Icy Slash Cold Damage",
+       "labelEn": "Icy Slash Cold Damage",
+       "labelZh": "冰刃斩击冰冻伤害",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 20000
+       },
+       "values": [
+        20000
+       ],
+       "rankCount": 4,
+       "base": 20000,
+       "unit": "",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 2,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        12500,
+        15000,
+        17500,
+        20000
+       ]
+      },
+      {
+       "id": "explosion_damage_3",
+       "label": "Frozen Explosion Cold Damage",
+       "labelEn": "Frozen Explosion Cold Damage",
+       "labelZh": "冻结爆炸冰冻伤害",
+       "valueTemplate": "{}",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 10000
+       },
+       "values": [
+        10000
+       ],
+       "rankCount": 4,
+       "base": 10000,
+       "unit": "",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 3,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        6250,
+        7500,
+        8750,
+        10000
+       ]
+      },
+      {
+       "id": "shield_armor_reduction_4",
+       "label": "Shield And Armor Reduction Per Cold Status",
+       "labelEn": "Shield And Armor Reduction Per Cold Status",
+       "labelZh": "每层冰冻削减护盾与护甲",
+       "valueTemplate": "{}%",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 5
+       },
+       "values": [
+        5
+       ],
+       "rankCount": 4,
+       "base": 5,
+       "unit": "%",
+       "scale": "strength",
+       "modifier": "AVATAR_ABILITY_STRENGTH",
+       "group": null,
+       "variant": null,
+       "displayOrder": 4,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        2,
+        3,
+        4,
+        5
+       ]
+      },
+      {
+       "id": "aura_radius_5",
+       "label": "Ice Aura Radius",
+       "labelEn": "Ice Aura Radius",
+       "labelZh": "冰霜光环半径",
+       "valueTemplate": "{}m",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 8
+       },
+       "values": [
+        8
+       ],
+       "rankCount": 4,
+       "base": 8,
+       "unit": "m",
+       "scale": "range",
+       "modifier": "AVATAR_ABILITY_RANGE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 5,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        6,
+        7,
+        7,
+        8
+       ]
+      },
+      {
+       "id": "explosion_range_6",
+       "label": "Frozen Explosion Range",
+       "labelEn": "Frozen Explosion Range",
+       "labelZh": "冻结爆炸范围",
+       "valueTemplate": "{}m",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 10
+       },
+       "values": [
+        10
+       ],
+       "rankCount": 4,
+       "base": 10,
+       "unit": "m",
+       "scale": "range",
+       "modifier": "AVATAR_ABILITY_RANGE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 6,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        7,
+        8,
+        9,
+        10
+       ]
+      },
+      {
+       "id": "max_duration_7",
+       "label": "Maximum Duration",
+       "labelEn": "Maximum Duration",
+       "labelZh": "最长持续时间",
+       "valueTemplate": "{}s",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 20
+       },
+       "values": [
+        20
+       ],
+       "rankCount": 1,
+       "base": 20,
+       "unit": "s",
+       "scale": "duration",
+       "modifier": "AVATAR_ABILITY_DURATION",
+       "group": null,
+       "variant": null,
+       "displayOrder": 7,
+       "isStatic": false,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        20
+       ]
+      },
+      {
+       "id": "marked_target_multiplier_8",
+       "label": "Damage On Marked Target",
+       "labelEn": "Damage On Marked Target",
+       "labelZh": "被标记目标伤害倍率",
+       "valueTemplate": "{}x",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 2
+       },
+       "values": [
+        2
+       ],
+       "rankCount": 1,
+       "base": 2,
+       "unit": "x",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 8,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        2
+       ]
+      },
+      {
+       "id": "radial_status_chance_9",
+       "label": "Radial Status Chance",
+       "labelEn": "Radial Status Chance",
+       "labelZh": "光环触发几率",
+       "valueTemplate": "{}%",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 200
+       },
+       "values": [
+        200
+       ],
+       "rankCount": 1,
+       "base": 200,
+       "unit": "%",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 9,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        200
+       ]
+      },
+      {
+       "id": "ice_per_unmarked_slash_10",
+       "label": "Ice Cost Per Unmarked Slash",
+       "labelEn": "Ice Cost Per Unmarked Slash",
+       "labelZh": "未标记斩击冰能量消耗",
+       "valueTemplate": "{}%",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 2
+       },
+       "values": [
+        2
+       ],
+       "rankCount": 1,
+       "base": 2,
+       "unit": "%",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 10,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        2
+       ]
+      },
+      {
+       "id": "slash_travel_11",
+       "label": "Icy Slash Travel Distance",
+       "labelEn": "Icy Slash Travel Distance",
+       "labelZh": "冰刃斩击射程",
+       "valueTemplate": "{}m",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 60
+       },
+       "values": [
+        60
+       ],
+       "rankCount": 1,
+       "base": 60,
+       "unit": "m",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 11,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        60
+       ]
+      },
+      {
+       "id": "targeting_radius_12",
+       "label": "Targeting Radius",
+       "labelEn": "Targeting Radius",
+       "labelZh": "标记半径",
+       "valueTemplate": "{}m",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 50
+       },
+       "values": [
+        50
+       ],
+       "rankCount": 1,
+       "base": 50,
+       "unit": "m",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 12,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        50
+       ]
+      },
+      {
+       "id": "targeting_duration_13",
+       "label": "Targeting Duration",
+       "labelEn": "Targeting Duration",
+       "labelZh": "标记时间",
+       "valueTemplate": "{}s",
+       "valueKeys": [
+        "val1"
+       ],
+       "parts": {
+        "val1": 3
+       },
+       "values": [
+        3
+       ],
+       "rankCount": 1,
+       "base": 3,
+       "unit": "s",
+       "scale": "none",
+       "modifier": "NONE",
+       "group": null,
+       "variant": null,
+       "displayOrder": 13,
+       "isStatic": true,
+       "isEnergy": false,
+       "sourceKind": "wiki",
+       "rankValues": [
+        3
+       ]
+      }
+     ],
+     "scalarGroups": [],
+     "supportLevel": "full",
+     "unresolvedFields": [],
+     "validForCalculation": true,
+     "sourceEvidence": [
+      {
+       "kind": "wiki",
+       "url": "https://wiki.warframe.com/w/Nurinarim",
+       "title": "Nurinarim"
+      },
+      {
+       "kind": "packages",
+       "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistBladeDanceAbility",
+       "available": true,
+       "uniquePowerIdentifier": "DUELIST_DANCE",
+       "build": "client-cache 2026.10.08"
+      },
+      {
+       "kind": "official-site",
+       "url": "https://www.warframe.com/zh-hans/game/warframes/narin",
+       "field": "nameZh/description"
+      }
+     ],
+     "sourceRevision": "client 2026.10.08 + wiki 2026-10-12",
+     "sourceUrl": "https://wiki.warframe.com/w/Nurinarim",
+     "fetchedAt": "2026-10-12T11:29:14Z",
+     "officialExportVersion": null,
+     "parserHash": null,
+     "localizationHash": null,
+     "localizationSource": "warframe.com/zh-hans (official)"
     }
    ],
-   "passive": null,
-   "passiveEn": null,
+   "passive": "敌人身上每层冰冻异常状态使 Sangodae 拾取物的生成几率提高 1%，拾取后 10 秒内主要武器和次要武器获得额外冰冻伤害。Narin 的技能也获得冰冻伤害。",
+   "passiveEn": "Each stack of Cold Status Effect on enemies increase chance to spawn Sangodae pickup by 1%, granting Extra Cold Damage on Primary and Secondary weapons for 10s. Narin also gains Cold Damage for her abilities.",
    "provenance": {
-    "addedFrom": "engine-dump-2026.09.22.16.46"
+    "addedFrom": "engine-dump-2026.09.22.16.46",
+    "completedBy": "tools/supplement_narin.py"
    },
-   "_source": "added-from-2026.09.22.16.46 (scalars pending Luau decompilation)"
+   "passiveSource": "wiki (en); zh translated",
+   "portraitAsset": "/assets/warframes/portraits/Narin.png",
+   "iconAsset": "/assets/warframes/portraits/Narin.png",
+   "slotPolaritySource": "client Packages.bin 2026.10.08 ArtifactSlots",
+   "rankGrowthSource": "/Lotus/Powersuits/Duelist/Duelist LevelUpgrades (client 2026.10.08)",
+   "sourceRevision": "client 2026.10.08",
+   "sourceUrl": "raw://client-cache/2026.10.08 Packages.bin + https://wiki.warframe.com/w/Narin + https://www.warframe.com/zh-hans/game/warframes/narin + overframe db/items 2026-10-01",
+   "fetchedAt": "2026-10-12T11:29:14Z"
   }
  ],
  "abilities": [
@@ -335740,6 +337113,1443 @@
    "localizationSource": "WF_Rever/research/wf-arsenal-external-sources/work/warframe-languages-bin-data/zh.json",
    "canonicalId": "/Lotus/Powersuits/SiriusOrion/Abilities/SiriusOrionUltimateAbility",
    "canonicalSource": "/Lotus/Powersuits/SiriusOrion/Abilities/SiriusOrionUltimateAbility"
+  },
+  {
+   "id": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+   "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+   "slot": 0,
+   "canonicalId": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+   "canonicalSource": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+   "postBuildSupplement": "Update 44 (2026-09-23)",
+   "nameEn": "Neote",
+   "nameZh": "寒霜疾剑",
+   "description": "挥舞 Narin 的细剑寒霜疾剑进行突刺，对正前方敌人造成冰冻伤害以及冰冻和穿刺异常状态。\n\n每击中一个敌人可获得冰能量。",
+   "descriptionEn": "Lunge with Narin's ice rapier Neote, inflicting <DT_FREEZE_COLOR> Cold Damage and <DT_FREEZE_COLOR> Cold and <DT_PUNCTURE_COLOR> Puncture Status Effect on foes directly ahead of her.\n\nGain Ice for each enemy hit.",
+   "nameTag": "/Lotus/Language/Iceblade/DuelistAbilityThrustName",
+   "descriptionTag": "/Lotus/Language/Iceblade/DuelistAbilityThrustDesc",
+   "iconAsset": "/assets/warframes/abilities/NarinThrust.png",
+   "energyCost": {
+    "activation": 25,
+    "resource": "energy",
+    "sourceKind": "wiki"
+   },
+   "scalars": [
+    {
+     "id": "energy_cost_0",
+     "label": "Energy Cost",
+     "labelEn": "Energy Cost",
+     "labelZh": "能量消耗",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 25
+     },
+     "values": [
+      25
+     ],
+     "rankCount": 4,
+     "base": 25,
+     "unit": "",
+     "scale": "efficiency",
+     "modifier": "AVATAR_ABILITY_EFFICIENCY",
+     "group": null,
+     "variant": null,
+     "displayOrder": 0,
+     "isStatic": false,
+     "isEnergy": true,
+     "sourceKind": "wiki",
+     "rankValues": [
+      25,
+      25,
+      25,
+      25
+     ]
+    },
+    {
+     "id": "cold_damage_per_hit_1",
+     "label": "Cold Damage Per Hit",
+     "labelEn": "Cold Damage Per Hit",
+     "labelZh": "每击冰冻伤害",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 400
+     },
+     "values": [
+      400
+     ],
+     "rankCount": 4,
+     "base": 400,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 1,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      250,
+      300,
+      350,
+      400
+     ]
+    },
+    {
+     "id": "hits_2",
+     "label": "Hits",
+     "labelEn": "Hits",
+     "labelZh": "命中次数",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 5
+     },
+     "values": [
+      5
+     ],
+     "rankCount": 1,
+     "base": 5,
+     "unit": "",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 2,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      5
+     ]
+    },
+    {
+     "id": "total_cold_damage_3",
+     "label": "Total Cold Damage",
+     "labelEn": "Total Cold Damage",
+     "labelZh": "冰冻总伤害",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 2000
+     },
+     "values": [
+      2000
+     ],
+     "rankCount": 4,
+     "base": 2000,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 3,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      1250,
+      1500,
+      1750,
+      2000
+     ]
+    },
+    {
+     "id": "range_4",
+     "label": "Range",
+     "labelEn": "Range",
+     "labelZh": "范围",
+     "valueTemplate": "{}m",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 12
+     },
+     "values": [
+      12
+     ],
+     "rankCount": 4,
+     "base": 12,
+     "unit": "m",
+     "scale": "range",
+     "modifier": "AVATAR_ABILITY_RANGE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 4,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    {
+     "id": "cold_status_per_hit_5",
+     "label": "Cold Status Per Hit",
+     "labelEn": "Cold Status Per Hit",
+     "labelZh": "每击冰冻异常",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 2
+     },
+     "values": [
+      2
+     ],
+     "rankCount": 1,
+     "base": 2,
+     "unit": "",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 5,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      2
+     ]
+    },
+    {
+     "id": "puncture_status_per_hit_6",
+     "label": "Puncture Status Per Hit",
+     "labelEn": "Puncture Status Per Hit",
+     "labelZh": "每击穿刺异常",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 1
+     },
+     "values": [
+      1
+     ],
+     "rankCount": 1,
+     "base": 1,
+     "unit": "",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 6,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      1
+     ]
+    },
+    {
+     "id": "ice_per_cast_7",
+     "label": "Ice Per Cast",
+     "labelEn": "Ice Per Cast",
+     "labelZh": "每次施放获得冰能量",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 7
+     },
+     "values": [
+      7
+     ],
+     "rankCount": 1,
+     "base": 7,
+     "unit": "%",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 7,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      7
+     ]
+    },
+    {
+     "id": "ice_per_hit_8",
+     "label": "Ice Per Hit",
+     "labelEn": "Ice Per Hit",
+     "labelZh": "每次命中获得冰能量",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 0.5
+     },
+     "values": [
+      0.5
+     ],
+     "rankCount": 1,
+     "base": 0.5,
+     "unit": "%",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 8,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      0.5
+     ]
+    }
+   ],
+   "scalarGroups": [],
+   "supportLevel": "partial",
+   "unresolvedFields": [
+    "cone_angle"
+   ],
+   "validForCalculation": true,
+   "sourceEvidence": [
+    {
+     "kind": "wiki",
+     "url": "https://wiki.warframe.com/w/Neote",
+     "title": "Neote"
+    },
+    {
+     "kind": "packages",
+     "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+     "available": true,
+     "uniquePowerIdentifier": "DUELIST_THRUST",
+     "build": "client-cache 2026.10.08"
+    },
+    {
+     "kind": "official-site",
+     "url": "https://www.warframe.com/zh-hans/game/warframes/narin",
+     "field": "nameZh/description"
+    }
+   ],
+   "sourceRevision": "client 2026.10.08 + wiki 2026-10-12",
+   "sourceUrl": "https://wiki.warframe.com/w/Neote",
+   "fetchedAt": "2026-10-12T11:29:14Z",
+   "officialExportVersion": null,
+   "parserHash": null,
+   "localizationHash": null,
+   "localizationSource": "warframe.com/zh-hans (official)"
+  },
+  {
+   "id": "/Lotus/Powersuits/Duelist/Abilities/DuelistRiposteAbility",
+   "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistRiposteAbility",
+   "slot": 1,
+   "canonicalId": "/Lotus/Powersuits/Duelist/Abilities/DuelistRiposteAbility",
+   "canonicalSource": "/Lotus/Powersuits/Duelist/Abilities/DuelistRiposteAbility",
+   "postBuildSupplement": "Update 44 (2026-09-23)",
+   "nameEn": "Naraemagi",
+   "nameZh": "冰翎御盾",
+   "description": "通过吸收附近敌人施加的冰冻异常状态来恢复护盾。如果护盾已满，则获得超宏防护。\n\n每击中一个敌人可获得冰能量。",
+   "descriptionEn": "Recover Shields by absorbing <DT_FREEZE_COLOR> Cold Status Effect from nearby enemies. Gain Overguard if at full Shields.\n\nGain Ice for each enemy hit.",
+   "nameTag": "/Lotus/Language/Iceblade/DuelistAbilityRiposteName",
+   "descriptionTag": "/Lotus/Language/Iceblade/DuelistAbilityRiposteDesc",
+   "iconAsset": "/assets/warframes/abilities/NarinRiposte.png",
+   "energyCost": {
+    "activation": 50,
+    "resource": "energy",
+    "sourceKind": "wiki"
+   },
+   "scalars": [
+    {
+     "id": "energy_cost_0",
+     "label": "Energy Cost",
+     "labelEn": "Energy Cost",
+     "labelZh": "能量消耗",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 50
+     },
+     "values": [
+      50
+     ],
+     "rankCount": 4,
+     "base": 50,
+     "unit": "",
+     "scale": "efficiency",
+     "modifier": "AVATAR_ABILITY_EFFICIENCY",
+     "group": null,
+     "variant": null,
+     "displayOrder": 0,
+     "isStatic": false,
+     "isEnergy": true,
+     "sourceKind": "wiki",
+     "rankValues": [
+      50,
+      50,
+      50,
+      50
+     ]
+    },
+    {
+     "id": "shield_per_cold_status_1",
+     "label": "Shields Restored / Overguard Per Cold Status",
+     "labelEn": "Shields Restored / Overguard Per Cold Status",
+     "labelZh": "每层冰冻恢复护盾 / 超宏防护",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 75
+     },
+     "values": [
+      75
+     ],
+     "rankCount": 4,
+     "base": 75,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 1,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      40,
+      50,
+      60,
+      75
+     ]
+    },
+    {
+     "id": "overguard_cap_2",
+     "label": "Overguard Cap",
+     "labelEn": "Overguard Cap",
+     "labelZh": "超宏防护上限",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 15000
+     },
+     "values": [
+      15000
+     ],
+     "rankCount": 4,
+     "base": 15000,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 2,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      9000,
+      11000,
+      13000,
+      15000
+     ]
+    },
+    {
+     "id": "range_3",
+     "label": "Range",
+     "labelEn": "Range",
+     "labelZh": "范围",
+     "valueTemplate": "{}m",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 14
+     },
+     "values": [
+      14
+     ],
+     "rankCount": 4,
+     "base": 14,
+     "unit": "m",
+     "scale": "range",
+     "modifier": "AVATAR_ABILITY_RANGE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 3,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      10,
+      12,
+      13,
+      14
+     ]
+    },
+    {
+     "id": "ice_per_cast_4",
+     "label": "Ice Per Cast",
+     "labelEn": "Ice Per Cast",
+     "labelZh": "每次施放获得冰能量",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 5
+     },
+     "values": [
+      5
+     ],
+     "rankCount": 1,
+     "base": 5,
+     "unit": "%",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 4,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      5
+     ]
+    },
+    {
+     "id": "ice_per_hit_5",
+     "label": "Ice Per Hit",
+     "labelEn": "Ice Per Hit",
+     "labelZh": "每次命中获得冰能量",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 1
+     },
+     "values": [
+      1
+     ],
+     "rankCount": 1,
+     "base": 1,
+     "unit": "%",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 5,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      1
+     ]
+    }
+   ],
+   "scalarGroups": [],
+   "supportLevel": "full",
+   "unresolvedFields": [],
+   "validForCalculation": true,
+   "sourceEvidence": [
+    {
+     "kind": "wiki",
+     "url": "https://wiki.warframe.com/w/Naraemagi",
+     "title": "Naraemagi"
+    },
+    {
+     "kind": "packages",
+     "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistRiposteAbility",
+     "available": true,
+     "uniquePowerIdentifier": "DUELIST_RIPOSTE",
+     "build": "client-cache 2026.10.08"
+    },
+    {
+     "kind": "official-site",
+     "url": "https://www.warframe.com/zh-hans/game/warframes/narin",
+     "field": "nameZh/description"
+    }
+   ],
+   "sourceRevision": "client 2026.10.08 + wiki 2026-10-12",
+   "sourceUrl": "https://wiki.warframe.com/w/Naraemagi",
+   "fetchedAt": "2026-10-12T11:29:14Z",
+   "officialExportVersion": null,
+   "parserHash": null,
+   "localizationHash": null,
+   "localizationSource": "warframe.com/zh-hans (official)"
+  },
+  {
+   "id": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
+   "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
+   "slot": 2,
+   "canonicalId": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
+   "canonicalSource": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
+   "postBuildSupplement": "Update 44 (2026-09-23)",
+   "nameEn": "Hakchum",
+   "nameZh": "鹤影舞坠",
+   "description": "轻按可跃向空中，再次轻按即可落在目标位置。落地时，对大范围内的敌人施加冰冻伤害易伤和异常状态效果。\n\n每击中一个敌人可获得冰能量。",
+   "descriptionEn": "Tap to leap into the air, tap again to land at target location. Applies <DT_FREEZE_COLOR> Cold Damage Vulnerability and Status Effect in a large radius upon landing.\n\nGain Ice for each enemy hit.",
+   "nameTag": "/Lotus/Language/Iceblade/DuelistAbilityLeapName",
+   "descriptionTag": "/Lotus/Language/Iceblade/DuelistAbilityLeapDesc",
+   "iconAsset": "/assets/warframes/abilities/NarinLeap.png",
+   "energyCost": {
+    "activation": 75,
+    "resource": "energy",
+    "sourceKind": "wiki"
+   },
+   "scalars": [
+    {
+     "id": "energy_cost_0",
+     "label": "Energy Cost",
+     "labelEn": "Energy Cost",
+     "labelZh": "能量消耗",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 75
+     },
+     "values": [
+      75
+     ],
+     "rankCount": 4,
+     "base": 75,
+     "unit": "",
+     "scale": "efficiency",
+     "modifier": "AVATAR_ABILITY_EFFICIENCY",
+     "group": null,
+     "variant": null,
+     "displayOrder": 0,
+     "isStatic": false,
+     "isEnergy": true,
+     "sourceKind": "wiki",
+     "rankValues": [
+      75,
+      75,
+      75,
+      75
+     ]
+    },
+    {
+     "id": "cold_landing_damage_1",
+     "label": "Cold Landing Damage",
+     "labelEn": "Cold Landing Damage",
+     "labelZh": "落地冰冻伤害",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 1000
+     },
+     "values": [
+      1000
+     ],
+     "rankCount": 4,
+     "base": 1000,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 1,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      400,
+      600,
+      800,
+      1000
+     ]
+    },
+    {
+     "id": "cold_damage_per_second_2",
+     "label": "Cold Damage Per Second",
+     "labelEn": "Cold Damage Per Second",
+     "labelZh": "冰暴每秒冰冻伤害",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 100
+     },
+     "values": [
+      100
+     ],
+     "rankCount": 1,
+     "base": 100,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 2,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      100
+     ]
+    },
+    {
+     "id": "cold_vulnerability_3",
+     "label": "Cold Damage Vulnerability",
+     "labelEn": "Cold Damage Vulnerability",
+     "labelZh": "冰冻伤害易伤",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 150
+     },
+     "values": [
+      150
+     ],
+     "rankCount": 4,
+     "base": 150,
+     "unit": "%",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 3,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      120,
+      130,
+      140,
+      150
+     ]
+    },
+    {
+     "id": "storm_radius_4",
+     "label": "Storm Radius",
+     "labelEn": "Storm Radius",
+     "labelZh": "冰暴半径",
+     "valueTemplate": "{}m",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 10
+     },
+     "values": [
+      10
+     ],
+     "rankCount": 4,
+     "base": 10,
+     "unit": "m",
+     "scale": "range",
+     "modifier": "AVATAR_ABILITY_RANGE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 4,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "id": "storm_duration_5",
+     "label": "Storm Duration",
+     "labelEn": "Storm Duration",
+     "labelZh": "冰暴持续时间",
+     "valueTemplate": "{}s",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 15
+     },
+     "values": [
+      15
+     ],
+     "rankCount": 1,
+     "base": 15,
+     "unit": "s",
+     "scale": "duration",
+     "modifier": "AVATAR_ABILITY_DURATION",
+     "group": null,
+     "variant": null,
+     "displayOrder": 5,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      15
+     ]
+    },
+    {
+     "id": "flight_duration_6",
+     "label": "Maximum Flight Duration",
+     "labelEn": "Maximum Flight Duration",
+     "labelZh": "最长滞空时间",
+     "valueTemplate": "{}s",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 3
+     },
+     "values": [
+      3
+     ],
+     "rankCount": 1,
+     "base": 3,
+     "unit": "s",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 6,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      3
+     ]
+    },
+    {
+     "id": "cold_status_on_landing_7",
+     "label": "Cold Status On Landing",
+     "labelEn": "Cold Status On Landing",
+     "labelZh": "落地冰冻异常",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 6
+     },
+     "values": [
+      6
+     ],
+     "rankCount": 1,
+     "base": 6,
+     "unit": "",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 7,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      6
+     ]
+    },
+    {
+     "id": "cold_status_per_second_8",
+     "label": "Cold Status Per Second",
+     "labelEn": "Cold Status Per Second",
+     "labelZh": "每秒冰冻异常",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 1
+     },
+     "values": [
+      1
+     ],
+     "rankCount": 1,
+     "base": 1,
+     "unit": "",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 8,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      1
+     ]
+    },
+    {
+     "id": "ice_per_hit_9",
+     "label": "Ice Per Hit",
+     "labelEn": "Ice Per Hit",
+     "labelZh": "每次命中获得冰能量",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 1
+     },
+     "values": [
+      1
+     ],
+     "rankCount": 1,
+     "base": 1,
+     "unit": "%",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 9,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      1
+     ]
+    }
+   ],
+   "scalarGroups": [],
+   "supportLevel": "full",
+   "unresolvedFields": [],
+   "validForCalculation": true,
+   "sourceEvidence": [
+    {
+     "kind": "wiki",
+     "url": "https://wiki.warframe.com/w/Hakchum",
+     "title": "Hakchum"
+    },
+    {
+     "kind": "packages",
+     "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistLeapAbility",
+     "available": true,
+     "uniquePowerIdentifier": "DUELIST_LEAP",
+     "build": "client-cache 2026.10.08"
+    },
+    {
+     "kind": "official-site",
+     "url": "https://www.warframe.com/zh-hans/game/warframes/narin",
+     "field": "nameZh/description"
+    }
+   ],
+   "sourceRevision": "client 2026.10.08 + wiki 2026-10-12",
+   "sourceUrl": "https://wiki.warframe.com/w/Hakchum",
+   "fetchedAt": "2026-10-12T11:29:14Z",
+   "officialExportVersion": null,
+   "parserHash": null,
+   "localizationHash": null,
+   "localizationSource": "warframe.com/zh-hans (official)"
+  },
+  {
+   "id": "/Lotus/Powersuits/Duelist/Abilities/DuelistBladeDanceAbility",
+   "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistBladeDanceAbility",
+   "slot": 3,
+   "canonicalId": "/Lotus/Powersuits/Duelist/Abilities/DuelistBladeDanceAbility",
+   "canonicalSource": "/Lotus/Powersuits/Duelist/Abilities/DuelistBladeDanceAbility",
+   "postBuildSupplement": "Update 44 (2026-09-23)",
+   "nameEn": "Nurinarim",
+   "nameZh": "降灵旋刃",
+   "description": "需要满冰能量才能施放。先祖之灵降临在 Narin 身上，她随即开始剑舞，对周围敌人造成持续伤害。按下攻击键即可发射粉碎性的冰刃斩击，削弱其护甲和护盾。击中被冻结的敌人会使其爆炸，造成大范围冰冻伤害。攻击被标记的目标不消耗冰能量，并造成更高伤害。",
+   "descriptionEn": "Requires full Ice to cast. An ancestral spirit descends upon Narin and she begins sword dancing for continuous nearby damage. Press Attack to launch shattering icy slashes that deplete Armor and Shields. Hitting Frozen enemies causes them to explode, dealing massive radial <DT_FREEZE_COLOR> Cold Damage. Attacks on Marked Targets cost no Ice and do more damage.",
+   "nameTag": "/Lotus/Language/Iceblade/DuelistAbilityBladedanceName",
+   "descriptionTag": "/Lotus/Language/Iceblade/DuelistAbilityBladedanceDesc",
+   "iconAsset": "/assets/warframes/abilities/NarinBladeDance.png",
+   "energyCost": {
+    "activation": 25,
+    "resource": "energy",
+    "sourceKind": "wiki"
+   },
+   "scalars": [
+    {
+     "id": "energy_cost_0",
+     "label": "Energy Cost",
+     "labelEn": "Energy Cost",
+     "labelZh": "能量消耗",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 25
+     },
+     "values": [
+      25
+     ],
+     "rankCount": 4,
+     "base": 25,
+     "unit": "",
+     "scale": "efficiency",
+     "modifier": "AVATAR_ABILITY_EFFICIENCY",
+     "group": null,
+     "variant": null,
+     "displayOrder": 0,
+     "isStatic": false,
+     "isEnergy": true,
+     "sourceKind": "wiki",
+     "rankValues": [
+      25,
+      25,
+      25,
+      25
+     ]
+    },
+    {
+     "id": "cold_radial_damage_1",
+     "label": "Ice Aura Cold Damage Per Second",
+     "labelEn": "Ice Aura Cold Damage Per Second",
+     "labelZh": "冰霜光环每秒冰冻伤害",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 500
+     },
+     "values": [
+      500
+     ],
+     "rankCount": 4,
+     "base": 500,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 1,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      200,
+      300,
+      400,
+      500
+     ]
+    },
+    {
+     "id": "icy_slash_damage_2",
+     "label": "Icy Slash Cold Damage",
+     "labelEn": "Icy Slash Cold Damage",
+     "labelZh": "冰刃斩击冰冻伤害",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 20000
+     },
+     "values": [
+      20000
+     ],
+     "rankCount": 4,
+     "base": 20000,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 2,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      12500,
+      15000,
+      17500,
+      20000
+     ]
+    },
+    {
+     "id": "explosion_damage_3",
+     "label": "Frozen Explosion Cold Damage",
+     "labelEn": "Frozen Explosion Cold Damage",
+     "labelZh": "冻结爆炸冰冻伤害",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 10000
+     },
+     "values": [
+      10000
+     ],
+     "rankCount": 4,
+     "base": 10000,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 3,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      6250,
+      7500,
+      8750,
+      10000
+     ]
+    },
+    {
+     "id": "shield_armor_reduction_4",
+     "label": "Shield And Armor Reduction Per Cold Status",
+     "labelEn": "Shield And Armor Reduction Per Cold Status",
+     "labelZh": "每层冰冻削减护盾与护甲",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 5
+     },
+     "values": [
+      5
+     ],
+     "rankCount": 4,
+     "base": 5,
+     "unit": "%",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 4,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      2,
+      3,
+      4,
+      5
+     ]
+    },
+    {
+     "id": "aura_radius_5",
+     "label": "Ice Aura Radius",
+     "labelEn": "Ice Aura Radius",
+     "labelZh": "冰霜光环半径",
+     "valueTemplate": "{}m",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 8
+     },
+     "values": [
+      8
+     ],
+     "rankCount": 4,
+     "base": 8,
+     "unit": "m",
+     "scale": "range",
+     "modifier": "AVATAR_ABILITY_RANGE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 5,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      6,
+      7,
+      7,
+      8
+     ]
+    },
+    {
+     "id": "explosion_range_6",
+     "label": "Frozen Explosion Range",
+     "labelEn": "Frozen Explosion Range",
+     "labelZh": "冻结爆炸范围",
+     "valueTemplate": "{}m",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 10
+     },
+     "values": [
+      10
+     ],
+     "rankCount": 4,
+     "base": 10,
+     "unit": "m",
+     "scale": "range",
+     "modifier": "AVATAR_ABILITY_RANGE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 6,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      7,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "id": "max_duration_7",
+     "label": "Maximum Duration",
+     "labelEn": "Maximum Duration",
+     "labelZh": "最长持续时间",
+     "valueTemplate": "{}s",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 20
+     },
+     "values": [
+      20
+     ],
+     "rankCount": 1,
+     "base": 20,
+     "unit": "s",
+     "scale": "duration",
+     "modifier": "AVATAR_ABILITY_DURATION",
+     "group": null,
+     "variant": null,
+     "displayOrder": 7,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      20
+     ]
+    },
+    {
+     "id": "marked_target_multiplier_8",
+     "label": "Damage On Marked Target",
+     "labelEn": "Damage On Marked Target",
+     "labelZh": "被标记目标伤害倍率",
+     "valueTemplate": "{}x",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 2
+     },
+     "values": [
+      2
+     ],
+     "rankCount": 1,
+     "base": 2,
+     "unit": "x",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 8,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      2
+     ]
+    },
+    {
+     "id": "radial_status_chance_9",
+     "label": "Radial Status Chance",
+     "labelEn": "Radial Status Chance",
+     "labelZh": "光环触发几率",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 200
+     },
+     "values": [
+      200
+     ],
+     "rankCount": 1,
+     "base": 200,
+     "unit": "%",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 9,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      200
+     ]
+    },
+    {
+     "id": "ice_per_unmarked_slash_10",
+     "label": "Ice Cost Per Unmarked Slash",
+     "labelEn": "Ice Cost Per Unmarked Slash",
+     "labelZh": "未标记斩击冰能量消耗",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 2
+     },
+     "values": [
+      2
+     ],
+     "rankCount": 1,
+     "base": 2,
+     "unit": "%",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 10,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      2
+     ]
+    },
+    {
+     "id": "slash_travel_11",
+     "label": "Icy Slash Travel Distance",
+     "labelEn": "Icy Slash Travel Distance",
+     "labelZh": "冰刃斩击射程",
+     "valueTemplate": "{}m",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 60
+     },
+     "values": [
+      60
+     ],
+     "rankCount": 1,
+     "base": 60,
+     "unit": "m",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 11,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      60
+     ]
+    },
+    {
+     "id": "targeting_radius_12",
+     "label": "Targeting Radius",
+     "labelEn": "Targeting Radius",
+     "labelZh": "标记半径",
+     "valueTemplate": "{}m",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 50
+     },
+     "values": [
+      50
+     ],
+     "rankCount": 1,
+     "base": 50,
+     "unit": "m",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 12,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      50
+     ]
+    },
+    {
+     "id": "targeting_duration_13",
+     "label": "Targeting Duration",
+     "labelEn": "Targeting Duration",
+     "labelZh": "标记时间",
+     "valueTemplate": "{}s",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 3
+     },
+     "values": [
+      3
+     ],
+     "rankCount": 1,
+     "base": 3,
+     "unit": "s",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 13,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      3
+     ]
+    }
+   ],
+   "scalarGroups": [],
+   "supportLevel": "full",
+   "unresolvedFields": [],
+   "validForCalculation": true,
+   "sourceEvidence": [
+    {
+     "kind": "wiki",
+     "url": "https://wiki.warframe.com/w/Nurinarim",
+     "title": "Nurinarim"
+    },
+    {
+     "kind": "packages",
+     "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistBladeDanceAbility",
+     "available": true,
+     "uniquePowerIdentifier": "DUELIST_DANCE",
+     "build": "client-cache 2026.10.08"
+    },
+    {
+     "kind": "official-site",
+     "url": "https://www.warframe.com/zh-hans/game/warframes/narin",
+     "field": "nameZh/description"
+    }
+   ],
+   "sourceRevision": "client 2026.10.08 + wiki 2026-10-12",
+   "sourceUrl": "https://wiki.warframe.com/w/Nurinarim",
+   "fetchedAt": "2026-10-12T11:29:14Z",
+   "officialExportVersion": null,
+   "parserHash": null,
+   "localizationHash": null,
+   "localizationSource": "warframe.com/zh-hans (official)"
   }
  ],
  "mods": [
@@ -409092,6 +411902,344 @@
    "parserHash": "8b0af6523682976b4769455de0cdfb274ac964207e02d66744628ececd712d31",
    "localizationHash": "dcfe1b92e7bfb89c2298b518146c436fff38fc950ff10a6f1f9f641a751c42c7",
    "localizationSource": "WF_Rever/research/wf-arsenal-external-sources/work/warframe-languages-bin-data/zh.json"
+  },
+  {
+   "id": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+   "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+   "recipePath": "/Lotus/Types/Recipes/AbilityOverrides/DuelistThrustBlueprint",
+   "originFrame": "/Lotus/Powersuits/Duelist/Duelist",
+   "kind": "subsumed",
+   "nameEn": "DuelistThrust",
+   "nameZh": "寒霜疾剑",
+   "description": "挥舞 Narin 的细剑寒霜疾剑进行突刺，对正前方敌人造成冰冻伤害以及冰冻和穿刺异常状态。\n\n每击中一个敌人可获得冰能量。",
+   "nameTag": "/Lotus/Language/Iceblade/DuelistAbilityThrustName",
+   "descriptionTag": "/Lotus/Language/Iceblade/DuelistAbilityThrustDesc",
+   "iconAsset": "/assets/warframes/abilities/NarinThrust.png",
+   "energyCost": {
+    "activation": 25,
+    "resource": "energy",
+    "sourceKind": "wiki"
+   },
+   "scalars": [
+    {
+     "id": "energy_cost_0",
+     "label": "Energy Cost",
+     "labelEn": "Energy Cost",
+     "labelZh": "能量消耗",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 25
+     },
+     "values": [
+      25
+     ],
+     "rankCount": 4,
+     "base": 25,
+     "unit": "",
+     "scale": "efficiency",
+     "modifier": "AVATAR_ABILITY_EFFICIENCY",
+     "group": null,
+     "variant": null,
+     "displayOrder": 0,
+     "isStatic": false,
+     "isEnergy": true,
+     "sourceKind": "wiki",
+     "rankValues": [
+      25,
+      25,
+      25,
+      25
+     ]
+    },
+    {
+     "id": "cold_damage_per_hit_1",
+     "label": "Cold Damage Per Hit",
+     "labelEn": "Cold Damage Per Hit",
+     "labelZh": "每击冰冻伤害",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 400
+     },
+     "values": [
+      400
+     ],
+     "rankCount": 4,
+     "base": 400,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 1,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      250,
+      300,
+      350,
+      400
+     ]
+    },
+    {
+     "id": "hits_2",
+     "label": "Hits",
+     "labelEn": "Hits",
+     "labelZh": "命中次数",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 5
+     },
+     "values": [
+      5
+     ],
+     "rankCount": 1,
+     "base": 5,
+     "unit": "",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 2,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      5
+     ]
+    },
+    {
+     "id": "total_cold_damage_3",
+     "label": "Total Cold Damage",
+     "labelEn": "Total Cold Damage",
+     "labelZh": "冰冻总伤害",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 2000
+     },
+     "values": [
+      2000
+     ],
+     "rankCount": 4,
+     "base": 2000,
+     "unit": "",
+     "scale": "strength",
+     "modifier": "AVATAR_ABILITY_STRENGTH",
+     "group": null,
+     "variant": null,
+     "displayOrder": 3,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      1250,
+      1500,
+      1750,
+      2000
+     ]
+    },
+    {
+     "id": "range_4",
+     "label": "Range",
+     "labelEn": "Range",
+     "labelZh": "范围",
+     "valueTemplate": "{}m",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 12
+     },
+     "values": [
+      12
+     ],
+     "rankCount": 4,
+     "base": 12,
+     "unit": "m",
+     "scale": "range",
+     "modifier": "AVATAR_ABILITY_RANGE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 4,
+     "isStatic": false,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    {
+     "id": "cold_status_per_hit_5",
+     "label": "Cold Status Per Hit",
+     "labelEn": "Cold Status Per Hit",
+     "labelZh": "每击冰冻异常",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 2
+     },
+     "values": [
+      2
+     ],
+     "rankCount": 1,
+     "base": 2,
+     "unit": "",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 5,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      2
+     ]
+    },
+    {
+     "id": "puncture_status_per_hit_6",
+     "label": "Puncture Status Per Hit",
+     "labelEn": "Puncture Status Per Hit",
+     "labelZh": "每击穿刺异常",
+     "valueTemplate": "{}",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 1
+     },
+     "values": [
+      1
+     ],
+     "rankCount": 1,
+     "base": 1,
+     "unit": "",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 6,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      1
+     ]
+    },
+    {
+     "id": "ice_per_cast_7",
+     "label": "Ice Per Cast",
+     "labelEn": "Ice Per Cast",
+     "labelZh": "每次施放获得冰能量",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 7
+     },
+     "values": [
+      7
+     ],
+     "rankCount": 1,
+     "base": 7,
+     "unit": "%",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 7,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      7
+     ]
+    },
+    {
+     "id": "ice_per_hit_8",
+     "label": "Ice Per Hit",
+     "labelEn": "Ice Per Hit",
+     "labelZh": "每次命中获得冰能量",
+     "valueTemplate": "{}%",
+     "valueKeys": [
+      "val1"
+     ],
+     "parts": {
+      "val1": 0.5
+     },
+     "values": [
+      0.5
+     ],
+     "rankCount": 1,
+     "base": 0.5,
+     "unit": "%",
+     "scale": "none",
+     "modifier": "NONE",
+     "group": null,
+     "variant": null,
+     "displayOrder": 8,
+     "isStatic": true,
+     "isEnergy": false,
+     "sourceKind": "wiki",
+     "rankValues": [
+      0.5
+     ]
+    }
+   ],
+   "scalarGroups": [],
+   "supportLevel": "partial",
+   "unresolvedFields": [
+    "cone_angle"
+   ],
+   "scalarSource": "inherited",
+   "altered": {},
+   "alteredDescription": "挥舞 Narin 的细剑寒霜疾剑进行突刺，对正前方敌人造成冰冻伤害以及冰冻和穿刺异常状态。\n\n每击中一个敌人可获得冰能量。",
+   "alteredSupportLevel": "text-only",
+   "validForCalculation": true,
+   "sourceEvidence": [
+    {
+     "kind": "wiki",
+     "url": "https://wiki.warframe.com/w/Neote",
+     "title": "Neote"
+    },
+    {
+     "kind": "packages",
+     "path": "/Lotus/Powersuits/Duelist/Abilities/DuelistThrustAbility",
+     "available": true,
+     "uniquePowerIdentifier": "DUELIST_THRUST",
+     "build": "client-cache 2026.10.08"
+    },
+    {
+     "kind": "official-site",
+     "url": "https://www.warframe.com/zh-hans/game/warframes/narin",
+     "field": "nameZh/description"
+    }
+   ],
+   "sourceRevision": "client 2026.10.08 + wiki 2026-10-12",
+   "sourceUrl": "https://wiki.warframe.com/w/Neote",
+   "fetchedAt": "2026-10-12T11:29:14Z",
+   "officialExportVersion": null,
+   "parserHash": null,
+   "localizationHash": null,
+   "localizationSource": "warframe.com/zh-hans (official)"
   }
  ],
  "invigoration": [

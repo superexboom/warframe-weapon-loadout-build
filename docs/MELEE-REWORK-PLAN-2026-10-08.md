@@ -282,7 +282,10 @@ Kestrel / Halikar 震地是磁力；Lecta 系是电。
   `WEAPON_MELEE_DAMAGE ADD_BASE 100`（+100 点基础伤害）被近战伤害乘区当成 +10000% 倍率，与此前修过的
   `WEAPON_DAMAGE_AMOUNT ADD_BASE` 同一类错误（既有问题）。本轮一并修正：近战 ADD_BASE 并入平坦基础伤害。
 - Orvius 用 `HomingGlaiveFireBehavior`，导入器补上后才有战刃路线。
-- 赛特刀（Zaw）与暗影分裂剑的两种形态没有命中表，仍走旧的架势倍率模型。
+- ~~赛特刀（Zaw）与暗影分裂剑的两种形态没有命中表，仍走旧的架势倍率模型。~~ 2026-10-11 已接入（见 REMAINING-ITEMS-2026-10-11.md）。
 - 拳套 / 格斗类连段里的拳脚效果事件（PunchEffect / KickEffect）、枪刃射击事件未计入命中，21 套连段与维基不符。
+  2026-10-11：半径 0 的拳脚特效不再算命中，剩 18 套，需实测。
 - 滑行攻击（E 滑行暴击）、处决（X）、近战赋能、Tennokai 未接入。
+  2026-10-11：Melee Duplicate 已接入，Arcane Fury / Strike 原本生效；滑行与 Tennokai 待定。
 - 多重弹体：Grattler 太空模式、Kuva Grattler 未接入。
+  2026-10-11：Kuva Grattler 已接入；Grattler 地面模式副本与主弹体相同，太空模式不在分析口径内。

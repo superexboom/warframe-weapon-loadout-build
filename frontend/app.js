@@ -553,7 +553,7 @@ function applyBuildConfig(config) {
     };
   }
   restoreSpecialSelections(config);
-  state.externalBuffs = Array.isArray(config.externalBuffs) ? config.externalBuffs.slice(0, 12).map((item) => ({ ...item })) : [];
+  state.externalBuffs = normalizeExternalBuffs(config.externalBuffs);
   state.formaSlots = {};
   if (config.formaSlots && typeof config.formaSlots === "object") {
     for (const [key, value] of Object.entries(config.formaSlots)) {
@@ -776,10 +776,12 @@ function rabbitWireRows(kind) {
   if (kind === "warframe") return ["mods", "arcanes", "shards", "helminth", "invigoration"].flatMap((key) => warframeRows(key));
   const catalog = state.catalog || {};
   const parts = catalog.kitgunParts || {};
+  const zaw = catalog.zawParts || {};
   return [
     ...(catalog.manualMods || []), ...(catalog.manualModVariants || []), ...(catalog.utilityMods || []),
     ...(catalog.stances || []), ...(catalog.arcanes || []),
     ...(parts.chambers || []), ...(parts.grips || []), ...(parts.loaders || []),
+    ...(zaw.strikes || []), ...(zaw.grips || []), ...(zaw.links || []),
   ];
 }
 
@@ -2330,11 +2332,19 @@ function renderScore() {
   // 同一武器的所有紫卡都在同一个固定靶上比较。
   const gain = finite(state.result.actualGain);
   ui["score-value"].textContent = formatPercent(gain);
+  ui["score-value"].classList.toggle("is-long", ui["score-value"].textContent.length > 6);
   const target = state.result.evaluationTarget || {};
   // 硬度积分靶：三个血量节点（无紫卡基线身体命中的击杀时间），KPM 为几何平均。
   const nodes = state.result.targetCalibration?.hardnessNodes || [];
   const ttkText = nodes.length ? nodes.map((node) => Number(node.ttkSeconds).toFixed(1)).join("/") : null;
-  ui["grade-value"].textContent = ttkText ? `基线 ${ttkText}s` : "--";
+  const grade = ui["grade-value"];
+  grade.classList.toggle("ttk-nodes", nodes.length > 0);
+  grade.replaceChildren();
+  if (nodes.length) {
+    grade.append(create("em", "", "基线击杀"), ...nodes.map((node) => create("span", "", `${Number(node.ttkSeconds).toFixed(1)} s`)));
+  } else {
+    grade.textContent = "--";
+  }
   const resultWeapon = state.result?.weapon;
   const displayWeapon = resultWeapon && (resultWeapon.nameZh || resultWeapon.nameEn) ? resultWeapon : state.weapon;
   ui["weapon-result-name"].textContent = `${weaponName(displayWeapon)} · ${TYPE_LABELS[state.weapon.weaponType] || state.weapon.weaponType}`;
@@ -4020,38 +4030,6 @@ function closeArcanePicker() {
 
 function fillArcanes() { renderArcanePicker(); }
 
-const EXTERNAL_BUFFS = [
-  { id: "roar", label: "战吼 Roar", group: "终伤", base: 0.5, note: "派系乘区，受强度" },
-  { id: "eclipse", label: "黯然失色 Eclipse", group: "终伤", base: 2.0, note: "光照 +200% 终伤" },
-  { id: "molecular-prime", label: "分子填充 Molecular Prime", group: "终伤", base: 1.0, note: "双倍伤害" },
-  { id: "void-strike", label: "虚空重击 Void Strike", group: "终伤", base: 12.0, note: "Madurai，按时间窗" },
-  { id: "unairu-wisp", label: "Unairu 虚灵", group: "终伤", base: 1.0, note: "4 层 +100%" },
-  { id: "arbitration", label: "仲裁加成", group: "终伤", base: 3.0, note: "+300%" },
-  { id: "base-damage", label: "通用基伤", group: "基伤", base: 1.0, note: "与基伤 mod 同乘区" },
-  { id: "vex-armor", label: "怨怒护甲 Vex Armor", group: "基伤", base: 2.75, note: "Chroma，受强度" },
-  { id: "shooting-gallery", label: "靶场 Shooting Gallery", group: "基伤", base: 0.25, note: "Mesa，受强度" },
-  { id: "mallet", label: "强音增幅 Mallet", group: "基伤", base: 2.0, note: "Octavia 放大" },
-  { id: "metamorphosis", label: "昼夜交替 Metamorphosis", group: "基伤", base: 0.25, note: "Equinox" },
-  { id: "vigoruous-swap", label: "强力切换 Vigorous Swap", group: "基伤", base: 1.65, note: "11 层" },
-  { id: "dead-eye", label: "死亡之眼 Dead Eye", group: "基伤", base: 0.525, note: "集团光环" },
-  { id: "fireball-frenzy", label: "狂热火球", group: "元素", base: 1.0, note: "+100% 火焰" },
-  { id: "flash-accelerant", label: "闪耀助燃", group: "元素", base: 0.5, note: "+50% 火焰" },
-  { id: "freeze-force", label: "寒冰之力", group: "元素", base: 1.0, note: "+100% 冰冻" },
-  { id: "shock-trooper", label: "电击奇兵", group: "元素", base: 1.0, note: "+100% 电击" },
-  { id: "smite-infusion", label: "惩击洗礼", group: "元素", base: 1.0, note: "+100% 辐射" },
-  { id: "venom-dose", label: "猛毒附加", group: "元素", base: 1.0, note: "+100% 腐蚀" },
-  { id: "crit-chance", label: "通用暴击", group: "暴击/触发", base: 1.0, note: "暴击几率" },
-  { id: "covenant", label: "庇佑圣约 Covenant", group: "暴击/触发", base: 0.5, note: "Harrow 满层" },
-  { id: "crit-damage", label: "通用暴伤", group: "暴击/触发", base: 1.0, note: "暴击伤害" },
-  { id: "status", label: "通用触发", group: "暴击/触发", base: 1.0, note: "触发几率" },
-  { id: "multishot", label: "通用多重", group: "射击", base: 1.0, note: "多重射击" },
-  { id: "fire-rate", label: "通用射速", group: "射击", base: 1.0, note: "射速/攻速" },
-  { id: "warcry", label: "咆哮 Warcry", group: "射击", base: 0.5, note: "Valkyr 攻速" },
-  { id: "reload", label: "通用装填", group: "射击", base: 1.0, note: "装填速度" },
-  { id: "magazine", label: "通用弹匣", group: "射击", base: 1.0, note: "弹匣容量" },
-];
-const EXTERNAL_BUFF_GROUPS = ["终伤", "基伤", "元素", "暴击/触发", "射击"];
-
 const WEAPON_PICKER_CATEGORIES = {
   all: "全部", rifle: "步枪", shotgun: "霰弹枪", pistol: "手枪", melee: "近战", zaw: "组合近战", kitgun: "组合枪", archgun: "空战武器(地面)", companion: "同伴武器",
 };
@@ -4658,72 +4636,162 @@ function closeWeaponPicker() {
   }
 }
 
+// 外部加成目录由后端下发（catalog.buildOptions.externalBuffs）：战甲技能写
+// 「战甲 · 技能」，光环写 Mod 名；每条列出加成的具体项目与乘区说明。
+const EXTERNAL_BUFF_GROUPS = [
+  ["ability", "战甲技能"],
+  ["aura", "小队光环"],
+  ["other", "其他来源"],
+  ["generic", "通用数值"],
+];
+const EXTERNAL_BUFF_ALIASES = { mallet: "octavia-amp", "vigoruous-swap": "vigorous-swap" };
+const EXTERNAL_BUFF_ELEMENT_LABELS = {
+  DT_FIRE: "火焰", DT_FREEZE: "冰冻", DT_ELECTRICITY: "电击", DT_POISON: "毒素", DT_EXPLOSION: "爆炸",
+  DT_RADIATION: "辐射", DT_GAS: "毒气", DT_MAGNETIC: "磁力", DT_VIRAL: "病毒", DT_CORROSIVE: "腐蚀",
+};
+
+function externalBuffCatalog() {
+  return state.catalog?.buildOptions?.externalBuffs || [];
+}
+
+function externalBuffSpec(id) {
+  return externalBuffCatalog().find((spec) => spec.id === id) || null;
+}
+
+// 保存过的旧配置：改名的 id 映射过来，下线的（Unairu 虚灵只加指挥官、
+// 闪耀助燃的技能已移除）丢弃；旧的直接数值换算成强度 / 人数。
+function normalizeExternalBuffs(items) {
+  const rows = [];
+  for (const raw of Array.isArray(items) ? items.slice(0, 40) : []) {
+    const id = EXTERNAL_BUFF_ALIASES[raw?.id] || raw?.id;
+    const spec = externalBuffSpec(id);
+    if (!spec || rows.some((row) => row.id === id)) continue;
+    const row = { id };
+    const value = raw.value == null ? null : Number(raw.value);
+    if (spec.squad) row.count = clamp(Math.round(Number(raw.count ?? (value != null ? value / spec.base : 1)) || 1), 1, 4);
+    else if (spec.strength) row.strength = clamp(Number(raw.strength ?? (value != null ? value / spec.base : 1)) || 0, 0, 10);
+    else row.value = clamp(Number(value ?? spec.base) || 0, 0, spec.maximum ?? 50);
+    if (spec.elements?.length) row.element = spec.elements.includes(raw.element) ? raw.element : spec.elements[0];
+    rows.push(row);
+  }
+  return rows;
+}
+
+function externalBuffValue(spec, item) {
+  if (!spec || !item) return 0;
+  let value = spec.squad ? spec.base * (item.count || 1) : spec.strength ? spec.base * (item.strength ?? 1) : Number(item.value ?? spec.base);
+  if (spec.maximum != null) value = Math.min(value, spec.maximum);
+  if (spec.group === "aura" && spec.id !== "coaction-drift") {
+    const drift = state.externalBuffs.find((row) => row.id === "coaction-drift");
+    value *= 1 + (drift ? externalBuffValue(externalBuffSpec("coaction-drift"), drift) : 0);
+  }
+  return value;
+}
+
+function externalBuffApplies(effect, weapon = state.buildWeapon) {
+  if (!effect.applies || !weapon) return true;
+  const ancestry = new Set([...(weapon.ancestry || []), weapon.path].filter(Boolean));
+  if (weapon.weaponType === "zaw") ancestry.add("/Lotus/Types/Game/LotusMeleeWeapon");
+  return effect.applies.some((path) => ancestry.has(path));
+}
+
+function externalBuffAmount(spec, value) {
+  const number = (x) => Number(x.toFixed(x >= 10 ? 0 : x >= 1 ? 2 : 3)).toString();
+  if (spec.unit === "count") return `+${number(value)}`;
+  if (spec.unit === "multiplier") return `+${number(value)} 倍`;
+  return `${spec.negative ? "−" : "+"}${number(value * 100)}%`;
+}
+
+function externalBuffSummary(spec, item) {
+  const value = externalBuffValue(spec, item);
+  return spec.effects.map((effect) => {
+    const amount = value * effect.scale;
+    let label = effect.label;
+    if (spec.elements?.length && item?.element) label = `${EXTERNAL_BUFF_ELEMENT_LABELS[item.element] || item.element}${label}`;
+    let text = `${label} ${externalBuffAmount(spec, amount)}`;
+    if (spec.meleeScale) text += `（近战 ${externalBuffAmount(spec, amount * spec.meleeScale)}）`;
+    if (spec.sniperScale) text += `（狙击枪 ${externalBuffAmount(spec, amount * spec.sniperScale)}）`;
+    return { text, applies: externalBuffApplies(effect) };
+  });
+}
+
 function renderExternalBuffs() {
   const target = document.getElementById("external-buff-list");
   if (!target) return;
-  const groups = EXTERNAL_BUFF_GROUPS.map((groupName) => {
+  const catalog = externalBuffCatalog();
+  const touch = () => { persistActiveBuildConfig(); scheduleLiveManualSimulation(); renderExternalBuffs(); };
+  const groups = EXTERNAL_BUFF_GROUPS.map(([group, title]) => {
+    const specs = catalog.filter((spec) => spec.group === group);
+    if (!specs.length) return null;
     const section = create("div", "external-buff-group");
-    section.append(create("h4", "external-buff-group-title", groupName));    EXTERNAL_BUFFS.filter((buff) => buff.group === groupName).forEach((buff) => {
-      const row = create("label", "external-buff-row");
-      const enabled = state.externalBuffs.some((item) => item.id === buff.id);
-      const current = state.externalBuffs.find((item) => item.id === buff.id);
+    section.append(create("h4", "external-buff-group-title", title));
+    for (const spec of specs) {
+      const current = state.externalBuffs.find((item) => item.id === spec.id) || null;
+      const summary = externalBuffSummary(spec, current || {});
+      const applies = summary.some((part) => part.applies);
+      const row = create("div", `external-buff-row${current ? " is-enabled" : ""}${applies ? "" : " is-inapplicable"}`);
+      const label = create("label", "external-buff-toggle");
       const check = document.createElement("input");
       check.type = "checkbox";
-      check.checked = enabled;
+      check.checked = Boolean(current);
       check.addEventListener("change", () => {
-        if (check.checked) {
-          state.externalBuffs.push({ id: buff.id, value: buff.base });
-        } else {
-          state.externalBuffs = state.externalBuffs.filter((item) => item.id !== buff.id);
-        }
-        renderExternalBuffs();
-        persistActiveBuildConfig();
-        scheduleLiveManualSimulation();
+        if (check.checked) state.externalBuffs.push(normalizeExternalBuffs([{ id: spec.id }])[0]);
+        else state.externalBuffs = state.externalBuffs.filter((item) => item.id !== spec.id);
+        touch();
       });
       const copy = create("span", "external-buff-copy");
-      copy.append(create("strong", "", buff.label));
-      copy.append(create("small", "", buff.note));
-      row.append(check, copy);
-      if (enabled) {
-        const slider = document.createElement("input");
-        slider.type = "range";
-        slider.min = "0";
-        slider.max = "50";
-        slider.step = "0.05";
-        slider.value = String((current?.value ?? buff.base) / buff.base);
-        slider.title = "数值倍率（上限 5000%）";
-        const number = document.createElement("input");
-        number.type = "number";
-        number.min = "0";
-        number.max = "5000";
-        number.step = "1";
-        number.value = String(Math.round((current?.value ?? buff.base) * 100));
-        number.title = "直接输入百分比（0–5000）";
-        const apply = (raw) => {
-          const percent = clamp(Number(raw), 0, 5000);
-          current.value = percent / 100;
-          slider.value = String(clamp(current.value / buff.base, 0, 50));
-          number.value = String(Math.round(percent));
-          readout.textContent = `+${Math.round(percent)}%`;
-          scheduleLiveManualSimulation();
-        };
-        slider.addEventListener("input", () => apply(buff.base * Number(slider.value) * 100));
-        number.addEventListener("change", () => apply(number.value));
-        const readout = create("b", "external-buff-value", `+${Math.round((current?.value ?? buff.base) * 100)}%`);
-        row.append(slider, number, readout);
-      } else {
-        row.append(create("span", "external-buff-spacer"), create("b", "external-buff-value is-muted", `+${Math.round(buff.base * 100)}%`));
+      const head = create("strong", "", spec.label);
+      if (!applies) head.append(create("em", "external-buff-tag", "当前武器不生效"));
+      copy.append(head, create("span", "external-buff-effects", summary.map((part) => part.text).join(" · ")), create("small", "", spec.detail));
+      label.append(check, copy);
+      row.append(label);
+      const controls = create("span", "external-buff-controls");
+      if (current) {
+        if (spec.squad) {
+          const select = document.createElement("select");
+          select.title = "携带该光环的队员人数（同一光环可叠加）";
+          for (let n = 1; n <= 4; n += 1) select.append(new Option(`${n} 人`, String(n), false, n === current.count));
+          select.addEventListener("change", () => { current.count = Number(select.value); touch(); });
+          controls.append(select);
+        } else if (spec.strength) {
+          const field = create("label", "external-buff-number");
+          const input = document.createElement("input");
+          input.type = "number"; input.min = "0"; input.max = "1000"; input.step = "5";
+          input.value = String(Math.round((current.strength ?? 1) * 100));
+          input.title = "施放者的技能强度（%）";
+          input.addEventListener("change", () => { current.strength = clamp(Number(input.value) || 0, 0, 1000) / 100; touch(); });
+          field.append(create("span", "", "强度"), input, create("span", "", "%"));
+          controls.append(field);
+        } else {
+          const field = create("label", "external-buff-number");
+          const input = document.createElement("input");
+          const scale = spec.unit === "percent" ? 100 : 1;
+          input.type = "number"; input.min = "0"; input.max = String((spec.maximum ?? 50) * scale); input.step = scale === 100 ? "1" : "0.1";
+          input.value = String(+(Number(current.value ?? spec.base) * scale).toFixed(2));
+          input.title = "直接填写数值";
+          input.addEventListener("change", () => { current.value = clamp(Number(input.value) || 0, 0, (spec.maximum ?? 50) * scale) / scale; touch(); });
+          field.append(input, create("span", "", scale === 100 ? "%" : spec.unit === "multiplier" ? "倍" : ""));
+          controls.append(field);
+        }
+        if (spec.elements?.length) {
+          const select = document.createElement("select");
+          select.title = "额外命中的元素";
+          for (const element of spec.elements) select.append(new Option(EXTERNAL_BUFF_ELEMENT_LABELS[element] || element, element, false, element === current.element));
+          select.addEventListener("change", () => { current.element = select.value; touch(); });
+          controls.append(select);
+        }
       }
+      row.append(controls);
       section.append(row);
-    });
+    }
     return section;
-  });
+  }).filter(Boolean);
   target.replaceChildren(...groups);
   renderExternalBuffGain();
 }
 
 async function renderExternalBuffGain() {
-  // Compare current DPS with and without external buffs — real simulation gain.
+  // 开 / 关外部加成各跑一次实时解算，取击杀速度（回放口径，含额外命中与光环削甲）。
   const panel = document.querySelector(".external-buff-panel .fold-body");
   if (!panel) return;
   let gainEl = panel.querySelector(".external-buff-gain");
@@ -4734,23 +4802,27 @@ async function renderExternalBuffGain() {
   if (!state.externalBuffs.length) { gainEl.hidden = true; return; }
   const payload = modGainsPayload();
   if (!payload) return;
+  const token = (renderExternalBuffGain.token || 0) + 1;
+  renderExternalBuffGain.token = token;
+  const kpmText = (value) => (value < 10 ? Number(value.toPrecision(3)).toString() : formatMetric(value));
   try {
-    const post = async (buffs) => {
-      const res = await fetch("/api/simulate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, externalBuffs: buffs }) });
+    const post = async (buffs, kind) => {
+      const res = await fetch("/api/simulate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, externalBuffs: buffs, ...liveTag(kind, token) }) });
       const body = await res.json();
       if (!res.ok) throw new Error("simulate failed");
       const sim = body.simulation || body;
-      return finite(sim.targetDamage?.dps) ?? finite(sim.moddedStats?.sustainedDps) ?? 0;
+      const kpm = finite(sim.benchmarkTimeline?.killsPerMinute);
+      return kpm !== null ? { value: kpm, unit: "KPM" } : { value: finite(sim.targetDamage?.dps) ?? finite(sim.moddedStats?.sustainedDps) ?? 0, unit: "DPS" };
     };
-    const [withBuffs, without] = await Promise.all([post(state.externalBuffs.map((b) => ({ id: b.id, value: b.value }))), post([])]);
-    if (without > 0) {
-      const percent = (withBuffs / without - 1) * 100;
+    const [withBuffs, without] = await Promise.all([post(externalBuffsPayload(), "buff-gain-on"), post([], "buff-gain-off")]);
+    if (token !== renderExternalBuffGain.token) return;
+    if (without.value > 0) {
+      const percent = (withBuffs.value / without.value - 1) * 100;
       gainEl.hidden = false;
-      gainEl.innerHTML = "";
-      gainEl.append(
+      gainEl.replaceChildren(
         create("span", "", "外部加成总收益"),
         create("b", `external-buff-gain-value${percent < 0 ? " is-negative" : ""}`, `${percent >= 0 ? "+" : ""}${percent.toFixed(1)}%`),
-        create("small", "", `${formatMetric(withBuffs)} → ${formatMetric(without)} DPS（关闭后）`),
+        create("small", "", `关闭 ${kpmText(without.value)} → 开启 ${kpmText(withBuffs.value)} ${withBuffs.unit}`),
       );
     }
   } catch (_error) {
@@ -4759,7 +4831,11 @@ async function renderExternalBuffGain() {
 }
 
 function externalBuffsPayload() {
-  return state.externalBuffs.map((item) => ({ id: item.id, value: Number(item.value ?? 0) }));
+  return state.externalBuffs.map((item) => {
+    const row = { id: item.id };
+    for (const key of ["strength", "count", "value", "element"]) if (item[key] != null) row[key] = item[key];
+    return row;
+  });
 }
 
 function rivenPayload() {
@@ -6103,6 +6179,12 @@ function openSpecialModPicker(kind) {
 
 let modGainsRequestId = 0;
 let equippedGainsRequestId = 0;
+// 实时请求带「频道 + 序号」：同一页面同一类请求来了新的，后端就跳过还在排队的旧请求、
+// 中止正在跑的旧搜索（否则每次改动都要排队算完一遍再被丢弃）。频道按页面区分。
+const LIVE_PAGE_ID = Math.random().toString(36).slice(2, 10);
+function liveTag(kind, seq) {
+  return { liveChannel: `${LIVE_PAGE_ID}:${kind}`, liveSeq: seq };
+}
 let modGainsTimer = null;
 let modGainsSignature = "";
 
@@ -6141,7 +6223,7 @@ async function runModGains() {
     const response = await fetch("/api/mod-gains", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...payload, candidates, targetSlot }),
+      body: JSON.stringify({ ...payload, candidates, targetSlot, ...liveTag("mod-gains", requestId) }),
     });
     const body = await response.json();
     if (!response.ok || requestId !== modGainsRequestId) return;
@@ -6169,7 +6251,7 @@ async function scheduleEquippedGains() {
     const response = await fetch("/api/mod-gains", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...payload, candidates: allCandidates, mode: "equipped" }),
+      body: JSON.stringify({ ...payload, candidates: allCandidates, mode: "equipped", ...liveTag("equipped-gains", requestId) }),
     });
     const body = await response.json();
     if (!response.ok || requestId !== equippedGainsRequestId) return;
@@ -8066,7 +8148,8 @@ function renderWarframeProfile() {
   const frameId = warframeId(frame);
   ui["warframe-frame-select"].value = frameId;
   ui["warframe-frame-select-name"].textContent = warframeName(frame);
-  ui["warframe-frame-select-description"].textContent = warframeLocalizedDescription(frame, "冻结官方战甲档案");
+  // 描述已在下方档案卡完整显示，选择器里只留操作提示。
+  ui["warframe-frame-select-description"].textContent = "点击更换战甲";
   const frameVisual = ui["warframe-frame-select-visual"];
   if (frameVisual) {
     frameVisual.replaceChildren();
@@ -8906,6 +8989,7 @@ function selectBuildWeapon(weapon, writeInput = true) {
   renderIncarnonChoices();
   renderManualSlots();
   renderManualMods();
+  renderExternalBuffs(); // which buffs reach this weapon (Warcry: melee only…)
   if ((weapon?.available || isAssemblyBase) && buildAvailable && (!isAssemblyBase || assemblyWeaponReady())) scheduleLiveBuild();
 }
 
@@ -9538,7 +9622,7 @@ async function submitWeaponBuild(event, live = false) {
   if (!state.buildResult || !live) setWeaponBuildState("loading");
   if (live) markLiveHudSolving();
   try {
-    const response = await fetch(state.buildInputMode === "manual" ? "/api/simulate" : "/api/build", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const response = await fetch(state.buildInputMode === "manual" ? "/api/simulate" : "/api/build", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, ...liveTag("build", requestId) }) });
     const body = await response.json();
     if (!response.ok) throw new Error(body?.error?.message || `配装失败（${response.status}）`);
     if (requestId !== state.liveRequestId) return;
