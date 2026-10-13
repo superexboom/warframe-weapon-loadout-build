@@ -80,3 +80,16 @@ def test_settings_are_validated_and_saved(tmp_path, monkeypatch):
         assert snapshot["logicalCores"] >= snapshot["physicalCores"] >= 1
     finally:
         parallel.configure(before["workers"], before["lowPriority"])
+
+
+def test_the_packaged_entry_point_lets_workers_start():
+    """The PyInstaller exe starts pool workers by running itself again with
+    --multiprocessing-fork; without freeze_support() each one re-ran main(),
+    rejected the argument and died, so every analysis hit BrokenProcessPool."""
+    import ast
+    from pathlib import Path
+
+    tree = ast.parse(Path(app.__file__).read_text(encoding="utf-8"))
+    entry = next(node for node in tree.body if isinstance(node, ast.If) and "__main__" in ast.unparse(node.test))
+    calls = [ast.unparse(node.func) for node in ast.walk(entry) if isinstance(node, ast.Call)]
+    assert calls.index("multiprocessing.freeze_support") < calls.index("main")

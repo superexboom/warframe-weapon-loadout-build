@@ -139,7 +139,7 @@ def live_variant(template, live_types, count_ceiling):
     Mirrors the resolver's ``replace(e, value=e.value*live_types/count_ceiling)``
     on every CO effect; None when some CO-dependent object has no CoSpec.
     """
-    from .damage import co_variant
+    from .damage import co_variant, with_value
     memo = {}
 
     def vary(obj):
@@ -153,7 +153,7 @@ def live_variant(template, live_types, count_ceiling):
             spec = getattr(obj, '_co_spec', None)
             if spec is None:
                 raise _NoVariant
-            scaled = [replace(e, value=e.value*live_types/count_ceiling) for e in obj.co_bucket]
+            scaled = [with_value(e, e.value*live_types/count_ceiling) for e in obj.co_bucket]
             out = co_variant(obj, spec, scaled)
         lingering = getattr(obj, '_lingering', None)
         if lingering:
@@ -203,7 +203,7 @@ def prepare(
     trigger / Incarnon options; the target, level and Eximus flag feed only
     affinity. Callers pass one cache per bound loadout (search_combat.bind).
     """
-    from .damage import ModEffect, ModEffectList, ModdedStats, apply_mods, apply_mods_spec, co_variant
+    from .damage import ModEffect, ModEffectList, ModdedStats, apply_mods, apply_mods_spec, co_variant, scenario_with, with_value
     from .runtime_adapters import latron_puncture_strip,incarnon_condition_rows
     from .runtime_adapters import ammo_restore_configuration
 
@@ -393,7 +393,7 @@ def prepare(
                 from .runtime_adapters import incarnon_actor_stacks
                 stacks = incarnon_actor_stacks(condition,scenario,weapon)
                 if stacks>0:
-                    actor_effects.extend(replace(e,value=e.value*stacks) for e in effects)
+                    actor_effects.extend(with_value(e, e.value*stacks) for e in effects)
                 continue
             if condition.get('formGate'):
                 form_dynamic.append(effects)
@@ -576,12 +576,12 @@ def prepare(
         for key, terms in dynamic:
             n = stacks.get(key, 0.0)
             if n > 0:
-                fx.extend(replace(e, value=(1.0 + (e.value - 1.0) * n) if e.operation == 'MULTIPLY' else e.value * n) for e in terms)
+                fx.extend(with_value(e, (1.0 + (e.value - 1.0) * n) if e.operation == 'MULTIPLY' else e.value * n) for e in terms)
         # Public Scenario requires an integer count. Scale the linear CO
         # coefficient to represent expected presence without rounding it up.
         count_ceiling = int(math.ceil(live_types))
         if count_ceiling and live_types != count_ceiling:
-            fx = ModEffectList(replace(e,value=e.value*live_types/count_ceiling)
+            fx = ModEffectList(with_value(e, e.value*live_types/count_ceiling)
                                if e.upgrade_type == 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'
                                else e for e in fx)
         idx = 0 if form == "base" else mode_index
@@ -607,7 +607,7 @@ def prepare(
             wp,
             fx,
             fire_mode=idx,
-            scenario=replace(
+            scenario=scenario_with(
                 scenario, incarnon_cycle=False, victim_status_count=count_ceiling,
                 heavy_attack=bool(stacks.get('__heavy')) or scenario.heavy_attack,
             ),

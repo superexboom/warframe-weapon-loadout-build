@@ -73,9 +73,9 @@ def test_bake_worker_limit_applies_to_default_and_explicit_cli(monkeypatch,tmp_p
         module.main()
 
 
-def test_interactive_parallel_pool_has_same_eight_worker_ceiling():
-    from wfarsenal.parallel import worker_count
-    assert worker_count() <= 8
+def test_default_parallel_pool_stays_within_the_machine():
+    from wfarsenal.parallel import default_workers, logical_core_count
+    assert 1 <= default_workers() <= min(logical_core_count(), 16)
 
 
 def test_delivery_resume_requires_current_successful_regression(tmp_path):

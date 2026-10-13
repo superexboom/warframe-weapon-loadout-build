@@ -38,11 +38,33 @@ _REPLAYS_MAX = 4096
 _UNHASHED = {"_combat_inputs", "_combat_scores", "_resolve_cache"}
 
 
+# Content digests of weapon and MOD records, by record_keys.shallow_key:
+# bind() copies a weapon as {**weapon, "fireModes": ...} for every loadout and
+# the values are shared. Entries hold the record, so the ids stay valid.
+_RECORD_DIGESTS: dict = {}
+
+
+def _record_digest(record):
+    from .record_keys import shallow_key
+    key = shallow_key(record)
+    hit = _RECORD_DIGESTS.get(key)
+    if hit is not None:
+        return hit[1]
+    digest = hashlib.blake2b(pickle.dumps(record, protocol=5), digest_size=20).digest()
+    if len(_RECORD_DIGESTS) >= 4096:
+        _RECORD_DIGESTS.clear()
+    _RECORD_DIGESTS[key] = (record, digest)
+    return digest
+
+
 def _replay_key(stats, data, context_key):
     """Digest of everything a window replay reads; equal digests, equal replays."""
     fields = stats.__dataclass_fields__
     extras = sorted((k, repr(v)) for k, v in vars(stats).items() if k not in fields and k not in _UNHASHED)
-    blob = pickle.dumps((repr(stats), extras, data["engine"], data["mods"], data["arcanes"],
+    engine = data["engine"]
+    engine_key = (_record_digest(engine["weapon"]), engine["effects"], engine["scenario"], engine["fire_mode"])
+    mods = [(_record_digest(record), rank, extra) for record, rank, extra in data["mods"]]
+    blob = pickle.dumps((repr(stats), extras, engine_key, mods, data["arcanes"],
                          data["choices"], context_key), protocol=5)
     return hashlib.blake2b(blob, digest_size=20).digest()
 

@@ -472,7 +472,7 @@ function renderComputeSettings() {
   ui["compute-workers"].value = String(s.workers);
   ui["compute-workers-value"].textContent = `${s.workers}${s.workers === s.defaultWorkers ? "（默认）" : ""}`;
   ui["compute-low-priority"].checked = Boolean(s.lowPriority);
-  ui["compute-machine"].textContent = `本机 ${s.physicalCores} 个物理核心 · ${s.logicalCores} 个逻辑线程；默认 ${s.defaultWorkers}（物理核心减一）`;
+  ui["compute-machine"].textContent = `本机 ${s.physicalCores} 个物理核心 · ${s.logicalCores} 个逻辑线程；默认 ${s.defaultWorkers}（物理核心数再加四分之一）`;
   const over = s.workers > s.physicalCores ? "超过物理核心数时按超线程运行，单核更慢、总量更多。" : "紫卡分析、自动配装和 MOD 收益共用这些核心。";
   ui["compute-workers-hint"].textContent = s.workers <= 1 ? "1 个核心：全部在主进程里串行计算。" : over;
   ui["compute-status"].textContent = s.running || s.queued ? `正在计算 ${s.running} 项 · 排队 ${s.queued} 项` : "当前空闲";

@@ -27,6 +27,8 @@ const NAMES: [&str; N] = ["total", "resolve", "view", "clean", "take", "add_proc
                           "fire", "setup", "result", "presence", "heat", "pooled", "no_status"];
 
 static ENABLED: AtomicBool = AtomicBool::new(false);
+/// Which per-function slots time when enabled (all by default).
+static MASK: AtomicU64 = AtomicU64::new(u64::MAX);
 static NANOS: [AtomicU64; N] = [const { AtomicU64::new(0) }; N];
 static CALLS: [AtomicU64; N] = [const { AtomicU64::new(0) }; N];
 
@@ -39,13 +41,25 @@ pub fn enable(on: bool) {
     ENABLED.store(on, Ordering::Relaxed);
 }
 
+/// Time only these slots (by name); fine-grained timers cost as much as the
+/// work they time, so a coarse selection gives truthful shares.
+pub fn select(names: &[String]) {
+    let mut mask = 0u64;
+    for (i, n) in NAMES.iter().enumerate() {
+        if names.iter().any(|x| x == n) {
+            mask |= 1 << i;
+        }
+    }
+    MASK.store(if names.is_empty() { u64::MAX } else { mask }, Ordering::Relaxed);
+}
+
 /// An inclusive timer for one call of a profiled function (no-op when off).
 pub struct Timer(usize, Option<Instant>);
 
 impl Timer {
     #[inline]
     pub fn start(slot: usize) -> Timer {
-        Timer(slot, if ENABLED.load(Ordering::Relaxed) { Some(Instant::now()) } else { None })
+        Timer(slot, if ENABLED.load(Ordering::Relaxed) && MASK.load(Ordering::Relaxed) & (1 << slot) != 0 { Some(Instant::now()) } else { None })
     }
 }
 

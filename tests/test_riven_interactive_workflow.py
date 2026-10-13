@@ -106,11 +106,13 @@ def test_busy_analysis_returns_immediately_instead_of_silent_queue(captured_anal
     assert app.analyze_payload(request)['responseCache'] == 'miss'
 
 
-def test_total_compute_limit_reserves_the_parent(monkeypatch):
+def test_default_workers_follow_the_core_layout(monkeypatch):
     from wfarsenal import parallel
     monkeypatch.delenv('WF_ANALYZER_SERIAL',raising=False)
-    monkeypatch.setattr(parallel,'_physical_core_count',lambda:32)
-    assert parallel.default_workers()+1 == 8
+    for physical, logical, expected in ((8, 16, 10), (4, 8, 5), (4, 4, 4), (1, 2, 1), (32, 64, 16)):
+        monkeypatch.setattr(parallel,'_physical_core_count',lambda physical=physical:physical)
+        monkeypatch.setattr(parallel,'logical_core_count',lambda logical=logical:logical)
+        assert parallel.default_workers() == expected
 
 
 def test_session_does_not_replace_engine_input_error():

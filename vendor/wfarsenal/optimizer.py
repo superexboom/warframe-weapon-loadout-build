@@ -15,7 +15,7 @@ import json
 import math
 import os
 import pickle
-from collections import OrderedDict
+from collections import OrderedDict, deque
 from dataclasses import dataclass, replace
 from pathlib import Path
 from statistics import median
@@ -41,6 +41,8 @@ from .damage import (
     sustained_status_damage,
     windowed_status_damage,
     mod_effects,
+    scenario_with,
+    with_value,
 )
 from .projectile_events import evaluate_projectile_events
 from .simulator import (
@@ -1567,7 +1569,7 @@ def _effects(cards: Sequence[_Card], scenario: Scenario) -> ModEffectList:
                 multiplier = _buff_set_multiplier(card.record, pieces)
                 if multiplier != 1.0:
                     current = ModEffectList(
-                        (replace(effect, value=effect.value * multiplier) for effect in current),
+                        (with_value(effect, effect.value * multiplier) for effect in current),
                         skipped=current.skipped,
                     )
         result.extend(current)
@@ -2098,9 +2100,9 @@ def _evaluate(
         all_cards = [*ordered, *special_cards]
         effect_cards = [passives, *all_cards] if passives is not None else all_cards
         effects = _effects(effect_cards, scenario)
-        probe_scenario = replace(scenario, victim_status_count=0)
+        probe_scenario = scenario_with(scenario, victim_status_count=0)
         probe_stats = apply_mods(weapon, effects, scenario=probe_scenario)
-        derived_scenario = replace(
+        derived_scenario = scenario_with(
             scenario,
             victim_status_count=expected_victim_status_count(probe_stats),
         )
@@ -2439,19 +2441,32 @@ def _optimize(
                 todo.setdefault(score_key(cards), cards)
             unique = list(todo.items())
             if _pool_exec is not None and len(unique) >= 8:
-                # Keep only a bounded batch in flight. A deadline must not
+                # Keep only a bounded window in flight. A deadline must not
                 # leave thousands of queued replay jobs running after return;
-                # four jobs per worker keep the pool busy between batches.
-                batch_size = max(16, 4 * _parallel.worker_count())
-                for offset in range(0, len(unique), batch_size):
-                    if expired(deadline):
-                        break
-                    batch = unique[offset:offset + batch_size]
-                    futures = [_pool_exec.submit(_parallel._score_job,
-                               (cards, riven, _pool_ctx)) for _key, cards in batch]
-                    for (key, _cards), future in zip(batch, futures):
+                # four jobs per worker, topped up as results come back in
+                # order, keep the pool busy (a batch-and-wait loop drained
+                # it at every batch boundary).
+                window = max(16, 4 * _parallel.worker_count())
+                in_flight: deque = deque()
+                submitted = 0
+                stopped = False
+                try:
+                    while True:
+                        while not stopped and submitted < len(unique) and len(in_flight) < window:
+                            if submitted % window == 0 and expired(deadline):
+                                stopped = True
+                                break
+                            key, cards = unique[submitted]
+                            in_flight.append((key, _pool_exec.submit(_parallel._score_job, (cards, riven, _pool_ctx))))
+                            submitted += 1
+                        if not in_flight:
+                            break
+                        key, future = in_flight.popleft()
                         layer_scores[key] = future.result()
-                    heartbeat(len(batch))
+                        heartbeat(1)
+                finally:
+                    for _key, future in in_flight:
+                        future.cancel()  # a cancelled request's queued jobs never start
             else:
                 for key, cards in unique:
                     if expired(deadline):
@@ -2910,6 +2925,75 @@ def _best_fixed(
     raise SimulationError("no capacity-valid build can equip the Riven")
 
 
+def _best_fixed_scores(
+    weapon: Mapping[str, Any],
+    items: Sequence[tuple[Sequence[_Card], _Card]],
+    **kwargs: Any,
+) -> list[float | Exception]:
+    """``_best_fixed(weapon, base_cards, riven, **kwargs).score`` for each
+    (base_cards, riven) item, or the exception it raised.
+
+    On the pool, every item's subsets of one keep level go out as one batch
+    (one item has only 1-8 subsets: most workers would wait), and an item is
+    settled at the first level where a subset fits, as ``_best_fixed`` does.
+    """
+    from wfarsenal import parallel as _parallel
+
+    pool = _parallel.get_pool() if len(items) > 1 else None
+    if pool is None:
+        results: list[float | Exception] = []
+        for base_cards, riven in items:
+            try:
+                results.append(_best_fixed(weapon, base_cards, riven, **kwargs).score)
+            except Exception as exc:
+                results.append(exc)
+        return results
+    scenario = kwargs["scenario"]
+    context = _parallel.shared({
+        "weapon": weapon, "metric": kwargs["metric"], "passives": kwargs.get("passives"), "slot_limit": 8,
+        "capacity_limit": kwargs.get("capacity_limit", 60), "target_context": kwargs.get("target_context"),
+        "scenario": scenario if isinstance(scenario.conditional_stacks, dict)
+        else replace(scenario, conditional_stacks=dict(scenario.conditional_stacks)),
+    })
+    splits = []
+    for base_cards, _riven in items:
+        required = tuple(card for card in base_cards if card.required)
+        optional = tuple(card for card in base_cards if not card.required)
+        splits.append((required, optional, min(len(optional), 7 - len(required))))
+    settled: dict[int, float | Exception] = {}
+    for step in itertools.count():
+        level = [(index, splits[index][2] - step) for index in range(len(items))
+                 if index not in settled and splits[index][2] - step >= 0]
+        if not level:
+            break
+        futures = []
+        for index, keep in level:
+            required, optional, _max_keep = splits[index]
+            futures.append([pool.submit(_parallel._score_job, ((*required, *(optional[i] for i in indexes)),
+                                                               items[index][1], context))
+                            for indexes in itertools.combinations(range(len(optional)), keep)])
+        try:
+            for (index, _keep), row in zip(level, futures):
+                best: float | None = None
+                try:
+                    for future in row:
+                        score = future.result()
+                        heartbeat(1)
+                        if score is not None and (best is None or score > best):
+                            best = score
+                except Exception as exc:
+                    settled[index] = exc
+                    continue
+                if best is not None:
+                    settled[index] = best
+        finally:
+            for row in futures:
+                for future in row:
+                    future.cancel()
+    return [settled.get(index, SimulationError("no capacity-valid build can equip the Riven"))
+            for index in range(len(items))]
+
+
 def validate_build(
     cards: Sequence[_Card],
     riven: _Card | None,
@@ -3144,70 +3228,50 @@ def _recommend_positive(
         line for line in candidates
         if line.effect is not None and line.effect.supported
     ]
-    _line_scores: list[float | None] | None = None
     from wfarsenal import parallel as _parallel
 
-    _wire_scenario = (
-        scenario
-        if isinstance(scenario.conditional_stacks, dict)
-        else replace(scenario, conditional_stacks=dict(scenario.conditional_stacks))
-    )
-    _pool_ctx = _parallel.shared({
-        "weapon": weapon,
-        "scenario": _wire_scenario,
-        "metric": metric,
-        "passives": passives,
-        "slot_limit": 8,
-        "capacity_limit": capacity_limit,
-        "target_context": target_context,
-    })
     _pool_exec = _parallel.get_pool()
+    fixed_kwargs = dict(scenario=scenario, metric=metric, passives=passives, capacity_limit=capacity_limit,
+                        target_context=target_context, max_keep_cap=keep_cap)
+
+    def fit_rows(riven_cards: Sequence[_Card]) -> list[list[float | Exception]]:
+        """``_best_fixed(base, card).score`` (or its exception) for every
+        base, per card, scored together on the pool."""
+        values = _best_fixed_scores(weapon, [(base, card) for card in riven_cards for base in bases],
+                                    **fixed_kwargs)
+        return [values[row * len(bases):(row + 1) * len(bases)] for row in range(len(riven_cards))]
+
+    # ── 单词条粗排并行化（每词条一次 _best_fixed 的子集枚举——40+ 次
+    # 独立的重量评估；物理核 worker 池，串行回退）──────────────────────
+    _line_scores: list[float | None] | None = None
     if _pool_exec is not None and len(_supported_lines) >= 4:
-        _futures = {
-            line.code: [
-                _pool_exec.submit(
-                    _parallel._best_fixed_job,
-                    (base, _card_from_lines([line]), keep_cap, _pool_ctx),
-                )
-                for base in bases
-            ]
-            for line in _supported_lines
-        }
+        # A line whose fit fails any way is left out, as before.
         _line_scores = []
-        for line in _supported_lines:
-            values = [value for value in (future.result() for future in _futures[line.code]) if value is not None]
+        for row in fit_rows([_card_from_lines([line]) for line in _supported_lines]):
+            values = [value for value in row if not isinstance(value, Exception)]
             _line_scores.append(max(values) if values else None)
 
     def fit_scores(riven_cards: Sequence[_Card]) -> list[float]:
-        """``fit(card).score`` for each card, as independent pool jobs.
+        """``fit(card).score`` for each card, scored together on the pool.
 
         Same choice as ``fit``: the first base with the highest score, bases
         that cannot equip the Riven skipped, SimulationError when none can.
         """
         if _pool_exec is None or len(riven_cards) * len(bases) < 4:
             return [fit(card).score for card in riven_cards]
-        futures = [[_pool_exec.submit(_parallel._best_fixed_score_job, (base, card, keep_cap, _pool_ctx))
-                    for base in bases] for card in riven_cards]
         scores: list[float] = []
-        try:
-            for row in futures:
-                best: float | None = None
-                for future in row:
-                    try:
-                        score = future.result()
-                    except SimulationError:
-                        continue
-                    finally:
-                        heartbeat(1)
-                    if best is None or score > best:
-                        best = score
-                if best is None:
-                    raise SimulationError("no capacity-valid build can equip the Riven")
-                scores.append(best)
-        finally:
-            for row in futures:
-                for future in row:
-                    future.cancel()
+        for row in fit_rows(riven_cards):
+            best: float | None = None
+            for value in row:
+                if isinstance(value, SimulationError):
+                    continue
+                if isinstance(value, Exception):
+                    raise value
+                if best is None or value > best:
+                    best = value
+            if best is None:
+                raise SimulationError("no capacity-valid build can equip the Riven")
+            scores.append(best)
         return scores
 
     ranked: list[tuple[float, _RivenLine]] = []
@@ -4575,6 +4639,14 @@ def analyze_riven_request(
         # candidates; the replay decides. Every profile runs all three, so a
         # deeper profile never ends below the ultra one.
         proxy = dict(kwargs, metric="statusSustainedDps", beam_width=4, shortlist=24)
+        # A seed's score is a pool job that runs while the next seed is
+        # searched; only the best seed is evaluated here, for its stats.
+        from wfarsenal import parallel as _parallel
+        pool = _parallel.get_pool()
+        seed_kwargs = dict(scenario=kwargs["scenario"], metric=kwargs["metric"], passives=kwargs.get("passives"),
+                           capacity_limit=kwargs.get("capacity_limit", 60), target_context=context)
+        seed_contexts: dict[int | None, Any] = {}
+        pending: list[tuple[tuple[_Card, ...], int | None, Any]] = []
         for element, parts in seeds:
             seeded = list(search_required_keys)
             for part in parts:
@@ -4592,11 +4664,46 @@ def analyze_riven_request(
             # Ultra ranks the seeds with the Riven last and places it only
             # in the winner (an element Riven multiplies replays by the
             # element boundaries).
-            scored = _evaluate(weapon, cards, riven, scenario=kwargs["scenario"], metric=kwargs["metric"],
-                               passives=kwargs.get("passives"), capacity_limit=kwargs.get("capacity_limit", 60),
-                               target_context=context, fixed_riven_index=len(cards) if ultra and riven is not None else None)
-            if scored is not None:
-                results.append(scored)
+            fixed = len(cards) if ultra and riven is not None else None
+            if pool is None:
+                pending.append((cards, fixed, _evaluate(weapon, cards, riven, fixed_riven_index=fixed, **seed_kwargs)))
+                continue
+            if fixed not in seed_contexts:
+                scenario_wire = seed_kwargs["scenario"]
+                if not isinstance(scenario_wire.conditional_stacks, dict):
+                    scenario_wire = replace(scenario_wire, conditional_stacks=dict(scenario_wire.conditional_stacks))
+                seed_contexts[fixed] = _parallel.shared({
+                    "weapon": weapon, "scenario": scenario_wire, "metric": seed_kwargs["metric"],
+                    "passives": seed_kwargs["passives"], "slot_limit": 8,
+                    "capacity_limit": seed_kwargs["capacity_limit"], "target_context": context,
+                    "fixed_riven_index": fixed,
+                })
+            pending.append((cards, fixed, pool.submit(_parallel._score_job, (cards, riven, seed_contexts[fixed]))))
+        seed_results: list[tuple[float, tuple[_Card, ...], int | None, _Evaluation | None]] = []
+        try:
+            for cards, fixed, outcome in pending:
+                if pool is None:
+                    if outcome is not None:
+                        seed_results.append((outcome.score, cards, fixed, outcome))
+                    continue
+                score = outcome.result()
+                if score is not None:
+                    seed_results.append((score, cards, fixed, None))
+        finally:
+            if pool is not None:
+                for _cards, _fixed, outcome in pending:
+                    outcome.cancel()
+        # The first best of the main result and the seeds, as max() picks.
+        chosen_seed = None
+        best_score = max((result.score for result in results), default=None)
+        for item in seed_results:
+            if best_score is None or item[0] > best_score:
+                chosen_seed, best_score = item, item[0]
+        if chosen_seed is not None:
+            score, cards, fixed, evaluation = chosen_seed
+            if evaluation is None:
+                evaluation = _evaluate(weapon, cards, riven, fixed_riven_index=fixed, **seed_kwargs)
+            results.append(evaluation)
         if not results and required_damage_type and ultra:
             unsupported.append(f"element-target-infeasible-{required_damage_type}-using-unconstrained")
             found = _optimize(weapon, mod_pool, riven, required_mod_keys=list(search_required_keys), **common, **proxy)
@@ -4875,15 +4982,17 @@ def analyze_riven_request(
         elements = [code for code in ("4", "5", "6", "7") if code in candidate_by_code]
         element = None
         if elements:
-            def element_value(code: str) -> float:
-                try:
-                    return _best_fixed(weapon, baseline.cards, _card_from_lines([candidate_by_code[code]]),
-                                       scenario=scenario, metric=ranking_metric, passives=passives,
-                                       capacity_limit=capacity_limit, target_context=search_context,
-                                       max_keep_cap={"fast": 3, "standard": 5, "deep": None}[profile]).score
-                except SimulationError:
-                    return -math.inf
-            element = max(elements, key=element_value)
+            values = _best_fixed_scores(
+                weapon, [(baseline.cards, _card_from_lines([candidate_by_code[code]])) for code in elements],
+                scenario=scenario, metric=ranking_metric, passives=passives,
+                capacity_limit=capacity_limit, target_context=search_context,
+                max_keep_cap={"fast": 3, "standard": 5, "deep": None}[profile])
+            for value in values:
+                if isinstance(value, Exception) and not isinstance(value, SimulationError):
+                    raise value
+            element_values = dict(zip(elements, (-math.inf if isinstance(value, Exception) else value
+                                                 for value in values)))
+            element = max(elements, key=element_values.__getitem__)
         archetypes = {"crit": ["0", "1", filler], "status": ["2", element or "D", filler]}
         built: dict[str, list[str]] = {}
         result: list[tuple[_Card, ...]] = []
@@ -4975,23 +5084,26 @@ def analyze_riven_request(
     negative_fresh = not isinstance(cached_negative, list)
     if negative_fresh and ultra:
         unsupported.append("ultra-profile-negative-ranking-not-cached")
-    for line in (negative_rolls(ranked_negative) if negative_fresh and not ultra else ()):
-        if line.code in {p.code for p in negative_seed}:
-            continue
-        if line.code not in neutral_negative_codes and (line.effect is None or not line.effect.supported):
-            continue
-        result = _best_fixed(
-            weapon,
-            baseline.cards,
-            _card_from_lines([*negative_seed, line]),
-            scenario=scenario,
-            metric=ranking_metric,
-            passives=passives,
-            capacity_limit=capacity_limit,
-            target_context=search_context,
-            max_keep_cap=negative_keep_cap,
-        )
-        negative_ranked.append((result.score, line))
+    negative_lines = [
+        line for line in (negative_rolls(ranked_negative) if negative_fresh and not ultra else ())
+        if line.code not in {p.code for p in negative_seed}
+        and (line.code in neutral_negative_codes or (line.effect is not None and line.effect.supported))
+    ]
+    # Independent lines: scored together so the pool stays full.
+    negative_scores = _best_fixed_scores(
+        weapon,
+        [(baseline.cards, _card_from_lines([*negative_seed, line])) for line in negative_lines],
+        scenario=scenario,
+        metric=ranking_metric,
+        passives=passives,
+        capacity_limit=capacity_limit,
+        target_context=search_context,
+        max_keep_cap=negative_keep_cap,
+    )
+    for line, score in zip(negative_lines, negative_scores):
+        if isinstance(score, Exception):
+            raise score
+        negative_ranked.append((score, line))
     negative_ranked.sort(key=lambda item: (-item[0],item[1].code not in neutral_negative_codes,item[1].code))
     recommended_negative = []
     for _,line in negative_ranked:

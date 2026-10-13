@@ -20,7 +20,15 @@ def main() -> int:
     profile = "debug" if "--debug" in sys.argv else "release"
     cargo = shutil.which("cargo") or str(Path.home() / ".cargo" / "bin" / "cargo")
     command = [cargo, "build"] + ([] if profile == "debug" else ["--release"])
-    subprocess.run(command, cwd=CRATE, check=True, env=dict(os.environ, CARGO_BUILD_JOBS=os.environ.get("CARGO_BUILD_JOBS", "4")))
+    # Cargo reports progress on stderr; pass it on as stdout so a caller that
+    # treats native stderr as an error (build-portable.ps1 under
+    # $ErrorActionPreference = "Stop" with redirected output) does not abort.
+    build = subprocess.run(command, cwd=CRATE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+                           encoding="utf-8", errors="replace",
+                           env=dict(os.environ, CARGO_BUILD_JOBS=os.environ.get("CARGO_BUILD_JOBS", "4")))
+    print(build.stdout, end="")
+    if build.returncode:
+        return build.returncode
     built = CRATE / "target" / profile / ("wfcore.dll" if os.name == "nt" else "libwfcore.so")
     try:
         shutil.copyfile(built, TARGET)

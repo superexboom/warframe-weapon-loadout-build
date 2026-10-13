@@ -6614,4 +6614,9 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
+    # The packaged exe starts its compute workers by running itself again;
+    # this turns such a run into a worker instead of a second server.
+    import multiprocessing
+
+    multiprocessing.freeze_support()
     raise SystemExit(main())

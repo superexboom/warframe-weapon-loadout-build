@@ -9,6 +9,7 @@ pub mod co;
 pub mod counters;
 pub mod fx;
 pub mod heat;
+pub mod mods;
 pub mod proc;
 pub mod pymath;
 pub mod replay;
@@ -151,10 +152,13 @@ fn capped_stack_add_dists(dists: Vec<Vec<f64>>, absence: f64, count: f64, cap: i
 
 /// Native timing counters: [(name, seconds, calls)].
 #[pyfunction]
-#[pyo3(name = "counters", signature = (reset=false, enable=None))]
-fn native_counters(reset: bool, enable: Option<bool>) -> Vec<(&'static str, f64, u64)> {
+#[pyo3(name = "counters", signature = (reset=false, enable=None, only=None))]
+fn native_counters(reset: bool, enable: Option<bool>, only: Option<Vec<String>>) -> Vec<(&'static str, f64, u64)> {
     if let Some(on) = enable {
         counters::enable(on);
+    }
+    if let Some(names) = only {
+        counters::select(&names);
     }
     counters::snapshot(reset)
 }
@@ -188,5 +192,7 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(replay::trajectory, m)?)?;
     m.add("NativeUnsupported", m.py().get_type::<replay::NativeUnsupported>())?;
     m.add_function(wrap_pyfunction!(c_math, m)?)?;
+    m.add_class::<mods::ModsPrep>()?;
+    m.add_function(wrap_pyfunction!(mods::apply_mods, m)?)?;
     Ok(())
 }

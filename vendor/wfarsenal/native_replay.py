@@ -287,6 +287,63 @@ def _target_tables(target, locations):
     return {"damage": damage, "dot": dot, "dotMultiplier": multipliers}
 
 
+# The target-only part of a replay's setup, by target (record_keys.shallow_key)
+# and level / strip / Steel Path / enhancements; the entry holds the target.
+# Nothing changes these objects: the helper copies before it edits a table.
+_TARGET_SETUPS: dict = {}
+
+
+def _target_setup(target, level, armour_strip, steel_path, enemy_enhancements):
+    from .damage import (enemy_defenses, _hit_location_info, _faction_damage_deltas, _damage_type_set,
+                         DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES, DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES)
+    try:
+        options = None if enemy_enhancements is None else tuple(sorted(enemy_enhancements.items()))
+        from .record_keys import shallow_key
+        key = (shallow_key(target), level, armour_strip, steel_path, options)
+        hash(key)
+    except (AttributeError, TypeError):
+        key = None
+    hit = _TARGET_SETUPS.get(key) if key is not None else None
+    if hit is not None:
+        return hit[1]
+    defenses = enemy_defenses(
+        target,
+        level=level,
+        armour_strip=armour_strip,
+        steel_path=steel_path,
+        enemy_enhancements=enemy_enhancements,
+    )
+    full = [float(defenses.get(k) or 0.0) for k in ("overguard", "shield", "health")]
+    ehp = sum(full)
+    armour_base = float(defenses.get("armour") or 0.0)
+    cache = dict(
+        faction_deltas=_faction_damage_deltas(target),
+        armour_bypass=_damage_type_set(
+            target.get("armourBypassDamageTypes"), DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES
+        ),
+        shield_bypass=_damage_type_set(
+            target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
+        ),
+        target_faction=str(target.get("faction") or ""),
+    )
+    locations = {}
+    for location in ("body", "head"):
+        _, hm, hcm, _, _ = _hit_location_info(target, location)
+        locations[location] = {
+            **cache,
+            "hit_multiplier": hm,
+            "hit_critical_multiplier": hcm,
+        }
+    bare_def = {**defenses, "armour": 0.0, "overguard": 0.0, "shield": 0.0}
+    tables = _target_tables(target, locations)
+    result = (defenses, full, ehp, armour_base, cache, locations, bare_def, tables)
+    if key is not None:
+        if len(_TARGET_SETUPS) >= 256:
+            _TARGET_SETUPS.clear()
+        _TARGET_SETUPS[key] = (target, result)
+    return result
+
+
 def _projectile_state(state):
     mode = state.get('projectileMode')
     return dict(isolated=mode == 'isolated', manual=mode == 'manual',
@@ -348,34 +405,8 @@ def trajectory(
     step = max(0.01, float(time_step))
     head = min(1.0, max(0.0, float(headshot_chance)))
     rate = max(0.0, float(attacks_per_second))
-    defenses = enemy_defenses(
-        target,
-        level=level,
-        armour_strip=armour_strip,
-        steel_path=steel_path,
-        enemy_enhancements=enemy_enhancements,
-    )
-    full = [float(defenses.get(k) or 0.0) for k in ("overguard", "shield", "health")]
-    ehp = sum(full)
-    armour_base = float(defenses.get("armour") or 0.0)
-    cache = dict(
-        faction_deltas=_faction_damage_deltas(target),
-        armour_bypass=_damage_type_set(
-            target.get("armourBypassDamageTypes"), DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES
-        ),
-        shield_bypass=_damage_type_set(
-            target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
-        ),
-        target_faction=str(target.get("faction") or ""),
-    )
-    locations = {}
-    for location in ("body", "head"):
-        _, hm, hcm, _, _ = _hit_location_info(target, location)
-        locations[location] = {
-            **cache,
-            "hit_multiplier": hm,
-            "hit_critical_multiplier": hcm,
-        }
+    defenses, full, ehp, armour_base, cache, locations, bare_def, tables = _target_setup(
+        target, level, armour_strip, steel_path, enemy_enhancements)
     names = {
         "DT_FIRE": "heat",
         "DT_VIRAL": "viral",
@@ -422,8 +453,6 @@ def trajectory(
     encumber = combat.get('encumber')
     if encumber and encumber.get('uptime', 1.0) == 0:
         encumber = None
-    bare_def = {**defenses, "armour": 0.0, "overguard": 0.0, "shield": 0.0}
-    tables = _target_tables(target, locations)
     helper = _Helper(target, locations, bare_def, forced_procs, combat)
     melee_config = None
     if melee:

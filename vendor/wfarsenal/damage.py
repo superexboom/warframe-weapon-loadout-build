@@ -29,7 +29,7 @@ from __future__ import annotations
 import math
 import struct
 from copy import copy as _copy_object
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field, fields, replace
 from types import MappingProxyType
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -609,6 +609,23 @@ class Scenario:
         )
 
 
+_DERIVED_SCENARIOS: dict = {}
+
+
+def scenario_with(scenario: "Scenario", **changes: Any) -> "Scenario":
+    """``replace(scenario, **changes)``, shared: a Scenario is frozen and its
+    validation is the expensive part, so one derived copy serves every call."""
+    key = (id(scenario), tuple(sorted(changes.items())))
+    hit = _DERIVED_SCENARIOS.get(key)
+    if hit is not None and hit[0] is scenario:
+        return hit[1]
+    derived = replace(scenario, **changes)
+    if len(_DERIVED_SCENARIOS) >= 4096:
+        _DERIVED_SCENARIOS.clear()
+    _DERIVED_SCENARIOS[key] = (scenario, derived)
+    return derived
+
+
 @dataclass(frozen=True)
 class ModEffect:
     """One normalized effect from an exported mod, at a chosen rank."""
@@ -671,6 +688,50 @@ class ModEffect:
             source_path=source_path,
             condition_tag=condition_tag,
         )
+
+
+_EFFECT_FIELDS = tuple(f.name for f in fields(ModEffect))
+# Equal effects share one object: the native apply_mods caches its per-effect
+# work by object, and a worker unpickles every job's cards afresh. Bounded.
+_INTERNED_EFFECTS: dict = {}
+_SCALED_EFFECTS: dict = {}
+
+
+def _value_identity(value: Any) -> tuple:
+    """What equality ignores: the type (1 == 1.0 == True) and the zero's sign."""
+    return (type(value), math.copysign(1.0, value) if type(value) is float and value == 0.0 else 0)
+
+
+def _interned_effect(*values: Any) -> ModEffect:
+    key = (values, tuple(map(_value_identity, values)))
+    effect = _INTERNED_EFFECTS.get(key)
+    if effect is None:
+        effect = ModEffect(*values)
+        if len(_INTERNED_EFFECTS) >= 65536:
+            _INTERNED_EFFECTS.clear()
+        _INTERNED_EFFECTS[key] = effect
+    return effect
+
+
+def _reduce_effect(self: ModEffect):
+    return (_interned_effect, tuple(getattr(self, name) for name in _EFFECT_FIELDS))
+
+
+ModEffect.__reduce__ = _reduce_effect  # type: ignore[method-assign]
+
+
+def with_value(effect: ModEffect, value: float) -> ModEffect:
+    """``replace(effect, value=value)``, one object per (effect, value): the
+    resolvers rescale the same terms every call."""
+    key = (id(effect), value, _value_identity(value))
+    hit = _SCALED_EFFECTS.get(key)
+    if hit is not None and hit[0] is effect:
+        return hit[1]
+    scaled = replace(effect, value=value)
+    if len(_SCALED_EFFECTS) >= 65536:
+        _SCALED_EFFECTS.clear()
+    _SCALED_EFFECTS[key] = (effect, scaled)
+    return scaled
 
 
 class ModEffectList(list[ModEffect]):
@@ -1353,7 +1414,12 @@ def apply_mods(
     Raises:
         ValueError: If the weapon has no usable fire mode or damage data.
     """
-    return apply_mods_spec(weapon, effects, fire_mode=fire_mode, scenario=scenario)[0]
+    if _mods_native is not None and _mods_native.ENABLED:
+        try:
+            return _mods_native.apply(weapon, effects, fire_mode, scenario or Scenario(), need_spec=False)[0]
+        except _mods_native.Unsupported:
+            pass
+    return _apply_mods_spec_py(weapon, effects, fire_mode=fire_mode, scenario=scenario)[0]
 
 
 class CoSpec:
@@ -1484,6 +1550,23 @@ def co_variant(stats: ModdedStats, spec: CoSpec, co_effects: list[ModEffect]) ->
 
 
 def apply_mods_spec(
+    weapon: Mapping[str, Any],
+    effects: Iterable[ModEffect],
+    *,
+    fire_mode: int = 0,
+    scenario: Scenario | None = None,
+) -> tuple[ModdedStats, CoSpec | None]:
+    """:func:`_apply_mods_spec_py` on the native core when it is built
+    (``mods_native``; identical results), else the Python reference."""
+    if _mods_native is not None and _mods_native.ENABLED:
+        try:
+            return _mods_native.apply(weapon, effects, fire_mode, scenario or Scenario())
+        except _mods_native.Unsupported:
+            pass
+    return _apply_mods_spec_py(weapon, effects, fire_mode=fire_mode, scenario=scenario)
+
+
+def _apply_mods_spec_py(
     weapon: Mapping[str, Any],
     effects: Iterable[ModEffect],
     *,
@@ -2171,7 +2254,7 @@ def _apply_heavy_components(
 
 def _scale_effect(effect: ModEffect, multiplier: int | float) -> ModEffect:
     """Return ``effect`` scaled by explicit combat state, preserving qualifiers."""
-    return replace(effect, value=effect.value * multiplier)
+    return with_value(effect, effect.value * multiplier)
 
 
 def _qualifier_rejection(
@@ -2746,7 +2829,45 @@ def _supports_standard_eximus_formula(target: Mapping[str, Any]) -> bool:
     return not any(token in identity for token in ("prosecutor", "warden", "archwing"))
 
 
+# enemy_defenses by target (record_keys.shallow_key) and arguments; the entry
+# holds the target. A plain dict emptied when full: request threads share it.
+_DEFENSES: dict = {}
+_DEFENSES_MAX = 256
+
+
 def enemy_defenses(
+    target: Mapping[str, Any],
+    *,
+    level: int | None = None,
+    steel_path: bool = False,
+    armour_strip: float = 0.0,
+    elemental_armour_strip: float = 0.0,
+    enemy_enhancements: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """:func:`_enemy_defenses`, memoised; every call gets its own copy."""
+    try:
+        options = None if enemy_enhancements is None else tuple(sorted(enemy_enhancements.items()))
+        from .record_keys import shallow_key
+        key = (shallow_key(target), level, steel_path, armour_strip, elemental_armour_strip, options)
+        hash(key)
+    except (AttributeError, TypeError):
+        key = None
+    if key is not None:
+        hit = _DEFENSES.get(key)
+        if hit is not None:
+            result = hit[1]
+            return {**result, "enhancements": dict(result["enhancements"]), "unsupported": list(result["unsupported"])}
+    result = _enemy_defenses(target, level=level, steel_path=steel_path, armour_strip=armour_strip,
+                             elemental_armour_strip=elemental_armour_strip, enemy_enhancements=enemy_enhancements)
+    if key is not None:
+        if len(_DEFENSES) >= _DEFENSES_MAX:
+            _DEFENSES.clear()
+        _DEFENSES[key] = (target, {**result, "enhancements": dict(result["enhancements"]),
+                                   "unsupported": list(result["unsupported"])})
+    return result
+
+
+def _enemy_defenses(
     target: Mapping[str, Any],
     *,
     level: int | None = None,
@@ -5420,3 +5541,9 @@ def _level_curve_multiplier(
         position = (delta - 70.0) / 10.0
         transition = 3.0 * position**2 - 2.0 * position**3
     return 1.0 + low + (high - low) * transition
+
+
+try:  # the native apply_mods (mods_native imports this module lazily)
+    from . import mods_native as _mods_native
+except ImportError:  # pragma: no cover
+    _mods_native = None

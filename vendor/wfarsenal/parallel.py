@@ -56,10 +56,14 @@ def logical_core_count() -> int:
 
 
 def default_workers() -> int:
-    """Physical cores minus one (the parent keeps a core for orchestration),
-    at most 7: workers plus parent stay within eight computations unless the
-    user raises it in the settings."""
-    return max(1, min(_physical_core_count() - 1, 7))
+    """Physical cores plus a quarter, within the logical threads, at most 16.
+
+    Measured on 8 cores / 16 threads: 10 workers beat 7 (one per core, less
+    one for the parent) by 10-35%; 14 gained nothing more. The parent mostly
+    waits on the pool, and a few SMT siblings fill the gaps between jobs.
+    """
+    physical = _physical_core_count()
+    return max(1, min(physical + physical // 4, logical_core_count(), 16))
 
 
 # Set in worker processes: a job never opens a pool of its own.
@@ -444,49 +448,3 @@ def _score_eligible_job(args: tuple) -> tuple[float, bool] | None:
         return None
     eligible = required_type is None or evaluated.stats.damage_types.get(required_type, 0.0) > 0
     return evaluated.score, eligible
-
-
-def _best_fixed_score_job(args: tuple) -> float:
-    """``_best_fixed(...).score`` for (base_cards, riven, keep_cap, context);
-    its errors reach the caller, which decides like the serial loop."""
-    from wfarsenal import optimizer as _opt
-
-    base_cards, riven, keep_cap, ctx = args
-    return _opt._best_fixed(
-        ctx["weapon"],
-        base_cards,
-        riven,
-        scenario=ctx["scenario"],
-        metric=ctx["metric"],
-        passives=ctx["passives"],
-        capacity_limit=ctx["capacity_limit"],
-        target_context=ctx["target_context"],
-        max_keep_cap=keep_cap,
-    ).score
-
-
-def _best_fixed_job(args: tuple) -> float | None:
-    """Worker-side _best_fixed: full subset search for one riven line.
-
-    args = (base_cards, riven, keep_cap, context); context is the shared
-    dict (weapon/scenario/metric/passives/capacity/target). Returns the
-    best score or None when nothing fits.
-    """
-    from wfarsenal import optimizer as _opt
-
-    base_cards, riven, keep_cap, ctx = args
-    try:
-        result = _opt._best_fixed(
-            ctx["weapon"],
-            base_cards,
-            riven,
-            scenario=ctx["scenario"],
-            metric=ctx["metric"],
-            passives=ctx["passives"],
-            capacity_limit=ctx["capacity_limit"],
-            target_context=ctx["target_context"],
-            max_keep_cap=keep_cap,
-        )
-        return result.score
-    except Exception:
-        return None

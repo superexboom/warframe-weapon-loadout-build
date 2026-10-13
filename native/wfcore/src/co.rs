@@ -66,7 +66,7 @@ pub struct Elements {
 }
 
 impl Elements {
-    fn physical(&self, d: D) -> bool {
+    pub(crate) fn physical(&self, d: D) -> bool {
         self.physical.contains(&d)
     }
     fn base(&self, d: D) -> bool {
@@ -82,30 +82,30 @@ impl Elements {
 pub struct Dict(pub Vec<(D, f64)>);
 
 impl Dict {
-    fn get(&self, d: D) -> Option<f64> {
+    pub(crate) fn get(&self, d: D) -> Option<f64> {
         self.0.iter().find(|e| e.0 == d).map(|e| e.1)
     }
-    fn get_or(&self, d: D, default: f64) -> f64 {
+    pub(crate) fn get_or(&self, d: D, default: f64) -> f64 {
         self.get(d).unwrap_or(default)
     }
-    fn set(&mut self, d: D, v: f64) {
+    pub(crate) fn set(&mut self, d: D, v: f64) {
         match self.0.iter_mut().find(|e| e.0 == d) {
             Some(e) => e.1 = v,
             None => self.0.push((d, v)),
         }
     }
-    fn pop(&mut self, d: D) -> Option<f64> {
+    pub(crate) fn pop(&mut self, d: D) -> Option<f64> {
         let i = self.0.iter().position(|e| e.0 == d)?;
         Some(self.0.remove(i).1)
     }
-    fn contains(&self, d: D) -> bool {
+    pub(crate) fn contains(&self, d: D) -> bool {
         self.0.iter().any(|e| e.0 == d)
     }
     /// `{k: v for k, v in d.items() if v}`
-    fn truthy(self) -> Dict {
+    pub(crate) fn truthy(self) -> Dict {
         Dict(self.0.into_iter().filter(|e| e.1 != 0.0).collect())
     }
-    fn scale(&mut self, f: f64) {
+    pub(crate) fn scale(&mut self, f: f64) {
         for e in self.0.iter_mut() {
             e.1 *= f;
         }
@@ -267,6 +267,8 @@ pub struct CoSpec {
 /// What the replay reads of `_co_damage`'s result.
 pub struct CoDamage {
     pub damage_types: Dict,
+    /// The final damage scale (after the melee bucket).
+    pub scale: f64,
     pub base_bracket: f64,
     pub victim_low_health_multiplier: f64,
     pub slam_damage_ratio: f64,
@@ -339,5 +341,5 @@ pub fn co_damage(spec: &CoSpec, co: &[(u8, f64)], el: &Elements) -> CoDamage {
     if let Some(f) = spec.frozen_factor {
         damage.scale(f);
     }
-    CoDamage { damage_types: damage, base_bracket, victim_low_health_multiplier: victim_low, slam_damage_ratio }
+    CoDamage { damage_types: damage, scale: damage_scale, base_bracket, victim_low_health_multiplier: victim_low, slam_damage_ratio }
 }
