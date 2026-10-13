@@ -287,8 +287,8 @@ def _target_tables(target, locations):
     return {"damage": damage, "dot": dot, "dotMultiplier": multipliers}
 
 
-# The target-only part of a replay's setup, by target (record_keys.shallow_key)
-# and level / strip / Steel Path / enhancements; the entry holds the target.
+# The target-only part of a replay's setup, by target (record_keys.record_key)
+# and level / strip / Steel Path / enhancements; the entry pins the target.
 # Nothing changes these objects: the helper copies before it edits a table.
 _TARGET_SETUPS: dict = {}
 
@@ -298,8 +298,8 @@ def _target_setup(target, level, armour_strip, steel_path, enemy_enhancements):
                          DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES, DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES)
     try:
         options = None if enemy_enhancements is None else tuple(sorted(enemy_enhancements.items()))
-        from .record_keys import shallow_key
-        key = (shallow_key(target), level, armour_strip, steel_path, options)
+        from .record_keys import record_key
+        key = (record_key(target), level, armour_strip, steel_path, options)
         hash(key)
     except (AttributeError, TypeError):
         key = None
@@ -340,7 +340,8 @@ def _target_setup(target, level, armour_strip, steel_path, enemy_enhancements):
     if key is not None:
         if len(_TARGET_SETUPS) >= 256:
             _TARGET_SETUPS.clear()
-        _TARGET_SETUPS[key] = (target, result)
+        from .record_keys import pin
+        _TARGET_SETUPS[key] = (pin(target), result)
     return result
 
 

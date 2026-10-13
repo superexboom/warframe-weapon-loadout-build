@@ -45,6 +45,7 @@ from .damage import (
     with_value,
 )
 from .projectile_events import evaluate_projectile_events
+from . import status_native as _status_native
 from .simulator import (
     SimulationError,
     _buff_set_multiplier,
@@ -1729,6 +1730,16 @@ def _score(
             )
             if key in context
         }
+        if _status_native.ENABLED:
+            try:
+                return _status_native.score(
+                    stats, target, target_kwargs,
+                    status_rate_multiplier=float(context.get("statusRateMultiplier") or 1.0),
+                    damage_rate_multiplier=float(context.get("stanceMultiplier") or 1.0),
+                    total=metric == "statusSustainedDps",
+                )
+            except _status_native.Unsupported:
+                pass
         status = sustained_status_damage(
             stats,
             target,
@@ -4907,7 +4918,11 @@ def analyze_riven_request(
 
     _progress("actual")
     actual_card = _card_from_lines(actual_lines)
-    actual = _apply_riven_floor_profiled(
+    # A statics bake keeps only what every card of the weapon shares; the
+    # trigger card's own build, floor and contributions are not part of it
+    # (nothing below writes them to the statics).
+    statics_only = bool(request.get("_bakeStaticsOnly")) and not ultra
+    actual = None if statics_only else _apply_riven_floor_profiled(
         _optimize_archetype(
             weapon,
             actual_card,
@@ -5123,11 +5138,72 @@ def analyze_riven_request(
     # independent, cached); gain and the displayed baseline use the stronger.
     searched_baseline, baseline = baseline, gain_baseline
     score_metric = ranking_metric
-    quality_scores = {"baseline":baseline.score, "actual":actual.score}
+    quality_scores = {"baseline":baseline.score, "actual":actual.score if actual is not None else None}
     quality_detail_cache: dict[str, float] = {}
     quality_cache_hit = False
     if score_metric != objective_metric:
         skipped_early.append("评分与配装从一开始使用同靶窗口 DPS；KPM 为同一配装的独立战斗指标，无重复复评搜索")
+
+    def _context_identity() -> tuple[dict[str, Any] | None, str]:
+        """The evaluation target and the context hash the statics record."""
+        evaluation_target = None
+        if benchmark_context is not None:
+            target_record = benchmark_context.get("target")
+            evaluation_target = {
+                "enemyPath": target_record.get("path") if isinstance(target_record, Mapping) else None,
+                "enemyName": (
+                    (target_record.get("nameEn") or target_record.get("name"))
+                    if isinstance(target_record, Mapping)
+                    else None
+                ),
+                "level": benchmark_context.get("level"),
+                "steelPath": bool(benchmark_context.get("steel_path")),
+                "enemyEnhancements": benchmark_context.get("enemy_enhancements"),
+                "armourStrip": benchmark_context.get("armour_strip", 0.0),
+                "elementalArmourStrip": benchmark_context.get("elemental_armour_strip", 0.0),
+                "hitLocation": benchmark_context.get("hit_location", "body"),
+                "headshotChance": benchmark_context.get("headshotChance", 0.0),
+                "windowSeconds": benchmark_context.get("windowSeconds"),
+            }
+        context_payload = {
+            "version": TARGET_CALIBRATION_VERSION,
+            "buildLabel": exports.get("buildLabel"),
+            "weapon": weapon.get("path"),
+            "fireMode": fire_mode,
+            "weaponType": weapon_type,
+            "innateElements": weapon.get("innateElements") or (),
+            "requestedTarget": requested_target_payload,
+            "evaluationTarget": evaluation_target,
+            "objectiveMetric": objective_metric,
+            "scoreMetric": score_metric,
+            "profile": profile_raw,
+            "capacityLimit": capacity_limit,
+            "disposition": disposition,
+            "scenario": {
+                **_scenario_context(scenario),
+                "throwable": throwable,
+                "incarnonChoices": resolved_choices,
+                "arcanes": request.get("arcanes"),
+            },
+            "stance": (
+                {
+                    "path": stance_info.get("path"),
+                    "dpsMultiplier": stance_multiplier,
+                    "statusRateMultiplier": status_rate_multiplier,
+                    "capacityGain": stance_capacity,
+                }
+                if stance_info
+                else None
+            ),
+            "targetCalibration": {
+                'version':TARGET_CALIBRATION_VERSION,
+                'status':target_calibration.get('status'),
+                'requestedLevel':target_calibration.get('requestedLevel'),
+                'evaluationLevel':target_calibration.get('evaluationLevel'),
+            },
+        }
+        context_hash = _evaluation_context_hash(context_payload)
+        return evaluation_target, context_hash
 
     # 回写静态缓存（仅本次新算的部分；高数值/当前紫卡反超修正不影响缓存）。
     if cacheable and not ultra and statics is not None and (
@@ -5152,6 +5228,18 @@ def analyze_riven_request(
         if negative_fresh:
             write_bundle["negative"] = [line.code for line in recommended_negative]
         statics_cache["__dirty__"] = True
+    if statics_only:
+        evaluation_target, context_hash = _context_identity()
+        if cacheable and statics is not None:
+            statics["contextHash"] = context_hash
+            statics["evaluationTarget"] = evaluation_target
+            statics["targetCalibration"] = target_calibration
+            statics["scoreMetric"] = score_metric
+            statics["qualityCalibrated"] = False  # a bake never calibrates quality
+            statics_cache["__dirty__"] = True
+        return {"bakeStaticsOnly": True, "contextHash": context_hash,
+                "recommended": [line.code for line in recommended],
+                "negative": [line.code for line in recommended_negative]}
 
     # 不再计算「理论上限」与 0–100 评分（上限本身是近似搜索，其误差会传给
     # 所有评分）。保留：相对无紫卡基线的实际增益、逐词条贡献与推荐词条排序。
@@ -5318,63 +5406,7 @@ def analyze_riven_request(
             }
         )
 
-    evaluation_target = None
-    if benchmark_context is not None:
-        target_record = benchmark_context.get("target")
-        evaluation_target = {
-            "enemyPath": target_record.get("path") if isinstance(target_record, Mapping) else None,
-            "enemyName": (
-                (target_record.get("nameEn") or target_record.get("name"))
-                if isinstance(target_record, Mapping)
-                else None
-            ),
-            "level": benchmark_context.get("level"),
-            "steelPath": bool(benchmark_context.get("steel_path")),
-            "enemyEnhancements": benchmark_context.get("enemy_enhancements"),
-            "armourStrip": benchmark_context.get("armour_strip", 0.0),
-            "elementalArmourStrip": benchmark_context.get("elemental_armour_strip", 0.0),
-            "hitLocation": benchmark_context.get("hit_location", "body"),
-            "headshotChance": benchmark_context.get("headshotChance", 0.0),
-            "windowSeconds": benchmark_context.get("windowSeconds"),
-        }
-    context_payload = {
-        "version": TARGET_CALIBRATION_VERSION,
-        "buildLabel": exports.get("buildLabel"),
-        "weapon": weapon.get("path"),
-        "fireMode": fire_mode,
-        "weaponType": weapon_type,
-        "innateElements": weapon.get("innateElements") or (),
-        "requestedTarget": requested_target_payload,
-        "evaluationTarget": evaluation_target,
-        "objectiveMetric": objective_metric,
-        "scoreMetric": score_metric,
-        "profile": profile_raw,
-        "capacityLimit": capacity_limit,
-        "disposition": disposition,
-        "scenario": {
-            **_scenario_context(scenario),
-            "throwable": throwable,
-            "incarnonChoices": resolved_choices,
-            "arcanes": request.get("arcanes"),
-        },
-        "stance": (
-            {
-                "path": stance_info.get("path"),
-                "dpsMultiplier": stance_multiplier,
-                "statusRateMultiplier": status_rate_multiplier,
-                "capacityGain": stance_capacity,
-            }
-            if stance_info
-            else None
-        ),
-        "targetCalibration": {
-            'version':TARGET_CALIBRATION_VERSION,
-            'status':target_calibration.get('status'),
-            'requestedLevel':target_calibration.get('requestedLevel'),
-            'evaluationLevel':target_calibration.get('evaluationLevel'),
-        },
-    }
-    context_hash = _evaluation_context_hash(context_payload)
+    evaluation_target, context_hash = _context_identity()
     # ── F10（审计修复）：三轴状态合同统一 ──────────────────────────────
     # targetCalibrated 只在真正完成压力校准时为 true——capped-saturated
     # （到达等级上限仍饱和）与 post-search-saturated（赢家仍饱和）都不算

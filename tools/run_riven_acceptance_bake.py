@@ -12,7 +12,9 @@ import time
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-MAX_BAKE_WORKERS=8
+# Bake workers are whole processes running serial analyses; beyond the
+# logical threads they only contend.
+MAX_BAKE_WORKERS=os.cpu_count() or 8
 
 
 def limited_workers(value) -> int:
@@ -52,12 +54,14 @@ def main() -> int:
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--acceptance',type=Path,required=True)
-    ap.add_argument('--workers',type=limited_workers,default=4,help='Parallel workers, capped at 8')
+    ap.add_argument('--workers',type=limited_workers,default=None,help='Parallel workers (default: the compute pool default), capped at the logical threads')
     ap.add_argument('--allow-full-bake',action='store_true',help='Use only after explicit user authorization for full-roster generation')
     args=ap.parse_args()
     if not args.allow_full_bake:
         ap.error('full-roster acceptance and baking requires explicit user authorization and --allow-full-bake')
     import app
+    from wfarsenal import parallel
+    args.workers=args.workers or limited_workers(parallel.default_workers())
     inputs=app._analysis_inputs_fingerprint()
     args.output.mkdir(parents=True,exist_ok=True)
     status=dict(status='running',pid=os.getpid(),inputs=inputs,startedAt=datetime.now(timezone.utc).isoformat(),
@@ -66,9 +70,10 @@ def main() -> int:
     write(status_file,status)
     env={**os.environ,'WF_ANALYZER_SERIAL':'1','PYTHONUNBUFFERED':'1'}
     commands=[('analysis-acceptance',[sys.executable,'-u','tools/audit_riven_analysis_context.py','--output',str(args.acceptance)])]
-    for profile in ('fast','standard'):
-        commands.append((profile,[sys.executable,'-u','tools/bake-analysis-statics.py','--profile',profile,
-                                 '--workers',str(args.workers),'--fire-modes','--allow-full-bake','--report',str(args.output/(profile+'.json'))]))
+    # One pool bakes both profiles (see bake-analysis-statics.py).
+    commands.append(('bake',[sys.executable,'-u','tools/bake-analysis-statics.py','--profile','fast,standard',
+                             '--workers',str(args.workers),'--fire-modes','--allow-full-bake',
+                             '--report',str(args.output/'{profile}.json')]))
     for phase,command in commands:
         entry=dict(phase=phase,status='running',command=command,startedAt=datetime.now(timezone.utc).isoformat())
         status['phases'].append(entry)

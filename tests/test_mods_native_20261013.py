@@ -69,7 +69,7 @@ def test_an_empty_bucket_keeps_the_int_zero():
 
 
 def test_a_record_changed_in_place_is_not_served_from_the_cache():
-    """Caches key records by top-level values (record_keys.shallow_key), so a
+    """Caches key records by their top-level values (record_keys.record_key), so a
     caller that edits a field between calls gets the new answer."""
     weapon = dict(next(w for w in app.EXPORTS["weapons"] if w.get("nameEn") == "Boltor Prime"))
     before = damage.apply_mods(weapon, []).magazine

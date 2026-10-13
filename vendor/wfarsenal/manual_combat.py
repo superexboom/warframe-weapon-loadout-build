@@ -239,6 +239,12 @@ def prepare(
     from .runtime_adapters import double_tap_configuration
     double_tap=next((spec for record,rank,_ in mod_records if (spec:=double_tap_configuration(record,rank))),None)
     from .sniper import combo_spec
+    # Imported once per call, not per record: the loop below runs for every
+    # MOD, Arcane and Incarnon branch of every replayed loadout.
+    from .runtime_adapters import (compression_configuration, onos_crits_for_hits, reserve_ammo_refund,
+                                   passive_incarnon_condition, self_break_forced, self_break_condition,
+                                   incarnon_actor_stacks)
+    from .arcane_runtime import configuration as runtime_arcane
     sniper_combo=combo_spec(weapon)
 
     # Final Fusillade / equivalent Incarnon terms are read from the base form's
@@ -259,7 +265,6 @@ def prepare(
         *arcane_records,
         *[(b, 0, None) for b in branches],
     ]:
-        from .runtime_adapters import compression_configuration
         if double_tap_configuration(record,rank):
             continue
         if miter_charge_aoe(record):
@@ -267,7 +272,6 @@ def prepare(
         if compression_configuration(record, rank):
             # The ADS adapter owns this exact runtime record and its children.
             continue
-        from .arcane_runtime import configuration as runtime_arcane
         if runtime_arcane(record, rank):
             # arcane_runtime rebuilt the script; its static terms (or the live
             # Cold / frozen fields) already carry the state.
@@ -292,19 +296,15 @@ def prepare(
         if crux:
             record = {**record, "conditionalEffects": [crux]}
         condition_rows = []
-        from .runtime_adapters import onos_crits_for_hits
         if onos_crits_for_hits(record):
             continue
-        from .runtime_adapters import reserve_ammo_refund
         if reserve_ammo_refund(record):
             notes.append('reserve-ammo-infinite-refund-does-not-change-magazine-or-damage')
             continue
-        from .runtime_adapters import latron_puncture_strip
         if latron_puncture_strip(record):
             continue
         if ammo_restore_configuration(record):
             continue
-        from .runtime_adapters import incarnon_condition_rows, passive_incarnon_condition, self_break_forced, self_break_condition
         for raw_condition in incarnon_condition_rows(record):
             raw_names = {str(x).rsplit("/", 1)[-1].casefold() for x in raw_condition.get("conditions") or ()}
             if 'evoonshieldbreakcondition' in raw_names and 'onoverguardbrokencondition' in raw_names:
@@ -328,7 +328,6 @@ def prepare(
                 merged=[*(condition.get('resetOn') or []),*(native.get('resetOn') or [])]
                 condition={**condition,'resetOn':[x for x in ('on-reload','on-transform','on-holster','on-body-hit') if x in merged]}
             if condition.get('equipmentGate'):
-                from .runtime_adapters import incarnon_actor_stacks
                 if not incarnon_actor_stacks({'actorGate':condition['equipmentGate']},scenario,weapon):
                     continue
             # The two audited Deadly Efficiency cards scale their 1.5-second
@@ -390,7 +389,6 @@ def prepare(
                 (source, e.upgrade_type, e.operation, e.damage_type) for e in effects
             )
             if condition.get('actorGate'):
-                from .runtime_adapters import incarnon_actor_stacks
                 stacks = incarnon_actor_stacks(condition,scenario,weapon)
                 if stacks>0:
                     actor_effects.extend(with_value(e, e.value*stacks) for e in effects)
@@ -571,6 +569,8 @@ def prepare(
         "magnetic": "DT_MAGNETIC",
     }
 
+    form_weapons = {}
+
     def resolve(form, stacks, live_types=0, last_round=False):
         fx = ModEffectList([*static,*actor_effects])
         for key, terms in dynamic:
@@ -592,11 +592,15 @@ def prepare(
                 n = min(onos_crit['maximum'],stacks.get('__onosHits',0.))
                 fx.extend(ModEffect(kind,'STACKING_MULTIPLY',onos_crit['perHit']*n)
                           for kind in ('WEAPON_CRIT_CHANCE','WEAPON_CRIT_DAMAGE'))
-        wp = {
-            **weapon,
-            "isIncarnonForm": form != "base" and weapon.get("isIncarnonForm", False),
-        }
-        wp = {**wp, '__selectedFireMode__': idx}
+        # One record per form and mode (only read and copied below).
+        wp = form_weapons.get((form != "base", idx))
+        if wp is None:
+            wp = {
+                **weapon,
+                "isIncarnonForm": form != "base" and weapon.get("isIncarnonForm", False),
+            }
+            wp = {**wp, '__selectedFireMode__': idx}
+            form_weapons[(form != "base", idx)] = wp
         if wp.get('isIncarnonForm'):
             for terms in form_dynamic:
                 fx.extend(terms)

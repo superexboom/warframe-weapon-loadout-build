@@ -56,21 +56,38 @@ def test_bake_excludes_inherited_ranged_melee_and_zero_damage_modes():
     assert module._supported_bake_modes(weapon)==[0]
 
 
-def test_bake_worker_limit_applies_to_default_and_explicit_cli(monkeypatch,tmp_path):
+def test_bake_workers_default_to_the_compute_pool_and_stay_within_the_machine(monkeypatch,tmp_path):
+    from tools.run_riven_acceptance_bake import MAX_BAKE_WORKERS
+    from wfarsenal import parallel
     spec=importlib.util.spec_from_file_location('bake_worker_limit',app.ROOT/'tools/bake-analysis-statics.py')
     module=importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    monkeypatch.setattr(module.os,'cpu_count',lambda:64)
     monkeypatch.setattr(module,'_catalog_weapons',lambda:[])
     monkeypatch.setattr(module,'SHARD_ROOT',tmp_path)
-    for requested in ([],['--workers','64'],['--workers','3']):
+    cases=(([],min(parallel.default_workers(),MAX_BAKE_WORKERS)),
+           (['--workers',str(MAX_BAKE_WORKERS+48)],MAX_BAKE_WORKERS),(['--workers','3'],3))
+    for requested,expected in cases:
         report=tmp_path/'plan.json'
         monkeypatch.setattr(module.sys,'argv',['bake','--dry-run','--report',str(report),*requested])
         assert module.main()==0
-        assert json.loads(report.read_text())['workers']==(3 if requested==['--workers','3'] else 8)
+        assert json.loads(report.read_text())['workers']==expected
     monkeypatch.setattr(module.sys,'argv',['bake','--workers','0','--dry-run'])
     with pytest.raises(SystemExit):
         module.main()
+
+
+def test_several_profiles_need_one_report_per_profile(monkeypatch,tmp_path):
+    spec=importlib.util.spec_from_file_location('bake_profiles',app.ROOT/'tools/bake-analysis-statics.py')
+    module=importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    monkeypatch.setattr(module,'_catalog_weapons',lambda:[])
+    monkeypatch.setattr(module,'SHARD_ROOT',tmp_path)
+    monkeypatch.setattr(module.sys,'argv',['bake','--dry-run','--profile','fast,standard','--report',str(tmp_path/'plan.json')])
+    with pytest.raises(SystemExit):
+        module.main()
+    monkeypatch.setattr(module.sys,'argv',['bake','--dry-run','--profile','fast,standard','--report',str(tmp_path/'{profile}.json')])
+    assert module.main()==0
+    assert {json.loads((tmp_path/f'{p}.json').read_text())['profile'] for p in ('fast','standard')}=={'fast','standard'}
 
 
 def test_default_parallel_pool_stays_within_the_machine():

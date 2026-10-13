@@ -713,8 +713,11 @@ def _interned_effect(*values: Any) -> ModEffect:
     return effect
 
 
+_EFFECT_VALUES = __import__("operator").attrgetter(*_EFFECT_FIELDS)
+
+
 def _reduce_effect(self: ModEffect):
-    return (_interned_effect, tuple(getattr(self, name) for name in _EFFECT_FIELDS))
+    return (_interned_effect, _EFFECT_VALUES(self))
 
 
 ModEffect.__reduce__ = _reduce_effect  # type: ignore[method-assign]
@@ -2829,8 +2832,9 @@ def _supports_standard_eximus_formula(target: Mapping[str, Any]) -> bool:
     return not any(token in identity for token in ("prosecutor", "warden", "archwing"))
 
 
-# enemy_defenses by target (record_keys.shallow_key) and arguments; the entry
-# holds the target. A plain dict emptied when full: request threads share it.
+# enemy_defenses by target (record_keys.record_key) and arguments; the entry
+# pins the target's values. A plain dict emptied when full: request threads
+# share it.
 _DEFENSES: dict = {}
 _DEFENSES_MAX = 256
 
@@ -2847,8 +2851,8 @@ def enemy_defenses(
     """:func:`_enemy_defenses`, memoised; every call gets its own copy."""
     try:
         options = None if enemy_enhancements is None else tuple(sorted(enemy_enhancements.items()))
-        from .record_keys import shallow_key
-        key = (shallow_key(target), level, steel_path, armour_strip, elemental_armour_strip, options)
+        from .record_keys import record_key
+        key = (record_key(target), level, steel_path, armour_strip, elemental_armour_strip, options)
         hash(key)
     except (AttributeError, TypeError):
         key = None
@@ -2862,7 +2866,8 @@ def enemy_defenses(
     if key is not None:
         if len(_DEFENSES) >= _DEFENSES_MAX:
             _DEFENSES.clear()
-        _DEFENSES[key] = (target, {**result, "enhancements": dict(result["enhancements"]),
+        from .record_keys import pin
+        _DEFENSES[key] = (pin(target), {**result, "enhancements": dict(result["enhancements"]),
                                    "unsupported": list(result["unsupported"])})
     return result
 

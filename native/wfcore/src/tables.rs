@@ -76,7 +76,7 @@ pub const CINEMATIC: D = 10;
 
 const DOT_COEFFICIENTS: [(D, f64); 5] = [(SLASH, 0.35), (FIRE, 0.5), (POISON, 0.5), (ELECTRICITY, 0.5), (GAS, 0.5)];
 
-fn get(v: &Vector, d: D) -> Option<f64> {
+pub(crate) fn get(v: &Vector, d: D) -> Option<f64> {
     v.iter().find(|x| x.0 == d).map(|x| x.1)
 }
 
@@ -175,7 +175,7 @@ fn weakpoint_noncrit_scale(s: &Core, hm: f64) -> f64 {
     scale
 }
 
-fn apply_weakpoint_folding(raw: f64, s: &Core, hm: f64, hcm: f64) -> f64 {
+pub(crate) fn apply_weakpoint_folding(raw: f64, s: &Core, hm: f64, hcm: f64) -> f64 {
     let mut raw = raw;
     if s.radial_only {
         return raw;
@@ -203,7 +203,7 @@ fn apply_weakpoint_folding(raw: f64, s: &Core, hm: f64, hcm: f64) -> f64 {
     raw
 }
 
-fn quantize(damage: &Vector, modded_base: f64) -> Vector {
+pub(crate) fn quantize(damage: &Vector, modded_base: f64) -> Vector {
     if modded_base <= 0.0 {
         return damage.clone();
     }
@@ -360,7 +360,7 @@ fn dot_multiplier(tables: &TargetTables, d: D) -> f64 {
 }
 
 /// `expected_status_damage` against the unit DoT target at one location.
-fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Status {
+pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Status {
     let loc = if s.radial_only { tables.dot[0] } else { tables.dot[loc_index] };
     let (hm, hcm) = (loc.hit_multiplier, loc.hit_critical_multiplier);
     let forced = &tables.forced_procs;

@@ -25,16 +25,96 @@ use std::collections::{BinaryHeap, VecDeque};
 
 pyo3::create_exception!(wfcore, NativeUnsupported, pyo3::exceptions::PyException);
 
+/// A Python ``{damage type: value}`` dict as a vector, interning the names.
+pub(crate) fn vector_of(types: &mut Types, obj: &Bound<'_, PyAny>) -> PyResult<Vector> {
+    let d = obj.downcast::<PyDict>()?;
+    let mut out = Vec::with_capacity(d.len());
+    for (k, v) in d.iter() {
+        let name: String = k.extract()?;
+        out.push((types.id(&name), v.extract::<f64>()?));
+    }
+    Ok(out)
+}
+
+/// The tables' view of a Python ``ModdedStats`` (``target_faction`` picks the
+/// faction row); the vectors are read by the caller, which keeps them too.
+pub(crate) fn core_of(obj: &Bound<'_, PyAny>, types: &mut Types, target_faction: &str, damage_types: &Vector,
+                  native_forced_procs: &Vector, independent_proc_chances: &Vector) -> PyResult<Core> {
+    let factions = obj.getattr("faction_damage_multipliers")?;
+    let factions = factions.cast::<PyDict>()?;
+    let faction_all = match factions.get_item("")? { Some(v) => v.extract::<f64>()?, None => 1.0 };
+    let faction_target = if target_faction.is_empty() {
+        1.0
+    } else {
+        match factions.get_item(target_faction)? { Some(v) => v.extract::<f64>()?, None => 1.0 }
+    };
+    let dot = obj.getattr("dot_base_damage")?;
+    let mut conversions = Vec::new();
+    for (k, adapters) in obj.getattr("impact_proc_conversions")?.cast::<PyDict>()?.iter() {
+        let d = types.id(&k.extract::<String>()?);
+        let mut rows = Vec::new();
+        for adapter in adapters.try_iter()? {
+            let adapter = adapter?;
+            let a = adapter.cast::<PyDict>()?;
+            rows.push((get_f(a, "chance", 0.0)?, get_f(a, "fireRateThreshold", f64::INFINITY)?,
+                       get_f(a, "fireRateMultiplier", 1.0)?));
+        }
+        conversions.push((d, rows));
+    }
+    let mut extra_hits = Vec::new();
+    for e in obj.getattr("extra_hits")?.try_iter()? {
+        let e = e?;
+        let t = e.cast::<PyTuple>()?;
+        extra_hits.push((types.id(&t.get_item(0)?.extract::<String>()?), t.get_item(1)?.extract::<f64>()?,
+                         t.get_item(2)?.is_truthy()?));
+    }
+    let low_threshold = obj.getattr("low_crit_threshold")?;
+    let low_base = obj.getattr("low_crit_damage_base")?;
+    Ok(Core {
+        damage_types: damage_types.clone(),
+        dot_base_damage: if dot.is_none() { None } else { Some(dot.extract::<f64>()?) },
+        crit_chance: f(obj, "crit_chance")?,
+        crit_multiplier: f(obj, "crit_multiplier")?,
+        noncrit_damage_multiplier: f(obj, "noncrit_damage_multiplier")?,
+        double_crit_chance: f(obj, "double_crit_chance")?,
+        falloff_multiplier: f(obj, "falloff_multiplier")?,
+        faction_all,
+        faction_target,
+        multishot: f(obj, "multishot")?,
+        continuous: b(obj, "continuous")?,
+        radial_only: b(obj, "radial_only")?,
+        bodyshot_crit_multiplier: f(obj, "bodyshot_crit_multiplier")?,
+        weakpoint_crit_chance_bonus: f(obj, "weakpoint_crit_chance_bonus")?,
+        base_crit_chance: f(obj, "base_crit_chance")?,
+        weakpoint_crit_chance_relative: f(obj, "weakpoint_crit_chance_relative")?,
+        headshot_bonus_multiplier: f(obj, "headshot_bonus_multiplier")?,
+        weakpoint_damage_bonus: match opt_attr(obj, "weakpoint_damage_bonus")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
+        status_chance: f(obj, "status_chance")?,
+        proc_duration_multiplier: f(obj, "proc_duration_multiplier")?,
+        proc_damage_multiplier: f(obj, "proc_damage_multiplier")?,
+        native_forced_procs: native_forced_procs.clone(),
+        independent_proc_chances: independent_proc_chances.clone(),
+        crit_proc_chances: vector_of(types, &obj.getattr("crit_proc_chances")?)?,
+        impact_proc_conversions: conversions,
+        fire_rate: f(obj, "fire_rate")?,
+        dot_elemental_multipliers: vector_of(types, &obj.getattr("dot_elemental_multipliers")?)?,
+        extra_hits,
+        low_crit_threshold: if low_threshold.is_none() { None } else { Some(low_threshold.extract::<f64>()?) },
+        low_crit_damage_base: if low_base.is_none() { None } else { Some(low_base.extract::<f64>()?) },
+        low_crit_damage_bonus: f(obj, "low_crit_damage_bonus")?,
+    })
+}
+
 // ── damage-type interning ────────────────────────────────────────────────
 
 type D = u32;
 
-struct Types {
+pub(crate) struct Types {
     names: Vec<String>,
     index: FxHashMap<String, D>,
 }
 impl Types {
-    fn new() -> Self {
+    pub(crate) fn new() -> Self {
         let mut t = Types { names: Vec::new(), index: FxHashMap::default() };
         for name in [
             "DT_FIRE", "DT_FREEZE", "DT_GAS", "DT_EXPLOSION", "DT_VIRAL", "DT_CORROSIVE", "DT_MAGNETIC",
@@ -45,7 +125,7 @@ impl Types {
         }
         t
     }
-    fn id(&mut self, name: &str) -> D {
+    pub(crate) fn id(&mut self, name: &str) -> D {
         if let Some(&i) = self.index.get(name) {
             return i;
         }
@@ -54,7 +134,7 @@ impl Types {
         self.index.insert(name.to_string(), i);
         i
     }
-    fn name(&self, d: D) -> &str {
+    pub(crate) fn name(&self, d: D) -> &str {
         &self.names[d as usize]
     }
 }
@@ -251,13 +331,13 @@ fn effect_ops(list: &Bound<'_, PyAny>) -> PyResult<Vec<(u8, f64)>> {
     Ok(out)
 }
 
-fn f(o: &Bound<'_, PyAny>, name: &str) -> PyResult<f64> {
+pub(crate) fn f(o: &Bound<'_, PyAny>, name: &str) -> PyResult<f64> {
     o.getattr(name)?.extract::<f64>()
 }
-fn b(o: &Bound<'_, PyAny>, name: &str) -> PyResult<bool> {
+pub(crate) fn b(o: &Bound<'_, PyAny>, name: &str) -> PyResult<bool> {
     o.getattr(name)?.is_truthy()
 }
-fn opt_attr<'py>(o: &Bound<'py, PyAny>, name: &str) -> PyResult<Option<Bound<'py, PyAny>>> {
+pub(crate) fn opt_attr<'py>(o: &Bound<'py, PyAny>, name: &str) -> PyResult<Option<Bound<'py, PyAny>>> {
     match o.getattr(name) {
         Ok(v) => Ok(Some(v)),
         Err(e) if e.is_instance_of::<pyo3::exceptions::PyAttributeError>(o.py()) => Ok(None),
@@ -296,6 +376,17 @@ struct Event {
     t: f64,
     seq: u64,
     kind: Kind,
+    gen: Option<i64>,
+}
+
+/// The remaining ticks of one DoT instance: tick k is at `t + (first + k)`
+/// with sequence number `base + 1 + k`.
+struct TickChain {
+    t: f64,
+    first: i64,
+    count: usize,
+    base: u64,
+    next: usize,
     gen: Option<i64>,
 }
 impl PartialEq for Event {
@@ -531,6 +622,10 @@ pub struct Replay<'py> {
     stats: Vec<Stats>,
     stats_by_ptr: FxHashMap<usize, usize>,
     model_cache: FxHashMap<(Vec<u64>, u64, bool), (usize, Option<usize>)>,
+    /// model()'s key buffer, reused while lookups hit.
+    model_key: Vec<u64>,
+    /// DoT ticks not yet in the heap, by instance (see add_procs_data).
+    tick_chains: FxHashMap<usize, TickChain>,
     co_specs: FxHashMap<usize, Option<Rc<co::CoSpec>>>,
     varied: FxHashMap<(usize, u64), Option<usize>>,
     elements: co::Elements,
@@ -585,13 +680,7 @@ impl<'py> Replay<'py> {
     }
 
     fn vector_from(&mut self, obj: &Bound<'py, PyAny>) -> PyResult<Vector> {
-        let d = obj.downcast::<PyDict>()?;
-        let mut out = Vec::with_capacity(d.len());
-        for (k, v) in d.iter() {
-            let name: String = k.extract()?;
-            out.push((self.types.id(&name), v.extract::<f64>()?));
-        }
-        Ok(out)
+        vector_of(&mut self.types, obj)
     }
 
     fn elements_from(&mut self, obj: &Bound<'py, PyAny>) -> PyResult<Vec<co::Element>> {
@@ -737,69 +826,7 @@ impl<'py> Replay<'py> {
 
     fn core_from(&mut self, obj: &Bound<'py, PyAny>, damage_types: &Vector, native_forced_procs: &Vector,
                  independent_proc_chances: &Vector) -> PyResult<Core> {
-        let factions = obj.getattr("faction_damage_multipliers")?;
-        let factions = factions.cast::<PyDict>()?;
-        let faction_all = match factions.get_item("")? { Some(v) => v.extract::<f64>()?, None => 1.0 };
-        let faction_target = if self.target_faction.is_empty() {
-            1.0
-        } else {
-            match factions.get_item(self.target_faction.as_str())? { Some(v) => v.extract::<f64>()?, None => 1.0 }
-        };
-        let dot = obj.getattr("dot_base_damage")?;
-        let mut conversions = Vec::new();
-        for (k, adapters) in obj.getattr("impact_proc_conversions")?.cast::<PyDict>()?.iter() {
-            let d = self.types.id(&k.extract::<String>()?);
-            let mut rows = Vec::new();
-            for adapter in adapters.try_iter()? {
-                let adapter = adapter?;
-                let a = adapter.cast::<PyDict>()?;
-                rows.push((get_f(a, "chance", 0.0)?, get_f(a, "fireRateThreshold", f64::INFINITY)?,
-                           get_f(a, "fireRateMultiplier", 1.0)?));
-            }
-            conversions.push((d, rows));
-        }
-        let mut extra_hits = Vec::new();
-        for e in obj.getattr("extra_hits")?.try_iter()? {
-            let e = e?;
-            let t = e.cast::<PyTuple>()?;
-            extra_hits.push((self.types.id(&t.get_item(0)?.extract::<String>()?), t.get_item(1)?.extract::<f64>()?,
-                             t.get_item(2)?.is_truthy()?));
-        }
-        let low_threshold = obj.getattr("low_crit_threshold")?;
-        let low_base = obj.getattr("low_crit_damage_base")?;
-        Ok(Core {
-            damage_types: damage_types.clone(),
-            dot_base_damage: if dot.is_none() { None } else { Some(dot.extract::<f64>()?) },
-            crit_chance: f(obj, "crit_chance")?,
-            crit_multiplier: f(obj, "crit_multiplier")?,
-            noncrit_damage_multiplier: f(obj, "noncrit_damage_multiplier")?,
-            double_crit_chance: f(obj, "double_crit_chance")?,
-            falloff_multiplier: f(obj, "falloff_multiplier")?,
-            faction_all,
-            faction_target,
-            multishot: f(obj, "multishot")?,
-            continuous: b(obj, "continuous")?,
-            radial_only: b(obj, "radial_only")?,
-            bodyshot_crit_multiplier: f(obj, "bodyshot_crit_multiplier")?,
-            weakpoint_crit_chance_bonus: f(obj, "weakpoint_crit_chance_bonus")?,
-            base_crit_chance: f(obj, "base_crit_chance")?,
-            weakpoint_crit_chance_relative: f(obj, "weakpoint_crit_chance_relative")?,
-            headshot_bonus_multiplier: f(obj, "headshot_bonus_multiplier")?,
-            weakpoint_damage_bonus: match opt_attr(obj, "weakpoint_damage_bonus")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
-            status_chance: f(obj, "status_chance")?,
-            proc_duration_multiplier: f(obj, "proc_duration_multiplier")?,
-            proc_damage_multiplier: f(obj, "proc_damage_multiplier")?,
-            native_forced_procs: native_forced_procs.clone(),
-            independent_proc_chances: independent_proc_chances.clone(),
-            crit_proc_chances: self.vector_from(&obj.getattr("crit_proc_chances")?)?,
-            impact_proc_conversions: conversions,
-            fire_rate: f(obj, "fire_rate")?,
-            dot_elemental_multipliers: self.vector_from(&obj.getattr("dot_elemental_multipliers")?)?,
-            extra_hits,
-            low_crit_threshold: if low_threshold.is_none() { None } else { Some(low_threshold.extract::<f64>()?) },
-            low_crit_damage_base: if low_base.is_none() { None } else { Some(low_base.extract::<f64>()?) },
-            low_crit_damage_bonus: f(obj, "low_crit_damage_bonus")?,
-        })
+        core_of(obj, &mut self.types, &self.target_faction, damage_types, native_forced_procs, independent_proc_chances)
     }
 
     fn view(&mut self, obj: &Bound<'py, PyAny>) -> PyResult<usize> {
@@ -936,6 +963,19 @@ impl<'py> Replay<'py> {
         Ok(i)
     }
 
+    /// Push the next tick of DoT instance `i`, if any is left.
+    fn next_tick(&mut self, i: usize) {
+        let Some(chain) = self.tick_chains.get_mut(&i) else { return };
+        let k = chain.next;
+        let event = Event { t: pmax(0.0, chain.t + (chain.first + k as i64) as f64), seq: chain.base + 1 + k as u64,
+                            kind: Kind::IndependentDot(i), gen: chain.gen };
+        chain.next += 1;
+        if chain.next >= chain.count {
+            self.tick_chains.remove(&i);
+        }
+        self.heap.push(event);
+    }
+
     fn push(&mut self, t: f64, kind: Kind, gen: Option<i64>) {
         if t < self.window + 1e-9 {
             self.seq += 1;
@@ -954,7 +994,7 @@ impl<'py> Replay<'py> {
         }
         if d == GAS {
             let a = psum(self.gas_procs.iter().map(|&i| self.dots[i].count * stack_alive(&self.dots[i])));
-            let b = psum(self.states.get(&d).map(|r| r.iter().map(|x| x.1).collect::<Vec<_>>()).unwrap_or_default());
+            let b = match self.states.get(&d) { Some(r) => psum(r.iter().map(|x| x.1)), None => psum(std::iter::empty()) };
             return a + b;
         }
         if d == EXPLOSION {
@@ -964,7 +1004,7 @@ impl<'py> Replay<'py> {
             return self.pooled[p].stats().1;
         }
         let cap = if d == FREEZE && self.pools[0] > 0.0 { 4.0 } else { cap_of(d).unwrap_or(f64::INFINITY) };
-        let total = psum(self.states.get(&d).map(|r| r.iter().map(|x| x.1).collect::<Vec<_>>()).unwrap_or_default());
+        let total = match self.states.get(&d) { Some(r) => psum(r.iter().map(|x| x.1)), None => psum(std::iter::empty()) };
         pmin(total, cap)
     }
 
@@ -1191,7 +1231,8 @@ impl<'py> Replay<'py> {
         } else {
             0.0
         };
-        let mut stacks: Vec<u64> = Vec::with_capacity(self.sources.len() + 1);
+        let mut stacks: Vec<u64> = std::mem::take(&mut self.model_key);
+        stacks.clear();
         stacks.push(self.form as u64);
         stacks.extend(self.sources.iter().map(|q| q.stacks.to_bits()));
         // Melee: combo-tier stacks and the heavy flag join the key, sorted by
@@ -1222,7 +1263,12 @@ impl<'py> Replay<'py> {
             }
             stacks.push(*bits);
         }
-        self.model_at(stacks, extra, live_types)
+        let key = (stacks, live_types.to_bits(), self.last_round);
+        if let Some(&hit) = self.model_cache.get(&key) {
+            self.model_key = key.0;
+            return Ok(hit);
+        }
+        self.model_at(key.0, extra, live_types)
     }
 
     fn model_at(&mut self, stacks: Vec<u64>, extra: Vec<(String, f64, PyObject)>, live_types: f64)
@@ -2120,9 +2166,9 @@ impl<'py> Replay<'py> {
                         v.drop_private();
                     });
                     let key = self.packet(part, 0.0)?;
-                    let vector = self.packets[&key].vector.clone();
+                    let packet = self.packets[&key].clone();
                     let cv2 = self.spread(part, 0.0);
-                    if !self.take(&vector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
+                    if !self.take(&packet.vector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
                         self.add_procs(part, 0.0, t, key)?;
                     }
                     self.noncrit_no_proc_hit(part, 0.0, t);
@@ -2273,13 +2319,18 @@ impl<'py> Replay<'py> {
             return Ok(()); // a derived status killed the original target
         }
         let scale = pmax(self.stats[st].proc_duration_multiplier, 0.0);
-        let mut procs = data.procs.clone();
-        if self.empowered.is_some() {
+        let sorted;
+        let procs: &Vector = if self.empowered.is_some() {
             // The reference sorts by type name for a stable grouped order.
+            let mut copy = data.procs.clone();
             let types = &self.types;
-            procs.sort_by(|a, b| types.name(a.0).cmp(types.name(b.0)));
-        }
-        for (d, n0) in procs {
+            copy.sort_by(|a, b| types.name(a.0).cmp(types.name(b.0)));
+            sorted = copy;
+            &sorted
+        } else {
+            &data.procs
+        };
+        for &(d, n0) in procs.iter() {
             let n = n0 * pmax(self.status_rate_multiplier, 0.0);
             if n <= 0.0 || (d == FREEZE && self.frozen_until > t) {
                 continue;
@@ -2350,10 +2401,10 @@ impl<'py> Replay<'py> {
                 }
                 if let Some(r) = row {
                     let immediate = d == GAS || d == ELECTRICITY;
-                    let ticks: Vec<i64> = if immediate {
-                        (0..ceil_i(duration - 1e-9).max(1)).collect()
+                    let (first_tick, end_tick) = if immediate {
+                        (0, ceil_i(duration - 1e-9).max(1))
                     } else {
-                        (1..floor_i(duration + 1e-9) + 1).collect()
+                        (1, floor_i(duration + 1e-9) + 1)
                     };
                     let mut per = r.seed;
                     if !r.shared {
@@ -2367,8 +2418,27 @@ impl<'py> Replay<'py> {
                         capped_stack_add(&mut live, &mut self.dots, absence, n, instance, 10);
                         self.gas_procs = live;
                     }
-                    for j in ticks {
-                        self.push(t + j as f64, Kind::IndependentDot(instance), Some(self.gen));
+                    // The ticks keep the sequence numbers they would take if all
+                    // were pushed now (the reference pushes them together), but
+                    // enter the heap one at a time as the previous one pops:
+                    // the pop order is the same and the heap stays small.
+                    let mut count = 0;
+                    for j in first_tick..end_tick {
+                        if t + (j as f64) < self.window + 1e-9 {
+                            count += 1;
+                        } else {
+                            break;
+                        }
+                    }
+                    if count > 0 {
+                        let base = self.seq;
+                        self.seq += count as u64;
+                        self.heap.push(Event { t: pmax(0.0, t + first_tick as f64), seq: base + 1,
+                                               kind: Kind::IndependentDot(instance), gen: Some(self.gen) });
+                        if count > 1 {
+                            self.tick_chains.insert(instance, TickChain { t, first: first_tick, count, base, next: 1,
+                                                                          gen: Some(self.gen) });
+                        }
                     }
                 } else if let Some(&per) = data.non.get(&d) {
                     self.states.get_mut(&d).unwrap().pop_back();
@@ -2680,6 +2750,9 @@ impl<'py> Replay<'py> {
         let mut rate_spool_shots: i64 = 0;
         let mut rate_spool_due = 0.0;
         while let Some(event) = self.heap.pop() {
+            if let Kind::IndependentDot(i) = &event.kind {
+                self.next_tick(*i);
+            }
             let t = event.t;
             self.current_time = t;
             self.clean(t);
@@ -2807,9 +2880,9 @@ impl<'py> Replay<'py> {
                 }
                 Kind::Lingering(part) => {
                     let raw = self.raw_packet(part, 0.0);
-                    let vector = self.packets[&raw].vector.clone();
+                    let packet = self.packets[&raw].clone();
                     let cv2 = self.spread(part, 0.0);
-                    if !self.take(&vector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
+                    if !self.take(&packet.vector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
                         let key = self.packet(part, 0.0)?;
                         self.add_procs(part, 0.0, t, key)?;
                     }
@@ -2838,9 +2911,9 @@ impl<'py> Replay<'py> {
                             continue;
                         }
                         let key = self.packet(part, 0.0)?;
-                        let vector = self.packets[&key].vector.clone();
+                        let packet = self.packets[&key].clone();
                         let cv2 = self.spread(part, 0.0);
-                        if !self.take(&vector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
+                        if !self.take(&packet.vector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
                             self.add_procs(part, 0.0, t, key)?;
                         }
                         self.enervate_hit(part, t, 0.0, 0.0);
@@ -3974,6 +4047,8 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
         stats: Vec::new(),
         stats_by_ptr: FxHashMap::default(),
         model_cache: FxHashMap::default(),
+        model_key: Vec::new(),
+        tick_chains: FxHashMap::default(),
         co_specs: FxHashMap::default(),
         varied: FxHashMap::default(),
         elements,

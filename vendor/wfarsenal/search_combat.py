@@ -38,22 +38,22 @@ _REPLAYS_MAX = 4096
 _UNHASHED = {"_combat_inputs", "_combat_scores", "_resolve_cache"}
 
 
-# Content digests of weapon and MOD records, by record_keys.shallow_key:
+# Content digests of weapon and MOD records, by record_keys.record_key:
 # bind() copies a weapon as {**weapon, "fireModes": ...} for every loadout and
-# the values are shared. Entries hold the record, so the ids stay valid.
+# the values are shared. Entries pin the values, so the ids stay valid.
 _RECORD_DIGESTS: dict = {}
 
 
 def _record_digest(record):
-    from .record_keys import shallow_key
-    key = shallow_key(record)
+    from .record_keys import pin, record_key
+    key = record_key(record)
     hit = _RECORD_DIGESTS.get(key)
     if hit is not None:
         return hit[1]
     digest = hashlib.blake2b(pickle.dumps(record, protocol=5), digest_size=20).digest()
     if len(_RECORD_DIGESTS) >= 4096:
         _RECORD_DIGESTS.clear()
-    _RECORD_DIGESTS[key] = (record, digest)
+    _RECORD_DIGESTS[key] = (pin(record), digest)
     return digest
 
 

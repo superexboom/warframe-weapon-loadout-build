@@ -14,6 +14,7 @@ pub mod proc;
 pub mod pymath;
 pub mod replay;
 pub mod stackable;
+pub mod sustained;
 pub mod tables;
 
 /// `HeatChains` exposed for differential tests against the Python class.
@@ -194,5 +195,7 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(c_math, m)?)?;
     m.add_class::<mods::ModsPrep>()?;
     m.add_function(wrap_pyfunction!(mods::apply_mods, m)?)?;
+    m.add_class::<sustained::SustainedTarget>()?;
+    m.add_function(wrap_pyfunction!(sustained::sustained_status, m)?)?;
     Ok(())
 }

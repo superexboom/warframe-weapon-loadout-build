@@ -58,10 +58,11 @@ def main():
         status['jobs'][name]=dict(pid=children[name].pid,command=command,status='running')
         write(path,status)
 
-    def bake(profile,workers,shards=False):
-        command=[sys.executable,'-u','tools/bake-analysis-statics.py','--profile',profile,'--workers',str(workers),
-                 '--fire-modes','--allow-full-bake','--report',str(args.output/(profile+('-shards' if shards else '')+'.json'))]
-        return command+(['--shards-only'] if shards else [])
+    def bake(workers):
+        # One pool bakes both profiles (a task is one weapon mode, every profile
+        # in the same worker), so no profile waits for the other's workers.
+        return [sys.executable,'-u','tools/bake-analysis-statics.py','--profile','fast,standard','--workers',str(workers),
+                '--fire-modes','--allow-full-bake','--report',str(args.output/'{profile}.json')]
 
     if previous_regression:
         status['jobs']['regression']=previous_regression
@@ -70,7 +71,6 @@ def main():
         launch('regression',[sys.executable,'-m','pytest','tests','-q',
                              '--junitxml='+str(args.output/'regression.xml')])
     baking=False
-    publishing=False
     try:
         while True:
             if app._analysis_inputs_fingerprint()!=inputs:
@@ -88,23 +88,13 @@ def main():
             if status['jobs']['regression']['status']=='complete' and not baking:
                 launch('acceptance',[sys.executable,'-u','tools/audit_riven_analysis_context.py','--extra-weapons','--output',str(args.acceptance)])
                 # Reserve one compute slot for the serial search acceptance.
-                fast_workers=MAX_BAKE_WORKERS//2
-                launch('fast',bake('fast',fast_workers))
-                launch('standard-shards',bake('standard',MAX_BAKE_WORKERS-fast_workers-1,True))
+                from wfarsenal import parallel
+                launch('bake',bake(max(1,min(parallel.default_workers(),MAX_BAKE_WORKERS)-1)))
                 baking=True
             if not baking:
                 time.sleep(5)
                 continue
-            if status['jobs']['fast']['status']=='complete' and not publishing:
-                child=children['standard-shards']
-                if child.poll() is None:
-                    stop_child(child)
-                    status['jobs']['standard-shards'].update(status='resumed-with-more-workers')
-                    logs['standard-shards'].close()
-                reserved=int(status['jobs']['acceptance']['status']=='running')
-                launch('standard',bake('standard',MAX_BAKE_WORKERS-reserved))
-                publishing=True
-            if publishing and all(status['jobs'][name]['status']=='complete' for name in ('regression','acceptance','fast','standard')):
+            if all(status['jobs'][name]['status']=='complete' for name in ('regression','acceptance','bake')):
                 command=[sys.executable,'tools/validate_baked_statics.py','--bake',str(args.output),
                          '--output',str(args.output/'validation.json')]
                 result=subprocess.run(command,cwd=ROOT,env=env,capture_output=True,text=True)

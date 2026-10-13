@@ -10,9 +10,9 @@ The reference splits into two kinds of work:
   CO tail): ``wfcore.apply_mods``, mirroring the reference's float operation
   order so results agree to the last bit (tools: the apply_mods corpus check).
 
-A Prep is keyed by the weapon record (``record_keys.shallow_key``: callers
-build ``{**weapon, ...}`` copies that share its values; the Prep holds the
-record) and by the scenario fields the weapon side reads.
+A Prep is keyed by the weapon record (``record_keys.record_key``: callers
+build ``{**weapon, ...}`` copies that share its values; the Prep pins them)
+and by the scenario fields the weapon side reads.
 ``WF_NATIVE=0`` (or a missing core) keeps the Python reference;
 ``WF_NATIVE_SHADOW=1`` also runs the reference on every call and raises on
 the first difference (types included: an int ``0`` is not a float ``0.0``).
@@ -23,7 +23,7 @@ import math
 import os
 from typing import Any, Mapping
 
-from .record_keys import shallow_key
+from .record_keys import pin, record_key
 
 try:  # pragma: no cover - exercised when the native core is built
     from . import wfcore
@@ -45,7 +45,7 @@ class Unsupported(Exception):
 
 
 class Prep:
-    __slots__ = ("weapon", "core", "zoom", "candidates", "base_obj", "base_total_obj")
+    __slots__ = ("weapon", "pinned", "core", "zoom", "candidates", "base_obj", "base_total_obj")
 
 
 def _scenario_key(scenario) -> tuple:
@@ -56,7 +56,7 @@ def _scenario_key(scenario) -> tuple:
 
 
 def prep_for(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
-    key = (shallow_key(weapon), fire_mode, _scenario_key(scenario))
+    key = (record_key(weapon), fire_mode, _scenario_key(scenario))
     prep = _PREPS.get(key)
     if prep is not None:
         return prep
@@ -236,6 +236,7 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
     )
     prep = Prep()
     prep.weapon = weapon
+    prep.pinned = pin(weapon)
     prep.zoom = list(zoom_effects(weapon, fire_mode, scenario))
     prep.candidates = tuple(innate_candidates)
     prep.base_obj = base

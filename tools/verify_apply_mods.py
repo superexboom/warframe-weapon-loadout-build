@@ -1,7 +1,8 @@
-"""Native apply_mods vs the Python reference on recorded real calls.
+"""Native apply_mods (and sustained-status scores) vs the Python reference on recorded real calls.
 
     python tools/verify_apply_mods.py capture <dir> [--shard i --shards n]
     python tools/verify_apply_mods.py verify <dir> [--variants] [--limit N]
+    python tools/verify_apply_mods.py verify-status <dir> [--limit N]
 
 ``capture`` records apply_mods_spec inputs (weapon, effects, fire mode,
 scenario) from build-page searches and manual simulations of every catalog
@@ -14,6 +15,13 @@ on scenario variants: aim, live status counts, distance, Incarnon cycle,
 heavy attack, Simulor orbs, no perfect charge) and reports every difference
 (exact float bits, number types, key and attribute order). Use it after any
 change to damage.apply_mods_spec or native/wfcore/src/mods.rs.
+
+``verify-status`` builds the corpus' panels (reference apply_mods) and scores
+each against 19 target contexts (armoured / shielded / both / unarmoured /
+Sentient targets at level 1 and 170 Steel Path, strips, a head hit, Eximus
+with Magnetic stacks, stance rates) with ``status_native.score`` and with
+``damage.sustained_status_damage``, totalDps and directDps; run it after any
+change to that path or native/wfcore/src/sustained.rs.
 """
 from __future__ import annotations
 
@@ -171,6 +179,94 @@ def verify(directory: Path, variants: bool, limit: int | None) -> int:
     return 1 if mismatched else 0
 
 
+def verify_status(directory: Path, limit: int | None) -> int:
+    import random
+    sys.path.insert(0, str(ROOT))
+    import app
+    from wfarsenal import damage, status_native
+
+    if not status_native.ENABLED:
+        print("native sustained status is not available (build it with tools/build_native.py)")
+        return 2
+    weapons, records = {}, []
+    for path in sorted(glob.glob(str(directory / "*.pkl"))):
+        with open(path, "rb") as handle:
+            data = pickle.load(handle)
+        weapons.update(data["weapons"])
+        records.extend(data["records"])
+    random.Random(7).shuffle(records)
+    records = records[:limit] if limit else records
+    enemies = app.EXPORTS["enemies"]
+
+    def pick(predicate):
+        return next(e for e in enemies if predicate(e))
+
+    targets = {
+        "benchmark": pick(lambda e: e.get("path") == app._BENCHMARK_ENEMY_PATH),
+        "armoured": pick(lambda e: e.get("armour") and not e.get("shield") and e.get("factionResistance") == "RK_GRINEER_FACTION"),
+        "shielded": pick(lambda e: e.get("shield") and not e.get("armour") and e.get("factionResistance") == "RK_CORPUS_FACTION"),
+        "shield+armour": pick(lambda e: e.get("shield") and e.get("armour")),
+        "unarmoured": pick(lambda e: not e.get("shield") and not e.get("armour") and e.get("factionResistance") == "RK_INFESTED_FACTION"),
+        "sentient": pick(lambda e: e.get("factionResistance") == "RK_SENTIENT_FACTION"),
+    }
+    contexts = []
+    for name, target in targets.items():
+        contexts.append((name + " L170 SP", target, dict(level=170, steel_path=True), 1.0, 1.0))
+        contexts.append((name + " L1", target, dict(level=1), 1.0, 1.0))
+    armoured = targets["armoured"]
+    contexts += [
+        ("strip", armoured, dict(level=100, armour_strip=0.5, elemental_armour_strip=0.3), 1.0, 1.0),
+        ("head", armoured, dict(level=100, hit_location="head"), 1.0, 1.0),
+        ("eximus+magnetic", targets["shielded"], dict(level=150, enemy_enhancements={"eximus": True, "magneticStacks": 3}), 1.0, 1.0),
+        ("stance", armoured, dict(level=120, steel_path=True), 0.75, 1.3),
+        ("no arguments", armoured, dict(), 1.0, 1.0),
+    ]
+    mismatched, examples, total = collections.Counter(), {}, 0
+    spent = {"reference": 0.0, "native": 0.0}
+    for name, wkey, effects, skipped, fire_mode, scenario in records:
+        try:
+            stats = damage._apply_mods_spec_py(weapons[wkey], damage.ModEffectList(effects, skipped=skipped),
+                                               fire_mode=fire_mode, scenario=scenario)[0]
+        except Exception:
+            continue
+        for label, target, kwargs, srm, drm in contexts:
+            for want_total in (True, False):
+                total += 1
+                started = time.perf_counter()
+                try:
+                    ref = float(damage.sustained_status_damage(
+                        stats, target, attacks_per_second=stats.sustained_attack_rate, status_rate_multiplier=srm,
+                        damage_rate_multiplier=drm, **kwargs)["totalDps" if want_total else "directDps"])
+                    ref_error = None
+                except Exception as exc:
+                    ref, ref_error = None, type(exc).__name__
+                spent["reference"] += time.perf_counter() - started
+                started = time.perf_counter()
+                try:
+                    nat = status_native.score(stats, target, kwargs, status_rate_multiplier=srm,
+                                              damage_rate_multiplier=drm, total=want_total)
+                    nat_error = None
+                except status_native.Unsupported:
+                    continue
+                except Exception as exc:
+                    nat, nat_error = None, type(exc).__name__
+                spent["native"] += time.perf_counter() - started
+                if ref_error or nat_error:
+                    if ref_error != nat_error:
+                        mismatched["exception"] += 1
+                        examples.setdefault("exception", (name, label, ref_error, nat_error))
+                    continue
+                if ref.hex() != nat.hex():
+                    key = label + (" total" if want_total else " direct")
+                    mismatched[key] += 1
+                    examples.setdefault(key, (name, ref, nat))
+    print(f"{total} comparisons, {sum(mismatched.values())} differ; reference "
+          f"{spent['reference'] * 1e6 / max(total, 1):.1f} us, native {spent['native'] * 1e6 / max(total, 1):.1f} us")
+    for key, count in mismatched.most_common(20):
+        print(f"  {count:6d} {key}: {examples[key]}")
+    return 1 if mismatched else 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = parser.add_subparsers(dest="command", required=True)
@@ -182,10 +278,15 @@ def main() -> int:
     ver.add_argument("dir", type=Path)
     ver.add_argument("--variants", action="store_true")
     ver.add_argument("--limit", type=int)
+    status = sub.add_parser("verify-status")
+    status.add_argument("dir", type=Path)
+    status.add_argument("--limit", type=int)
     args = parser.parse_args()
     if args.command == "capture":
         capture(args.dir, args.shard, args.shards)
         return 0
+    if args.command == "verify-status":
+        return verify_status(args.dir, args.limit)
     return verify(args.dir, args.variants, args.limit)
 
 

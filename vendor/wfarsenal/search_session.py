@@ -43,7 +43,15 @@ def session_request(fn):
         if not isinstance(request, Mapping):
             return fn(*args, **kwargs)  # Preserve the engine's input error.
         if request.get('_bakeStaticsOnly'):
-            return fn(*args, **kwargs)
+            # A bake has no interactive budget (its statics must not depend on
+            # the machine's load) but shares the request's search memo.
+            token = SESSION.set(dict(start=time.monotonic(), deadline=float('inf'), phaseSeconds=float('inf'),
+                                     stage='baseline', hook=None, evaluations=0, memoHits=0, memo=OrderedDict(),
+                                     searches=OrderedDict(), limited=0, lastBeat=0.))
+            try:
+                return fn(*args, **kwargs)
+            finally:
+                SESSION.reset(token)
         profile = str(request.get('profile') or 'standard').strip().casefold()
         state = dict(start=time.monotonic(), deadline=time.monotonic() +
                      {'fast':45., 'standard':90., 'deep':240.}.get(profile,90.),
