@@ -110,7 +110,7 @@ def test_total_compute_limit_reserves_the_parent(monkeypatch):
     from wfarsenal import parallel
     monkeypatch.delenv('WF_ANALYZER_SERIAL',raising=False)
     monkeypatch.setattr(parallel,'_physical_core_count',lambda:32)
-    assert parallel.worker_count()+1 == 8
+    assert parallel.default_workers()+1 == 8
 
 
 def test_session_does_not_replace_engine_input_error():

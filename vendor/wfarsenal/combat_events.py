@@ -106,6 +106,8 @@ def direct_fire_ledger(
             "trace": [],
         }
 
+    if len(components) == 1 and not collect_trace:
+        return _single_component_ledger(rate, window, ehp, components[0][1])
     queue = EventQueue()
     period = 1.0 / rate
     attack_id = 0
@@ -202,4 +204,44 @@ def direct_fire_ledger(
         "remainingHealth": health,
         "traceCollected": bool(collect_trace),
         "trace": trace,
+    }
+
+
+def _single_component_ledger(rate: float, window: float, ehp: float, damage: float) -> dict[str, Any]:
+    """direct_fire_ledger for one component without a trace.
+
+    Each attack's single hit is the next event after the attack itself (same
+    time, later phase; attacks are strictly increasing in time), so no hit can
+    be stale and the queue reduces to this loop with the same arithmetic.
+    """
+    period = 1.0 / rate
+    attacks = 0
+    fire_time = 0.0
+    while fire_time < window - 1e-12:
+        attacks += 1
+        fire_time = attacks * period
+    damage = max(float(damage or 0.0), 0.0)
+    health = ehp
+    kills = generation = 0
+    first_kill_time: float | None = None
+    for attack in range(attacks):
+        applied = min(health, damage)
+        health -= applied
+        if health <= 1e-12:
+            kills += 1
+            if first_kill_time is None:
+                first_kill_time = float(attack * period) if attack else 0.0
+            generation += 1
+            health = ehp
+    return {
+        "model": "direct-event-ledger-v1",
+        "attacks": attacks,
+        "kills": kills,
+        "killsPerMinute": kills * (60.0 / window),
+        "firstKillTime": first_kill_time,
+        "staleComponents": 0,
+        "targetGeneration": generation,
+        "remainingHealth": health,
+        "traceCollected": False,
+        "trace": [],
     }

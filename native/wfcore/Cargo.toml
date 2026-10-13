@@ -1,0 +1,20 @@
+[package]
+name = "wfcore"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Native hot paths of the Portable damage engine (bit-exact with the Python reference)"
+
+[lib]
+name = "wfcore"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.27", features = ["extension-module", "abi3-py39"] }
+indexmap = "2"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"

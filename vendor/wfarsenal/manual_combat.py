@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import math
 import sys
-from copy import deepcopy
+from copy import copy, deepcopy
 from dataclasses import replace
 from functools import lru_cache
 from pathlib import Path
@@ -48,6 +48,7 @@ def condition_kind(condition):
         "evopistolonheadshotcondition": "on-headshot",
         "evopistolonheadshotconditionb": "on-headshot",
         "onpistolheadshotkillcondition": "on-headshot-kill",
+        "onpistolheadshotkillnojetpistolcondition": "on-headshot-kill",
         "onheadshotkillanysourcecondition": "on-headshot-kill",
         "onheadshotkillcondition": "on-headshot-kill",
         "onkillheadshotriflecondition": "on-headshot-kill",
@@ -128,6 +129,61 @@ def modeled_event_kinds(record, rank):
     return tuple(kinds)
 
 
+class _NoVariant(Exception):
+    pass
+
+
+def live_variant(template, live_types, count_ceiling):
+    """``template`` (resolved at ``count_ceiling`` live types) at ``live_types``.
+
+    Mirrors the resolver's ``replace(e, value=e.value*live_types/count_ceiling)``
+    on every CO effect; None when some CO-dependent object has no CoSpec.
+    """
+    from .damage import co_variant
+    memo = {}
+
+    def vary(obj):
+        if obj is None:
+            return None
+        key = id(obj)
+        if key in memo:
+            return memo[key]
+        out = obj
+        if obj.co_bucket:
+            spec = getattr(obj, '_co_spec', None)
+            if spec is None:
+                raise _NoVariant
+            scaled = [replace(e, value=e.value*live_types/count_ceiling) for e in obj.co_bucket]
+            out = co_variant(obj, spec, scaled)
+        lingering = getattr(obj, '_lingering', None)
+        if lingering:
+            part = vary(lingering[0])
+            if part is not lingering[0]:
+                out = out if out is not obj else copy(obj)
+                out._lingering = (part, *lingering[1:])
+        extra = getattr(obj, '_additional_radials', None)
+        if extra:
+            parts = tuple(vary(part) for part in extra)
+            if any(a is not b for a, b in zip(parts, extra)):
+                out = out if out is not obj else copy(obj)
+                out._additional_radials = parts
+        stackable = getattr(obj, '_stackable', None)
+        if stackable:
+            config, parts = stackable
+            varied = {name: vary(part) for name, part in parts.items()}
+            if any(varied[name] is not part for name, part in parts.items()):
+                out = out if out is not obj else copy(obj)
+                out._stackable = (config, varied)
+        memo[key] = out
+        return out
+
+    try:
+        st, radial = template
+        return vary(st), vary(radial)
+    except _NoVariant:
+        return None
+
+
 def prepare(
     engine,
     mod_records,
@@ -147,7 +203,7 @@ def prepare(
     trigger / Incarnon options; the target, level and Eximus flag feed only
     affinity. Callers pass one cache per bound loadout (search_combat.bind).
     """
-    from .damage import ModEffect, ModEffectList, ModdedStats, apply_mods
+    from .damage import ModEffect, ModEffectList, ModdedStats, apply_mods, apply_mods_spec, co_variant
     from .runtime_adapters import latron_puncture_strip,incarnon_condition_rows
     from .runtime_adapters import ammo_restore_configuration
 
@@ -210,6 +266,11 @@ def prepare(
             continue
         if compression_configuration(record, rank):
             # The ADS adapter owns this exact runtime record and its children.
+            continue
+        from .arcane_runtime import configuration as runtime_arcane
+        if runtime_arcane(record, rank):
+            # arcane_runtime rebuilt the script; its static terms (or the live
+            # Cold / frozen fields) already carry the state.
             continue
         status_spec = status_configuration(record, rank)
         if status_spec:
@@ -316,6 +377,15 @@ def prepare(
                 effects = [e for e in effects if e.supported]
             if not effects:
                 continue
+            kinds = [condition.get('eventKind') or condition_kind(condition)]
+            kinds = [k for k in kinds if k]
+            if (not kinds and not condition.get('actorGate') and not condition.get('formGate')
+                    and override is not None and (override.get('stacks') is not None or override.get('uptime') is not None)):
+                # A trigger the replay cannot simulate (taking damage, wall
+                # latch, ability heat procs...) but forced or fixed by the
+                # user: the static card already holds that state, keep it.
+                notes.append(str(source) + ":event-condition-fixed-by-user")
+                continue
             replaced_terms.update(
                 (source, e.upgrade_type, e.operation, e.damage_type) for e in effects
             )
@@ -328,8 +398,6 @@ def prepare(
             if condition.get('formGate'):
                 form_dynamic.append(effects)
                 continue
-            kinds = [condition.get('eventKind') or condition_kind(condition)]
-            kinds = [k for k in kinds if k]
             if not kinds:
                 notes.append(str(source) + ":event-condition-unmodeled")
                 continue
@@ -535,7 +603,7 @@ def prepare(
         if last_round and last_round_multishot and form != 'incarnon' and not wp.get('isIncarnonForm'):
             fx.append(ModEffect('WEAPON_FIRE_ITERATIONS', 'ADD', last_round_multishot,
                                 source_path='incarnon:last-round-multishot'))
-        st = apply_mods(
+        st, spec = apply_mods_spec(
             wp,
             fx,
             fire_mode=idx,
@@ -544,6 +612,7 @@ def prepare(
                 heavy_attack=bool(stacks.get('__heavy')) or scenario.heavy_attack,
             ),
         )
+        st._co_spec = spec
         if onos_sequence and form!='base':
             st._charge_pool_cost = onos_sequence['powerCost'] if onos_power else 1.
             st.continuous = not onos_power
@@ -567,7 +636,7 @@ def prepare(
                 "types": {mapped[k]: v for k, v in r["damage"].items()},
                 "forcedProcs": [],
             }
-            radial = apply_mods(
+            radial, radial_spec = apply_mods_spec(
                 {**wp, "fireModes": [rm]},
                 fx,
                 scenario=replace(scenario, incarnon_cycle=False, victim_status_count=0),
@@ -581,6 +650,7 @@ def prepare(
                 weakpoint_crit_chance_relative=0.0,
                 headshot_bonus_multiplier=1.0,
             )
+            radial._co_spec = radial_spec
         extra = base_profile(wp, idx)
         from .event_profiles import perfect_release
         extra, _ = perfect_release(extra, modes[idx], scenario.combat_state)
@@ -601,11 +671,12 @@ def prepare(
                                 'critChance':component['critChance'],'critMultiplier':component['critMultiplier'],
                                 'procChance':component['statusChance'],'forcedProcs':component.get('forcedProcs') or []}
                 part_fx = fx if component.get('takesConditionOverload') else [e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE']
-                part = apply_mods({**wp,'fireModes':[rm]},part_fx,scenario=replace(scenario,incarnon_cycle=False,victim_status_count=count_ceiling))
+                part, part_spec = apply_mods_spec({**wp,'fireModes':[rm]},part_fx,scenario=replace(scenario,incarnon_cycle=False,victim_status_count=count_ceiling))
                 part = replace(part,radial_only=True,multishot=1.,weakpoint_damage_bonus=0.,
                                weakpoint_crit_chance_bonus=0.,weakpoint_crit_chance_relative=0.,headshot_bonus_multiplier=1.)
                 if name=='singularity':
                     part = replace(part,crit_chance=0.,crit_multiplier=1.,noncrit_damage_multiplier=1.)
+                part._co_spec = part_spec
                 parts[name] = part
             if stackable.get('kind')=='mq' and mq_augment is not None:
                 amount = scenario.combat_state.get('orbAbsorbedDamage')
@@ -656,7 +727,7 @@ def prepare(
                     # its field, so it stays.
                     part_fx = ModEffectList(e for e in part_fx
                                             if not (e.upgrade_type == 'WEAPON_DAMAGE_AMOUNT' and e.operation == 'ADD_BASE'))
-                part = apply_mods({**wp, 'fireModes': [rm], '__compressionProfile__': extra.get('compression'),
+                part, part_spec = apply_mods_spec({**wp, 'fireModes': [rm], '__compressionProfile__': extra.get('compression'),
                                    **({'__coProfile__': component['coProfile']} if component.get('coProfile') else {})},
                                   part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
                 part = replace(part, radial_only=True, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
@@ -664,6 +735,7 @@ def prepare(
                     part = replace(part, multishot=1.0)
                 if component.get('count'):
                     part = replace(part, multishot=part.multishot * float(component['count']))
+                part._co_spec = part_spec
                 if component.get('impact_delay_seconds') is not None:
                     part._impact_delay = float(component['impact_delay_seconds'])
                 if component.get('headOnly'):
@@ -689,10 +761,11 @@ def prepare(
             rm=deepcopy(modes[idx])
             rm.update(falloffRange=[0,0],falloffMinDamage=1)
             rm['damage']={**rm['damage'],'types':{'DT_EXPLOSION':miter_aoe['damage']},'forcedProcs':[]}
-            radial=apply_mods({**wp,'fireModes':[rm]},[e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'],
+            radial,radial_spec=apply_mods_spec({**wp,'fireModes':[rm]},[e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'],
                              scenario=replace(scenario,incarnon_cycle=False,victim_status_count=0))
             radial=replace(radial,radial_only=True,weakpoint_damage_bonus=0.,weakpoint_crit_chance_bonus=0.,
                            weakpoint_crit_chance_relative=0.,bodyshot_crit_multiplier=1.,headshot_bonus_multiplier=1.)
+            radial._co_spec=radial_spec
             st.charge_seconds+=miter_aoe['holdSeconds']
             st._charge_time=getattr(st,'_charge_time',st.charge_seconds-miter_aoe['holdSeconds'])+miter_aoe['holdSeconds']
         return st, radial
@@ -737,16 +810,31 @@ def prepare(
         else None
     )
     from .beam_ramp import floor_for
-    if resolve_cache is not None:
-        uncached = resolve
+    exact = resolve
 
-        def resolve(form, stacks, live_types=0, last_round=False):
-            key = (form, tuple(sorted(stacks.items())), live_types, last_round)
-            if key not in resolve_cache:
-                resolve_cache[key] = uncached(form, stacks, live_types, last_round)
-            return resolve_cache[key]
+    def resolve(form, stacks, live_types=0, last_round=False):
+        # A fractional live status count scales only the CO bucket. Resolve
+        # the whole count it rounds up to once, then redo the CO tail of each
+        # stats object (damage.co_variant) instead of every apply_mods.
+        count_ceiling = int(math.ceil(live_types))
+        if count_ceiling and live_types != count_ceiling and not onos_sequence:
+            template = cached(form, stacks, count_ceiling, last_round)
+            varied = live_variant(template, live_types, count_ceiling)
+            if varied is not None:
+                return varied
+        return exact(form, stacks, live_types, last_round)
+
+    def cached(form, stacks, live_types, last_round):
+        if resolve_cache is None:
+            return resolve(form, stacks, live_types, last_round)
+        key = (form, tuple(sorted(stacks.items())), live_types, last_round)
+        if key not in resolve_cache:
+            resolve_cache[key] = resolve(form, stacks, live_types, last_round)
+        return resolve_cache[key]
+
+    entry = cached if resolve_cache is not None else resolve
     return dict(
-        resolve=resolve,
+        resolve=entry,
         melee=melee,
         comboTierKeys=combo_tier_keys,
         beamRampFloors={

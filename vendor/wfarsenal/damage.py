@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import math
 import struct
+from copy import copy as _copy_object
 from dataclasses import dataclass, field, replace
 from types import MappingProxyType
 from typing import Any, Iterable, Mapping, Sequence
@@ -354,6 +355,15 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "RUNTIME_FINAL_DAMAGE": "final_damage",
     "RUNTIME_FINAL_CRIT_DAMAGE": "final_crit_damage",
     "RUNTIME_EXTRA_HIT": "extra_hits",
+    # Runtime-script Arcanes (arcane_runtime): damage per Cold stack on the
+    # target in the base-damage bracket (Secondary Shiver), a multiplier on
+    # melee hits against a frozen target (Melee Careen), and the next-shot
+    # bonus that multiplies the ordinary base-damage bucket but not
+    # Galvanized Aptitude (Longbow Sharpshot). ``runtime_chance`` is the
+    # forced state; unforced, the replay reads the live Cold count.
+    "RUNTIME_COLD_STACK_DAMAGE": "cold_stack_damage",
+    "RUNTIME_FROZEN_DAMAGE": "frozen_damage",
+    "RUNTIME_NEXT_SHOT_DAMAGE": "next_shot_damage",
     # ── 词条融合新词条（2026.09.22，引擎乘区已逆向裁决）──────────────
     # WEAPON_CRIT_CHANCE_WEAKPOINT：与 WEAPON_CRIT_CHANCE 加算进同一次
     # 判定（fn 0x1406dc47e 链 244-248，IsWeakpoint 门控）——引擎侧门控在
@@ -514,7 +524,7 @@ class Scenario:
             raise TypeError("conditional_stacks must be a mapping")
         if not isinstance(self.combat_state, Mapping):
             raise TypeError('combatState must be an object')
-        numeric = {'frameArmor','energyPool','sprintMultiplier','energySpent','energySpendPerSecond','nearbyRadius','detonationWaitSeconds','stugBounceDelaySeconds','stugChildDetonateSeconds','orbAbsorbedDamage',
+        numeric = {'frameArmor','frameShield','energyPool','sprintMultiplier','energySpent','energySpendPerSecond','nearbyRadius','detonationWaitSeconds','stugBounceDelaySeconds','stugChildDetonateSeconds','orbAbsorbedDamage',
                    'selfShieldBreakAt','selfShieldBreakInterval','selfOverguardBreakAt','selfOverguardBreakInterval','selfShieldHitAt','selfShieldHitInterval'}
         numeric |= {'equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval','meleeTargetDistance'}
         binary = {'overshields','channeling','aimGliding','sliding','incarnonMeleeActive','orbSpecialShield','onosRadialHit','selfShieldBreakForced','perfectCharge','infiniteAmmo'}
@@ -894,6 +904,12 @@ def arcane_effects(
         # Explicit state only; the shared replay owns emergent state/reset.
         return ModEffectList([ModEffect('WEAPON_CRIT_CHANCE', 'ADD', .1*stacks*uptime,
                                         source_path=arcane.get('path'))])
+    from .arcane_runtime import configuration as runtime_arcane
+    runtime = runtime_arcane(arcane, rank)
+    if runtime:
+        cap = runtime['maxStacks'] or 1
+        # Zero-valued terms stay: the card is modelled, just not active.
+        return ModEffectList(runtime['build'](min(stacks, cap), uptime))
     from .runtime_adapters import verified_crux_condition
     crux = verified_crux_condition(arcane)
     if crux is not None:
@@ -1096,6 +1112,11 @@ class ModdedStats:
     # its status is guaranteed). The replay fires each beside every weapon
     # hit; a guaranteed status rides native_forced_procs.
     extra_hits: tuple[tuple[str, float, bool], ...] = ()
+    # Live Cold-stack damage per stack, the base-damage bracket it joins, and
+    # the melee multiplier against a frozen target (arcane_runtime).
+    cold_stack_damage: float = 0.0
+    base_damage_bracket: float = 1.0
+    frozen_damage_multiplier: float = 1.0
 
 
     @property
@@ -1332,6 +1353,153 @@ def apply_mods(
     Raises:
         ValueError: If the weapon has no usable fire mode or damage data.
     """
+    return apply_mods_spec(weapon, effects, fire_mode=fire_mode, scenario=scenario)[0]
+
+
+class CoSpec:
+    """The CO-independent inputs of :func:`_co_damage` for one apply_mods call.
+
+    Only the WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE (CO) values differ between
+    resolutions that vary the expected live status count, so a resolver keeps
+    this and re-runs the tail alone (wfcore mirrors it natively).
+    """
+
+    __slots__ = ("victim_status_count", "damage_scale_effects", "ordinary_scale", "compression_mult",
+                 "gunco_independent", "gunco_fraction", "victim_damage", "co_fraction", "melee",
+                 "melee_damage_effects", "slam_effects", "base", "base_total", "elemental_base_total",
+                 "pre", "post", "innate_entries", "pool_factor", "copy_factor", "orb", "final",
+                 "frozen_factor", "native")
+
+    def __init__(self) -> None:
+        self.pool_factor = None
+        self.copy_factor = None
+        self.orb = None
+        self.final = None
+        self.frozen_factor = None
+        self.native = None
+
+    def __repr__(self) -> str:  # deterministic: replay digests may include it
+        return "CoSpec()"
+
+
+class _CoDamage:
+    __slots__ = ("damage_types", "base_bracket", "victim_low_health_multiplier", "slam_damage_ratio",
+                 "status_multiplier", "innate_damage_types")
+
+
+def _co_damage(spec: CoSpec, co_effects: list[ModEffect]) -> _CoDamage:
+    """Everything apply_mods derives from the CO bucket's values."""
+    status_damage_effects = [_scale_effect(effect, spec.victim_status_count) for effect in co_effects]
+    damage_scale = _combine(1.0, spec.damage_scale_effects + status_damage_effects)
+    if spec.gunco_fraction is not None:
+        fraction = spec.gunco_fraction
+        ordinary_scale = spec.ordinary_scale
+        raw_co = _combine(1.,status_damage_effects)-1.
+        damage_scale = ordinary_scale*(1.+raw_co*fraction) if spec.gunco_independent else ordinary_scale+raw_co*fraction
+    # Multiplying Compression amplifies the ordinary bucket, not adding GunCO.
+    damage_scale += spec.ordinary_scale * (spec.compression_mult - 1.0)
+    out = _CoDamage()
+    # The replay adds live Cold stacks to this bracket (hit damage scales with it).
+    out.base_bracket = damage_scale
+    victim_low_health_multiplier = 1.
+    victim_damage, co_fraction = spec.victim_damage, spec.co_fraction
+    if victim_damage:
+        if spec.gunco_independent:
+            co_current = _combine(1.,status_damage_effects)
+            victim_low_health_multiplier = 1.+victim_damage*co_fraction/max(co_current,1e-9)
+        else:
+            victim_low_health_multiplier = 1.+victim_damage*co_fraction/max(damage_scale,1e-9)
+    out.victim_low_health_multiplier = victim_low_health_multiplier
+    slam_damage_ratio = 1.0
+    if spec.melee:
+        pre_melee = damage_scale
+        damage_scale = _combine(
+            damage_scale,
+            spec.melee_damage_effects,
+            base_value=damage_scale,
+        )
+        if spec.slam_effects and damage_scale:
+            slam_damage_ratio = _combine(
+                pre_melee,
+                [*spec.melee_damage_effects, *spec.slam_effects],
+                base_value=pre_melee,
+            ) / damage_scale
+    out.slam_damage_ratio = slam_damage_ratio
+    scaled_base = {dtype: amount * damage_scale for dtype, amount in spec.base.items()}
+    damage_types = _apply_elements(
+        scaled_base,
+        base_total=spec.elemental_base_total * damage_scale,
+        pre=spec.pre,
+        post=spec.post,
+    )
+    base_total = spec.base_total
+    if spec.innate_entries:
+        damage_types = _apply_innate_elements(
+            damage_types, base_total=base_total * damage_scale, entries=spec.innate_entries
+        )
+    if spec.pool_factor is not None:
+        factor = spec.pool_factor
+        damage_types = {k:v*factor for k,v in damage_types.items()}
+    if spec.copy_factor is not None:
+        factor = spec.copy_factor
+        damage_types = {k: v * factor for k, v in damage_types.items()}
+    if spec.orb is not None:
+        electric_bonus, special, passes, atten = spec.orb
+        elemental_base_total = spec.elemental_base_total
+        damage_types = dict(damage_types)
+        damage_types['DT_ELECTRICITY'] = damage_types.get('DT_ELECTRICITY',0.)+elemental_base_total*damage_scale*electric_bonus
+        if special:
+            damage_types['DT_RADIATION'] = damage_types.get('DT_RADIATION',0.)+elemental_base_total*damage_scale*2.*passes
+        damage_types = {k:v*atten for k,v in damage_types.items()}
+    if spec.final is not None:
+        final_damage, typed_final = spec.final
+        damage_types = {k: v * final_damage * typed_final.get(k, 1.0) for k, v in damage_types.items()}
+    if spec.frozen_factor is not None:
+        frozen = spec.frozen_factor
+        damage_types = {k: v * frozen for k, v in damage_types.items()}
+    out.damage_types = damage_types
+    out.status_multiplier = _combine(1.0, status_damage_effects)
+    out.innate_damage_types = {
+        dtype: base_total * damage_scale * value
+        for dtype, value in spec.innate_entries
+    }
+    return out
+
+
+def co_variant(stats: ModdedStats, spec: CoSpec, co_effects: list[ModEffect]) -> ModdedStats:
+    """``stats`` as apply_mods returns it when ``co_effects`` is its CO bucket.
+
+    The copy keeps every other field and instance attribute of ``stats``.
+    """
+    co = _co_damage(spec, co_effects)
+    out = _copy_object(stats)
+    out.damage_types = co.damage_types
+    out.base_damage_bracket = co.base_bracket
+    out.victim_low_health_multiplier = co.victim_low_health_multiplier
+    out.slam_damage_ratio = co.slam_damage_ratio
+    out.status_condition_damage_multiplier = co.status_multiplier
+    out.innate_damage_types = co.innate_damage_types
+    out.co_bucket = list(co_effects)
+    return out
+
+
+def apply_mods_spec(
+    weapon: Mapping[str, Any],
+    effects: Iterable[ModEffect],
+    *,
+    fire_mode: int = 0,
+    scenario: Scenario | None = None,
+) -> tuple[ModdedStats, CoSpec | None]:
+    """:func:`apply_mods` and the :class:`CoSpec` of its CO tail (None for heavy components).
+
+    Args:
+        weapon: A record from ``weapons.json``.
+        effects: Mod effects already scaled to their ranks.
+        fire_mode: Index into the weapon's ``fireModes``.
+
+    Raises:
+        ValueError: If the weapon has no usable fire mode or damage data.
+    """
     scenario = scenario or Scenario()
     effect_list = ModEffectList(
         list(effects), skipped=getattr(effects, "skipped", ())
@@ -1342,7 +1510,7 @@ def apply_mods(
         if isinstance(components, list) and components:
             return _apply_heavy_components(
                 weapon, effect_list, components, scenario=scenario
-            )
+            ), None
 
     modes = weapon.get("fireModes") or []
     if fire_mode >= len(modes):
@@ -1462,10 +1630,8 @@ def apply_mods(
     # CO 类（Galvanized Aptitude 等对触发目标增伤）按 scenario.victim_status_count
     # 折算。窗口模型需要按「每步实际活层数」重算 CO —— 把 CO 分量单独记录，
     # windowed_status_damage 用它回退预乘再逐层重算（emergent 语义）。
-    status_damage_effects = [
-        _scale_effect(effect, scenario.victim_status_count)
-        for effect in buckets["WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE"]
-    ]
+    # Everything the CO bucket's values reach is computed by _co_damage at the
+    # end; the rest of this function is independent of those values.
     co_effects = list(buckets["WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE"])
     # ── ADD_BASE 语义分离（解算正确性修复）────────────────────────────
     # WEAPON_DAMAGE_AMOUNT 的 ADD_BASE（灵化进化「+N 基础伤害」类词条，
@@ -1488,7 +1654,14 @@ def apply_mods(
             damage_flat_base += effect.value
         else:
             damage_scale_effects.append(effect)
-    compression_mult = 1.0
+    # Secondary Shiver forced to N Cold stacks: N steps in the base bucket.
+    cold_stack_rate = sum(e.value for e in buckets['RUNTIME_COLD_STACK_DAMAGE'])
+    cold_stack_forced = max((float(e.runtime_chance or 0.0) for e in buckets['RUNTIME_COLD_STACK_DAMAGE']), default=0.0)
+    if cold_stack_rate and cold_stack_forced:
+        damage_scale_effects.append(ModEffect('WEAPON_DAMAGE_AMOUNT', 'STACKING_MULTIPLY',
+                                              cold_stack_rate * min(cold_stack_forced, 10.0),
+                                              source_path='runtime:cold-stack-damage'))
+    compression_mult = 1.0 + sum(e.value for e in buckets['RUNTIME_NEXT_SHOT_DAMAGE'])
     compression_ammo = 0.0
     compression_profile = weapon.get('__compressionProfile__') or event_profile.get('compression')
     if buckets['RUNTIME_PRIMARY_COMPRESSION'] and scenario.aiming:
@@ -1509,27 +1682,17 @@ def apply_mods(
         else:
             unsupported.add('primary-compression-weapon-profile-unverified')
     ordinary_scale = _combine(1.0, damage_scale_effects)
-    damage_scale = _combine(1.0, damage_scale_effects + status_damage_effects)
-    if gunco and status_damage_effects:
+    gunco_fraction = None
+    if gunco and co_effects:
         fraction = gunco['baseFraction']
         excluded_flat = sum(e.value for e in buckets['WEAPON_DAMAGE_AMOUNT'] if e.operation=='ADD_BASE'
                             and e.source_path in gunco['excludeFlatSources'])
         total = sum(base.values())+damage_flat_base
         fraction *= max(total-excluded_flat,0.)/total if total else 0.
-        raw_co = _combine(1.,status_damage_effects)-1.
-        damage_scale = ordinary_scale*(1.+raw_co*fraction) if gunco['behavior']=='independent' else ordinary_scale+raw_co*fraction
-    # Multiplying Compression amplifies the ordinary bucket, not adding GunCO.
-    damage_scale += ordinary_scale * (compression_mult - 1.0)
-    victim_damage = _combine(1.,buckets['WEAPON_VICTIM_DAMAGE_AMOUNT'])-1.
+        gunco_fraction = fraction
+    victim_damage =_combine(1.,buckets['WEAPON_VICTIM_DAMAGE_AMOUNT'])-1.
     original_total = sum(base.values())
     co_fraction = gunco.get('baseFraction',1.)*original_total/max(original_total+damage_flat_base,1e-9)
-    victim_low_health_multiplier = 1.
-    if victim_damage:
-        if gunco.get('behavior')=='independent':
-            co_current = _combine(1.,status_damage_effects)
-            victim_low_health_multiplier = 1.+victim_damage*co_fraction/max(co_current,1e-9)
-        else:
-            victim_low_health_multiplier = 1.+victim_damage*co_fraction/max(damage_scale,1e-9)
     if damage_flat_base:
         base_total_unscaled = sum(base.values())
         if base_total_unscaled > 0:
@@ -1539,44 +1702,37 @@ def apply_mods(
             base = {dtype: amount * scale_up for dtype, amount in base.items()}
         # base_total_unscaled == 0（无基伤模式）：flat 无可加权的份额，
         # 维持原状并诊断（不虚构伤害类型）。
-    slam_damage_ratio = 1.0
-    if weapon.get("slot") in MELEE_SLOTS:
-        pre_melee = damage_scale
-        damage_scale = _combine(
-            damage_scale,
-            melee_damage_effects,
-            base_value=damage_scale,
-        )
-        if buckets["WEAPON_MELEE_SLAM_DAMAGE_BONUS"] and damage_scale:
-            slam_damage_ratio = _combine(
-                pre_melee,
-                [*melee_damage_effects, *buckets["WEAPON_MELEE_SLAM_DAMAGE_BONUS"]],
-                base_value=pre_melee,
-            ) / damage_scale
-
-    scaled_base = {dtype: amount * damage_scale for dtype, amount in base.items()}
     base_total = sum(base.values())
 
     innate_entries, innate_candidates = _read_innate_elements(weapon)
     # Progenitor damage belongs to the base used by elemental mods and DoT
     # seeds, although its element joins after the ordered mod coalescing.
     elemental_base_total = base_total * (1.0 + sum(value for _, value in innate_entries))
-    damage_types = _apply_elements(
-        scaled_base,
-        base_total=elemental_base_total * damage_scale,
-        pre=buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED"],
-        post=buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE"],
-    )
     if innate_candidates and not innate_entries:
         unsupported.add("innate-element-instance-required")
         skipped.append(
             f"{weapon.get('path') or weapon.get('name') or '?'}: "
             "unsupported[innate-element-instance-required]"
         )
-    if innate_entries:
-        damage_types = _apply_innate_elements(
-            damage_types, base_total=base_total * damage_scale, entries=innate_entries
-        )
+    spec = CoSpec()
+    spec.victim_status_count = scenario.victim_status_count
+    spec.damage_scale_effects = damage_scale_effects
+    spec.ordinary_scale = ordinary_scale
+    # Multiplying Compression amplifies the ordinary bucket, not adding GunCO.
+    spec.compression_mult = compression_mult
+    spec.gunco_independent = gunco.get('behavior') == 'independent'
+    spec.gunco_fraction = gunco_fraction
+    spec.victim_damage = victim_damage
+    spec.co_fraction = co_fraction
+    spec.melee = weapon.get("slot") in MELEE_SLOTS
+    spec.melee_damage_effects = melee_damage_effects
+    spec.slam_effects = buckets["WEAPON_MELEE_SLAM_DAMAGE_BONUS"]
+    spec.base = base
+    spec.base_total = base_total
+    spec.elemental_base_total = elemental_base_total
+    spec.pre = buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED"]
+    spec.post = buckets["WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE"]
+    spec.innate_entries = innate_entries
     projectile_speed_multiplier = max(0.,_combine(1.,buckets['WEAPON_PROJECTILE_SPEED']))
     falloff_mode = mode
     if projectile_speed_multiplier!=1. and mode.get('falloffRange'):
@@ -1705,7 +1861,7 @@ def apply_mods(
             multishot = amplified
         else:
             factor = amplified/multishot
-            damage_types = {k:v*factor for k,v in damage_types.items()}
+            spec.pool_factor = factor
             compression_mult *= factor
     # MultiShotProjectileType: projectiles beyond the first may be a weaker
     # copy (Latron Prime Incarnon wave since 2026.10.08). Blend per expected
@@ -1715,7 +1871,7 @@ def apply_mods(
         extra, share = multishot - 1., float(copy.get('scale', 1.))
         total = 1. + extra * share
         factor = total / multishot
-        damage_types = {k: v * factor for k, v in damage_types.items()}
+        spec.copy_factor = factor
         compression_mult *= factor
         copy_chance = _combine(float(copy.get('critChance', damage.get('critChance', 0.))), buckets['WEAPON_CRIT_CHANCE'])
         copy_multiplier = _combine(quantize_base_crit_damage(
@@ -1743,11 +1899,7 @@ def apply_mods(
         shields = passes*(2 if special else 1)
         atten = .66**shields
         electric_bonus = passes*electric
-        damage_types = dict(damage_types)
-        damage_types['DT_ELECTRICITY'] = damage_types.get('DT_ELECTRICITY',0.)+elemental_base_total*damage_scale*electric_bonus
-        if special:
-            damage_types['DT_RADIATION'] = damage_types.get('DT_RADIATION',0.)+elemental_base_total*damage_scale*2.*passes
-        damage_types = {k:v*atten for k,v in damage_types.items()}
+        spec.orb = (electric_bonus, special, passes, atten)
         dot_basis *= atten
         dot_elements['DT_ELECTRICITY'] = dot_elements.get('DT_ELECTRICITY',1.)+electric_bonus
         crit_chance += .25*shields
@@ -1764,10 +1916,17 @@ def apply_mods(
         if effect.damage_type:
             typed_final[effect.damage_type] = typed_final.get(effect.damage_type, 1.0) * (1.0 + effect.value)
     if final_damage != 1.0 or typed_final:
-        damage_types = {k: v * final_damage * typed_final.get(k, 1.0) for k, v in damage_types.items()}
+        spec.final = (final_damage, typed_final)
         dot_basis *= final_damage
     crit_multiplier += sum(e.value for e in buckets['RUNTIME_FINAL_CRIT_DAMAGE'])
-    forced_statuses = {dtype: float((damage.get('forcedProcs') or []).count(proc))
+    # Melee Careen: forced, every hit counts as on a frozen target; otherwise
+    # the replay applies it while the target holds 10 Cold stacks.
+    frozen_bonus = sum(e.value for e in buckets['RUNTIME_FROZEN_DAMAGE']) if weapon.get('slot') in MELEE_SLOTS else 0.0
+    frozen_forced = frozen_bonus and any((e.runtime_chance or 0.0) > 0 for e in buckets['RUNTIME_FROZEN_DAMAGE'])
+    if frozen_forced:
+        frozen_share = max(float(e.runtime_chance or 0.0) for e in buckets['RUNTIME_FROZEN_DAMAGE'])
+        spec.frozen_factor = 1.0 + frozen_bonus * min(frozen_share, 1.0)
+    forced_statuses ={dtype: float((damage.get('forcedProcs') or []).count(proc))
         for proc, dtype in [('PT_KNOCKBACK','DT_IMPACT'),('PT_FRAILTY','DT_PUNCTURE'),('PT_BLEEDING','DT_SLASH'),
             ('PT_IMMOLATION','DT_FIRE'),('PT_CHILLED','DT_FREEZE'),('PT_ELECTROCUTION','DT_ELECTRICITY'),
             ('PT_POISONED','DT_POISON'),('PT_FLASHBANG','DT_EXPLOSION'),('PT_RAD_TOX','DT_RADIATION'),
@@ -1778,8 +1937,9 @@ def apply_mods(
     for effect in buckets['RUNTIME_EXTRA_HIT']:
         if effect.damage_type and effect.value > 0 and effect.runtime_chance:
             forced_statuses[effect.damage_type] = forced_statuses.get(effect.damage_type, 0.0) + float(effect.runtime_chance)
+    co = _co_damage(spec, co_effects)
     return ModdedStats(
-        damage_types=damage_types,
+        damage_types=co.damage_types,
         crit_chance=crit_chance,
         # 基础暴伤量化（wfsim §5）：flat CD 先加进基础值 → 量化到 32/4095
         # 步长 → 相对 CD（%）后乘。旧的 _combine 单序列在 flat+relative 混合
@@ -1794,7 +1954,7 @@ def apply_mods(
             *[replace(e,upgrade_type='WEAPON_CRIT_CHANCE') for e in buckets['WEAPON_VICTIM_CRIT_CHANCE']]])-weapon_crit_chance,
         victim_full_crit_damage=(_combine(quantize_base_crit_damage(crit_base+sum(e.value for e in buckets['WEAPON_VICTIM_CRIT_DAMAGE'])),crit_relative)
             -_combine(quantize_base_crit_damage(crit_base),crit_relative))*shield_crit_damage_multiplier,
-        victim_low_health_multiplier=victim_low_health_multiplier,
+        victim_low_health_multiplier=co.victim_low_health_multiplier,
         projectile_speed_multiplier=projectile_speed_multiplier,
         charge_rate_multiplier=charge_rate,
         charge_seconds=charge_seconds,
@@ -1804,6 +1964,9 @@ def apply_mods(
         radial_only=radial_only,
         native_forced_procs=forced_statuses,
         extra_hits=extra_hits,
+        cold_stack_damage=0.0 if cold_stack_forced else cold_stack_rate,
+        base_damage_bracket=co.base_bracket,
+        frozen_damage_multiplier=1.0 if frozen_forced else 1.0 + frozen_bonus,
         continuous=continuous,
         status_chance=pellet_status(per_pellet_proc),
         multishot=multishot,
@@ -1824,7 +1987,7 @@ def apply_mods(
         ),
         proc_damage_multiplier=_combine(1.0, buckets["WEAPON_PROC_DAMAGE"]),
         proc_duration_multiplier=_combine(1.0, buckets["WEAPON_PROC_TIME"]),
-        status_condition_damage_multiplier=_combine(1.0, status_damage_effects),
+        status_condition_damage_multiplier=co.status_multiplier,
         # CO（对触发目标增伤）原始效果列表与预乘时的假定层数：窗口模型
         # （windowed_status_damage）用它把 CO 从 damage_types 中剥离，按每步
         # 实际活异常类型数重算（emergent 语义，wfsim M27：高级靶杀不动的
@@ -1842,7 +2005,7 @@ def apply_mods(
         combo_extra_chance=sum(e.value for e in buckets["WEAPON_MELEE_COMBO_GAIN_EXTRA_CHANCE"]),
         combo_miss_chance=sum(e.value for e in buckets["WEAPON_MELEE_COMBO_GAIN_MISS_CHANCE"]),
         heavy_charge_speed=max(0.05, 1.0 + sum(e.value for e in buckets["WEAPON_MELEE_HEAVY_CHARGE_SPEED"])),
-        slam_damage_ratio=slam_damage_ratio,
+        slam_damage_ratio=co.slam_damage_ratio,
         faction_damage_multipliers=faction_damage_multipliers,
         noncrit_damage_multiplier=1.0 + max(0.0, _combine(1.0, buckets["WEAPON_NOCRIT_DAMAGE"]) - 1.0) * (
             min(1.0, max(0.0, _combine(0.0, buckets['WEAPON_NOCRIT_CHANCE'])))
@@ -1885,14 +2048,11 @@ def apply_mods(
         crit_proc_chances={
             "DT_SLASH": sum(e.value for e in buckets["WEAPON_SLASH_PROC_ON_CRIT_CHANCE"])
         } if buckets["WEAPON_SLASH_PROC_ON_CRIT_CHANCE"] else {},
-        innate_damage_types={
-            dtype: base_total * damage_scale * value
-            for dtype, value in innate_entries
-        },
+        innate_damage_types=co.innate_damage_types,
         innate_element_candidates=tuple(innate_candidates),
         unsupported=sorted(unsupported),
         skipped=list(dict.fromkeys(skipped)),
-    )
+    ), spec
 
 
 def _apply_heavy_components(

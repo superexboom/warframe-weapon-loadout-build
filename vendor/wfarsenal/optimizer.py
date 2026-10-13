@@ -1182,9 +1182,14 @@ def _arcane_matches_weapon(
     if not isinstance(support, Mapping):
         return False
     try:
-        return int(support.get("weaponEffects") or 0) > 0
+        if int(support.get("weaponEffects") or 0) <= 0:
+            return False
     except (TypeError, ValueError):
         return False
+    # Only where one of its weapon effects lands: Arcane Precision is for
+    # secondaries, Fury for melee, Arachne for guns (arcane_runtime).
+    from .arcane_runtime import scope_applies, weapon_scopes
+    return scope_applies(weapon_scopes(arcane), weapon)
 
 
 def _frame_owned_arcane(arcane: Mapping[str, Any]) -> bool:
@@ -2258,7 +2263,7 @@ def _optimize(
         if isinstance(scenario.conditional_stacks, dict)
         else replace(scenario, conditional_stacks=dict(scenario.conditional_stacks))
     )
-    _pool_ctx = {
+    _pool_ctx = _parallel.shared({
         "weapon": weapon,
         "scenario": _wire_scenario,
         "metric": metric,
@@ -2266,7 +2271,7 @@ def _optimize(
         "slot_limit": slot_count,
         "capacity_limit": capacity_limit,
         "target_context": target_context,
-    }
+    })
     _pool_exec = _parallel.get_pool()
     if _pool_exec is not None and len(_rank_jobs) >= 8:
         _futures = [
@@ -3068,7 +3073,7 @@ def _recommend_positive(
         if isinstance(scenario.conditional_stacks, dict)
         else replace(scenario, conditional_stacks=dict(scenario.conditional_stacks))
     )
-    _pool_ctx = {
+    _pool_ctx = _parallel.shared({
         "weapon": weapon,
         "scenario": _wire_scenario,
         "metric": metric,
@@ -3076,7 +3081,7 @@ def _recommend_positive(
         "slot_limit": 8,
         "capacity_limit": capacity_limit,
         "target_context": target_context,
-    }
+    })
     _pool_exec = _parallel.get_pool()
     if _pool_exec is not None and len(_supported_lines) >= 4:
         _futures = {
@@ -4952,10 +4957,10 @@ def analyze_riven_request(
         from wfarsenal import parallel as _parallel
         _pool = _parallel.get_pool()
         if _pool is not None:
-            _ctx = {"weapon": weapon, "scenario": scenario, "metric": objective_metric,
+            _ctx = _parallel.shared({"weapon": weapon, "scenario": scenario, "metric": objective_metric,
                     "passives": passives, "slot_limit": 8, "capacity_limit": capacity_limit,
                     "target_context": ablation_context, "fixed_riven_index": actual.riven_index,
-                    "reorder_elements": False}
+                    "reorder_elements": False})
             _jobs = {}
             for _line in actual_lines:
                 if _line.code in {'W','Y'} and benchmark_context is not None and not float(benchmark_context.get('headshotChance') or 0.):

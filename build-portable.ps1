@@ -19,7 +19,21 @@ $bundleArguments = @('tools/data_pipeline.py', 'bundle', $packageRoot)
 if ($Snapshot) { $bundleArguments += @('--snapshot', $Snapshot) }
 python @bundleArguments
 if ($LASTEXITCODE -ne 0) { throw "Frozen runtime validation failed." }
-python -m PyInstaller `
+
+# Native engine core (Rust, native/wfcore). Without a Rust toolchain the build
+# still succeeds and the engine runs its Python reference, only slower.
+$nativeArguments = @()
+if (Get-Command cargo -ErrorAction SilentlyContinue) {
+    python tools/build_native.py
+    if ($LASTEXITCODE -ne 0) { throw "Native core build failed." }
+} else {
+    Write-Warning "cargo not found: packaging without the native engine core (Python reference only)."
+}
+$nativeCore = Join-Path $projectRoot "vendor\wfarsenal\wfcore.pyd"
+if (Test-Path -LiteralPath $nativeCore) {
+    $nativeArguments = @('--add-binary', "$nativeCore;wfarsenal", '--hidden-import', 'wfarsenal.wfcore')
+}
+python -m PyInstaller @nativeArguments `
     --noconfirm `
     --clean `
     --onefile `

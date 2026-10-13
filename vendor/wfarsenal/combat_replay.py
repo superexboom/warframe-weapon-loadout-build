@@ -101,6 +101,46 @@ def _trajectory(
 ):
     # Expected proc counts; attack/tick/resource clocks are discrete.
     # Mechanics: WFSim 69e6a139, data/debuffs/ignite.yaml and syndicates/.
+    from . import native_replay
+    options = dict(attacks_per_second=attacks_per_second, window_seconds=window_seconds,
+                   status_rate_multiplier=status_rate_multiplier, damage_rate_multiplier=damage_rate_multiplier,
+                   forced_procs=forced_procs, level=level, armour_strip=armour_strip,
+                   elemental_armour_strip=elemental_armour_strip, steel_path=steel_path,
+                   enemy_enhancements=enemy_enhancements, time_step=time_step, trigger_sources=trigger_sources,
+                   collect_timeline=collect_timeline, headshot_chance=headshot_chance, combat=combat,
+                   weak_draw=weak_draw, life_curve=life_curve)
+    if native_replay.supported(stats, options):
+        if native_replay.SHADOW:
+            return native_replay.shadow(stats, target, options, _reference_trajectory)
+        result = native_replay.trajectory(stats, target, **options)
+        if result is not None:
+            return result
+    return _reference_trajectory(stats, target, **options)
+
+
+def _reference_trajectory(
+    stats,
+    target,
+    *,
+    attacks_per_second,
+    window_seconds=5.0,
+    status_rate_multiplier=1.0,
+    damage_rate_multiplier=1.0,
+    forced_procs=None,
+    level=None,
+    armour_strip=0.0,
+    elemental_armour_strip=0.0,
+    steel_path=False,
+    enemy_enhancements=None,
+    time_step=0.25,
+    trigger_sources=None,
+    collect_timeline=True,
+    headshot_chance=0.0,
+    combat=None,
+    weak_draw=None,
+    life_curve=None,
+):
+    """The Python reference of the event replay (native_replay mirrors it)."""
     from .damage import (
         enemy_defenses,
         expected_status_damage,
@@ -794,7 +834,8 @@ def _trajectory(
         procs = {
             k: (1 - aim) * b["expectedProcs"].get(k, 0.0)
             + aim * h["expectedProcs"].get(k, 0.0)
-            for k in set(b["expectedProcs"]) | set(h["expectedProcs"])
+            # Insertion order, not a set: proc order feeds ordered float sums.
+            for k in dict.fromkeys([*b["expectedProcs"], *h["expectedProcs"]])
         }
         non = {}
         for k, row in b.get("nonDot", {}).get("perType", {}).items():
@@ -834,17 +875,30 @@ def _trajectory(
             st = replace(st,damage_types={k:v*st.victim_low_health_multiplier for k,v in st.damage_types.items()})
         if not enervate and not puncture and not cold:
             return attack_data(st, aim)
+        # Secondary Shiver adds each live Cold stack to the base-damage
+        # bracket; Melee Careen multiplies hits on a frozen target.
+        shiver = frozen = 1.0
+        if cold and (st.cold_stack_damage or st.frozen_damage_multiplier != 1.0):
+            stacks_cold = count('DT_FREEZE')
+            if st.cold_stack_damage and st.base_damage_bracket > 0:
+                shiver = (st.base_damage_bracket + st.cold_stack_damage*min(stacks_cold, 10.))/st.base_damage_bracket
+            if frozen_until > current_time or stacks_cold >= 10-1e-9:
+                frozen = st.frozen_damage_multiplier
         vector, procs, rows, non = {}, {}, {}, {}
         seed_sums, non_sums = {}, {}
         weights=enervate.damage_marginal() if enervate else {0:1.0}
         for stacks, weight in weights.items():
-            key=(id(st), stacks, puncture, cold)
+            key=(id(st), stacks, puncture, cold, shiver, frozen)
             if key not in crit_views:
                 view=copy(st)
                 view.crit_chance=max(0.0,st.crit_chance + stacks*.1 + puncture)
                 view.crit_multiplier=(st.low_crit_damage_base + (st.low_crit_damage_bonus
                     if view.crit_chance<st.low_crit_threshold else 0.)
                     if st.low_crit_threshold is not None else st.crit_multiplier)+cold
+                if shiver != 1.0 or frozen != 1.0:
+                    view.damage_types={k: v*shiver*frozen for k, v in st.damage_types.items()}
+                    if st.dot_base_damage is not None:
+                        view.dot_base_damage=st.dot_base_damage*shiver
                 crit_views[key]=(st,view)
             v,p,r,n=attack_data(crit_views[key][1],aim)
             for k,value in v.items():vector[k]=vector.get(k,0.0)+weight*value

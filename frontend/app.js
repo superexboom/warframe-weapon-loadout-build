@@ -138,7 +138,7 @@ const ui = Object.fromEntries([
   "manual-slots", "manual-mod-search", "manual-mod-categories", "manual-mod-list", "manual-level-toggle", "manual-clear", "manual-build-summary",
   "mod-picker", "mod-picker-scrim", "mod-picker-close", "mod-picker-title", "mod-picker-sub", "mod-picker-view",
   "fill-optimal-button",
-  "capacity-bar", "capacity-readout", "forma-count", "forma-increase", "forma-decrease", "forma-needed", "build-reset-all", "kitgun-assembly-title", "theme-toggle",
+  "capacity-bar", "capacity-readout", "forma-count", "forma-increase", "forma-decrease", "forma-needed", "build-reset-all", "kitgun-assembly-title", "theme-toggle", "compute-button", "compute-button-value", "compute-panel", "compute-machine", "compute-workers", "compute-workers-value", "compute-workers-hint", "compute-low-priority", "compute-status", "compute-default", "compute-close",
   "weapon-picker", "weapon-picker-close", "weapon-picker-sub", "weapon-picker-search", "weapon-picker-categories", "weapon-picker-list",
   "live-hud", "live-hud-pulse", "live-hud-metrics", "build-bench", "build-detail",
   "weapon-build-idle", "weapon-build-loading",
@@ -445,12 +445,80 @@ function arcaneSimulationSelection(item) {
   // 强制触发 = 满层且全程覆盖，限定层数 = 固定层数全程覆盖。
   const base = compactRankedSelection(item);
   if (!base) return null;
-  const maxStacks = Math.max(1, Number(item.trigger?.maxStacks ?? 1) || 1);
-  if (item.forceProc) return { ...base, stacks: maxStacks, uptime: 1 };
-  if (Number.isInteger(item.fixedStacks) && item.fixedStacks > 0) {
-    return { ...base, stacks: clamp(item.fixedStacks, 1, maxStacks), uptime: 1 };
+  const controls = arcaneStateControls(item);
+  const maxStacks = Math.max(1, Number(controls.forceStacks ?? item.trigger?.maxStacks ?? 1) || 1);
+  if (item.forceProc && controls.force) return { ...base, stacks: maxStacks, uptime: 1 };
+  if (Number.isInteger(item.fixedStacks) && item.fixedStacks > 0 && controls.stacks) {
+    return { ...base, stacks: clamp(item.fixedStacks, 1, Number(controls.stacks)), uptime: 1 };
   }
   return base;
+}
+
+// 槽位开关以目录为准（存档里的旧 trigger 不可信）：force = 强制触发是否有意义，
+// stacks = 「限定层数」上限，note = 这张卡在解算里怎么算。
+function arcaneStateControls(item) {
+  const record = arcaneRecords().find((arcane) => arcane.path === item?.path);
+  return record?.stateControls || item?.stateControls || {};
+}
+
+// ── 全局计算设置（顶栏「算力」）：核心数与优先级由用户决定，后端调度器即时生效 ──
+const compute = { settings: null, timer: 0, poll: 0 };
+
+function renderComputeSettings() {
+  const s = compute.settings;
+  if (!s) return;
+  ui["compute-button-value"].textContent = `${s.workers} 核`;
+  ui["compute-workers"].max = String(s.logicalCores);
+  ui["compute-workers"].value = String(s.workers);
+  ui["compute-workers-value"].textContent = `${s.workers}${s.workers === s.defaultWorkers ? "（默认）" : ""}`;
+  ui["compute-low-priority"].checked = Boolean(s.lowPriority);
+  ui["compute-machine"].textContent = `本机 ${s.physicalCores} 个物理核心 · ${s.logicalCores} 个逻辑线程；默认 ${s.defaultWorkers}（物理核心减一）`;
+  const over = s.workers > s.physicalCores ? "超过物理核心数时按超线程运行，单核更慢、总量更多。" : "紫卡分析、自动配装和 MOD 收益共用这些核心。";
+  ui["compute-workers-hint"].textContent = s.workers <= 1 ? "1 个核心：全部在主进程里串行计算。" : over;
+  ui["compute-status"].textContent = s.running || s.queued ? `正在计算 ${s.running} 项 · 排队 ${s.queued} 项` : "当前空闲";
+}
+
+async function loadComputeSettings() {
+  try {
+    const response = await fetch("/api/settings");
+    if (!response.ok) return;
+    compute.settings = (await response.json()).compute;
+    renderComputeSettings();
+  } catch { /* 引擎未就绪时保持占位 */ }
+}
+
+function saveComputeSettings(patch) {
+  compute.settings = { ...compute.settings, ...patch };
+  renderComputeSettings();
+  clearTimeout(compute.timer);
+  compute.timer = setTimeout(async () => {
+    try {
+      const response = await fetch("/api/settings", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ compute: { workers: compute.settings.workers, lowPriority: compute.settings.lowPriority } }) });
+      if (response.ok) { compute.settings = (await response.json()).compute; renderComputeSettings(); }
+      else toast("计算设置保存失败");
+    } catch { toast("计算设置保存失败"); }
+  }, 250);
+}
+
+function setComputePanel(open) {
+  ui["compute-panel"].hidden = !open;
+  ui["compute-button"].setAttribute("aria-expanded", String(open));
+  clearInterval(compute.poll);
+  if (open) { loadComputeSettings(); compute.poll = setInterval(loadComputeSettings, 1500); }
+}
+
+function setupComputeSettings() {
+  if (!ui["compute-button"]) return;
+  loadComputeSettings();
+  ui["compute-button"].addEventListener("click", (event) => { event.stopPropagation(); setComputePanel(ui["compute-panel"].hidden); });
+  ui["compute-panel"].addEventListener("click", (event) => event.stopPropagation());
+  ui["compute-close"].addEventListener("click", () => setComputePanel(false));
+  ui["compute-workers"].addEventListener("input", () => saveComputeSettings({ workers: Number(ui["compute-workers"].value) }));
+  ui["compute-low-priority"].addEventListener("change", () => saveComputeSettings({ lowPriority: ui["compute-low-priority"].checked }));
+  ui["compute-default"].addEventListener("click", () => saveComputeSettings({ workers: compute.settings?.defaultWorkers ?? 1, lowPriority: true }));
+  document.addEventListener("click", () => { if (!ui["compute-panel"].hidden) setComputePanel(false); });
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !ui["compute-panel"].hidden) setComputePanel(false); });
 }
 
 function syncArcaneSelections() {
@@ -3890,8 +3958,22 @@ function arcaneRecords() {
   return Array.isArray(state.catalog?.arcanes) ? state.catalog.arcanes : [];
 }
 
+// 战甲赋能只在它的武器效果能落到当前武器上时可选：精确只给次要武器，
+// 狂怒只给近战，蜘蛛只给主/副武器（weaponScopes 由后端按效果的 validType 给出）。
+function frameArcaneAppliesToWeapon(arcane, weapon = state.buildWeapon) {
+  if (!weapon) return true;
+  const scopes = Array.isArray(arcane?.weaponScopes) ? arcane.weaponScopes : null;
+  if (!scopes) return true;
+  const ancestry = new Set([weapon.path, ...(weapon.ancestry || [])].filter(Boolean).map((p) => String(p).replace(/\/$/, "")));
+  const melee = ["melee", "zaw"].includes(weapon.weaponType);
+  const archgunShared = (type) => weapon.weaponType === "archgun"
+    && ["/Lotus/Weapons/Tenno/LotusLongGun", "/Lotus/Weapons/Tenno/Pistol/LotusPistol"].includes(type);
+  return scopes.some((scope) => (!scope.meleeOnly || melee)
+    && (!scope.validType || ancestry.has(scope.validType) || archgunShared(scope.validType)));
+}
+
 function arcaneMatchesBuildWeapon(arcane) {
-  if (arcane?.slotKind === "warframe") return true;
+  if (arcane?.slotKind === "warframe") return frameArcaneAppliesToWeapon(arcane);
   const weapon = state.buildWeapon;
   if (!weapon) return false;
   const compatibility = String(arcane?.compatibility || "").replace(/\\/g, "/").replace(/\/$/, "").toLowerCase();
@@ -3913,7 +3995,7 @@ function arcanePickerRows(kind) {
   const query = String(ui["arcane-picker-search"]?.value || "").trim().toLocaleLowerCase();
   return arcaneRecords().filter((arcane) => {
     const matchesKind = kind === "warframe" ? arcane.slotKind === "warframe" : arcane.slotKind !== "warframe";
-    if (!matchesKind || (kind !== "warframe" && !arcaneMatchesBuildWeapon(arcane))) return false;
+    if (!matchesKind || !arcaneMatchesBuildWeapon(arcane)) return false;
     if (!query) return true;
     return [arcane.nameZh, arcane.nameEn, arcane.path].filter(Boolean).join(" ").toLocaleLowerCase().includes(query);
   });
@@ -4966,7 +5048,17 @@ function renderArcaneSlot(kind, slotIndex, item) {
   copy.append(create("strong", "", record ? (record.nameZh || record.nameEn || record.path) : "空槽位"));
   if (record) {
     copy.append(create("span", "arcane-slot-rank", `等级 ${Number(record.rank ?? record.maxRank ?? 0)}/${Number(record.maxRank ?? record.rank ?? 0)}`));
-    copy.append(create("p", "arcane-slot-description", arcaneDescription(record)));
+    const description = arcaneDescription(record);
+    const text = create("p", "arcane-slot-description", description);
+    text.title = description;
+    copy.append(text);
+    const note = arcaneStateControls(record).note;
+    if (kind === "warframe" && !frameArcaneAppliesToWeapon(record)) {
+      slot.classList.add("is-inapplicable");
+      copy.append(create("p", "arcane-slot-note is-warning", "对当前武器无效，不参与解算"));
+    } else if (note) {
+      copy.append(create("p", "arcane-slot-note", note));
+    }
   } else {
     copy.append(create("p", "arcane-slot-description", "未装备"));
   }
@@ -5004,26 +5096,29 @@ function renderArcaneSlot(kind, slotIndex, item) {
     slot.append(controls);
     // 触发型赋能提供「强制触发 / 限定层数」开关：默认关闭时由后端按武器面板
     // 推导触发期望；打开后按手动状态（满层全程 / 固定层数全程）参与解算。
-    const trigger = record.trigger || {};
-    const hasTrigger = trigger.conditionTag || trigger.chance != null || trigger.maxStacks != null;
+    const stateControls = arcaneStateControls(record);
+    const applies = kind !== "warframe" || frameArcaneAppliesToWeapon(record);
+    const hasTrigger = applies && Boolean(stateControls.force || stateControls.stacks);
     if (hasTrigger) {
-      const maxStacks = Math.max(1, Number(trigger.maxStacks ?? 1) || 1);
+      const maxStacks = Math.max(1, Number(stateControls.stacks ?? 1) || 1);
       const entry = () => (kind === "warframe" ? state.frameArcanes[slotIndex] : (slotIndex === 1 ? state.weaponArcane2 : state.weaponArcane));
       const commit = () => { syncArcaneSelections(); renderArcaneSelections(); persistActiveBuildConfig(); scheduleLiveManualSimulation(); };
       const toggles = create("div", "arcane-slot-toggles");
-      const force = create("button", `arcane-flag-toggle${item.forceProc ? " is-active" : ""}`, "强制触发");
-      force.type = "button";
-      force.title = "视为赋能始终触发并按满层计算";
-      force.setAttribute("aria-pressed", String(Boolean(item.forceProc)));
-      force.addEventListener("click", (event) => {
-        event.stopPropagation();
-        const target = entry();
-        if (!target) return;
-        target.forceProc = !target.forceProc;
-        if (target.forceProc) target.fixedStacks = null;
-        commit();
-      });
-      toggles.append(force);
+      if (stateControls.force) {
+        const force = create("button", `arcane-flag-toggle${item.forceProc ? " is-active" : ""}`, "强制触发");
+        force.type = "button";
+        force.title = "视为赋能始终触发并按满层计算";
+        force.setAttribute("aria-pressed", String(Boolean(item.forceProc)));
+        force.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const target = entry();
+          if (!target) return;
+          target.forceProc = !target.forceProc;
+          if (target.forceProc) target.fixedStacks = null;
+          commit();
+        });
+        toggles.append(force);
+      }
       if (maxStacks > 1) {
         const fixedActive = Number.isInteger(item.fixedStacks) && item.fixedStacks > 0;
         const fixed = create("button", `arcane-flag-toggle${fixedActive ? " is-active" : ""}`, "限定层数");
@@ -5054,7 +5149,8 @@ function renderArcaneSlot(kind, slotIndex, item) {
           };
           sdown.addEventListener("click", (event) => { event.stopPropagation(); setStacks(current - 1); });
           sup.addEventListener("click", (event) => { event.stopPropagation(); setStacks(current + 1); });
-          toggles.append(sdown, create("span", "rank-stepper-value", `${current} 层`), sup);
+          const unit = stateControls.stackLabel && stateControls.stackLabel !== "层数" ? ` · ${stateControls.stackLabel}` : " 层";
+          toggles.append(sdown, create("span", "rank-stepper-value", `${current}${unit}`), sup);
         }
       }
       slot.append(toggles);
@@ -5080,7 +5176,7 @@ function renderArcaneSelections() {
   // diff 复用：未变化的赋能槽不重绘（图标/框图不重载）
   const existing = Array.from(target.children);
   specs.forEach(([kind, slotIndex, item], position) => {
-    const signature = [kind, slotIndex, item?.path || "", item ? Number(item.rank ?? item.maxRank ?? 0) : "", item?.forceProc ? 1 : 0, item?.fixedStacks ?? "", state.buildInputMode].join("|");
+    const signature = [kind, slotIndex, item?.path || "", item ? Number(item.rank ?? item.maxRank ?? 0) : "", item?.forceProc ? 1 : 0, item?.fixedStacks ?? "", state.buildInputMode, state.buildWeapon?.path || ""].join("|");
     const prev = existing[position];
     if (prev && prev.dataset.signature === signature) return;
     const node = renderArcaneSlot(kind, slotIndex, item);
@@ -9746,6 +9842,7 @@ function bindEvents() {
   });
   ui["sample-button"].addEventListener("click", sample);
   ui["reset-button"].addEventListener("click", reset);
+  setupComputeSettings();
   ui["theme-toggle"]?.addEventListener("click", () => {
     applyTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light");
   });

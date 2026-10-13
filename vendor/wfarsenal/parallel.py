@@ -1,35 +1,39 @@
-"""Parallel beam evaluation for the riven analyzer.
+"""The engine's shared compute pool and its scheduler.
 
-The beam layer expansion evaluates hundreds of independent card
-combinations per layer (fast: ~384, deep: ~1400), each running the full
-mod pipeline + windowed scoring (~10-100ms). On an 8-physical-core host
-that is a several-fold wall-clock win.
+One pool of worker processes serves every request in the process: the riven
+analysis' beam layers and rankings, the build page's searches, MOD gains.
+Requests no longer own workers; they hand jobs to the scheduler, which keeps
+exactly ``workers`` jobs running and starts the next one by priority:
 
-Design:
-- A module-level persistent ProcessPoolExecutor (created lazily on first
-  use). The per-search constant context (weapon / scenario / metric /
-  passives / limits / target) travels ONCE through the initializer and
-  lives in each worker; job payloads carry only the card combination.
-- Workers score ONLY: the parent re-evaluates the surviving beam rows
-  and the incumbent after each layer to attach full stats (deterministic
-  pure function, ~15 sequential evals per layer).
-- Worker processes pin to DISTINCT PHYSICAL CORES (Windows SMT: logical
-  0..N-1 are the first hyperthreads). Two workers on sibling
-  hyperthreads of one physical core fight for the same execution units —
-  the classic "running on adjacent threads" misconfiguration the user
-  observed. Affinity is best-effort: unsupported platforms run unpinned.
-- WF_ANALYZER_SERIAL=1 forces the serial path (parity testing).
+- 0: interactive (build page, manual simulation, MOD gains),
+- 1: riven analysis,
+- 2: background work.
+
+A request's priority is the ``PRIORITY`` context variable of the thread that
+submits; within one priority jobs run first-come first-served. Results come
+back by job index, so an answer never depends on how many workers ran it or
+what else was running (WFSim's evaluate_batch does the same).
+
+The worker count and whether workers run below normal priority are the user's
+setting (``configure``; the app's global settings panel). A change takes
+effect for new jobs: running jobs finish on the old processes.
+
+Worker processes are stateless: a job carries its whole argument tuple.
+``WF_ANALYZER_SERIAL=1`` (or one worker) runs everything in the caller.
 """
 from __future__ import annotations
 
+import heapq
+import itertools
 import os
-from typing import Any
+import threading
+from concurrent.futures import Future, ProcessPoolExecutor
+from concurrent.futures.process import BrokenProcessPool
+from contextvars import ContextVar
+from typing import Any, Callable
 
-from concurrent.futures import ProcessPoolExecutor
-
-_POOL: ProcessPoolExecutor | None = None
-_POOL_WORKERS = 0
-_WORKER_CONTEXT: dict[str, Any] | None = None
+PRIORITY: ContextVar[int] = ContextVar("engine_priority", default=1)
+INTERACTIVE, ANALYSIS, BACKGROUND = 0, 1, 2
 
 
 def _physical_core_count() -> int:
@@ -47,73 +51,189 @@ def _physical_core_count() -> int:
     return max(count // 2, 1)
 
 
-def _pin_worker(seed: int, physical: int) -> None:
-    """Pin this worker process to one physical core (best effort).
+def logical_core_count() -> int:
+    return os.cpu_count() or 1
 
-    Windows SMT convention: logical CPUs 0..physical-1 are the first
-    hyperthread of each physical core. seed % physical picks a stable
-    slot so distinct pids land on distinct physical cores; collisions
-    merely degrade to two workers sharing a core — never to the
-    SMT-sibling misconfiguration.
-    """
+
+def default_workers() -> int:
+    """Physical cores minus one (the parent keeps a core for orchestration),
+    at most 7: workers plus parent stay within eight computations unless the
+    user raises it in the settings."""
+    return max(1, min(_physical_core_count() - 1, 7))
+
+
+def _worker_init(slot_counter, pin: bool, low_priority: bool) -> None:
+    """Pin to a distinct physical core (when the pool fits on them) and drop
+    below normal priority, so other programs on the machine come first."""
     try:
         import psutil  # type: ignore
 
         proc = psutil.Process()
-        proc.cpu_affinity([seed % physical])
+        if low_priority:
+            proc.nice(psutil.BELOW_NORMAL_PRIORITY_CLASS if os.name == "nt" else 10)
+        if pin:
+            with slot_counter.get_lock():
+                slot = slot_counter.value
+                slot_counter.value += 1
+            # Windows SMT: logical 0..physical-1 are the first hyperthread of
+            # each physical core, so slot k sits alone on core k.
+            proc.cpu_affinity([slot % _physical_core_count()])
     except Exception:
-        # psutil missing or affinity unsupported: run unpinned.
-        pass
+        pass  # psutil missing or unsupported: unpinned, normal priority.
 
 
-def _worker_init(context: dict[str, Any] | None = None) -> None:
-    """Per-worker initializer: capture the shared scoring context and pin
-    this process to a distinct physical core.
+class _Scheduler:
+    """Keeps ``workers`` jobs on the process pool, next one by priority.
 
-    Windows spawn re-imports this module per worker, so a module counter
-    would restart at 0 in every process — pid-modulo is the practical
-    distinct-slot source.
+    Only the dispatcher thread touches the pool: completion callbacks (which
+    the pool runs on its own management thread) just record the result and
+    wake the dispatcher. Calling back into a pool from its management thread
+    could deadlock or rebuild a pool from inside the one that is breaking.
+    A broken pool (a worker process died) fails the jobs it held and is
+    replaced for later ones; a job is never retried.
     """
-    global _POOL_WORKERS, _WORKER_CONTEXT
-    _POOL_WORKERS = _physical_core_count()
-    _WORKER_CONTEXT = context
-    _pin_worker(os.getpid(), _POOL_WORKERS)
+
+    def __init__(self) -> None:
+        self._lock = threading.Condition(threading.RLock())
+        self._queue: list = []
+        self._order = itertools.count()
+        self._running = 0
+        self._executor: ProcessPoolExecutor | None = None
+        self._dispatcher: threading.Thread | None = None
+        self.workers = default_workers()
+        self.low_priority = True
+        env = os.environ.get("WF_ENGINE_WORKERS", "")
+        if env.isdigit():
+            self.workers = max(1, int(env))
+
+    # ── settings ────────────────────────────────────────────────────────
+    def configure(self, workers: int | None = None, low_priority: bool | None = None) -> None:
+        with self._lock:
+            changed = False
+            if workers is not None:
+                workers = max(1, min(int(workers), logical_core_count()))
+                changed |= workers != self.workers
+                self.workers = workers
+            if low_priority is not None and bool(low_priority) != self.low_priority:
+                self.low_priority = bool(low_priority)
+                changed = True
+            if changed and self._executor is not None:
+                # Running jobs finish on the old processes; new ones start
+                # on a pool built with the new setting.
+                self._executor.shutdown(wait=False, cancel_futures=False)
+                self._executor = None
+            self._lock.notify_all()
+
+    def snapshot(self) -> dict[str, Any]:
+        with self._lock:
+            return {"workers": self.workers, "lowPriority": self.low_priority,
+                    "defaultWorkers": default_workers(), "physicalCores": _physical_core_count(),
+                    "logicalCores": logical_core_count(), "running": self._running, "queued": len(self._queue)}
+
+    def serial(self) -> bool:
+        return os.environ.get("WF_ANALYZER_SERIAL") == "1" or self.workers <= 1
+
+    # ── jobs ────────────────────────────────────────────────────────────
+    def _ensure(self) -> ProcessPoolExecutor:
+        if self._executor is None:
+            import multiprocessing
+
+            pin = self.workers <= _physical_core_count()
+            counter = multiprocessing.Value("i", 0)
+            self._executor = ProcessPoolExecutor(max_workers=self.workers, initializer=_worker_init,
+                                                 initargs=(counter, pin, self.low_priority))
+        return self._executor
+
+    def submit(self, fn: Callable, arg: Any, priority: int | None = None) -> Future:
+        outer: Future = Future()
+        with self._lock:
+            level = PRIORITY.get() if priority is None else priority
+            heapq.heappush(self._queue, (level, next(self._order), fn, arg, outer))
+            if self._dispatcher is None or not self._dispatcher.is_alive():
+                self._dispatcher = threading.Thread(target=self._dispatch, name="engine-scheduler", daemon=True)
+                self._dispatcher.start()
+            self._lock.notify_all()
+        return outer
+
+    def _dispatch(self) -> None:
+        while True:
+            with self._lock:
+                while not (self._queue and self._running < self.workers):
+                    if not self._queue and not self._running:
+                        # Idle: let the thread end; the next submit starts one.
+                        if not self._lock.wait(timeout=30.0) and not self._queue:
+                            self._dispatcher = None
+                            return
+                    else:
+                        self._lock.wait()
+                _level, _n, fn, arg, outer = heapq.heappop(self._queue)
+                if not outer.set_running_or_notify_cancel():
+                    continue
+                self._running += 1
+                try:
+                    executor = self._ensure()
+                except Exception as exc:
+                    self._running -= 1
+                    outer.set_exception(exc)
+                    continue
+            try:
+                inner = executor.submit(fn, arg)
+            except Exception as exc:  # broken or shut-down pool: replace it
+                with self._lock:
+                    self._running -= 1
+                    if self._executor is executor:
+                        self._executor = None
+                outer.set_exception(exc)
+                continue
+            inner.add_done_callback(lambda done, outer=outer, executor=executor: self._finish(outer, done, executor))
+
+    def _finish(self, outer: Future, inner: Future, executor: ProcessPoolExecutor) -> None:
+        # Runs on the pool's own thread: record and wake, never touch the pool.
+        try:
+            outer.set_result(inner.result())
+        except BaseException as exc:  # the job's own exception, or the pool's
+            if isinstance(exc, BrokenProcessPool):
+                with self._lock:
+                    if self._executor is executor:
+                        self._executor = None
+            outer.set_exception(exc)
+        with self._lock:
+            self._running -= 1
+            self._lock.notify_all()
+
+    def shutdown(self) -> None:
+        with self._lock:
+            for _level, _n, _fn, _arg, outer in self._queue:
+                outer.cancel()
+            self._queue.clear()
+            if self._executor is not None:
+                self._executor.shutdown(wait=False, cancel_futures=True)
+                self._executor = None
+            self._lock.notify_all()
+
+
+SCHEDULER = _Scheduler()
+
+
+class _PoolFacade:
+    """``pool.submit(fn, arg)`` for the engine's existing call sites."""
+
+    def submit(self, fn: Callable, arg: Any) -> Future:
+        return SCHEDULER.submit(fn, arg)
 
 
 def worker_count() -> int:
-    """Number of parallel evaluation workers (physical cores, 1 = serial)."""
-    if os.environ.get("WF_ANALYZER_SERIAL") == "1":
-        return 1
-    # Interactive analysis and background cache work share the same user
-    # machine. Keep one global ceiling so a live request cannot fan out across
-    # every physical core behind the cache worker limit.
-    # The parent also replays surviving candidates. Reserve its CPU slot so
-    # workers plus parent stay within the user's total eight-computation cap.
-    return min(_physical_core_count(), 7)
+    """Number of parallel evaluation workers (1 = serial)."""
+    return 1 if SCHEDULER.serial() else SCHEDULER.workers
 
 
-def get_pool(context: dict[str, Any] | None = None) -> ProcessPoolExecutor | None:
-    """The persistent evaluation pool, or None when serial (1 core).
+def get_pool(context: dict[str, Any] | None = None) -> _PoolFacade | None:
+    """The shared scheduler, or None when the engine runs serially."""
+    return None if SCHEDULER.serial() else _PoolFacade()
 
-    Workers are STATELESS: each job carries its full argument tuple
-    (weapon/cards/riven/scenario/metric/passives/limits/target), so the
-    pool survives context changes (KPM->DPS metric switches, target level
-    escalation) without worker respawns. The initializer only pins
-    physical cores.
-    """
-    global _POOL
-    if os.environ.get("WF_ANALYZER_SERIAL") == "1":
-        return None
-    workers = worker_count()
-    if workers <= 1:
-        return None
-    if _POOL is None:
-        _POOL = ProcessPoolExecutor(
-            max_workers=workers,
-            initializer=_worker_init,
-            initargs=(context,),
-        )
-    return _POOL
+
+def configure(workers: int | None = None, low_priority: bool | None = None) -> None:
+    SCHEDULER.configure(workers, low_priority)
 
 
 def map_jobs(fn, jobs: list) -> list:
@@ -144,8 +264,63 @@ def map_jobs(fn, jobs: list) -> list:
                 results.append(exc)
     finally:
         for future in futures:
-            future.cancel()  # no-op once finished
+            future.cancel()  # queued jobs of a cancelled request never start
     return results
+
+
+# ── shared job context ──────────────────────────────────────────────────
+# A batch's jobs share one context (weapon record, scenario, passives,
+# target), ~33 KB pickled. Sending it inside every job cost more than the
+# replays it carried; a SharedContext is pickled once in the parent and each
+# worker decodes a given one once, then reuses the same object -- which also
+# lets the worker's identity-keyed caches hit across the batch.
+_SHARED: "OrderedDict[bytes, dict]" = None  # type: ignore[assignment]
+_SHARED_MAX = 16
+
+
+class SharedContext(dict):
+    """A job context that pickles as (digest, frozen bytes)."""
+
+    __slots__ = ("_wire",)
+
+    def __reduce__(self):
+        wire = getattr(self, "_wire", None)
+        if wire is None:
+            import hashlib
+            import pickle
+
+            blob = pickle.dumps(dict(self), protocol=pickle.HIGHEST_PROTOCOL)
+            wire = (hashlib.blake2b(blob, digest_size=16).digest(), blob)
+            self._wire = wire
+        return (_shared_context, wire)
+
+
+def _shared_context(key: bytes, blob: bytes) -> dict:
+    global _SHARED
+    from collections import OrderedDict
+    import pickle
+
+    if _SHARED is None:
+        _SHARED = OrderedDict()
+    ctx = _SHARED.get(key)
+    if ctx is None:
+        ctx = pickle.loads(blob)
+        _SHARED[key] = ctx
+        while len(_SHARED) > _SHARED_MAX:
+            _SHARED.popitem(last=False)
+    else:
+        _SHARED.move_to_end(key)
+    return ctx
+
+
+def shared(context: dict) -> SharedContext:
+    """``context`` for a batch of pool jobs; it must not change afterwards."""
+    return SharedContext(context)
+
+
+def shutdown_pool() -> None:
+    """Tear the pool down (tests / process exit)."""
+    SCHEDULER.shutdown()
 
 
 def _gain_replay_job(args: tuple) -> float:
@@ -159,14 +334,6 @@ def _gain_replay_job(args: tuple) -> float:
     combat = prepare(*prepare_args, **prepare_kwargs)
     return replay(stats, enemy, combat=combat, trigger_sources=combat["trigger_sources"],
                   **replay_kwargs)["killsPerMinute"]
-
-
-def shutdown_pool() -> None:
-    """Tear the pool down (tests / process exit)."""
-    global _POOL
-    if _POOL is not None:
-        _POOL.shutdown(wait=False, cancel_futures=True)
-        _POOL = None
 
 
 def _score_job(args: tuple) -> float | None:

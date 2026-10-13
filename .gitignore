@@ -39,3 +39,9 @@ venv/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Native core build output
+/native/wfcore/target/
+/vendor/wfarsenal/wfcore.pyd
+/vendor/wfarsenal/wfcore.so
+/vendor/wfarsenal/wfcore.pyd.old-*

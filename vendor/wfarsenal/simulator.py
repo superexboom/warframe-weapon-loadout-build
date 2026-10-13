@@ -152,7 +152,10 @@ def _load_exports_uncached(root: Path) -> dict[str, Any]:
             or loaded.get("schemaVersion") != schema_version
         ):
             raise SimulationError(f"invalid Arcane export payload: {arcane_path}")
-        arcanes = loaded["data"]
+        # Runtime-script cards rebuilt by arcane_runtime and cards the export
+        # flagged unsupported count as weapon Arcanes for the manual slots.
+        from .arcane_runtime import supplement
+        arcanes = [supplement(row) for row in loaded["data"]]
 
     incarnon_defaults: Mapping[str, Any] = {}
     defaults_path = root / "incarnon_defaults.json"

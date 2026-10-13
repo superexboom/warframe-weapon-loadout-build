@@ -3,6 +3,7 @@ from collections import OrderedDict
 from contextvars import ContextVar
 from functools import wraps
 import hashlib
+import os
 import pickle
 import time
 from dataclasses import replace
@@ -111,13 +112,20 @@ def memoized_search(fn):
     return run
 
 
+# Benchmarks and exact-output comparisons turn the interactive budget off: with
+# it, how far a search gets depends on the machine's speed and load.
+UNBOUNDED = os.environ.get('WF_SEARCH_NO_DEADLINE') == '1'
+
+
 def phase_deadline():
     state = SESSION.get()
+    if UNBOUNDED:
+        return float('inf')
     return min(state['deadline'],time.monotonic()+state['phaseSeconds']) if state else float('inf')
 
 
 def expired(deadline):
-    if time.monotonic() < deadline:
+    if UNBOUNDED or time.monotonic() < deadline:
         return False
     state = SESSION.get()
     if state is not None:

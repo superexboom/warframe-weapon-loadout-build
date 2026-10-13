@@ -708,7 +708,7 @@ body.is-mod-dragging .mod-tilt { transform: none !important; }
 .arcane-option-copy { display: grid; gap: 2px; min-width: 0; }
 .arcane-option-copy strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
 .arcane-option-copy small { color: var(--muted); font-size: 9px; }
-.arcane-option-copy .arcane-option-effect { color: var(--success); font-size: 10px; font-style: normal; }
+.arcane-option-copy .arcane-option-effect { color: var(--success); font-size: 10px; font-style: normal; white-space: pre-line; }
 .arcane-option-copy .arcane-option-effect.is-plain { color: var(--muted); }
 .forma-needed { display: inline-flex; align-items: center; gap: 6px; color: var(--warning); font-size: 11px; white-space: nowrap; }
 .forma-needed[hidden] { display: none; }
@@ -969,7 +969,10 @@ i.empty-slot-polarity { font-size: 13px; font-style: normal; line-height: 16px; 
 .arcane-slot-label { color: var(--muted); font-size: 9px; }
 .arcane-slot-copy strong { color: var(--text); font-size: 14px; overflow-wrap: anywhere; }
 .arcane-slot-rank { color: var(--orokin); font-size: 10px; }
-.arcane-slot-description { display: -webkit-box; max-height: 4.35em; margin: 0; overflow: hidden; color: var(--muted); font-size: 11px; line-height: 1.45; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+.arcane-slot-description { display: -webkit-box; max-height: 5.8em; margin: 0; overflow: hidden; color: var(--muted); font-size: 11px; line-height: 1.45; overflow-wrap: anywhere; white-space: pre-line; -webkit-box-orient: vertical; -webkit-line-clamp: 4; }
+.arcane-slot-note { margin: 3px 0 0; color: var(--ice); font-size: 11px; line-height: 1.4; overflow-wrap: anywhere; }
+.arcane-slot-note.is-warning { color: var(--warning, #e8b34a); }
+.arcane-workbench-slot.is-inapplicable .arcane-slot-visual { opacity: .45; filter: grayscale(.6); }
 .arcane-slot-controls { grid-column: 1 / -1; margin-top: 0; }
 .arcane-slot-toggles { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .arcane-flag-toggle { min-width: 0; height: 20px; padding: 0 8px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); background: rgba(0,0,0,.18); cursor: pointer; font-size: 9px; }
@@ -1856,3 +1859,20 @@ body:not(.mod-slot) :is(.button, .tool-tab, input, select, textarea) { font-size
   .build-workspace { grid-template-columns: 490px minmax(0, 1fr); }
   .warframe-workspace { grid-template-columns: 420px minmax(0, 1fr); }
 }
+
+/* 全局计算设置（顶栏「算力」） */
+.compute-settings { position: relative; }
+.compute-button b { margin-left: 4px; color: var(--ice); font-weight: 650; }
+.compute-panel { position: absolute; z-index: 60; top: calc(100% + 8px); right: 0; display: grid; width: min(340px, calc(100vw - 32px)); gap: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel-raised); box-shadow: var(--shadow); }
+.compute-panel[hidden] { display: none; }
+.compute-panel-head { display: grid; gap: 3px; }
+.compute-panel-head strong { color: var(--text); font-size: 13px; }
+.compute-panel-head small, .compute-field small, .compute-status { color: var(--muted); font-size: 11px; line-height: 1.45; }
+.compute-field { display: grid; gap: 6px; }
+.compute-field > span { display: flex; justify-content: space-between; color: var(--text-soft); font-size: 12px; }
+.compute-field > span b { color: var(--ice); }
+.compute-field input[type="range"] { width: 100%; accent-color: var(--ice); }
+.compute-check span { font-size: 12px; }
+.compute-status { margin: 0; }
+.compute-actions { display: flex; justify-content: flex-end; gap: 8px; }
+@media (max-width: 720px) { .compute-panel { position: fixed; top: 64px; right: 16px; left: 16px; width: auto; } }

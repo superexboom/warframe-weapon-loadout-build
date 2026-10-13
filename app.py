@@ -10,6 +10,7 @@ import json
 import math
 import mimetypes
 import os
+import re
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -687,6 +688,7 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("sniper.py"),
         Path(optimizer.__file__).with_name("riven_fusion.py"),
         Path(optimizer.__file__).with_name("melee_sequence.py"),
+        Path(optimizer.__file__).with_name("arcane_runtime.py"),
         EXPORT_DIR / "arcanes.json",
         Path(__file__),  # app.py — 运行时补丁与分析入口语义
     )
@@ -895,6 +897,53 @@ RIVEN_WEAPON_RECORDS_BY_PATH = {
     for weapon in EXPORTS["weapons"]
     if weapon.get("path") and str(weapon.get("slot") or "") in RIVEN_SLOTS
 }
+
+# ── 全局计算设置（界面顶栏「算力」）──────────────────────────────────────
+# 核心数与是否低优先级由用户决定，存在本机；WF_ENGINE_WORKERS 环境变量
+# （基准测试用）优先于保存的设置。
+ENGINE_SETTINGS_PATH = ANALYSIS_STATICS_CACHE_PATH.parent / "engine-settings.json"
+_ENGINE_SETTINGS_LOCK = threading.Lock()
+
+
+def engine_settings() -> dict[str, Any]:
+    return {"compute": parallel.SCHEDULER.snapshot()}
+
+
+def update_engine_settings(payload: Any) -> dict[str, Any]:
+    compute = payload.get("compute") if isinstance(payload, Mapping) else None
+    if not isinstance(compute, Mapping):
+        raise ValueError("settings must carry a compute object")
+    workers, low = compute.get("workers"), compute.get("lowPriority")
+    if workers is not None and (isinstance(workers, bool) or not isinstance(workers, int)
+                                or not 1 <= workers <= parallel.logical_core_count()):
+        raise ValueError(f"compute.workers must be 1-{parallel.logical_core_count()}")
+    if low is not None and not isinstance(low, bool):
+        raise ValueError("compute.lowPriority must be a boolean")
+    with _ENGINE_SETTINGS_LOCK:
+        parallel.configure(workers, low)
+        snapshot = parallel.SCHEDULER.snapshot()
+        try:
+            ENGINE_SETTINGS_PATH.parent.mkdir(parents=True, exist_ok=True)
+            ENGINE_SETTINGS_PATH.write_text(json.dumps({"compute": {
+                "workers": snapshot["workers"], "lowPriority": snapshot["lowPriority"]}}), encoding="utf-8")
+        except OSError:
+            pass  # Read-only location: the setting still holds for this session.
+    return {"compute": snapshot}
+
+
+def _load_engine_settings() -> None:
+    if os.environ.get("WF_ENGINE_WORKERS", "").isdigit():
+        return
+    try:
+        compute = json.loads(ENGINE_SETTINGS_PATH.read_text(encoding="utf-8")).get("compute") or {}
+        workers, low = compute.get("workers"), compute.get("lowPriority")
+        parallel.configure(workers if isinstance(workers, int) and not isinstance(workers, bool) else None,
+                           low if isinstance(low, bool) else None)
+    except (OSError, ValueError, AttributeError):
+        pass
+
+
+_load_engine_settings()
 
 # The export is immutable in this portable build. Reusing it avoids parsing the
 # same JSON files for every click.
@@ -2640,7 +2689,89 @@ def _localized_condition(condition_tag: Any) -> str:
     return str(INCARNON_STRINGS.get(tag) or "")
 
 
+_CREPUSCULAR_PATH = "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityStrengthAndCritDamageWhenInvisible"
+_ARCANE_COLOR_TAG = re.compile(r"</?DT_[A-Z_]+(?:_COLOR)?>")
+
+
+def _arcane_text_lines(parts: Any) -> list[str]:
+    """Official arcane text as display lines.
+
+    The localized strings carry a literal backslash-n between the trigger and
+    the effect, element colour tags, and the frame revive line twice.
+    """
+    lines: list[str] = []
+    for part in parts if isinstance(parts, (list, tuple)) else [parts]:
+        text = _ARCANE_COLOR_TAG.sub("", str(part or "")).replace("\\n", "\n")
+        for raw in text.split("\n"):
+            line = re.sub(r"\s{2,}", " ", raw).strip()
+            if line and line not in lines:
+                lines.append(line)
+    return lines
+
+
+# Event-modelled cards: the replay resolves every trigger, forcing adds nothing.
+_ARCANE_EVENT_NOTES = {
+    'encumber': '按事件逐次解算：每次异常有几率追加随机异常。',
+    'fortifier': '按事件逐次解算：只对目标的超宏防护生效。',
+    'empowered': '按事件逐次解算：每次异常追加同类型伤害。',
+    'cryogenic': '按事件逐次解算：每次穿刺异常追加冰冻。',
+    'duplicate': '按事件逐次解算：近战黄色暴击时重放一次命中。',
+    'enervate': '按事件逐次解算：命中叠暴击，强暴击后清零。',
+}
+# Conditional cards whose trigger needs a word beyond "not simulated".
+_ARCANE_CONDITION_NOTES = {
+    '/Lotus/Upgrades/CosmeticEnhancers/Offensive/HeavyAttackDamageAndShieldOnShieldBreak':
+        '只作用于重击；护盾被击破跟随上方「自身护盾击破类效果强制生效」。',
+}
+# Cards kept in the list whose effect cannot reach a single-target replay.
+_ARCANE_UNMODELLED_NOTES = {
+    '/Lotus/Upgrades/CosmeticEnhancers/Offensive/RadialDamageOnMaxRadiationStackHit': '伤害只溅射给周围其他敌人，单目标解算中不计。',
+    '/Lotus/Upgrades/CosmeticEnhancers/Offensive/HeavyCritOnRegularMelee': '普通攻击叠层、重击消耗；解算未建模这段叠层，暂不计算。',
+    '/Lotus/Upgrades/CosmeticEnhancers/Offensive/PermaComboOnFinisher': '只在处决击杀时增加初始连击，解算中没有处决。',
+    '/Lotus/Upgrades/CosmeticEnhancers/Offensive/CritDamageForPunctureStatus': '「每 10% 穿刺触发几率」的口径没有可靠来源（WFSim 也未建模），暂不计算。',
+    '/Lotus/Upgrades/CosmeticEnhancers/Offensive/BonusDamageNextShotForCurEnergy': '每次施放技能只强化下一发，按持续输出计几乎为零，暂不计算。',
+    '/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamagePerAmmoOnReload': '每装填一发的增伤与衰减规则写在脚本里，暂不计算。',
+    '/Lotus/Upgrades/CosmeticEnhancers/Offensive/EyeInTheSky': '只降低散布与后坐力，不影响伤害。',
+}
+
+
+def _arcane_state_controls(arcane: Mapping[str, Any], rank: int, status_kind: str | None,
+                           enervate: bool) -> dict[str, Any]:
+    """Which state switches the slot offers and what they mean."""
+    from wfarsenal.arcane_runtime import configuration as runtime_arcane
+    spec = runtime_arcane(arcane, rank)
+    if spec:
+        maximum = spec["maxStacks"] or 1
+        derived = (spec["default"] or ("manual",))[0]
+        # Combat-state cards follow the inputs above; only "force" overrides.
+        return {"force": bool(spec["force"]), "forceStacks": maximum,
+                "stacks": maximum if maximum > 1 and derived in ("manual", "live") else None,
+                "stackLabel": spec["stackLabel"], "note": spec["note"], "model": "runtime-adapter",
+                "derived": derived}
+    if status_kind or enervate:
+        return {"force": False, "stacks": None, "note": _ARCANE_EVENT_NOTES['enervate' if enervate else status_kind],
+                "model": "events"}
+    path = str(arcane.get("path") or "")
+    if path in _ARCANE_UNMODELLED_NOTES:
+        return {"force": False, "stacks": None, "note": _ARCANE_UNMODELLED_NOTES[path], "model": "unmodelled"}
+    from wfarsenal.manual_combat import condition_kind
+    from wfarsenal.runtime_adapters import self_break_condition, verified_crux_condition
+    crux = verified_crux_condition(arcane)
+    conditions = [crux] if crux else [c for c in arcane.get("conditionalEffects") or ()
+                                       if isinstance(c, Mapping) and c.get("effects")]
+    if not conditions:
+        return {"force": False, "stacks": None, "note": "", "model": "static"}
+    trigger = arcane.get("trigger") if isinstance(arcane.get("trigger"), Mapping) else {}
+    maximum = int(trigger.get("maxStacks") or max((int(c.get("maxStacks") or 1) for c in conditions), default=1))
+    simulated = all(condition_kind(c) or self_break_condition(c) for c in conditions)
+    note = _ARCANE_CONDITION_NOTES.get(path) or (
+        "" if simulated else "触发条件无法在解算中模拟，默认不计入；需要时点「强制触发」。")
+    return {"force": True, "forceStacks": maximum, "stacks": maximum if maximum > 1 else None, "stackLabel": "层数",
+            "note": note, "model": "events" if simulated else "manual"}
+
+
 def _manual_arcane_rows() -> list[dict[str, Any]]:
+    from wfarsenal.arcane_runtime import weapon_scopes
     rows = []
     for arcane in EXPORTS.get("arcanes") or ():
         support = arcane.get("support") if isinstance(arcane.get("support"), Mapping) else {}
@@ -2662,9 +2793,9 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
         duration = trigger.get("duration")
         stacks = trigger.get("maxStacks")
         condition_zh = _localized_condition(trigger.get("conditionTag"))
-        official_levels = arcane.get("effectsZhByRank") or []
+        official_levels = [_arcane_text_lines(level) for level in arcane.get("effectsZhByRank") or []]
         if official_levels:
-            effect = "；".join(official_levels[-1])
+            effect = "\n".join(official_levels[-1])
             # Full localized descriptions retain script conditions and units;
             # synthetic materialized effects are only a calculation channel.
             if "：" in effect:
@@ -2678,7 +2809,7 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
                 'duplicate': ('近战黄色暴击时', '事件解算：每次能暴击的近战命中按黄色（一级）暴击的概率 × 触发率重放一次，暴击与异常重新判定，不增加连击数；橙色及以上暴击不触发。'),
             }
             condition_zh, event_note = event_text[status_spec['kind']]
-            effect += '；' + event_note
+            effect += '\n' + event_note
         trigger_bits = [condition_zh]
         if isinstance(chance, (int, float)):
             trigger_bits.append(f"{float(chance) * 100:g}%")
@@ -2695,9 +2826,13 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
         for rank in range(max_rank_int + 1):
             line = _arcane_effect_summary(arcane, rank)
             effects_by_rank.append(list(official_levels[min(rank, len(official_levels) - 1)]) if official_levels else ([line] if line else []))
+        controls = _arcane_state_controls(arcane, max_rank_int, status_spec['kind'] if status_spec else None,
+                                          bool(enervate_spec))
+        if controls.get("stacks"):
+            trigger = {**trigger, "maxStacks": controls["stacks"]}
         rows.append({
             "path": str(arcane.get("path")),
-            "nameZh": str(arcane.get("nameZh") or arcane.get("nameEn") or ""),
+            "nameZh": str(arcane.get("nameZh") or arcane.get("nameEn") or "").strip(),
             "nameEn": str(arcane.get("nameEn") or arcane.get("name") or ""),
             "maxRank": max_rank,
             "rarity": str(arcane.get("rarity") or "COMMON"),
@@ -2717,10 +2852,13 @@ def _manual_arcane_rows() -> list[dict[str, Any]]:
                 "conditionZh": condition_zh,
             },
             "complete": False if status_spec else bool(support.get("complete")),
-            "runtime": bool(arcane.get("runtimeScripts")),
+            "runtime": bool(arcane.get("runtimeScripts")) and controls.get("model") != "runtime-adapter",
+            "stateControls": controls,
+            "weaponScopes": [{"validType": valid, "meleeOnly": melee} for valid, melee in weapon_scopes(arcane)]
+            if slot_kind == "warframe" else None,
             "effect": effect,
             "effectsZhByRank": effects_by_rank,
-            "description": (effect + ' 命中后叠加10个暴击百分点；累计rank+1次橙暴或更高暴击后清零。无固定时限/层数上限，最多30次/秒；真实事件已计入。' if enervate_spec else effect if official_levels else " · ".join(bit for bit in [effect, *trigger_bits] if bit)),
+            "description": (effect + '\n命中后叠加10个暴击百分点；累计rank+1次橙暴或更高暴击后清零。无固定时限/层数上限，最多30次/秒；真实事件已计入。' if enervate_spec else effect if official_levels else " · ".join(bit for bit in [effect, *trigger_bits] if bit)),
             "eventModel": 'enervate-joint-probability' if enervate_spec else (status_spec['kind'] if status_spec else None),
         })
     rows.sort(key=lambda row: (row["nameZh"].casefold(), row["path"]))
@@ -3606,6 +3744,7 @@ def build_weapon_payload(
                 arcane_card, _states, arcane_unsupported_opt, _normalized = _prepare_manual_arcanes(
                     validated, selected_weapon, event_stats=None,
                     headshot_chance=float(payload.get("headshotChance") or 0.0),
+                    combat_state=payload.get("combatState") if isinstance(payload.get("combatState"), Mapping) else {},
                 )
                 if arcane_card is not None:
                     arcane_passives = optimizer._merge_passives(incarnon_card, arcane_card)
@@ -4537,7 +4676,7 @@ def _probability_payload(stats: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def _manual_arcane_trigger_kind(arcane: Mapping[str, Any]) -> str | None:
+def _manual_arcane_trigger_kind(arcane: Mapping[str, Any], weapon: Mapping[str, Any] | None = None) -> str | None:
     trigger = arcane.get("trigger")
     if not isinstance(trigger, Mapping):
         return None
@@ -4546,6 +4685,12 @@ def _manual_arcane_trigger_kind(arcane: Mapping[str, Any]) -> str | None:
     if isinstance(conditions, (list, tuple)):
         parts.extend(str(item) for item in conditions)
     text = " ".join(parts).casefold()
+    if weapon is not None:
+        # Kills with the other weapon (Primary Charger on a rifle, Blade
+        # Charger on a sword) never happen while this one fires.
+        melee = weapon.get("slot") in ("melee", "arch_melee")
+        if ("meleekill" in text and not melee) or ("primarykill" in text and weapon.get("slot") != "primary"):
+            return None
     if "headshot" in text:
         return "headshot"
     # 弱点命中触发（2026.09.22 更名：原 HeadshotCondition 系统性改为
@@ -4583,8 +4728,10 @@ def _prepare_manual_arcanes(
     event_stats: Mapping[str, Any] | None = None,
     headshot_chance: float = 0.0,
     elapsed: float | None = None,
+    combat_state: Mapping[str, Any] | None = None,
 ) -> tuple[Any, list[dict[str, Any]], list[str], list[dict[str, Any]]]:
     """Resolve one manual Arcane state through the optimizer's existing adapter."""
+    from wfarsenal.arcane_runtime import configuration as runtime_arcane, default_state
     normalized: list[dict[str, Any]] = []
     inferred: dict[str, float] = {}
     unsupported: list[str] = []
@@ -4594,7 +4741,14 @@ def _prepare_manual_arcanes(
         row["query"] = query
         if "triggerRate" not in row and "stacks" not in row and "uptime" not in row:
             arcane = optimizer.resolve_record(EXPORTS["arcanes"], query, kind="arcane")
-            kind = _manual_arcane_trigger_kind(arcane)
+            spec = runtime_arcane(arcane, int(row.get("rank", arcane.get("maxRank") or 0)))
+            if spec:
+                # Armour, shields, energy, overshields, weak-point share: the
+                # state follows the build page's inputs unless forced.
+                row["stacks"], row["uptime"] = default_state(spec, combat_state or {}, headshot_chance)
+                normalized.append(row)
+                continue
+            kind = _manual_arcane_trigger_kind(arcane, weapon_record)
             if kind and event_stats is not None:
                 rate = _manual_arcane_rate(kind, event_stats, headshot_chance)
                 row["triggerRate"] = rate
@@ -4854,6 +5008,7 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
     # 空战武器（地面）：武器赋能上限 2（主+副赋能池同时触发，wfsim 口径）。
     _weapon_arcane_limit = 2 if weapon["weaponType"] == "archgun" else 1
     validated_arcanes: list[dict[str, Any]] = []
+    ignored_arcanes: list[str] = []
     arcane_counts = Counter()
     seen_arcanes: set[str] = set()
     for index, item in enumerate(raw_arcanes):
@@ -4875,6 +5030,11 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
             )
         arcane_record = optimizer.resolve_record(EXPORTS["arcanes"], path, kind="arcane")
         if not optimizer._arcane_matches_weapon(arcane_record, selected_weapon):
+            if slot_kind == "warframe":
+                # A frame card kept from another weapon (Arcane Fury on a
+                # pistol) does nothing here; say so instead of failing.
+                ignored_arcanes.append(f"arcane-not-for-this-weapon:{path}")
+                continue
             raise SimulationError("Arcane is not compatible with the selected weapon")
         max_rank = arcane_meta.get("maxRank")
         rank = _manual_int(item.get("rank", max_rank or 0), f"arcanes[{index}].rank")
@@ -4895,9 +5055,13 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
                 raise SimulationError(f"arcanes[{index}].stacks must be a non-negative integer")
             trigger_meta = arcane_meta.get("trigger") if isinstance(arcane_meta.get("trigger"), Mapping) else {}
             from wfarsenal.enervate import configuration as enervate_configuration
+            from wfarsenal.arcane_runtime import configuration as runtime_arcane
+            runtime_spec = runtime_arcane(arcane_record, rank)
             if enervate_configuration(arcane_record, rank):
                 # The verified event has no stack ceiling. None is not a 1-stack cap.
                 arcane_row["stacks"] = stacks_override
+            elif runtime_spec:
+                arcane_row["stacks"] = min(stacks_override, runtime_spec["maxStacks"] or 1)
             else:
                 stack_cap = trigger_meta.get("maxStacks")
                 stack_cap = stack_cap if isinstance(stack_cap, int) and stack_cap > 0 else 1
@@ -4976,13 +5140,19 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
             weapon_record,
             event_stats=resolved_event_stats,
             headshot_chance=headshot_chance,
+            combat_state=common["scenario"].combat_state,
         )
+        arc_unsupported = sorted({*arc_unsupported, *ignored_arcanes})
         passives = _manual_passive_effects(optimizer._merge_passives(incarnon_card, arcane_card))
         riven_stats = payload.get("riven")
         if not skip_riven and isinstance(riven_stats, Mapping) and isinstance(riven_stats.get("stats"), list):
             riven_effects = optimizer.synthetic_riven_effects(riven_stats["stats"])
             passives = ModEffectList([*passives, *riven_effects], skipped=[*list(getattr(passives, "skipped", ())), *list(riven_effects.skipped)])
-        external = _external_buff_effects(payload.get("externalBuffs"), weapon_record)
+        buffs = payload.get("externalBuffs")
+        if isinstance(buffs, list) and any(item["path"] == _CREPUSCULAR_PATH for item in validated_arcanes):
+            # Equipped in a frame slot already: the buff row would count it twice.
+            buffs = [b for b in buffs if not (isinstance(b, Mapping) and b.get("id") == "arcane-crepuscular")]
+        external = _external_buff_effects(buffs, weapon_record)
         if external is not None:
             passives = ModEffectList([*passives, *external], skipped=list(getattr(passives, "skipped", ())))
         return {
@@ -5603,6 +5773,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                 event_stats=event_stats,
                 headshot_chance=headshot_chance,
                 elapsed=elapsed,
+                combat_state=common["scenario"].combat_state,
             )
             with _engine_lock():
                 timeline_passives = optimizer._merge_passives(incarnon_card, timeline_card)
@@ -5839,6 +6010,7 @@ def _build_passives_without_arcane(
         ctx["weapon_record"],
         event_stats=event_stats,
         headshot_chance=ctx["headshot_chance"],
+        combat_state=common["scenario"].combat_state,
     )
     passives = _manual_passive_effects(
         optimizer._merge_passives(ctx["incarnon_card"], arcane_card)
@@ -6177,6 +6349,9 @@ class PortableHandler(BaseHTTPRequestHandler):
         if path == "/api/catalog":
             self._send_json(HTTPStatus.OK, CATALOG, cache="no-cache")
             return
+        if path == "/api/settings":
+            self._send_json(HTTPStatus.OK, engine_settings(), cache="no-store")
+            return
         if path == "/api/warframe/catalog":
             self._send_json(HTTPStatus.OK, WARFRAME_CATALOG, cache="no-cache")
             return
@@ -6219,6 +6394,9 @@ class PortableHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         path = urlsplit(self.path).path
+        if path == "/api/settings":
+            self._post_settings()
+            return
         analyzers = {
             "/api/analyze": analyze_payload,
             "/api/build": build_weapon_route,
@@ -6249,6 +6427,8 @@ class PortableHandler(BaseHTTPRequestHandler):
             self._send_error(HTTPStatus.BAD_REQUEST, "invalid_json", str(exc))
             return
         cancel_token = SEARCH_CANCEL.set(_live_superseded(payload))
+        # The riven analysis queues behind the build page's jobs on the shared pool.
+        priority_token = parallel.PRIORITY.set(parallel.ANALYSIS if path == "/api/analyze" else parallel.INTERACTIVE)
         try:
             result = analyze(payload)
         except SearchCancelled:
@@ -6279,7 +6459,19 @@ class PortableHandler(BaseHTTPRequestHandler):
             )
             return
         finally:
+            parallel.PRIORITY.reset(priority_token)
             SEARCH_CANCEL.reset(cancel_token)
+        self._send_json(HTTPStatus.OK, result, cache="no-store")
+
+    def _post_settings(self) -> None:
+        try:
+            length = int(self.headers.get("Content-Length", ""))
+            if not 0 < length <= 4096:
+                raise ValueError("settings body must be 1-4096 bytes")
+            result = update_engine_settings(json.loads(self.rfile.read(length).decode("utf-8")))
+        except (ValueError, TypeError, UnicodeDecodeError) as exc:
+            self._send_error(HTTPStatus.UNPROCESSABLE_ENTITY, "invalid_settings", str(exc))
+            return
         self._send_json(HTTPStatus.OK, result, cache="no-store")
 
     def _serve_static(self, request_path: str) -> None:
