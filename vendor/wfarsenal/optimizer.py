@@ -2440,11 +2440,13 @@ def _optimize(
             unique = list(todo.items())
             if _pool_exec is not None and len(unique) >= 8:
                 # Keep only a bounded batch in flight. A deadline must not
-                # leave thousands of queued replay jobs running after return.
-                for offset in range(0, len(unique), 16):
+                # leave thousands of queued replay jobs running after return;
+                # four jobs per worker keep the pool busy between batches.
+                batch_size = max(16, 4 * _parallel.worker_count())
+                for offset in range(0, len(unique), batch_size):
                     if expired(deadline):
                         break
-                    batch = unique[offset:offset + 16]
+                    batch = unique[offset:offset + batch_size]
                     futures = [_pool_exec.submit(_parallel._score_job,
                                (cards, riven, _pool_ctx)) for _key, cards in batch]
                     for (key, _cards), future in zip(batch, futures):
@@ -2478,6 +2480,30 @@ def _optimize(
             if score is not None
         ]
         scored.sort(key=lambda item: (-item[1], tuple(pool[i].key for i in item[0])))
+        if required_damage_type is None:
+            # Survivors carry their score only: the next layer reads their
+            # selections, and full stats are needed just for a new best,
+            # which is the first survivor (they are sorted) if it beats it.
+            survivors = scored[: beam_width + 1]
+            if not survivors:
+                break
+            beam = [(sel, score) for sel, score in survivors[:beam_width]]
+            top_sel, top_score = survivors[0]
+            if best is None or top_score > best.score:
+                evaluated = _evaluate(
+                    weapon,
+                    (*required_cards, *(pool[item] for item in top_sel)),
+                    riven,
+                    scenario=scenario,
+                    metric=metric,
+                    passives=passives,
+                    slot_limit=slot_count,
+                    capacity_limit=capacity_limit,
+                    target_context=target_context,
+                )
+                if evaluated is not None:
+                    best = evaluated
+            continue
         # Beam 幸存者 + 全局最优候选在父进程重评估附 stats。
         for sel, _score in scored[: beam_width + 1]:
             evaluated = _evaluate(
@@ -2568,6 +2594,46 @@ def _optimize(
             max_fill=max_fill,
         )
 
+    climb_seen: dict[tuple[str, ...], _Evaluation] = {}
+
+    def climb_evaluate(cards: Sequence[_Card]) -> _Evaluation:
+        cached = climb_seen.pop(tuple(card.key for card in cards), None)
+        if cached is not None:
+            return cached
+        return _evaluate(weapon, tuple(cards), riven, scenario=scenario, metric=metric, passives=passives,
+                         slot_limit=slot_count, capacity_limit=capacity_limit, target_context=target_context)
+
+    def climb_scores(candidates: Sequence[Sequence[_Card]]):
+        """(score, eligible) per candidate in order, or None for an invalid build.
+
+        Serially a lazy generator (a caller that stops early evaluates no
+        further, and the winner's evaluation is handed back); with a pool,
+        all candidates are scored as jobs.
+        """
+        climb_seen.clear()
+        if _pool_exec is None or len(candidates) < 8:
+            for cards in candidates:
+                evaluated = _evaluate(weapon, tuple(cards), riven, scenario=scenario, metric=metric,
+                                      passives=passives, slot_limit=slot_count, capacity_limit=capacity_limit,
+                                      target_context=target_context)
+                if evaluated is None:
+                    yield None
+                    continue
+                climb_seen.clear()
+                climb_seen[tuple(card.key for card in cards)] = evaluated
+                yield evaluated.score, eligible(evaluated)
+            return
+        futures = [_pool_exec.submit(_parallel._score_eligible_job, (tuple(cards), riven, _pool_ctx, required_damage_type))
+                   for cards in candidates]
+        try:
+            for future in futures:
+                outcome = future.result()
+                heartbeat(1)
+                yield outcome
+        finally:
+            for future in futures:
+                future.cancel()
+
     while improved and climb_guard < climb_rounds and not expired(deadline):
         improved = False
         climb_guard += 1
@@ -2576,6 +2642,7 @@ def _optimize(
         best_score = best.score
         # Swap: replace one optional card with one pool card.  F15：新卡放进
         # 被移除卡的槽位（保持元素边界，不追加到末尾）。
+        swaps: list[list[_Card]] = []
         for drop_pos, dropped in enumerate(base_optional):
             for card in pool:
                 if expired(deadline):
@@ -2595,20 +2662,16 @@ def _optimize(
                 if sig in seen_keys:
                     continue
                 seen_keys.add(sig)
-                evaluated = _evaluate(
-                    weapon,
-                    tuple(candidate_cards),
-                    riven,
-                    scenario=scenario,
-                    metric=metric,
-                    passives=passives,
-                    slot_limit=slot_count,
-                    capacity_limit=capacity_limit,
-                    target_context=target_context,
-                )
-                if evaluated is not None and eligible(evaluated) and evaluated.score > best_score + 1e-9:
-                    best, best_score = evaluated, evaluated.score
-                    improved = True
+                swaps.append(candidate_cards)
+        # Every swap is measured against the round's base: score them all,
+        # then take improvements in order exactly as one-by-one would.
+        chosen_swap: list[_Card] | None = None
+        for candidate_cards, outcome in zip(swaps, climb_scores(swaps)):
+            if outcome is not None and outcome[1] and outcome[0] > best_score + 1e-9:
+                chosen_swap, best_score = candidate_cards, outcome[0]
+                improved = True
+        if chosen_swap is not None:
+            best = climb_evaluate(chosen_swap)
         # Add: one more pool card while slots AND max_fill remain.
         # ── F07（审计修复）：Add 同时检查 slot_count 与 max_fill（旧实现
         # 只查 slot_count，beam 阶段的数量上限会被爬山的 Add 绕过）。
@@ -2618,6 +2681,7 @@ def _optimize(
         ):
             used_keys = {c.key for c in best.cards}
             used_families = {_mod_family(c) for c in best.cards}
+            adds: list[tuple[tuple[str, ...], list[_Card]]] = []
             for card in pool:
                 if card.key in used_keys or _mod_family(card) in used_families:
                     continue
@@ -2626,22 +2690,18 @@ def _optimize(
                 sig = tuple(c.key for c in (*best.cards, card))
                 if sig in seen_keys:
                     continue
+                adds.append((sig, [*best.cards, card]))
+            # The first improving add wins; only the candidates up to it were
+            # tried (and so marked seen) one by one.
+            outcomes = climb_scores([cards for _, cards in adds])
+            for (sig, candidate_cards), outcome in zip(adds, outcomes):
                 seen_keys.add(sig)
-                evaluated = _evaluate(
-                    weapon,
-                    (*best.cards, card),
-                    riven,
-                    scenario=scenario,
-                    metric=metric,
-                    passives=passives,
-                    slot_limit=slot_count,
-                    capacity_limit=capacity_limit,
-                    target_context=target_context,
-                )
-                if evaluated is not None and eligible(evaluated) and evaluated.score > best_score + 1e-9:
-                    best, best_score = evaluated, evaluated.score
+                if outcome is not None and outcome[1] and outcome[0] > best_score + 1e-9:
+                    best = climb_evaluate(candidate_cards)
+                    best_score = best.score
                     improved = True
                     break
+            outcomes.close()  # an early winner cancels the queued rest
         # Drop: remove one optional card (frees capacity for nothing — only
         # keeps builds whose score genuinely improves, e.g. set-bonus traps).
         # ── F07（审计修复）：Drop 检查 min_fill（数量下限不被绕过）。
@@ -2806,21 +2866,40 @@ def _best_fixed(
     # A search budget cannot mean forcibly deleting equipped mods. Start at
     # the largest legal subset (usually only 1 or 8 candidates), preserving
     # the available build and avoiding C(8,5) repeated replay explosions.
+    from wfarsenal import parallel as _parallel
+
+    def evaluate(cards: Sequence[_Card]) -> _Evaluation | None:
+        return _evaluate(weapon, cards, riven, scenario=scenario, metric=metric, passives=passives,
+                         capacity_limit=capacity_limit, target_context=target_context)
+
     for keep in range(max_keep, -1, -1):
-        evaluated = [
-            value
-            for indexes in itertools.combinations(range(len(optional)), keep)
-            if (value := _evaluate(
-                weapon,
-                (*required, *(optional[index] for index in indexes)),
-                riven,
-                scenario=scenario,
-                metric=metric,
-                passives=passives,
-                capacity_limit=capacity_limit,
-                target_context=target_context,
-            )) is not None
-        ]
+        subsets = [(*required, *(optional[index] for index in indexes))
+                   for indexes in itertools.combinations(range(len(optional)), keep)]
+        pool = _parallel.get_pool() if len(subsets) >= 4 else None
+        if pool is None:
+            evaluated = [value for cards in subsets if (value := evaluate(cards)) is not None]
+        else:
+            # Score the subsets on the pool, keep the first best (as max()
+            # does), and evaluate only that one here for its full stats.
+            context = _parallel.shared({
+                "weapon": weapon, "metric": metric, "passives": passives, "slot_limit": 8,
+                "capacity_limit": capacity_limit, "target_context": target_context,
+                "scenario": scenario if isinstance(scenario.conditional_stacks, dict)
+                else replace(scenario, conditional_stacks=dict(scenario.conditional_stacks)),
+            })
+            futures = [pool.submit(_parallel._score_job, (cards, riven, context)) for cards in subsets]
+            chosen: int | None = None
+            chosen_score = 0.0
+            try:
+                for index, future in enumerate(futures):
+                    score = future.result()
+                    heartbeat(1)
+                    if score is not None and (chosen is None or score > chosen_score):
+                        chosen, chosen_score = index, score
+            finally:
+                for future in futures:
+                    future.cancel()
+            evaluated = [] if chosen is None else [value for value in (evaluate(subsets[chosen]),) if value is not None]
         if evaluated:
             candidate = max(evaluated, key=lambda value: value.score)
             if preserved is None:
@@ -3099,6 +3178,38 @@ def _recommend_positive(
             values = [value for value in (future.result() for future in _futures[line.code]) if value is not None]
             _line_scores.append(max(values) if values else None)
 
+    def fit_scores(riven_cards: Sequence[_Card]) -> list[float]:
+        """``fit(card).score`` for each card, as independent pool jobs.
+
+        Same choice as ``fit``: the first base with the highest score, bases
+        that cannot equip the Riven skipped, SimulationError when none can.
+        """
+        if _pool_exec is None or len(riven_cards) * len(bases) < 4:
+            return [fit(card).score for card in riven_cards]
+        futures = [[_pool_exec.submit(_parallel._best_fixed_score_job, (base, card, keep_cap, _pool_ctx))
+                    for base in bases] for card in riven_cards]
+        scores: list[float] = []
+        try:
+            for row in futures:
+                best: float | None = None
+                for future in row:
+                    try:
+                        score = future.result()
+                    except SimulationError:
+                        continue
+                    finally:
+                        heartbeat(1)
+                    if best is None or score > best:
+                        best = score
+                if best is None:
+                    raise SimulationError("no capacity-valid build can equip the Riven")
+                scores.append(best)
+        finally:
+            for row in futures:
+                for future in row:
+                    future.cancel()
+        return scores
+
     ranked: list[tuple[float, _RivenLine]] = []
     if _line_scores is not None:
         for line, score in zip(_supported_lines, _line_scores):
@@ -3135,15 +3246,16 @@ def _recommend_positive(
         best_lines = tuple(fast_combo)
         best_result = fit(_card_from_lines(best_lines))
     else:
-        for combo in itertools.combinations(shortlist, count):
-            if best_result is not None and expired(deadline):
-                break
-            # 融合词条每卡限 1 条（游戏规则）：含 2+ 融合的组合非法。
-            if not _combo_allows_fusion(combo):
-                continue
-            result = fit(_card_from_lines(combo))
-            if best_result is None or result.score > best_result.score:
-                best_lines, best_result = combo, result
+        # 融合词条每卡限 1 条（游戏规则）：含 2+ 融合的组合非法。
+        # Every combination is an independent fit (no deadline here): score
+        # them on the pool, keep the first best, then rebuild that one.
+        combos = [combo for combo in itertools.combinations(shortlist, count) if _combo_allows_fusion(combo)]
+        best_score: float | None = None
+        for combo, score in zip(combos, fit_scores([_card_from_lines(combo) for combo in combos])):
+            if best_score is None or score > best_score:
+                best_lines, best_score = combo, score
+        if best_lines is not None:
+            best_result = fit(_card_from_lines(best_lines))
     assert best_lines is not None and best_result is not None
 
     # Score each affix in a full-card context. A one-line Riven can lose to the
@@ -3160,18 +3272,20 @@ def _recommend_positive(
                 marginal.append((gain, line))
         marginal.sort(key=lambda item: (-item[0], item[1].code))
     else:
-        anchor_results: dict[tuple[str, ...], _Evaluation] = {}
+        anchors: dict[tuple[str, ...], tuple[_RivenLine, ...]] = {}
+        pairs: list[tuple[_RivenLine, tuple[str, ...], tuple[_RivenLine, ...]]] = []
         for _, line in ranked:
             anchor = tuple(item for item in best_lines if item.code != line.code)[: count - 1]
             if len(anchor) < count - 1:
                 anchor = tuple(best_lines[: count - 1])
             anchor_key = tuple(item.code for item in anchor)
-            without = anchor_results.get(anchor_key)
-            if without is None:
-                without = fit(_card_from_lines(anchor))
-                anchor_results[anchor_key] = without
-            with_line = fit(_card_from_lines((*anchor, line)))
-            gain = _percent_gain(with_line.score, without.score)
+            anchors.setdefault(anchor_key, anchor)
+            pairs.append((line, anchor_key, (*anchor, line)))
+        scores = fit_scores([_card_from_lines(anchor) for anchor in anchors.values()]
+                            + [_card_from_lines(lines) for _, _, lines in pairs])
+        without = dict(zip(anchors, scores[:len(anchors)]))
+        for (line, anchor_key, _), with_score in zip(pairs, scores[len(anchors):]):
+            gain = _percent_gain(with_score, without[anchor_key])
             if gain > 0:
                 marginal.append((gain, line))
         marginal.sort(key=lambda item: (-item[0], item[1].code))

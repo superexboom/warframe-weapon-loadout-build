@@ -62,22 +62,64 @@ def default_workers() -> int:
     return max(1, min(_physical_core_count() - 1, 7))
 
 
+# Set in worker processes: a job never opens a pool of its own.
+_IN_WORKER = False
+
+
+def _core_first_logicals() -> list[int] | None:
+    """The first logical CPU of each physical core, or None when unknown.
+
+    Windows numbers SMT siblings next to each other (0/1 share a core), Linux
+    usually puts them half the count apart, so the layout is read, not assumed.
+    """
+    try:
+        if os.name == "nt":
+            import ctypes
+
+            class _Info(ctypes.Structure):
+                _fields_ = [("mask", ctypes.c_size_t), ("relationship", ctypes.c_uint32),
+                            ("union", ctypes.c_ulonglong * 2)]
+
+            kernel32 = ctypes.windll.kernel32
+            length = ctypes.c_uint32(0)
+            kernel32.GetLogicalProcessorInformation(None, ctypes.byref(length))
+            count = length.value // ctypes.sizeof(_Info)
+            if not count:
+                return None
+            buffer = (_Info * count)()
+            if not kernel32.GetLogicalProcessorInformation(buffer, ctypes.byref(length)):
+                return None
+            firsts = sorted((info.mask & -info.mask).bit_length() - 1
+                            for info in buffer if info.relationship == 0 and info.mask)  # RelationProcessorCore
+            return firsts or None
+        firsts = set()
+        for index in range(os.cpu_count() or 0):
+            path = f"/sys/devices/system/cpu/cpu{index}/topology/thread_siblings_list"
+            with open(path, encoding="ascii") as handle:
+                firsts.add(int(handle.read().replace("-", ",").split(",")[0]))
+        return sorted(firsts) or None
+    except Exception:
+        return None
+
+
 def _worker_init(slot_counter, pin: bool, low_priority: bool) -> None:
     """Pin to a distinct physical core (when the pool fits on them) and drop
     below normal priority, so other programs on the machine come first."""
+    global _IN_WORKER
+    _IN_WORKER = True
     try:
         import psutil  # type: ignore
 
         proc = psutil.Process()
         if low_priority:
             proc.nice(psutil.BELOW_NORMAL_PRIORITY_CLASS if os.name == "nt" else 10)
-        if pin:
+        cores = _core_first_logicals() if pin else None
+        if cores:
             with slot_counter.get_lock():
                 slot = slot_counter.value
                 slot_counter.value += 1
-            # Windows SMT: logical 0..physical-1 are the first hyperthread of
-            # each physical core, so slot k sits alone on core k.
-            proc.cpu_affinity([slot % _physical_core_count()])
+            # One worker per physical core, on that core's first logical CPU.
+            proc.cpu_affinity([cores[slot % len(cores)]])
     except Exception:
         pass  # psutil missing or unsupported: unpinned, normal priority.
 
@@ -131,7 +173,7 @@ class _Scheduler:
                     "logicalCores": logical_core_count(), "running": self._running, "queued": len(self._queue)}
 
     def serial(self) -> bool:
-        return os.environ.get("WF_ANALYZER_SERIAL") == "1" or self.workers <= 1
+        return _IN_WORKER or os.environ.get("WF_ANALYZER_SERIAL") == "1" or self.workers <= 1
 
     # ── jobs ────────────────────────────────────────────────────────────
     def _ensure(self) -> ProcessPoolExecutor:
@@ -385,6 +427,42 @@ def _score_job(args: tuple) -> float | None:
         target_context=target_context,
     )
     return None if evaluated is None else evaluated.score
+
+
+def _score_eligible_job(args: tuple) -> tuple[float, bool] | None:
+    """(score, eligible) of one card combination for the hill climb:
+    eligible when no damage type is required or the build deals it."""
+    from wfarsenal import optimizer as _opt
+
+    cards, riven, ctx, required_type = args
+    evaluated = _opt._evaluate(
+        ctx["weapon"], cards, riven, scenario=ctx["scenario"], metric=ctx["metric"], passives=ctx["passives"],
+        slot_limit=ctx.get("slot_limit", 8), capacity_limit=ctx["capacity_limit"],
+        target_context=ctx["target_context"],
+    )
+    if evaluated is None:
+        return None
+    eligible = required_type is None or evaluated.stats.damage_types.get(required_type, 0.0) > 0
+    return evaluated.score, eligible
+
+
+def _best_fixed_score_job(args: tuple) -> float:
+    """``_best_fixed(...).score`` for (base_cards, riven, keep_cap, context);
+    its errors reach the caller, which decides like the serial loop."""
+    from wfarsenal import optimizer as _opt
+
+    base_cards, riven, keep_cap, ctx = args
+    return _opt._best_fixed(
+        ctx["weapon"],
+        base_cards,
+        riven,
+        scenario=ctx["scenario"],
+        metric=ctx["metric"],
+        passives=ctx["passives"],
+        capacity_limit=ctx["capacity_limit"],
+        target_context=ctx["target_context"],
+        max_keep_cap=keep_cap,
+    ).score
 
 
 def _best_fixed_job(args: tuple) -> float | None:
