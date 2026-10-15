@@ -32,10 +32,11 @@ def test_stug_status_perk_only_doubles_in_incarnon():
     st,_=base['resolve']('selected',{},0)
     incst,_=inc['resolve']('selected',{},0)
     returned,_=inc['resolve']('base',{},0)
-    # Native explosion SC is 0 in base, .2 transformed; perk grants .2 + form-only .2.
-    assert st.status_chance==pytest.approx(.2)
+    # Explosion SC is .1 in base (wiki; the export's 0 is a projectile without
+    # its own ProcChance), .2 transformed; perk grants .2 + form-only .2.
+    assert st.status_chance==pytest.approx(.3)
     assert incst.status_chance==pytest.approx(.6)
-    assert returned.status_chance==pytest.approx(.2)
+    assert returned.status_chance==pytest.approx(.3)
 
 def test_unrelated_or_changed_stug_signature_is_not_adapted():
     w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Stug')

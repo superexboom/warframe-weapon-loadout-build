@@ -22,6 +22,8 @@ pub struct Core {
     pub falloff_multiplier: f64,
     pub faction_all: f64,
     pub faction_target: f64,
+    /// Demolishers' 0.8 inside the faction bracket (WFSim M89); 1.0 elsewhere.
+    pub faction_bracket: f64,
     pub multishot: f64,
     pub continuous: bool,
     pub radial_only: bool,
@@ -97,6 +99,7 @@ impl Core {
         if tables.target_faction {
             m *= self.faction_target;
         }
+        m *= self.faction_bracket;
         m
     }
 }
@@ -408,8 +411,13 @@ pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Statu
         let shared = d == FIRE || d == ELECTRICITY || d == GAS;
         let accumulator = if shared { 1.0 } else { pmin(count, 10.0) };
         let accumulator_multiplier = pmax(elemental, 0.0) * proc_damage;
-        let unit = coefficient * seed_basis * seed_merge(s, d, forced) * elemental_factor * proc_damage
+        let mut unit = coefficient * seed_basis * seed_merge(s, d, forced) * elemental_factor * proc_damage
             * s.falloff_multiplier * hm * target_multiplier * pow(pmax(faction_mod, 0.0), 2.0);
+        if (d == ELECTRICITY || d == GAS) && !s.radial_only && hm > 1.0 + 1e-9 {
+            // WFSim M100: an Electricity / Gas tick lands on a head with the
+            // headshot bonuses once more (Python reference, same order).
+            unit *= s.headshot_bonus_multiplier;
+        }
         let mut crit_share = 0.0;
         if get(&s.crit_proc_chances, d).is_some() && !crit_seed_tiers.is_empty() {
             let shots = if s.continuous { 1.0 } else { pmax(s.multishot, 0.0) };

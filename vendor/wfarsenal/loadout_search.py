@@ -36,12 +36,13 @@ from dataclasses import dataclass, field, replace
 from typing import Any, Callable, Mapping, Sequence
 
 EPS = 1e-9
-# Independent searches (route scouts, finals, Arcane refines) run at once.
-# Each hands its replays to the shared worker pool; one search leaves workers
-# idle while the parent does its beam bookkeeping between layers, a few
-# together keep them busy. Results are taken in call order, and the caches
-# they share are keyed by content, so the outcome does not depend on it.
-CONCURRENT_SEARCHES = max(1, int(os.environ.get("WF_CONCURRENT_SEARCHES", "3") or 1))
+# Independent searches (route scouts, finals, Arcane refines) CAN run at once
+# (WF_CONCURRENT_SEARCHES > 1): results are taken in call order and the caches
+# they share are keyed by content. Off by default: the searches of one request
+# share its interactive time budget, so running them together can cut a search
+# short where it would have finished alone (seen 2026-10-16 on a Burston
+# re-search), and the measured gain was only 2-10%.
+CONCURRENT_SEARCHES = max(1, int(os.environ.get("WF_CONCURRENT_SEARCHES", "1") or 1))
 
 
 def _concurrently(calls: Sequence[Callable[[], Any]]) -> list[Any]:

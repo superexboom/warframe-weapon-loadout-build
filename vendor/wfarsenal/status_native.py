@@ -54,7 +54,7 @@ def _target(target: Mapping[str, Any], target_kwargs: Mapping[str, Any]):
     from .damage import (
         DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES, DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES, _damage_type_set,
         _enemy_enhancement_options, _faction_damage_deltas, _hit_location_info, _normalise_hit_location,
-        _scaled_armour, enemy_defenses,
+        _scaled_armour, enemy_defenses, faction_bracket,
     )
 
     level = target_kwargs.get("level")
@@ -91,7 +91,7 @@ def _target(target: Mapping[str, Any], target_kwargs: Mapping[str, Any]):
         factionDeltas=[(str(k), float(v)) for k, v in _faction_damage_deltas(target).items()],
         armourBypass=sorted(_damage_type_set(target.get("armourBypassDamageTypes"), DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES)),
         shieldBypass=sorted(_damage_type_set(target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES)),
-        targetFaction=str(target.get("faction") or ""), body=body, located=located,
+        targetFaction=str(target.get("faction") or ""), factionBracket=faction_bracket(target), body=body, located=located,
         existingMagnetic=int((enhancements or {}).get("magneticStacks") or 0),
     ))
     if len(_TARGETS) >= 256:

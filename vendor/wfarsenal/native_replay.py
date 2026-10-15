@@ -136,7 +136,7 @@ class _Helper:
         return result
 
     def attack_data(self, st, aim):
-        from .damage import damage_against_cached_armour, expected_status_damage
+        from .damage import damage_against_cached_armour, expected_status_damage, faction_bracket
         locations, bare_def, target, forced_procs, probes = (
             self.locations, self.bare_def, self.target, self.forced_procs, self.probes)
         key = (id(st), aim)
@@ -168,6 +168,7 @@ class _Helper:
             "faction": target.get("faction", ""),
             "hitProxies": target.get("hitProxies", []),
             "factionResistance": "RK_NEUTRAL",
+            "factionBracket": faction_bracket(target),
         }
         b = expected_status_damage(
             st, dot_target, forced_procs=forced_procs, level=1, hit_location="body"
@@ -253,7 +254,7 @@ def _target_tables(target, locations):
     from .damage import (enemy_defenses, _hit_location_info, _faction_damage_deltas, _damage_type_set,
                          _target_damage_multiplier, _overguard_damage_multiplier, _magnetic_defense_multiplier,
                          _normalise_hit_location, DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES,
-                         DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES)
+                         DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES, faction_bracket)
     dot_target = {
         "health": 1.0,
         "armour": 0.0,
@@ -261,6 +262,7 @@ def _target_tables(target, locations):
         "faction": target.get("faction", ""),
         "hitProxies": target.get("hitProxies", []),
         "factionResistance": "RK_NEUTRAL",
+        "factionBracket": faction_bracket(target),
     }
     damage = [(locations[name]["hit_multiplier"], locations[name]["hit_critical_multiplier"], name == "head")
               for name in ("body", "head")]
@@ -296,7 +298,7 @@ _TARGET_SETUPS: dict = {}
 
 def _target_setup(target, level, armour_strip, steel_path, enemy_enhancements):
     from .damage import (enemy_defenses, _hit_location_info, _faction_damage_deltas, _damage_type_set,
-                         DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES, DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES)
+                         faction_bracket, DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES, DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES)
     try:
         options = None if enemy_enhancements is None else tuple(sorted(enemy_enhancements.items()))
         from .record_keys import record_key
@@ -326,6 +328,7 @@ def _target_setup(target, level, armour_strip, steel_path, enemy_enhancements):
             target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
         ),
         target_faction=str(target.get("faction") or ""),
+        faction_bracket=faction_bracket(target),
     )
     locations = {}
     for location in ("body", "head"):
@@ -434,6 +437,7 @@ def trajectory(
         extra_scale = stats.faction_damage_multipliers.get('', 1.0)
         if cache['target_faction']:
             extra_scale *= stats.faction_damage_multipliers.get(cache['target_faction'], 1.0)
+        extra_scale *= cache['faction_bracket']
         head_part = float(locations['head']['hit_multiplier'] or 1.0)
         extra_scale *= ((1 - head) + head * head_part * head_part) / ((1 - head) + head * head_part)
     unsupported = list(combat.get("unsupported") or [])
@@ -490,7 +494,7 @@ def trajectory(
         infiniteAmmo=bool(combat.get('infiniteAmmo')),
         victimBefore=dict(combat.get('victimProcTypesBeforeHit') or {}),
         syndicate=dict(syndrome) if syndrome else None,
-        targetFaction=cache['target_faction'], tables=tables,
+        targetFaction=cache['target_faction'], factionBracket=cache['faction_bracket'], tables=tables,
         melee=melee_config,
         battery=combat.get('battery') or None, spool=combat.get('spool') or None,
         fireRateSpool=combat.get('fireRateSpool') or None, shellReload=combat.get('shellReload') or None,

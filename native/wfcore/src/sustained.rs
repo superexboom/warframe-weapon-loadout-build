@@ -34,6 +34,7 @@ pub struct SustainedTarget {
     armour_bypass: Vec<String>,
     shield_bypass: Vec<String>,
     target_faction: String,
+    faction_bracket: f64,
     body: (f64, f64, bool),
     located: (f64, f64, bool),
     existing_magnetic: i64,
@@ -59,6 +60,7 @@ impl SustainedTarget {
             armour_bypass: get("armourBypass")?.extract()?,
             shield_bypass: get("shieldBypass")?.extract()?,
             target_faction: get("targetFaction")?.extract()?,
+            faction_bracket: match config.get_item("factionBracket")? { Some(v) => v.extract()?, None => 1.0 },
             body: get("body")?.extract()?,
             located: get("located")?.extract()?,
             existing_magnetic: get("existingMagnetic")?.extract()?,
@@ -149,6 +151,7 @@ impl Context<'_> {
         if !self.target.target_faction.is_empty() {
             faction *= s.faction_target;
         }
+        faction *= self.target.faction_bracket;
         if faction != 1.0 {
             for e in per_type.iter_mut() {
                 e.1 *= faction;
@@ -211,7 +214,7 @@ pub fn sustained_status(
     let damage_types = vector_of(&mut types, &stats.getattr("damage_types")?)?;
     let forced = vector_of(&mut types, &stats.getattr("native_forced_procs")?)?;
     let independent = vector_of(&mut types, &stats.getattr("independent_proc_chances")?)?;
-    let core = core_of(stats, &mut types, &target.target_faction, &damage_types, &forced, &independent)?;
+    let core = core_of(stats, &mut types, &target.target_faction, target.faction_bracket, &damage_types, &forced, &independent)?;
     let id = |types: &mut Types, n: &str| types.id(n);
     let (viral, corrosive, magnetic, cold, puncture, heat) = (
         id(&mut types, "DT_VIRAL"), id(&mut types, "DT_CORROSIVE"), id(&mut types, "DT_MAGNETIC"),

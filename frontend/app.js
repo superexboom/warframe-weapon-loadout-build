@@ -2659,8 +2659,12 @@ function renderTiers() {
   const recommended = normalizeLabels(state.result.recommendedNegative);
   const fatal = normalizeLabels(state.result.fatalNegative);
   ui["recommended-negative"].textContent = recommended.join(" / ") || "无";
-  ui["fatal-negative"].textContent = fatal.join(" / ") || "无";
+  // 武器级致命负面：负面词条按理论数值放进推荐正面的紫卡，配装围绕它重搜后
+  // 仍亏损超过 35% 才算致命。提交的紫卡负面在其中时单独点明。
+  const own = normalizeLabels(state.result.submittedFatalNegative);
+  ui["fatal-negative"].textContent = (fatal.join(" / ") || "无") + (own.length ? `（当前紫卡的负面 ${own.join(" / ")} 属于致命负面）` : "");
   ui["fatal-box"].classList.toggle("is-clear", !fatal.length);
+  ui["fatal-box"].title = "负面词条按理论数值评估：配装可以围绕负面重新搭配，重搜后仍亏损超过 35% 的才算致命";
 }
 
 function formatMetric(value) {

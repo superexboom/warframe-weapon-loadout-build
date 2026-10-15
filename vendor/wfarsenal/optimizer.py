@@ -3439,6 +3439,84 @@ def _neutral_negative_codes(weapon: Mapping[str, Any]) -> frozenset[str]:
     return frozenset({"Z", "H", "M", "E"})
 
 
+# A malus that still costs more than this after the build re-adapts around it
+# is "fatal" (致命负面).
+FATAL_NEGATIVE_LOSS = 0.35
+
+
+def _assess_negatives(
+    weapon: Mapping[str, Any],
+    mod_pool: Sequence[_Card],
+    baseline: _Evaluation,
+    positive_lines: Sequence[_RivenLine],
+    ranked: Sequence[tuple[float, _RivenLine]],
+    negative_map: Mapping[str, _RivenLine],
+    neutral_codes: frozenset[str],
+    *,
+    scenario: Scenario,
+    metric: str,
+    passives: _Card | None,
+    capacity_limit: int,
+    target_context: Mapping[str, Any] | None,
+    keep_cap: int | None,
+) -> list[dict[str, Any]]:
+    """Every negative stat of the weapon, judged on its best build.
+
+    ``ranked`` holds each candidate malus scored on the baseline build with
+    the recommended bonuses (fixed cards, the best kept subset). A malus that
+    loses more than ``FATAL_NEGATIVE_LOSS`` there gets a second chance: the
+    build page's search (element niches, panel-proxy seeds, and one seeded
+    with the baseline) lets the build follow the malus -- a status malus moves
+    the build to crit, a magazine malus feeds a first-shot card -- and both
+    sides of the comparison are searched the same way. Only a malus that
+    still loses that much is fatal.
+
+    Calibrated 2026-10-16 on the user's gold standards (2 bonuses + malus at
+    the theoretical roll, Lv170 hardness-integrated target): a Status Chance
+    malus below 95% is not fatal on Furis (-14%), Burston (-34%) or Burston
+    Prime (-31%) once the build moves to crit; Vectis Prime's Magazine malus
+    costs 0% on its baseline and ~22% with Primed Chamber; Base Damage stays
+    fatal (Furis -49%, Boltor Prime -83%).
+    """
+    # Windowed DPS, not kills per minute: KPM saturates on an easy target
+    # (a fast-profile reference read exactly 48.0) and hides what a malus costs.
+    if metric == "killsPerMinute" and target_context is not None:
+        metric = "windowedDps"
+    common = dict(scenario=scenario, metric=metric, passives=passives, capacity_limit=capacity_limit,
+                  target_context=target_context)
+    codes = [code for code in dict.fromkeys(line.code for _score, line in ranked) if code in negative_map]
+    fixed = _best_fixed_scores(
+        weapon, [(baseline.cards, _card_from_lines(list(positive_lines)))]
+        + [(baseline.cards, _card_from_lines([*positive_lines, negative_map[code]])) for code in codes],
+        max_keep_cap=keep_cap, **common)
+    reference = fixed[0]
+    if isinstance(reference, Exception) or not reference:
+        return []
+    rows = []
+    for code, score in zip(codes, fixed[1:]):
+        if isinstance(score, Exception):
+            continue
+        line = negative_map[code]
+        rows.append(dict(code=code, label=line.label, value=line.value, neutral=code in neutral_codes,
+                         fixedDelta=score / reference - 1.0, reoptimizedDelta=None, fatal=False))
+    suspects = [row for row in rows if not row["neutral"] and row["fixedDelta"] < -FATAL_NEGATIVE_LOSS]
+    if suspects:
+        def search(lines):
+            riven = _card_from_lines(list(lines))
+            seeded = _optimize(weapon, mod_pool, riven, profile="fast", seed_cards=tuple(baseline.cards), **common)
+            fresh = _optimize(weapon, mod_pool, riven, profile="standard", element_niches=2, **common)
+            best = max((seeded, fresh), key=lambda found: found.score)
+            return proxy_seed_best(weapon, mod_pool, riven, best, profile="standard", **common).score
+        scores = [search(positive_lines)] + [search([*positive_lines, negative_map[row["code"]]]) for row in suspects]
+        searched_reference = max(scores[0], reference)
+        for row, score in zip(suspects, scores[1:]):
+            best = max(score, (1.0 + row["fixedDelta"]) * reference)
+            row["reoptimizedDelta"] = best / searched_reference - 1.0
+            row["fatal"] = row["reoptimizedDelta"] < -FATAL_NEGATIVE_LOSS
+    rows.sort(key=lambda row: (row["reoptimizedDelta"] if row["reoptimizedDelta"] is not None else row["fixedDelta"]))
+    return rows
+
+
 def _recommend_positive(
     weapon: Mapping[str, Any],
     baseline: _Evaluation,
@@ -3854,6 +3932,8 @@ def _statics_cache_key(
         benchmark_key["scenario"] = raw["scenario"]
     if raw.get("melee"):
         benchmark_key["melee"] = raw["melee"]
+    if raw.get("incarnon"):
+        benchmark_key["incarnon"] = raw["incarnon"]
     return json.dumps(
         {
             "weapon": str(weapon_path or ""),
@@ -4413,6 +4493,7 @@ def analyze_riven_request(
     status_rate_multiplier = float(stance_info.get("statusRateMultiplier") or 1.0) if stance_info else 1.0
     melee_context: dict[str, Any] | None = None
     melee_schedule: dict[str, Any] | None = None
+    route_sensitive = False  # a melee slam / glaive route: the panel proxy cannot rank for it
     if weapon_type == "melee":
         # Melee hit schedule: the stance and route travel with the scenario;
         # the replay uses discrete hits and ignores the stance multipliers.
@@ -4429,6 +4510,7 @@ def analyze_riven_request(
         melee_schedule = build_schedule(weapon, state.get("meleeRoute"), stance=state.get("meleeStance"),
                                         combo=state.get("meleeCombo"), target_distance=state.get("meleeTargetDistance"))
         if melee_schedule:
+            route_sensitive = melee_schedule["route"] != "combo"
             melee_context = {"route": melee_schedule["route"], "label": melee_schedule.get("label"),
                              "stance": melee_schedule.get("stance"), "combo": melee_schedule.get("combo")}
             stance_multiplier = status_rate_multiplier = 1.0
@@ -4658,7 +4740,9 @@ def analyze_riven_request(
         and (not record_overridden or bool(request.get("_cacheDefaultInnate"))
              # A default-element Kitgun / Zaw assembly caches under its parts.
              or (bool(request.get("_cacheAssembly")) and statics_weapon != weapon_record.get("path")))
-        and request.get("incarnonChoices") is None
+        # A caller that fixes the route per weapon (the Bot's baked best route)
+        # may cache it: the route then joins the cache key below.
+        and (request.get("incarnonChoices") is None or bool(request.get("_cacheIncarnon")))
         and request.get("arcanes") is None
         # A fixed caller preset (the Bot) may cache its own scenario; the
         # scenario then joins the cache key below.
@@ -4679,6 +4763,8 @@ def analyze_riven_request(
         _bm["scenario"] = _scenario_context(scenario)
     if melee_context:
         _bm["melee"] = melee_context
+    if request.get("incarnonChoices") is not None and request.get("_cacheIncarnon"):
+        _bm["incarnon"] = {str(k): str(v) for k, v in sorted(dict(request["incarnonChoices"]).items())}
     cache_key = _statics_cache_key(
         statics_weapon,
         weapon.get("innateElements"),
@@ -4890,12 +4976,16 @@ def analyze_riven_request(
         common = dict(target_context=context, profile=profile, forbidden_mod_keys=search_forbidden_keys,
                       min_fill=search_min_fill, max_fill=search_max_fill)
         results = []
-        if not ultra:
+        # The panel proxy the ultra profile ranks with knows nothing about a
+        # melee attack route: on a slam or glaive route it picks the combo
+        # build (Blood Rush, Weeping Wounds). Those routes get the replay
+        # search as well, like the deeper profiles.
+        if not ultra or route_sensitive:
             results.append(_optimize_with_element_fallback(
                 weapon, mod_pool, riven, required_mod_keys=search_required_keys, **common, **kwargs))
         seeds: tuple[tuple[str | None, tuple[str, ...]], ...] = ((None, ()), *ELEMENT_SEEDS.items())
         if required_damage_type:
-            if not ultra:
+            if not ultra or route_sensitive:
                 return _rescore(results[0], riven, kwargs)
             # Ultra with a fixed element (the Bot's viral policy): only that
             # element's seed; the open seed is the fallback when infeasible.
@@ -5381,6 +5471,26 @@ def analyze_riven_request(
         if len(recommended_negative)==3:break
     if not negative_fresh:
         recommended_negative = [negative_map[code] for code in cached_negative if code in negative_map]
+    # ── 致命负面（武器级）──────────────────────────────────────────────
+    # 每个可作负面的词条按理论负值放进推荐正面的紫卡：先在基准配装上固定
+    # 配卡评估；亏损超过 FATAL_NEGATIVE_LOSS 的，再以基准配装为种子重搜一次
+    # 配卡——配装可以围绕负面调整（负触发转暴击、负弹匣喂首发伤害卡），
+    # 重搜后仍亏损超过阈值才算致命。与 WFSim 一样让战斗决定每个负面，
+    # 不按词条写死规则；不参与伤害的词条（变焦、后坐力…）恒为无伤。
+    negative_assessment: list[dict[str, Any]] = []
+    cached_fatal = (bundle or {}).get("fatal") if not recommended_fresh else None
+    if negative_fresh and not ultra:
+        negative_assessment = _assess_negatives(
+            weapon, mod_pool, baseline, negative_seed, negative_ranked, negative_map, neutral_negative_codes,
+            scenario=scenario, metric=ranking_metric, passives=passives, capacity_limit=capacity_limit,
+            target_context=search_context, keep_cap=negative_keep_cap)
+        fatal_codes = [row["code"] for row in negative_assessment if row["fatal"]]
+    elif isinstance(cached_fatal, list):
+        fatal_codes = [code for code in cached_fatal if code in negative_map]
+    else:
+        fatal_codes = []
+        if not ultra:
+            unsupported.append("fatal-negative-not-assessed")
     negative_fresh = negative_fresh and not ultra
     if not recommended_negative and "ultra-profile-negative-ranking-not-cached" not in unsupported:
         unsupported.append("no-objective-neutral-supported-negative-stat")
@@ -5482,6 +5592,7 @@ def analyze_riven_request(
             write_bundle["tiers"] = recommended_tiers
         if negative_fresh:
             write_bundle["negative"] = [line.code for line in recommended_negative]
+            write_bundle["fatal"] = list(fatal_codes)
         statics_cache["__dirty__"] = True
     if statics_only:
         evaluation_target, context_hash = _context_identity()
@@ -5494,7 +5605,8 @@ def analyze_riven_request(
             statics_cache["__dirty__"] = True
         return {"bakeStaticsOnly": True, "contextHash": context_hash,
                 "recommended": [line.code for line in recommended],
-                "negative": [line.code for line in recommended_negative]}
+                "negative": [line.code for line in recommended_negative],
+                "fatal": list(fatal_codes)}
 
     # 不再计算「理论上限」与 0–100 评分（上限本身是近似搜索，其误差会传给
     # 所有评分）。保留：相对无紫卡基线的实际增益、逐词条贡献与推荐词条排序。
@@ -5614,20 +5726,9 @@ def analyze_riven_request(
         elif line.code == 'HR':
             condition = '武器收起时自动装填'
             inactive_reason = '当前持续持枪，没有收起装填事件'
-        fatal = line.negative and (
-            (ablation_delta if ablation_delta is not None else delta or 0.0) < -5.0
-        )
-        if (
-            fatal
-            and line.effect is not None
-            and line.effect.upgrade_type == "WEAPON_CLIP_MAX"
-            and float(getattr(actual.stats, "magazine", 0.0) or 0.0) >= 1.0
-        ):
-            # 弹匣负面只有在压到连一次完整开火循环都维持不了（弹匣 <1）时才
-            # 算致命；否则只是可量化的 DPS 折损（details 里仍给出数值）。
-            # 小弹匣武器（如守望者 Prime，弹匣 2）配合首发伤害 MOD 时社区
-            # 口径（黑猫）不把负弹匣列为致命。
-            fatal = False
+        # 提交紫卡的负面是否致命：看它是否在武器级致命负面里（重搜配卡后
+        # 仍亏损超过阈值）；固定配卡消融的亏损仍在 details 里给出数值。
+        fatal = bool(line.negative and line.code in fatal_codes)
         if fatal:
             fatal_negative.append(line.label)
         details.append(
@@ -5948,7 +6049,10 @@ def analyze_riven_request(
         "recommendedPositiveTiers": recommended_tiers,
         "recommendedRoutes": None,
         "recommendedNegative": [line.label for line in recommended_negative],
-        "fatalNegative": fatal_negative,
+        # 武器级致命负面（不随提交的紫卡变化）；提交紫卡的负面若在其中，另见 submittedFatalNegative。
+        "fatalNegative": [negative_map[code].label for code in fatal_codes if code in negative_map],
+        "submittedFatalNegative": fatal_negative,
+        "negativeAssessment": negative_assessment,
         "baseline": baseline_payload,
         "actual": actual_payload,
         "incarnonChoices": resolved_choices,

@@ -1,0 +1,230 @@
+{
+ "source": "wiki.warframe.com Module:Weapons/data/* via api.php",
+ "revisions": {},
+ "rule": "measurement > wiki > export; fields converted to the export's conventions (status per shot)",
+ "weapons": {
+  "/Lotus/Weapons/ClanTech/Bio/AcidDartPistol": {
+   "name": "Acrid",
+   "modes": {
+    "0": {
+     "wikiAttack": "Normal Attack",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  },
+  "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/CarminePenta": {
+   "name": "Carmine Penta",
+   "modes": {
+    "0": {
+     "wikiAttack": "Grenade Impact",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  },
+  "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncher": {
+   "name": "Penta",
+   "modes": {
+    "0": {
+     "wikiAttack": "Grenade Impact",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  },
+  "/Lotus/Weapons/Grineer/LongGuns/GrnGrenadeLauncher/GrnGrenadeLauncher": {
+   "name": "Tonkor",
+   "modes": {
+    "0": {
+     "wikiAttack": "Grenade Impact",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  },
+  "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun": {
+   "name": "Stug",
+   "modes": {
+    "0": {
+     "wikiAttack": "Blob Explosion",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    },
+    "1": {
+     "wikiAttack": "Blob Explosion",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  },
+  "/Lotus/Weapons/Infested/LongGuns/Tentacluster/InfestedShotgun": {
+   "name": "Phage",
+   "modes": {
+    "0": {
+     "wikiAttack": "Normal Attack",
+     "notes": [
+      "7 beams (wiki); packages 6"
+     ],
+     "multishot": 7.0,
+     "procChance": 1.085000012
+    }
+   }
+  },
+  "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica": {
+   "name": "Rakta Ballistica",
+   "modes": {
+    "0": {
+     "wikiAttack": "Charged Shot",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  },
+  "/Lotus/Weapons/Tenno/Bows/HuntingBow": {
+   "name": "Paris",
+   "modes": {
+    "0": {
+     "wikiAttack": "Charged Shot",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon": {
+   "name": "Alternox",
+   "modes": {
+    "0": {
+     "wikiAttack": "Normal Attack",
+     "notes": [
+      "projectile GyrRifleWaveProj: 62 Electricity, 30% status"
+     ],
+     "damageTypes": {
+      "DT_ELECTRICITY": 62.0
+     },
+     "procChance": 0.3
+    }
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon": {
+   "name": "Alternox Prime",
+   "modes": {
+    "0": {
+     "wikiAttack": "Normal Attack",
+     "notes": [
+      "Electricity projectile (wiki)"
+     ],
+     "damageTypes": {
+      "DT_ELECTRICITY": 75.0
+     },
+     "procChance": 0.4
+    }
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun": {
+   "name": "Phantasma Prime",
+   "modes": {
+    "0": {
+     "wikiAttack": "Beam",
+     "notes": [
+      "6 beams (wiki); packages 5"
+     ],
+     "multishot": 6.0,
+     "procChance": 1.332
+    }
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun": {
+   "name": "Phantasma",
+   "modes": {
+    "0": {
+     "wikiAttack": "Beam",
+     "notes": [
+      "6 beams in game (wiki, user check); packages fireIterations 5"
+     ],
+     "multishot": 6.0,
+     "procChance": 1.332
+    }
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryWeapon": {
+   "name": "Acceltra",
+   "modes": {
+    "0": {
+     "wikiAttack": "Rocket Impact",
+     "notes": [
+      "rocket impact 35 (wiki); export 26"
+     ],
+     "damageTypes": {
+      "DT_IMPACT": 35.0
+     },
+     "procChance": 0.06
+    }
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/TnRailjackRifle/RailjackRifleGun": {
+   "name": "Quellor",
+   "modes": {
+    "1": {
+     "wikiAttack": "Alt-Fire",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/TnoPrmryXbow/TnoPrmryXbowWeapon": {
+   "name": "Attica",
+   "modes": {
+    "0": {
+     "wikiAttack": "Normal Attack",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  },
+  "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow": {
+   "name": "Ballistica",
+   "modes": {
+    "0": {
+     "wikiAttack": "Charged Shot",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  },
+  "/Lotus/Weapons/Tenno/ThrowingWeapons/TennoStars": {
+   "name": "Hikou",
+   "modes": {
+    "0": {
+     "wikiAttack": "Normal Attack",
+     "notes": [
+      "export ProcChance 0 (projectile without its own); wiki status chance"
+     ],
+     "procChance": 0.1
+    }
+   }
+  }
+ }
+}

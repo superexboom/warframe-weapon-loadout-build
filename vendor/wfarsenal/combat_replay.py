@@ -7,6 +7,7 @@ from dataclasses import replace
 from copy import copy
 
 KILL_BRANCHES = 16
+SHIELD_GATE_LEAK = 0.05
 KILL_BRANCH_MARGIN = .05
 _GOLDEN = (5 ** .5 - 1) / 2
 
@@ -177,6 +178,7 @@ def _reference_trajectory(
         DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES,
         _armour_reduction,
         direct_fire_ledger,
+        faction_bracket,
     )
 
     combat = combat or {}
@@ -228,6 +230,7 @@ def _reference_trajectory(
             target.get("shieldBypassDamageTypes"), DEFAULT_SHIELD_BYPASS_DAMAGE_TYPES
         ),
         target_faction=str(target.get("faction") or ""),
+        faction_bracket=faction_bracket(target),
     )
     locations = {}
     for location in ("body", "head"):
@@ -640,6 +643,7 @@ def _reference_trajectory(
         extra_scale = stats.faction_damage_multipliers.get('', 1.0)
         if cache['target_faction']:
             extra_scale *= stats.faction_damage_multipliers.get(cache['target_faction'], 1.0)
+        extra_scale *= cache['faction_bracket']
         head_part = float(locations['head']['hit_multiplier'] or 1.0)
         extra_scale *= ((1 - head) + head * head_part * head_part) / ((1 - head) + head * head_part)
 
@@ -653,6 +657,7 @@ def _reference_trajectory(
         left = 1.0
         applied = 0.0
         earlier_hit = health_hit = remaining = 0.0
+        shield_broke = False
 
         def health_value(dtype, raw):
             mult = max(
@@ -713,14 +718,22 @@ def _reference_trajectory(
             left -= fraction
             if pools[1] <= 1e-9:
                 pools[1] = 0.0
+                shield_broke = True
                 magnetic_break(t, 1)
                 signal('on-shield-broken', t)
         if left > 0.0 and pools[1] <= 1e-9 and pools[2] > 0.0:
             value = sum(health_value(k, raw) for k, raw in vector.items())
-            drain = min(pools[2], value * left)
+            amount = value * left
+            if shield_broke:
+                # The shield gate (WFSim M61, in game): the hit that breaks an
+                # enemy shield passes 5% of its excess to health; a direct
+                # weakpoint hit bypasses the gate.
+                weak = (head if weak_kill else 0.) if isinstance(weak_kill, bool) else weak_kill
+                amount *= weak + (1.0 - weak) * SHIELD_GATE_LEAK
+            drain = min(pools[2], amount)
             pools[2] -= drain
             applied += drain
-            health_hit += value * left  # Unclipped jump size.
+            health_hit += amount  # Unclipped jump size.
             remaining += drain
         totals[source] += applied
         if source == 'dot' and len(vector) == 1:
@@ -837,6 +850,7 @@ def _reference_trajectory(
             "faction": target.get("faction", ""),
             "hitProxies": target.get("hitProxies", []),
             "factionResistance": "RK_NEUTRAL",
+            "factionBracket": faction_bracket(target),
         }
         b = expected_status_damage(
             st, dot_target, forced_procs=forced_procs, level=1, hit_location="body"
@@ -987,6 +1001,7 @@ def _reference_trajectory(
         faction = st.faction_damage_multipliers.get('', 1.0)
         if cache['target_faction']:
             faction *= st.faction_damage_multipliers.get(cache['target_faction'], 1.0)
+        faction *= cache['faction_bracket']
         empowered_count += n
         before = totals['arcane']
         died = take({dtype:n * empowered['damage'] * faction}, t, 'arcane')
@@ -1106,15 +1121,21 @@ def _reference_trajectory(
                         push(t + j, "independent-dot", instance, gen)
                 elif dtype in non:
                     states[dtype].pop()
-                    instance = {
-                        "count": n,
-                        "per": non[dtype]["perProc"],
-                        "end": t + 1.5 * scale,
-                    }
-                    blast_procs.append(instance)
-                    push(instance["end"], "blast", instance, gen)
-                    if sum(p["count"] for p in blast_procs) >= 10.0:
-                        push(t, "blast-all", None, gen)
+                    # WFSim M108 (in game): the pile detonates at ten and the rest
+                    # of the shot that filled it is lost -- it does not start the
+                    # next pile. The proc itself still counts (Cascadia below).
+                    room = max(0.0, 10.0 - sum(p["count"] for p in blast_procs))
+                    kept = min(n, room)
+                    if kept > 0.0:
+                        instance = {
+                            "count": kept,
+                            "per": non[dtype]["perProc"],
+                            "end": t + 1.5 * scale,
+                        }
+                        blast_procs.append(instance)
+                        push(instance["end"], "blast", instance, gen)
+                        if sum(p["count"] for p in blast_procs) >= 10.0:
+                            push(t, "blast-all", None, gen)
 
             if empowered_hit(st, dtype, n, t, allow_encumber):
                 return

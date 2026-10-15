@@ -184,6 +184,13 @@ def live_variant(template, live_types, count_ceiling):
         return None
 
 
+# Weapons that fire straight from the reserve and never reload.
+NO_MAGAZINE_WEAPONS = frozenset({
+    "/Lotus/Weapons/Tenno/Pistols/TnWraitheSidearm/TnWraitheSidearmWeapon",       # Epitaph
+    "/Lotus/Weapons/Tenno/Pistols/PrimeEpitaph/PrimeEpitaphSidearmWeapon",        # Epitaph Prime
+})
+
+
 def prepare(
     engine,
     mod_records,
@@ -889,7 +896,10 @@ def prepare(
                           if selected_attack.get('manualDetonation') else None),
         # combatState.infiniteAmmo (Bot preset): the magazine never runs dry,
         # so there are no reloads, recharges or reload-triggered effects.
-        infiniteAmmo=bool(scenario.combat_state.get('infiniteAmmo')),
+        # Epitaph has no magazine at all (WFSim M114, in-game timing + wiki):
+        # a shot draws from the reserve, the 0.6 s reload is never paid.
+        infiniteAmmo=bool(scenario.combat_state.get('infiniteAmmo'))
+                     or str(weapon.get('path') or '') in NO_MAGAZINE_WEAPONS,
         reloadAfterEveryShot=(not weapon.get("isIncarnonForm") and not cycle
                               and reloads_after_every_shot(weapon, mode_index)),
         shellReload=({'start': base_attack['reloadStart'], 'perShell': base_attack['reloadPerShell'],

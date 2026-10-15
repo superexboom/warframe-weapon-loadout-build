@@ -38,7 +38,7 @@ pub(crate) fn vector_of(types: &mut Types, obj: &Bound<'_, PyAny>) -> PyResult<V
 
 /// The tables' view of a Python ``ModdedStats`` (``target_faction`` picks the
 /// faction row); the vectors are read by the caller, which keeps them too.
-pub(crate) fn core_of(obj: &Bound<'_, PyAny>, types: &mut Types, target_faction: &str, damage_types: &Vector,
+pub(crate) fn core_of(obj: &Bound<'_, PyAny>, types: &mut Types, target_faction: &str, faction_bracket: f64, damage_types: &Vector,
                   native_forced_procs: &Vector, independent_proc_chances: &Vector) -> PyResult<Core> {
     let factions = obj.getattr("faction_damage_multipliers")?;
     let factions = factions.cast::<PyDict>()?;
@@ -80,6 +80,7 @@ pub(crate) fn core_of(obj: &Bound<'_, PyAny>, types: &mut Types, target_faction:
         falloff_multiplier: f(obj, "falloff_multiplier")?,
         faction_all,
         faction_target,
+        faction_bracket,
         multishot: f(obj, "multishot")?,
         continuous: b(obj, "continuous")?,
         radial_only: b(obj, "radial_only")?,
@@ -320,6 +321,8 @@ impl Stats {
 }
 
 const UNSUPPORTED_ATTRS: [&str; 1] = ["_mine_extra"];
+/// WFSim M61: the share of a shield-breaking hit's excess that reaches health.
+const SHIELD_GATE_LEAK: f64 = 0.05;
 
 /// A list of ModEffect as (operation code, value).
 fn effect_ops(list: &Bound<'_, PyAny>) -> PyResult<Vec<(u8, f64)>> {
@@ -486,6 +489,7 @@ pub struct Replay<'py> {
     victim_before: Vec<(D, f64)>,
     syndicate: Option<(String, D, f64)>,
     target_faction: String,
+    faction_bracket: f64,
     tables: TargetTables,
     battery: Option<(f64, f64, f64)>,
     spool: Option<SpoolSpec>,
@@ -832,7 +836,7 @@ impl<'py> Replay<'py> {
 
     fn core_from(&mut self, obj: &Bound<'py, PyAny>, damage_types: &Vector, native_forced_procs: &Vector,
                  independent_proc_chances: &Vector) -> PyResult<Core> {
-        core_of(obj, &mut self.types, &self.target_faction, damage_types, native_forced_procs, independent_proc_chances)
+        core_of(obj, &mut self.types, &self.target_faction, self.faction_bracket, damage_types, native_forced_procs, independent_proc_chances)
     }
 
     fn view(&mut self, obj: &Bound<'py, PyAny>) -> PyResult<usize> {
@@ -1876,6 +1880,7 @@ impl<'py> Replay<'py> {
         let mut earlier_hit = 0.0;
         let mut health_hit = 0.0;
         let mut remaining = 0.0;
+        let mut shield_broke = false;
         if self.pools[0] > 0.0 {
             let mut value = psum(vector.iter().map(|(k, raw)| raw * if *k == VOID || *k == RADIANT { 1.5 } else { 1.0 }))
                 * self.vulnerability(MAGNETIC);
@@ -1933,6 +1938,7 @@ impl<'py> Replay<'py> {
             left -= fraction;
             if self.pools[1] <= 1e-9 {
                 self.pools[1] = 0.0;
+                shield_broke = true;
                 self.magnetic_break(t, 1)?;
                 self.signal("on-shield-broken", t, 1.0);
             }
@@ -1943,10 +1949,21 @@ impl<'py> Replay<'py> {
                 s.add(self.health_value(*k, *raw, t));
             }
             let value = s.value();
-            let drain = pmin(self.pools[2], value * left);
+            let mut amount = value * left;
+            if shield_broke {
+                // WFSim M61: the shield-breaking hit passes 5% of its excess;
+                // a direct weakpoint hit bypasses the gate (Python reference).
+                let weak = match weak_kill {
+                    WeakKill::Flag(true) => self.head,
+                    WeakKill::Flag(false) => 0.0,
+                    WeakKill::Value(v) => v,
+                };
+                amount *= weak + (1.0 - weak) * SHIELD_GATE_LEAK;
+            }
+            let drain = pmin(self.pools[2], amount);
             self.pools[2] -= drain;
             applied += drain;
-            health_hit += value * left;
+            health_hit += amount;
             remaining += drain;
         }
         self.totals[source] += applied;
@@ -2257,7 +2274,7 @@ impl<'py> Replay<'py> {
             return Ok(false);
         }
         let core = &self.stats[st].core;
-        let faction = core.faction_all * core.faction_target;
+        let faction = core.faction_all * core.faction_target * core.faction_bracket;
         self.empowered_count += n;
         let before = self.totals[ARCANE];
         let died = self.take(&vec![(d, n * damage * faction)], t, ARCANE, WeakKill::Flag(false), 0.0, false)?;
@@ -2459,13 +2476,19 @@ impl<'py> Replay<'py> {
                     }
                 } else if let Some(&per) = data.non.get(&d) {
                     self.states.get_mut(&d).unwrap().pop_back();
-                    self.blasts.push(Blast { count: n, per, end: t + 1.5 * scale });
-                    let blast = self.blasts.len() - 1;
-                    self.blast_procs.push_back(blast);
-                    let end = self.blasts[blast].end;
-                    self.push(end, Kind::Blast(blast), Some(self.gen));
-                    if psum(self.blast_procs.iter().map(|&i| self.blasts[i].count)) >= 10.0 {
-                        self.push(t, Kind::BlastAll, Some(self.gen));
+                    // WFSim M108: the pile detonates at ten; the rest of the shot
+                    // that filled it is lost (Python reference, same order).
+                    let room = pmax(0.0, 10.0 - psum(self.blast_procs.iter().map(|&i| self.blasts[i].count)));
+                    let kept = pmin(n, room);
+                    if kept > 0.0 {
+                        self.blasts.push(Blast { count: kept, per, end: t + 1.5 * scale });
+                        let blast = self.blasts.len() - 1;
+                        self.blast_procs.push_back(blast);
+                        let end = self.blasts[blast].end;
+                        self.push(end, Kind::Blast(blast), Some(self.gen));
+                        if psum(self.blast_procs.iter().map(|&i| self.blasts[i].count)) >= 10.0 {
+                            self.push(t, Kind::BlastAll, Some(self.gen));
+                        }
                     }
                 }
             }
@@ -3947,6 +3970,7 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
         reload_shell_events: Vec::new(),
         derived: FxHashMap::default(),
         target_faction,
+        faction_bracket: get_f(&config, "factionBracket", 1.0)?,
         tables,
         selected_incarnon: item("selectedIncarnon")?.is_truthy()?,
         melee,

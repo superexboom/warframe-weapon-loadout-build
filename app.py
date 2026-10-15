@@ -239,6 +239,49 @@ def _patch_export_weapons(exports: dict[str, Any]) -> None:
 
 _patch_export_weapons(EXPORTS)
 
+# 数据优先级：实测 > wiki > 导出。wiki 与导出冲突、且能确定是同一攻击时，
+# 以 wiki 为准（tools/import_wiki_weapon_stats.py 生成，口径已换成导出的：
+# 多弹丸触发几率按每次射击）。导出漏掉的是游戏运行时推出来的值：弹丸自己
+# 没有 ProcChance 时沿用武器的（导出写成 0），光束的 fireIterations 比军械库
+# 显示的光束数少一条（幻离子 5 对 6）。
+WIKI_WEAPON_OVERRIDES_PATH = ROOT / "data" / "wiki_weapon_overrides.json"
+
+
+def _apply_wiki_weapon_overrides(exports: dict[str, Any]) -> None:
+    try:
+        overrides = json.loads(WIKI_WEAPON_OVERRIDES_PATH.read_text(encoding="utf-8")).get("weapons") or {}
+    except (OSError, ValueError):
+        return
+    for weapon in exports.get("weapons") or ():
+        entry = overrides.get(str(weapon.get("path") or "")) if isinstance(weapon, dict) else None
+        if not entry:
+            continue
+        modes = weapon.get("fireModes") or []
+        for key, fields in (entry.get("modes") or {}).items():
+            index = int(key)
+            if index >= len(modes) or not isinstance(modes[index], dict):
+                continue
+            mode = modes[index]
+            damage = mode.setdefault("damage", {})
+            applied = []
+            if "multishot" in fields:
+                mode["multishot"] = fields["multishot"]
+                applied.append("multishot")
+            if "damageTypes" in fields:
+                types = {key: float(value) for key, value in fields["damageTypes"].items()}
+                total = sum(types.values())
+                damage["types"] = types
+                damage["total"] = total
+                damage["shares"] = {key: value / total for key, value in types.items()} if total else {}
+                applied.append("damage")
+            if "procChance" in fields:
+                damage["procChance"] = fields["procChance"]
+                applied.append("procChance")
+            mode["wikiOverride"] = applied
+
+
+_apply_wiki_weapon_overrides(EXPORTS)
+
 
 # ---------------------------------------------------------------------------
 # 暗黑分合剑（Dark Split-Sword）：唯一随架势切换武器类别的特殊武器。
@@ -656,6 +699,7 @@ def _analysis_inputs_fingerprint() -> str:
         EXPORT_DIR / "riven_templates.json",
         EXPORT_DIR / "incarnon_defaults.json",
         ROOT / "data" / "source-lock.json",
+        ROOT / "data" / "wiki_weapon_overrides.json",
         ROOT / "data" / "mechanics" / "combat-reference.json",
         ROOT / "data" / "mechanics" / "sniper-mechanics.json",
         ROOT / "data" / "mechanics" / "melee-mechanics.json",
@@ -3577,6 +3621,32 @@ def _auto_loadout(
             evaluation = choose_route(evaluation, arcane_card, rescreen=True)
     report["seconds"] = round(time.perf_counter() - started, 2)
     return evaluation, incarnon_card, dict(incarnon_choices), list(incarnon_unsupported), arcane_card, report
+
+
+def best_analysis_incarnon_route(
+    weapon_path: str, *, profile: str = "fast", headshot_chance: float = 0.0, element_target: str | None = None,
+) -> dict[str, str] | None:
+    """The Incarnon route the build page's automatic search picks on the riven
+    analysis' benchmark (Thrax Centurion Lv170 Steel Path without its innate
+    Overguard, the analysis' default Incarnon form).
+
+    For a caller that fixes one route per weapon and bakes it (the Bot: pass
+    the route as ``incarnonChoices`` with ``_cacheIncarnon``). The Portable
+    analysis keeps the weapon's default route unless the user picks one.
+    """
+    if weapon_path not in CATALOG_WEAPONS_BY_PATH:
+        return None
+    record = optimizer.resolve_record(EXPORTS["weapons"], weapon_path, kind="weapon")
+    if not loadout_search.route_choices(record, optimizer._tier_number):
+        return None
+    modes = record.get("fireModes") or ()
+    fire_mode = len(modes) - 1 if record.get("isIncarnon") and len(modes) > 1 else 0
+    payload = dict(weapon=weapon_path, mode="auto", profile=profile, autoIncarnon=True, fireMode=fire_mode,
+                   headshotChance=headshot_chance)
+    if element_target:
+        payload["elementTarget"] = element_target
+    result = build_weapon_payload(payload)
+    return dict(result.get("incarnonChoices") or {}) or None
 
 
 def build_weapon_payload(

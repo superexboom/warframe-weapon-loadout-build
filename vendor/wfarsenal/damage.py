@@ -609,6 +609,22 @@ class Scenario:
         )
 
 
+# Demolishers (WFSim M89, in game): a flat 0.8 INSIDE the faction bracket, so a
+# hit takes x0.8 and the status it seeds x0.64 (the bracket applies again at
+# every derivation step). It is not damage attenuation. Multiplied in last, so
+# every other target is exactly unchanged.
+DEMOLISHER_FACTION_BRACKET = 0.8
+
+
+def faction_bracket(target) -> float:
+    explicit = (target or {}).get("factionBracket")
+    if explicit is not None:
+        return float(explicit)
+    name = str((target or {}).get("path") or "").rsplit("/", 1)[-1]
+    demolisher = ("Disruption" in name or name.startswith(("Demo", "PNWNarmerDemo"))) and "ShieldDrone" not in name
+    return DEMOLISHER_FACTION_BRACKET if demolisher else 1.0
+
+
 _DERIVED_SCENARIOS: dict = {}
 
 
@@ -3152,6 +3168,7 @@ def damage_against_cached_armour(
     faction_multiplier = stats.faction_damage_multipliers.get("", 1.0)
     if target_faction:
         faction_multiplier *= stats.faction_damage_multipliers.get(target_faction, 1.0)
+    faction_multiplier *= faction_bracket(target)
     if faction_multiplier != 1.0:
         per_type = {
             damage_type: amount * faction_multiplier
@@ -3333,6 +3350,7 @@ def damage_against(
     faction_multiplier = stats.faction_damage_multipliers.get("", 1.0)
     if target_faction:
         faction_multiplier *= stats.faction_damage_multipliers.get(target_faction, 1.0)
+    faction_multiplier *= faction_bracket(target)
     if faction_multiplier != 1.0:
         per_type = {
             damage_type: amount * faction_multiplier
@@ -3446,6 +3464,7 @@ def enemy_kill_metrics(
         faction_multiplier = stats.faction_damage_multipliers.get("", 1.0)
         if target_faction:
             faction_multiplier *= stats.faction_damage_multipliers.get(target_faction, 1.0)
+        faction_multiplier *= faction_bracket(target)
         raw_per_trigger = (
             stats.total_damage
             * effective_hit_multiplier(
@@ -3742,6 +3761,7 @@ def expected_dot_damage(
     faction_mod = stats.faction_damage_multipliers.get("", 1.0)
     if target_faction:
         faction_mod *= stats.faction_damage_multipliers.get(target_faction, 1.0)
+    faction_mod *= faction_bracket(target)
 
     breakdown: dict[str, dict[str, float]] = {}
     total = 0.0
@@ -3806,6 +3826,11 @@ def expected_dot_damage(
             * target_multiplier
             * max(float(faction_mod), 0.0) ** 2
         )
+        if dtype in ("DT_ELECTRICITY", "DT_GAS") and not stats.radial_only and hit_multiplier > 1.0 + 1e-9:
+            # WFSim M100 (in game): an Electricity or Gas tick LANDS on the part
+            # the hit struck, and on a head the headshot bonuses (Deadhead-like,
+            # not Acuity-like) apply to the tick once more.
+            unit *= float(stats.headshot_bonus_multiplier)
         crit_share = 0.0
         if dtype in stats.crit_proc_chances and crit_seed_tiers:
             shots = 1.0 if stats.continuous else max(float(stats.multishot), 0.0)
@@ -3970,6 +3995,7 @@ def expected_status_damage(
         target_faction = str(target.get("faction") or "")
         if target_faction:
             faction_mod *= stats.faction_damage_multipliers.get(target_faction, 1.0)
+        faction_mod *= faction_bracket(target)
         modded_base = (
             stats.dot_base_damage
             if stats.dot_base_damage is not None
