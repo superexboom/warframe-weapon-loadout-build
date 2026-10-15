@@ -183,3 +183,29 @@ def test_head_ticks_in_the_replay(engine, dtype, extra):
     bonus = run(stats(damage_types={dtype: 100.0}, fire_rate=1.0, headshot_bonus_multiplier=2.0), tg,
                 headshot_chance=1.0, window_seconds=7.)
     assert bonus["dotWindow"] == pytest.approx(plain["dotWindow"] * 2. * extra, rel=.02)
+
+
+# ── a read-only ultra caller may read a deeper profile's statics ──────────
+
+@pytest.mark.parametrize("extra,profile,metric", [
+    ({}, "fast", "killsPerMinute"),
+    ({"_staticsProfile": "deep"}, "deep", "windowedDps"),
+    ({"_staticsProfile": "bogus"}, "fast", "killsPerMinute"),
+])
+def test_ultra_reads_the_statics_of_the_requested_profile(monkeypatch, extra, profile, metric):
+    seen = []
+    original = o._statics_cache_key
+
+    def key(*args, **kwargs):
+        seen.append((args[4], args[7]))
+        return original(*args, **kwargs)
+    monkeypatch.setattr(o, "_statics_cache_key", key)
+    monkeypatch.setattr(app, "_ANALYSIS_RESULTS", type(app._ANALYSIS_RESULTS)())
+    monkeypatch.setattr(app, "_persist_analysis_statics_cache", lambda: None)
+    weapon = next(w for w in app.CATALOG["weapons"] if w.get("nameEn") == "Lex Prime")
+    family = o._riven_type(None, _weapon("Lex Prime"))
+    bases = app.RIVEN_BASE_VALUES[family]
+    stats = [dict(code=c, value=bases[c] * weapon["disposition"], negative=False) for c in ("0", "1")]
+    app.analyze_payload(dict(weapon=weapon["path"], disposition=weapon["disposition"], stats=stats, profile="ultra",
+                             elementTarget="viral", headshotChance=0.5, **extra))
+    assert seen[0] == (profile, metric)

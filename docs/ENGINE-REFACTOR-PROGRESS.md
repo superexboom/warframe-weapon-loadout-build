@@ -513,3 +513,17 @@ ultra 也跑真实回放搜索；Fragor Prime 震地配卡变为震波 / 邪恶�
 
 **Bot 用**：`app.best_analysis_incarnon_route()` 在紫卡分析靶上跑配装页的自动灵化搜索（fast 档每把 14–26 秒）；请求带 `_cacheIncarnon`
 时显式灵化路线也可缓存（路线进缓存键）。
+
+**Bot 缓存档位（`_staticsProfile`）**：Bot 每个请求只算提交紫卡的配卡与三节点得分，ultra 档单线程 0.1–0.2 秒；fast 档逐卡搜索
+3–6 秒，超出 3 秒回复预算，所以请求仍是 ultra。可以加深的是它读的缓存：ultra 请求带 `_staticsProfile` 时读该档位烘焙的
+基线、硬度节点、推荐与致命负面（只读，写入仍按请求自身档位）。各档基线的 KPM 不能直接比（硬度节点由各自的基线推出），
+放到同一组节点上比较：
+
+|武器|standard / fast|deep / fast|fast · standard · deep 烘焙（2 正）|
+|---|---|---|---|
+|Nikana Prime|−0.5% / −1.5%|+5.4% / +7.9%|36 · 77 · 251 s|
+|Lex Prime|−9.8%|±0|17 · 38 · 64 s|
+|Kuva Nukor、螺钉 Prime、伯斯顿、Soma Prime|±0|±0|—|
+
+（两列分别为 fast 与 deep 的节点。）standard 按窗口 DPS 排序，KPM 上可能不如 fast；deep 在测过的武器上都不低于 fast。
+Bot 因此按 deep 烘焙。

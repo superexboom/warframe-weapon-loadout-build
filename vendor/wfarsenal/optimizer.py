@@ -4765,15 +4765,26 @@ def analyze_riven_request(
         _bm["melee"] = melee_context
     if request.get("incarnonChoices") is not None and request.get("_cacheIncarnon"):
         _bm["incarnon"] = {str(k): str(v) for k, v in sorted(dict(request["incarnonChoices"]).items())}
+    # A read-only ultra caller (the Bot) may read the statics a deeper profile
+    # baked: the card is still placed and scored by the ultra profile, on that
+    # profile's baseline, hardness nodes and recommendation ranking. Writes
+    # always use the request's own profile. (Scored on common hardness nodes,
+    # deep baselines were never below fast ones, 2026-10-16; standard ones
+    # were on Lex Prime -10%: its DPS ranking can cost kills per minute.)
+    statics_profile, statics_metric = profile, ranking_metric
+    if ultra and request.get("_staticsProfile") in ("standard", "deep"):
+        statics_profile = str(request["_staticsProfile"])
+        statics_metric = ('windowedDps' if objective_metric == 'killsPerMinute' and benchmark_context is not None
+                          else objective_metric)
     cache_key = _statics_cache_key(
         statics_weapon,
         weapon.get("innateElements"),
         fire_mode,
         element_target_raw,
-        profile,
+        statics_profile,
         disposition,
         capacity_limit,
-        ranking_metric,
+        statics_metric,
         _bm,
     )
     statics: dict[str, Any] | None = None
@@ -4782,7 +4793,7 @@ def analyze_riven_request(
         if (
             isinstance(candidate_entry, dict)
             and candidate_entry.get("disposition") == disposition
-            and candidate_entry.get("metric") == ranking_metric
+            and candidate_entry.get("metric") == statics_metric
             and candidate_entry.get("capacityLimit") == capacity_limit
         ):
             statics = candidate_entry
@@ -4793,13 +4804,13 @@ def analyze_riven_request(
             # hardness nodes do not depend on it and the recommendation ranking
             # hardly does. Nothing is written back under this key.
             fallback_key = _statics_cache_key(
-                statics_weapon, weapon.get("innateElements"), fire_mode, element_target_raw, profile,
-                float(fallback_disposition), capacity_limit, ranking_metric, _bm,
+                statics_weapon, weapon.get("innateElements"), fire_mode, element_target_raw, statics_profile,
+                float(fallback_disposition), capacity_limit, statics_metric, _bm,
             )
             fallback_entry = statics_cache.get(fallback_key)
             if (
                 isinstance(fallback_entry, dict)
-                and fallback_entry.get("metric") == ranking_metric
+                and fallback_entry.get("metric") == statics_metric
                 and fallback_entry.get("capacityLimit") == capacity_limit
             ):
                 statics = fallback_entry
@@ -4855,8 +4866,8 @@ def analyze_riven_request(
                     and parsed_key.get("innateElements") == list(weapon.get("innateElements") or ())
                     and parsed_key.get("fireMode") == fire_mode
                     and parsed_key.get("elementTarget") == (element_target_raw or "-")
-                    and parsed_key.get("profile") == profile
-                    and parsed_key.get("metric") == ranking_metric
+                    and parsed_key.get("profile") == statics_profile
+                    and parsed_key.get("metric") == statics_metric
                     and parsed_key.get("capacityLimit") == capacity_limit
                     and parsed_key.get("disposition") == round(float(disposition), 8)
                     and _benchmark_matches_except_level(parsed_key.get("benchmark"))
