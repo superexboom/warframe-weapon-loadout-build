@@ -94,6 +94,9 @@ def heartbeat(count=0):
             pass  # Progress reporting is never part of numerical evaluation.
 
 
+_MISSING = object()
+
+
 def memoized_search(fn):
     @wraps(fn)
     def run(*args, **kwargs):
@@ -109,13 +112,17 @@ def memoized_search(fn):
         except (TypeError, pickle.PicklingError):
             return fn(*args, **kwargs)
         memo = state['searches']
-        if key in memo:
+        hit = memo.get(key, _MISSING)
+        if hit is not _MISSING:
             state['memoHits'] += 1
-            return memo[key]
+            return hit
         result = fn(*args, **kwargs)
         memo[key] = result
-        if len(memo) > 256:
-            memo.popitem(last=False)
+        while len(memo) > 256:
+            try:
+                memo.popitem(last=False)
+            except KeyError:
+                break
         return result
     return run
 

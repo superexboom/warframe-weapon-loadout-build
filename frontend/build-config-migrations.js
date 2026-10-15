@@ -1,5 +1,5 @@
 /* Only migrate server-verified, previously admitted unreleased identities.
- * The original entry stays in the config/export; API validation remains strict.
+ * Silent for the user; API validation of direct requests remains strict.
  */
 function migrateLegacyBuildConfig(config, replacements) {
   if (!config || typeof config !== 'object' || Array.isArray(config)) return { config, changes: [] };
@@ -29,19 +29,8 @@ function migrateLegacyBuildConfig(config, replacements) {
       return rule.path;
     }))];
   }
-  if (!changes.length) return { config, changes };
-  next.legacyModMigrations = [...(Array.isArray(config.legacyModMigrations) ? config.legacyModMigrations : []), ...changes];
+  if (!changes.length && !Object.hasOwn(config, 'legacyModMigrations')) return { config, changes };
+  // Older saves carried an audit trail of these swaps; it means nothing to the user.
+  delete next.legacyModMigrations;
   return { config: next, changes };
-}
-
-function legacyModMigrationMessage(history) {
-  if (!Array.isArray(history) || !history.length) return '';
-  const entries = history.filter((change) => change && typeof change === 'object' && ['mods', 'exilus', 'requiredMods', 'forbiddenMods'].includes(change.field));
-  if (!entries.length) return '';
-  const details = entries.map((change) => {
-    const location = change.field === 'mods' ? `第 ${Number(change.slot) + 1} 槽` : ({ exilus: '特殊槽', requiredMods: '必选限制', forbiddenMods: '禁用限制' }[change.field] || 'MOD');
-    const rank = change.to && typeof change.to === 'object' ? `，等级 ${change.from?.rank ?? '默认'} → ${change.to.rank}` : '';
-    return `${location}：${change.label || 'MOD'}${rank}`;
-  });
-  return `旧配置中的未发布 MOD 变体已替换为正式版本（${details.join('；')}）。超出正式上限的等级已调整，数值将重新计算；原始路径与等级保留在导出 JSON 的 legacyModMigrations 中。`;
 }

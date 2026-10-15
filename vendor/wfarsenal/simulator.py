@@ -864,7 +864,7 @@ def simulate(
         enemy_record.setdefault("path", "__custom_enemy__")
         enemy_record.setdefault("name", "Custom defense snapshot")
         enemy_record.setdefault("nameEn", "Custom defense snapshot")
-        enemy_record.setdefault("nameZh", "自定义防御快照")
+        enemy_record.setdefault("nameZh", "自定义防御")
     else:
         enemy_record = resolve_record(exports["enemies"], enemy, kind="enemy")
     scenario = scenario or Scenario()

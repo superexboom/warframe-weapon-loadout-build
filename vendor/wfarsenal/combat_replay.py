@@ -11,6 +11,42 @@ KILL_BRANCH_MARGIN = .05
 _GOLDEN = (5 ** .5 - 1) / 2
 
 
+class _KillProbe:
+    """weak_draw that leaves kills fractional and records how uncertain they were."""
+
+    def __init__(self):
+        self.uncertainty = 0.
+
+    def __call__(self, probability):
+        self.uncertainty = max(self.uncertainty, min(probability, 1. - probability))
+        return probability
+
+    def native_spec(self):
+        return dict(probe=True)
+
+    def absorb(self, core):
+        self.uncertainty = max(self.uncertainty, core['weakUncertainty'])
+
+
+class _KillBranch:
+    """weak_draw deciding each uncertain kill from a rotated Kronecker sequence."""
+
+    def __init__(self, offset):
+        self.offset = offset
+        self.index = 0
+
+    def __call__(self, probability):
+        u = (self.offset + self.index * _GOLDEN) % 1.
+        self.index += 1
+        return 1. if u < probability else 0.
+
+    def native_spec(self):
+        return dict(probe=False, offset=self.offset, golden=_GOLDEN)
+
+    def absorb(self, core):
+        self.index = int(core['weakIndex'])
+
+
 def replay(stats, target, **options):
     """Expected replay; uncertain weak-point-kill feedback runs branches.
 
@@ -28,23 +64,12 @@ def replay(stats, target, **options):
                        for q in options.get('trigger_sources') or ()))
     if not feedback:
         return _trajectory(stats, target, **options)
-    uncertainty = [0.]
-
-    def probe(probability):
-        uncertainty[0] = max(uncertainty[0], min(probability, 1. - probability))
-        return probability
+    probe = _KillProbe()
     expected = _trajectory(stats, target, weak_draw=probe, **options)
-    if uncertainty[0] < KILL_BRANCH_MARGIN:
+    if probe.uncertainty < KILL_BRANCH_MARGIN:
         return expected
-    runs = []
-    for branch in range(branches):
-        state = dict(index=0)
-
-        def draw(probability, state=state, offset=(branch + .5) / branches):
-            u = (offset + state['index'] * _GOLDEN) % 1.
-            state['index'] += 1
-            return 1. if u < probability else 0.
-        runs.append(_trajectory(stats, target, weak_draw=draw, **options))
+    runs = [_trajectory(stats, target, weak_draw=_KillBranch((branch + .5) / branches), **options)
+            for branch in range(branches)]
     return _merge_branches(runs)
 
 

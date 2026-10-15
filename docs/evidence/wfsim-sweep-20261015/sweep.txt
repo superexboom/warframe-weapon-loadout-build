@@ -1,0 +1,766 @@
+kompressa                    m0 build wfsim    0.0213 +- 0.3% local    0.1345 ( +531.2%)  [wfsim: The bubbles explode 0.6-0.8 s after landing, which can let e | explosion_ignores_cover | self_stagger]
+kompressa                    m0 bare  wfsim    0.0044 +- 0.1% local    0.0151 ( +242.1%)  [wfsim: The bubbles explode 0.6-0.8 s after landing, which can let e | explosion_ignores_cover | self_stagger]
+dual_coda_torxica            m0 bare  wfsim    0.0257 +- 0.4% local    0.0501 (  +95.4%)  [wfsim: The spores are most of the weapon: an enemy hit by it and th]
+mutalist_quanta_orb          m1 bare  wfsim    0.0247 +- 0.5% local    0.0024 (  -90.1%)  [wfsim: The orb hangs in place and damages what walks into it, and s | explosion_ignores_cover | self_stagger]
+tenet_plinx_charged          m1 bare  wfsim    0.0700 +- 2.4% local    0.0073 (  -89.6%)  [wfsim: Magazine capacity raises this alt-fire's damage, multiplicat | The 0.8 s embed delay before the slug detonates, during whic | Fulmination reaches only the blast, not the pull radius; the | The explosion's forced ragdoll and the alt-fire's forced kno | self_stagger]
+mutalist_quanta_orb          m1 build wfsim    0.0856 +- 0.6% local    0.0095 (  -88.9%)  [wfsim: The orb hangs in place and damages what walks into it, and s | explosion_ignores_cover | self_stagger]
+ferrox_thrown                m1 bare  wfsim    0.0148 +- 0.7% local    0.0023 (  -84.6%)  [wfsim: The field pulls enemies within 10 m toward it for 30 s, the  | The throw's forced knockdown is crowd control, worth time an | The spear must be picked up or waited out; here it is thrown]
+tenet_plinx_charged          m1 build wfsim    0.8306 +- 1.7% local    0.1567 (  -81.1%)  [wfsim: Magazine capacity raises this alt-fire's damage, multiplicat | The 0.8 s embed delay before the slug detonates, during whic | Fulmination reaches only the blast, not the pull radius; the | The explosion's forced ragdoll and the alt-fire's forced kno | self_stagger]
+trumna_prime_grenade         m1 bare  wfsim    0.3890 +- 1.3% local    0.0924 (  -76.2%)  [wfsim: Primary Compression's row for this attack is not entered. Th | The grenades are earned by dealing damage with the primary f | explosion_ignores_cover | self_stagger]
+trumna_grenade               m1 bare  wfsim    0.3428 +- 1.4% local    0.0815 (  -76.2%)  [wfsim: Primary Compression's row for this attack is not entered. Th | The grenades are earned by dealing damage with the primary f | explosion_ignores_cover | self_stagger]
+ferrox_thrown                m1 build wfsim    0.0578 +- 1.2% local    0.0151 (  -73.9%)  [wfsim: The field pulls enemies within 10 m toward it for 30 s, the  | The throw's forced knockdown is crowd control, worth time an | The spear must be picked up or waited out; here it is thrown]
+lenz                         m0 build wfsim    0.2171 +- 0.4% local    0.3756 (  +73.0%)  [wfsim: The module gives this shot three attacks and the engine carr | The collapse's 1.3 s delay after the initial blast is not mo | The bubble holds what it catches until it collapses (wiki);  | self_stagger | bolt_corpse_ragdoll]
+sepulcrum_lockon             m1 bare  wfsim    0.0805 +- 2.3% local    0.0232 (  -71.2%)  [wfsim: Lock-on marks several targets and sends a missile at each (w | The mode is charged by dealing damage with the primary fire; | explosion_ignores_cover | self_stagger]
+acceltra                     m0 bare  wfsim    0.0394 +- 0.2% local    0.0118 (  -69.9%)  [wfsim: The rockets arm only after 7 m (wiki); closer, they hit with | Reloading while sprinting gives +25% reload speed (+50% on G | explosion_ignores_cover | self_stagger]
+kuva_kraken_mag_burst        m1 bare  wfsim    0.0493 +- 0.8% local    0.0161 (  -67.4%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | The burst can be interrupted by a quick melee, a roll or a w]
+aegrit                       m0 build wfsim    0.2989 +- 0.2% local    0.4899 (  +63.9%)  [wfsim: The mines are detonated by hand with the alt-fire, up to fou | Mines stick to surfaces, enemies and allies, and multishot t | explosion_ignores_cover | self_stagger | silent_weapon]
+castanas                     m0 bare  wfsim    0.0327 +- 0.4% local    0.0123 (  -62.4%)  [wfsim: The explosion is the whole weapon, and its radius is not mod | The mines are detonated by hand with the alt-fire, and sever | Mines stick to surfaces, enemies and allies, and multishot t | silent_weapon | explosion_ignores_cover]
+castanas                     m0 build wfsim    0.2915 +- 0.5% local    0.1098 (  -62.3%)  [wfsim: The explosion is the whole weapon, and its radius is not mod | The mines are detonated by hand with the alt-fire, and sever | Mines stick to surfaces, enemies and allies, and multishot t | silent_weapon | explosion_ignores_cover]
+acceltra                     m0 build wfsim    0.4737 +- 0.1% local    0.1940 (  -59.0%)  [wfsim: The rockets arm only after 7 m (wiki); closer, they hit with | Reloading while sprinting gives +25% reload speed (+50% on G | explosion_ignores_cover | self_stagger]
+trumna_prime_grenade         m1 build wfsim    1.5952 +- 1.0% local    0.6586 (  -58.7%)  [wfsim: Primary Compression's row for this attack is not entered. Th | The grenades are earned by dealing damage with the primary f | explosion_ignores_cover | self_stagger]
+javlok_throw                 m1 bare  wfsim    0.0286 +- 1.9% local    0.0119 (  -58.4%)  [wfsim: The spear must be retrieved before the weapon can be used ag | explosion_ignores_cover | self_stagger]
+convectrix_alt               m1 build wfsim    0.3885 +- 0.2% local    0.1636 (  -57.9%)  [wfsim: The alt-fire sweeps both beams across the front (wiki); the ]
+trumna_grenade               m1 build wfsim    1.4339 +- 1.0% local    0.6044 (  -57.8%)  [wfsim: Primary Compression's row for this attack is not entered. Th | The grenades are earned by dealing damage with the primary f | explosion_ignores_cover | self_stagger]
+javlok_throw                 m1 build wfsim    0.2028 +- 1.7% local    0.0858 (  -57.7%)  [wfsim: The spear must be retrieved before the weapon can be used ag | explosion_ignores_cover | self_stagger]
+sepulcrum_lockon             m1 build wfsim    0.6006 +- 0.9% local    0.2592 (  -56.8%)  [wfsim: Lock-on marks several targets and sends a missile at each (w | The mode is charged by dealing damage with the primary fire; | explosion_ignores_cover | self_stagger]
+scourge_thrown               m1 build wfsim    0.0356 +- 0.9% local    0.0162 (  -54.6%)  [wfsim: The Bullet Attractor's value as an aiming aid is not counted | It reloads 33% of its magazine a second while holstered or d]
+kuva_kraken_mag_burst        m1 build wfsim    0.5877 +- 0.3% local    0.2722 (  -53.7%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | The burst can be interrupted by a quick melee, a roll or a w]
+scourge_thrown               m1 bare  wfsim    0.0052 +- 0.5% local    0.0025 (  -52.7%)  [wfsim: The Bullet Attractor's value as an aiming aid is not counted | It reloads 33% of its magazine a second while holstered or d]
+dual_coda_torxica            m0 build wfsim    0.4195 +- 0.2% local    0.6378 (  +52.0%)  [wfsim: The spores are most of the weapon: an enemy hit by it and th]
+tenet_ferrox_thrown          m1 bare  wfsim    0.0143 +- 0.7% local    0.0070 (  -51.1%)  [wfsim: The field pulls enemies within 10 m toward it for 30 s, the  | The throw's forced knockdown is crowd control, worth time an | The page lists as a bug that the field is disabled entirely  | The spear must be picked up or waited out; here it is thrown]
+sancti_castanas              m0 bare  wfsim    0.0677 +- 0.5% local    0.0331 (  -51.1%)  [wfsim: The explosion is the whole weapon, and its radius is not mod | The mines are detonated by hand with the alt-fire, and sever | Mines stick to surfaces, enemies and allies, and multishot t | The Purity syndicate effect heals and cleanses the wielder a | silent_weapon | explosion_ignores_cover]
+afentis_throw                m1 build wfsim    0.2863 +- 0.6% local    0.1464 (  -48.9%)
+synoid_simulor               m0 build wfsim    0.3420 +- 0.8% local    0.1759 (  -48.6%)  [wfsim: Orbs merge, and a full set collapses into a singularity deal | The Entropy syndicate effect detonates enemies and restores  | explosion_ignores_cover | self_stagger]
+afentis_throw                m1 bare  wfsim    0.0172 +- 0.9% local    0.0089 (  -48.2%)
+afentis_prime_throw          m1 bare  wfsim    0.0270 +- 0.9% local    0.0141 (  -48.0%)
+tenet_detron_mag_burst       m1 bare  wfsim    0.0638 +- 0.4% local    0.0344 (  -46.1%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | Aiming is disabled during the burst, so Acolyte mods do not  | The burst can be cancelled with a quick melee to spend less  | The Condition Overload bonus ignores damage falloff (the cat]
+afentis_prime_throw          m1 build wfsim    0.4793 +- 0.2% local    0.2608 (  -45.6%)
+cyanex                       m0 build wfsim    0.0706 +- 0.3% local    0.1028 (  +45.5%)  [wfsim: The projectiles home on enemies (wiki); shots here already l | explosion_ignores_cover | self_stagger]
+athodai_alt                  m1 bare  wfsim    0.1250 +- 0.5% local    0.0688 (  -45.0%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | The cone is 2 m thick (wiki); the sim fires a ray with no wi]
+athodai_prime_alt            m1 bare  wfsim    0.2008 +- 0.5% local    0.1120 (  -44.2%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | The cone is 2 m thick (wiki); the sim fires a ray with no wi]
+tenet_diplos_lock_on         m1 build wfsim    0.0927 +- 0.8% local    0.0522 (  -43.7%)  [wfsim: The mode locks up to 8 enemies within 60 m and fires a 2-rou | The ~0.5 s delay before the mode can lock on again after a b | Lock-on homes on the body, making headshots hard unless aimi | Seeking rounds travel 5 m before they seek, so at contact ra]
+tenet_diplos_lock_on         m1 bare  wfsim    0.0051 +- 1.0% local    0.0029 (  -43.6%)  [wfsim: The mode locks up to 8 enemies within 60 m and fires a 2-rou | The ~0.5 s delay before the mode can lock on again after a b | Lock-on homes on the body, making headshots hard unless aimi | Seeking rounds travel 5 m before they seek, so at contact ra]
+epitaph_prime                m0 bare  wfsim    0.0302 +- 0.9% local    0.0178 (  -40.9%)
+catabolyst                   m0 bare  wfsim    0.0348 +- 0.8% local    0.0211 (  -39.6%)  [wfsim: Unmeasured: when in the reload the grenade lands. The page s | The explosion's self-stagger, which costs the wielder time w | Galvanized Shot's bug on the grenade's direct hit (multiplic | Interrupting the reload to throw again without reloading, th | This weapon never reloads on its own; the sim reloads it, so]
+twin_kohmak                  m0 bare  wfsim    0.0423 +- 0.2% local    0.0256 (  -39.4%)  [wfsim: The pellet count spools up too, one more per consecutive sho | auto_spool_ramp]
+scourge_prime_thrown         m1 build wfsim    0.0605 +- 0.9% local    0.0372 (  -38.5%)  [wfsim: The Bullet Attractor's value as an aiming aid is not counted | It reloads 33% of its magazine a second while holstered or d]
+scourge_prime_thrown         m1 bare  wfsim    0.0069 +- 0.6% local    0.0043 (  -37.4%)  [wfsim: The Bullet Attractor's value as an aiming aid is not counted | It reloads 33% of its magazine a second while holstered or d]
+epitaph                      m0 bare  wfsim    0.0200 +- 0.7% local    0.0126 (  -37.0%)
+epitaph                      m0 build wfsim    0.4252 +- 0.4% local    0.2682 (  -36.9%)
+pandero_prime_alt            m1 bare  wfsim    0.0337 +- 0.5% local    0.0214 (  -36.5%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | The alt-fire prevents zoom, so Hydraulic Crosshairs and Shar]
+pandero_alt                  m1 build wfsim    0.3706 +- 0.3% local    0.2361 (  -36.3%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | The alt-fire prevents zoom, so Hydraulic Crosshairs and Shar]
+pandero_alt                  m1 bare  wfsim    0.0198 +- 0.4% local    0.0127 (  -36.0%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | The alt-fire prevents zoom, so Hydraulic Crosshairs and Shar]
+twin_kohmak                  m0 build wfsim    0.4803 +- 0.0% local    0.3087 (  -35.7%)  [wfsim: The pellet count spools up too, one more per consecutive sho | auto_spool_ramp]
+synoid_simulor               m0 bare  wfsim    0.0671 +- 0.5% local    0.0434 (  -35.3%)  [wfsim: Orbs merge, and a full set collapses into a singularity deal | The Entropy syndicate effect detonates enemies and restores  | explosion_ignores_cover | self_stagger]
+athodai_prime_alt            m1 build wfsim    1.3847 +- 0.3% local    0.9029 (  -34.8%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | The cone is 2 m thick (wiki); the sim fires a ray with no wi]
+tenet_ferrox_thrown          m1 build wfsim    0.0694 +- 1.2% local    0.0484 (  -30.3%)  [wfsim: The field pulls enemies within 10 m toward it for 30 s, the  | The throw's forced knockdown is crowd control, worth time an | The page lists as a bug that the field is disabled entirely  | The spear must be picked up or waited out; here it is thrown]
+simulor                      m0 bare  wfsim    0.0278 +- 0.6% local    0.0362 (  +30.3%)  [wfsim: Orbs merge: a new orb joining one in the air triggers 'Orb M | explosion_ignores_cover | self_stagger]
+kohmak                       m0 bare  wfsim    0.0291 +- 0.3% local    0.0203 (  -30.1%)  [wfsim: The pellet count spools up too, one more per consecutive sho | auto_spool_ramp]
+kohm                         m0 bare  wfsim    0.0634 +- 0.2% local    0.0446 (  -29.7%)  [wfsim: The pellet count spools up too, one more per consecutive sho | auto_spool_ramp]
+kohmak                       m0 build wfsim    0.3490 +- 0.2% local    0.2456 (  -29.6%)  [wfsim: The pellet count spools up too, one more per consecutive sho | auto_spool_ramp]
+catabolyst                   m0 build wfsim    0.3737 +- 0.4% local    0.2634 (  -29.5%)  [wfsim: Unmeasured: when in the reload the grenade lands. The page s | The explosion's self-stagger, which costs the wielder time w | Galvanized Shot's bug on the grenade's direct hit (multiplic | Interrupting the reload to throw again without reloading, th | This weapon never reloads on its own; the sim reloads it, so]
+kohm                         m0 build wfsim    0.4476 +- 0.1% local    0.3158 (  -29.4%)  [wfsim: The pellet count spools up too, one more per consecutive sho | auto_spool_ramp]
+athodai_alt                  m1 build wfsim    0.8809 +- 0.3% local    0.6220 (  -29.4%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | The cone is 2 m thick (wiki); the sim fires a ray with no wi]
+alternox_prime               m0 bare  wfsim    0.0310 +- 0.5% local    0.0220 (  -29.0%)
+cinta                        m0 bare  wfsim    0.0406 +- 0.5% local    0.0292 (  -28.2%)  [wfsim: silent_weapon]
+convectrix_alt               m1 bare  wfsim    0.0330 +- 0.2% local    0.0237 (  -28.1%)  [wfsim: The alt-fire sweeps both beams across the front (wiki); the ]
+kuva_quartakk                m0 bare  wfsim    0.0502 +- 1.0% local    0.0362 (  -27.9%)  [wfsim: mode_is_the_aim_state]
+alternox_prime_alt           m1 build wfsim    0.0782 +- 0.7% local    0.0578 (  -26.1%)  [wfsim: The alt-fire's third attack, a burn in 6 m between the conta | explosion_ignores_cover | self_stagger]
+shedu                        m0 bare  wfsim    0.0255 +- 1.1% local    0.0321 (  +25.9%)  [wfsim: The battery discharge when the magazine empties, a 20 m puls | The discharge also strips Sentient and Shadow Stalker damage | +30% Movement Speed while aiming and the explosion's self-st]
+hikou                        m0 build wfsim    0.0564 +- 0.3% local    0.0419 (  -25.8%)  [wfsim: Not offered here: the thrown-exclusive Concealed Explosives, | silent_weapon]
+vulcax                       m0 bare  wfsim    0.0097 +- 2.4% local    0.0072 (  -25.7%)  [wfsim: The charge time is not modelled because the page publishes n | companion_fires_it | spread_not_transcribed]
+tenet_detron_mag_burst       m1 build wfsim    0.6005 +- 0.1% local    0.4484 (  -25.3%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | Aiming is disabled during the burst, so Acolyte mods do not  | The burst can be cancelled with a quick melee to spend less  | The Condition Overload bonus ignores damage falloff (the cat]
+vulcax                       m0 build wfsim    0.1211 +- 1.9% local    0.0915 (  -24.4%)  [wfsim: The charge time is not modelled because the page publishes n | companion_fires_it | spread_not_transcribed]
+enkaus                       m0 bare  wfsim    0.0107 +- 0.1% local    0.0133 (  +23.6%)  [wfsim: An Enkaus hit that leaves an ink-stained enemy below 35% hea | Primary fire on an ink-stained enemy spends no ammo and rest | Unmeasured: the page gives the beam a 30 m range and the wea | Unmeasured: the page says the weapon uses no ammo pickups an]
+alternox_prime               m0 build wfsim    0.3670 +- 0.5% local    0.2804 (  -23.6%)
+enkaus                       m0 build wfsim    0.1198 +- 0.2% local    0.1477 (  +23.3%)  [wfsim: An Enkaus hit that leaves an ink-stained enemy below 35% hea | Primary fire on an ink-stained enemy spends no ammo and rest | Unmeasured: the page gives the beam a 30 m range and the wea | Unmeasured: the page says the weapon uses no ammo pickups an]
+shedu                        m0 build wfsim    0.3531 +- 0.8% local    0.4341 (  +23.0%)  [wfsim: The battery discharge when the magazine empties, a 20 m puls | The discharge also strips Sentient and Shadow Stalker damage | +30% Movement Speed while aiming and the explosion's self-st]
+kuva_quartakk                m0 build wfsim    0.6193 +- 0.3% local    0.4776 (  -22.9%)  [wfsim: mode_is_the_aim_state]
+alternox_alt                 m1 build wfsim    0.0497 +- 0.8% local    0.0387 (  -22.1%)  [wfsim: The alt-fire's third attack, a burn in 6 m between the conta | explosion_ignores_cover | self_stagger]
+pandero_prime_alt            m1 build wfsim    0.5196 +- 0.1% local    0.4060 (  -21.9%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | The alt-fire prevents zoom, so Hydraulic Crosshairs and Shar]
+alternox                     m0 bare  wfsim    0.0167 +- 0.5% local    0.0131 (  -21.4%)
+epitaph_prime                m0 build wfsim    0.5165 +- 0.3% local    0.4081 (  -21.0%)
+enkaus_alt                   m1 build wfsim    0.0100 +- 0.5% local    0.0080 (  -20.6%)  [wfsim: The blast ink-stains every enemy it hits for 20 s and leaves | Unmeasured: the page says the weapon uses no ammo pickups an | explosion_ignores_cover | self_stagger]
+enkaus_alt                   m1 bare  wfsim    0.0013 +- 0.2% local    0.0010 (  -20.4%)  [wfsim: The blast ink-stains every enemy it hits for 20 s and leaves | Unmeasured: the page says the weapon uses no ammo pickups an | explosion_ignores_cover | self_stagger]
+talons                       m0 build wfsim    0.3567 +- 0.2% local    0.2918 (  -18.2%)  [wfsim: The explosion is the whole weapon, and its radius is not mod | The mines are detonated by hand with the alt-fire, and sever | Mines stick to surfaces, enemies and allies, and multishot t | The embedded detonation also forces a ragdoll, which is not  | explosion_ignores_cover]
+coda_pox                     m0 build wfsim    0.2819 +- 0.2% local    0.3326 (  +18.0%)  [wfsim: The throw is silent and the cloud is not; there is nobody to | This weapon cannot equip Concealed Explosives, the thrown-ex]
+attica                       m0 build wfsim    0.2101 +- 0.4% local    0.1726 (  -17.8%)  [wfsim: Not offered here: Spring-Loaded Broadhead and the bow-exclus | bolt_corpse_ragdoll | silent_weapon]
+phantasma_prime              m0 build wfsim    0.2245 +- 0.1% local    0.1869 (  -16.8%)
+phantasma                    m0 bare  wfsim    0.0311 +- 0.0% local    0.0259 (  -16.7%)
+phantasma                    m0 build wfsim    0.1942 +- 0.1% local    0.1618 (  -16.7%)
+phantasma_prime              m0 bare  wfsim    0.0337 +- 0.1% local    0.0281 (  -16.7%)
+nukor                        m0 bare  wfsim    0.0074 +- 0.2% local    0.0062 (  -16.6%)  [wfsim: The Microwave status enlarges the body part that was shot (w]
+talons                       m0 bare  wfsim    0.0253 +- 0.3% local    0.0212 (  -16.4%)  [wfsim: The explosion is the whole weapon, and its radius is not mod | The mines are detonated by hand with the alt-fire, and sever | Mines stick to surfaces, enemies and allies, and multishot t | The embedded detonation also forces a ragdoll, which is not  | explosion_ignores_cover]
+nukor                        m0 build wfsim    0.0698 +- 0.5% local    0.0584 (  -16.3%)  [wfsim: The Microwave status enlarges the body part that was shot (w]
+coda_pox                     m0 bare  wfsim    0.0324 +- 0.2% local    0.0377 (  +16.1%)  [wfsim: The throw is silent and the cloud is not; there is nobody to | This weapon cannot equip Concealed Explosives, the thrown-ex]
+haalvu_alt                   m1 build wfsim    0.2050 +- 0.2% local    0.1727 (  -15.7%)  [wfsim: Tau's status effect is not modelled. Tau's neutral damage is | The miniature rifles lock onto up to four enemies within 40 ]
+haalvu_alt                   m1 bare  wfsim    0.0190 +- 0.1% local    0.0161 (  -15.6%)  [wfsim: Tau's status effect is not modelled. Tau's neutral damage is | The miniature rifles lock onto up to four enemies within 40 ]
+verglas                      m0 bare  wfsim    0.0094 +- 0.1% local    0.0109 (  +15.5%)  [wfsim: companion_fires_it | spread_not_transcribed]
+verglas                      m0 build wfsim    0.0746 +- 0.4% local    0.0860 (  +15.3%)  [wfsim: companion_fires_it | spread_not_transcribed]
+kuva_kohm                    m0 bare  wfsim    0.0851 +- 0.4% local    0.0724 (  -15.0%)  [wfsim: The pellet count spools from 1 to 12, and this entry fires 1]
+phage                        m0 bare  wfsim    0.0169 +- 0.1% local    0.0144 (  -14.6%)  [wfsim: From the hip the seven beams spread; aiming focuses them on ]
+phage                        m0 build wfsim    0.1187 +- 0.1% local    0.1013 (  -14.6%)  [wfsim: From the hip the seven beams spread; aiming focuses them on ]
+pox                          m0 bare  wfsim    0.0126 +- 0.4% local    0.0144 (  +14.4%)  [wfsim: The cloud's Condition Overload term is 50 against its own ba | The throw is silent and the cloud is not; there is nobody to | This weapon cannot equip Concealed Explosives, the thrown-ex]
+pox                          m0 build wfsim    0.0927 +- 0.4% local    0.1054 (  +13.7%)  [wfsim: The cloud's Condition Overload term is 50 against its own ba | The throw is silent and the cloud is not; there is nobody to | This weapon cannot equip Concealed Explosives, the thrown-ex]
+coda_bubonico_burst          m1 build wfsim    0.3478 +- 1.0% local    0.3934 (  +13.1%)  [wfsim: The explosion's +9 s status duration is applied before other | explosion_ignores_cover | The projectiles arc and travel slowly, so at range they must | self_stagger]
+attica                       m0 bare  wfsim    0.0131 +- 0.6% local    0.0114 (  -13.0%)  [wfsim: Not offered here: Spring-Loaded Broadhead and the bow-exclus | bolt_corpse_ragdoll | silent_weapon]
+coda_bubonico_burst          m1 bare  wfsim    0.0501 +- 1.5% local    0.0563 (  +12.4%)  [wfsim: The explosion's +9 s status duration is applied before other | explosion_ignores_cover | The projectiles arc and travel slowly, so at range they must | self_stagger]
+hikou                        m0 bare  wfsim    0.0059 +- 0.2% local    0.0052 (  -12.4%)  [wfsim: Not offered here: the thrown-exclusive Concealed Explosives, | silent_weapon]
+prisma_lenz                  m0 build wfsim    0.4544 +- 0.3% local    0.5083 (  +11.9%)  [wfsim: The module gives this shot three attacks and the engine carr | The collapse's 1.3 s delay after the initial blast is not mo | The bubble holds what it catches until it collapses (wiki);  | self_stagger | bolt_corpse_ragdoll]
+kulstar                      m0 build wfsim    0.3040 +- 0.3% local    0.2682 (  -11.8%)  [wfsim: explosion_ignores_cover | self_stagger | cluster_bomblet_co]
+efv_5_jupiter_buckshot       m1 bare  wfsim    0.0406 +- 0.3% local    0.0453 (  +11.7%)
+haalvu                       m0 bare  wfsim    0.0200 +- 0.2% local    0.0178 (  -11.1%)  [wfsim: Tau's status effect is not modelled. Tau's neutral damage is | Switching firing modes takes 3 s, can be interrupted and sca]
+bubonico_burst               m1 build wfsim    0.0697 +- 0.4% local    0.0774 (  +11.1%)  [wfsim: explosion_ignores_cover | The projectiles arc and travel slowly, so at range they must | self_stagger]
+haalvu                       m0 build wfsim    0.2790 +- 0.2% local    0.2482 (  -11.1%)  [wfsim: Tau's status effect is not modelled. Tau's neutral damage is | Switching firing modes takes 3 s, can be interrupted and sca]
+bubonico_burst               m1 bare  wfsim    0.0107 +- 0.4% local    0.0118 (  +10.9%)  [wfsim: explosion_ignores_cover | The projectiles arc and travel slowly, so at range they must | self_stagger]
+alternox                     m0 build wfsim    0.1670 +- 0.6% local    0.1503 (  -10.0%)
+sancti_castanas              m0 build wfsim    0.5246 +- 0.1% local    0.4731 (   -9.8%)  [wfsim: The explosion is the whole weapon, and its radius is not mod | The mines are detonated by hand with the alt-fire, and sever | Mines stick to surfaces, enemies and allies, and multishot t | The Purity syndicate effect heals and cleanses the wielder a | silent_weapon | explosion_ignores_cover]
+nagantaka_burst              m1 build wfsim    0.3323 +- 0.6% local    0.3649 (   +9.8%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | bolt_corpse_ragdoll]
+staticor                     m0 build wfsim    0.0345 +- 0.6% local    0.0378 (   +9.7%)  [wfsim: explosion_ignores_cover | self_stagger]
+staticor                     m0 bare  wfsim    0.0046 +- 0.4% local    0.0051 (   +9.1%)  [wfsim: explosion_ignores_cover | self_stagger]
+nagantaka_burst              m1 bare  wfsim    0.0297 +- 0.6% local    0.0322 (   +8.4%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | bolt_corpse_ragdoll]
+gotva_prime                  m0 bare  wfsim    0.0179 +- 0.2% local    0.0165 (   -8.2%)
+efv_5_jupiter_buckshot       m1 build wfsim    0.5028 +- 0.2% local    0.5435 (   +8.1%)
+gotva_prime                  m0 build wfsim    0.2472 +- 0.2% local    0.2278 (   -7.8%)
+multron                      m0 bare  wfsim    0.0037 +- 0.4% local    0.0034 (   -7.7%)  [wfsim: The dart's 1.5 s explosion delay is not modelled: the blast  | companion_fires_it | spread_not_transcribed]
+multron                      m0 build wfsim    0.0375 +- 0.7% local    0.0346 (   -7.6%)  [wfsim: The dart's 1.5 s explosion delay is not modelled: the blast  | companion_fires_it | spread_not_transcribed]
+acrid                        m0 bare  wfsim    0.0239 +- 0.2% local    0.0221 (   -7.4%)
+acrid                        m0 build wfsim    0.2080 +- 0.3% local    0.1930 (   -7.2%)
+tenet_arca_plasmor           m0 build wfsim    0.4481 +- 1.0% local    0.4797 (   +7.1%)  [wfsim: The projectile is a wall 4.4 m thick that sweeps everything  | Shots bounce off surfaces up to 4 times, which can double a  | The guaranteed Impact proc reaches only 29 m but is applied  | Its innate punch through does not pass surfaces when the pro]
+kuva_kohm                    m0 build wfsim    0.5418 +- 0.1% local    0.5051 (   -6.8%)  [wfsim: The pellet count spools from 1 to 12, and this entry fires 1]
+verglas_prime                m0 bare  wfsim    0.0138 +- 0.2% local    0.0147 (   +6.6%)  [wfsim: companion_fires_it | spread_not_transcribed]
+twin_gremlins                m0 bare  wfsim    0.0073 +- 0.3% local    0.0068 (   -6.6%)  [wfsim: bolt_corpse_ragdoll]
+twin_gremlins                m0 build wfsim    0.0844 +- 0.3% local    0.0789 (   -6.6%)  [wfsim: bolt_corpse_ragdoll]
+verglas_prime                m0 build wfsim    0.1409 +- 0.3% local    0.1501 (   +6.5%)  [wfsim: companion_fires_it | spread_not_transcribed]
+opticor                      m0 bare  wfsim    0.0273 +- 1.2% local    0.0290 (   +6.0%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's ra | explosion_ignores_cover | self_stagger]
+proboscis_cernos             m0 bare  wfsim    0.0434 +- 0.3% local    0.0408 (   -6.0%)  [wfsim: The arrow also throws appendages that grab enemies within 9  | explosion_ignores_cover | self_stagger | silent_weapon]
+nagantaka_prime_burst        m1 bare  wfsim    0.0465 +- 0.5% local    0.0492 (   +6.0%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | bolt_corpse_ragdoll | silent_weapon]
+nagantaka_prime_burst        m1 build wfsim    0.5554 +- 0.3% local    0.5867 (   +5.6%)  [wfsim: The burst empties the magazine, and this entry fires a fixed | bolt_corpse_ragdoll | silent_weapon]
+coda_tysis                   m0 bare  wfsim    0.0273 +- 1.6% local    0.0288 (   +5.5%)  [wfsim: The innate Corrosive damage over time, 177 of each dart's 25 | A dart that pierces an enemy deals it only 1 tick of the dam | On a kill the body follows the dart, damaging anyone in its ]
+kulstar                      m0 bare  wfsim    0.0407 +- 0.2% local    0.0388 (   -4.8%)  [wfsim: explosion_ignores_cover | self_stagger | cluster_bomblet_co]
+alternox_prime_alt           m1 bare  wfsim    0.0189 +- 0.5% local    0.0180 (   -4.5%)  [wfsim: The alt-fire's third attack, a burn in 6 m between the conta | explosion_ignores_cover | self_stagger]
+coda_catabolyst              m0 bare  wfsim    0.0991 +- 0.7% local    0.0947 (   -4.5%)  [wfsim: Unmeasured: when in the reload the grenade lands. The page s | The explosion's self-stagger, which costs the wielder time w | Galvanized Shot's bug on the grenade's direct hit (multiplic | Interrupting the reload to throw again without reloading, th | The 45-degree fan is read as edge to edge around the reticle | This weapon never reloads on its own; the sim reloads it, so]
+javlok                       m0 build wfsim    0.3555 +- 1.2% local    0.3710 (   +4.4%)  [wfsim: explosion_ignores_cover | self_stagger]
+kuva_twin_stubbas            m0 bare  wfsim    0.0328 +- 0.8% local    0.0341 (   +4.2%)
+tenet_ferrox                 m0 bare  wfsim    0.0493 +- 1.4% local    0.0513 (   +4.1%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's ra | The catalog says the explosion takes Condition Overload comp | explosion_ignores_cover | holstered_reload | self_stagger]
+proboscis_cernos             m0 build wfsim    0.2142 +- 0.8% local    0.2055 (   -4.1%)  [wfsim: The arrow also throws appendages that grab enemies within 9  | explosion_ignores_cover | self_stagger | silent_weapon]
+kuva_seer                    m0 build wfsim    0.4741 +- 0.8% local    0.4930 (   +4.0%)  [wfsim: explosion_ignores_cover]
+coda_catabolyst              m0 build wfsim    1.5669 +- 0.6% local    1.6289 (   +4.0%)  [wfsim: Unmeasured: when in the reload the grenade lands. The page s | The explosion's self-stagger, which costs the wielder time w | Galvanized Shot's bug on the grenade's direct hit (multiplic | Interrupting the reload to throw again without reloading, th | The 45-degree fan is read as edge to edge around the reticle | This weapon never reloads on its own; the sim reloads it, so]
+kuva_hind                    m0 bare  wfsim    0.0454 +- 0.7% local    0.0472 (   +3.9%)
+coda_hema                    m0 build wfsim    0.6118 +- 0.9% local    0.6356 (   +3.9%)  [wfsim: Its drawback, converting health to ammo (up to 5% of max hea | The 5% life steal on headshots adds nothing here: there is n]
+ignis_wraith                 m0 bare  wfsim    0.0397 +- 0.6% local    0.0412 (   +3.8%)  [wfsim: The beam's 0.15 m thickness, the largest of any continuous w | The area damage can headshot, which the page marks as a bug;]
+zakti                        m0 bare  wfsim    0.0125 +- 0.5% local    0.0120 (   -3.7%)  [wfsim: The cloud arrives 1 s after the dart lands (wiki); here it r | The explosion staggers enemies, opening them to finishers an | explosion_ignores_cover]
+lenz                         m0 bare  wfsim    0.0221 +- 0.6% local    0.0213 (   -3.7%)  [wfsim: The module gives this shot three attacks and the engine carr | The collapse's 1.3 s delay after the initial blast is not mo | The bubble holds what it catches until it collapses (wiki);  | self_stagger | bolt_corpse_ragdoll]
+helstrum                     m0 build wfsim    0.0194 +- 1.9% local    0.0201 (   +3.6%)  [wfsim: The missiles home, which is not modelled; with one target at | The explosion's falloff is not published, so it is not model | companion_fires_it | spread_not_transcribed]
+helstrum                     m0 bare  wfsim    0.0026 +- 2.0% local    0.0027 (   +3.6%)  [wfsim: The missiles home, which is not modelled; with one target at | The explosion's falloff is not published, so it is not model | companion_fires_it | spread_not_transcribed]
+trumna_prime                 m0 bare  wfsim    0.0892 +- 0.6% local    0.0924 (   +3.6%)  [wfsim: explosion_ignores_cover | self_stagger]
+kuva_zarr                    m0 bare  wfsim    0.0970 +- 1.7% local    0.1004 (   +3.5%)  [wfsim: cluster_bomblet_co | explosion_ignores_cover | self_stagger]
+kuva_nukor                   m0 bare  wfsim    0.0345 +- 0.9% local    0.0357 (   +3.3%)  [wfsim: Microwave also enlarges the body part it hit, an aiming aid ]
+trumna                       m0 bare  wfsim    0.0789 +- 0.6% local    0.0815 (   +3.3%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's ra | explosion_ignores_cover | self_stagger]
+tenet_spirex                 m0 build wfsim    0.7650 +- 0.4% local    0.7899 (   +3.3%)  [wfsim: Bullseye Reload, its passive: a headshot grants +25% reload  | self_stagger]
+prisma_lenz                  m0 bare  wfsim    0.0421 +- 0.7% local    0.0407 (   -3.3%)  [wfsim: The module gives this shot three attacks and the engine carr | The collapse's 1.3 s delay after the initial blast is not mo | The bubble holds what it catches until it collapses (wiki);  | self_stagger | bolt_corpse_ragdoll]
+grakata                      m0 bare  wfsim    0.0077 +- 0.2% local    0.0079 (   +3.2%)
+sagek_prime                  m0 build wfsim    0.2166 +- 0.1% local    0.2234 (   +3.2%)  [wfsim: Critical hits have a 6% chance to set the next shot's status]
+grakata                      m0 build wfsim    0.1029 +- 0.2% local    0.1062 (   +3.2%)
+tenet_cycron                 m0 bare  wfsim    0.0601 +- 0.5% local    0.0620 (   +3.2%)  [wfsim: In game the chain can pass through corpses (page); here a bo | Ruinous Extension extends the beam to 36 m (page); beam-rang]
+sagek_prime                  m0 bare  wfsim    0.0131 +- 0.2% local    0.0135 (   +3.1%)  [wfsim: Critical hits have a 6% chance to set the next shot's status]
+aegrit                       m0 bare  wfsim    0.0381 +- 0.5% local    0.0369 (   -3.0%)  [wfsim: The mines are detonated by hand with the alt-fire, up to fou | Mines stick to surfaces, enemies and allies, and multishot t | explosion_ignores_cover | self_stagger | silent_weapon]
+tenet_detron                 m0 bare  wfsim    0.0488 +- 0.4% local    0.0502 (   +3.0%)  [wfsim: The Condition Overload bonus ignores damage falloff (the cat | The in-game falloff display is wrong on this weapon (page): ]
+flux_rifle                   m0 build wfsim    0.1719 +- 0.4% local    0.1769 (   +2.9%)
+kuva_ogris                   m0 bare  wfsim    0.0689 +- 1.9% local    0.0709 (   +2.9%)  [wfsim: explosion_ignores_cover | self_stagger | The rocket flies at 60 m/s and can be shot down; nothing sho]
+simulor                      m0 build wfsim    0.1324 +- 1.0% local    0.1361 (   +2.8%)  [wfsim: Orbs merge: a new orb joining one in the air triggers 'Orb M | explosion_ignores_cover | self_stagger]
+tenet_arca_plasmor           m0 bare  wfsim    0.0607 +- 1.9% local    0.0624 (   +2.8%)  [wfsim: The projectile is a wall 4.4 m thick that sweeps everything  | Shots bounce off surfaces up to 4 times, which can double a  | The guaranteed Impact proc reaches only 29 m but is applied  | Its innate punch through does not pass surfaces when the pro]
+tenet_spirex                 m0 bare  wfsim    0.0799 +- 1.0% local    0.0821 (   +2.7%)  [wfsim: Bullseye Reload, its passive: a headshot grants +25% reload  | self_stagger]
+kuva_seer                    m0 bare  wfsim    0.0404 +- 1.5% local    0.0414 (   +2.7%)  [wfsim: explosion_ignores_cover]
+coda_bassocyst               m0 bare  wfsim    0.1036 +- 1.9% local    0.1063 (   +2.6%)  [wfsim: The alt-fire is a finisher tool: it latches a mite onto up t | A Mercy kill grants +100% damage and multishot for 20 s, ref | The projectile's thickness is left blank on the page; the si]
+zakti_prime                  m0 bare  wfsim    0.0301 +- 0.4% local    0.0293 (   -2.6%)  [wfsim: The cloud arrives 1 s after the dart lands (wiki); here it r | explosion_ignores_cover]
+kompressa_prime              m0 bare  wfsim    0.0051 +- 0.2% local    0.0050 (   -2.5%)  [wfsim: The bubbles explode 0.6-0.8 s after landing, which can let e | explosion_ignores_cover | self_stagger]
+amprex                       m0 build wfsim    0.3761 +- 0.3% local    0.3855 (   +2.5%)  [wfsim: In game the chain can route through corpses (wiki); here a b]
+kuva_tonkor                  m0 build wfsim    0.3795 +- 1.2% local    0.3890 (   +2.5%)  [wfsim: explosion_ignores_cover | self_stagger | A direct hit forces a knockdown (wiki). Enemies here are not]
+steflos                      m0 build wfsim    0.3459 +- 1.3% local    0.3545 (   +2.5%)  [wfsim: The projectile lives 0.6 s, and each enemy hit adds 50% to i]
+coda_hema                    m0 bare  wfsim    0.0453 +- 1.0% local    0.0464 (   +2.5%)  [wfsim: Its drawback, converting health to ammo (up to 5% of max hea | The 5% life steal on headshots adds nothing here: there is n]
+pandero                      m0 bare  wfsim    0.0102 +- 0.7% local    0.0099 (   -2.4%)
+kuva_bramma                  m0 bare  wfsim    0.1656 +- 1.3% local    0.1695 (   +2.4%)  [wfsim: explosion_ignores_cover | self_stagger | The alt-fire detonates the arrow mid-flight; the sim lets it]
+kuva_nukor                   m0 build wfsim    0.5908 +- 0.4% local    0.6046 (   +2.3%)  [wfsim: Microwave also enlarges the body part it hit, an aiming aid ]
+vadarya_prime                m0 bare  wfsim    0.0635 +- 1.3% local    0.0620 (   -2.3%)  [wfsim: sniper_combo_miss | zoom_steps | Chain lightning is not modelled, and it is a third of the we]
+tenet_flux_rifle             m0 bare  wfsim    0.0401 +- 0.5% local    0.0410 (   +2.3%)
+cedo_prime_alt               m1 build wfsim    0.0116 +- 0.5% local    0.0119 (   +2.3%)  [wfsim: explosion_ignores_cover | self_stagger]
+kuva_karak                   m0 bare  wfsim    0.0356 +- 0.6% local    0.0364 (   +2.2%)
+spira                        m0 bare  wfsim    0.0085 +- 0.5% local    0.0083 (   -2.2%)  [wfsim: Not offered here: the thrown-exclusive Concealed Explosives. | bolt_corpse_ragdoll | silent_weapon]
+javlok                       m0 bare  wfsim    0.0383 +- 1.6% local    0.0392 (   +2.2%)  [wfsim: explosion_ignores_cover | self_stagger]
+kompressa_prime              m0 build wfsim    0.0320 +- 0.3% local    0.0313 (   -2.1%)  [wfsim: The bubbles explode 0.6-0.8 s after landing, which can let e | explosion_ignores_cover | self_stagger]
+kuva_sobek                   m0 bare  wfsim    0.0993 +- 0.8% local    0.0972 (   -2.1%)
+kuva_tonkor                  m0 bare  wfsim    0.0456 +- 2.2% local    0.0447 (   -2.1%)  [wfsim: explosion_ignores_cover | self_stagger | A direct hit forces a knockdown (wiki). Enemies here are not]
+tenet_ferrox                 m0 build wfsim    0.6602 +- 0.7% local    0.6740 (   +2.1%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's ra | The catalog says the explosion takes Condition Overload comp | explosion_ignores_cover | holstered_reload | self_stagger]
+cedo_alt                     m1 build wfsim    0.0099 +- 0.4% local    0.0101 (   +2.1%)  [wfsim: explosion_ignores_cover | self_stagger]
+zakti_prime                  m0 build wfsim    0.1564 +- 0.4% local    0.1531 (   -2.1%)  [wfsim: The cloud arrives 1 s after the dart lands (wiki); here it r | explosion_ignores_cover]
+ignis_wraith                 m0 build wfsim    0.5807 +- 0.3% local    0.5926 (   +2.0%)  [wfsim: The beam's 0.15 m thickness, the largest of any continuous w | The area damage can headshot, which the page marks as a bug;]
+coda_synapse                 m0 build wfsim    0.7677 +- 0.5% local    0.7833 (   +2.0%)
+kuva_twin_stubbas            m0 build wfsim    0.4766 +- 0.3% local    0.4863 (   +2.0%)
+zakti                        m0 build wfsim    0.0562 +- 0.5% local    0.0551 (   -2.0%)  [wfsim: The cloud arrives 1 s after the dart lands (wiki); here it r | The explosion staggers enemies, opening them to finishers an | explosion_ignores_cover]
+tenet_plinx                  m0 bare  wfsim    0.0253 +- 1.4% local    0.0248 (   -2.0%)
+riot_848                     m0 bare  wfsim    0.0035 +- 0.2% local    0.0035 (   -2.0%)  [wfsim: The explosion comes on the reload: rounds lodge in surfaces  | It uses no ammo pickups and has a reserve of zero (module); ]
+vulkar                       m0 build wfsim    0.2427 +- 0.7% local    0.2380 (   -2.0%)  [wfsim: sniper_combo_miss | zoom_steps]
+flux_rifle                   m0 bare  wfsim    0.0136 +- 0.3% local    0.0139 (   +1.9%)
+euphona_prime_buckshot       m1 build wfsim    0.3540 +- 0.5% local    0.3609 (   +1.9%)
+kuva_ogris                   m0 build wfsim    0.5373 +- 1.1% local    0.5476 (   +1.9%)  [wfsim: explosion_ignores_cover | self_stagger | The rocket flies at 60 m/s and can be shot down; nothing sho]
+kuva_karak                   m0 build wfsim    0.4743 +- 0.3% local    0.4833 (   +1.9%)
+ignis                        m0 bare  wfsim    0.0315 +- 0.6% local    0.0310 (   -1.9%)
+quanta_vandal                m0 bare  wfsim    0.0458 +- 0.2% local    0.0467 (   +1.9%)
+efv_8_mars                   m0 build wfsim    0.2522 +- 0.1% local    0.2569 (   +1.9%)
+efv_8_mars                   m0 bare  wfsim    0.0158 +- 0.3% local    0.0161 (   +1.8%)
+trumna_prime                 m0 build wfsim    0.6472 +- 0.3% local    0.6586 (   +1.8%)  [wfsim: explosion_ignores_cover | self_stagger]
+coda_tysis                   m0 build wfsim    0.3962 +- 0.9% local    0.4031 (   +1.8%)  [wfsim: The innate Corrosive damage over time, 177 of each dart's 25 | A dart that pierces an enemy deals it only 1 tick of the dam | On a kill the body follows the dart, damaging anyone in its ]
+grimoire                     m0 bare  wfsim    0.0165 +- 0.6% local    0.0168 (   +1.7%)  [wfsim: explosion_ignores_cover | self_stagger]
+nagantaka_prime              m0 build wfsim    0.3399 +- 0.6% local    0.3341 (   -1.7%)  [wfsim: Headshot kills from the bolt boost reload speed by 50% (wiki | Used by Garuda it gains 1 m of innate punch through (wiki),  | bolt_corpse_ragdoll | silent_weapon]
+riot_848                     m0 build wfsim    0.0546 +- 0.1% local    0.0537 (   -1.7%)  [wfsim: The explosion comes on the reload: rounds lodge in surfaces  | It uses no ammo pickups and has a reserve of zero (module); ]
+pandero                      m0 build wfsim    0.1869 +- 0.3% local    0.1838 (   -1.7%)
+magnus_prime                 m0 build wfsim    0.3280 +- 0.3% local    0.3226 (   -1.6%)  [wfsim: Chamber Cascade: a hit or a damaging status has a 4% chance ]
+nagantaka_prime              m0 bare  wfsim    0.0246 +- 0.7% local    0.0242 (   -1.6%)  [wfsim: Headshot kills from the bolt boost reload speed by 50% (wiki | Used by Garuda it gains 1 m of innate punch through (wiki),  | bolt_corpse_ragdoll | silent_weapon]
+kuva_hind                    m0 build wfsim    0.5447 +- 0.2% local    0.5536 (   +1.6%)
+panthera                     m0 bare  wfsim    0.0140 +- 0.5% local    0.0138 (   -1.6%)  [wfsim: The blades ricochet off surfaces (wiki); there are no walls ]
+basmu                        m0 bare  wfsim    0.0278 +- 0.4% local    0.0282 (   +1.6%)  [wfsim: explosion_ignores_cover | self_stagger]
+evensong                     m0 bare  wfsim    0.0273 +- 1.1% local    0.0268 (   -1.6%)  [wfsim: explosion_ignores_cover | self_stagger]
+tenet_tetra                  m0 bare  wfsim    0.0435 +- 1.1% local    0.0442 (   +1.6%)
+grimoire                     m0 build wfsim    0.1795 +- 0.6% local    0.1823 (   +1.6%)  [wfsim: explosion_ignores_cover | self_stagger]
+kuva_hek                     m0 bare  wfsim    0.0703 +- 0.8% local    0.0715 (   +1.6%)
+ferrox                       m0 build wfsim    0.3130 +- 0.5% local    0.3179 (   +1.6%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's ra | explosion_ignores_cover | holstered_reload | self_stagger]
+mutalist_cernos              m0 build wfsim    0.2606 +- 0.6% local    0.2565 (   -1.6%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's li | The cloud confuses enemies in it, turning them on each other | silent_weapon]
+kuva_bramma                  m0 build wfsim    0.8462 +- 0.8% local    0.8595 (   +1.6%)  [wfsim: explosion_ignores_cover | self_stagger | The alt-fire detonates the arrow mid-flight; the sim lets it]
+trumna                       m0 build wfsim    0.5953 +- 0.3% local    0.6044 (   +1.5%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's ra | explosion_ignores_cover | self_stagger]
+akbronco_prime               m0 build wfsim    0.3163 +- 0.4% local    0.3211 (   +1.5%)
+tenet_tetra_grenade          m1 bare  wfsim    0.0530 +- 2.1% local    0.0538 (   +1.5%)  [wfsim: The grenade's damage scales with how full the magazine is (p | explosion_ignores_cover | The alt-fire cannot be reloaded early to skip its delay, and | self_stagger]
+magnus_prime                 m0 bare  wfsim    0.0176 +- 0.5% local    0.0174 (   -1.5%)  [wfsim: Chamber Cascade: a hit or a damaging status has a 4% chance ]
+opticor                      m0 build wfsim    0.3189 +- 1.5% local    0.3236 (   +1.5%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's ra | explosion_ignores_cover | self_stagger]
+kuva_chakkhurr               m0 bare  wfsim    0.0468 +- 1.6% local    0.0474 (   +1.5%)  [wfsim: explosion_ignores_cover]
+spira                        m0 build wfsim    0.1367 +- 0.3% local    0.1347 (   -1.4%)  [wfsim: Not offered here: the thrown-exclusive Concealed Explosives. | bolt_corpse_ragdoll | silent_weapon]
+zymos                        m0 build wfsim    0.0319 +- 0.8% local    0.0323 (   +1.4%)  [wfsim: A headshot spawns six homing spores that explode in 3.3 m ea | explosion_ignores_cover | self_stagger]
+quanta_cube                  m1 bare  wfsim    0.0219 +- 0.3% local    0.0222 (   +1.4%)  [wfsim: A cube that is shot explodes for 600 Blast in 6 m, four time | A cube left alone detonates after 9 s, which needs a miss an | explosion_ignores_cover]
+coda_sporothrix              m0 build wfsim    1.5803 +- 1.2% local    1.6024 (   +1.4%)  [wfsim: sniper_combo_miss | zoom_steps | The barb's 0.9 s eruption delay is not modelled: the explosi]
+coda_synapse                 m0 bare  wfsim    0.0377 +- 0.8% local    0.0382 (   +1.4%)
+vinquibus                    m0 bare  wfsim    0.0347 +- 0.9% local    0.0343 (   -1.3%)  [wfsim: Its second innate polarity is an Aura polarity, which no wea | Equipping it also takes the melee slot, so a Vinquibus loado | Headshots grant 2 stacks (max 16) of Vinquibus Precision, +2]
+aklato                       m0 bare  wfsim    0.0065 +- 0.3% local    0.0064 (   -1.3%)
+snipetron                    m0 build wfsim    0.1488 +- 0.5% local    0.1469 (   -1.3%)  [wfsim: sniper_combo_miss | zoom_steps]
+penta                        m0 build wfsim    0.0587 +- 1.0% local    0.0595 (   +1.3%)  [wfsim: The grenades are detonated by hand with the alt-fire, with n | Only five grenades can be live at once, and multishot counts | Not offered here: Tether Grenades, Napalm Grenades and the l | explosion_ignores_cover | self_stagger]
+cedo_alt                     m1 bare  wfsim    0.0019 +- 0.5% local    0.0019 (   +1.3%)  [wfsim: explosion_ignores_cover | self_stagger]
+tonkor                       m0 build wfsim    0.1503 +- 0.9% local    0.1483 (   -1.3%)  [wfsim: The grenades arm only after 7.5 m and deal much less damage  | A direct hit forces a knockdown (wiki). Enemies here are not | Not offered here: Precision Strike and the launcher-exclusiv | explosion_ignores_cover | self_stagger]
+convectrix                   m0 build wfsim    0.4003 +- 0.2% local    0.3951 (   -1.3%)  [wfsim: The two beams converge on the crosshair and deal full damage]
+kuva_brakk                   m0 bare  wfsim    0.0584 +- 0.3% local    0.0591 (   +1.3%)
+tenet_flux_rifle             m0 build wfsim    0.4790 +- 0.3% local    0.4851 (   +1.3%)
+kuva_sobek                   m0 build wfsim    0.5912 +- 0.2% local    0.5838 (   -1.3%)
+quanta                       m0 bare  wfsim    0.0203 +- 0.3% local    0.0205 (   +1.3%)
+pandero_prime                m0 bare  wfsim    0.0168 +- 0.6% local    0.0166 (   -1.2%)
+vulklok                      m0 bare  wfsim    0.0028 +- 3.0% local    0.0027 (   -1.2%)  [wfsim: companion_fires_it | spread_not_transcribed]
+komorex                      m0 bare  wfsim    0.0490 +- 0.3% local    0.0484 (   -1.2%)  [wfsim: sniper_combo_miss | The second zoom level is not modelled. On this weapon it is  | The first zoom's -50% recoil and +2 m punch through are not ]
+argonak                      m0 build wfsim    0.1816 +- 0.4% local    0.1794 (   -1.2%)  [wfsim: Aiming highlights enemies within 100 m (wiki), an aiming aid]
+tenet_tetra_grenade          m1 build wfsim    0.5766 +- 0.9% local    0.5697 (   -1.2%)  [wfsim: The grenade's damage scales with how full the magazine is (p | explosion_ignores_cover | The alt-fire cannot be reloaded early to skip its delay, and | self_stagger]
+vulklok                      m0 build wfsim    0.0451 +- 2.0% local    0.0446 (   -1.2%)  [wfsim: companion_fires_it | spread_not_transcribed]
+athodai_prime                m0 build wfsim    0.4090 +- 0.8% local    0.4139 (   +1.2%)  [wfsim: Overdrive: a weak-point kill grants +100% fire rate, +100% a]
+tenet_diplos                 m0 build wfsim    0.4854 +- 0.3% local    0.4911 (   +1.2%)  [wfsim: holstered_reload | The very heavy side-to-side recoil (page) makes its accuracy]
+aklato                       m0 build wfsim    0.0681 +- 0.4% local    0.0673 (   -1.2%)
+tenet_quanta_cube            m1 bare  wfsim    0.0556 +- 0.7% local    0.0563 (   +1.2%)  [wfsim: A cube that is shot explodes for 600 Blast in 6 m, four time | A cube left alone detonates after 9 s, which needs a miss an | explosion_ignores_cover | This weapon does not self-stagger, unlike other explosives; ]
+quanta_cube                  m1 build wfsim    0.1387 +- 0.5% local    0.1403 (   +1.2%)  [wfsim: A cube that is shot explodes for 600 Blast in 6 m, four time | A cube left alone detonates after 9 s, which needs a miss an | explosion_ignores_cover]
+cedo_prime_alt               m1 bare  wfsim    0.0020 +- 0.6% local    0.0021 (   +1.2%)  [wfsim: explosion_ignores_cover | self_stagger]
+kuva_drakgoon                m0 bare  wfsim    0.0614 +- 0.5% local    0.0620 (   +1.1%)  [wfsim: bounce_headshot_assumed | ricochet_terrain]
+panthera_prime_alt           m1 build wfsim    0.2756 +- 0.6% local    0.2787 (   +1.1%)  [wfsim: The sawblade is deployed 6 m in front of the wielder and sta]
+spectra_vandal               m0 build wfsim    0.2970 +- 0.3% local    0.2936 (   -1.1%)
+zenith                       m1 build wfsim    0.4118 +- 0.3% local    0.4164 (   +1.1%)  [wfsim: The semi-auto mode is entered by deploying a disc that lasts]
+hikou_prime                  m0 build wfsim    0.0889 +- 0.2% local    0.0879 (   -1.1%)  [wfsim: Not offered here: the thrown-exclusive Concealed Explosives, | silent_weapon]
+knell                        m0 build wfsim    0.0331 +- 0.6% local    0.0327 (   -1.1%)  [wfsim: zoom_steps]
+cantare                      m0 bare  wfsim    0.0105 +- 0.6% local    0.0104 (   -1.1%)  [wfsim: On a reload the blades return, damaging everything in their  | Cantare Chorale: hitting enemies with the returning blades g | silent_weapon]
+grinlok                      m0 bare  wfsim    0.0141 +- 0.8% local    0.0139 (   -1.1%)
+tenet_diplos                 m0 bare  wfsim    0.0259 +- 0.8% local    0.0262 (   +1.0%)  [wfsim: holstered_reload | The very heavy side-to-side recoil (page) makes its accuracy]
+marelok                      m0 bare  wfsim    0.0103 +- 0.6% local    0.0102 (   -1.0%)
+tazicor                      m0 build wfsim    0.0256 +- 0.4% local    0.0258 (   +1.0%)  [wfsim: Chaining is not modelled, and it is what the weapon is for:  | companion_fires_it]
+lanka                        m0 bare  wfsim    0.0373 +- 1.1% local    0.0377 (   +1.0%)  [wfsim: sniper_combo_miss | zoom_steps | The partial charge is a separate entry; in game both are the]
+basmu                        m0 build wfsim    0.2154 +- 0.4% local    0.2175 (   +1.0%)  [wfsim: explosion_ignores_cover | self_stagger]
+ogris                        m0 build wfsim    0.1385 +- 0.8% local    0.1398 (   +1.0%)  [wfsim: Enemies can shoot down the rockets (wiki); nothing shoots ba | Not offered here: the launcher-exclusive Adhesive Blast, whi | explosion_ignores_cover | self_stagger]
+tenet_detron                 m0 build wfsim    0.5317 +- 0.1% local    0.5370 (   +1.0%)  [wfsim: The Condition Overload bonus ignores damage falloff (the cat | The in-game falloff display is wrong on this weapon (page): ]
+amprex                       m0 bare  wfsim    0.0190 +- 0.3% local    0.0191 (   +1.0%)  [wfsim: In game the chain can route through corpses (wiki); here a b]
+zhuge_prime                  m0 bare  wfsim    0.0212 +- 0.3% local    0.0210 (   -1.0%)  [wfsim: empty_reload_is_faster | The explosion arrives 0.6 s after the bolt lands, which lets | bolt_corpse_ragdoll | explosion_ignores_cover | self_stagger]
+prisma_burst_laser           m0 bare  wfsim    0.0027 +- 0.4% local    0.0027 (   -1.0%)  [wfsim: companion_fires_it | spread_not_transcribed]
+cernos_prime                 m0 build wfsim    0.3937 +- 0.3% local    0.3900 (   -0.9%)
+burst_laser                  m0 bare  wfsim    0.0019 +- 0.4% local    0.0018 (   -0.9%)  [wfsim: companion_fires_it | spread_not_transcribed]
+alternox_alt                 m1 bare  wfsim    0.0120 +- 0.6% local    0.0121 (   +0.9%)  [wfsim: The alt-fire's third attack, a burn in 6 m between the conta | explosion_ignores_cover | self_stagger]
+ambassador                   m0 bare  wfsim    0.0224 +- 0.4% local    0.0226 (   +0.9%)
+kuva_drakgoon                m0 build wfsim    0.4798 +- 0.2% local    0.4843 (   +0.9%)  [wfsim: bounce_headshot_assumed | ricochet_terrain]
+nataruk_perfect              m0 build wfsim    0.7384 +- 0.8% local    0.7316 (   -0.9%)  [wfsim: This is the perfect release, not the ordinary full draw: the | silent_weapon]
+burst_laser                  m0 build wfsim    0.0243 +- 0.4% local    0.0241 (   -0.9%)  [wfsim: companion_fires_it | spread_not_transcribed]
+seer                         m0 bare  wfsim    0.0054 +- 0.5% local    0.0053 (   -0.9%)
+ambassador                   m0 build wfsim    0.2530 +- 0.4% local    0.2553 (   +0.9%)
+magnus                       m0 bare  wfsim    0.0115 +- 0.5% local    0.0114 (   -0.9%)
+plinx                        m0 bare  wfsim    0.0070 +- 0.7% local    0.0069 (   -0.9%)
+zenith                       m1 bare  wfsim    0.0243 +- 0.4% local    0.0245 (   +0.9%)  [wfsim: The semi-auto mode is entered by deploying a disc that lasts]
+akvasto                      m0 bare  wfsim    0.0101 +- 0.4% local    0.0100 (   -0.9%)
+panthera_prime_alt           m1 bare  wfsim    0.0154 +- 0.6% local    0.0156 (   +0.8%)  [wfsim: The sawblade is deployed 6 m in front of the wielder and sta]
+burst_laser_prime            m0 build wfsim    0.0706 +- 0.2% local    0.0700 (   -0.8%)  [wfsim: companion_fires_it | spread_not_transcribed]
+prisma_burst_laser           m0 build wfsim    0.0385 +- 0.3% local    0.0382 (   -0.8%)  [wfsim: companion_fires_it | spread_not_transcribed]
+afentis_prime                m0 build wfsim    0.3962 +- 0.9% local    0.3929 (   -0.8%)  [wfsim: A direct hit forces a knockdown and the explosion a ragdoll; | explosion_ignores_cover | self_stagger]
+zymos                        m0 bare  wfsim    0.0060 +- 0.7% local    0.0060 (   +0.8%)  [wfsim: A headshot spawns six homing spores that explode in 3.3 m ea | explosion_ignores_cover | self_stagger]
+bolto                        m0 bare  wfsim    0.0077 +- 0.4% local    0.0076 (   -0.8%)  [wfsim: bolt_corpse_ragdoll]
+cyanex                       m0 bare  wfsim    0.0120 +- 0.3% local    0.0121 (   +0.8%)  [wfsim: The projectiles home on enemies (wiki); shots here already l | explosion_ignores_cover | self_stagger]
+tenet_quanta_cube            m1 build wfsim    0.3730 +- 0.8% local    0.3762 (   +0.8%)  [wfsim: A cube that is shot explodes for 600 Blast in 6 m, four time | A cube left alone detonates after 9 s, which needs a miss an | explosion_ignores_cover | This weapon does not self-stagger, unlike other explosives; ]
+akvasto_prime                m0 bare  wfsim    0.0169 +- 0.6% local    0.0167 (   -0.8%)
+aksomati                     m0 bare  wfsim    0.0125 +- 0.4% local    0.0124 (   -0.8%)  [wfsim: The page gives the spool as a count, 6 shots to full fire ra | auto_spool_ramp]
+kuva_brakk                   m0 build wfsim    0.6473 +- 0.1% local    0.6526 (   +0.8%)
+cycron                       m0 bare  wfsim    0.0113 +- 0.2% local    0.0112 (   -0.8%)
+pandero_prime                m0 build wfsim    0.3163 +- 0.4% local    0.3138 (   -0.8%)
+cryotra                      m0 build wfsim    0.0011 +- 1.3% local    0.0011 (   +0.8%)  [wfsim: The cold field is not modelled, and it is most of the weapon | companion_fires_it]
+convectrix                   m0 bare  wfsim    0.0334 +- 0.2% local    0.0331 (   -0.8%)  [wfsim: The two beams converge on the crosshair and deal full damage]
+velox_prime                  m0 bare  wfsim    0.0189 +- 0.3% local    0.0190 (   +0.8%)  [wfsim: empty_reload_is_faster]
+tysis                        m0 build wfsim    0.0479 +- 0.5% local    0.0475 (   -0.8%)  [wfsim: The innate Corrosive damage over time, 81 of each dart's 130]
+komorex                      m0 build wfsim    0.5886 +- 0.4% local    0.5839 (   -0.8%)  [wfsim: sniper_combo_miss | The second zoom level is not modelled. On this weapon it is  | The first zoom's -50% recoil and +2 m punch through are not ]
+akmagnus                     m0 bare  wfsim    0.0136 +- 0.4% local    0.0135 (   -0.8%)
+daikyu_prime                 m0 build wfsim    0.5313 +- 0.4% local    0.5271 (   -0.8%)  [wfsim: Weak-point hits get +250% critical chance, additive with Poi | bolt_corpse_ragdoll | silent_weapon | zoom_steps]
+quatz                        m0 build wfsim    0.1742 +- 0.3% local    0.1755 (   +0.8%)  [wfsim: Reloading from an empty magazine releases an 8 m shockwave, ]
+athodai                      m0 bare  wfsim    0.0158 +- 0.9% local    0.0156 (   -0.8%)  [wfsim: Overdrive: a weak-point kill grants +100% fire rate, +100% a]
+akbolto                      m0 bare  wfsim    0.0098 +- 0.3% local    0.0097 (   -0.7%)  [wfsim: bolt_corpse_ragdoll]
+aklex                        m0 build wfsim    0.0995 +- 0.5% local    0.0987 (   -0.7%)
+cernos_prime                 m0 bare  wfsim    0.0262 +- 0.3% local    0.0260 (   -0.7%)
+hind                         m0 build wfsim    0.0708 +- 0.4% local    0.0702 (   -0.7%)
+vaykor_marelok               m0 bare  wfsim    0.0121 +- 0.5% local    0.0120 (   -0.7%)  [wfsim: The Justice syndicate effect detonates a radial blast and he]
+fusilai                      m0 build wfsim    0.1323 +- 0.4% local    0.1333 (   +0.7%)  [wfsim: silent_weapon]
+zhuge                        m0 build wfsim    0.2001 +- 0.4% local    0.2016 (   +0.7%)  [wfsim: Not offered here: the bow-exclusive Thunderbolt, which on th | bolt_corpse_ragdoll | silent_weapon]
+karak                        m0 build wfsim    0.0779 +- 0.3% local    0.0773 (   -0.7%)
+zhuge                        m0 bare  wfsim    0.0161 +- 0.4% local    0.0162 (   +0.7%)  [wfsim: Not offered here: the bow-exclusive Thunderbolt, which on th | bolt_corpse_ragdoll | silent_weapon]
+cernos                       m0 build wfsim    0.2782 +- 0.4% local    0.2762 (   -0.7%)  [wfsim: silent_weapon]
+kuva_kraken                  m0 build wfsim    0.4571 +- 0.5% local    0.4604 (   +0.7%)  [wfsim: Hip-fire recoil is not modelled; the page notes the burst ki]
+athodai_prime                m0 bare  wfsim    0.0207 +- 1.1% local    0.0206 (   -0.7%)  [wfsim: Overdrive: a weak-point kill grants +100% fire rate, +100% a]
+akmagnus                     m0 build wfsim    0.1991 +- 0.4% local    0.1977 (   -0.7%)
+ignis                        m0 build wfsim    0.4441 +- 0.5% local    0.4473 (   +0.7%)
+stradavar_prime              m0 bare  wfsim    0.0162 +- 0.3% local    0.0161 (   -0.7%)
+knell_prime                  m0 build wfsim    0.0785 +- 0.5% local    0.0779 (   -0.7%)
+ferrox                       m0 bare  wfsim    0.0191 +- 0.8% local    0.0192 (   +0.7%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's ra | explosion_ignores_cover | holstered_reload | self_stagger]
+magnus                       m0 build wfsim    0.1668 +- 0.4% local    0.1657 (   -0.7%)
+tenet_cycron                 m0 build wfsim    0.8555 +- 0.3% local    0.8615 (   +0.7%)  [wfsim: In game the chain can pass through corpses (page); here a bo | Ruinous Extension extends the beam to 36 m (page); beam-rang]
+stradavar                    m0 bare  wfsim    0.0119 +- 0.3% local    0.0119 (   -0.7%)
+tenet_tetra                  m0 build wfsim    0.5571 +- 0.3% local    0.5610 (   +0.7%)
+corinth                      m0 build wfsim    0.2291 +- 0.2% local    0.2275 (   -0.7%)
+aeolak                       m0 bare  wfsim    0.0185 +- 0.4% local    0.0186 (   +0.7%)
+hikou_prime                  m0 bare  wfsim    0.0087 +- 0.2% local    0.0087 (   -0.7%)  [wfsim: Not offered here: the thrown-exclusive Concealed Explosives, | silent_weapon]
+rakta_cernos                 m0 build wfsim    0.4320 +- 0.3% local    0.4290 (   -0.7%)  [wfsim: The Blight syndicate effect blinds enemies in a radius and o | silent_weapon]
+vulkar                       m0 bare  wfsim    0.0182 +- 0.5% local    0.0180 (   -0.7%)  [wfsim: sniper_combo_miss | zoom_steps]
+euphona_prime_buckshot       m1 bare  wfsim    0.0387 +- 0.3% local    0.0389 (   +0.7%)
+aklex_prime                  m0 build wfsim    0.2300 +- 0.3% local    0.2315 (   +0.7%)
+stradavar                    m0 build wfsim    0.1624 +- 0.2% local    0.1614 (   -0.6%)
+telos_akbolto                m0 build wfsim    0.1683 +- 0.2% local    0.1672 (   -0.6%)  [wfsim: bolt_corpse_ragdoll | The Truth syndicate effect detonates a radial blast that str]
+daikyu_prime                 m0 bare  wfsim    0.0369 +- 1.2% local    0.0367 (   -0.6%)  [wfsim: Weak-point hits get +250% critical chance, additive with Poi | bolt_corpse_ragdoll | silent_weapon | zoom_steps]
+azima                        m0 build wfsim    0.1302 +- 0.2% local    0.1294 (   -0.6%)  [wfsim: The alt-fire spends the whole magazine to deploy a turret th]
+cycron                       m0 build wfsim    0.1484 +- 0.3% local    0.1475 (   -0.6%)
+spectra_vandal               m0 bare  wfsim    0.0166 +- 0.2% local    0.0165 (   -0.6%)
+tiberon                      m0 bare  wfsim    0.0169 +- 0.3% local    0.0168 (   -0.6%)
+stahlta                      m0 build wfsim    0.1966 +- 0.3% local    0.1954 (   -0.6%)
+stradavar_prime              m0 build wfsim    0.2429 +- 0.2% local    0.2415 (   -0.6%)
+panthera_alt                 m1 build wfsim    0.2416 +- 0.7% local    0.2430 (   +0.6%)  [wfsim: The sawblade is deployed 6 m in front of the wielder and sta | It uses ammo only when dealing damage (wiki); reserves are i]
+mutalist_cernos              m0 bare  wfsim    0.0265 +- 0.4% local    0.0263 (   -0.6%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's li | The cloud confuses enemies in it, turning them on each other | silent_weapon]
+akjagara                     m0 bare  wfsim    0.0130 +- 0.4% local    0.0131 (   +0.6%)
+kuva_zarr_barrage            m1 bare  wfsim    0.0448 +- 0.5% local    0.0450 (   +0.6%)
+quellor_alt                  m1 build wfsim    0.4747 +- 0.1% local    0.4775 (   +0.6%)  [wfsim: The charged shot travels 26 m (wiki), which is not entered,  | The guaranteed Impact proc reaches only 18 m (wiki) but is a | It cannot hold a charge (wiki): the shot fires once charged,]
+arca_scisco                  m0 bare  wfsim    0.0117 +- 0.3% local    0.0117 (   +0.6%)  [wfsim: Target Analysis: each shot grants +4% flat critical and stat | zoom_steps]
+mutalist_quanta              m0 build wfsim    0.0580 +- 0.3% local    0.0577 (   -0.6%)
+steflos                      m0 bare  wfsim    0.0433 +- 1.6% local    0.0436 (   +0.6%)  [wfsim: The projectile lives 0.6 s, and each enemy hit adds 50% to i]
+akmagnus_prime               m0 build wfsim    0.3794 +- 0.3% local    0.3772 (   -0.6%)  [wfsim: Chamber Cascade: a hit or a damaging status has a 4% chance ]
+paracyst                     m0 build wfsim    0.1965 +- 0.3% local    0.1976 (   +0.6%)
+harpak                       m0 build wfsim    0.2280 +- 0.2% local    0.2268 (   -0.6%)  [wfsim: Bolts stick and fling bodies on a kill, and a flung body dam]
+rubico_prime                 m0 bare  wfsim    0.0622 +- 0.8% local    0.0618 (   -0.6%)  [wfsim: sniper_combo_miss | zoom_steps]
+rauta                        m0 bare  wfsim    0.0309 +- 0.3% local    0.0307 (   -0.6%)  [wfsim: Each pellet adds 2 to the melee combo count, up to 28 a shot]
+supra                        m0 build wfsim    0.2161 +- 0.2% local    0.2149 (   -0.5%)  [wfsim: spool_rebuilds_after_reload]
+argonak                      m0 bare  wfsim    0.0126 +- 0.4% local    0.0125 (   -0.5%)  [wfsim: Aiming highlights enemies within 100 m (wiki), an aiming aid]
+cedo                         m0 build wfsim    0.2119 +- 0.2% local    0.2131 (   +0.5%)
+basmu_beam                   m1 build wfsim    0.1340 +- 0.9% local    0.1333 (   -0.5%)
+snipetron_vandal             m0 build wfsim    0.3839 +- 0.4% local    0.3818 (   -0.5%)  [wfsim: sniper_combo_miss | zoom_steps]
+exergis                      m0 bare  wfsim    0.0429 +- 0.6% local    0.0427 (   -0.5%)
+cinta                        m0 build wfsim    0.4821 +- 0.2% local    0.4847 (   +0.5%)  [wfsim: silent_weapon]
+velox_prime                  m0 build wfsim    0.2347 +- 0.2% local    0.2360 (   +0.5%)  [wfsim: empty_reload_is_faster]
+zhuge_prime                  m0 build wfsim    0.2247 +- 0.3% local    0.2235 (   -0.5%)  [wfsim: empty_reload_is_faster | The explosion arrives 0.6 s after the bolt lands, which lets | bolt_corpse_ragdoll | explosion_ignores_cover | self_stagger]
+afentis_prime                m0 bare  wfsim    0.0446 +- 1.0% local    0.0444 (   -0.5%)  [wfsim: A direct hit forces a knockdown and the explosion a ragdoll; | explosion_ignores_cover | self_stagger]
+evensong                     m0 build wfsim    0.3231 +- 0.9% local    0.3248 (   +0.5%)  [wfsim: explosion_ignores_cover | self_stagger]
+nagantaka                    m0 bare  wfsim    0.0185 +- 0.7% local    0.0184 (   -0.5%)  [wfsim: Headshot kills from the bolt boost reload speed by 50% (wiki | Used by Garuda it gains 1 m of innate punch through (wiki),  | bolt_corpse_ragdoll | silent_weapon]
+vaykor_marelok               m0 build wfsim    0.1431 +- 0.5% local    0.1423 (   -0.5%)  [wfsim: The Justice syndicate effect detonates a radial blast and he]
+prisma_twin_gremlins         m0 bare  wfsim    0.0130 +- 0.3% local    0.0131 (   +0.5%)  [wfsim: bolt_corpse_ragdoll]
+daikyu                       m0 bare  wfsim    0.0288 +- 1.0% local    0.0287 (   -0.5%)  [wfsim: Fires only at full charge; an early release fires nothing. T | Not offered here: Spring-Loaded Broadhead, Amalgam Daikyu Ta | bolt_corpse_ragdoll | silent_weapon | zoom_steps]
+akvasto                      m0 build wfsim    0.1213 +- 0.4% local    0.1207 (   -0.5%)
+viper_wraith                 m0 build wfsim    0.1023 +- 0.2% local    0.1028 (   +0.5%)
+aklex                        m0 bare  wfsim    0.0071 +- 0.5% local    0.0071 (   -0.5%)
+stinger                      m0 bare  wfsim    0.0041 +- 0.3% local    0.0041 (   -0.5%)  [wfsim: The Toxin embed, a second attack dealing damage over 3 s on  | companion_fires_it | spread_not_transcribed]
+fulmin                       m1 build wfsim    0.2155 +- 0.3% local    0.2144 (   -0.5%)  [wfsim: Switching modes takes 1 s of animation (0.5 s on Wisp); the  | It gets nothing from reload-triggered mods such as Spring-Lo]
+athodai                      m0 build wfsim    0.2792 +- 0.8% local    0.2806 (   +0.5%)  [wfsim: Overdrive: a weak-point kill grants +100% fire rate, +100% a]
+quellor                      m0 bare  wfsim    0.0184 +- 0.3% local    0.0185 (   +0.5%)
+kuva_chakkhurr               m0 build wfsim    0.5815 +- 0.7% local    0.5787 (   -0.5%)  [wfsim: explosion_ignores_cover]
+quatz_burst                  m1 bare  wfsim    0.0146 +- 0.4% local    0.0147 (   +0.5%)  [wfsim: Each shot lands in a small square around the aim point and c | mode_is_the_aim_state]
+prisma_twin_gremlins         m0 build wfsim    0.1841 +- 0.2% local    0.1850 (   +0.5%)  [wfsim: bolt_corpse_ragdoll]
+burst_laser_prime            m0 bare  wfsim    0.0047 +- 0.4% local    0.0047 (   -0.5%)  [wfsim: companion_fires_it | spread_not_transcribed]
+aksomati                     m0 build wfsim    0.2215 +- 0.2% local    0.2205 (   -0.5%)  [wfsim: The page gives the spool as a count, 6 shots to full fire ra | auto_spool_ramp]
+plinx                        m0 build wfsim    0.1348 +- 0.4% local    0.1354 (   +0.5%)
+panthera_prime               m0 bare  wfsim    0.0229 +- 0.4% local    0.0228 (   -0.5%)  [wfsim: The blades ricochet off surfaces (wiki); there are no walls  | explosion_ignores_cover | self_stagger]
+deth_machine_rifle_prime     m0 build wfsim    0.0638 +- 0.3% local    0.0635 (   -0.5%)  [wfsim: auto_spool_ramp | companion_fires_it | spread_not_transcribed]
+reconifex                    m0 bare  wfsim    0.0182 +- 0.3% local    0.0181 (   -0.5%)  [wfsim: Pressing reload again 22-38% into a reload cuts it to 1 s an]
+thornbak                     m0 bare  wfsim    0.0118 +- 0.3% local    0.0118 (   +0.5%)
+kuva_zarr_barrage            m1 build wfsim    0.5980 +- 0.3% local    0.6008 (   +0.5%)
+tenet_plinx                  m0 build wfsim    0.5229 +- 0.5% local    0.5205 (   -0.5%)
+deth_machine_rifle           m0 build wfsim    0.0289 +- 0.3% local    0.0288 (   -0.5%)  [wfsim: auto_spool_ramp | companion_fires_it | spread_not_transcribed]
+karak                        m0 bare  wfsim    0.0087 +- 0.2% local    0.0087 (   -0.4%)
+ocucor                       m0 bare  wfsim    0.0051 +- 0.2% local    0.0051 (   -0.4%)
+brakk                        m0 build wfsim    0.3309 +- 0.2% local    0.3294 (   -0.4%)
+kuva_hek                     m0 build wfsim    0.5108 +- 0.2% local    0.5130 (   +0.4%)
+carmine_penta                m0 build wfsim    0.1480 +- 0.6% local    0.1486 (   +0.4%)  [wfsim: The grenades are detonated by hand with the alt-fire, with n | Only five grenades can be live at once, and multishot counts | explosion_ignores_cover | self_stagger]
+tiberon                      m0 build wfsim    0.2497 +- 0.2% local    0.2486 (   -0.4%)
+brakk                        m0 bare  wfsim    0.0241 +- 0.2% local    0.0240 (   -0.4%)
+quanta_vandal                m0 build wfsim    0.5261 +- 0.1% local    0.5284 (   +0.4%)
+corinth                      m0 bare  wfsim    0.0273 +- 0.3% local    0.0272 (   -0.4%)
+aeolak                       m0 build wfsim    0.2479 +- 0.3% local    0.2490 (   +0.4%)
+rubico                       m0 bare  wfsim    0.0395 +- 0.9% local    0.0393 (   -0.4%)  [wfsim: sniper_combo_miss | zoom_steps]
+aeolak_alt                   m1 bare  wfsim    0.0317 +- 0.6% local    0.0316 (   -0.4%)  [wfsim: explosion_ignores_cover | self_stagger]
+stinger                      m0 build wfsim    0.0228 +- 0.5% local    0.0227 (   -0.4%)  [wfsim: The Toxin embed, a second attack dealing damage over 3 s on  | companion_fires_it | spread_not_transcribed]
+corinth_prime                m0 bare  wfsim    0.0463 +- 0.3% local    0.0461 (   -0.4%)
+harpak                       m0 bare  wfsim    0.0175 +- 0.3% local    0.0174 (   -0.4%)  [wfsim: Bolts stick and fling bodies on a kill, and a flung body dam]
+akbronco_prime               m0 bare  wfsim    0.0302 +- 0.2% local    0.0303 (   +0.4%)
+quartakk                     m0 build wfsim    0.2248 +- 0.3% local    0.2239 (   -0.4%)
+supra_vandal                 m0 build wfsim    0.2815 +- 0.2% local    0.2804 (   -0.4%)  [wfsim: spool_rebuilds_after_reload]
+cernos                       m0 bare  wfsim    0.0184 +- 0.5% local    0.0183 (   -0.4%)  [wfsim: silent_weapon]
+tiberon_prime                m0 bare  wfsim    0.0233 +- 0.4% local    0.0232 (   -0.4%)
+knell                        m0 bare  wfsim    0.0028 +- 0.4% local    0.0028 (   -0.4%)  [wfsim: zoom_steps]
+quatz_burst                  m1 build wfsim    0.2514 +- 0.3% local    0.2524 (   +0.4%)  [wfsim: Each shot lands in a small square around the aim point and c | mode_is_the_aim_state]
+kuva_zarr                    m0 build wfsim    0.5872 +- 0.9% local    0.5895 (   +0.4%)  [wfsim: cluster_bomblet_co | explosion_ignores_cover | self_stagger]
+secura_penta                 m0 build wfsim    0.1679 +- 0.5% local    0.1672 (   -0.4%)  [wfsim: The grenades are detonated by hand with the alt-fire, with n | Only five grenades can be live at once, and multishot counts | The Sequence syndicate effect turns damage dealt into shield | explosion_ignores_cover | self_stagger]
+mutalist_quanta              m0 bare  wfsim    0.0077 +- 0.2% local    0.0076 (   -0.4%)
+seer                         m0 build wfsim    0.0459 +- 0.5% local    0.0457 (   -0.4%)
+purgator_1                   m0 bare  wfsim    0.0455 +- 0.5% local    0.0453 (   -0.4%)  [wfsim: An enemy killed directly by it leaves a Gas cloud whose tick]
+exergis                      m0 build wfsim    0.2766 +- 0.4% local    0.2755 (   -0.4%)
+stahlta                      m0 bare  wfsim    0.0151 +- 0.4% local    0.0150 (   -0.4%)
+azima                        m0 bare  wfsim    0.0097 +- 0.4% local    0.0097 (   -0.4%)  [wfsim: The alt-fire spends the whole magazine to deploy a turret th]
+afuris_prime                 m0 build wfsim    0.1960 +- 0.2% local    0.1953 (   -0.4%)
+veldt                        m0 build wfsim    0.2096 +- 0.5% local    0.2087 (   -0.4%)  [wfsim: The alt-fire only changes the zoom (wiki), so this weapon ha]
+vesper_77                    m0 bare  wfsim    0.0132 +- 0.6% local    0.0131 (   -0.4%)  [wfsim: silent_weapon | The laser sight highlights weak points on screen, an aiming ]
+fulmin                       m1 bare  wfsim    0.0141 +- 0.4% local    0.0140 (   -0.4%)  [wfsim: Switching modes takes 1 s of animation (0.5 s on Wisp); the  | It gets nothing from reload-triggered mods such as Spring-Lo]
+spectra                      m0 bare  wfsim    0.0115 +- 0.2% local    0.0115 (   -0.4%)
+cyanex_burst                 m1 bare  wfsim    0.0135 +- 0.4% local    0.0135 (   -0.4%)  [wfsim: The burst empties the magazine, and this entry fires a fixed]
+tenet_glaxion                m0 bare  wfsim    0.0302 +- 0.2% local    0.0301 (   -0.4%)  [wfsim: In game the chain can pass through corpses (page); here a bo]
+paracyst                     m0 bare  wfsim    0.0235 +- 0.3% local    0.0236 (   +0.4%)
+spectra                      m0 build wfsim    0.1774 +- 0.3% local    0.1768 (   -0.4%)
+supra_vandal                 m0 bare  wfsim    0.0245 +- 0.2% local    0.0245 (   -0.4%)  [wfsim: spool_rebuilds_after_reload]
+velox                        m0 bare  wfsim    0.0130 +- 0.2% local    0.0130 (   +0.4%)  [wfsim: empty_reload_is_faster]
+vulkar_wraith                m0 bare  wfsim    0.0304 +- 0.4% local    0.0303 (   -0.4%)  [wfsim: sniper_combo_miss | zoom_steps]
+hystrix                      m0 bare  wfsim    0.0295 +- 0.3% local    0.0294 (   -0.4%)  [wfsim: The alt-fire cycles four quill types, Poison, Fire, Electric]
+panthera_alt                 m1 bare  wfsim    0.0140 +- 0.6% local    0.0140 (   +0.3%)  [wfsim: The sawblade is deployed 6 m in front of the wielder and sta | It uses ammo only when dealing damage (wiki); reserves are i]
+bolto                        m0 build wfsim    0.1047 +- 0.4% local    0.1044 (   -0.3%)  [wfsim: bolt_corpse_ragdoll]
+kraken                       m0 build wfsim    0.0505 +- 0.5% local    0.0503 (   -0.3%)
+vaykor_hek                   m0 build wfsim    0.3455 +- 0.1% local    0.3467 (   +0.3%)  [wfsim: The Justice syndicate effect detonates a radial blast and he]
+sepulcrum                    m0 build wfsim    0.2601 +- 0.6% local    0.2592 (   -0.3%)  [wfsim: explosion_ignores_cover | self_stagger]
+vadarya_prime                m0 build wfsim    0.5476 +- 0.1% local    0.5457 (   -0.3%)  [wfsim: sniper_combo_miss | zoom_steps | Chain lightning is not modelled, and it is a third of the we]
+rakta_cernos                 m0 bare  wfsim    0.0289 +- 0.4% local    0.0288 (   -0.3%)  [wfsim: The Blight syndicate effect blinds enemies in a radius and o | silent_weapon]
+prisma_grakata               m0 bare  wfsim    0.0171 +- 0.2% local    0.0170 (   -0.3%)
+sporothrix                   m0 bare  wfsim    0.0593 +- 0.7% local    0.0595 (   +0.3%)  [wfsim: sniper_combo_miss | zoom_steps | The barb's 0.9 s eruption delay is not modelled: the explosi]
+tysis                        m0 bare  wfsim    0.0052 +- 0.5% local    0.0052 (   -0.3%)  [wfsim: The innate Corrosive damage over time, 81 of each dart's 130]
+fulmin_prime                 m1 bare  wfsim    0.0174 +- 0.4% local    0.0173 (   -0.3%)  [wfsim: Switching modes takes 1 s of animation (0.5 s on Wisp); the ]
+cedo                         m0 bare  wfsim    0.0282 +- 0.2% local    0.0283 (   +0.3%)
+tetra                        m0 build wfsim    0.0601 +- 0.2% local    0.0599 (   -0.3%)
+akstiletto_prime             m0 build wfsim    0.1472 +- 0.4% local    0.1477 (   +0.3%)
+buzlok                       m0 build wfsim    0.2576 +- 0.3% local    0.2568 (   -0.3%)  [wfsim: Landing a tracer round grants +50% absolute critical chance  | The primary fire homes on a beaconed target for 20 s (wiki);]
+snipetron_vandal             m0 bare  wfsim    0.0230 +- 0.4% local    0.0229 (   -0.3%)  [wfsim: sniper_combo_miss | zoom_steps]
+tonkor                       m0 bare  wfsim    0.0186 +- 0.8% local    0.0185 (   -0.3%)  [wfsim: The grenades arm only after 7.5 m and deal much less damage  | A direct hit forces a knockdown (wiki). Enemies here are not | Not offered here: Precision Strike and the launcher-exclusiv | explosion_ignores_cover | self_stagger]
+nataruk_perfect              m0 bare  wfsim    0.0651 +- 0.9% local    0.0649 (   -0.3%)  [wfsim: This is the perfect release, not the ordinary full draw: the | silent_weapon]
+corinth_prime_airburst       m1 bare  wfsim    0.0485 +- 0.3% local    0.0487 (   +0.3%)  [wfsim: explosion_ignores_cover | self_stagger]
+afuris_prime                 m0 bare  wfsim    0.0153 +- 0.2% local    0.0152 (   -0.3%)
+synapse                      m0 bare  wfsim    0.0129 +- 0.2% local    0.0128 (   -0.3%)
+perigale_prime               m0 build wfsim    0.7261 +- 0.2% local    0.7284 (   +0.3%)  [wfsim: sniper_combo_miss | zoom_steps | Voruna's signature bonus is not modelled: carried by her, th]
+tenora                       m0 build wfsim    0.2046 +- 0.2% local    0.2039 (   -0.3%)  [wfsim: It needs 40 shots to reach full accuracy (wiki); this entry  | spool_rebuilds_after_reload]
+vulkar_wraith                m0 build wfsim    0.3951 +- 0.6% local    0.3939 (   -0.3%)  [wfsim: sniper_combo_miss | zoom_steps]
+quanta_vandal_cube           m1 build wfsim    0.1662 +- 0.4% local    0.1657 (   -0.3%)  [wfsim: A cube that is shot explodes for 600 Blast in 6 m, four time | A cube left alone detonates after 9 s, which needs a miss an | explosion_ignores_cover]
+afentis                      m0 build wfsim    0.2212 +- 0.7% local    0.2205 (   -0.3%)  [wfsim: A direct hit forces a knockdown and the explosion a ragdoll; | explosion_ignores_cover | self_stagger]
+dex_furis                    m0 bare  wfsim    0.0127 +- 0.2% local    0.0127 (   -0.3%)
+kuva_kraken                  m0 bare  wfsim    0.0287 +- 1.1% local    0.0286 (   -0.3%)  [wfsim: Hip-fire recoil is not modelled; the page notes the burst ki]
+dex_furis                    m0 build wfsim    0.1569 +- 0.1% local    0.1564 (   -0.3%)
+battacor                     m0 bare  wfsim    0.0336 +- 0.7% local    0.0335 (   -0.3%)
+supra                        m0 bare  wfsim    0.0212 +- 0.2% local    0.0211 (   -0.3%)  [wfsim: spool_rebuilds_after_reload]
+corinth_airburst             m1 bare  wfsim    0.0165 +- 0.2% local    0.0165 (   +0.3%)  [wfsim: explosion_ignores_cover | self_stagger]
+drakgoon                     m0 build wfsim    0.1928 +- 0.2% local    0.1923 (   -0.3%)  [wfsim: Shots ricochet once (wiki), which reaches enemies behind cov]
+twin_vipers_wraith           m0 build wfsim    0.1296 +- 0.2% local    0.1300 (   +0.3%)
+akjagara_prime               m0 bare  wfsim    0.0209 +- 0.4% local    0.0208 (   -0.3%)
+akarius                      m0 build wfsim    0.3528 +- 0.4% local    0.3517 (   -0.3%)  [wfsim: The rockets home within 15 degrees; every shot here hits any | The +50% reload speed while sprinting is not modelled: the p | Self-stagger is not modelled: an explosion at the wielder's  | The rockets aim for the torso, so a high headshot rate is no]
+ocucor                       m0 build wfsim    0.0652 +- 0.3% local    0.0650 (   -0.3%)
+rauta                        m0 build wfsim    0.2086 +- 0.3% local    0.2080 (   -0.3%)  [wfsim: Each pellet adds 2 to the melee combo count, up to 28 a shot]
+tazicor                      m0 bare  wfsim    0.0029 +- 0.3% local    0.0029 (   +0.3%)  [wfsim: Chaining is not modelled, and it is what the weapon is for:  | companion_fires_it]
+rubico                       m0 build wfsim    0.5004 +- 0.1% local    0.4989 (   -0.3%)  [wfsim: sniper_combo_miss | zoom_steps]
+quellor_alt                  m1 bare  wfsim    0.0299 +- 0.9% local    0.0300 (   +0.3%)  [wfsim: The charged shot travels 26 m (wiki), which is not entered,  | The guaranteed Impact proc reaches only 18 m (wiki) but is a | It cannot hold a charge (wiki): the shot fires once charged,]
+afuris                       m0 bare  wfsim    0.0089 +- 0.2% local    0.0088 (   -0.3%)
+twin_vipers                  m0 build wfsim    0.0742 +- 0.3% local    0.0744 (   +0.3%)
+viper                        m0 build wfsim    0.0662 +- 0.3% local    0.0664 (   +0.3%)
+cryotra                      m0 bare  wfsim    0.0001 +- 0.4% local    0.0001 (   +0.3%)  [wfsim: The cold field is not modelled, and it is most of the weapon | companion_fires_it]
+quellor                      m0 build wfsim    0.1806 +- 0.3% local    0.1800 (   -0.3%)
+stubba                       m0 build wfsim    0.1326 +- 0.3% local    0.1323 (   -0.3%)
+aklex_prime                  m0 bare  wfsim    0.0150 +- 0.4% local    0.0150 (   -0.3%)
+baza_prime                   m0 bare  wfsim    0.0159 +- 0.2% local    0.0158 (   -0.3%)  [wfsim: silent_weapon]
+cantare                      m0 build wfsim    0.1421 +- 0.5% local    0.1417 (   -0.3%)  [wfsim: On a reload the blades return, damaging everything in their  | Cantare Chorale: hitting enemies with the returning blades g | silent_weapon]
+rubico_prime                 m0 build wfsim    0.5479 +- 0.1% local    0.5464 (   -0.3%)  [wfsim: sniper_combo_miss | zoom_steps]
+hind                         m0 bare  wfsim    0.0086 +- 0.2% local    0.0086 (   -0.3%)
+scyotid                      m0 build wfsim    0.4572 +- 0.2% local    0.4560 (   -0.3%)  [wfsim: silent_weapon]
+prisma_grakata               m0 build wfsim    0.2440 +- 0.1% local    0.2433 (   -0.3%)
+astilla                      m0 bare  wfsim    0.0297 +- 0.3% local    0.0296 (   -0.3%)  [wfsim: explosion_ignores_cover | self_stagger]
+ax_52                        m0 bare  wfsim    0.0163 +- 0.2% local    0.0162 (   -0.3%)  [wfsim: While aiming, headshots get +400% critical chance, additive  | The hip-fire half of the passive, +60% ammo efficiency: the ]
+coda_bassocyst               m0 build wfsim    0.6150 +- 0.9% local    0.6134 (   -0.3%)  [wfsim: The alt-fire is a finisher tool: it latches a mite onto up t | A Mercy kill grants +100% damage and multishot for 20 s, ref | The projectile's thickness is left blank on the page; the si]
+scourge_prime                m0 build wfsim    0.1176 +- 0.4% local    0.1179 (   +0.3%)  [wfsim: It reloads 33% of its magazine a second while holstered or d]
+akbolto                      m0 build wfsim    0.1346 +- 0.4% local    0.1342 (   -0.3%)  [wfsim: bolt_corpse_ragdoll]
+hema                         m0 build wfsim    0.0991 +- 0.3% local    0.0994 (   +0.3%)  [wfsim: Its drawback, converting health to ammo, is not modelled: no]
+bubonico                     m0 bare  wfsim    0.0713 +- 0.2% local    0.0715 (   +0.3%)
+embolist                     m0 bare  wfsim    0.0191 +- 0.3% local    0.0191 (   +0.3%)
+tenora                       m0 bare  wfsim    0.0144 +- 0.2% local    0.0144 (   -0.2%)  [wfsim: It needs 40 shots to reach full accuracy (wiki); this entry  | spool_rebuilds_after_reload]
+akbronco                     m0 build wfsim    0.1585 +- 0.3% local    0.1589 (   +0.2%)
+akjagara_prime               m0 build wfsim    0.3025 +- 0.3% local    0.3018 (   -0.2%)
+zarr                         m0 bare  wfsim    0.0211 +- 0.2% local    0.0210 (   -0.2%)  [wfsim: explosion_ignores_cover | self_stagger | cluster_bomblet_co]
+tenora_prime                 m0 bare  wfsim    0.0217 +- 0.2% local    0.0218 (   +0.2%)  [wfsim: Accuracy improves the longer it fires (wiki); this entry use | spool_rebuilds_after_reload]
+tenet_envoy                  m0 build wfsim    0.5178 +- 0.3% local    0.5166 (   -0.2%)  [wfsim: explosion_ignores_cover | The rockets can be guided by aiming and fired from behind co | A rocket that hits nothing detonates after 6 s; the sim does | holstered_reload | self_stagger]
+akzani                       m0 bare  wfsim    0.0091 +- 0.2% local    0.0091 (   -0.2%)
+akstiletto                   m0 bare  wfsim    0.0099 +- 0.3% local    0.0098 (   -0.2%)
+corinth_prime                m0 build wfsim    0.3888 +- 0.2% local    0.3879 (   -0.2%)
+akbolto_prime                m0 build wfsim    0.2654 +- 0.2% local    0.2660 (   +0.2%)  [wfsim: bolt_corpse_ragdoll]
+tenet_quanta                 m0 bare  wfsim    0.0282 +- 0.2% local    0.0281 (   -0.2%)
+synapse                      m0 build wfsim    0.2265 +- 0.1% local    0.2260 (   -0.2%)
+prisma_grinlok               m0 bare  wfsim    0.0198 +- 0.9% local    0.0198 (   -0.2%)
+panthera_prime               m0 build wfsim    0.2356 +- 0.5% local    0.2361 (   +0.2%)  [wfsim: The blades ricochet off surfaces (wiki); there are no walls  | explosion_ignores_cover | self_stagger]
+afuris                       m0 build wfsim    0.0903 +- 0.2% local    0.0901 (   -0.2%)
+akmagnus_prime               m0 bare  wfsim    0.0204 +- 0.5% local    0.0203 (   -0.2%)  [wfsim: Chamber Cascade: a hit or a damaging status has a 4% chance ]
+prime_laser_rifle            m0 build wfsim    0.1342 +- 0.3% local    0.1339 (   -0.2%)  [wfsim: companion_fires_it | spread_not_transcribed]
+velox                        m0 build wfsim    0.1568 +- 0.2% local    0.1572 (   +0.2%)  [wfsim: empty_reload_is_faster]
+thornbak                     m0 build wfsim    0.0960 +- 0.3% local    0.0962 (   +0.2%)
+tiberon_prime                m0 build wfsim    0.3781 +- 0.2% local    0.3773 (   -0.2%)
+sonicor                      m0 build wfsim    0.0475 +- 0.2% local    0.0476 (   +0.2%)  [wfsim: The projectile explodes on impact or after 15 m (wiki). This | Its guaranteed knockback and ragdoll (wiki) are crowd contro | Projectiles bounce off surfaces (wiki); there are no walls h | explosion_ignores_cover]
+knell_prime                  m0 bare  wfsim    0.0044 +- 0.8% local    0.0044 (   -0.2%)
+reconifex                    m0 build wfsim    0.2816 +- 0.1% local    0.2810 (   -0.2%)  [wfsim: Pressing reload again 22-38% into a reload cuts it to 1 s an]
+astilla                      m0 build wfsim    0.1269 +- 0.3% local    0.1271 (   +0.2%)  [wfsim: explosion_ignores_cover | self_stagger]
+viper_wraith                 m0 bare  wfsim    0.0075 +- 0.2% local    0.0076 (   +0.2%)
+tigris                       m0 build wfsim    0.2674 +- 0.3% local    0.2668 (   -0.2%)
+scyotid                      m0 bare  wfsim    0.0277 +- 0.4% local    0.0278 (   +0.2%)  [wfsim: silent_weapon]
+glaxion_vandal               m0 build wfsim    0.1347 +- 0.3% local    0.1344 (   -0.2%)  [wfsim: Kills leave an extra corpse, which the page notes for Nekros]
+higasa                       m0 build wfsim    0.1182 +- 0.3% local    0.1179 (   -0.2%)  [wfsim: Aiming raises a shield that blocks frontal projectiles, clos]
+panthera                     m0 build wfsim    0.1322 +- 0.6% local    0.1319 (   -0.2%)  [wfsim: The blades ricochet off surfaces (wiki); there are no walls ]
+vesper_77                    m0 build wfsim    0.2247 +- 0.4% local    0.2251 (   +0.2%)  [wfsim: silent_weapon | The laser sight highlights weak points on screen, an aiming ]
+ax_52                        m0 build wfsim    0.2336 +- 0.1% local    0.2331 (   -0.2%)  [wfsim: While aiming, headshots get +400% critical chance, additive  | The hip-fire half of the passive, +60% ammo efficiency: the ]
+quanta                       m0 build wfsim    0.3351 +- 0.3% local    0.3357 (   +0.2%)
+twin_grakatas                m0 bare  wfsim    0.0147 +- 0.2% local    0.0147 (   -0.2%)
+sporothrix                   m0 build wfsim    0.5190 +- 1.0% local    0.5199 (   +0.2%)  [wfsim: sniper_combo_miss | zoom_steps | The barb's 0.9 s eruption delay is not modelled: the explosi]
+hek                          m0 build wfsim    0.1833 +- 0.2% local    0.1837 (   +0.2%)
+pyrana                       m0 bare  wfsim    0.0284 +- 0.2% local    0.0285 (   +0.2%)
+pyrana_prime                 m0 build wfsim    0.4838 +- 0.0% local    0.4829 (   -0.2%)
+arca_plasmor                 m0 bare  wfsim    0.0222 +- 0.3% local    0.0221 (   -0.2%)  [wfsim: The projectile is a wall 3 m thick (4.4 m on the Tenet varia | The guaranteed Impact proc reaches only 14 m but is applied  | Its innate punch through does not pass surfaces when the pro]
+aksomati_prime               m0 bare  wfsim    0.0176 +- 0.3% local    0.0176 (   -0.2%)  [wfsim: auto_spool_ramp | Accuracy also improves during the spool (wiki); this entry u]
+buzlok                       m0 bare  wfsim    0.0176 +- 0.3% local    0.0176 (   +0.2%)  [wfsim: Landing a tracer round grants +50% absolute critical chance  | The primary fire homes on a beaconed target for 20 s (wiki);]
+spira_prime                  m0 bare  wfsim    0.0115 +- 0.5% local    0.0115 (   -0.2%)  [wfsim: Not offered here: the thrown-exclusive Concealed Explosives. | bolt_corpse_ragdoll | silent_weapon]
+euphona_prime                m0 bare  wfsim    0.0176 +- 0.6% local    0.0176 (   -0.2%)
+tetra                        m0 bare  wfsim    0.0076 +- 0.1% local    0.0076 (   -0.2%)
+akjagara                     m0 build wfsim    0.1409 +- 0.4% local    0.1411 (   +0.2%)
+deth_machine_rifle           m0 bare  wfsim    0.0042 +- 0.1% local    0.0042 (   -0.2%)  [wfsim: auto_spool_ramp | companion_fires_it | spread_not_transcribed]
+laser_rifle                  m0 build wfsim    0.0894 +- 0.4% local    0.0893 (   -0.2%)  [wfsim: companion_fires_it | spread_not_transcribed]
+sepulcrum                    m0 bare  wfsim    0.0232 +- 0.9% local    0.0232 (   +0.2%)  [wfsim: explosion_ignores_cover | self_stagger]
+afentis                      m0 bare  wfsim    0.0281 +- 0.6% local    0.0280 (   -0.2%)  [wfsim: A direct hit forces a knockdown and the explosion a ragdoll; | explosion_ignores_cover | self_stagger]
+quatz                        m0 bare  wfsim    0.0159 +- 0.3% local    0.0159 (   +0.2%)  [wfsim: Reloading from an empty magazine releases an 8 m shockwave, ]
+prisma_tetra                 m0 bare  wfsim    0.0110 +- 0.2% local    0.0109 (   -0.2%)
+prime_laser_rifle            m0 bare  wfsim    0.0105 +- 0.3% local    0.0105 (   +0.2%)  [wfsim: companion_fires_it | spread_not_transcribed]
+akarius_prime                m0 bare  wfsim    0.0570 +- 0.3% local    0.0570 (   -0.2%)  [wfsim: The rockets home within 15 degrees; every shot here hits any | The +50% reload speed while sprinting is not modelled: the p | Self-stagger is not modelled: an explosion at the wielder's  | The rockets aim for the torso, so a high headshot rate is no]
+akzani                       m0 build wfsim    0.1128 +- 0.1% local    0.1126 (   -0.1%)
+pyrana_prime                 m0 bare  wfsim    0.0343 +- 0.2% local    0.0343 (   -0.1%)
+tigris_prime                 m0 build wfsim    0.3714 +- 0.3% local    0.3709 (   -0.1%)
+basmu_beam                   m1 bare  wfsim    0.0120 +- 0.5% local    0.0120 (   +0.1%)
+perigale                     m0 build wfsim    0.6165 +- 0.2% local    0.6174 (   +0.1%)  [wfsim: sniper_combo_miss | zoom_steps | Voruna's signature bonus is not modelled: carried by her, th]
+hek                          m0 bare  wfsim    0.0267 +- 0.3% local    0.0268 (   +0.1%)
+fusilai                      m0 bare  wfsim    0.0095 +- 0.5% local    0.0095 (   +0.1%)  [wfsim: silent_weapon]
+scourge_prime                m0 bare  wfsim    0.0139 +- 0.2% local    0.0139 (   -0.1%)  [wfsim: It reloads 33% of its magazine a second while holstered or d]
+higasa                       m0 bare  wfsim    0.0088 +- 0.3% local    0.0088 (   +0.1%)  [wfsim: Aiming raises a shield that blocks frontal projectiles, clos]
+zarr_barrage                 m1 bare  wfsim    0.0441 +- 0.3% local    0.0442 (   +0.1%)
+twin_grakatas                m0 build wfsim    0.2384 +- 0.1% local    0.2381 (   -0.1%)
+aeolak_alt                   m1 build wfsim    0.2278 +- 0.9% local    0.2281 (   +0.1%)  [wfsim: explosion_ignores_cover | self_stagger]
+baza                         m0 build wfsim    0.1896 +- 0.2% local    0.1894 (   -0.1%)  [wfsim: silent_weapon]
+kuva_hek_quad                m1 bare  wfsim    0.0714 +- 0.3% local    0.0715 (   +0.1%)  [wfsim: The alt-fire needs four rounds and reloads instead when ther]
+kraken                       m0 bare  wfsim    0.0055 +- 0.3% local    0.0055 (   -0.1%)
+efv_5_jupiter                m0 bare  wfsim    0.0260 +- 0.3% local    0.0260 (   +0.1%)
+corinth_airburst             m1 build wfsim    0.0577 +- 0.2% local    0.0578 (   +0.1%)  [wfsim: explosion_ignores_cover | self_stagger]
+tigris_prime                 m0 bare  wfsim    0.0545 +- 0.3% local    0.0545 (   -0.1%)
+snipetron                    m0 bare  wfsim    0.0097 +- 0.4% local    0.0097 (   +0.1%)  [wfsim: sniper_combo_miss | zoom_steps]
+nagantaka                    m0 build wfsim    0.2032 +- 0.8% local    0.2030 (   -0.1%)  [wfsim: Headshot kills from the bolt boost reload speed by 50% (wiki | Used by Garuda it gains 1 m of innate punch through (wiki),  | bolt_corpse_ragdoll | silent_weapon]
+laser_rifle                  m0 bare  wfsim    0.0079 +- 0.2% local    0.0079 (   +0.1%)  [wfsim: companion_fires_it | spread_not_transcribed]
+perigale                     m0 bare  wfsim    0.0940 +- 0.6% local    0.0939 (   -0.1%)  [wfsim: sniper_combo_miss | zoom_steps | Voruna's signature bonus is not modelled: carried by her, th]
+carmine_penta                m0 bare  wfsim    0.0289 +- 0.2% local    0.0289 (   -0.1%)  [wfsim: The grenades are detonated by hand with the alt-fire, with n | Only five grenades can be live at once, and multishot counts | explosion_ignores_cover | self_stagger]
+harpak_harpoon               m1 build wfsim    0.1260 +- 0.4% local    0.1261 (   +0.1%)  [wfsim: The harpoon pulls enemies in, knocks them down, grounds flye]
+purgator_1                   m0 build wfsim    0.4986 +- 0.1% local    0.4980 (   -0.1%)  [wfsim: An enemy killed directly by it leaves a Gas cloud whose tick]
+dual_cestra                  m0 bare  wfsim    0.0135 +- 0.1% local    0.0135 (   -0.1%)
+tigris                       m0 bare  wfsim    0.0393 +- 0.4% local    0.0392 (   -0.1%)
+akbronco                     m0 bare  wfsim    0.0168 +- 0.1% local    0.0168 (   +0.1%)
+sobek                        m0 build wfsim    0.2209 +- 0.2% local    0.2206 (   -0.1%)
+drakgoon                     m0 bare  wfsim    0.0287 +- 0.2% local    0.0287 (   -0.1%)  [wfsim: Shots ricochet once (wiki), which reaches enemies behind cov]
+karak_wraith                 m0 bare  wfsim    0.0143 +- 0.3% local    0.0143 (   -0.1%)
+secura_dual_cestra           m0 bare  wfsim    0.0121 +- 0.1% local    0.0120 (   -0.1%)  [wfsim: The Sequence syndicate effect turns damage dealt into shield | auto_spool_ramp]
+aksomati_prime               m0 build wfsim    0.2929 +- 0.2% local    0.2925 (   -0.1%)  [wfsim: auto_spool_ramp | Accuracy also improves during the spool (wiki); this entry u]
+pyrana                       m0 build wfsim    0.3917 +- 0.2% local    0.3914 (   -0.1%)
+quanta_vandal_cube           m1 bare  wfsim    0.0262 +- 0.3% local    0.0262 (   -0.1%)  [wfsim: A cube that is shot explodes for 600 Blast in 6 m, four time | A cube left alone detonates after 9 s, which needs a miss an | explosion_ignores_cover]
+sancti_tigris                m0 bare  wfsim    0.0484 +- 0.3% local    0.0483 (   -0.1%)  [wfsim: The Purity syndicate effect heals and cleanses the wielder a]
+baza_prime                   m0 build wfsim    0.2500 +- 0.1% local    0.2498 (   -0.1%)  [wfsim: silent_weapon]
+twin_rogga                   m0 bare  wfsim    0.0292 +- 0.2% local    0.0292 (   +0.1%)
+akstiletto_prime             m0 bare  wfsim    0.0113 +- 0.3% local    0.0113 (   +0.1%)
+telos_akbolto                m0 bare  wfsim    0.0137 +- 0.2% local    0.0137 (   -0.1%)  [wfsim: bolt_corpse_ragdoll | The Truth syndicate effect detonates a radial blast that str]
+artax                        m0 build wfsim    0.0152 +- 0.2% local    0.0152 (   -0.1%)  [wfsim: companion_fires_it]
+baza                         m0 bare  wfsim    0.0119 +- 0.3% local    0.0119 (   -0.1%)  [wfsim: silent_weapon]
+cedo_prime                   m0 bare  wfsim    0.0510 +- 0.2% local    0.0510 (   -0.1%)
+veldt                        m0 bare  wfsim    0.0155 +- 0.5% local    0.0155 (   -0.1%)  [wfsim: The alt-fire only changes the zoom (wiki), so this weapon ha]
+prisma_tetra                 m0 build wfsim    0.1105 +- 0.3% local    0.1104 (   -0.1%)
+akbolto_prime                m0 bare  wfsim    0.0139 +- 0.3% local    0.0139 (   -0.1%)  [wfsim: bolt_corpse_ragdoll]
+viper                        m0 bare  wfsim    0.0060 +- 0.2% local    0.0060 (   -0.1%)
+akvasto_prime                m0 build wfsim    0.2597 +- 0.4% local    0.2599 (   +0.1%)
+spira_prime                  m0 build wfsim    0.2213 +- 0.3% local    0.2215 (   +0.1%)  [wfsim: Not offered here: the thrown-exclusive Concealed Explosives. | bolt_corpse_ragdoll | silent_weapon]
+zarr                         m0 build wfsim    0.1222 +- 0.4% local    0.1223 (   +0.1%)  [wfsim: explosion_ignores_cover | self_stagger | cluster_bomblet_co]
+astilla_prime                m0 build wfsim    0.1971 +- 0.3% local    0.1973 (   +0.1%)  [wfsim: explosion_ignores_cover | self_stagger]
+tenet_envoy                  m0 bare  wfsim    0.0430 +- 0.8% local    0.0430 (   +0.1%)  [wfsim: explosion_ignores_cover | The rockets can be guided by aiming and fired from behind co | A rocket that hits nothing detonates after 6 s; the sim does | holstered_reload | self_stagger]
+akarius                      m0 bare  wfsim    0.0396 +- 0.2% local    0.0396 (   -0.1%)  [wfsim: The rockets home within 15 degrees; every shot here hits any | The +50% reload speed while sprinting is not modelled: the p | Self-stagger is not modelled: an explosion at the wielder's  | The rockets aim for the torso, so a high headshot rate is no]
+harpak_harpoon               m1 bare  wfsim    0.0091 +- 0.5% local    0.0090 (   -0.1%)  [wfsim: The harpoon pulls enemies in, knocks them down, grounds flye]
+sancti_tigris                m0 build wfsim    0.3203 +- 0.2% local    0.3205 (   +0.1%)  [wfsim: The Purity syndicate effect heals and cleanses the wielder a]
+daikyu                       m0 build wfsim    0.4350 +- 0.6% local    0.4353 (   +0.1%)  [wfsim: Fires only at full charge; an early release fires nothing. T | Not offered here: Spring-Loaded Broadhead, Amalgam Daikyu Ta | bolt_corpse_ragdoll | silent_weapon | zoom_steps]
+detron                       m0 build wfsim    0.1656 +- 0.1% local    0.1655 (   -0.1%)
+hema                         m0 bare  wfsim    0.0113 +- 0.1% local    0.0113 (   -0.1%)  [wfsim: Its drawback, converting health to ammo, is not modelled: no]
+fulmin_prime                 m1 build wfsim    0.2877 +- 0.3% local    0.2875 (   -0.1%)  [wfsim: Switching modes takes 1 s of animation (0.5 s on Wisp); the ]
+vaykor_hek                   m0 bare  wfsim    0.0482 +- 0.2% local    0.0482 (   -0.1%)  [wfsim: The Justice syndicate effect detonates a radial blast and he]
+scourge                      m0 build wfsim    0.0626 +- 0.2% local    0.0626 (   -0.1%)  [wfsim: It reloads 33% of its magazine a second while holstered or d]
+astilla_prime                m0 bare  wfsim    0.0436 +- 0.3% local    0.0437 (   +0.1%)  [wfsim: explosion_ignores_cover | self_stagger]
+zarr_barrage                 m1 build wfsim    0.4881 +- 0.0% local    0.4884 (   +0.1%)
+quartakk                     m0 bare  wfsim    0.0171 +- 0.4% local    0.0171 (   -0.1%)
+hystrix_prime                m0 bare  wfsim    0.0420 +- 0.2% local    0.0420 (   -0.1%)  [wfsim: The alt-fire cycles four quill types, Poison, Fire, Electric]
+perigale_prime               m0 bare  wfsim    0.1376 +- 0.5% local    0.1375 (   -0.1%)  [wfsim: sniper_combo_miss | zoom_steps | Voruna's signature bonus is not modelled: carried by her, th]
+tenet_quanta                 m0 build wfsim    0.4341 +- 0.2% local    0.4339 (   -0.1%)
+tenora_prime                 m0 build wfsim    0.3214 +- 0.1% local    0.3216 (   +0.1%)  [wfsim: Accuracy improves the longer it fires (wiki); this entry use | spool_rebuilds_after_reload]
+buzlok_beacon                m1 build wfsim    0.0009 +- 0.2% local    0.0009 (   -0.1%)  [wfsim: The beacon exists to grant the primary fire +50% absolute cr]
+arca_scisco                  m0 build wfsim    0.1458 +- 0.3% local    0.1459 (   +0.1%)  [wfsim: Target Analysis: each shot grants +4% flat critical and stat | zoom_steps]
+coda_bubonico                m0 bare  wfsim    0.0979 +- 0.3% local    0.0980 (   +0.1%)  [wfsim: spool_rebuilds_after_reload]
+battacor                     m0 build wfsim    0.4898 +- 0.1% local    0.4900 (   +0.1%)
+vinquibus                    m0 build wfsim    0.5122 +- 0.3% local    0.5124 (   +0.0%)  [wfsim: Its second innate polarity is an Aura polarity, which no wea | Equipping it also takes the melee slot, so a Vinquibus loado | Headshots grant 2 stacks (max 16) of Vinquibus Precision, +2]
+marelok                      m0 build wfsim    0.1096 +- 0.6% local    0.1097 (   +0.0%)
+sweeper_prime                m0 bare  wfsim    0.0104 +- 0.2% local    0.0104 (   +0.0%)  [wfsim: The 20-40 degree spread is not modelled; at zero distance al | companion_fires_it]
+kuva_hek_quad                m1 build wfsim    0.4997 +- 0.2% local    0.5000 (   +0.0%)  [wfsim: The alt-fire needs four rounds and reloads instead when ther]
+lanka                        m0 build wfsim    0.4858 +- 0.1% local    0.4860 (   +0.0%)  [wfsim: sniper_combo_miss | zoom_steps | The partial charge is a separate entry; in game both are the]
+sweeper_prime                m0 build wfsim    0.0710 +- 0.2% local    0.0710 (   +0.0%)  [wfsim: The 20-40 degree spread is not modelled; at zero distance al | companion_fires_it]
+secura_penta                 m0 bare  wfsim    0.0212 +- 0.4% local    0.0212 (   +0.0%)  [wfsim: The grenades are detonated by hand with the alt-fire, with n | Only five grenades can be live at once, and multishot counts | The Sequence syndicate effect turns damage dealt into shield | explosion_ignores_cover | self_stagger]
+acceltra_prime               m0 build wfsim    0.5011 +- 0.0% local    0.5013 (   +0.0%)  [wfsim: The rockets arm only after 7 m (wiki); closer, they hit with | Reloading while sprinting gives +25% reload speed (+50% on G | explosion_ignores_cover | self_stagger]
+efv_5_jupiter                m0 build wfsim    0.3448 +- 0.3% local    0.3446 (   -0.0%)
+embolist                     m0 build wfsim    0.2456 +- 0.3% local    0.2455 (   -0.0%)
+ogris                        m0 bare  wfsim    0.0205 +- 0.3% local    0.0205 (   +0.0%)  [wfsim: Enemies can shoot down the rockets (wiki); nothing shoots ba | Not offered here: the launcher-exclusive Adhesive Blast, whi | explosion_ignores_cover | self_stagger]
+bubonico                     m0 build wfsim    0.4847 +- 0.0% local    0.4849 (   +0.0%)
+deth_machine_rifle_prime     m0 bare  wfsim    0.0074 +- 0.2% local    0.0074 (   -0.0%)  [wfsim: auto_spool_ramp | companion_fires_it | spread_not_transcribed]
+acceltra_prime               m0 bare  wfsim    0.0538 +- 0.2% local    0.0537 (   -0.0%)  [wfsim: The rockets arm only after 7 m (wiki); closer, they hit with | Reloading while sprinting gives +25% reload speed (+50% on G | explosion_ignores_cover | self_stagger]
+penta                        m0 bare  wfsim    0.0115 +- 0.4% local    0.0115 (   +0.0%)  [wfsim: The grenades are detonated by hand with the alt-fire, with n | Only five grenades can be live at once, and multishot counts | Not offered here: Tether Grenades, Napalm Grenades and the l | explosion_ignores_cover | self_stagger]
+sobek                        m0 bare  wfsim    0.0312 +- 0.2% local    0.0312 (   +0.0%)
+stubba                       m0 bare  wfsim    0.0094 +- 0.3% local    0.0094 (   -0.0%)
+sonicor                      m0 bare  wfsim    0.0074 +- 0.1% local    0.0074 (   -0.0%)  [wfsim: The projectile explodes on impact or after 15 m (wiki). This | Its guaranteed knockback and ragdoll (wiki) are crowd contro | Projectiles bounce off surfaces (wiki); there are no walls h | explosion_ignores_cover]
+artax                        m0 bare  wfsim    0.0027 +- 0.0% local    0.0027 (   -0.0%)  [wfsim: companion_fires_it]
+opticor_vandal               m0 build wfsim    0.4924 +- 0.2% local    0.4922 (   -0.0%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's ra | explosion_ignores_cover | self_stagger]
+arca_plasmor                 m0 build wfsim    0.1505 +- 0.3% local    0.1505 (   +0.0%)  [wfsim: The projectile is a wall 3 m thick (4.4 m on the Tenet varia | The guaranteed Impact proc reaches only 14 m but is applied  | Its innate punch through does not pass surfaces when the pro]
+glaxion_vandal               m0 bare  wfsim    0.0138 +- 0.2% local    0.0138 (   -0.0%)  [wfsim: Kills leave an extra corpse, which the page notes for Nekros]
+akarius_prime                m0 build wfsim    0.5008 +- 0.0% local    0.5007 (   -0.0%)  [wfsim: The rockets home within 15 degrees; every shot here hits any | The +50% reload speed while sprinting is not modelled: the p | Self-stagger is not modelled: an explosion at the wielder's  | The rockets aim for the torso, so a high headshot rate is no]
+opticor_vandal               m0 bare  wfsim    0.0492 +- 1.0% local    0.0492 (   -0.0%)  [wfsim: The wiki's Condition Overload catalog gives this weapon's ra | explosion_ignores_cover | self_stagger]
+glaxion                      m0 build wfsim    0.0860 +- 0.4% local    0.0860 (   -0.0%)
+corinth_prime_airburst       m1 build wfsim    0.1456 +- 0.3% local    0.1456 (   -0.0%)  [wfsim: explosion_ignores_cover | self_stagger]
+detron                       m0 bare  wfsim    0.0207 +- 0.0% local    0.0207 (   -0.0%)
+sweeper                      m0 build wfsim    0.0470 +- 0.1% local    0.0470 (   -0.0%)  [wfsim: The 20-40 degree spread is not modelled; at zero distance al | companion_fires_it]
+glaxion                      m0 bare  wfsim    0.0109 +- 0.1% local    0.0109 (   +0.0%)
+cyanex_burst                 m1 build wfsim    0.1345 +- 0.3% local    0.1345 (   -0.0%)  [wfsim: The burst empties the magazine, and this entry fires a fixed]
+coda_bubonico                m0 build wfsim    0.5152 +- 0.0% local    0.5154 (   +0.0%)  [wfsim: spool_rebuilds_after_reload]
+twin_rogga                   m0 build wfsim    0.3457 +- 0.2% local    0.3457 (   +0.0%)
+twin_vipers_wraith           m0 bare  wfsim    0.0095 +- 0.2% local    0.0095 (   -0.0%)
+coda_sporothrix              m0 bare  wfsim    0.1671 +- 1.2% local    0.1671 (   -0.0%)  [wfsim: sniper_combo_miss | zoom_steps | The barb's 0.9 s eruption delay is not modelled: the explosi]
+mara_detron                  m0 build wfsim    0.2261 +- 0.1% local    0.2261 (   -0.0%)
+scourge                      m0 bare  wfsim    0.0113 +- 0.0% local    0.0113 (   -0.0%)  [wfsim: It reloads 33% of its magazine a second while holstered or d]
+dual_cestra                  m0 build wfsim    0.1333 +- 0.1% local    0.1333 (   -0.0%)
+karak_wraith                 m0 build wfsim    0.1560 +- 0.3% local    0.1560 (   +0.0%)
+sweeper                      m0 bare  wfsim    0.0072 +- 0.1% local    0.0072 (   -0.0%)  [wfsim: The 20-40 degree spread is not modelled; at zero distance al | companion_fires_it]
+hystrix                      m0 build wfsim    0.4612 +- 0.2% local    0.4611 (   -0.0%)  [wfsim: The alt-fire cycles four quill types, Poison, Fire, Electric]
+euphona_prime                m0 build wfsim    0.3066 +- 0.3% local    0.3065 (   -0.0%)
+hystrix_prime                m0 build wfsim    0.4965 +- 0.0% local    0.4965 (   -0.0%)  [wfsim: The alt-fire cycles four quill types, Poison, Fire, Electric]
+akstiletto                   m0 build wfsim    0.1272 +- 0.3% local    0.1272 (   -0.0%)
+grinlok                      m0 build wfsim    0.1590 +- 0.9% local    0.1590 (   +0.0%)
+mara_detron                  m0 bare  wfsim    0.0253 +- 0.0% local    0.0253 (   -0.0%)
+tenet_glaxion                m0 build wfsim    0.3953 +- 0.3% local    0.3953 (   -0.0%)  [wfsim: In game the chain can pass through corpses (page); here a bo]
+secura_dual_cestra           m0 build wfsim    0.1437 +- 0.1% local    0.1437 (   -0.0%)  [wfsim: The Sequence syndicate effect turns damage dealt into shield | auto_spool_ramp]
+twin_vipers                  m0 bare  wfsim    0.0067 +- 0.2% local    0.0067 (   -0.0%)
+prisma_grinlok               m0 build wfsim    0.2794 +- 0.8% local    0.2794 (   +0.0%)
+cedo_prime                   m0 build wfsim    0.3873 +- 0.1% local    0.3873 (   -0.0%)
+buzlok_beacon                m1 bare  wfsim    0.0002 +- 0.0% local    0.0002 (   +0.0%)  [wfsim: The beacon exists to grant the primary fire +50% absolute cr]
+cases 682  mean |delta| 8.10%  median 0.68%  within 5% 543  over 20% 84
+skipped (no exact local record): 85
+skipped (incarnon): 73
+skipped (no local alternate mode): 1
+reference error ambassador_charged bare: {'error': 'unknown weapon: "ambassador_charged"', 'ok': False}
+reference error ambassador_charged build: {'error': 'unknown weapon: "ambassador_charged"', 'ok': False}
+reference error argonak_auto bare: {'error': 'unknown weapon: "argonak_auto"', 'ok': False}
+reference error argonak_auto build: {'error': 'unknown weapon: "argonak_auto"', 'ok': False}
+reference error battacor_charged bare: {'error': 'unknown weapon: "battacor_charged"', 'ok': False}
+reference error battacor_charged build: {'error': 'unknown weapon: "battacor_charged"', 'ok': False}
+reference error cernos_prime_uncharged bare: {'error': 'unknown weapon: "cernos_prime_uncharged"', 'ok': False}
+reference error cernos_prime_uncharged build: {'error': 'unknown weapon: "cernos_prime_uncharged"', 'ok': False}
+reference error cernos_uncharged bare: {'error': 'unknown weapon: "cernos_uncharged"', 'ok': False}
+reference error cernos_uncharged build: {'error': 'unknown weapon: "cernos_uncharged"', 'ok': False}
+reference error cinta_charged bare: {'error': 'unknown weapon: "cinta_charged"', 'ok': False}
+reference error cinta_charged build: {'error': 'unknown weapon: "cinta_charged"', 'ok': False}
+reference error daikyu_prime_quick bare: {'error': 'unknown weapon: "daikyu_prime_quick"', 'ok': False}
+reference error daikyu_prime_quick build: {'error': 'unknown weapon: "daikyu_prime_quick"', 'ok': False}
+reference error drakgoon_uncharged bare: {'error': 'unknown weapon: "drakgoon_uncharged"', 'ok': False}
+reference error drakgoon_uncharged build: {'error': 'unknown weapon: "drakgoon_uncharged"', 'ok': False}
+reference error efv_8_mars_alt bare: {'error': 'unknown weapon: "efv_8_mars_alt"', 'ok': False}
+reference error efv_8_mars_alt build: {'error': 'unknown weapon: "efv_8_mars_alt"', 'ok': False}
+reference error epitaph_prime_uncharged bare: {'error': 'unknown weapon: "epitaph_prime_uncharged"', 'ok': False}
+reference error epitaph_prime_uncharged build: {'error': 'unknown weapon: "epitaph_prime_uncharged"', 'ok': False}
+reference error epitaph_uncharged bare: {'error': 'unknown weapon: "epitaph_uncharged"', 'ok': False}
+reference error epitaph_uncharged build: {'error': 'unknown weapon: "epitaph_uncharged"', 'ok': False}
+reference error evensong_quick bare: {'error': 'unknown weapon: "evensong_quick"', 'ok': False}
+reference error evensong_quick build: {'error': 'unknown weapon: "evensong_quick"', 'ok': False}
+reference error fulmin_prime_semi bare: {'error': 'unknown weapon: "fulmin_prime_semi"', 'ok': False}
+reference error fulmin_prime_semi build: {'error': 'unknown weapon: "fulmin_prime_semi"', 'ok': False}
+reference error fulmin_semi bare: {'error': 'unknown weapon: "fulmin_semi"', 'ok': False}
+reference error fulmin_semi build: {'error': 'unknown weapon: "fulmin_semi"', 'ok': False}
+reference error fusilai_fan bare: {'error': 'unknown weapon: "fusilai_fan"', 'ok': False}
+reference error fusilai_fan build: {'error': 'unknown weapon: "fusilai_fan"', 'ok': False}
+reference error higasa_charged bare: {'error': 'unknown weapon: "higasa_charged"', 'ok': False}
+reference error higasa_charged build: {'error': 'unknown weapon: "higasa_charged"', 'ok': False}
+reference error hind_semi bare: {'error': 'unknown weapon: "hind_semi"', 'ok': False}
+reference error hind_semi build: {'error': 'unknown weapon: "hind_semi"', 'ok': False}
+reference error kuva_drakgoon_uncharged bare: {'error': 'unknown weapon: "kuva_drakgoon_uncharged"', 'ok': False}
+reference error kuva_drakgoon_uncharged build: {'error': 'unknown weapon: "kuva_drakgoon_uncharged"', 'ok': False}
+reference error kuva_hind_auto bare: {'error': 'unknown weapon: "kuva_hind_auto"', 'ok': False}
+reference error kuva_hind_auto build: {'error': 'unknown weapon: "kuva_hind_auto"', 'ok': False}
+reference error kuva_hind_semi bare: {'error': 'unknown weapon: "kuva_hind_semi"', 'ok': False}
+reference error kuva_hind_semi build: {'error': 'unknown weapon: "kuva_hind_semi"', 'ok': False}
+reference error kuva_quartakk_auto bare: {'error': 'unknown weapon: "kuva_quartakk_auto"', 'ok': False}
+reference error kuva_quartakk_auto build: {'error': 'unknown weapon: "kuva_quartakk_auto"', 'ok': False}
+reference error lanka_uncharged bare: {'error': 'unknown weapon: "lanka_uncharged"', 'ok': False}
+reference error lanka_uncharged build: {'error': 'unknown weapon: "lanka_uncharged"', 'ok': False}
+reference error mutalist_cernos_uncharged bare: {'error': 'unknown weapon: "mutalist_cernos_uncharged"', 'ok': False}
+reference error mutalist_cernos_uncharged build: {'error': 'unknown weapon: "mutalist_cernos_uncharged"', 'ok': False}
+reference error nataruk bare: {'error': 'unknown weapon: "nataruk"', 'ok': False}
+reference error nataruk build: {'error': 'unknown weapon: "nataruk"', 'ok': False}
+reference error opticor_quick bare: {'error': 'unknown weapon: "opticor_quick"', 'ok': False}
+reference error opticor_quick build: {'error': 'unknown weapon: "opticor_quick"', 'ok': False}
+reference error opticor_vandal_quick bare: {'error': 'unknown weapon: "opticor_vandal_quick"', 'ok': False}
+reference error opticor_vandal_quick build: {'error': 'unknown weapon: "opticor_vandal_quick"', 'ok': False}
+reference error paracyst_harpoon bare: {'error': 'unknown weapon: "paracyst_harpoon"', 'ok': False}
+reference error paracyst_harpoon build: {'error': 'unknown weapon: "paracyst_harpoon"', 'ok': False}
+reference error phantasma_charged bare: {'error': 'unknown weapon: "phantasma_charged"', 'ok': False}
+reference error phantasma_charged build: {'error': 'unknown weapon: "phantasma_charged"', 'ok': False}
+reference error phantasma_prime_charged bare: {'error': 'unknown weapon: "phantasma_prime_charged"', 'ok': False}
+reference error phantasma_prime_charged build: {'error': 'unknown weapon: "phantasma_prime_charged"', 'ok': False}
+reference error rakta_cernos_uncharged bare: {'error': 'unknown weapon: "rakta_cernos_uncharged"', 'ok': False}
+reference error rakta_cernos_uncharged build: {'error': 'unknown weapon: "rakta_cernos_uncharged"', 'ok': False}
+reference error scyotid_snare bare: {'error': 'unknown weapon: "scyotid_snare"', 'ok': False}
+reference error scyotid_snare build: {'error': 'unknown weapon: "scyotid_snare"', 'ok': False}
+reference error stahlta_charged bare: {'error': 'unknown weapon: "stahlta_charged"', 'ok': False}
+reference error stahlta_charged build: {'error': 'unknown weapon: "stahlta_charged"', 'ok': False}
+reference error staticor_uncharged bare: {'error': 'unknown weapon: "staticor_uncharged"', 'ok': False}
+reference error staticor_uncharged build: {'error': 'unknown weapon: "staticor_uncharged"', 'ok': False}
+reference error stradavar_prime_semi bare: {'error': 'unknown weapon: "stradavar_prime_semi"', 'ok': False}
+reference error stradavar_prime_semi build: {'error': 'unknown weapon: "stradavar_prime_semi"', 'ok': False}
+reference error stradavar_semi bare: {'error': 'unknown weapon: "stradavar_semi"', 'ok': False}
+reference error stradavar_semi build: {'error': 'unknown weapon: "stradavar_semi"', 'ok': False}
+reference error tenora_charged bare: {'error': 'unknown weapon: "tenora_charged"', 'ok': False}
+reference error tenora_charged build: {'error': 'unknown weapon: "tenora_charged"', 'ok': False}
+reference error tenora_prime_charged bare: {'error': 'unknown weapon: "tenora_prime_charged"', 'ok': False}
+reference error tenora_prime_charged build: {'error': 'unknown weapon: "tenora_prime_charged"', 'ok': False}
+reference error tiberon_prime_auto bare: {'error': 'unknown weapon: "tiberon_prime_auto"', 'ok': False}
+reference error tiberon_prime_auto build: {'error': 'unknown weapon: "tiberon_prime_auto"', 'ok': False}
+reference error tiberon_prime_semi bare: {'error': 'unknown weapon: "tiberon_prime_semi"', 'ok': False}
+reference error tiberon_prime_semi build: {'error': 'unknown weapon: "tiberon_prime_semi"', 'ok': False}
+reference error zenith_auto bare: {'error': 'unknown weapon: "zenith_auto"', 'ok': False}
+reference error zenith_auto build: {'error': 'unknown weapon: "zenith_auto"', 'ok': False}

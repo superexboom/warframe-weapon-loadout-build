@@ -33,7 +33,8 @@ _UNSUPPORTED_COMBAT = (
 def supported(stats, options) -> bool:
     if not ENABLED or options.get("collect_timeline", True):
         return False
-    if options.get("weak_draw") is not None:
+    draw = options.get("weak_draw")
+    if draw is not None and not callable(getattr(draw, "native_spec", None)):
         return False
     combat = options.get("combat")
     if not combat or not combat.get("resolve"):
@@ -503,6 +504,7 @@ def trajectory(
         doubleTap=combat.get('doubleTap') or None,
         fieldDurationOnEmptyReload=combat.get('fieldDurationOnEmptyReload') or None,
         encumber=encumber, punctureArmorStrip=float(combat.get('punctureArmorStrip') or 0.0),
+        weakDraw=weak_draw.native_spec() if weak_draw is not None else None,
     )
     try:
         core = wfcore.trajectory(config, helper)
@@ -510,6 +512,8 @@ def trajectory(
         STATS["fallback"] += 1
         return None
     STATS["native"] += 1
+    if weak_draw is not None:
+        weak_draw.absorb(core)
     combat['lastRound'] = core["lastRound"]
     if core["attacks"]:
         combat['victimProcTypesBeforeHit'] = core["victimBefore"]
@@ -714,11 +718,16 @@ def shadow(stats, target, options, reference):
                           trigger_sources=_copy.deepcopy(options.get("trigger_sources")))
     if options.get("life_curve") is not None:
         native_options["life_curve"] = []
+    draw = options.get("weak_draw")
+    if draw is not None:
+        native_options["weak_draw"] = _copy.copy(draw)
     native = trajectory(stats, target, **native_options)
     expected = reference(stats, target, **options)
     if native is None:
         return expected
     found = _first_difference(native, expected)
+    if not found and draw is not None and vars(native_options["weak_draw"]) != vars(draw):
+        found = f"weakDraw: {vars(native_options['weak_draw'])!r} != {vars(draw)!r}"
     if not found and options.get("life_curve") is not None:
         found = _first_difference(native_options["life_curve"], options["life_curve"], "lifeCurve")
     if found:

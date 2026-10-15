@@ -78,9 +78,13 @@ def window(stats, context):
     if key in cache:
         return cache[key]
     shared = _replay_key(stats, data, key)
-    if shared in _REPLAYS:
-        _REPLAYS.move_to_end(shared)
-        result = _REPLAYS[shared]
+    result = _REPLAYS.get(shared)
+    if result is not None:
+        # Concurrent searches of one request share this cache (loadout_search).
+        try:
+            _REPLAYS.move_to_end(shared)
+        except KeyError:
+            pass
         for reason in result.get("unsupported") or []:
             if reason not in stats.unsupported:
                 stats.unsupported.append(reason)
@@ -114,8 +118,11 @@ def window(stats, context):
             stats.unsupported.append(reason)
     cache[key] = result
     _REPLAYS[shared] = result
-    if len(_REPLAYS) > _REPLAYS_MAX:
-        _REPLAYS.popitem(last=False)
+    while len(_REPLAYS) > _REPLAYS_MAX:
+        try:
+            _REPLAYS.popitem(last=False)
+        except KeyError:
+            break
     return result
 
 

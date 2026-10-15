@@ -41,7 +41,6 @@ const state = {
   activeConfig: "A",
   buildConfigs: { A: null, B: null, C: null },
   buildStore: {},
-  buildMigrationHistory: [],
   arcaneSelections: [],
   stanceSelection: null,
   stanceLocked: false,
@@ -67,6 +66,7 @@ const state = {
   externalBuffs: [],
   weaponPickerCategory: "all",
   rivenBuilderStats: [],
+  rivenBuilderPolarity: null,
   kitgunBase: null,
   kitgunParts: null,
   formaCount: 0,
@@ -99,7 +99,7 @@ const state = {
 const ui = Object.fromEntries([
   "app-shell", "boot-screen", "page-title",
   "health-dot", "health-label", "build-label", "weapon-count", "coverage-count",
-  "footer-schema", "sample-button", "reset-button", "export-button", "riven-form",
+  "sample-button", "reset-button", "export-button", "riven-form",
   "weapon", "weapon-options", "build-weapon-options", "weapon-caption", "disposition-value", "disposition-dots",
   "weapon-issue", "weapon-issue-text", "stat-rows", "stat-row-template", "add-stat",
   "analysis-innate-element-field", "analysis-innate-element-select", "analysis-innate-element-icon", "analysis-preferred-element-select", "analysis-preferred-element-icon",
@@ -121,7 +121,7 @@ const ui = Object.fromEntries([
   "build-innate-element-field", "build-innate-element-select", "build-innate-element-icon",
   "build-innate-element-value-field", "build-innate-element-value", "build-innate-element-output",
   "build-incarnon-panel", "build-incarnon-tiers", "build-incarnon-note", "build-incarnon-cycle", "build-incarnon-cycle-note",
-  "build-optimize-arcanes", "build-min-fill", "build-max-fill",
+  "build-optimize-arcanes", "build-auto-arcane", "build-auto-incarnon", "build-min-fill", "build-max-fill",
   "build-slot-count", "build-slot-output", "build-weapon-issue",
   "build-weapon-issue-text", "build-form-message",
   "build-enemy-select", "build-enemy-search", "build-enemy-factions", "build-enemy-list", "build-enemy-count", "build-enemy-level", "build-steel-path", "build-armour-strip", "build-armour-strip-output",
@@ -138,7 +138,7 @@ const ui = Object.fromEntries([
   "manual-slots", "manual-mod-search", "manual-mod-categories", "manual-mod-list", "manual-level-toggle", "manual-clear", "manual-build-summary",
   "mod-picker", "mod-picker-scrim", "mod-picker-close", "mod-picker-title", "mod-picker-sub", "mod-picker-view",
   "fill-optimal-button",
-  "capacity-bar", "capacity-readout", "forma-count", "forma-increase", "forma-decrease", "forma-needed", "build-reset-all", "kitgun-assembly-title", "theme-toggle", "compute-button", "compute-button-value", "compute-panel", "compute-machine", "compute-workers", "compute-workers-value", "compute-workers-hint", "compute-low-priority", "compute-status", "compute-default", "compute-close",
+  "capacity-bar", "capacity-readout", "forma-counter", "forma-count", "forma-optimize", "forma-needed", "build-reset-all", "kitgun-assembly-title", "theme-toggle", "compute-button", "compute-button-value", "compute-panel", "compute-machine", "compute-workers", "compute-workers-value", "compute-workers-hint", "compute-low-priority", "compute-status", "compute-default", "compute-close",
   "weapon-picker", "weapon-picker-close", "weapon-picker-sub", "weapon-picker-search", "weapon-picker-categories", "weapon-picker-list",
   "live-hud", "live-hud-pulse", "live-hud-metrics", "build-bench", "build-detail",
   "weapon-build-idle", "weapon-build-loading",
@@ -146,9 +146,10 @@ const ui = Object.fromEntries([
   "weapon-build-type", "weapon-build-name", "weapon-build-fire-mode", "weapon-build-archetype",
   "weapon-build-metric", "weapon-build-stat-band",
   "weapon-build-element-note", "weapon-build-damage-types", "weapon-build-fire-modes",
-  "weapon-build-slot-summary", "weapon-build-build-label",
+  "weapon-build-slot-summary",
   "manual-results", "probability-content", "timeline-content",
   "weapon-build-diagnostic-count", "weapon-build-diagnostic-list", "toast-region",
+  "part-values", "part-values-run", "part-values-status", "part-values-content",
   "warframe-catalog-status", "warframe-frame-select", "warframe-frame-open", "warframe-frame-select-visual", "warframe-frame-select-name", "warframe-frame-select-description", "warframe-frame-caption", "warframe-portrait", "warframe-profile-name", "warframe-profile-description", "warframe-passive",
   "warframe-apply-conditionals", "warframe-helminth-slot", "warframe-helminth-slot-open", "warframe-helminth-slot-visual", "warframe-helminth-slot-name", "warframe-helminth-slot-description", "warframe-helminth-ability", "warframe-helminth-ability-open", "warframe-helminth-ability-visual", "warframe-helminth-ability-name", "warframe-helminth-ability-source", "warframe-helminth-description", "warframe-invigoration-open", "warframe-invigoration-name", "warframe-invigoration-description",
   "warframe-config-tabs", "warframe-config-status", "warframe-config-copy", "warframe-config-import", "warframe-config-export", "warframe-config-import-json", "warframe-config-import-rabbit", "warframe-config-export-json", "warframe-config-export-rabbit", "warframe-config-import-file", "warframe-clear", "warframe-message", "warframe-result-name", "warframe-capacity-readout", "warframe-capacity-bar", "warframe-forma-readout", "warframe-loading", "warframe-build-content",
@@ -278,7 +279,6 @@ function captureBuildConfig() {
     triggerPolicy: document.getElementById("trigger-policy-select")?.value || "emergent",
     configId: state.activeConfig,
     configSchema: BUILD_CONFIG_SCHEMA,
-    legacyModMigrations: state.buildMigrationHistory.length ? structuredClone(state.buildMigrationHistory) : undefined,
     mods,
     formaSlots: Object.keys(state.formaSlots).length ? { ...state.formaSlots } : undefined,
     // Special-slot Forma is exported explicitly as well as in formaSlots so
@@ -324,6 +324,8 @@ function captureBuildConfig() {
     minFill: scopeFillValue("build-min-fill"),
     maxFill: scopeFillValue("build-max-fill"),
     optimizeWithArcanes: checked("build-optimize-arcanes") ? undefined : false,
+    autoArcane: checked("build-auto-arcane") || undefined,
+    autoIncarnon: checked("build-auto-incarnon") || undefined,
     // 最优紫卡求解的预算档位（10/20/30/60s）随配置持久化。
     rivenSolveBudget: state.rivenSolveBudget || 10,
   };
@@ -527,14 +529,9 @@ function syncArcaneSelections() {
 
 function applyBuildConfig(config) {
   const restored = migrateLegacyBuildConfig(config, state.catalog?.legacyModReplacements);
+  const migrated = restored.config !== config;
   config = restored.config;
-  state.buildMigrationHistory = Array.isArray(config?.legacyModMigrations) ? structuredClone(config.legacyModMigrations) : [];
-  const notice = document.getElementById('build-config-migration-note');
-  if (notice) {
-    notice.textContent = legacyModMigrationMessage(state.buildMigrationHistory);
-    notice.hidden = !notice.textContent;
-  }
-  if (restored.changes.length && state.buildWeapon?.path) {
+  if (migrated && state.buildWeapon?.path) {
     state.buildConfigs[state.activeConfig] = config;
     state.buildStore[state.buildWeapon.path] = state.buildConfigs;
     writeBuildStore();
@@ -553,6 +550,8 @@ function applyBuildConfig(config) {
     setControlValue("build-min-fill", "");
     setControlValue("build-max-fill", "");
     if (ui["build-optimize-arcanes"]) ui["build-optimize-arcanes"].checked = true;
+    if (ui["build-auto-arcane"]) ui["build-auto-arcane"].checked = false;
+    if (ui["build-auto-incarnon"]) ui["build-auto-incarnon"].checked = false;
     renderScopeLists();
     renderManualSlots();
     renderManualMods();
@@ -629,6 +628,15 @@ function applyBuildConfig(config) {
       if (Number.isInteger(index) && index >= 0 && index < 10 && typeof value === "string" && value) state.formaSlots[index] = value;
     }
   }
+  // 旧配置里的紫卡可能存成了紫卡不会有的极性（曾允许 Zenurik/Unairu/Penjaga）：
+  // 换成合法极性，为它准备的槽位极化一起跟过去。
+  const savedRivenSlot = state.manualSlots.findIndex((mod) => mod?.__riven);
+  if (savedRivenSlot >= 0 && config.riven?.polarity && !RIVEN_POLARITY_CHOICES.includes(config.riven.polarity)) {
+    const riven = state.manualSlots[savedRivenSlot];
+    riven.rivenPolarity = null;
+    riven.rivenPolarity = rivenFixedPolarity(riven, savedRivenSlot);
+    if (state.formaSlots[savedRivenSlot] === config.riven.polarity) state.formaSlots[savedRivenSlot] = riven.rivenPolarity;
+  }
   if (config.specialSlotPolarities && typeof config.specialSlotPolarities === "object") {
     for (const [kind, value] of Object.entries(config.specialSlotPolarities)) {
       const index = specialSlotIndex(kind);
@@ -640,8 +648,7 @@ function applyBuildConfig(config) {
     }
   }
   refreshStanceSelection();
-  state.formaCount = Object.keys(state.formaSlots).length;
-  if (ui["forma-count"]) ui["forma-count"].textContent = String(state.formaCount);
+  refreshFormaCount();
   state.rivenBuilderStats = Array.isArray(config.riven?.stats) ? config.riven.stats.map((s) => ({ ...s })) : [];
   state.incarnonChoices = config.incarnonChoices && typeof config.incarnonChoices === "object" ? { ...config.incarnonChoices } : {};
   if (ui["build-incarnon-cycle"]) ui["build-incarnon-cycle"].checked = Boolean(config.incarnonCycle);
@@ -653,6 +660,8 @@ function applyBuildConfig(config) {
   setControlValue("build-min-fill", config.minFill ?? "");
   setControlValue("build-max-fill", config.maxFill ?? "");
   if (ui["build-optimize-arcanes"]) ui["build-optimize-arcanes"].checked = config.optimizeWithArcanes !== false;
+  if (ui["build-auto-arcane"]) ui["build-auto-arcane"].checked = config.autoArcane === true;
+  if (ui["build-auto-incarnon"]) ui["build-auto-incarnon"].checked = config.autoIncarnon === true;
   state.rivenSolveBudget = [10, 20, 30, 60].includes(Number(config.rivenSolveBudget)) ? Number(config.rivenSolveBudget) : 10;
   renderScopeLists();
   refreshScenarioLabels();
@@ -721,7 +730,7 @@ function importBuildConfig(file) {
       const parsed = JSON.parse(String(reader.result || ""));
       const config = parsed.config || parsed;
       const schema = Number(parsed.schema ?? config.schema ?? BUILD_CONFIG_SCHEMA);
-      if (!config || ![1, BUILD_CONFIG_SCHEMA].includes(schema)) throw new Error("配置 schema 不兼容");
+      if (!config || ![1, BUILD_CONFIG_SCHEMA].includes(schema)) throw new Error("配置文件格式不兼容");
       const target = config.weapon || parsed.weapon;
       if (target) {
         const weapon = state.catalog?.weapons?.find((item) => item.path === target);
@@ -1238,14 +1247,14 @@ async function rabbitCleanWeaponResult() {
   payload.enemyEnhancements = { eximus: false, empowered: false, playerCount: null, archimedea: false };
   const response = await fetch("/api/simulate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
   const result = await response.json();
-  if (!response.ok) throw new Error(result?.error?.message || `Rabbit 武器快照失败（${response.status}）`);
+  if (!response.ok) throw new Error(result?.error?.message || `Rabbit 武器配装生成失败（${response.status}）`);
   return result;
 }
 
 async function rabbitCurrentWarframeResult() {
   const response = await fetch("/api/warframe/calculate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(warframePayload()) });
   const result = await response.json();
-  if (!response.ok) throw new Error(result?.error?.message || `Rabbit 战甲快照失败（${response.status}）`);
+  if (!response.ok) throw new Error(result?.error?.message || `Rabbit 战甲配装生成失败（${response.status}）`);
   return result;
 }
 
@@ -1499,7 +1508,7 @@ async function generateRabbitCommand(event) {
   event.preventDefault();
   const status = ui["rabbit-export-status"];
   status.className = "";
-  status.textContent = "正在生成配装快照…";
+  status.textContent = "正在生成配装…";
   ui["rabbit-generate"].disabled = true;
   try {
     const fields = rabbitExportFields();
@@ -1537,7 +1546,7 @@ async function copyRabbitCommand() {
 
 async function applyRabbitWeaponConfig(wrapper) {
   const weapon = state.catalog?.weapons?.find((item) => item.path === wrapper.target);
-  if (!weapon) throw new Error("Rabbit 配装中的武器不在当前冻结目录");
+  if (!weapon) throw new Error("Rabbit 配装中的武器不在当前武器目录里");
   setActiveTool("build");
   selectBuildWeapon(weapon);
   const config = wrapper.config || {};
@@ -1556,7 +1565,7 @@ async function applyRabbitWeaponConfig(wrapper) {
 async function applyRabbitWarframeConfig(wrapper) {
   await loadWarframeCatalog();
   const frame = warframeResolve(warframeRows("warframes"), wrapper.target);
-  if (!frame) throw new Error("Rabbit 配装中的战甲不在当前冻结目录");
+  if (!frame) throw new Error("Rabbit 配装中的战甲不在当前战甲目录里");
   setActiveTool("warframe");
   selectWarframeFrame(frame);
   const build = state.warframeBuild;
@@ -1863,6 +1872,8 @@ function definitionStep(definition) {
 
 function fillStatSelect(select, preferredCode) {
   const previous = preferredCode || select.value;
+  // 负面行只能选可作负面的词条（元素/融合/穿透等只会是正面）。
+  const negativeRow = Boolean(select.closest(".stat-row")?.querySelector(".sign-toggle")?.classList.contains("is-negative"));
   const activeEntries = activeStats();
   const used = new Set(activeEntries.filter((entry) => entry.row.querySelector(".stat-code") !== select).map((entry) => entry.code));
   // 融合词条每卡限 1 条：其他行已有融合词条时，本行禁选所有融合词条。
@@ -1879,7 +1890,9 @@ function fillStatSelect(select, preferredCode) {
     option.disabled = (
       (used.has(definition.code) && definition.code !== previous)
       || (definition.isFusion && fusionUsedElsewhere && definition.code !== previous)
+      || (negativeRow && !definition.canNegative)
     );
+    if (negativeRow && !definition.canNegative) option.title = "该词条不能作为负面";
     if (definition.isFusion) {
       const recipe = definition.fusionRecipe || {};
       option.title = `融合词条（${recipe.primaryLabel || "?"} + ${recipe.secondaryLabel || "?"} 合成）`;
@@ -1894,8 +1907,8 @@ function refreshStatSelects() {
   for (const entry of activeStats()) fillStatSelect(entry.row.querySelector(".stat-code"), entry.code);
 }
 
-function chooseUnusedCode(preferred) {
-  const definitions = statDefinitions();
+function chooseUnusedCode(preferred, negative = false) {
+  const definitions = statDefinitions().filter((entry) => !negative || entry.canNegative);
   const used = new Set(activeStats().map((entry) => entry.code));
   if (preferred && definitions.some((entry) => entry.code === preferred) && !used.has(preferred)) return preferred;
   return (definitions.find((entry) => entry.objectiveSupported && !used.has(entry.code)) || definitions.find((entry) => !used.has(entry.code)) || definitions[0])?.code;
@@ -1919,17 +1932,24 @@ function addStat(preferredCode, preferredNegative = false) {
   const select = row.querySelector(".stat-code");
   const input = row.querySelector(".stat-value");
   const negative = preferredNegative || statShape().positive >= 3;
-  fillStatSelect(select, chooseUnusedCode(preferredCode));
-  select.value = chooseUnusedCode(preferredCode);
   setRowNegative(row, negative);
+  const code = chooseUnusedCode(preferredCode, negative);
+  fillStatSelect(select, code);
+  select.value = code;
 
   row.querySelector(".sign-toggle").addEventListener("click", () => toggleSign(row));
   row.querySelector(".remove-stat").addEventListener("click", () => removeStat(row));
   select.addEventListener("change", () => {
     const definition = statDefinitions().find((entry) => entry.code === select.value);
-    if (row.querySelector(".sign-toggle").classList.contains("is-negative") && !definition?.canNegative) {
-      setRowNegative(row, false);
-      toast(`${definition.label} 不能作为负面词条`);
+    const negativeRow = row.querySelector(".sign-toggle").classList.contains("is-negative");
+    if (negativeRow && !definition?.canNegative) {
+      // 选项已禁用，这里只兜底（例如键盘/脚本改值）：退回原词条。
+      const fallback = chooseUnusedCode(null, true);
+      if (fallback) select.value = fallback;
+      toast(`${definition?.label || "该词条"} 不能作为负面词条`);
+    } else if (!negativeRow && definition?.canNegative && statShape().positive > 3 && statShape().negative === 0) {
+      // 4 条正面不是合法紫卡：本行换成可作负面的词条时恢复为负面。
+      setRowNegative(row, true);
     }
     refreshStatSelects();
     refreshRanges(false);
@@ -2000,6 +2020,7 @@ function toggleSign(row) {
     }
   }
   setRowNegative(row, !current.negative);
+  refreshStatSelects();
   refreshRanges(true);
 }
 
@@ -2160,7 +2181,8 @@ function rivenWeaponDisplayName(weapon) {
 
 function updateAnalyzeAvailability() {
   const shape = statShape();
-  const validShape = shape.total >= 2 && shape.total <= 4 && (shape.positive === 2 || shape.positive === 3) && shape.negative <= 1;
+  const validShape = shape.total >= 2 && shape.total <= 4 && (shape.positive === 2 || shape.positive === 3) && shape.negative <= 1
+    && activeStats().every((entry) => !entry.negative || entry.definition?.canNegative);
   const isAssembly = state.assemblyFor === "analysis" && state.kitgunBase && state.kitgunBase.path === state.weapon?.path;
   const weaponReady = Boolean(state.weapon) && (isAssembly ? assemblyWeaponReady() : state.weapon.analysisAvailable !== false);
   ui["analyze-button"].disabled = !weaponReady || !validShape || ui["analyze-button"].classList.contains("is-loading");
@@ -2519,7 +2541,12 @@ const DIAGNOSTIC_CODE_LABELS = {
   "kitgun-radial-damage-unapplied": "组合枪爆炸范围伤害部分未计入单目标计算",
   "kitgun-chain-damage-unapplied": "组合枪光束的链式伤害未计入",
   "kitgun-cluster-damage-unapplied": "组合枪孢子分裂弹的二次伤害未计入",
-  "loadout-over-capacity": "配装超出 60 容量上限",
+  "loadout-over-capacity": "配装超出容量上限",
+  "enemy-base-level-unverified": "该敌人的基准等级没有官方记录，等级缩放可能有偏差",
+  "ultra-profile-baseline-approximate": "超快档：基准配装是近似结果，增益仅供参考",
+  "ultra-profile-contributions-center-node": "超快档：词条贡献只按中间血量节点计算",
+  "ultra-profile-negative-ranking-not-cached": "超快档：没有计算负面词条排名",
+  "ultra-profile-recommendation-not-cached": "超快档：没有计算推荐词条",
 };
 
 // 多部件武器数据缺口（weapon-radial-or-field-damage-not-in-export-<part>）：
@@ -2528,8 +2555,8 @@ function multipartDiagnosticLabel(code) {
   const match = String(code).match(/^weapon-radial-or-field-damage-not-in-export-(radial|field)$/);
   if (!match) return null;
   return match[1] === "radial"
-    ? "该武器的爆炸伤害部分不在离线数据内，最终伤害偏低（配装排序仍有效）"
-    : "该武器的残留场伤害部分不在离线数据内，最终伤害偏低（配装排序仍有效）";
+    ? "该武器的爆炸伤害部分暂缺数据，最终伤害偏低（配装排序仍有效）"
+    : "该武器的残留场伤害部分暂缺数据，最终伤害偏低（配装排序仍有效）";
 }
 
 // 灵化分支诊断码（incarnon-<分支id>-<原因>）翻译成人话，原因口径与后端注明一致。
@@ -2537,7 +2564,7 @@ const INCARNON_DIAGNOSTIC_REASONS = {
   "runtime-scripts-not-applied": "含游戏内动态脚本效果（形态/叠层联动），该部分不参与解算",
   "conditional-effects-not-applied": "含未激活的条件效果，该部分不参与解算",
   "unresolved-references": "含未解析的数据引用",
-  "NONE-not-evaluated": "脚本占位词条不参与解算",
+  "NONE-not-evaluated": "部分词条没有可计算的数值，不参与计算",
 };
 
 function incarnonDiagnosticLabel(code) {
@@ -2545,6 +2572,36 @@ function incarnonDiagnosticLabel(code) {
   if (!match) return null;
   const reason = INCARNON_DIAGNOSTIC_REASONS[match[2]];
   return reason ? `灵化分支 ${match[1]}：${reason}` : null;
+}
+
+// 诊断面板只给用户看与结果有关的说明：搜索参数、内部路径、英文实现备注
+// 这类只对开发有意义的条目不展示；已知代码与路径翻译成中文。
+const HIDDEN_DIAGNOSTIC = /^optimizer-(assumption|objective|profile|search|trigger-policy):/;
+
+function itemNameByPath(path) {
+  const pools = [state.catalog?.manualMods, state.catalog?.manualModVariants, state.catalog?.arcanes, state.catalog?.utilityMods, state.catalog?.stances];
+  for (const pool of pools) {
+    const row = Array.isArray(pool) ? pool.find((entry) => entry?.path === path) : null;
+    if (row) return row.nameZh || row.nameEn || path.split("/").pop();
+  }
+  return path.split("/").pop();
+}
+
+function userDiagnostic(line) {
+  let text = String(line || "").trim();
+  if (!text || HIDDEN_DIAGNOSTIC.test(text)) return null;
+  text = text.replace(/^optimizer-(auto-incarnon|auto-arcane|scope|arcanes|stance):\s*/, "");
+  const item = text.match(/^(\/Lotus\/\S+):\s*(.+)$/);
+  if (item && !/[一-鿿]/.test(item[2])) {
+    return `${itemNameByPath(item[1])}：${/PM_HEAVY_MELEE/.test(item[2]) ? "只对重击生效，不计入当前攻击" : "部分效果暂未计入"}`;
+  }
+  if (/^[A-Z][A-Z0-9_]+$/.test(text)) return MOD_EFFECT_LABELS[text] ? `${MOD_EFFECT_LABELS[text]}（暂未计入）` : null;
+  if (!/[一-鿿]/.test(text)) return null;
+  return text;
+}
+
+function userDiagnostics(value) {
+  return normalizeLabels(value).map(userDiagnostic).filter(Boolean);
 }
 
 function normalizeLabels(value) {
@@ -2883,6 +2940,7 @@ function renderRivenBuilder(target) {
       const negativeCount = state.rivenBuilderStats.filter((s) => s.negative).length;
       const positiveCount = state.rivenBuilderStats.length - negativeCount;
       if (!entry.negative && def?.isFusion) return toast("融合词条仅正面");
+      if (!entry.negative && !def?.canNegative) return toast(`${def?.label || "该词条"} 不能作为负面词条`);
       if (!entry.negative && (negativeCount >= 1 || positiveCount <= 2)) return toast("负面最多 1 条且需保留 2 条正面");
       entry.negative = !entry.negative;
       renderManualMods();
@@ -2898,7 +2956,10 @@ function renderRivenBuilder(target) {
       option.value = d.code;
       option.textContent = d.isFusion ? `★${d.label || d.code}` : (d.label || d.code);
       option.selected = d.code === entry.code;
-      option.disabled = usedCodes.has(d.code) || (d.isFusion && fusionUsedElsewhere && d.code !== entry.code);
+      // 负面行只能选可作负面的词条（元素/融合/穿透等只会是正面）。
+      const positiveOnly = entry.negative && !d.canNegative;
+      option.disabled = usedCodes.has(d.code) || (d.isFusion && fusionUsedElsewhere && d.code !== entry.code) || positiveOnly;
+      if (positiveOnly) option.title = "该词条不能作为负面";
       if (d.isFusion) {
         const recipe = d.fusionRecipe || {};
         option.title = `融合词条（${recipe.primaryLabel || "?"} + ${recipe.secondaryLabel || "?"} 合成）· 仅正面，每卡限 1 条`;
@@ -2908,6 +2969,11 @@ function renderRivenBuilder(target) {
     select.value = entry.code;
     select.addEventListener("change", () => {
       if (usedCodes.has(select.value)) return toast("同一词条不能重复录入");
+      const chosen = defs.find((d) => d.code === select.value);
+      if (entry.negative && !chosen?.canNegative) {
+        select.value = entry.code;
+        return toast(`${chosen?.label || "该词条"} 不能作为负面词条`);
+      }
       entry.code = select.value;
       renderManualMods();
     });
@@ -2945,9 +3011,10 @@ function renderRivenBuilder(target) {
   add.addEventListener("click", () => {
     if (state.rivenBuilderStats.length >= 4) return toast("紫卡最多 4 条词条");
     const used = new Set(state.rivenBuilderStats.map((s) => s.code));
-    const next = defs.find((d) => !used.has(d.code) && (state.rivenBuilderStats.filter((s) => s.negative).length < 1 || !d.canNegative));
+    // 已有 3 条正面时第 4 条只能是负面：从可作负面的词条里选。
+    const negative = state.rivenBuilderStats.length >= 3 && state.rivenBuilderStats.every((s) => !s.negative);
+    const next = defs.find((d) => !used.has(d.code) && (!negative || d.canNegative));
     if (!next) return toast("没有更多可用词条");
-    const negative = state.rivenBuilderStats.length >= 3 && state.rivenBuilderStats.every((s) => !s.negative) && next.canNegative;
     state.rivenBuilderStats.push({ code: next.code, value: null, negative });
     renderManualMods();
   });
@@ -2975,6 +3042,30 @@ function renderRivenBuilder(target) {
   solve.addEventListener("click", () => requestRivenRecommendation(Number(budget.value), panel));
   solveWrap.append(budget, solve);
   actions.append(solveWrap);
+  // 紫卡极性只会是 Madurai / Vazarin / Naramon 三种之一（揭示时随机、洗卡不变）。
+  const existingPolarity = state.manualSlots[state.modPickerSlot]?.rivenPolarity;
+  if (!RIVEN_POLARITY_CHOICES.includes(state.rivenBuilderPolarity)) {
+    state.rivenBuilderPolarity = RIVEN_POLARITY_CHOICES.includes(existingPolarity) ? existingPolarity : randomRegularPolarity();
+  }
+  const polarityPicker = create("div", "riven-polarity-picker");
+  polarityPicker.append(create("small", "", "紫卡极性"));
+  for (const polarity of RIVEN_POLARITY_CHOICES) {
+    const button = create("button", `riven-polarity-option${state.rivenBuilderPolarity === polarity ? " is-active" : ""}`);
+    button.type = "button";
+    button.title = POLARITY_NAMES[polarity] || polarity;
+    button.setAttribute("aria-pressed", String(state.rivenBuilderPolarity === polarity));
+    button.append(imageNode(POLARITY_IMAGES[polarity], "riven-polarity-icon", POLARITY_NAMES[polarity] || polarity, "eager"));
+    button.addEventListener("click", () => {
+      state.rivenBuilderPolarity = polarity;
+      polarityPicker.querySelectorAll(".riven-polarity-option").forEach((peer) => {
+        const active = peer === button;
+        peer.classList.toggle("is-active", active);
+        peer.setAttribute("aria-pressed", String(active));
+      });
+    });
+    polarityPicker.append(button);
+  }
+  actions.append(polarityPicker);
   const insert = create("button", "button button-primary", "放入当前槽位");
   insert.type = "button";
   insert.addEventListener("click", () => {
@@ -2995,8 +3086,16 @@ function renderRivenBuilder(target) {
       stats,
       // 紫卡落槽即掷出一个固定常规极性（游戏内 riven 洗卡极性随机且可用
       // 极化卡改）：与本武器绑定、随配置持久化，之后不再受槽位极化影响。
-      rivenPolarity: state.manualSlots[slot]?.rivenPolarity || randomRegularPolarity(),
+      rivenPolarity: state.rivenBuilderPolarity,
     };
+    // 槽位上已有的极化若是为旧紫卡准备的，跟随新紫卡的极性。
+    const nativeSlot = nativeSlotPolarities()[slot];
+    if (Object.hasOwn(state.formaSlots, slot) && RIVEN_POLARITY_CHOICES.includes(state.formaSlots[slot])) {
+      if (state.rivenBuilderPolarity === nativeSlot) delete state.formaSlots[slot];
+      else state.formaSlots[slot] = state.rivenBuilderPolarity;
+    }
+    if (!ensureCapacityFit().fits) toast("容量不足：即使极化也装不下这张紫卡，请降低其他 MOD 等级", "error");
+    refreshFormaCount();
     renderManualSlots();
     persistActiveBuildConfig();
     scheduleLiveManualSimulation();
@@ -3004,7 +3103,7 @@ function renderRivenBuilder(target) {
     toast("紫卡已放入槽位");
   });
   actions.append(insert);
-  const hint = create("small", "riven-builder-hint", "词条范围 = 官方 wiki 公式（倾向 × 基准 × 结构系数）；渲染使用 Omega 框系素材");
+  const hint = create("small", "riven-builder-hint", "词条数值范围 = 武器倾向 × 词条基准值 × 词条数系数");
   actions.append(hint);
   panel.append(actions);
   // 上一次求解结果（同一会话内重新打开面板时保留显示）。
@@ -3652,6 +3751,7 @@ function applyPreset(preset) {
     slot += 1;
     filled += 1;
   }
+  ensureCapacityFit();
   renderManualSlots();
   persistActiveBuildConfig();
   scheduleLiveManualSimulation();
@@ -3745,13 +3845,13 @@ function updateCustomDamageControls() {
   const supported = customDamageSupported();
   if (option) {
     option.disabled = !supported;
-    option.title = supported ? "使用后端提供的自定义防御快照" : "当前离线后端未实现自定义防御快照";
+    option.title = supported ? "按自己填写的生命、护甲和护盾计算" : "当前版本不支持自定义防御";
   }
   const active = select?.value === "custom";
   if (ui["custom-defense-fields"]) ui["custom-defense-fields"].hidden = !active;
   if (ui["custom-defense-note"]) ui["custom-defense-note"].textContent = supported
-    ? "该快照会原样发送给后端，不会套用幻影装置敌人数据。"
-    : "当前离线后端未声明支持，已禁用自定义模型。";
+    ? "按这里填写的数值计算，不使用敌人库的数据。"
+    : "当前版本不支持自定义防御，已禁用。";
   if (active && !supported && select) select.value = "panel";
 
   // Keep defense pools and resistance types coherent for custom snapshots.
@@ -5568,7 +5668,7 @@ function modSetText(mod) {
     }
   } else if (!setDescription && mod.setMaxPieces) {
     parts.push(mod.setSupported === false
-      ? `套装 ${mod.setMaxPieces} 件效果依赖运行时条件，本引擎不支持模拟（当前 ${Math.min(pieces, maxPieces)} 件）`
+      ? `套装 ${mod.setMaxPieces} 件效果依赖战斗中的条件，暂不支持模拟（当前 ${Math.min(pieces, maxPieces)} 件）`
       : `套装当前 ${Math.min(pieces, maxPieces)}/${maxPieces} 件生效`);
   }
   return parts.join("；");
@@ -5587,9 +5687,9 @@ function modEffectText(mod) {
   const conditionLine = condition && !conditionAlreadyListed(meta) ? String(condition).replace(/<\/?DT_[A-Z_]+_COLOR>/g, "") : "";
   const officialText = String(official || "");
   const uniqueLines = lines.filter((line) => !officialText.includes(String(line)));
-  const unsupportedNote = Array.isArray(mod?.unsupportedNotes) && mod.unsupportedNotes.length ? "该词条不参与引擎解算" : "";
+  const unsupportedNote = Array.isArray(mod?.unsupportedNotes) && mod.unsupportedNotes.length ? "该词条不参与计算" : "";
   // Unsupported diagnostics stay in the hover title/diagnostics channel, not
-  // in the rendered card: "mod-effect-line is-unsupported", "该词条不参与引擎解算"。
+  // in the rendered card: "mod-effect-line is-unsupported", "该词条不参与计算"。
   const combined = [...(official ? [official] : []), ...uniqueLines, setText, conditionLine, modStackedSummary(mod), unsupportedNote].filter(Boolean)
     .map(cleanOfficialText)
     .filter(Boolean);
@@ -5655,9 +5755,8 @@ function polarityMatches(modPolarity, slotPolarity) {
   return modPolarity === "AP_ANY" || slotPolarity === "AP_ANY" || modPolarity === slotPolarity;
 }
 
-// 紫卡固定极性候选：只含常规六系（不含 Umbra/Precept/任意/通用），
-// 与游戏内紫卡可用极化范围一致。
-const RIVEN_POLARITY_CHOICES = ["AP_ATTACK", "AP_DEFENSE", "AP_TACTIC", "AP_POWER", "AP_WARD", "AP_PRECEPT"];
+// 紫卡极性：游戏内揭示时在 Madurai / Vazarin / Naramon 三者中随机，洗卡不变。
+const RIVEN_POLARITY_CHOICES = ["AP_ATTACK", "AP_DEFENSE", "AP_TACTIC"];
 function randomRegularPolarity() {
   return RIVEN_POLARITY_CHOICES[Math.floor(Math.random() * RIVEN_POLARITY_CHOICES.length)];
 }
@@ -5806,32 +5905,220 @@ function renderCapacityBar() {
   readout.classList.toggle("is-over", over);
   const needed = ui["forma-needed"];
   if (needed) {
-    let formaNeeded = 0;
-    let working = perSlot.map((s) => ({ ...s }));
-    let guard = 0;
-    while (computeCapacityFromSlots(working).over && guard < 16) {
-      const target = working.findIndex((s) => Number.isInteger(s.index) && s.drain > 0 && s.relation === "mismatch");
-      const neutralTarget = target === -1 ? working.findIndex((s) => Number.isInteger(s.index) && s.drain > 0 && s.relation === "neutral") : -1;
-      const polarize = target !== -1 ? target : neutralTarget;
-      if (polarize === -1) break;
-      const mod = state.manualSlots[polarize];
-      // 紫卡槽也可极化（声明紫卡极性与槽一致），drain 18 → 9。
-      if (!mod) break;
-      working[polarize].drain = Math.max(0, Math.ceil(modBaseDrain(mod) / 2));
-      working[polarize].relation = "match";
-      formaNeeded += 1;
-      guard += 1;
-    }
-    needed.hidden = !formaNeeded;
-    needed.textContent = formaNeeded ? `还需极化 ×${formaNeeded}` : "";
+    // Over capacity (e.g. after re-polarizing a slot by hand): how many more
+    // Forma the current layout needs, from the same minimal plan.
+    const plan = over ? workbenchFormaPlan() : null;
+    needed.hidden = !over;
+    needed.textContent = !over ? "" : plan?.fits ? `还需极化 ×${plan.formas}` : "极化也装不下";
   }
 }
 
-function computeCapacityFromSlots(perSlot) {
-  const limit = weaponCapacityLimit();
-  let used = 0;
-  perSlot.forEach((s) => { used += s.drain || 0; });
-  return { used, limit, over: used > limit };
+// ── Minimal Forma ──────────────────────────────────────────────────────────
+// The solver scores builds as if every card sat in a matching slot; the real
+// build only has to fit the capacity. minimalFormaPlan finds the fewest Forma
+// that make it fit — the same exact DP over slots as the backend's
+// optimizer.forma_plan. Ties go to fewer moved cards, then less drain. Cards
+// carrying a base element keep their relative order (it decides which
+// combined elements form); fixed cards never move.
+const BASE_ELEMENT_TYPES = new Set(["DT_FIRE", "DT_FREEZE", "DT_ELECTRICITY", "DT_POISON"]);
+const RIVEN_BASE_ELEMENT_CODES = new Set(["4", "5", "6", "7"]);
+const UMBRA_POLARITIES = new Set(["AP_UMBRA", "AP_ULTIMATE"]);
+
+function modHasBaseElement(mod) {
+  if (!mod) return false;
+  if (mod.__riven) return (mod.stats || []).some((stat) => !stat.negative && RIVEN_BASE_ELEMENT_CODES.has(String(stat.code)));
+  const meta = state.modAssets?.mods?.[mod.path] || {};
+  const effects = [...(Array.isArray(mod.effects) ? mod.effects : []), ...(Array.isArray(meta.effects) ? meta.effects : [])];
+  return effects.some((effect) => BASE_ELEMENT_TYPES.has(String(effect?.damageType || "").toUpperCase()) && Number(effect?.valuePerRank ?? 1) > 0);
+}
+
+function polarizedDrain(drain, polarity, slot) {
+  if (!polarity || !slot) return drain;
+  const matched = polarity === slot || polarity === "AP_ANY" || slot === "AP_ANY";
+  const factor = drain >= 0 ? (matched ? 0.5 : 1.25) : (matched ? 2 : 0.5);
+  const adjusted = Math.ceil(Math.abs(drain) * factor);
+  return drain < 0 ? -adjusted : adjusted;
+}
+
+// slots: polarity per slot (null = none). items: { origin, polarity, drain,
+// elemental, fixed }. extras: per cardless slot (stance / Exilus) the
+// alternatives [formas, umbra, drainDelta], index 0 = leave it.
+function minimalFormaPlan({ slots, items, limit, extras = [], allowMove = true }) {
+  const n = slots.length;
+  const list = items.filter((item) => item.origin >= 0 && item.origin < n);
+  const elementalFixed = !allowMove || list.some((item) => item.elemental && item.fixed);
+  const fixedAt = new Map();
+  list.forEach((item, index) => {
+    if (item.fixed || !allowMove || (item.elemental && elementalFixed)) fixedAt.set(item.origin, index);
+  });
+  const pinned = new Set(fixedAt.values());
+  const movable = list.map((_item, index) => index).filter((index) => !pinned.has(index)).sort((a, b) => list[a].origin - list[b].origin);
+  const chain = movable.filter((index) => list[index].elemental);
+  const free = movable.filter((index) => !list[index].elemental);
+  const bit = new Map(free.map((index, position) => [index, 1 << position]));
+  const full = (1 << free.length) - 1;
+  const openAfter = slots.map((_slot, k) => slots.reduce((count, _s, j) => count + (j > k && !fixedAt.has(j) ? 1 : 0), 0));
+  const popcount = (value) => { let count = 0; for (let v = value; v; v &= v - 1) count += 1; return count; };
+  const keyOf = (e, mask, formas, moves) => `${e}|${mask}|${formas}|${moves}`;
+  let layer = new Map([[keyOf(0, 0, 0, 0), { drain: 0, e: 0, mask: 0, formas: 0, moves: 0, back: null }]]);
+  const history = [];
+  for (let j = 0; j < n; j += 1) {
+    const next = new Map();
+    const push = (e, mask, formas, moves, drain, back) => {
+      const key = keyOf(e, mask, formas, moves);
+      const current = next.get(key);
+      if (!current || drain < current.drain) next.set(key, { drain, e, mask, formas, moves, back });
+    };
+    for (const [key, node] of layer) {
+      const options = [];
+      if (fixedAt.has(j)) options.push([fixedAt.get(j), node.e, node.mask]);
+      else {
+        options.push([null, node.e, node.mask]);
+        if (node.e < chain.length) options.push([chain[node.e], node.e + 1, node.mask]);
+        for (const index of free) if (!(node.mask & bit.get(index))) options.push([index, node.e, node.mask | bit.get(index)]);
+      }
+      for (const [index, e2, mask2] of options) {
+        if (!fixedAt.has(j) && (chain.length - e2) + (free.length - popcount(mask2)) > openAfter[j]) continue;
+        if (index === null) { push(e2, mask2, node.formas, node.moves, node.drain, { key, index: null, formed: false }); continue; }
+        const item = list[index];
+        const moves = node.moves + (item.origin !== j ? 1 : 0);
+        const plain = polarizedDrain(item.drain, item.polarity, slots[j]);
+        push(e2, mask2, node.formas, moves, node.drain + plain, { key, index, formed: false });
+        const matched = polarizedDrain(item.drain, item.polarity, item.polarity);
+        if (item.polarity && matched !== plain) push(e2, mask2, node.formas + 1, moves, node.drain + matched, { key, index, formed: true });
+      }
+    }
+    history.push(next);
+    layer = next;
+  }
+  const combos = extras.reduce((acc, options) => acc.flatMap((combo) => options.map((option, index) => [...combo, [index, option]])), [[]]);
+  let best = null;
+  for (const [key, node] of layer) {
+    if (node.e !== chain.length || node.mask !== full) continue;
+    for (const combo of combos) {
+      const formas = node.formas + combo.reduce((sum, [, option]) => sum + option[0], 0);
+      const used = node.drain + combo.reduce((sum, [, option]) => sum + option[2], 0);
+      const fits = used <= limit;
+      const rank = [fits ? 0 : 1, fits ? 0 : used, formas, node.moves, used];
+      const differs = best ? rank.findIndex((value, i) => value !== best.rank[i]) : -1;
+      if (!best || (differs >= 0 && rank[differs] < best.rank[differs])) best = { rank, key, combo, used, fits };
+    }
+  }
+  const placement = Array(n).fill(null);
+  const forma = Array(n).fill(null);
+  if (!best) return { formas: 0, umbra: 0, moves: 0, drain: 0, fits: true, placement, forma, extras: extras.map(() => 0) };
+  let key = best.key;
+  for (let j = n - 1; j >= 0; j -= 1) {
+    const { back } = history[j].get(key);
+    placement[j] = back.index === null ? null : list[back.index].origin;
+    if (back.formed) forma[j] = list[back.index].polarity;
+    key = back.key;
+  }
+  return {
+    formas: forma.filter(Boolean).length + best.combo.reduce((sum, [, option]) => sum + option[0], 0),
+    umbra: forma.filter((value) => UMBRA_POLARITIES.has(value)).length + best.combo.reduce((sum, [, option]) => sum + option[1], 0),
+    moves: placement.filter((origin, j) => origin !== null && origin !== j).length,
+    drain: best.used,
+    fits: best.fits,
+    placement,
+    forma,
+    extras: best.combo.map(([index]) => index),
+  };
+}
+
+function nativeSlotPolarities() {
+  const base = Array.isArray(state.buildWeapon?.polarities) ? state.buildWeapon.polarities : [];
+  return weaponSlotPolarities().map((_slot, index) => normalizedSpecialPolarity(base[index]));
+}
+
+function stanceCapacityGain(stance, slotPolarity) {
+  const effective = modEffectiveDrain(stance, slotPolarity);
+  return effective.drain < 0 ? -effective.drain : Math.max(0, Number(stance?.capacityGain ?? 0) || 0);
+}
+
+// Plan input from the workbench. fresh: start from the weapon's native slot
+// polarities and let unlocked cards move (fill / "最少极化"); otherwise keep
+// every card and every Forma already placed and only add Forma.
+function workbenchFormaPlan({ fresh = false } = {}) {
+  const slots = fresh ? nativeSlotPolarities() : weaponSlotPolarities();
+  const items = [];
+  state.manualSlots.forEach((mod, index) => {
+    if (!mod || index >= slots.length) return;
+    if (mod.__riven && !RIVEN_POLARITY_CHOICES.includes(mod.rivenPolarity)) mod.rivenPolarity = rivenFixedPolarity(mod, index);
+    const polarity = normalizedSpecialPolarity(modPolarityOf(mod, index));
+    items.push({ origin: index, polarity, drain: modBaseDrain(mod), elemental: modHasBaseElement(mod), fixed: !fresh || Boolean(state.manualLocks[index]) });
+  });
+  const extras = [];
+  const kinds = [];
+  let limit = 60;
+  const stance = state.stanceSelection;
+  if (stance && !stance.builtIn && !stance.locked) {
+    const current = weaponSpecialSlotPolarity("stance");
+    const polarity = normalizedSpecialPolarity(modPolarityOf(stance));
+    const gain = stanceCapacityGain(stance, current);
+    limit += gain;
+    const matchedGain = polarity ? stanceCapacityGain(stance, polarity) : gain;
+    if (polarity && matchedGain > gain) { extras.push([[0, 0, 0], [1, UMBRA_POLARITIES.has(polarity) ? 1 : 0, gain - matchedGain]]); kinds.push(["stance", polarity]); }
+  } else {
+    limit = weaponCapacityLimit();
+  }
+  if (state.exilusSelection) {
+    const current = weaponSpecialSlotPolarity("exilus");
+    const polarity = normalizedSpecialPolarity(modPolarityOf(state.exilusSelection));
+    const drain = modEffectiveDrain(state.exilusSelection, current).drain;
+    const matched = polarity ? modEffectiveDrain(state.exilusSelection, polarity).drain : drain;
+    extras.push(matched < drain ? [[0, 0, drain], [1, UMBRA_POLARITIES.has(polarity) ? 1 : 0, matched]] : [[0, 0, drain]]);
+    kinds.push(["exilus", polarity]);
+  }
+  const plan = minimalFormaPlan({ slots, items, limit, extras, allowMove: fresh });
+  plan.special = kinds.map(([kind, polarity], index) => ({ kind, polarity, formed: plan.extras[index] === 1 }));
+  return plan;
+}
+
+function applyFormaPlan(plan, { fresh = false } = {}) {
+  const native = nativeSlotPolarities();
+  if (fresh) {
+    const before = state.manualSlots.slice();
+    plan.placement.forEach((origin, slot) => { state.manualSlots[slot] = origin === null ? null : before[origin]; });
+    for (const key of Object.keys(state.formaSlots)) if (Number(key) < native.length) delete state.formaSlots[key];
+  }
+  plan.forma.forEach((polarity, slot) => {
+    if (!polarity) return;
+    if (polarity === native[slot]) delete state.formaSlots[slot];
+    else state.formaSlots[slot] = polarity;
+  });
+  for (const { kind, polarity, formed } of plan.special || []) {
+    if (formed && polarity) state.formaSlots[specialSlotIndex(kind)] = polarity;
+  }
+  refreshStanceSelection();
+  refreshFormaCount();
+}
+
+// Fresh minimal plan for the current cards (solver fill, riven apply and the
+// 「最少极化」button).
+function applyMinimalForma() {
+  const plan = workbenchFormaPlan({ fresh: true });
+  applyFormaPlan(plan, { fresh: true });
+  return plan;
+}
+
+function refreshFormaCount() {
+  const native = nativeSlotPolarities();
+  let regular = 0;
+  let umbra = 0;
+  let special = 0;
+  for (const [key, value] of Object.entries(state.formaSlots)) {
+    const index = Number(key);
+    if (index >= native.length) { special += 1; continue; }
+    if (UMBRA_POLARITIES.has(value)) umbra += 1;
+    else regular += 1;
+  }
+  state.formaCount = regular + umbra + special;
+  if (ui["forma-count"]) {
+    ui["forma-count"].textContent = String(state.formaCount);
+    const parts = [regular && `普通 ×${regular}`, umbra && `Umbra ×${umbra}`, special && `架势/功能槽 ×${special}`].filter(Boolean);
+    ui["forma-counter"]?.setAttribute("title", state.formaCount ? `当前配装的极化：${parts.join("、")}` : "当前配装不需要极化");
+  }
 }
 
 const POLARITY_NAMES = { AP_ATTACK: "Madurai", AP_DEFENSE: "Vazarin", AP_TACTIC: "Naramon", AP_UMBRA: "Umbra", AP_POWER: "力量", AP_WARD: "Unairu", AP_PRECEPT: "Penjaga", AP_UNIVERSAL: "无极性", AP_ANY: "任意" };
@@ -5852,7 +6139,7 @@ function slotPolarityChip(index, perSlotInfo) {
   }
   const isRivenSlot = Boolean(state.manualSlots[index]?.__riven);
   const rivenPol = isRivenSlot ? rivenFixedPolarity(state.manualSlots[index], index) : null;
-  chip.title = `槽位 ${index + 1} 极性 · ${POLARITY_NAMES[pol] || pol}${info.forma ? "（已极化）" : ""}${info.relation === "mismatch" ? " · MOD 不匹配（消耗 ×1.25）" : info.relation === "match" ? " · 匹配（消耗减半）" : ""}${isRivenSlot ? ` · 紫卡固定极性：${POLARITY_NAMES[rivenPol] || rivenPol}（不随极化变动）` : ""} · 点击切换极化`;
+  chip.title = `槽位 ${index + 1} 极性 · ${POLARITY_NAMES[pol] || pol}${info.forma ? "（已极化）" : ""}${info.relation === "mismatch" ? " · MOD 不匹配（消耗 ×1.25）" : info.relation === "match" ? " · 匹配（消耗减半）" : ""}${isRivenSlot ? ` · 紫卡极性：${POLARITY_NAMES[rivenPol] || rivenPol} · 点击在原生极性与紫卡极性之间切换（紫卡极性在紫卡编辑里修改）` : " · 点击切换极化"}`;
   chip.setAttribute("aria-label", chip.title);
   chip.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -5868,9 +6155,16 @@ function cycleSlotPolarity(index) {
   const mod = state.manualSlots[index];
   const order = [null, "AP_ATTACK", "AP_DEFENSE", "AP_TACTIC", "AP_UMBRA", "AP_POWER", "AP_WARD", "AP_PRECEPT", "AP_ANY"];
   const current = weaponSlotPolarities()[index] || null;
-  if (!mod || mod.__riven) {
-    // 空槽与紫卡槽自由循环极化。紫卡自身极性固定（落槽时掷出），
-    // 槽位极化只改变槽位极性；紫卡按固定极性与槽位比对消耗。
+  if (mod?.__riven) {
+    // 紫卡槽只在「原生极性」与「紫卡自身极性」之间切换：紫卡极性固定
+    // （Madurai / Vazarin / Naramon 之一），给它的槽极化成别的极性没有意义。
+    const native = nativeSlotPolarities()[index] || null;
+    const own = rivenFixedPolarity(mod, index);
+    setSlotPolarity(index, current === own ? native : own);
+    return;
+  }
+  if (!mod) {
+    // 空槽自由循环极化（用来还原账号里武器已有的极化）。
     const currentIndex = Math.max(0, order.indexOf(current));
     const next = order[(currentIndex + 1) % order.length];
     setSlotPolarity(index, next);
@@ -5899,8 +6193,7 @@ function cycleSpecialSlotPolarity(kind) {
   if (next === native) delete state.formaSlots[index];
   else state.formaSlots[index] = next || "AP_UNIVERSAL";
   if (kind === "stance") refreshStanceSelection();
-  state.formaCount = Object.keys(state.formaSlots).length;
-  if (ui["forma-count"]) ui["forma-count"].textContent = String(state.formaCount);
+  refreshFormaCount();
   persistActiveBuildConfig();
   renderSpecialSlots();
   renderCapacityBar();
@@ -5919,25 +6212,7 @@ function setSlotPolarity(index, polarity) {
   const base = !rawBase || rawBase === "AP_UNIVERSAL" ? null : rawBase;
   if (polarity === base) delete state.formaSlots[index];
   else state.formaSlots[index] = polarity || "AP_UNIVERSAL";
-  state.formaCount = Object.keys(state.formaSlots).length;
-  if (ui["forma-count"]) ui["forma-count"].textContent = String(state.formaCount);
-  persistActiveBuildConfig();
-  renderManualSlots();
-  scheduleLiveManualSimulation();
-}
-
-function autoPolarize() {
-  // For every occupied slot whose mod polarity mismatches, polarize to match
-  // (Overframe-style): mismatch ×1.25 → match /2. Reverse polarity stays
-  // allowed as long as total capacity is not exceeded.
-  const slots = weaponSlotPolarities();
-  state.manualSlots.forEach((mod, index) => {
-    if (!mod) return;
-    const modPol = modPolarityOf(mod, index);
-    if (modPol && !polarityMatches(modPol, slots[index])) state.formaSlots[index] = modPol;
-  });
-  state.formaCount = Object.keys(state.formaSlots).length;
-  if (ui["forma-count"]) ui["forma-count"].textContent = String(state.formaCount);
+  refreshFormaCount();
   persistActiveBuildConfig();
   renderManualSlots();
   scheduleLiveManualSimulation();
@@ -6035,6 +6310,7 @@ function startPointerModDrag(kind, index, event, slot) {
     if (shouldSwap) {
       if (kind === "weapon") {
         [state.manualSlots[index], state.manualSlots[targetIndex]] = [state.manualSlots[targetIndex], state.manualSlots[index]];
+        ensureCapacityFit();
         renderManualSlots();
         persistActiveBuildConfig();
         scheduleLiveManualSimulation();
@@ -6120,6 +6396,7 @@ function buildManualSlotNode(mod, index, slotPolarities, capacity) {
       const from = dragSourceIndex("weapon", event);
       if (!Number.isInteger(from) || from === index || !state.manualSlots[from] || state.manualLocks[from] || state.manualLocks[index]) return;
       [state.manualSlots[from], state.manualSlots[index]] = [state.manualSlots[index], state.manualSlots[from]];
+      ensureCapacityFit();
       renderManualSlots(); persistActiveBuildConfig(); scheduleLiveManualSimulation();
     });
     if (!mod) {
@@ -6173,10 +6450,9 @@ function buildManualSlotNode(mod, index, slotPolarities, capacity) {
         const before = currentRank();
         if (next === before) return;
         mod.rank = next;
-        const { fits, polarized } = ensureCapacityFit(index);
+        const { fits, polarized } = ensureCapacityFit();
         if (!fits) {
           mod.rank = before;
-          ensureCapacityFit(-1);
           renderManualSlots();
           toast(`容量不足：升到 ${next} 级后即使全部极化也装不下`);
           return;
@@ -6247,6 +6523,10 @@ function openModPicker(slotIndex) {
   if (!ui["mod-picker"] || state.buildInputMode === "auto") return;
   state.modPickerKind = "normal";
   state.modPickerSlot = clamp(Number(slotIndex) || 0, 0, state.manualSlots.length - 1);
+  // 紫卡构建器的极性默认取该槽已有紫卡的极性（没有时再随机）。
+  state.rivenBuilderPolarity = state.manualSlots[state.modPickerSlot]?.__riven
+    ? rivenFixedPolarity(state.manualSlots[state.modPickerSlot], state.modPickerSlot)
+    : null;
   ui["mod-picker"].classList.remove("is-special-picker");
   if (ui["mod-picker-title"]) ui["mod-picker-title"].textContent = "选择 MOD";
   ui["mod-picker-sub"].textContent = `填充到槽位 ${state.modPickerSlot + 1}`;
@@ -6485,35 +6765,16 @@ function resultBuildView(result) {
   };
 }
 
-// Dynamic polarization (manual workbench): polarization count is an OUTPUT of
-// the build, not a constraint on it. When the loadout exceeds capacity, forma
-// occupied slots one by one — the just-changed slot first, then the largest
-// savings — until the build fits. Returns { fits, polarized }.
-function ensureCapacityFit(preferIndex = -1) {
-  let polarized = 0;
-  let guard = 0;
-  while (computeCapacity().over && guard < 16) {
-    guard += 1;
-    const slots = weaponSlotPolarities();
-    const candidates = state.manualSlots
-      .map((mod, index) => {
-        if (!mod || mod.__riven) return null;
-        const modPol = state.modAssets?.mods?.[mod.path]?.polarity || mod.polarity;
-        if (!modPol || polarityMatches(modPol, slots[index])) return null;
-        const saving = modEffectiveDrain(mod, slots[index]).drain - Math.max(0, Math.ceil(modBaseDrain(mod) / 2));
-        return saving > 0 ? { index, modPol, saving } : null;
-      })
-      .filter(Boolean);
-    if (!candidates.length) break;
-    candidates.sort((a, b) => (a.index === preferIndex ? -1 : b.index === preferIndex ? 1 : b.saving - a.saving));
-    state.formaSlots[candidates[0].index] = candidates[0].modPol;
-    polarized += 1;
-  }
-  if (polarized) {
-    state.formaCount = Object.keys(state.formaSlots).length;
-    if (ui["forma-count"]) ui["forma-count"].textContent = String(state.formaCount);
-  }
-  return { fits: !computeCapacity().over, polarized };
+// Manual edits: polarization is an OUTPUT of the build, not a constraint on
+// it. When the loadout exceeds capacity, add the fewest Forma that make it fit
+// (cards stay where the user put them). Nothing changes when it cannot fit.
+// Returns { fits, polarized }.
+function ensureCapacityFit() {
+  if (!computeCapacity().over) return { fits: true, polarized: 0 };
+  const plan = workbenchFormaPlan();
+  if (!plan.fits) return { fits: false, polarized: 0 };
+  applyFormaPlan(plan);
+  return { fits: !computeCapacity().over, polarized: plan.formas };
 }
 
 function applyModToPickerSlot(mod) {
@@ -6530,10 +6791,9 @@ function applyModToPickerSlot(mod) {
   }
   const previous = state.manualSlots[slot] || null;
   state.manualSlots[slot] = candidate;
-  const { fits, polarized } = ensureCapacityFit(slot);
+  const { fits, polarized } = ensureCapacityFit();
   if (!fits) {
     state.manualSlots[slot] = previous;
-    ensureCapacityFit(-1);
     toast("容量不足：即使极化全部槽位也装不下这张 MOD，请降低等级或移除其他 MOD");
     return;
   }
@@ -6767,19 +7027,10 @@ function modPolarity(mod, slotIndex = 0) {
   return modPolarityOf(mod, slotIndex);
 }
 
-// Keep the solved elemental order and polarize each occupied slot in place.
+// Solver results score every card as if it sat in a matching slot; give the
+// filled build the fewest Forma that actually fit it (elements keep order).
 function syncAutoFormaFromSlots() {
-  // Elemental order is part of the solved build. Polarize in place.
-  const specialForma = Object.fromEntries(Object.entries(state.formaSlots || {}).filter(([key]) => !/^\d+$/.test(key)));
-  const base = state.buildWeapon?.polarities || [];
-  state.formaSlots = { ...specialForma };
-  state.manualSlots.forEach((mod, index) => {
-    if (!mod) return;
-    const polarity = modPolarity(mod, index);
-    if (polarity && polarity !== "AP_UNIVERSAL" && !polarityMatches(polarity, base[index])) state.formaSlots[index] = polarity;
-  });
-  state.formaCount = Object.keys(state.formaSlots).length;
-  if (ui["forma-count"]) ui["forma-count"].textContent = String(state.formaCount);
+  applyMinimalForma();
 }
 
 function fillSpecialFromResult(result) {
@@ -6816,28 +7067,6 @@ function fillSpecialFromResult(result) {
     if (weaponArcaneSlotCount() > 1) state.weaponArcane2 = hydrateRankedSelection(selected.filter((item) => item.slotKind !== "warframe")[1], arcaneRecords(), "weapon");
     const frames = selected.filter((item) => item.slotKind === "warframe").slice(0, 2).map((item) => hydrateRankedSelection(item, arcaneRecords(), "warframe"));
     state.frameArcanes = [frames[0] || null, frames[1] || null];
-  }
-  const forma = read("forma");
-  if (forma && typeof forma === "object") {
-    const regular = Number(forma.regular || 0);
-    const umbra = Number(forma.umbra || 0);
-    const stance = Number(forma.stance || 0);
-    state.formaCount = regular + umbra + stance;
-    if (ui["forma-count"]) ui["forma-count"].textContent = String(state.formaCount);
-    if (ui["forma-needed"]) {
-      ui["forma-needed"].hidden = !state.formaCount;
-      const summaries = [
-        ["普通", regular, null],
-        ["Umbra", umbra, "/assets/game/formas/UmbraForma.png"],
-        ["架势", stance, "/assets/game/formas/StanceForma.png"],
-      ];
-      ui["forma-needed"].replaceChildren(...summaries.map(([label, count, asset]) => {
-        const chip = create("span", "forma-kind-chip");
-        if (asset) chip.append(imageNode(asset, "forma-kind-icon", `${label} Forma`, "eager"));
-        chip.append(document.createTextNode(`${label} ×${count}`));
-        return chip;
-      }));
-    }
   }
   syncArcaneSelections();
   renderSpecialSlots();
@@ -6936,7 +7165,7 @@ function drawTimelineVisual(timeline, killTimeline) {
   const points = Array.isArray(timeline?.points) ? timeline.points : (Array.isArray(timeline) ? timeline : []);
   const kill = killTimeline && Array.isArray(killTimeline.points) ? killTimeline : null;
   if (points.length < 2 && !kill) {
-    target.replaceChildren(create("p", "empty-copy", "后端未返回时间线；当前只显示静态结果"));
+    target.replaceChildren(create("p", "empty-copy", "没有时间线数据，只显示汇总结果"));
     return;
   }
   const W = 860, H = 280, pad = { l: 52, r: 18, t: 22, b: 32 };
@@ -7402,7 +7631,7 @@ function drawBenchmarkReplay(bench) {
     if (bench.manualDetonation) caveats.push(`每批 ${bench.manualDetonation.batchSize} 次投掷，等待 ${bench.manualDetonation.delaySeconds}s 起爆 · 已起爆 ${bench.manualDetonation.detonations} 批`);
     if (bench.delayedAttackEvents) caveats.push(`已结算 ${bench.delayedAttackEvents} 次延迟爆炸`);
     if (bench.syndicateEvents?.length) caveats.push(`集团爆发 ${bench.syndicateEvents.length} 次，实际伤害 ${formatMetric(bench.syndicateWindow || 0)}`);
-    if (bench.unsupported?.length) caveats.push(`另有 ${bench.unsupported.length} 项事件未建模，见提示`);
+    if (bench.unsupported?.length) caveats.push(`另有 ${bench.unsupported.length} 项效果暂未计入，见提示`);
     note.textContent = `${parts.join(" · ") || "标准靶"} · ${tMax.toFixed(0)}s 窗口 · ${caveats.join(" · ")}`;
     note.title = normalizeLabels([...(bench.unsupported || []), ...(bench.limitations || [])]).join('；');
   }
@@ -7428,7 +7657,7 @@ function renderBuild() {
       : state.result.fireMode || "主模式";
   const optimizationMetric = state.result.searchStatus?.metric || state.result.metric;
   ui["build-metric"].textContent = METRIC_LABELS[optimizationMetric] || optimizationMetric || "战斗伤害";
-  // 无限极化口径的极化次数（只展示结果）：架势/Umbra 极化在提示里细分。
+  // 放下这套配装最少需要的极化次数（只展示结果）：架势 / 功能槽 / Umbra 在提示里细分。
   const forma = build?.forma;
   const formaEl = ui["build-forma"];
   if (formaEl) {
@@ -7438,8 +7667,9 @@ function renderBuild() {
       if (forma.regular) parts.push(`常规 ×${forma.regular}`);
       if (forma.umbra) parts.push(`Umbra ×${forma.umbra}`);
       if (forma.stance) parts.push(`架势槽 ×${forma.stance}`);
+      if (forma.exilus) parts.push(`功能槽 ×${forma.exilus}`);
       formaEl.textContent = `极化 ×${total}`;
-      formaEl.title = total ? `按武器原生极性，该配装需要极化：${parts.join("、")}` : "该配装不需要极化";
+      formaEl.title = total ? `按武器原生极性，放下这套配装最少需要极化：${parts.join("、")}` : "这套配装不需要极化";
       formaEl.hidden = false;
     } else {
       formaEl.hidden = true;
@@ -7763,10 +7993,10 @@ function importWarframeConfig(file) {
     try {
       const parsed = JSON.parse(String(reader.result || ""));
       const config = parsed.config || parsed;
-      if (!config || Number(parsed.schema ?? config.schema ?? 1) !== 1) throw new Error("战甲配置 schema 不兼容");
+      if (!config || Number(parsed.schema ?? config.schema ?? 1) !== 1) throw new Error("战甲配置文件格式不兼容");
       const build = state.warframeBuild;
       const frame = parsed.frameId ? warframeResolve(warframeRows("warframes"), parsed.frameId) : build.frame;
-      if (!frame) throw new Error("导入文件中的战甲不在当前冻结目录");
+      if (!frame) throw new Error("导入文件中的战甲不在当前战甲目录里");
       const active = build.activeConfig;
       if (warframeId(frame) !== warframeId(build.frame)) {
         persistWarframeConfig();
@@ -7824,7 +8054,7 @@ async function loadWarframeCatalog() {
   if (state.warframeCatalog) return state.warframeCatalog;
   if (state.warframeCatalogPromise) return state.warframeCatalogPromise;
   ui["warframe-catalog-status"].textContent = "LOADING";
-  ui["warframe-loading"].querySelector("p").textContent = "正在读取冻结战甲目录";
+  ui["warframe-loading"].querySelector("p").textContent = "正在载入战甲目录";
   state.warframeCatalogPromise = fetch("/api/warframe/catalog")
     .then(async (response) => {
       const body = await response.json();
@@ -8255,7 +8485,7 @@ function renderWarframeProfile() {
   }
   ui["warframe-profile-name"].textContent = warframeName(frame);
   ui["warframe-result-name"].textContent = warframeName(frame);
-  ui["warframe-profile-description"].textContent = warframeLocalizedDescription(frame, "冻结官方战甲档案");
+  ui["warframe-profile-description"].textContent = warframeLocalizedDescription(frame, "暂无战甲简介");
   ui["warframe-passive"].textContent = warframePassiveText(frame) || "--";
   const portrait = frame.portraitAsset || frame.iconAsset;
   ui["warframe-portrait"].hidden = !portrait;
@@ -8286,7 +8516,7 @@ function renderWarframeProfile() {
   }
   ui["warframe-helminth-description"].textContent = build.helminthAbility ? warframeLocalizedDescription(build.helminthAbility, "该技能只替换一个主动技能槽。") : "未替换技能。";
   ui["warframe-invigoration-name"].textContent = build.invigoration.length ? build.invigoration.map(warframeName).join(" + ") : "未选择";
-  ui["warframe-invigoration-description"].textContent = build.invigoration.length ? build.invigoration.map((row) => warframeLocalizedDescription(row, "冻结静态增幅")).join("；") : "一项攻势 + 一项辅助";
+  ui["warframe-invigoration-description"].textContent = build.invigoration.length ? build.invigoration.map((row) => warframeLocalizedDescription(row, "增幅效果")).join("；") : "一项攻势 + 一项辅助";
   ui["warframe-config-tabs"].querySelectorAll("[data-warframe-config]").forEach((button) => {
     const active = button.dataset.warframeConfig === build.activeConfig;
     button.classList.toggle("is-active", active);
@@ -8388,8 +8618,8 @@ function renderWarframePicker() {
     if (icon) visual.append(imageNode(icon, "warframe-picker-icon", warframeName(row), "lazy"));
     else if (kind !== "shard" || !warframeShardAssets(row)?.base) visual.append(create("i", "", "◇"));
     const copy = create("span", "warframe-image-option-copy");
-    const sub = kind === "helminth" ? warframeSourceLabel(row) : kind === "helminthSlot" ? (row.slot === null ? "保留原技能" : `原技能 ${Number(row.slot) + 1}`) : (kind === "frame" ? "固定满级 30 · 冻结官方档案" : (row.tau ? "Tau 级" : (row.rarity || row.category || "静态效果")));
-    copy.append(create("strong", "", warframeName(row)), create("small", "", sub), create("p", "", warframeDescription(row) || "冻结游戏数据"));
+    const sub = kind === "helminth" ? warframeSourceLabel(row) : kind === "helminthSlot" ? (row.slot === null ? "保留原技能" : `原技能 ${Number(row.slot) + 1}`) : (kind === "frame" ? "满级 30" : (row.tau ? "Tau 级" : (row.rarity || row.category || "静态效果")));
+    copy.append(create("strong", "", warframeName(row)), create("small", "", sub), create("p", "", warframeDescription(row) || "暂无说明"));
     option.append(visual, copy);
     option.addEventListener("click", () => applyWarframePickerRow(row));
     return option;
@@ -8780,7 +9010,7 @@ function renderWarframeResult(result) {
     if (icon) head.append(imageNode(icon, "", warframeName(ability), "lazy"));
     head.append(create("strong", "", warframeName(ability)));
     if (replaced || ability.altered || ability.helminth) head.append(create("b", "", "HELMINTH"));
-    card.append(head, create("p", "warframe-ability-description", warframeAbilityDescription(ability) || "官方描述随冻结数据展示。"));
+    card.append(head, create("p", "warframe-ability-description", warframeAbilityDescription(ability) || "暂无官方描述"));
     const scalarList = create("div", "warframe-ability-scalars");
     const cost = ability.energyCost || {};
     const scalars = Array.isArray(ability.scalars) ? ability.scalars : [];
@@ -8793,7 +9023,7 @@ function renderWarframeResult(result) {
       const costDelta = warframeAbilityCostDelta(cost);
       if (costDelta === "better") costRow.classList.add("is-improved");
       else if (costDelta === "worse") costRow.classList.add("is-worse");
-      costRow.append(create("span", "", costDisplay.label), create("strong", "", costDisplay.text), create("small", "", costDisplay.note || (costDisplay.base ? `基础 ${costDisplay.base}` : "冻结官方资源规则")));
+      costRow.append(create("span", "", costDisplay.label), create("strong", "", costDisplay.text), create("small", "", costDisplay.note || (costDisplay.base ? `基础 ${costDisplay.base}` : "官方资源规则")));
       scalarList.append(costRow);
     }
     let currentGroup = "";
@@ -8821,11 +9051,7 @@ function renderWarframeResult(result) {
       scalarList.append(row);
     });
     else {
-      const evidence = Array.isArray(ability.sourceEvidence) ? ability.sourceEvidence : [];
-      const sources = [...new Set(evidence.map((entry) => entry?.kind === "wiki" ? "Wiki" : entry?.kind === "packages" ? "游戏包" : "冻结资料").filter(Boolean))];
-      scalarList.append(create("p", "", `官方描述已保留${sources.length ? ` · 来源 ${sources.join(" / ")}` : ""}`));
-      const unresolved = Array.isArray(ability.unresolvedFields) ? ability.unresolvedFields.filter(Boolean) : [];
-      if (unresolved.length) scalarList.append(create("small", "warframe-ability-diagnostic", unresolved.join("；")));
+      scalarList.append(create("p", "", "该技能没有可调整的数值，以官方描述为准"));
     }
     card.append(scalarList, create("small", "warframe-ability-global", globalScale));
     return card;
@@ -9070,8 +9296,7 @@ function selectBuildWeapon(weapon, writeInput = true) {
   state.incarnonChoices = {};
   state.manualSlot = 0;
   state.formaSlots = {};
-  state.formaCount = 0;
-  if (ui["forma-count"]) ui["forma-count"].textContent = "0";
+  refreshFormaCount();
   if (!isAssemblyBase) {
     state.kitgunBase = null;
     state.kitgunParts = null;
@@ -9167,7 +9392,7 @@ function setWeaponBuildState(name) {
 
 function buildPayloadFromForm() {
   const damageModel = ui["build-damage-model"]?.value || "panel";
-  if (damageModel === "custom" && !customDamageSupported()) throw new Error("当前后端未支持自定义防御快照");
+  if (damageModel === "custom" && !customDamageSupported()) throw new Error("当前版本不支持自定义防御");
   const mods = state.manualSlots.flatMap((mod, slot) => (mod && !mod.__riven) ? [{
     path: mod.path,
     slot,
@@ -9198,6 +9423,9 @@ function buildPayloadFromForm() {
     minFill: scopeFillValue("build-min-fill"),
     maxFill: scopeFillValue("build-max-fill"),
     optimizeWithArcanes: !ui["build-optimize-arcanes"]?.checked ? false : undefined,
+    // 自动选择（默认关闭）：武器赋能 / 灵化进化路线交给求解，结果填回槽位。
+    autoArcane: ui["build-auto-arcane"]?.checked ? true : undefined,
+    autoIncarnon: ui["build-auto-incarnon"]?.checked && Array.isArray(state.buildWeapon?.incarnon) && state.buildWeapon.incarnon.length ? true : undefined,
     // 触发类效果口径：emergent（按实际爬升，窗口模型模拟）/ assumed_max（恒满）。
     triggerPolicy: document.getElementById("trigger-policy-select")?.value || "emergent",
     elementTarget: ui["build-element-select"].value || null,
@@ -9346,9 +9574,8 @@ function renderWeaponBuildDiagnostics(result) {
     ...(result.projectileEvents?.events || result.build?.projectileEvents?.events || [])
       .filter((event) => event.kind === "scriptRadial" && event.baseSource === "shieldDamageData")
       .map(() => "触发条件：装备深埋之憾后，感染量子切割器球体被破坏时，按球体吸收弹丸得到的伤害及 MOD 等级倍率引爆。实际吸收伤害尚未恢复，此效果未计入评分。"),
-    ...normalizeLabels(result.unsupported).map((item) => `未完整支持：${item}`),
-    ...normalizeLabels(result.skipped).map((item) => `计算说明：${item}`),
-    ...normalizeLabels(result.limitations).map((item) => `限制：${item}`),
+    ...userDiagnostics(result.unsupported).map((item) => `未完整支持：${item}`),
+    ...userDiagnostics(result.skipped).map((item) => `计算说明：${item}`),
   ];
   const unique = [...new Set(lines)];
   ui["weapon-build-diagnostic-count"].textContent = String(unique.length);
@@ -9394,7 +9621,6 @@ function renderWeaponBuild(result) {
   const innateText = innate ? `自带${DAMAGE_TYPE_LABELS[innate.damageType] || innate.damageType} ${(Number(innate.percent || innate.value * 100)).toFixed(0)}%` : "无自带元素";
   ui["weapon-build-element-note"].textContent = `${result.elementTarget ? `元素目标：${result.elementTarget.label}（配装包含）` : "未限定元素"} · ${innateText}`;
   ui["weapon-build-slot-summary"].textContent = `${result.slotCount ?? Number(ui["build-slot-count"]?.value || 8)} SLOTS`;
-  ui["weapon-build-build-label"].textContent = result.buildLabel || "OFFLINE";
   updateLiveHud(result);
   renderWeaponStats(result.moddedStats);
   // 伤害数值只保留顶部随动 HUD 与面板属性带：原先这里的「单发/爆发/持续」
@@ -9411,6 +9637,120 @@ function renderWeaponBuild(result) {
   renderWeaponBuildDiagnostics(result);
   updateEnemyStatsPanel(result);
   scheduleEquippedGains();
+}
+
+// ── 部件贡献（Shapley）────────────────────────────────────────────────────
+// 枚举已装备 MOD 与紫卡的全部组合（后端 /api/part-values），给出每个部件
+// 在所有装配顺序下的平均等效倍率、拿掉它/只装它，以及两两配合。
+let partValuesRequest = 0;
+let partValuesTimer = null;
+
+function partValuesKey(payload) {
+  return JSON.stringify({ ...payload, liveChannel: undefined, liveSeq: undefined });
+}
+
+function schedulePartValues() {
+  if (!ui["part-values"]?.open || state.buildInputMode !== "manual") return;
+  window.clearTimeout(partValuesTimer);
+  partValuesTimer = window.setTimeout(() => requestPartValues(), 600);
+}
+
+async function requestPartValues() {
+  let payload;
+  try {
+    payload = buildPayloadFromForm();
+  } catch (error) {
+    ui["part-values-status"].textContent = issueLabel(error.message) || "当前配装无法计算";
+    return;
+  }
+  if (!(payload.mods || []).length && !payload.riven) {
+    ui["part-values-content"].replaceChildren();
+    ui["part-values-status"].textContent = "先装配 MOD 再计算";
+    return;
+  }
+  const key = partValuesKey(payload);
+  if (state.partValues?.key === key) return renderPartValues(state.partValues.result);
+  const requestId = ++partValuesRequest;
+  ui["part-values-run"].disabled = true;
+  ui["part-values-status"].textContent = "正在枚举全部组合…";
+  try {
+    const response = await fetch("/api/part-values", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const body = await response.json();
+    if (!response.ok) throw new Error(body?.error?.message || `计算失败（${response.status}）`);
+    if (requestId !== partValuesRequest) return;
+    state.partValues = { key, result: body };
+    renderPartValues(body);
+  } catch (error) {
+    if (requestId === partValuesRequest) ui["part-values-status"].textContent = issueLabel(error.message) || "计算失败";
+  } finally {
+    if (requestId === partValuesRequest) ui["part-values-run"].disabled = false;
+  }
+}
+
+function partValueName(row) {
+  if (row.kind === "riven") return "紫卡";
+  return row.nameZh || row.nameEn || String(row.key || "").split("/").pop();
+}
+
+function signedPercent(value) {
+  if (!Number.isFinite(Number(value))) return "--";
+  const number = Number(value);
+  return `${number >= 0 ? "+" : "−"}${Math.abs(number) >= 100 ? Math.abs(number).toFixed(0) : Math.abs(number).toFixed(1)}%`;
+}
+
+function renderPartValues(result) {
+  const target = ui["part-values-content"];
+  if (!target || !result) return;
+  const log = result.scale === "log";
+  const rows = [...result.parts].sort((a, b) => b.shapley - a.shapley);
+  const total = log ? Math.log(result.fullValue / result.emptyValue) : result.fullValue - result.emptyValue;
+  const table = create("div", "part-values-table");
+  const head = create("div", "part-values-row is-head");
+  head.append(create("span", "", "部件"), create("span", "", log ? "占总提升" : "占总提升"), create("b", "", log ? "等效倍率" : "平均贡献"), create("b", "", "拿掉它"), create("b", "", "只装它"));
+  table.append(head);
+  for (const row of rows) {
+    const line = create("div", "part-values-row");
+    const share = total > 0 ? clamp(row.shapley / total, 0, 1) : 0;
+    const bar = create("span", "part-values-bar");
+    const fill = create("i");
+    fill.style.width = `${(share * 100).toFixed(1)}%`;
+    bar.append(fill);
+    bar.title = `占全装相对裸武器提升的 ${(share * 100).toFixed(1)}%（对数尺度）`;
+    line.append(
+      create("span", "", `${row.slot !== undefined && row.slot !== null ? `${Number(row.slot) + 1}. ` : ""}${partValueName(row)}`),
+      bar,
+      create("b", "", log ? `×${Number(row.multiplier).toFixed(2)}` : `${(Number(row.share || 0) * 100).toFixed(1)}%`),
+      create("b", "", signedPercent(row.removeLossPercent)),
+      create("b", "", row.alonePercent === null || row.alonePercent === undefined ? "--" : signedPercent(row.alonePercent)),
+    );
+    table.append(line);
+  }
+  const pairs = create("div", "part-values-pairs");
+  const synergy = result.pairs.filter((pair) => pair.interaction > 1e-9).slice(0, 3);
+  const dilution = result.pairs.filter((pair) => pair.interaction < -1e-9).slice(0, 3);
+  const pairText = (pair) => `${partValueName(result.parts[pair.a])} + ${partValueName(result.parts[pair.b])}`;
+  const pairValue = (pair) => (log ? `×${Number(pair.multiplier).toFixed(2)}` : formatMetric(pair.interaction));
+  if (synergy.length) {
+    pairs.append(create("small", "", "配合最好"));
+    for (const pair of synergy) {
+      const line = create("p", "is-synergy");
+      line.append(document.createTextNode(`${pairText(pair)} `), create("b", "", pairValue(pair)));
+      pairs.append(line);
+    }
+  }
+  if (dilution.length) {
+    pairs.append(create("small", "", "互相稀释"));
+    for (const pair of dilution) {
+      const line = create("p", "is-dilution");
+      line.append(document.createTextNode(`${pairText(pair)} `), create("b", "", pairValue(pair)));
+      pairs.append(line);
+    }
+  }
+  const note = create("p", "part-values-note", log
+    ? `等效倍率 = 该部件在所有装配顺序下带来的平均倍数，全部相乘等于全装 / 裸武器（×${formatMetric(result.fullValue / result.emptyValue)}）。配合：两件一起装比各自单独带来的更多（>1）或更少（<1）。赋能、功能槽、架势与灵化保持当前设置。`
+    : "裸武器在当前目标上无法击杀，改按击杀数的平均贡献与占比显示。赋能、功能槽、架势与灵化保持当前设置。");
+  target.replaceChildren(table, pairs, note);
+  ui["part-values-status"].textContent = `${result.evaluations} 种组合 · ${Number(result.seconds).toFixed(1)} 秒`;
 }
 
 // /api/build (auto mode) returns optimizer output without statusProcs/dot/
@@ -9703,6 +10043,35 @@ function refreshScenarioLabels() {
   setSliderVisual(ui["build-headshot-chance"]);
 }
 
+// 自动选择的武器赋能 / 灵化路线填回槽位：之后的手动回放与下次求解都用它
+// （下次求解以它为基准路线，所以结果不会倒退）。只改状态，不触发新的求解。
+function applyAutoLoadout(body) {
+  const auto = body?.autoLoadout;
+  if (!auto) return;
+  let changed = false;
+  if (auto.incarnon && body.incarnonChoices && typeof body.incarnonChoices === "object") {
+    const next = { ...body.incarnonChoices };
+    if (JSON.stringify(next) !== JSON.stringify(state.incarnonChoices)) {
+      state.incarnonChoices = next;
+      renderIncarnonChoices();
+      changed = true;
+    }
+  }
+  if (auto.arcane) {
+    const chosen = (auto.arcane.chosen || []).map((row) => hydrateRankedSelection(row, arcaneRecords(), "weapon"));
+    const first = chosen[0] || null;
+    const second = weaponArcaneSlotCount() > 1 ? (chosen[1] || null) : state.weaponArcane2;
+    if (first?.path !== state.weaponArcane?.path || second?.path !== state.weaponArcane2?.path) {
+      state.weaponArcane = first;
+      state.weaponArcane2 = second;
+      syncArcaneSelections();
+      renderArcaneSelections();
+      changed = true;
+    }
+  }
+  if (changed) persistActiveBuildConfig();
+}
+
 async function submitWeaponBuild(event, live = false) {
   event?.preventDefault();
   let payload;
@@ -9723,8 +10092,10 @@ async function submitWeaponBuild(event, live = false) {
     if (!response.ok) throw new Error(body?.error?.message || `配装失败（${response.status}）`);
     if (requestId !== state.liveRequestId) return;
     state.buildResult = body;
+    applyAutoLoadout(body);
     renderWeaponBuild(body);
     setWeaponBuildState("content");
+    schedulePartValues();
   } catch (error) {
     if (requestId === state.liveRequestId) {
       const message = issueLabel(error.message) || "配装失败";
@@ -9743,11 +10114,11 @@ async function submitWeaponBuild(event, live = false) {
 function diagnosticLines() {
   const lines = [];
   // 靶子与灵化路线说明由后端放在 skipped 开头（“靶子：”“灵化路线：”），原样置顶。
-  const notes = normalizeLabels(state.result.skipped);
+  const notes = userDiagnostics(state.result.skipped);
   const pinned = notes.filter((item) => /^(靶子|攻击路线|灵化路线|开火模式)：/.test(item));
   const route = incarnonRouteText();
   for (const item of pinned) lines.push(item.startsWith("灵化路线：") && route ? `${item}（${route}）` : item);
-  for (const item of normalizeLabels(state.result.unsupported)) lines.push(`未完整支持：${item}`);
+  for (const item of userDiagnostics(state.result.unsupported)) lines.push(item.startsWith("超快档：") ? `计算说明：${item}` : `未完整支持：${item}`);
   for (const item of notes) if (!pinned.includes(item)) lines.push(`计算说明：${item}`);
   return [...new Set(lines)];
 }
@@ -9903,10 +10274,12 @@ function bindEvents() {
       persistActiveBuildConfig();
     });
   }
-  document.getElementById("build-optimize-arcanes")?.addEventListener("change", () => {
-    persistActiveBuildConfig();
-    scheduleLiveBuild();
-  });
+  for (const id of ["build-optimize-arcanes", "build-auto-arcane", "build-auto-incarnon"]) {
+    document.getElementById(id)?.addEventListener("change", () => {
+      persistActiveBuildConfig();
+      scheduleLiveBuild();
+    });
+  }
   ui["build-element-select"]?.addEventListener("change", () => {
     setElementControlIcon(ui["build-element-select"], ui["build-element-icon"]);
   });
@@ -9969,8 +10342,7 @@ function bindEvents() {
     state.buildConfigs = { A: null, B: null, C: null };
     state.activeConfig = "A";
     state.formaSlots = {};
-    state.formaCount = 0;
-    if (ui["forma-count"]) ui["forma-count"].textContent = "0";
+    refreshFormaCount();
     state.manualSlots = Array.from({ length: 8 }, () => null);
     resetSpecialSelections();
     state.incarnonChoices = {};
@@ -9996,12 +10368,11 @@ function bindEvents() {
       const response = await fetch("/api/build", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const body = await response.json();
       if (!response.ok) throw new Error(body?.error?.message || "求解失败");
+      applyAutoLoadout(body);
       fillManualFromResult(body);
-      // Auto-polarize to the solved build (Overframe behaviour): green slots.
-      autoPolarize();
       persistActiveBuildConfig();
       scheduleLiveManualSimulation();
-      toast("已回填最优配装并自动极化");
+      toast(state.formaCount ? `已回填最优配装，最少需要极化 ${state.formaCount} 次` : "已回填最优配装，无需极化");
     } catch (error) {
       toast(issueLabel(error.message) || "求解失败", "error");
     } finally {
@@ -10010,18 +10381,17 @@ function bindEvents() {
       if (state.buildInputMode !== previousMode) setBuildModeUI(previousMode);
     }
   });
-  ui["forma-increase"]?.addEventListener("click", () => {
-    // +1 极化: auto-polarize the next mismatched occupied slot
-    const slots = weaponSlotPolarities();
-    const target = state.manualSlots.findIndex((mod, index) => {
-      if (!mod) return false;
-      const modPol = mod.__riven ? null : (state.modAssets?.mods?.[mod.path]?.polarity || mod.polarity);
-      return modPol && !polarityMatches(modPol, slots[index]);
-    });
-    if (target === -1) return toast("没有需要极化的槽位");
-    const mod = state.manualSlots[target];
-    setSlotPolarity(target, state.modAssets?.mods?.[mod.path]?.polarity || mod.polarity);
-    toast(`槽位 ${target + 1} 已极化`);
+  ui["part-values-run"]?.addEventListener("click", () => { state.partValues = null; requestPartValues(); });
+  ui["part-values"]?.addEventListener("toggle", () => { if (ui["part-values"].open) requestPartValues(); });
+  ui["forma-optimize"]?.addEventListener("click", () => {
+    if (!state.manualSlots.some(Boolean)) return toast("还没有装配 MOD");
+    const before = JSON.stringify([state.manualSlots.map((mod) => mod?.path || (mod?.__riven ? "riven" : null)), state.formaSlots]);
+    const plan = applyMinimalForma();
+    renderManualSlots();
+    persistActiveBuildConfig();
+    if (JSON.stringify([state.manualSlots.map((mod) => mod?.path || (mod?.__riven ? "riven" : null)), state.formaSlots]) !== before) scheduleLiveManualSimulation();
+    if (!plan.fits) return toast("即使全部极化也超出容量，请降低等级或移除 MOD", "error");
+    toast(plan.formas ? `已按最少极化重排：极化 ${plan.formas} 次${plan.moves ? `，调换 ${plan.moves} 张 MOD 的位置` : ""}` : "当前 MOD 不需要极化");
   });
   // 战斗演算「重演」按钮：清空 liveTimer 立即重跑一次 simulate（敌人/等级/
   // 强化/触发口径改动后 KPM 立刻刷新，不等防抖）。
@@ -10040,17 +10410,6 @@ function bindEvents() {
     window.clearTimeout(state.liveTimer);
     state.liveTimer = null;
     submitWeaponBuild(null, true);
-  });
-  ui["forma-decrease"]?.addEventListener("click", () => {
-    const keys = Object.keys(state.formaSlots).map(Number).sort((a, b) => b - a);
-    if (!keys.length) return toast("没有可撤销的极化");
-    const last = keys[0];
-    delete state.formaSlots[last];
-    state.formaCount = keys.length - 1;
-    if (ui["forma-count"]) ui["forma-count"].textContent = String(state.formaCount);
-    persistActiveBuildConfig();
-    renderManualSlots();
-    scheduleLiveManualSimulation();
   });
   ui["mod-picker-close"]?.addEventListener("click", closeModPicker);
   ui["mod-picker-scrim"]?.addEventListener("click", closeModPicker);
@@ -10082,7 +10441,7 @@ function bindEvents() {
   ui["build-headshot-chance"].addEventListener("input", () => { refreshScenarioLabels(); scheduleLiveManualSimulation(); });
   ui["build-damage-model"]?.addEventListener("change", () => {
     updateCustomDamageControls();
-    if (ui["build-damage-model"].value === "custom" && !customDamageSupported()) showBuildMessage("当前后端未支持自定义防御快照");
+    if (ui["build-damage-model"].value === "custom" && !customDamageSupported()) showBuildMessage("当前版本不支持自定义防御");
     else showBuildMessage("");
   });
   ui["build-enemy-search"]?.addEventListener("input", fillBuildEnemies);
@@ -10130,7 +10489,6 @@ async function bootstrap() {
     const pickerUnavailable = (state.catalog.counts.buildPickerWeapons ?? state.catalog.counts.weapons) - (state.catalog.counts.buildPickerAvailable ?? state.catalog.counts.buildAvailable);
     ui["build-weapon-caption"].textContent = `${state.catalog.counts.buildPickerAvailable ?? state.catalog.counts.buildAvailable} 把可配装 · ${pickerUnavailable} 把已注明不可用`;
     ui["build-label"].textContent = state.catalog.buildLabel;
-    ui["footer-schema"].textContent = `SCHEMA ${state.catalog.schemaVersion}`;
     ui["health-label"].textContent = "本地引擎已连接";
     ui["health-dot"].classList.add("is-live");
     bindEvents();

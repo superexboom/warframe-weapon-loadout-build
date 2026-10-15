@@ -1595,47 +1595,201 @@ def _capacity(cards: Sequence[_Card]) -> int:
     )
 
 
+_UMBRA_POLARITIES = frozenset({"AP_UMBRA", "AP_ULTIMATE"})
+
+
+def _slot_polarity(value: Any) -> str | None:
+    token = str(value or "").strip().upper()
+    return None if token in {"", "AP_UNIVERSAL", "AP_NONE", "NONE", "NULL"} else token
+
+
+def _slot_drain(drain: int, polarity: str | None, slot: str | None) -> int:
+    """In-game slot cost: matching halves, mismatching adds 25%, rounded up.
+
+    Negative drains (stances) add capacity instead: matching doubles it,
+    mismatching halves it.
+    """
+    if not polarity or not slot:
+        return drain
+    matched = polarity == slot or "AP_ANY" in (polarity, slot)
+    factor = (0.5 if matched else 1.25) if drain >= 0 else (2.0 if matched else 0.5)
+    adjusted = math.ceil(abs(drain) * factor)
+    return -adjusted if drain < 0 else adjusted
+
+
+@dataclass(frozen=True)
+class FormaItem:
+    """One equipped card for :func:`forma_plan`, at its current slot."""
+
+    origin: int
+    polarity: str | None
+    drain: int
+    elemental: bool = False
+    fixed: bool = False
+
+
+def forma_plan(
+    slots: Sequence[str | None],
+    items: Sequence[FormaItem],
+    *,
+    limit: int,
+    extras: Sequence[Sequence[tuple[int, int, int]]] = (),
+    allow_move: bool = True,
+) -> dict[str, Any]:
+    """The fewest Forma that fit ``items`` into ``limit`` capacity.
+
+    ``slots`` are the slot polarities before this plan. A Forma turns one
+    slot into its card's polarity. ``extras`` are other Forma choices that do
+    not hold a card (stance / Exilus slot): per slot, the alternatives
+    ``(formas, umbra, drain_delta)``, the first one being "leave it".
+
+    Exact DP over slots. Objective, in order: Forma count, cards moved,
+    capacity used. Cards with base elements keep their relative order
+    (it decides which combined elements form); ``fixed`` cards and, with
+    ``allow_move`` off, every card stay in their slot.
+    """
+    n = len(slots)
+    items = [item for item in items if 0 <= item.origin < n]
+    elemental_fixed = not allow_move or any(item.elemental and item.fixed for item in items)
+    fixed_at = {item.origin: index for index, item in enumerate(items)
+                if item.fixed or not allow_move or (item.elemental and elemental_fixed)}
+    pinned = set(fixed_at.values())
+    movable = [index for index in sorted(range(len(items)), key=lambda i: items[i].origin) if index not in pinned]
+    chain = [index for index in movable if items[index].elemental]
+    free = [index for index in movable if not items[index].elemental]
+    bit = {index: 1 << position for position, index in enumerate(free)}
+    full = (1 << len(free)) - 1
+    open_after = [sum(1 for j in range(k + 1, n) if j not in fixed_at) for k in range(n)]
+    layer: dict[tuple[int, int, int, int], tuple[int, Any]] = {(0, 0, 0, 0): (0, None)}
+    history = []
+    for j in range(n):
+        nxt: dict[tuple[int, int, int, int], tuple[int, Any]] = {}
+
+        def push(key: tuple[int, int, int, int], drain: int, back: Any) -> None:
+            if key not in nxt or drain < nxt[key][0]:
+                nxt[key] = (drain, back)
+
+        for key, (drain, _back) in layer.items():
+            e, mask, formas, moves = key
+            if j in fixed_at:
+                options = [(fixed_at[j], e, mask)]
+            else:
+                options = [(None, e, mask)]
+                if e < len(chain):
+                    options.append((chain[e], e + 1, mask))
+                options.extend((index, e, mask | bit[index]) for index in free if not mask & bit[index])
+            for index, e2, mask2 in options:
+                if j not in fixed_at and (len(chain) - e2) + (len(free) - bin(mask2).count("1")) > open_after[j]:
+                    continue
+                if index is None:
+                    push((e2, mask2, formas, moves), drain, (key, None, False))
+                    continue
+                item = items[index]
+                moved = moves + (item.origin != j)
+                push((e2, mask2, formas, moved), drain + _slot_drain(item.drain, item.polarity, slots[j]),
+                     (key, index, False))
+                if item.polarity and _slot_drain(item.drain, item.polarity, slots[j]) != _slot_drain(
+                        item.drain, item.polarity, item.polarity):
+                    push((e2, mask2, formas + 1, moved),
+                         drain + _slot_drain(item.drain, item.polarity, item.polarity), (key, index, True))
+        history.append(nxt)
+        layer = nxt
+    finals = [(key, drain) for key, (drain, _back) in layer.items() if key[0] == len(chain) and key[1] == full]
+    combos = list(itertools.product(*[list(enumerate(options)) for options in extras])) or [()]
+    best = None
+    for key, drain in finals:
+        for combo in combos:
+            formas = key[2] + sum(option[0] for _index, option in combo)
+            used = drain + sum(option[2] for _index, option in combo)
+            fits = used <= limit
+            rank = (not fits, (used if not fits else 0), formas, key[3], used)
+            if best is None or rank < best[0]:
+                best = (rank, key, combo, used, fits)
+    if best is None:
+        return {"formas": 0, "umbra": 0, "moves": 0, "drain": 0, "fits": True,
+                "placement": [None] * n, "forma": [None] * n, "extras": [0] * len(extras)}
+    _rank, key, combo, used, fits = best
+    placement: list[int | None] = [None] * n
+    forma: list[str | None] = [None] * n
+    for j in range(n - 1, -1, -1):
+        _drain, (previous, index, formed) = history[j][key]
+        placement[j] = index
+        if formed:
+            forma[j] = items[index].polarity
+        key = previous
+    umbra = sum(1 for value in forma if value in _UMBRA_POLARITIES) + sum(option[1] for _i, option in combo)
+    return {
+        "formas": sum(1 for value in forma if value) + sum(option[0] for _i, option in combo),
+        "umbra": umbra,
+        "moves": sum(1 for j, index in enumerate(placement) if index is not None and items[index].origin != j),
+        "drain": used,
+        "fits": fits,
+        "placement": placement,
+        "forma": forma,
+        "extras": [index for index, _option in combo],
+    }
+
+
 def _forma_summary(
     weapon: Mapping[str, Any],
     cards: Sequence[_Card],
     riven: _Card | None = None,
     stance: Mapping[str, Any] | None = None,
+    *,
+    riven_index: int | None = None,
+    exilus: Mapping[str, Any] | None = None,
 ) -> dict[str, int]:
-    """无限极化口径下该配装需要投入的极化次数。
+    """该配装放进容量所需的最少极化次数（不是逐张都极化）。
 
-    逐槽消耗武器原生极性：MOD 极性没有原生槽可占即需一次极化；紫卡按
-    Madurai 计；Umbra 系极性单独统计（需要 Umbra Forma）；架势槽原生极性
-    与所选架势不匹配时计一次（架势不占普通槽，但槽位本身可以极化）。
+    搜索按「每张都已极化匹配」的容量口径进行；实际只需让总消耗不超过
+    容量，所以用 :func:`forma_plan` 求最少极化：非元素 MOD 可以换槽去
+    占原生极性槽，元素 MOD 保持相对顺序。架势槽不匹配时可以极化来提高
+    容量，功能槽不匹配时可以极化来降低消耗；都只在需要时计入。
     """
-    native: dict[str, int] = {}
-    for value in list(weapon.get("polarities") or ())[:8]:
-        key = str(value)
-        native[key] = native.get(key, 0) + 1
-    regular = 0
-    umbra = 0
+    slots = [_slot_polarity(value) for value in list(weapon.get("polarities") or ())[:8]]
+    slots += [None] * (8 - len(slots))
     ordered = list(cards)
     if riven is not None:
-        ordered.append(riven)
-    for card in ordered:
-        polarity = str(card.polarity or "")
-        if not polarity or polarity == "AP_UNIVERSAL":
-            continue
-        if native.get(polarity, 0) > 0:
-            native[polarity] -= 1
-        elif polarity in {"AP_UMBRA", "AP_ULTIMATE"}:
-            umbra += 1
+        index = riven_index if isinstance(riven_index, int) and 0 <= riven_index <= len(ordered) else len(ordered)
+        ordered.insert(index, riven)
+    items = [FormaItem(origin=index, polarity=_slot_polarity(card.polarity), drain=int(card.drain),
+                       elemental=bool(_card_elements(card)))
+             for index, card in enumerate(ordered[:8])]
+    extras: list[list[tuple[int, int, int]]] = []
+    kinds: list[str] = []
+    gain = 0
+    if stance and stance.get("path") and not stance.get("builtIn"):
+        gain = int(stance.get("nativeCapacityGain", stance.get("capacityGain")) or 0)
+        matched = int(stance.get("matchedCapacityGain", stance.get("capacityGain")) or 0)
+        if stance.get("polarityRelation") != "matched" and matched > gain:
+            extras.append([(0, 0, 0), (1, 0, gain - matched)])
+            kinds.append("stance")
+    if exilus and exilus.get("polarity") and isinstance(exilus.get("rawDrain"), int):
+        raw = int(exilus["rawDrain"])
+        polarity = _slot_polarity(exilus.get("polarity"))
+        current = _slot_drain(raw, polarity, _slot_polarity(exilus.get("slotPolarity")))
+        matched = _slot_drain(raw, polarity, polarity)
+        if matched < current:
+            extras.append([(0, 0, current), (1, 1 if polarity in _UMBRA_POLARITIES else 0, matched)])
+            kinds.append("exilus")
         else:
-            regular += 1
-    stance_count = int(
-        bool(
-            stance
-            and stance.get("path")
-            and not stance.get("builtIn")
-            and stance.get("polarityRelation") != "matched"
-        )
-    )
-    total = regular + umbra + stance_count
-    return {"regular": regular, "umbra": umbra, "stance": stance_count, "total": total}
+            extras.append([(0, 0, current)])
+            kinds.append("exilus")
+    plan = forma_plan(slots, items, limit=60 + gain, extras=extras)
+    special = {kind: index for kind, index in zip(kinds, plan["extras"])}
+    regular_slots = sum(1 for value in plan["forma"] if value and value not in _UMBRA_POLARITIES)
+    umbra_slots = sum(1 for value in plan["forma"] if value in _UMBRA_POLARITIES)
+    stance_count = int(special.get("stance", 0) == 1)
+    exilus_count = int(special.get("exilus", 0) == 1)
+    return {
+        "regular": regular_slots,
+        "umbra": umbra_slots,
+        "stance": stance_count,
+        "exilus": exilus_count,
+        "total": regular_slots + umbra_slots + stance_count + exilus_count,
+        "fits": plan["fits"],
+        "slots": {str(index): value for index, value in enumerate(plan["forma"]) if value},
+    }
 
 
 def _mod_family(card: _Card) -> str:
@@ -1899,6 +2053,70 @@ def optimize_for_element(
     raise failure
 
 
+def proxy_seed_best(
+    weapon: Mapping[str, Any],
+    candidates: Sequence[_Card],
+    riven: _Card | None,
+    incumbent: _Evaluation,
+    *,
+    scenario: Scenario,
+    metric: str,
+    passives: _Card | None = None,
+    slot_count: int = 8,
+    capacity_limit: int = 60,
+    required_damage_type: str | None = None,
+    target_context: Mapping[str, Any] | None = None,
+    profile: str = "standard",
+    required_mod_keys: Sequence[str] | None = None,
+    forbidden_mod_keys: Sequence[str] | None = None,
+    min_fill: int | None = None,
+    max_fill: int | None = None,
+    **_ignored: Any,
+) -> _Evaluation:
+    """``incumbent`` or a better build from the open / viral / corrosive seeds.
+
+    The riven analysis' element seeds (``_optimize_archetype``) for the build
+    page: each seed is searched on the cheap panel proxy
+    (``statusSustainedDps``, beam 4 / shortlist 24) and re-scored with the
+    real metric. The proxy values conditional stacks (Galvanized MODs) at their
+    cap, so it reaches builds whose payoff a beam on the event metric prunes
+    while the build is still weak -- the case element niches do not cover.
+    Measured 2026-10-14 against a level-30 target: niches alone left 35% on
+    Kuva Nukor, the seeds closed it (~0.25 s).
+    """
+    if metric not in {"killsPerMinute", "windowedDps", "windowedTotalDamage"} or not target_context:
+        return incumbent
+    seeds: tuple[tuple[str | None, tuple[str, ...]], ...] = ((None, ()), *ELEMENT_SEEDS.items())
+    if required_damage_type:
+        seeds = ((required_damage_type, ELEMENT_SEEDS.get(required_damage_type, ())),)
+    forbidden = set(forbidden_mod_keys or ())
+    best = incumbent
+    for element, parts in seeds:
+        seeded = list(required_mod_keys or ())
+        for part in parts:
+            options = [(sum(float(e.value) for e in c.effects if e.damage_type == part), c.key)
+                       for c in candidates if any(e.damage_type == part for e in c.effects)
+                       and c.key not in forbidden and c.key not in seeded]
+            if options:
+                seeded.append(max(options)[1])
+        try:
+            found = _optimize(weapon, candidates, riven, scenario=scenario, metric="statusSustainedDps",
+                              passives=passives, beam_width=4, shortlist=24, slot_count=slot_count,
+                              capacity_limit=capacity_limit, required_damage_type=element or required_damage_type,
+                              target_context=target_context, profile=profile, required_mod_keys=seeded,
+                              forbidden_mod_keys=forbidden_mod_keys, min_fill=min_fill, max_fill=max_fill)
+        except SimulationError:
+            continue
+        scored = _evaluate(weapon, found.cards, riven, scenario=scenario, metric=metric, passives=passives,
+                           slot_limit=slot_count, capacity_limit=capacity_limit, target_context=target_context)
+        if scored is None or scored.score <= best.score + 1e-9:
+            continue
+        if required_damage_type and scored.stats.damage_types.get(required_damage_type, 0.0) <= 0:
+            continue
+        best = scored
+    return best
+
+
 def _with_health_scale(context: Mapping[str, Any], scale: float) -> dict[str, Any]:
     enhancements = dict(context.get("enemy_enhancements") or {})
     enhancements["healthScale"] = float(scale)
@@ -2156,6 +2374,7 @@ def _optimize(
     min_fill: int | None = None,
     max_fill: int | None = None,
     seed_cards: Sequence[_Card] | None = None,
+    element_niches: int = 0,
 ) -> _Evaluation:
     # 解算档位（用户可调，平衡深度与等待时间）：
     #   fast     — beam 12/32，不做爬山。适合快速预览；可能漏掉冷门协同组合。
@@ -2321,6 +2540,42 @@ def _optimize(
         pool.append(card)
         if len(pool) >= shortlist:
             break
+    if element_niches:
+        # Element niches (below) keep partial builds alive by the base
+        # elements they hold; a niche needs its element cards in the pool,
+        # however a lone element card ranks: the best ``element_niches`` of
+        # each base element join the shortlist.
+        for element in BASE_ELEMENTS:
+            have = sum(1 for card in pool if element in _card_elements(card))
+            for _, card in ranked:
+                if have >= element_niches:
+                    break
+                family = _mod_family(card)
+                if family in families or element not in _card_elements(card):
+                    continue
+                families.add(family)
+                pool.append(card)
+                have += 1
+
+    def niche(selection: Sequence[int]) -> frozenset[str]:
+        return frozenset(element for index in selection for element in _card_elements(pool[index]))
+
+    def survivors_of(scored_rows: list, width: int) -> list:
+        """The best ``width`` rows, plus the best ``element_niches`` rows of
+        every base-element set not already that well represented."""
+        chosen = scored_rows[:width]
+        if not element_niches:
+            return chosen
+        counts: dict[frozenset[str], int] = {}
+        for row in chosen:
+            key = niche(row[0])
+            counts[key] = counts.get(key, 0) + 1
+        for row in scored_rows[width:]:
+            key = niche(row[0])
+            if counts.get(key, 0) < element_niches:
+                chosen.append(row)
+                counts[key] = counts.get(key, 0) + 1
+        return chosen
 
     beam: list[tuple[tuple[int, ...], _Evaluation]] = [((), empty)]
     best = empty if eligible(empty) else None
@@ -2513,7 +2768,7 @@ def _optimize(
             survivors = scored[: beam_width + 1]
             if not survivors:
                 break
-            beam = [(sel, score) for sel, score in survivors[:beam_width]]
+            beam = [(sel, score) for sel, score in survivors_of(scored, beam_width)]
             top_sel, top_score = survivors[0]
             if best is None or top_score > best.score:
                 evaluated = _evaluate(
@@ -2531,7 +2786,7 @@ def _optimize(
                     best = evaluated
             continue
         # Beam 幸存者 + 全局最优候选在父进程重评估附 stats。
-        for sel, _score in scored[: beam_width + 1]:
+        for sel, _score in survivors_of(scored, beam_width + 1):
             evaluated = _evaluate(
                 weapon,
                 (*required_cards, *(pool[item] for item in sel)),
@@ -2553,7 +2808,7 @@ def _optimize(
                 tuple(pool[index].key for index in item[0]),
             )
         )
-        beam = expanded[:beam_width]
+        beam = survivors_of(expanded, beam_width)
         for _, evaluated in expanded:
             if eligible(evaluated) and (best is None or evaluated.score > best.score):
                 best = evaluated
@@ -5614,7 +5869,8 @@ def analyze_riven_request(
         (baseline_payload, baseline, None),
         (actual_payload, actual, actual_card),
     ):
-        payload["forma"] = _forma_summary(weapon, evaluation.cards, riven_card, stance_info)
+        payload["forma"] = _forma_summary(weapon, evaluation.cards, riven_card, stance_info,
+                                           riven_index=evaluation.riven_index)
         # 解算目标的原始分数（KPM 口径下即标准靶每分钟击杀数）：前端头条
         # 直接读取，不再从提升百分比反推。
         payload["objectiveScore"] = _score(evaluation.stats, objective_metric,

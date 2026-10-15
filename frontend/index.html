@@ -374,6 +374,10 @@
                       <input id="build-optimize-arcanes" type="checkbox" checked>
                       <span>已配置赋能参与求解（沿用当前触发策略）</span>
                     </label>
+                    <label class="check-field" title="自动配装时筛选全部可装的武器赋能，对最好的两个各做一次配装搜索，选出的赋能会填回赋能槽。战甲赋能保持手动。">
+                      <input id="build-auto-arcane" type="checkbox">
+                      <span>自动选择武器赋能（较慢：标准档约多 3–20 秒）</span>
+                    </label>
                     <div class="scope-mod-lists">
                       <div class="scope-mod-list" id="build-required-list" aria-label="必选 MOD"></div>
                       <div class="scope-mod-list" id="build-forbidden-list" aria-label="禁选 MOD"></div>
@@ -387,6 +391,11 @@
                 <details class="fold" open>
                   <summary class="fold-head"><strong>灵化路线</strong><span>进化 I / II / III / IV / V</span></summary>
                   <div class="fold-body">
+                    <label class="incarnon-cycle-toggle" for="build-auto-incarnon" title="自动配装时比较全部进化路线：先在当前配装上筛选，再对有希望的路线做配装搜索；当前选择的路线始终参与比较，结果不会低于不开启时。选出的路线会填回下方。">
+                      <input type="checkbox" id="build-auto-incarnon">
+                      <span>自动选择进化路线</span>
+                      <small>较慢：标准档每次求解约多 7–20 秒</small>
+                    </label>
                     <div class="incarnon-tiers" id="build-incarnon-tiers"></div>
                     <!-- 灵化循环口径开关：常驻灵化（充能池近似零装填，默认）
                          vs 真实循环（池耗尽回基础形态充能，装填按基础形态折算）。 -->
@@ -462,13 +471,13 @@
                         </button>
                         <input id="build-enemy-select" type="hidden">
                       </div>
-                      <label class="field"><span>伤害模型</span><select id="build-damage-model"><option value="panel">面板</option><option value="target">指定目标</option><option value="custom">自定义防御快照</option></select></label>
+                      <label class="field"><span>伤害模型</span><select id="build-damage-model"><option value="panel">面板</option><option value="target">指定目标</option><option value="custom">自定义防御</option></select></label>
                       <label class="field"><span>目标等级</span><input id="build-enemy-level" type="number" min="0" max="9999" step="1" value="160"></label>
                       <label class="check-field"><input id="build-steel-path" type="checkbox"><span>钢铁之路</span></label>
                     </div>
                   </div>
                   <div class="scenario-group">
-                    <div class="scenario-group-title">敌人强化<small>卓越者 / 科研词条 · 数值取自 wiki 与难度表快照</small></div>
+                    <div class="scenario-group-title">敌人强化<small>卓越者 / 科研词条</small></div>
                     <div class="scenario-fields">
                       <label class="check-field"><input id="build-enemy-eximus" type="checkbox"><span>卓越者变体</span></label>
                       <label class="check-field"><input id="build-enemy-empowered" type="checkbox"><span>敌人强化</span></label>
@@ -555,10 +564,10 @@
                     <label class="field"><span>自定义生命值</span><input id="build-custom-health" type="number" min="1" step="1" value="100000"></label>
                     <label class="field"><span>自定义护甲</span><input id="build-custom-armor" type="number" min="0" step="1" value="0"></label>
                     <label class="field"><span>自定义护盾</span><input id="build-custom-shield" type="number" min="0" step="1" value="0"></label>
-                    <label class="field"><span>生命类型</span><input id="build-custom-health-type" value="RK_CLONED_FLESH"></label>
-                    <label class="field"><span>护甲类型</span><select id="build-custom-armor-type" required aria-required="true"><option value="RK_NONE">RK_NONE</option><option value="RK_ARMOR" selected>RK_ARMOR</option><option value="RK_HULKING_ARMOR">RK_HULKING_ARMOR</option><option value="RK_INFESTED_ARMOUR">RK_INFESTED_ARMOUR</option></select></label>
-                    <label class="field"><span>护盾类型</span><select id="build-custom-shield-type" required aria-required="true"><option value="RK_NONE">RK_NONE</option><option value="RK_SHIELD">RK_SHIELD</option><option value="RK_HEAVY_SHIELD" selected>RK_HEAVY_SHIELD</option><option value="RK_PROTO_SHIELD">RK_PROTO_SHIELD</option><option value="RK_SENTIENT_SHIELD">RK_SENTIENT_SHIELD</option><option value="RK_TENNO_SHIELD">RK_TENNO_SHIELD</option></select></label>
-                    <p class="field-note" id="custom-defense-note">后端未声明支持时该模型不可提交。</p>
+                    <label class="field"><span>生命类型</span><select id="build-custom-health-type"><option value="RK_CLONED_FLESH" selected>克隆血肉</option><option value="RK_FLESH">血肉</option><option value="RK_ROBOTIC">机器人</option><option value="RK_MACHINERY">机械</option><option value="RK_INFESTED_FLESH">感染血肉</option><option value="RK_INFESTED">感染</option><option value="RK_FOSSILIZED">化石</option><option value="RK_FRACTURE">断裂（低语者）</option></select></label>
+                    <label class="field"><span>护甲类型</span><select id="build-custom-armor-type" required aria-required="true"><option value="RK_NONE">无护甲</option><option value="RK_ARMOR" selected>铁质装甲</option><option value="RK_HULKING_ARMOR">合金装甲</option><option value="RK_INFESTED_ARMOUR">感染肌腱</option></select></label>
+                    <label class="field"><span>护盾类型</span><select id="build-custom-shield-type" required aria-required="true"><option value="RK_NONE">无护盾</option><option value="RK_SHIELD">护盾</option><option value="RK_HEAVY_SHIELD" selected>重型护盾</option><option value="RK_PROTO_SHIELD">原型护盾</option><option value="RK_SENTIENT_SHIELD">Sentient 护盾</option><option value="RK_TENNO_SHIELD">Tenno 护盾</option></select></label>
+                    <p class="field-note" id="custom-defense-note"></p>
                   </div>
                 </div>
               </details>
@@ -575,7 +584,7 @@
             <div class="build-result-state" id="weapon-build-idle">
               <div class="build-idle-sigil" aria-hidden="true">◇</div>
               <h3>选择武器后开始配装</h3>
-              <p>离线优化器会从冻结数据中搜索真实 MOD 组合；任何参数修改都会实时刷新上方仪表盘。</p>
+              <p>按当前条件搜索最优 MOD 组合；修改任何参数都会实时刷新上方仪表盘。</p>
             </div>
             <div class="build-result-state" id="weapon-build-loading" hidden>
               <div class="scan-core" aria-hidden="true"><i></i><b></b></div>
@@ -585,7 +594,6 @@
               <div class="error-symbol" aria-hidden="true">!</div><h3>本次配装未完成</h3><p id="weapon-build-error-message"></p>
             </div>
 
-            <p id="build-config-migration-note" class="build-config-migration-note" role="status" hidden></p>
             <div class="weapon-build-content" id="weapon-build-content" hidden>
               <section class="build-config-strip" aria-label="A / B / C 配置槽">
                 <div class="config-strip-row">
@@ -626,13 +634,12 @@
                       <button class="is-active" type="button" data-build-mode="manual" aria-pressed="true">手动配卡</button>
                       <button type="button" data-build-mode="auto" aria-pressed="false">自动配置</button>
                     </div>
-                    <button class="button button-fill" id="fill-optimal-button" type="button" title="用离线优化器搜索当前条件下的最优 MOD 组合并回填">⚡ 填充最优</button>
-                    <label class="forma-counter" id="forma-counter" title="已使用的极化次数（Forma）">
+                    <button class="button button-fill" id="fill-optimal-button" type="button" title="搜索当前条件下的最优 MOD 组合并回填">⚡ 填充最优</button>
+                    <span class="forma-counter" id="forma-counter" title="当前配装不需要极化">
                       <span>极化</span>
-                      <button type="button" id="forma-decrease" aria-label="减少极化次数">−</button>
                       <b id="forma-count">0</b>
-                      <button type="button" id="forma-increase" aria-label="增加极化次数">＋</button>
-                    </label>
+                      <button type="button" id="forma-optimize" title="按当前 MOD 重新计算最少极化：清除普通槽的现有极化，必要时调换非元素 MOD 的位置（元素顺序不变，锁定槽不动）">最少极化</button>
+                    </span>
                     <span class="forma-needed" id="forma-needed" hidden></span>
                   </div>
                   <div class="capacity-bar-block">
@@ -652,7 +659,7 @@
                   <div class="special-mod-slots" id="special-mod-slots"></div>
                   <div class="arcane-workbench-slots" id="build-arcane-list" aria-live="polite"></div>
                 </section>
-                <div class="build-legend"><span><i class="legend-riven"></i>当前紫卡</span><span><i class="legend-mod"></i>本地真实 MOD 素材</span><b id="weapon-build-slot-summary">8 SLOTS</b><b id="weapon-build-build-label">OFFLINE</b></div>
+                <div class="build-legend"><span><i class="legend-riven"></i>当前紫卡</span><span><i class="legend-mod"></i>MOD</span><b id="weapon-build-slot-summary">8 SLOTS</b></div>
               </section>
 
               <section class="build-detail">
@@ -687,6 +694,13 @@
                     </div>
                     <div class="combat-charts" id="combat-charts"></div>
                   </div>
+                  <details class="fold part-values" id="part-values">
+                    <summary class="fold-head"><strong>部件贡献</strong><span>每张 MOD / 紫卡平均值多少，以及两两之间的配合</span></summary>
+                    <div class="fold-body">
+                      <div class="part-values-actions"><button class="button button-quiet" id="part-values-run" type="button">计算</button><small id="part-values-status">按当前目标的每分钟击杀数，枚举已装备 MOD 与紫卡的全部组合（最多 256 种）</small></div>
+                      <div id="part-values-content"></div>
+                    </div>
+                  </details>
                 </section>
               </section>
 
@@ -710,7 +724,7 @@
                 <input id="warframe-frame-select" type="hidden" value="">
                 <button class="warframe-selector-trigger" id="warframe-frame-open" type="button" aria-label="选择战甲">
                   <span class="warframe-selector-visual" id="warframe-frame-select-visual"><i>W</i></span>
-                  <span class="warframe-selector-copy"><small>WARFRAME</small><strong id="warframe-frame-select-name">选择战甲</strong><em id="warframe-frame-select-description">进入选择器查看冻结档案</em></span>
+                  <span class="warframe-selector-copy"><small>WARFRAME</small><strong id="warframe-frame-select-name">选择战甲</strong><em id="warframe-frame-select-description">点击选择战甲</em></span>
                   <b aria-hidden="true">›</b>
                 </button>
                 <small id="warframe-frame-caption">固定满级 30</small>
@@ -747,7 +761,7 @@
               <div class="warframe-capacity"><span>容量</span><strong id="warframe-capacity-readout">-- / 60</strong><i id="warframe-capacity-bar"></i></div>
               <div><span>极化</span><strong id="warframe-forma-readout">--</strong></div>
             </header>
-            <div class="warframe-result-state" id="warframe-loading"><div class="scan-core" aria-hidden="true"><i></i><b></b></div><p>进入此页后读取冻结战甲目录</p></div>
+            <div class="warframe-result-state" id="warframe-loading"><div class="scan-core" aria-hidden="true"><i></i><b></b></div><p>正在载入战甲目录</p></div>
             <div class="warframe-build-content" id="warframe-build-content" hidden>
               <section class="warframe-mod-bench">
                 <section class="build-config-strip warframe-build-config-strip" aria-label="战甲 A / B / C 配置槽">
@@ -927,7 +941,7 @@
           </div>
         </div>
 
-        <footer class="app-footer"><span>WARFRAME RIVEN WORKSHOP</span><span id="footer-schema">SCHEMA --</span><span>LOCALHOST · NO CLOUD</span></footer>
+        <footer class="app-footer"><span>WARFRAME RIVEN WORKSHOP</span><span>LOCALHOST · NO CLOUD</span></footer>
       </main>
     </section>
   </div>

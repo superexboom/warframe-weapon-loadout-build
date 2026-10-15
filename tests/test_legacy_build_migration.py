@@ -10,7 +10,7 @@ OLD='/Lotus/Upgrades/Mods/Rifle/Expert/WeaponToxinDamageModExpert'
 BASE='/Lotus/Upgrades/Mods/Rifle/WeaponToxinDamageMod'
 
 
-def test_restore_migrates_only_known_cards_with_auditable_rank_changes(tmp_path):
+def test_restore_migrates_only_known_cards_silently(tmp_path):
     source=app.ROOT/'frontend/build-config-migrations.js'
     fixture=tmp_path/'catalog.json'
     fixture.write_text(json.dumps(app.CATALOG['legacyModReplacements']),encoding='utf-8')
@@ -26,12 +26,12 @@ const pristine=JSON.stringify(original);
 const r=ctx.migrateLegacyBuildConfig(original,rules);
 assert.equal(JSON.stringify(original),pristine);
 assert.equal(r.config.mods[0].path,base);assert.equal(r.config.mods[0].rank,5);assert.equal(r.config.mods[0].slot,2);
-assert.equal(JSON.stringify(r.config.legacyModMigrations[0].from),JSON.stringify(original.mods[0]));
+assert.equal(JSON.stringify(r.changes[0].from),JSON.stringify(original.mods[0]));
+assert.equal(Object.hasOwn(r.config,'legacyModMigrations'),false);
+const stale=ctx.migrateLegacyBuildConfig({...JSON.parse(JSON.stringify(r.config)),legacyModMigrations:[{field:'mods'}]},rules);
+assert.equal(stale.changes.length,0);assert.equal(Object.hasOwn(stale.config,'legacyModMigrations'),false);
 for(const k of ['riven','formaSlots','incarnonChoices','arcanes']) assert.equal(JSON.stringify(r.config[k]),JSON.stringify(original[k]));
 assert.equal(ctx.migrateLegacyBuildConfig(JSON.parse(JSON.stringify(r.config)),rules).changes.length,0);
-assert.match(ctx.legacyModMigrationMessage(r.config.legacyModMigrations),/10 → 5/);
-assert.match(ctx.legacyModMigrationMessage(r.config.legacyModMigrations),/legacyModMigrations/);
-assert.equal(ctx.legacyModMigrationMessage([null,4,{},'bad']), '');
 for (const rank of [0,2,5]) assert.equal(ctx.migrateLegacyBuildConfig({mods:[{path:old,rank}]},rules).config.mods[0].rank,rank);
 for (const rank of [-1,1.5,'10',true]) assert.equal(ctx.migrateLegacyBuildConfig({mods:[{path:old,rank}]},rules).changes.length,0);
 const unknown={mods:[{path:'/unknown/Expert',rank:10},{path:base,rank:10}]};assert.equal(ctx.migrateLegacyBuildConfig(unknown,rules).config,unknown);

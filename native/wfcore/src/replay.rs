@@ -532,6 +532,12 @@ pub struct Replay<'py> {
     gen: i64,
     kills: i64,
     weak_kill_events: f64,
+    /// Weak-point-kill draw of `combat_replay.replay`: (probe, offset,
+    /// golden). A probe records how uncertain the kills were; a branch decides
+    /// each uncertain kill from the rotated Kronecker sequence.
+    weak_draw: Option<(bool, f64, f64)>,
+    weak_index: f64,
+    weak_uncertainty: f64,
     attacks: i64,
     stale: i64,
     first_kill: Option<f64>,
@@ -2028,7 +2034,18 @@ impl<'py> Replay<'py> {
                 self.signal("on-close-kill", t, 1.0);
             }
         }
-        let weak_probability = pmin(1.0, pmax(0.0, weak_kill));
+        let mut weak_probability = pmin(1.0, pmax(0.0, weak_kill));
+        if let Some((probe, offset, golden)) = self.weak_draw {
+            if weapon_kill && 1e-9 < weak_probability && weak_probability < 1.0 - 1e-9 {
+                if probe {
+                    self.weak_uncertainty = pmax(self.weak_uncertainty, pmin(weak_probability, 1.0 - weak_probability));
+                } else {
+                    let u = (offset + self.weak_index * golden) % 1.0;
+                    self.weak_index += 1.0;
+                    weak_probability = if u < weak_probability { 1.0 } else { 0.0 };
+                }
+            }
+        }
         if weak_probability != 0.0 {
             self.weak_kill_events += weak_probability;
             self.signal("on-headshot-kill", t, weak_probability);
@@ -3964,6 +3981,12 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
         gen: 0,
         kills: 0,
         weak_kill_events: 0.0,
+        weak_draw: match opt_dict("weakDraw")? {
+            Some(d) => Some((truthy(&d, "probe")?, get_f(&d, "offset", 0.0)?, get_f(&d, "golden", 0.0)?)),
+            None => None,
+        },
+        weak_index: 0.0,
+        weak_uncertainty: 0.0,
         attacks: 0,
         stale: 0,
         first_kill: None,
@@ -4128,6 +4151,8 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
     }
     out.set_item("gen", replay.gen)?;
     out.set_item("weakKillEvents", replay.weak_kill_events)?;
+    out.set_item("weakUncertainty", replay.weak_uncertainty)?;
+    out.set_item("weakIndex", replay.weak_index)?;
     out.set_item("attacks", replay.attacks)?;
     out.set_item("stale", replay.stale)?;
     out.set_item("firstKill", opt(replay.first_kill))?;
