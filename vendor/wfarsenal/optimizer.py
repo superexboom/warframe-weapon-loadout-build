@@ -3325,26 +3325,40 @@ def _mark_required_cards(
     )
 
 
+# Riven stat values (wiki, Riven Mods, Attribute Value Formula): base value x
+# a uniform roll of 90-110% x Riven disposition x the card's weight. A max roll
+# is nominal x 1.1, shown in game as a +10% grade.
+RIVEN_ROLL_LOW = 0.9
+RIVEN_ROLL_HIGH = 1.1
+_RIVEN_BONUS_WEIGHTS = {(2, False): 0.99, (2, True): 1.2375, (3, False): 0.75, (3, True): 0.9375}
+_RIVEN_MALUS_WEIGHTS = {2: 0.495, 3: 0.75}
+
+
 def theoretical_structure_scale(
     positive_count: int, has_negative: bool, *, negative: bool = False
 ) -> float:
-    """紫卡词条结构的理论数值系数（官方 wiki 口径，与 app 层校验一致）。
+    """紫卡词条结构的数值权重（wiki 口径，app 校验、前端与 Bot 同一套）。
 
-    正面词条：2 正 = 1.0；3 正 = 0.757525；带 1 负面再 ×1.25。
-    负面词条：3 正结构 = 0.757525；2 正结构 = 0.5（负面系数是独立档位，
-    不等于正面系数 ×1.25——wiki 公式里负面按自己的档位取值）。
+    正面词条：2 正 = 0.99；2 正 1 负 = 1.2375；3 正 = 0.75；3 正 1 负 = 0.9375。
+    负面词条：2 正 1 负 = 0.495；3 正 1 负 = 0.75。
     """
+    positives = 3 if positive_count == 3 else 2
     if negative:
-        return 0.757525 if positive_count == 3 else 0.5
-    scale = 0.757525 if positive_count == 3 else 1.0
-    if has_negative:
-        scale *= 1.25
-    return scale
+        return _RIVEN_MALUS_WEIGHTS[positives]
+    return _RIVEN_BONUS_WEIGHTS[(positives, bool(has_negative))]
+
+
+def riven_stat_window(
+    base: float, disposition: float, positive_count: int, negative_count: int, *, negative: bool = False
+) -> tuple[float, float, float]:
+    """(nominal, lowest roll, highest roll) of one Riven stat on this card shape."""
+    nominal = abs(base * disposition * theoretical_structure_scale(positive_count, bool(negative_count), negative=negative))
+    return nominal, nominal * RIVEN_ROLL_LOW, nominal * RIVEN_ROLL_HIGH
 
 
 def _structure_full_roll_factor() -> float:
-    """理论满值相对 nominal 的上浮系数（wiki：nominal × 1.089 为满值）。"""
-    return 1.089
+    """理论满值相对 nominal 的上浮系数（wiki：roll 上限 110%）。"""
+    return RIVEN_ROLL_HIGH
 
 
 def _fusion_codes_from_templates(
@@ -3374,7 +3388,7 @@ def _candidate_lines(
     calibrated = bool(ratios)
     if structure_scale is not None:
         # 显式结构系数（理论口径）：3+1 求解/上限计算用，不依赖实际紫卡
-        # 的 roll 指纹校准。×1.089 满值上浮（wiki：nominal × 1.089）。
+        # 的 roll 指纹校准。×1.1 满值上浮（wiki：roll 上限 110%）。
         roll_scale = float(structure_scale) * _structure_full_roll_factor()
     elif ratios:
         roll_scale = median(ratios)
@@ -3636,6 +3650,12 @@ def _recommend_positive(
     shortlist = [line for _, line in ranked[: max(8, count)]]
     if len(shortlist) < count:
         raise SimulationError("not enough supported Riven stats for this weapon")
+    # One fusion stat per card: a top eight of seven fusion stats holds no legal
+    # three-stat card, so top it up with the best ordinary stats below it.
+    ordinary = sum(line.code not in _FUSION_LINE_CODES for line in shortlist)
+    if ordinary < count - 1:
+        shortlist += [line for _, line in ranked[len(shortlist):]
+                      if line.code not in _FUSION_LINE_CODES][: count - 1 - ordinary]
     best_lines: tuple[_RivenLine, ...] | None = None
     best_result: _Evaluation | None = None
     if profile == "fast":

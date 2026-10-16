@@ -443,6 +443,8 @@ impl ModsPrep {
 }
 
 const CACHE_MAX: usize = 16384;
+/// damage.py RELOAD_NEVER_SECONDS: a reload that never finishes.
+const RELOAD_NEVER_SECONDS: f64 = 1e9;
 
 impl ModsPrep {
     /// The cached classification and row of one effect object.
@@ -744,12 +746,15 @@ pub fn apply_mods<'py>(
         None => prep.reload_base,
     };
     let speed_ops = ap.ops(b!("WEAPON_RELOAD_SPEED"));
+    // A reload-speed total of -100% or below never finishes a reload
+    // (damage.py RELOAD_NEVER_SECONDS): a negative time sent the replay clock
+    // backwards and never left the window.
     let divide = |base: Num| -> Num {
         if !base.truthy() || speed_ops.is_empty() {
             return base;
         }
         let scale = combine(1.0, &[&speed_ops]);
-        if scale != 0.0 { Num::F(base.f() / scale) } else { base }
+        if scale > 0.0 { Num::F(base.f() / scale) } else { Num::F(RELOAD_NEVER_SECONDS) }
     };
     let mut reload_time = divide(combine_num(reload_base, &[&ap.ops(b!("WEAPON_RELOAD_TIME"))]));
     if let Some((delay, regen)) = prep.battery {

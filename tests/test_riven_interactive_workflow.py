@@ -21,7 +21,7 @@ def captured_analysis(monkeypatch):
     weapon = next(w for w in app.EXPORTS['weapons'] if w.get('nameEn') == 'Burston Prime')
     request = dict(weapon=weapon['path'], disposition=1.35, profile='standard', stats=[
         dict(code=c,value=v,negative=n) for c,v,n in
-        [('W',313.2,False),('6',125.2,False),('1',163.8,False),('3',91.,True)]])
+        [('W',313.2,False),('6',125.2,False),('1',163.8,False),('3',91.2,True)]])
     return calls, request
 
 

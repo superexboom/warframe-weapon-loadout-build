@@ -3224,14 +3224,10 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
         if base is None or value is None:
             raise SimulationError(f"Riven stat {code or '?'} has no valid portable range")
         negative = raw.get("negative") is True
-        if negative:
-            multiplier = 0.757525 if positive_count == 3 else 0.5
-        else:
-            multiplier = 0.757525 if positive_count == 3 else 1.0
-            if negative_count:
-                multiplier *= 1.25
-        nominal = abs(base * disposition * multiplier)
-        low, high = nominal * 0.89, nominal * 1.089
+        _nominal, low, high = optimizer.riven_stat_window(
+            base, disposition, positive_count, negative_count, negative=negative
+        )
+        # The game shows one decimal: a displayed max roll may read 0.05 above.
         if value < low - 0.11 or value > high + 0.11:
             raise SimulationError(
                 f"Riven stat {code} value {value:g} is outside {low:.1f}-{high:.1f}"

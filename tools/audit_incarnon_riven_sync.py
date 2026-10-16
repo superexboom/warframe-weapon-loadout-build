@@ -23,9 +23,9 @@ def legal_riven(result, stats):
         return False
     bases = app.RIVEN_BASE_VALUES[result['weaponType']]
     for row in stats:
-        nominal = bases[row['code']] * result['disposition'] * app.optimizer.theoretical_structure_scale(
-            positives, bool(negatives), negative=row['negative'])
-        if not nominal * .89 - .11 <= row['value'] <= nominal * 1.089 + .11:
+        _nominal, low, high = app.optimizer.riven_stat_window(
+            bases[row['code']], result['disposition'], positives, negatives, negative=row['negative'])
+        if not low - .11 <= row['value'] <= high + .11:
             return False
     return sum(row['code'] in app.optimizer._FUSION_LINE_CODES for row in stats) <= 1
 

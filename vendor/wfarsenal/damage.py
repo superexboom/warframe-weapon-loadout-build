@@ -2369,12 +2369,20 @@ def _combine(
     return (origin * (1.0 + additive) * factors) + flat
 
 
+# A reload-speed total of -100% or below never finishes a reload: base / (1 +
+# total) grows without bound as the total nears -100% (wiki, Reload Speed), and
+# the formula's negative time past it is meaningless. Only 3+1 archgun Rivens
+# roll such a malus (Reload Speed base 99.9). Finite, so JSON and arithmetic
+# stay valid; native/wfcore/src/mods.rs carries the same constant.
+RELOAD_NEVER_SECONDS = 1e9
+
+
 def _divide(base: float, effects: list[ModEffect]) -> float:
-    """Apply speed-style bonuses that shorten a duration."""
+    """Apply reload-speed bonuses to a reload duration."""
     if not base or not effects:
         return base
     scale = _combine(1.0, effects)
-    return base / scale if scale else base
+    return base / scale if scale > 0 else RELOAD_NEVER_SECONDS
 
 
 def _falloff_multiplier(

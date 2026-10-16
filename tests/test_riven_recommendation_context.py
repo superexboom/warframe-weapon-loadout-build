@@ -77,7 +77,7 @@ def test_duration_variants_have_distinct_effects_and_legal_values():
     assert rolls[0].value<100<rolls[-1].value
     assert any(line.value==99.9 for line in rolls)
     for line in rolls:
-        assert duration.high*.89/1.089-1e-9<=line.value<=duration.high
+        assert duration.high*o.RIVEN_ROLL_LOW/o.RIVEN_ROLL_HIGH-1e-9<=line.value<=duration.high
         assert line.effect.value==pytest.approx(-line.value/100)
 
 

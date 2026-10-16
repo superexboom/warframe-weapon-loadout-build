@@ -2794,6 +2794,11 @@ impl<'py> Replay<'py> {
                 self.next_tick(*i);
             }
             let t = event.t;
+            if t < self.current_time - 1e-9 {
+                // An event before the clock (a negative duration) replays the
+                // window again and again; the Python reference raises.
+                return Err(Self::unsupported("replay-clock-went-backwards"));
+            }
             self.current_time = t;
             self.clean(t);
             if let Some(g) = event.gen {

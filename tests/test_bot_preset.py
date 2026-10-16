@@ -19,8 +19,8 @@ def test_fusion_bases_follow_server_rolls_for_every_gun_type():
         bases = app.RIVEN_BASE_VALUES[family]
         assert (bases["W"], bases["Y"], bases["AE"], bases["MA"], bases["VI"], bases["FO"]) == (225.0, 247.5, 45.0, 90.0, 90.0, 45.0)
     assert "HR" not in optimizer.FUSION_SERVER_BASES["archgun"]
-    nominal = app.RIVEN_BASE_VALUES["pistol"]["W"] * 1.35
-    assert nominal * 0.89 <= 310 <= nominal * 1.089
+    _nominal, low, high = optimizer.riven_stat_window(app.RIVEN_BASE_VALUES["pistol"]["W"], 1.35, 2, 0)
+    assert low <= 310 <= high
     assert abs(app.RIVEN_BASE_VALUES["melee"]["PA"] - 8.1) < 1e-9 and abs(app.RIVEN_BASE_VALUES["melee"]["HD"] - 119.7) < 1e-9
 
 

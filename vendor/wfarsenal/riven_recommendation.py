@@ -7,7 +7,7 @@ import time
 def negative_rolls(lines):
     from . import optimizer as o
     for line in lines:
-        low=line.value*.89/1.089
+        low=line.value*o.RIVEN_ROLL_LOW/o.RIVEN_ROLL_HIGH
         values=[line.value]
         if line.code=='3':
             values=[low,(low+line.value)/2.,line.value]
@@ -143,7 +143,7 @@ def recommend(weapon, baseline, positive_candidates, negative_candidates, *, sce
         duration=next((l for l in negatives if l.code=='3' and l.code not in used),None)
         if duration:
             # A weaker curse can win on Heat strip timing while keeping ticks.
-            # These are valid rolls between nominal*0.89 and nominal*1.089.
+            # These are valid rolls between nominal*0.9 and nominal*1.1.
             for curse in negative_rolls([duration]):
                 yield (*combo,curse)
         for l in negatives:

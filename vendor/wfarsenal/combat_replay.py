@@ -1175,6 +1175,11 @@ def _reference_trajectory(
     max_per_step = 0
     while heap:
         t, _, kind, payload, event_gen = heapq.heappop(heap)
+        if t < current_time - 1e-9:
+            # An event before the clock (a negative duration) replays the window
+            # again and again; refuse instead of growing without end.
+            from .simulator import SimulationError
+            raise SimulationError(f"replay clock went backwards: {kind} at {t:.3f}s after {current_time:.3f}s")
         current_time=t
         clean(t)
         if event_gen is not None and event_gen != gen:

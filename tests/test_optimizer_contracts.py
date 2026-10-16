@@ -27,12 +27,13 @@ class StructureScaleContractTests(unittest.TestCase):
     """S01: the structure scale follows the normalized actual structure."""
 
     def test_four_structures_use_their_own_scales(self) -> None:
+        # wiki, Riven Mods, Attribute Value Formula.
         cases = {
             # (positives, has_negative): positive scale, negative scale
-            (2, False): (1.0, 0.5),
-            (2, True): (1.25, 0.5),
-            (3, False): (0.757525, 0.757525),
-            (3, True): (0.94690625, 0.757525),
+            (2, False): (0.99, 0.495),
+            (2, True): (1.2375, 0.495),
+            (3, False): (0.75, 0.75),
+            (3, True): (0.9375, 0.75),
         }
         for (positives, has_negative), (pos_scale, neg_scale) in cases.items():
             with self.subTest(positives=positives, has_negative=has_negative):
@@ -46,6 +47,15 @@ class StructureScaleContractTests(unittest.TestCase):
                     neg_scale,
                     places=6,
                 )
+
+    def test_max_roll_is_inside_the_window_and_grades_plus_ten_percent(self) -> None:
+        # A user's Torid 3+1 card: Viral 120.7% (base 90, disposition 1.3)
+        # is a max roll; the old 0.757525 x 1.089 window stopped at 120.648.
+        nominal, low, high = app.optimizer.riven_stat_window(90.0, 1.3, 3, 1)
+        self.assertAlmostEqual(nominal, 109.6875)
+        self.assertEqual(round(high, 1), 120.7)
+        self.assertAlmostEqual(low, 98.71875)
+        self.assertAlmostEqual(high / nominal - 1, 0.10)
 
     def test_analysis_has_hardness_integrated_target_and_no_optimum_score(self) -> None:
         """No theoretical optimum or 0-100 score; one target set per weapon."""

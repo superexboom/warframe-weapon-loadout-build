@@ -1762,18 +1762,23 @@ function factionRivenDelta(multiplier) {
   return Math.abs((Number(multiplier) - 1) * 100);
 }
 
+// Riven stat window (wiki, Riven Mods, Attribute Value Formula): base value x a
+// 90-110% roll x disposition x the card's weight; the engine
+// (optimizer.riven_stat_window) and the Bot use the same numbers.
+const RIVEN_BONUS_WEIGHTS = { 2: [0.99, 1.2375], 3: [0.75, 0.9375] };
+const RIVEN_MALUS_WEIGHTS = { 2: 0.495, 3: 0.75 };
+
+function rivenStatWindow(baseValue, disposition, positiveCount, negativeCount, negative) {
+  const positives = positiveCount === 3 ? 3 : 2;
+  const weight = negative ? RIVEN_MALUS_WEIGHTS[positives] : RIVEN_BONUS_WEIGHTS[positives][negativeCount ? 1 : 0];
+  const nominal = Math.abs(Number(baseValue || 0) * Number(disposition || 0) * weight);
+  return { low: nominal * 0.9, high: nominal * 1.1 };
+}
+
 function deriveRange(definition, negative) {
   if (!definition || !state.weapon) return null;
   const shape = statShape();
-  let multiplier;
-  if (negative) {
-    multiplier = shape.positive === 3 ? 0.757525 : 0.5;
-  } else {
-    multiplier = shape.positive === 3 ? 0.757525 : 1;
-    if (shape.negative) multiplier *= 1.25;
-  }
-  const nominal = Math.abs(definition.baseValue * state.weapon.disposition * multiplier);
-  return { low: nominal * 0.89, high: nominal * 1.089 };
+  return rivenStatWindow(definition.baseValue, state.weapon.disposition, shape.positive, shape.negative, negative);
 }
 
 function formatStatNumber(value, definition, negative = false) {
@@ -2916,14 +2921,7 @@ function rivenStatDefinitions() {
 
 function rivenNominalRange(definition, negative, positiveCount, negativeCount) {
   const disposition = Number(state.buildWeapon?.disposition || 1);
-  let multiplier;
-  if (negative) multiplier = positiveCount === 3 ? 0.757525 : 0.5;
-  else {
-    multiplier = positiveCount === 3 ? 0.757525 : 1.0;
-    if (negativeCount) multiplier *= 1.25;
-  }
-  const nominal = Math.abs(Number(definition.baseValue || 0) * disposition * multiplier);
-  return { low: nominal * 0.89, high: nominal * 1.089 };
+  return rivenStatWindow(definition.baseValue, disposition, positiveCount, negativeCount, negative);
 }
 
 function renderRivenBuilder(target) {
@@ -9557,7 +9555,8 @@ function renderWeaponStats(stats) {
     ["攻速 / 射速", value("fireRate", "fire_rate"), (value) => value.toFixed(2)],
     ...(!melee ? [
       ["弹匣", value("magazine"), (value) => value.toFixed(1)],
-      ["装填", value("reloadTime", "reload_time"), (value) => `${value.toFixed(2)}s`],
+      // Reload speed -100% or below never finishes a reload (engine: 1e9 s).
+      ["装填", value("reloadTime", "reload_time"), (value) => (value >= 1e8 ? "无法完成" : `${value.toFixed(2)}s`)],
     ] : [
       ["初始连击", value("initialCombo", "initial_combo"), (value) => value.toFixed(0)],
       ["连击持续", value("comboDuration", "combo_duration"), (value) => `${value.toFixed(1)}s`],
