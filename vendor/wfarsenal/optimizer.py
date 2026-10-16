@@ -3512,7 +3512,7 @@ def _assess_negatives(
             continue
         line = negative_map[code]
         rows.append(dict(code=code, label=line.label, value=line.value, neutral=code in neutral_codes,
-                         fixedDelta=score / reference - 1.0, reoptimizedDelta=None, fatal=False))
+                         fixedDelta=score / reference - 1.0, reoptimizedDelta=None, fatal=False, fatalAbove=None))
     suspects = [row for row in rows if not row["neutral"] and row["fixedDelta"] < -FATAL_NEGATIVE_LOSS]
     if suspects:
         def search(lines):
@@ -3527,8 +3527,80 @@ def _assess_negatives(
             best = max(score, (1.0 + row["fixedDelta"]) * reference)
             row["reoptimizedDelta"] = best / searched_reference - 1.0
             row["fatal"] = row["reoptimizedDelta"] < -FATAL_NEGATIVE_LOSS
+
+        def fixed_delta(line):
+            score = _best_fixed_scores(weapon, [(baseline.cards, _card_from_lines([*positive_lines, line]))],
+                                       max_keep_cap=keep_cap, **common)[0]
+            if isinstance(score, Exception):
+                raise score
+            return score / reference - 1.0
+
+        def fatal_at(line, delta):
+            """The same two-step judgement as above, for one roll of a malus."""
+            if delta >= -FATAL_NEGATIVE_LOSS:
+                return False
+            best = max(search([*positive_lines, line]), (1.0 + delta) * reference)
+            return best / searched_reference - 1.0 < -FATAL_NEGATIVE_LOSS
+
+        for row in suspects:
+            if row["fatal"]:
+                row["fatalAbove"] = _fatal_roll_threshold(negative_map[row["code"]], fixed_delta, fatal_at)
     rows.sort(key=lambda row: (row["reoptimizedDelta"] if row["reoptimizedDelta"] is not None else row["fixedDelta"]))
     return rows
+
+
+# Resolution of a roll-dependent fatal threshold, in the stat's percent points.
+FATAL_THRESHOLD_STEP = 0.1
+
+
+def _fatal_roll_threshold(top: _RivenLine, fixed_delta, fatal_at) -> float | None:
+    """The highest roll of a fatal malus that is still not fatal, or None.
+
+    A malus judged fatal at its theoretical (highest) roll can be harmless or
+    even the best malus at lower rolls: a 3+1 Status Duration window that
+    crosses -100% (Dual Decurion 87.7-107.2%) speeds up Heat's armour strip
+    until statuses expire between shots and then vanish at -100%. When the
+    lowest roll is not fatal, the boundary is bisected to
+    ``FATAL_THRESHOLD_STEP``: first on the fixed build (cheap), then the roll
+    just above that boundary gets the re-search, and only if the re-search
+    rescues it does the bisection continue with re-searches. Rounded down, so
+    every roll up to the returned value is not fatal.
+    """
+    def rolled(value):
+        return replace(top, value=value, effect=_effect_from_code(top.code, value, negative=True,
+                                                                  source="riven:theoretical:" + top.code))
+
+    def shown(value):  # one decimal, as cards show it, rounded towards the safe side
+        return math.floor(value * 10.0 + 1e-9) / 10.0
+
+    low, high = top.value * RIVEN_ROLL_LOW / RIVEN_ROLL_HIGH, top.value
+    line = rolled(low)
+    low_delta = fixed_delta(line)
+    if fatal_at(line, low_delta):
+        return None
+    ok = low
+    if low_delta >= -FATAL_NEGATIVE_LOSS:
+        # Phase 1: the fixed-build boundary (low passes, high fails on the fixed build).
+        bad = high
+        while bad - ok > FATAL_THRESHOLD_STEP:
+            middle = (ok + bad) / 2.0
+            if fixed_delta(rolled(middle)) >= -FATAL_NEGATIVE_LOSS:
+                ok = middle
+            else:
+                bad = middle
+        line = rolled(bad)
+        if fatal_at(line, fixed_delta(line)):
+            return shown(ok)
+        ok = bad
+    # Phase 2: the re-search rescues rolls past the fixed boundary.
+    while high - ok > FATAL_THRESHOLD_STEP:
+        middle = (ok + high) / 2.0
+        line = rolled(middle)
+        if fatal_at(line, fixed_delta(line)):
+            high = middle
+        else:
+            ok = middle
+    return shown(ok)
 
 
 def _recommend_positive(
@@ -5516,10 +5588,16 @@ def analyze_riven_request(
             scenario=scenario, metric=ranking_metric, passives=passives, capacity_limit=capacity_limit,
             target_context=search_context, keep_cap=negative_keep_cap)
         fatal_codes = [row["code"] for row in negative_assessment if row["fatal"]]
+        fatal_above = {row["code"]: row["fatalAbove"] for row in negative_assessment
+                       if row["fatal"] and row["fatalAbove"] is not None}
     elif isinstance(cached_fatal, list):
         fatal_codes = [code for code in cached_fatal if code in negative_map]
+        cached_above = (bundle or {}).get("fatalAbove")
+        fatal_above = ({code: float(value) for code, value in cached_above.items() if code in fatal_codes}
+                       if isinstance(cached_above, Mapping) else {})
     else:
         fatal_codes = []
+        fatal_above = {}
         if not ultra:
             unsupported.append("fatal-negative-not-assessed")
     negative_fresh = negative_fresh and not ultra
@@ -5624,6 +5702,7 @@ def analyze_riven_request(
         if negative_fresh:
             write_bundle["negative"] = [line.code for line in recommended_negative]
             write_bundle["fatal"] = list(fatal_codes)
+            write_bundle["fatalAbove"] = dict(fatal_above)
         statics_cache["__dirty__"] = True
     if statics_only:
         evaluation_target, context_hash = _context_identity()
@@ -5637,7 +5716,7 @@ def analyze_riven_request(
         return {"bakeStaticsOnly": True, "contextHash": context_hash,
                 "recommended": [line.code for line in recommended],
                 "negative": [line.code for line in recommended_negative],
-                "fatal": list(fatal_codes)}
+                "fatal": list(fatal_codes), "fatalAbove": dict(fatal_above)}
 
     # 不再计算「理论上限」与 0–100 评分（上限本身是近似搜索，其误差会传给
     # 所有评分）。保留：相对无紫卡基线的实际增益、逐词条贡献与推荐词条排序。
@@ -5759,7 +5838,9 @@ def analyze_riven_request(
             inactive_reason = '当前持续持枪，没有收起装填事件'
         # 提交紫卡的负面是否致命：看它是否在武器级致命负面里（重搜配卡后
         # 仍亏损超过阈值）；固定配卡消融的亏损仍在 details 里给出数值。
-        fatal = bool(line.negative and line.code in fatal_codes)
+        # 随数值变化的致命负（fatalAbove）只在超过阈值时致命。
+        fatal = bool(line.negative and line.code in fatal_codes
+                     and not (line.code in fatal_above and line.value <= fatal_above[line.code] + 1e-9))
         if fatal:
             fatal_negative.append(line.label)
         details.append(
@@ -6082,6 +6163,9 @@ def analyze_riven_request(
         "recommendedNegative": [line.label for line in recommended_negative],
         # 武器级致命负面（不随提交的紫卡变化）；提交紫卡的负面若在其中，另见 submittedFatalNegative。
         "fatalNegative": [negative_map[code].label for code in fatal_codes if code in negative_map],
+        # 随数值变化的致命负：负值（百分点）不超过该值时不致命，超过即致命。
+        "fatalNegativeAbove": {negative_map[code].label: value for code, value in fatal_above.items()
+                               if code in negative_map},
         "submittedFatalNegative": fatal_negative,
         "negativeAssessment": negative_assessment,
         "baseline": baseline_payload,

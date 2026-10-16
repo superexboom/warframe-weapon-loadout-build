@@ -2667,7 +2667,14 @@ function renderTiers() {
   // 武器级致命负面：负面词条按理论数值放进推荐正面的紫卡，配装围绕它重搜后
   // 仍亏损超过 35% 才算致命。提交的紫卡负面在其中时单独点明。
   const own = normalizeLabels(state.result.submittedFatalNegative);
-  ui["fatal-negative"].textContent = (fatal.join(" / ") || "无") + (own.length ? `（当前紫卡的负面 ${own.join(" / ")} 属于致命负面）` : "");
+  // 随数值变化的致命负（如 3+1 触发时间跨过 −100%）：负值不超过阈值时不致命。
+  const above = state.result.fatalNegativeAbove || {};
+  const fatalText = fatal.map((label) => {
+    const limit = finite(above[label]);
+    if (limit === null) return label;
+    return `${label}（负值超过 ${limit.toFixed(1)}% 时致命，不超过时${recommended.includes(label) ? "为推荐负" : "不致命"}）`;
+  });
+  ui["fatal-negative"].textContent = (fatalText.join(" / ") || "无") + (own.length ? `（当前紫卡的负面 ${own.join(" / ")} 属于致命负面）` : "");
   ui["fatal-box"].classList.toggle("is-clear", !fatal.length);
   ui["fatal-box"].title = "负面词条按理论数值评估：配装可以围绕负面重新搭配，重搜后仍亏损超过 35% 的才算致命";
 }

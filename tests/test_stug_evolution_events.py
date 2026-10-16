@@ -101,7 +101,8 @@ def test_dera_incarnon_on_kill_ammo_efficiency_replays_as_event():
     q=c['trigger_sources'][0]
     base,_=c['resolve']('selected',{},0);live,_=c['resolve']('selected',{q['id']:4},0)
     assert q['kind']=='on-kill' and q['maxStacks']==4 and q['duration']==5
-    assert base.ammo_cost==1 and live.ammo_cost==pytest.approx(.2)
+    # 4 stacks x 20% = 80%, held to the 75% Ammo Efficiency cap (2026-10-16).
+    assert base.ammo_cost==1 and live.ammo_cost==pytest.approx(.25)
 
 
 def test_torid_final_fusillade_adds_flat_multishot_only_on_base_last_round():

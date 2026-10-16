@@ -2083,7 +2083,7 @@ def _apply_mods_spec_py(
         recoil_multiplier=_combine(1.0, buckets["WEAPON_RECOIL"]),
         ammo_max_multiplier=_combine(1.0, buckets["WEAPON_AMMO_MAX"]),
         # 每扳机弹药消耗（Twin Grakatas 类）：sustained_attack_rate 折算用。
-        ammo_cost=max(0.0, _combine(float(mode.get("ammoCost") or 1), buckets["WEAPON_AMMO_CONSUME_RATE"])) * max(0.0, 1.0 - compression_ammo),
+        ammo_cost=_capped_ammo_cost(float(mode.get("ammoCost") or 1), buckets["WEAPON_AMMO_CONSUME_RATE"], compression_ammo),
         headshot_bonus_multiplier=_combine(
             1.0, buckets["WEAPON_HEADSHOT_MULTIPLIER"]
         ),
@@ -2383,6 +2383,20 @@ def _divide(base: float, effects: list[ModEffect]) -> float:
         return base
     scale = _combine(1.0, effects)
     return base / scale if scale > 0 else RELOAD_NEVER_SECONDS
+
+
+# Ammo Efficiency is capped at 75% since the 2026-10-16 hotfix (user, 2026-10-16;
+# Bot maintainer patch 5fa4ba89): after every source, Primary Compression
+# included, a trigger still costs a quarter of its native ammo. Ammo-free
+# chances and infinite-ammo states are separate mechanics and stay uncapped.
+# native/wfcore/src/mods.rs carries the same rule.
+AMMO_EFFICIENCY_CAP = 0.75
+
+
+def _capped_ammo_cost(base: float, effects: list[ModEffect], compression_ammo: float) -> float:
+    """Per-trigger ammo cost after Ammo Efficiency, floored by the 75% cap."""
+    cost = max(0.0, _combine(base, effects)) * max(0.0, 1.0 - compression_ammo)
+    return max(base * (1.0 - AMMO_EFFICIENCY_CAP), cost)
 
 
 def _falloff_multiplier(

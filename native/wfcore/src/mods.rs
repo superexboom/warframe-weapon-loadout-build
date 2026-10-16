@@ -445,6 +445,8 @@ impl ModsPrep {
 const CACHE_MAX: usize = 16384;
 /// damage.py RELOAD_NEVER_SECONDS: a reload that never finishes.
 const RELOAD_NEVER_SECONDS: f64 = 1e9;
+/// damage.py AMMO_EFFICIENCY_CAP: the total Ammo Efficiency a trigger can reach.
+const AMMO_EFFICIENCY_CAP: f64 = 0.75;
 
 impl ModsPrep {
     /// The cached classification and row of one effect object.
@@ -1070,7 +1072,10 @@ pub fn apply_mods<'py>(
                  combine(1.0, &[&ap.ops_where(body, |r| r.symbol.as_deref() == Some("TORSO"))]))?;
     out.set_item("base_crit_chance",
                  combine_num(critchance, &[&ap.ops_where(b!("WEAPON_CRIT_CHANCE"), |r| r.op == OP_ADD_BASE || r.set_base)]).to_py(py))?;
-    out.set_item("ammo_cost", pmax(0.0, combine(prep.ammo_cost, &[&ap.ops(b!("WEAPON_AMMO_CONSUME_RATE"))])) * pmax(0.0, 1.0 - compression_ammo))?;
+    // Ammo Efficiency cap (75%, damage.py AMMO_EFFICIENCY_CAP): every source,
+    // Primary Compression included, keeps a quarter of the native cost.
+    let ammo_cost = pmax(0.0, combine(prep.ammo_cost, &[&ap.ops(b!("WEAPON_AMMO_CONSUME_RATE"))])) * pmax(0.0, 1.0 - compression_ammo);
+    out.set_item("ammo_cost", pmax(prep.ammo_cost * (1.0 - AMMO_EFFICIENCY_CAP), ammo_cost))?;
     out.set_item("co_bucket", ap.list(py, &co_idx)?)?;
     out.set_item("co_assumed_count", vsc)?;
     out.set_item("continuous", continuous)?;

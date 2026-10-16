@@ -103,7 +103,8 @@ def test_bronco_efficiency_requires_the_native_nearby_enemy_count():
     for count in (0,5,6):
         _,_,stats=branch_combat('Bronco Prime',{'tier4':'4-1'},{'nearbyEnemies':count,'nearbyRadius':6})
         costs.append(stats.ammo_cost)
-    assert costs==pytest.approx([1.,1.,.2])
+    # The evolution's 80% Ammo Efficiency is held to the 75% cap (2026-10-16).
+    assert costs==pytest.approx([1.,1.,.25])
 
 
 def test_sybaris_status_addition_is_only_active_in_incarnon_form():
