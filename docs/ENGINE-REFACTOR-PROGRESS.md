@@ -552,3 +552,9 @@ Bot 因此按 deep 烘焙。
 deep / standard 断言失败，fast 只给 2 条。短名单现在补足最好的普通词条（至少 count − 1 条），Bot 那边的绕行包装删除。
 
 **Bot 烘焙**：每个目标一个进程（`max_tasks_per_child=1`），日志记录每个目标的内存峰值；`--skip` 可以把个别目标留到后面单独跑。
+
+**验证**：全量测试 1041 项通过（`test_riven_interactive_workflow` 夹具的触发时间负面 91.0 落在旧下限 0.89 上、低于 wiki 下限 91.12，
+改为 91.2）；新增 `tests/test_bake_fixes_20261016.py`（融合短名单三档、装填 −90/−100/−103% 参考与原生一致、负装填回放打完一个弹匣即停）。
+`verify_apply_mods.py verify --variants` 397,789 次调用零差异；影子模式螺钉 Prime / Kuva Nukor / Hek / Lanka / Rubico Prime /
+守望者 Prime / Phaedra / 双持判决官 / Cyngas / Nikana Prime / 托里德 × 2 个靶共 246,653 次原生重放与 Python 参考逐位一致、零回退
+（新加的时钟保护没有在正常回放里触发）。Bot 全量烘焙中原先卡死的三把空战枪 183–215 秒、峰值 160 MB。
