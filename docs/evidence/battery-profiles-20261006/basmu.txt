@@ -1,6 +1,0 @@
-python basmu.py <scratch> alternate  (WFSim pinned .local/wfsim-live-20261004; m1 = WFSim mode 'alternate')
-native = battery 42/s, 2 s from empty, 0.2 s partial; export-reload = plain 2 s reload
-bare  m0 wfsim   0.028  | native   0.028 ( +1.7%) shots 150 reloads 0 | export-reload   0.032 (+13.9%) shots 168 reloads 8
-bare  m1 wfsim   0.012  | native   0.012 ( +0.1%) shots 150 reloads 0 | export-reload   0.014 (+15.1%) shots 168 reloads 8
-build m0 wfsim   0.519  | native   0.522 ( +0.7%) shots 150 reloads 0 | export-reload   0.549 ( +5.8%) shots 168 reloads 8
-build m1 wfsim   0.385  | native   0.387 ( +0.5%) shots 150 reloads 0 | export-reload   0.439 (+14.0%) shots 168 reloads 8

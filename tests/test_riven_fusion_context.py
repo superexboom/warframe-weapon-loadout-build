@@ -28,6 +28,7 @@ def test_cannonade_catalog_retains_category_description_and_native_lock():
 
 
 def test_cache_authorization_contract_is_documented_and_local_only():
-    text=open('docs/RIVEN-ANALYSIS-AUDIT-2026-10-03.md',encoding='utf-8').read()
-    assert 'explicit authorization' in text
-    assert 'full-roster' in text
+    # The bake tool's own help and errors carry the full-roster authorization contract.
+    text=open('tools/bake-analysis-statics.py',encoding='utf-8').read()
+    assert 'explicit user authorization' in text
+    assert 'full-roster' in text and '--allow-full-bake' in text

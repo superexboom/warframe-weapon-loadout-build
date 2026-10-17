@@ -33,6 +33,8 @@ python app.py --port 0
 
 On Windows, `run-dev.cmd` provides the same startup path.
 
+An optional Rust core makes searches much faster: with a Rust toolchain installed, run `python tools/build_native.py`; the resulting `vendor/wfarsenal/wfcore.pyd` is loaded automatically. Without it the engine uses its Python implementation, which gives the same results.
+
 ## Windows Portable Build
 
 Download `Warframe-Weapon-Loadout-Build-win-x64.exe` from the repository Releases and double-click it. Python and adjacent data or dependency folders are not required. The interface opens in the system browser. Press `Ctrl+C` in the server console to exit.
@@ -50,26 +52,17 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build-portable.ps1
 
 The executable is written to `.local/artifacts/release/Warframe-Weapon-Loadout-Build-win-x64.exe` with an `.exe.sha256` checksum. Only the EXE is required to run; the checksum is provided to verify the download. `.local/` contains machine-local builds, caches, audits, and archived development material and is never committed.
 
-## Data Refresh
-
-Weapon, mod, Arcane, enemy, Warframe, and ability data are generated as a version-locked snapshot and activated only after validation. Extraction and generation modules are included; local JSON configuration supplies input paths without requiring another project's source or export directory. See [DATA_PIPELINE.md](DATA_PIPELINE.md) for inputs, candidate packaging, activation, and rollback.
-
-Validate the current frozen data and assets without the original inputs:
-
-```powershell
-python tools/data_pipeline.py check
-```
-
 ## Repository Layout
 
 ```text
 app.py                 Local HTTP server and API
 frontend/              Chinese web UI and bundled assets
 vendor/wfarsenal/      Loadout, damage, and Warframe calculation engine
+native/wfcore/         Optional Rust calculation core
 data/                  Frozen datasets, source lock, and runtime sidecars
-tools/                 Data generation and audit tools
+tools/                 Data generation, import, baking, and audit tools
+tests/                 Regression tests and fixtures
 build-portable.ps1     Windows portable-package builder
-DATA_PIPELINE.md       Data provenance and refresh workflow
 THIRD_PARTY_NOTICES.md Third-party provenance and licenses
 ```
 
@@ -77,4 +70,10 @@ THIRD_PARTY_NOTICES.md Third-party provenance and licenses
 
 Unless separately noted, project source code is licensed under the [GNU Affero General Public License v3.0](LICENSE), SPDX identifier `AGPL-3.0-only`.
 
-Warframe names, artwork, icons, and other Digital Extremes material are not relicensed by the project's source-code license. Third-party components and assets remain subject to their respective terms; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Parts of the calculation engine are ported from or based on [WFSim](https://github.com/magenie33/wfsim) by magenie33 and the WFSim contributors (`AGPL-3.0-or-later`); those parts are distributed here under AGPL-3.0, and source comments name where each comes from. This project is not WFSim and is not endorsed by it; the WFSim name is used only to state that origin. Data, measured rules and benchmark outputs (test fixtures, `CC BY-NC-SA 4.0`) imported from WFSim are credited under its terms.
+
+Some weapon data was read from the [WARFRAME Wiki](https://wiki.warframe.com/); the bundled copy of `Module:Stances/data` is under the wiki's declared `CC BY-NC-SA 3.0`.
+
+*Warframe* is a trademark of Digital Extremes Ltd. Game data, card text, and the artwork, icons, and other images under `frontend/assets/` are the copyright of Digital Extremes. They are not covered by the project's code license, and no rights in them are granted here; anything the rights holder asks to have removed will be removed.
+
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for every source, author, and term.

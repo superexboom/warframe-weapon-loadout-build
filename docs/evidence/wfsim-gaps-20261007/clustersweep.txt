@@ -1,9 +1,0 @@
-zarr                     m0 bare   wfsim   0.0211 +- 0.2% local   0.0210 (  -0.2%)
-zarr                     m0 build  wfsim   0.1222 +- 0.4% local   0.1223 (  +0.1%)
-kuva_zarr                m0 bare   wfsim   0.0720 +- 1.2% local   0.1004 ( +39.4%)
-kuva_zarr                m0 build  wfsim   0.5062 +- 0.6% local   0.5895 ( +16.5%)
-kuva_bramma              m0 bare   wfsim   0.1239 +- 1.2% local   0.1695 ( +36.8%)
-kuva_bramma              m0 build  wfsim   0.7146 +- 0.9% local   0.8595 ( +20.3%)
-kulstar                  m0 bare   wfsim   0.0407 +- 0.2% local   0.0388 (  -4.8%)
-kulstar                  m0 build  wfsim   0.3040 +- 0.3% local   0.2682 ( -11.8%)
-mean |err| 16.22 median 14.11 max 39.4

@@ -1,8 +1,0 @@
-{
- "case": "Rubico Prime top public board row with Riven; Thrax Centurion Steel Path; body shots; aiming; no arcanes; 30 s; WFSim runs=100 seed=12648430",
- "command": "python docs/evidence/sniper-combo-20261005/rubico-prime-public-riven/reproduce.py <new-dir>",
- "killsPerMinute": {
-  "170": {"localBeforeSniperMechanics": 1.679, "localAfter": 5.338, "wfsim": 5.380},
-  "9999": {"localBeforeSniperMechanics": 0.373, "localAfter": 1.261, "wfsim": 1.265}
- }
-}

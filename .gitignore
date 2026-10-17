@@ -1,6 +1,17 @@
 # Local-only archive, caches, audits, and build output
 /.local/
 
+# Internal working notes, audit evidence and progress logs (local only)
+/docs/
+/*-STATUS.md
+/*-PROGRESS.md
+/DATA_PIPELINE.md
+
+# One-off research probes, evidence packagers and reverse-engineering scripts
+/tools/probe_*.py
+/tools/package_*_evidence.py
+/tools/ghidra/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -35,6 +46,7 @@ venv/
 .env.*
 !.env.example
 .idea/
+/.claude/
 .vscode/
 .DS_Store
 Thumbs.db

@@ -4,17 +4,3 @@ frontend/assets/** -text
 tools/extract_ability_luau_ir.py -text
 tools/diff_ability_runtime_fields.py -text
 tools/promote_ability_runtime_fields.py -text
-# Regression evidence manifests hash exact bytes.
-docs/evidence/spread-talons-round-20260928/** -text
-docs/evidence/legacy-config-icons-20260928/** -text
-docs/evidence/remaining-events-20260928/** -text whitespace=cr-at-eol
-docs/evidence/quanta-deferred-spread-20260930/** -text
-docs/evidence/projectile-lifecycle-20260930/** -text whitespace=cr-at-eol
-docs/evidence/incarnon-riven-sync-20261001/** -text whitespace=cr-at-eol
-docs/evidence/runtime-completion-20261001/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
-docs/evidence/runtime-completion-v21-20261001/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
-docs/evidence/felarx-reload-loop-20261001/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
-docs/evidence/runtime-completion-final-v23-20261002/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
-docs/evidence/riven-analysis-stall-20261003/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
-docs/evidence/riven-recommendation-20261004/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
-docs/evidence/kpm-discrepancy-20261004/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

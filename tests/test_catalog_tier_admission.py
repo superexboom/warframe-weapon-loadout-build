@@ -14,7 +14,7 @@ def test_every_frozen_tier_clone_is_excluded_without_mutating_export():
     before = copy.deepcopy(RAW)
     catalog = {m['path']: m for m in released_mod_catalog(RAW)}
     assert len(UNRELEASED_TIER_CLONES) == 58
-    evidence = json.loads((app.ROOT / 'docs/evidence/radial-round-20260927/expert-catalog-evidence.json').read_text(encoding='utf-8'))
+    evidence = json.loads((app.ROOT / 'tests/fixtures/expert_catalog_evidence_20260927.json').read_text(encoding='utf-8'))
     assert {r['path'] for r in evidence['rows']} == set(UNRELEASED_TIER_CLONES)
     for path, base in UNRELEASED_TIER_CLONES.items():
         assert catalog[path]['selectable'] is False

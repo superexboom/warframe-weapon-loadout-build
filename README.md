@@ -33,6 +33,8 @@ python app.py --port 0
 
 也可以双击 `run-dev.cmd`。
 
+可选的 Rust 计算核心能显著加快搜索：装好 Rust 工具链后运行 `python tools/build_native.py`，生成的 `vendor/wfarsenal/wfcore.pyd` 会被自动加载；没有它时引擎使用同等结果的 Python 实现。
+
 ## Windows 便携包
 
 从仓库 Releases 下载 `Warframe-Weapon-Loadout-Build-win-x64.exe`，双击启动。无需安装 Python，也无需在 EXE 旁放置数据或依赖目录；界面使用系统默认浏览器。退出时在服务窗口按 `Ctrl+C`。
@@ -50,26 +52,17 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build-portable.ps1
 
 输出位于 `.local/artifacts/release/Warframe-Weapon-Loadout-Build-win-x64.exe`，同目录生成 `.exe.sha256` 校验文件。分发时只需 EXE，校验文件供核对下载完整性。`.local/` 保存本机构建、缓存、审计与归档材料，不会提交到 Git。
 
-## 数据更新
-
-武器、MOD、赋能、敌人、战甲和技能数据按同一游戏 build 生成独立快照，验收后整体启用。提取与生成模块随仓库提供，输入位置由本地 JSON 配置指定，不依赖其他工程的源码或 export 目录。输入要求、试用候选、启用和回滚说明见 [DATA_PIPELINE.md](DATA_PIPELINE.md)。
-
-验证当前冻结数据和素材，不需要原始输入：
-
-```powershell
-python tools/data_pipeline.py check
-```
-
 ## 项目结构
 
 ```text
 app.py                 本地 HTTP 服务与 API
 frontend/              中文 Web UI 与本地素材
 vendor/wfarsenal/      配装、伤害和战甲计算内核
+native/wfcore/         可选的 Rust 计算核心
 data/                  冻结数据、来源锁与运行 sidecar
-tools/                 数据生成与审计工具
+tools/                 数据生成、导入、烘焙与审计工具
+tests/                 回归测试与测试夹具
 build-portable.ps1     Windows 便携包构建脚本
-DATA_PIPELINE.md       数据来源和更新流程
 THIRD_PARTY_NOTICES.md 第三方来源与授权说明
 ```
 
@@ -77,4 +70,10 @@ THIRD_PARTY_NOTICES.md 第三方来源与授权说明
 
 未另行标注的项目源代码采用 [GNU Affero General Public License v3.0](LICENSE)，SPDX 标识为 `AGPL-3.0-only`。
 
-Warframe 名称、图像、图标和其他 Digital Extremes 素材不因本项目的代码许可而被重新授权；第三方组件和素材继续适用各自条款，详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+部分计算机制与代码移植或改编自 [WFSim](https://github.com/magenie33/wfsim)（作者 magenie33 及 WFSim 贡献者，`AGPL-3.0-or-later`），对应部分在 AGPL-3.0 下随本项目分发，代码注释标明了出处。本项目不是 WFSim，也未获其背书，“WFSim”一名仅用于说明来源。从 WFSim 导入的数据、实测规则与基准结果（测试夹具，`CC BY-NC-SA 4.0`）均按其条款署名。
+
+部分武器数据读取自 [WARFRAME Wiki](https://wiki.warframe.com/)；随仓库提供的 `Module:Stances/data` 副本适用 Wiki 声明的 `CC BY-NC-SA 3.0`。
+
+*Warframe* 是 Digital Extremes Ltd. 的商标。游戏数据、卡面文本，以及 `frontend/assets/` 中的卡图、图标和其他美术均为 Digital Extremes 版权所有，不在本项目的代码许可范围内，本项目不就其授予任何权利；权利人要求移除的内容将予以移除。
+
+各项来源、作者与条款详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

@@ -13,7 +13,7 @@ from wfarsenal.combat_replay import replay
 from tests.test_combat_replay import stats, target
 
 HM = '/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod'
-EVIDENCE = Path(__file__).resolve().parents[1] / 'docs/evidence/hunter-munitions-20261005/cases.json'
+EVIDENCE = Path(__file__).resolve().parent / 'fixtures/hunter_munitions_cases_20261005.json'
 
 
 def hm(chance=.3, **kw):
