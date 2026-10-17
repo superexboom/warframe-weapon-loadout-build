@@ -7691,9 +7691,15 @@ function renderBuild() {
   renderAnalysisIncarnonRoute();
 }
 
+// 显示中的配装（基准 / 当前紫卡）所用的灵化路线：当前紫卡的配装可能按紫卡
+// 改选了路线（后端逐阶筛选），基准配装始终是武器默认路线。
+function analysisBuildIncarnonChoices() {
+  return state.result?.[state.buildMode]?.incarnonChoices || state.result?.incarnonChoices;
+}
+
 // 诊断里的灵化路线：进化编号附中文分支名（与路线徽标同源）。
 function incarnonRouteText() {
-  const choices = state.result?.incarnonChoices;
+  const choices = analysisBuildIncarnonChoices();
   const tiers = Array.isArray(state.weapon?.incarnon) ? state.weapon.incarnon : [];
   if (!choices || typeof choices !== "object") return "";
   return tiers
@@ -7711,7 +7717,7 @@ function incarnonRouteText() {
 function renderAnalysisIncarnonRoute() {
   const target = ui["analysis-incarnon-route"];
   if (!target) return;
-  const choices = state.result?.incarnonChoices;
+  const choices = analysisBuildIncarnonChoices();
   const tiers = Array.isArray(state.weapon?.incarnon) ? state.weapon.incarnon : [];
   if (!choices || typeof choices !== "object" || !Object.keys(choices).length || !tiers.length) {
     target.hidden = true;
@@ -7740,8 +7746,11 @@ function renderAnalysisIncarnonRoute() {
     target.replaceChildren();
     return;
   }
-  const head = create("span", "incarnon-route-head", "灵化路线");
-  head.title = "本次解算使用的进化分支（Evo N-分支号）";
+  const rerouted = state.buildMode === "actual" && state.result?.incarnonRouteScreen?.adopted;
+  const head = create("span", "incarnon-route-head", rerouted ? "灵化路线（按紫卡改选）" : "灵化路线");
+  head.title = rerouted
+    ? "当前紫卡的配装按这张紫卡逐阶筛选后改用的进化分支；无紫卡基准仍用武器默认路线"
+    : "本次解算使用的进化分支（Evo N-分支号）";
   target.replaceChildren(head, ...nodes);
   target.hidden = false;
 }

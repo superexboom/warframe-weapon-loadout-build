@@ -1159,6 +1159,52 @@ def _incarnon_card(
     )
 
 
+# Incarnon effects the analysis' replay does not score: the neutral Riven
+# maluses (recoil, zoom, reserve ammo), holster reload (the weapon stays
+# drawn), Incarnon charge gain (the form counts as permanent), noise, and
+# avatar movement or ability effects.
+ROUTE_NEUTRAL_UPGRADE_TYPES = frozenset({
+    "NONE", "WEAPON_RECOIL", "WEAPON_ZOOM", "WEAPON_AMMO_MAX", "WEAPON_AUTO_RELOAD_RATE",
+    "WEAPON_ADD_CHARGE_COUNTER_MULTIPLIER", "WEAPON_NOISE_REDUCTION",
+})
+
+
+def _route_neutral_branch(branch: Mapping[str, Any]) -> bool:
+    """A branch that cannot change an analysis score (nothing to screen)."""
+    if branch.get("runtimeScripts") or branch.get("conditionalEffects") or any(
+        isinstance(source, Mapping) and source.get("conditionalEffects") for source in branch.get("sources") or ()
+    ):
+        return False
+    effects, _ = _branch_effects(branch)
+    return all(effect.upgrade_type in ROUTE_NEUTRAL_UPGRADE_TYPES
+               or effect.upgrade_type.startswith(("AVATAR_", "SKILL_")) for effect in effects)
+
+
+def _route_options(weapon: Mapping[str, Any], choices: Mapping[str, str]) -> list[tuple[str, list[str]]]:
+    """Per selectable tier of a resolved route: the chosen branch and every
+    other branch that can change a score. Tiers with nothing to compare are
+    left out."""
+    incarnon = weapon.get("incarnon") or {}
+    tiers = incarnon.get("tiers") if isinstance(incarnon, Mapping) else None
+    options: list[tuple[str, list[str]]] = []
+    for raw_tier in tiers if isinstance(tiers, list) else ():
+        if not isinstance(raw_tier, Mapping):
+            continue
+        key = f"tier{_tier_number(raw_tier.get('tier'))}"
+        chosen = choices.get(key)
+        branches = [branch for branch in raw_tier.get("branches") or () if isinstance(branch, Mapping)]
+        if chosen is None or len(branches) < 2:
+            continue
+        ids = [str(branch.get("id") or branch.get("path") or "") for branch in branches]
+        if chosen not in ids:
+            continue
+        row = [chosen] + [branch_id for branch_id, branch in zip(ids, branches)
+                          if branch_id != chosen and not _route_neutral_branch(branch)]
+        if len(row) > 1:
+            options.append((key, row))
+    return options
+
+
 def _arcane_matches_weapon(
     arcane: Mapping[str, Any], weapon: Mapping[str, Any]
 ) -> bool:
@@ -5072,11 +5118,13 @@ def analyze_riven_request(
         """全量池单次求解（流派钳制已按用户要求移除：实战即双修混搭）。
 
         ``__escalated_context``（可选）：评分靶升级时覆盖 benchmark_context
-        （自适应等级逻辑用；正常调用不传）。
+        （自适应等级逻辑用；正常调用不传）。``search_profile``（可选）：
+        覆盖本次搜索的档位（灵化路线筛选用快速档）。
         """
         escalated = kwargs.pop("__escalated_context", None)
+        search_profile = kwargs.pop("search_profile", None) or profile
         context = escalated if escalated is not None else search_context
-        common = dict(target_context=context, profile=profile, forbidden_mod_keys=search_forbidden_keys,
+        common = dict(target_context=context, profile=search_profile, forbidden_mod_keys=search_forbidden_keys,
                       min_fill=search_min_fill, max_fill=search_max_fill)
         results = []
         # The panel proxy the ultra profile ranks with knows nothing about a
@@ -5192,12 +5240,13 @@ def analyze_riven_request(
                            reorder_elements=False)
         return scored or result
 
-    def _apply_riven_floor_profiled(result: _Evaluation, riven_card: _Card, *, floor_metric: str | None = None) -> _Evaluation:
+    def _apply_riven_floor_profiled(result: _Evaluation, riven_card: _Card, *, floor_metric: str | None = None,
+                                    route_passives: Any = None) -> _Evaluation:
         # riven floor 修正（「无紫卡最优 − 最弱卡 + 紫卡」下限）在所有档位保留：
         # 它只花 ~9 次评估，却能挡住「窄 beam 剪掉显见路径导致带紫卡反而更差」
         # 的假性负收益（快速档 beam 12 实测出现 -5% 假性负收益）。真正按档位
         # 缩的是爬山轮数与 _best_fixed 的子集枚举。
-        return _apply_riven_floor(result, riven_card, floor_metric=floor_metric)
+        return _apply_riven_floor(result, riven_card, floor_metric=floor_metric, route_passives=route_passives)
 
     _progress("baseline")
     # ── 硬度积分靶（hardness-integrated）──────────────────────────────
@@ -5260,7 +5309,11 @@ def analyze_riven_request(
             searchHealthScale=(search_context.get("enemy_enhancements") or {}).get("healthScale", 1.0),
         )
 
-    def _apply_riven_floor(result: _Evaluation, riven_card: _Card, *, floor_metric: str | None = None) -> _Evaluation:
+    def _apply_riven_floor(result: _Evaluation, riven_card: _Card, *, floor_metric: str | None = None,
+                           route_passives: Any = None) -> _Evaluation:
+        # ``route_passives``: the passives of the route ``result`` was searched
+        # on (Incarnon route screening); the default route's otherwise.
+        floor_passives = passives if route_passives is None else route_passives
         # 梁搜索在强制含紫卡时可能中途剪掉「无紫卡最优 − 最弱卡 + 紫卡」这条
         # 显而易见的路径（部分配装在前几层协同未成形就被淘汰）。用它做下限，
         # 避免「带紫卡反而比不带差」的假性负收益。required 卡（剑风 Prime）
@@ -5342,7 +5395,7 @@ def analyze_riven_request(
                 riven_card,
                 scenario=scenario,
                 metric=floor_metric or ranking_metric,
-                passives=passives,
+                passives=floor_passives,
                 capacity_limit=capacity_limit,
                 target_context=search_context,
                 reorder_elements=False,  # the baseline's element order is already chosen
@@ -5352,12 +5405,12 @@ def analyze_riven_request(
                 floor = evaluated
         if floor is not None and ultra:
             floor = _evaluate(weapon, floor.cards, riven_card, scenario=scenario, metric=floor_metric or ranking_metric,
-                              passives=passives, capacity_limit=capacity_limit, target_context=search_context,
+                              passives=floor_passives, capacity_limit=capacity_limit, target_context=search_context,
                               reorder_elements=False) or floor
         if floor is not None and search_context is not benchmark_context:
             # Candidates compete on the middle node; the winner is scored on all.
             floor = _evaluate(weapon, floor.cards, riven_card, scenario=scenario,
-                              metric=floor_metric or ranking_metric, passives=passives,
+                              metric=floor_metric or ranking_metric, passives=floor_passives,
                               capacity_limit=capacity_limit, target_context=benchmark_context,
                               fixed_riven_index=floor.riven_index, reorder_elements=False) or floor
         if floor is not None and floor.score > result.score:
@@ -5381,6 +5434,124 @@ def analyze_riven_request(
         ),
         actual_card,
     )
+
+    # ── 灵化路线随紫卡筛选（2026-10-17）──────────────────────────────────
+    # 默认路线（社区策略或裸枪逐阶择优）在看到紫卡之前就定了，紫卡会让最优
+    # 路线翻转：奏凯无紫卡时 5-3 强袭损耗更强，配负暴击紫卡后 5-1 压制损耗
+    # 高 14–24%。基准、推荐与致命负仍按默认路线（武器级缓存，与紫卡无关）；
+    # 当前紫卡的配装先用快速档逐阶筛选（坐标下降，最多两轮），胜出路线再按
+    # 本档位精算，精算后仍胜过默认路线才采用。各路线在同一组硬度节点上评分。
+    # 显式路线、超快档与时间线请求不筛选。
+    actual_passives, actual_choices, route_screen = passives, dict(resolved_choices), None
+    route_baseline: _Evaluation | None = None
+    route_options = (_route_options(weapon, resolved_choices)
+                     if actual is not None and not ultra and timeline_seconds is None
+                     and request.get("incarnonChoices") is None and resolved_choices else [])
+    if route_options:
+        import time as _time
+        screen_started = _time.perf_counter()
+        route_cards: dict[tuple[tuple[str, str], ...], tuple[Any, list[str]]] = {}
+        screened: dict[tuple[tuple[str, str], ...], _Evaluation | None] = {}
+
+        def _passives_for(route: Mapping[str, str]) -> tuple[Any, list[str]]:
+            key = tuple(sorted(route.items()))
+            if key not in route_cards:
+                card, _choices, card_unsupported, _policy = _incarnon_card(
+                    weapon, dict(route), scenario=scenario, metric=objective_metric,
+                    policy=exports.get("incarnonDefaults"), build_label=exports["buildLabel"])
+                route_cards[key] = (_merge_passives(card, arcane_card), card_unsupported)
+            return route_cards[key]
+
+        def _screen(route: Mapping[str, str]) -> float:
+            key = tuple(sorted(route.items()))
+            if key not in screened:
+                if key == tuple(sorted(resolved_choices.items())) and profile == "fast":
+                    screened[key] = actual
+                else:
+                    try:
+                        route_passive = _passives_for(route)[0]
+                        screened[key] = _apply_riven_floor_profiled(
+                            _optimize_archetype(weapon, actual_card, scenario=scenario, metric=ranking_metric,
+                                                passives=route_passive, capacity_limit=capacity_limit,
+                                                search_profile="fast"),
+                            actual_card, route_passives=route_passive)
+                    except SimulationError:
+                        screened[key] = None  # no valid build on this route: it cannot win
+            return screened[key].score if screened[key] is not None else -math.inf
+
+        probes: dict[tuple[tuple[tuple[str, str], ...], tuple[str, ...]], float | None] = {}
+
+        def _probe(route: Mapping[str, str], build: _Evaluation) -> float | None:
+            # One replay of a fixed build under ``route`` (middle node).
+            key = (tuple(sorted(route.items())), tuple(card.key for card in build.cards))
+            if key not in probes:
+                probe = _evaluate(weapon, build.cards, actual_card, scenario=scenario, metric=ranking_metric,
+                                  passives=_passives_for(route)[0], capacity_limit=capacity_limit,
+                                  target_context=search_context, fixed_riven_index=build.riven_index,
+                                  reorder_elements=False)
+                probes[key] = probe.score if probe is not None else None
+            return probes[key]
+
+        current = dict(resolved_choices)
+        current_score = _screen(current)
+        inert: list[dict[str, str]] = []
+        for _round in range(2):
+            changed = False
+            for tier_key, branch_ids in route_options:
+                for branch_id in branch_ids:
+                    if current.get(tier_key) == branch_id:
+                        continue
+                    trial = {**current, tier_key: branch_id}
+                    if tuple(sorted(trial.items())) not in screened:
+                        # A branch that leaves the current build's score exactly
+                        # unchanged is inert in this model (gliding / holster
+                        # effects…): no search for it.
+                        build = screened[tuple(sorted(current.items()))]
+                        before = _probe(current, build) if build is not None else None
+                        after = _probe(trial, build) if before is not None else None
+                        if before is not None and after is not None and abs(after - before) <= 1e-12 * max(abs(before), 1.0):
+                            inert.append(trial)
+                            continue
+                    trial_score = _screen(trial)
+                    if trial_score > current_score * (1.0 + 1e-6):
+                        current, current_score, changed = trial, trial_score, True
+            if not changed:
+                break
+        adopted = False
+        if current != resolved_choices:
+            route_passive, route_unsupported = _passives_for(current)
+            final = screened[tuple(sorted(current.items()))]
+            if profile != "fast":
+                try:
+                    searched = _apply_riven_floor_profiled(
+                        _optimize_archetype(weapon, actual_card, scenario=scenario, metric=ranking_metric,
+                                            passives=route_passive, capacity_limit=capacity_limit),
+                        actual_card, route_passives=route_passive)
+                except SimulationError:
+                    searched = None
+                if searched is not None and searched.score >= final.score:
+                    final = searched
+            if final.score > actual.score * (1.0 + 1e-6):
+                actual, actual_passives, actual_choices, adopted = final, route_passive, dict(current), True
+                unsupported.extend(route_unsupported)
+                # The no-Riven build on the new route: when the route alone is
+                # stronger, the gain is measured against it, so actualGain counts
+                # only what the Riven adds (searched at the request's profile).
+                try:
+                    route_baseline = _optimize_archetype(weapon, None, scenario=scenario, metric=ranking_metric,
+                                                         passives=route_passive, capacity_limit=capacity_limit)
+                except SimulationError:
+                    route_baseline = None
+        route_screen = {
+            "defaultRoute": dict(resolved_choices),
+            "chosenRoute": dict(actual_choices),
+            "adopted": adopted,
+            "screenProfile": "fast",
+            "screened": [{"route": dict(key), "score": evaluation.score if evaluation is not None else None}
+                         for key, evaluation in screened.items()],
+            "inert": inert,
+            "seconds": round(_time.perf_counter() - screen_started, 2),
+        }
 
     # Reverse floor (ultra without a cached baseline only): the actual build
     # without its Riven, the slot refilled, is a no-Riven build too; when it
@@ -5412,6 +5583,14 @@ def analyze_riven_request(
             if best.score > baseline.score * (1.0 + 1e-9):
                 gain_baseline = best
                 unsupported.append("baseline-raised-by-reverse-floor")
+    baseline_passives, baseline_choices = passives, dict(resolved_choices)
+    if route_screen is not None:
+        route_screen["baselineScores"] = {"defaultRoute": gain_baseline.score,
+                                          "chosenRoute": route_baseline.score if route_baseline is not None else None}
+        route_screen["baselineRaised"] = False
+    if route_baseline is not None and route_baseline.score > gain_baseline.score * (1.0 + 1e-9):
+        gain_baseline, baseline_passives, baseline_choices = route_baseline, actual_passives, dict(actual_choices)
+        route_screen["baselineRaised"] = True
 
     _fusable = _fusion_codes_from_templates(
         exports.get("rivenTemplates") or {}, riven_type
@@ -5736,7 +5915,7 @@ def analyze_riven_request(
     ablation_reference = quality_scores["actual"]
     if ultra and search_context is not benchmark_context:
         ablation_context = search_context
-        center = _evaluate(weapon, actual.cards, actual_card, scenario=scenario, metric=score_metric, passives=passives,
+        center = _evaluate(weapon, actual.cards, actual_card, scenario=scenario, metric=score_metric, passives=actual_passives,
                            capacity_limit=capacity_limit, target_context=search_context,
                            fixed_riven_index=actual.riven_index, reorder_elements=False)
         if center is not None:
@@ -5749,7 +5928,7 @@ def analyze_riven_request(
         _pool = _parallel.get_pool()
         if _pool is not None:
             _ctx = _parallel.shared({"weapon": weapon, "scenario": scenario, "metric": objective_metric,
-                    "passives": passives, "slot_limit": 8, "capacity_limit": capacity_limit,
+                    "passives": actual_passives, "slot_limit": 8, "capacity_limit": capacity_limit,
                     "target_context": ablation_context, "fixed_riven_index": actual.riven_index,
                     "reorder_elements": False})
             _jobs = {}
@@ -5775,7 +5954,7 @@ def analyze_riven_request(
                 without,
                 scenario=scenario,
                 metric=score_metric,
-                passives=passives,
+                passives=actual_passives,
                 capacity_limit=capacity_limit,
                 target_context=benchmark_context,
                 max_keep_cap=details_keep_cap,
@@ -5812,7 +5991,7 @@ def analyze_riven_request(
         else:
             ablated = _evaluate(
                 weapon, actual.cards, without_line, scenario=scenario,
-                metric=score_metric, passives=passives,
+                metric=score_metric, passives=actual_passives,
                 capacity_limit=capacity_limit, target_context=ablation_context,
                 fixed_riven_index=actual.riven_index, reorder_elements=False,
             )
@@ -5989,9 +6168,16 @@ def analyze_riven_request(
             + (f"使用灵化形态（模式 {fire_mode + 1}）" if fire_mode != 0 else "使用本体形态（模式 1）")
             + (
                 "；进化 " + " / ".join(value for _, value in sorted(resolved_choices.items()))
-                + ("（显式指定）" if request.get("incarnonChoices") else "（按武器默认策略选取，可在配装页改选）")
+                + ("（显式指定）" if request.get("incarnonChoices") else "（无紫卡基准按武器默认策略选取）")
                 if resolved_choices
                 else ""
+            )
+            + (
+                "；当前紫卡配装改用进化 " + " / ".join(value for _, value in sorted(actual_choices.items()))
+                + "（按这张紫卡逐阶筛选路线后胜出）"
+                + ("；新路线的无紫卡配装更强，基准与增益改按它计" if route_screen.get("baselineRaised") else "")
+                if route_screen and route_screen.get("adopted")
+                else ("；已按这张紫卡逐阶筛选路线，默认路线最优" if route_screen else "")
             )
             + "；灵化形态按常驻计算，“自身护盾 / 超宏击破”类进化效果按强制生效"
             if resolved_choices or weapon.get("isIncarnonForm")
@@ -6074,8 +6260,8 @@ def analyze_riven_request(
             "arcane timeline is an expected DPS envelope, not an enemy hit/status event replay"
         )
     _progress("payload")
-    baseline_payload = _build_payload(weapon, baseline, None, passives)
-    actual_payload = _build_payload(weapon, actual, actual_card, passives)
+    baseline_payload = _build_payload(weapon, baseline, None, baseline_passives)
+    actual_payload = _build_payload(weapon, actual, actual_card, actual_passives)
     # 无限极化口径的极化次数（只展示结果，不可调节）；近战带架势时按架势
     # 倍率放大普通攻击展示数值（与配装页 HUD 口径一致，重击不受架势影响）。
     for payload, evaluation, riven_card in (
@@ -6092,13 +6278,15 @@ def analyze_riven_request(
         payload['optimizationMetric'] = ranking_metric
         payload['scoringMetric'] = score_metric
         payload['scoringScore'] = quality_scores['baseline' if evaluation is baseline else 'actual']
+        if resolved_choices:
+            payload['incarnonChoices'] = dict(baseline_choices if evaluation is baseline else actual_choices)
         if stance_multiplier != 1.0:
             for key in ("attackDps", "burstDps", "sustainedDps"):
                 value = payload.get(key)
                 if isinstance(value, (int, float)) and not isinstance(value, bool):
                     payload[key] = value * stance_multiplier
     alternate_modes = _alternate_mode_payloads(
-        weapon_record, actual, actual_card, passives, selected_fire_mode=fire_mode
+        weapon_record, actual, actual_card, actual_passives, selected_fire_mode=fire_mode
     )
     if alternate_modes:
         actual_payload["alternateModes"] = alternate_modes
@@ -6170,7 +6358,12 @@ def analyze_riven_request(
         "negativeAssessment": negative_assessment,
         "baseline": baseline_payload,
         "actual": actual_payload,
-        "incarnonChoices": resolved_choices,
+        # The actual build's route and the displayed baseline's (the default
+        # route unless the chosen route's no-Riven build is stronger).
+        # Recommendations and fatal negatives always use the default route.
+        "incarnonChoices": actual_choices,
+        "baselineIncarnonChoices": baseline_choices,
+        "incarnonRouteScreen": route_screen,
         "incarnonPolicy": incarnon_policy,
         "arcaneStates": arcane_states,
         "stance": (
