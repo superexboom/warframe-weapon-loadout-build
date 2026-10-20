@@ -2,11 +2,11 @@
  "schemaVersion": 1,
  "buildLabel": "2026.08.13.13.24",
  "counts": {
-  "eligibleMods": 569,
-  "mappedMods": 569,
+  "eligibleMods": 622,
+  "mappedMods": 622,
   "uniqueArtFiles": 388,
   "missingMods": 0,
-  "effectTextZh": 567,
+  "effectTextZh": 617,
   "conditionTextZh": 38,
   "setTextZh": 20
  },
@@ -102,12 +102,22 @@
    "maxRank": 3,
    "drain": 13,
    "description": "连续命中叠层；基础形态直击生效，灵化形态仅范围伤害生效。不同形态分别保留层数和剩余期限。",
-   "effectsZh": ["命中后：下一次射击 +20% 独立伤害，持续 2 秒，最多 20 层。多重命中分别累积；超时清空。"],
+   "effectsZh": [
+    "命中后：下一次射击 +20% 独立伤害，持续 2 秒，最多 20 层。多重命中分别累积；超时清空。"
+   ],
    "effectsZhByRank": [
-    ["命中后：下一次射击 +5% 独立伤害，持续 0.5 秒，最多 80 层。"],
-    ["命中后：下一次射击 +10% 独立伤害，持续 1 秒，最多 40 层。"],
-    ["命中后：下一次射击 +15% 独立伤害，持续 1.5 秒，最多 26 层。"],
-    ["命中后：下一次射击 +20% 独立伤害，持续 2 秒，最多 20 层。多重命中分别累积；超时清空。"]
+    [
+     "命中后：下一次射击 +5% 独立伤害，持续 0.5 秒，最多 80 层。"
+    ],
+    [
+     "命中后：下一次射击 +10% 独立伤害，持续 1 秒，最多 40 层。"
+    ],
+    [
+     "命中后：下一次射击 +15% 独立伤害，持续 1.5 秒，最多 26 层。"
+    ],
+    [
+     "命中后：下一次射击 +20% 独立伤害，持续 2 秒，最多 20 层。多重命中分别累积；超时清空。"
+    ]
    ],
    "textSource": "current-native-script-rank-values-and-confirmed-live-form-behavior"
   },
@@ -22627,6 +22637,2277 @@
     [
      "+350% 弱点伤害",
      "+350% 弱点暴击几率。多重射击无法变动。"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Antiques/AmmoSchool": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/AntiqueMods/OrokinImageA.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "维南",
+   "nameEn": "Vik-Anam",
+   "rarity": "UNCOMMON",
+   "polarity": null,
+   "maxRank": 5,
+   "drain": 5,
+   "description": "",
+   "effectsZh": [
+    "+30% 最大增幅器能量",
+    "每个 <MADURAI_CLEAN>Madurai 学派 Mod 增加 5% 增幅器能量恢复速率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+5% 最大增幅器能量",
+     "每个 <MADURAI_CLEAN>Madurai 学派 Mod 增加 5% 增幅器能量恢复速率"
+    ],
+    [
+     "+10% 最大增幅器能量",
+     "每个 <MADURAI_CLEAN>Madurai 学派 Mod 增加 5% 增幅器能量恢复速率"
+    ],
+    [
+     "+15% 最大增幅器能量",
+     "每个 <MADURAI_CLEAN>Madurai 学派 Mod 增加 5% 增幅器能量恢复速率"
+    ],
+    [
+     "+20% 最大增幅器能量",
+     "每个 <MADURAI_CLEAN>Madurai 学派 Mod 增加 5% 增幅器能量恢复速率"
+    ],
+    [
+     "+25% 最大增幅器能量",
+     "每个 <MADURAI_CLEAN>Madurai 学派 Mod 增加 5% 增幅器能量恢复速率"
+    ],
+    [
+     "+30% 最大增幅器能量",
+     "每个 <MADURAI_CLEAN>Madurai 学派 Mod 增加 5% 增幅器能量恢复速率"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Antiques/CritChanceSchool": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/AntiqueMods/OrokinImageC.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "奥维",
+   "nameEn": "Omn-Evi",
+   "rarity": "UNCOMMON",
+   "polarity": null,
+   "maxRank": 5,
+   "drain": 5,
+   "description": "",
+   "effectsZh": [
+    "+60% 增幅器暴击几率",
+    "每个 <ZENURIK_CLEAN>Zenurik 学派 Mod 增加 10% 增幅器暴击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 增幅器暴击几率",
+     "每个 <ZENURIK_CLEAN>Zenurik 学派 Mod 增加 10% 增幅器暴击伤害"
+    ],
+    [
+     "+20% 增幅器暴击几率",
+     "每个 <ZENURIK_CLEAN>Zenurik 学派 Mod 增加 10% 增幅器暴击伤害"
+    ],
+    [
+     "+30% 增幅器暴击几率",
+     "每个 <ZENURIK_CLEAN>Zenurik 学派 Mod 增加 10% 增幅器暴击伤害"
+    ],
+    [
+     "+40% 增幅器暴击几率",
+     "每个 <ZENURIK_CLEAN>Zenurik 学派 Mod 增加 10% 增幅器暴击伤害"
+    ],
+    [
+     "+50% 增幅器暴击几率",
+     "每个 <ZENURIK_CLEAN>Zenurik 学派 Mod 增加 10% 增幅器暴击伤害"
+    ],
+    [
+     "+60% 增幅器暴击几率",
+     "每个 <ZENURIK_CLEAN>Zenurik 学派 Mod 增加 10% 增幅器暴击伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Antiques/FireRateAndEfficiency": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/AntiqueMods/OrokinImageG.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "维萨",
+   "nameEn": "Vikla-Safor",
+   "rarity": null,
+   "polarity": null,
+   "maxRank": 5,
+   "drain": 5,
+   "description": "",
+   "effectsZh": [
+    "+30% 增幅器射速",
+    "+30% 增幅器弹药效率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+5% 增幅器射速",
+     "+5% 增幅器弹药效率"
+    ],
+    [
+     "+10% 增幅器射速",
+     "+10% 增幅器弹药效率"
+    ],
+    [
+     "+15% 增幅器射速",
+     "+15% 增幅器弹药效率"
+    ],
+    [
+     "+20% 增幅器射速",
+     "+20% 增幅器弹药效率"
+    ],
+    [
+     "+25% 增幅器射速",
+     "+25% 增幅器弹药效率"
+    ],
+    [
+     "+30% 增幅器射速",
+     "+30% 增幅器弹药效率"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Antiques/Multishot": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/AntiqueMods/OrokinImageL.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "哈达",
+   "nameEn": "Hayan-Dabor",
+   "rarity": null,
+   "polarity": null,
+   "maxRank": 5,
+   "drain": 5,
+   "description": "",
+   "effectsZh": [
+    "+60% 增幅器多重射击"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 增幅器多重射击"
+    ],
+    [
+     "+20% 增幅器多重射击"
+    ],
+    [
+     "+30% 增幅器多重射击"
+    ],
+    [
+     "+40% 增幅器多重射击"
+    ],
+    [
+     "+50% 增幅器多重射击"
+    ],
+    [
+     "+60% 增幅器多重射击"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Antiques/ProcChanceSchool": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/AntiqueMods/OrokinImageM.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "西塔",
+   "nameEn": "Sil-Tabol",
+   "rarity": "UNCOMMON",
+   "polarity": null,
+   "maxRank": 5,
+   "drain": 5,
+   "description": "",
+   "effectsZh": [
+    "+60% 增幅器触发几率",
+    "每个 Vazarin 学派 Mod 增加 15% 异常状态伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 增幅器触发几率",
+     "每个 Vazarin 学派 Mod 增加 15% 异常状态伤害"
+    ],
+    [
+     "+20% 增幅器触发几率",
+     "每个 Vazarin 学派 Mod 增加 15% 异常状态伤害"
+    ],
+    [
+     "+30% 增幅器触发几率",
+     "每个 Vazarin 学派 Mod 增加 15% 异常状态伤害"
+    ],
+    [
+     "+40% 增幅器触发几率",
+     "每个 Vazarin 学派 Mod 增加 15% 异常状态伤害"
+    ],
+    [
+     "+50% 增幅器触发几率",
+     "每个 Vazarin 学派 Mod 增加 15% 异常状态伤害"
+    ],
+    [
+     "+60% 增幅器触发几率",
+     "每个 Vazarin 学派 Mod 增加 15% 异常状态伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Antiques/WeaponDamageSchools": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/AntiqueMods/OrokinImageU.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "乌卡",
+   "nameEn": "Ubri-Kaneph",
+   "rarity": "RARE",
+   "polarity": null,
+   "maxRank": 5,
+   "drain": 5,
+   "description": "",
+   "effectsZh": [
+    "+60% 增幅器伤害",
+    "每种独特学派的 Mod 可获得 +10% 的加成"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 增幅器伤害",
+     "每种独特学派的 Mod 可获得 +10% 的加成"
+    ],
+    [
+     "+20% 增幅器伤害",
+     "每种独特学派的 Mod 可获得 +10% 的加成"
+    ],
+    [
+     "+30% 增幅器伤害",
+     "每种独特学派的 Mod 可获得 +10% 的加成"
+    ],
+    [
+     "+40% 增幅器伤害",
+     "每种独特学派的 Mod 可获得 +10% 的加成"
+    ],
+    [
+     "+50% 增幅器伤害",
+     "每种独特学派的 Mod 可获得 +10% 的加成"
+    ],
+    [
+     "+60% 增幅器伤害",
+     "每种独特学派的 Mod 可获得 +10% 的加成"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/DataSpike/Assassin/SwiftExecuteMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/DataSpike/SwiftExecuteMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "迅捷怜悯",
+   "nameEn": "Swift Mercy",
+   "rarity": null,
+   "polarity": null,
+   "maxRank": 0,
+   "drain": 0,
+   "description": "",
+   "effectsZh": [
+    "怜悯之击的施放速度提升 50%"
+   ],
+   "effectsZhByRank": [
+    [
+     "怜悯之击的施放速度提升 50%"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Melee/Beginner/WeaponGlaiveSpeedModBeginner": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Unique/GlaiveWhirlwindMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "旋风",
+   "nameEn": "Whirlwind",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+120% 投射物速度"
+   ],
+   "effectsZhByRank": [
+    [
+     "+30% 投射物速度"
+    ],
+    [
+     "+60% 投射物速度"
+    ],
+    [
+     "+90% 投射物速度"
+    ],
+    [
+     "+120% 投射物速度"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Melee/Channel/ChannelProcTimeExtendOnHitMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/ChannelProcTimeExtendOnHitMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "长时苦难",
+   "nameEn": "Enduring Affliction",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_DEFENSE",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+100% 对浮空敌人的触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+16.7% 对浮空敌人的触发几率"
+    ],
+    [
+     "+33.3% 对浮空敌人的触发几率"
+    ],
+    [
+     "+50% 对浮空敌人的触发几率"
+    ],
+    [
+     "+66.7% 对浮空敌人的触发几率"
+    ],
+    [
+     "+83.3% 对浮空敌人的触发几率"
+    ],
+    [
+     "+100% 对浮空敌人的触发几率"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Melee/WeaponGlaiveExplodingReflectionDecreaseMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/VolatileQuickReturnMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "易爆速返",
+   "nameEn": "Volatile Quick Return",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_TACTIC",
+   "maxRank": 3,
+   "drain": 5,
+   "description": "",
+   "effectsZh": [
+    "-4 弹跳",
+    "+3 爆炸半径",
+    "+100% 几率在反弹时爆炸（禁用穿透效果）"
+   ],
+   "effectsZhByRank": [
+    [
+     "-1 弹跳",
+     "+0.8 爆炸半径",
+     "+25% 几率在反弹时爆炸（禁用穿透效果）"
+    ],
+    [
+     "-2 弹跳",
+     "+1.5 爆炸半径",
+     "+50% 几率在反弹时爆炸（禁用穿透效果）"
+    ],
+    [
+     "-3 弹跳",
+     "+2.3 爆炸半径",
+     "+75% 几率在反弹时爆炸（禁用穿透效果）"
+    ],
+    [
+     "-4 弹跳",
+     "+3 爆炸半径",
+     "+100% 几率在反弹时爆炸（禁用穿透效果）"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Melee/WeaponMeleeSlamDamageMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Melee/WeaponMeleeSlamDamageMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "震波",
+   "nameEn": "Seismic Wave",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+200% 震地攻击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+50% 震地攻击伤害"
+    ],
+    [
+     "+100% 震地攻击伤害"
+    ],
+    [
+     "+150% 震地攻击伤害"
+    ],
+    [
+     "+200% 震地攻击伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Pistol/WeaponBleedOnImpactPistolMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pistol/WeaponBleedOnImpactPistolMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "失血",
+   "nameEn": "Hemorrhage",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 15,
+   "description": "",
+   "effectsZh": [
+    " <DT_IMPACT_COLOR>冲击异常状态有 35% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+   ],
+   "effectsZhByRank": [
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 10% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 15% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 20% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 25% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 30% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 35% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/GunnerSideWeaponDamage": {
+   "art": "/assets/mods/art/Lotus/Interface/Icons/RailjackSystemMods/GunnerWeaponDamage.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "GunnerSideWeaponDamage",
+   "nameEn": "GunnerSideWeaponDamage",
+   "rarity": null,
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 15,
+   "description": "",
+   "effectsZh": null,
+   "effectsZhByRank": null,
+   "textSource": null
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/LavanOrdnanceDamage": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/RailjackModWarhead.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "湮灭弹头",
+   "nameEn": "Warhead",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 16,
+   "description": "",
+   "effectsZh": [
+    "+127.3% 火炮伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+9.1% 火炮伤害"
+    ],
+    [
+     "+18.2% 火炮伤害"
+    ],
+    [
+     "+27.3% 火炮伤害"
+    ],
+    [
+     "+36.4% 火炮伤害"
+    ],
+    [
+     "+45.5% 火炮伤害"
+    ],
+    [
+     "+54.5% 火炮伤害"
+    ],
+    [
+     "+63.6% 火炮伤害"
+    ],
+    [
+     "+72.7% 火炮伤害"
+    ],
+    [
+     "+81.8% 火炮伤害"
+    ],
+    [
+     "+90.9% 火炮伤害"
+    ],
+    [
+     "+100% 火炮伤害"
+    ],
+    [
+     "+109.1% 火炮伤害"
+    ],
+    [
+     "+118.2% 火炮伤害"
+    ],
+    [
+     "+127.3% 火炮伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/LavanOrdnanceSpeed": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/RailjackModOrdnanceVelocity.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "火炮速度",
+   "nameEn": "Ordnance Velocity",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+90% 火炮投射物速度"
+   ],
+   "effectsZhByRank": [
+    [
+     "+10% 火炮投射物速度"
+    ],
+    [
+     "+20% 火炮投射物速度"
+    ],
+    [
+     "+30% 火炮投射物速度"
+    ],
+    [
+     "+40% 火炮投射物速度"
+    ],
+    [
+     "+50% 火炮投射物速度"
+    ],
+    [
+     "+60% 火炮投射物速度"
+    ],
+    [
+     "+70% 火炮投射物速度"
+    ],
+    [
+     "+80% 火炮投射物速度"
+    ],
+    [
+     "+90% 火炮投射物速度"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/LavanReducedOrdnanceReload": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/RailjackModRipload.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "撕裂装填",
+   "nameEn": "Ripload",
+   "rarity": null,
+   "polarity": "AP_TACTIC",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": [
+    "-63% 火炮装填时间"
+   ],
+   "effectsZhByRank": [
+    [
+     "-7% 火炮装填时间"
+    ],
+    [
+     "-14% 火炮装填时间"
+    ],
+    [
+     "-21% 火炮装填时间"
+    ],
+    [
+     "-28% 火炮装填时间"
+    ],
+    [
+     "-35% 火炮装填时间"
+    ],
+    [
+     "-42% 火炮装填时间"
+    ],
+    [
+     "-49% 火炮装填时间"
+    ],
+    [
+     "-56% 火炮装填时间"
+    ],
+    [
+     "-63% 火炮装填时间"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/VidarCorpusKiller": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/DmgVsCorpus.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "格拉努之劲敌",
+   "nameEn": "Granum's Nemesis",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "x1.41 炮台对 Corpus 的伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "x1.05 炮台对 Corpus 的伤害"
+    ],
+    [
+     "x1.09 炮台对 Corpus 的伤害"
+    ],
+    [
+     "x1.14 炮台对 Corpus 的伤害"
+    ],
+    [
+     "x1.18 炮台对 Corpus 的伤害"
+    ],
+    [
+     "x1.23 炮台对 Corpus 的伤害"
+    ],
+    [
+     "x1.27 炮台对 Corpus 的伤害"
+    ],
+    [
+     "x1.32 炮台对 Corpus 的伤害"
+    ],
+    [
+     "x1.36 炮台对 Corpus 的伤害"
+    ],
+    [
+     "x1.41 炮台对 Corpus 的伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/VidarGrineerKiller": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/DmgVsGrineer.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "蠕虫熬煎",
+   "nameEn": "Worm's Torment",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "x1.41 炮台对 Grineer 的伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "x1.05 炮台对 Grineer 的伤害"
+    ],
+    [
+     "x1.09 炮台对 Grineer 的伤害"
+    ],
+    [
+     "x1.14 炮台对 Grineer 的伤害"
+    ],
+    [
+     "x1.18 炮台对 Grineer 的伤害"
+    ],
+    [
+     "x1.23 炮台对 Grineer 的伤害"
+    ],
+    [
+     "x1.27 炮台对 Grineer 的伤害"
+    ],
+    [
+     "x1.32 炮台对 Grineer 的伤害"
+    ],
+    [
+     "x1.36 炮台对 Grineer 的伤害"
+    ],
+    [
+     "x1.41 炮台对 Grineer 的伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/VidarGunnerWeaponCritChance": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/RailjackModPredator.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "捕食者",
+   "nameEn": "Predator",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": [
+    "+75% 炮台暴击几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+8.3% 炮台暴击几率"
+    ],
+    [
+     "+16.7% 炮台暴击几率"
+    ],
+    [
+     "+25% 炮台暴击几率"
+    ],
+    [
+     "+33.3% 炮台暴击几率"
+    ],
+    [
+     "+41.7% 炮台暴击几率"
+    ],
+    [
+     "+50% 炮台暴击几率"
+    ],
+    [
+     "+58.3% 炮台暴击几率"
+    ],
+    [
+     "+66.7% 炮台暴击几率"
+    ],
+    [
+     "+75% 炮台暴击几率"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/VidarGunnerWeaponCritDamage": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/RailjackModSectionDensity.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "截面密度",
+   "nameEn": "Section Density",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 15,
+   "description": "",
+   "effectsZh": [
+    "+75% 炮台暴击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+8.3% 炮台暴击伤害"
+    ],
+    [
+     "+16.7% 炮台暴击伤害"
+    ],
+    [
+     "+25% 炮台暴击伤害"
+    ],
+    [
+     "+33.3% 炮台暴击伤害"
+    ],
+    [
+     "+41.7% 炮台暴击伤害"
+    ],
+    [
+     "+50% 炮台暴击伤害"
+    ],
+    [
+     "+58.3% 炮台暴击伤害"
+    ],
+    [
+     "+66.7% 炮台暴击伤害"
+    ],
+    [
+     "+75% 炮台暴击伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/VidarGunnerWeaponDamage": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/RailjackModHyperstrike.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "超量打击",
+   "nameEn": "Hyperstrike",
+   "rarity": null,
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 15,
+   "description": "",
+   "effectsZh": [
+    "+112.5% 炮台伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+12.5% 炮台伤害"
+    ],
+    [
+     "+25% 炮台伤害"
+    ],
+    [
+     "+37.5% 炮台伤害"
+    ],
+    [
+     "+50% 炮台伤害"
+    ],
+    [
+     "+62.5% 炮台伤害"
+    ],
+    [
+     "+75% 炮台伤害"
+    ],
+    [
+     "+87.5% 炮台伤害"
+    ],
+    [
+     "+100% 炮台伤害"
+    ],
+    [
+     "+112.5% 炮台伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/VidarSentientKiller": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/RailjackModSentientScalpel.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "Sentient 解剖刀",
+   "nameEn": "Sentient Scalpel",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": [
+    "x1.41 炮台对 Sentient 的伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "x1.05 炮台对 Sentient 的伤害"
+    ],
+    [
+     "x1.09 炮台对 Sentient 的伤害"
+    ],
+    [
+     "x1.14 炮台对 Sentient 的伤害"
+    ],
+    [
+     "x1.18 炮台对 Sentient 的伤害"
+    ],
+    [
+     "x1.23 炮台对 Sentient 的伤害"
+    ],
+    [
+     "x1.27 炮台对 Sentient 的伤害"
+    ],
+    [
+     "x1.32 炮台对 Sentient 的伤害"
+    ],
+    [
+     "x1.36 炮台对 Sentient 的伤害"
+    ],
+    [
+     "x1.41 炮台对 Sentient 的伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/VidarTurretRangeAndSpeed": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/RailjackModTurretVelocity.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "炮台速度",
+   "nameEn": "Turret Velocity",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 16,
+   "description": "",
+   "effectsZh": [
+    "+32.2% 炮台范围",
+    "+70% 炮台投射物速度"
+   ],
+   "effectsZhByRank": [
+    [
+     "+2.3% 炮台范围",
+     "+5% 炮台投射物速度"
+    ],
+    [
+     "+4.6% 炮台范围",
+     "+10% 炮台投射物速度"
+    ],
+    [
+     "+6.9% 炮台范围",
+     "+15% 炮台投射物速度"
+    ],
+    [
+     "+9.2% 炮台范围",
+     "+20% 炮台投射物速度"
+    ],
+    [
+     "+11.5% 炮台范围",
+     "+25% 炮台投射物速度"
+    ],
+    [
+     "+13.8% 炮台范围",
+     "+30% 炮台投射物速度"
+    ],
+    [
+     "+16.1% 炮台范围",
+     "+35% 炮台投射物速度"
+    ],
+    [
+     "+18.4% 炮台范围",
+     "+40% 炮台投射物速度"
+    ],
+    [
+     "+20.7% 炮台范围",
+     "+45% 炮台投射物速度"
+    ],
+    [
+     "+23% 炮台范围",
+     "+50% 炮台投射物速度"
+    ],
+    [
+     "+25.3% 炮台范围",
+     "+55% 炮台投射物速度"
+    ],
+    [
+     "+27.6% 炮台范围",
+     "+60% 炮台投射物速度"
+    ],
+    [
+     "+29.9% 炮台范围",
+     "+65% 炮台投射物速度"
+    ],
+    [
+     "+32.2% 炮台范围",
+     "+70% 炮台投射物速度"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Railjack/Gunnery/ZektiSuperWeaponDamage": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Railjack/RailjackModForwardArtillery.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "前装光能炮",
+   "nameEn": "Forward Artillery",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 16,
+   "description": "",
+   "effectsZh": [
+    "+127.3% 前装光能炮伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+9.1% 前装光能炮伤害"
+    ],
+    [
+     "+18.2% 前装光能炮伤害"
+    ],
+    [
+     "+27.3% 前装光能炮伤害"
+    ],
+    [
+     "+36.4% 前装光能炮伤害"
+    ],
+    [
+     "+45.5% 前装光能炮伤害"
+    ],
+    [
+     "+54.5% 前装光能炮伤害"
+    ],
+    [
+     "+63.6% 前装光能炮伤害"
+    ],
+    [
+     "+72.7% 前装光能炮伤害"
+    ],
+    [
+     "+81.8% 前装光能炮伤害"
+    ],
+    [
+     "+90.9% 前装光能炮伤害"
+    ],
+    [
+     "+100% 前装光能炮伤害"
+    ],
+    [
+     "+109.1% 前装光能炮伤害"
+    ],
+    [
+     "+118.2% 前装光能炮伤害"
+    ],
+    [
+     "+127.3% 前装光能炮伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Rifle/Event/Nightwave/NightwaveAkjagaraAugmentMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Nightwave/NightwaveAkjagaraAugmentMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "优势距离",
+   "nameEn": "Range Advantage",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "如果附近 10 米内没有敌人则 +300% 伤害。"
+   ],
+   "effectsZhByRank": [
+    [
+     "如果附近 10 米内没有敌人则 +50% 伤害。"
+    ],
+    [
+     "如果附近 10 米内没有敌人则 +100% 伤害。"
+    ],
+    [
+     "如果附近 10 米内没有敌人则 +150% 伤害。"
+    ],
+    [
+     "如果附近 10 米内没有敌人则 +200% 伤害。"
+    ],
+    [
+     "如果附近 10 米内没有敌人则 +250% 伤害。"
+    ],
+    [
+     "如果附近 10 米内没有敌人则 +300% 伤害。"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Rifle/Event/Nightwave/NightwaveSporothrixAugmentMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Nightwave/NightwaveSporothrixAugmentMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "易爆变体",
+   "nameEn": "Volatile Variant",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "射击具有 +3 穿透，且倒钩立即爆炸。直接命中敌人的倒钩有 +4 米的范围，并 +50% 触发几率。"
+   ],
+   "effectsZhByRank": [
+    [
+     "射击具有 +3 穿透，且倒钩立即爆炸。直接命中敌人的倒钩有 +4 米的范围，并 +25% 触发几率。"
+    ],
+    [
+     "射击具有 +3 穿透，且倒钩立即爆炸。直接命中敌人的倒钩有 +4 米的范围，并 +30% 触发几率。"
+    ],
+    [
+     "射击具有 +3 穿透，且倒钩立即爆炸。直接命中敌人的倒钩有 +4 米的范围，并 +35% 触发几率。"
+    ],
+    [
+     "射击具有 +3 穿透，且倒钩立即爆炸。直接命中敌人的倒钩有 +4 米的范围，并 +40% 触发几率。"
+    ],
+    [
+     "射击具有 +3 穿透，且倒钩立即爆炸。直接命中敌人的倒钩有 +4 米的范围，并 +45% 触发几率。"
+    ],
+    [
+     "射击具有 +3 穿透，且倒钩立即爆炸。直接命中敌人的倒钩有 +4 米的范围，并 +50% 触发几率。"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponIncreaseRadialExplosionModExpert": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Unique/FirestormMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "烈焰风暴 Prime",
+   "nameEn": "Primed Firestorm",
+   "rarity": "LEGENDARY",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 16,
+   "description": [
+    "提高范围攻击武器的爆炸半径。"
+   ],
+   "effectsZh": [
+    "+44% 爆炸范围"
+   ],
+   "effectsZhByRank": [
+    [
+     "+4% 爆炸范围"
+    ],
+    [
+     "+8% 爆炸范围"
+    ],
+    [
+     "+12% 爆炸范围"
+    ],
+    [
+     "+16% 爆炸范围"
+    ],
+    [
+     "+20% 爆炸范围"
+    ],
+    [
+     "+24% 爆炸范围"
+    ],
+    [
+     "+28% 爆炸范围"
+    ],
+    [
+     "+32% 爆炸范围"
+    ],
+    [
+     "+36% 爆炸范围"
+    ],
+    [
+     "+40% 爆炸范围"
+    ],
+    [
+     "+44% 爆炸范围"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Rifle/Intermediate/WeaponIncreaseRadialExplosionModIntermediate": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Unique/FirestormMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "烈焰风暴",
+   "nameEn": "Firestorm",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": null,
+   "effectsZhByRank": null,
+   "textSource": null
+  },
+  "/Lotus/Upgrades/Mods/Rifle/WeaponBleedOnImpactProcRifleMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/WeaponBleedOnImpactProcRifleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "内部出血",
+   "nameEn": "Internal Bleeding",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 15,
+   "description": "",
+   "effectsZh": [
+    " <DT_IMPACT_COLOR>冲击异常状态有 35% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+   ],
+   "effectsZhByRank": [
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 10% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 15% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 20% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 25% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 30% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 35% 的几率施加一个 <DT_SLASH_COLOR>切割异常状态（射速低于 2.5 时 x2）。"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountInvisibleMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Rifle/WeaponDamageAmountInvisibleMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "幽灵 膛线",
+   "nameEn": "Spectral Serration",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 16,
+   "description": "",
+   "effectsZh": [
+    "+330% 隐身时伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+30% 隐身时伤害"
+    ],
+    [
+     "+60% 隐身时伤害"
+    ],
+    [
+     "+90% 隐身时伤害"
+    ],
+    [
+     "+120% 隐身时伤害"
+    ],
+    [
+     "+150% 隐身时伤害"
+    ],
+    [
+     "+180% 隐身时伤害"
+    ],
+    [
+     "+210% 隐身时伤害"
+    ],
+    [
+     "+240% 隐身时伤害"
+    ],
+    [
+     "+270% 隐身时伤害"
+    ],
+    [
+     "+300% 隐身时伤害"
+    ],
+    [
+     "+330% 隐身时伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Rifle/WeaponIncreaseRadialExplosionMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Unique/FirestormMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "烈焰风暴",
+   "nameEn": "Firestorm",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 9,
+   "description": [
+    "提高范围攻击武器的爆炸半径。"
+   ],
+   "effectsZh": [
+    "+24% 爆炸范围"
+   ],
+   "effectsZhByRank": [
+    [
+     "+6% 爆炸范围"
+    ],
+    [
+     "+12% 爆炸范围"
+    ],
+    [
+     "+18% 爆炸范围"
+    ],
+    [
+     "+24% 爆炸范围"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/BeastWeapon/BeastBruteConditioningMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/BeastBruteConditioningMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "蛮力调控",
+   "nameEn": "Brute Conditioning",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+385% 近战伤害",
+    "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+35% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+70% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+105% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+140% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+175% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+210% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+245% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+280% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+315% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+350% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ],
+    [
+     "+385% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_IMPACT_COLOR>冲击伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/BeastWeapon/BeastCullTheWeakMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/BeastCullTheWeakMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "优胜劣汰",
+   "nameEn": "Cull the Weak",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "目标身上的每种异常状态可增加 +60% 近战伤害",
+    "非暴击攻击造成 +240% 伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "目标身上的每种异常状态可增加 +10% 近战伤害",
+     "非暴击攻击造成 +40% 伤害"
+    ],
+    [
+     "目标身上的每种异常状态可增加 +20% 近战伤害",
+     "非暴击攻击造成 +80% 伤害"
+    ],
+    [
+     "目标身上的每种异常状态可增加 +30% 近战伤害",
+     "非暴击攻击造成 +120% 伤害"
+    ],
+    [
+     "目标身上的每种异常状态可增加 +40% 近战伤害",
+     "非暴击攻击造成 +160% 伤害"
+    ],
+    [
+     "目标身上的每种异常状态可增加 +50% 近战伤害",
+     "非暴击攻击造成 +200% 伤害"
+    ],
+    [
+     "目标身上的每种异常状态可增加 +60% 近战伤害",
+     "非暴击攻击造成 +240% 伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/BeastWeapon/BeastDisablingConditioningMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/BeastDisablingConditionMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "伤残调控",
+   "nameEn": "Disabling Conditioning",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+385% 近战伤害",
+    "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+35% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+70% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+105% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+140% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+175% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+210% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+245% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+280% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+315% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+350% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ],
+    [
+     "+385% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_PUNCTURE_COLOR>穿刺伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/BeastWeapon/BeastPrecisionConditioningMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/BeastPrecisionConditionMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "精准调控",
+   "nameEn": "Precision Conditioning",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+385% 近战伤害",
+    "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+35% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+70% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+105% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+140% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+175% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+210% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+245% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+280% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+315% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+350% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ],
+    [
+     "+385% 近战伤害",
+     "将所有基础物理伤害转换为 <DT_SLASH_COLOR>切割伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/BeastWeapon/BeastWeakenedImmunityMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/BeastWeakenedImmunityMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "免疫抵御",
+   "nameEn": "Immunity Resistance",
+   "rarity": null,
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+50% 异常状态伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+12.5% 异常状态伤害"
+    ],
+    [
+     "+25% 异常状态伤害"
+    ],
+    [
+     "+37.5% 异常状态伤害"
+    ],
+    [
+     "+50% 异常状态伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/BeastWeapon/KubrowBaseConversionMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowDualPoison.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "KubrowBaseConversionMod",
+   "nameEn": "KubrowBaseConversionMod",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": null,
+   "effectsZhByRank": null,
+   "textSource": null
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/BeastWeapon/KubrowColdConversionMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowColdConversionMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "寒冰之爪",
+   "nameEn": "Chilling Claws",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+330% <DT_FREEZE_COLOR>冰冻伤害",
+    "+330% 触发几率",
+    "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+30% <DT_FREEZE_COLOR>冰冻伤害",
+     "+30% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+60% <DT_FREEZE_COLOR>冰冻伤害",
+     "+60% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+90% <DT_FREEZE_COLOR>冰冻伤害",
+     "+90% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+120% <DT_FREEZE_COLOR>冰冻伤害",
+     "+120% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+150% <DT_FREEZE_COLOR>冰冻伤害",
+     "+150% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+180% <DT_FREEZE_COLOR>冰冻伤害",
+     "+180% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+210% <DT_FREEZE_COLOR>冰冻伤害",
+     "+210% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+240% <DT_FREEZE_COLOR>冰冻伤害",
+     "+240% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+270% <DT_FREEZE_COLOR>冰冻伤害",
+     "+270% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+300% <DT_FREEZE_COLOR>冰冻伤害",
+     "+300% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ],
+    [
+     "+330% <DT_FREEZE_COLOR>冰冻伤害",
+     "+330% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FREEZE_COLOR>冰冻伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/BeastWeapon/KubrowElectricConversionMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowElectricConversionMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "电击之爪",
+   "nameEn": "Shocking Claws",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+330% <DT_ELECTRICITY_COLOR>电击伤害",
+    "+330% 触发几率",
+    "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+30% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+30% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+60% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+60% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+90% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+90% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+120% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+120% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+150% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+150% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+180% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+180% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+210% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+210% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+240% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+240% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+270% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+270% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+300% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+300% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ],
+    [
+     "+330% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+330% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_ELECTRICITY_COLOR>电击伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/BeastWeapon/KubrowHeatConversionMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowHeatConversionMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "灼热之爪",
+   "nameEn": "Burning Claws",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+330% <DT_FIRE_COLOR>火焰伤害",
+    "+330% 触发几率",
+    "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+30% <DT_FIRE_COLOR>火焰伤害",
+     "+30% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+60% <DT_FIRE_COLOR>火焰伤害",
+     "+60% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+90% <DT_FIRE_COLOR>火焰伤害",
+     "+90% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+120% <DT_FIRE_COLOR>火焰伤害",
+     "+120% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+150% <DT_FIRE_COLOR>火焰伤害",
+     "+150% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+180% <DT_FIRE_COLOR>火焰伤害",
+     "+180% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+210% <DT_FIRE_COLOR>火焰伤害",
+     "+210% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+240% <DT_FIRE_COLOR>火焰伤害",
+     "+240% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+270% <DT_FIRE_COLOR>火焰伤害",
+     "+270% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+300% <DT_FIRE_COLOR>火焰伤害",
+     "+300% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ],
+    [
+     "+330% <DT_FIRE_COLOR>火焰伤害",
+     "+330% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_FIRE_COLOR>火焰伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/BeastWeapon/KubrowToxicConversionMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowToxicConversionMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "脓毒之爪",
+   "nameEn": "Sepsis Claws",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+330% <DT_POISON_COLOR>毒素伤害",
+    "+330% 触发几率",
+    "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+30% <DT_POISON_COLOR>毒素伤害",
+     "+30% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+60% <DT_POISON_COLOR>毒素伤害",
+     "+60% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+90% <DT_POISON_COLOR>毒素伤害",
+     "+90% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+120% <DT_POISON_COLOR>毒素伤害",
+     "+120% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+150% <DT_POISON_COLOR>毒素伤害",
+     "+150% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+180% <DT_POISON_COLOR>毒素伤害",
+     "+180% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+210% <DT_POISON_COLOR>毒素伤害",
+     "+210% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+240% <DT_POISON_COLOR>毒素伤害",
+     "+240% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+270% <DT_POISON_COLOR>毒素伤害",
+     "+270% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+300% <DT_POISON_COLOR>毒素伤害",
+     "+300% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ],
+    [
+     "+330% <DT_POISON_COLOR>毒素伤害",
+     "+330% 触发几率",
+     "将这些利爪造成的所有元素伤害转换为 <DT_POISON_COLOR>毒素伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/DualStat/KubrowElectEventMeleeMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowDualElect.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "电击项圈",
+   "nameEn": "Shock Collar",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_ELECTRICITY_COLOR>电击伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_ELECTRICITY_COLOR>电击伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/DualStat/KubrowFireEventMeleeMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowDualFire.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "火焰腺体",
+   "nameEn": "Flame Gland",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_FIRE_COLOR>火焰伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_FIRE_COLOR>火焰伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_FIRE_COLOR>火焰伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_FIRE_COLOR>火焰伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_FIRE_COLOR>火焰伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/DualStat/KubrowIceEventMeleeMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowDualIce.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "冰冻双颚",
+   "nameEn": "Frost Jaw",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_FREEZE_COLOR>冰冻伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_FREEZE_COLOR>冰冻伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_FREEZE_COLOR>冰冻伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_FREEZE_COLOR>冰冻伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_FREEZE_COLOR>冰冻伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/DualStat/KubrowMagneticEventMeleeMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowMagneticEventMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "磁化利爪",
+   "nameEn": "Magnetic Claws",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_MAGNETIC_COLOR>磁力伤害",
+    "+40% 触发时间"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+10% 触发时间"
+    ],
+    [
+     "+30% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+20% 触发时间"
+    ],
+    [
+     "+45% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+30% 触发时间"
+    ],
+    [
+     "+60% <DT_MAGNETIC_COLOR>磁力伤害",
+     "+40% 触发时间"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/DualStat/KubrowPoisonEventMeleeMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowDualPoison.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "牙齿毒液",
+   "nameEn": "Venom Teeth",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_POISON_COLOR>毒素伤害",
+    "+60% 触发几率"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_POISON_COLOR>毒素伤害",
+     "+15% 触发几率"
+    ],
+    [
+     "+30% <DT_POISON_COLOR>毒素伤害",
+     "+30% 触发几率"
+    ],
+    [
+     "+45% <DT_POISON_COLOR>毒素伤害",
+     "+45% 触发几率"
+    ],
+    [
+     "+60% <DT_POISON_COLOR>毒素伤害",
+     "+60% 触发几率"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/DualStat/KubrowRadiationEventMeleeMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowRadiationEventMeleeMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "辐能利爪",
+   "nameEn": "Radon Claws",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+60% <DT_RADIATION_COLOR>辐射伤害",
+    "+80% 暴击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+15% <DT_RADIATION_COLOR>辐射伤害",
+     "+20% 暴击伤害"
+    ],
+    [
+     "+30% <DT_RADIATION_COLOR>辐射伤害",
+     "+40% 暴击伤害"
+    ],
+    [
+     "+45% <DT_RADIATION_COLOR>辐射伤害",
+     "+60% 暴击伤害"
+    ],
+    [
+     "+60% <DT_RADIATION_COLOR>辐射伤害",
+     "+80% 暴击伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowCritMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowHunterAttack.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "咬碎",
+   "nameEn": "Bite",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 16,
+   "description": "",
+   "effectsZh": [
+    "+330% 暴击几率",
+    "+220% 暴击伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+30% 暴击几率",
+     "+20% 暴击伤害"
+    ],
+    [
+     "+60% 暴击几率",
+     "+40% 暴击伤害"
+    ],
+    [
+     "+90% 暴击几率",
+     "+60% 暴击伤害"
+    ],
+    [
+     "+120% 暴击几率",
+     "+80% 暴击伤害"
+    ],
+    [
+     "+150% 暴击几率",
+     "+100% 暴击伤害"
+    ],
+    [
+     "+180% 暴击几率",
+     "+120% 暴击伤害"
+    ],
+    [
+     "+210% 暴击几率",
+     "+140% 暴击伤害"
+    ],
+    [
+     "+240% 暴击几率",
+     "+160% 暴击伤害"
+    ],
+    [
+     "+270% 暴击几率",
+     "+180% 暴击伤害"
+    ],
+    [
+     "+300% 暴击几率",
+     "+200% 暴击伤害"
+    ],
+    [
+     "+330% 暴击几率",
+     "+220% 暴击伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowMeleeDamageMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowAdventurerAttack.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "捶击",
+   "nameEn": "Maul",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 10,
+   "drain": 14,
+   "description": "",
+   "effectsZh": [
+    "+330% 近战伤害"
+   ],
+   "effectsZhByRank": [
+    [
+     "+30% 近战伤害"
+    ],
+    [
+     "+60% 近战伤害"
+    ],
+    [
+     "+90% 近战伤害"
+    ],
+    [
+     "+120% 近战伤害"
+    ],
+    [
+     "+150% 近战伤害"
+    ],
+    [
+     "+180% 近战伤害"
+    ],
+    [
+     "+210% 近战伤害"
+    ],
+    [
+     "+240% 近战伤害"
+    ],
+    [
+     "+270% 近战伤害"
+    ],
+    [
+     "+300% 近战伤害"
+    ],
+    [
+     "+330% 近战伤害"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sets/Hunter/PrimaryHunterMunitionsMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Hunter/HunterMunitions.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "猎人 战备",
+   "nameEn": "Hunter Munitions",
+   "rarity": "UNCOMMON",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 9,
+   "description": "",
+   "effectsZh": [
+    "+30% 几率在暴击时造成 <DT_SLASH_COLOR>"
+   ],
+   "effectsZhByRank": [
+    [
+     "+5% 几率在暴击时造成 <DT_SLASH_COLOR>"
+    ],
+    [
+     "+10% 几率在暴击时造成 <DT_SLASH_COLOR>"
+    ],
+    [
+     "+15% 几率在暴击时造成 <DT_SLASH_COLOR>"
+    ],
+    [
+     "+20% 几率在暴击时造成 <DT_SLASH_COLOR>"
+    ],
+    [
+     "+25% 几率在暴击时造成 <DT_SLASH_COLOR>"
+    ],
+    [
+     "+30% 几率在暴击时造成 <DT_SLASH_COLOR>"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Sets/Mecha/KubrowMechaOverdriveMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Mecha/KubrowMechaOverdriveMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "机甲 超载",
+   "nameEn": "Mecha Overdrive",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 11,
+   "description": "",
+   "effectsZh": [
+    "为同伴附加 +60% 主要武器的触发几率",
+    "+90% 触发时间"
+   ],
+   "effectsZhByRank": [
+    [
+     "为同伴附加 +10% 主要武器的触发几率",
+     "+15% 触发时间"
+    ],
+    [
+     "为同伴附加 +20% 主要武器的触发几率",
+     "+30% 触发时间"
+    ],
+    [
+     "为同伴附加 +30% 主要武器的触发几率",
+     "+45% 触发时间"
+    ],
+    [
+     "为同伴附加 +40% 主要武器的触发几率",
+     "+60% 触发时间"
+    ],
+    [
+     "为同伴附加 +50% 主要武器的触发几率",
+     "+75% 触发时间"
+    ],
+    [
+     "为同伴附加 +60% 主要武器的触发几率",
+     "+90% 触发时间"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Shotgun/WeaponMagneticOnImpactShotgunMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Shotgun/WeaponMagneticOnImpactShotgunMod.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "磁化冲击",
+   "nameEn": "Magnetic Welt",
+   "rarity": "RARE",
+   "polarity": "AP_ATTACK",
+   "maxRank": 5,
+   "drain": 15,
+   "description": "",
+   "effectsZh": [
+    " <DT_IMPACT_COLOR>冲击异常状态有 35% 的几率施加一层 <DT_MAGNETIC_COLOR>磁力异常状态（射速低于 2.5 时 x2）。"
+   ],
+   "effectsZhByRank": [
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 10% 的几率施加一层 <DT_MAGNETIC_COLOR>磁力异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 15% 的几率施加一层 <DT_MAGNETIC_COLOR>磁力异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 20% 的几率施加一层 <DT_MAGNETIC_COLOR>磁力异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 25% 的几率施加一层 <DT_MAGNETIC_COLOR>磁力异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 30% 的几率施加一层 <DT_MAGNETIC_COLOR>磁力异常状态（射速低于 2.5 时 x2）。"
+    ],
+    [
+     " <DT_IMPACT_COLOR>冲击异常状态有 35% 的几率施加一层 <DT_MAGNETIC_COLOR>磁力异常状态（射速低于 2.5 时 x2）。"
+    ]
+   ],
+   "textSource": "warframe-items/data/json/i18n.json"
+  },
+  "/Lotus/Upgrades/Mods/Syndicate/KestrelMod": {
+   "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Syndicate/Kestrel.png",
+   "artSource": "official-rgb-alpha",
+   "nameZh": "飞逝熵数",
+   "nameEn": "Entropy Flight",
+   "rarity": "RARE",
+   "polarity": "AP_TACTIC",
+   "maxRank": 3,
+   "drain": 7,
+   "description": "",
+   "effectsZh": [
+    "+140% 投射物速度",
+    "+1 '熵数'"
+   ],
+   "effectsZhByRank": [
+    [
+     "+35% 投射物速度",
+     "+0.3 '熵数'"
+    ],
+    [
+     "+70% 投射物速度",
+     "+0.5 '熵数'"
+    ],
+    [
+     "+105% 投射物速度",
+     "+0.8 '熵数'"
+    ],
+    [
+     "+140% 投射物速度",
+     "+1 '熵数'"
     ]
    ],
    "textSource": "warframe-items/data/json/i18n.json"

@@ -19,7 +19,7 @@ from collections import OrderedDict, deque
 from dataclasses import dataclass, replace
 from pathlib import Path
 from statistics import median
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any, Iterable, Iterator, Mapping, Sequence
 from .search_session import SESSION, session_request, memoized_search, heartbeat, phase_deadline, expired
 
 # Scored no-Riven baselines per exact inputs (see analyze_riven_request._reconstruct).
@@ -222,19 +222,25 @@ def _combo_allows_fusion(lines: Sequence[Any]) -> bool:
     ) <= 1
 
 
-def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, float]:
-    """Recover display-scale base values from the current RandomModRare export."""
+def _template_stats(
+    payload: Mapping[str, Any], weapon_type: str, *, lenient: bool = False
+) -> Iterator[tuple[str, str, Mapping[str, Any], Mapping[str, Any]]]:
+    """(code, unit, template stat, its single upgrade) for each stat of the
+    weapon type's canonical RandomModRare template that maps to one Riven code.
+
+    ``lenient`` (identity only, never values) reads a multi-upgrade stat by its
+    first upgrade and breaks shared rules (gun fire rate / melee attack speed)
+    by the codes this weapon type can roll."""
     templates = payload.get("templates") if isinstance(payload, Mapping) else None
     if not isinstance(templates, list):
-        return {}
+        return
     candidates = [row for row in templates if isinstance(row, Mapping) and row.get("weaponType") == weapon_type]
     if weapon_type == "melee":
         candidates.sort(key=lambda row: str(row.get("id") or "") != "PlayerMeleeWeaponRandomModRare")
     elif weapon_type == "pistol":
         candidates.sort(key=lambda row: str(row.get("id") or "") != "LotusPistolRandomModRare")
     if not candidates:
-        return {}
-    result: dict[str, float] = {}
+        return
     for stat in candidates[0].get("stats") or ():
         if not isinstance(stat, Mapping):
             continue
@@ -244,7 +250,7 @@ def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, f
             # Read the unqualified normal value; the wire rule adds the heavy
             # qualifier separately and must not lose melee crit candidates.
             upgrades = [u for u in upgrades if isinstance(u, Mapping) and not u.get('validModifiers')]
-        if len(upgrades) != 1 or not isinstance(upgrades[0], Mapping):
+        if (len(upgrades) != 1 and not (lenient and upgrades)) or not isinstance(upgrades[0], Mapping):
             continue
         upgrade = upgrades[0]
         matches = []
@@ -265,10 +271,19 @@ def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, f
             if not symbol_filter and raw_symbol and not (code == 'HR' and raw_symbol == 'Holstered'):
                 continue
             matches.append((code, unit))
+        if lenient and len(matches) > 1:
+            matches = [row for row in matches if row[0] in RIVEN_BASE_VALUES.get(weapon_type, {})]
+        if len(matches) == 1:
+            yield (*matches[0], stat, upgrade)
+
+
+def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, float]:
+    """Recover display-scale base values from the current RandomModRare export."""
+    result: dict[str, float] = {}
+    for code, unit, _stat, upgrade in _template_stats(payload, weapon_type):
         raw_value = upgrade.get("rawValue")
-        if len(matches) != 1 or isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
+        if isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
             continue
-        code, unit = matches[0]
         result[code] = abs(float(raw_value)) * (90.0 if unit == "flat" else 9000.0)
     # Rivens are rolled by the server. Until 2026.10.08 the client template
     # disagreed with observed rolls for some spliced traits (a Dual Toxocyst
@@ -278,6 +293,33 @@ def _template_bases(payload: Mapping[str, Any], weapon_type: str) -> dict[str, f
                    if code in result or code in RIVEN_BASE_VALUES.get(weapon_type, {})})
     return result
 
+
+
+def riven_card_faces(payload: Mapping[str, Any], weapon_type: str) -> dict[str, dict[str, Any]]:
+    """Card art and name syllables per Riven code, from the template's UpgradeEntries.
+
+    In game the card face cycles through the ``Icon`` of every stat on the card;
+    the name is built from the ``LocalizePrefixTag`` / ``LocalizeSuffixTag``
+    syllables (spliced traits have none).
+    """
+    faces = {
+        code: {"icon": stat.get("icon"), "prefix": stat.get("prefix"), "suffix": stat.get("suffix")}
+        for code, _unit, stat, _upgrade in _template_stats(payload, weapon_type, lenient=True)
+    }
+    # Template rows whose upgrade differs from the wire rule (slide crit is a
+    # filtered WEAPON_CRIT_CHANCE, parry angle multiplies) are matched by tag.
+    templates = payload.get("templates") if isinstance(payload, Mapping) else None
+    for template in templates if isinstance(templates, list) else ():
+        if not isinstance(template, Mapping) or template.get("weaponType") != weapon_type:
+            continue
+        for stat in template.get("stats") or ():
+            code = _FACE_TAG_CODES.get(str(stat.get("tag") or ""))
+            if code and code not in faces and code in RIVEN_BASE_VALUES.get(weapon_type, {}):
+                faces[code] = {"icon": stat.get("icon"), "prefix": stat.get("prefix"), "suffix": stat.get("suffix")}
+    return faces
+
+
+_FACE_TAG_CODES = {"SlideAttackCritChanceMod": "E", "WeaponMeleeParryAngleMod": "PA"}
 
 # Spliced (fusion) trait bases as rolled by the server, in display percent
 # (wiki Riven Mods; the 2026.10.08 client templates agree). Same for every gun

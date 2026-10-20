@@ -180,6 +180,16 @@ const DAMAGE_TYPE_LABELS = {
   DT_MAGNETIC: "磁力", DT_VIRAL: "病毒", DT_CORROSIVE: "腐蚀",
   DT_RADIANT: "虚空", DT_FINISHER: "处决", DT_TRUE: "真实",
 };
+
+// In game <DT_SLASH_COLOR> renders as the damage-type glyph and name. Most
+// localized lines repeat the name after the token; some (Hunter Munitions) don't.
+function damageTokenText(text) {
+  return String(text ?? "").replace(/<(\/?)(DT_[A-Z_]+?)(?:_COLOR)?>/g, (token, closing, dt, offset, whole) => {
+    const name = DAMAGE_TYPE_LABELS[dt];
+    if (closing || !name) return "";
+    return whole.slice(offset + token.length).trimStart().startsWith(name) ? "" : name;
+  });
+}
 const TRIGGER_LABELS = {
   Auto: "自动", AutoBurst: "自动点射", SemiAuto: "半自动", Burst: "点射",
   Charge: "蓄力", Held: "持续", TriggerContinous: "持续",
@@ -211,7 +221,6 @@ const POLARITY_GLYPHS = Object.freeze({});
 // the random polarity printed on a Riven.
 const RIVEN_CARD_POLARITIES = Object.freeze(["AP_ATTACK", "AP_DEFENSE", "AP_TACTIC"]);
 const RIVEN_FACTION_CODES = Object.freeze(["C", "G", "I"]);
-const RIVEN_SUFFIXES = ["Acri-visitis", "Crita-hexalis", "Sati-cronitox", "Visi-ignitis", "Hexa-critatio"];
 
 function finite(value) {
   if (value === null || value === undefined || value === "") return null;
@@ -2153,9 +2162,20 @@ function updateCardPreview() {
   const entries = activeStats();
   const seedSource = `${state.weapon?.path || "empty"}:${entries.map((entry) => `${entry.code}:${entry.value}:${entry.negative}`).join("|")}`;
   const seed = hashText(seedSource);
-  const baseName = rivenWeaponDisplayName(state.weapon);
-  ui["card-name"].textContent = `${baseName} ${RIVEN_SUFFIXES[seed % RIVEN_SUFFIXES.length]}`;
-  ui["card-name"].style.setProperty("--name-length", String(ui["card-name"].textContent.length));
+  const filled = entries.filter((entry) => entry.definition && entry.value !== null);
+  ui["card-name"].textContent = state.weapon ? rivenCardName(state.weapon, filled, statDefinitions()) : "未命名紫卡";
+  const arts = state.weapon ? rivenFaceArts(filled, statDefinitions()) : [];
+  const artKey = arts.join("|");
+  if (ui["riven-card"].dataset.faces !== artKey) {
+    ui["riven-card"].dataset.faces = artKey;
+    ui["riven-card"].querySelector(".riven-card-art")?.remove();
+    if (arts.length) {
+      const art = create("div", "riven-card-art");
+      art.setAttribute("aria-hidden", "true");
+      art.append(...rivenFaceCanvases(arts, "riven-art-bg", "riven-art-fg"));
+      ui["riven-card"].prepend(art);
+    }
+  }
   ui["card-mr"].textContent = String(8 + (seed % 9));
   ui["card-rerolls"].textContent = String((seed >>> 4) % 1000);
   const polarityNames = RIVEN_CARD_POLARITIES;
@@ -2176,6 +2196,21 @@ function updateCardPreview() {
   });
   ui["card-stats"].replaceChildren(...(lines.length ? lines : [create("span", "card-empty", "等待录入词条")]));
   ui["riven-card"].classList.toggle("is-active", Boolean(state.weapon && lines.length));
+  requestAnimationFrame(fitRivenCardText);
+}
+
+// 卡名、词条行按卡宽缩小字号直到放得下（长武器名 / 系统字体或最小字号偏大时不出框）。
+function fitRivenCardText() {
+  const fit = (node, min) => {
+    node.style.fontSize = "";
+    let size = parseFloat(getComputedStyle(node).fontSize);
+    while (node.clientWidth && node.scrollWidth > node.clientWidth && size > min) {
+      size -= 0.5;
+      node.style.fontSize = `${size}px`;
+    }
+  };
+  fit(ui["card-name"], 11);
+  ui["card-stats"].querySelectorAll("span").forEach((node) => fit(node, 10));
 }
 
 function rivenWeaponDisplayName(weapon) {
@@ -2785,6 +2820,170 @@ function splitArtLayers(artSource) {
   return { bg: artSource.replace(/\.png$/i, ".bg.jpg"), fg: artSource.replace(/\.png$/i, ".fg.png") };
 }
 
+// —— 紫卡卡面 ——
+// 卡名：正面词条按随机系数（数值 ÷ 该词条基础值，倾向与正负结构对同卡词条相同）
+// 从高到低排序（分不出高低时按卡上顺序），最高为前缀、次高为核心、最低为后缀（3 正 “Prefix-coresuffix”，
+// 2 正 “Coresuffix”）；音节取自紫卡模板 UpgradeEntries 的 Prefix/SuffixTag，
+// 融合词条没有音节，不参与命名（wiki Riven Mods#Naming）。
+function rivenCardName(weapon, stats, definitions) {
+  const byCode = new Map((definitions || []).map((definition) => [String(definition.code), definition]));
+  const ranked = (stats || [])
+    .filter((stat) => !stat.negative)
+    .map((stat) => ({ definition: byCode.get(String(stat.code)), value: Number(stat.value) }))
+    .filter(({ definition, value }) => definition?.namePrefix && definition?.nameSuffix && Number(definition.baseValue) > 0 && value > 0)
+    .map((entry) => ({ ...entry, base: Number(entry.definition.baseValue), roll: entry.value / Number(entry.definition.baseValue) }))
+    // 数值只有 1 位小数精度：系数差在这个误差内（满 roll 的两条常见）分不出高低，
+    // 按卡上的词条顺序排（stable sort 保持原序）。
+    .sort((a, b) => (Math.abs(a.roll - b.roll) <= 0.05 / a.base + 0.05 / b.base ? 0 : b.roll - a.roll));
+  const capital = (text) => text.charAt(0).toUpperCase() + text.slice(1);
+  let suffix = "";
+  if (ranked.length >= 3) {
+    suffix = `${capital(ranked[0].definition.namePrefix)}-${ranked[1].definition.namePrefix}${ranked[ranked.length - 1].definition.nameSuffix}`;
+  } else if (ranked.length === 2) {
+    suffix = `${capital(ranked[0].definition.namePrefix)}${ranked[1].definition.nameSuffix}`;
+  } else if (ranked.length === 1) {
+    suffix = `${capital(ranked[0].definition.namePrefix)}${ranked[0].definition.nameSuffix}`;
+  }
+  return `${rivenWeaponDisplayName(weapon)} ${suffix}`.trim();
+}
+
+// 卡图：游戏内紫卡图标用 OmegaIconProcedural 材质（IconProcedural + IMAGE_BLEND），
+// 在卡上每个词条（含负面）对应 MOD 的卡图之间轮切，过渡按灰度遮罩
+// /Lotus/Interface/Graphics/OmegaModTransition.png 的阈值逐块溶解（BlendPoint）。
+// 停留与过渡时长在原生 UI 代码里、数据包中没有，按游戏内观感取值。
+const RIVEN_FACE_HOLD_MS = 3000;
+const RIVEN_FACE_FADE_MS = 900;
+const RIVEN_FACE_EDGE = 0.08;
+const RIVEN_FACE_SIZE = 256;
+let rivenFaceMask = null;
+const rivenFaceImages = new Map();
+
+function rivenFaceArts(stats, definitions) {
+  const byCode = new Map((definitions || []).map((definition) => [String(definition.code), definition]));
+  const arts = [];
+  for (const stat of stats || []) {
+    const art = byCode.get(String(stat.code))?.art;
+    if (art && !arts.includes(art)) arts.push(art);
+  }
+  return arts;
+}
+
+function rivenFacePixels(src) {
+  if (!rivenFaceImages.has(src)) {
+    rivenFaceImages.set(src, new Promise((resolve) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = canvas.height = RIVEN_FACE_SIZE;
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        context.drawImage(image, 0, 0, RIVEN_FACE_SIZE, RIVEN_FACE_SIZE);
+        resolve(context.getImageData(0, 0, RIVEN_FACE_SIZE, RIVEN_FACE_SIZE).data);
+      };
+      image.onerror = () => resolve(null);
+      image.src = src;
+    }));
+  }
+  return rivenFaceImages.get(src);
+}
+
+async function loadRivenFaceMask() {
+  if (!rivenFaceMask) {
+    rivenFaceMask = rivenFacePixels("/assets/riven/omega-transition.png").then((data) => {
+      if (!data) return null;
+      const mask = new Float32Array(RIVEN_FACE_SIZE * RIVEN_FACE_SIZE);
+      for (let i = 0; i < mask.length; i += 1) mask[i] = data[i * 4] / 255;
+      return mask;
+    });
+  }
+  return rivenFaceMask;
+}
+
+// 返回两张 canvas（mod-art-bg 背景层 / mod-art-fg 主体抠图层，沿用普通卡的
+// 伪 3D 视差与 hover 样式）；卡片离开文档后动画自动停止。
+function rivenFaceCanvases(arts, bgClass = "mod-art mod-art-bg", fgClass = "mod-art-fg") {
+  const make = (className) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = RIVEN_FACE_SIZE;
+    canvas.className = className;
+    return canvas;
+  };
+  const bg = make(bgClass);
+  const fg = make(fgClass);
+  if (arts.length) animateRivenFace([bg, fg], arts);
+  return [bg, fg];
+}
+
+async function animateRivenFace(canvases, arts) {
+  const layers = await Promise.all(arts.map((art) => {
+    const split = splitArtLayers(art);
+    return Promise.all([rivenFacePixels(split?.bg || art), rivenFacePixels(split?.fg || art)]);
+  }));
+  const faces = layers.filter(([bg, fg]) => bg && fg);
+  if (!faces.length) return;
+  const contexts = canvases.map((canvas) => canvas.getContext("2d"));
+  const frames = contexts.map((context) => context.createImageData(RIVEN_FACE_SIZE, RIVEN_FACE_SIZE));
+  const draw = (from, to, t, mask) => {
+    const threshold = t * (1 + 2 * RIVEN_FACE_EDGE) - RIVEN_FACE_EDGE;
+    for (let layer = 0; layer < 2; layer += 1) {
+      const a = faces[from][layer];
+      const b = faces[to][layer];
+      const out = frames[layer].data;
+      if (!mask || t <= 0 || t >= 1) out.set(t >= 1 ? b : a);
+      else {
+        for (let i = 0, p = 0; i < mask.length; i += 1, p += 4) {
+          const w = Math.min(1, Math.max(0, (threshold - mask[i]) / RIVEN_FACE_EDGE + 0.5));
+          out[p] = a[p] + (b[p] - a[p]) * w;
+          out[p + 1] = a[p + 1] + (b[p + 1] - a[p + 1]) * w;
+          out[p + 2] = a[p + 2] + (b[p + 2] - a[p + 2]) * w;
+          out[p + 3] = a[p + 3] + (b[p + 3] - a[p + 3]) * w;
+        }
+      }
+      contexts[layer].putImageData(frames[layer], 0, 0);
+    }
+  };
+  draw(0, 0, 0, null);
+  if (faces.length < 2) return;
+  const mask = await loadRivenFaceMask();
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches || !mask;
+  let current = 0;
+  const next = () => {
+    if (!canvases[0].isConnected) return;
+    const target = (current + 1) % faces.length;
+    if (still || document.hidden) {
+      draw(target, target, 1, null);
+      current = target;
+      setTimeout(next, RIVEN_FACE_HOLD_MS);
+      return;
+    }
+    const started = performance.now();
+    const step = (now) => {
+      if (!canvases[0].isConnected) return;
+      const t = Math.min(1, (now - started) / RIVEN_FACE_FADE_MS);
+      draw(current, target, t, mask);
+      if (t < 1) requestAnimationFrame(step);
+      else {
+        current = target;
+        setTimeout(next, RIVEN_FACE_HOLD_MS);
+      }
+    };
+    requestAnimationFrame(step);
+  };
+  setTimeout(next, RIVEN_FACE_HOLD_MS);
+}
+
+// 紫卡卡片内容层：与 modContentLayers 同结构（背景、立绘窗、高光），立绘换成轮切卡面。
+function rivenContentLayers(frames, arts, loading = "eager") {
+  const nodes = [];
+  if (frames.background) nodes.push(imageNode(frames.background, "mod-background", "", loading));
+  const artWindow = create("div", "mod-art-window");
+  if (arts.length) artWindow.append(...rivenFaceCanvases(arts));
+  else if (frames.art) artWindow.append(imageNode(frames.art, "mod-art", "紫卡", loading));
+  artWindow.append(create("span", "mod-art-shade"));
+  nodes.push(artWindow, create("span", "mod-glare"));
+  return nodes;
+}
+
 // 内容层：进入 .mod-content（被裁剪）：背景、立绘窗（非 compact 卡挂伪 3D 双层+高光）
 function modContentLayers(frames, metadata, mod, artClass = "mod-art", loading = "lazy", splitArt = false) {
   const nodes = [];
@@ -2858,7 +3057,12 @@ function renderEffectLines(mod, details = false) {
     if (!fullText) return;
     const lead = fullText.match(/^\s*([+-]?\d+(?:\.\d+)?%)\s*/);
     const iconEl = line.icon ? imageNode(line.icon, "mod-effect-icon", "", "lazy") : null;
-    if (iconEl && lead) {
+    // 标记不在数值后面时（"…暴击时造成 <DT_SLASH_COLOR>"）图标跟着元素名走。
+    const named = iconEl && line.iconName ? fullText.indexOf(line.iconName) : -1;
+    if (named > 0 && !(lead && named === lead[0].length)) {
+      p.classList.add("is-inline");
+      p.append(document.createTextNode(fullText.slice(0, named)), iconEl, document.createTextNode(fullText.slice(named)));
+    } else if (iconEl && lead) {
       p.append(document.createTextNode(`${lead[1]} `), iconEl);
       const rest = fullText.slice(lead[0].length).trim();
       if (rest) p.append(document.createTextNode(rest));
@@ -3241,9 +3445,10 @@ function createCustomRivenSlotCard(mod, index, slotPolarity = null) {
   const frame = create("div", "game-mod-card riven-mod-card");
   const frames = state.modAssets?.rarityFrames?.RIVEN || {};
   const content = create("div", "mod-content");
-  content.append(...modContentLayers(frames, {}, {}, "mod-art", "eager"));
+  const definitions = rivenStatDefinitions();
+  content.append(...rivenContentLayers(frames, rivenFaceArts(mod.stats, definitions)));
   const description = create("div", "mod-description");
-  description.append(modNameNode(mod.nameZh || "自定义紫卡"));
+  description.append(modNameNode(state.buildWeapon ? rivenCardName(state.buildWeapon, mod.stats, definitions) : (mod.nameZh || "自定义紫卡")));
   (mod.stats || []).forEach((stat) => {
     description.append(create("p", `mod-effect-line${stat.negative ? " is-negative" : ""}`, rivenStatLabel(stat)));
   });
@@ -3279,7 +3484,7 @@ function modConditionalText(mod) {
   const meta = modAssetFields(mod);
   if (meta.conditionZh) {
     if (conditionAlreadyListed(meta)) return "";
-    return cleanOfficialText(meta.conditionZh).replace(/<\/?DT_[A-Z_]+_COLOR>/g, "");
+    return cleanOfficialText(meta.conditionZh);
   }
   const conds = Array.isArray(mod?.conditionalEffects) ? mod.conditionalEffects : [];
   if (!conds.length) return "";
@@ -3432,7 +3637,7 @@ function createRivenModCard(slotIndex, build = null) {
   const frame = create("div", "game-mod-card riven-mod-card");
   const frames = state.modAssets?.rarityFrames?.RIVEN || {};
   const content = create("div", "mod-content");
-  content.append(...modContentLayers(frames, {}, {}, "mod-art", "eager"));
+  content.append(...rivenContentLayers(frames, rivenFaceArts(activeStats().filter((entry) => entry.definition && entry.value !== null), statDefinitions())));
   const description = create("div", "mod-description");
   description.append(modNameNode(ui["card-name"].textContent || "紫卡"));
   const lines = rivenCardLines(build);
@@ -4118,7 +4323,7 @@ function arcaneEffectHint(arcane) {
   }
   const trigger = arcane.trigger || {};
   const bits = [];
-  if (trigger.conditionZh) bits.push(String(trigger.conditionZh).replace(/<\/?DT_[A-Z_]+_COLOR>/g, ""));
+  if (trigger.conditionZh) bits.push(damageTokenText(trigger.conditionZh));
   if (trigger.chance != null) bits.push(`${Math.round(Number(trigger.chance) * 100)}% 触发`);
   if (trigger.maxStacks != null) bits.push(`${trigger.maxStacks} 层`);
   if (trigger.duration != null) bits.push(`${Number(trigger.duration).toFixed(1)}s`);
@@ -4161,8 +4366,7 @@ function arcaneDescription(arcane) {
     const cleaned = cleanOfficialText(text).split(String.fromCharCode(92) + "n").join(String.fromCharCode(10));
     if (cleaned) return cleaned;
   }
-  return String(arcane?.description || arcane?.effect || arcaneEffectHint(arcane))
-    .replace(/<\/?DT_[A-Z_]+_COLOR>/g, "");
+  return damageTokenText(arcane?.description || arcane?.effect || arcaneEffectHint(arcane));
 }
 
 function renderArcanePicker() {
@@ -5462,10 +5666,10 @@ function localizedEffectLines(mod) {
   return source.flatMap((text) => splitEffectSegments(text).map((seg) => {
     const iconKey = (seg.match(/DT_[A-Z_]+(?=_COLOR)/) || [])[0];
     return {
-      label: applySetMultiplierToOfficialLine(seg, setMultiplier)
-        .replace(/<\/?DT_[A-Z_]+_COLOR>/g, "")
+      label: damageTokenText(applySetMultiplierToOfficialLine(seg, setMultiplier))
         .replace(/<[^>]+>/g, ""),
       icon: ELEMENT_ICONS[iconKey] || null,
+      iconName: DAMAGE_TYPE_LABELS[iconKey] || null,
     };
   }));
 }
@@ -5537,7 +5741,7 @@ function modEffectLines(mod) {
 }
 
 function cleanOfficialText(value) {
-  return String(value || "")
+  return damageTokenText(value || "")
     .replace(/<LOWER_IS_BETTER>/gi, "")
     .replace(/\bNONE\s*[+]?[-+]?0(?:\.0+)?%?/gi, "")
     .replace(/<[^>]+>/g, " ")
@@ -5693,7 +5897,7 @@ function modEffectText(mod) {
   const setText = isSacrificeSetMod(mod) ? "" : modSetText(mod);
   // Localized rank text is the official card text. Computed values stay separate.
   const official = officialEffectText(mod);
-  const conditionLine = condition && !conditionAlreadyListed(meta) ? String(condition).replace(/<\/?DT_[A-Z_]+_COLOR>/g, "") : "";
+  const conditionLine = condition && !conditionAlreadyListed(meta) ? damageTokenText(condition) : "";
   const officialText = String(official || "");
   const uniqueLines = lines.filter((line) => !officialText.includes(String(line)));
   const unsupportedNote = Array.isArray(mod?.unsupportedNotes) && mod.unsupportedNotes.length ? "该词条不参与计算" : "";
@@ -7773,10 +7977,9 @@ function warframeName(record) {
 }
 
 function warframeDescription(record) {
-  const lines = String(record?.descriptionZh || record?.description || record?.effect || "")
+  const lines = damageTokenText(record?.descriptionZh || record?.description || record?.effect || "")
     .replace(/\\n/g, "\n")
     .replace(/<LINE_SEPARATOR>/gi, "\n")
-    .replace(/<\/?DT_[A-Z_]+_COLOR>/g, "")
     .replace(/<[^>]+>/g, "")
     .replace(/<[^>]+>/g, "")
     .replace(/<LOWER_IS_BETTER>/gi, "")
@@ -7815,8 +8018,7 @@ function warframeSourceLabel(record) {
 }
 
 function warframePassiveText(record) {
-  return String(record?.passive || record?.passiveDescription || "")
-    .replace(/<\/?DT_[A-Z_]+(?:_COLOR)?>/g, "")
+  return damageTokenText(record?.passive || record?.passiveDescription || "")
     .replace(/<[^>]+>/g, "")
     .replace(/\|[A-Z][A-Z0-9_]*\|%?/gi, "对应数值")
     .replace(/\s+([%，。；、])/g, "$1")
@@ -9086,6 +9288,7 @@ function setActiveTool(name) {
   ui["analysis-tool"].hidden = name !== "analysis";
   ui["build-tool"].hidden = name !== "build";
   ui["warframe-tool"].hidden = name !== "warframe";
+  if (name === "analysis") requestAnimationFrame(fitRivenCardText);
   ui["page-title"].textContent = name === "warframe" ? "战甲配装" : name === "build" ? "武器配装" : "紫卡分析";
   for (const button of document.querySelectorAll("[data-tab]")) {
     const active = button.dataset.tab === name;
@@ -10477,8 +10680,14 @@ function bindEvents() {
       const x = (event.clientX - bounds.left) / bounds.width - 0.5;
       const y = (event.clientY - bounds.top) / bounds.height - 0.5;
       ui["riven-card"].style.transform = `rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 7).toFixed(2)}deg) translateY(-2px)`;
+      ui["riven-card"].style.setProperty("--par-x", (x * 2).toFixed(3));
+      ui["riven-card"].style.setProperty("--par-y", (y * 2).toFixed(3));
     });
-    ui["riven-stage"].addEventListener("pointerleave", () => { ui["riven-card"].style.transform = ""; });
+    ui["riven-stage"].addEventListener("pointerleave", () => {
+      ui["riven-card"].style.transform = "";
+      ui["riven-card"].style.removeProperty("--par-x");
+      ui["riven-card"].style.removeProperty("--par-y");
+    });
   }
 }
 

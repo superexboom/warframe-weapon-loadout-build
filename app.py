@@ -2180,6 +2180,16 @@ def build_catalog() -> dict[str, Any]:
                     ),
                 }
             )
+        # 紫卡卡面：游戏内卡图在卡上各词条对应的 MOD 卡图之间轮切；
+        # 卡名由正面词条的前缀/后缀音节拼成（融合词条没有音节）。
+        faces = optimizer.riven_card_faces(EXPORTS.get("rivenTemplates") or {}, weapon_type)
+        for row in rows:
+            face = faces.get(row["code"]) or {}
+            icon = str(face.get("icon") or "")
+            art_file = ROOT / "frontend" / "assets" / "mods" / "art" / icon.lstrip("/")
+            row["art"] = "/assets/mods/art/" + icon.lstrip("/") if icon and art_file.is_file() else None
+            row["namePrefix"] = face.get("prefix")
+            row["nameSuffix"] = face.get("suffix")
         stats_by_type[weapon_type] = rows
 
     return {

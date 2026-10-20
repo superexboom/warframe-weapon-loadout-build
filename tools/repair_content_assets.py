@@ -33,7 +33,7 @@ def safe(root, path):
     return p
 
 
-def repair(root, export, official, items, packages):
+def repair(root, export, official, items, packages, gaps=(), extra_art=()):
     index_path = root / "frontend/assets/mods/index.json"
     index = load(index_path)
     mods_path = export / "mods.json"
@@ -221,6 +221,76 @@ def repair(root, export, official, items, packages):
         report["archwingMods"] += 1
         if not levels:
             report["missing"].append({"kind": "mod-text", "path": path})
+    # Catalog MODs that gained engine support after the index was built have no
+    # index record, so the picker showed them without art and with raw English.
+    # Primed / tiered variants share the base card's art.
+    by_path = {str(m.get("path") or ""): m for m in mods["data"]}
+    if gaps and not pkg.parents:
+        from wfarsenal.parenttable import iter_entities
+
+        pkg.parents = {e.path: e.parent for e in iter_entities(packages.parent / "Packages.bin")}
+        pkg._resolved.clear()
+    for path in gaps:
+        mod = by_path.get(path)
+        if mod is None:
+            continue
+        zh = i18n.get(path, {}).get("zh", {})
+        item = item_mods.get(path, {})
+        icon = str(mod.get("icon") or pkg.resolve(path).get("Icon") or "")
+        if not icon:
+            base = (
+                path.replace("/Expert/", "/").replace("/Intermediate/", "/").replace("/Beginner/", "/")
+                .removesuffix("Expert").removesuffix("Intermediate").removesuffix("Beginner")
+            )
+            icon = str(pkg.resolve(base).get("Icon") or "") if base != path else ""
+        dest = safe(root / "frontend/assets/mods/art", icon) if icon else None
+        if dest is not None and not dest.is_file():
+            source = safe(official, icon)
+            if source.is_file():
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, dest)
+                report["modIconsAdded"] += 1
+        if dest is None or not dest.is_file():
+            report["missing"].append({"kind": "mod-art", "path": path, "icon": icon or None})
+            dest = None
+        levels = zh.get("levelStats") or []
+        if dest is None and not levels:
+            continue
+        record = index["mods"].setdefault(path, {})
+        record.update(
+            {
+                "art": "/assets/mods/art/" + icon.lstrip("/") if dest else None,
+                "artSource": "official-rgb-alpha" if dest else None,
+                "nameZh": zh.get("name") or mod.get("nameZh"),
+                "nameEn": mod.get("nameEn"),
+                "rarity": mod.get("rarity"),
+                "polarity": mod.get("polarity"),
+                "maxRank": mod.get("maxRank"),
+                "drain": int(mod.get("baseDrain") or 0) + int(mod.get("maxRank") or 0),
+                "description": zh.get("description") or "",
+                "effectsZh": levels[-1].get("stats") if levels else None,
+                "effectsZhByRank": [r.get("stats", []) for r in levels] or None,
+                "textSource": "warframe-items/data/json/i18n.json" if levels else None,
+            }
+        )
+        report["catalogGapsFilled"] = report.get("catalogGapsFilled", 0) + 1
+        if not levels:
+            report["missing"].append({"kind": "mod-text", "path": path})
+    # Riven card faces cycle through the Icon of each stat's UpgradeEntry.
+    # Riven-only art (RivenUpgrades/*, Status Chance cards) is missing from the
+    # 2D export; take it from extra roots extracted from the game cache.
+    templates = load(export / "riven_templates.json").get("templates") or []
+    for icon in sorted({str(s.get("icon") or "") for t in templates for s in t.get("stats") or ()} - {""}):
+        dest = safe(root / "frontend/assets/mods/art", icon)
+        if dest.is_file():
+            continue
+        source = next((safe(r, icon) for r in (official, *extra_art) if safe(r, icon).is_file()), None)
+        if source is None:
+            report["missing"].append({"kind": "riven-face", "icon": icon})
+            continue
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, dest)
+        report["rivenFacesAdded"] = report.get("rivenFacesAdded", 0) + 1
     # Repair every unpaired local card, not only the newly restored family.
     for category in ("mods", "stances"):
         for src in (root / "frontend/assets" / category / "art").rglob("*.png"):
@@ -249,6 +319,22 @@ def repair(root, export, official, items, packages):
     return report
 
 
+def catalog_gaps():
+    """Paths of picker MODs (and variants) missing art or Chinese effect text."""
+    import app
+
+    rows = [
+        row
+        for key in ("manualMods", "manualModVariants")
+        for row in app.CATALOG.get(key) or ()
+    ]
+    return sorted(
+        str(row["path"])
+        for row in rows
+        if not row.get("art") or not (row.get("effectsZh") or row.get("effectsZhByRank"))
+    )
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--official-art", type=Path, required=True)
@@ -260,8 +346,24 @@ def main():
         type=Path,
         default=ROOT / ".local/reports/content-assets-repair.json",
     )
+    p.add_argument(
+        "--catalog-gaps",
+        action="store_true",
+        help="also fill catalog MODs that have no art or Chinese effect text",
+    )
+    p.add_argument(
+        "--extra-art",
+        type=Path,
+        action="append",
+        default=[],
+        help="more card-art roots (e.g. textures extracted from the game cache)",
+    )
     a = p.parse_args()
-    report = repair(ROOT, a.export, a.official_art, a.items, a.packages)
+    report = repair(
+        ROOT, a.export, a.official_art, a.items, a.packages,
+        catalog_gaps() if a.catalog_gaps else (),
+        a.extra_art,
+    )
     a.report.parent.mkdir(parents=True, exist_ok=True)
     write(a.report, report)
     print(json.dumps(report, ensure_ascii=False))
