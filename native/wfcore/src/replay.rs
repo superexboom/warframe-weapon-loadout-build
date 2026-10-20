@@ -224,6 +224,7 @@ struct Stats {
     heavy_attack_efficiency: f64,
     additional: Vec<usize>,
     head_only: bool,
+    body_only: bool,
     impact_delay: f64,
     lingering: Option<(usize, f64, f64)>,
     primary_delay: f64,
@@ -255,6 +256,7 @@ impl Stats {
         self.charge_pool_cost = 1.0;
         self.requires_full_ammo = false;
         self.head_only = false;
+        self.body_only = false;
         self.impact_delay = 0.0;
         self.fixed_radial = false;
         self.additional = Vec::new();
@@ -301,6 +303,7 @@ impl Stats {
             heavy_attack_efficiency: self.heavy_attack_efficiency,
             additional: self.additional.clone(),
             head_only: self.head_only,
+            body_only: self.body_only,
             impact_delay: self.impact_delay,
             lingering: self.lingering,
             primary_delay: self.primary_delay,
@@ -908,6 +911,7 @@ impl<'py> Replay<'py> {
             heavy_attack_efficiency: f(obj, "heavy_attack_efficiency")?,
             additional: Vec::new(),
             head_only: match opt_attr(obj, "_head_only")? { Some(v) => v.is_truthy()?, None => false },
+            body_only: match opt_attr(obj, "_body_only")? { Some(v) => v.is_truthy()?, None => false },
             impact_delay: match opt_attr(obj, "_impact_delay")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
             lingering: None,
             primary_delay: match opt_attr(obj, "_primary_delay_seconds")? {
@@ -3394,8 +3398,9 @@ impl<'py> Replay<'py> {
                             self.stale += 1;
                             continue;
                         }
-                        if self.stats[part].head_only {
-                            let ms = self.stats[part].multishot * aim;
+                        let head_only = self.stats[part].head_only;
+                        if head_only || self.stats[part].body_only {
+                            let ms = self.stats[part].multishot * if head_only { aim } else { 1.0 - aim };
                             part = self.derive(part, 5, aim, |v| {
                                 v.multishot = ms;
                                 v.core.multishot = ms;

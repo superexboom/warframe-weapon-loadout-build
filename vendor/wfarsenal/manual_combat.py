@@ -551,7 +551,7 @@ def prepare(
         and (cycle_enabled or weapon.get('isIncarnonForm'))
         and profile.get("referenceId")
         not in ("burston_incarnon", "burston_prime_incarnon")
-        and not any(p.get('radial') for p in (ref.get('auditedAttacks',{}).get(weapon.get('path'),{}).get('modes',{}).values()))
+        and not any(p.get('radial') or p.get('radials') for p in (ref.get('auditedAttacks',{}).get(weapon.get('path'),{}).get('modes',{}).values()))
     ):
         notes.append(profile["referenceId"] + ":radial-payload-unmodeled")
     if any(
@@ -751,6 +751,8 @@ def prepare(
                     part._impact_delay = float(component['impact_delay_seconds'])
                 if component.get('headOnly'):
                     part._head_only = True
+                if component.get('bodyOnly'):
+                    part._body_only = True
                 if extra.get('radial') or extra.get('radials'):
                     radial_parts.append(part)
                 else:

@@ -1612,13 +1612,15 @@ def _reference_trajectory(
                 if gen != generation:
                     stale += 1
                     continue
-                if getattr(part, '_head_only', False):
+                head_only = getattr(part, '_head_only', False)
+                if head_only or getattr(part, '_body_only', False):
                     # Embeds in a head only (Zymos ValidEmbedPart HEAD): the
-                    # burst follows the shot's head share.
+                    # burst follows the shot's head share. A body-only part
+                    # (Vectis Incarnon's lingering orb) follows the rest.
                     key = (id(part), aim)
                     if key not in head_only_parts:
                         scaled = copy(part)
-                        scaled.multishot = part.multishot * aim
+                        scaled.multishot = part.multishot * (aim if head_only else 1.0 - aim)
                         head_only_parts[key] = scaled
                     part = head_only_parts[key]
                     if not part.multishot:

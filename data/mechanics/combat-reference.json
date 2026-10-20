@@ -4443,21 +4443,6 @@
         "1": {
           "allowIncarnon": true,
           "directTotal": 150.0,
-          "radial": {
-            "takes_condition_overload": false,
-            "takes_multishot": true,
-            "damage": {
-              "DT_FREEZE": 150.0
-            },
-            "radius": 6.6999998,
-            "falloff": 0.69999999,
-            "crit_chance": 0.34999999,
-            "crit_multiplier": 3.0,
-            "status_chance": 0.30000001,
-            "forcedProcs": [
-              "PT_CHILLED"
-            ]
-          },
           "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/IncarnonAdaptorPrimeVectis/IncarnonVectisPrimeProj",
           "compression": {
             "effectiveness": 0.04,
@@ -4468,7 +4453,84 @@
             "takesRadiusMods": true
           },
           "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
-          "compressionSourceSha256": "c76aee1946e22f2c9ebc8d481db18db516d21d167687308f24cb4e65a6192faa"
+          "compressionSourceSha256": "c76aee1946e22f2c9ebc8d481db18db516d21d167687308f24cb4e65a6192faa",
+          "radials": [
+            {
+              "takes_condition_overload": false,
+              "takes_multishot": true,
+              "damage": {
+                "DT_FREEZE": 25.0
+              },
+              "radius": 0.15000001,
+              "falloff": 0.69999999,
+              "crit_chance": 0.34999999,
+              "crit_multiplier": 3,
+              "status_chance": 0.30000001,
+              "forcedProcs": [
+                "PT_CHILLED"
+              ],
+              "nativeField": "EmbedAttack",
+              "hit": "embed"
+            },
+            {
+              "takes_condition_overload": false,
+              "takes_multishot": true,
+              "damage": {
+                "DT_FREEZE": 25.0
+              },
+              "radius": 0.15000001,
+              "falloff": 0.69999999,
+              "crit_chance": 0.34999999,
+              "crit_multiplier": 3,
+              "status_chance": 0.30000001,
+              "forcedProcs": [
+                "PT_CHILLED"
+              ],
+              "nativeField": "EmbedAttack",
+              "hit": "embed-body-tick",
+              "bodyOnly": true,
+              "impact_delay_seconds": 1.25
+            },
+            {
+              "takes_condition_overload": false,
+              "takes_multishot": true,
+              "damage": {
+                "DT_FREEZE": 25.0
+              },
+              "radius": 0.15000001,
+              "falloff": 0.69999999,
+              "crit_chance": 0.34999999,
+              "crit_multiplier": 3,
+              "status_chance": 0.30000001,
+              "forcedProcs": [
+                "PT_CHILLED"
+              ],
+              "nativeField": "EmbedAttack",
+              "hit": "embed-body-tick",
+              "bodyOnly": true,
+              "impact_delay_seconds": 2.5
+            },
+            {
+              "takes_condition_overload": false,
+              "takes_multishot": true,
+              "damage": {
+                "DT_FREEZE": 150.0
+              },
+              "radius": 6.6999998,
+              "falloff": 0.69999999,
+              "crit_chance": 0.34999999,
+              "crit_multiplier": 3,
+              "status_chance": 0.30000001,
+              "forcedProcs": [
+                "PT_CHILLED"
+              ],
+              "nativeField": "ExplosiveAttack",
+              "hit": "headshot-explosion",
+              "headOnly": true,
+              "count": 2,
+              "impact_delay_seconds": 0.40000001
+            }
+          ]
         }
       }
     },
@@ -4691,21 +4753,6 @@
         "1": {
           "allowIncarnon": true,
           "directTotal": 5.0,
-          "radial": {
-            "takes_condition_overload": false,
-            "takes_multishot": true,
-            "damage": {
-              "DT_FREEZE": 5.0
-            },
-            "radius": 6.6999998,
-            "falloff": 0.69999999,
-            "crit_chance": 0.30000001,
-            "crit_multiplier": 2.5,
-            "status_chance": 0.30000001,
-            "forcedProcs": [
-              "PT_CHILLED"
-            ]
-          },
           "projectile": "/Lotus/Weapons/Tenno/Rifle/IncarnonTennoSniperRifleProj",
           "compression": {
             "effectiveness": 0.04,
@@ -4716,7 +4763,84 @@
             "takesRadiusMods": true
           },
           "compressionSourceCommit": "5ccb12ad8b3d6f8085cb655d353028edfce7db65",
-          "compressionSourceSha256": "30ed0a2cf522220c52f3e37bcf66c342d570d1df492dc2a9ad619745758ef5b9"
+          "compressionSourceSha256": "30ed0a2cf522220c52f3e37bcf66c342d570d1df492dc2a9ad619745758ef5b9",
+          "radials": [
+            {
+              "takes_condition_overload": false,
+              "takes_multishot": true,
+              "damage": {
+                "DT_FREEZE": 5.0
+              },
+              "radius": 0.15000001,
+              "falloff": 0.69999999,
+              "crit_chance": 0.30000001,
+              "crit_multiplier": 2.5,
+              "status_chance": 0.30000001,
+              "forcedProcs": [
+                "PT_CHILLED"
+              ],
+              "nativeField": "EmbedAttack",
+              "hit": "embed"
+            },
+            {
+              "takes_condition_overload": false,
+              "takes_multishot": true,
+              "damage": {
+                "DT_FREEZE": 5.0
+              },
+              "radius": 0.15000001,
+              "falloff": 0.69999999,
+              "crit_chance": 0.30000001,
+              "crit_multiplier": 2.5,
+              "status_chance": 0.30000001,
+              "forcedProcs": [
+                "PT_CHILLED"
+              ],
+              "nativeField": "EmbedAttack",
+              "hit": "embed-body-tick",
+              "bodyOnly": true,
+              "impact_delay_seconds": 1.25
+            },
+            {
+              "takes_condition_overload": false,
+              "takes_multishot": true,
+              "damage": {
+                "DT_FREEZE": 5.0
+              },
+              "radius": 0.15000001,
+              "falloff": 0.69999999,
+              "crit_chance": 0.30000001,
+              "crit_multiplier": 2.5,
+              "status_chance": 0.30000001,
+              "forcedProcs": [
+                "PT_CHILLED"
+              ],
+              "nativeField": "EmbedAttack",
+              "hit": "embed-body-tick",
+              "bodyOnly": true,
+              "impact_delay_seconds": 2.5
+            },
+            {
+              "takes_condition_overload": false,
+              "takes_multishot": true,
+              "damage": {
+                "DT_FREEZE": 5.0
+              },
+              "radius": 6.6999998,
+              "falloff": 0.69999999,
+              "crit_chance": 0.30000001,
+              "crit_multiplier": 2.5,
+              "status_chance": 0.30000001,
+              "forcedProcs": [
+                "PT_CHILLED"
+              ],
+              "nativeField": "ExplosiveAttack",
+              "hit": "headshot-explosion",
+              "headOnly": true,
+              "count": 2,
+              "impact_delay_seconds": 0.40000001
+            }
+          ]
         }
       }
     },
