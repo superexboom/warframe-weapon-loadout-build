@@ -8,6 +8,8 @@ from dataclasses import replace
 from functools import lru_cache
 from pathlib import Path
 
+from .record_keys import pin, record_key
+
 
 @lru_cache(maxsize=1)
 def reference():
@@ -32,6 +34,26 @@ def infinite_condition_sources():
 SET_BLEND_FIELDS = {"WEAPON_AMMO_CONSUME_RATE": "ammo_cost"}
 # Terms counted per status type on the victim: a fractional live count scales them.
 STATUS_COUNT_TYPES = ("WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE", "WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE")
+
+# Part records (a radial blast, a stackable embed, a reload grenade) of a form
+# record. Rebuilt on every resolve, each was a new weapon to mods_native's prep
+# cache, which keys a record by the identity of its values; built once per form
+# record and part they keep one. An entry pins the form record's values
+# (record_keys); a part's own data keys by content (repr: JSON-like data).
+_PART_RECORDS: dict = {}
+_PART_RECORDS_MAX = 1024
+
+
+def _part_record(wp, part, build):
+    key = (record_key(wp), part)
+    hit = _PART_RECORDS.get(key)
+    if hit is not None:
+        return hit[1]
+    record = build()
+    if len(_PART_RECORDS) >= _PART_RECORDS_MAX:
+        _PART_RECORDS.clear()
+    _PART_RECORDS[key] = (pin(wp), record)
+    return record
 
 
 def condition_kind(condition):
@@ -644,6 +666,8 @@ def prepare(
     }
 
     form_weapons = {}
+    # The event profile of each form record (read only below).
+    form_profiles = {}
 
     def resolve(form, stacks, live_types=0, last_round=False):
         # The weapon's always-on terms join here (not inside apply_mods) so a
@@ -732,14 +756,16 @@ def prepare(
             and profile.get("referenceId")
             in ("burston_incarnon", "burston_prime_incarnon")
         ):
-            rm = deepcopy(modes[idx])
-            rm["damage"] = {
-                **rm["damage"],
-                "types": {mapped[k]: v for k, v in r["damage"].items()},
-                "forcedProcs": [],
-            }
+            def burston_part():
+                rm = deepcopy(modes[idx])
+                rm["damage"] = {
+                    **rm["damage"],
+                    "types": {mapped[k]: v for k, v in r["damage"].items()},
+                    "forcedProcs": [],
+                }
+                return {**wp, "fireModes": [rm], "__innateResolved__": True}
             radial, radial_spec = apply_mods_spec(
-                {**wp, "fireModes": [rm], "__innateResolved__": True},
+                _part_record(wp, ("burston", idx, repr(r["damage"])), burston_part),
                 fx,
                 scenario=replace(scenario, incarnon_cycle=False, victim_status_count=0),
             )
@@ -753,9 +779,11 @@ def prepare(
                 headshot_bonus_multiplier=1.0,
             )
             radial._co_spec = radial_spec
-        extra = base_profile(wp, idx)
-        from .event_profiles import perfect_release
-        extra, _ = perfect_release(extra, modes[idx], scenario.combat_state)
+        extra = form_profiles.get((form != "base", idx))
+        if extra is None:
+            from .event_profiles import perfect_release
+            extra, _ = perfect_release(base_profile(wp, idx), modes[idx], scenario.combat_state)
+            form_profiles[(form != "base", idx)] = extra
         stackable = extra.get('stackable')
         if stackable:
             if stackable.get('chargedStacks'):
@@ -767,13 +795,16 @@ def prepare(
                 component = stackable.get(name)
                 if not component:
                     continue
-                rm = deepcopy(modes[idx])
-                rm.update(falloffRange=[0,0],falloffMinDamage=1,continuous=False,multishot=1.)
-                rm['damage'] = {**rm['damage'],'types':component['damage'],
-                                'critChance':component['critChance'],'critMultiplier':component['critMultiplier'],
-                                'procChance':component['statusChance'],'forcedProcs':component.get('forcedProcs') or []}
+                def stackable_part(component=component):
+                    rm = deepcopy(modes[idx])
+                    rm.update(falloffRange=[0,0],falloffMinDamage=1,continuous=False,multishot=1.)
+                    rm['damage'] = {**rm['damage'],'types':component['damage'],
+                                    'critChance':component['critChance'],'critMultiplier':component['critMultiplier'],
+                                    'procChance':component['statusChance'],'forcedProcs':component.get('forcedProcs') or []}
+                    return {**wp,'fireModes':[rm],'__innateResolved__':True}
                 part_fx = fx if component.get('takesConditionOverload') else [e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE']
-                part, part_spec = apply_mods_spec({**wp,'fireModes':[rm],'__innateResolved__':True},part_fx,scenario=replace(scenario,incarnon_cycle=False,victim_status_count=count_ceiling))
+                part, part_spec = apply_mods_spec(_part_record(wp, ('stackable', idx, name, repr(component)), stackable_part),
+                                                  part_fx,scenario=replace(scenario,incarnon_cycle=False,victim_status_count=count_ceiling))
                 part = replace(part,radial_only=True,multishot=1.,weakpoint_damage_bonus=0.,
                                weakpoint_crit_chance_bonus=0.,weakpoint_crit_chance_relative=0.,headshot_bonus_multiplier=1.)
                 if name=='singularity':
@@ -807,19 +838,22 @@ def prepare(
                     and scenario.distance < component['armingDistance']):
                 component = None
             if component and component.get('damage'):
-                rm = deepcopy(modes[idx])
-                rm['__radialPart__'] = True
-                # This part detonates at the aimed target; shot flight distance is
-                # not distance from the explosion centre.
-                rm['falloffRange'] = [0, 0]
-                rm['falloffMinDamage'] = 1
-                rm['damage'] = {
-                    **rm['damage'], 'types': {mapped.get(k,k): v for k, v in component['damage'].items()},
-                    'forcedProcs': list(component.get('forcedProcs') or [])+[proc for element, proc in [('electricity', 'PT_ELECTROCUTION'), ('cold', 'PT_CHILLED')] if element in component.get('forced_procs', [])],
-                    'critChance': component.get('crit_chance', rm['damage'].get('critChance')),
-                    'critMultiplier': component.get('crit_multiplier', rm['damage'].get('critMultiplier')),
-                    'procChance': (component['status_chance'] * float(rm.get('multishot') or 1) if component.get('status_chance') is not None else rm['damage'].get('procChance')),
-                }
+                def radial_part(component=component):
+                    rm = deepcopy(modes[idx])
+                    rm['__radialPart__'] = True
+                    # This part detonates at the aimed target; shot flight distance is
+                    # not distance from the explosion centre.
+                    rm['falloffRange'] = [0, 0]
+                    rm['falloffMinDamage'] = 1
+                    rm['damage'] = {
+                        **rm['damage'], 'types': {mapped.get(k,k): v for k, v in component['damage'].items()},
+                        'forcedProcs': list(component.get('forcedProcs') or [])+[proc for element, proc in [('electricity', 'PT_ELECTROCUTION'), ('cold', 'PT_CHILLED')] if element in component.get('forced_procs', [])],
+                        'critChance': component.get('crit_chance', rm['damage'].get('critChance')),
+                        'critMultiplier': component.get('crit_multiplier', rm['damage'].get('critMultiplier')),
+                        'procChance': (component['status_chance'] * float(rm.get('multishot') or 1) if component.get('status_chance') is not None else rm['damage'].get('procChance')),
+                    }
+                    return {**wp, 'fireModes': [rm], '__innateResolved__': True, '__compressionProfile__': extra.get('compression'),
+                            **({'__coProfile__': component['coProfile']} if component.get('coProfile') else {})}
                 part_fx = fx if component.get('takes_condition_overload') else ModEffectList(e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
                 if not (extra.get('radial') or extra.get('radials')):
                     # A lingering field has its own native base damage: flat
@@ -829,9 +863,9 @@ def prepare(
                     # its field, so it stays.
                     part_fx = ModEffectList(e for e in part_fx
                                             if not (e.upgrade_type == 'WEAPON_DAMAGE_AMOUNT' and e.operation == 'ADD_BASE'))
-                part, part_spec = apply_mods_spec({**wp, 'fireModes': [rm], '__innateResolved__': True, '__compressionProfile__': extra.get('compression'),
-                                   **({'__coProfile__': component['coProfile']} if component.get('coProfile') else {})},
-                                  part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
+                part, part_spec = apply_mods_spec(
+                    _part_record(wp, ('radial', idx, repr(component), repr(extra.get('compression'))), radial_part),
+                    part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
                 part = replace(part, radial_only=True, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
                 if component.get('takes_multishot') is False:
                     part = replace(part, multishot=1.0)
@@ -864,10 +898,13 @@ def prepare(
         if extra.get('bow'):
             st._bow_draw = extra['drawSeconds'] / (max(st.fire_rate / float(modes[idx]['fireRate']), 1e-9)*st.charge_rate_multiplier)
         if miter_aoe and idx==0 and not wp.get('isIncarnonForm'):
-            rm=deepcopy(modes[idx])
-            rm.update(falloffRange=[0,0],falloffMinDamage=1)
-            rm['damage']={**rm['damage'],'types':{'DT_EXPLOSION':miter_aoe['damage']},'forcedProcs':[]}
-            radial,radial_spec=apply_mods_spec({**wp,'fireModes':[rm],'__innateResolved__':True},[e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'],
+            def miter_part():
+                rm=deepcopy(modes[idx])
+                rm.update(falloffRange=[0,0],falloffMinDamage=1)
+                rm['damage']={**rm['damage'],'types':{'DT_EXPLOSION':miter_aoe['damage']},'forcedProcs':[]}
+                return {**wp,'fireModes':[rm],'__innateResolved__':True}
+            radial,radial_spec=apply_mods_spec(_part_record(wp,('miter',idx,repr(miter_aoe['damage'])),miter_part),
+                             [e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'],
                              scenario=replace(scenario,incarnon_cycle=False,victim_status_count=0))
             radial=replace(radial,radial_only=True,weakpoint_damage_bonus=0.,weakpoint_crit_chance_bonus=0.,
                            weakpoint_crit_chance_relative=0.,bodyshot_crit_multiplier=1.,headshot_bonus_multiplier=1.)
@@ -932,18 +969,22 @@ def prepare(
             parts = []
             for name in ('contact', 'explosion'):
                 component = spec[name]
-                rm = deepcopy(modes[0])
-                rm['__radialPart__'] = True
-                rm.update(falloffRange=[0, 0], falloffMinDamage=1, multishot=1,
-                          trigger='/Lotus/Language/Menu/Loadout_TriggerSemiAuto')
-                rm['damage'] = {**rm['damage'], 'types': dict(component['damage']), 'forcedProcs': [],
-                                'critChance': component['critChance'], 'critMultiplier': component['critMultiplier'],
-                                'procChance': component['procChance']}
                 contact = name == 'contact'
+
+                def reload_part(component=component, contact=contact):
+                    rm = deepcopy(modes[0])
+                    rm['__radialPart__'] = True
+                    rm.update(falloffRange=[0, 0], falloffMinDamage=1, multishot=1,
+                              trigger='/Lotus/Language/Menu/Loadout_TriggerSemiAuto')
+                    rm['damage'] = {**rm['damage'], 'types': dict(component['damage']), 'forcedProcs': [],
+                                    'critChance': component['critChance'], 'critMultiplier': component['critMultiplier'],
+                                    'procChance': component['procChance']}
+                    part_weapon = {**wp, 'fireModes': [rm], '__innateResolved__': True}
+                    if contact:
+                        part_weapon['__coProfile__'] = {'behavior': 'independent', 'baseFraction': 1.0, 'excludeFlatSources': []}
+                    return part_weapon
                 part_fx = ModEffectList(e for e in fx if contact or e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
-                part_weapon = {**wp, 'fireModes': [rm], '__innateResolved__': True}
-                if contact:
-                    part_weapon['__coProfile__'] = {'behavior': 'independent', 'baseFraction': 1.0, 'excludeFlatSources': []}
+                part_weapon = _part_record(wp, ('reload', kind, name, repr(component)), reload_part)
                 part, part_spec = apply_mods_spec(part_weapon, part_fx,
                                                   scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
                 part = replace(part, radial_only=True, multishot=float(thrown_spec.get('count') or 1),

@@ -16,6 +16,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Mapping
 
+from .record_keys import pin, record_key
+
 HIT_EVENTS = ("StartMeleeSweep", "StartMeleeSweepA", "StartMeleeSweepB", "StartMeleeSweepC", "StartMeleeThrust")
 
 
@@ -189,9 +191,29 @@ def class_charge_time(ref, row):
     return (siblings[len(siblings) // 2] if siblings else 0.7), True
 
 
+# Schedules by weapon record and route arguments. A schedule depends on them and
+# the reference tables only, and every prepare of a melee loadout asks for it
+# (0.4 ms, a tenth of a melee bake); callers only read it. Entries pin the
+# record's values (record_keys).
+_SCHEDULES: dict = {}
+_SCHEDULES_MAX = 256
+
+
 def build_schedule(weapon: Mapping[str, Any], route: str | None = None, *, stance: str | None = None,
                    combo: str | None = None, target_distance: float | None = None) -> dict[str, Any] | None:
     """The hit loop of one melee route, or None when the weapon has no data."""
+    key = (record_key(weapon), route, stance, combo, repr(target_distance))
+    hit = _SCHEDULES.get(key)
+    if hit is not None:
+        return hit[1]
+    schedule = _build_schedule(weapon, route, stance=stance, combo=combo, target_distance=target_distance)
+    if len(_SCHEDULES) >= _SCHEDULES_MAX:
+        _SCHEDULES.clear()
+    _SCHEDULES[key] = (pin(weapon), schedule)
+    return schedule
+
+
+def _build_schedule(weapon, route, *, stance, combo, target_distance):
     ref = reference()
     row = weapon_row(weapon)
     if not row:

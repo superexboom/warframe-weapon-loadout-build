@@ -60,20 +60,28 @@ class _Helper:
         self.hits = []
         self._hit_ids = {}
         self._applied = {}
-        if melee:
-            from .melee_sequence import Loop
-            self.loop = Loop(melee)
 
-    def melee_next(self, speed, charge, projectile=1.0):
-        """The route's next hit: (id, wait, heavy, combo hits, consumes combo,
-        slam phase bits: 1 a slam starts, 2 it ends)."""
-        hit, wait = self.loop.next(speed, charge, projectile)
-        key = id(hit)
-        if key not in self._hit_ids:
-            self._hit_ids[key] = len(self.hits)
-            self.hits.append(hit)
-        return (self._hit_ids[key], wait, bool(hit.get('heavy')), float(hit.get('comboHits', 1.0)),
-                bool(hit.get('consumesCombo')), (1 if hit.get('slamStart') else 0) | (2 if hit.get('slamEnd') else 0))
+    def melee_segments(self):
+        """The route as wfcore walks it (melee_sequence.Loop.next): per segment
+        (fixed, anim, charge-scaled, flight-scaled, hit id or None, heavy, combo
+        hits, consumes combo, slam phase bits: 1 a slam starts, 2 it ends). Hit
+        ids number the hits in the order the loop first reaches them."""
+        rows = []
+        for segment in self.melee['segments']:
+            hit = segment.get('hit')
+            if not hit:
+                rows.append((segment['fixed'], segment['anim'], bool(segment.get('chargeScaled')),
+                             bool(segment.get('flightScaled')), None, False, 0.0, False, 0))
+                continue
+            key = id(hit)
+            if key not in self._hit_ids:
+                self._hit_ids[key] = len(self.hits)
+                self.hits.append(hit)
+            rows.append((segment['fixed'], segment['anim'], bool(segment.get('chargeScaled')),
+                         bool(segment.get('flightScaled')), self._hit_ids[key], bool(hit.get('heavy')),
+                         float(hit.get('comboHits', 1.0)), bool(hit.get('consumesCombo')),
+                         (1 if hit.get('slamStart') else 0) | (2 if hit.get('slamEnd') else 0)))
+        return rows
 
     def stackable_profile(self, profile):
         """A `_stackable` profile flattened to the numbers wfcore's clocks read."""
@@ -477,7 +485,8 @@ def trajectory(
         melee_config = dict(baseHits=first, tierStep=float(spec.get("tierStep") or first),
                             cap=float(spec.get("cap") or 220.0),
                             baseMultiplier=float(spec.get("baseMultiplier") or 1.0),
-                            tierKeys=dict(combat.get('comboTierKeys') or {}))
+                            tierKeys=dict(combat.get('comboTierKeys') or {}),
+                            segments=helper.melee_segments())
     config = dict(
         stats=stats, resolver=combat['resolve'], window=window, head=head, rate=rate,
         punctureCap=proc_stack_cap(stats, 'DT_PUNCTURE', 5.0),
@@ -526,6 +535,10 @@ def trajectory(
     except wfcore.NativeUnsupported:
         STATS["fallback"] += 1
         return None
+    except wfcore.ReplayRunaway as exc:
+        # The reference would run into the same limit, only slower.
+        from .simulator import SimulationError
+        raise SimulationError(str(exc)) from None
     STATS["native"] += 1
     if weak_draw is not None:
         weak_draw.absorb(core)

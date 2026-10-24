@@ -10,6 +10,10 @@ KILL_BRANCHES = 16
 SHIELD_GATE_LEAK = 0.05
 KILL_BRANCH_MARGIN = .05
 _GOLDEN = (5 ** .5 - 1) / 2
+# Events one replay may process (wfcore replay.rs REPLAY_EVENT_LIMIT): a 30 s
+# manual window peaks near 5,000. A loop that keeps rescheduling at the same
+# instant stops here as an error instead of running without end.
+REPLAY_EVENT_LIMIT = 10_000_000
 
 
 class _KillProbe:
@@ -1252,8 +1256,13 @@ def _reference_trajectory(
     sample_time = 0.0
     last_kills = 0
     max_per_step = 0
+    events = 0
     while heap:
         t, _, kind, payload, event_gen = heapq.heappop(heap)
+        events += 1
+        if events > REPLAY_EVENT_LIMIT:
+            from .simulator import SimulationError
+            raise SimulationError(f"replay exceeded {REPLAY_EVENT_LIMIT} events")
         if t < current_time - 1e-9:
             # An event before the clock (a negative duration) replays the window
             # again and again; refuse instead of growing without end.

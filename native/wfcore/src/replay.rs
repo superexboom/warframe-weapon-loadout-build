@@ -17,13 +17,17 @@ use crate::co;
 use crate::stackable::{self, Projectiles};
 use std::rc::Rc;
 use crate::fx::{FxHashMap, FxIndexMap};
-use pyo3::exceptions::{PyIndexError, PyValueError};
+use pyo3::exceptions::{PyIndexError, PyValueError, PyZeroDivisionError};
 use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyList, PyTuple};
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, VecDeque};
 
 pyo3::create_exception!(wfcore, NativeUnsupported, pyo3::exceptions::PyException);
+// A replay past this many events (combat_replay.REPLAY_EVENT_LIMIT) is a loop
+// that keeps rescheduling: an error for the caller, never a reference fallback.
+pyo3::create_exception!(wfcore, ReplayRunaway, pyo3::exceptions::PyException);
+const REPLAY_EVENT_LIMIT: u64 = 10_000_000;
 
 /// A Python ``{damage type: value}`` dict as a vector, interning the names.
 pub(crate) fn vector_of(types: &mut Types, obj: &Bound<'_, PyAny>) -> PyResult<Vector> {
@@ -579,6 +583,8 @@ pub struct Replay<'py> {
     melee_heavy_multiplier: f64,
     melee_last_hit: f64,
     melee_pending: Option<MeleeHit>,
+    // melee_sequence.Loop.index: the route segment the next swing starts at.
+    melee_index: usize,
     heavy_flag: bool,
     // A glaive explosion's model: Condition Overload stripped (combat_replay `__noCO`).
     no_co_flag: bool,
@@ -1869,19 +1875,32 @@ impl<'py> Replay<'py> {
         Ok(i)
     }
 
+    /// melee_sequence.Loop.next: the route's next hit and the seconds until it lands.
     fn melee_next(&mut self, speed: f64, charge: f64, projectile: f64) -> PyResult<(MeleeHit, f64)> {
-        let r = self.helper.call_method1("melee_next", (speed, charge, projectile))?;
-        let t = r.cast::<PyTuple>()?;
-        Ok((
-            MeleeHit {
-                id: t.get_item(0)?.extract()?,
-                heavy: t.get_item(2)?.extract()?,
-                combo_hits: t.get_item(3)?.extract()?,
-                consumes: t.get_item(4)?.extract()?,
-                phase: t.get_item(5)?.extract()?,
-            },
-            t.get_item(1)?.extract()?,
-        ))
+        let segments = &self.melee.as_ref().expect("melee route").segments;
+        if segments.is_empty() {
+            return Err(PyIndexError::new_err("list index out of range"));
+        }
+        let mut waited = 0.0;
+        for _ in 0..segments.len() + 1 {
+            let segment = &segments[self.melee_index];
+            self.melee_index = (self.melee_index + 1) % segments.len();
+            let mut fixed = segment.fixed;
+            if segment.charge_scaled {
+                if charge == 0.0 {
+                    return Err(PyZeroDivisionError::new_err("float division by zero"));
+                }
+                fixed = segment.fixed / charge;
+            }
+            if segment.flight_scaled {
+                fixed = segment.fixed / pmax(projectile, 1e-9);
+            }
+            waited += fixed + segment.anim / pmax(speed, 1e-9);
+            if let Some(hit) = segment.hit {
+                return Ok((hit, waited));
+            }
+        }
+        Err(PyValueError::new_err("melee route has no hits"))
     }
 
     fn spread(&mut self, st: usize, aim: f64) -> f64 {
@@ -2928,6 +2947,18 @@ struct MeleeSpec {
     cap: f64,
     base_multiplier: f64,
     tier_keys: Vec<(PyObject, String, f64)>,
+    segments: Vec<MeleeSegment>,
+}
+
+/// One step of a melee route (melee_sequence.Loop): ``fixed`` seconds, divided
+/// by the charge or projectile speed when flagged, plus ``anim`` seconds at
+/// attack speed, then optionally a hit.
+struct MeleeSegment {
+    fixed: f64,
+    anim: f64,
+    charge_scaled: bool,
+    flight_scaled: bool,
+    hit: Option<MeleeHit>,
 }
 
 #[derive(Clone, Copy)]
@@ -2977,7 +3008,12 @@ impl<'py> Replay<'py> {
         let mut spool_shots: i64 = 0;
         let mut rate_spool_shots: i64 = 0;
         let mut rate_spool_due = 0.0;
+        let mut events: u64 = 0;
         while let Some(event) = self.heap.pop() {
+            events += 1;
+            if events > REPLAY_EVENT_LIMIT {
+                return Err(ReplayRunaway::new_err(format!("replay exceeded {REPLAY_EVENT_LIMIT} events")));
+            }
             if let Kind::IndependentDot(i) = &event.kind {
                 self.next_tick(*i);
             }
@@ -4076,12 +4112,35 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
                     tier_keys.push((k.clone().unbind(), k.extract::<String>()?, cap.extract::<f64>()?));
                 }
             }
+            let mut segments = Vec::new();
+            for row in d.get_item("segments")?.ok_or_else(|| PyValueError::new_err("melee.segments missing"))?.cast::<PyList>()?.iter() {
+                let t = row.cast::<PyTuple>()?;
+                let hit = t.get_item(4)?;
+                segments.push(MeleeSegment {
+                    fixed: t.get_item(0)?.extract()?,
+                    anim: t.get_item(1)?.extract()?,
+                    charge_scaled: t.get_item(2)?.extract()?,
+                    flight_scaled: t.get_item(3)?.extract()?,
+                    hit: if hit.is_none() {
+                        None
+                    } else {
+                        Some(MeleeHit {
+                            id: hit.extract()?,
+                            heavy: t.get_item(5)?.extract()?,
+                            combo_hits: t.get_item(6)?.extract()?,
+                            consumes: t.get_item(7)?.extract()?,
+                            phase: t.get_item(8)?.extract()?,
+                        })
+                    },
+                });
+            }
             Some(MeleeSpec {
                 base_hits: get_f(d, "baseHits", 20.0)?,
                 tier_step: get_f(d, "tierStep", 20.0)?,
                 cap: get_f(d, "cap", 220.0)?,
                 base_multiplier: get_f(d, "baseMultiplier", 1.0)?,
                 tier_keys,
+                segments,
             })
         }
     };
@@ -4302,6 +4361,7 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
         melee_heavy_multiplier: 1.0,
         melee_last_hit: f64::NEG_INFINITY,
         melee_pending: None,
+        melee_index: 0,
         heavy_flag: false,
         no_co_flag: false,
         melee_heavy_now: false,
