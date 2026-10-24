@@ -21,11 +21,11 @@
     "primary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam",
      "slot": "primary",
-     "disposition": 0.89999998,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelBeam/InfModularBarrelBeamPart",
       "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleDPart",
-      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPart"
+      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIIReloadIClipPart"
      ],
      "partNames": [
       {
@@ -39,21 +39,21 @@
        "nameZh": "震颤"
       },
       {
-       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPart",
-       "nameEn": "Splat",
-       "nameZh": "溅击"
+       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIIReloadIClipPart",
+       "nameEn": "Killstream",
+       "nameZh": "连杀"
       }
      ],
-     "kpm": 12.409877,
+     "kpm": 16.229162,
      "mods": [
       "重口径",
       "敏锐主武",
+      "致命火力",
       "低温弹头 Prime",
+      "铝热焊弹",
       "弱点感应",
-      "猎人 战备",
       "卑劣加速",
-      "膛线",
-      "重锤射击"
+      "膛线"
      ],
      "screened": 100,
      "verified": 4
@@ -61,7 +61,7 @@
     "secondary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam",
      "slot": "secondary",
-     "disposition": 1.15,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelBeam/InfModularBarrelBeamPart",
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart",
@@ -84,16 +84,16 @@
        "nameZh": "溅击"
       }
      ],
-     "kpm": 10.985272,
+     "kpm": 14.614202,
      "mods": [
-      "痉挛 Prime",
+      "瘟疫手枪",
+      "结霜侵蚀",
+      "火焰装填 Prime",
       "敏锐手枪",
       "黄蜂螫刺",
-      "乏能迅敏",
       "弱点专精 Prime",
-      "重装火力",
-      "瘟疫手枪",
-      "火焰装填 Prime"
+      "乏能迅敏",
+      "重装火力"
      ],
      "screened": 100,
      "verified": 5
@@ -107,11 +107,11 @@
     "primary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher",
      "slot": "primary",
-     "disposition": 1.15,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/InfModularBarrelEggPart",
       "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleDPart",
-      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPart"
+      "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigPart"
      ],
      "partNames": [
       {
@@ -125,21 +125,21 @@
        "nameZh": "震颤"
       },
       {
-       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPart",
-       "nameEn": "Splat",
-       "nameZh": "溅击"
+       "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigPart",
+       "nameEn": "Macro Arcroid",
+       "nameZh": "巨匣 弃脓"
       }
      ],
-     "kpm": 6.620796,
+     "kpm": 8.062671,
      "mods": [
       "重口径",
       "敏锐主武",
-      "地狱火",
-      "重锤射击",
+      "低温弹头 Prime",
+      "致命火力",
       "铝热焊弹",
       "弱点感应",
-      "膛线",
-      "卑劣加速"
+      "卑劣加速",
+      "野火"
      ],
      "screened": 100,
      "verified": 4
@@ -147,7 +147,7 @@
     "secondary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun",
      "slot": "secondary",
-     "disposition": 0.60000002,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/InfModularBarrelEggPart",
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart",
@@ -193,11 +193,11 @@
     "primary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun",
      "slot": "primary",
-     "disposition": 1.1,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelAPart",
       "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleDPart",
-      "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart"
+      "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigPart"
      ],
      "partNames": [
       {
@@ -211,32 +211,32 @@
        "nameZh": "震颤"
       },
       {
-       "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart",
-       "nameEn": "Macro Thymoid",
-       "nameZh": "巨匣 抑脓"
+       "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigPart",
+       "nameEn": "Macro Arcroid",
+       "nameZh": "巨匣 弃脓"
       }
      ],
-     "kpm": 6.047248,
+     "kpm": 8.818421,
      "mods": [
+      "急冻控场 Prime",
+      "毒素弹幕",
       "烈焰",
-      "炼狱轰击",
       "地狱弹膛",
       "抵近射击 Prime",
-      "霰弹枪元素师",
       "霰弹弹幕",
       "降速暴击",
       "破灭 Prime"
      ],
      "screened": 100,
-     "verified": 5
+     "verified": 4
     },
     "secondary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun",
      "slot": "secondary",
-     "disposition": 0.75,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelAPart",
-      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart",
+      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleDPart",
       "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart"
      ],
      "partNames": [
@@ -246,9 +246,9 @@
        "nameZh": "捕月"
       },
       {
-       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart",
-       "nameEn": "Haymaker",
-       "nameZh": "重拳"
+       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleDPart",
+       "nameEn": "Gibber",
+       "nameZh": "碎语"
       },
       {
        "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart",
@@ -256,16 +256,16 @@
        "nameZh": "巨匣 抑脓"
       }
      ],
-     "kpm": 11.250827,
+     "kpm": 12.663,
      "mods": [
-      "灼痕焦点",
+      "结霜侵蚀",
+      "瘟疫手枪",
+      "火焰装填 Prime",
       "敏锐手枪",
       "半自动手枪炮轰",
-      "火焰装填 Prime",
       "弱点专精 Prime",
-      "黄蜂螫刺",
       "手枪元素师",
-      "准确射手"
+      "黄蜂螫刺"
      ],
      "screened": 100,
      "verified": 5
@@ -279,7 +279,7 @@
     "primary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper",
      "slot": "primary",
-     "disposition": 1.0,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelBPart",
       "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleDPart",
@@ -302,12 +302,12 @@
        "nameZh": "溅击"
       }
      ],
-     "kpm": 7.208332,
+     "kpm": 8.0,
      "mods": [
       "重口径",
       "敏锐主武",
-      "地狱火",
-      "重锤射击",
+      "低温弹头 Prime",
+      "致命火力",
       "铝热焊弹",
       "弱点感应",
       "卑劣加速",
@@ -319,11 +319,11 @@
     "secondary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
      "slot": "secondary",
-     "disposition": 0.89999998,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelBPart",
-      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart",
-      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIIReloadIClipPart"
+      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleBPart",
+      "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart"
      ],
      "partNames": [
       {
@@ -332,29 +332,29 @@
        "nameZh": "墓指"
       },
       {
-       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart",
-       "nameEn": "Haymaker",
-       "nameZh": "重拳"
+       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleBPart",
+       "nameEn": "Lovetap",
+       "nameZh": "爱击"
       },
       {
-       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIIReloadIClipPart",
-       "nameEn": "Killstream",
-       "nameZh": "连杀"
+       "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart",
+       "nameEn": "Macro Thymoid",
+       "nameZh": "巨匣 抑脓"
       }
      ],
-     "kpm": 6.99536,
+     "kpm": 7.546904,
      "mods": [
+      "瘟疫手枪",
+      "结霜侵蚀",
       "火焰装填 Prime",
       "敏锐手枪",
       "半自动手枪炮轰",
-      "灼痕焦点",
       "弱点专精 Prime",
-      "黄蜂螫刺",
-      "手枪精通 Prime",
-      "手枪元素师"
+      "灼痕焦点",
+      "黄蜂螫刺"
      ],
      "screened": 100,
-     "verified": 4
+     "verified": 5
     }
    }
   },
@@ -365,11 +365,11 @@
     "primary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
      "slot": "primary",
-     "disposition": 1.0,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelCPart",
       "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleDPart",
-      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIIReloadIClipPart"
+      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPart"
      ],
      "partNames": [
       {
@@ -383,21 +383,21 @@
        "nameZh": "震颤"
       },
       {
-       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIIReloadIClipPart",
-       "nameEn": "Killstream",
-       "nameZh": "连杀"
+       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPart",
+       "nameEn": "Splat",
+       "nameZh": "溅击"
       }
      ],
-     "kpm": 7.502592,
+     "kpm": 12.358904,
      "mods": [
       "重口径",
       "敏锐主武",
-      "地狱火",
-      "重锤射击",
+      "低温弹头 Prime",
+      "致命火力",
+      "铝热焊弹",
       "弱点感应",
-      "膛线",
       "卑劣加速",
-      "铝热焊弹"
+      "膛线"
      ],
      "screened": 100,
      "verified": 4
@@ -405,11 +405,11 @@
     "secondary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
      "slot": "secondary",
-     "disposition": 1.0,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelCPart",
-      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleBPart",
-      "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPart"
+      "/Lotus/Weapons/Infested/Pistols/InfKitGun/Handles/InfSecondaryHandle/InfModularSecondaryHandlePart",
+      "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart"
      ],
      "partNames": [
       {
@@ -418,29 +418,29 @@
        "nameZh": "响胆"
       },
       {
-       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleBPart",
-       "nameEn": "Lovetap",
-       "nameZh": "爱击"
+       "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Handles/InfSecondaryHandle/InfModularSecondaryHandlePart",
+       "nameEn": "Ulnaris",
+       "nameZh": "尺骨"
       },
       {
-       "path": "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPart",
-       "nameEn": "Splat",
-       "nameZh": "溅击"
+       "path": "/Lotus/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatPart",
+       "nameEn": "Macro Thymoid",
+       "nameZh": "巨匣 抑脓"
       }
      ],
-     "kpm": 8.635963,
+     "kpm": 11.287832,
      "mods": [
+      "瘟疫手枪",
+      "结霜侵蚀",
       "火焰装填 Prime",
       "敏锐手枪",
-      "弱点专精 Prime",
       "黄蜂螫刺",
       "乏能迅敏",
-      "重装火力",
-      "灼痕焦点",
-      "手枪精通 Prime"
+      "弱点专精 Prime",
+      "重装火力"
      ],
      "screened": 100,
-     "verified": 4
+     "verified": 5
     }
    }
   },
@@ -451,7 +451,7 @@
     "primary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam",
      "slot": "primary",
-     "disposition": 1.1,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelDPart",
       "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/Handles/SUModularPrimaryHandleDPart",
@@ -474,16 +474,16 @@
        "nameZh": "连杀"
       }
      ],
-     "kpm": 8.636836,
+     "kpm": 14.705758,
      "mods": [
       "重口径",
       "敏锐主武",
-      "地狱火",
+      "低温弹头 Prime",
+      "致命火力",
+      "铝热焊弹",
       "弱点感应",
       "卑劣加速",
-      "铝热焊弹",
-      "膛线",
-      "重锤射击"
+      "膛线"
      ],
      "screened": 100,
      "verified": 4
@@ -491,7 +491,7 @@
     "secondary": {
      "weapon": "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam",
      "slot": "secondary",
-     "disposition": 1.05,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelDPart",
       "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPart",
@@ -514,16 +514,16 @@
        "nameZh": "溅击"
       }
      ],
-     "kpm": 9.119233,
+     "kpm": 14.723789,
      "mods": [
+      "瘟疫手枪",
+      "结霜侵蚀",
       "火焰装填 Prime",
       "敏锐手枪",
-      "弱点专精 Prime",
       "黄蜂螫刺",
+      "弱点专精 Prime",
       "乏能迅敏",
-      "重装火力",
-      "灼痕焦点",
-      "手枪元素师"
+      "重装火力"
      ],
      "screened": 100,
      "verified": 4
@@ -539,11 +539,11 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 1.25,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFive",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII"
      ],
      "partNames": [
       {
@@ -557,21 +557,21 @@
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
-       "nameEn": "Vargeet Jai II",
-       "nameZh": "瓦吉·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
+       "nameEn": "Ekwana II Jai",
+       "nameZh": "厄克瓦纳 II ·贾依"
       }
      ],
-     "kpm": 4.540505,
+     "kpm": 8.068422,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
-      "励磁加速",
+      "蚀骨寒霜",
+      "热病打击 Prime",
       "异况超量",
       "压迫点 Prime",
+      "励磁加速",
       "狂暴 Prime",
-      "牺牲 斩铁",
-      "肢解"
+      "爆裂刀刃"
      ],
      "screened": 160,
      "verified": 4
@@ -585,11 +585,11 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 1.0,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFour",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII"
      ],
      "partNames": [
       {
@@ -603,21 +603,21 @@
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
-       "nameEn": "Vargeet Jai II",
-       "nameZh": "瓦吉·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
+       "nameEn": "Ekwana II Jai",
+       "nameZh": "厄克瓦纳 II ·贾依"
       }
      ],
-     "kpm": 3.760746,
+     "kpm": 6.686098,
      "mods": [
       "剑风 Prime",
+      "蚀骨寒霜",
       "励磁加速",
+      "热病打击 Prime",
       "压迫点 Prime",
-      "爆裂刀刃",
       "异况超量",
       "狂暴 Prime",
-      "牺牲 斩铁",
-      "肢解"
+      "爆裂刀刃"
      ],
      "screened": 160,
      "verified": 5
@@ -631,11 +631,11 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 0.80000001,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOne",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII"
      ],
      "partNames": [
       {
@@ -649,24 +649,24 @@
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
-       "nameEn": "Ekwana Jai II",
-       "nameZh": "厄克瓦纳·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
+       "nameEn": "Ekwana II Jai",
+       "nameZh": "厄克瓦纳 II ·贾依"
       }
      ],
-     "kpm": 1.952499,
+     "kpm": 3.910179,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
+      "蚀骨寒霜",
       "励磁加速",
       "压迫点 Prime",
       "异况超量",
+      "剧毒灾害",
       "狂暴 Prime",
-      "肢解",
-      "牺牲 斩铁"
+      "爆裂刀刃"
      ],
      "screened": 160,
-     "verified": 4
+     "verified": 5
     }
    }
   },
@@ -677,11 +677,11 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 1.3,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSix",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII"
      ],
      "partNames": [
       {
@@ -695,21 +695,21 @@
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
-       "nameEn": "Vargeet Jai II",
-       "nameZh": "瓦吉·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
+       "nameEn": "Ekwana II Jai",
+       "nameZh": "厄克瓦纳 II ·贾依"
       }
      ],
-     "kpm": 3.867172,
+     "kpm": 6.135322,
      "mods": [
       "剑风 Prime",
-      "压迫点 Prime",
       "热病打击 Prime",
+      "压迫点 Prime",
+      "蚀骨寒霜",
       "异况超量",
-      "伏打电能",
       "爆裂刀刃",
-      "狂暴 Prime",
-      "牺牲 斩铁"
+      "励磁加速",
+      "狂暴 Prime"
      ],
      "screened": 160,
      "verified": 5
@@ -723,7 +723,7 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 1.15,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipThree",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
@@ -746,19 +746,19 @@
        "nameZh": "瓦吉·贾依 II"
       }
      ],
-     "kpm": 5.650273,
+     "kpm": 8.113065,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
-      "励磁加速",
-      "异况超量",
+      "热病打击 Prime",
       "压迫点 Prime",
+      "蚀骨寒霜",
+      "异况超量",
+      "爆裂刀刃",
       "狂暴 Prime",
-      "牺牲 斩铁",
-      "肢解"
+      "牺牲 斩铁"
      ],
      "screened": 160,
-     "verified": 4
+     "verified": 5
     }
    }
   },
@@ -769,7 +769,7 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 1.3,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Tip/TipTwo",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
@@ -792,16 +792,16 @@
        "nameZh": "瓦吉·贾依 II"
       }
      ],
-     "kpm": 5.986763,
+     "kpm": 8.508591,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
-      "励磁加速",
-      "异况超量",
+      "热病打击 Prime",
       "压迫点 Prime",
+      "蚀骨寒霜",
+      "异况超量",
+      "爆裂刀刃",
       "狂暴 Prime",
-      "急进猛突",
-      "肢解"
+      "牺牲 斩铁"
      ],
      "screened": 160,
      "verified": 5
@@ -815,11 +815,11 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 0.75,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipEleven",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
       {
@@ -833,21 +833,21 @@
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
-       "nameEn": "Vargeet Jai II",
-       "nameZh": "瓦吉·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
+       "nameEn": "Ekwana Jai II",
+       "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 8.547835,
+     "kpm": 11.180635,
      "mods": [
       "剑风 Prime",
+      "蚀骨寒霜",
       "压迫点 Prime",
-      "熔岩冲击",
+      "剧毒灾害",
       "异况超量",
+      "爆裂刀刃",
       "狂暴 Prime",
-      "急进猛突",
-      "创口溃烂",
-      "肢解"
+      "创口溃烂"
      ],
      "screened": 160,
      "verified": 5
@@ -861,11 +861,11 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 0.69999999,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipNine",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
       {
@@ -879,24 +879,24 @@
        "nameZh": "佩耶"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
-       "nameEn": "Vargeet Jai II",
-       "nameZh": "瓦吉·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
+       "nameEn": "Ekwana Jai II",
+       "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 4.953481,
+     "kpm": 8.100078,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
-      "励磁加速",
-      "异况超量",
+      "蚀骨寒霜",
       "压迫点 Prime",
-      "牺牲 斩铁",
-      "肢解",
-      "狂暴 Prime"
+      "热病打击 Prime",
+      "异况超量",
+      "狂暴 Prime",
+      "励磁加速",
+      "爆裂刀刃"
      ],
      "screened": 160,
-     "verified": 4
+     "verified": 5
     }
    }
   },
@@ -907,11 +907,11 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 1.3,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMelee02/Tip/TipTen",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
      ],
      "partNames": [
       {
@@ -925,24 +925,24 @@
        "nameZh": "佩耶"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritI",
-       "nameEn": "Vargeet Jai II",
-       "nameZh": "瓦吉·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
+       "nameEn": "Ekwana Jai II",
+       "nameZh": "厄克瓦纳·贾依 II"
       }
      ],
-     "kpm": 2.980447,
+     "kpm": 4.796549,
      "mods": [
       "剑风 Prime",
+      "蚀骨寒霜",
       "压迫点 Prime",
-      "熔岩冲击",
+      "励磁加速",
       "异况超量",
+      "剧毒灾害",
       "狂暴 Prime",
-      "牺牲 斩铁",
-      "爆裂刀刃",
-      "肢解"
+      "爆裂刀刃"
      ],
      "screened": 160,
-     "verified": 4
+     "verified": 5
     }
    }
   },
@@ -953,11 +953,11 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 0.64999998,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipOne",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFour",
-      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI"
+      "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII"
      ],
      "partNames": [
       {
@@ -971,21 +971,21 @@
        "nameZh": "希卡拉"
       },
       {
-       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusI",
-       "nameEn": "Ekwana Jai II",
-       "nameZh": "厄克瓦纳·贾依 II"
+       "path": "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusII",
+       "nameEn": "Ekwana II Jai",
+       "nameZh": "厄克瓦纳 II ·贾依"
       }
      ],
-     "kpm": 7.312286,
+     "kpm": 8.144369,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
+      "伏打电能",
       "励磁加速",
       "异况超量",
       "压迫点 Prime",
       "狂暴 Prime",
-      "牺牲 斩铁",
-      "肢解"
+      "剧毒灾害",
+      "爆裂刀刃"
      ],
      "screened": 160,
      "verified": 5
@@ -999,7 +999,7 @@
     "melee": {
      "weapon": "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
      "slot": "melee",
-     "disposition": 0.89999998,
+     "disposition": 1.2,
      "parts": [
       "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipTwo",
       "/Lotus/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOne",
@@ -1022,16 +1022,16 @@
        "nameZh": "瓦吉 II ·贾依"
       }
      ],
-     "kpm": 6.374183,
+     "kpm": 6.635946,
      "mods": [
       "剑风 Prime",
-      "爆裂刀刃",
+      "蚀骨寒霜",
       "压迫点 Prime",
-      "异况超量",
       "狂暴 Prime",
-      "牺牲 斩铁",
-      "肢解",
-      "加速"
+      "异况超量",
+      "剧毒灾害",
+      "爆裂刀刃",
+      "牺牲 斩铁"
      ],
      "screened": 160,
      "verified": 5
