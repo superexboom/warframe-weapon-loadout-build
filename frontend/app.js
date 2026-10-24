@@ -54,6 +54,15 @@ const state = {
   // 搜索约束（「限制」面板）：必选/禁选 mod path 集合 + 配卡数量范围。
   requiredMods: [],
   forbiddenMods: [],
+  // 全局屏蔽（跨武器，本机记忆）与「屏蔽派系歧视卡」开关。
+  globalForbiddenMods: readStoredList("wf-global-forbidden-mods"),
+  excludeFactionMods: readStoredFlag("wf-exclude-faction-mods"),
+  // 同伴武器：机械守护本体（槽位 / 开关）与镀层叠层开关；见 isCompanionWeapon。
+  sentinel: null,
+  companionPlayerStacks: false,
+  exaltedLink: null,
+  exaltedResult: null,
+  sentinelPanel: null,
   // 真正缺少等级缩放锚点的目标默认在选择器里隐藏；无独立弱点区的目标仍可选。
   enemyShowMissing: false,
   modPickerView: "grid",
@@ -153,7 +162,7 @@ const ui = Object.fromEntries([
   "warframe-catalog-status", "warframe-frame-select", "warframe-frame-open", "warframe-frame-select-visual", "warframe-frame-select-name", "warframe-frame-select-description", "warframe-frame-caption", "warframe-portrait", "warframe-profile-name", "warframe-profile-description", "warframe-passive",
   "warframe-apply-conditionals", "warframe-helminth-slot", "warframe-helminth-slot-open", "warframe-helminth-slot-visual", "warframe-helminth-slot-name", "warframe-helminth-slot-description", "warframe-helminth-ability", "warframe-helminth-ability-open", "warframe-helminth-ability-visual", "warframe-helminth-ability-name", "warframe-helminth-ability-source", "warframe-helminth-description", "warframe-invigoration-open", "warframe-invigoration-name", "warframe-invigoration-description",
   "warframe-config-tabs", "warframe-config-status", "warframe-config-copy", "warframe-config-import", "warframe-config-export", "warframe-config-import-json", "warframe-config-import-rabbit", "warframe-config-export-json", "warframe-config-export-rabbit", "warframe-config-import-file", "warframe-clear", "warframe-message", "warframe-result-name", "warframe-capacity-readout", "warframe-capacity-bar", "warframe-forma-readout", "warframe-loading", "warframe-build-content",
-  "warframe-special-slots", "warframe-normal-slots", "warframe-arcane-slots", "warframe-shard-slots", "warframe-effect-status", "warframe-panel-grid", "warframe-active-effects", "warframe-ability-grid",
+  "warframe-special-slots", "warframe-normal-slots", "warframe-arcane-slots", "warframe-shard-slots", "warframe-effect-status", "warframe-panel-grid", "warframe-ability-grid",
   "warframe-diagnostics", "warframe-diagnostic-count", "warframe-diagnostic-list", "warframe-picker", "warframe-picker-title", "warframe-picker-sub", "warframe-picker-search", "warframe-picker-close", "warframe-picker-categories", "warframe-picker-list",
   "rabbit-dialog-scrim", "rabbit-dialog", "rabbit-dialog-title", "rabbit-dialog-close", "rabbit-export-form", "rabbit-import-panel", "rabbit-target", "rabbit-archetype", "rabbit-build-title", "rabbit-summary", "rabbit-usage", "rabbit-cautions", "rabbit-export-status", "rabbit-generate", "rabbit-code-result", "rabbit-code-count", "rabbit-code", "rabbit-copy", "rabbit-import-code", "rabbit-import-status", "rabbit-import-apply",
 ].map((id) => [id, document.getElementById(id)]));
@@ -293,6 +302,8 @@ function captureBuildConfig() {
     // Special-slot Forma is exported explicitly as well as in formaSlots so
     // consumers do not have to infer stance/Exilus from ordinary-slot indexes.
     specialSlotPolarities: Object.keys(specialSlotPolaritiesPayload()).length ? specialSlotPolaritiesPayload() : undefined,
+    sentinel: captureSentinelConfig(),
+    exaltedLink: captureExaltedLink(),
     riven: rivenMod ? { slot: rivenSlot, polarity: rivenFixedPolarity(rivenMod, rivenSlot), stats: rivenMod.stats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) })) } : null,
     enemy: get("build-enemy-select", "") || null,
     level: Number(get("build-enemy-level", 160) || 160),
@@ -556,6 +567,12 @@ function applyBuildConfig(config) {
     restoreCombatState();
     state.requiredMods = [];
     state.forbiddenMods = [];
+    restoreSentinelConfig(null);
+    renderCompanionPanel();
+    restoreExaltedLink(null);
+    renderExaltedPanel();
+    renderSentinelBench();
+    scheduleSentinelEvaluate();
     setControlValue("build-min-fill", "");
     setControlValue("build-max-fill", "");
     if (ui["build-optimize-arcanes"]) ui["build-optimize-arcanes"].checked = true;
@@ -689,6 +706,12 @@ function applyBuildConfig(config) {
   renderArcaneSelections();
   renderExternalBuffs();
   renderIncarnonChoices();
+  restoreSentinelConfig(config);
+  renderCompanionPanel();
+  restoreExaltedLink(config);
+  renderExaltedPanel();
+  renderSentinelBench();
+  scheduleSentinelEvaluate();
 }
 
 function switchBuildConfig(name) {
@@ -1657,7 +1680,7 @@ function fillWeapons() {
     const option = document.createElement("option");
     option.value = weaponOptionLabel(weapon);
     option.label = weapon.analysisAvailable !== false
-      ? `${TYPE_LABELS[weapon.weaponType] || weapon.weaponType} · 倾向 ${formatDisposition(weapon.disposition)}`
+      ? `${TYPE_LABELS[weapon.weaponType] || weapon.weaponType} · 倾向 ${dispositionLabel(weapon)}`
       : `不可用 · ${issueLabel(weapon.analysisIssue || weapon.issue)}`;
     fragment.append(option);
   }
@@ -1683,7 +1706,7 @@ function fillBuildWeapons() {
       ? `不可用 · ${issueLabel(weapon.buildIssue || weapon.issue)}`
       : isAssembly
         ? `${TYPE_LABELS[weapon.weaponType] || weapon.weaponType} · 装配后按腔体/剑刃倾向`
-        : `${TYPE_LABELS[weapon.weaponType] || weapon.weaponType} · 倾向 ${formatDisposition(weapon.disposition)}`;
+        : weaponTypeCaption(weapon);
     fragment.append(option);
   }
   ui["build-weapon-options"].replaceChildren(fragment);
@@ -1717,6 +1740,22 @@ function resolveBuildWeapon(value) {
 function formatDisposition(value) {
   const number = finite(value);
   return number === null ? "--" : number.toFixed(2);
+}
+
+// 10-23 起紫卡倾向统一 1.2（data/mechanics/riven-disposition.json）；
+// 旧的逐武器倾向附在括号里，便于对照已有紫卡。
+// 武器选择器里的副标题：显赫武器没有紫卡，不显示倾向，改写携带它的战甲。
+function weaponTypeCaption(weapon, withDots = false) {
+  const type = TYPE_LABELS[weapon.weaponType] || weapon.weaponType;
+  if (weapon.exalted) {
+    const frames = (weapon.exalted.frames || []).map((frame) => frame.nameZh || frame.nameEn).filter(Boolean);
+    return `${type} · 显赫武器${frames.length ? `（${frames.join(" / ")}）` : ""}`;
+  }
+  return `${type} · 倾向 ${dispositionLabel(weapon)}${withDots ? ` ${dispositionDots(weapon.disposition)}` : ""}`;
+}
+
+function dispositionLabel(weapon) {
+  return formatDisposition(weapon?.disposition);
 }
 
 function dispositionDots(value) {
@@ -2159,6 +2198,7 @@ function selectWeapon(weapon, writeInput = true) {
 }
 
 function updateCardPreview() {
+  refreshAnalysisFavoriteButton();
   const entries = activeStats();
   const seedSource = `${state.weapon?.path || "empty"}:${entries.map((entry) => `${entry.code}:${entry.value}:${entry.negative}`).join("|")}`;
   const seed = hashText(seedSource);
@@ -2243,8 +2283,66 @@ function scopeFillValue(id) {
   return clamp(Math.round(parsed), 0, 8);
 }
 
+function readStoredList(key) {
+  try {
+    const value = JSON.parse(window.localStorage.getItem(key) || "[]");
+    return Array.isArray(value) ? value.filter((item) => typeof item === "string" && item) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeStoredList(key, list) {
+  try { window.localStorage.setItem(key, JSON.stringify(list)); } catch { /* 本机记忆不可用时只在本次会话生效 */ }
+}
+
+function readStoredFlag(key) {
+  try { return window.localStorage.getItem(key) === "1"; } catch { return false; }
+}
+
+// 本武器禁选 + 全局屏蔽（只发目录里存在、且不在本武器必选里的卡）。
+function scopeForbiddenPaths() {
+  const known = new Set((state.catalog?.manualMods || []).map((mod) => mod.path));
+  const paths = [...new Set([...state.forbiddenMods, ...state.globalForbiddenMods])]
+    .filter((path) => known.has(path) && !state.requiredMods.includes(path));
+  return paths.length ? paths : undefined;
+}
+
+function scopeMenuButtons(path, after) {
+  const entries = [
+    ["required", state.requiredMods.includes(path), "✓ 必选（点击移除）", "加入必选"],
+    ["forbidden", state.forbiddenMods.includes(path), "✓ 本武器禁选（点击移除）", "本武器禁选"],
+    ["global", state.globalForbiddenMods.includes(path), "✓ 全局屏蔽（点击移除）", "全局屏蔽（所有武器）"],
+  ];
+  return entries.map(([kind, active, on, off]) => {
+    const button = create("button", "", active ? on : off);
+    button.type = "button";
+    button.addEventListener("click", () => { toggleScopeMod(path, kind); closeScopeMenu(); after?.(kind, active); });
+    return button;
+  });
+}
+
 function toggleScopeMod(path, kind) {
-  // kind: "required" | "forbidden" — 互斥：一张卡只能在其中一边。
+  // kind: "required" | "forbidden" | "global" — 本武器必选/禁选互斥；
+  // 全局屏蔽跨武器生效，加入时同时移出本武器必选。
+  if (kind === "global") {
+    const list = state.globalForbiddenMods;
+    const index = list.indexOf(path);
+    if (index >= 0) list.splice(index, 1);
+    else {
+      list.push(path);
+      state.requiredMods = state.requiredMods.filter((p) => p !== path);
+    }
+    writeStoredList("wf-global-forbidden-mods", list);
+    renderScopeLists();
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+    return;
+  }
+  if (kind === "required") {
+    state.globalForbiddenMods = state.globalForbiddenMods.filter((p) => p !== path);
+    writeStoredList("wf-global-forbidden-mods", state.globalForbiddenMods);
+  }
   const other = kind === "required" ? "forbiddenMods" : "requiredMods";
   state[other] = state[other].filter((p) => p !== path);
   const list = kind === "required" ? state.requiredMods : state.forbiddenMods;
@@ -2283,6 +2381,17 @@ function renderScopeLists() {
       ? state.forbiddenMods.map((p) => chip(p, "forbidden"))
       : [create("span", "scope-empty", "无")])
   );
+  const global = document.getElementById("build-global-forbidden-list");
+  if (global) {
+    global.replaceChildren(
+      create("span", "scope-empty", "全局屏蔽："),
+      ...(state.globalForbiddenMods.length
+        ? state.globalForbiddenMods.map((p) => chip(p, "global"))
+        : [create("span", "scope-empty", "无（所有武器生效）")])
+    );
+  }
+  const faction = document.getElementById("build-exclude-faction");
+  if (faction) faction.checked = state.excludeFactionMods;
   // 数量范围输出回显
   const lo = scopeFillValue("build-min-fill");
   const hi = scopeFillValue("build-max-fill");
@@ -2432,6 +2541,7 @@ async function submitAnalysis(event) {
     state.result = body;
     state.buildMode = "actual";
     renderResult();
+    rememberAnalysisResult();
     ui["export-button"].disabled = false;
     setResultState("content");
     ui["result-content"].scrollIntoView({ behavior: "smooth", block: "start" });
@@ -2824,7 +2934,7 @@ function splitArtLayers(artSource) {
 // 卡名：正面词条按随机系数（数值 ÷ 该词条基础值，倾向与正负结构对同卡词条相同）
 // 从高到低排序（分不出高低时按卡上顺序），最高为前缀、次高为核心、最低为后缀（3 正 “Prefix-coresuffix”，
 // 2 正 “Coresuffix”）；音节取自紫卡模板 UpgradeEntries 的 Prefix/SuffixTag，
-// 融合词条没有音节，不参与命名（wiki Riven Mods#Naming）。
+// 融合词条也有音节（09-22 模板），同样参与命名（wiki Riven Mods#Naming）。
 function rivenCardName(weapon, stats, definitions) {
   const byCode = new Map((definitions || []).map((definition) => [String(definition.code), definition]));
   const ranked = (stats || [])
@@ -3279,6 +3389,22 @@ function renderRivenBuilder(target) {
     polarityPicker.append(button);
   }
   actions.append(polarityPicker);
+  const favorite = create("button", "button button-quiet riven-builder-favorite", "☆ 收藏");
+  favorite.type = "button";
+  favorite.title = "把这组词条存进紫卡收藏夹（跨武器查看）";
+  const builderStats = () => state.rivenBuilderStats.map((s) => ({ code: s.code, value: Number(s.value || 0), negative: Boolean(s.negative) }));
+  const paintFavorite = () => {
+    const saved = Boolean(state.buildWeapon && findFavorite(state.buildWeapon.path, builderStats()));
+    favorite.textContent = saved ? "★ 已收藏" : "☆ 收藏";
+    favorite.classList.toggle("is-active", saved);
+  };
+  favorite.addEventListener("click", () => {
+    toggleFavorite(state.buildWeapon, builderStats(), { polarity: state.rivenBuilderPolarity });
+    paintFavorite();
+  });
+  panel.addEventListener("input", paintFavorite);
+  paintFavorite();
+  actions.append(favorite);
   const insert = create("button", "button button-primary", "放入当前槽位");
   insert.type = "button";
   insert.addEventListener("click", () => {
@@ -3790,6 +3916,7 @@ function modExclusiveFamily(mod) {
 
 function manualModRecords() {
   const weapon = state.buildWeapon;
+  if (state.modPickerKind === "sentinel") return sentinelModRecords();
   if (state.modPickerKind === "stance") {
     return stanceRecords().filter((stance) => stanceMatchesBuildWeapon(stance) && specialRecordMatchesSearch(stance));
   }
@@ -4426,8 +4553,13 @@ function closeArcanePicker() {
 function fillArcanes() { renderArcanePicker(); }
 
 const WEAPON_PICKER_CATEGORIES = {
-  all: "全部", rifle: "步枪", shotgun: "霰弹枪", pistol: "手枪", melee: "近战", zaw: "组合近战", kitgun: "组合枪", archgun: "空战武器(地面)", companion: "同伴武器",
+  all: "全部", rifle: "步枪", shotgun: "霰弹枪", pistol: "手枪", melee: "近战", zaw: "组合近战", kitgun: "组合枪", archgun: "空战武器(地面)", companion: "同伴武器", exalted: "显赫武器",
 };
+
+// 显赫武器单列一类，不混进它基类（近战 / 手枪 / 步枪）的分类里。
+function weaponPickerCategoryOf(weapon) {
+  return weapon.exalted ? "exalted" : weapon.weaponType;
+}
 
 function weaponPickerRows() {
   const rows = (state.catalog?.weapons || []).filter((weapon) => !weapon.hiddenFromBuildPicker);
@@ -4451,7 +4583,7 @@ function weaponPickerRows() {
   return rows.filter((weapon) => {
     if (isKitgun(weapon) || isZaw(weapon)) return false;
     const haystack = [weapon.nameZh, weapon.nameEn, weapon.nameInternal, weapon.path].filter(Boolean).join(" ").toLocaleLowerCase();
-    return (!query || haystack.includes(query)) && (assemblyCategory === "all" || weapon.weaponType === assemblyCategory);
+    return (!query || haystack.includes(query)) && (assemblyCategory === "all" || weaponPickerCategoryOf(weapon) === assemblyCategory);
   }).concat(
     [...merged.entries()].filter(([key, weapon]) => {
       const haystack = [weapon.nameZh, weapon.nameEn, weapon.nameInternal, weapon.path, "组合枪", "组合近战", "kitgun", "zaw", "装配"].filter(Boolean).join(" ").toLocaleLowerCase();
@@ -4506,7 +4638,7 @@ function renderWeaponPicker() {
   const counts = new Map([["all", regularRows.length + assemblyCount]]);
   rows.forEach((weapon) => {
     if (isKitgun(weapon) || isZaw(weapon)) return;
-    counts.set(weapon.weaponType, (counts.get(weapon.weaponType) || 0) + 1);
+    counts.set(weaponPickerCategoryOf(weapon), (counts.get(weaponPickerCategoryOf(weapon)) || 0) + 1);
   });
   if (kitgunEntries.size) counts.set("kitgun", kitgunEntries.size);
   if (zawEntries) counts.set("zaw", zawEntries);
@@ -4570,7 +4702,7 @@ function renderWeaponPicker() {
       create("strong", "", isAssembly ? (isZaw ? "组合近战（Zaw · 装配）" : `组合枪（${weapon.slot === "primary" ? "主武器" : "副武器"} · 装配）`) : weaponName(weapon)),
       create("small", "", isAssembly
         ? `${isZaw ? "剑刃×握把×配重" : "腔体×握把×装填器"} · 倾向 ${kitgunDispo ? formatDisposition(kitgunDispo) : isZaw ? "跟剑刃" : "跟腔体"}${kitgunDispo ? " " + dispositionDots(kitgunDispo) : ""}`
-        : `${TYPE_LABELS[weapon.weaponType] || weapon.weaponType} · 倾向 ${formatDisposition(weapon.disposition)} ${dispositionDots(weapon.disposition)}`),
+        : weaponTypeCaption(weapon, true)),
     );
     option.append(thumb, copy);
     if (weapon.buildAvailable === false && !isAssembly && !forAnalysis) {
@@ -5481,11 +5613,18 @@ function weaponArcaneSlotCount() {
 function renderArcaneSelections() {
   const target = ui["build-arcane-list"];
   if (!target) return;
+  if (isCompanionWeapon()) {
+    // 机械武器不能装赋能（wiki Arcane_Enhancement / Sentinel）。
+    target.replaceChildren(create("p", "empty-copy companion-arcane-note", "守护武器不能装赋能；战甲赋能也不作用于守护的攻击。"));
+    return;
+  }
+  if (target.querySelector(".companion-arcane-note")) target.replaceChildren();
   const specs = [
     ["weapon", 0, state.weaponArcane],
   ];
   if (weaponArcaneSlotCount() > 1) specs.push(["weapon", 1, state.weaponArcane2]);
-  specs.push(["warframe", 0, state.frameArcanes[0]], ["warframe", 1, state.frameArcanes[1]]);
+  // 显赫武器：战甲赋能来自关联战甲的配置（见显赫武器面板），这里不提供槽位。
+  if (!isExaltedWeapon()) specs.push(["warframe", 0, state.frameArcanes[0]], ["warframe", 1, state.frameArcanes[1]]);
   // diff 复用：未变化的赋能槽不重绘（图标/框图不重载）
   const existing = Array.from(target.children);
   specs.forEach(([kind, slotIndex, item], position) => {
@@ -6634,6 +6773,17 @@ function buildManualSlotNode(mod, index, slotPolarities, capacity) {
     const runtimeText = modRuntimeText(mod);
     if (runtimeText) slot.append(create("p", "mod-runtime-summary", runtimeText));
     if (!mod.__riven && capacity.over) preview.classList.add("is-over-capacity");
+    if (!mod.__riven) {
+      // 右键 / 长按已装备的卡：禁选或全局屏蔽时顺手把它从槽位剔除，
+      // 自动配装随即按新约束重算。
+      bindScopeModMenu(slot, mod, (kind, wasActive) => {
+        if (kind === "required" || wasActive || state.manualSlots[index]?.path !== mod.path) return;
+        if (state.manualLocks[index]) { toast("槽位已锁定，已加入屏蔽但未移除"); return; }
+        state.manualSlots[index] = null;
+        renderManualSlots();
+        persistActiveBuildConfig();
+      });
+    }
     // 紫卡槽同样给调整工具栏（拖动/锁定/移除）；等级步进不适用——
     // 自定义紫卡词条数值由编辑器直接给出，没有等级缩放。
     const actions = create("div", "manual-slot-actions");
@@ -6991,6 +7141,7 @@ function ensureCapacityFit() {
 }
 
 function applyModToPickerSlot(mod) {
+  if (state.modPickerKind === "sentinel") return applySentinelMod(mod);
   if (state.modPickerKind !== "normal") return applySpecialMod(mod);
   const slot = state.modPickerSlot;
   if (state.manualLocks[slot]) return toast("当前槽位已锁定");
@@ -7029,7 +7180,9 @@ function modPickerCard(mod, kind = state.modPickerKind) {
     })
     : kind === "normal"
       ? createNormalModCard({ ...mod, rank: mod.maxRank ?? mod.rank ?? 0 }, 0, { compact: true, compatLabel: modCompatLabel(mod, modAssetFields(mod)) })
-      : createSpecialModCard(mod, kind, true, weaponSpecialSlotPolarity(kind));
+      : kind === "sentinel"
+        ? createNormalModCard({ ...mod, rank: mod.maxRank ?? 0 }, 0, { compact: true, compatLabel: mod.exclusiveTo ? "专属守则" : (mod.kind === "precept" ? "守护守则" : "守护") })
+        : createSpecialModCard(mod, kind, true, weaponSpecialSlotPolarity(kind));
   card.classList.add("manual-option-card");
   card.querySelector(".slot-number")?.remove();
   return card;
@@ -7071,7 +7224,9 @@ function showModPreview(mod, anchor, kind = state.modPickerKind) {
     })
     : kind === "normal"
       ? createNormalModCard({ ...mod, rank: mod.rank ?? mod.maxRank ?? 0 }, 0, { compact: false, compatLabel: modCompatLabel(mod, modAssetFields(mod)) })
-      : createSpecialModCard(mod, kind, false, weaponSpecialSlotPolarity(kind));
+      : kind === "sentinel"
+        ? createNormalModCard({ ...mod, rank: mod.maxRank ?? 0 }, 0, { compact: false, compatLabel: mod.exclusiveTo ? "专属守则" : (mod.kind === "precept" ? "守护守则" : "守护") })
+        : createSpecialModCard(mod, kind, false, weaponSpecialSlotPolarity(kind));
   card.querySelector(".slot-number")?.remove();
   card.querySelector(".game-mod-card")?.classList.add("is-expanded");
   preview.append(card);
@@ -7105,22 +7260,14 @@ function closeScopeMenu() {
   scopeMenuElement = null;
 }
 
-function bindScopeModMenu(option, mod) {
+function bindScopeModMenu(option, mod, after) {
   const open = (x, y) => {
     closeScopeMenu();
     hideModPreview();
     const menu = create("div", "scope-context-menu");
-    const isRequired = state.requiredMods.includes(mod.path);
-    const isForbidden = state.forbiddenMods.includes(mod.path);
-    const reqButton = create("button", "", isRequired ? "✓ 必选（点击移除）" : "加入必选");
-    reqButton.type = "button";
-    reqButton.addEventListener("click", () => { toggleScopeMod(mod.path, "required"); closeScopeMenu(); });
-    const forbButton = create("button", "", isForbidden ? "✓ 禁选（点击移除）" : "加入禁选");
-    forbButton.type = "button";
-    forbButton.addEventListener("click", () => { toggleScopeMod(mod.path, "forbidden"); closeScopeMenu(); });
-    menu.append(reqButton, forbButton);
+    menu.append(...scopeMenuButtons(mod.path, after));
     menu.style.left = `${Math.min(x, window.innerWidth - 170)}px`;
-    menu.style.top = `${Math.min(y, window.innerHeight - 90)}px`;
+    menu.style.top = `${Math.min(y, window.innerHeight - 130)}px`;
     document.body.append(menu);
     scopeMenuElement = menu;
     // 点击任意处关闭
@@ -7205,7 +7352,7 @@ function renderManualMods() {
       // 右键 / 长按 → 必选/禁选菜单（「限制」面板的入口）。
       bindScopeModMenu(option, mod);
       if (state.requiredMods.includes(mod.path)) option.classList.add("is-scope-required");
-      if (state.forbiddenMods.includes(mod.path)) option.classList.add("is-scope-forbidden");
+      if (state.forbiddenMods.includes(mod.path) || state.globalForbiddenMods.includes(mod.path)) option.classList.add("is-scope-forbidden");
     }
     return option;
   });
@@ -7554,6 +7701,7 @@ function renderManualResultVisual(result) {
   }
   // 结果区两块（用户指定的分离布局）：配装解算块只放异常状态分布；
   // 战斗演算块（KPM 头条 + 逐条展开的回放图组）在下方独立呈现。
+  renderExaltedEnergy(source.exalted);
   renderProbabilityVisual(source.probability || source.probabilityDistribution || {});
   renderStatusBreakdown(source);
   const hasBenchmark = Array.isArray(source.benchmarkTimeline?.points) && source.benchmarkTimeline.points.length > 1;
@@ -8745,6 +8893,7 @@ function renderWarframeProfile() {
 }
 
 function renderWarframeWorkbench() {
+  renderWarframeExaltedCard();
   renderWarframeProfile();
   renderWarframeLoadout();
 }
@@ -9041,17 +9190,6 @@ function warframeScalarGroupLabel(ability, scalar) {
   return variant;
 }
 
-function warframeEffectLabel(effect) {
-  const stat = String(effect?.stat || effect?.label || effect?.source || "");
-  const labels = {
-    AVATAR_HEALTH_MAX: "生命值", AVATAR_SHIELD_MAX: "护盾", AVATAR_ARMOUR: "护甲", AVATAR_ARMOR: "护甲", AVATAR_POWER_MAX: "最大能量",
-    AVATAR_ABILITY_STRENGTH: "技能强度", AVATAR_ABILITY_DURATION: "技能持续", AVATAR_ABILITY_RANGE: "技能范围", AVATAR_ABILITY_EFFICIENCY: "技能效率",
-    AVATAR_POWER_RATE: "能量恢复", AVATAR_ENERGY_REGEN: "能量恢复", AVATAR_HEALTH_REGEN: "生命恢复", AVATAR_CASTING_SPEED: "施法速度", AVATAR_PARKOUR_BOOST: "跑酷速度",
-    health: "生命值", shield: "护盾", armor: "护甲", energy: "最大能量", sprint: "冲刺速度", abilityStrength: "技能强度", abilityDuration: "技能持续", abilityRange: "技能范围", abilityEfficiency: "技能效率", energyRegen: "能量恢复", healthRegen: "生命恢复", castingSpeed: "施法速度", parkour: "跑酷速度",
-  };
-  return labels[stat] || labels[stat.toUpperCase()] || String(effect?.label || stat).replace(/^AVATAR_/, "").replaceAll("_", " ") || "效果";
-}
-
 function warframeNumber(value) {
   const number = Number(value);
   if (!Number.isFinite(number)) return "--";
@@ -9211,12 +9349,7 @@ function renderWarframeResult(result) {
     cell.append(create("span", "", label), create("strong", "", finalValue), create("small", "", `基础 ${baseValue}`));
     return cell;
   }));
-  const effects = Array.isArray(result.activeEffects) ? result.activeEffects : [];
-  ui["warframe-active-effects"].replaceChildren(...(effects.length ? effects.map((effect) => {
-    const row = create("span", "warframe-active-effect");
-    row.append(create("strong", "", warframeEffectLabel(effect)), document.createTextNode(effect.condition ? ` · ${effect.condition}` : ""));
-    return row;
-  }) : [create("p", "empty-copy", "当前没有直接改变面板的已启用效果")])) ;
+  renderWarframeExaltedCard();
   const globalScale = `强度 ${warframePanelValue("abilityStrength", final.abilityStrength)} · 持续 ${warframePanelValue("abilityDuration", final.abilityDuration)} · 范围 ${warframePanelValue("abilityRange", final.abilityRange)} · 效率 ${warframePanelValue("abilityEfficiency", final.abilityEfficiency)}`;
   const sourceAbilities = Array.isArray(state.warframeBuild.frame?.abilities) ? state.warframeBuild.frame.abilities : [];
   const abilities = Array.isArray(result.abilityScalars) ? result.abilityScalars : sourceAbilities;
@@ -9456,6 +9589,9 @@ function selectBuildWeapon(weapon, writeInput = true) {
   if (isAssemblyBase && weapon) state.buildWeapon = { ...weapon, disposition: shownDisposition };
   ui["build-disposition"].textContent = formatDisposition(shownDisposition);
   ui["build-disposition-dots"].textContent = dispositionDots(shownDisposition);
+  // 显赫武器没有紫卡：暂时隐藏倾向栏。
+  const dispositionCard = ui["build-disposition"].closest(".build-disposition-card");
+  if (dispositionCard) dispositionCard.hidden = Boolean(weapon?.exalted);
   ui["build-weapon-caption"].textContent = weapon
     ? `${TYPE_LABELS[weapon.weaponType] || weapon.weaponType} · ${weapon.nameInternal}`
     : "请选择目录中的完整武器名称";
@@ -9640,7 +9776,11 @@ function buildPayloadFromForm() {
     metric: ui["build-metric-select"].value,
     profile: solveProfile(),
     requiredMods: state.requiredMods.length ? [...state.requiredMods] : undefined,
-    forbiddenMods: state.forbiddenMods.length ? [...state.forbiddenMods] : undefined,
+    forbiddenMods: scopeForbiddenPaths(),
+    excludeFactionMods: state.excludeFactionMods || undefined,
+    sentinel: sentinelPayload(),
+    exaltedFrame: exaltedPayload(),
+    companionPlayerStacks: isCompanionWeapon() && state.companionPlayerStacks ? true : undefined,
     minFill: scopeFillValue("build-min-fill"),
     maxFill: scopeFillValue("build-max-fill"),
     optimizeWithArcanes: !ui["build-optimize-arcanes"]?.checked ? false : undefined,
@@ -10402,6 +10542,1003 @@ function exportResult() {
   URL.revokeObjectURL(url);
 }
 
+// ── 守护（同伴武器 + 机械守护本体）────────────────────────────────────
+// 同伴武器由 AI 开火：只瞄准躯干、不开镜（爆头 / 开镜条件无效），不能装赋能；
+// 镀层叠层只来自玩家本人用同类武器的击杀（开关）。守护本体不自动配卡：
+// 用户手选 10 个槽位，后端 /api/sentinel/evaluate 给出属性，影响武器伤害的
+// 本体 MOD（过热射击 / 星界连结 / 重大连结）随配装请求一起计入。
+const SENTINEL_SLOTS = 10;
+const SENTINEL_ELEMENTS = [["DT_FIRE", "火焰"], ["DT_FREEZE", "冰冻"], ["DT_ELECTRICITY", "电击"], ["DT_POISON", "毒素"]];
+
+function isCompanionWeapon(weapon = state.buildWeapon) {
+  return weapon?.weaponType === "companion";
+}
+
+function sentinelCatalog() {
+  return state.catalog?.sentinel || { sentinels: [], mods: [], capacity: { reactor: 60 } };
+}
+
+function sentinelRecord(path) {
+  return sentinelCatalog().sentinels.find((row) => row.path === path) || null;
+}
+
+function sentinelModRecord(path) {
+  return sentinelCatalog().mods.find((row) => row.path === path) || null;
+}
+
+function emptySentinelState() {
+  return { path: null, slots: Array.from({ length: SENTINEL_SLOTS }, () => null), polarities: Array.from({ length: SENTINEL_SLOTS }, () => null), options: { firedUp: true, astralBond: false, momentousElement: "" } };
+}
+
+// 守护槽极化：polarities[i] 为 null 表示保持本体原生极性；"AP_UNIVERSAL" 表示极化成无极性。
+const SENTINEL_FORMA_ORDER = ["AP_UNIVERSAL", "AP_ATTACK", "AP_DEFENSE", "AP_TACTIC", "AP_WARD", "AP_PRECEPT", "AP_ANY"];
+
+function sentinelSlotPolarity(index, record = sentinelRecord(state.sentinel?.path)) {
+  const override = state.sentinel?.polarities?.[index];
+  const polarity = override ?? record?.slots?.[index] ?? null;
+  return polarity === "AP_UNIVERSAL" ? null : polarity;
+}
+
+function sentinelPolarityRelation(mod, polarity) {
+  if (!mod?.polarity || !polarity) return "";
+  return polarityMatches(mod.polarity, polarity) ? "match" : "mismatch";
+}
+
+function cycleSentinelPolarity(index) {
+  const record = sentinelRecord(state.sentinel?.path);
+  if (!record) return;
+  const native = record.slots?.[index] || "AP_UNIVERSAL";
+  const current = sentinelSlotPolarity(index, record) || "AP_UNIVERSAL";
+  const mod = sentinelSlotMod(state.sentinel.slots[index]);
+  const next = mod?.polarity && current !== mod.polarity
+    ? mod.polarity
+    : SENTINEL_FORMA_ORDER[(Math.max(0, SENTINEL_FORMA_ORDER.indexOf(current)) + 1) % SENTINEL_FORMA_ORDER.length];
+  state.sentinel.polarities[index] = next === native ? null : next;
+  sentinelChanged();
+}
+
+function sentinelPolarityChip(index, record, mod) {
+  const polarity = sentinelSlotPolarity(index, record);
+  const forma = state.sentinel.polarities[index] != null;
+  const relation = sentinelPolarityRelation(mod, polarity);
+  const chip = create("button", `slot-polarity-chip${relation === "match" ? " is-matched" : ""}${relation === "mismatch" ? " is-mismatch" : ""}${forma ? " is-forma" : ""}`);
+  chip.type = "button";
+  chip.append(POLARITY_IMAGES[polarity] ? imageNode(POLARITY_IMAGES[polarity], "slot-polarity-icon", "", "lazy") : create("span", "slot-polarity-icon", ""));
+  chip.title = `槽位 ${index + 1} 极性 · ${POLARITY_NAMES[polarity] || "无极性"}${forma ? "（已极化）" : ""}${relation === "mismatch" ? " · MOD 不匹配（消耗 ×1.25）" : relation === "match" ? " · 匹配（消耗减半）" : ""} · 点击切换极化`;
+  chip.setAttribute("aria-label", chip.title);
+  chip.addEventListener("click", (event) => { event.stopPropagation(); cycleSentinelPolarity(index); });
+  return chip;
+}
+
+function compatibleSentinels(weapon = state.buildWeapon) {
+  const family = new Set([weapon?.path, ...(weapon?.ancestry || [])].filter(Boolean));
+  return sentinelCatalog().sentinels.filter((row) => !(row.incompatibleWeapons || []).some((path) => family.has(path)));
+}
+
+function defaultSentinelFor(weapon) {
+  return sentinelCatalog().sentinels.find((row) => row.defaultWeapon === weapon?.path) || null;
+}
+
+// 守护 MOD 进 modAssets 索引，卡面复用 createNormalModCard。
+function registerSentinelAssets() {
+  if (!state.modAssets) return;
+  state.modAssets.mods = state.modAssets.mods || {};
+  for (const mod of sentinelCatalog().mods) {
+    const zh = (mod.levelStatsZh || []).map((line) => [line]);
+    state.modAssets.mods[mod.path] = {
+      ...(state.modAssets.mods[mod.path] || {}),
+      art: mod.art,
+      artSource: "official-rgb-alpha",
+      nameZh: mod.nameZh,
+      nameEn: mod.nameEn,
+      rarity: String(mod.rarity || "Common").toUpperCase(),
+      polarity: mod.polarity,
+      maxRank: mod.maxRank,
+      drain: (mod.baseDrain || 0) + (mod.maxRank || 0),
+      effectsZh: zh.length ? zh[zh.length - 1] : null,
+      effectsZhByRank: zh.length ? zh : null,
+      description: zh.length ? zh[zh.length - 1] : [],
+    };
+  }
+}
+
+function sentinelSlotMod(item) {
+  const record = item ? sentinelModRecord(item.path) : null;
+  return record ? { ...record, rank: item.rank ?? record.maxRank, rarity: String(record.rarity || "Common").toUpperCase() } : null;
+}
+
+// ── 显赫武器：关联战甲（战甲配装页已保存的 A/B/C 配置）与能量续航 ──
+// 计算一律按无限能量；续航只作指示：能量不回复时能持续多久 / 能放几次，
+// 启动不了或续不上后续连击时给持久提示（后端 vendor/wfarsenal/exalted.py）。
+function isExaltedWeapon(weapon = state.buildWeapon) {
+  return Boolean(weapon?.exalted);
+}
+
+function exaltedFrames(weapon = state.buildWeapon) {
+  return weapon?.exalted?.frames || [];
+}
+
+function exaltedWarframeStore() {
+  return { ...readWarframeStore(), ...(state.warframeBuild?.store || {}) };
+}
+
+function captureExaltedLink() {
+  return isExaltedWeapon() && state.exaltedLink ? { ...state.exaltedLink } : undefined;
+}
+
+function restoreExaltedLink(config) {
+  const frames = exaltedFrames();
+  const saved = config?.exaltedLink;
+  const frameId = frames.some((frame) => frame.id === saved?.frameId) ? saved.frameId : frames[0]?.id || null;
+  const configName = saved && (saved.configName === "" || /^[ABC]$/.test(saved.configName || "")) ? saved.configName : "A";
+  state.exaltedLink = isExaltedWeapon() && frameId ? { frameId, configName } : null;
+  state.exaltedResult = null;
+}
+
+function exaltedPayload() {
+  if (!isExaltedWeapon() || !state.exaltedLink) return undefined;
+  const { frameId, configName } = state.exaltedLink;
+  const config = configName ? exaltedWarframeStore()[frameId]?.[configName] || null : null;
+  return { frameId, configName: configName || null, config };
+}
+
+function exaltedChanged() {
+  renderExaltedPanel();
+  persistActiveBuildConfig();
+  scheduleLiveBuild();
+}
+
+const EXALTED_TIER_NOTES = {
+  weapon: "按普通武器口径计算；基础伤害取技能满级数值并按技能强度缩放",
+  strength: "伤害受技能强度缩放，强度读取自关联战甲",
+  cast: "每次施放 = 一次攻击：伤害按技能强度缩放，5 秒内连续施放每次 +20 连击，伤害随连击倍率 1:1 增长（最高 12×）",
+  always: "常驻武器，不消耗能量，不受技能强度影响",
+};
+
+function renderExaltedPanel() {
+  const panel = document.getElementById("build-exalted-panel");
+  if (!panel) return;
+  const exalted = isExaltedWeapon();
+  panel.hidden = !exalted;
+  syncHeadshotLock();
+  if (!exalted) return;
+  if (!state.exaltedLink) restoreExaltedLink(null);
+  const frameSelect = document.getElementById("build-exalted-frame");
+  frameSelect.replaceChildren(...exaltedFrames().map((frame) => {
+    const option = document.createElement("option");
+    option.value = frame.id;
+    option.textContent = frame.nameZh || frame.nameEn || frame.id;
+    return option;
+  }));
+  frameSelect.value = state.exaltedLink?.frameId || "";
+  const saved = exaltedWarframeStore()[state.exaltedLink?.frameId] || {};
+  const configSelect = document.getElementById("build-exalted-config");
+  configSelect.replaceChildren(...["A", "B", "C", ""].map((name) => {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name ? `配置 ${name}${saved[name] ? "" : "（未保存）"}` : "满级无 MOD";
+    option.title = name && !saved[name] ? "战甲配装页这个配置还没保存过，按满级无 MOD 计算" : "";
+    return option;
+  }));
+  configSelect.value = state.exaltedLink?.configName ?? "A";
+  document.getElementById("build-exalted-caption").textContent = EXALTED_TIER_NOTES[state.buildWeapon.exalted.tier] || "";
+  renderExaltedReadout(state.exaltedResult);
+}
+
+function renderExaltedReadout(exalted) {
+  const host = document.getElementById("build-exalted-readout");
+  if (!host) return;
+  const panel = exalted?.panel;
+  if (!panel) {
+    host.replaceChildren(create("small", "", "计算一次后显示战甲面板"));
+    return;
+  }
+  const pct = (value) => `${Math.round(Number(value || 0) * 1000) / 10}%`;
+  const cells = [["强度", pct(panel.abilityStrength)], ["持续", pct(panel.abilityDuration)], ["效率", pct(panel.abilityEfficiency)], ["范围", pct(panel.abilityRange)]];
+  if (Number(panel.castingSpeed)) cells.push(["施法速度", `+${Math.round(Number(panel.castingSpeed) * 100)}%`]);
+  cells.push(exalted.energy?.kind === "shield" ? ["护盾", Math.round(panel.shield || 0)] : ["能量", Math.round(panel.energy || 0)]);
+  host.replaceChildren(...cells.map(([label, value]) => {
+    const cell = create("span", "exalted-stat");
+    cell.append(create("small", "", label), create("b", "", String(value)));
+    return cell;
+  }));
+}
+
+// 战甲配置带来的光环与战甲赋能：只有武器计算已支持的才计入，其余仅展示。
+function renderExaltedLoadout(exalted) {
+  const host = document.getElementById("build-exalted-loadout");
+  if (!host) return;
+  const loadout = exalted?.loadout;
+  const rows = [];
+  if (loadout?.aura) rows.push(["光环", loadout.aura]);
+  for (const arcane of loadout?.arcanes || []) rows.push(["战甲赋能", arcane]);
+  host.hidden = !loadout;
+  if (!loadout) return;
+  if (!rows.length) {
+    host.replaceChildren(create("small", "", "该配置没有光环和战甲赋能"));
+    return;
+  }
+  host.replaceChildren(...rows.map(([label, item]) => {
+    const row = create("div", `exalted-loadout-row${item.counted ? " is-counted" : ""}`);
+    row.append(create("small", "", label), create("strong", "", item.nameZh || String(item.path || "").split("/").pop()),
+      create("em", "", item.counted ? "计入" : "仅展示"));
+    row.title = item.counted ? "已计入显赫武器伤害" : "对这把武器没有可计算的效果，只作配装展示";
+    return row;
+  }));
+}
+
+async function openExaltedFrameConfig() {
+  const link = state.exaltedLink;
+  if (!link?.frameId) return;
+  setActiveTool("warframe");
+  try {
+    await loadWarframeCatalog();
+  } catch (_error) {
+    return;
+  }
+  const frame = warframeRows("warframes").find((row) => warframeId(row) === link.frameId);
+  if (frame && warframeId(state.warframeBuild.frame) !== link.frameId) selectWarframeFrame(frame);
+  if (/^[ABC]$/.test(link.configName || "")) switchWarframeConfig(link.configName);
+}
+
+function renderExaltedEnergy(exalted) {
+  state.exaltedResult = exalted || null;
+  renderExaltedReadout(state.exaltedResult);
+  renderExaltedLoadout(state.exaltedResult);
+  renderArcaneSelections();
+  const host = document.getElementById("build-exalted-energy");
+  if (!host) return;
+  const energy = exalted?.energy;
+  host.hidden = !energy;
+  if (!energy) return;
+  const ability = exalted.ability?.nameZh || exalted.ability?.nameEn || "";
+  const frame = exalted.frame || {};
+  const source = frame.configured ? `${frame.frameName} · 配置 ${frame.configName || ""}` : `${frame.frameName || "战甲"} · 满级无 MOD`;
+  const head = create("div", "result-section-title");
+  const title = create("div");
+  title.append(create("span", "", "ENERGY"), create("h3", "", "能量续航"));
+  head.append(title, create("small", "", `${ability ? `${ability} · ` : ""}${source}`));
+  const nodes = [head];
+  for (const text of energy.warnings || []) nodes.push(create("p", "exalted-warning", text));
+  const list = create("ul", "exalted-energy-lines");
+  for (const text of energy.lines || []) list.append(create("li", "", text));
+  const cast = exalted.cast;
+  if (cast) {
+    list.append(create("li", "", `每次施放期望伤害：首次 ${formatMetric(cast.firstCast)} · 满连击 12× ${formatMetric(cast.fullCombo)}`));
+    if (cast.secondsPerCast) list.append(create("li", "", `每次施放 ${cast.secondsPerCast.toFixed(2)} 秒（施法速度 ${Math.round((cast.castingSpeed || 1) * 100)}%${(cast.castingSpeed || 1) !== 1 ? "，动画按施法速度缩短" : ""}）`));
+    if (cast.per100Energy) list.append(create("li", "", `满连击时每 100 能量伤害 ${formatMetric(cast.per100Energy)}（平均每次 ${formatMetric(cast.averageCost)} 能量）`));
+  }
+  nodes.push(list, create("p", "scope-hint", "续航按能量不回复估算；伤害与 KPM 一律按无限能量计算。"));
+  host.replaceChildren(...nodes);
+}
+
+function bindExaltedControls() {
+  document.getElementById("build-exalted-open-frame")?.addEventListener("click", () => { openExaltedFrameConfig(); });
+  document.getElementById("build-exalted-frame")?.addEventListener("change", (event) => {
+    state.exaltedLink = { frameId: event.target.value, configName: state.exaltedLink?.configName ?? "A" };
+    exaltedChanged();
+  });
+  document.getElementById("build-exalted-config")?.addEventListener("change", (event) => {
+    state.exaltedLink = { frameId: state.exaltedLink?.frameId || exaltedFrames()[0]?.id, configName: event.target.value };
+    exaltedChanged();
+  });
+}
+
+// 战甲配装页：所选战甲带显赫武器时，在战甲面板下方显示实时摘要（随当前配置的
+// 强度 / 效率 / 能量变化），并可跳转到武器配装编辑。
+function renderWarframeExaltedCard() {
+  const host = document.getElementById("warframe-exalted-card");
+  if (!host) return;
+  const frameId = warframeId(state.warframeBuild?.frame);
+  const weapons = (state.catalog?.weapons || []).filter((weapon) => weapon.exalted?.frames?.some((frame) => frame.id === frameId));
+  host.hidden = !weapons.length;
+  if (!weapons.length) return;
+  const live = new Map((state.warframeBuild?.result?.exalted || []).map((row) => [row.path, row]));
+  const head = create("div", "exalted-card-head");
+  head.append(create("strong", "", "显赫武器"), create("small", "", `按当前配置 ${state.warframeBuild.activeConfig} 实时计算`));
+  const rows = weapons.map((weapon) => {
+    const summary = live.get(weapon.path);
+    const row = create("div", "exalted-card-row");
+    const text = create("div", "exalted-card-text");
+    text.append(create("strong", "", weapon.nameZh || weapon.nameEn));
+    const facts = [];
+    if (summary) {
+      if (Number.isFinite(summary.baseDamage)) facts.push(`单次基础伤害 ${formatMetric(summary.baseDamage)}${summary.strengthScaled ? "（已按强度缩放）" : ""}`);
+      if (Number.isFinite(summary.bonus)) facts.push(`基础伤害加成 +${Math.round(summary.bonus * 100)}%`);
+      if (Number.isFinite(summary.secondsPerCast)) facts.push(`每次施放 ${summary.secondsPerCast.toFixed(2)} 秒`);
+      const lines = summary.energy?.lines || [];
+      if (lines.length) facts.push(lines[lines.length - 1]);
+    }
+    text.append(create("small", "", facts.join(" · ") || "计算中…"));
+    for (const warning of summary?.energy?.warnings || []) text.append(create("small", "exalted-card-warning", warning));
+    if (summary?.headshotIssue) text.append(create("small", "exalted-card-note", summary.headshotIssue));
+    const button = create("button", "button button-quiet", "在武器配装中编辑");
+    button.type = "button";
+    button.addEventListener("click", () => {
+      persistWarframeConfig();
+      setActiveTool("build");
+      selectBuildWeapon(weapon);
+      state.exaltedLink = { frameId, configName: state.warframeBuild.activeConfig };
+      exaltedChanged();
+    });
+    row.append(text, button);
+    return row;
+  });
+  host.replaceChildren(head, ...rows);
+}
+
+function captureSentinelConfig() {
+  if (!isCompanionWeapon()) return undefined;
+  const sentinel = state.sentinel || emptySentinelState();
+  return {
+    path: sentinel.path,
+    slots: sentinel.slots.map((item) => item ? { path: item.path, rank: item.rank } : null),
+    polarities: [...(sentinel.polarities || [])],
+    options: { ...sentinel.options },
+    playerStacks: Boolean(state.companionPlayerStacks),
+  };
+}
+
+function restoreSentinelConfig(config) {
+  state.sentinel = emptySentinelState();
+  state.companionPlayerStacks = false;
+  if (!isCompanionWeapon()) return;
+  const saved = config?.sentinel;
+  const compatible = compatibleSentinels();
+  const path = saved && "path" in saved ? saved.path : defaultSentinelFor(state.buildWeapon)?.path || null;
+  state.sentinel.path = compatible.some((row) => row.path === path) ? path : null;
+  if (saved) {
+    state.sentinel.options = { ...state.sentinel.options, ...(saved.options || {}) };
+    state.companionPlayerStacks = saved.playerStacks === true;
+    (Array.isArray(saved.polarities) ? saved.polarities : []).slice(0, SENTINEL_SLOTS).forEach((polarity, index) => {
+      if (SENTINEL_FORMA_ORDER.includes(polarity)) state.sentinel.polarities[index] = polarity;
+    });
+    (saved.slots || []).slice(0, SENTINEL_SLOTS).forEach((item, index) => {
+      const record = item && sentinelModRecord(item.path);
+      if (record && sentinelModFits(record)) state.sentinel.slots[index] = { path: record.path, rank: clamp(Number(item.rank ?? record.maxRank), 0, record.maxRank) };
+    });
+  } else if (state.sentinel.path) {
+    // 新选守护：按游戏默认预装的守则（突击模式等）。
+    const defaults = (sentinelRecord(state.sentinel.path)?.defaultPrecepts || []).map(sentinelModRecord).filter(Boolean);
+    defaults.slice(0, SENTINEL_SLOTS).forEach((record, index) => { state.sentinel.slots[index] = { path: record.path, rank: record.maxRank }; });
+  }
+}
+
+function sentinelModFits(record, sentinelPath = state.sentinel?.path) {
+  return !record.exclusiveTo || record.exclusiveTo.includes(sentinelPath);
+}
+
+function sentinelPayload() {
+  if (!isCompanionWeapon() || !state.sentinel?.path) return undefined;
+  return {
+    path: state.sentinel.path,
+    mods: state.sentinel.slots.map((item, slot) => item ? { path: item.path, rank: item.rank, slot } : null).filter(Boolean),
+    polarities: [...state.sentinel.polarities],
+    options: {
+      firedUp: state.sentinel.options.firedUp !== false,
+      astralBond: state.sentinel.options.astralBond === true,
+      momentousElement: state.sentinel.options.momentousElement || undefined,
+    },
+  };
+}
+
+function sentinelChanged() {
+  renderCompanionPanel();
+  renderSentinelBench();
+  persistActiveBuildConfig();
+  scheduleSentinelEvaluate();
+  scheduleLiveBuild();
+}
+
+// 守护武器（AI 只瞄躯干、不开镜）与无法爆头的显赫武器：爆头率锁定为 0。
+function syncHeadshotLock() {
+  const companion = isCompanionWeapon();
+  const exaltedIssue = state.buildWeapon?.exalted?.headshotIssue || "";
+  const locks = {
+    "build-headshot-chance": companion ? "守护只瞄准躯干、不会开镜，对守护武器无效" : exaltedIssue ? `${exaltedIssue}，爆头率固定为 0` : "",
+    "build-aiming": companion ? "守护只瞄准躯干、不会开镜，对守护武器无效" : "",
+  };
+  for (const [id, reason] of Object.entries(locks)) {
+    const input = document.getElementById(id);
+    if (!input) continue;
+    const label = input.closest("label");
+    input.disabled = Boolean(reason);
+    label?.classList.toggle("is-companion-disabled", Boolean(reason));
+    if (reason) label?.setAttribute("title", reason);
+    else if (label?.title?.includes("爆头率固定") || label?.title?.includes("守护只瞄准")) label.removeAttribute("title");
+    if (reason && id === "build-headshot-chance" && Number(input.value) !== 0) {
+      input.value = "0";
+      refreshScenarioLabels();
+    }
+  }
+}
+
+function renderCompanionPanel() {
+  const panel = document.getElementById("build-companion-panel");
+  if (!panel) return;
+  const companion = isCompanionWeapon();
+  panel.hidden = !companion;
+  syncHeadshotLock();
+  if (!companion) return;
+  const select = document.getElementById("build-sentinel-select");
+  const rows = compatibleSentinels();
+  const options = [["", "不带守护本体（只算武器）"], ...rows.map((row) => [row.path, `${row.nameZh}${row.defaultWeapon === state.buildWeapon?.path ? "（默认武器）" : ""}`])];
+  select.replaceChildren(...options.map(([value, label]) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = label;
+    return option;
+  }));
+  select.value = state.sentinel?.path || "";
+  document.getElementById("build-companion-player-stacks").checked = Boolean(state.companionPlayerStacks);
+  const host = document.getElementById("build-sentinel-options");
+  const equipped = new Set((state.sentinel?.slots || []).filter(Boolean).map((item) => item.path));
+  const nodes = [];
+  const toggle = (key, label, title) => {
+    const row = create("label", "check-field");
+    row.title = title;
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = key === "firedUp" ? state.sentinel.options.firedUp !== false : state.sentinel.options[key] === true;
+    input.addEventListener("change", () => { state.sentinel.options[key] = input.checked; sentinelChanged(); });
+    row.append(input, create("span", "", label));
+    return row;
+  };
+  const byName = (name) => sentinelCatalog().mods.find((mod) => mod.nameEn === name);
+  if (equipped.has(byName("Fired Up")?.path)) nodes.push(toggle("firedUp", "过热射击按满层计算（每次命中 +5% 火焰，满 100%）", "连续命中约 20 次叠满；5 秒没有命中才清零。关闭则不计入。"));
+  if (equipped.has(byName("Astral Bond")?.path)) nodes.push(toggle("astralBond", "星界连结生效（指挥官最近 10 秒造成过伤害）", "+60% 伤害、+30% 虚空伤害，持续 10 秒；需要指挥官 / 漂泊者持续输出。"));
+  const momentous = byName("Momentous Bond");
+  if (equipped.has(momentous?.path)) {
+    const row = create("label", "field");
+    row.append(create("span", "", "重大连结（击杀 Eximus 后 30 秒，随机元素 +120%）"));
+    const select = document.createElement("select");
+    for (const [value, label] of [["", "不计入"], ...SENTINEL_ELEMENTS]) {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      select.append(option);
+    }
+    select.value = state.sentinel.options.momentousElement || "";
+    select.addEventListener("change", () => { state.sentinel.options.momentousElement = select.value; sentinelChanged(); });
+    row.append(select);
+    nodes.push(row);
+  }
+  host.replaceChildren(...nodes);
+}
+
+function renderSentinelBench() {
+  const bench = document.getElementById("sentinel-bench");
+  if (!bench) return;
+  bench.hidden = !isCompanionWeapon();
+  if (bench.hidden) return;
+  const record = sentinelRecord(state.sentinel?.path);
+  const portrait = document.getElementById("sentinel-portrait");
+  portrait.hidden = !record?.portrait;
+  if (record?.portrait) portrait.src = record.portrait;
+  document.getElementById("sentinel-name").textContent = record ? `${record.nameZh} · ${record.nameEn}` : "未带守护本体";
+  const slots = document.getElementById("sentinel-slots");
+  if (!record) {
+    slots.replaceChildren(create("p", "empty-copy", "左侧「守护」里选择守护本体后，可在这里配置 10 个守护 MOD 槽位。"));
+    document.getElementById("sentinel-stats").replaceChildren();
+    document.getElementById("sentinel-warning").hidden = true;
+    renderSentinelCapacity(null);
+    return;
+  }
+  const nodes = state.sentinel.slots.map((item, index) => {
+    const polarity = sentinelSlotPolarity(index, record);
+    const slot = create("article", "manual-slot sentinel-slot");
+    const mod = sentinelSlotMod(item);
+    const chip = sentinelPolarityChip(index, record, mod);
+    if (!mod) {
+      const empty = create("button", "manual-slot-empty-card");
+      empty.type = "button";
+      empty.append(create("span", "manual-slot-empty-plus", "＋"), create("small", "", `槽位 ${index + 1}`));
+      empty.addEventListener("click", () => openSentinelPicker(index));
+      slot.append(empty, chip);
+      return slot;
+    }
+    const card = createNormalModCard(mod, index + 1, { slotPolarity: polarity, compatLabel: mod.exclusiveTo ? `${record.nameZh} 专属` : (mod.kind === "precept" ? "守护守则" : "守护") });
+    card.classList.add("manual-slot-preview");
+    if (mod.weaponRole) card.classList.add("is-weapon-relevant");
+    card.addEventListener("click", () => openSentinelPicker(index));
+    const actions = create("div", "manual-slot-actions");
+    const down = create("button", "manual-slot-rank", "−");
+    down.type = "button";
+    down.title = "降低等级";
+    down.addEventListener("click", (event) => { event.stopPropagation(); item.rank = Math.max(0, item.rank - 1); sentinelChanged(); });
+    const up = create("button", "manual-slot-rank", "+");
+    up.type = "button";
+    up.title = "提高等级";
+    up.addEventListener("click", (event) => { event.stopPropagation(); item.rank = Math.min(mod.maxRank, item.rank + 1); sentinelChanged(); });
+    const remove = create("button", "manual-slot-remove", "×");
+    remove.type = "button";
+    remove.title = "移除";
+    remove.addEventListener("click", (event) => { event.stopPropagation(); state.sentinel.slots[index] = null; sentinelChanged(); });
+    actions.append(down, create("span", "manual-slot-rank-value", `${item.rank}/${mod.maxRank}`), up, remove);
+    slot.append(card, chip, actions);
+    return slot;
+  });
+  slots.replaceChildren(...nodes);
+  renderSentinelStats();
+}
+
+function renderSentinelCapacity(panel) {
+  const bar = document.getElementById("sentinel-capacity-bar");
+  const readout = document.getElementById("sentinel-capacity-readout");
+  if (!bar || !readout) return;
+  const used = panel?.capacity?.used ?? 0;
+  const total = panel?.capacity?.total ?? (sentinelCatalog().capacity?.reactor || 60);
+  const segs = Math.ceil(total / 5);
+  const filled = Math.round(Math.min(used / total, 1) * segs);
+  bar.replaceChildren(...Array.from({ length: segs }, (_, i) => create("i", `cap-seg${i < filled ? (used > total ? " is-over" : " is-used") : ""}`)));
+  readout.textContent = used > total ? `容量不足 超出 ${used - total}` : `${total - used} / ${total}`;
+  readout.title = panel?.formaCount ? `已极化 ${panel.formaCount} 个槽位（点槽位右上角的极性切换）` : "点槽位右上角的极性切换极化";
+}
+
+function renderSentinelStats() {
+  const host = document.getElementById("sentinel-stats");
+  const warning = document.getElementById("sentinel-warning");
+  const panel = state.sentinelPanel?.sentinel === state.sentinel?.path ? state.sentinelPanel : null;
+  renderSentinelCapacity(panel);
+  if (!host) return;
+  if (!panel) {
+    host.replaceChildren(create("p", "empty-copy", "属性计算中…"));
+    return;
+  }
+  warning.hidden = panel.attackPrecept;
+  warning.textContent = panel.attackPrecept ? "" : "没有装备攻击类守则（突击模式 / 精算射击 / 重击者 / 目标感应）：游戏里守护不会开火，武器伤害只作参考。";
+  const fmt = (value) => Math.round(value).toLocaleString();
+  const row = (label, stat, percent = false) => {
+    const node = create("div", "sentinel-stat");
+    const changed = Math.abs(stat.modded - stat.base) > 1e-9;
+    node.append(create("span", "", label), create("b", changed ? "is-changed" : "", percent ? `${stat.modded >= 0 ? "+" : ""}${(stat.modded * 100).toFixed(0)}%` : fmt(stat.modded)));
+    if (!percent && changed) node.append(create("small", "", `基础 ${fmt(stat.base)}`));
+    return node;
+  };
+  const stats = panel.stats;
+  const nodes = [row("生命", stats.health), row("护盾", stats.shield), row("护甲", stats.armor)];
+  if (stats.shieldRecharge.modded) nodes.push(row("护盾回复", stats.shieldRecharge, true));
+  if (stats.shieldDelay.modded) nodes.push(row("回盾延迟", stats.shieldDelay, true));
+  const weaponMods = (panel.weaponMods || []).map(sentinelModRecord).filter(Boolean);
+  const note = create("p", "sentinel-note", weaponMods.length
+    ? `计入武器伤害：${weaponMods.map((mod) => mod.nameZh).join("、")}（开关在左侧「守护」）`
+    : "当前本体 MOD 不改变武器伤害。属性为 30 级（基础 ×3.5，wiki 守护数值表）。");
+  host.replaceChildren(create("div", "sentinel-stat-grid", ""), note);
+  host.firstChild.append(...nodes);
+}
+
+let sentinelEvaluateTimer = null;
+let sentinelEvaluateSeq = 0;
+function scheduleSentinelEvaluate() {
+  window.clearTimeout(sentinelEvaluateTimer);
+  const payload = sentinelPayload();
+  if (!payload) { state.sentinelPanel = null; return; }
+  sentinelEvaluateTimer = window.setTimeout(async () => {
+    const seq = ++sentinelEvaluateSeq;
+    try {
+      const response = await fetch("/api/sentinel/evaluate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sentinel: payload }) });
+      const body = await response.json();
+      if (seq !== sentinelEvaluateSeq) return;
+      if (!response.ok) throw new Error(body?.error?.message || "守护属性计算失败");
+      state.sentinelPanel = body;
+    } catch (error) {
+      state.sentinelPanel = null;
+      toast(error.message, "error");
+    }
+    renderSentinelStats();
+  }, 160);
+}
+
+function openSentinelPicker(slotIndex) {
+  if (!ui["mod-picker"] || !state.sentinel?.path) return;
+  state.modPickerKind = "sentinel";
+  state.sentinelPickerSlot = slotIndex;
+  ui["mod-picker"].classList.add("is-special-picker");
+  if (ui["mod-picker-title"]) ui["mod-picker-title"].textContent = "选择守护 MOD";
+  ui["mod-picker-sub"].textContent = `${sentinelRecord(state.sentinel.path)?.nameZh || "守护"} · 槽位 ${slotIndex + 1}`;
+  ui["mod-picker"].hidden = false;
+  ui["mod-picker-scrim"].hidden = false;
+  document.body.classList.add("is-modal-open");
+  if (ui["manual-mod-search"]) ui["manual-mod-search"].value = "";
+  renderManualMods();
+  ui["manual-mod-search"]?.focus();
+}
+
+function sentinelModRecords() {
+  const query = String(ui["manual-mod-search"]?.value || "").trim().toLocaleLowerCase();
+  const used = new Set(state.sentinel.slots.filter(Boolean).map((item) => item.path));
+  const current = state.sentinel.slots[state.sentinelPickerSlot]?.path;
+  return sentinelCatalog().mods
+    .filter((mod) => sentinelModFits(mod) && (!used.has(mod.path) || mod.path === current))
+    .filter((mod) => !query || [mod.nameZh, mod.nameEn, ...(mod.levelStatsZh || []).slice(-1)].join(" ").toLocaleLowerCase().includes(query))
+    .sort((a, b) => Number(Boolean(b.weaponRole)) - Number(Boolean(a.weaponRole)) || Number(Boolean(b.exclusiveTo)) - Number(Boolean(a.exclusiveTo)) || String(a.nameZh).localeCompare(String(b.nameZh), "zh"))
+    .map((mod) => ({ ...mod, rarity: String(mod.rarity || "Common").toUpperCase() }));
+}
+
+function applySentinelMod(mod) {
+  const slot = state.sentinelPickerSlot ?? 0;
+  state.sentinel.slots = state.sentinel.slots.map((item, index) => index !== slot && item?.path === mod.path ? null : item);
+  state.sentinel.slots[slot] = { path: mod.path, rank: mod.maxRank };
+  closeModPicker();
+  sentinelChanged();
+}
+
+function bindCompanionControls() {
+  document.getElementById("build-sentinel-select")?.addEventListener("change", (event) => {
+    const path = event.target.value || null;
+    state.sentinel = emptySentinelState();
+    state.sentinel.path = path;
+    const defaults = (sentinelRecord(path)?.defaultPrecepts || []).map(sentinelModRecord).filter(Boolean);
+    defaults.slice(0, SENTINEL_SLOTS).forEach((record, index) => { state.sentinel.slots[index] = { path: record.path, rank: record.maxRank }; });
+    sentinelChanged();
+  });
+  document.getElementById("build-companion-player-stacks")?.addEventListener("change", (event) => {
+    state.companionPlayerStacks = Boolean(event.target.checked);
+    persistActiveBuildConfig();
+    scheduleLiveBuild();
+  });
+}
+
+// ── 紫卡收藏夹（跨武器，本机记忆）──────────────────────────────────
+// 每条收藏：武器 path + 词条 {code,value,negative} + 极性 + 备注 + 最近一次
+// 分析摘要。入口：分析页紫卡右上角星标、配装页紫卡构建器、顶栏「收藏夹」。
+const FAVORITES_KEY = "wf-riven-favorites";
+
+function readFavorites() {
+  try {
+    const value = JSON.parse(window.localStorage.getItem(FAVORITES_KEY) || "[]");
+    return Array.isArray(value) ? value.filter((item) => item && typeof item.weaponPath === "string" && Array.isArray(item.stats)) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeFavorites(list) {
+  state.favorites = list;
+  try { window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(list)); } catch { toast("本机存储不可用，收藏只在本次打开期间有效", "error"); }
+  renderFavoritesBadge();
+}
+
+function favoriteKey(weaponPath, stats) {
+  const parts = [...stats].map((s) => `${s.code}:${s.negative ? "-" : "+"}:${Number(s.value).toFixed(1)}`).sort();
+  return `${weaponPath}|${parts.join(",")}`;
+}
+
+function findFavorite(weaponPath, stats) {
+  const key = favoriteKey(weaponPath, stats);
+  return (state.favorites || []).find((item) => favoriteKey(item.weaponPath, item.stats) === key) || null;
+}
+
+function catalogWeapon(path) {
+  return state.catalog?.weapons?.find((weapon) => weapon.path === path) || null;
+}
+
+function favoriteDefinitions(weapon) {
+  return state.catalog?.statsByType?.[weapon?.rivenType || weapon?.weaponType] || [];
+}
+
+function toggleFavorite(weapon, stats, extra = {}) {
+  if (!weapon || stats.length < 2) {
+    toast("至少录入 2 条完整词条再收藏");
+    return null;
+  }
+  const list = [...(state.favorites || [])];
+  const existing = findFavorite(weapon.path, stats);
+  if (existing) {
+    writeFavorites(list.filter((item) => item.id !== existing.id));
+    toast("已从收藏夹移除");
+    return false;
+  }
+  const now = Date.now();
+  list.unshift({
+    id: `fav-${now.toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
+    weaponPath: weapon.path,
+    stats: stats.map((s) => ({ code: s.code, value: Number(Number(s.value).toFixed(3)), negative: Boolean(s.negative) })),
+    polarity: extra.polarity || null,
+    note: "",
+    createdAt: now,
+    analysis: extra.analysis || null,
+  });
+  writeFavorites(list);
+  toast("已加入紫卡收藏夹");
+  return true;
+}
+
+function analysisRivenStats() {
+  return activeStats()
+    .filter((entry) => entry.definition && entry.value !== null)
+    .map((entry) => ({ code: entry.code, value: entry.value, negative: entry.negative }));
+}
+
+function analysisSummary() {
+  // 只有当前词条就是刚分析过的那组时才附带结果。
+  const payload = state.lastPayload;
+  if (!state.result || !payload || payload.weapon !== state.weapon?.path) return null;
+  const current = favoriteKey(payload.weapon, analysisRivenStats());
+  if (current !== favoriteKey(payload.weapon, payload.stats || [])) return null;
+  return { gain: finite(state.result.actualGain), kpm: finite(state.result.actual?.objectiveScore), at: Date.now() };
+}
+
+function refreshAnalysisFavoriteButton() {
+  const button = document.getElementById("analysis-favorite");
+  if (!button) return;
+  const saved = Boolean(state.weapon && findFavorite(state.weapon.path, analysisRivenStats()));
+  button.classList.toggle("is-active", saved);
+  button.textContent = saved ? "★" : "☆";
+  button.title = saved ? "已收藏（点击取消）" : "收藏这张紫卡";
+  button.setAttribute("aria-pressed", String(saved));
+}
+
+function rememberAnalysisResult() {
+  // 已收藏的紫卡分析完成后，把最新结果写回收藏。
+  const summary = analysisSummary();
+  const saved = summary && state.weapon && findFavorite(state.weapon.path, analysisRivenStats());
+  if (!saved) return;
+  writeFavorites(state.favorites.map((item) => item.id === saved.id ? { ...item, analysis: summary } : item));
+}
+
+function renderFavoritesBadge() {
+  const count = document.getElementById("favorites-count");
+  if (count) count.textContent = String((state.favorites || []).length);
+  refreshAnalysisFavoriteButton();
+  if (document.getElementById("favorites-drawer")?.hidden === false) renderFavorites();
+}
+
+function favoriteStatLabel(stat, definitions) {
+  const def = definitions.find((d) => d.code === stat.code);
+  if (!def) return `${stat.negative ? "−" : "+"}${Number(stat.value).toFixed(1)} ${stat.code}`;
+  return `${formatStatNumber(Number(stat.value), def, stat.negative)} ${def.label || stat.code}`;
+}
+
+function createFavoriteRivenCard(weapon, stats, polarity) {
+  const definitions = favoriteDefinitions(weapon);
+  const frames = state.modAssets?.rarityFrames?.RIVEN || {};
+  const card = create("article", "mod-slot is-riven-slot favorite-riven-card");
+  card.dataset.rarity = "RIVEN";
+  const frame = create("div", "game-mod-card riven-mod-card");
+  const content = create("div", "mod-content");
+  content.append(...rivenContentLayers(frames, rivenFaceArts(stats, definitions), "lazy"));
+  const description = create("div", "mod-description");
+  description.append(modNameNode(rivenCardName(weapon, stats, definitions)));
+  for (const stat of stats) description.append(create("p", `mod-effect-line${stat.negative ? " is-negative" : ""}`, favoriteStatLabel(stat, definitions)));
+  content.append(description);
+  frame.append(content);
+  const compat = create("div", "mod-item-compat");
+  compat.append(create("p", "", "裂罅"));
+  if (frames.lowerTab) compat.style.setProperty("--lower-tab", `url("${frames.lowerTab}")`);
+  frame.append(compat, rankPips(8, 8));
+  frame.append(...modFrameLayers(frames, "lazy"));
+  card.append(modTiltWrap(frame));
+  return card;
+}
+
+function loadFavoriteIntoAnalysis(item) {
+  const weapon = catalogWeapon(item.weaponPath);
+  if (!weapon) return toast("当前目录里没有这把武器");
+  if (weapon.analysisAvailable === false) return toast(weapon.analysisIssue || "这把武器暂不支持紫卡分析");
+  closeFavorites();
+  setActiveTool("analysis");
+  selectWeapon(weapon);
+  ui["stat-rows"].replaceChildren();
+  for (const stat of item.stats) addStat(stat.code, stat.negative);
+  refreshRanges(false);
+  const rows = activeStats();
+  item.stats.forEach((stat, index) => {
+    const input = rows[index]?.row.querySelector(".stat-value");
+    if (input) input.value = String(stat.value);
+  });
+  refreshRanges(true);
+  updateCardPreview();
+  clearResult();
+  refreshAnalysisFavoriteButton();
+  toast("已载入收藏的紫卡，点「开始分析」重新评估");
+}
+
+function loadFavoriteIntoBuild(item) {
+  const weapon = catalogWeapon(item.weaponPath);
+  if (!weapon) return toast("当前目录里没有这把武器");
+  closeFavorites();
+  setActiveTool("build");
+  if (state.buildWeapon?.path !== weapon.path) selectBuildWeapon(weapon);
+  const current = state.manualSlots.findIndex((slot) => slot?.__riven);
+  const empty = state.manualSlots.findIndex((slot) => !slot);
+  const target = current >= 0 ? current : (empty >= 0 ? empty : state.manualSlots.length - 1);
+  if (state.manualLocks[target]) return toast("目标槽位已锁定，先解锁再装入");
+  state.manualSlots[target] = {
+    __riven: true,
+    path: "__riven__",
+    nameZh: `${weapon.nameZh || "紫卡"} (自定义)`,
+    nameEn: "Custom Riven",
+    maxRank: 8,
+    rank: 8,
+    rivenPolarity: item.polarity || state.manualSlots[target]?.rivenPolarity || randomRegularPolarity(),
+    stats: item.stats.map((s) => ({ ...s })),
+  };
+  if (!ensureCapacityFit().fits) toast("容量不足：即使极化也装不下这张紫卡", "error");
+  renderManualSlots();
+  persistActiveBuildConfig();
+  scheduleLiveManualSimulation();
+  toast(`紫卡已装入槽位 ${target + 1}`);
+}
+
+function favoriteFilters() {
+  return {
+    scope: document.querySelector("#favorites-scope .is-active")?.dataset.scope || "all",
+    type: document.getElementById("favorites-type")?.value || "",
+    query: (document.getElementById("favorites-search")?.value || "").trim().toLowerCase(),
+  };
+}
+
+function renderFavorites() {
+  const list = document.getElementById("favorites-list");
+  if (!list) return;
+  const { scope, type, query } = favoriteFilters();
+  const current = state.activeTool === "build" ? state.buildWeapon : state.weapon;
+  const currentButton = document.querySelector('#favorites-scope [data-scope="current"]');
+  if (currentButton) currentButton.textContent = current ? `当前武器 · ${weaponName(current)}` : "当前武器";
+  const rows = (state.favorites || []).filter((item) => {
+    const weapon = catalogWeapon(item.weaponPath);
+    if (scope === "current" && item.weaponPath !== current?.path) return false;
+    if (type && (weapon?.weaponType || "") !== type) return false;
+    if (query) {
+      const text = `${weapon?.nameZh || ""} ${weapon?.nameEn || ""} ${item.note || ""}`.toLowerCase();
+      if (!text.includes(query)) return false;
+    }
+    return true;
+  });
+  const groups = new Map();
+  for (const item of rows) {
+    if (!groups.has(item.weaponPath)) groups.set(item.weaponPath, []);
+    groups.get(item.weaponPath).push(item);
+  }
+  const nodes = [];
+  for (const [path, items] of groups) {
+    const weapon = catalogWeapon(path);
+    const group = create("section", "favorites-group");
+    const head = create("header", "favorites-group-head");
+    head.append(create("strong", "", weapon ? weaponName(weapon) : path.split("/").pop()),
+      create("small", "", `${TYPE_LABELS[weapon?.weaponType] || weapon?.weaponType || "未知"} · 倾向 ${weapon ? formatDisposition(weapon.disposition) : "--"} · ${items.length} 张`));
+    group.append(head);
+    const grid = create("div", "favorites-grid");
+    for (const item of items) {
+      const entry = create("article", "favorite-entry");
+      entry.append(weapon ? createFavoriteRivenCard(weapon, item.stats, item.polarity) : create("p", "empty-copy", "武器已不在目录"));
+      const side = create("div", "favorite-side");
+      const summary = create("p", "favorite-summary");
+      if (item.analysis && item.analysis.gain !== null && item.analysis.gain !== undefined) {
+        const kpm = item.analysis.kpm !== null && item.analysis.kpm !== undefined ? ` · ${Number(item.analysis.kpm).toFixed(1)} KPM` : "";
+        summary.append(create("b", item.analysis.gain < 0 ? "is-negative" : "", formatPercent(item.analysis.gain)),
+          create("small", "", ` 实际增益${kpm} · ${new Date(item.analysis.at).toLocaleDateString()}`));
+      } else {
+        summary.append(create("small", "", "尚未分析（载入分析后会自动记下结果）"));
+      }
+      const note = document.createElement("input");
+      note.className = "favorite-note";
+      note.type = "text";
+      note.maxLength = 60;
+      note.placeholder = "备注（例：价格、来源）";
+      note.value = item.note || "";
+      note.addEventListener("change", () => {
+        writeFavorites(state.favorites.map((other) => other.id === item.id ? { ...other, note: note.value.trim() } : other));
+      });
+      const actions = create("div", "favorite-actions");
+      const analyze = create("button", "button button-quiet", "分析");
+      analyze.type = "button";
+      analyze.disabled = !weapon || weapon.analysisAvailable === false;
+      analyze.addEventListener("click", () => loadFavoriteIntoAnalysis(item));
+      const build = create("button", "button button-quiet", "装到配装");
+      build.type = "button";
+      build.disabled = !weapon;
+      build.addEventListener("click", () => loadFavoriteIntoBuild(item));
+      const remove = create("button", "button button-quiet favorite-remove", "删除");
+      remove.type = "button";
+      remove.addEventListener("click", () => {
+        if (remove.dataset.armed !== "1") {
+          remove.dataset.armed = "1";
+          remove.textContent = "确认删除";
+          window.setTimeout(() => { remove.dataset.armed = ""; remove.textContent = "删除"; }, 2500);
+          return;
+        }
+        writeFavorites(state.favorites.filter((other) => other.id !== item.id));
+      });
+      actions.append(analyze, build, remove);
+      const lines = create("ul", "favorite-stats");
+      const definitions = favoriteDefinitions(weapon);
+      for (const stat of item.stats) lines.append(create("li", stat.negative ? "is-negative" : "", favoriteStatLabel(stat, definitions)));
+      side.append(lines, summary, note, actions);
+      entry.append(side);
+      grid.append(entry);
+    }
+    group.append(grid);
+    nodes.push(group);
+  }
+  const total = (state.favorites || []).length;
+  list.replaceChildren(...(nodes.length ? nodes : [create("p", "empty-copy", total
+    ? "没有符合筛选条件的收藏"
+    : "还没有收藏。分析页紫卡右上角的 ☆，或配装页紫卡构建器里的「☆ 收藏」，都能把紫卡存到这里。")]));
+  const stat = document.getElementById("favorites-stat");
+  if (stat) stat.textContent = `${rows.length} / ${total} 张 · ${new Set((state.favorites || []).map((item) => item.weaponPath)).size} 把武器`;
+}
+
+function openFavorites() {
+  const drawer = document.getElementById("favorites-drawer");
+  if (!drawer) return;
+  const types = document.getElementById("favorites-type");
+  if (types && types.options.length <= 1) {
+    for (const type of ["rifle", "shotgun", "pistol", "melee", "archgun", "companion"]) {
+      const option = document.createElement("option");
+      option.value = type;
+      option.textContent = TYPE_LABELS[type] || type;
+      types.append(option);
+    }
+  }
+  drawer.hidden = false;
+  document.getElementById("favorites-scrim").hidden = false;
+  document.getElementById("favorites-button")?.setAttribute("aria-expanded", "true");
+  renderFavorites();
+  document.getElementById("favorites-search")?.focus();
+}
+
+function closeFavorites() {
+  const drawer = document.getElementById("favorites-drawer");
+  if (!drawer || drawer.hidden) return;
+  drawer.hidden = true;
+  document.getElementById("favorites-scrim").hidden = true;
+  document.getElementById("favorites-button")?.setAttribute("aria-expanded", "false");
+}
+
+function exportFavorites() {
+  const blob = new Blob([JSON.stringify({ kind: "wf-riven-favorites", version: 1, favorites: state.favorites || [] }, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `riven-favorites-${new Date().toISOString().slice(0, 10)}.json`;
+  anchor.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function importFavorites(file) {
+  file.text().then((text) => {
+    const body = JSON.parse(text);
+    const incoming = Array.isArray(body) ? body : body?.favorites;
+    if (!Array.isArray(incoming)) throw new Error("文件里没有收藏列表");
+    const known = new Set((state.favorites || []).map((item) => favoriteKey(item.weaponPath, item.stats)));
+    const added = incoming.filter((item) => item && typeof item.weaponPath === "string" && Array.isArray(item.stats)
+      && !known.has(favoriteKey(item.weaponPath, item.stats)))
+      .map((item) => ({ ...item, id: item.id || `fav-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}` }));
+    writeFavorites([...added, ...(state.favorites || [])]);
+    toast(`导入 ${added.length} 张紫卡（重复的已跳过）`);
+  }).catch((error) => toast(`导入失败：${error.message}`, "error"));
+}
+
+function bindFavorites() {
+  state.favorites = readFavorites();
+  renderFavoritesBadge();
+  document.getElementById("favorites-button")?.addEventListener("click", openFavorites);
+  document.getElementById("favorites-close")?.addEventListener("click", closeFavorites);
+  document.getElementById("favorites-scrim")?.addEventListener("click", closeFavorites);
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeFavorites(); });
+  for (const button of document.querySelectorAll("#favorites-scope [data-scope]")) {
+    button.addEventListener("click", () => {
+      document.querySelectorAll("#favorites-scope [data-scope]").forEach((peer) => peer.classList.toggle("is-active", peer === button));
+      renderFavorites();
+    });
+  }
+  document.getElementById("favorites-type")?.addEventListener("change", renderFavorites);
+  document.getElementById("favorites-search")?.addEventListener("input", renderFavorites);
+  document.getElementById("favorites-export")?.addEventListener("click", exportFavorites);
+  const importInput = document.getElementById("favorites-import-file");
+  document.getElementById("favorites-import")?.addEventListener("click", () => importInput?.click());
+  importInput?.addEventListener("change", () => { if (importInput.files?.[0]) importFavorites(importInput.files[0]); importInput.value = ""; });
+  document.getElementById("analysis-favorite")?.addEventListener("click", () => {
+    toggleFavorite(state.weapon, analysisRivenStats(), { analysis: analysisSummary() });
+    refreshAnalysisFavoriteButton();
+  });
+  // 词条改动后星标跟随（收藏按「武器 + 词条 + 一位小数数值」识别）。
+  ui["stat-rows"]?.addEventListener("input", refreshAnalysisFavoriteButton);
+  ui["stat-rows"]?.addEventListener("change", refreshAnalysisFavoriteButton);
+}
+
 function toast(message, type = "info") {
   // type: info / success / error —— 顶部居中横幅，颜色随深浅主题联动。
   const node = create("div", `toast is-${type}`, message);
@@ -10434,6 +11571,9 @@ function bindEvents() {
     if (!ui["result-content"].hidden) submitAnalysis();
   });
   ui["sample-button"].addEventListener("click", sample);
+  bindFavorites();
+  bindCompanionControls();
+  bindExaltedControls();
   ui["reset-button"].addEventListener("click", reset);
   setupComputeSettings();
   ui["theme-toggle"]?.addEventListener("click", () => {
@@ -10502,6 +11642,11 @@ function bindEvents() {
       scheduleLiveBuild();
     });
   }
+  document.getElementById("build-exclude-faction")?.addEventListener("change", (event) => {
+    state.excludeFactionMods = Boolean(event.target.checked);
+    try { window.localStorage.setItem("wf-exclude-faction-mods", state.excludeFactionMods ? "1" : "0"); } catch { /* 本次会话生效 */ }
+    scheduleLiveBuild();
+  });
   ui["build-element-select"]?.addEventListener("change", () => {
     setElementControlIcon(ui["build-element-select"], ui["build-element-icon"]);
   });
@@ -10698,6 +11843,7 @@ async function bootstrap() {
     if (!catalogResponse.ok) throw new Error("本地目录加载失败");
     state.catalog = await catalogResponse.json();
     state.modAssets = assetsResponse.ok ? await assetsResponse.json() : null;
+    registerSentinelAssets();
     fillWeapons();
     fillBuildWeapons();
     fillBuildEnemies();

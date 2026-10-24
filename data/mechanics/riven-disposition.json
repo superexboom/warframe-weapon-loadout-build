@@ -1,0 +1,6 @@
+{
+  "mode": "uniform",
+  "value": 1.2,
+  "effective": "2026-10-23",
+  "note": "The 2026-10-23 update removes per-weapon Riven disposition and sets every Riven weapon to 1.2. Set mode to \"legacy\" to use the exported per-weapon values (kept as legacyOmegaAttenuation)."
+}

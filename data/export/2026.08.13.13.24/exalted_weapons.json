@@ -1,0 +1,5964 @@
+{
+ "buildLabel": "2026.08.13.13.24",
+ "count": 35,
+ "data": [
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Berserker/BerserkerMelee",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridBalanced",
+   "descTag": "/Lotus/Language/Items/BerserkerMeleeDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Berserker",
+    "framePaths": [
+     "/Lotus/Powersuits/Berserker/Berserker"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/BerskerMelee.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.5,
+      "critMultiplier": 2.0,
+      "procChance": 0,
+      "shares": {
+       "DT_PUNCTURE": 0.25,
+       "DT_SLASH": 0.75
+      },
+      "total": 300.0,
+      "types": {
+       "DT_PUNCTURE": 75.0,
+       "DT_SLASH": 225.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.5,
+     "fireRateRaw": 90,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/PunchKickMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeB",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "damageTypeMultipliers": {
+        "DT_IMPACT": 3
+       },
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeA",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_BLEEDING"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 2,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 3,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_BLEEDING"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 4,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 5,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_STUNNED"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 1,
+       "damageTypeMultipliers": {
+        "DT_IMPACT": 3
+       },
+       "forcedProcs": [
+        "PT_KNOCKBACK"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.5,
+       "critMultiplier": 2.0,
+       "procChance": 0.0,
+       "shares": {
+        "DT_PUNCTURE": 0.25,
+        "DT_SLASH": 0.75
+       },
+       "total": 1500.0,
+       "types": {
+        "DT_PUNCTURE": 375.0,
+        "DT_SLASH": 1125.0
+       }
+      },
+      "forcedProcs": [
+       "PT_KNOCKED_DOWN"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "BerserkerMelee",
+   "nameEn": "Valkyr Talons",
+   "nameInternal": "BerserkerMelee",
+   "nameTag": "/Lotus/Language/Items/BerserkerMeleeName",
+   "nameZh": "Valkyr 的利爪",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Berserker/BerserkerMelee",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Berserker/BerserkerMeleePrime",
+    "/Lotus/Powersuits/Berserker/BerserkerMelee",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridBalanced",
+   "descTag": "/Lotus/Language/Suits/BerserkerMeleePrimeDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Berserker",
+    "framePaths": [
+     "/Lotus/Powersuits/Berserker/ValkyrPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/BerskerMelee.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.5,
+      "critMultiplier": 2.0,
+      "procChance": 0,
+      "shares": {
+       "DT_PUNCTURE": 0.25,
+       "DT_SLASH": 0.75
+      },
+      "total": 300.0,
+      "types": {
+       "DT_PUNCTURE": 75.0,
+       "DT_SLASH": 225.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.5,
+     "fireRateRaw": 90,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/PunchKickMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeB",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "damageTypeMultipliers": {
+        "DT_IMPACT": 3
+       },
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeA",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_BLEEDING"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 2,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 3,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_BLEEDING"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 4,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 5,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_STUNNED"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 1,
+       "damageTypeMultipliers": {
+        "DT_IMPACT": 3
+       },
+       "forcedProcs": [
+        "PT_KNOCKBACK"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.5,
+       "critMultiplier": 2.0,
+       "procChance": 0.0,
+       "shares": {
+        "DT_PUNCTURE": 0.25,
+        "DT_SLASH": 0.75
+       },
+       "total": 1500.0,
+       "types": {
+        "DT_PUNCTURE": 375.0,
+        "DT_SLASH": 1125.0
+       }
+      },
+      "forcedProcs": [
+       "PT_KNOCKED_DOWN"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "BerserkerMeleePrime",
+   "nameEn": "Valkyr Prime Talons",
+   "nameInternal": "BerserkerMeleePrime",
+   "nameTag": "/Lotus/Language/Suits/BerserkerMeleePrimeName",
+   "nameZh": "Valkyr Prime 之爪",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Berserker/BerserkerMeleePrime",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Brawler/AtlasPunchWeapon",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "POWER_WEAPON_LITE",
+    "NO_FINISHER",
+    "NO_SLIDE",
+    "NO_ATTACK_SPEED"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridImpact",
+   "descTag": "/Lotus/Language/Suits/AtlasPunchWeaponDesc",
+   "exalted": {
+    "abilitySlot": 0,
+    "family": "Brawler",
+    "framePaths": [
+     "/Lotus/Powersuits/Brawler/Brawler"
+    ],
+    "icon": "/Lotus/Interface/Icons/Abilities/AtlasRockPunch.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree",
+    "tier": "cast"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": null,
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/WhipMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree",
+    "support": {
+     "complete": false,
+     "level": "unsupported",
+     "singleDamage": false,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "AtlasPunchWeapon",
+   "nameEn": "Landslide Fists",
+   "nameInternal": "AtlasPunchWeapon",
+   "nameTag": "/Lotus/Language/Suits/AtlasPunchWeaponName",
+   "nameZh": "土石坍方",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Brawler/AtlasPunchWeapon",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Brawler/AtlasPunchWeaponPrime",
+    "/Lotus/Powersuits/Brawler/AtlasPunchWeapon",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "POWER_WEAPON_LITE",
+    "NO_FINISHER",
+    "NO_SLIDE",
+    "NO_ATTACK_SPEED"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridImpact",
+   "descTag": "/Lotus/Language/Suits/AtlasPunchWeaponPrimeDesc",
+   "exalted": {
+    "abilitySlot": 0,
+    "family": "Brawler",
+    "framePaths": [
+     "/Lotus/Powersuits/Brawler/AtlasPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/Abilities/AtlasRockPunch.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree",
+    "tier": "cast"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": null,
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/WhipMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree",
+    "support": {
+     "complete": false,
+     "level": "unsupported",
+     "singleDamage": false,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "AtlasPunchWeaponPrime",
+   "nameEn": "Landslide Fists Prime",
+   "nameInternal": "AtlasPunchWeaponPrime",
+   "nameTag": "/Lotus/Language/Suits/AtlasPunchWeaponPrimeName",
+   "nameZh": "土石坍方 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Brawler/AtlasPunchWeaponPrime",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Choir/ChoirEruptWeapon",
+    "/Lotus/Powersuits/Choir/ChoirEruptWeaponBase",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "NO_AIM",
+    "AOE"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Pistol/HybridHeat",
+   "descTag": "/Lotus/Language/Weapons/ChoirEruptWeaponDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Choir",
+    "framePaths": [
+     "/Lotus/Powersuits/Choir/Choir"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/ChoirEruptWeapon.png",
+    "meleeTree": null,
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "components": [
+       {
+        "falloff": 0.75,
+        "procChance": 0.2,
+        "radius": 2,
+        "shares": {
+         "DT_FIRE": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 15.0,
+        "types": {
+         "DT_FIRE": 15.0
+        }
+       }
+      ],
+      "critChance": 0.15000001,
+      "critMultiplier": 2.0,
+      "falloff": 0.75,
+      "flightSpeed": 100,
+      "procChance": 0.2,
+      "projectile": "/Lotus/Powersuits/Choir/ChoirEruptProjectile",
+      "radial": {
+       "falloff": 0.75,
+       "procChance": 0.2,
+       "radius": 2,
+       "shares": {
+        "DT_FIRE": 1.0
+       },
+       "source": "ExplosiveAttack",
+       "total": 15.0,
+       "types": {
+        "DT_FIRE": 15.0
+       }
+      },
+      "radius": 2,
+      "shares": {
+       "DT_FIRE": 1.0
+      },
+      "source": "ExplosiveAttack",
+      "total": 15.0,
+      "types": {
+       "DT_FIRE": 15.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.666667,
+     "fireRateRaw": 100,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
+    }
+   ],
+   "gripType": null,
+   "isIncarnon": false,
+   "magazineSize": 1,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "ChoirEruptWeapon",
+   "nameEn": "Glory",
+   "nameInternal": "ChoirEruptWeapon",
+   "nameTag": "/Lotus/Language/Weapons/ChoirEruptWeaponName",
+   "nameZh": "荣耀",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Choir/ChoirEruptWeapon",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "secondary",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Cowgirl/PrimeSlingerPistols",
+    "/Lotus/Powersuits/Cowgirl/SlingerPistolsBase",
+    "/Lotus/Types/Weapon/LotusCustomAimWeapon",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "NO_AIM"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Pistol/CritBalanced",
+   "descTag": null,
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Cowgirl",
+    "framePaths": [
+     "/Lotus/Powersuits/Cowgirl/MesaPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/PrimeSlingerPistols.png",
+    "meleeTree": null,
+    "tier": "strength"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.25,
+      "critMultiplier": 3.0,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.5,
+       "DT_PUNCTURE": 0.25,
+       "DT_SLASH": 0.25
+      },
+      "total": 50.0,
+      "types": {
+       "DT_IMPACT": 25.0,
+       "DT_PUNCTURE": 12.5,
+       "DT_SLASH": 12.5
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 14.8,
+     "fireRateRaw": 888,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1.75,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
+    }
+   ],
+   "gripType": "DUAL_GUN_GUN",
+   "isIncarnon": false,
+   "magazineSize": 100,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "PrimeSlingerPistols",
+   "nameEn": "Regulators Prime",
+   "nameInternal": "PrimeSlingerPistols",
+   "nameTag": "/Lotus/Language/Primes/PrimeSlingerPistolsName",
+   "nameZh": "监察者双枪 Prime",
+   "omegaAttenuation": null,
+   "path": "/Lotus/Powersuits/Cowgirl/PrimeSlingerPistols",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "secondary",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Cowgirl/SlingerPistols",
+    "/Lotus/Powersuits/Cowgirl/SlingerPistolsBase",
+    "/Lotus/Types/Weapon/LotusCustomAimWeapon",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "NO_AIM"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Pistol/CritBalanced",
+   "descTag": null,
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Cowgirl",
+    "framePaths": [
+     "/Lotus/Powersuits/Cowgirl/Cowgirl"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/SlingerPistols.png",
+    "meleeTree": null,
+    "tier": "strength"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.25,
+      "critMultiplier": 3.0,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.5,
+       "DT_PUNCTURE": 0.25,
+       "DT_SLASH": 0.25
+      },
+      "total": 50.0,
+      "types": {
+       "DT_IMPACT": 25.0,
+       "DT_PUNCTURE": 12.5,
+       "DT_SLASH": 12.5
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 14.8,
+     "fireRateRaw": 888,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1.75,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
+    }
+   ],
+   "gripType": "DUAL_GUN_GUN",
+   "isIncarnon": false,
+   "magazineSize": 100,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "SlingerPistols",
+   "nameEn": "Regulators",
+   "nameInternal": "SlingerPistols",
+   "nameTag": "/Lotus/Language/Items/GunFuGunName",
+   "nameZh": "监察者双枪",
+   "omegaAttenuation": null,
+   "path": "/Lotus/Powersuits/Cowgirl/SlingerPistols",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "secondary",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Excalibur/DoomSword",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridSlash",
+   "descTag": "/Lotus/Language/Suits/SwordOfDoomAbilityDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Excalibur",
+    "framePaths": [
+     "/Lotus/Powersuits/Excalibur/Excalibur"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/ExaltedBlade.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.15000001,
+      "critMultiplier": 2.0,
+      "procChance": 0.15000001,
+      "shares": {
+       "DT_IMPACT": 0.15,
+       "DT_PUNCTURE": 0.15,
+       "DT_SLASH": 0.7
+      },
+      "total": 35.0,
+      "types": {
+       "DT_IMPACT": 5.25,
+       "DT_PUNCTURE": 5.25,
+       "DT_SLASH": 24.5
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 0.833333,
+     "fireRateRaw": 50,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/SwordMelee30ChargeB",
+    "attacks": [
+     {
+      "action": null,
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/SwordMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_LIFT_HIT"
+       ]
+      }
+     },
+     {
+      "action": null,
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/SwordMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.15000001,
+       "critMultiplier": 2.0,
+       "procChance": 0.15000001,
+       "shares": {
+        "DT_IMPACT": 0.15,
+        "DT_PUNCTURE": 0.15,
+        "DT_SLASH": 0.7
+       },
+       "total": 175.0,
+       "types": {
+        "DT_IMPACT": 26.25,
+        "DT_PUNCTURE": 26.25,
+        "DT_SLASH": 122.5
+       }
+      },
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "DoomSword",
+   "nameEn": "Exalted Blade",
+   "nameInternal": "DoomSword",
+   "nameTag": "/Lotus/Language/Suits/SwordOfDoomAbilityName",
+   "nameZh": "显赫刀剑",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Excalibur/DoomSword",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Excalibur/DoomSwordPrime",
+    "/Lotus/Powersuits/Excalibur/DoomSword",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridSlash",
+   "descTag": "/Lotus/Language/Suits/DoomSwordPrimeDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Excalibur",
+    "framePaths": [
+     "/Lotus/Powersuits/Excalibur/ExcaliburPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/ExaltedBladePrime.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.15000001,
+      "critMultiplier": 2.0,
+      "procChance": 0.15000001,
+      "shares": {
+       "DT_IMPACT": 0.15,
+       "DT_PUNCTURE": 0.15,
+       "DT_SLASH": 0.7
+      },
+      "total": 35.0,
+      "types": {
+       "DT_IMPACT": 5.25,
+       "DT_PUNCTURE": 5.25,
+       "DT_SLASH": 24.5
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 0.833333,
+     "fireRateRaw": 50,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/SwordMelee30ChargeB",
+    "attacks": [
+     {
+      "action": null,
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/SwordMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_LIFT_HIT"
+       ]
+      }
+     },
+     {
+      "action": null,
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/SwordMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.15000001,
+       "critMultiplier": 2.0,
+       "procChance": 0.15000001,
+       "shares": {
+        "DT_IMPACT": 0.15,
+        "DT_PUNCTURE": 0.15,
+        "DT_SLASH": 0.7
+       },
+       "total": 175.0,
+       "types": {
+        "DT_IMPACT": 26.25,
+        "DT_PUNCTURE": 26.25,
+        "DT_SLASH": 122.5
+       }
+      },
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "DoomSwordPrime",
+   "nameEn": "Exalted Prime Blade",
+   "nameInternal": "DoomSwordPrime",
+   "nameTag": "/Lotus/Language/Suits/DoomSwordPrimeName",
+   "nameZh": "显赫刀剑 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Excalibur/DoomSwordPrime",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Excalibur/DoomSwordUmbra",
+    "/Lotus/Powersuits/Excalibur/DoomSword",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridSlash",
+   "descTag": "/Lotus/Language/Suits/DoomSwordUmbraDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Excalibur",
+    "framePaths": [
+     "/Lotus/Powersuits/Excalibur/ExcaliburUmbra"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/ExcaliburUmbraDoomSword.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.15000001,
+      "critMultiplier": 2.0,
+      "procChance": 0.15000001,
+      "shares": {
+       "DT_IMPACT": 0.15,
+       "DT_PUNCTURE": 0.15,
+       "DT_SLASH": 0.7
+      },
+      "total": 35.0,
+      "types": {
+       "DT_IMPACT": 5.25,
+       "DT_PUNCTURE": 5.25,
+       "DT_SLASH": 24.5
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 0.833333,
+     "fireRateRaw": 50,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/SwordMelee30ChargeB",
+    "attacks": [
+     {
+      "action": null,
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/SwordMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_LIFT_HIT"
+       ]
+      }
+     },
+     {
+      "action": null,
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/SwordMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.15000001,
+       "critMultiplier": 2.0,
+       "procChance": 0.15000001,
+       "shares": {
+        "DT_IMPACT": 0.15,
+        "DT_PUNCTURE": 0.15,
+        "DT_SLASH": 0.7
+       },
+       "total": 175.0,
+       "types": {
+        "DT_IMPACT": 26.25,
+        "DT_PUNCTURE": 26.25,
+        "DT_SLASH": 122.5
+       }
+      },
+      "forcedProcs": [
+       "PT_LIFT_HIT"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "DoomSwordUmbra",
+   "nameEn": "Exalted Umbra Blade",
+   "nameInternal": "DoomSwordUmbra",
+   "nameTag": "/Lotus/Language/Suits/DoomSwordUmbraName",
+   "nameZh": "显赫刀剑 Umbra",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Excalibur/DoomSwordUmbra",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UMBRA",
+    "AP_UMBRA",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_VARIANT"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Fairy/FlightPistols",
+    "/Lotus/Powersuits/Fairy/BaseFlightPistols",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "BATTERY"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Pistol/HybridSlash",
+   "descTag": "/Lotus/Language/Suits/FairyArchwingPistolsDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Fairy",
+    "framePaths": [
+     "/Lotus/Powersuits/Fairy/Fairy"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/FlightPistols.png",
+    "meleeTree": null,
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.1,
+      "critMultiplier": 2.0,
+      "procChance": 0.25,
+      "shares": {
+       "DT_IMPACT": 0.1,
+       "DT_PUNCTURE": 0.1,
+       "DT_SLASH": 0.8
+      },
+      "total": 85.0,
+      "types": {
+       "DT_IMPACT": 8.5,
+       "DT_PUNCTURE": 8.5,
+       "DT_SLASH": 68.000001
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 5.833333,
+     "fireRateRaw": 350,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
+    }
+   ],
+   "gripType": "DUAL_GUN_GUN",
+   "isIncarnon": false,
+   "magazineSize": 60,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "FlightPistols",
+   "nameEn": "Dex Pixia",
+   "nameInternal": "FlightPistols",
+   "nameTag": "/Lotus/Language/Items/FairyArchwingPistols",
+   "nameZh": "Dex 妖精",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Fairy/FlightPistols",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "secondary",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Fairy/FlightSword",
+    "/Lotus/Powersuits/Fairy/BaseFlightSword",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "NO_SLIDE",
+    "NO_HEAVY_ATTACK",
+    "NO_FINISHER"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/CritPuncture",
+   "descTag": "/Lotus/Language/Suits/FlightSwordDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Fairy",
+    "framePaths": [
+     "/Lotus/Powersuits/Fairy/Fairy"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/FlightSword.png",
+    "meleeTree": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyMeleeTree",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.2,
+      "critMultiplier": 2.0,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.15,
+       "DT_PUNCTURE": 0.75,
+       "DT_SLASH": 0.1
+      },
+      "total": 350.0,
+      "types": {
+       "DT_IMPACT": 52.500003,
+       "DT_PUNCTURE": 262.5,
+       "DT_SLASH": 35.000007
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.083333,
+     "fireRateRaw": 65,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "FlightSword",
+   "nameEn": "Diwata",
+   "nameInternal": "FlightSword",
+   "nameTag": "/Lotus/Language/Items/FlightSword",
+   "nameZh": "仙女",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Fairy/FlightSword",
+   "polarities": [
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Fairy/PrimeFlightPistols",
+    "/Lotus/Powersuits/Fairy/BaseFlightPistols",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "BATTERY"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Pistol/HybridSlash",
+   "descTag": "/Lotus/Language/Suits/FairyArchwingPistolsDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Fairy",
+    "framePaths": [
+     "/Lotus/Powersuits/Fairy/TitaniaPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/DexPixiaPrime.png",
+    "meleeTree": null,
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.1,
+      "critMultiplier": 2.0,
+      "procChance": 0.25,
+      "shares": {
+       "DT_IMPACT": 0.1,
+       "DT_PUNCTURE": 0.1,
+       "DT_SLASH": 0.8
+      },
+      "total": 85.0,
+      "types": {
+       "DT_IMPACT": 8.5,
+       "DT_PUNCTURE": 8.5,
+       "DT_SLASH": 68.000001
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 5.833333,
+     "fireRateRaw": 350,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
+    }
+   ],
+   "gripType": "DUAL_GUN_GUN",
+   "isIncarnon": false,
+   "magazineSize": 60,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "PrimeFlightPistols",
+   "nameEn": "Dex Pixia Prime",
+   "nameInternal": "PrimeFlightPistols",
+   "nameTag": "/Lotus/Language/Primes/PrimeFlightPistolsName",
+   "nameZh": "Dex 妖精 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Fairy/PrimeFlightPistols",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "secondary",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Fairy/PrimeFlightSword",
+    "/Lotus/Powersuits/Fairy/BaseFlightSword",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "NO_SLIDE",
+    "NO_HEAVY_ATTACK",
+    "NO_FINISHER"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/CritPuncture",
+   "descTag": "/Lotus/Language/Suits/FlightSwordDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Fairy",
+    "framePaths": [
+     "/Lotus/Powersuits/Fairy/TitaniaPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/DiwataPrime.png",
+    "meleeTree": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyMeleeTree",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.2,
+      "critMultiplier": 2.0,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.15,
+       "DT_PUNCTURE": 0.75,
+       "DT_SLASH": 0.1
+      },
+      "total": 350.0,
+      "types": {
+       "DT_IMPACT": 52.500003,
+       "DT_PUNCTURE": 262.5,
+       "DT_SLASH": 35.000007
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.083333,
+     "fireRateRaw": 65,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "PrimeFlightSword",
+   "nameEn": "Diwata Prime",
+   "nameInternal": "PrimeFlightSword",
+   "nameTag": "/Lotus/Language/Primes/PrimeFlightSwordName",
+   "nameZh": "仙女 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Fairy/PrimeFlightSword",
+   "polarities": [
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Frumentarius/ExaltedSniper",
+    "/Lotus/Powersuits/Frumentarius/ExaltedSniperBase",
+    "/Lotus/Weapons/Tenno/Rifle/LotusSniperRifle",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+    "/Lotus/Weapons/Tenno/LotusLongGun",
+    "/Lotus/Weapons/Tenno/LotusBulletWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "SEMI_AUTO",
+    "SNIPER_AMMO"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Rifle/CritPuncture",
+   "descTag": "/Lotus/Language/Weapons/TnExaltedSniperDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Frumentarius",
+    "framePaths": [
+     "/Lotus/Powersuits/Frumentarius/Frumentarius"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/FrumentariusExaltedSniper.png",
+    "meleeTree": null,
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 1,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.44999999,
+      "critMultiplier": 3.0,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.05,
+       "DT_PUNCTURE": 0.85,
+       "DT_SLASH": 0.1
+      },
+      "total": 255.0,
+      "types": {
+       "DT_IMPACT": 12.75,
+       "DT_PUNCTURE": 216.750005,
+       "DT_SLASH": 25.499991
+      }
+     },
+     "falloffMinDamage": 90,
+     "falloffRange": [
+      400,
+      600
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2.25,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
+    },
+    {
+     "ammoCost": 3,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "components": [
+       {
+        "falloff": 0.60000002,
+        "forcedProcs": [
+         "PT_CHILLED"
+        ],
+        "procChance": 0,
+        "radius": 10,
+        "shares": {
+         "DT_FREEZE": 1.0
+        },
+        "source": "ExplosiveAttack",
+        "total": 20.0,
+        "types": {
+         "DT_FREEZE": 20.0
+        }
+       }
+      ],
+      "critChance": 0.30000001,
+      "critMultiplier": 2.0,
+      "falloff": 0.60000002,
+      "flightSpeed": 35,
+      "forcedProcs": [
+       "PT_CHILLED"
+      ],
+      "procChance": 0,
+      "projectile": "/Lotus/Powersuits/Frumentarius/ExaltedSniperAltProjectile",
+      "radial": {
+       "falloff": 0.60000002,
+       "forcedProcs": [
+        "PT_CHILLED"
+       ],
+       "procChance": 0,
+       "radius": 10,
+       "shares": {
+        "DT_FREEZE": 1.0
+       },
+       "source": "ExplosiveAttack",
+       "total": 20.0,
+       "types": {
+        "DT_FREEZE": 20.0
+       }
+      },
+      "radius": 10,
+      "shares": {
+       "DT_FREEZE": 1.0
+      },
+      "source": "ExplosiveAttack",
+      "total": 20.0,
+      "types": {
+       "DT_FREEZE": 20.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.333333,
+     "fireRateRaw": 80,
+     "index": 1,
+     "isAlternateFire": true,
+     "multishot": 1,
+     "reloadTime": 2.25,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
+    }
+   ],
+   "gripType": null,
+   "isIncarnon": false,
+   "magazineSize": 12,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "ExaltedSniper",
+   "nameEn": "Neutralizer",
+   "nameInternal": "ExaltedSniper",
+   "nameTag": "/Lotus/Language/Weapons/TnExaltedSniperName",
+   "nameZh": "肃清者",
+   "omegaAttenuation": 1.3,
+   "path": "/Lotus/Powersuits/Frumentarius/ExaltedSniper",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "primary",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Garuda/GarudaClaws",
+    "/Lotus/Powersuits/Garuda/GarudaBaseClaws",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "CLAWS_STANCE_STANCE"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridSlash",
+   "descTag": "/Lotus/Language/Suits/GarudaClawsDesc",
+   "exalted": {
+    "abilitySlot": null,
+    "family": "Garuda",
+    "framePaths": [
+     "/Lotus/Powersuits/Garuda/Garuda"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/MeleeWeapons/Weapons/GarudaMeleeClaws.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawMeleeTree",
+    "tier": "always"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.2,
+      "critMultiplier": 2.0,
+      "procChance": 0.36000001,
+      "shares": {
+       "DT_IMPACT": 0.08,
+       "DT_PUNCTURE": 0.22,
+       "DT_SLASH": 0.7
+      },
+      "total": 248.0,
+      "types": {
+       "DT_IMPACT": 19.84,
+       "DT_PUNCTURE": 54.56,
+       "DT_SLASH": 173.599998
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/ClawMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/ClawMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_KNOCKBACK",
+        "PT_BLEEDING"
+       ],
+       "procChanceMultiplier": 1.5
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/ClawMelee30ChargeA",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1.5
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.2,
+       "critMultiplier": 2.0,
+       "procChance": 0.5400000149999999,
+       "shares": {
+        "DT_IMPACT": 0.0800000006451613,
+        "DT_PUNCTURE": 0.22000000177419357,
+        "DT_SLASH": 0.6999999975806451
+       },
+       "total": 1239.99999,
+       "types": {
+        "DT_IMPACT": 99.2,
+        "DT_PUNCTURE": 272.8,
+        "DT_SLASH": 867.99999
+       }
+      },
+      "forcedProcs": [
+       "PT_KNOCKBACK",
+       "PT_BLEEDING"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "GarudaClaws",
+   "nameEn": "Garuda Talons",
+   "nameInternal": "GarudaClaws",
+   "nameTag": "/Lotus/Language/Suits/GarudaClawsName",
+   "nameZh": "Garuda 之爪",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Garuda/GarudaClaws",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Garuda/GarudaPrimeClaws",
+    "/Lotus/Powersuits/Garuda/GarudaBaseClaws",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "CLAWS_STANCE_STANCE"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridSlash",
+   "descTag": "/Lotus/Language/Primes/GarudaPrimeClawsDesc",
+   "exalted": {
+    "abilitySlot": null,
+    "family": "Garuda",
+    "framePaths": [
+     "/Lotus/Powersuits/Garuda/GarudaPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/GarudaPrimeClaws.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawMeleeTree",
+    "tier": "always"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.34999999,
+      "critMultiplier": 2.0,
+      "procChance": 0.36000001,
+      "shares": {
+       "DT_IMPACT": 0.05,
+       "DT_PUNCTURE": 0.1,
+       "DT_SLASH": 0.85
+      },
+      "total": 280.0,
+      "types": {
+       "DT_IMPACT": 14.0,
+       "DT_PUNCTURE": 28.0,
+       "DT_SLASH": 238.000006
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/ClawMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/ClawMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_KNOCKBACK",
+        "PT_BLEEDING"
+       ],
+       "procChanceMultiplier": 1.5
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/ClawMelee30ChargeA",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1.5
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.34999999,
+       "critMultiplier": 2.0,
+       "procChance": 0.5400000149999999,
+       "shares": {
+        "DT_IMPACT": 0.049999998928571446,
+        "DT_PUNCTURE": 0.09999999785714289,
+        "DT_SLASH": 0.8500000032142857
+       },
+       "total": 1400.0000300000002,
+       "types": {
+        "DT_IMPACT": 70.0,
+        "DT_PUNCTURE": 140.0,
+        "DT_SLASH": 1190.0000300000002
+       }
+      },
+      "forcedProcs": [
+       "PT_KNOCKBACK",
+       "PT_BLEEDING"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "GarudaPrimeClaws",
+   "nameEn": "Garuda Prime Talons",
+   "nameInternal": "GarudaPrimeClaws",
+   "nameTag": "/Lotus/Language/Primes/GarudaPrimeClawsName",
+   "nameZh": "Garuda Prime 之爪",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Garuda/GarudaPrimeClaws",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Glass/GaraShankWeapon",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "POWER_WEAPON_LITE",
+    "NO_FINISHER",
+    "NO_SLIDE",
+    "NO_ATTACK_SPEED"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridBalanced",
+   "descTag": "/Lotus/Language/Suits/GaraShankWeaponDesc",
+   "exalted": {
+    "abilitySlot": 0,
+    "family": "Glass",
+    "framePaths": [
+     "/Lotus/Powersuits/Glass/Glass"
+    ],
+    "icon": "/Lotus/Interface/Icons/Abilities/GlassShank.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree",
+    "tier": "cast"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": null,
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/WhipMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree",
+    "support": {
+     "complete": false,
+     "level": "unsupported",
+     "singleDamage": false,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "GaraShankWeapon",
+   "nameEn": "Shattered Lash",
+   "nameInternal": "GaraShankWeapon",
+   "nameTag": "/Lotus/Language/Suits/GaraShankWeaponName",
+   "nameZh": "琉璃碎击",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Glass/GaraShankWeapon",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_POWER",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Glass/GaraShankWeaponPrime",
+    "/Lotus/Powersuits/Glass/GaraShankWeapon",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "POWER_WEAPON_LITE",
+    "NO_FINISHER",
+    "NO_SLIDE",
+    "NO_ATTACK_SPEED"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridBalanced",
+   "descTag": "/Lotus/Language/Suits/GaraShankWeaponPrimeDesc",
+   "exalted": {
+    "abilitySlot": 0,
+    "family": "Glass",
+    "framePaths": [
+     "/Lotus/Powersuits/Glass/GaraPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/Abilities/GlassShank.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree",
+    "tier": "cast"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": null,
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/WhipMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree",
+    "support": {
+     "complete": false,
+     "level": "unsupported",
+     "singleDamage": false,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "GaraShankWeaponPrime",
+   "nameEn": "Shattered Lash Prime",
+   "nameInternal": "GaraShankWeaponPrime",
+   "nameTag": "/Lotus/Language/Suits/GaraShankWeaponPrimeName",
+   "nameZh": "琉璃碎击 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Glass/GaraShankWeaponPrime",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_POWER",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/IronFrame/BlastWeapon",
+    "/Lotus/Powersuits/IronFrame/BlastWeaponBase",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "AOE"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Pistol/HybridElectricity",
+   "descTag": "/Lotus/Language/Suits/IronFrameBlasterDesc",
+   "exalted": {
+    "abilitySlot": 0,
+    "family": "IronFrame",
+    "framePaths": [
+     "/Lotus/Powersuits/IronFrame/IronFrame"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/IronFrameBlastWeapon.png",
+    "meleeTree": null,
+    "tier": "strength"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeDamageMultiplier": 3,
+     "chargeTime": 2,
+     "chargedProjectile": true,
+     "damage": {
+      "critChance": 0.050000001,
+      "critMultiplier": 2.0,
+      "procChance": 0.059999999,
+      "shares": {
+       "DT_IMPACT": 1.0
+      },
+      "total": 10.0,
+      "types": {
+       "DT_IMPACT": 10.0
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 0.833333,
+     "fireRateRaw": 50,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
+    },
+    {
+     "ammoCost": 0,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 2.0,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.333333,
+       "DT_PUNCTURE": 0.333333,
+       "DT_SLASH": 0.333334
+      },
+      "total": 10.0,
+      "types": {
+       "DT_IMPACT": 3.33333,
+       "DT_PUNCTURE": 3.33333,
+       "DT_SLASH": 3.33334
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 0.75,
+     "fireRateRaw": 45,
+     "index": 1,
+     "isAlternateFire": true,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst"
+    }
+   ],
+   "gripType": "DUAL_GUN_GUN",
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "BlastWeapon",
+   "nameEn": "Balefire Charger",
+   "nameInternal": "BlastWeapon",
+   "nameTag": "/Lotus/Language/Suits/IronFrameBlasterName",
+   "nameZh": "野火充能",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/IronFrame/BlastWeapon",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "secondary",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/IronFrame/BlastWeaponPrime",
+    "/Lotus/Powersuits/IronFrame/BlastWeaponBase",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "AOE"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Pistol/HybridElectricity",
+   "descTag": "/Lotus/Language/Primes/BlastWeaponPrimeDesc",
+   "exalted": {
+    "abilitySlot": 0,
+    "family": "IronFrame",
+    "framePaths": [
+     "/Lotus/Powersuits/IronFrame/IronFramePrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/HildrynPrimeBlastWeapon.png",
+    "meleeTree": null,
+    "tier": "strength"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeDamageMultiplier": 3,
+     "chargeTime": 2,
+     "chargedProjectile": true,
+     "damage": {
+      "critChance": 0.050000001,
+      "critMultiplier": 2.0,
+      "procChance": 0.059999999,
+      "shares": {
+       "DT_IMPACT": 1.0
+      },
+      "total": 10.0,
+      "types": {
+       "DT_IMPACT": 10.0
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 0.833333,
+     "fireRateRaw": 50,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
+    },
+    {
+     "ammoCost": 0,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.0,
+      "critMultiplier": 2.0,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.333333,
+       "DT_PUNCTURE": 0.333333,
+       "DT_SLASH": 0.333334
+      },
+      "total": 10.0,
+      "types": {
+       "DT_IMPACT": 3.33333,
+       "DT_PUNCTURE": 3.33333,
+       "DT_SLASH": 3.33334
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 0.75,
+     "fireRateRaw": 45,
+     "index": 1,
+     "isAlternateFire": true,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerBurst"
+    }
+   ],
+   "gripType": "DUAL_GUN_GUN",
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "BlastWeaponPrime",
+   "nameEn": "Balefire Charger Prime",
+   "nameInternal": "BlastWeaponPrime",
+   "nameTag": "/Lotus/Language/Primes/BlastWeaponPrimeName",
+   "nameZh": "野火充能 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/IronFrame/BlastWeaponPrime",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "secondary",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Khora/KhoraWhipclawWeapon",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "POWER_WEAPON_LITE",
+    "NO_FINISHER",
+    "NO_SLIDE",
+    "NO_ATTACK_SPEED"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridBalanced",
+   "descTag": "/Lotus/Language/Suits/KhoraWhipclawWeaponDesc",
+   "exalted": {
+    "abilitySlot": 0,
+    "family": "Khora",
+    "framePaths": [
+     "/Lotus/Powersuits/Khora/Khora"
+    ],
+    "icon": "/Lotus/Interface/Icons/Abilities/KhoraCrack.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree",
+    "tier": "cast"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.25,
+      "critMultiplier": 2.0,
+      "procChance": 0.25,
+      "shares": {
+       "DT_IMPACT": 0.333,
+       "DT_PUNCTURE": 0.333,
+       "DT_SLASH": 0.334
+      },
+      "total": 10.0,
+      "types": {
+       "DT_IMPACT": 3.33,
+       "DT_PUNCTURE": 3.33,
+       "DT_SLASH": 3.34
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/WhipMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.25,
+       "critMultiplier": 2.0,
+       "procChance": 0.25,
+       "shares": {
+        "DT_IMPACT": 0.33299999999999996,
+        "DT_PUNCTURE": 0.33299999999999996,
+        "DT_SLASH": 0.33399999999999996
+       },
+       "total": 45.0,
+       "types": {
+        "DT_IMPACT": 14.985,
+        "DT_PUNCTURE": 14.985,
+        "DT_SLASH": 15.03
+       }
+      },
+      "forcedProcs": [
+       "PT_BLEEDING",
+       "PT_KNOCKED_DOWN"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "KhoraWhipclawWeapon",
+   "nameEn": "Whipclaw",
+   "nameInternal": "KhoraWhipclawWeapon",
+   "nameTag": "/Lotus/Language/Suits/KhoraWhipclawWeaponName",
+   "nameZh": "长鞭利爪",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Khora/KhoraWhipclawWeapon",
+   "polarities": [
+    "AP_DEFENSE",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_POWER",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Khora/KhoraWhipclawWeaponPrime",
+    "/Lotus/Powersuits/Khora/KhoraWhipclawWeapon",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "POWER_WEAPON_LITE",
+    "NO_FINISHER",
+    "NO_SLIDE",
+    "NO_ATTACK_SPEED"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridBalanced",
+   "descTag": "/Lotus/Language/Suits/KhoraWhipclawWeaponPrimeDesc",
+   "exalted": {
+    "abilitySlot": 0,
+    "family": "Khora",
+    "framePaths": [
+     "/Lotus/Powersuits/Khora/KhoraPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/Abilities/KhoraCrack.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree",
+    "tier": "cast"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.25,
+      "critMultiplier": 2.0,
+      "procChance": 0.25,
+      "shares": {
+       "DT_IMPACT": 0.333,
+       "DT_PUNCTURE": 0.333,
+       "DT_SLASH": 0.334
+      },
+      "total": 10.0,
+      "types": {
+       "DT_IMPACT": 3.33,
+       "DT_PUNCTURE": 3.33,
+       "DT_SLASH": 3.34
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/WhipMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.25,
+       "critMultiplier": 2.0,
+       "procChance": 0.25,
+       "shares": {
+        "DT_IMPACT": 0.33299999999999996,
+        "DT_PUNCTURE": 0.33299999999999996,
+        "DT_SLASH": 0.33399999999999996
+       },
+       "total": 45.0,
+       "types": {
+        "DT_IMPACT": 14.985,
+        "DT_PUNCTURE": 14.985,
+        "DT_SLASH": 15.03
+       }
+      },
+      "forcedProcs": [
+       "PT_BLEEDING",
+       "PT_KNOCKED_DOWN"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "KhoraWhipclawWeaponPrime",
+   "nameEn": "Whipclaw Prime",
+   "nameInternal": "KhoraWhipclawWeaponPrime",
+   "nameTag": "/Lotus/Language/Suits/KhoraWhipclawWeaponPrimeName",
+   "nameZh": "长鞭利爪 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Khora/KhoraWhipclawWeaponPrime",
+   "polarities": [
+    "AP_DEFENSE",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_POWER",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/MonkeyKing/MonkeyKingStaff",
+    "/Lotus/Powersuits/MonkeyKing/MonkeyKingStaffBase",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/StatusImpact",
+   "descTag": "/Lotus/Language/Items/MonkeyKingStaffDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "MonkeyKing",
+    "framePaths": [
+     "/Lotus/Powersuits/MonkeyKing/MonkeyKing"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/MonkeyKingStaff.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.25,
+      "critMultiplier": 2.0,
+      "procChance": 0.30000001,
+      "shares": {
+       "DT_IMPACT": 0.68,
+       "DT_SLASH": 0.32
+      },
+      "total": 300.0,
+      "types": {
+       "DT_IMPACT": 204.000003,
+       "DT_SLASH": 95.999997
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/StaffMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/StaffMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/StaffMelee30ChargeA",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 2,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.25,
+       "critMultiplier": 2.0,
+       "procChance": 0.30000001,
+       "shares": {
+        "DT_IMPACT": 0.68000001,
+        "DT_SLASH": 0.31999999
+       },
+       "total": 1500.0,
+       "types": {
+        "DT_IMPACT": 1020.000015,
+        "DT_SLASH": 479.999985
+       }
+      },
+      "forcedProcs": [
+       "PT_KNOCKED_DOWN"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "MonkeyKingStaff",
+   "nameEn": "Iron Staff",
+   "nameInternal": "MonkeyKingStaff",
+   "nameTag": "/Lotus/Language/Items/MonkeyKingStaffName",
+   "nameZh": "定海神针",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/MonkeyKing/MonkeyKingStaff",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/MonkeyKing/WukongPrimeStaff",
+    "/Lotus/Powersuits/MonkeyKing/MonkeyKingStaffBase",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/StatusImpact",
+   "descTag": "/Lotus/Language/Primes/WukongPrimeStaffDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "MonkeyKing",
+    "framePaths": [
+     "/Lotus/Powersuits/MonkeyKing/WukongPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/WukongPrimeStaff.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.25,
+      "critMultiplier": 2.0,
+      "procChance": 0.30000001,
+      "shares": {
+       "DT_IMPACT": 0.68,
+       "DT_SLASH": 0.32
+      },
+      "total": 300.0,
+      "types": {
+       "DT_IMPACT": 204.000003,
+       "DT_SLASH": 95.999997
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 2,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/StaffMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/StaffMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/StaffMelee30ChargeA",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 2,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.25,
+       "critMultiplier": 2.0,
+       "procChance": 0.30000001,
+       "shares": {
+        "DT_IMPACT": 0.68000001,
+        "DT_SLASH": 0.31999999
+       },
+       "total": 1500.0,
+       "types": {
+        "DT_IMPACT": 1020.000015,
+        "DT_SLASH": 479.999985
+       }
+      },
+      "forcedProcs": [
+       "PT_KNOCKED_DOWN"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "WukongPrimeStaff",
+   "nameEn": "Iron Staff Prime",
+   "nameInternal": "WukongPrimeStaff",
+   "nameTag": "/Lotus/Language/Primes/WukongPrimeStaffName",
+   "nameZh": "定海神针 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/MonkeyKing/WukongPrimeStaff",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_TACTIC",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Ninja/NinjaStormWeapon",
+    "/Lotus/Weapons/Tenno/Melee/LotusDagger",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "POWER_WEAPON_LITE",
+    "NO_SLIDE"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridBalanced",
+   "descTag": "/Lotus/Language/Suits/NinjaStormWeaponDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Ninja",
+    "framePaths": [
+     "/Lotus/Powersuits/Ninja/Ninja"
+    ],
+    "icon": "/Lotus/Interface/Icons/Abilities/NinjaStorm.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree",
+    "tier": "cast"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.25,
+      "critMultiplier": 2.0,
+      "procChance": 0.25,
+      "shares": {
+       "DT_IMPACT": 0.333,
+       "DT_PUNCTURE": 0.333,
+       "DT_SLASH": 0.334
+      },
+      "total": 10.0,
+      "types": {
+       "DT_IMPACT": 3.33,
+       "DT_PUNCTURE": 3.33,
+       "DT_SLASH": 3.34
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/WhipMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.25,
+       "critMultiplier": 2.0,
+       "procChance": 0.25,
+       "shares": {
+        "DT_IMPACT": 0.33299999999999996,
+        "DT_PUNCTURE": 0.33299999999999996,
+        "DT_SLASH": 0.33399999999999996
+       },
+       "total": 45.0,
+       "types": {
+        "DT_IMPACT": 14.985,
+        "DT_PUNCTURE": 14.985,
+        "DT_SLASH": 15.03
+       }
+      },
+      "forcedProcs": [
+       "PT_BLEEDING",
+       "PT_KNOCKED_DOWN"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "NinjaStormWeapon",
+   "nameEn": "Shadow Clones",
+   "nameInternal": "NinjaStormWeapon",
+   "nameTag": "/Lotus/Language/Suits/NinjaStormWeaponName",
+   "nameZh": "影分身",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Ninja/NinjaStormWeapon",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_POWER",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Ninja/NinjaStormWeaponPrime",
+    "/Lotus/Powersuits/Ninja/NinjaStormWeapon",
+    "/Lotus/Weapons/Tenno/Melee/LotusDagger",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "POWER_WEAPON_LITE",
+    "NO_SLIDE"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridBalanced",
+   "descTag": "/Lotus/Language/Suits/NinjaStormWeaponPrimeDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Ninja",
+    "framePaths": [
+     "/Lotus/Powersuits/Ninja/AshPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/Abilities/NinjaStorm.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree",
+    "tier": "cast"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.25,
+      "critMultiplier": 2.0,
+      "procChance": 0.25,
+      "shares": {
+       "DT_IMPACT": 0.333,
+       "DT_PUNCTURE": 0.333,
+       "DT_SLASH": 0.334
+      },
+      "total": 10.0,
+      "types": {
+       "DT_IMPACT": 3.33,
+       "DT_PUNCTURE": 3.33,
+       "DT_SLASH": 3.34
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/WhipMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA",
+      "perSwing": [],
+      "properties": {
+       "baseDamageMultiplier": 4.5,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ],
+       "procChanceMultiplier": 1
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.25,
+       "critMultiplier": 2.0,
+       "procChance": 0.25,
+       "shares": {
+        "DT_IMPACT": 0.33299999999999996,
+        "DT_PUNCTURE": 0.33299999999999996,
+        "DT_SLASH": 0.33399999999999996
+       },
+       "total": 45.0,
+       "types": {
+        "DT_IMPACT": 14.985,
+        "DT_PUNCTURE": 14.985,
+        "DT_SLASH": 15.03
+       }
+      },
+      "forcedProcs": [
+       "PT_BLEEDING",
+       "PT_KNOCKED_DOWN"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "NinjaStormWeaponPrime",
+   "nameEn": "Shadow Clones Prime",
+   "nameInternal": "NinjaStormWeaponPrime",
+   "nameTag": "/Lotus/Language/Suits/NinjaStormWeaponPrimeName",
+   "nameZh": "影分身 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Ninja/NinjaStormWeaponPrime",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_POWER",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Pacifist/PacifistFist",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/CritImpact",
+   "descTag": "/Lotus/Language/Suits/PacifistFistDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Pacifist",
+    "framePaths": [
+     "/Lotus/Powersuits/Pacifist/Pacifist"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/PacifistFistWeapon.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.34999999,
+      "critMultiplier": 2.0,
+      "forcedProcs": [
+       "PT_RAGDOLL"
+      ],
+      "procChance": 0,
+      "shares": {
+       "DT_IMPACT": 0.3333,
+       "DT_PUNCTURE": 0.333333,
+       "DT_SLASH": 0.333367
+      },
+      "total": 250.0,
+      "types": {
+       "DT_IMPACT": 83.324997,
+       "DT_PUNCTURE": 83.333247,
+       "DT_SLASH": 83.341747
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/PunchKickMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeB",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "damageTypeMultipliers": {
+        "DT_IMPACT": 3
+       },
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeA",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_BLEEDING"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 2,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 3,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_BLEEDING"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 4,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 5,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_STUNNED"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 1,
+       "damageTypeMultipliers": {
+        "DT_IMPACT": 3
+       },
+       "forcedProcs": [
+        "PT_KNOCKBACK"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.34999999,
+       "critMultiplier": 2.0,
+       "procChance": 0.0,
+       "shares": {
+        "DT_IMPACT": 0.5999639985586462,
+        "DT_PUNCTURE": 0.20000780031229332,
+        "DT_SLASH": 0.2000282011290604
+       },
+       "total": 2083.249925,
+       "types": {
+        "DT_IMPACT": 1249.874955,
+        "DT_PUNCTURE": 416.66623500000003,
+        "DT_SLASH": 416.708735
+       }
+      },
+      "forcedProcs": [
+       "PT_RAGDOLL",
+       "PT_KNOCKED_DOWN"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "PacifistFist",
+   "nameEn": "Desert Wind",
+   "nameInternal": "PacifistFist",
+   "nameTag": "/Lotus/Language/Suits/PacifistFistName",
+   "nameZh": "沙漠之风",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Pacifist/PacifistFist",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_DEFENSE",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Pacifist/PacifistFistPrime",
+    "/Lotus/Powersuits/Pacifist/PacifistFist",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/CritImpact",
+   "descTag": "/Lotus/Language/Suits/PacifistFistPrimeDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Pacifist",
+    "framePaths": [
+     "/Lotus/Powersuits/Pacifist/BaruukPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/PacifistFistWeapon.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree",
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.34999999,
+      "critMultiplier": 2.0,
+      "forcedProcs": [
+       "PT_RAGDOLL"
+      ],
+      "procChance": 0,
+      "shares": {
+       "DT_IMPACT": 0.3333,
+       "DT_PUNCTURE": 0.333333,
+       "DT_SLASH": 0.333367
+      },
+      "total": 250.0,
+      "types": {
+       "DT_IMPACT": 83.324997,
+       "DT_PUNCTURE": 83.333247,
+       "DT_SLASH": 83.341747
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/PunchKickMelee30ChargeB",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeB",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 5,
+       "damageTypeMultipliers": {
+        "DT_IMPACT": 3
+       },
+       "forcedProcs": [
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeA",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_BLEEDING"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 2,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 3,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_BLEEDING"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 4,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       },
+       {
+        "index": 5,
+        "override": true,
+        "properties": {
+         "baseDamageMultiplier": 3,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "forcedProcs": [
+          "PT_STUNNED"
+         ],
+         "procChanceMultiplier": 1,
+         "slam": ""
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 1,
+       "damageTypeMultipliers": {
+        "DT_IMPACT": 3
+       },
+       "forcedProcs": [
+        "PT_KNOCKBACK"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.34999999,
+       "critMultiplier": 2.0,
+       "procChance": 0.0,
+       "shares": {
+        "DT_IMPACT": 0.5999639985586462,
+        "DT_PUNCTURE": 0.20000780031229332,
+        "DT_SLASH": 0.2000282011290604
+       },
+       "total": 2083.249925,
+       "types": {
+        "DT_IMPACT": 1249.874955,
+        "DT_PUNCTURE": 416.66623500000003,
+        "DT_SLASH": 416.708735
+       }
+      },
+      "forcedProcs": [
+       "PT_RAGDOLL",
+       "PT_KNOCKED_DOWN"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "PacifistFistPrime",
+   "nameEn": "Desert Wind Prime",
+   "nameInternal": "PacifistFistPrime",
+   "nameTag": "/Lotus/Language/Suits/PacifistFistPrimeName",
+   "nameZh": "沙漠之风 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Pacifist/PacifistFistPrime",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_DEFENSE",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Pagemaster/ExaltedBook",
+    "/Lotus/Powersuits/Pagemaster/ExaltedBookBase",
+    "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+    "/Lotus/Weapons/Tenno/Pistol/LotusGrimoire",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+   ],
+   "compatTags": [
+    "POWER_WEAPON",
+    "AOE"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Pistol/HybridElectricity",
+   "descTag": "/Lotus/Language/Weapons/TnNoctuaDesc",
+   "exalted": {
+    "abilitySlot": 0,
+    "family": "Pagemaster",
+    "framePaths": [
+     "/Lotus/Powersuits/Pagemaster/Pagemaster"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/ExaltedTome.png",
+    "meleeTree": null,
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "/Lotus/Weapons/Ammo/PistolAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.30000001,
+      "critMultiplier": 2.0,
+      "flightSpeed": 80,
+      "procChance": 0.25,
+      "projectile": "/Lotus/Powersuits/Pagemaster/ExaltedBookProj",
+      "shares": {
+       "DT_SLASH": 1.0
+      },
+      "total": 200.0,
+      "types": {
+       "DT_SLASH": 200.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.5,
+     "fireRateRaw": 90,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 0.0099999998,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerAuto"
+    },
+    {
+     "ammoCost": 1,
+     "ammoType": "/Lotus/Weapons/Ammo/PistolAmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.44999999,
+      "critMultiplier": 3.0,
+      "flightSpeed": 35,
+      "forcedProcs": [
+       "PT_STAGGERED"
+      ],
+      "procChance": 0.44999999,
+      "projectile": "/Lotus/Powersuits/Pagemaster/ExaltedBookAltFireProj",
+      "shares": {
+       "DT_IMPACT": 0.4,
+       "DT_RADIATION": 0.6
+      },
+      "total": 2500.0,
+      "types": {
+       "DT_IMPACT": 1000.0,
+       "DT_RADIATION": 1500.0
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 1,
+     "isAlternateFire": true,
+     "multishot": 1,
+     "reloadTime": 0.0099999998,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
+    }
+   ],
+   "gripType": "BOOK",
+   "isIncarnon": false,
+   "magazineSize": 10,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "ExaltedBook",
+   "nameEn": "Noctua",
+   "nameInternal": "ExaltedBook",
+   "nameTag": "/Lotus/Language/Weapons/TnNoctuaName",
+   "nameZh": "夜枭",
+   "omegaAttenuation": 0.60000002,
+   "path": "/Lotus/Powersuits/Pagemaster/ExaltedBook",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "secondary",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Ranger/ExaltedBow",
+    "/Lotus/Powersuits/Ranger/ExaltedBowBase",
+    "/Lotus/Weapons/Tenno/Bows/LotusLongBow",
+    "/Lotus/Weapons/Tenno/Bows/LotusBow",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+    "/Lotus/Weapons/Tenno/LotusLongGun",
+    "/Lotus/Weapons/Tenno/LotusBulletWeapon"
+   ],
+   "compatTags": [
+    "PROJECTILE",
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Rifle/HybridPuncture",
+   "descTag": "/Lotus/Language/Suits/RangerBowAbilityDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Ranger",
+    "framePaths": [
+     "/Lotus/Powersuits/Ranger/Ranger"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/ExaltedBow.png",
+    "meleeTree": null,
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": 1,
+     "damage": {
+      "critChance": 0.2,
+      "critMultiplier": 1.5,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.333333,
+       "DT_PUNCTURE": 0.333333,
+       "DT_SLASH": 0.333334
+      },
+      "total": 8.0,
+      "types": {
+       "DT_IMPACT": 2.666664,
+       "DT_PUNCTURE": 2.666664,
+       "DT_SLASH": 2.666672
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 0.85000002,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
+    },
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.2,
+      "critMultiplier": 1.5,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.333333,
+       "DT_PUNCTURE": 0.333333,
+       "DT_SLASH": 0.333334
+      },
+      "total": 8.0,
+      "types": {
+       "DT_IMPACT": 2.666664,
+       "DT_PUNCTURE": 2.666664,
+       "DT_SLASH": 2.666672
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 1,
+     "isAlternateFire": true,
+     "multishot": 1,
+     "reloadTime": 0.69999999,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
+    }
+   ],
+   "gripType": "BOW",
+   "isIncarnon": false,
+   "magazineSize": 1,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "ExaltedBow",
+   "nameEn": "Artemis Bow",
+   "nameInternal": "ExaltedBow",
+   "nameTag": "/Lotus/Language/Suits/RangerBowAbilityName",
+   "nameZh": "月神狩弓",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Ranger/ExaltedBow",
+   "polarities": [
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "primary",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Ranger/PrimeExaltedBow",
+    "/Lotus/Powersuits/Ranger/ExaltedBowBase",
+    "/Lotus/Weapons/Tenno/Bows/LotusLongBow",
+    "/Lotus/Weapons/Tenno/Bows/LotusBow",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+    "/Lotus/Weapons/Tenno/LotusLongGun",
+    "/Lotus/Weapons/Tenno/LotusBulletWeapon"
+   ],
+   "compatTags": [
+    "PROJECTILE",
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Rifle/HybridPuncture",
+   "descTag": null,
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Ranger",
+    "framePaths": [
+     "/Lotus/Powersuits/Ranger/IvaraPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/ArtemisBowPrime.png",
+    "meleeTree": null,
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": 1,
+     "damage": {
+      "critChance": 0.2,
+      "critMultiplier": 1.5,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.333333,
+       "DT_PUNCTURE": 0.333333,
+       "DT_SLASH": 0.333334
+      },
+      "total": 8.0,
+      "types": {
+       "DT_IMPACT": 2.666664,
+       "DT_PUNCTURE": 2.666664,
+       "DT_SLASH": 2.666672
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 0.85000002,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
+    },
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.2,
+      "critMultiplier": 1.5,
+      "procChance": 0.1,
+      "shares": {
+       "DT_IMPACT": 0.333333,
+       "DT_PUNCTURE": 0.333333,
+       "DT_SLASH": 0.333334
+      },
+      "total": 8.0,
+      "types": {
+       "DT_IMPACT": 2.666664,
+       "DT_PUNCTURE": 2.666664,
+       "DT_SLASH": 2.666672
+      }
+     },
+     "falloffMinDamage": 0,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 1,
+     "isAlternateFire": true,
+     "multishot": 1,
+     "reloadTime": 0.69999999,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
+    }
+   ],
+   "gripType": "BOW",
+   "isIncarnon": false,
+   "magazineSize": 1,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "PrimeExaltedBow",
+   "nameEn": "Artemis Bow Prime",
+   "nameInternal": "PrimeExaltedBow",
+   "nameTag": "/Lotus/Language/Primes/IvaraPrimeExaltedBowName",
+   "nameZh": "月神狩弓 Prime",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Ranger/PrimeExaltedBow",
+   "polarities": [
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "primary",
+   "variantType": "VT_PRIME"
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Temple/ExaltedGuitar",
+    "/Lotus/Powersuits/Temple/ExaltedGuitarBase",
+    "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+    "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+    "/Lotus/Weapons/Tenno/LotusLongGun",
+    "/Lotus/Weapons/Tenno/LotusBulletWeapon"
+   ],
+   "compatTags": [
+    "ASSAULT_AMMO",
+    "BEAM"
+   ],
+   "defaultModTemplate": null,
+   "descTag": "/Lotus/Language/Weapons/TnExaltedGuitarDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Temple",
+    "framePaths": [
+     "/Lotus/Powersuits/Temple/Temple"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/TempleExaltedGuitar.png",
+    "meleeTree": null,
+    "tier": "weapon"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.34999999,
+      "critMultiplier": 2.3,
+      "procChance": 0.34999999,
+      "shares": {
+       "DT_FIRE": 1.0
+      },
+      "total": 85.0,
+      "types": {
+       "DT_FIRE": 85.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 8.0,
+     "fireRateRaw": 480,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 0.0099999998,
+     "trigger": "/Lotus/Language/Menu/Loadout_TriggerContinous"
+    },
+    {
+     "ammoCost": 0,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.15000001,
+      "critMultiplier": 2.0,
+      "flightSpeed": 60,
+      "forcedProcs": [
+       "PT_INFECTED"
+      ],
+      "procChance": 0.25,
+      "projectile": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileOne",
+      "shares": {
+       "DT_VIRAL": 1.0
+      },
+      "total": 20.0,
+      "types": {
+       "DT_VIRAL": 20.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 5.333333,
+     "fireRateRaw": 320,
+     "index": 1,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 0.0099999998,
+     "trigger": ""
+    },
+    {
+     "ammoCost": 0,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.15000001,
+      "critMultiplier": 2.0,
+      "flightSpeed": 60,
+      "forcedProcs": [
+       "PT_MAGNETIZED"
+      ],
+      "procChance": 0.25,
+      "projectile": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileTwo",
+      "shares": {
+       "DT_MAGNETIC": 1.0
+      },
+      "total": 20.0,
+      "types": {
+       "DT_MAGNETIC": 20.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 5.333333,
+     "fireRateRaw": 320,
+     "index": 2,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 0.0099999998,
+     "trigger": ""
+    },
+    {
+     "ammoCost": 0,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.15000001,
+      "critMultiplier": 2.0,
+      "flightSpeed": 60,
+      "forcedProcs": [
+       "PT_CHILLED"
+      ],
+      "procChance": 0.25,
+      "projectile": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileThree",
+      "shares": {
+       "DT_FREEZE": 1.0
+      },
+      "total": 20.0,
+      "types": {
+       "DT_FREEZE": 20.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 5.333333,
+     "fireRateRaw": 320,
+     "index": 3,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 0.0099999998,
+     "trigger": ""
+    },
+    {
+     "ammoCost": 0,
+     "ammoType": "/EE/Types/Game/AmmoEx",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.15000001,
+      "critMultiplier": 2.0,
+      "flightSpeed": 60,
+      "forcedProcs": [
+       "PT_CAUSTIC_BURN"
+      ],
+      "procChance": 0.25,
+      "projectile": "/Lotus/Powersuits/Temple/ExaltedGuitarSmallProjectileFour",
+      "shares": {
+       "DT_CORROSIVE": 1.0
+      },
+      "total": 20.0,
+      "types": {
+       "DT_CORROSIVE": 20.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 5.333333,
+     "fireRateRaw": 320,
+     "index": 4,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 0.0099999998,
+     "trigger": ""
+    }
+   ],
+   "gripType": "GUITAR",
+   "isIncarnon": false,
+   "magazineSize": 25,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "ExaltedGuitar",
+   "nameEn": "Lizzie",
+   "nameInternal": "ExaltedGuitar",
+   "nameTag": "/Lotus/Language/Weapons/TnExaltedGuitarName",
+   "nameZh": "丽兹",
+   "omegaAttenuation": 1,
+   "path": "/Lotus/Powersuits/Temple/ExaltedGuitar",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_TACTIC",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "primary",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Wraith/ReaperMeleeWeapon",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridBalanced",
+   "descTag": "/Lotus/Language/Suits/ReaperMeleeDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Wraith",
+    "framePaths": [
+     "/Lotus/Powersuits/Wraith/Wraith"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/WraithReaperClaws.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree",
+    "tier": "strength"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.38,
+      "critMultiplier": 2.5999999,
+      "procChance": 0.23999999,
+      "shares": {
+       "DT_IMPACT": 0.3,
+       "DT_PUNCTURE": 0.2,
+       "DT_SLASH": 0.5
+      },
+      "total": 240.0,
+      "types": {
+       "DT_IMPACT": 72.000002,
+       "DT_PUNCTURE": 48.0,
+       "DT_SLASH": 120.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/ReaperMelee30ChargeA",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMelee30ChargeA",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 4,
+       "forcedProcs": [
+        "PT_KNOCKBACK",
+        "PT_BLEEDING"
+       ]
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMelee30ChargeB",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 4,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.38,
+       "critMultiplier": 2.5999999,
+       "procChance": 0.23999999,
+       "shares": {
+        "DT_IMPACT": 0.30000000583333325,
+        "DT_PUNCTURE": 0.19999999833333335,
+        "DT_SLASH": 0.4999999958333334
+       },
+       "total": 960.000008,
+       "types": {
+        "DT_IMPACT": 288.000008,
+        "DT_PUNCTURE": 192.0,
+        "DT_SLASH": 480.0
+       }
+      },
+      "forcedProcs": [
+       "PT_KNOCKBACK",
+       "PT_BLEEDING"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "ReaperMeleeWeapon",
+   "nameEn": "Shadow Claws",
+   "nameInternal": "ReaperMeleeWeapon",
+   "nameTag": "/Lotus/Language/Suits/ReaperMeleeName",
+   "nameZh": "幽影之爪",
+   "omegaAttenuation": null,
+   "path": "/Lotus/Powersuits/Wraith/ReaperMeleeWeapon",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": null
+  },
+  {
+   "ancestry": [
+    "/Lotus/Powersuits/Wraith/SevagothShadowPrimeClawsWeapon",
+    "/Lotus/Powersuits/Wraith/ReaperMeleeWeapon",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon"
+   ],
+   "compatTags": [
+    "POWER_WEAPON"
+   ],
+   "defaultModTemplate": "/Lotus/Types/ModLists/Melee/HybridBalanced",
+   "descTag": "/Lotus/Language/Primes/SevagothShadowPrimeClawsDesc",
+   "exalted": {
+    "abilitySlot": 3,
+    "family": "Wraith",
+    "framePaths": [
+     "/Lotus/Powersuits/Wraith/SevagothPrime"
+    ],
+    "icon": "/Lotus/Interface/Icons/StoreIcons/Weapons/ExaltedWeapons/SevagothShadowPrimeClaws.png",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree",
+    "tier": "strength"
+   },
+   "fireModes": [
+    {
+     "ammoCost": 0,
+     "ammoType": "",
+     "chargeTime": null,
+     "damage": {
+      "critChance": 0.38,
+      "critMultiplier": 2.5999999,
+      "procChance": 0.23999999,
+      "shares": {
+       "DT_IMPACT": 0.3,
+       "DT_PUNCTURE": 0.2,
+       "DT_SLASH": 0.5
+      },
+      "total": 240.0,
+      "types": {
+       "DT_IMPACT": 72.000002,
+       "DT_PUNCTURE": 48.0,
+       "DT_SLASH": 120.0
+      }
+     },
+     "falloffMinDamage": 1,
+     "falloffRange": [
+      0,
+      0
+     ],
+     "fireRate": 1.0,
+     "fireRateRaw": 60,
+     "index": 0,
+     "isAlternateFire": false,
+     "multishot": 1,
+     "reloadTime": 1,
+     "trigger": ""
+    }
+   ],
+   "gripType": "MELEE_ONE_HAND",
+   "heavyAttack": {
+    "attackSet": "/Lotus/Weapons/Tenno/Melee/AttackSets/ReaperMelee30ChargeA",
+    "attacks": [
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMelee30ChargeA",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 4,
+       "forcedProcs": [
+        "PT_KNOCKBACK",
+        "PT_BLEEDING"
+       ]
+      }
+     },
+     {
+      "action": "MELEE_SWING",
+      "extraAction": "MELEE_CHARGE",
+      "path": "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMelee30ChargeB",
+      "perSwing": [
+       {
+        "index": 1,
+        "override": false,
+        "properties": {
+         "baseDamageMultiplier": 1,
+         "comboHits": 1,
+         "damageTypeMultipliers": {
+          "DT_CINEMATIC": 1,
+          "DT_CORROSIVE": 1,
+          "DT_ELECTRICITY": 1,
+          "DT_ENERGY_DRAIN": 1,
+          "DT_EXPLOSION": 1,
+          "DT_FINISHER": 1,
+          "DT_FIRE": 1,
+          "DT_FREEZE": 1,
+          "DT_GAS": 1,
+          "DT_HEALTH_DRAIN": 1,
+          "DT_IMPACT": 1,
+          "DT_MAGNETIC": 1,
+          "DT_POISON": 1,
+          "DT_PUNCTURE": 1,
+          "DT_RADIANT": 1,
+          "DT_RADIATION": 1,
+          "DT_SENTIENT": 1,
+          "DT_SHIELD_DRAIN": 1,
+          "DT_SLASH": 1,
+          "DT_VIRAL": 1
+         },
+         "procChanceMultiplier": 1
+        }
+       }
+      ],
+      "properties": {
+       "baseDamageMultiplier": 4,
+       "forcedProcs": [
+        "PT_BLEEDING",
+        "PT_KNOCKED_DOWN"
+       ]
+      }
+     }
+    ],
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "comboContext": "CC_GROUND_HEAVY",
+    "components": [
+     {
+      "count": 1,
+      "damage": {
+       "critChance": 0.38,
+       "critMultiplier": 2.5999999,
+       "procChance": 0.23999999,
+       "shares": {
+        "DT_IMPACT": 0.30000000583333325,
+        "DT_PUNCTURE": 0.19999999833333335,
+        "DT_SLASH": 0.4999999958333334
+       },
+       "total": 960.000008,
+       "types": {
+        "DT_IMPACT": 288.000008,
+        "DT_PUNCTURE": 192.0,
+        "DT_SLASH": 480.0
+       }
+      },
+      "forcedProcs": [
+       "PT_KNOCKBACK",
+       "PT_BLEEDING"
+      ],
+      "id": "attack-1-swing-1",
+      "kind": "melee",
+      "source": null
+     }
+    ],
+    "defaultAttackIndex": 0,
+    "disableTime": 1,
+    "kind": "melee",
+    "meleeTree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree",
+    "support": {
+     "complete": true,
+     "level": "complete",
+     "singleDamage": true,
+     "timing": "charge-and-disable"
+    },
+    "tapTime": null,
+    "timingApproximation": true,
+    "timingSource": "ComboData.HeavyMeleeChargeTime"
+   },
+   "isIncarnon": false,
+   "magazineSize": 0,
+   "masteryReq": 0,
+   "maxRank": 30,
+   "name": "SevagothShadowPrimeClawsWeapon",
+   "nameEn": "Shadow Claws Prime",
+   "nameInternal": "SevagothShadowPrimeClawsWeapon",
+   "nameTag": "/Lotus/Language/Primes/SevagothShadowPrimeClawsName",
+   "nameZh": "幽影之爪 Prime",
+   "omegaAttenuation": null,
+   "path": "/Lotus/Powersuits/Wraith/SevagothShadowPrimeClawsWeapon",
+   "polarities": [
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL",
+    "AP_ATTACK",
+    "AP_POWER",
+    "AP_UNIVERSAL",
+    "AP_UNIVERSAL"
+   ],
+   "primaryOmegaAttenuation": null,
+   "productCategory": "SpecialItems",
+   "slot": "melee",
+   "variantType": "VT_PRIME"
+  }
+ ],
+ "schemaVersion": 3,
+ "source": "tools/extract-exalted-weapons.py (packages 2026.08.13.13.24)"
+}

@@ -161,6 +161,9 @@ sys.path.insert(0, str(VENDOR_DIR))
 
 import wfarsenal.optimizer as optimizer  # noqa: E402
 from wfarsenal import loadout_search, parallel  # noqa: E402
+from wfarsenal.companion import companion_payload, is_companion  # noqa: E402
+from wfarsenal import exalted as exalted_weapons  # noqa: E402
+from wfarsenal import sentinel as sentinel_body  # noqa: E402
 from wfarsenal.damage import (  # noqa: E402
     ModEffectList,
     SUPPORTED_WEAPON_UPGRADE_TYPES,
@@ -693,6 +696,7 @@ def _analysis_inputs_fingerprint() -> str:
     #    权威事件源更不能遗漏。
     engine_paths = (
         EXPORT_DIR / "weapons.json",
+        EXPORT_DIR / "exalted_weapons.json",
         EXPORT_DIR / "mods.json",
         EXPORT_DIR / "enemies.json",
         EXPORT_DIR / "enemy_overrides.json",
@@ -703,6 +707,10 @@ def _analysis_inputs_fingerprint() -> str:
         ROOT / "data" / "mechanics" / "combat-reference.json",
         ROOT / "data" / "mechanics" / "sniper-mechanics.json",
         ROOT / "data" / "mechanics" / "melee-mechanics.json",
+        ROOT / "data" / "mechanics" / "riven-disposition.json",
+        ROOT / "data" / "mechanics" / "battery-profiles.json",
+        ROOT / "data" / "mechanics" / "weapon-passives.json",
+        ROOT / "data" / "mechanics" / "client-updates.json",
         EXPORT_DIR / "kitguns.json",
         EXPORT_DIR / "zaws.json",
         # The mechanics override sidecar currently feeds only the manual
@@ -734,8 +742,13 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("riven_fusion.py"),
         Path(optimizer.__file__).with_name("melee_sequence.py"),
         Path(optimizer.__file__).with_name("arcane_runtime.py"),
+        Path(optimizer.__file__).with_name("riven_disposition.py"),
+        Path(optimizer.__file__).with_name("client_updates.py"),
         EXPORT_DIR / "arcanes.json",
         Path(__file__),  # app.py — 运行时补丁与分析入口语义
+        # The Bot bundle's worker beside app.py: its disposition and bake
+        # policy decide what its cache holds (absent in Portable).
+        *[path for path in (Path(__file__).with_name("bot_riven.py"),) if path.is_file()],
     )
     for path in engine_paths:
         try:
@@ -1223,9 +1236,17 @@ def _variant_group_path(weapon: Mapping[str, Any]) -> str:
     for path in weapon.get("ancestry") or ():
         path = str(path or "")
         candidate = RIVEN_WEAPON_RECORDS_BY_PATH.get(path)
-        if path != own_path and candidate is not None and not candidate.get("variantType"):
+        if path != own_path and candidate is not None and not candidate.get("variantType") and _has_direct_damage(candidate):
             return path
     return own_path
+
+
+def _has_direct_damage(weapon: Mapping[str, Any]) -> bool:
+    """A playable record; abstract bases (LotusLongGun "主要武器", LotusPistol ...) carry no damage."""
+    return any(
+        isinstance(mode, Mapping) and (mode.get("damage") or {}).get("types")
+        for mode in weapon.get("fireModes") or ()
+    )
 
 
 def _metric_availability(
@@ -1391,6 +1412,10 @@ def _incarnon_effect_text(effect: Mapping[str, Any], *, annotate: bool = True) -
         return official
     if not upgrade or upgrade.upper() == "NONE":
         return None
+    if (upgrade == "WEAPON_AMMO_CONSUME_RATE" and effect.get("operation") == "SET"
+            and effect.get("valuePerRank", effect.get("value")) == 0):
+        # Since the 2026-10-24 client an infinite-ammo source sets the cost to 0 (InfiniteAmmoDesc).
+        return "无限弹药"
     label = INCARNON_UPGRADE_LABELS.get(upgrade, upgrade.replace("WEAPON_", "").replace("_", " ").lower())
     if upgrade == "WEAPON_PERCENT_BASE_DAMAGE_ADDED":
         label = INCARNON_ELEMENT_LABELS.get(str(effect.get("damageType") or ""), "元素") + "伤害"
@@ -1642,6 +1667,9 @@ def _best_stance_combo(stance: Mapping[str, Any]) -> dict[str, Any] | None:
     return dict(max(combos, key=lambda combo: float(combo["dpsMultiplier"]))) if combos else None
 
 
+_GLAIVE_STANCE_PATH = "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GlaiveCmbTwoMeleeTree"  # Astral Twilight
+
+
 def _compatible_stances(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
     tags = {str(tag).casefold() for tag in weapon.get("compatTags") or ()}
     rows = []
@@ -1654,7 +1682,7 @@ def _compatible_stances(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
         rows.append({**source, "bestComboData": combo})
     # Rank by the extracted hit loop (melee-mechanics.json: damage multiplier
     # per second at 1.0 attack speed); the wiki multiplier is the fallback.
-    from wfarsenal.melee_sequence import build_schedule, loop_rate
+    from wfarsenal.melee_sequence import build_schedule, default_route, loop_rate
 
     def _rate(row: Mapping[str, Any]) -> float:
         schedule = build_schedule(weapon, "combo", stance=str(row.get("path") or ""))
@@ -1662,8 +1690,12 @@ def _compatible_stances(weapon: Mapping[str, Any]) -> list[dict[str, Any]]:
             return loop_rate(schedule["segments"])
         return float(row["bestComboData"]["dpsMultiplier"])
 
+    # A glaive plays the charged throw by default, which no stance moves: it
+    # carries Astral Twilight, the stance WFSim fixes for every glaive.
+    preferred = _GLAIVE_STANCE_PATH if default_route(weapon) == "glaive" else None
     rows.sort(
         key=lambda row: (
+            row.get("path") != preferred,
             -_rate(row),
             str(row.get("nameZh") or row.get("nameEn") or "").casefold(),
         )
@@ -1912,7 +1944,7 @@ def _score_with_special_card(
     cards = list(bound.get("cards") or evaluation.cards)
     if card is not None:
         cards.append(card)
-    effect_cards = [passives, *cards] if passives is not None else cards
+    effect_cards = [*cards, passives] if passives is not None else cards
     effects = optimizer._effects(effect_cards, scenario)
     probe_scenario = replace(scenario, victim_status_count=0)
     probe_stats = optimizer.apply_mods(weapon, effects, scenario=probe_scenario)
@@ -2022,6 +2054,22 @@ MANUAL_MODS: list[dict[str, Any]] = []
 MANUAL_ARCANES: list[dict[str, Any]] = []
 
 
+def _exalted_catalog_payload(block: Mapping[str, Any] | None) -> dict[str, Any] | None:
+    if block is None:
+        return None
+    frames = {str(f.get("path")): f for f in WARFRAME_CATALOG.get("warframes") or () if isinstance(f, Mapping)}
+    return {
+        "family": block.get("family"),
+        "tier": block.get("tier"),
+        "abilitySlot": block.get("abilitySlot"),
+        "headshotIssue": exalted_weapons.NO_HEADSHOT.get(str(block.get("family") or "")),
+        "frames": [
+            {"id": path, "nameZh": (frames.get(path) or {}).get("nameZh"), "nameEn": (frames.get(path) or {}).get("nameEn")}
+            for path in block.get("framePaths") or ()
+        ],
+    }
+
+
 def build_catalog() -> dict[str, Any]:
     weapons: list[dict[str, Any]] = []
     hard_fails: list[dict[str, Any]] = []
@@ -2037,6 +2085,10 @@ def build_catalog() -> dict[str, Any]:
         # 任何选择器里——它自身没有开火模式，永远灰置只会造成困惑。
         if str(weapon.get("path") or "") == _DARK_SPLIT_SWORD_PATH:
             continue
+        if exalted_weapons.meta(weapon) is not None:
+            # 技能伤害型显赫武器（土石坍方等）的包体伤害为空，按 100% 强度的
+            # 技能伤害判定可用性；实际配装再按关联战甲的强度重算。
+            weapon = exalted_weapons.apply_damage_rules(weapon, {"panel": {"abilityStrength": 1.0}})
         weapon_type = optimizer._weapon_type(None, weapon)
         # 同伴武器（哨兵/MOA/Zanuka）：slot 区分而非类型推导（它们的 ancestry
         # 解析成 rifle 是因为共享枪械基类）——强制 companion 类型。
@@ -2057,6 +2109,9 @@ def build_catalog() -> dict[str, Any]:
             and analysis_availability.get("available")
             else str((analysis_availability or {}).get("issue") or "default analysis metric is unavailable")
         )
+        exalted_block = exalted_weapons.meta(weapon)
+        if exalted_block is not None and analysis_issue is None:
+            analysis_issue = "显赫武器没有紫卡"
         disposition = _finite_positive(weapon.get("omegaAttenuation"))
         stance_slot = _stance_slot_payload(weapon, weapon_type)
         special_polarities = _special_slot_polarities(weapon, weapon_type)
@@ -2086,7 +2141,8 @@ def build_catalog() -> dict[str, Any]:
             "innateElementCandidates": list(weapon.get("innateElementCandidates") or ()),
             "innateElementSources": list(weapon.get("innateElementSources") or ()),
             "innateElement": _innate_catalog_payload(weapon),
-            "isExalted": bool(stance_slot and stance_slot.get("builtIn")),
+            "isExalted": bool(stance_slot and stance_slot.get("builtIn")) or exalted_block is not None,
+            "exalted": _exalted_catalog_payload(exalted_block),
             "specialSlots": {
                 "stance": stance_slot,
                 "exilus": {
@@ -2111,6 +2167,16 @@ def build_catalog() -> dict[str, Any]:
         else:
             available += 1
         weapons.append(row)
+
+    # Exalted Prime / Umbra versions do not inherit from their ordinary record;
+    # group them by frame family and slot so the version picker pairs them.
+    exalted_groups: dict[tuple[str, str], str] = {}
+    for row in weapons:
+        if row.get("exalted") and row.get("variantType") == "VT_NORMAL":
+            exalted_groups.setdefault((row["exalted"]["family"], row["slot"]), row["path"])
+    for row in weapons:
+        if row.get("exalted"):
+            row["variantGroupPath"] = exalted_groups.get((row["exalted"]["family"], row["slot"]), row["path"])
 
     weapons.sort(
         key=lambda row: (
@@ -2570,7 +2636,10 @@ def _manual_mod_rows() -> list[dict[str, Any]]:
         # what the engine applies, so it admits the card too.
         from wfarsenal.runtime_adapters import resolve_runtime_adapter
         runtime_adapter = resolve_runtime_adapter(mod, int(mod.get("maxRank") or 0)) is not None
-        admitted = has_supported_effect or fixed_melee_range or first_shot_chamber or mechanic_override or runtime_adapter
+        # Power Throw: its consecutive-throw damage is the glaive route's.
+        from wfarsenal.manual_combat import replay_only_card
+        admitted = (has_supported_effect or fixed_melee_range or first_shot_chamber or mechanic_override
+                    or runtime_adapter or replay_only_card(mod))
         if not support.get("weapon") and not admitted:
             continue
         if mod.get("supported") is False and not admitted:
@@ -2970,6 +3039,7 @@ CATALOG_UTILITY_MODS = [
     for row in UTILITY_MOD_ROWS
 ]
 CATALOG["manualMods"] = MANUAL_MODS
+CATALOG["rivenDisposition"] = EXPORTS.get("rivenDisposition")
 # Variant path (Beginner/Intermediate/Expert) -> canonical card path, so the
 # workbench can display solver picks that reference tiered variants.
 CATALOG["manualModAliases"] = MANUAL_MOD_ALIASES
@@ -3183,6 +3253,14 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     disposition = _finite_positive(disposition_value)
     if disposition is None or disposition > 2:
         raise SimulationError("disposition must be finite and between 0 and 2")
+    # A card read at its own disposition (one rolled before the uniform 1.2,
+    # as the Bot's OCR sees it) is validated there and projected once to the
+    # analysed one.
+    source_disposition = (_finite_positive(request.get("sourceDisposition"))
+                          if request.get("sourceDisposition") is not None else disposition)
+    if source_disposition is None or source_disposition > 2:
+        raise SimulationError("source disposition must be finite and between 0 and 2")
+    disposition_scale = disposition / source_disposition
     raw_stats = request.get("stats")
     if not isinstance(raw_stats, list) or not 2 <= len(raw_stats) <= 4:
         raise SimulationError("portable Riven input requires 2 to 4 stat objects")
@@ -3235,14 +3313,17 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
             raise SimulationError(f"Riven stat {code or '?'} has no valid portable range")
         negative = raw.get("negative") is True
         _nominal, low, high = optimizer.riven_stat_window(
-            base, disposition, positive_count, negative_count, negative=negative
+            base, source_disposition, positive_count, negative_count, negative=negative
         )
         # The game shows one decimal: a displayed max roll may read 0.05 above.
         if value < low - 0.11 or value > high + 0.11:
             raise SimulationError(
                 f"Riven stat {code} value {value:g} is outside {low:.1f}-{high:.1f}"
             )
-        normalized_stats.append({**raw, "code": code, "low": low, "high": high})
+        stat = {**raw, "code": code, "low": low, "high": high}
+        if disposition_scale != 1.0:
+            stat.update(value=value * disposition_scale, low=low * disposition_scale, high=high * disposition_scale)
+        normalized_stats.append(stat)
     engine_request = {
         **request,
         "weapon": weapon["path"],
@@ -3655,6 +3736,105 @@ def best_analysis_incarnon_route(
     return dict(result.get("incarnonChoices") or {}) or None
 
 
+def _exalted_context(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> dict[str, Any] | None:
+    """Linked-frame context for an exalted weapon (None for ordinary weapons)."""
+    if exalted_weapons.meta(weapon) is None:
+        return None
+    try:
+        return exalted_weapons.frame_context(WARFRAME_ENGINE, weapon, payload.get("exaltedFrame"))
+    except (SimulationError, ValueError) as exc:
+        raise SimulationError(f"exaltedFrame: {exc}") from None
+
+
+def warframe_calculate_payload(payload: Any) -> dict[str, Any]:
+    """Warframe build plus a live summary of the frame's exalted weapons."""
+    result = WARFRAME_ENGINE.calculate(payload)
+    frame_id = (result.get("frame") or {}).get("id") or (payload.get("frameId") if isinstance(payload, Mapping) else None)
+    summaries = []
+    for weapon in EXPORTS["weapons"]:
+        block = exalted_weapons.meta(weapon)
+        if not block or frame_id not in (block.get("framePaths") or ()):
+            continue
+        context = exalted_weapons.context_from_result(result, weapon, frame_id)
+        summaries.append({**exalted_weapons.frame_summary(weapon, context),
+                          "nameZh": weapon.get("nameZh"), "nameEn": weapon.get("nameEn"),
+                          "tier": block.get("tier")})
+    return {**result, "exalted": summaries}
+
+
+def _exalted_payload(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Pin a request for an exalted weapon to its linked Warframe.
+
+    * no headshots where the weapon cannot land one (exalted.NO_HEADSHOT);
+    * the Warframe Arcane slots are the linked config's, not the weapon page's:
+      only the ones the weapon calculation already supports count, the rest
+      are listed as display-only;
+    * the config's aura joins as the carrier's own aura when it is one of the
+      supported squad auras (Steel Charge, Rifle Amp ...), Coaction Drift too.
+    """
+    if exalted_weapons.meta(weapon) is None:
+        return payload
+    out = dict(payload)
+    loadout: dict[str, Any] = {"arcanes": [], "aura": None, "headshotIssue": exalted_weapons.headshot_issue(weapon)}
+    names = {str(row.get("path")): row.get("nameZh") or row.get("nameEn")
+             for key in ("arcanes", "mods") for row in WARFRAME_CATALOG.get(key) or () if isinstance(row, Mapping)}
+    if loadout["headshotIssue"]:
+        out["headshotChance"] = 0.0
+    link = payload.get("exaltedFrame") if isinstance(payload.get("exaltedFrame"), Mapping) else {}
+    config = link.get("config") if isinstance(link.get("config"), Mapping) else {}
+    arcanes = [row for row in out.get("arcanes") or () if isinstance(row, Mapping)
+               and str((MANUAL_ARCANES_BY_PATH.get(str(row.get("path") or "")) or {}).get("slotKind") or "weapon") == "weapon"]
+    for row in config.get("arcanes") or ():
+        path = str((row or {}).get("path") or (row or {}).get("id") or "") if isinstance(row, Mapping) else ""
+        if not path:
+            continue
+        meta = MANUAL_ARCANES_BY_PATH.get(path)
+        record = optimizer.resolve_record(EXPORTS["arcanes"], path, kind="arcane") if meta else None
+        if meta and str(meta.get("slotKind") or "") == "warframe" and optimizer._arcane_matches_weapon(record, weapon):
+            rank = row.get("rank") if isinstance(row.get("rank"), int) else meta.get("maxRank") or 0
+            arcanes.append({"path": path, "rank": min(int(rank), int(meta.get("maxRank") or rank))})
+            loadout["arcanes"].append({"path": path, "nameZh": names.get(path) or meta.get("nameZh"), "counted": True})
+        else:
+            loadout["arcanes"].append({"path": path, "nameZh": names.get(path), "counted": False})
+    out["arcanes"] = arcanes
+    buffs = [row for row in out.get("externalBuffs") or () if isinstance(row, Mapping)]
+    aura = config.get("aura") if isinstance(config.get("aura"), Mapping) else None
+    aura_path = str((aura or {}).get("path") or (aura or {}).get("id") or "")
+    aura_id = next((key for key, spec in EXTERNAL_BUFFS.items() if spec.get("group") == "aura" and spec.get("mod") == aura_path), None)
+    if aura_id:
+        spec = EXTERNAL_BUFFS[aura_id]
+        rank = aura.get("rank") if isinstance(aura.get("rank"), int) else 5
+        buffs.append({"id": aura_id, "value": spec["base"] * (min(max(rank, 0), 5) + 1) / 6.0})
+        mods = [row for row in (config.get("exilus"), *(config.get("normalMods") or ())) if isinstance(row, Mapping)]
+        if any(str(row.get("path") or row.get("id") or "") == EXTERNAL_BUFFS["coaction-drift"]["mod"] for row in mods):
+            buffs.append({"id": "coaction-drift", "value": EXTERNAL_BUFFS["coaction-drift"]["maximum"]})
+        loadout["aura"] = {"path": aura_path, "nameZh": names.get(aura_path), "counted": True, "buff": aura_id}
+    elif aura_path:
+        loadout["aura"] = {"path": aura_path, "nameZh": names.get(aura_path), "counted": False}
+    out["externalBuffs"] = buffs
+    out["_exaltedLoadout"] = loadout
+    return out
+
+
+def _exalted_result(
+    weapon: Mapping[str, Any], context: Mapping[str, Any] | None, average_hit: Any = None,
+    loadout: Mapping[str, Any] | None = None,
+) -> dict[str, Any] | None:
+    if context is None:
+        return None
+    return {
+        "loadout": dict(loadout or {}),
+        "cast": exalted_weapons.cast_metrics(weapon, context, average_hit),
+        "frame": {k: context.get(k) for k in ("frameId", "frameName", "configName", "configured")},
+        "panel": context.get("panel"),
+        "ability": {k: (context.get("ability") or {}).get(k) for k in ("slot", "nameZh", "nameEn", "energyCost")},
+        "tier": (exalted_weapons.meta(weapon) or {}).get("tier"),
+        "damageRule": weapon.get("exaltedDamageRule"),
+        "energy": exalted_weapons.energy_report(weapon, context),
+        "unlimitedEnergy": True,
+    }
+
+
 def build_weapon_payload(
     payload: Any, *, return_engine_context: bool = False, fixed_mods: list | None = None
 ) -> dict[str, Any]:
@@ -3670,6 +3850,8 @@ def build_weapon_payload(
     catalog_weapon = CATALOG_WEAPONS_BY_PATH.get(weapon_path)
     if catalog_weapon is None:
         raise SimulationError("weapon is not in the portable Riven catalog")
+    payload = companion_payload(payload, catalog_weapon)
+    payload = _exalted_payload(payload, catalog_weapon)
     kitgun_parts = _manual_kitgun_parts(payload.get("kitgunParts"))
     assembly_ready = bool(kitgun_parts)
     if not assembly_ready:
@@ -3745,6 +3927,9 @@ def build_weapon_payload(
         weapon_record = {**weapon_record, "innateElements": [innate_selection]}
     if catalog_weapon.get("isExalted"):
         selected_weapon = {**selected_weapon, "isExalted": True}
+    exalted_context = _exalted_context(payload, weapon_record)
+    if exalted_context is not None:
+        selected_weapon = exalted_weapons.apply_damage_rules(selected_weapon, exalted_context)
     catalog_mode = next(
         (
             mode
@@ -3889,6 +4074,14 @@ def build_weapon_payload(
         )
     required_keys = [candidates_by_path[p] for p in required_mod_paths]
     forbidden_keys = [candidates_by_path[p] for p in forbidden_mod_paths if p in candidates_by_path]
+    # 一键屏蔽派系歧视卡（GAMEPLAY_FACTION_DAMAGE）：从候选池剔除，必选优先。
+    faction_excluded = [
+        p for p in candidates_by_path
+        if payload.get("excludeFactionMods") is True
+        and p in FACTION_DAMAGE_MOD_PATHS and p not in required_mod_paths
+        and candidates_by_path[p] not in forbidden_keys
+    ]
+    forbidden_keys += [candidates_by_path[p] for p in faction_excluded]
     # 保留真实赋能记录及显式覆盖。每个候选由共享事件回放解析触发；
     # 用户关闭此项时仅求解评分排除赋能，手动实战回放仍使用已装备赋能。
     optimize_arcanes = payload.get("optimizeWithArcanes")
@@ -3954,6 +4147,11 @@ def build_weapon_payload(
             return False, ["optimize-arcanes-merge-failed-using-incarnon-only"]
 
     external = _external_buff_effects(payload.get("externalBuffs"), selected_weapon)
+    sentinel_effects, sentinel_notes = _sentinel_weapon_effects(payload, selected_weapon)
+    if sentinel_effects:
+        external = ModEffectList([*(external or ()), *sentinel_effects])
+    if exalted_weapons.weapon_effects(selected_weapon):
+        external = ModEffectList([*(external or ()), *exalted_weapons.weapon_effects(selected_weapon)])
     external_card = optimizer._Card(
         key="__external__", record=None, rank=0, effects=tuple(external),
         skipped=(), drain=0, polarity=None,
@@ -4169,8 +4367,11 @@ def build_weapon_payload(
         ),
         f"optimizer-search: profile {profile}, {len(candidates)} candidate mods, {rejected_mods} unsupported mods rejected",
     ]
-    if required_mod_paths or forbidden_mod_paths or min_fill is not None or max_fill is not None:
+    skipped.extend(sentinel_notes)
+    if required_mod_paths or forbidden_mod_paths or faction_excluded or min_fill is not None or max_fill is not None:
         scope_bits = []
+        if faction_excluded:
+            scope_bits.append(f"屏蔽派系歧视卡 {len(faction_excluded)} 张")
         if required_mod_paths:
             names = [str(MANUAL_MODS_BY_PATH[p].get("nameZh") or p) for p in required_mod_paths]
             scope_bits.append(f"必选 {'、'.join(names)}")
@@ -4253,6 +4454,8 @@ def build_weapon_payload(
         "skipped": list(dict.fromkeys(skipped)),
         "profile": profile,
         "limitations": CATALOG["buildOptions"]["limitations"],
+        "exalted": _exalted_result(selected_weapon, exalted_context, evaluation.stats.average_hit,
+                                   payload.get("_exaltedLoadout")),
     }
     if return_engine_context:
         # 最优紫卡求解路由复用：baseline evaluation + 求解器需要的全部语境。
@@ -4749,6 +4952,21 @@ def _external_buff_effects(entries: Any, weapon: Mapping[str, Any] | None = None
     return ModEffectList(effects)
 
 
+def _sentinel_weapon_effects(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> tuple[Any, list[str]]:
+    """Body MODs of the robotic sentinel carrying this companion weapon."""
+    raw = payload.get("sentinel")
+    if not raw or not is_companion(weapon):
+        return None, []
+    effects, notes = sentinel_body.weapon_effects(raw, weapon)
+    return (effects or None), notes
+
+
+def sentinel_evaluate_payload(payload: Any) -> dict[str, Any]:
+    if not isinstance(payload, Mapping):
+        raise SimulationError("request body must be a JSON object")
+    return sentinel_body.evaluate(payload.get("sentinel", payload), reactor=payload.get("reactor", True) is not False)
+
+
 def _external_enemy_enhancements(entries: Any, enhancements: Mapping[str, Any]) -> dict[str, Any]:
     """Fold Corrosive Projection / Shield Disruption into the enemy switches."""
     merged = dict(enhancements)
@@ -4761,6 +4979,7 @@ def _external_enemy_enhancements(entries: Any, enhancements: Mapping[str, Any]) 
 
 
 CATALOG["buildOptions"]["externalBuffs"] = external_buff_catalog()
+CATALOG["sentinel"] = sentinel_body.catalog()
 
 
 def _manual_number(value: Any, label: str, *, low: float | None = None, high: float | None = None) -> float:
@@ -4836,7 +5055,9 @@ def _custom_enemy_snapshot(value: Any) -> dict[str, Any]:
         "shieldType": shield_type,
         "factionResistance": str(value.get("factionResistance") or "RK_GRINEER_FACTION"),
         "damageController": "custom",
-        "hitProxies": [{"bone": "GAME_C1_HEAD", "damageAtten": 1.0}],
+        # A standard head (GrineerHead): DamageAtten 2 (3x with the fixed 1.5x)
+        # and CriticalMultiplier 2, the critical-headshot doubling.
+        "hitProxies": [{"bone": "GAME_C1_HEAD", "part": "HEAD", "damageAtten": 2.0, "criticalMultiplier": 2.0}],
     }
 
 
@@ -5122,6 +5343,8 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
     if not isinstance(weapon_path, str) or weapon_path.strip() not in CATALOG_WEAPONS_BY_PATH:
         raise SimulationError("weapon must be an exported portable weapon path")
     weapon = CATALOG_WEAPONS_BY_PATH[weapon_path.strip()]
+    payload = companion_payload(payload, weapon)
+    payload = _exalted_payload(payload, weapon)
     selected_catalog_weapon = _special_slot_override(
         payload, weapon, weapon["weaponType"]
     )
@@ -5210,6 +5433,9 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
     scenario = optimizer._requested_scenario(payload, 'manual')
     weapon_record = optimizer.resolve_record(EXPORTS["weapons"], weapon_path.strip(), kind="weapon")
     weapon_record = _special_slot_override(payload, weapon_record, weapon["weaponType"])
+    exalted_context = _exalted_context(payload, weapon_record)
+    if exalted_context is not None:
+        weapon_record = exalted_weapons.apply_damage_rules(weapon_record, exalted_context)
     # Kitgun bases have no fire modes of their own; the engine assembles the
     # chamber's modes from kitgun_parts, so mode selection is deferred.
     selected_weapon = weapon_record
@@ -5397,6 +5623,10 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
         weapon_override["innateElements"] = [innate_selection]
     if isinstance(payload.get("specialSlotPolarities"), Mapping) and payload.get("specialSlotPolarities"):
         weapon_override["polarities"] = list(selected_weapon.get("polarities") or ())
+    for key in ("fireModes", "exaltedStrength", "exaltedDamageRule", "exaltedCast"):
+        if weapon_record.get("exaltedCast") is not None or weapon_record.get("exaltedStrength") is not None:
+            if key in weapon_record:
+                weapon_override[key] = weapon_record[key]
     if weapon_override:
         common["weapon_override"] = weapon_override
     if defense_snapshot is not None:
@@ -5434,6 +5664,11 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
             # Equipped in a frame slot already: the buff row would count it twice.
             buffs = [b for b in buffs if not (isinstance(b, Mapping) and b.get("id") == "arcane-crepuscular")]
         external = _external_buff_effects(buffs, weapon_record)
+        sentinel_effects, _sentinel_notes = _sentinel_weapon_effects(payload, weapon_record)
+        if sentinel_effects:
+            external = ModEffectList([*(external or ()), *sentinel_effects])
+        if exalted_weapons.weapon_effects(weapon_record):
+            external = ModEffectList([*(external or ()), *exalted_weapons.weapon_effects(weapon_record)])
         if external is not None:
             passives = ModEffectList([*passives, *external], skipped=list(getattr(passives, "skipped", ())))
         return {
@@ -5460,6 +5695,8 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
     return {
         "common": common,
         "weapon": weapon,
+        "exalted": _exalted_result(weapon_record, exalted_context, loadout=payload.get("_exaltedLoadout")),
+        "exalted_context": exalted_context,
         "weapon_path": weapon_path.strip(),
         "damage_model": damage_model,
         "metric": metric,
@@ -5938,6 +6175,10 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
     result["selection"]["stance"] = stance
     result["selection"]["exilus"] = exilus
     result["damageModel"] = damage_model
+    result["exalted"] = ctx["exalted"]
+    if isinstance(result.get("exalted"), dict) and ctx["weapon_record"].get("exaltedCast"):
+        result["exalted"] = {**result["exalted"], "cast": exalted_weapons.cast_metrics(
+            ctx["weapon_record"], ctx["exalted_context"], (result.get("moddedStats") or {}).get("averageHit"))}
     if damage_model in {"target", "custom"}:
         kill_timeline = _kill_timeline(result, stance=stance)
         if kill_timeline is not None:
@@ -6828,7 +7069,8 @@ class PortableHandler(BaseHTTPRequestHandler):
             "/api/mod-gains": mod_gains_payload,
             "/api/part-values": part_values_payload,
             "/api/recommend-riven": recommend_riven_payload,
-            "/api/warframe/calculate": WARFRAME_ENGINE.calculate,
+            "/api/warframe/calculate": warframe_calculate_payload,
+            "/api/sentinel/evaluate": sentinel_evaluate_payload,
         }
         analyze = analyzers.get(path)
         if analyze is None:

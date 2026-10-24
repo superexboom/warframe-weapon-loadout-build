@@ -133,8 +133,10 @@ def test_prisma_lenz_uses_native_point_eight_second_draw():
     assert evidence['referenceSeconds']==1.2
 
 
-@pytest.mark.parametrize('bonus,rounds',[(-1.,1.),(-.5,1.),(.4,1.),(.99,1.),(1.,2.)])
-def test_fractional_magazine_bonus_does_not_buy_fractional_rounds(bonus,rounds):
+# A modded magazine rounds to the nearest whole round (wiki Magazine Warp: a one-round
+# Tonkor under Primed Magazine Warp holds 2), never below one.
+@pytest.mark.parametrize('bonus,rounds',[(-1.,1.),(-.5,1.),(.4,1.),(.49,1.),(.5,2.),(.99,2.),(1.,2.)])
+def test_fractional_magazine_bonus_rounds_to_the_nearest_round(bonus,rounds):
     c,st,parts=resolve('Lenz',effects=[ModEffect('WEAPON_CLIP_MAX','STACKING_MULTIPLY',bonus)])
     assert st.magazine==rounds
     baseline=resolve('Lenz')[1]

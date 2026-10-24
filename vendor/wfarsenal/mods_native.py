@@ -73,7 +73,8 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
         SUPPORTED_WEAPON_UPGRADE_TYPES, _KNOWN_MULTIPART_PATHS, _qualifier_rejection, _read_innate_elements,
         _require_nonnegative_finite, archgun_arcane_type_applies,
     )
-    from .event_profiles import base_profile, co_profile, perfect_release, reloads_after_every_shot
+    from .event_profiles import (base_profile, co_profile, perfect_release, reloads_after_every_shot,
+                                 super_crit_on_status, super_status_on_crit)
     from .sniper import zoom_effects
     from .beam_ramp import is_furis_beam
     from .manual_combat import reference
@@ -215,7 +216,8 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
         reloadEveryShot=reload_every_shot,
         reloadBase=mode.get('reloadTime') or 0.0,
         shell=shell,
-        battery=(battery['delayEmptySeconds'], battery['regenPerSecond']) if battery else None,
+        battery=((battery['delayEmptySeconds'], battery['regenPerSecond'], battery.get('emptyAnimationSeconds'),
+                  battery['delayPartialSeconds']) if battery else None),
         critChance=damage['critChance'] if 'critChance' in damage else None,
         critMultiplier=damage.get('critMultiplier', 1.),
         fireRate=mode.get('fireRate') or 0.,
@@ -227,6 +229,8 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
                                     copy['critChance'] if 'critChance' in copy else None,
                                     copy['critMultiplier'] if 'critMultiplier' in copy else None,
                                     float(copy['procChance']) if copy.get('procChance') is not None else None),
+        superCrit=super_crit_on_status(weapon),
+        superStatus=super_status_on_crit(weapon),
         orbPasses=state.get('orbPasses', 0),
         orbStacks=state.get('orbStacks', 1),
         orbSpecial=bool(state.get('orbSpecialShield', False)),
@@ -250,8 +254,10 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
 
 def apply(weapon, effects, fire_mode, scenario, *, need_spec=True):
     """(ModdedStats, CoSpec) like the reference, or Unsupported."""
-    from .damage import CoSpec, ModdedStats
+    from .damage import CoSpec, ModdedStats, ModEffectList, innate_terms_for, with_innate
 
+    if innate_terms_for(weapon, fire_mode):
+        effects = with_innate(weapon, ModEffectList(list(effects), skipped=getattr(effects, "skipped", ())), fire_mode)
     heavy = weapon.get("heavyAttack")
     if scenario.heavy_attack and isinstance(heavy, Mapping) and isinstance(heavy.get("components"), list) \
             and heavy.get("components"):

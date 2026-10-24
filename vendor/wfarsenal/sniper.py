@@ -4,9 +4,11 @@ Data: data/mechanics/sniper-mechanics.json (tools/import_sniper_mechanics.py),
 read from the game packages' SniperImpactBehavior and ZoomLevels and
 cross-checked against WFSim's weapon YAML. Semantics follow WFSim
 engine/src/model/weapon.rs SniperCombo, fight/run.rs combo_at and
-fight/pellet.rs: the multiplier is read before the hit is counted, every
-landing direct pellet counts once, and the count drops by one per decay
-period without a landing hit.
+fight/pellet.rs: every landing direct pellet counts once and the count drops
+by one per decay period without a landing hit. A hit is counted before it is
+paid (WFSim M118, 2026-10-22: a Rubico Prime's first scoped hit from an empty
+counter reaches Minimum Combo 1 and pays x1.5), so the hit that reaches a
+tier already takes it.
 """
 from __future__ import annotations
 
@@ -95,15 +97,16 @@ class ShotCombo:
     def shot(self, t, pellets):
         """Mean multiplier over this shot's landing pellets, then count them.
 
-        Pellet i of the shot reads the count after the i pellets before it;
-        a fractional pellet count is the expected mix of floor/ceil pellets.
+        Pellet i of the shot reads the count with itself and the i pellets
+        before it counted; a fractional pellet count is the expected mix of
+        floor/ceil pellets.
         """
         now = self.at(t)
         pellets = max(float(pellets), 0.)
         whole = math.floor(pellets)
         part = pellets - whole
-        total = sum(multiplier(self.spec, now + i) for i in range(whole))
-        total += part * multiplier(self.spec, now + whole)
+        total = sum(multiplier(self.spec, now + i + 1) for i in range(whole))
+        total += part * multiplier(self.spec, now + whole + 1)
         factor = total / pellets if pellets > 0 else multiplier(self.spec, now)
         if pellets > 0:
             self.count, self.last_hit = now + pellets, t

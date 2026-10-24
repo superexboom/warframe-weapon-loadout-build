@@ -40,6 +40,29 @@ TAG_CODES = {
     "WeaponFactionDamageInfested": "I",
     "WeaponFactionDamageInfestation": "I",
 }
+# Name syllables of the spliced traits (2026.09.22 templates' Localize*Tag,
+# language tables 44.1.2); the 2026.08.13 export predates them.
+FUSION_SYLLABLES = {
+    "WeaponWeakpointDamage": ("eni", "vo"),
+    "WeaponWeakpointCriticalChance": ("exiti", "eus"),
+    "WeaponAmmoEfficiency": ("parci", "pia"),
+    "WeaponMagazineReloadHolstered": ("parci", "pia"),
+    "WeaponStatusDamage": ("plaga", "mna"),
+    "WeaponGasDamageMod": ("cali", "fel"),
+    "WeaponCorrosiveDamageMod": ("cori", "or"),
+    "WeaponViralDamageMod": ("cari", "sco"),
+    "WeaponRadiationDamageMod": ("radi", "lo"),
+    "WeaponBlastDamageMod": ("fraga", "tus"),
+    "WeaponMagneticDamageMod": ("magni", "bra"),
+    "WeaponFactionDamageOrokin": ("effi", "tas"),
+    "WeaponFactionDamageTechrot": ("muti", "gia"),
+    "WeaponFactionDamageScaldra": ("exsi", "llo"),
+    "WeaponMeleeHeavyAttackDamageMod": ("laci", "nus"),
+    "WeaponMeleeHeavyAttackChargeMod": ("laci", "nus"),
+    "WeaponMeleeParryAngleMod": ("laci", "nus"),
+    "WeaponMeleeSlamDamageMod": ("laci", "nus"),
+}
+
 FUSION_CODES = frozenset(
     {
         "W",

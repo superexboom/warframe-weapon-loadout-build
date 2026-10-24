@@ -99,10 +99,10 @@ def test_dera_incarnon_on_kill_ammo_efficiency_replays_as_event():
     w=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Dera')
     c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent')),[],[],incarnon_choices={'tier2':'2-1'})
     q=c['trigger_sources'][0]
-    base,_=c['resolve']('selected',{},0);live,_=c['resolve']('selected',{q['id']:4},0)
-    assert q['kind']=='on-kill' and q['maxStacks']==4 and q['duration']==5
-    # 4 stacks x 20% = 80%, held to the 75% Ammo Efficiency cap (2026-10-16).
-    assert base.ammo_cost==1 and live.ammo_cost==pytest.approx(.25)
+    base,_=c['resolve']('selected',{},0);one,_=c['resolve']('selected',{q['id']:1},0);live,_=c['resolve']('selected',{q['id']:3},0)
+    assert q['kind']=='on-kill' and q['maxStacks']==3 and q['duration']==5
+    # 2026-10-24 client (data/mechanics/client-updates.json): 3 stacks x 25% = the 75% cap exactly.
+    assert base.ammo_cost==1 and one.ammo_cost==pytest.approx(.75) and live.ammo_cost==pytest.approx(.25)
 
 
 def test_torid_final_fusillade_adds_flat_multishot_only_on_base_last_round():

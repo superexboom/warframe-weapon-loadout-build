@@ -242,7 +242,64 @@ def load_warframe_catalog(path: str | Path, *, fallback: Mapping[str, Any] | Non
         key: len(result.get(key) or ())
         for key in ("warframes", "mods", "arcanes", "helminth", "invigoration", "shards")
     }
+    result["helminth"] = apply_helminth_altered(result["helminth"], path.parent / "mechanics" / "helminth-altered.json")
     return result
+
+
+def _altered_scalar(scalar: Mapping[str, Any], spec: Any) -> dict[str, Any]:
+    row = dict(scalar)
+    spec = {"values": spec} if isinstance(spec, (list, tuple, int, float)) else dict(spec)
+    values = spec.get("values")
+    if isinstance(values, (int, float)):
+        values = [values] * max(1, len(row.get("rankValues") or ()) or 1)
+    if isinstance(values, (list, tuple)) and values:
+        row["rankValues"] = list(values)
+        row["values"] = [values[-1]]
+        row["base"] = values[-1]
+        parts = dict(row.get("parts") or {})
+        if len(parts) <= 1 or spec.get("valueTemplate"):
+            parts = {"val1": values[-1]}
+        row["parts"] = parts
+    if isinstance(spec.get("parts"), Mapping):
+        row["parts"] = dict(spec["parts"])
+    if spec.get("valueTemplate"):
+        row["valueTemplate"] = spec["valueTemplate"]
+        row["valueKeys"] = list(row["parts"])
+    row["sourceKind"] = "wiki-helminth"
+    return row
+
+
+def apply_helminth_altered(rows: Sequence[Any], path: Path) -> list[Any]:
+    """Subsumed abilities whose Helminth version has different numbers.
+
+    The sidecar copies the original ability's scalars; the wiki's Helminth tab
+    gives the altered ones (data/mechanics/helminth-altered.json). They go to
+    ``altered.scalars``, which the engine swaps in when the ability is placed.
+    """
+    try:
+        table = json.loads(path.read_text(encoding="utf-8")).get("abilities") or {}
+    except (OSError, ValueError):
+        return list(rows)
+    out = []
+    for row in rows:
+        spec = table.get(str((row or {}).get("path") or "")) if isinstance(row, Mapping) else None
+        if not spec:
+            out.append(row)
+            continue
+        row = dict(row)
+        overrides = spec.get("scalars") or {}
+        altered = dict(row.get("altered") or {})
+        if overrides:
+            altered["scalars"] = [
+                _altered_scalar(scalar, overrides[scalar.get("id")]) if scalar.get("id") in overrides else dict(scalar)
+                for scalar in row.get("scalars") or () if isinstance(scalar, Mapping)
+            ]
+            row["scalarSource"] = "wiki-altered"
+        if spec.get("notes"):
+            altered["notes"] = spec["notes"]
+        row["altered"] = altered
+        out.append(row)
+    return out
 
 
 def _row_id(row: Mapping[str, Any]) -> str:
@@ -347,6 +404,51 @@ def _effect_value(effect: Mapping[str, Any], rank: int) -> float | None:
     return None
 
 
+def _rank_pick(values: Any, rank: int) -> float | None:
+    if isinstance(values, (list, tuple)):
+        return _number(values[min(rank, len(values) - 1)]) if values else None
+    return _number(values)
+
+
+def _script_effect(effect: Mapping[str, Any], rank: int) -> tuple[str, float, str] | None:
+    """Panel effect a card's Lua script applies (its numbers sit in localizationScript).
+
+    AddTimedUpgrade (Archon Intensify +30% Strength, Archon Stretch +2 Energy/s),
+    AuraSquadPower (Power Donation: the carrier loses Strength),
+    UpgradeStackOnAbilityCast (Arcane Power Ramp, full stacks),
+    StrengthForOneCast (Molt Vigor).
+    """
+    script = effect.get("localizationScript")
+    if not isinstance(script, Mapping):
+        return None
+    name = str(script.get("Script") or "").rsplit("/", 1)[-1]
+    if name == "AddTimedUpgrade.lua":
+        stat = _STAT_ALIASES.get(str(script.get("_upgradeType") or "").upper())
+        amount = _number(script.get("_upgradeAmount"))
+        if stat is None or amount is None:
+            return None
+        operation = str(script.get("_upgradeOperationType") or "ADD")
+        if "MULTIPLY" in operation and script.get("_upgradeIsPercent"):
+            amount /= 100.0
+        return stat, amount, operation
+    if name == "AuraSquadPower.lua":
+        amount = _rank_pick(script.get("_selfReduceAmount"), rank)
+        return ("abilityStrength", -amount, "STACKING_MULTIPLY") if amount else None
+    if name == "UpgradeStackOnAbilityCast.lua":
+        amount = _rank_pick(script.get("_bonuses"), rank)
+        stacks = _number(script.get("_maxStacks")) or 1.0
+        return ("abilityStrength", amount * stacks, "STACKING_MULTIPLY") if amount else None
+    if name == "StrengthForOneCast.lua":
+        base = _number(script.get("_baseStrength"))
+        per = _number(script.get("_strengthIncreasePerLevel")) or 0.0
+        return ("abilityStrength", (base + per * rank) / 100.0, "STACKING_MULTIPLY") if base is not None else None
+    return None
+
+
+# Script effects that apply without a trigger (Power Donation's own Strength cost).
+_UNCONDITIONAL_SCRIPTS = frozenset({"AuraSquadPower.lua"})
+
+
 def _effects(card: Mapping[str, Any], rank: int, *, conditionals: bool, source: str, set_multiplier: float = 1.0) -> Iterable[dict[str, Any]]:
     rows = card.get("effects")
     if isinstance(rows, Mapping):
@@ -358,14 +460,26 @@ def _effects(card: Mapping[str, Any], rank: int, *, conditionals: bool, source: 
         stat = _effect_stat(effect)
         if stat is not None and value is not None:
             yield {"stat": stat, "value": value * set_multiplier, "operation": effect.get("operation") or effect.get("mode") or "ADD", "source": source, "label": effect.get("label") or effect.get("upgradeType") or stat}
+            continue
+        script = effect.get("localizationScript")
+        scripted = _script_effect(effect, rank) if isinstance(script, Mapping) and str(script.get("Script") or "").rsplit("/", 1)[-1] in _UNCONDITIONAL_SCRIPTS else None
+        if scripted:
+            yield {"stat": scripted[0], "value": scripted[1] * set_multiplier, "operation": scripted[2], "source": source, "label": scripted[0]}
     if not conditionals:
         return
     condition_rows = card.get("conditionalEffects")
     if isinstance(condition_rows, Mapping):
         condition_rows = [condition_rows]
+    seen: set[str] = set()
     for conditional in condition_rows or ():
         if not isinstance(conditional, Mapping):
             continue
+        # The export repeats some sub-upgrades verbatim (Archon Intensify and
+        # Archon Stretch list theirs twice); the game applies each once.
+        key = json.dumps(conditional, sort_keys=True, default=str)
+        if key in seen:
+            continue
+        seen.add(key)
         stacks = conditional.get("maxStacks")
         stacks = stacks if isinstance(stacks, int) and stacks > 0 else 1
         nested = conditional.get("effects")
@@ -376,8 +490,13 @@ def _effects(card: Mapping[str, Any], rank: int, *, conditionals: bool, source: 
                 continue
             value = _effect_value(effect, rank)
             stat = _effect_stat(effect)
-            if stat is not None and value is not None:
-                yield {"stat": stat, "value": value * stacks * set_multiplier, "operation": effect.get("operation") or effect.get("mode") or "ADD", "source": source, "label": effect.get("label") or effect.get("upgradeType") or stat, "conditional": True, "condition": conditional.get("conditionTag") or conditional.get("condition")}
+            operation = effect.get("operation") or effect.get("mode") or "ADD"
+            if stat is None or value is None or (value == 0 and effect.get("localizationScript")):
+                scripted = _script_effect(effect, rank)
+                if scripted is None:
+                    continue
+                stat, value, operation = scripted
+            yield {"stat": stat, "value": value * stacks * set_multiplier, "operation": operation, "source": source, "label": effect.get("label") or effect.get("upgradeType") or stat, "conditional": True, "condition": conditional.get("conditionTag") or conditional.get("condition")}
 
 
 def _is_percent(effect: Mapping[str, Any], value: float) -> bool:

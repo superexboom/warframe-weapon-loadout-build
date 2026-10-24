@@ -182,7 +182,22 @@ def _load_exports_uncached(root: Path) -> dict[str, Any]:
         if not isinstance(loaded, Mapping) or loaded.get("buildLabel") != build_label:
             raise SimulationError(f"invalid Riven template payload: {templates_path}")
         riven_templates = loaded
-    return {
+    # Exalted weapons (tools/extract-exalted-weapons.py) have no StoreItems
+    # entry, so the core export skips them; their sidecar joins the list.
+    exalted_path = root / "exalted_weapons.json"
+    if exalted_path.is_file():
+        try:
+            loaded = json.loads(exalted_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise SimulationError(f"cannot read export file {exalted_path}: {exc}") from exc
+        if not isinstance(loaded, Mapping) or loaded.get("buildLabel") != build_label:
+            raise SimulationError(f"invalid exalted weapon payload: {exalted_path}")
+        known = {row.get("path") for row in payloads["weapons"]["data"]}
+        payloads["weapons"] = {**payloads["weapons"], "data": [
+            *payloads["weapons"]["data"], *(row for row in loaded.get("data") or () if row.get("path") not in known)]}
+    from .client_updates import apply_exports as apply_client_updates
+    from .riven_disposition import apply_exports
+    return apply_client_updates(apply_exports({
         "path": str(root.resolve()),
         "buildLabel": build_label,
         "schemaVersion": schema_version,
@@ -193,7 +208,7 @@ def _load_exports_uncached(root: Path) -> dict[str, Any]:
         "rivenTemplates": riven_templates,
         **{name: payloads[name]["data"] for name in EXPORT_NAMES},
         'mods': released_mod_catalog(payloads['mods']['data']),
-    }
+    }))
 
 
 _RESOLVE_CACHE: dict[tuple[int, str, str], Mapping[str, Any] | None] = {}
@@ -506,10 +521,21 @@ def _steady_state_scenario(
     mods: Iterable[Mapping[str, Any]], scenario: Scenario
 ) -> Scenario:
     """Fill only exported kill-triggered MOD stacks for sustained snapshots."""
+    from .companion import kill_condition, player_only, player_stacks
     stacks = dict(scenario.conditional_stacks)
+    companion = player_stacks(scenario)
     for mod in mods:
         for conditional in mod.get("conditionalEffects") or ():
             if not isinstance(conditional, Mapping):
+                continue
+            if companion is not None and player_only(conditional):
+                # A companion never fires player-only conditions itself; its
+                # kill stacks are the player's (switch), anything else is off.
+                maximum = conditional.get("maxStacks")
+                held = (maximum if isinstance(maximum, int) and maximum > 0 else 1) if companion and kill_condition(conditional) else 0
+                for key in (conditional.get("sourcePath"), conditional.get("conditionTag")):
+                    if isinstance(key, str) and key:
+                        stacks[key] = held
                 continue
             condition_text = " ".join(
                 str(value or "")

@@ -10,6 +10,11 @@ A local Warframe Riven analyzer, weapon loadout builder, and Warframe loadout bu
 
 - **Riven analysis**: scores a Riven from its weapon, disposition, stat count, and roll values; reports per-stat contribution, dynamic T0-T3 gains, recommended negatives, and fatal negatives.
 - **Weapon loadouts**: supports guns, melee, Kitguns, Zaws, exalted weapons, stances, Exilus slots, Arcanes, Incarnon branches, Forma, and A/B/C configurations.
+- **Companions**: companion weapons follow the AI's real behavior (torso shots only, no aiming, no Arcanes, switchable Galvanized stacks); robotic sentinel bodies take 10 sentinel mods with a stats panel, and weapon-relevant ones such as Fired Up count toward damage.
+- **Build constraints**: auto builds take required / per-weapon forbidden / global blocked mods and a one-click faction (bane) mod block; right-click an equipped mod to drop it and rebuild.
+- **Exalted weapons**: all 35 exalted weapons (including Whipclaw, Shattered Lash, Landslide and Blade Storm) are in the weapon builder, linked to a saved Warframe build for Ability Strength / Efficiency / energy; damage follows the ability figures and Strength, cast-type weapons use per-cast hits with the ability combo; the result shows energy sustain without regeneration and keeps a warning when the ability could not start or chain. Calculations always assume unlimited energy.
+- **Riven disposition (2026-10-23)**: every Riven weapon uses 1.2; the old value is shown in brackets.
+- **Riven vault**: save Rivens across weapons, browse them by weapon, load one into analysis or a build in one click, and export / import the list.
 - **Warframe loadouts**: supports Aura, Exilus and normal mods, Arcanes, Archon Shards, Helminth abilities, Invigorations, conditional effects, capacity, and ability-panel calculations.
 - **Target simulation**: includes a local enemy catalog, custom defenses, level scaling, Steel Path, Eximus and Overguard options, armor strip, headshots, and multiple damage metrics.
 - **Local assets**: card art, frames, polarities, Warframe portraits, ability icons, and datasets ship with the project. Configurations can be imported or exported, including the compact Warframe Rabbit format.

@@ -64,6 +64,110 @@
     null
    ]
   },
+  "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickA": {
+   "anim": "/Lotus/Animations/FlightSuit/MeleeComboA_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickB": {
+   "anim": "/Lotus/Animations/FlightSuit/MeleeComboB_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickC": {
+   "anim": "/Lotus/Animations/FlightSuit/MeleeComboC_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickD": {
+   "anim": "/Lotus/Animations/FlightSuit/MeleeComboD_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickE": {
+   "anim": "/Lotus/Animations/FlightSuit/MeleeComboE_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickF": {
+   "anim": "/Lotus/Animations/FlightSuit/MeleeComboF_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_BIG_STAGGER"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
   "/Lotus/Types/Enemies/ManInTheWall/Octopede/MITWOctopedeSwipe2Attack": {
    "anim": "/Lotus/Animations/MITW/Octopede/SwipeMeleeAttack02_anim.fbx",
    "atten": 1.0,
@@ -3005,6 +3109,538 @@
    ],
    "procAtten": 1.0,
    "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBasicA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/BasicComboA_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBasicB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/BasicComboB_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBasicC": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/BasicComboC_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBasicD": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/BasicComboD_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_BLEEDING",
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchAA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo1A_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchAB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo1B_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchAC": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo1C_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchAD": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo1D_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchBA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo2A_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchBB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo2B_anim.fbx",
+   "atten": 1.5,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchBC": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo2C_anim.fbx",
+   "atten": 1.5,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchBD": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo2D_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo3A_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_BLEEDING",
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo3B_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STUNNED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCC": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo3C_anim.fbx",
+   "atten": 2.5,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCD": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/Combo3D_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    {
+     "atten": 3.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_KNOCKED_DOWN"
+     ],
+     "procAtten": 1.0
+    },
+    null,
+    {
+     "atten": 3.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_RAGDOLL"
+     ],
+     "procAtten": 1.0
+    }
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerJumpAttackA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/JumpStrike_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [
+    {
+     "event": "GroundStab",
+     "t": 0.07
+    }
+   ],
+   "extraAction": "MELEE_JUMP_FALL",
+   "extraAnim": "/Lotus/Animations/Tenno/Powers/Berserker/JumpStrikeLoop",
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKED_DOWN"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerJumpForward": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/JumpStrikeForward_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerJumpLeft": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/JumpStrikeLeft_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerJumpRight": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/JumpStrikeRight_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerSlideA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/SlideAttack_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [
+    {
+     "event": "GetUpFromSlide",
+     "t": 0.46938801
+    },
+    {
+     "event": "PacifistSlideAttack",
+     "t": 0.46938801
+    },
+    {
+     "event": "WaitStart",
+     "t": 0.734694
+    }
+   ],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.07
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.15000001
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.22
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 1,
+     "t": 0.11
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 1,
+     "t": 0.19
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 1,
+     "t": 0.44999999
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerSlideB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Berserker/SlideAttack_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [
+    {
+     "event": "GetUpFromSlide",
+     "t": 0.46938801
+    },
+    {
+     "event": "PacifistSlideAttack",
+     "t": 0.46938801
+    },
+    {
+     "event": "WaitStart",
+     "t": 0.734694
+    }
+   ],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.07
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.15000001
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.22
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 1,
+     "t": 0.11
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 1,
+     "t": 0.19
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 1,
+     "t": 0.44999999
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null,
+    null,
+    null,
+    null,
     null
    ]
   },
@@ -6686,6 +7322,418 @@
      "procAtten": 1.0
     }
    ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBasicA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordComboDefaultA_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBasicB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordComboDefaultB_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBasicC": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordComboDefaultC_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBasicD": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordComboDefaultD_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch1A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo1A_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch1B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo1B_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch1C": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo1C_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch1D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo1D_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch2A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo2A_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch2B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo2B_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch2C": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo2C_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch2D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo2D_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch2E": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo2E_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKED_DOWN"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch3A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo3A_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch3B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo3B_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch3C": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordBranchCombo3C_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_RAGDOLL"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordJumpAttackA": {
+   "anim": "/Lotus/Animations/Tenno/Melee/Sword/JumpStrikeStrike_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": 1.0,
+   "events": [
+    {
+     "event": "WaitStart",
+     "t": 0.69207603
+    }
+   ],
+   "extraAction": "MELEE_JUMP_FALL",
+   "extraAnim": "/Lotus/Animations/Tenno/Melee/Sword/JumpStrikeLoop_anim.fbx",
+   "extraDuration": 0.233333,
+   "extraProcs": [
+    "PT_KNOCKED_DOWN"
+   ],
+   "hits": [
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.0233209
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordJumpForward": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordJumpStrikeForward",
+   "atten": 2.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [
+    {
+     "event": "WallAttackImpulse",
+     "t": 0.15000001
+    }
+   ],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.13
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordJumpLeft": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordJumpStrikeLeft",
+   "atten": 2.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [
+    {
+     "event": "WallAttackImpulse",
+     "t": 0.15000001
+    }
+   ],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.1
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordJumpRight": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/EnergySwordJumpStrikeRight",
+   "atten": 2.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [
+    {
+     "event": "WallAttackImpulse",
+     "t": 0.15000001
+    }
+   ],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.16
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": []
   },
   "/Lotus/Weapons/Tenno/Melee/Attacks/DualDaggerAerialA": {
    "anim": "/Lotus/Animations/Tenno/Melee/DualDagger/Aerial/AerialCombo1B_anim.fbx",
@@ -22824,6 +23872,475 @@
     }
    ]
   },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBasicC": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/ComboDefaultC_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_STAGGERED"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BIG_STAGGER"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_STAGGERED"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BIG_STAGGER"
+     ],
+     "procAtten": 1.0
+    }
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBasicD": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/ComboDefaultD_anim.fbx",
+   "atten": 4.0,
+   "comboHits": 4.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKED_DOWN"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch1A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo1A_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch1B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo1B_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch1D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo1D_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_BIG_STAGGER"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_KNOCKBACK"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_KNOCKBACK"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_STAGGERED"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 3.0,
+     "comboHits": 3.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BIG_STAGGER"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_KNOCKED_DOWN"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_KNOCKED_DOWN"
+     ],
+     "procAtten": 1.0
+    }
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch2A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo2A_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_STAGGERED"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BIG_STAGGER"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_STAGGERED"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 3.0,
+     "comboHits": 3.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_KNOCKBACK"
+     ],
+     "procAtten": 1.0
+    }
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch2B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo2B_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_BIG_STAGGER"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch2C": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo2C_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch2D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo2D_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [
+    {
+     "event": "HardMeleeSlam",
+     "t": 0.63
+    },
+    {
+     "event": "StepL",
+     "t": 0.13
+    },
+    {
+     "event": "LandHeavy",
+     "t": 0.63
+    },
+    {
+     "event": "WaitStart",
+     "t": 1.0
+    },
+    {
+     "event": "StaffBranch2D",
+     "t": 0.0
+    }
+   ],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKED_DOWN"
+   ],
+   "hits": [
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.21766201
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 1,
+     "t": 0.30317199
+    },
+    {
+     "event": "StartMeleeSweep",
+     "param": 1,
+     "t": 0.60945302
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_STAGGERED"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 2.0,
+     "comboHits": 2.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BIG_STAGGER"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 3.0,
+     "comboHits": 3.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_KNOCKED_DOWN"
+     ],
+     "procAtten": 1.0
+    }
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch3A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo3A_anim.fbx",
+   "atten": 4.0,
+   "comboHits": 4.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch3B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo3B_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_STAGGERED"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BIG_STAGGER"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_STAGGERED"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BIG_STAGGER"
+     ],
+     "procAtten": 1.0
+    }
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch3C": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo3C_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKED_DOWN"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch3D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/MonkeyKing/GoldenBandStaff/BranchCombo3D_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK",
+    "PT_FRAILTY"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
   "/Lotus/Weapons/Tenno/Melee/Attacks/MortiforSwordShieldCustomHeavy": {
    "anim": "/Lotus/Animations/Tenno/Melee/SwordandBoard/TakAndLug/HeavyAttackShieldThrow01_anim.fbx",
    "atten": 3.0,
@@ -24358,6 +25875,98 @@
     null
    ]
   },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PVPDoomSwordSlideA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Excalibur/PvPSlideAttack",
+   "atten": 2.1428571,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [
+    {
+     "event": "ShowMelee",
+     "t": 0.0
+    },
+    {
+     "event": "GetUpFromSlide",
+     "t": 0.88999999
+    },
+    {
+     "event": "WaitStart",
+     "t": 0.93000001
+    },
+    {
+     "event": "BlindCastAlt",
+     "t": 0.64999998
+    },
+    {
+     "event": "ExcaliburRadialBlind",
+     "t": 0.64999998
+    },
+    {
+     "event": "DoomProjectile",
+     "t": 0.18000001
+    }
+   ],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.15000001
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PVPStaffSlideA": {
+   "anim": "/Lotus/Animations/Tenno/Melee/Sword/PVPSlideSlash",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": 0.933333,
+   "events": [
+    {
+     "event": "SwordSpinAttack",
+     "t": 0.0
+    },
+    {
+     "event": "ShowMelee",
+     "t": 0.0
+    },
+    {
+     "event": "GetUpFromSlide",
+     "t": 0.75999999
+    },
+    {
+     "event": "WaitStart",
+     "t": 0.79310298
+    },
+    {
+     "event": "ReleaseProjectile",
+     "t": 0.59359598
+    }
+   ],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [
+    {
+     "event": "StartMeleeSweepB",
+     "param": 0,
+     "t": 0.28551701
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
   "/Lotus/Weapons/Tenno/Melee/Attacks/PVPXmasScytheSlideA": {
    "anim": "/Lotus/Animations/Tenno/Melee/Axe/PVPXmasScytheSlideAttack",
    "atten": 2.0,
@@ -24405,6 +26014,353 @@
    "swings": [
     null
    ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBasicA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/DefaultCombo1A_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBasicB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/DefaultCombo1B_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBasicC": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/DefaultCombo1C_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch1A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo1A_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch1B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo1B_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch1C": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo1C_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch1D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo1D_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch2A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo2A_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch2B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo2B_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch2C": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo2C_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch2D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo2D_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch3A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo3A_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch3B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo3B_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STUNNED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch3C": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo3C_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null,
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch3D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Pacifist/BranchCombo3D_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_KNOCKED_DOWN"
+     ],
+     "procAtten": 1.0
+    },
+    null,
+    {
+     "atten": 2.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_RAGDOLL"
+     ],
+     "procAtten": 1.0
+    }
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PolearmAerialA": {
+   "anim": "/Lotus/Animations/Tenno/Melee/PoleArm/Aerial/AerialCombo1B_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": 0.4,
+   "events": [
+    {
+     "event": "WaitStart",
+     "t": 0.60000002
+    }
+   ],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.1
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/PolearmAerialB": {
+   "anim": "/Lotus/Animations/Tenno/Melee/PoleArm/Aerial/AerialCombo1C_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": 0.566667,
+   "events": [
+    {
+     "event": "WaitStart",
+     "t": 0.823403
+    },
+    {
+     "event": "MeleeSpinWhoosh",
+     "t": 0.2
+    }
+   ],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [
+    {
+     "event": "StartMeleeSweep",
+     "param": 0,
+     "t": 0.37
+    }
+   ],
+   "procAtten": 1.0,
+   "swings": []
   },
   "/Lotus/Weapons/Tenno/Melee/Attacks/PolearmBranchAA": {
    "anim": "/Lotus/Animations/Tenno/Melee/PoleArm/BranchComboA1_anim.fbx",
@@ -27690,6 +29646,472 @@
      "t": 0.400381
     }
    ],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperJumpStrikeForward_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": "MELEE_JUMP_FALL",
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackAB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperJumpStrikeForward_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": "MELEE_JUMP_FALL",
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperJumpStrikeLeft_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": "MELEE_JUMP_FALL",
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackBB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperJumpStrikeLeft_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": "MELEE_JUMP_FALL",
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackBC": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperJumpStrikeRight_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": "MELEE_JUMP_FALL",
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackC": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperJumpStrikeRight_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": "MELEE_JUMP_FALL",
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMelee30ChargeA": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ChargeAttack/ReaperChargeAttack01Strike_anim.fbx",
+   "atten": 4.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": "MELEE_CHARGE",
+   "extraAnim": "/Lotus/Animations/Tenno/Powers/Wraithe/ChargeAttack/ReaperChargeAttack01Charge_anim.fbx",
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK",
+    "PT_BLEEDING"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMelee30ChargeB": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ChargeAttack/ReaperChargeAttack02Strike_anim.fbx",
+   "atten": 4.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": "MELEE_CHARGE",
+   "extraAnim": "/Lotus/Animations/Tenno/Powers/Wraithe/ChargeAttack/ReaperChargeAttack02Charge_anim.fbx",
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_BLEEDING",
+    "PT_KNOCKED_DOWN"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch1A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee1A_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch1B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee1B_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch1C": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee1C_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_BLEEDING",
+    "PT_BIG_STAGGER"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch1D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee1D_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    {
+     "atten": 1.0,
+     "comboHits": 1.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_KNOCKBACK"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 2.0,
+     "comboHits": 2.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BLEEDING"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 3.0,
+     "comboHits": 3.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_KNOCKED_DOWN"
+     ],
+     "procAtten": 1.0
+    }
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch2A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee2A_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch2B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee2B_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch2D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee2D_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch3A": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee3A_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_STAGGERED"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch3B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee3B_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_BIG_STAGGER"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch4B": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee4B_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKED_DOWN"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": []
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch4C": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee4C_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKBACK"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null,
+    null,
+    null,
+    {
+     "atten": 2.0,
+     "comboHits": 2.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BLEEDING"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 2.0,
+     "comboHits": 2.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BLEEDING"
+     ],
+     "procAtten": 1.0
+    }
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch4D": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperMelee4D_anim.fbx",
+   "atten": 1.0,
+   "comboHits": 1.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null,
+    null,
+    {
+     "atten": 2.0,
+     "comboHits": 2.0,
+     "damagePct": {},
+     "extraProcs": [],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 2.0,
+     "comboHits": 2.0,
+     "damagePct": {},
+     "extraProcs": [],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 3.0,
+     "comboHits": 3.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_RAGDOLL"
+     ],
+     "procAtten": 1.0
+    },
+    {
+     "atten": 3.0,
+     "comboHits": 3.0,
+     "damagePct": {},
+     "extraProcs": [
+      "PT_BLEEDING",
+      "PT_RAGDOLL"
+     ],
+     "procAtten": 1.0
+    }
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeJumpStrike": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperJumpStrike_anim.fbx",
+   "atten": 3.0,
+   "comboHits": 3.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": "MELEE_JUMP_FALL",
+   "extraAnim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperJumpStrikeFallingLoop_anim.fbx",
+   "extraDuration": null,
+   "extraProcs": [
+    "PT_KNOCKED_DOWN"
+   ],
+   "hits": [],
+   "procAtten": 1.0,
+   "swings": [
+    null
+   ]
+  },
+  "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperSlide": {
+   "anim": "/Lotus/Animations/Tenno/Powers/Wraithe/ReaperSlideSlash_anim.fbx",
+   "atten": 2.0,
+   "comboHits": 2.0,
+   "damagePct": {},
+   "duration": null,
+   "events": [],
+   "extraAction": null,
+   "extraAnim": null,
+   "extraDuration": null,
+   "extraProcs": [],
+   "hits": [],
    "procAtten": 1.0,
    "swings": [
     null
@@ -39575,11 +41997,11 @@
  },
  "buildLabel": "2026.10.08",
  "counts": {
-  "attacks": 939,
-  "attacksWithoutDuration": 0,
+  "attacks": 1041,
+  "attacksWithoutDuration": 7,
   "hybrids": 1,
-  "trees": 109,
-  "weapons": 239,
+  "trees": 119,
+  "weapons": 262,
   "zawStrikes": 11
  },
  "hybrids": {
@@ -39595,6 +42017,21 @@
   "packagesBinSha256": "0d5881641f87e9746fb307a4fae76422cbba314bf4f808f9d5ca57bd20f0ea78"
  },
  "trees": {
+  "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyMeleeTree": {
+   "aerial": {},
+   "compat": [],
+   "contexts": {
+    "CC_GROUND": [
+     "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickA",
+     "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickB",
+     "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickC",
+     "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickD",
+     "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickE",
+     "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyQuickF"
+    ]
+   },
+   "followThrough": 1.0
+  },
   "/Lotus/Types/Enemies/ManInTheWall/Octopede/MITWOctopedeMeleeTree": {
    "aerial": {},
    "compat": [],
@@ -39815,6 +42252,46 @@
     ]
    },
    "followThrough": 0.60000002
+  },
+  "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree": {
+   "aerial": {
+    "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/AxeJumpAttackA",
+    "BP_DOWN": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+    "BP_JUMP": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+    "BP_LEFT": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeft",
+    "BP_RIGHT": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRight",
+    "BP_UP": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward"
+   },
+   "compat": [],
+   "contexts": {
+    "CC_AIR": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRight",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeft"
+    ],
+    "CC_AIR_RIGHT": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForwardB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRightB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeftB"
+    ],
+    "CC_GROUND": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipBranchAB"
+    ],
+    "CC_GROUND_BRANCH_A": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipBranchAC"
+    ],
+    "CC_GROUND_HEAVY": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA"
+    ],
+    "CC_SLIDING": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipSlideA"
+    ]
+   },
+   "followThrough": 0.5
   },
   "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AxeCmbOneMeleeTree": {
    "aerial": {
@@ -40156,6 +42633,66 @@
     ]
    },
    "followThrough": 0.40000001
+  },
+  "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree": {
+   "aerial": {
+    "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerJumpAttackA",
+    "BP_DOWN": "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerJumpForward",
+    "BP_JUMP": "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerJumpForward",
+    "BP_LEFT": "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerJumpLeft",
+    "BP_RIGHT": "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerJumpRight",
+    "BP_UP": "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerJumpForward"
+   },
+   "compat": [],
+   "contexts": {
+    "CC_AIR": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackC"
+    ],
+    "CC_AIR_RIGHT": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackAB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackBB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackCB"
+    ],
+    "CC_GROUND": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchAA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchAB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchAC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchAD",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCB"
+    ],
+    "CC_GROUND_BRANCH_A": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBasicA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBasicB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBasicC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBasicD"
+    ],
+    "CC_GROUND_BRANCH_B": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchBA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchBB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchBC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchBD",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCD"
+    ],
+    "CC_GROUND_BRANCH_C": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerBranchCD"
+    ],
+    "CC_GROUND_HEAVY": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeA"
+    ],
+    "CC_SLIDING": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerSlideA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerSlideB"
+    ]
+   },
+   "followThrough": null
   },
   "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawCmbOneMeleeTree": {
    "aerial": {
@@ -40657,6 +43194,61 @@
     ]
    },
    "followThrough": 0.89999998
+  },
+  "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree": {
+   "aerial": {
+    "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordJumpAttackA",
+    "BP_DOWN": "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordJumpAttackA",
+    "BP_JUMP": "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordJumpForward",
+    "BP_LEFT": "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordJumpLeft",
+    "BP_RIGHT": "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordJumpRight",
+    "BP_UP": "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordJumpForward"
+   },
+   "compat": [],
+   "contexts": {
+    "CC_AIR": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/SwordAerialA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/SwordAerialB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/SwordAerialC"
+    ],
+    "CC_AIR_RIGHT": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/SwordAerialAB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/SwordAerialBB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/SwordAerialCB"
+    ],
+    "CC_GROUND": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch2A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch2B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch2C",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch2D",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch2E"
+    ],
+    "CC_GROUND_BRANCH_A": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBasicA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBasicB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBasicC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBasicD"
+    ],
+    "CC_GROUND_BRANCH_B": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch1D",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch1A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch1B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch1C"
+    ],
+    "CC_GROUND_BRANCH_C": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch3A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch3B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/DoomSwordBranch3C"
+    ],
+    "CC_GROUND_HEAVY": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/SwordMelee30ChargeB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/SwordMelee30ChargeA"
+    ],
+    "CC_SLIDING": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PVPDoomSwordSlideA"
+    ]
+   },
+   "followThrough": null
   },
   "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DualDaggerCmbOneMeleeTree": {
    "aerial": {
@@ -41535,6 +44127,46 @@
     ]
    },
    "followThrough": 0.89999998
+  },
+  "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree": {
+   "aerial": {
+    "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/AxeJumpAttackA",
+    "BP_DOWN": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+    "BP_JUMP": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+    "BP_LEFT": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeft",
+    "BP_RIGHT": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRight",
+    "BP_UP": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward"
+   },
+   "compat": [],
+   "contexts": {
+    "CC_AIR": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRight",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeft"
+    ],
+    "CC_AIR_RIGHT": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForwardB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRightB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeftB"
+    ],
+    "CC_GROUND": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipBranchAB"
+    ],
+    "CC_GROUND_BRANCH_A": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipBranchAC"
+    ],
+    "CC_GROUND_HEAVY": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA"
+    ],
+    "CC_SLIDING": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipSlideA"
+    ]
+   },
+   "followThrough": 0.5
   },
   "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GlaiveCmbOneMeleeTree": {
    "aerial": {
@@ -42497,6 +45129,46 @@
    },
    "followThrough": 0.69999999
   },
+  "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree": {
+   "aerial": {
+    "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/AxeJumpAttackA",
+    "BP_DOWN": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+    "BP_JUMP": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+    "BP_LEFT": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeft",
+    "BP_RIGHT": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRight",
+    "BP_UP": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward"
+   },
+   "compat": [],
+   "contexts": {
+    "CC_AIR": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRight",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeft"
+    ],
+    "CC_AIR_RIGHT": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForwardB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRightB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeftB"
+    ],
+    "CC_GROUND": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipBranchAB"
+    ],
+    "CC_GROUND_BRANCH_A": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipBranchAC"
+    ],
+    "CC_GROUND_HEAVY": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA"
+    ],
+    "CC_SLIDING": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipSlideA"
+    ]
+   },
+   "followThrough": 0.5
+  },
   "/Lotus/Weapons/Tenno/Melee/MeleeTrees/LongKatanaCmbOneMeleeTree": {
    "aerial": {
     "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/LongKatanaJumpAttackA",
@@ -42724,6 +45396,52 @@
    },
    "followThrough": 0.69999999
   },
+  "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework": {
+   "aerial": {
+    "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/StaffJumpAttackA",
+    "BP_DOWN": "/Lotus/Weapons/Tenno/Melee/Attacks/PolearmJumpForward",
+    "BP_JUMP": "/Lotus/Weapons/Tenno/Melee/Attacks/PolearmJumpForward",
+    "BP_LEFT": "/Lotus/Weapons/Tenno/Melee/Attacks/PolearmJumpLeft",
+    "BP_RIGHT": "/Lotus/Weapons/Tenno/Melee/Attacks/PolearmJumpRight",
+    "BP_UP": "/Lotus/Weapons/Tenno/Melee/Attacks/PolearmJumpForward"
+   },
+   "compat": [],
+   "contexts": {
+    "CC_AIR": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PolearmAerialA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PolearmAerialB"
+    ],
+    "CC_GROUND": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBasicC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch3A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch1D"
+    ],
+    "CC_GROUND_BRANCH_A": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch1B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch1A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch3B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBasicD"
+    ],
+    "CC_GROUND_BRANCH_B": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch3D",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch3C"
+    ],
+    "CC_GROUND_BRANCH_C": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch2A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch2B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch2C",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/MonkeyKingStaffBranch2D"
+    ],
+    "CC_GROUND_HEAVY": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/StaffMelee30ChargeB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/StaffMelee30ChargeA"
+    ],
+    "CC_SLIDING": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PVPStaffSlideA"
+    ]
+   },
+   "followThrough": null
+  },
   "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MortiforSwordShieldMeleeTree": {
    "aerial": {
     "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/SwordShieldJumpAttackA",
@@ -42760,6 +45478,46 @@
     ]
    },
    "followThrough": 0.60000002
+  },
+  "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree": {
+   "aerial": {
+    "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/AxeJumpAttackA",
+    "BP_DOWN": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+    "BP_JUMP": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+    "BP_LEFT": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeft",
+    "BP_RIGHT": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRight",
+    "BP_UP": "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward"
+   },
+   "compat": [],
+   "contexts": {
+    "CC_AIR": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForward",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRight",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeft"
+    ],
+    "CC_AIR_RIGHT": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpForwardB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpRightB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipJumpLeftB"
+    ],
+    "CC_GROUND": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipBranchAB"
+    ],
+    "CC_GROUND_BRANCH_A": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipQuickB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipBranchAC"
+    ],
+    "CC_GROUND_HEAVY": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipMelee30ChargeA"
+    ],
+    "CC_SLIDING": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/WhipSlideA"
+    ]
+   },
+   "followThrough": 0.5
   },
   "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NunchakuCmbOneMeleeTree": {
    "aerial": {
@@ -42852,6 +45610,61 @@
     ]
    },
    "followThrough": 0.5
+  },
+  "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree": {
+   "aerial": {
+    "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/FistJumpAttackA",
+    "BP_DOWN": "/Lotus/Weapons/Tenno/Melee/Attacks/FistJumpForward",
+    "BP_JUMP": "/Lotus/Weapons/Tenno/Melee/Attacks/FistJumpForward",
+    "BP_LEFT": "/Lotus/Weapons/Tenno/Melee/Attacks/FistJumpLeft",
+    "BP_RIGHT": "/Lotus/Weapons/Tenno/Melee/Attacks/FistJumpRight",
+    "BP_UP": "/Lotus/Weapons/Tenno/Melee/Attacks/FistJumpForward"
+   },
+   "compat": [],
+   "contexts": {
+    "CC_AIR": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackC"
+    ],
+    "CC_AIR_RIGHT": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackAB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackBB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ClawsAerialAttackCB"
+    ],
+    "CC_GROUND": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch1A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch1B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch1C",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch1D"
+    ],
+    "CC_GROUND_BRANCH_A": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBasicA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBasicB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBasicC"
+    ],
+    "CC_GROUND_BRANCH_B": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch2A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch2B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch2C",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch2D"
+    ],
+    "CC_GROUND_BRANCH_C": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch3A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch3B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch3C",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PacifistBranch3D"
+    ],
+    "CC_GROUND_HEAVY": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/PunchKickMelee30ChargeA"
+    ],
+    "CC_SLIDING": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerSlideA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/BerserkerSlideB"
+    ]
+   },
+   "followThrough": null
   },
   "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PolearmCmbOneMeleeTree": {
    "aerial": {
@@ -43256,6 +46069,52 @@
     ]
    },
    "followThrough": 0.69999999
+  },
+  "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree": {
+   "aerial": {
+    "BP_CROUCH": "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeJumpStrike"
+   },
+   "compat": [],
+   "contexts": {
+    "CC_AIR": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackA"
+    ],
+    "CC_AIR_RIGHT": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackBC",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackBB",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperAerialAttackAB"
+    ],
+    "CC_GROUND": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch1A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch1B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch1C",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch1D"
+    ],
+    "CC_GROUND_BRANCH_A": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch2A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch2B"
+    ],
+    "CC_GROUND_BRANCH_B": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch2D",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch3A",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch3B",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch4B"
+    ],
+    "CC_GROUND_BRANCH_C": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch4C",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMeleeBranch4D"
+    ],
+    "CC_GROUND_HEAVY": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMelee30ChargeA",
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperMelee30ChargeB"
+    ],
+    "CC_SLIDING": [
+     "/Lotus/Weapons/Tenno/Melee/Attacks/ReaperSlide"
+    ]
+   },
+   "followThrough": null
   },
   "/Lotus/Weapons/Tenno/Melee/MeleeTrees/RegorSwordShieldMeleeTree": {
    "aerial": {
@@ -44585,6 +47444,2065 @@
   }
  },
  "weapons": {
+  "/Lotus/Powersuits/Berserker/BerserkerMelee": {
+   "attackSpeed": 1.5,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 300.0,
+    "crit": 0.5,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.0,
+    "types": {
+     "DT_PUNCTURE": 0.25,
+     "DT_SLASH": 0.75
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.41666666,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 300.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_PHYSICAL",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 6.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackLeft",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackRight",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackFinale",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree"
+  },
+  "/Lotus/Powersuits/Berserker/BerserkerMeleePrime": {
+   "attackSpeed": 1.5,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 300.0,
+    "crit": 0.5,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.0,
+    "types": {
+     "DT_PUNCTURE": 0.25,
+     "DT_SLASH": 0.75
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.41666666,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 300.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_PHYSICAL",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 6.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackLeft",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackRight",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackFinale",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree"
+  },
+  "/Lotus/Powersuits/Brawler/AtlasPunchWeapon": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 0.0,
+    "crit": 0.0,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.0,
+    "types": {
+     "DT_IMPACT": 1
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.5,
+    1.5
+   ],
+   "slams": [],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree"
+  },
+  "/Lotus/Powersuits/Brawler/AtlasPunchWeaponPrime": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 0.0,
+    "crit": 0.0,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.0,
+    "types": {
+     "DT_IMPACT": 1
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.5,
+    1.5
+   ],
+   "slams": [],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree"
+  },
+  "/Lotus/Powersuits/Excalibur/DoomSword": {
+   "attackSpeed": 0.8333333333333334,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 35.0,
+    "crit": 0.15000001,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.15000001,
+    "types": {
+     "DT_IMPACT": 0.15000001,
+     "DT_PUNCTURE": 0.15000001,
+     "DT_SLASH": 0.69999999
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.35714287,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "GroundAttackEffect",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 1.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree"
+  },
+  "/Lotus/Powersuits/Excalibur/DoomSwordPrime": {
+   "attackSpeed": 0.8333333333333334,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 35.0,
+    "crit": 0.15000001,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.15000001,
+    "types": {
+     "DT_IMPACT": 0.15000001,
+     "DT_PUNCTURE": 0.15000001,
+     "DT_SLASH": 0.69999999
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.35714287,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "GroundAttackEffect",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 1.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree"
+  },
+  "/Lotus/Powersuits/Excalibur/DoomSwordUmbra": {
+   "attackSpeed": 0.8333333333333334,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 35.0,
+    "crit": 0.15000001,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.15000001,
+    "types": {
+     "DT_IMPACT": 0.15000001,
+     "DT_PUNCTURE": 0.15000001,
+     "DT_SLASH": 0.69999999
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.35714287,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "GroundAttackEffect",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 1.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree"
+  },
+  "/Lotus/Powersuits/Fairy/FlightSword": {
+   "attackSpeed": 1.0833333333333333,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 350.0,
+    "crit": 0.2,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.1,
+    "types": {
+     "DT_IMPACT": 0.15000001,
+     "DT_PUNCTURE": 0.75,
+     "DT_SLASH": 0.10000002
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.3125,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "GroundAttackEffect",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 1.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyMeleeTree"
+  },
+  "/Lotus/Powersuits/Fairy/PrimeFlightSword": {
+   "attackSpeed": 1.0833333333333333,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 350.0,
+    "crit": 0.2,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.1,
+    "types": {
+     "DT_IMPACT": 0.15000001,
+     "DT_PUNCTURE": 0.75,
+     "DT_SLASH": 0.10000002
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.3125,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "GroundAttackEffect",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 1.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyMeleeTree"
+  },
+  "/Lotus/Powersuits/Garuda/GarudaClaws": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 248.0,
+    "crit": 0.2,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.36000001,
+    "types": {
+     "DT_IMPACT": 0.079999998,
+     "DT_PUNCTURE": 0.22,
+     "DT_SLASH": 0.69999999
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.41666666,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.30000001,
+     "radius": 6.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackLeft",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackRight",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackFinale",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawCmbOneMeleeTree",
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawMeleeTree"
+  },
+  "/Lotus/Powersuits/Garuda/GarudaPrimeClaws": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 280.0,
+    "crit": 0.34999999,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.36000001,
+    "types": {
+     "DT_IMPACT": 0.050000001,
+     "DT_PUNCTURE": 0.1,
+     "DT_SLASH": 0.85000002
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.41666666,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.30000001,
+     "radius": 6.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackLeft",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackRight",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "BerserkerAttackFinale",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 0.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawCmbThreeMeleeTree",
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ClawMeleeTree"
+  },
+  "/Lotus/Powersuits/Glass/GaraShankWeapon": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 0.0,
+    "crit": 0.0,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.0,
+    "types": {
+     "DT_PUNCTURE": 1
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.5,
+    1.5
+   ],
+   "slams": [],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree"
+  },
+  "/Lotus/Powersuits/Glass/GaraShankWeaponPrime": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 0.0,
+    "crit": 0.0,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.0,
+    "types": {
+     "DT_PUNCTURE": 1
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.5,
+    1.5
+   ],
+   "slams": [],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree"
+  },
+  "/Lotus/Powersuits/Khora/KhoraWhipclawWeapon": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 10.0,
+    "crit": 0.25,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.25,
+    "types": {
+     "DT_IMPACT": 0.333,
+     "DT_PUNCTURE": 0.333,
+     "DT_SLASH": 0.33399999
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.5,
+    1.5
+   ],
+   "slams": [],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree"
+  },
+  "/Lotus/Powersuits/Khora/KhoraWhipclawWeaponPrime": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 10.0,
+    "crit": 0.25,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.25,
+    "types": {
+     "DT_IMPACT": 0.333,
+     "DT_PUNCTURE": 0.333,
+     "DT_SLASH": 0.33399999
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.5,
+    1.5
+   ],
+   "slams": [],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree"
+  },
+  "/Lotus/Powersuits/MonkeyKing/MonkeyKingStaff": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 300.0,
+    "crit": 0.25,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.30000001,
+    "types": {
+     "DT_IMPACT": 0.68000001,
+     "DT_SLASH": 0.31999999
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 2.0,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.35714287,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 150.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 200.0,
+     "attenuation": 0.5,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "LightMeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [
+      "PT_STAGGERED"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.25,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": true,
+     "amount": 350.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MediumMeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [
+      "PT_BIG_STAGGER"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.30000001,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 750.0,
+     "attenuation": 3.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HardMeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.5,
+     "radius": 10.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 5.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 10.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework"
+  },
+  "/Lotus/Powersuits/MonkeyKing/WukongPrimeStaff": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 300.0,
+    "crit": 0.25,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.30000001,
+    "types": {
+     "DT_IMPACT": 0.68000001,
+     "DT_SLASH": 0.31999999
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 2.0,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.35714287,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 150.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_RAGDOLL"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 200.0,
+     "attenuation": 0.5,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "LightMeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [
+      "PT_STAGGERED"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.25,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": true,
+     "amount": 350.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MediumMeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [
+      "PT_BIG_STAGGER"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.30000001,
+     "radius": 7.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": false,
+     "amount": 750.0,
+     "attenuation": 3.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HardMeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.5,
+     "radius": 10.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 5.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 10.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework"
+  },
+  "/Lotus/Powersuits/Ninja/NinjaStormWeapon": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 10.0,
+    "crit": 0.25,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.25,
+    "types": {
+     "DT_IMPACT": 0.333,
+     "DT_PUNCTURE": 0.333,
+     "DT_SLASH": 0.33399999
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.5,
+    1.5
+   ],
+   "slams": [],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree"
+  },
+  "/Lotus/Powersuits/Ninja/NinjaStormWeaponPrime": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 10.0,
+    "crit": 0.25,
+    "critMultiplier": 2.0,
+    "forcedProcs": [],
+    "procChance": 0.25,
+    "types": {
+     "DT_IMPACT": 0.333,
+     "DT_PUNCTURE": 0.333,
+     "DT_SLASH": 0.33399999
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.5,
+    1.5
+   ],
+   "slams": [],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree"
+  },
+  "/Lotus/Powersuits/Pacifist/PacifistFist": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 250.0,
+    "crit": 0.34999999,
+    "critMultiplier": 2.0,
+    "forcedProcs": [
+     "PT_RAGDOLL"
+    ],
+    "procChance": 0.0,
+    "types": {
+     "DT_IMPACT": 0.33329999,
+     "DT_PUNCTURE": 0.33333299,
+     "DT_SLASH": 0.33336699
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.3125,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 9.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree"
+  },
+  "/Lotus/Powersuits/Pacifist/PacifistFistPrime": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 250.0,
+    "crit": 0.34999999,
+    "critMultiplier": 2.0,
+    "forcedProcs": [
+     "PT_RAGDOLL"
+    ],
+    "procChance": 0.0,
+    "types": {
+     "DT_IMPACT": 0.33329999,
+     "DT_PUNCTURE": 0.33333299,
+     "DT_SLASH": 0.33336699
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.75,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.3125,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 9.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree"
+  },
+  "/Lotus/Powersuits/Wraith/ReaperMeleeWeapon": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 240.0,
+    "crit": 0.38,
+    "critMultiplier": 2.5999999,
+    "forcedProcs": [],
+    "procChance": 0.23999999,
+    "types": {
+     "DT_IMPACT": 0.30000001,
+     "DT_PUNCTURE": 0.2,
+     "DT_SLASH": 0.5
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.3125,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 25.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_KNOCKBACK"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 9.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "GroundAttackEffect",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 1.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree"
+  },
+  "/Lotus/Powersuits/Wraith/SevagothShadowPrimeClawsWeapon": {
+   "attackSpeed": 1.0,
+   "combo": {
+    "baseHits": 20.0,
+    "baseMultiplier": 1.0,
+    "cap": 220.0,
+    "initial": 0.0,
+    "seconds": 5.0,
+    "tierOperation": "HTO_ADDITIVE",
+    "tierStep": 20.0
+   },
+   "damage": {
+    "amount": 240.0,
+    "crit": 0.38,
+    "critMultiplier": 2.5999999,
+    "forcedProcs": [],
+    "procChance": 0.23999999,
+    "types": {
+     "DT_IMPACT": 0.30000001,
+     "DT_PUNCTURE": 0.2,
+     "DT_SLASH": 0.5
+    }
+   },
+   "fullSlamRadiusHeight": 10.0,
+   "glaive": null,
+   "heavy": {
+    "chargeDuration": null,
+    "chargeTime": 0.69999999,
+    "consumeCombo": null,
+    "disableTime": 1.0,
+    "hasHeavy": null,
+    "tapTime": null
+   },
+   "heavySlamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/HeavySlamAoE",
+   "slamAttack": "/Lotus/Weapons/Tenno/Melee/Attacks/SlamAoE",
+   "slamRadiusClamps": [
+    0.3125,
+    1.5
+   ],
+   "slams": [
+    {
+     "aerial": true,
+     "amount": 25.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_IMPACT",
+     "event": "MeleeSlam",
+     "falloff": true,
+     "falloffMax": 0.5,
+     "forcedProcs": [
+      "PT_KNOCKBACK"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 8.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": true,
+     "amount": 50.0,
+     "attenuation": 4.0,
+     "canCrit": false,
+     "comboMultiplier": true,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "HeavySlam",
+     "falloff": true,
+     "falloffMax": 0.69999999,
+     "forcedProcs": [
+      "PT_LIFT_HIT"
+     ],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 9.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": true
+    },
+    {
+     "aerial": false,
+     "amount": 0.0,
+     "attenuation": 1.0,
+     "canCrit": false,
+     "comboMultiplier": false,
+     "currentAttack": false,
+     "damageType": "DT_EXPLOSION",
+     "event": "GroundAttackEffect",
+     "falloff": true,
+     "falloffMax": 0.0,
+     "forcedProcs": [],
+     "modifiedRadius": true,
+     "procChance": 0.1,
+     "radius": 1.0,
+     "radiusMin": 0.0,
+     "weaponAmount": true,
+     "weaponProcChance": false
+    }
+   ],
+   "stance": null,
+   "tree": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree"
+  },
   "/Lotus/Types/Enemies/TennoReplicants/OraxiaEnemy/OraxiaEnemyMeleeWeapon": {
    "attackSpeed": 1.0,
    "combo": {

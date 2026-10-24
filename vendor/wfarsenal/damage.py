@@ -30,6 +30,7 @@ import math
 import struct
 from copy import copy as _copy_object
 from dataclasses import dataclass, field, fields, replace
+from functools import lru_cache
 from types import MappingProxyType
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -294,6 +295,8 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "WEAPON_PERCENT_BASE_DAMAGE_ADDED": "element_pre_coalesce",
     "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE": "element_post_coalesce",
     "WEAPON_CRIT_CHANCE": "crit_chance",
+    # Galariak Prime: +N final crit chance per status type on the victim.
+    "WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE": "crit_chance_per_status",
     "WEAPON_CRIT_DAMAGE": "crit_multiplier",
     # Vigilante set bonus: a chance to promote an already rolled critical hit by
     # one tier.  This is kept separate from crit chance; treating it as crit chance
@@ -317,6 +320,15 @@ WEAPON_EFFECT_HANDLERS: dict[str, str] = {
     "WEAPON_HEADSHOT_MULTIPLIER": "headshot_bonus_multiplier",
     "WEAPON_PROC_DAMAGE": "proc_damage_multiplier",
     "WEAPON_PROC_TIME": "proc_duration_multiplier",
+    # One status type's duration (Slaytra: Bleed only), keyed by damage type.
+    "RUNTIME_TYPED_PROC_TIME": "proc_duration_types",
+    # Extra stacks of one status type on the victim (Evensong: +2 Puncture).
+    "RUNTIME_TYPED_PROC_MAX_STACK": "proc_max_stacks",
+    # Glaives: Volatile Rebound / Quick Return's chance a bounce explodes, and
+    # Power Throw's consecutive-throw damage (manual_combat remaps its
+    # WEAPON_DAMAGE_AMOUNT), which only the thrown strike reads.
+    "WEAPON_REFLECTION_EXPLOSION_CHANCE": "reflection_explosion_chance",
+    "RUNTIME_THROW_DAMAGE": "throw_damage_bonus",
     "WEAPON_MELEE_COMBO_INITIAL_BONUS": "initial_combo",
     "WEAPON_MELEE_COMBO_DURATION_BONUS": "combo_duration",
     "WEAPON_MELEE_COMBO_USAGE_EFFICIENCY": "heavy_attack_efficiency",
@@ -527,7 +539,8 @@ class Scenario:
         numeric = {'frameArmor','frameShield','energyPool','sprintMultiplier','energySpent','energySpendPerSecond','nearbyRadius','detonationWaitSeconds','stugBounceDelaySeconds','stugChildDetonateSeconds','orbAbsorbedDamage',
                    'selfShieldBreakAt','selfShieldBreakInterval','selfOverguardBreakAt','selfOverguardBreakInterval','selfShieldHitAt','selfShieldHitInterval'}
         numeric |= {'equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval','meleeTargetDistance'}
-        binary = {'overshields','channeling','aimGliding','sliding','incarnonMeleeActive','orbSpecialShield','onosRadialHit','selfShieldBreakForced','perfectCharge','infiniteAmmo'}
+        binary = {'overshields','channeling','aimGliding','sliding','incarnonMeleeActive','orbSpecialShield','onosRadialHit','selfShieldBreakForced','perfectCharge','infiniteAmmo',
+                  'companion','companionPlayerStacks'}
         integers = {'nearbyEnemies':1000,'stugBounceHits':2,'stugChildHits':5,'detonateAfterShots':20,'orbPasses':3,'orbStacks':3,'orbRank':6,'punchthroughTargets':100,'abilityUses':100000}
         melee_text = {'meleeRoute','meleeStance','meleeCombo'}
         allowed = numeric | binary | set(integers) | melee_text | {'projectileMode','equippedWeapons','emptySlots','orbAbsorbedDamageType','orbAbsorbedDamageTypes'}
@@ -703,6 +716,8 @@ class ModEffect:
             check_type_on_install=effect.get("checkTypeOnInstall"),
             source_path=source_path,
             condition_tag=condition_tag,
+            # A guaranteed Extra Hit status (weapon-passives.json Reconifex rounds).
+            runtime_chance=effect.get("runtimeChance"),
         )
 
 
@@ -1109,6 +1124,11 @@ class ModdedStats:
     headshot_bonus_multiplier: float = 1.0
     proc_damage_multiplier: float = 1.0
     proc_duration_multiplier: float = 1.0
+    # Damage type -> its own duration multiplier where one type differs
+    # (RUNTIME_TYPED_PROC_TIME joins the shared bucket for that type).
+    proc_duration_types: dict[str, float] = field(default_factory=dict)
+    # Damage type -> extra stacks its victim debuff holds (RUNTIME_TYPED_PROC_MAX_STACK).
+    proc_max_stacks: dict[str, float] = field(default_factory=dict)
     status_condition_damage_multiplier: float = 1.0
     initial_combo: float = 0.0
     combo_duration: float = BASE_MELEE_COMBO_DURATION
@@ -1197,6 +1217,10 @@ class ModdedStats:
     cold_stack_damage: float = 0.0
     base_damage_bracket: float = 1.0
     frozen_damage_multiplier: float = 1.0
+    # A thrown glaive: the chance a bounce sets off its explosion, and the
+    # throw-only weapon-damage bonus (it joins base_damage_bracket).
+    reflection_explosion_chance: float = 0.0
+    throw_damage_bonus: float = 0.0
 
 
     @property
@@ -1416,6 +1440,33 @@ def archgun_arcane_type_applies(weapon, source_path, valid_type):
     )
 
 
+@lru_cache(maxsize=None)
+def _innate_terms(path: str, fire_mode: int) -> tuple[ModEffect, ...]:
+    from .event_profiles import weapon_passives
+    rows = (weapon_passives().get(path) or {}).get("innate") or ()
+    return tuple(ModEffect.from_export(term, 0, source_path=row["path"])
+                 for row in rows if fire_mode in (row.get("fireModes") or (fire_mode,))
+                 for term in row.get("effects") or ())
+
+
+def innate_terms_for(weapon: Mapping[str, Any], fire_mode: int) -> tuple[ModEffect, ...]:
+    """The always-on innate terms an apply_mods call on ``weapon`` owes. A
+    single-mode record names its real mode (``__selectedFireMode__``); a
+    resolver's part record (``__innateResolved__``) inherits its shot's terms."""
+    if weapon.get("__innateResolved__"):
+        return ()
+    return _innate_terms(str(weapon.get("path") or ""), int(weapon.get("__selectedFireMode__", fire_mode)))
+
+
+def with_innate(weapon: Mapping[str, Any], effects: ModEffectList, fire_mode: int) -> ModEffectList:
+    """``effects`` plus the weapon's always-on DefaultUpgrades terms
+    (weapon-passives.json innate), added once whichever core runs."""
+    terms = innate_terms_for(weapon, fire_mode)
+    if not terms or any(e.source_path == terms[0].source_path for e in effects):
+        return effects
+    return ModEffectList([*effects, *terms], skipped=effects.skipped)
+
+
 def apply_mods(
     weapon: Mapping[str, Any],
     effects: Iterable[ModEffect],
@@ -1603,9 +1654,9 @@ def _apply_mods_spec_py(
         ValueError: If the weapon has no usable fire mode or damage data.
     """
     scenario = scenario or Scenario()
-    effect_list = ModEffectList(
+    effect_list = with_innate(weapon, ModEffectList(
         list(effects), skipped=getattr(effects, "skipped", ())
-    )
+    ), fire_mode)
     heavy = weapon.get("heavyAttack")
     if scenario.heavy_attack and isinstance(heavy, Mapping):
         components = heavy.get("components")
@@ -1896,11 +1947,12 @@ def _apply_mods_spec_py(
     base_magazine = float(weapon.get('magazineSize') or event_profile.get('magazine')
                           or (NATIVE_DEFAULT_CLIP if weapon.get('slot') in ('primary', 'secondary') else 0))
     magazine = _combine(base_magazine, buckets['WEAPON_CLIP_MAX'])
-    # Ammo magazines hold whole rounds; fractional consumption below remains
-    # fractional. Quantize to native f32 before truncating so e.g. 40 rounds
-    # represented as 39.9999994 do not lose a round to Python precision.
+    # Ammo magazines hold whole rounds, rounded to the nearest (wiki Magazine
+    # Warp: a one-round Tonkor under Primed Magazine Warp holds 2; WFSim
+    # 37840309da); fractional consumption below remains fractional. Quantize
+    # to native f32 first so 40 rounds represented as 39.9999994 stay 40.
     if base_magazine > 0 and not weapon.get('isIncarnonForm'):
-        magazine = float(max(1, math.floor(_float32(magazine))))
+        magazine = float(max(1, math.floor(_float32(magazine) + 0.5)))
     from .event_profiles import reloads_after_every_shot
     if not weapon.get('isIncarnonForm') and reloads_after_every_shot(weapon, weapon.get('__selectedFireMode__', fire_mode)):
         magazine = 1.0  # native ReloadAfterEveryShot: one shot, then an ordinary reload
@@ -1909,7 +1961,13 @@ def _apply_mods_spec_py(
         reload_base = event_profile['reloadStart'] + event_profile['reloadPerShell'] * magazine + event_profile['reloadEnd']
     reload_time = _divide(_combine(reload_base,buckets['WEAPON_RELOAD_TIME']), buckets['WEAPON_RELOAD_SPEED'])
     battery = event_profile.get('battery')
-    if battery:
+    if battery and 'emptyAnimationSeconds' in battery:
+        # An empty battery that plays a reload animation (Haalvu, WFSim M121):
+        # the longer of the animation, which reload speed shortens, and the
+        # refill from the partial delay, which it does not.
+        reload_time = max(_divide(battery['emptyAnimationSeconds'], buckets['WEAPON_RELOAD_SPEED']),
+                          battery['delayPartialSeconds'] + magazine / battery['regenPerSecond'])
+    elif battery:
         reload_time = _divide(battery['delayEmptySeconds'], buckets['WEAPON_RELOAD_SPEED']) + magazine / battery['regenPerSecond']
     if weapon.get('isIncarnonForm'):
         reload_time = 0.
@@ -1931,6 +1989,10 @@ def _apply_mods_spec_py(
             bonus = min(conversion.runtime_threshold, max(0., source_chance) * conversion.value)
             per_pellet_proc += bonus
     crit_chance = _combine(damage.get('critChance',0.),buckets['WEAPON_CRIT_CHANCE'])
+    per_status_crit = sum(e.value for e in buckets['WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE'])
+    if per_status_crit:
+        # Final crit chance per status type on the victim (GrnDrillScytheInnateUpgrade).
+        crit_chance = crit_chance + per_status_crit * scenario.victim_status_count
     fire_rate=(mode.get('fireRate') or 0.) if buckets['RUNTIME_LOCK_FIRE_RATE'] else _combine(mode.get('fireRate') or 0.,buckets['WEAPON_FIRE_RATE'])
     charge_rate=max(1e-9,_combine(1.,buckets['WEAPON_CHARGE_RATE']))
     # Native ChargeModifier: only a WEAPON_FIRE_RATE charge is shortened by fire-rate mods.
@@ -1984,7 +2046,14 @@ def _apply_mods_spec_py(
         crit_chance = blended
         if copy.get('procChance') is not None:
             per_pellet_proc = (per_pellet_proc + extra * float(copy['procChance'])) / multishot
-    dot_basis = elemental_base_total * _combine(1.0, damage_scale_effects) * compression_mult
+    # A status reads the modified base, and a melee weapon's damage mods
+    # (Pressure Point, a melee Riven's damage) are part of it as they are of
+    # the hit (WFSim ModifiedBase: Primed Pressure Point x2.65 on a bleed).
+    # Condition Overload and GunCO stay out.
+    dot_scale = _combine(1.0, damage_scale_effects)
+    if weapon.get("slot") in MELEE_SLOTS:
+        dot_scale = _combine(dot_scale, melee_damage_effects, base_value=dot_scale)
+    dot_basis = elemental_base_total * dot_scale * compression_mult
     dot_elements = _dot_elemental_multipliers(buckets['WEAPON_PERCENT_BASE_DAMAGE_ADDED'],
                                             buckets['WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE'])
     weapon_crit_chance = crit_chance
@@ -2008,6 +2077,23 @@ def _apply_mods_spec_py(
         crit_multiplier *= 1.25
         low_bonus *= 1.25
         shield_crit_damage_multiplier = 1.25
+    from .event_profiles import super_crit_on_status
+    super_crit = super_crit_on_status(weapon)
+    if super_crit:
+        # Gotva Prime: a pellet that applies a status arms the next one with this
+        # chance, and an armed pellet's crit chance is SET (weapon-passives.json).
+        # Expected crit damage is linear in the chance, so a pellet reads the mix.
+        armed = super_crit[0] * min(1.0, max(0.0, pellet_status(per_pellet_proc)))
+        crit_chance = crit_chance + armed * (super_crit[1] - crit_chance)
+    status_chance = pellet_status(per_pellet_proc)
+    from .event_profiles import super_status_on_crit
+    super_status = super_status_on_crit(weapon)
+    if super_status:
+        # Sagek Prime: a critical hit arms the next shot with this chance, and an
+        # armed shot's status chance is SET (GrnOrokinPistol.lua). Expected
+        # statuses are linear in the chance, so a shot reads the mix.
+        armed = super_status[0] * min(1.0, max(0.0, crit_chance))
+        status_chance = status_chance + armed * (super_status[1] - status_chance)
     # External final multipliers multiply each other and reach the hit and its
     # statuses once; the final critical damage joins the finished multiplier.
     final_damage = math.prod(1.0 + e.value for e in buckets['RUNTIME_FINAL_DAMAGE'] if not e.damage_type)
@@ -2069,8 +2155,10 @@ def _apply_mods_spec_py(
         cold_stack_damage=0.0 if cold_stack_forced else cold_stack_rate,
         base_damage_bracket=co.base_bracket,
         frozen_damage_multiplier=1.0 if frozen_forced else 1.0 + frozen_bonus,
+        reflection_explosion_chance=min(1.0, max(0.0, _combine(0.0, buckets['WEAPON_REFLECTION_EXPLOSION_CHANCE']))),
+        throw_damage_bonus=sum(e.value for e in buckets['RUNTIME_THROW_DAMAGE']),
         continuous=continuous,
-        status_chance=pellet_status(per_pellet_proc),
+        status_chance=status_chance,
         multishot=multishot,
         fire_rate=fire_rate,
         magazine=magazine,
@@ -2089,6 +2177,8 @@ def _apply_mods_spec_py(
         ),
         proc_damage_multiplier=_combine(1.0, buckets["WEAPON_PROC_DAMAGE"]),
         proc_duration_multiplier=_combine(1.0, buckets["WEAPON_PROC_TIME"]),
+        proc_duration_types=_typed_durations(buckets),
+        proc_max_stacks=_typed_stack_caps(buckets),
         status_condition_damage_multiplier=co.status_multiplier,
         # CO（对触发目标增伤）原始效果列表与预乘时的假定层数：窗口模型
         # （windowed_status_damage）用它把 CO 从 damage_types 中剥离，按每步
@@ -2313,7 +2403,9 @@ def _qualifier_rejection(
         if state:
             return f"{source}: excludes modifier {modifier}"
 
-    if effect.valid_proc_types:
+    # A per-status-type count names the types it counts, not a gate
+    # (Galariak Prime lists every damaging status: the victim_status_count).
+    if effect.valid_proc_types and effect.upgrade_type != "WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE":
         return f"{source}: cannot evaluate proc type {','.join(effect.valid_proc_types)}"
     if effect.valid_postures:
         return f"{source}: cannot evaluate posture {','.join(effect.valid_postures)}"
@@ -2332,6 +2424,34 @@ def _bucket(effects: Iterable[ModEffect]) -> dict[str, list[ModEffect]]:
             return []
 
     return _Defaulting(grouped)
+
+
+def _typed_durations(buckets) -> dict[str, float]:
+    typed: dict[str, list[ModEffect]] = {}
+    for effect in buckets["RUNTIME_TYPED_PROC_TIME"]:
+        if effect.damage_type:
+            typed.setdefault(effect.damage_type, []).append(effect)
+    return {dtype: _combine(1.0, [*buckets["WEAPON_PROC_TIME"], *rows]) for dtype, rows in typed.items()}
+
+
+def _typed_stack_caps(buckets) -> dict[str, float]:
+    extra: dict[str, float] = {}
+    for effect in buckets["RUNTIME_TYPED_PROC_MAX_STACK"]:
+        if effect.damage_type:
+            extra[effect.damage_type] = extra.get(effect.damage_type, 0.0) + effect.value
+    return extra
+
+
+def proc_stack_cap(stats: "ModdedStats", dtype: str, cap: float) -> float:
+    """The victim's stack cap of ``dtype`` with the weapon's extra stacks."""
+    extra = getattr(stats, "proc_max_stacks", None)
+    return cap + extra[dtype] if extra and dtype in extra else cap
+
+
+def proc_duration_scale(stats: "ModdedStats", dtype: str) -> float:
+    """Status duration multiplier of ``dtype`` on ``stats``."""
+    typed = getattr(stats, "proc_duration_types", None)
+    return max(float(typed[dtype] if typed and dtype in typed else stats.proc_duration_multiplier), 0.0)
 
 
 def _combine(
@@ -2388,7 +2508,9 @@ def _divide(base: float, effects: list[ModEffect]) -> float:
 # Ammo Efficiency is capped at 75% since the 2026-10-16 hotfix (user, 2026-10-16;
 # Bot maintainer patch 5fa4ba89): after every source, Primary Compression
 # included, a trigger still costs a quarter of its native ammo. Ammo-free
-# chances and infinite-ammo states are separate mechanics and stay uncapped.
+# chances and infinite-ammo states are separate mechanics and stay uncapped:
+# since the 2026-10-24 client every infinite-ammo source is a SET 0 of the cost
+# (Vasto 3C, Arcane Pistoleer, Perigale), and a SET is never floored.
 # native/wfcore/src/mods.rs carries the same rule.
 AMMO_EFFICIENCY_CAP = 0.75
 
@@ -2396,6 +2518,8 @@ AMMO_EFFICIENCY_CAP = 0.75
 def _capped_ammo_cost(base: float, effects: list[ModEffect], compression_ammo: float) -> float:
     """Per-trigger ammo cost after Ammo Efficiency, floored by the 75% cap."""
     cost = max(0.0, _combine(base, effects)) * max(0.0, 1.0 - compression_ammo)
+    if any(e.operation in ("SET", "SET_BASE") for e in effects):
+        return cost
     return max(base * (1.0 - AMMO_EFFICIENCY_CAP), cost)
 
 
@@ -3869,12 +3993,13 @@ def expected_dot_damage(
         per_second_by_tier = [(w, ps) for w, ps in per_second_by_tier if w > 0.0]
         seed_per_second_no_acc = sum(weight * ps for weight, ps in per_second_by_tier)
         per_second = seed_per_second_no_acc + (accumulator * accumulator_multiplier)
-        damage = per_second * duration
+        type_duration = DOT_BASE_DURATION_SECONDS * proc_duration_scale(stats, dtype)
+        damage = per_second * type_duration
         expected = damage * count
         breakdown[dtype] = {
             "expectedProcs": count,
             "coefficient": coefficient,
-            "durationSeconds": duration,
+            "durationSeconds": type_duration,
             "elementalMultiplier": max(float(elemental), 0.0),
             "critMultiplier": (1.0 - crit_share) * crit + crit_share * sum(
                 weight * factor for weight, factor in crit_seed_tiers
@@ -4127,7 +4252,7 @@ def sustained_status_damage(
 
     def stacks(dtype: str, duration: float, cap: float) -> float:
         return min(
-            max(float(procs.get(dtype) or 0.0) * proc_rate * duration * duration_scale, 0.0),
+            max(float(procs.get(dtype) or 0.0) * proc_rate * duration * proc_duration_scale(stats, dtype), 0.0),
             cap,
         )
 
@@ -4136,7 +4261,7 @@ def sustained_status_damage(
         "corrosive": stacks("DT_CORROSIVE", 8.0, 10.0),
         "magnetic": stacks("DT_MAGNETIC", 6.0, 10.0),
         "cold": stacks("DT_FREEZE", 6.0, 10.0),
-        "puncture": stacks("DT_PUNCTURE", 10.0, 5.0),
+        "puncture": stacks("DT_PUNCTURE", 10.0, proc_stack_cap(stats, "DT_PUNCTURE", 5.0)),
         "heat": stacks("DT_FIRE", 6.0, 1.0),
     }
 
@@ -4163,7 +4288,7 @@ def sustained_status_damage(
     cold_proc_rate = float(procs.get("DT_FREEZE") or 0.0) * proc_rate
     cold_freeze_uptime = 0.0
     if cold_count >= 10.0 and cold_proc_rate > 0.0:
-        freeze_duration = 3.0 * duration_scale
+        freeze_duration = 3.0 * proc_duration_scale(stats, "DT_FREEZE")
         rebuild_duration = 7.0 / cold_proc_rate
         cold_freeze_uptime = (
             freeze_duration / (freeze_duration + rebuild_duration)
@@ -4177,7 +4302,7 @@ def sustained_status_damage(
             if cold_count < 1.0
             else min(0.1 + 0.05 * (cold_count - 1.0), 0.5)
         )
-    puncture_crit = min(0.05 * stack_counts["puncture"], 0.25)
+    puncture_crit = min(0.05 * stack_counts["puncture"], 0.05 * proc_stack_cap(stats, "DT_PUNCTURE", 5.0))
     adjusted_stats = replace(
         stats,
         crit_chance=max(float(stats.crit_chance) + puncture_crit, 0.0),
@@ -4284,7 +4409,8 @@ def sustained_status_damage(
         if count > 0.0 and per_second > 0.0:
             ramp_times.append(count / per_second)
     if status.get("dotTotal"):
-        ramp_times.append(DOT_BASE_DURATION_SECONDS * duration_scale)
+        ramp_times.append(DOT_BASE_DURATION_SECONDS * max(
+            [duration_scale, *(proc_duration_scale(stats, d) for d in DOT_DAMAGE_COEFFICIENTS if procs.get(d))]))
     if status.get("nonDotTotal"):
         ramp_times.append(BLAST_DELAY_SECONDS)
     steady_state_seconds = max(ramp_times, default=0.0)
@@ -4542,7 +4668,7 @@ def windowed_status_damage(
         "corrosive": ("DT_CORROSIVE", 8.0, 10.0, False),
         "magnetic": ("DT_MAGNETIC", 6.0, 10.0, False),
         "cold": ("DT_FREEZE", 6.0, 10.0, False),
-        "puncture": ("DT_PUNCTURE", 10.0, 5.0, False),
+        "puncture": ("DT_PUNCTURE", 10.0, proc_stack_cap(stats, "DT_PUNCTURE", 5.0), False),
         "heat": ("DT_FIRE", 6.0, 1.0, True),
     }
 
@@ -4552,7 +4678,7 @@ def windowed_status_damage(
         (
             key,
             float(procs.get(_dtype) or 0.0) * proc_rate,
-            duration * duration_scale,
+            duration * proc_duration_scale(stats, _dtype),
             cap,
         )
         for key, (_dtype, duration, cap, _shared) in stack_specs.items()
@@ -4716,7 +4842,7 @@ def windowed_status_damage(
     # 注意口径区分：削甲用的 heat 活层（live_strip，上限 50%）仍走
     # live_stacks 的 cap 口径；本状态只喂 DoT tick 伤害（cloud_procs）。
     _heat_rate = float(procs.get("DT_FIRE") or 0.0) * proc_rate  # heat procs/s
-    _heat_duration = 6.0 * duration_scale
+    _heat_duration = 6.0 * proc_duration_scale(stats, "DT_FIRE")
     heat_inherit_total = 0.0  # 继承中的累计层数（断档/击杀清零）
     heat_inherit_last = 0.0   # 最后一次 heat proc 的绝对时刻
 
@@ -5286,7 +5412,7 @@ def windowed_status_damage(
         kills_in_window = 0.0
     steady_counts = {
         key: min(
-            max(float(procs.get(dtype) or 0.0) * proc_rate * duration * duration_scale, 0.0),
+            max(float(procs.get(dtype) or 0.0) * proc_rate * duration * proc_duration_scale(stats, dtype), 0.0),
             cap,
         )
         for key, (dtype, duration, cap, _shared) in stack_specs.items()

@@ -50,6 +50,7 @@
               </div>
             </div>
           </div>
+          <button class="button button-quiet favorites-button" id="favorites-button" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="favorites-drawer" title="紫卡收藏夹：跨武器保存、分析和装配紫卡">☆ 收藏夹 <b id="favorites-count">0</b></button>
           <button class="icon-button" id="theme-toggle" type="button" title="切换日间 / 夜间模式" aria-label="切换日间 / 夜间模式">☀</button>
           <button class="button button-quiet" id="sample-button" type="button" title="载入可运行示例">示例</button>
           <button class="button button-quiet" id="reset-button" type="button" title="重置输入">重置</button>
@@ -127,6 +128,7 @@
             </section>
 
             <div class="riven-composer">
+              <button class="riven-favorite-toggle" id="analysis-favorite" type="button" aria-pressed="false" title="收藏这张紫卡">☆</button>
               <div class="riven-stage" id="riven-stage">
                 <article class="riven-card" id="riven-card" aria-label="紫卡实时预览">
                   <div class="riven-drain" aria-label="容量 18">
@@ -310,6 +312,48 @@
                 <span>当前倾向</span><strong id="build-disposition">--</strong><i id="build-disposition-dots">○○○○○</i>
               </div>
 
+              <section class="incarnon-panel exalted-panel" id="build-exalted-panel" hidden aria-label="显赫武器">
+                <details class="fold" open>
+                  <summary class="fold-head"><strong>显赫武器</strong><span>关联战甲 / 技能强度 / 能量</span></summary>
+                  <div class="fold-body">
+                    <div class="exalted-link-row">
+                      <label class="field">
+                        <span>关联战甲</span>
+                        <select id="build-exalted-frame"></select>
+                      </label>
+                      <label class="field">
+                        <span>战甲配置</span>
+                        <select id="build-exalted-config"></select>
+                      </label>
+                    </div>
+                    <button class="button button-quiet exalted-open-frame" id="build-exalted-open-frame" type="button">在战甲配装中编辑这个配置 →</button>
+                    <div class="exalted-readout" id="build-exalted-readout"></div>
+                    <div class="exalted-loadout" id="build-exalted-loadout"></div>
+                    <p class="scope-hint" id="build-exalted-caption"></p>
+                    <p class="scope-hint">强度 / 效率 / 持续 / 能量上限、光环与战甲赋能都读取自战甲配装页对应的已保存配置；武器页的战甲赋能槽对显赫武器不生效。计算一律按无限能量，续航只在结果区提示。</p>
+                  </div>
+                </details>
+              </section>
+
+              <section class="incarnon-panel companion-panel" id="build-companion-panel" hidden aria-label="守护">
+                <details class="fold" open>
+                  <summary class="fold-head"><strong>守护</strong><span>本体 / 镀层叠层 / 守护 MOD 开关</span></summary>
+                  <div class="fold-body">
+                    <label class="field">
+                      <span>守护本体（机械守护）</span>
+                      <select id="build-sentinel-select"></select>
+                      <small id="build-sentinel-caption">任意能装这把武器的守护都可以选；本体 MOD 在右侧「守护本体」里配置</small>
+                    </label>
+                    <label class="check-field" title="镀层 MOD 的击杀条件只认玩家本人的击杀（游戏数据 DamageSources = TennoAvatar）。守护自己的击杀不叠层；但你用同类武器（步枪 / 霰弹枪 / 手枪 / 近战）击杀时，守护武器上的镀层也会叠层。">
+                      <input id="build-companion-player-stacks" type="checkbox">
+                      <span>战甲用同类武器击杀，守护武器的镀层按满层计算</span>
+                    </label>
+                    <div class="companion-options" id="build-sentinel-options"></div>
+                    <p class="scope-hint">守护的 AI 只瞄准躯干、不会开镜：爆头率、开镜和「爆头 / 开镜」类条件 MOD 对守护武器无效；守护武器不能装赋能。镀层开关同时作用于自动配装和伤害计算。</p>
+                  </div>
+                </details>
+              </section>
+
               <label class="field">
                 <span>攻击模式</span>
                 <select id="build-fire-mode-select"></select>
@@ -378,11 +422,16 @@
                       <input id="build-auto-arcane" type="checkbox">
                       <span>自动选择武器赋能（较慢：标准档约多 3–20 秒）</span>
                     </label>
+                    <label class="check-field" title="自动配装不再使用对 Grineer / Corpus / Infested 等派系的增伤卡（含 Prime 版与紫卡之外的所有派系卡）。所有武器生效，本机记忆。">
+                      <input id="build-exclude-faction" type="checkbox">
+                      <span>屏蔽派系歧视卡（所有武器）</span>
+                    </label>
                     <div class="scope-mod-lists">
                       <div class="scope-mod-list" id="build-required-list" aria-label="必选 MOD"></div>
                       <div class="scope-mod-list" id="build-forbidden-list" aria-label="禁选 MOD"></div>
+                      <div class="scope-mod-list" id="build-global-forbidden-list" aria-label="全局屏蔽 MOD"></div>
                     </div>
-                    <p class="scope-hint">在 MOD 选择器中长按（或右键）一张卡可加入必选/禁选清单；求解时这些约束会一并生效。</p>
+                    <p class="scope-hint">在 MOD 选择器或已装备的槽位上长按（或右键）一张卡：必选 / 本武器禁选 / 全局屏蔽。槽位上禁选会顺手剔除这张卡并重新配装。</p>
                   </div>
                 </details>
               </section>
@@ -662,7 +711,21 @@
                 <div class="build-legend"><span><i class="legend-riven"></i>当前紫卡</span><span><i class="legend-mod"></i>MOD</span><b id="weapon-build-slot-summary">8 SLOTS</b></div>
               </section>
 
+              <section class="sentinel-bench" id="sentinel-bench" hidden aria-label="守护本体">
+                <header class="sentinel-bench-head">
+                  <div class="sentinel-identity"><img id="sentinel-portrait" alt="" hidden><div><span>SENTINEL</span><strong id="sentinel-name">未带守护本体</strong></div></div>
+                  <div class="capacity-bar-block">
+                    <div class="capacity-bar" id="sentinel-capacity-bar" role="progressbar" aria-label="守护 MOD 容量"></div>
+                    <span class="capacity-readout" id="sentinel-capacity-readout">-- / 60</span>
+                  </div>
+                </header>
+                <p class="sentinel-warning" id="sentinel-warning" hidden></p>
+                <div class="sentinel-slots" id="sentinel-slots" aria-label="守护 MOD 槽位"></div>
+                <div class="sentinel-stats" id="sentinel-stats" aria-live="polite"></div>
+              </section>
+
               <section class="build-detail">
+                <section class="exalted-energy" id="build-exalted-energy" hidden aria-live="polite"></section>
                 <div class="weapon-stat-band" id="weapon-build-stat-band"></div>
                 <section class="damage-composition">
                   <div class="result-section-title"><div><span>DAMAGE PROFILE</span><h3>伤害构成</h3></div><small id="weapon-build-element-note">未限定元素</small></div>
@@ -811,7 +874,7 @@
               <section class="warframe-panel-section">
                 <div class="result-section-title"><div><span>RANK 30 PANEL</span><h3>战甲面板</h3></div><small id="warframe-effect-status">触发效果关闭</small></div>
                 <div class="warframe-panel-grid" id="warframe-panel-grid"></div>
-                <div class="warframe-active-effects" id="warframe-active-effects"></div>
+                <section class="warframe-exalted-card" id="warframe-exalted-card" hidden aria-label="显赫武器"></section>
               </section>
               <section class="warframe-ability-section">
                 <div class="result-section-title"><div><span>ABILITY SCALING</span><h3>技能缩放</h3></div><small>强度 / 持续 / 范围 / 效率</small></div>
@@ -826,6 +889,30 @@
         </section>
 
         <div class="mod-picker-scrim" id="mod-picker-scrim" hidden></div>
+        <div class="favorites-scrim" id="favorites-scrim" hidden></div>
+        <aside class="favorites-drawer" id="favorites-drawer" role="dialog" aria-modal="true" aria-labelledby="favorites-title" hidden>
+          <header class="favorites-head">
+            <div><span>RIVEN VAULT</span><h3 id="favorites-title">紫卡收藏夹</h3><small id="favorites-stat">--</small></div>
+            <button class="icon-button" id="favorites-close" type="button" title="关闭" aria-label="关闭紫卡收藏夹">×</button>
+          </header>
+          <div class="favorites-toolbar">
+            <div class="favorites-scope" id="favorites-scope" role="group" aria-label="范围">
+              <button type="button" class="is-active" data-scope="all">全部武器</button>
+              <button type="button" data-scope="current">当前武器</button>
+            </div>
+            <select id="favorites-type" aria-label="武器类别"><option value="">全部类别</option></select>
+            <input id="favorites-search" type="search" placeholder="搜索武器或备注" aria-label="搜索收藏">
+          </div>
+          <div class="favorites-list" id="favorites-list"></div>
+          <footer class="favorites-foot">
+            <small>收藏保存在本机浏览器；换电脑前先导出。</small>
+            <div>
+              <button class="button button-quiet" id="favorites-import" type="button">导入</button>
+              <button class="button button-quiet" id="favorites-export" type="button">导出</button>
+              <input id="favorites-import-file" type="file" accept="application/json,.json" hidden>
+            </div>
+          </footer>
+        </aside>
         <div class="rabbit-dialog-scrim" id="rabbit-dialog-scrim" hidden></div>
         <div class="rabbit-dialog" id="rabbit-dialog" role="dialog" aria-modal="true" aria-labelledby="rabbit-dialog-title" hidden>
           <section class="rabbit-dialog-shell">

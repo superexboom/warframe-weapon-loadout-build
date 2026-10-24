@@ -64,7 +64,8 @@ def test_zaw_swings_its_strikes_melee_tree():
     assert ms.weapon_row(machete)["tree"].endswith("/MacheteMeleeTree")
     assert ms.default_route(hammer) == "slamBullet" and ms.default_route(machete) == "combo"
     slam = ms.build_schedule(hammer)
-    assert slam["route"] == "slamBullet" and slam["segments"][1]["hit"]["atten"] == pytest.approx(5.0)
+    # One heavy-slam area hit at HeavySlamAoE's x3 (wiki), not the Slams[] row's x5.
+    assert slam["route"] == "slamBullet" and slam["segments"][0]["hit"]["atten"] == pytest.approx(3.0)
     stance = app._compatible_stances(machete)[0]
     combo = ms.build_schedule(machete, "combo", stance=stance["path"])
     assert combo["route"] == "combo" and combo["stance"] == stance["path"]

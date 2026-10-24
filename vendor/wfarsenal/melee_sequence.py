@@ -196,6 +196,15 @@ def build_schedule(weapon: Mapping[str, Any], route: str | None = None, *, stanc
     row = weapon_row(weapon)
     if not row:
         return None
+    if weapon.get("exaltedCast"):
+        # Whipclaw / Shattered Lash / Landslide / Blade Storm: the melee tree is
+        # a placeholder; one cast is one hit (exalted.cast_schedule).
+        from .exalted import cast_schedule
+        melee_damage = row.get("damage") or {}
+        schedule = cast_schedule(weapon, row.get("combo") or {})
+        if schedule:
+            return dict(schedule, stance=None, notes=["exalted-cast-loop"], comboSpec=row.get("combo") or {},
+                        meleeCrit=(melee_damage.get("crit"), melee_damage.get("critMultiplier")))
     route = route or default_route(weapon)
     attacks = ref.get("attacks") or {}
     slams = {s["event"]: s for s in row.get("slams") or () if s.get("event")}
@@ -234,23 +243,33 @@ def build_schedule(weapon: Mapping[str, Any], route: str | None = None, *, stanc
         strike_seconds = float(strike.get("duration") or 1.0) * (_wait_fraction(strike) or 1.0)
         rise, fall, height = jump_times(route)
         notes.append(f"slam-cycle: rise {rise:.2f}s + free-fall {fall:.2f}s from {height:g} m (plunge speed not in data)")
+        # One area strike, the slam attack's own DamageAtten (SlamAoE 2,
+        # HeavySlamAoE 3: wiki Melee "Slam attacks deal 2x weapon damage (3x
+        # for Heavy Slams)", Arca Titron's heavy slam 1,080 = 3 x 360) in the
+        # Slams[] row's element and procs, the target at its centre. The row's
+        # own BaseDamageAttenuation (HeavySlam 3.5-5 by class) matches no
+        # published figure and is not applied. It crits: weapon pages list a
+        # heavy slam crit chance. A heavy slam spends the counter it reads.
         segments = [
             dict(fixed=rise + fall, anim=0.0, hit=dict(
-                kind="slamDirect", t=0.0, atten=direct, procAtten=1.0, extraProcs=[], comboHits=1.0,
-                damagePct={}, canCrit=True, heavy=bool(heavy), slam=True, comboMultiplier=bool(heavy))),
-            dict(fixed=0.0, anim=0.0, hit=dict(
-                kind="slamRadial", t=0.0, atten=float(slam.get("attenuation") or 1.0), procAtten=1.0,
-                extraProcs=list(slam.get("forcedProcs") or ()), comboHits=0.0, damagePct={},
-                canCrit=bool(slam.get("canCrit")), radial=True, slam=True, heavy=bool(heavy),
-                damageType=slam.get("damageType"), comboMultiplier=bool(slam.get("comboMultiplier")),
-                consumesCombo=bool(heavy))),
+                kind="slam", t=0.0, atten=direct, procAtten=1.0, extraProcs=list(slam.get("forcedProcs") or ()),
+                comboHits=0.0 if heavy else 1.0, damagePct={}, canCrit=True, radial=True, slam=True,
+                heavy=bool(heavy), damageType=slam.get("damageType"), comboMultiplier=bool(heavy),
+                consumesCombo=bool(heavy), slamStart=True, slamEnd=True)),
             dict(fixed=0.0, anim=strike_seconds, hit=None),
         ]
         return dict(common, route=route, segments=segments, label="heavy-slam" if heavy else "slam",
                     slamHeight=height)
     glaive = row["glaive"]
     proj = glaive.get("turbo") or glaive.get("projectile")
-    charge, guessed = class_charge_time(ref, row)
+    # The charged throw winds up for the glaive's ChargeDuration (1.2 s, the
+    # wiki's heavy wind-up); HeavyMeleeChargeTime belongs to a stance heavy
+    # glaives do not have (HasHeavyAttack 0). Wind-up cards shorten it.
+    charge_duration = (row.get("heavy") or {}).get("chargeDuration")
+    if charge_duration:
+        charge, guessed = float(charge_duration), False
+    else:
+        charge, guessed = class_charge_time(ref, row)
     if guessed:
         notes.append("heavy-wind-up-from-class")
     distance = GLAIVE_DEFAULT_DISTANCE if target_distance is None else float(target_distance)
@@ -259,21 +278,42 @@ def build_schedule(weapon: Mapping[str, Any], route: str | None = None, *, stanc
     throw = attacks.get(heavy_set[0]) if heavy_set else None
     throw_seconds = float((throw or {}).get("duration") or 0.7)
     scale = float(proj.get("amount") or 0.0) / melee_amount if melee_amount else 1.0
-    explosion = float(proj.get("explosion") or 0.0) * float(proj.get("heavyRecallAtten") or 1.0)
+    blast = float(proj.get("explosion") or 0.0)
+    explosion = blast * float(proj.get("heavyRecallAtten") or 1.0)
     notes.append(f"glaive-cycle: wind-up {charge:g}s + throw {throw_seconds:.2f}s + flight {flight:.2f}s ({distance:g} m)")
     melee_proc = float(melee_damage.get("procChance") or 0.0)
-    base = dict(procAtten=float(proj.get("procChance") or 0.0) / melee_proc if melee_proc else 1.0,
-                critChance=proj.get("crit"), critMultiplier=proj.get("critMultiplier"), damagePct={},
-                heavy=True, projectile=True)
+
+    def proc_atten(chance):
+        return float(chance or 0.0) / melee_proc if melee_proc else 1.0
+
+    base = dict(critChance=proj.get("crit"), critMultiplier=proj.get("critMultiplier"), damagePct={},
+                projectile=True)
+    blast_proc = proc_atten(proj.get("explosionProcChance", proj.get("procChance")))
     segments = [
         dict(fixed=charge, anim=throw_seconds, hit=None, chargeScaled=True),
-        dict(fixed=flight, anim=0.0, hit=dict(
+        # The strike is not a heavy attack: a combo point and Condition
+        # Overload, no counter, no heavy-attack card (wiki Killing Blow:
+        # "does not increase the thrown weapon's own damage"); Power Throw's
+        # consecutive-throw damage is its alone. Whirlwind shortens the flight.
+        dict(fixed=flight, anim=0.0, flightScaled=True, hit=dict(
             base, kind="glaiveDirect", t=0.0, atten=scale, canCrit=True, comboHits=1.0,
-            extraProcs=list(proj.get("forcedProcs") or ()), comboMultiplier=False)),
+            procAtten=proc_atten(proj.get("procChance")),
+            extraProcs=list(proj.get("forcedProcs") or ()), comboMultiplier=False, heavy=False, throw=True)),
+        # Volatile Rebound / Quick Return: the bounce off the struck body sets
+        # off the projectile's own explosion, half the detonation (wiki: "50%
+        # of Heavy Attack damage"), at the build's chance; no counter, no
+        # heavy-attack card, no forced procs. The detonation still follows.
+        dict(fixed=0.0, anim=0.0, hit=dict(
+            base, kind="glaiveBounce", t=0.0, atten=blast / melee_amount if melee_amount else 1.0,
+            canCrit=True, radial=True, damageType="DT_EXPLOSION", comboHits=0.0, procAtten=blast_proc,
+            extraProcs=[], comboMultiplier=False, heavy=False, bounce=True, noConditionOverload=True)),
+        # The detonation is a heavy attack: it reads the counter and spends
+        # it; Condition Overload does not reach it (wiki, Glaive Prime).
         dict(fixed=0.0, anim=0.0, hit=dict(
             base, kind="glaiveExplosion", t=0.0, atten=explosion / melee_amount if melee_amount else 1.0,
-            canCrit=True, radial=True, damageType="DT_EXPLOSION", comboHits=0.0,
-            extraProcs=list(proj.get("heavyRecallProcs") or ()), comboMultiplier=True)),
+            canCrit=True, radial=True, damageType="DT_EXPLOSION", comboHits=0.0, procAtten=blast_proc,
+            extraProcs=list(proj.get("heavyRecallProcs") or ()), comboMultiplier=True, heavy=True,
+            consumesCombo=True, noConditionOverload=True)),
     ]
     return dict(common, route="glaive", segments=segments, label="heavy-throw-detonate")
 
@@ -300,12 +340,15 @@ class Loop:
         self.segments = list(schedule["segments"])
         self.index = 0
 
-    def next(self, attack_speed: float, charge_speed: float = 1.0) -> tuple[dict[str, Any], float]:
+    def next(self, attack_speed: float, charge_speed: float = 1.0,
+             projectile_speed: float = 1.0) -> tuple[dict[str, Any], float]:
         waited = 0.0
         for _ in range(len(self.segments) + 1):
             segment = self.segments[self.index]
             self.index = (self.index + 1) % len(self.segments)
             fixed = segment["fixed"] / charge_speed if segment.get("chargeScaled") else segment["fixed"]
+            if segment.get("flightScaled"):
+                fixed = segment["fixed"] / max(projectile_speed, 1e-9)
             waited += fixed + segment["anim"] / max(attack_speed, 1e-9)
             if segment.get("hit"):
                 return segment["hit"], waited
@@ -330,6 +373,12 @@ def apply_hit(stats, hit: Mapping[str, Any], *, melee_crit, heavy_multiplier: fl
     factor = float(hit.get("atten", 1.0))
     if hit.get("slam"):
         factor *= float(getattr(stats, "slam_damage_ratio", 1.0) or 1.0)
+    throw_bonus = float(getattr(stats, "throw_damage_bonus", 0.0) or 0.0)
+    if hit.get("throw") and throw_bonus:
+        # Power Throw: weapon damage on the throw alone, in the base bracket
+        # beside the other weapon-damage terms (wiki: multiplicative to
+        # Pressure Point, additive with universal weapon bonuses).
+        factor *= 1.0 + throw_bonus / (float(getattr(stats, "base_damage_bracket", 1.0)) or 1.0)
     if hit.get("comboMultiplier"):
         factor *= heavy_multiplier
     pct = hit.get("damagePct") or {}
@@ -361,7 +410,9 @@ def apply_hit(stats, hit: Mapping[str, Any], *, melee_crit, heavy_multiplier: fl
         crit_multiplier=crit_multiplier,
         status_chance=stats.status_chance * float(hit.get("procAtten", 1.0)),
         native_forced_procs=forced,
-        multishot=1.0,
+        # A Volatile bounce explosion lands at the build's bounce chance.
+        multishot=(min(1.0, max(0.0, float(getattr(stats, "reflection_explosion_chance", 0.0))))
+                   if hit.get("bounce") else 1.0),
         radial_only=bool(hit.get("radial")),
     )
 
@@ -385,13 +436,15 @@ def route_note(schedule: Mapping[str, Any], stance_name: str | None = None) -> s
                 f"{len(hits)} 击 / 总倍率 {sum(h['atten'] for h in hits):g}，1.0 攻速下 {seconds:.2f} 秒一轮）；"
                 "逐次命中，连击数从初始连击逐击累加，嗜血类效果按实时档位")
     if route in ("slam", "slamBullet"):
-        direct, radial = hits[0], hits[1]
+        slam = hits[0]
         jump = "原地跳到最高点" if route == "slam" else "垂直子弹跳"
-        kind = "重击震地" if direct.get("heavy") else "震地"
+        kind = "重击震地" if slam.get("heavy") else "震地"
         return (f"攻击路线：{kind}（{jump}，{schedule.get('slamHeight', 0):g} 米，1.0 攻速下 {seconds:.2f} 秒一轮）；"
-                f"直击 ×{direct['atten']:g} + 范围 ×{radial['atten']:g}（{_DAMAGE_NAMES.get(radial.get('damageType'), radial.get('damageType'))}，不暴击，靶在中心）"
-                + ("，重击按初始连击倍率" if direct.get("heavy") else ""))
+                f"一次范围打击 ×{slam['atten']:g}（{_DAMAGE_NAMES.get(slam.get('damageType'), slam.get('damageType'))}，可暴击，靶在中心）"
+                + ("，按初始连击倍率并消耗连击" if slam.get("heavy") else ""))
     if route == "glaive":
-        return (f"攻击路线：蓄力重投 + 立即引爆（1.0 攻速下 {seconds:.2f} 秒一轮）；投掷直击 ×{hits[0]['atten']:.2f} + "
-                f"爆炸 ×{hits[1]['atten']:.2f}（爆炸按初始连击倍率）")
+        by_kind = {h["kind"]: h for h in hits}
+        return (f"攻击路线：蓄力重投 + 立即引爆（1.0 攻速下 {seconds:.2f} 秒一轮）；投掷直击 ×{by_kind['glaiveDirect']['atten']:.2f} + "
+                f"引爆 ×{by_kind['glaiveExplosion']['atten']:.2f}（重击，按初始连击倍率并消耗连击，不吃异况超量）"
+                f"；易爆弹跳 / 易爆速返的弹跳爆炸 ×{by_kind['glaiveBounce']['atten']:.2f} 按弹跳爆炸几率")
     return "攻击路线：" + str(route)

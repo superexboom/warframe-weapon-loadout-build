@@ -13,7 +13,7 @@ use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
 use crate::pymath::{pmax, pmin, psum, sqrt};
-use crate::replay::{core_of, f, opt_attr, vector_of, Types};
+use crate::replay::{core_of, opt_attr, vector_of, Types};
 use crate::tables::{self, Core, Location, TargetTables, Vector};
 
 type D = u32;
@@ -239,13 +239,12 @@ pub fn sustained_status(
     let (_, _, head) = ctx.location(&core);
     let procs = tables::expected_status_procs(&core, &Vec::new(), head);
     let proc_of = |d: D| tables::get(&procs, d).unwrap_or(0.0);
-    let duration_scale = pmax(f(stats, "proc_duration_multiplier")?, 0.0);
-    let stacks = |d: D, duration: f64, cap: f64| pmin(pmax(proc_of(d) * proc_rate * duration * duration_scale, 0.0), cap);
+    let stacks = |d: D, duration: f64, cap: f64| pmin(pmax(proc_of(d) * proc_rate * duration * core.duration_scale(d), 0.0), cap);
     let viral_count = stacks(viral, 6.0, 10.0);
     let corrosive_count = stacks(corrosive, 8.0, 10.0);
     let magnetic_count = stacks(magnetic, 6.0, 10.0);
     let cold_count = stacks(cold, 6.0, 10.0);
-    let puncture_count = stacks(puncture, 10.0, 5.0);
+    let puncture_count = stacks(puncture, 10.0, core.stack_cap(puncture, 5.0));
     let heat_count = stacks(heat, 6.0, 1.0);
 
     let corrosive_strip = if corrosive_count < 1.0 {
@@ -258,7 +257,7 @@ pub fn sustained_status(
     let combined_strip = 1.0 - ((1.0 - elemental) * (1.0 - corrosive_strip) * (1.0 - heat_strip));
     let cold_proc_rate = proc_of(cold) * proc_rate;
     let cold_crit = if cold_count >= 10.0 && cold_proc_rate > 0.0 {
-        let freeze_duration = 3.0 * duration_scale;
+        let freeze_duration = 3.0 * core.duration_scale(cold);
         let rebuild_duration = 7.0 / cold_proc_rate;
         let uptime = if freeze_duration > 0.0 { freeze_duration / (freeze_duration + rebuild_duration) } else { 0.0 };
         0.35 * (1.0 - uptime) + uptime
@@ -267,7 +266,7 @@ pub fn sustained_status(
     } else {
         pmin(0.1 + 0.05 * (cold_count - 1.0), 0.5)
     };
-    let puncture_crit = pmin(0.05 * puncture_count, 0.25);
+    let puncture_crit = pmin(0.05 * puncture_count, 0.05 * core.stack_cap(puncture, 5.0));
     let mut adjusted = core.clone();
     adjusted.crit_chance = pmax(core.crit_chance + puncture_crit, 0.0);
     adjusted.crit_multiplier = pmax(core.crit_multiplier + cold_crit, 1.0);

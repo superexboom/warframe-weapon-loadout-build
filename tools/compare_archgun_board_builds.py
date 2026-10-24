@@ -27,6 +27,8 @@ const rel=JSON.parse(fs.readFileSync(path.join(repo,'site/release.json'),'utf8')
 const base=path.join(repo,'site/pkg');
 const engine=new Function(fs.readFileSync(path.join(base,'wfsim_wasm.'+rel.wasm+'.js'),'utf8')+';return wasm_bindgen;')();
 engine.initSync({module:fs.readFileSync(path.join(base,'wfsim_wasm_bg.'+rel.wasm+'.wasm'))});
+// Since 2026-10-17 the game data ships as packs the engine is handed before its first call.
+for(const pack of rel.packs||[]){const err=engine.install_data_bytes(new Uint8Array(fs.readFileSync(path.join(base,pack))));if(err)throw new Error(pack+': '+err);}
 const results=JSON.parse(fs.readFileSync(input,'utf8')).map(p=>JSON.parse(engine.api('/api/simulate',JSON.stringify(p))));
 fs.writeFileSync(output,JSON.stringify(results,null,2),{flag:'wx'});
 """

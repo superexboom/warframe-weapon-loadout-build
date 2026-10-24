@@ -71,6 +71,10 @@ def main():
         rate, empty, partial = values['regenPerSecond'], values['delayEmptySeconds'], values['delayPartialSeconds']
         entry = dict(name=row.get('nameEn'), membership=[m for m, on in (('wfsim', ref), ('native-tag', tagged)) if on], valueSource=source, regenPerSecond=rate, delayEmptySeconds=empty, delayPartialSeconds=partial,
                      nativeMagazine=native.get('AmmoClipSize'), exportReloadTimes=[m.get('reloadTime') for m in row.get('fireModes') or []])
+        if b.get('empty_animation_seconds') is not None:
+            # A measured reload animation on an empty battery (WFSim M121, Haalvu): see damage.py.
+            entry['emptyAnimationSeconds'] = float(b['empty_animation_seconds'])
+            entry['emptyAnimationSource'] = 'WFSim ' + ref['source']
         own = pkg._path_to_file(row['path'])
         if own.is_file():
             entry['nativeSha256'] = hashlib.sha256(own.read_bytes()).hexdigest()
@@ -82,7 +86,8 @@ def main():
                 entry['wfsimDiffers'] = True
         out[row['path']] = entry
     payload = dict(schemaVersion=1, packageBuild=a.build_dir.name, generatedBy='tools/import_battery_profiles.py',
-                   semantics='empty-magazine refill = delayEmptySeconds / reload speed + magazine / regenPerSecond',
+                   semantics='empty-magazine refill = delayEmptySeconds / reload speed + magazine / regenPerSecond; '
+                             'with emptyAnimationSeconds: max(emptyAnimationSeconds / reload speed, delayPartialSeconds + magazine / regenPerSecond)',
                    weapons=out)
     a.output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     print(len(out), 'battery weapons;', sum(1 for e in out.values() if e.get('wfsimDiffers')), 'differ from WFSim')

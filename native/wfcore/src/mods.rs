@@ -168,7 +168,9 @@ const BUCKETS: &[&str] = &[
     "WEAPON_CRIT_UNDER_PROC_THRESHOLD_MAX", "WEAPON_EXPLOSION_RADIUS", "WEAPON_FIRE_ITERATIONS", "WEAPON_FIRE_RATE",
     "WEAPON_LOW_CRIT_DAMAGE", "WEAPON_LOW_CRIT_VALUE", "WEAPON_NOCRIT_CHANCE", "WEAPON_PROC_CHANCE",
     "WEAPON_PROJECTILE_SPEED", "WEAPON_RELOAD_SPEED", "WEAPON_RELOAD_TIME", "WEAPON_VICTIM_CRIT_CHANCE",
-    "WEAPON_VICTIM_CRIT_DAMAGE", "WEAPON_VICTIM_DAMAGE_AMOUNT",
+    "WEAPON_VICTIM_CRIT_DAMAGE", "WEAPON_VICTIM_DAMAGE_AMOUNT", "WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE",
+    "RUNTIME_TYPED_PROC_TIME", "RUNTIME_TYPED_PROC_MAX_STACK", "WEAPON_REFLECTION_EXPLOSION_CHANCE",
+    "RUNTIME_THROW_DAMAGE",
 ];
 const OTHER: usize = BUCKETS.len();
 
@@ -320,7 +322,12 @@ pub struct ModsPrep {
     reload_every_shot: bool,
     reload_base: Num,
     shell: Option<(f64, f64, f64)>,
-    battery: Option<(Num, f64)>,
+    /// (empty delay, regen, empty animation, partial delay) - damage.py battery reload.
+    battery: Option<(Num, f64, Option<f64>, f64)>,
+    /// (arming chance, set crit chance) - damage.py super_crit_on_status.
+    super_crit: Option<(f64, f64)>,
+    /// (arming chance, set status chance) - damage.py super_status_on_crit.
+    super_status: Option<(f64, f64)>,
     crit_chance: Num,
     crit_multiplier: Num,
     fire_rate: Num,
@@ -391,10 +398,21 @@ impl ModsPrep {
                 None
             } else {
                 let t = v.cast::<PyTuple>()?;
-                Some((Num::extract(&t.get_item(0)?)?, t.get_item(1)?.extract::<f64>()?))
+                Some((Num::extract(&t.get_item(0)?)?, t.get_item(1)?.extract::<f64>()?,
+                      t.get_item(2)?.extract::<Option<f64>>()?, t.get_item(3)?.extract::<f64>()?))
             }
         };
+        let super_crit = {
+            let v = get(config, "superCrit")?;
+            if v.is_none() { None } else { Some(v.extract::<(f64, f64)>()?) }
+        };
+        let super_status = {
+            let v = get(config, "superStatus")?;
+            if v.is_none() { None } else { Some(v.extract::<(f64, f64)>()?) }
+        };
         Ok(ModsPrep {
+            super_crit,
+            super_status,
             classify: get(config, "classify")?.unbind(),
             effect_class: get(config, "effectClass")?.unbind(),
             zoom,
@@ -738,7 +756,8 @@ pub fn apply_mods<'py>(
     let pellet_status = |chance: f64| combine(chance * pellets, &[&proc_ops]) / pellets;
     let mut magazine = combine(prep.base_magazine, &[&ap.ops(b!("WEAPON_CLIP_MAX"))]);
     if prep.base_magazine > 0.0 && !prep.incarnon_form {
-        magazine = pmax(1.0, ((magazine as f32) as f64).floor());
+        // Nearest whole round (damage.py: wiki Magazine Warp, Tonkor 1 x 1.55 -> 2).
+        magazine = pmax(1.0, (((magazine as f32) as f64) + 0.5).floor());
     }
     if prep.reload_every_shot {
         magazine = 1.0;
@@ -759,8 +778,11 @@ pub fn apply_mods<'py>(
         if scale > 0.0 { Num::F(base.f() / scale) } else { Num::F(RELOAD_NEVER_SECONDS) }
     };
     let mut reload_time = divide(combine_num(reload_base, &[&ap.ops(b!("WEAPON_RELOAD_TIME"))]));
-    if let Some((delay, regen)) = prep.battery {
-        reload_time = Num::F(divide(delay).f() + magazine / regen);
+    if let Some((delay, regen, animation, partial)) = prep.battery {
+        reload_time = Num::F(match animation {
+            Some(animation) => pmax(divide(Num::F(animation)).f(), partial + magazine / regen),
+            None => divide(delay).f() + magazine / regen,
+        });
     }
     if prep.incarnon_form {
         reload_time = Num::F(0.0);
@@ -793,6 +815,11 @@ pub fn apply_mods<'py>(
         }
     }
     let mut crit_chance = combine_num(critchance, &[&crit_ops]);
+    let per_status_crit = pysum(ap.values(b!("WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE")));
+    if per_status_crit.truthy() {
+        // damage.py: final crit chance per status type on the victim (Galariak Prime).
+        crit_chance = Num::F(crit_chance.f() + per_status_crit.f() * vsc);
+    }
     let fire_rate = if !ap.empty(b!("RUNTIME_LOCK_FIRE_RATE")) {
         prep.fire_rate
     } else {
@@ -864,7 +891,13 @@ pub fn apply_mods<'py>(
             }
         }
     }
-    let mut dot_basis = elemental_base_total * combine(1.0, &[&scale_ops]) * compression_mult;
+    // A melee weapon's damage mods are part of the status payload's base.
+    let mut dot_scale = combine(1.0, &[&scale_ops]);
+    if prep.melee {
+        let melee_ops: Vec<(u8, f64)> = melee_idx.iter().map(|&i| (rows[i].op, rows[i].value)).collect();
+        dot_scale = co::combine(dot_scale, &[&melee_ops], Some(dot_scale));
+    }
+    let mut dot_basis = elemental_base_total * dot_scale * compression_mult;
     // _dot_elemental_multipliers
     let typed = |name: &str| -> Vec<(u8, f64)> {
         pre_idx.iter().chain(post_idx.iter()).filter(|&&i| nonempty(&rows[i].damage_type) == Some(name))
@@ -894,6 +927,17 @@ pub fn apply_mods<'py>(
         crit_multiplier *= 1.25;
         low_bonus *= 1.25;
         shield_crit = 1.25;
+    }
+    if let Some((chance, set_to)) = prep.super_crit {
+        // Gotva Prime (damage.py): status-armed pellets read a SET crit chance.
+        let armed = chance * pmin(1.0, pmax(0.0, pellet_status(per_pellet_proc)));
+        crit_chance = Num::F(crit_chance.f() + armed * (set_to - crit_chance.f()));
+    }
+    let mut status_chance = pellet_status(per_pellet_proc);
+    if let Some((chance, set_to)) = prep.super_status {
+        // Sagek Prime (damage.py): a crit arms the next shot's SET status chance.
+        let armed = chance * pmin(1.0, pmax(0.0, crit_chance.f()));
+        status_chance = status_chance + armed * (set_to - status_chance);
     }
     let mut final_damage = Num::I(1);
     let mut typed_final: Vec<(D, String, f64)> = Vec::new();
@@ -989,7 +1033,7 @@ pub fn apply_mods<'py>(
     out.set_item("damage_types", dict_py(py, &codamage.damage_types)?)?;
     out.set_item("crit_chance", crit_chance.to_py(py))?;
     out.set_item("crit_multiplier", crit_eff)?;
-    out.set_item("status_chance", pellet_status(per_pellet_proc))?;
+    out.set_item("status_chance", status_chance)?;
     out.set_item("multishot", multishot)?;
     out.set_item("fire_rate", fire_rate.to_py(py))?;
     out.set_item("magazine", magazine)?;
@@ -1000,6 +1044,39 @@ pub fn apply_mods<'py>(
     out.set_item("headshot_bonus_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_HEADSHOT_MULTIPLIER"))]))?;
     out.set_item("proc_damage_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_PROC_DAMAGE"))]))?;
     out.set_item("proc_duration_multiplier", combine(1.0, &[&ap.ops(b!("WEAPON_PROC_TIME"))]))?;
+    {
+        // damage._typed_durations: per damage type, the shared bucket then its own rows.
+        let shared = ap.ops(b!("WEAPON_PROC_TIME"));
+        let mut typed: Vec<(String, Vec<(u8, f64)>)> = Vec::new();
+        for &i in ap.idx(b!("RUNTIME_TYPED_PROC_TIME")) {
+            if let Some(d) = rows[i].damage_type.clone().filter(|d| !d.is_empty()) {
+                match typed.iter_mut().find(|x| x.0 == d) {
+                    Some(x) => x.1.push((rows[i].op, rows[i].value)),
+                    None => typed.push((d, vec![(rows[i].op, rows[i].value)])),
+                }
+            }
+        }
+        let durations = PyDict::new(py);
+        for (d, own) in typed.iter() {
+            durations.set_item(d, combine(1.0, &[&shared, own]))?;
+        }
+        out.set_item("proc_duration_types", durations)?;
+        // damage._typed_stack_caps: extra victim stacks per damage type, summed in order.
+        let mut caps: Vec<(String, f64)> = Vec::new();
+        for &i in ap.idx(b!("RUNTIME_TYPED_PROC_MAX_STACK")) {
+            if let Some(d) = rows[i].damage_type.clone().filter(|d| !d.is_empty()) {
+                match caps.iter_mut().find(|x| x.0 == d) {
+                    Some(x) => x.1 += rows[i].value,
+                    None => caps.push((d, 0.0 + rows[i].value)),
+                }
+            }
+        }
+        let extra = PyDict::new(py);
+        for (d, v) in caps.iter() {
+            extra.set_item(d, *v)?;
+        }
+        out.set_item("proc_max_stacks", extra)?;
+    }
     out.set_item("status_condition_damage_multiplier", status_multiplier)?;
     out.set_item("initial_combo", combine(0.0, &[&ap.ops(b!("WEAPON_MELEE_COMBO_INITIAL_BONUS"))]))?;
     out.set_item("combo_duration", combine(if prep.melee { 5.0 } else { 0.0 }, &[&ap.ops(b!("WEAPON_MELEE_COMBO_DURATION_BONUS"))]))?;
@@ -1074,8 +1151,11 @@ pub fn apply_mods<'py>(
                  combine_num(critchance, &[&ap.ops_where(b!("WEAPON_CRIT_CHANCE"), |r| r.op == OP_ADD_BASE || r.set_base)]).to_py(py))?;
     // Ammo Efficiency cap (75%, damage.py AMMO_EFFICIENCY_CAP): every source,
     // Primary Compression included, keeps a quarter of the native cost.
-    let ammo_cost = pmax(0.0, combine(prep.ammo_cost, &[&ap.ops(b!("WEAPON_AMMO_CONSUME_RATE"))])) * pmax(0.0, 1.0 - compression_ammo);
-    out.set_item("ammo_cost", pmax(prep.ammo_cost * (1.0 - AMMO_EFFICIENCY_CAP), ammo_cost))?;
+    let ammo_ops = ap.ops(b!("WEAPON_AMMO_CONSUME_RATE"));
+    let ammo_cost = pmax(0.0, combine(prep.ammo_cost, &[&ammo_ops])) * pmax(0.0, 1.0 - compression_ammo);
+    // An infinite-ammo SET 0 is not efficiency and is never floored (damage.py).
+    let ammo_set = ammo_ops.iter().any(|&(op, _)| op == co::SET);
+    out.set_item("ammo_cost", if ammo_set { ammo_cost } else { pmax(prep.ammo_cost * (1.0 - AMMO_EFFICIENCY_CAP), ammo_cost) })?;
     out.set_item("co_bucket", ap.list(py, &co_idx)?)?;
     out.set_item("co_assumed_count", vsc)?;
     out.set_item("continuous", continuous)?;
@@ -1115,6 +1195,9 @@ pub fn apply_mods<'py>(
     out.set_item("cold_stack_damage", if cold_forced != 0.0 { Num::F(0.0) } else { cold_rate }.to_py(py))?;
     out.set_item("base_damage_bracket", codamage.base_bracket)?;
     out.set_item("frozen_damage_multiplier", if frozen_forced { 1.0 } else { 1.0 + frozen_bonus.f() })?;
+    out.set_item("reflection_explosion_chance",
+                 pmin(1.0, pmax(0.0, combine(0.0, &[&ap.ops(b!("WEAPON_REFLECTION_EXPLOSION_CHANCE"))]))))?;
+    out.set_item("throw_damage_bonus", pysum(ap.values(b!("RUNTIME_THROW_DAMAGE"))).to_py(py))?;
 
     if !need_spec {
         return Ok((out, py.None()));

@@ -27,6 +27,13 @@ def infinite_condition_sources():
         return frozenset()
 
 
+# Event-granted SET terms a fractional presence blends: upgrade type -> the
+# scalar ModdedStats field it owns. Others keep value x presence.
+SET_BLEND_FIELDS = {"WEAPON_AMMO_CONSUME_RATE": "ammo_cost"}
+# Terms counted per status type on the victim: a fractional live count scales them.
+STATUS_COUNT_TYPES = ("WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE", "WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE")
+
+
 def condition_kind(condition):
     if condition.get('nativeEvent'):
         return condition['nativeEvent']['kind']
@@ -77,8 +84,25 @@ def condition_kind(condition):
         "onshotgunclosekillcondition": "on-close-kill",
         "evoonshieldbreakcondition": "on-self-shield-broken",
         "onoverguardbrokencondition": "on-self-overguard-broken",
+        "onglaiveconsecutivethrow": "on-glaive-throw",
     }
     return next((exact[x] for x in names if x in exact), None)
+
+
+# Cards whose whole payload is a condition only the melee hit schedule
+# raises (Power Throw's consecutive throws): empty on a static panel, they
+# still belong in the MOD picker and the build search's pool.
+REPLAY_ONLY_CARD_KINDS = frozenset({'on-glaive-throw'})
+
+
+def replay_only_card(mod):
+    """A card scored only by the replay's own condition (Power Throw)."""
+    from .damage import SUPPORTED_WEAPON_UPGRADE_TYPES
+    return any(
+        condition_kind(c) in REPLAY_ONLY_CARD_KINDS
+        and any(str(e.get('upgradeType') or '') in SUPPORTED_WEAPON_UPGRADE_TYPES for e in c.get('effects') or ())
+        for c in mod.get('conditionalEffects') or () if isinstance(c, dict)
+    )
 
 
 EVENT_CONDITION_TEXT = {
@@ -107,6 +131,7 @@ EVENT_CONDITION_TEXT = {
     'on-self-shield-hit': '玩家自身护盾受到伤害时触发。',
     'on-fire': '扣动扳机射击时触发。',
     'on-punchthrough': '同次射击穿透并命中后续目标时触发。',
+    'on-glaive-throw': '战刃连续投掷时叠加（循环投掷时第二投起每投都是连续投掷），只加成投掷直击。',
 }
 
 
@@ -210,7 +235,8 @@ def prepare(
     trigger / Incarnon options; the target, level and Eximus flag feed only
     affinity. Callers pass one cache per bound loadout (search_combat.bind).
     """
-    from .damage import ModEffect, ModEffectList, ModdedStats, apply_mods, apply_mods_spec, co_variant, scenario_with, with_value
+    from .damage import (ModEffect, ModEffectList, ModdedStats, apply_mods, apply_mods_spec, co_variant, scenario_with,
+                         with_innate, with_value)
     from .runtime_adapters import latron_puncture_strip,incarnon_condition_rows
     from .runtime_adapters import ammo_restore_configuration
 
@@ -253,6 +279,8 @@ def prepare(
                                    incarnon_actor_stacks)
     from .arcane_runtime import configuration as runtime_arcane
     sniper_combo=combo_spec(weapon)
+    from .companion import kill_condition, player_only, player_stacks
+    companion = player_stacks(scenario)
 
     # Final Fusillade / equivalent Incarnon terms are read from the base form's
     # last magazine pull. Keep this as an event gate; never fold it into the
@@ -267,10 +295,15 @@ def prepare(
                 last_round_multishot += float(term['valuePerRank'])
 
     replaced_terms = set()
+    from .event_profiles import execute_below, innate_conditionals
+    innate = innate_conditionals(weapon, mode_index)
     for record, rank, override in [
         *mod_records,
         *arcane_records,
         *[(b, 0, None) for b in branches],
+        # The weapon's own event-granted passives; always-on ones are in
+        # every apply_mods call (damage.with_innate).
+        *[(r, 0, None) for r in innate],
     ]:
         if double_tap_configuration(record,rank):
             continue
@@ -385,6 +418,15 @@ def prepare(
                 continue
             kinds = [condition.get('eventKind') or condition_kind(condition)]
             kinds = [k for k in kinds if k]
+            if 'on-glaive-throw' in kinds:
+                # Power Throw: its weapon damage is the throw's alone
+                # (melee_sequence.apply_hit reads RUNTIME_THROW_DAMAGE on the
+                # strike), and a loop buffers every throw, so the stacks hold
+                # from one throw to the next rather than for 1 s.
+                replaced_terms.update((source, e.upgrade_type, e.operation, e.damage_type) for e in effects)
+                effects = [replace(e, upgrade_type='RUNTIME_THROW_DAMAGE') if e.upgrade_type == 'WEAPON_DAMAGE_AMOUNT'
+                           else e for e in effects]
+                condition = {**condition, 'duration': 0}
             if (not kinds and not condition.get('actorGate') and not condition.get('formGate')
                     and override is not None and (override.get('stacks') is not None or override.get('uptime') is not None)):
                 # A trigger the replay cannot simulate (taking damage, wall
@@ -395,6 +437,13 @@ def prepare(
             replaced_terms.update(
                 (source, e.upgrade_type, e.operation, e.damage_type) for e in effects
             )
+            companion_fixed = False
+            if companion is not None and player_only(condition):
+                # Companion weapon: only the player's own kills feed these
+                # (companion.py); held full when switched on, else absent.
+                if not (companion and kill_condition(condition)):
+                    continue
+                companion_fixed = True
             if condition.get('actorGate'):
                 stacks = incarnon_actor_stacks(condition,scenario,weapon)
                 if stacks>0:
@@ -415,7 +464,7 @@ def prepare(
             cap = float(condition.get("maxStacks") or 1.0)
             forced = (override or {}).get("stacks")
             uptime = (override or {}).get('uptime')
-            fixed = forced is not None or uptime is not None or (self_break_condition(condition) and self_break_forced(scenario)) or (assumed and not condition.get('energyGate') and not condition.get('toggleOn')
+            fixed = companion_fixed or forced is not None or uptime is not None or (self_break_condition(condition) and self_break_forced(scenario)) or (assumed and not condition.get('energyGate') and not condition.get('toggleOn')
                       and not any(k.startswith('on-self-') or k in {'on-equip-from-primary','on-warframe-ability','on-three-enemy-punchthrough','on-onos-damage-condition'} for k in kinds))
             initial = min(max(float(forced), 0.0), cap) if forced is not None else (cap if fixed else 0.0)
             if condition.get('initialStateKey') and not fixed:
@@ -424,6 +473,17 @@ def prepare(
                 initial = min(cap,math.floor(scenario.combat_state.get('energySpent',0)/condition['energyGate']))
             if uptime is not None:
                 initial *= min(max(float(uptime), 0.0), 1.0)
+            chance = float(condition.get("chance", (record.get("trigger") or {}).get("chance", 1.0)) or 0.0)
+            # A one-stack refreshable buff is up while any live roll holds:
+            # 1 - prod(1 - p). Same as a reset on whole events, and no longer
+            # saturating on fractional ones (a 0.5 headshot share, Magnus
+            # Prime's 4%). Sources whose stacks are written directly (energy,
+            # toggles, held, seeded) keep their own decay.
+            union = (cap == 1.0 and not fixed and float(condition.get("duration") or 0.0) > 0.0
+                     and not condition.get("hold") and not condition.get("toggleOn") and not condition.get("energyGate")
+                     and not condition.get("initialStateKey") and initial == 0.0)
+            free_ammo = any(e.upgrade_type == "WEAPON_AMMO_CONSUME_RATE" and e.operation in ("SET", "SET_BASE")
+                            and e.value <= 0.0 for e in effects)
             for kind_index, kind in enumerate(kinds):
                 key = source + ":" + str(ci) + ":" + str(kind_index)
                 sources.append(
@@ -448,17 +508,7 @@ def prepare(
                             if fixed
                             else float(condition.get("duration") or 0.0)
                         ),
-                        perEvent=(
-                            0.0
-                            if fixed
-                            else float(
-                                condition.get(
-                                    "chance",
-                                    (record.get("trigger") or {}).get("chance", 1.0),
-                                )
-                                or 0.0
-                            )
-                        ),
+                        perEvent=0.0 if fixed else chance,
                         initialStacks=initial,
                         initialDuration=float(condition.get('duration') or 0.) if condition.get('energyGate') and not fixed else 0.,
                         energyThreshold=condition.get('energyGate'),
@@ -468,11 +518,24 @@ def prepare(
                             if condition.get("stackMode") == "SM_DECAY"
                             else (
                                 "per-stack"
-                                if condition.get("stackMode") == "per-stack"
+                                if (condition.get("stackMode") == "per-stack" or condition.get("noRefresh"))
                                 and not fixed
+                                else "union"
+                                if union and kind not in ("on-consecutive-headshot", "on-burst-hit")
                                 else "reset"
                             )
                         ),
+                        noRefresh=bool(condition.get("noRefresh")) and not fixed,
+                        # Infinite ammo: a branch settles it at an empty magazine.
+                        freeAmmo=free_ammo and not fixed,
+                        # Melee passives: a duration growing with the combo tier
+                        # (Pennant), a count of attacks (Dorrclave), stacks a
+                        # slam spends (Arca Titron), the routes they need.
+                        durationPerTier=float(condition.get('durationPerTier') or 0.0),
+                        charges=float(condition.get('charges') or 0.0),
+                        consumeOn=condition.get('consumeOn'),
+                        lockOn=condition.get('lockOn'),
+                        meleeRoutes=list(condition.get('meleeRoutes') or ()),
                     )
                 )
                 dynamic.append((key, effects))
@@ -486,6 +549,10 @@ def prepare(
         state = scenario.combat_state
         melee = build_schedule(weapon, state.get("meleeRoute"), stance=state.get("meleeStance"),
                                combo=state.get("meleeCombo"), target_distance=state.get("meleeTargetDistance"))
+    for q in sources:
+        if q.get('meleeRoutes') and (not melee or melee.get('route') not in q['meleeRoutes']):
+            # A slam passive on a route without slams never triggers.
+            q.update(perEvent=0.0, initialStacks=0.0)
     if melee:
         notes.extend(melee["notes"])
         for record, rank, _ in [*mod_records, *arcane_records]:
@@ -579,17 +646,33 @@ def prepare(
     form_weapons = {}
 
     def resolve(form, stacks, live_types=0, last_round=False):
-        fx = ModEffectList([*static,*actor_effects])
+        # The weapon's always-on terms join here (not inside apply_mods) so a
+        # fractional live status count below scales them too (Cedo, Galariak).
+        fx = with_innate(weapon, ModEffectList([*static,*actor_effects]), 0 if form == "base" else mode_index)
+        partial_sets = {}
         for key, terms in dynamic:
             n = stacks.get(key, 0.0)
             if n > 0:
-                fx.extend(with_value(e, (1.0 + (e.value - 1.0) * n) if e.operation == 'MULTIPLY' else e.value * n) for e in terms)
+                for e in terms:
+                    if e.operation in ('SET', 'SET_BASE') and n < 1.0 - 1e-9 and e.upgrade_type in SET_BLEND_FIELDS:
+                        # A SET does not scale with presence: the stat is
+                        # blended below between with and without it (Knell's
+                        # infinite ammo at a 0.6 headshot share costs 0.4).
+                        group = (e.upgrade_type, e.operation, e.value)
+                        held = partial_sets.get(group)
+                        partial_sets[group] = (e, n if held is None else 1.0 - (1.0 - held[1]) * (1.0 - n))
+                    else:
+                        fx.append(with_value(e, (1.0 + (e.value - 1.0) * n) if e.operation == 'MULTIPLY' else e.value * n))
+        if stacks.get('__noCO'):
+            # A glaive's explosions: Condition Overload does not reach them.
+            fx = ModEffectList([e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'],
+                               skipped=fx.skipped)
         # Public Scenario requires an integer count. Scale the linear CO
         # coefficient to represent expected presence without rounding it up.
         count_ceiling = int(math.ceil(live_types))
         if count_ceiling and live_types != count_ceiling:
             fx = ModEffectList(with_value(e, e.value*live_types/count_ceiling)
-                               if e.upgrade_type == 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'
+                               if e.upgrade_type in STATUS_COUNT_TYPES
                                else e for e in fx)
         idx = 0 if form == "base" else mode_index
         onos_power = bool(stacks.get('__onosPower'))
@@ -607,6 +690,13 @@ def prepare(
                 "isIncarnonForm": form != "base" and weapon.get("isIncarnonForm", False),
             }
             wp = {**wp, '__selectedFireMode__': idx}
+            if melee:
+                # A hit schedule scales each hit itself (a heavy slam's x3 / x5,
+                # a glaive detonation's recall blast): a heavy hit only turns on
+                # the heavy-attack cards, it must not also swap the base for
+                # the heavy-attack record (x6 on a hammer, the whole throw on
+                # a glaive).
+                wp.pop('heavyAttack', None)
             form_weapons[(form != "base", idx)] = wp
         if wp.get('isIncarnonForm'):
             for terms in form_dynamic:
@@ -614,15 +704,16 @@ def prepare(
         if last_round and last_round_multishot and form != 'incarnon' and not wp.get('isIncarnonForm'):
             fx.append(ModEffect('WEAPON_FIRE_ITERATIONS', 'ADD', last_round_multishot,
                                 source_path='incarnon:last-round-multishot'))
-        st, spec = apply_mods_spec(
-            wp,
-            fx,
-            fire_mode=idx,
-            scenario=scenario_with(
-                scenario, incarnon_cycle=False, victim_status_count=count_ceiling,
-                heavy_attack=bool(stacks.get('__heavy')) or scenario.heavy_attack,
-            ),
+        form_scenario = scenario_with(
+            scenario, incarnon_cycle=False, victim_status_count=count_ceiling,
+            heavy_attack=bool(stacks.get('__heavy')) or scenario.heavy_attack,
         )
+        st, spec = apply_mods_spec(wp, fx, fire_mode=idx, scenario=form_scenario)
+        for e, n in partial_sets.values():
+            field_name = SET_BLEND_FIELDS[e.upgrade_type]
+            held, _ = apply_mods_spec(wp, ModEffectList([*fx, e], skipped=fx.skipped), fire_mode=idx,
+                                      scenario=form_scenario)
+            setattr(st, field_name, n * getattr(held, field_name) + (1.0 - n) * getattr(st, field_name))
         st._co_spec = spec
         if onos_sequence and form!='base':
             st._charge_pool_cost = onos_sequence['powerCost'] if onos_power else 1.
@@ -648,7 +739,7 @@ def prepare(
                 "forcedProcs": [],
             }
             radial, radial_spec = apply_mods_spec(
-                {**wp, "fireModes": [rm]},
+                {**wp, "fireModes": [rm], "__innateResolved__": True},
                 fx,
                 scenario=replace(scenario, incarnon_cycle=False, victim_status_count=0),
             )
@@ -682,7 +773,7 @@ def prepare(
                                 'critChance':component['critChance'],'critMultiplier':component['critMultiplier'],
                                 'procChance':component['statusChance'],'forcedProcs':component.get('forcedProcs') or []}
                 part_fx = fx if component.get('takesConditionOverload') else [e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE']
-                part, part_spec = apply_mods_spec({**wp,'fireModes':[rm]},part_fx,scenario=replace(scenario,incarnon_cycle=False,victim_status_count=count_ceiling))
+                part, part_spec = apply_mods_spec({**wp,'fireModes':[rm],'__innateResolved__':True},part_fx,scenario=replace(scenario,incarnon_cycle=False,victim_status_count=count_ceiling))
                 part = replace(part,radial_only=True,multishot=1.,weakpoint_damage_bonus=0.,
                                weakpoint_crit_chance_bonus=0.,weakpoint_crit_chance_relative=0.,headshot_bonus_multiplier=1.)
                 if name=='singularity':
@@ -738,7 +829,7 @@ def prepare(
                     # its field, so it stays.
                     part_fx = ModEffectList(e for e in part_fx
                                             if not (e.upgrade_type == 'WEAPON_DAMAGE_AMOUNT' and e.operation == 'ADD_BASE'))
-                part, part_spec = apply_mods_spec({**wp, 'fireModes': [rm], '__compressionProfile__': extra.get('compression'),
+                part, part_spec = apply_mods_spec({**wp, 'fireModes': [rm], '__innateResolved__': True, '__compressionProfile__': extra.get('compression'),
                                    **({'__coProfile__': component['coProfile']} if component.get('coProfile') else {})},
                                   part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
                 part = replace(part, radial_only=True, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
@@ -760,6 +851,8 @@ def prepare(
         if radial_parts:
             radial = radial_parts[0]
             radial._additional_radials = tuple(radial_parts[1:])
+        if thrown_spec and idx == 0 and not wp.get('isIncarnonForm'):
+            st._reload_projectiles = reload_parts(wp, fx, count_ceiling)
         if extra.get('requiresFullAmmo'):
             st._requires_full_ammo = True
         if extra.get('primaryDelaySeconds') is not None:
@@ -774,7 +867,7 @@ def prepare(
             rm=deepcopy(modes[idx])
             rm.update(falloffRange=[0,0],falloffMinDamage=1)
             rm['damage']={**rm['damage'],'types':{'DT_EXPLOSION':miter_aoe['damage']},'forcedProcs':[]}
-            radial,radial_spec=apply_mods_spec({**wp,'fireModes':[rm]},[e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'],
+            radial,radial_spec=apply_mods_spec({**wp,'fireModes':[rm],'__innateResolved__':True},[e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'],
                              scenario=replace(scenario,incarnon_cycle=False,victim_status_count=0))
             radial=replace(radial,radial_only=True,weakpoint_damage_bonus=0.,weakpoint_crit_chance_bonus=0.,
                            weakpoint_crit_chance_relative=0.,bodyshot_crit_multiplier=1.,headshot_bonus_multiplier=1.)
@@ -823,14 +916,57 @@ def prepare(
         else None
     )
     from .beam_ramp import floor_for
+    from .event_profiles import reload_projectiles
+    thrown_spec = reload_projectiles(weapon)
+
+    def reload_parts(wp, fx, count_ceiling):
+        """Reload grenade hits (InfBeamPistol.lua) as radial-only parts: the
+        weapon's mods but fire rate, magazine and multishot (the script's
+        _unusedReloadProjectileStats); the contact Multiplying with Condition
+        Overload and the blast taking none (WFSim catabolyst.yaml)."""
+        thrown = {'landsAt': float(thrown_spec.get('landsAt') or 0.)}
+        for kind in ('empty', 'partial'):
+            spec = thrown_spec.get(kind)
+            if not spec:
+                continue
+            parts = []
+            for name in ('contact', 'explosion'):
+                component = spec[name]
+                rm = deepcopy(modes[0])
+                rm['__radialPart__'] = True
+                rm.update(falloffRange=[0, 0], falloffMinDamage=1, multishot=1,
+                          trigger='/Lotus/Language/Menu/Loadout_TriggerSemiAuto')
+                rm['damage'] = {**rm['damage'], 'types': dict(component['damage']), 'forcedProcs': [],
+                                'critChance': component['critChance'], 'critMultiplier': component['critMultiplier'],
+                                'procChance': component['procChance']}
+                contact = name == 'contact'
+                part_fx = ModEffectList(e for e in fx if contact or e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
+                part_weapon = {**wp, 'fireModes': [rm], '__innateResolved__': True}
+                if contact:
+                    part_weapon['__coProfile__'] = {'behavior': 'independent', 'baseFraction': 1.0, 'excludeFlatSources': []}
+                part, part_spec = apply_mods_spec(part_weapon, part_fx,
+                                                  scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
+                part = replace(part, radial_only=True, multishot=float(thrown_spec.get('count') or 1),
+                               weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0,
+                               weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
+                part._co_spec = part_spec
+                parts.append(part)
+            thrown[kind] = tuple(parts)
+        return thrown
+
     exact = resolve
+    from .damage import innate_terms_for
+    # A per-status crit term moves crit chance, which co_variant does not redo.
+    status_crit = any(e.upgrade_type == 'WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE'
+                      for e in [*static, *actor_effects, *(e for _, terms in dynamic for e in terms),
+                                *innate_terms_for(weapon, 0), *innate_terms_for(weapon, mode_index)])
 
     def resolve(form, stacks, live_types=0, last_round=False):
         # A fractional live status count scales only the CO bucket. Resolve
         # the whole count it rounds up to once, then redo the CO tail of each
         # stats object (damage.co_variant) instead of every apply_mods.
         count_ceiling = int(math.ceil(live_types))
-        if count_ceiling and live_types != count_ceiling and not onos_sequence:
+        if count_ceiling and live_types != count_ceiling and not onos_sequence and not status_crit:
             template = cached(form, stacks, count_ceiling, last_round)
             varied = live_variant(template, live_types, count_ceiling)
             if varied is not None:
@@ -866,6 +1002,8 @@ def prepare(
         syndicate=syndrome,
         affinityPerKill=affinity,
         trigger_sources=sources,
+        # Enkaus: an ink-stained target dissolves below this health share.
+        executeBelow=execute_below(weapon, mode_index),
         unsupported=notes,
         lastBurst=any(
             "Burston" in str(b.get("path")) and str(b.get("id")) == "2-1"

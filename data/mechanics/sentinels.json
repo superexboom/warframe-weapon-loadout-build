@@ -1,0 +1,3537 @@
+{
+  "source": "Packages.bin 2026.08.13.13.24 + warframe-items Mods/Sentinels/i18n",
+  "sentinels": [
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/ArcDronePowerSuit",
+      "nameEn": "Diriga",
+      "nameZh": "电气浮囊",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/Diriga.png",
+      "prime": false,
+      "health": 700.0,
+      "shield": 150.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/SentElecRailgun",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/ArcTrap",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/TaserStun",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/HeadShot",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/Diriga.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/CarrierPowerSuit",
+      "nameEn": "Carrier",
+      "nameZh": "搬运者",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/Carrier.png",
+      "prime": false,
+      "health": 560.0,
+      "shield": 250.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        "AP_DEFENSE",
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/SentShotgun",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/ItemVacum",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/Carrier.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/DethCubePowerSuit",
+      "nameEn": "Dethcube",
+      "nameZh": "死亡魔方",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/Dethcube.png",
+      "prime": false,
+      "health": 560.0,
+      "shield": 250.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/DethMachineRifle",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/Vaporize",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/Dethcube.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/EmpyreanSentinelPowerSuit",
+      "nameEn": "Nautilus",
+      "nameZh": "鹦鹉螺",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/EmpyreanSentinel.png",
+      "prime": false,
+      "health": 560.0,
+      "shield": 250.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/SentinelFreezeRayRifle",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/RepairShip",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/GatherEnemies",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/EmpyreanSentinel.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/GubberPowerSuit",
+      "nameEn": "Djinn",
+      "nameZh": "引灵",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/Djinn.png",
+      "prime": false,
+      "health": 560.0,
+      "shield": 250.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        "AP_TACTIC",
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/SentBioWeapon",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/Bait",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/Thumper",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/Djinn.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/MeleePetPowerSuit",
+      "nameEn": "Helios",
+      "nameZh": "赫利俄斯",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/Helios.png",
+      "prime": false,
+      "health": 560.0,
+      "shield": 250.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        "AP_DEFENSE",
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/ThrowGlaivePrecept",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/CodexScannerPrecept",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/Helios.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/NautilusPrimeSentinelPowerSuit",
+      "nameEn": "Nautilus Prime",
+      "nameZh": "鹦鹉螺 Prime",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/NautilusPrime.png",
+      "prime": true,
+      "health": 560.0,
+      "shield": 350.0,
+      "armor": 175.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        "AP_DEFENSE",
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/SentinelFreezeRayPrimeRifle",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/RepairShip",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/GatherEnemies",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/NautilusPrime.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeCarrierPowerSuit",
+      "nameEn": "Carrier Prime",
+      "nameZh": "搬运者 Prime",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/CarrierPrime.png",
+      "prime": true,
+      "health": 650.0,
+      "shield": 300.0,
+      "armor": 150.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        "AP_DEFENSE",
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        "AP_ATTACK",
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeSentShotgun",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/ItemVacum",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/CarrierPrime.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeDethCubePowerSuit",
+      "nameEn": "Dethcube Prime",
+      "nameZh": "死亡魔方 Prime",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/DethcubePrime.png",
+      "prime": true,
+      "health": 600.0,
+      "shield": 300.0,
+      "armor": 150.0,
+      "slots": [
+        "AP_PRECEPT",
+        "AP_DEFENSE",
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeDethMachineRifle",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/Vaporize",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/DethcubePrime.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeHeliosPowerSuit",
+      "nameEn": "Helios Prime",
+      "nameZh": "赫利俄斯 Prime",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/HeliosPrime.png",
+      "prime": true,
+      "health": 700.0,
+      "shield": 300.0,
+      "armor": 100.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        "AP_DEFENSE",
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/ThrowGlaivePrecept",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/CodexScannerPrecept",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/HeliosPrime.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeShadePowerSuit",
+      "nameEn": "Shade Prime",
+      "nameZh": "阴影 Prime",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/ShadePrime.png",
+      "prime": true,
+      "health": 700.0,
+      "shield": 300.0,
+      "armor": 100.0,
+      "slots": [
+        "AP_PRECEPT",
+        "AP_TACTIC",
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeBurstLaserPistol",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/Revenge",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/Ghost",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/ShadePrime.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeWyrmPowerSuit",
+      "nameEn": "Wyrm Prime",
+      "nameZh": "蛟龙 Prime",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/WyrmPrime.png",
+      "prime": true,
+      "health": 450.0,
+      "shield": 600.0,
+      "armor": 150.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/PrimeLaserRifle",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/CrowdDispersion",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/WyrmPrime.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/PrismaShadePowerSuit",
+      "nameEn": "Prisma Shade",
+      "nameZh": "棱晶 阴影",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/PrismaShade.png",
+      "prime": true,
+      "health": 700.0,
+      "shield": 300.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        "AP_TACTIC",
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/PrismaBurstLaserPistol",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/Revenge",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/Ghost",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/PrismaShade.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/RadarPowerSuit",
+      "nameEn": "Oxylus",
+      "nameZh": "奥克绪罗斯",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/Oxylus.png",
+      "prime": false,
+      "health": 560.0,
+      "shield": 250.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        "AP_DEFENSE",
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraWeapon",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/LocateCreatures",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/LocateResources",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/Oxylus.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/ShadePowerSuit",
+      "nameEn": "Shade",
+      "nameZh": "阴影",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/Shade.png",
+      "prime": false,
+      "health": 600.0,
+      "shield": 130.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/BurstLaserPistol",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/Revenge",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/Ghost",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/Shade.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/TnSentinelCrossPowerSuit",
+      "nameEn": "Taxon",
+      "nameZh": "塔克桑",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/Taxon.png",
+      "prime": false,
+      "health": 560.0,
+      "shield": 250.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/Gremlin",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/ShieldVampire",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/Taxon.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPowersuits/WyrmPowerSuit",
+      "nameEn": "Wyrm",
+      "nameZh": "蛟龙",
+      "icon": "/Lotus/Interface/Icons/StoreIcons/Companions/Sentinels/Types/Wyrm.png",
+      "prime": false,
+      "health": 560.0,
+      "shield": 250.0,
+      "armor": 80.0,
+      "slots": [
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT",
+        "AP_PRECEPT",
+        null,
+        null,
+        null,
+        "AP_PRECEPT"
+      ],
+      "defaultWeapon": "/Lotus/Types/Sentinels/SentinelWeapons/LaserRifle",
+      "incompatibleWeapons": [
+        "/Lotus/Types/Sentinels/SentinelWeapons/SentGlaiveWeapon",
+        "/Lotus/Types/Sentinels/SentinelWeapons/DeconstructorPrime/PrimeHeliosGlaiveWeapon",
+        "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetMeleeWeapon"
+      ],
+      "defaultPrecepts": [
+        "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/CrowdDispersion",
+        "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum"
+      ],
+      "portrait": "/assets/sentinels/Wyrm.png"
+    }
+  ],
+  "mods": [
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/Events/Index/CompanionMedipetKitMod",
+      "nameEn": "Medi-Pet Kit",
+      "nameZh": "宠物治疗套件",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/CompanionMediPetKit.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_HEAL_RATE",
+          "operation": "ADD",
+          "value": 2,
+          "damageType": "DT_ANY"
+        },
+        {
+          "type": "AVATAR_RESPAWN_TIME",
+          "operation": "ADD",
+          "value": -2.5,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "+2 Companion Health Regen/s -2.5s Companion Recovery Time",
+        "+4 Companion Health Regen/s -5s Companion Recovery Time",
+        "+6 Companion Health Regen/s -7.5s Companion Recovery Time",
+        "+8 Companion Health Regen/s -10s Companion Recovery Time",
+        "+10 Companion Health Regen/s -12.5s Companion Recovery Time",
+        "+12 Companion Health Regen/s -15s Companion Recovery Time"
+      ],
+      "levelStatsZh": [
+        "同伴每秒恢复 +2 生命 -2.5 秒同伴恢复时间",
+        "同伴每秒恢复 +4 生命 -5 秒同伴恢复时间",
+        "同伴每秒恢复 +6 生命 -7.5 秒同伴恢复时间",
+        "同伴每秒恢复 +8 生命 -10 秒同伴恢复时间",
+        "同伴每秒恢复 +10 生命 -12.5 秒同伴恢复时间",
+        "同伴每秒恢复 +12 生命 -15 秒同伴恢复时间"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/CompanionMediPetKit.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/Expert/KubrowPackLeaderExpertMod",
+      "nameEn": "Primed Pack Leader",
+      "nameZh": "领袖 Prime",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Legendary",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 4,
+      "maxRank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Kubrow/KubrowPackLeader.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_SENTINEL_PACK_LEADER",
+          "operation": "ADD",
+          "value": 16.66,
+          "damageType": "DT_ANY"
+        },
+        {
+          "type": "AVATAR_SENTINEL_PACK_LEADER_OVERGUARD_CAP",
+          "operation": "ADD",
+          "value": 200,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "+17 Health per hit +200 Overguard Max",
+        "+33 Health per hit +400 Overguard Max",
+        "+50 Health per hit +600 Overguard Max",
+        "+67 Health per hit +800 Overguard Max",
+        "+83 Health per hit +1,000 Overguard Max",
+        "+100 Health per hit +1,200 Overguard Max",
+        "+117 Health per hit +1,400 Overguard Max",
+        "+133 Health per hit +1,600 Overguard Max",
+        "+150 Health per hit +1,800 Overguard Max",
+        "+167 Health per hit +2,000 Overguard Max",
+        "+183 Health per hit +2,200 Overguard Max"
+      ],
+      "levelStatsZh": [
+        "每次击中生命值恢复 +17 +200 超宏防护上限",
+        "每次击中生命值恢复 +33 +400 超宏防护上限",
+        "每次击中生命值恢复 +50 +600 超宏防护上限",
+        "每次击中生命值恢复 +67 +800 超宏防护上限",
+        "每次击中生命值恢复 +83 +1,000 超宏防护上限",
+        "每次击中生命值恢复 +100 +1,200 超宏防护上限",
+        "每次击中生命值恢复 +117 +1,400 超宏防护上限",
+        "每次击中生命值恢复 +133 +1,600 超宏防护上限",
+        "每次击中生命值恢复 +150 +1,800 超宏防护上限",
+        "每次击中生命值恢复 +167 +2,000 超宏防护上限",
+        "每次击中生命值恢复 +183 +2,200 超宏防护上限"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowPackLeader.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowLinkArmourMaxMod",
+      "nameEn": "Link Fiber",
+      "nameZh": "链接纤维",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Uncommon",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 4,
+      "maxRank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Kubrow/KubrowArmorLink.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_SENTINEL_ARMOUR_LINK",
+          "operation": "STACKING_MULTIPLY",
+          "value": 0.11363,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "Increase Max Armor by +11% of Warframe's Armor",
+        "Increase Max Armor by +23% of Warframe's Armor",
+        "Increase Max Armor by +34% of Warframe's Armor",
+        "Increase Max Armor by +45% of Warframe's Armor",
+        "Increase Max Armor by +57% of Warframe's Armor",
+        "Increase Max Armor by +68% of Warframe's Armor",
+        "Increase Max Armor by +80% of Warframe's Armor",
+        "Increase Max Armor by +91% of Warframe's Armor",
+        "Increase Max Armor by +102% of Warframe's Armor",
+        "Increase Max Armor by +114% of Warframe's Armor",
+        "Increase Max Armor by +125% of Warframe's Armor"
+      ],
+      "levelStatsZh": [
+        "最大护甲增加战甲护甲的 +11%",
+        "最大护甲增加战甲护甲的 +23%",
+        "最大护甲增加战甲护甲的 +34%",
+        "最大护甲增加战甲护甲的 +45%",
+        "最大护甲增加战甲护甲的 +57%",
+        "最大护甲增加战甲护甲的 +68%",
+        "最大护甲增加战甲护甲的 +80%",
+        "最大护甲增加战甲护甲的 +91%",
+        "最大护甲增加战甲护甲的 +102%",
+        "最大护甲增加战甲护甲的 +114%",
+        "最大护甲增加战甲护甲的 +125%"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowArmorLink.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowLinkHealthMaxMod",
+      "nameEn": "Link Vitality",
+      "nameZh": "链接生命力",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Uncommon",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 2,
+      "maxRank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Kubrow/KubrowLifeLink.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_SENTINEL_HEALTH_LINK",
+          "operation": "STACKING_MULTIPLY",
+          "value": 0.11363,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "Increase Health by +11% of Warframe's Max Health",
+        "Increase Health by +23% of Warframe's Max Health",
+        "Increase Health by +34% of Warframe's Max Health",
+        "Increase Health by +45% of Warframe's Max Health",
+        "Increase Health by +57% of Warframe's Max Health",
+        "Increase Health by +68% of Warframe's Max Health",
+        "Increase Health by +80% of Warframe's Max Health",
+        "Increase Health by +91% of Warframe's Max Health",
+        "Increase Health by +102% of Warframe's Max Health",
+        "Increase Health by +114% of Warframe's Max Health",
+        "Increase Health by +125% of Warframe's Max Health"
+      ],
+      "levelStatsZh": [
+        "生命值增加战甲最大生命值的 +11%",
+        "生命值增加战甲最大生命值的 +23%",
+        "生命值增加战甲最大生命值的 +34%",
+        "生命值增加战甲最大生命值的 +45%",
+        "生命值增加战甲最大生命值的 +57%",
+        "生命值增加战甲最大生命值的 +68%",
+        "生命值增加战甲最大生命值的 +80%",
+        "生命值增加战甲最大生命值的 +91%",
+        "生命值增加战甲最大生命值的 +102%",
+        "生命值增加战甲最大生命值的 +114%",
+        "生命值增加战甲最大生命值的 +125%"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowLifeLink.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowLinkShieldMaxMod",
+      "nameEn": "Link Redirection",
+      "nameZh": "链接蓄能",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Uncommon",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 4,
+      "maxRank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Kubrow/KubrowShieldLink.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_SENTINEL_SHIELD_LINK",
+          "operation": "STACKING_MULTIPLY",
+          "value": 0.11363,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "Increase Shield by +11% of Warframe's Max Shield",
+        "Increase Shield by +23% of Warframe's Max Shield",
+        "Increase Shield by +34% of Warframe's Max Shield",
+        "Increase Shield by +45% of Warframe's Max Shield",
+        "Increase Shield by +57% of Warframe's Max Shield",
+        "Increase Shield by +68% of Warframe's Max Shield",
+        "Increase Shield by +80% of Warframe's Max Shield",
+        "Increase Shield by +91% of Warframe's Max Shield",
+        "Increase Shield by +102% of Warframe's Max Shield",
+        "Increase Shield by +114% of Warframe's Max Shield",
+        "Increase Shield by +125% of Warframe's Max Shield"
+      ],
+      "levelStatsZh": [
+        "护盾增加战甲最大护盾的 +11%",
+        "护盾增加战甲最大护盾的 +23%",
+        "护盾增加战甲最大护盾的 +34%",
+        "护盾增加战甲最大护盾的 +45%",
+        "护盾增加战甲最大护盾的 +57%",
+        "护盾增加战甲最大护盾的 +68%",
+        "护盾增加战甲最大护盾的 +80%",
+        "护盾增加战甲最大护盾的 +91%",
+        "护盾增加战甲最大护盾的 +102%",
+        "护盾增加战甲最大护盾的 +114%",
+        "护盾增加战甲最大护盾的 +125%"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowShieldLink.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowMasterBleedoutMod",
+      "nameEn": "Loyal Companion",
+      "nameZh": "忠实搭档",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Common",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Kubrow/KubrowBleedOut.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/LoyalCompanion.lua",
+          "params": {
+            "_cooldown": 60,
+            "_damageReduction": 0.75,
+            "_duration": 10,
+            "_healthThresholdToActivate": 0.34999999,
+            "_reductionDuration": 10
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "When your Health falls below 35%, gain 12% Damage Reduction for 10s while your Companion becomes invincible and draws fire to itself for 10s. 60s cooldown.",
+        "When your Health falls below 35%, gain 25% Damage Reduction for 10s while your Companion becomes invincible and draws fire to itself for 10s. 60s cooldown.",
+        "When your Health falls below 35%, gain 37% Damage Reduction for 10s while your Companion becomes invincible and draws fire to itself for 10s. 60s cooldown.",
+        "When your Health falls below 35%, gain 50% Damage Reduction for 10s while your Companion becomes invincible and draws fire to itself for 10s. 60s cooldown.",
+        "When your Health falls below 35%, gain 62% Damage Reduction for 10s while your Companion becomes invincible and draws fire to itself for 10s. 60s cooldown.",
+        "When your Health falls below 35%, gain 75% Damage Reduction for 10s while your Companion becomes invincible and draws fire to itself for 10s. 60s cooldown."
+      ],
+      "levelStatsZh": [
+        "当你的生命值低于 35% 时，获得 10 秒的 12% 伤害减免，同时你的同伴变得无敌，并在 10 秒内吸引敌人火力。冷却时间 60 秒。",
+        "当你的生命值低于 35% 时，获得 10 秒的 25% 伤害减免，同时你的同伴变得无敌，并在 10 秒内吸引敌人火力。冷却时间 60 秒。",
+        "当你的生命值低于 35% 时，获得 10 秒的 37% 伤害减免，同时你的同伴变得无敌，并在 10 秒内吸引敌人火力。冷却时间 60 秒。",
+        "当你的生命值低于 35% 时，获得 10 秒的 50% 伤害减免，同时你的同伴变得无敌，并在 10 秒内吸引敌人火力。冷却时间 60 秒。",
+        "当你的生命值低于 35% 时，获得 10 秒的 62% 伤害减免，同时你的同伴变得无敌，并在 10 秒内吸引敌人火力。冷却时间 60 秒。",
+        "当你的生命值低于 35% 时，获得 10 秒的 75% 伤害减免，同时你的同伴变得无敌，并在 10 秒内吸引敌人火力。冷却时间 60 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowBleedOut.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/Kubrow/KubrowPackLeaderMod",
+      "nameEn": "Pack Leader",
+      "nameZh": "领袖",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Common",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Kubrow/KubrowPackLeader.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_SENTINEL_PACK_LEADER",
+          "operation": "ADD",
+          "value": 16.66,
+          "damageType": "DT_ANY"
+        },
+        {
+          "type": "AVATAR_SENTINEL_PACK_LEADER_OVERGUARD_CAP",
+          "operation": "ADD",
+          "value": 200,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "+17 Health per hit +200 Overguard Max",
+        "+33 Health per hit +400 Overguard Max",
+        "+50 Health per hit +600 Overguard Max",
+        "+67 Health per hit +800 Overguard Max",
+        "+83 Health per hit +1,000 Overguard Max",
+        "+100 Health per hit +1,200 Overguard Max"
+      ],
+      "levelStatsZh": [
+        "每次击中生命值恢复 +17 +200 超宏防护上限",
+        "每次击中生命值恢复 +33 +400 超宏防护上限",
+        "每次击中生命值恢复 +50 +600 超宏防护上限",
+        "每次击中生命值恢复 +67 +800 超宏防护上限",
+        "每次击中生命值恢复 +83 +1,000 超宏防护上限",
+        "每次击中生命值恢复 +100 +1,200 超宏防护上限"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Kubrow/KubrowPackLeader.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelArmourMod",
+      "nameEn": "Metal Fiber",
+      "nameZh": "金属纤维",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Common",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 4,
+      "maxRank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelSteelFiberMod.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_ARMOUR",
+          "operation": "STACKING_MULTIPLY",
+          "value": 0.2273,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "+23% Armor",
+        "+45% Armor",
+        "+68% Armor",
+        "+91% Armor",
+        "+114% Armor",
+        "+136% Armor",
+        "+159% Armor",
+        "+182% Armor",
+        "+205% Armor",
+        "+227% Armor",
+        "+250% Armor"
+      ],
+      "levelStatsZh": [
+        "+23% 护甲",
+        "+45% 护甲",
+        "+68% 护甲",
+        "+91% 护甲",
+        "+114% 护甲",
+        "+136% 护甲",
+        "+159% 护甲",
+        "+182% 护甲",
+        "+205% 护甲",
+        "+227% 护甲",
+        "+250% 护甲"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSteelFiberMod.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelDropChanceMod",
+      "nameEn": "Spare Parts",
+      "nameZh": "残余",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Uncommon",
+      "polarity": "AP_TACTIC",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelSalvageScanner.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/SalvageScanner.lua",
+          "params": {
+            "_cooldown": 15,
+            "_dropChanceBoostPerRank": 0.33333001,
+            "_maxRange": 30,
+            "_scanDuration": 15
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Companion marks a target every 15s for 15s. The target becomes 34% more likely to drop an item when killed.",
+        "Companion marks a target every 15s for 15s. The target becomes 67% more likely to drop an item when killed.",
+        "Companion marks a target every 15s for 15s. The target becomes 100% more likely to drop an item when killed.",
+        "Companion marks a target every 15s for 15s. The target becomes 134% more likely to drop an item when killed.",
+        "Companion marks a target every 15s for 15s. The target becomes 167% more likely to drop an item when killed.",
+        "Companion marks a target every 15s for 15s. The target becomes 200% more likely to drop an item when killed."
+      ],
+      "levelStatsZh": [
+        "同伴每 15 秒标记一个目标，持续 15 秒。目标被击杀时有额外 34% 几率掉落物品。",
+        "同伴每 15 秒标记一个目标，持续 15 秒。目标被击杀时有额外 67% 几率掉落物品。",
+        "同伴每 15 秒标记一个目标，持续 15 秒。目标被击杀时有额外 100% 几率掉落物品。",
+        "同伴每 15 秒标记一个目标，持续 15 秒。目标被击杀时有额外 134% 几率掉落物品。",
+        "同伴每 15 秒标记一个目标，持续 15 秒。目标被击杀时有额外 167% 几率掉落物品。",
+        "同伴每 15 秒标记一个目标，持续 15 秒。目标被击杀时有额外 200% 几率掉落物品。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSalvageScanner.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelExplosionMod",
+      "nameEn": "Self Destruct",
+      "nameZh": "自爆",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelSelfDestructMod.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_EXPLOSION_DAMAGE",
+          "operation": "ADD",
+          "value": 100,
+          "damageType": "DT_ANY"
+        },
+        {
+          "type": "AVATAR_EXPLOSION_RADIUS",
+          "operation": "ADD",
+          "value": 3,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "Explodes when incapacitated, dealing 100 <DT_EXPLOSION_COLOR>Blast Damage in a 3m radius and knocking down nearby enemies.",
+        "Explodes when incapacitated, dealing 200 <DT_EXPLOSION_COLOR>Blast Damage in a 6m radius and knocking down nearby enemies.",
+        "Explodes when incapacitated, dealing 300 <DT_EXPLOSION_COLOR>Blast Damage in a 9m radius and knocking down nearby enemies.",
+        "Explodes when incapacitated, dealing 400 <DT_EXPLOSION_COLOR>Blast Damage in a 12m radius and knocking down nearby enemies.",
+        "Explodes when incapacitated, dealing 500 <DT_EXPLOSION_COLOR>Blast Damage in a 15m radius and knocking down nearby enemies.",
+        "Explodes when incapacitated, dealing 600 <DT_EXPLOSION_COLOR>Blast Damage in a 18m radius and knocking down nearby enemies."
+      ],
+      "levelStatsZh": [
+        "在能力丧失时爆炸，在 3 米半径内造成 100 <DT_EXPLOSION_COLOR>爆炸伤害，并击倒附近的敌人。",
+        "在能力丧失时爆炸，在 6 米半径内造成 200 <DT_EXPLOSION_COLOR>爆炸伤害，并击倒附近的敌人。",
+        "在能力丧失时爆炸，在 9 米半径内造成 300 <DT_EXPLOSION_COLOR>爆炸伤害，并击倒附近的敌人。",
+        "在能力丧失时爆炸，在 12 米半径内造成 400 <DT_EXPLOSION_COLOR>爆炸伤害，并击倒附近的敌人。",
+        "在能力丧失时爆炸，在 15 米半径内造成 500 <DT_EXPLOSION_COLOR>爆炸伤害，并击倒附近的敌人。",
+        "在能力丧失时爆炸，在 18 米半径内造成 600 <DT_EXPLOSION_COLOR>爆炸伤害，并击倒附近的敌人。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSelfDestructMod.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelHealthMaxMod",
+      "nameEn": "Enhanced Vitality",
+      "nameZh": "构造强化",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Common",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 2,
+      "maxRank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelPlaceholderMod.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_HEALTH_MAX",
+          "operation": "STACKING_MULTIPLY",
+          "value": 0.2273,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "+23% Health",
+        "+45% Health",
+        "+68% Health",
+        "+91% Health",
+        "+114% Health",
+        "+136% Health",
+        "+159% Health",
+        "+182% Health",
+        "+205% Health",
+        "+227% Health",
+        "+250% Health"
+      ],
+      "levelStatsZh": [
+        "+23% 生命值",
+        "+45% 生命值",
+        "+68% 生命值",
+        "+91% 生命值",
+        "+114% 生命值",
+        "+136% 生命值",
+        "+159% 生命值",
+        "+182% 生命值",
+        "+205% 生命值",
+        "+227% 生命值",
+        "+250% 生命值"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelPlaceholderMod.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelLootRadarEnemyRadarExpertMod",
+      "nameEn": "Primed Animal Instinct",
+      "nameZh": "动物本能 Prime",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Legendary",
+      "polarity": "AP_TACTIC",
+      "baseDrain": 6,
+      "maxRank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/AnimalInstincts.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_LOOT_RADAR",
+          "operation": "ADD",
+          "value": 5,
+          "damageType": "DT_ANY"
+        },
+        {
+          "type": "AVATAR_ENEMY_RADAR",
+          "operation": "ADD",
+          "value": 3,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "+5m Loot Radar +3m Enemy Radar",
+        "+10m Loot Radar +6m Enemy Radar",
+        "+15m Loot Radar +9m Enemy Radar",
+        "+20m Loot Radar +12m Enemy Radar",
+        "+25m Loot Radar +15m Enemy Radar",
+        "+30m Loot Radar +18m Enemy Radar",
+        "+35m Loot Radar +21m Enemy Radar",
+        "+40m Loot Radar +24m Enemy Radar",
+        "+45m Loot Radar +27m Enemy Radar",
+        "+50m Loot Radar +30m Enemy Radar",
+        "+55m Loot Radar +33m Enemy Radar"
+      ],
+      "levelStatsZh": [
+        "+5 米寻物雷达 +3 米侦敌雷达",
+        "+10 米寻物雷达 +6 米侦敌雷达",
+        "+15 米寻物雷达 +9 米侦敌雷达",
+        "+20 米寻物雷达 +12 米侦敌雷达",
+        "+25 米寻物雷达 +15 米侦敌雷达",
+        "+30 米寻物雷达 +18 米侦敌雷达",
+        "+35 米寻物雷达 +21 米侦敌雷达",
+        "+40 米寻物雷达 +24 米侦敌雷达",
+        "+45 米寻物雷达 +27 米侦敌雷达",
+        "+50 米寻物雷达 +30 米侦敌雷达",
+        "+55 米寻物雷达 +33 米侦敌雷达"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/AnimalInstincts.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelLootRadarEnemyRadarMod",
+      "nameEn": "Animal Instinct",
+      "nameZh": "动物本能",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_TACTIC",
+      "baseDrain": 6,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/AnimalInstincts.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_LOOT_RADAR",
+          "operation": "ADD",
+          "value": 5,
+          "damageType": "DT_ANY"
+        },
+        {
+          "type": "AVATAR_ENEMY_RADAR",
+          "operation": "ADD",
+          "value": 3,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "+5m Loot Radar +3m Enemy Radar",
+        "+10m Loot Radar +6m Enemy Radar",
+        "+15m Loot Radar +9m Enemy Radar",
+        "+20m Loot Radar +12m Enemy Radar",
+        "+25m Loot Radar +15m Enemy Radar",
+        "+30m Loot Radar +18m Enemy Radar"
+      ],
+      "levelStatsZh": [
+        "+5 米寻物雷达 +3 米侦敌雷达",
+        "+10 米寻物雷达 +6 米侦敌雷达",
+        "+15 米寻物雷达 +9 米侦敌雷达",
+        "+20 米寻物雷达 +12 米侦敌雷达",
+        "+25 米寻物雷达 +15 米侦敌雷达",
+        "+30 米寻物雷达 +18 米侦敌雷达"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/AnimalInstincts.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelOverheatDamageMod",
+      "nameEn": "Fired Up",
+      "nameZh": "过热射击",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 6,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelFiredUpMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "OnHit",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/FiredUp.lua",
+          "params": {
+            "_damagePctPerHitPerLevel": 0.0083999997,
+            "_duration": 5,
+            "_maxDamagePctPerLevel": 0.168
+          }
+        },
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/FiredUp.lua",
+          "params": {
+            "_damagePctPerHitPerLevel": 0.0099999998,
+            "_duration": 5,
+            "_maxDamagePctPerLevel": 0.2
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "0.8% <DT_FIRE_COLOR>Heat Damage on weapon per hit. Stacks up to 16%. Resets after 5s with no hits.",
+        "1.7% <DT_FIRE_COLOR>Heat Damage on weapon per hit. Stacks up to 33%. Resets after 5s with no hits.",
+        "2.5% <DT_FIRE_COLOR>Heat Damage on weapon per hit. Stacks up to 50%. Resets after 5s with no hits.",
+        "3.4% <DT_FIRE_COLOR>Heat Damage on weapon per hit. Stacks up to 67%. Resets after 5s with no hits.",
+        "4.2% <DT_FIRE_COLOR>Heat Damage on weapon per hit. Stacks up to 84%. Resets after 5s with no hits.",
+        "5% <DT_FIRE_COLOR>Heat Damage on weapon per hit. Stacks up to 100%. Resets after 5s with no hits."
+      ],
+      "levelStatsZh": [
+        "武器每次击中造成 0.8% <DT_FIRE_COLOR>火焰伤害。伤害最多叠加 16%。未命中 5 秒后重置。",
+        "武器每次击中造成 1.7% <DT_FIRE_COLOR>火焰伤害。伤害最多叠加 33%。未命中 5 秒后重置。",
+        "武器每次击中造成 2.5% <DT_FIRE_COLOR>火焰伤害。伤害最多叠加 50%。未命中 5 秒后重置。",
+        "武器每次击中造成 3.4% <DT_FIRE_COLOR>火焰伤害。伤害最多叠加 67%。未命中 5 秒后重置。",
+        "武器每次击中造成 4.2% <DT_FIRE_COLOR>火焰伤害。伤害最多叠加 84%。未命中 5 秒后重置。",
+        "武器每次击中造成 5% <DT_FIRE_COLOR>火焰伤害。伤害最多叠加 100%。未命中 5 秒后重置。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelFiredUpMod.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelRepairKitMod",
+      "nameEn": "Repair Kit",
+      "nameZh": "修补套件",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Common",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelRepairKit.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_HEAL_RATE",
+          "operation": "ADD",
+          "value": 3,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "+3 Companion Health Regen/s",
+        "+6 Companion Health Regen/s",
+        "+9 Companion Health Regen/s",
+        "+12 Companion Health Regen/s",
+        "+15 Companion Health Regen/s",
+        "+18 Companion Health Regen/s"
+      ],
+      "levelStatsZh": [
+        "同伴每秒恢复 +3 生命",
+        "同伴每秒恢复 +6 生命",
+        "同伴每秒恢复 +9 生命",
+        "同伴每秒恢复 +12 生命",
+        "同伴每秒恢复 +15 生命",
+        "同伴每秒恢复 +18 生命"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRepairKit.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelShieldMaxMod",
+      "nameEn": "Calculated Redirection",
+      "nameZh": "精算蓄能",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Common",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 4,
+      "maxRank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelRedirectionMod.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_SHIELD_MAX",
+          "operation": "STACKING_MULTIPLY",
+          "value": 0.2273,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "+23% Shield Capacity",
+        "+45% Shield Capacity",
+        "+68% Shield Capacity",
+        "+91% Shield Capacity",
+        "+114% Shield Capacity",
+        "+136% Shield Capacity",
+        "+159% Shield Capacity",
+        "+182% Shield Capacity",
+        "+205% Shield Capacity",
+        "+227% Shield Capacity",
+        "+250% Shield Capacity"
+      ],
+      "levelStatsZh": [
+        "+23% 护盾容量",
+        "+45% 护盾容量",
+        "+68% 护盾容量",
+        "+91% 护盾容量",
+        "+114% 护盾容量",
+        "+136% 护盾容量",
+        "+159% 护盾容量",
+        "+182% 护盾容量",
+        "+205% 护盾容量",
+        "+227% 护盾容量",
+        "+250% 护盾容量"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRedirectionMod.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sentinel/SentinelShieldRechargeRateMod",
+      "nameEn": "Accelerated Deflection",
+      "nameZh": "加速充能",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Uncommon",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelFastDeflectionMod.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_SHIELD_RECHARGE_RATE",
+          "operation": "STACKING_MULTIPLY",
+          "value": 0.15000001,
+          "damageType": "DT_ANY"
+        },
+        {
+          "type": "AVATAR_SHIELD_RECHARGE_DELAY",
+          "operation": "STACKING_MULTIPLY",
+          "value": -0.075000003,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "+15% Shield Recharge -7.5% Shield Recharge Delay",
+        "+30% Shield Recharge -15% Shield Recharge Delay",
+        "+45% Shield Recharge -22.5% Shield Recharge Delay",
+        "+60% Shield Recharge -30% Shield Recharge Delay",
+        "+75% Shield Recharge -37.5% Shield Recharge Delay",
+        "+90% Shield Recharge -45% Shield Recharge Delay"
+      ],
+      "levelStatsZh": [
+        "+15% 护盾恢复 -7.5% 护盾恢复延迟",
+        "+30% 护盾恢复 -15% 护盾恢复延迟",
+        "+45% 护盾恢复 -22.5% 护盾恢复延迟",
+        "+60% 护盾恢复 -30% 护盾恢复延迟",
+        "+75% 护盾恢复 -37.5% 护盾恢复延迟",
+        "+90% 护盾恢复 -45% 护盾恢复延迟"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelFastDeflectionMod.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Synth/SentinelSynthDeconstructMod",
+      "nameEn": "Synth Deconstruct",
+      "nameZh": "合成 解构",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Synth/SentinelSynthDeconstructMod.png",
+      "modSet": "SynthSetMod",
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Enemies injured by the Companions have 2% chance to drop a Health Orb when killed.",
+        "Enemies injured by the Companions have 5% chance to drop a Health Orb when killed.",
+        "Enemies injured by the Companions have 10% chance to drop a Health Orb when killed.",
+        "Enemies injured by the Companions have 15% chance to drop a Health Orb when killed.",
+        "Enemies injured by the Companions have 20% chance to drop a Health Orb when killed.",
+        "Enemies injured by the Companions have 25% chance to drop a Health Orb when killed."
+      ],
+      "levelStatsZh": [
+        "受到同伴攻击的敌人在被击杀时有 2% 的几率会掉落一个生命球。",
+        "受到同伴攻击的敌人在被击杀时有 5% 的几率会掉落一个生命球。",
+        "受到同伴攻击的敌人在被击杀时有 10% 的几率会掉落一个生命球。",
+        "受到同伴攻击的敌人在被击杀时有 15% 的几率会掉落一个生命球。",
+        "受到同伴攻击的敌人在被击杀时有 20% 的几率会掉落一个生命球。",
+        "受到同伴攻击的敌人在被击杀时有 25% 的几率会掉落一个生命球。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Synth/SentinelSynthDeconstructMod.png"
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Sets/Synth/SentinelSynthFibersMod",
+      "nameEn": "Synth Fiber",
+      "nameZh": "合成 纤维",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 4,
+      "maxRank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Sets/Synth/SentinelSynthFibersMod.png",
+      "modSet": "SynthSetMod",
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Health Orbs increase Armor for Companions by 25% for 3s.",
+        "Health Orbs increase Armor for Companions by 50% for 6s.",
+        "Health Orbs increase Armor for Companions by 75% for 9s.",
+        "Health Orbs increase Armor for Companions by 100% for 12s."
+      ],
+      "levelStatsZh": [
+        "生命球可增加同伴 25% 的护甲，持续 3 秒。",
+        "生命球可增加同伴 50% 的护甲，持续 6 秒。",
+        "生命球可增加同伴 75% 的护甲，持续 9 秒。",
+        "生命球可增加同伴 100% 的护甲，持续 12 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Sets/Synth/SentinelSynthFibersMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/AntigravDilator",
+      "nameEn": "Anti-Grav Array",
+      "nameZh": "反重力阵列",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 4,
+      "maxRank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Parkour/AntigravDilator.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Increase height of owner's jumps by +10%.",
+        "Increase height of owner's jumps by +20%.",
+        "Increase height of owner's jumps by +30%.",
+        "Increase height of owner's jumps by +40%."
+      ],
+      "levelStatsZh": [
+        "增加拥有者 +10% 的跳跃高度",
+        "增加拥有者 +20% 的跳跃高度",
+        "增加拥有者 +30% 的跳跃高度",
+        "增加拥有者 +40% 的跳跃高度"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Parkour/AntigravDilator.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ArcTrap",
+      "nameEn": "Arc Coil",
+      "nameZh": "电弧线圈",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/ArcDronePowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/ArcDroneArcTrap.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Sentinel will zap up to 2 enemies within 10m, dealing 100 <DT_ELECTRICITY_COLOR>Electricity Damage with a 10% Status Chance.",
+        "Sentinel will zap up to 3 enemies within 10m, dealing 100 <DT_ELECTRICITY_COLOR>Electricity Damage with a 10% Status Chance.",
+        "Sentinel will zap up to 4 enemies within 10m, dealing 100 <DT_ELECTRICITY_COLOR>Electricity Damage with a 10% Status Chance.",
+        "Sentinel will zap up to 5 enemies within 10m, dealing 100 <DT_ELECTRICITY_COLOR>Electricity Damage with a 10% Status Chance.",
+        "Sentinel will zap up to 6 enemies within 10m, dealing 100 <DT_ELECTRICITY_COLOR>Electricity Damage with a 10% Status Chance.",
+        "Sentinel will zap up to 7 enemies within 10m, dealing 100 <DT_ELECTRICITY_COLOR>Electricity Damage with a 10% Status Chance."
+      ],
+      "levelStatsZh": [
+        "守护会以迅雷不及掩耳的速度攻击 10 米内的 2 名敌人，造成 100<DT_ELECTRICITY_COLOR>电击伤害，并有 10% 的几率附加负面状态。",
+        "守护会以迅雷不及掩耳的速度攻击 10 米内的 3 名敌人，造成 100<DT_ELECTRICITY_COLOR>电击伤害，并有 10% 的几率附加负面状态。",
+        "守护会以迅雷不及掩耳的速度攻击 10 米内的 4 名敌人，造成 100<DT_ELECTRICITY_COLOR>电击伤害，并有 10% 的几率附加负面状态。",
+        "守护会以迅雷不及掩耳的速度攻击 10 米内的 5 名敌人，造成 100<DT_ELECTRICITY_COLOR>电击伤害，并有 10% 的几率附加负面状态。",
+        "守护会以迅雷不及掩耳的速度攻击 10 米内的 6 名敌人，造成 100<DT_ELECTRICITY_COLOR>电击伤害，并有 10% 的几率附加负面状态。",
+        "守护会以迅雷不及掩耳的速度攻击 10 米内的 7 名敌人，造成 100<DT_ELECTRICITY_COLOR>电击伤害，并有 10% 的几率附加负面状态。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ArcDroneArcTrap.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Bait",
+      "nameEn": "Fatal Attraction",
+      "nameZh": "致命诱惑",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/GubberPowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelFatalAttractionMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "NpcEvaluateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/Bait.lua",
+          "params": {
+            "_macheteBuffDuration": 30,
+            "_macheteBuffPctAmount": 0.25
+          }
+        },
+        {
+          "function": "AttachEffect",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/Bait.lua",
+          "params": {
+            "_macheteBuffDuration": 30,
+            "_macheteBuffPctAmount": 0.15000001
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Enemies within 10m are drawn to you. Once they are within 3.5m, they detonate for 100 Damage. Kill them before detonation to increase lure time and reduce cooldown.",
+        "Enemies within 12m are drawn to you. Once they are within 4m, they detonate for 125 Damage. Kill them before detonation to increase lure time and reduce cooldown.",
+        "Enemies within 14m are drawn to you. Once they are within 4.5m, they detonate for 150 Damage. Kill them before detonation to increase lure time and reduce cooldown.",
+        "Enemies within 16m are drawn to you. Once they are within 5m, they detonate for 180 Damage. Kill them before detonation to increase lure time and reduce cooldown.",
+        "Enemies within 18m are drawn to you. Once they are within 5.5m, they detonate for 200 Damage. Kill them before detonation to increase lure time and reduce cooldown.",
+        "Enemies within 20m are drawn to you. Once they are within 6m, they detonate for 250 Damage. Kill them before detonation to increase lure time and reduce cooldown."
+      ],
+      "levelStatsZh": [
+        "10 米内的敌人会被你吸引。一旦他们进入 3.5 米范围内，他们会爆发出 100 伤害。在爆发前击杀他们可以增加引诱时间并减少冷却时间。",
+        "12 米内的敌人会被你吸引。一旦他们进入 4 米范围内，他们会爆发出 125 伤害。在爆发前击杀他们可以增加引诱时间并减少冷却时间。",
+        "14 米内的敌人会被你吸引。一旦他们进入 4.5 米范围内，他们会爆发出 150 伤害。在爆发前击杀他们可以增加引诱时间并减少冷却时间。",
+        "16 米内的敌人会被你吸引。一旦他们进入 5 米范围内，他们会爆发出 180 伤害。在爆发前击杀他们可以增加引诱时间并减少冷却时间。",
+        "18 米内的敌人会被你吸引。一旦他们进入 5.5 米范围内，他们会爆发出 200 伤害。在爆发前击杀他们可以增加引诱时间并减少冷却时间。",
+        "20 米内的敌人会被你吸引。一旦他们进入 6 米范围内，他们会爆发出 250 伤害。在爆发前击杀他们可以增加引诱时间并减少冷却时间。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelFatalAttractionMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/CodexScannerPrecept",
+      "nameEn": "Investigator",
+      "nameZh": "侦察",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/MeleePetPowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeHeliosPowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelInvestigatorMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "NpcEvaluateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/CodexScannerAbility.lua",
+          "params": {
+            "_allowQuotaRescannable": 0
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Helios Sentinel will scan objects and enemies within 20m over 5.0s. This consumes Codex Scanner charges.",
+        "Helios Sentinel will scan objects and enemies within 26m over 4.4s. This consumes Codex Scanner charges.",
+        "Helios Sentinel will scan objects and enemies within 32m over 3.8s. This consumes Codex Scanner charges.",
+        "Helios Sentinel will scan objects and enemies within 38m over 3.2s. This consumes Codex Scanner charges.",
+        "Helios Sentinel will scan objects and enemies within 44m over 2.6s. This consumes Codex Scanner charges.",
+        "Helios Sentinel will scan objects and enemies within 50m over 2.0s. This consumes Codex Scanner charges."
+      ],
+      "levelStatsZh": [
+        "赫利俄斯守护会消耗资料库扫描器，来扫描 20 米范围内的物件及敌人，耗时 5.0 秒。",
+        "赫利俄斯守护会消耗资料库扫描器，来扫描 26 米范围内的物件及敌人，耗时 4.4 秒。",
+        "赫利俄斯守护会消耗资料库扫描器，来扫描 32 米范围内的物件及敌人，耗时 3.8 秒。",
+        "赫利俄斯守护会消耗资料库扫描器，来扫描 38 米范围内的物件及敌人，耗时 3.2 秒。",
+        "赫利俄斯守护会消耗资料库扫描器，来扫描 44 米范围内的物件及敌人，耗时 2.6 秒。",
+        "赫利俄斯守护会消耗资料库扫描器，来扫描 50 米范围内的物件及敌人，耗时 2.0 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelInvestigatorMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/CoolantLeak",
+      "nameEn": "Coolant Leak",
+      "nameZh": "冷却液外泄",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelCoolantLeakMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Unleashes a 4m radial blast of <DT_FREEZE_COLOR>Cold when multiple enemies are nearby. Add 3 stacks. 10s cooldown.",
+        "Unleashes a 6m radial blast of <DT_FREEZE_COLOR>Cold when multiple enemies are nearby. Add 3 stacks. 10s cooldown.",
+        "Unleashes a 8m radial blast of <DT_FREEZE_COLOR>Cold when multiple enemies are nearby. Add 3 stacks. 10s cooldown.",
+        "Unleashes a 10m radial blast of <DT_FREEZE_COLOR>Cold when multiple enemies are nearby. Add 3 stacks. 10s cooldown."
+      ],
+      "levelStatsZh": [
+        "当附近有多个敌人时，释放一个范围 4 米的 <DT_FREEZE_COLOR>冰冻爆炸。叠加 3 层异常状态。冷却时间为 10 秒。",
+        "当附近有多个敌人时，释放一个范围 6 米的 <DT_FREEZE_COLOR>冰冻爆炸。叠加 3 层异常状态。冷却时间为 10 秒。",
+        "当附近有多个敌人时，释放一个范围 8 米的 <DT_FREEZE_COLOR>冰冻爆炸。叠加 3 层异常状态。冷却时间为 10 秒。",
+        "当附近有多个敌人时，释放一个范围 10 米的 <DT_FREEZE_COLOR>冰冻爆炸。叠加 3 层异常状态。冷却时间为 10 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCoolantLeakMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/CrowdDispersion",
+      "nameEn": "Crowd Dispersion",
+      "nameZh": "人群驱散",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeWyrmPowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/WyrmPowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelCrowdDispersionMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Unleashes a 6.0m radial knockdown when multiple enemies are nearby, dealing 6.0 Damage.",
+        "Unleashes a 6.8m radial knockdown when multiple enemies are nearby, dealing 6.8 Damage.",
+        "Unleashes a 7.6m radial knockdown when multiple enemies are nearby, dealing 7.6 Damage.",
+        "Unleashes a 8.4m radial knockdown when multiple enemies are nearby, dealing 8.4 Damage.",
+        "Unleashes a 9.2m radial knockdown when multiple enemies are nearby, dealing 9.2 Damage.",
+        "Unleashes a 10.0m radial knockdown when multiple enemies are nearby, dealing 10.0 Damage."
+      ],
+      "levelStatsZh": [
+        "当周围有复数名敌人时，释放出一道半径 6.0 米的击倒震波，并造成 6.0 伤害。",
+        "当周围有复数名敌人时，释放出一道半径 6.8 米的击倒震波，并造成 6.8 伤害。",
+        "当周围有复数名敌人时，释放出一道半径 7.6 米的击倒震波，并造成 7.6 伤害。",
+        "当周围有复数名敌人时，释放出一道半径 8.4 米的击倒震波，并造成 8.4 伤害。",
+        "当周围有复数名敌人时，释放出一道半径 9.2 米的击倒震波，并造成 9.2 伤害。",
+        "当周围有复数名敌人时，释放出一道半径 10.0 米的击倒震波，并造成 10.0 伤害。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCrowdDispersionMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Events/CorpusArena/ShieldAuraPrecept",
+      "nameEn": "Shield Charger",
+      "nameZh": "护盾充能",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 0,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/SentinelShieldingPrecept.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "NpcEvaluateAbility",
+          "script": "/Lotus/Powersuits/NpcPowersuits/NpcPowersuitAbilities/ActivateAura.lua",
+          "params": {
+            "_abilityDuration": 5,
+            "_durationPerLevel": 1,
+            "_isSentinel": 1
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Increase Warframe Max Shields and Shield Regeneration by 10% for 5s.",
+        "Increase Warframe Max Shields and Shield Regeneration by 20% for 6s.",
+        "Increase Warframe Max Shields and Shield Regeneration by 30% for 7s.",
+        "Increase Warframe Max Shields and Shield Regeneration by 40% for 8s.",
+        "Increase Warframe Max Shields and Shield Regeneration by 50% for 9s.",
+        "Increase Warframe Max Shields and Shield Regeneration by 60% for 10s."
+      ],
+      "levelStatsZh": [
+        "增加战甲最大护盾和 10% 护盾再生速度，持续 5 秒。",
+        "增加战甲最大护盾和 20% 护盾再生速度，持续 6 秒。",
+        "增加战甲最大护盾和 30% 护盾再生速度，持续 7 秒。",
+        "增加战甲最大护盾和 40% 护盾再生速度，持续 8 秒。",
+        "增加战甲最大护盾和 50% 护盾再生速度，持续 9 秒。",
+        "增加战甲最大护盾和 60% 护盾再生速度，持续 10 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/SentinelShieldingPrecept.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Events/ProjectNightwatch/SentinelHealthRegenPreceptNightwatchMod",
+      "nameEn": "Medi-Ray",
+      "nameZh": "医疗射线",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Uncommon",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 0,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelHealthRegenPreceptNightwatchMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "NpcEvaluateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/SentinelHealAbility.lua",
+          "params": {
+            "_baseDuration": 4,
+            "_baseTotalHealPct": 2,
+            "_durationScaling": 0,
+            "_healWhenHealthPercentageAtOrBelow": 1,
+            "_maxHealthBoostDistance": 10,
+            "_totalHealPctScaling": 2
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Sentinel will occasionally heal its owner, restoring 2% Health over 4s.",
+        "Sentinel will occasionally heal its owner, restoring 4% Health over 4s.",
+        "Sentinel will occasionally heal its owner, restoring 6% Health over 4s.",
+        "Sentinel will occasionally heal its owner, restoring 8% Health over 4s.",
+        "Sentinel will occasionally heal its owner, restoring 10% Health over 4s.",
+        "Sentinel will occasionally heal its owner, restoring 12% Health over 4s."
+      ],
+      "levelStatsZh": [
+        "守护会不时治疗它的主人，于 4 秒内恢复 2% 血量",
+        "守护会不时治疗它的主人，于 4 秒内恢复 4% 血量",
+        "守护会不时治疗它的主人，于 4 秒内恢复 6% 血量",
+        "守护会不时治疗它的主人，于 4 秒内恢复 8% 血量",
+        "守护会不时治疗它的主人，于 4 秒内恢复 10% 血量",
+        "守护会不时治疗它的主人，于 4 秒内恢复 12% 血量"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelHealthRegenPreceptNightwatchMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/GatherEnemies",
+      "nameEn": "Cordon",
+      "nameZh": "防线封锁",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/EmpyreanSentinelPowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/NautilusPrimeSentinelPowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelGatherEnemies.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Nautilus forces enemies within 5m of the target into clusters for easier targeting. Cooldown: 15s.",
+        "Nautilus forces enemies within 10m of the target into clusters for easier targeting. Cooldown: 15s.",
+        "Nautilus forces enemies within 15m of the target into clusters for easier targeting. Cooldown: 15s.",
+        "Nautilus forces enemies within 20m of the target into clusters for easier targeting. Cooldown: 15s.",
+        "Nautilus forces enemies within 25m of the target into clusters for easier targeting. Cooldown: 15s.",
+        "Nautilus forces enemies within 30m of the target into clusters for easier targeting. Cooldown: 15s."
+      ],
+      "levelStatsZh": [
+        "鹦鹉螺把目标范围 5 米内的敌人强行聚集以便于瞄准。冷却时间：15 秒。",
+        "鹦鹉螺把目标范围 10 米内的敌人强行聚集以便于瞄准。冷却时间：15 秒。",
+        "鹦鹉螺把目标范围 15 米内的敌人强行聚集以便于瞄准。冷却时间：15 秒。",
+        "鹦鹉螺把目标范围 20 米内的敌人强行聚集以便于瞄准。冷却时间：15 秒。",
+        "鹦鹉螺把目标范围 25 米内的敌人强行聚集以便于瞄准。冷却时间：15 秒。",
+        "鹦鹉螺把目标范围 30 米内的敌人强行聚集以便于瞄准。冷却时间：15 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelGatherEnemies.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Ghost",
+      "nameEn": "Ghost",
+      "nameZh": "幽灵",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeShadePowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrismaShadePowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/ShadePowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelGhostMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Cloaks owner when enemies are within 14m. The cloak is disrupted if owner attacks.",
+        "Cloaks owner when enemies are within 16m. The cloak is disrupted if owner attacks.",
+        "Cloaks owner when enemies are within 18m. The cloak is disrupted if owner attacks.",
+        "Cloaks owner when enemies are within 20m. The cloak is disrupted if owner attacks.",
+        "Cloaks owner when enemies are within 22m. The cloak is disrupted if owner attacks.",
+        "Cloaks owner when enemies are within 24m. The cloak is disrupted if owner attacks."
+      ],
+      "levelStatsZh": [
+        "当敌人靠近至 14 米范围内时自动隐匿主人，若攻击将会中断隐匿。",
+        "当敌人靠近至 16 米范围内时自动隐匿主人，若攻击将会中断隐匿。",
+        "当敌人靠近至 18 米范围内时自动隐匿主人，若攻击将会中断隐匿。",
+        "当敌人靠近至 20 米范围内时自动隐匿主人，若攻击将会中断隐匿。",
+        "当敌人靠近至 22 米范围内时自动隐匿主人，若攻击将会中断隐匿。",
+        "当敌人靠近至 24 米范围内时自动隐匿主人，若攻击将会中断隐匿。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelGhostMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/GhostAugmentCard",
+      "nameEn": "Ambush",
+      "nameZh": "幽灵伏击",
+      "kind": "mod",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeShadePowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrismaShadePowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/ShadePowerSuit"
+      ],
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 6,
+      "maxRank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/GhostAugmentCard.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_ABILITY_AUGMENT",
+          "operation": "ADD",
+          "value": 1,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [],
+      "levelStatsEn": [
+        "When Ghost invisibility is broken, Shade's owner is granted +60% Weapon Damage for 3s.",
+        "When Ghost invisibility is broken, Shade's owner is granted +120% Weapon Damage for 3s.",
+        "When Ghost invisibility is broken, Shade's owner is granted +180% Weapon Damage for 3s.",
+        "When Ghost invisibility is broken, Shade's owner is granted +240% Weapon Damage for 3s."
+      ],
+      "levelStatsZh": [
+        "当幽灵的隐身破除时，阴影的拥有者将获得 +60% 武器伤害，持续 3 秒。",
+        "当幽灵的隐身破除时，阴影的拥有者将获得 +120% 武器伤害，持续 3 秒。",
+        "当幽灵的隐身破除时，阴影的拥有者将获得 +180% 武器伤害，持续 3 秒。",
+        "当幽灵的隐身破除时，阴影的拥有者将获得 +240% 武器伤害，持续 3 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/GhostAugmentCard.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Guardian",
+      "nameEn": "Guardian",
+      "nameZh": "守护者",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelGaurdianMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "NpcEvaluateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/Guardian.lua",
+          "params": {
+            "_boostWhenShieldPercentageAtOrBelow": 0
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Boosts owner's shield by 58% when it runs out.",
+        "Boosts owner's shield by 67% when it runs out.",
+        "Boosts owner's shield by 75% when it runs out.",
+        "Boosts owner's shield by 83% when it runs out.",
+        "Boosts owner's shield by 92% when it runs out.",
+        "Boosts owner's shield by 100% when it runs out."
+      ],
+      "levelStatsZh": [
+        "在主人护盾耗尽时为其补充58% 护盾。",
+        "在主人护盾耗尽时为其补充67% 护盾。",
+        "在主人护盾耗尽时为其补充75% 护盾。",
+        "在主人护盾耗尽时为其补充83% 护盾。",
+        "在主人护盾耗尽时为其补充92% 护盾。",
+        "在主人护盾耗尽时为其补充100% 护盾。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelGaurdianMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/HeadShot",
+      "nameEn": "Calculated Shot",
+      "nameZh": "精算射击",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/ArcDronePowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 0,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/ArcDroneHeadshot.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "NpcEvaluateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/SwiftDethAbility.lua",
+          "params": {
+            "_maxDistance": 35
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Sentinel charges a powerful shot and fires at the first enemy within 40.8m.",
+        "Sentinel charges a powerful shot and fires at the first enemy within 46.6m.",
+        "Sentinel charges a powerful shot and fires at the first enemy within 52.5m.",
+        "Sentinel charges a powerful shot and fires at the first enemy within 58.3m.",
+        "Sentinel charges a powerful shot and fires at the first enemy within 64.1m.",
+        "Sentinel charges a powerful shot and fires at the first enemy within 70m."
+      ],
+      "levelStatsZh": [
+        "守护在蓄能后，朝 40.8 米范围内的第一名敌人击发强力射击。",
+        "守护在蓄能后，朝 46.6 米范围内的第一名敌人击发强力射击。",
+        "守护在蓄能后，朝 52.5 米范围内的第一名敌人击发强力射击。",
+        "守护在蓄能后，朝 58.3 米范围内的第一名敌人击发强力射击。",
+        "守护在蓄能后，朝 64.1 米范围内的第一名敌人击发强力射击。",
+        "守护在蓄能后，朝 70 米范围内的第一名敌人击发强力射击。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ArcDroneHeadshot.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/HealBot",
+      "nameEn": "Odomedic",
+      "nameZh": "气息疗愈",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/Healbot.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "NpcEvaluateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/Healbot.lua",
+          "params": {
+            "_maxStacks": 3,
+            "_regenAmount": 10
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Every <LOWER_IS_BETTER>12m traversed by Wall Running regenerates +10 Health over 1s. This effect can stack up to 3x.",
+        "Every <LOWER_IS_BETTER>9m traversed by Wall Running regenerates +20 Health over 2s. This effect can stack up to 3x.",
+        "Every <LOWER_IS_BETTER>6m traversed by Wall Running regenerates +30 Health over 3s. This effect can stack up to 3x.",
+        "Every <LOWER_IS_BETTER>3m traversed by Wall Running regenerates +40 Health over 4s. This effect can stack up to 3x."
+      ],
+      "levelStatsZh": [
+        "壁面蹬冲每 <LOWER_IS_BETTER>12 米后即可在 1 秒内恢复 +10 生命值。此效果最多可叠加 3 倍。",
+        "壁面蹬冲每 <LOWER_IS_BETTER>9 米后即可在 2 秒内恢复 +20 生命值。此效果最多可叠加 3 倍。",
+        "壁面蹬冲每 <LOWER_IS_BETTER>6 米后即可在 3 秒内恢复 +30 生命值。此效果最多可叠加 3 倍。",
+        "壁面蹬冲每 <LOWER_IS_BETTER>3 米后即可在 4 秒内恢复 +40 生命值。此效果最多可叠加 3 倍。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/Healbot.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ItemDropOnAssist",
+      "nameEn": "Energy Generator",
+      "nameZh": "能量产生器",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/DethCubePowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeDethCubePowerSuit"
+      ],
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/ItemDropOnAssist.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Dethcube drops an Energy Orb after assisting in <LOWER_IS_BETTER>15 kills.",
+        "Dethcube drops an Energy Orb after assisting in <LOWER_IS_BETTER>14 kills.",
+        "Dethcube drops an Energy Orb after assisting in <LOWER_IS_BETTER>13 kills.",
+        "Dethcube drops an Energy Orb after assisting in <LOWER_IS_BETTER>12 kills.",
+        "Dethcube drops an Energy Orb after assisting in <LOWER_IS_BETTER>11 kills.",
+        "Dethcube drops an Energy Orb after assisting in <LOWER_IS_BETTER>10 kills."
+      ],
+      "levelStatsZh": [
+        "死亡魔方协助击杀 <LOWER_IS_BETTER>15 次后，将掉落一个能量球。",
+        "死亡魔方协助击杀 <LOWER_IS_BETTER>14 次后，将掉落一个能量球。",
+        "死亡魔方协助击杀 <LOWER_IS_BETTER>13 次后，将掉落一个能量球。",
+        "死亡魔方协助击杀 <LOWER_IS_BETTER>12 次后，将掉落一个能量球。",
+        "死亡魔方协助击杀 <LOWER_IS_BETTER>11 次后，将掉落一个能量球。",
+        "死亡魔方协助击杀 <LOWER_IS_BETTER>10 次后，将掉落一个能量球。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ItemDropOnAssist.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ItemVacum",
+      "nameEn": "Ammo Case",
+      "nameZh": "弹药储转箱",
+      "kind": "mod",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/CarrierPowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeCarrierPowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/ItemVacuumMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Increases Ammo Capacity by 5% and converts Ammo Pickups into ammo for equipped weapons after 5s.",
+        "Increases Ammo Capacity by 10% and converts Ammo Pickups into ammo for equipped weapons after 4s.",
+        "Increases Ammo Capacity by 13% and converts Ammo Pickups into ammo for equipped weapons after 3.5s.",
+        "Increases Ammo Capacity by 15% and converts Ammo Pickups into ammo for equipped weapons after 3s.",
+        "Increases Ammo Capacity by 17% and converts Ammo Pickups into ammo for equipped weapons after 2.5s.",
+        "Increases Ammo Capacity by 25% and converts Ammo Pickups into ammo for equipped weapons after 2s."
+      ],
+      "levelStatsZh": [
+        "提升弹药携带量 5% 并在捡取弹药后的 5 秒将其转换为目前使用中的武器弹药类型。",
+        "提升弹药携带量 10% 并在捡取弹药后的 4 秒将其转换为目前使用中的武器弹药类型。",
+        "提升弹药携带量 13% 并在捡取弹药后的 3.5 秒将其转换为目前使用中的武器弹药类型。",
+        "提升弹药携带量 15% 并在捡取弹药后的 3 秒将其转换为目前使用中的武器弹药类型。",
+        "提升弹药携带量 17% 并在捡取弹药后的 2.5 秒将其转换为目前使用中的武器弹药类型。",
+        "提升弹药携带量 25% 并在捡取弹药后的 2 秒将其转换为目前使用中的武器弹药类型。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ItemVacuumMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/LocateResources",
+      "nameEn": "Scan Matter",
+      "nameZh": "扫描物质",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/RadarPowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 0,
+      "maxRank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/LocateResources.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Reveals resource containers and mineral deposits within 15m. Automatically breaks containers and collects resources every 3s.",
+        "Reveals resource containers and mineral deposits within 30m. Automatically breaks containers and collects resources every 3s.",
+        "Reveals resource containers and mineral deposits within 45m. Automatically breaks containers and collects resources every 3s.",
+        "Reveals resource containers and mineral deposits within 60m. Automatically breaks containers and collects resources every 3s."
+      ],
+      "levelStatsZh": [
+        "显示 15 米范围内的资源箱和矿床。每 3 秒自动破坏资源箱并收集资源。",
+        "显示 30 米范围内的资源箱和矿床。每 3 秒自动破坏资源箱并收集资源。",
+        "显示 45 米范围内的资源箱和矿床。每 3 秒自动破坏资源箱并收集资源。",
+        "显示 60 米范围内的资源箱和矿床。每 3 秒自动破坏资源箱并收集资源。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/LocateResources.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Looter",
+      "nameEn": "Looter",
+      "nameZh": "搜刮者",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/CarrierPowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeCarrierPowerSuit"
+      ],
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelLooterMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Emits a pulse wave to break open Loot Crates within 12m.",
+        "Emits a pulse wave to break open Loot Crates within 14m.",
+        "Emits a pulse wave to break open Loot Crates within 16m.",
+        "Emits a pulse wave to break open Loot Crates within 18m.",
+        "Emits a pulse wave to break open Loot Crates within 20m.",
+        "Emits a pulse wave to break open Loot Crates within 22m."
+      ],
+      "levelStatsZh": [
+        "发射脉冲波来打开 12 米范围内的战利品储存箱。",
+        "发射脉冲波来打开 14 米范围内的战利品储存箱。",
+        "发射脉冲波来打开 16 米范围内的战利品储存箱。",
+        "发射脉冲波来打开 18 米范围内的战利品储存箱。",
+        "发射脉冲波来打开 20 米范围内的战利品储存箱。",
+        "发射脉冲波来打开 22 米范围内的战利品储存箱。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelLooterMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/PlantScannerPrecept",
+      "nameEn": "Botanist",
+      "nameZh": "植物学家",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/RadarPowerSuit"
+      ],
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/PlantScannerPrecept.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/PlantScannerAbility.lua",
+          "params": {
+            "_rescanInterval": 1
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Oxylus Sentinel will automatically pick any plants within 20m over <LOWER_IS_BETTER>5.0s.",
+        "Oxylus Sentinel will automatically pick any plants within 26m over <LOWER_IS_BETTER>4.4s.",
+        "Oxylus Sentinel will automatically pick any plants within 32m over <LOWER_IS_BETTER>3.8s.",
+        "Oxylus Sentinel will automatically pick any plants within 38m over <LOWER_IS_BETTER>3.2s.",
+        "Oxylus Sentinel will automatically pick any plants within 44m over <LOWER_IS_BETTER>2.6s.",
+        "Oxylus Sentinel will automatically pick any plants within 50m over <LOWER_IS_BETTER>2.0s."
+      ],
+      "levelStatsZh": [
+        "奥克绪罗斯守护将在 <LOWER_IS_BETTER>5.0 秒内自动拾取 20 米范围内的任何植物。",
+        "奥克绪罗斯守护将在 <LOWER_IS_BETTER>4.4 秒内自动拾取 26 米范围内的任何植物。",
+        "奥克绪罗斯守护将在 <LOWER_IS_BETTER>3.8 秒内自动拾取 32 米范围内的任何植物。",
+        "奥克绪罗斯守护将在 <LOWER_IS_BETTER>3.2 秒内自动拾取 38 米范围内的任何植物。",
+        "奥克绪罗斯守护将在 <LOWER_IS_BETTER>2.6 秒内自动拾取 44 米范围内的任何植物。",
+        "奥克绪罗斯守护将在 <LOWER_IS_BETTER>2.0 秒内自动拾取 50 米范围内的任何植物。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/PlantScannerPrecept.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/PrimedRegen",
+      "nameEn": "Primed Regen",
+      "nameZh": "重生 Prime",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Legendary",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 4,
+      "maxRank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelRegenMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/RegenAbility.lua",
+          "params": {
+            "_reviveTimeImmunity": 10,
+            "_reviveTimerReductionBase": 5,
+            "_reviveTimerReductionPerRank": 3
+          }
+        },
+        {
+          "function": "AddUpgrade",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/RegenAbility.lua",
+          "params": {
+            "_reviveTimeImmunity": 10,
+            "_reviveTimerReductionBase": 5,
+            "_reviveTimerReductionPerRank": 3
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Sentinel recovery time reduced by 5s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 8s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 11s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 14s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 17s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 20s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 23s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 26s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 29s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 32s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 35s. Revives with 10s of invulnerability."
+      ],
+      "levelStatsZh": [
+        "守护恢复时间减少 5 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 8 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 11 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 14 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 17 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 20 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 23 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 26 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 29 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 32 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 35 秒。复活时具有 10 秒的无敌状态。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRegenMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ProcAbsorb",
+      "nameEn": "Negate",
+      "nameZh": "抵消",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeWyrmPowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/WyrmPowerSuit"
+      ],
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelProcAbsorb.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Sentinel prevents Status Effects from applying to its owner once every <LOWER_IS_BETTER>15s.",
+        "Sentinel prevents Status Effects from applying to its owner once every <LOWER_IS_BETTER>13s.",
+        "Sentinel prevents Status Effects from applying to its owner once every <LOWER_IS_BETTER>11s.",
+        "Sentinel prevents Status Effects from applying to its owner once every <LOWER_IS_BETTER>9s.",
+        "Sentinel prevents Status Effects from applying to its owner once every <LOWER_IS_BETTER>7s.",
+        "Sentinel prevents Status Effects from applying to its owner once every <LOWER_IS_BETTER>5s."
+      ],
+      "levelStatsZh": [
+        "每 <LOWER_IS_BETTER>15 秒，守护将防止其拥有者受到异常状态。",
+        "每 <LOWER_IS_BETTER>13 秒，守护将防止其拥有者受到异常状态。",
+        "每 <LOWER_IS_BETTER>11 秒，守护将防止其拥有者受到异常状态。",
+        "每 <LOWER_IS_BETTER>9 秒，守护将防止其拥有者受到异常状态。",
+        "每 <LOWER_IS_BETTER>7 秒，守护将防止其拥有者受到异常状态。",
+        "每 <LOWER_IS_BETTER>5 秒，守护将防止其拥有者受到异常状态。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelProcAbsorb.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Regen",
+      "nameEn": "Regen",
+      "nameZh": "重生",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelRegenMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/RegenAbility.lua",
+          "params": {
+            "_reviveTimeImmunity": 10,
+            "_reviveTimerReductionBase": 5,
+            "_reviveTimerReductionPerRank": 3
+          }
+        },
+        {
+          "function": "AddUpgrade",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/RegenAbility.lua",
+          "params": {
+            "_reviveTimeImmunity": 10,
+            "_reviveTimerReductionBase": 5,
+            "_reviveTimerReductionPerRank": 3
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Sentinel recovery time reduced by 5s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 8s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 11s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 14s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 17s. Revives with 10s of invulnerability.",
+        "Sentinel recovery time reduced by 20s. Revives with 10s of invulnerability."
+      ],
+      "levelStatsZh": [
+        "守护恢复时间减少 5 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 8 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 11 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 14 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 17 秒。复活时具有 10 秒的无敌状态。",
+        "守护恢复时间减少 20 秒。复活时具有 10 秒的无敌状态。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRegenMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/RepairShip",
+      "nameEn": "Auto Omni",
+      "nameZh": "万用自修",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/EmpyreanSentinelPowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/NautilusPrimeSentinelPowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelRepairShip.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Nautilus has 17% chance to repair nearby Railjack hull damages and extinguishes fires on Railjack. Cooldown: 20s.",
+        "Nautilus has 34% chance to repair nearby Railjack hull damages and extinguishes fires on Railjack. Cooldown: 20s.",
+        "Nautilus has 51% chance to repair nearby Railjack hull damages and extinguishes fires on Railjack. Cooldown: 20s.",
+        "Nautilus has 68% chance to repair nearby Railjack hull damages and extinguishes fires on Railjack. Cooldown: 20s.",
+        "Nautilus has 85% chance to repair nearby Railjack hull damages and extinguishes fires on Railjack. Cooldown: 20s.",
+        "Nautilus has 100% chance to repair nearby Railjack hull damages and extinguishes fires on Railjack. Cooldown: 20s."
+      ],
+      "levelStatsZh": [
+        "鹦鹉螺有 17% 的几率修复附近的航道星舰舰体损伤并扑灭航道星舰上的火灾。冷却时间：20 秒。",
+        "鹦鹉螺有 34% 的几率修复附近的航道星舰舰体损伤并扑灭航道星舰上的火灾。冷却时间：20 秒。",
+        "鹦鹉螺有 51% 的几率修复附近的航道星舰舰体损伤并扑灭航道星舰上的火灾。冷却时间：20 秒。",
+        "鹦鹉螺有 68% 的几率修复附近的航道星舰舰体损伤并扑灭航道星舰上的火灾。冷却时间：20 秒。",
+        "鹦鹉螺有 85% 的几率修复附近的航道星舰舰体损伤并扑灭航道星舰上的火灾。冷却时间：20 秒。",
+        "鹦鹉螺有 100% 的几率修复附近的航道星舰舰体损伤并扑灭航道星舰上的火灾。冷却时间：20 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRepairShip.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/RespawnSelf",
+      "nameEn": "Reawaken",
+      "nameZh": "再启动",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/GubberPowerSuit"
+      ],
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelRespawnSelf.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_OVERSHIELD_MAX",
+          "operation": "ADD",
+          "value": 150,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [
+        {
+          "function": "OnPickup",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/Reawaken.lua",
+          "params": {
+            "_overshieldMaxPerLevel": 150,
+            "_overshieldsPerOrbPerLevel": 50,
+            "_reducedIncapacitationTimePerOrb": 6
+          }
+        },
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/Reawaken.lua",
+          "params": {
+            "_overshieldMaxPerLevel": 150,
+            "_overshieldsPerOrbPerLevel": 50,
+            "_reducedIncapacitationTimePerOrb": 6
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Energy Orbs reduce Sentinel Recovery timer by 6s. Djinn recovers with 50 Overshields per Energy Orb collected. Djinn's max Overshields increase by 150.",
+        "Energy Orbs reduce Sentinel Recovery timer by 6s. Djinn recovers with 100 Overshields per Energy Orb collected. Djinn's max Overshields increase by 300.",
+        "Energy Orbs reduce Sentinel Recovery timer by 6s. Djinn recovers with 150 Overshields per Energy Orb collected. Djinn's max Overshields increase by 450.",
+        "Energy Orbs reduce Sentinel Recovery timer by 6s. Djinn recovers with 200 Overshields per Energy Orb collected. Djinn's max Overshields increase by 600.",
+        "Energy Orbs reduce Sentinel Recovery timer by 6s. Djinn recovers with 250 Overshields per Energy Orb collected. Djinn's max Overshields increase by 750.",
+        "Energy Orbs reduce Sentinel Recovery timer by 6s. Djinn recovers with 300 Overshields per Energy Orb collected. Djinn's max Overshields increase by 900."
+      ],
+      "levelStatsZh": [
+        "能量球可减少 6 秒守护恢复倒计时。每收集一个能量球，引灵会恢复 50 过载护盾。引灵的最大过载护盾增加 150。",
+        "能量球可减少 6 秒守护恢复倒计时。每收集一个能量球，引灵会恢复 100 过载护盾。引灵的最大过载护盾增加 300。",
+        "能量球可减少 6 秒守护恢复倒计时。每收集一个能量球，引灵会恢复 150 过载护盾。引灵的最大过载护盾增加 450。",
+        "能量球可减少 6 秒守护恢复倒计时。每收集一个能量球，引灵会恢复 200 过载护盾。引灵的最大过载护盾增加 600。",
+        "能量球可减少 6 秒守护恢复倒计时。每收集一个能量球，引灵会恢复 250 过载护盾。引灵的最大过载护盾增加 750。",
+        "能量球可减少 6 秒守护恢复倒计时。每收集一个能量球，引灵会恢复 300 过载护盾。引灵的最大过载护盾增加 900。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRespawnSelf.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Revenge",
+      "nameEn": "Revenge",
+      "nameZh": "复仇",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeShadePowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrismaShadePowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/ShadePowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 0,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelRevengeMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Sentinel will not attack an enemy unless that enemy has attacked the Sentinel's master within 5.8m.",
+        "Sentinel will not attack an enemy unless that enemy has attacked the Sentinel's master within 6.6m.",
+        "Sentinel will not attack an enemy unless that enemy has attacked the Sentinel's master within 7.5m.",
+        "Sentinel will not attack an enemy unless that enemy has attacked the Sentinel's master within 8.3m.",
+        "Sentinel will not attack an enemy unless that enemy has attacked the Sentinel's master within 9.1m.",
+        "Sentinel will not attack an enemy unless that enemy has attacked the Sentinel's master within 10m."
+      ],
+      "levelStatsZh": [
+        "除非敌人在 5.8 米范围内攻击其主人，否则守护不会攻击敌人",
+        "除非敌人在 6.6 米范围内攻击其主人，否则守护不会攻击敌人",
+        "除非敌人在 7.5 米范围内攻击其主人，否则守护不会攻击敌人",
+        "除非敌人在 8.3 米范围内攻击其主人，否则守护不会攻击敌人",
+        "除非敌人在 9.1 米范围内攻击其主人，否则守护不会攻击敌人",
+        "除非敌人在 10 米范围内攻击其主人，否则守护不会攻击敌人"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelRevengeMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/RevivePlayer",
+      "nameEn": "Sacrifice",
+      "nameZh": "牺牲",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 6,
+      "maxRank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelSacrificeMod.png",
+      "modSet": null,
+      "upgrades": [
+        {
+          "type": "AVATAR_REVIVE_ASSIST",
+          "operation": "ADD",
+          "value": 1,
+          "damageType": "DT_ANY"
+        }
+      ],
+      "scripts": [
+        {
+          "function": "NpcEvaluateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/SentinelRevivePlayer.lua",
+          "params": {
+            "_companionRevivePenalty": 15
+          }
+        },
+        {
+          "function": "ApplyCompanionRevivePenalty",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/SentinelRevivePlayer.lua",
+          "params": {
+            "_companionRevivePenalty": 15
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Sentinel incapacitates itself to revive its downed owner to 25% health and shields in <LOWER_IS_BETTER>7s. Sentinel Recovery timer increases by 15s. +15s Companion Recovery Time",
+        "Sentinel incapacitates itself to revive its downed owner to 50% health and shields in <LOWER_IS_BETTER>6s. Sentinel Recovery timer increases by 15s. +15s Companion Recovery Time",
+        "Sentinel incapacitates itself to revive its downed owner to 75% health and shields in <LOWER_IS_BETTER>5s. Sentinel Recovery timer increases by 15s. +15s Companion Recovery Time",
+        "Sentinel incapacitates itself to revive its downed owner to 100% health and shields in <LOWER_IS_BETTER>4s. Sentinel Recovery timer increases by 15s. +15s Companion Recovery Time"
+      ],
+      "levelStatsZh": [
+        "守护使自己失去战斗能力，在 <LOWER_IS_BETTER>7 秒内复活其倒地的主人，使其恢复 25% 的生命值和护盾。守护恢复倒计时增加 15 秒。 +15 秒同伴恢复时间",
+        "守护使自己失去战斗能力，在 <LOWER_IS_BETTER>6 秒内复活其倒地的主人，使其恢复 50% 的生命值和护盾。守护恢复倒计时增加 15 秒。 +15 秒同伴恢复时间",
+        "守护使自己失去战斗能力，在 <LOWER_IS_BETTER>5 秒内复活其倒地的主人，使其恢复 75% 的生命值和护盾。守护恢复倒计时增加 15 秒。 +15 秒同伴恢复时间",
+        "守护使自己失去战斗能力，在 <LOWER_IS_BETTER>4 秒内复活其倒地的主人，使其恢复 100% 的生命值和护盾。守护恢复倒计时增加 15 秒。 +15 秒同伴恢复时间"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSacrificeMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Sanctuary",
+      "nameEn": "Sanctuary",
+      "nameZh": "守护光罩",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 6,
+      "maxRank": 10,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelSanctuaryMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "NpcEvaluateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/Sanctuary.lua",
+          "params": {
+            "_createOnMaster": 0,
+            "_incrementShieldHealth": 150,
+            "_initialShieldHealth": 300,
+            "_shieldCooldownOnDestroyed": 10
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Creates a shield with 300 Health around the player when they are reviving fallen allies.",
+        "Creates a shield with 450 Health around the player when they are reviving fallen allies.",
+        "Creates a shield with 600 Health around the player when they are reviving fallen allies.",
+        "Creates a shield with 750 Health around the player when they are reviving fallen allies.",
+        "Creates a shield with 900 Health around the player when they are reviving fallen allies.",
+        "Creates a shield with 1050 Health around the player when they are reviving fallen allies.",
+        "Creates a shield with 1200 Health around the player when they are reviving fallen allies.",
+        "Creates a shield with 1350 Health around the player when they are reviving fallen allies.",
+        "Creates a shield with 1500 Health around the player when they are reviving fallen allies.",
+        "Creates a shield with 1650 Health around the player when they are reviving fallen allies.",
+        "Creates a shield with 1800 Health around the player when they are reviving fallen allies."
+      ],
+      "levelStatsZh": [
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 300 的护盾",
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 450 的护盾",
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 600 的护盾",
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 750 的护盾",
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 900 的护盾",
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 1050 的护盾",
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 1200 的护盾",
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 1350 的护盾",
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 1500 的护盾",
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 1650 的护盾",
+        "在救助倒地同伴的玩家身边产生一层拥有生命值 1800 的护盾"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSanctuaryMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/SentinelAttack",
+      "nameEn": "Assault Mode",
+      "nameZh": "突击模式",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 0,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelAssaultMode.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Sentinel will attack the first visible enemy within 17.5m.",
+        "Sentinel will attack the first visible enemy within 20m.",
+        "Sentinel will attack the first visible enemy within 22.5m.",
+        "Sentinel will attack the first visible enemy within 25.0m.",
+        "Sentinel will attack the first visible enemy within 27.4m.",
+        "Sentinel will attack the first visible enemy within 30m."
+      ],
+      "levelStatsZh": [
+        "守护会攻击 17.5 米范围内的第一名可视敌人。",
+        "守护会攻击 20 米范围内的第一名可视敌人。",
+        "守护会攻击 22.5 米范围内的第一名可视敌人。",
+        "守护会攻击 25.0 米范围内的第一名可视敌人。",
+        "守护会攻击 27.4 米范围内的第一名可视敌人。",
+        "守护会攻击 30 米范围内的第一名可视敌人。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelAssaultMode.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ShieldVampire",
+      "nameEn": "Molecular Conversion",
+      "nameZh": "分子转化",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/TnSentinelCrossPowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelShieldVampireMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Blast enemies within 10m, converting 50 Damage into Shields for the Warframe.",
+        "Blast enemies within 10m, converting 75 Damage into Shields for the Warframe.",
+        "Blast enemies within 10m, converting 100 Damage into Shields for the Warframe.",
+        "Blast enemies within 10m, converting 125 Damage into Shields for the Warframe.",
+        "Blast enemies within 10m, converting 150 Damage into Shields for the Warframe.",
+        "Blast enemies within 10m, converting 200 Damage into Shields for the Warframe."
+      ],
+      "levelStatsZh": [
+        "爆破 10 米内的敌人，将 50 伤害转换成战甲护盾",
+        "爆破 10 米内的敌人，将 75 伤害转换成战甲护盾",
+        "爆破 10 米内的敌人，将 100 伤害转换成战甲护盾",
+        "爆破 10 米内的敌人，将 125 伤害转换成战甲护盾",
+        "爆破 10 米内的敌人，将 150 伤害转换成战甲护盾",
+        "爆破 10 米内的敌人，将 200 伤害转换成战甲护盾"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelShieldVampireMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/TaserStun",
+      "nameEn": "Electro Pulse",
+      "nameZh": "电光脉冲",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/ArcDronePowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/ArcDroneTaserStun.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Every 10s, Sentinel will continually zap an enemy within 15m, trapping them in a stunned state.",
+        "Every 9s, Sentinel will continually zap an enemy within 15m, trapping them in a stunned state.",
+        "Every 8s, Sentinel will continually zap an enemy within 15m, trapping them in a stunned state.",
+        "Every 7s, Sentinel will continually zap an enemy within 15m, trapping them in a stunned state.",
+        "Every 6s, Sentinel will continually zap an enemy within 15m, trapping them in a stunned state.",
+        "Every 5s, Sentinel will continually zap an enemy within 15m, trapping them in a stunned state."
+      ],
+      "levelStatsZh": [
+        "每 10 秒，守护会持续电击 15 米内的单名敌人以达到牵制效果。",
+        "每 9 秒，守护会持续电击 15 米内的单名敌人以达到牵制效果。",
+        "每 8 秒，守护会持续电击 15 米内的单名敌人以达到牵制效果。",
+        "每 7 秒，守护会持续电击 15 米内的单名敌人以达到牵制效果。",
+        "每 6 秒，守护会持续电击 15 米内的单名敌人以达到牵制效果。",
+        "每 5 秒，守护会持续电击 15 米内的单名敌人以达到牵制效果。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/ArcDroneTaserStun.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/ThrowGlaivePrecept",
+      "nameEn": "Targeting Receptor",
+      "nameZh": "目标感应",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/MeleePetPowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeHeliosPowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 0,
+      "maxRank": 3,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelTargetingReceptorMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Causes the Helios Sentinel to attack targets within 10m with 1 glaives.",
+        "Causes the Helios Sentinel to attack targets within 10m with 2 glaives.",
+        "Causes the Helios Sentinel to attack targets within 10m with 3 glaives.",
+        "Causes the Helios Sentinel to attack targets within 10m with 3 glaives."
+      ],
+      "levelStatsZh": [
+        "让赫利俄斯守护以 1 个机体组件来攻击 10 米距离内的敌人。",
+        "让赫利俄斯守护以 2 个机体组件来攻击 10 米距离内的敌人。",
+        "让赫利俄斯守护以 3 个机体组件来攻击 10 米距离内的敌人。",
+        "让赫利俄斯守护以 3 个机体组件来攻击 10 米距离内的敌人。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelTargetingReceptorMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Thumper",
+      "nameEn": "Thumper",
+      "nameZh": "重击者",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/GubberPowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 0,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelThumperMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "NpcEvaluateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/SwiftDethAbility.lua",
+          "params": {
+            "_maxDistance": 30
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Djinn will attack the first visible enemy within 35m.",
+        "Djinn will attack the first visible enemy within 40m.",
+        "Djinn will attack the first visible enemy within 45m.",
+        "Djinn will attack the first visible enemy within 50.0m.",
+        "Djinn will attack the first visible enemy within 54.9m.",
+        "Djinn will attack the first visible enemy within 60m."
+      ],
+      "levelStatsZh": [
+        "引灵会攻击 35 米范围内的第一名可视敌人。",
+        "引灵会攻击 40 米范围内的第一名可视敌人。",
+        "引灵会攻击 45 米范围内的第一名可视敌人。",
+        "引灵会攻击 50.0 米范围内的第一名可视敌人。",
+        "引灵会攻击 54.9 米范围内的第一名可视敌人。",
+        "引灵会攻击 60 米范围内的第一名可视敌人。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelThumperMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/UniversalVacuum",
+      "nameEn": "Vacuum",
+      "nameZh": "吸取",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/CarrierVaccuumMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "8.5m Companion Gather-Link. Detects and collects items, including mods.",
+        "9.5m Companion Gather-Link. Detects and collects items, including mods.",
+        "10.5m Companion Gather-Link. Detects and collects items, including mods.",
+        "11.5m Companion Gather-Link. Detects and collects items, including mods.",
+        "12.5m Companion Gather-Link. Detects and collects items, including mods.",
+        "13.5m Companion Gather-Link. Detects and collects items, including mods."
+      ],
+      "levelStatsZh": [
+        "8.5 米同伴收集链接。探测并收集物品，这包括收集 MOD。",
+        "9.5 米同伴收集链接。探测并收集物品，这包括收集 MOD。",
+        "10.5 米同伴收集链接。探测并收集物品，这包括收集 MOD。",
+        "11.5 米同伴收集链接。探测并收集物品，这包括收集 MOD。",
+        "12.5 米同伴收集链接。探测并收集物品，这包括收集 MOD。",
+        "13.5 米同伴收集链接。探测并收集物品，这包括收集 MOD。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/CarrierVaccuumMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/Vaporize",
+      "nameEn": "Vaporize",
+      "nameZh": "汽化",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/DethCubePowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeDethCubePowerSuit"
+      ],
+      "rarity": "Common",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelSwiftDethMod.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [
+        "Every 10s the sentinel will stun and inflict 150 damage to an enemy within 5m. Damage dealt affected by Sentinel Weapon Mods.",
+        "Every 10s the sentinel will stun and inflict 300 damage to an enemy within 10m. Damage dealt affected by Sentinel Weapon Mods.",
+        "Every 10s the sentinel will stun and inflict 450 damage to an enemy within 15m. Damage dealt affected by Sentinel Weapon Mods.",
+        "Every 10s the sentinel will stun and inflict 600 damage to an enemy within 20m. Damage dealt affected by Sentinel Weapon Mods.",
+        "Every 10s the sentinel will stun and inflict 600 damage to an enemy within 25m. Damage dealt affected by Sentinel Weapon Mods.",
+        "Every 10s the sentinel will stun and inflict 600 damage to an enemy within 30m. Damage dealt affected by Sentinel Weapon Mods."
+      ],
+      "levelStatsZh": [
+        "每隔 10 秒，守护将使 5 米范围内的敌人眩晕并造成 150 点伤害。所造成的伤害受守护武器 Mod 影响。",
+        "每隔 10 秒，守护将使 10 米范围内的敌人眩晕并造成 300 点伤害。所造成的伤害受守护武器 Mod 影响。",
+        "每隔 10 秒，守护将使 15 米范围内的敌人眩晕并造成 450 点伤害。所造成的伤害受守护武器 Mod 影响。",
+        "每隔 10 秒，守护将使 20 米范围内的敌人眩晕并造成 600 点伤害。所造成的伤害受守护武器 Mod 影响。",
+        "每隔 10 秒，守护将使 25 米范围内的敌人眩晕并造成 600 点伤害。所造成的伤害受守护武器 Mod 影响。",
+        "每隔 10 秒，守护将使 30 米范围内的敌人眩晕并造成 600 点伤害。所造成的伤害受守护武器 Mod 影响。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelSwiftDethMod.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/AlacrityField",
+      "nameEn": "Reinforced Bond",
+      "nameZh": "强固连结",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_TACTIC",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelAlacrityField.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/AlacrityField.lua",
+          "params": {
+            "_fireRateIncreasePerRank": 0.1,
+            "_shieldThreshold": 1200,
+            "_shieldsPerRank": 25
+          }
+        },
+        {
+          "function": "ShieldBoost",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/AlacrityField.lua",
+          "params": {
+            "_fireRateIncreasePerRank": 0.25,
+            "_shieldThreshold": 1200,
+            "_shieldsPerRank": 25
+          }
+        },
+        {
+          "function": "AddUpgrades",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/AlacrityField.lua",
+          "params": {
+            "_fireRateIncreasePerRank": 0.1,
+            "_shieldThreshold": 1200,
+            "_shieldsPerRank": 25
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "If the Companion exceeds 1200 Max Shields or Overshields then your fire rate is increased 10%. Reloading restores 25 Overshields to your companion.",
+        "If the Companion exceeds 1200 Max Shields or Overshields then your fire rate is increased 20%. Reloading restores 50 Overshields to your companion.",
+        "If the Companion exceeds 1200 Max Shields or Overshields then your fire rate is increased 30%. Reloading restores 75 Overshields to your companion.",
+        "If the Companion exceeds 1200 Max Shields or Overshields then your fire rate is increased 40%. Reloading restores 100 Overshields to your companion.",
+        "If the Companion exceeds 1200 Max Shields or Overshields then your fire rate is increased 50%. Reloading restores 125 Overshields to your companion.",
+        "If the Companion exceeds 1200 Max Shields or Overshields then your fire rate is increased 60%. Reloading restores 150 Overshields to your companion."
+      ],
+      "levelStatsZh": [
+        "如果同伴的最大护盾或过载护盾超过 1200，那么你的射速会增加 10%。重新装填可为你的同伴恢复 25 过载护盾。",
+        "如果同伴的最大护盾或过载护盾超过 1200，那么你的射速会增加 20%。重新装填可为你的同伴恢复 50 过载护盾。",
+        "如果同伴的最大护盾或过载护盾超过 1200，那么你的射速会增加 30%。重新装填可为你的同伴恢复 75 过载护盾。",
+        "如果同伴的最大护盾或过载护盾超过 1200，那么你的射速会增加 40%。重新装填可为你的同伴恢复 100 过载护盾。",
+        "如果同伴的最大护盾或过载护盾超过 1200，那么你的射速会增加 50%。重新装填可为你的同伴恢复 125 过载护盾。",
+        "如果同伴的最大护盾或过载护盾超过 1200，那么你的射速会增加 60%。重新装填可为你的同伴恢复 150 过载护盾。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelAlacrityField.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/BondedExaltation",
+      "nameEn": "Seismic Bond",
+      "nameZh": "震撼连结",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelBondedExaltation.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "OnMeleeHit",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/BondedExaltation.lua",
+          "params": {
+            "_durationPerLevel": 2,
+            "_efficiencyPerLevelPerStack": 0.0099999998,
+            "_maxStacks": 10,
+            "_percentOfDamagePerLevel": 0.050000001,
+            "_range": 4
+          }
+        },
+        {
+          "function": "OnHit",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/BondedExaltation.lua",
+          "params": {
+            "_durationPerLevel": 2,
+            "_efficiencyPerLevelPerStack": 0.0049999999,
+            "_maxStacks": 10,
+            "_percentOfDamagePerLevel": 0.050000001,
+            "_range": 4
+          }
+        },
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/BondedExaltation.lua",
+          "params": {
+            "_durationPerLevel": 2,
+            "_efficiencyPerLevelPerStack": 0.0049999999,
+            "_maxStacks": 10,
+            "_percentOfDamagePerLevel": 0.050000001,
+            "_range": 4
+          }
+        },
+        {
+          "function": "LocalUpdateStatusEffects",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/BondedExaltation.lua",
+          "params": {
+            "_durationPerLevel": 2,
+            "_efficiencyPerLevelPerStack": 0.0049999999,
+            "_maxStacks": 10,
+            "_percentOfDamagePerLevel": 0.050000001,
+            "_range": 4
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "While a channeled Ability is active, Companion melee attacks create a 4m shockwave for 5% of their melee attack damage. Damage dealt by your Companion increases your Ability Efficiency by 0.5% for 2 seconds. Max 10 stacks.",
+        "While a channeled Ability is active, Companion melee attacks create a 4m shockwave for 10% of their melee attack damage. Damage dealt by your Companion increases your Ability Efficiency by 1% for 4 seconds. Max 10 stacks.",
+        "While a channeled Ability is active, Companion melee attacks create a 4m shockwave for 15% of their melee attack damage. Damage dealt by your Companion increases your Ability Efficiency by 1.5% for 6 seconds. Max 10 stacks.",
+        "While a channeled Ability is active, Companion melee attacks create a 4m shockwave for 20% of their melee attack damage. Damage dealt by your Companion increases your Ability Efficiency by 2% for 8 seconds. Max 10 stacks.",
+        "While a channeled Ability is active, Companion melee attacks create a 4m shockwave for 25% of their melee attack damage. Damage dealt by your Companion increases your Ability Efficiency by 2.5% for 10 seconds. Max 10 stacks.",
+        "While a channeled Ability is active, Companion melee attacks create a 4m shockwave for 30% of their melee attack damage. Damage dealt by your Companion increases your Ability Efficiency by 3% for 12 seconds. Max 10 stacks."
+      ],
+      "levelStatsZh": [
+        "当引导技能被激活时，同伴近战攻击会产生 4 米的冲击波，造成其 5% 的近战伤害。你的同伴造成的伤害会使你的技能效率提高 0.5%，持续 2 秒。最多 10 层。",
+        "当引导技能被激活时，同伴近战攻击会产生 4 米的冲击波，造成其 10% 的近战伤害。你的同伴造成的伤害会使你的技能效率提高 1%，持续 4 秒。最多 10 层。",
+        "当引导技能被激活时，同伴近战攻击会产生 4 米的冲击波，造成其 15% 的近战伤害。你的同伴造成的伤害会使你的技能效率提高 1.5%，持续 6 秒。最多 10 层。",
+        "当引导技能被激活时，同伴近战攻击会产生 4 米的冲击波，造成其 20% 的近战伤害。你的同伴造成的伤害会使你的技能效率提高 2%，持续 8 秒。最多 10 层。",
+        "当引导技能被激活时，同伴近战攻击会产生 4 米的冲击波，造成其 25% 的近战伤害。你的同伴造成的伤害会使你的技能效率提高 2.5%，持续 10 秒。最多 10 层。",
+        "当引导技能被激活时，同伴近战攻击会产生 4 米的冲击波，造成其 30% 的近战伤害。你的同伴造成的伤害会使你的技能效率提高 3%，持续 12 秒。最多 10 层。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelBondedExaltation.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/BoneSplitter",
+      "nameEn": "Vicious Bond",
+      "nameZh": "凶恶连结",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelBoneSplitter.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "OnPetMeleeHit",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/BoneSplitter.lua",
+          "params": {
+            "_armourStripPerLevel": 2.5,
+            "_bonusArmourStripPerLevel": 2.5,
+            "_markedDuration": 10,
+            "_rangePerLevel": 1.5
+          }
+        },
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/BoneSplitter.lua",
+          "params": {
+            "_armourStripPerLevel": 2.5,
+            "_bonusArmourStripPerLevel": 2.5,
+            "_markedDuration": 10,
+            "_rangePerLevel": 1.5
+          }
+        },
+        {
+          "function": "ApplyBonesplitterMark",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/BoneSplitter.lua",
+          "params": {
+            "_armourStripPerLevel": 2.5,
+            "_bonusArmourStripPerLevel": 2.5,
+            "_markedDuration": 10,
+            "_rangePerLevel": 1.5
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Companion melee attacks strip 2.5% of enemy armor. Enemies recently damaged by Abilities spread the effect to other enemies in a 1.5m radius.",
+        "Companion melee attacks strip 5% of enemy armor. Enemies recently damaged by Abilities spread the effect to other enemies in a 3m radius.",
+        "Companion melee attacks strip 7.5% of enemy armor. Enemies recently damaged by Abilities spread the effect to other enemies in a 4.5m radius.",
+        "Companion melee attacks strip 10% of enemy armor. Enemies recently damaged by Abilities spread the effect to other enemies in a 6m radius.",
+        "Companion melee attacks strip 12.5% of enemy armor. Enemies recently damaged by Abilities spread the effect to other enemies in a 7.5m radius.",
+        "Companion melee attacks strip 15% of enemy armor. Enemies recently damaged by Abilities spread the effect to other enemies in a 9m radius."
+      ],
+      "levelStatsZh": [
+        "同伴近战攻击会削减敌人 2.5% 的护甲。最近受到技能伤害的敌人会把效果扩散到周围 1.5 米内的敌人身上。",
+        "同伴近战攻击会削减敌人 5% 的护甲。最近受到技能伤害的敌人会把效果扩散到周围 3 米内的敌人身上。",
+        "同伴近战攻击会削减敌人 7.5% 的护甲。最近受到技能伤害的敌人会把效果扩散到周围 4.5 米内的敌人身上。",
+        "同伴近战攻击会削减敌人 10% 的护甲。最近受到技能伤害的敌人会把效果扩散到周围 6 米内的敌人身上。",
+        "同伴近战攻击会削减敌人 12.5% 的护甲。最近受到技能伤害的敌人会把效果扩散到周围 7.5 米内的敌人身上。",
+        "同伴近战攻击会削减敌人 15% 的护甲。最近受到技能伤害的敌人会把效果扩散到周围 9 米内的敌人身上。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelBoneSplitter.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/CompoundingLaceration",
+      "nameEn": "Manifold Bond",
+      "nameZh": "多种连结",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelCompoundingLaceration.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "OnHit",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/CompoundingLaceration.lua",
+          "params": {
+            "_cooldownReductionPerRank": 0.5,
+            "_uniqueStatusEffectsBase": 6,
+            "_uniqueStatusEffectsBasePerRank": -0.5
+          }
+        },
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/CompoundingLaceration.lua",
+          "params": {
+            "_cooldownReductionPerRank": 0.5,
+            "_uniqueStatusEffectsBase": 6,
+            "_uniqueStatusEffectsBasePerRank": -0.5
+          }
+        },
+        {
+          "function": "ApplyCooldown",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/CompoundingLaceration.lua",
+          "params": {
+            "_cooldownReductionPerRank": 0.5,
+            "_uniqueStatusEffectsBase": 6,
+            "_uniqueStatusEffectsBasePerRank": -0.5
+          }
+        },
+        {
+          "function": "EnemyKilled",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/CompoundingLaceration.lua",
+          "params": {
+            "_cooldownReductionPerRank": 0.5,
+            "_uniqueStatusEffectsBase": 6,
+            "_uniqueStatusEffectsBasePerRank": -0.5
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Companion Precept Mods apply Status Effects from Companion weapons. Killing enemies with <LOWER_IS_BETTER>6 or more unique Status Effects reduces Companion Ability cooldowns by 0.5s.",
+        "Companion Precept Mods apply Status Effects from Companion weapons. Killing enemies with <LOWER_IS_BETTER>5 or more unique Status Effects reduces Companion Ability cooldowns by 1s.",
+        "Companion Precept Mods apply Status Effects from Companion weapons. Killing enemies with <LOWER_IS_BETTER>5 or more unique Status Effects reduces Companion Ability cooldowns by 1.5s.",
+        "Companion Precept Mods apply Status Effects from Companion weapons. Killing enemies with <LOWER_IS_BETTER>4 or more unique Status Effects reduces Companion Ability cooldowns by 2s.",
+        "Companion Precept Mods apply Status Effects from Companion weapons. Killing enemies with <LOWER_IS_BETTER>4 or more unique Status Effects reduces Companion Ability cooldowns by 2.5s.",
+        "Companion Precept Mods apply Status Effects from Companion weapons. Killing enemies with <LOWER_IS_BETTER>3 or more unique Status Effects reduces Companion Ability cooldowns by 3s."
+      ],
+      "levelStatsZh": [
+        "同伴武器能造成的异常状态可由同伴指令 Mod 触发。杀死具有 <LOWER_IS_BETTER>6 种或更多独特异常状态效果的敌人可减少同伴技能冷却时间 0.5 秒。",
+        "同伴武器能造成的异常状态可由同伴指令 Mod 触发。杀死具有 <LOWER_IS_BETTER>5 种或更多独特异常状态效果的敌人可减少同伴技能冷却时间 1 秒。",
+        "同伴武器能造成的异常状态可由同伴指令 Mod 触发。杀死具有 <LOWER_IS_BETTER>5 种或更多独特异常状态效果的敌人可减少同伴技能冷却时间 1.5 秒。",
+        "同伴武器能造成的异常状态可由同伴指令 Mod 触发。杀死具有 <LOWER_IS_BETTER>4 种或更多独特异常状态效果的敌人可减少同伴技能冷却时间 2 秒。",
+        "同伴武器能造成的异常状态可由同伴指令 Mod 触发。杀死具有 <LOWER_IS_BETTER>4 种或更多独特异常状态效果的敌人可减少同伴技能冷却时间 2.5 秒。",
+        "同伴武器能造成的异常状态可由同伴指令 Mod 触发。杀死具有 <LOWER_IS_BETTER>3 种或更多独特异常状态效果的敌人可减少同伴技能冷却时间 3 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCompoundingLaceration.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/Copilot",
+      "nameEn": "Aerial Bond",
+      "nameZh": "空中连结",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelCopilot.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "ApplyFrostAuraUpgradesToPet",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/Copilot.lua",
+          "params": {
+            "_baseMeshScale": 0.5,
+            "_baseRange": 1,
+            "_baseStatus": 0.050000001,
+            "_decalDistance": 4.5,
+            "_gracePeriod": 3,
+            "_maxRangePerRank": 1.5,
+            "_maxStatusPerRank": 0.1,
+            "_meshScaleAtMax": 2,
+            "_tickRate": 0.25,
+            "_timeReductionPerAirKillHeadshotPerRank": 1.5,
+            "_timeReductionPerAirKillPerRank": 0.5,
+            "_timeToMax": 20
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Airborne kills decrease Companion Recovery Time by 0.5s and 1.5s for headshot kills. Companion creates a field of cold that increases up to 10% and 2.5m radius while Warframe is airborne, lasting for 3s after returning to ground.",
+        "Airborne kills decrease Companion Recovery Time by 1s and 3s for headshot kills. Companion creates a field of cold that increases up to 15% and 4m radius while Warframe is airborne, lasting for 3s after returning to ground.",
+        "Airborne kills decrease Companion Recovery Time by 1.5s and 4.5s for headshot kills. Companion creates a field of cold that increases up to 20% and 5.5m radius while Warframe is airborne, lasting for 3s after returning to ground.",
+        "Airborne kills decrease Companion Recovery Time by 2s and 6s for headshot kills. Companion creates a field of cold that increases up to 25% and 7m radius while Warframe is airborne, lasting for 3s after returning to ground.",
+        "Airborne kills decrease Companion Recovery Time by 2.5s and 7.5s for headshot kills. Companion creates a field of cold that increases up to 30% and 8.5m radius while Warframe is airborne, lasting for 3s after returning to ground.",
+        "Airborne kills decrease Companion Recovery Time by 3s and 9s for headshot kills. Companion creates a field of cold that increases up to 35% and 10m radius while Warframe is airborne, lasting for 3s after returning to ground."
+      ],
+      "levelStatsZh": [
+        "空中击杀会使同伴恢复时间减少 0.5 秒，爆头击杀减少 1.5 秒。当战甲在空中时，同伴会创造一个最大增加至 10% 并拥有 2.5 米范围的冰冻区域，落地后持续 3 秒。",
+        "空中击杀会使同伴恢复时间减少 1 秒，爆头击杀减少 3 秒。当战甲在空中时，同伴会创造一个最大增加至 15% 并拥有 4 米范围的冰冻区域，落地后持续 3 秒。",
+        "空中击杀会使同伴恢复时间减少 1.5 秒，爆头击杀减少 4.5 秒。当战甲在空中时，同伴会创造一个最大增加至 20% 并拥有 5.5 米范围的冰冻区域，落地后持续 3 秒。",
+        "空中击杀会使同伴恢复时间减少 2 秒，爆头击杀减少 6 秒。当战甲在空中时，同伴会创造一个最大增加至 25% 并拥有 7 米范围的冰冻区域，落地后持续 3 秒。",
+        "空中击杀会使同伴恢复时间减少 2.5 秒，爆头击杀减少 7.5 秒。当战甲在空中时，同伴会创造一个最大增加至 30% 并拥有 8.5 米范围的冰冻区域，落地后持续 3 秒。",
+        "空中击杀会使同伴恢复时间减少 3 秒，爆头击杀减少 9 秒。当战甲在空中时，同伴会创造一个最大增加至 35% 并拥有 10 米范围的冰冻区域，落地后持续 3 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelCopilot.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/EximusHunter",
+      "nameEn": "Momentous Bond",
+      "nameZh": "重大连结",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelEximusHunter.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/EximusHunter.lua",
+          "params": {
+            "_bonusDamagePerRank": 0.2,
+            "_damageDuration": 30,
+            "_reducedIncapacitationTimePerRank": 3
+          }
+        },
+        {
+          "function": "ApplyEximusHunter",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/EximusHunter.lua",
+          "params": {
+            "_bonusDamagePerRank": 0.2,
+            "_damageDuration": 30,
+            "_reducedIncapacitationTimePerRank": 3
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Killing Eximus enemies grants 20% bonus of a random Elemental Damage to your Companion for 30s and reduces Companion Recovery Time by 3s.",
+        "Killing Eximus enemies grants 40% bonus of a random Elemental Damage to your Companion for 30s and reduces Companion Recovery Time by 6s.",
+        "Killing Eximus enemies grants 60% bonus of a random Elemental Damage to your Companion for 30s and reduces Companion Recovery Time by 9s.",
+        "Killing Eximus enemies grants 80% bonus of a random Elemental Damage to your Companion for 30s and reduces Companion Recovery Time by 12s.",
+        "Killing Eximus enemies grants 100% bonus of a random Elemental Damage to your Companion for 30s and reduces Companion Recovery Time by 15s.",
+        "Killing Eximus enemies grants 120% bonus of a random Elemental Damage to your Companion for 30s and reduces Companion Recovery Time by 18s."
+      ],
+      "levelStatsZh": [
+        "击杀卓越者敌人会给你的同伴带来 20% 随机元素伤害增益，持续 30 秒，并减少同伴恢复时间 3 秒。",
+        "击杀卓越者敌人会给你的同伴带来 40% 随机元素伤害增益，持续 30 秒，并减少同伴恢复时间 6 秒。",
+        "击杀卓越者敌人会给你的同伴带来 60% 随机元素伤害增益，持续 30 秒，并减少同伴恢复时间 9 秒。",
+        "击杀卓越者敌人会给你的同伴带来 80% 随机元素伤害增益，持续 30 秒，并减少同伴恢复时间 12 秒。",
+        "击杀卓越者敌人会给你的同伴带来 100% 随机元素伤害增益，持续 30 秒，并减少同伴恢复时间 15 秒。",
+        "击杀卓越者敌人会给你的同伴带来 120% 随机元素伤害增益，持续 30 秒，并减少同伴恢复时间 18 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelEximusHunter.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/MutualNourishment",
+      "nameEn": "Restorative Bond",
+      "nameZh": "恢复连结",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelMutualNourishment.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "OnPickup",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/MutualNourishment.lua",
+          "params": {
+            "_reducedIncapacitationTimePerOrbPerLevel": 0.5
+          }
+        },
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/MutualNourishment.lua",
+          "params": {
+            "_reducedIncapacitationTimePerOrbPerLevel": 0.5
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Health Orbs restore 10 more health and reduce Companion Recovery Time by 0.5s.",
+        "Health Orbs restore 20 more health and reduce Companion Recovery Time by 1s.",
+        "Health Orbs restore 30 more health and reduce Companion Recovery Time by 1.5s.",
+        "Health Orbs restore 40 more health and reduce Companion Recovery Time by 2s.",
+        "Health Orbs restore 50 more health and reduce Companion Recovery Time by 2.5s.",
+        "Health Orbs restore 60 more health and reduce Companion Recovery Time by 3s."
+      ],
+      "levelStatsZh": [
+        "生命球可恢复额外 10 生命值，并减少同伴恢复时间 0.5 秒。",
+        "生命球可恢复额外 20 生命值，并减少同伴恢复时间 1 秒。",
+        "生命球可恢复额外 30 生命值，并减少同伴恢复时间 1.5 秒。",
+        "生命球可恢复额外 40 生命值，并减少同伴恢复时间 2 秒。",
+        "生命球可恢复额外 50 生命值，并减少同伴恢复时间 2.5 秒。",
+        "生命球可恢复额外 60 生命值，并减少同伴恢复时间 3 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelMutualNourishment.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/PredatoryResponse",
+      "nameEn": "Covert Bond",
+      "nameZh": "隐蔽连结",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_TACTIC",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelPredatoryResponse.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/PredatoryResponse.lua",
+          "params": {
+            "_maxTime": 60,
+            "_timeAddedOnMercyKillPerLevel": 1.67
+          }
+        },
+        {
+          "function": "ApplyInvisibility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/PredatoryResponse.lua",
+          "params": {
+            "_maxTime": 60,
+            "_timeAddedOnMercyKillPerLevel": 1.67
+          }
+        },
+        {
+          "function": "ApplyInvisibility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/PredatoryResponse.lua",
+          "params": {
+            "_maxTime": 60,
+            "_timeAddedOnMercyKillPerLevel": 1.67
+          }
+        },
+        {
+          "function": "ApplyUpgrade",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/PredatoryResponse.lua",
+          "params": {
+            "_maxTime": 60,
+            "_timeAddedOnMercyKillPerLevel": 1.67
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Finisher and Mercy Kills grant your Companion 1s of stealth that attacks will not disrupt. Max 60s.",
+        "Finisher and Mercy Kills grant your Companion 3s of stealth that attacks will not disrupt. Max 60s.",
+        "Finisher and Mercy Kills grant your Companion 5s of stealth that attacks will not disrupt. Max 60s.",
+        "Finisher and Mercy Kills grant your Companion 6s of stealth that attacks will not disrupt. Max 60s.",
+        "Finisher and Mercy Kills grant your Companion 8s of stealth that attacks will not disrupt. Max 60s.",
+        "Finisher and Mercy Kills grant your Companion 10s of stealth that attacks will not disrupt. Max 60s."
+      ],
+      "levelStatsZh": [
+        "处决和怜悯之击可以让你的同伴获得 1 秒的隐身能力，且攻击不会中断。最多持续 60 秒。",
+        "处决和怜悯之击可以让你的同伴获得 3 秒的隐身能力，且攻击不会中断。最多持续 60 秒。",
+        "处决和怜悯之击可以让你的同伴获得 5 秒的隐身能力，且攻击不会中断。最多持续 60 秒。",
+        "处决和怜悯之击可以让你的同伴获得 6 秒的隐身能力，且攻击不会中断。最多持续 60 秒。",
+        "处决和怜悯之击可以让你的同伴获得 8 秒的隐身能力，且攻击不会中断。最多持续 60 秒。",
+        "处决和怜悯之击可以让你的同伴获得 10 秒的隐身能力，且攻击不会中断。最多持续 60 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelPredatoryResponse.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/PreyDrive",
+      "nameEn": "Mystic Bond",
+      "nameZh": "神秘连结",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_TACTIC",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelPreyDrive.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "OnAbilityUse",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/PreyDrive.lua",
+          "params": {
+            "_chargesGiven": 1
+          }
+        },
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/PreyDrive.lua",
+          "params": {
+            "_chargesGiven": 1
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "After your Companion uses Abilities with cooldowns <LOWER_IS_BETTER>10 times, you may cast a Warframe Ability without expending Energy.",
+        "After your Companion uses Abilities with cooldowns <LOWER_IS_BETTER>9 times, you may cast a Warframe Ability without expending Energy.",
+        "After your Companion uses Abilities with cooldowns <LOWER_IS_BETTER>8 times, you may cast a Warframe Ability without expending Energy.",
+        "After your Companion uses Abilities with cooldowns <LOWER_IS_BETTER>7 times, you may cast a Warframe Ability without expending Energy.",
+        "After your Companion uses Abilities with cooldowns <LOWER_IS_BETTER>6 times, you may cast a Warframe Ability without expending Energy.",
+        "After your Companion uses Abilities with cooldowns <LOWER_IS_BETTER>5 times, you may cast a Warframe Ability without expending Energy."
+      ],
+      "levelStatsZh": [
+        "当你的同伴施放带有冷却时间的技能 <LOWER_IS_BETTER>10 次之后，你将可以不用消耗能量来施放一个战甲技能。",
+        "当你的同伴施放带有冷却时间的技能 <LOWER_IS_BETTER>9 次之后，你将可以不用消耗能量来施放一个战甲技能。",
+        "当你的同伴施放带有冷却时间的技能 <LOWER_IS_BETTER>8 次之后，你将可以不用消耗能量来施放一个战甲技能。",
+        "当你的同伴施放带有冷却时间的技能 <LOWER_IS_BETTER>7 次之后，你将可以不用消耗能量来施放一个战甲技能。",
+        "当你的同伴施放带有冷却时间的技能 <LOWER_IS_BETTER>6 次之后，你将可以不用消耗能量来施放一个战甲技能。",
+        "当你的同伴施放带有冷却时间的技能 <LOWER_IS_BETTER>5 次之后，你将可以不用消耗能量来施放一个战甲技能。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelPreyDrive.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/Proliferation",
+      "nameEn": "Contagious Bond",
+      "nameZh": "传染连结",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelProliferation.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "OnPetKill",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/Proliferation.lua",
+          "params": {
+            "_maxProcCountPerProcType": 100,
+            "_statusSpreadRangePerLevel": 1.5,
+            "_statusSpreadRatioPerLevel": 0.083300002
+          }
+        },
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/Proliferation.lua",
+          "params": {
+            "_maxProcCountPerProcType": 100,
+            "_statusSpreadRangePerLevel": 1.5,
+            "_statusSpreadRatioPerLevel": 0.083300002
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "When your Companion kills an enemy afflicted with a Status Effect, 8% of the Status Effect spreads to other enemies within 1.5m. Max 100 stacks.",
+        "When your Companion kills an enemy afflicted with a Status Effect, 17% of the Status Effect spreads to other enemies within 3m. Max 100 stacks.",
+        "When your Companion kills an enemy afflicted with a Status Effect, 25% of the Status Effect spreads to other enemies within 4.5m. Max 100 stacks.",
+        "When your Companion kills an enemy afflicted with a Status Effect, 33% of the Status Effect spreads to other enemies within 6m. Max 100 stacks.",
+        "When your Companion kills an enemy afflicted with a Status Effect, 42% of the Status Effect spreads to other enemies within 7.5m. Max 100 stacks.",
+        "When your Companion kills an enemy afflicted with a Status Effect, 50% of the Status Effect spreads to other enemies within 9m. Max 100 stacks."
+      ],
+      "levelStatsZh": [
+        "当你的同伴杀死一个处于异常状态的敌人时，8% 的异常状态效果会扩散到 1.5 米内的其他敌人。最多叠加 100 层。",
+        "当你的同伴杀死一个处于异常状态的敌人时，17% 的异常状态效果会扩散到 3 米内的其他敌人。最多叠加 100 层。",
+        "当你的同伴杀死一个处于异常状态的敌人时，25% 的异常状态效果会扩散到 4.5 米内的其他敌人。最多叠加 100 层。",
+        "当你的同伴杀死一个处于异常状态的敌人时，33% 的异常状态效果会扩散到 6 米内的其他敌人。最多叠加 100 层。",
+        "当你的同伴杀死一个处于异常状态的敌人时，42% 的异常状态效果会扩散到 7.5 米内的其他敌人。最多叠加 100 层。",
+        "当你的同伴杀死一个处于异常状态的敌人时，50% 的异常状态效果会扩散到 9 米内的其他敌人。最多叠加 100 层。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelProliferation.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/TenaciousPartner",
+      "nameEn": "Tenacious Bond",
+      "nameZh": "坚韧连结",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_DEFENSE",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelTenaciousPartner.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "AddUpgrades",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/TenaciousPartner.lua",
+          "params": {
+            "_companionCritChanceThreshold": 0.5,
+            "_ownerCritDamageStackingMultPerRank": 0.2,
+            "_timerReductionOnHeadshotPerRank": 0.5
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Headshot kills reduce Companion Recovery timer by 0.5s. If the Companion's Critical Chance is over 50% then you gain +0.2x Final Critical Damage Multiplier.",
+        "Headshot kills reduce Companion Recovery timer by 1s. If the Companion's Critical Chance is over 50% then you gain +0.4x Final Critical Damage Multiplier.",
+        "Headshot kills reduce Companion Recovery timer by 1.5s. If the Companion's Critical Chance is over 50% then you gain +0.6x Final Critical Damage Multiplier.",
+        "Headshot kills reduce Companion Recovery timer by 2s. If the Companion's Critical Chance is over 50% then you gain +0.8x Final Critical Damage Multiplier.",
+        "Headshot kills reduce Companion Recovery timer by 2.5s. If the Companion's Critical Chance is over 50% then you gain +1.0x Final Critical Damage Multiplier.",
+        "Headshot kills reduce Companion Recovery timer by 3s. If the Companion's Critical Chance is over 50% then you gain +1.2x Final Critical Damage Multiplier."
+      ],
+      "levelStatsZh": [
+        "爆头击杀会使同伴恢复倒计时减少 0.5 秒。如果同伴的暴击几率超过 50%，那么你将获得 +0.2x 最终暴击伤害倍率。",
+        "爆头击杀会使同伴恢复倒计时减少 1 秒。如果同伴的暴击几率超过 50%，那么你将获得 +0.4x 最终暴击伤害倍率。",
+        "爆头击杀会使同伴恢复倒计时减少 1.5 秒。如果同伴的暴击几率超过 50%，那么你将获得 +0.6x 最终暴击伤害倍率。",
+        "爆头击杀会使同伴恢复倒计时减少 2 秒。如果同伴的暴击几率超过 50%，那么你将获得 +0.8x 最终暴击伤害倍率。",
+        "爆头击杀会使同伴恢复倒计时减少 2.5 秒。如果同伴的暴击几率超过 50%，那么你将获得 +1.0x 最终暴击伤害倍率。",
+        "爆头击杀会使同伴恢复倒计时减少 3 秒。如果同伴的暴击几率超过 50%，那么你将获得 +1.2x 最终暴击伤害倍率。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelTenaciousPartner.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/VoidClone",
+      "nameEn": "Duplex Bond",
+      "nameZh": "双影连结",
+      "kind": "mod",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 4,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelVoidClone.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "MonitorEnergyUse",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/VoidClone.lua",
+          "params": {
+            "_cloneDurationPerRank": 5,
+            "_cloneSpawnRange": 0.25,
+            "_orbChancePerRank": 0.083400004,
+            "_spendEnergy": 100
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Companion will clone itself each time you expend 100 energy, up to 3 clones. Clones live 5s and cannot use Abilities. Their kills have a 8% chance of dropping Energy Orbs.",
+        "Companion will clone itself each time you expend 100 energy, up to 3 clones. Clones live 10s and cannot use Abilities. Their kills have a 16% chance of dropping Energy Orbs.",
+        "Companion will clone itself each time you expend 100 energy, up to 3 clones. Clones live 15s and cannot use Abilities. Their kills have a 25% chance of dropping Energy Orbs.",
+        "Companion will clone itself each time you expend 100 energy, up to 3 clones. Clones live 20s and cannot use Abilities. Their kills have a 33% chance of dropping Energy Orbs.",
+        "Companion will clone itself each time you expend 100 energy, up to 3 clones. Clones live 25s and cannot use Abilities. Their kills have a 41% chance of dropping Energy Orbs.",
+        "Companion will clone itself each time you expend 100 energy, up to 3 clones. Clones live 30s and cannot use Abilities. Their kills have a 50% chance of dropping Energy Orbs."
+      ],
+      "levelStatsZh": [
+        "每消耗 100 能量，同伴就会复制自己，最多有 3 个复制体。复制体存活 5 秒且无法使用技能，它们的击杀有 8% 的几率掉落能量球。",
+        "每消耗 100 能量，同伴就会复制自己，最多有 3 个复制体。复制体存活 10 秒且无法使用技能，它们的击杀有 16% 的几率掉落能量球。",
+        "每消耗 100 能量，同伴就会复制自己，最多有 3 个复制体。复制体存活 15 秒且无法使用技能，它们的击杀有 25% 的几率掉落能量球。",
+        "每消耗 100 能量，同伴就会复制自己，最多有 3 个复制体。复制体存活 20 秒且无法使用技能，它们的击杀有 33% 的几率掉落能量球。",
+        "每消耗 100 能量，同伴就会复制自己，最多有 3 个复制体。复制体存活 25 秒且无法使用技能，它们的击杀有 41% 的几率掉落能量球。",
+        "每消耗 100 能量，同伴就会复制自己，最多有 3 个复制体。复制体存活 30 秒且无法使用技能，它们的击杀有 50% 的几率掉落能量球。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelVoidClone.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/VoidBond/VoidVinculum",
+      "nameEn": "Astral Bond",
+      "nameZh": "星界连结",
+      "kind": "precept",
+      "exclusiveTo": null,
+      "rarity": "Rare",
+      "polarity": "AP_ATTACK",
+      "baseDrain": 2,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelVoidVinculum.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [
+        {
+          "function": "OnHit",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/VoidVinculum.lua",
+          "params": {
+            "_damageDuration": 10,
+            "_damagePctPerRank": 0.0099999998,
+            "_efficiencyDuration": 5,
+            "_energyEfficiencyPerRank": 0.050000001,
+            "_voidDamagePctPerRank": 0.2
+          }
+        },
+        {
+          "function": "ActivateAbility",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/VoidVinculum.lua",
+          "params": {
+            "_damageDuration": 10,
+            "_damagePctPerRank": 0.1,
+            "_efficiencyDuration": 5,
+            "_energyEfficiencyPerRank": 0.050000001,
+            "_voidDamagePctPerRank": 0.050000001
+          }
+        },
+        {
+          "function": "ApplyUpgrade",
+          "script": "/Lotus/Types/Sentinels/SentinelAbilities/VoidVinculum.lua",
+          "params": {
+            "_damageDuration": 10,
+            "_damagePctPerRank": 0.1,
+            "_efficiencyDuration": 5,
+            "_energyEfficiencyPerRank": 0.050000001,
+            "_voidDamagePctPerRank": 0.050000001
+          }
+        }
+      ],
+      "levelStatsEn": [
+        "Damage dealt by Operator or Drifter grants 10% damage and 5% <DT_RADIANT_COLOR>Void Damage to your Companion's attacks for 10s. Companion Void Damage adds +5% Amp and Energy Efficiency to Operator or Drifter for 5s.",
+        "Damage dealt by Operator or Drifter grants 20% damage and 10% <DT_RADIANT_COLOR>Void Damage to your Companion's attacks for 10s. Companion Void Damage adds +10% Amp and Energy Efficiency to Operator or Drifter for 5s.",
+        "Damage dealt by Operator or Drifter grants 30% damage and 15% <DT_RADIANT_COLOR>Void Damage to your Companion's attacks for 10s. Companion Void Damage adds +15% Amp and Energy Efficiency to Operator or Drifter for 5s.",
+        "Damage dealt by Operator or Drifter grants 40% damage and 20% <DT_RADIANT_COLOR>Void Damage to your Companion's attacks for 10s. Companion Void Damage adds +20% Amp and Energy Efficiency to Operator or Drifter for 5s.",
+        "Damage dealt by Operator or Drifter grants 50% damage and 25% <DT_RADIANT_COLOR>Void Damage to your Companion's attacks for 10s. Companion Void Damage adds +25% Amp and Energy Efficiency to Operator or Drifter for 5s.",
+        "Damage dealt by Operator or Drifter grants 60% damage and 30% <DT_RADIANT_COLOR>Void Damage to your Companion's attacks for 10s. Companion Void Damage adds +30% Amp and Energy Efficiency to Operator or Drifter for 5s."
+      ],
+      "levelStatsZh": [
+        "当指挥官或漂泊者造成伤害时，给同伴的攻击带来 10% 伤害和 5% <DT_RADIANT_COLOR>虚空伤害，持续 10 秒。此外，同伴的虚空伤害还能为指挥官或漂泊者增加 +5% 增幅器和能量效率，持续 5 秒。",
+        "当指挥官或漂泊者造成伤害时，给同伴的攻击带来 20% 伤害和 10% <DT_RADIANT_COLOR>虚空伤害，持续 10 秒。此外，同伴的虚空伤害还能为指挥官或漂泊者增加 +10% 增幅器和能量效率，持续 5 秒。",
+        "当指挥官或漂泊者造成伤害时，给同伴的攻击带来 30% 伤害和 15% <DT_RADIANT_COLOR>虚空伤害，持续 10 秒。此外，同伴的虚空伤害还能为指挥官或漂泊者增加 +15% 增幅器和能量效率，持续 5 秒。",
+        "当指挥官或漂泊者造成伤害时，给同伴的攻击带来 40% 伤害和 20% <DT_RADIANT_COLOR>虚空伤害，持续 10 秒。此外，同伴的虚空伤害还能为指挥官或漂泊者增加 +20% 增幅器和能量效率，持续 5 秒。",
+        "当指挥官或漂泊者造成伤害时，给同伴的攻击带来 50% 伤害和 25% <DT_RADIANT_COLOR>虚空伤害，持续 10 秒。此外，同伴的虚空伤害还能为指挥官或漂泊者增加 +25% 增幅器和能量效率，持续 5 秒。",
+        "当指挥官或漂泊者造成伤害时，给同伴的攻击带来 60% 伤害和 30% <DT_RADIANT_COLOR>虚空伤害，持续 10 秒。此外，同伴的虚空伤害还能为指挥官或漂泊者增加 +30% 增幅器和能量效率，持续 5 秒。"
+      ],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelVoidVinculum.png"
+    },
+    {
+      "path": "/Lotus/Types/Sentinels/SentinelPrecepts/WeaknessScanPrecept",
+      "nameEn": "Detect Vulnerability",
+      "nameZh": "弱点侦测",
+      "kind": "precept",
+      "exclusiveTo": [
+        "/Lotus/Types/Sentinels/SentinelPowersuits/MeleePetPowerSuit",
+        "/Lotus/Types/Sentinels/SentinelPowersuits/PrimeHeliosPowerSuit"
+      ],
+      "rarity": "Rare",
+      "polarity": "AP_PRECEPT",
+      "baseDrain": 6,
+      "maxRank": 5,
+      "icon": "/Lotus/Interface/Cards/Images/Pets/SentinelWeaknessScanPrecept.png",
+      "modSet": null,
+      "upgrades": [],
+      "scripts": [],
+      "levelStatsEn": [],
+      "levelStatsZh": [],
+      "art": "/assets/mods/art/Lotus/Interface/Cards/Images/Pets/SentinelWeaknessScanPrecept.png"
+    }
+  ]
+}

@@ -31,8 +31,58 @@ def battery_profiles():
         rows = json.loads((root / "data/mechanics/battery-profiles.json").read_text(encoding="utf-8"))["weapons"]
     except (OSError, ValueError, KeyError):
         return {}
-    return {path: {key: float(row[key]) for key in ("regenPerSecond", "delayEmptySeconds", "delayPartialSeconds")}
+    return {path: {key: float(row[key]) for key in ("regenPerSecond", "delayEmptySeconds", "delayPartialSeconds",
+                                                     "emptyAnimationSeconds") if key in row}
             for path, row in rows.items()}
+
+# Weapon passives the export lacks: data/mechanics/weapon-passives.json.
+@lru_cache(maxsize=1)
+def weapon_passives():
+    root = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[2]))
+    try:
+        return json.loads((root / "data/mechanics/weapon-passives.json").read_text(encoding="utf-8"))["weapons"]
+    except (OSError, ValueError, KeyError):
+        return {}
+
+
+def innate_conditionals(weapon, fire_mode):
+    """The weapon's DefaultUpgrades records a replay event grants (innate rows
+    with conditionalEffects) for ``fire_mode``."""
+    rows = (weapon_passives().get(str(weapon.get('path') or '')) or {}).get('innate') or ()
+    return [r for r in rows if r.get('conditionalEffects') and fire_mode in (r.get('fireModes') or (fire_mode,))]
+
+
+def execute_below(weapon, fire_mode):
+    """The health share below which the weapon's own passive kills (Enkaus's
+    dissolve, an ink-stained target below 35%), or 0."""
+    if weapon.get('isIncarnonForm'):
+        return 0.0
+    rows = (weapon_passives().get(str(weapon.get('path') or '')) or {}).get('innate') or ()
+    return max((float(r['executeBelowHealth']) for r in rows if r.get('executeBelowHealth')
+                and fire_mode in (r.get('fireModes') or (fire_mode,))), default=0.0)
+
+
+def super_status_on_crit(weapon):
+    """(chance, status chance) of the weapon's crit-armed set status, or None."""
+    if weapon.get('isIncarnonForm'):
+        return None
+    spec = (weapon_passives().get(str(weapon.get('path') or '')) or {}).get('superStatusOnCrit')
+    return (float(spec['chance']), float(spec['statusChance'])) if spec else None
+
+
+def reload_projectiles(weapon):
+    """The grenade a reload throws (weapon-passives.json reloadProjectiles), or None."""
+    if weapon.get('isIncarnonForm'):
+        return None
+    return (weapon_passives().get(str(weapon.get('path') or '')) or {}).get('reloadProjectiles')
+
+
+def super_crit_on_status(weapon):
+    """(chance, crit chance) of the weapon's status-armed set crit, or None."""
+    if weapon.get('isIncarnonForm'):
+        return None
+    spec = (weapon_passives().get(str(weapon.get('path') or '')) or {}).get('superCritOnStatus')
+    return (float(spec['chance']), float(spec['critChance'])) if spec else None
 
 # Round-by-round reloads: data/mechanics/shell-reload-profiles.json
 # (tools/import_shell_reload_profiles.py; native AmmoTakenPerReload = 1 state

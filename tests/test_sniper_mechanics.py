@@ -27,14 +27,19 @@ def test_combo_ladder_is_wfsims_table():
     assert multiplier(v, 59049) == pytest.approx(6.5)  # 3^10: a floor(log3) would land one short
 
 
-def test_counter_reads_before_counting_and_decays_one_per_window():
+def test_counter_counts_a_hit_before_paying_it_and_decays_one_per_window():
+    # WFSim M118: a Rubico Prime's first scoped hit from an empty counter reaches
+    # Minimum Combo 1 and pays x1.5 (311 against 207 from the hip).
     combo = ShotCombo(dict(min=1, tierBonus=.5, tierFactor=3., seconds=2.))
-    assert [combo.shot(t, 1) for t in (0., .5, 1., 1.5)] == pytest.approx([1., 1.5, 1.5, 2.])
+    assert [combo.shot(t, 1) for t in (0., .5, 1., 1.5)] == pytest.approx([1.5, 1.5, 2., 2.])
     assert combo.count == 4
     assert combo.at(3.49) == 4 and combo.at(3.5) == 3 and combo.at(9.5) == 0
-    # Two pellets in one shot: the second reads the count after the first.
+    # Two pellets in one shot: each reads the count with itself counted.
     combo = ShotCombo(dict(min=1, tierBonus=.5, tierFactor=3., seconds=2.))
-    assert combo.shot(0., 2) == pytest.approx((1. + 1.5) / 2)
+    assert combo.shot(0., 2) == pytest.approx((1.5 + 1.5) / 2)
+    vp = ShotCombo(dict(min=5, tierBonus=.5, tierFactor=3., seconds=2.))
+    # M118 Vectis Prime: at 4 the next landing hit takes the counter to 5 and already pays x1.5.
+    assert [vp.shot(t, 1) for t in (0., .1, .2, .3, .4)] == pytest.approx([1., 1., 1., 1., 1.5])
     assert combo.count == 2
     lanka = ShotCombo(combo_spec(weapon('Lanka')))
     lanka.shot(0., 1)
@@ -93,12 +98,12 @@ def _run(w, mode=0, combo=True, status=1.):
                   status_rate_multiplier=status)
 
 
-def test_combo_multiplies_each_direct_hit_by_the_count_before_it():
+def test_combo_multiplies_each_direct_hit_by_the_count_including_it():
     # No procs, so every shot's unscaled damage is identical.
     w = weapon('Rubico Prime')
     on, off = _run(w, status=0.), _run(w, combo=False, status=0.)
     factors = [e['multiplier'] for e in on['sniperCombo']['events']]
-    assert factors[:4] == pytest.approx([1., 1.5, 1.5, 2.])
+    assert factors[:4] == pytest.approx([1.5, 1.5, 2., 2.])
     assert on['directWindow'] / off['directWindow'] == pytest.approx(sum(factors) / len(factors), rel=1e-9)
     assert off['sniperCombo'] is None
 

@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "description": "Values of subsumed (Helminth) abilities that differ from the original. Keyed by ability path, then scalar id; a list gives the four rank values, a number the max-rank value, an object may also replace parts / valueTemplate. Text-only changes (no number) are listed under notes.",
+  "source": "wiki.warframe.com ability pages, Helminth tab (Wayback captures 2026-03/04, fetched 2026-10-21 while the wiki returned 502)",
+  "abilities": {
+    "/Lotus/Powersuits/Rhino/Abilities/RhinoRoarAbility": {
+      "wiki": "Roar",
+      "scalars": {"damage_1": [2, 9, 15, 30]}
+    },
+    "/Lotus/Powersuits/Harlequin/Abilities/LightAbility": {
+      "wiki": "Eclipse",
+      "scalars": {"damage_bonus_2": [2, 9, 15, 30], "damage_reduction_cap_4": 75}
+    },
+    "/Lotus/Powersuits/Berserker/Abilities/BerserkerScreamAbility": {
+      "wiki": "Warcry",
+      "scalars": {"attack_speed_buff_1": [9, 12, 15, 30]}
+    },
+    "/Lotus/Powersuits/Devourer/Abilities/DevourerConsumeAbility": {
+      "wiki": "Nourish",
+      "scalars": {"self_heal_on_cast_2": [0, 0, 0, 0], "energy_multiplier_3": [1.3, 1.39, 1.48, 1.6], "viral_damage_buff_5": [24, 30, 36, 45]},
+      "notes": "爆炸只施加 1 层病毒"
+    },
+    "/Lotus/Powersuits/PaxDuviricus/Abilities/PaxTeleportAbility": {
+      "wiki": "Wrathful_Advance",
+      "scalars": {"damage_melee_final_critical_chance_1": [25, 50, 75, 100], "range_teleport_distance_2": [10, 11, 11.5, 12.5]}
+    },
+    "/Lotus/Powersuits/Nokko/Abilities/NokkoPowerShroomAbility": {
+      "wiki": "Brightbonnet",
+      "scalars": {"energy_restore_1": [6.67, 8, 8.67, 10], "ability_strength_bonus_2": [10, 13, 17, 20], "ability_strength_bonus_caps_10": 100}
+    },
+    "/Lotus/Powersuits/Geode/Abilities/GeodeShardsAbility": {
+      "wiki": "Fractured_Blast",
+      "scalars": {"damage_impact_and_slash_damage_1": [125, 150, 200, 250], "damage_health_orb_drop_chance_2": 25, "damage_energy_orb_drop_chance_3": 10}
+    },
+    "/Lotus/Powersuits/Runner/Abilities/RunnerTransferAbility": {
+      "wiki": "Thermal_Sunder",
+      "scalars": {
+        "cold_damage_1": {"values": [225, 300, 375, 450], "valueTemplate": "{}"},
+        "damage_heat_damage_13": {"values": [450, 600, 750, 900], "valueTemplate": "{}"}
+      },
+      "notes": "伤害固定为 50% 电池；火焰异常带来的伤害增幅上限为技能伤害的 10 倍"
+    },
+    "/Lotus/Powersuits/Dagath/Abilities/DagathVolleyAbility": {
+      "wiki": "Wyrd_Scythes",
+      "scalars": {"damage_slow_1": [15, 18, 22, 26], "slow_cap_8": 71}
+    },
+    "/Lotus/Powersuits/Mag/Abilities/PullAbility": {
+      "wiki": "Pull",
+      "scalars": {"target_range_2": [7.5, 10, 11, 12.5]}
+    },
+    "/Lotus/Powersuits/Infestation/Abilities/InfestTendrilsAbility": {
+      "wiki": "Larva",
+      "scalars": {"grab_radius_3": [5.33, 6, 6.67, 8]}
+    },
+    "/Lotus/Powersuits/Odalisk/Abilities/OdaliskDispensaryAbility": {
+      "wiki": "Dispensary",
+      "scalars": {"duration_2": [5, 7.5, 10, 12.5]}
+    },
+    "/Lotus/Powersuits/Oraxia/Abilities/OraxiaEntangleAbility": {
+      "wiki": "Webbed_Embrace",
+      "scalars": {"range_radius_3": [3.33, 4.67, 5.33, 6.67]}
+    },
+    "/Lotus/Powersuits/MonkeyKing/Abilities/MonkeyDeathNewAbility": {
+      "wiki": "Defy",
+      "scalars": {"armor_bonus_cap_ap_10": 750}
+    },
+    "/Lotus/Powersuits/Frumentarius/Abilities/FrumentariusCloakAbility": {
+      "wiki": "Evade",
+      "scalars": {"duration_cap_4": 25}
+    },
+    "/Lotus/Powersuits/Paladin/Abilities/SmiteAbility": {
+      "wiki": "Smite",
+      "scalars": {"percentage_damage_cap_6": 50, "aoe_percentage_damage_cap_7": 20}
+    },
+    "/Lotus/Powersuits/Ember/Abilities/FireBlastAbility": {
+      "wiki": "Fire_Blast",
+      "scalars": {"armor_reduction_2": {"parts": {"val1": 50, "val2": 75}}},
+      "notes": "每次施放的削甲上限 75%；治愈之焰不给其他战甲超宏防护"
+    },
+    "/Lotus/Powersuits/AntiMatter/Abilities/NullStarAbility": {
+      "wiki": "Null_Star",
+      "scalars": {"damage_reduction_cap_7": 75}
+    },
+    "/Lotus/Powersuits/Inkblot/Abilities/InkCloneAbility": {
+      "wiki": "Self_Portrait",
+      "scalars": {"maximum_damage_reduction_cap_8": 75},
+      "notes": "不施加墨蚀"
+    },
+    "/Lotus/Powersuits/Werewolf/Abilities/WerewolfLeapAbility": {
+      "wiki": "Lycath's_Hunt",
+      "scalars": {"health_orb_drop_chance_on_melee_kill_3": 50, "energy_orb_drop_chance_on_headshot_kill_4": 50, "passive_heavy_attack_efficiency_7": 0},
+      "notes": "不能触发被动"
+    },
+    "/Lotus/Powersuits/Trinity/Abilities/WellOfLifeAbility": {
+      "wiki": "Well_of_Life",
+      "scalars": {"revive_cooldown_10": 120}
+    },
+    "/Lotus/Powersuits/Koumei/Abilities/KoumeiBlockAbility": {
+      "wiki": "Omamori",
+      "notes": "御守护符数量在 10 到 20 之间，无法获得无敌"
+    }
+  }
+}

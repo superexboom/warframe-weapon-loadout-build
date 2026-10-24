@@ -61,7 +61,7 @@ def replay(stats, target, **options):
     combat = options.get('combat') or {}
     restore = combat.get('magazineRestore') or {}
     feedback = (restore.get('kind') == 'on-headshot-kill'
-                or any(q.get('kind') == 'on-headshot-kill' and q.get('perEvent', 1.) != 0
+                or any((q.get('kind') == 'on-headshot-kill' or q.get('freeAmmo')) and q.get('perEvent', 1.) != 0
                        for q in options.get('trigger_sources') or ()))
     if not feedback:
         return _trajectory(stats, target, **options)
@@ -72,6 +72,27 @@ def replay(stats, target, **options):
     runs = [_trajectory(stats, target, weak_draw=_KillBranch((branch + .5) / branches), **options)
             for branch in range(branches)]
     return _merge_branches(runs)
+
+
+def _settle(q, on):
+    """A branch's verdict on a free-ammo buff at an empty magazine: fully up
+    until its latest roll lapses, or gone."""
+    if on:
+        end = max((x[0] for x in q.get('expiries') or ()), default=q['expires'])
+        q['stacks'] = q['maxStacks']
+        if q.get('decay') in ('per-stack', 'union'):
+            q['expiries'] = [(end, q['maxStacks'])]
+    else:
+        q['stacks'] = 0.0
+        q['expiries'] = []
+
+
+def _union(expiries):
+    """Chance a one-stack buff is up: any live independent roll holds it."""
+    idle = 1.0
+    for _, n in expiries:
+        idle *= 1.0 - n
+    return 1.0 - idle
 
 
 def _merge_branches(runs):
@@ -170,6 +191,8 @@ def _reference_trajectory(
     from .damage import (
         enemy_defenses,
         expected_status_damage,
+        proc_duration_scale,
+        proc_stack_cap,
         damage_against_cached_armour,
         _hit_location_info,
         _faction_damage_deltas,
@@ -189,6 +212,7 @@ def _reference_trajectory(
     melee_count = 0.0
     melee_last_hit = -math.inf
     melee_heavy_multiplier = 1.0
+    melee_heavy_now = False  # the event being resolved is a heavy melee hit (Pennant's kills)
     melee_events = []
     if melee:
         from .melee_sequence import Loop, apply_hit, combo_multiplier, combo_tier
@@ -218,6 +242,12 @@ def _reference_trajectory(
         enemy_enhancements=enemy_enhancements,
     )
     full = [float(defenses.get(k) or 0.0) for k in ("overguard", "shield", "health")]
+    execute = float(combat.get('executeBelow') or 0.0)
+    if execute:
+        # Enkaus: a target dissolves below that health share, so it dies when
+        # the rest is gone and the replay carries only the rest (the 50%
+        # low-health gate then reads that share).
+        full[2] *= 1.0 - execute
     pools = full.copy()
     ehp = sum(full)
     armour_base = float(defenses.get("armour") or 0.0)
@@ -270,6 +300,8 @@ def _reference_trajectory(
     from .proc_probability import HeatChains, StatusPresence, no_status_probability, KillAttribution, DOT_TICK_SECONDS, crit_cv2, capped_stack_add, stack_alive, CappedPool
     heat_chains=HeatChains()
     # Cold keeps the expected-count trim: its freeze is a threshold on it.
+    # A weapon's extra Puncture stacks (Evensong) raise the victim's cap.
+    caps['DT_PUNCTURE'] = proc_stack_cap(stats, 'DT_PUNCTURE', caps['DT_PUNCTURE'])
     pooled={dtype:CappedPool(caps[dtype]) for dtype in ('DT_VIRAL','DT_CORROSIVE','DT_MAGNETIC','DT_PUNCTURE')}
     presence={}
     attribution=KillAttribution(max(DOT_TICK_SECONDS,1./rate if rate>0 else 0.),interval=1./rate if rate>0 else None)
@@ -442,11 +474,14 @@ def _reference_trajectory(
                     missed = 1 + int((t - q["expires"]) / q["duration"])
                     q["stacks"] = max(0.0, q["stacks"] - missed)
                     q["expires"] += missed * q["duration"]
-                elif q.get("decay") != "per-stack":
+                elif q.get("decay") not in ("per-stack", "union"):
                     q["stacks"] = 0.0
             if q.get("decay") == "per-stack":
                 q["expiries"] = [x for x in q.get("expiries", []) if x[0] > t]
                 q["stacks"] = sum(x[1] for x in q["expiries"])
+            elif q.get("decay") == "union":
+                q["expiries"] = [x for x in q.get("expiries", []) if x[0] > t]
+                q["stacks"] = _union(q["expiries"])
 
     def armour(t):
         # 26 % at the first stack, +6 % per further one: E = .20 P(N>=1) + .06 E[N].
@@ -485,6 +520,24 @@ def _reference_trajectory(
                 q['stacks'] = 1.-q['stacks']
                 q['expires'] = math.inf
                 continue
+            if q.get('consumeOn') == kind and q['perEvent'] != 0:
+                if q.get('charges'):
+                    # Dorrclave: the buff lasts a count of attacks, each spent
+                    # as it starts; the one after the last finds it gone.
+                    if q.get('chargesLeft', 0.0) <= 1e-9:
+                        q['stacks'] = 0.0
+                    if q['stacks'] > 0.0:
+                        q['chargesLeft'] = q.get('chargesLeft', 0.0) - weight
+                else:
+                    # Arca Titron: a slam spends the stacks it started with;
+                    # kills during it count for the next one.
+                    q['stacks'] = min(q['maxStacks'], q.get('deferred', 0.0))
+                    q['deferred'] = 0.0
+                    q['locked'] = False
+                continue
+            if q.get('lockOn') == kind and q['perEvent'] != 0:
+                q['locked'] = True
+                continue
             gate_probability=(combat.get('victimProcTypesBeforeHit',{}).get(q['victimProcType'],0.)
                               if q.get('victimProcType') else 1.)
             if not gate_probability:
@@ -513,10 +566,31 @@ def _reference_trajectory(
                 delta=completed*q['perEvent']
             else:
                 delta=weight*gate_probability*q['perEvent']
+            if q.get('noRefresh'):
+                # CanReproc 0: a running buff is not renewed; only its idle share starts one.
+                delta *= max(0.0, 1.0 - q['stacks'] / q['maxStacks'])
             if delta <= 0:
                 continue
+            if q.get('locked'):
+                q['deferred'] = min(q['maxStacks'], q.get('deferred', 0.0) + delta)
+                continue
+            if q.get('charges'):
+                q['chargesLeft'] = q['charges']
+            life = q["duration"]
+            if q.get('durationPerTier') and melee:
+                # Pennant: 2 s and 4 s per combo multiplier above 1x at the kill.
+                life += q['durationPerTier'] * combo_tier(melee['comboSpec'], melee_count)
+            if q.get("decay") == "union":
+                # A share of one event rolls once (weight x p); several events
+                # roll each, 1 - (1 - p)^weight, not weight x p.
+                roll = (min(1.0, delta) if required > 1 or weight <= 1
+                        else 1.0 - (1.0 - min(1.0, gate_probability * q['perEvent'])) ** weight)
+                q.setdefault("expiries", []).append((t + life, roll))
+                q["stacks"] = _union(q["expiries"])
+                q["expires"] = t + life
+                continue
             if q.get("decay") == "per-stack":
-                q.setdefault("expiries", []).append((t + q["duration"], delta))
+                q.setdefault("expiries", []).append((t + life, delta))
                 excess = sum(x[1] for x in q["expiries"]) - q["maxStacks"]
                 while excess > 1e-9 and q["expiries"]:
                     end, n = q["expiries"][0]
@@ -527,7 +601,7 @@ def _reference_trajectory(
                     else:
                         q["expiries"][0] = (end, n - removed)
             q["stacks"] = min(q["maxStacks"], q["stacks"] + delta)
-            q["expires"] = t + q["duration"] if q["duration"] else math.inf
+            q["expires"] = t + life if q["duration"] else math.inf
 
     def consecutive_heads(t,probability):
         for q in sources:
@@ -576,6 +650,8 @@ def _reference_trajectory(
             signal("on-primary-kill", t)
         if "melee" in slot:
             signal("on-melee-kill", t)
+            if melee_heavy_now and weapon_kill:
+                signal("on-melee-heavy-kill", t)
         distance = combat.get("distance")
         if distance is not None and distance <= 5.0:
             signal("on-close-kill", t)
@@ -754,16 +830,19 @@ def _reference_trajectory(
                     return True
         return False
 
-    def melee_stacks(heavy=False):
+    def melee_stacks(heavy=False, no_co=False):
         if not melee:
             return {}
         tier = combo_tier(melee['comboSpec'], melee_count)
         out = {key: float(min(tier, cap)) for key, cap in combo_tier_keys.items()}
         if heavy:
             out['__heavy'] = True
+        if no_co:
+            # A glaive's explosions: Condition Overload does not reach them.
+            out['__noCO'] = True
         return out
 
-    def model(t, heavy=False):
+    def model(t, heavy=False, no_co=False):
         live_types = (
             sum(p.probability(t) for p in presence.values())
             if combat.get("conditionOverload") or stats.co_bucket
@@ -773,7 +852,7 @@ def _reference_trajectory(
         onos_values = {'__onosPower':bool(onos and onos_ticks>=onos['alignmentShots']),
                        '__onosHits':onos_hits,
                        '__onosBeamSeconds':round(min(onos['rampSeconds'],max(0.,t-onos_start)),6) if onos else 0.}
-        extra_stacks = melee_stacks(heavy)
+        extra_stacks = melee_stacks(heavy, no_co)
         key = (form, tuple(q["stacks"] for q in sources), live_types, last_round,
                tuple(onos_values.values()) if onos and form!='base' else (),
                tuple(sorted(extra_stacks.items())))
@@ -1047,10 +1126,10 @@ def _reference_trajectory(
                 add_procs(st,aim,t,({},dict.fromkeys(STATUS_POOL,weight/len(STATUS_POOL)),extra_rows,extra_non),False)
         if gen != generation:
             return  # A derived status hit killed the original target.
-        scale = max(st.proc_duration_multiplier, 0.0)
         # Stable ordering for grouped expected instances, independent of hash seed.
         proc_items = sorted(procs.items()) if empowered else procs.items()
         for dtype, n in proc_items:
+            scale = proc_duration_scale(st, dtype)
             n *= max(status_rate_multiplier, 0.0)
             if n <= 0.0 or dtype == 'DT_FREEZE' and frozen_until > t:
                 continue
@@ -1181,6 +1260,7 @@ def _reference_trajectory(
             from .simulator import SimulationError
             raise SimulationError(f"replay clock went backwards: {kind} at {t:.3f}s after {current_time:.3f}s")
         current_time=t
+        melee_heavy_now = False
         clean(t)
         if event_gen is not None and event_gen != gen:
             continue
@@ -1372,19 +1452,41 @@ def _reference_trajectory(
             if speed <= 0.0:
                 continue
             melee_hit = None
+            # What the swing's speed was read from: a buff this hit grants
+            # (a kill's attack speed) reaches the very next swing.
+            speed_state = (tuple(q['stacks'] for q in sources),
+                           combo_tier(melee['comboSpec'], melee_count)) if melee else None
             if melee:
                 if melee_pending is None:
                     # Combo starts at the initial combo; heavy hits use its
                     # multiplier (heavy attacks read the initial combo only).
                     melee_count = float(active.initial_combo or 0.0)
                     melee_heavy_multiplier = combo_multiplier(melee['comboSpec'], melee_count)
-                    melee_pending, wait = melee_loop.next(speed, active.heavy_charge_speed)
+                    melee_pending, wait = melee_loop.next(speed, active.heavy_charge_speed,
+                                                          getattr(active, 'projectile_speed_multiplier', 1.0))
                     push(t + wait, 'fire')
                     continue
                 melee_hit = melee_pending
+                if melee_hit.get('bounce') and not getattr(active, 'reflection_explosion_chance', 0.0) > 0.0:
+                    # No Volatile card: the glaive's bounce sets nothing off.
+                    melee_pending, wait = melee_loop.next(speed, active.heavy_charge_speed,
+                                                          getattr(active, 'projectile_speed_multiplier', 1.0))
+                    push(t + wait, 'fire')
+                    continue
                 if t - melee_last_hit > max(active.combo_duration, 0.0) + 1e-9 and melee_last_hit > -math.inf:
+                    dropped = (combo_tier(melee['comboSpec'], melee_count)
+                               > combo_tier(melee['comboSpec'], float(active.initial_combo or 0.0)))
                     melee_count = float(active.initial_combo or 0.0)
-                active, radial = model(t, heavy=bool(melee_hit.get('heavy')))
+                    if dropped:
+                        signal('on-combo-tier-reset', t)
+                melee_heavy_now = bool(melee_hit.get('heavy'))
+                # An attack starts: Dorrclave spends a charge, a slam locks
+                # Arca Titron's stacks before this hit reads them.
+                signal('on-melee-attack', t)
+                if melee_hit.get('slamStart'):
+                    signal('on-melee-slam-start', t)
+                active, radial = model(t, heavy=bool(melee_hit.get('heavy')),
+                                       no_co=bool(melee_hit.get('noConditionOverload')))
                 active = apply_hit(active, melee_hit, melee_crit=melee['meleeCrit'],
                                    heavy_multiplier=melee_heavy_multiplier)
                 duplicate = combat.get('duplicate')
@@ -1418,8 +1520,27 @@ def _reference_trajectory(
                 ammo = min(active.magazine, ammo + max(0, t - last_fire_time - delay) * battery['regenPerSecond'])
             if combat.get('infiniteAmmo') and active.magazine > 0.0 and not (cycle and form == "incarnon"):
                 ammo = max(ammo, active.magazine)
+            if weak_draw and ammo <= 1e-9 and active.ammo_cost > 1e-9 and active.magazine > 0.0 and combat:
+                # Empty, and infinite ammo is up with some probability: the
+                # chain of free shots either goes on or the weapon reloads, a
+                # bistable outcome a branch decides like an uncertain kill.
+                free_sources = [q for q in sources if q.get('freeAmmo') and q['stacks'] > 0.0]
+                free_idle = 1.0
+                for q in free_sources:
+                    free_idle *= 1.0 - min(1.0, q['stacks'] / q['maxStacks'])
+                free_up = 1.0 - free_idle
+                if free_sources and 1e-9 < free_up < 1.0 - 1e-9:
+                    free_drawn = weak_draw(free_up)
+                    if free_drawn in (0.0, 1.0):
+                        free_held = max(free_sources, key=lambda q: q['stacks']) if free_drawn else None
+                        for q in free_sources:
+                            _settle(q, q is free_held)
+                        active, radial = model(t)
             insufficient_ammo = getattr(active, '_requires_full_ammo', False) and ammo + 1e-9 < max(active.ammo_cost, 0.0)
-            if (ammo <= 1e-9 or insufficient_ammo) and active.magazine > 0.0 and combat:
+            # A shot reloads only when it cannot fire: a free one (infinite
+            # ammo up) fires on an empty magazine (WFSim rolls::can_fire;
+            # Knell chains headshots on its one round).
+            if ((ammo <= 1e-9 and active.ammo_cost > 1e-9) or insufficient_ammo) and active.magazine > 0.0 and combat:
                 if cycle and form == "incarnon":
                     push(t + cycle["exitSeconds"], "transform", "base")
                 else:
@@ -1467,6 +1588,11 @@ def _reference_trajectory(
                             q["stacks"] = (
                                 q["initialStacks"] if q["perEvent"] == 0 else 0.0
                             )
+                    thrown = getattr(active, '_reload_projectiles', None)
+                    if thrown:
+                        # The reload grenade (Catabolyst): the big one from empty, landing partway in.
+                        for part in thrown.get('empty' if was_empty else 'partial', ()):
+                            push(t + reload_time * thrown['landsAt'], 'delayed-radial', (part, 1.), gen)
                     if combat.get('spool') and reload_time >= combat['spool']['spindown']:
                         spool_shots=0
                     push(t + reload_time, "reload-complete", was_empty)
@@ -1731,6 +1857,7 @@ def _reference_trajectory(
                 queue_mines(t)
                 delay = max(delay, manual_detonation['delaySeconds'])
             if melee_hit is not None:
+                tier_before = combo_tier(melee['comboSpec'], melee_count)
                 gained = float(melee_hit.get('comboHits', 1.0)) * (1.0 + max(active.combo_extra_chance, 0.0))
                 melee_count += gained * min(max(1.0 - active.combo_miss_chance, 0.0), 1.0)
                 if melee_hit.get('consumesCombo'):
@@ -1739,9 +1866,30 @@ def _reference_trajectory(
                 melee_cap = float(melee['comboSpec'].get('cap') or 220.0)
                 melee_count = min(melee_count, melee_cap)
                 melee_last_hit = t
+                # Melee events (Ekhein: a heavy hit; Tonkkatt: a combo tier gained or lost).
+                tier_after = combo_tier(melee['comboSpec'], melee_count)
+                if melee_hit.get('heavy'):
+                    signal('on-melee-heavy-hit', t)
+                if tier_after > tier_before:
+                    signal('on-combo-tier-increase', t, float(tier_after - tier_before))
+                elif tier_after < tier_before:
+                    signal('on-combo-tier-reset', t)
+                if melee_hit.get('slamEnd'):
+                    signal('on-melee-slam', t)
+                if melee_hit.get('throw'):
+                    # Power Throw: a loop buffers every throw, so each one
+                    # after the first is consecutive (wiki; WFSim MELEE §10).
+                    signal('on-glaive-throw', t)
                 if collect_timeline:
                     melee_events.append(dict(time=round(t, 6), kind=melee_hit['kind'], combo=round(melee_count, 3)))
-                melee_pending, delay = melee_loop.next(speed, active.heavy_charge_speed)
+                after = active
+                if speed_state != (tuple(q['stacks'] for q in sources), combo_tier(melee['comboSpec'], melee_count)):
+                    # This hit changed a buff: the next swing plays at the
+                    # speed it left behind (Pennant's kill speeds the recovery).
+                    after = model(t)[0]
+                    speed = after.fire_rate
+                melee_pending, delay = melee_loop.next(speed, after.heavy_charge_speed,
+                                                       getattr(after, 'projectile_speed_multiplier', 1.0))
             rate_spool_due = t + delay
             push(t + delay, "fire")
         elif kind == "sample":

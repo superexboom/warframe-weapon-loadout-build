@@ -300,7 +300,8 @@ def riven_card_faces(payload: Mapping[str, Any], weapon_type: str) -> dict[str, 
 
     In game the card face cycles through the ``Icon`` of every stat on the card;
     the name is built from the ``LocalizePrefixTag`` / ``LocalizeSuffixTag``
-    syllables (spliced traits have none).
+    syllables. The 2026.08.13 export lacks the spliced traits' syllables;
+    they come from the 09-22 templates (``riven_fusion.FUSION_SYLLABLES``).
     """
     faces = {
         code: {"icon": stat.get("icon"), "prefix": stat.get("prefix"), "suffix": stat.get("suffix")}
@@ -316,6 +317,11 @@ def riven_card_faces(payload: Mapping[str, Any], weapon_type: str) -> dict[str, 
             code = _FACE_TAG_CODES.get(str(stat.get("tag") or ""))
             if code and code not in faces and code in RIVEN_BASE_VALUES.get(weapon_type, {}):
                 faces[code] = {"icon": stat.get("icon"), "prefix": stat.get("prefix"), "suffix": stat.get("suffix")}
+    from .riven_fusion import FUSION_SYLLABLES, TAG_CODES
+    for tag, (prefix, suffix) in FUSION_SYLLABLES.items():
+        face = faces.get(TAG_CODES.get(tag, ""))
+        if face is not None and not face.get("prefix"):
+            face.update(prefix=prefix, suffix=suffix)
     return faces
 
 
@@ -641,7 +647,9 @@ def _mod_card(
         if effect.supported and effect.upgrade_type in SUPPORTED_WEAPON_UPGRADE_TYPES
     )
     if not active and not allow_empty and not _combo_tier_card(mod):
-        return None
+        from .manual_combat import replay_only_card
+        if not replay_only_card(mod):
+            return None
     drain = max(0, int(mod.get("baseDrain") or 0) + rank)
     return _Card(
         key=str(mod.get("path") or mod.get("nameInternal") or mod.get("nameEn")),
@@ -694,10 +702,16 @@ def _candidate_mods(
             rejected += 1
         else:
             cards.append(card)
+    # Primed Reach rides along on every melee build, except a glaive's
+    # throw: Reach only widens the glaive's hitbox, never its flight (wiki
+    # Glaive), so on the throw route the slot goes to a card that scores.
+    from .melee_sequence import default_route
+    route = (getattr(scenario, "combat_state", None) or {}).get("meleeRoute") or default_route(weapon)
     if (
         _weapon_type(None, weapon) == "melee"
         and not weapon.get("isExalted")
         and reach is not None
+        and route != "glaive"
     ):
         required_reach = _mod_card(
             reach, scenario, required=True, allow_empty=True
@@ -2415,7 +2429,11 @@ def _evaluate(
         if capacity > capacity_limit:
             continue
         all_cards = [*ordered, *special_cards]
-        effect_cards = [passives, *all_cards] if passives is not None else all_cards
+        # Passives (arcanes, Incarnon, external buffs, sentinel Fired Up) join after
+        # the installed mods, as the manual simulator does: a runtime elemental
+        # buff takes its combine position after the mod slots and before the
+        # weapon's innate element (wiki Damage: innate elements are always last).
+        effect_cards = [*all_cards, passives] if passives is not None else all_cards
         effects = _effects(effect_cards, scenario)
         probe_scenario = scenario_with(scenario, victim_status_count=0)
         probe_stats = apply_mods(weapon, effects, scenario=probe_scenario)
@@ -4061,6 +4079,12 @@ def _statics_weapon_identity(weapon: Mapping[str, Any]) -> str:
     so the path alone would let one assembly read another's baked statics.
     """
     path = str(weapon.get("path") or "")
+    if weapon.get("exaltedStrength") is not None:
+        # Exalted weapons scaled by the linked frame's Ability Strength.
+        path += f"#strength={weapon['exaltedStrength']:g}"
+    cast = weapon.get("exaltedCast")
+    if isinstance(cast, Mapping) and cast.get("castingSpeed") not in (None, 1, 1.0):
+        path += f"#cast={cast['castingSpeed']:g}"
     parts = weapon.get("kitgunParts") or weapon.get("zawParts")
     if not parts:
         return path
@@ -4193,7 +4217,7 @@ def _selected_effects(
     ordered = list(evaluation.cards)
     if riven is not None:
         ordered.insert(evaluation.riven_index if evaluation.riven_index is not None else len(ordered), riven)
-    resolved: list[_Card] = [passives] if passives is not None else []
+    resolved: list[_Card] = []
     for card in ordered:
         if card.record is not None:
             current = mod_effects(
@@ -4207,6 +4231,8 @@ def _selected_effects(
                 skipped=tuple(current.skipped),
             )
         resolved.append(card)
+    if passives is not None:
+        resolved.append(passives)
     return _effects(resolved, scenario)
 
 

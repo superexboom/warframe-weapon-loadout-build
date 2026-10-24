@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "packageBuild": "2026.08.13.13.24",
   "generatedBy": "tools/import_battery_profiles.py",
-  "semantics": "empty-magazine refill = delayEmptySeconds / reload speed + magazine / regenPerSecond",
+  "semantics": "empty-magazine refill = delayEmptySeconds / reload speed + magazine / regenPerSecond; with emptyAnimationSeconds: max(emptyAnimationSeconds / reload speed, delayPartialSeconds + magazine / regenPerSecond)",
   "weapons": {
     "/Lotus/Weapons/ClanTech/Energy/CrpLaserRifle": {
       "name": "Flux Rifle",
@@ -203,6 +203,8 @@
       "regenPerSecond": 300.0,
       "delayEmptySeconds": 2.0,
       "delayPartialSeconds": 0.5,
+      "emptyAnimationSeconds": 2.0,
+      "emptyAnimationSource": "WFSim M121 (2026-10-23, in game): fired dry, 2 s before it fires again; stopped short, 0.5 s then 300 a second",
       "nativeMagazine": 150,
       "exportReloadTimes": [
         2,

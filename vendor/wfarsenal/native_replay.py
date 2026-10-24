@@ -64,15 +64,16 @@ class _Helper:
             from .melee_sequence import Loop
             self.loop = Loop(melee)
 
-    def melee_next(self, speed, charge):
-        """The route's next hit: (id, wait, heavy, combo hits, consumes combo)."""
-        hit, wait = self.loop.next(speed, charge)
+    def melee_next(self, speed, charge, projectile=1.0):
+        """The route's next hit: (id, wait, heavy, combo hits, consumes combo,
+        slam phase bits: 1 a slam starts, 2 it ends)."""
+        hit, wait = self.loop.next(speed, charge, projectile)
         key = id(hit)
         if key not in self._hit_ids:
             self._hit_ids[key] = len(self.hits)
             self.hits.append(hit)
         return (self._hit_ids[key], wait, bool(hit.get('heavy')), float(hit.get('comboHits', 1.0)),
-                bool(hit.get('consumesCombo')))
+                bool(hit.get('consumesCombo')), (1 if hit.get('slamStart') else 0) | (2 if hit.get('slamEnd') else 0))
 
     def stackable_profile(self, profile):
         """A `_stackable` profile flattened to the numbers wfcore's clocks read."""
@@ -114,6 +115,9 @@ class _Helper:
             bool(hit.get("radial")),
             (float(duplicate['chance']), float(duplicate.get('uptime', 1.0)))
             if duplicate and hit.get('canCrit', True) else None,
+            bool(hit.get("throw")),
+            bool(hit.get("bounce")),
+            bool(hit.get("noConditionOverload")),
         )
 
     def melee_apply(self, active, hit_id, heavy_multiplier):
@@ -390,6 +394,7 @@ def trajectory(
 ):
     """The native replay, or None when it must fall back to the reference."""
     from .damage import (
+        proc_stack_cap,
         enemy_defenses,
         expected_status_damage,
         damage_against_cached_armour,
@@ -412,6 +417,11 @@ def trajectory(
     rate = max(0.0, float(attacks_per_second))
     defenses, full, ehp, armour_base, cache, locations, bare_def, tables = _target_setup(
         target, level, armour_strip, steel_path, enemy_enhancements)
+    execute = float((combat or {}).get('executeBelow') or 0.0)
+    if execute:
+        # combat_replay: Enkaus's dissolve leaves only the health above it.
+        full = [full[0], full[1], full[2] * (1.0 - execute)]
+        ehp = sum(full)
     names = {
         "DT_FIRE": "heat",
         "DT_VIRAL": "viral",
@@ -470,6 +480,7 @@ def trajectory(
                             tierKeys=dict(combat.get('comboTierKeys') or {}))
     config = dict(
         stats=stats, resolver=combat['resolve'], window=window, head=head, rate=rate,
+        punctureCap=proc_stack_cap(stats, 'DT_PUNCTURE', 5.0),
         statusRateMultiplier=float(status_rate_multiplier), damageRateMultiplier=float(damage_rate_multiplier),
         full=full, ehp=float(ehp), armourBase=armour_base, elementalArmourStrip=float(elemental_armour_strip),
         forcedProcs=dict(forced_procs or {}), factionDeltas=dict(cache['faction_deltas']),

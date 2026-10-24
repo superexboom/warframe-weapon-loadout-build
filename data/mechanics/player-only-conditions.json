@@ -1,0 +1,92 @@
+{
+  "source": "Packages.bin GenericChallenge DamageSources == [TennoAvatar]",
+  "packages": "2026.08.13.13.24",
+  "conditions": {
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotEximusCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/LotusBulletWeapon"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotPistolNoAbilityWeaponsCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotRifleCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotShotgunCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitPistolCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitRifleCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitShotgunCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillHeadshotRifleCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillPistolCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillPistolNoAbilityWeaponsCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillRifleCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Rifle/LotusRifle"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillShotgunCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeKillCondition": {
+      "weaponClass": [
+        "/Lotus/Types/Game/LotusMeleeWeapon",
+        "/Lotus/Types/Game/LotusFinisher"
+      ]
+    },
+    "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnShotgunKillCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun"
+      ]
+    },
+    "/Lotus/Upgrades/Mods/PvPMods/Conditions/OnPistolHeadshotKillCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+      ]
+    },
+    "/Lotus/Upgrades/Mods/PvPMods/Conditions/OnPistolKillCondition": {
+      "weaponClass": [
+        "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnJetTurbine/PistolPrimaryFireWeakpointHitCondition": {
+      "weaponClass": [
+        "TnJetTurbinePistolWeapon"
+      ]
+    }
+  }
+}

@@ -8,12 +8,13 @@ rights in it are granted. See `THIRD_PARTY_NOTICES.md`.
 
 | Path | Files | Use | Source |
 | --- | ---: | --- | --- |
-| `mods/art/**` | 2290 | MOD card illustrations and Riven card faces | Official 2D asset export (one `warframe-items` fallback); Riven-only faces (`RivenUpgrades/*`, Status Chance cards) extracted from the game cache |
+| `mods/art/**` | 2482 | MOD card illustrations (incl. sentinel mods and precepts) and Riven card faces | Official 2D asset export (one `warframe-items` fallback); Riven-only faces (`RivenUpgrades/*`, Status Chance cards) extracted from the game cache |
 | `mods/frame/**` | 66 | Rarity frames, Riven art, rank pips | Warframe Companion 5.3.5.0 app package + official 2D asset export |
 | `stances/art/**` | 174 | Stance card illustrations | Official 2D asset export |
 | `arcanes/*`, `arcanes/frames/*` | 177 | Arcane icons and rarity frames | `warframe-items` image set + official 2D asset export |
 | `weapons/*` | 796 | Weapon icons | Official 2D asset export (`Lotus/Interface/Icons/StoreIcons`) |
 | `enemies/art/**` | 874 | Enemy icons | Game interface textures (`Lotus/Interface/Icons/Npcs`) |
+| `sentinels/*` | 17 | Robotic sentinel portraits | Official 2D asset export (`Lotus/Interface/Icons/StoreIcons/Companions/Sentinels`) |
 | `warframes/portraits/*` | 119 | Warframe portraits | `warframe-items` image set |
 | `warframes/abilities/*` | 284 | Ability icons | `warframe-items` image set |
 | `warframes/mods/*` | 338 | Warframe MOD illustrations | `warframe-items` image set |

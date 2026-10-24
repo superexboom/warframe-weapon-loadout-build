@@ -35,6 +35,10 @@ pub struct Core {
     pub weakpoint_damage_bonus: f64,
     pub status_chance: f64,
     pub proc_duration_multiplier: f64,
+    /// damage.ModdedStats.proc_duration_types: one type's own duration multiplier.
+    pub proc_duration_types: Vector,
+    /// damage.ModdedStats.proc_max_stacks: extra victim stacks of one type.
+    pub proc_max_stacks: Vector,
     pub proc_damage_multiplier: f64,
     pub native_forced_procs: Vector,
     pub independent_proc_chances: Vector,
@@ -91,6 +95,22 @@ fn add(v: &mut Vector, d: D, x: f64) {
 }
 
 impl Core {
+    /// `damage.proc_stack_cap`: the victim's stack cap of `d` with the weapon's extra stacks.
+    pub fn stack_cap(&self, d: D, cap: f64) -> f64 {
+        match get(&self.proc_max_stacks, d) {
+            Some(v) => cap + v,
+            None => cap,
+        }
+    }
+
+    /// `damage.proc_duration_scale`: status duration multiplier of `d`.
+    pub fn duration_scale(&self, d: D) -> f64 {
+        match get(&self.proc_duration_types, d) {
+            Some(v) => pmax(v, 0.0),
+            None => pmax(self.proc_duration_multiplier, 0.0),
+        }
+    }
+
     pub fn total_damage(&self) -> f64 {
         psum(self.damage_types.iter().map(|x| x.1))
     }
@@ -372,7 +392,6 @@ pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Statu
         Some(v) => v,
         None => s.total_damage(),
     }, 0.0);
-    let duration = 6.0 * pmax(s.proc_duration_multiplier, 0.0);
     let seed_tiers = crit_tier_seed_distribution(s.crit_chance, s.crit_multiplier, s.noncrit_damage_multiplier, hcm, s.double_crit_chance, false);
     let weak_seed_scale = apply_weakpoint_folding(1.0, s, hm, hcm);
     let crit_seed_tiers = if !s.crit_proc_chances.is_empty() {
@@ -427,6 +446,7 @@ pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Statu
         tiers.extend(crit_seed_tiers.iter().map(|(w, f)| (crit_share * w, unit * f * crit_seed_scale)));
         tiers.retain(|e| e.0 > 0.0);
         let seed = psum(tiers.iter().map(|(w, ps)| w * ps));
+        let duration = 6.0 * s.duration_scale(d);
         rows.push((d, Row { duration, seed, accumulator: accumulator * accumulator_multiplier, shared, coefficient }));
     }
     let mut non = Vec::new();

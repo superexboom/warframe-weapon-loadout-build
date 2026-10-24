@@ -343,6 +343,9 @@ def main() -> int:
     args = parser.parse_args()
     packages = Packages(args.packages_bin)
     exports = json.loads(WEAPONS.read_text(encoding="utf-8"))["data"]
+    exalted = WEAPONS.with_name("exalted_weapons.json")
+    if exalted.is_file():
+        exports += json.loads(exalted.read_text(encoding="utf-8"))["data"]
     melee = [w for w in exports if w.get("slot") == "melee" and packages.exists(str(w.get("path")))]
     paths = [w["path"] for w in melee]
     hybrids = {p: hybrid_forms(packages, p) for p in paths}

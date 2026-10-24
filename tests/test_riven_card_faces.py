@@ -26,7 +26,9 @@ def test_face_syllables_match_the_wiki_example():
     faces = o.riven_card_faces(app.EXPORTS["rivenTemplates"], "rifle")
     assert (faces["S"]["prefix"], faces["0"]["prefix"], faces["D"]["suffix"]) == ("sati", "crita", "ata")
     assert faces["0"]["icon"].endswith("/Rifle/RifleCritChanceMod.png")
-    assert faces["VI"]["prefix"] is None and faces["VI"]["icon"].endswith("/RivenUpgrades/WeaponViralDamage.png")
+    # Spliced traits carry syllables too (09-22 templates, language 44.1.2).
+    assert (faces["VI"]["prefix"], faces["VI"]["suffix"]) == ("cari", "sco")
+    assert faces["VI"]["icon"].endswith("/RivenUpgrades/WeaponViralDamage.png")
 
 
 def test_lenient_identity_covers_multi_upgrade_stats():

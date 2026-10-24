@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "description": "Values the live client changed after the pinned export build. Each patch names the exported records it touches and the value it expects there before the change; a record holding neither the old nor the new value fails the load (vendor/wfarsenal/client_updates.py). Incarnon variants (Prime / Telos / Vandal) inherit the changed field from the base record in the client.",
+  "client": {
+    "date": "2026-10-24",
+    "packagesBin": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+    "previous": "e31e78ed55ff6def14eb6b770ea6d0db40259b1f13f216a9c18859d91e7f00a8"
+  },
+  "patches": [
+    {
+      "id": "boltor-crimson-overture",
+      "name": "Boltor family 2-2 (Crimson Overture)",
+      "kind": "incarnon",
+      "paths": [
+        "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/BoltorEvoTier1B",
+        "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/Prime/PrimeBoltorEvoTier1B",
+        "/Lotus/Weapons/Tenno/Rifle/BoltorIncarnonEvolutions/Telos/TelosBoltorEvoTier1B"
+      ],
+      "effects": [
+        {
+          "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+          "from": [
+            "STACKING_MULTIPLY",
+            -0.2
+          ],
+          "to": [
+            "STACKING_MULTIPLY",
+            -0.25
+          ]
+        }
+      ],
+      "maxStacks": [
+        4,
+        3
+      ],
+      "source": "BoltorEvoTier1BSubMod: Value -0.2 -> -0.25, MaxConditionalStacks 4 -> 3 (Prime / Telos already 3)"
+    },
+    {
+      "id": "dera-1a",
+      "name": "Dera family 2-1",
+      "kind": "incarnon",
+      "paths": [
+        "/Lotus/Weapons/ClanTech/Energy/DeraIncarnonEvolutions/DeraEvoTier1A",
+        "/Lotus/Weapons/ClanTech/Energy/DeraIncarnonEvolutions/Vandal/VandalDeraEvoTier1A"
+      ],
+      "effects": [
+        {
+          "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+          "from": [
+            "STACKING_MULTIPLY",
+            -0.2
+          ],
+          "to": [
+            "STACKING_MULTIPLY",
+            -0.25
+          ]
+        }
+      ],
+      "maxStacks": [
+        4,
+        3
+      ],
+      "source": "DeraEvoTier1ASubMod: Value -0.2 -> -0.25, MaxConditionalStacks 4 -> 3"
+    },
+    {
+      "id": "bronco-3a",
+      "name": "Bronco family 4-1",
+      "kind": "incarnon",
+      "paths": [
+        "/Lotus/Weapons/Tenno/Pistol/BroncoIncarnonEvolutions/BroncoEvoTier3A",
+        "/Lotus/Weapons/Tenno/Pistol/BroncoIncarnonEvolutions/Prime/PrimeBroncoEvoTier3A"
+      ],
+      "effects": [
+        {
+          "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+          "from": [
+            "STACKING_MULTIPLY",
+            -0.80000001
+          ],
+          "to": [
+            "STACKING_MULTIPLY",
+            -0.75
+          ]
+        }
+      ],
+      "source": "BroncoEvoTier3A: Value -0.80000001 -> -0.75"
+    },
+    {
+      "id": "vasto-3c",
+      "name": "Vasto family 4-3",
+      "kind": "incarnon",
+      "paths": [
+        "/Lotus/Weapons/Tenno/Pistol/VastoIncarnonEvolutions/VastoEvoTier3C",
+        "/Lotus/Weapons/Tenno/Pistol/VastoIncarnonEvolutions/Prime/PrimeVastoEvoTier3C"
+      ],
+      "effects": [
+        {
+          "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+          "from": [
+            "STACKING_MULTIPLY",
+            -1
+          ],
+          "to": [
+            "SET",
+            0
+          ]
+        }
+      ],
+      "locTag": "/Lotus/Language/Mods/InfiniteAmmoDesc",
+      "source": "VastoEvoTier3C: STACKING_MULTIPLY -1 -> SET 0 (InfiniteAmmoDesc): infinite ammo, not 100% efficiency"
+    },
+    {
+      "id": "arcane-pistoleer",
+      "name": "Arcane Pistoleer",
+      "kind": "arcane",
+      "paths": [
+        "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AmmoEfficiencyOnPistolHeadshot"
+      ],
+      "effects": [
+        {
+          "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+          "from": [
+            "STACKING_MULTIPLY",
+            -0.17
+          ],
+          "to": [
+            "SET",
+            0
+          ]
+        }
+      ],
+      "conditionTag": "/Lotus/Language/Upgrades/OnPistolWeakPointKillCondition_Description",
+      "source": "AmmoEfficiencyOnPistolHeadshot: STACKING_MULTIPLY -0.17 a rank at 60% -> SET 0 (infinite ammo) at 100%, 12 s; condition OnPistolWeakPointKillNoJetPistolCondition",
+      "trigger": {
+        "chance": [
+          0.60000002,
+          1
+        ]
+      },
+      "effectsZhByRank": [
+        [
+          "手枪弱点击杀时：\n获得无限弹药，持续 12 秒"
+        ],
+        [
+          "手枪弱点击杀时：\n获得无限弹药，持续 12 秒"
+        ],
+        [
+          "手枪弱点击杀时：\n获得无限弹药，持续 12 秒"
+        ],
+        [
+          "手枪弱点击杀时：\n获得无限弹药，持续 12 秒\n赋能复活次数 +1",
+          "赋能复活次数 +1"
+        ],
+        [
+          "手枪弱点击杀时：\n获得无限弹药，持续 12 秒\n赋能复活次数 +1",
+          "赋能复活次数 +1"
+        ],
+        [
+          "手枪弱点击杀时：\n获得无限弹药，持续 12 秒\n赋能复活次数 +1",
+          "赋能复活次数 +1"
+        ]
+      ],
+      "effectsEnByRank": [
+        [
+          "On Pistol Weak Point Kill:\nInfinite Ammo for 12s"
+        ],
+        [
+          "On Pistol Weak Point Kill:\nInfinite Ammo for 12s"
+        ],
+        [
+          "On Pistol Weak Point Kill:\nInfinite Ammo for 12s"
+        ],
+        [
+          "On Pistol Weak Point Kill:\nInfinite Ammo for 12s\n+1 Arcane Revive",
+          "+1 Arcane Revive"
+        ],
+        [
+          "On Pistol Weak Point Kill:\nInfinite Ammo for 12s\n+1 Arcane Revive",
+          "+1 Arcane Revive"
+        ],
+        [
+          "On Pistol Weak Point Kill:\nInfinite Ammo for 12s\n+1 Arcane Revive",
+          "+1 Arcane Revive"
+        ]
+      ]
+    }
+  ]
+}

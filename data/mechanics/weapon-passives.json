@@ -1,0 +1,2155 @@
+{
+  "schemaVersion": 1,
+  "description": "Weapon passives the export does not carry (the weapon's DefaultUpgrades; tools/import_weapon_passives.py). innate: export-shaped records, `effects` always on, `conditionalEffects` granted by the named replay event (noRefresh: CanReproc 0, not renewed while running); `fireModes` limits a record to those modes. superCritOnStatus: a pellet that applies a status arms the next pellet with probability `chance`; that pellet's crit chance is SET to `critChance`, replacing every other crit bonus. superStatusOnCrit: the same with a critical hit arming a SET status chance. excluded: every other DefaultUpgrade of an exported weapon and why it is left out. reloadProjectiles: the grenade a reload throws (Catabolyst), `empty` / `partial` by the magazine's state, contact and blast as separate hits.",
+  "weapons": {
+    "/Lotus/Types/Sentinels/SentinelWeapons/Gremlin": {
+      "name": "Artax",
+      "innate": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Sentinel/GremlinColdMod",
+          "name": "GremlinColdMod",
+          "nameEn": "Artax passive",
+          "nameZh": "阿塔克斯·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED_POST_COALESCE",
+              "operation": "ADD",
+              "valuePerRank": 0.2,
+              "damageType": "DT_FREEZE"
+            }
+          ],
+          "descZh": "自带 +20% <DT_FREEZE_COLOR>冰冻伤害，独立于任何其他元素伤害类型。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Corpus/Melee/Hammer/CorpusHammerWeapon": {
+      "name": "Arca Titron",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Corpus/Melee/Hammer/CorpusHammerWeaponInnateMod",
+          "name": "CorpusHammerWeaponInnateMod",
+          "nameEn": "Arca Titron passive",
+          "nameZh": "弧电振子锤·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 0,
+              "maxStacks": 5,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_MELEE_DAMAGE",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 2.5
+                }
+              ],
+              "meleeRoutes": [
+                "slam",
+                "slamBullet"
+              ],
+              "lockOn": "on-melee-slam-start",
+              "consumeOn": "on-melee-slam",
+              "conditionText": "近战击杀为下次震地攻击增加 250% 伤害和 2 米范围，最多叠加 5 层。震地攻击触发 电击异常状态。",
+              "sourcePath": "/Lotus/Weapons/Corpus/Melee/Hammer/CorpusHammerWeaponInnateMod",
+              "eventKind": "on-melee-kill",
+              "conditions": [
+                "CorpusHammerWeaponKillCondition"
+              ]
+            }
+          ],
+          "ignored": [
+            "WEAPON_EXPLOSION_RADIUS"
+          ],
+          "descZh": "近战击杀为下次震地攻击增加 250% 伤害和 2 米范围，最多叠加 5 层。震地攻击触发 <DT_ELECTRICITY_COLOR>电击异常状态。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol": {
+      "name": "Tenet Spirex",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistolInnateMod",
+          "name": "CrpIgniterPistolInnateMod",
+          "nameEn": "Tenet Spirex passive",
+          "nameZh": "信条·斯派克斯·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 4,
+              "maxStacks": 2,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_RELOAD_SPEED",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 0.25
+                }
+              ],
+              "conditionText": "爆头时，增加 25% 装填速度，持续 4 秒。最多可叠加 2 层",
+              "sourcePath": "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistolInnateMod",
+              "eventKind": "on-headshot",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotCondition"
+              ]
+            }
+          ],
+          "descZh": "爆头时，增加 25% 装填速度，持续 4 秒。最多可叠加 2 层"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Corpus/Pistols/SniperPistol/CrpScopeGun": {
+      "name": "Arca Scisco",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/SniperPistol/ScopeGunInnateMod",
+          "name": "ScopeGunInnateMod",
+          "nameEn": "Arca Scisco passive",
+          "nameZh": "弧电探知者·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 2,
+              "maxStacks": 5,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_CRIT_CHANCE",
+                  "operation": "ADD",
+                  "valuePerRank": 0.039999999
+                },
+                {
+                  "upgradeType": "WEAPON_PROC_CHANCE",
+                  "operation": "ADD",
+                  "valuePerRank": 0.039999999
+                }
+              ],
+              "stackMode": "SM_DECAY",
+              "conditionText": "击中时提高 4% 暴击几率和触发几率，持续 2 秒。最多叠加 5 层。",
+              "sourcePath": "/Lotus/Weapons/Corpus/Pistols/SniperPistol/ScopeGunInnateMod",
+              "eventKind": "on-hit",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitPistolNoDotsCondition"
+              ]
+            }
+          ],
+          "descZh": "击中时提高 4% 暴击几率和触发几率，持续 2 秒。最多叠加 5 层。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon": {
+      "name": "Kuva Chakkhurr",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleInnateUpgrade",
+          "name": "GrnKuvaLichRifleInnateUpgrade",
+          "nameEn": "Kuva Chakkhurr passive",
+          "nameZh": "赤毒·邪眼·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": 0.5
+            }
+          ],
+          "descZh": "直接击中时，增加 50% 爆头伤害"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnOrokinRifle/GrnOrokinRifleWeapon": {
+      "name": "Gotva Prime",
+      "superCritOnStatus": {
+        "chance": 0.15000001,
+        "critChance": 3.0
+      },
+      "source": "Packages.bin e31e78ed GrnOrokinRifleInnateUpgrade: Script GrnOrokinRifleRedCrit.lua OnStatusProcApplied, _chanceToAddBuff 0.15000001, _critChance 3; per pellet and next-pellet arming as WFSim engine/src/fight/pellet.rs (wiki Gotva Prime)"
+    },
+    "/Lotus/Weapons/Grineer/Melee/GrnSharbola/GrnSharbolaWeapon": {
+      "name": "Slaytra",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Grineer/Melee/GrnSharbola/GrnSharbolaInnateUpgrade",
+          "name": "GrnSharbolaInnateUpgrade",
+          "nameEn": "Slaytra passive",
+          "nameZh": "屠煞·固有被动",
+          "effects": [
+            {
+              "upgradeType": "RUNTIME_TYPED_PROC_TIME",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": 1,
+              "damageType": "DT_SLASH",
+              "packageUpgradeType": "WEAPON_PROC_TIME"
+            }
+          ]
+        }
+      ]
+    },
+    "/Lotus/Weapons/Grineer/Melee/Scythe/GrnDrillScythe/GrnDrillScythe": {
+      "name": "Galariak Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Grineer/Melee/Scythe/GrnDrillScythe/GrnDrillScytheInnateUpgrade",
+          "name": "GrnDrillScytheInnateUpgrade",
+          "nameEn": "Galariak Prime passive",
+          "nameZh": "加拉亚 Prime·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_CRIT_CHANCE_IF_VICTIM_PROC_ACTIVE",
+              "operation": "ADD",
+              "valuePerRank": 0.1,
+              "validProcTypes": [
+                "PT_KNOCKBACK",
+                "PT_FRAILTY",
+                "PT_BLEEDING",
+                "PT_IMMOLATION",
+                "PT_CHILLED",
+                "PT_ELECTROCUTION",
+                "PT_POISONED",
+                "PT_RAD_TOX",
+                "PT_ASPHYXIATION",
+                "PT_MAGNETIZED",
+                "PT_INFECTED",
+                "PT_CAUSTIC_BURN",
+                "PT_RADIANT",
+                "PT_SENTIENT"
+              ]
+            }
+          ],
+          "descZh": "目标身上每存在一种独特的异常状态，最终暴击几率提高 10%"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Grineer/Melee/Tonfa/GrnChainSawTonfa/GrnChainSawTonfaWeapon": {
+      "name": "Tonkkatt",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Grineer/Melee/Tonfa/GrnChainSawTonfa/GrnChainSawTonfaPassiveDescUpgrade",
+          "name": "GrnChainSawTonfaPassiveDescUpgrade",
+          "nameEn": "Tonkkatt passive",
+          "nameZh": "通卡拐刃·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 15,
+              "maxStacks": 30,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+                  "operation": "ADD",
+                  "valuePerRank": 0.039999999,
+                  "damageType": "DT_FIRE"
+                }
+              ],
+              "resetOn": [
+                "on-combo-tier-reset"
+              ],
+              "conditionText": "增加连击倍率可获得 4% 火焰伤害，持续 15 秒。最多可叠加 30 层",
+              "sourcePath": "/Lotus/Weapons/Grineer/Melee/Tonfa/GrnChainSawTonfa/GrnChainSawTonfaPassiveDescUpgrade",
+              "eventKind": "on-combo-tier-increase",
+              "conditions": [
+                "GrnChainSawTonfaComboTierIncreaseCondition"
+              ]
+            }
+          ],
+          "descZh": "增加连击倍率可获得 4% <DT_FIRE_COLOR>火焰伤害，持续 15 秒。最多可叠加 30 层"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Grineer/Pistols/GrnOrokinPistol/GrnOrokinPistol": {
+      "name": "Sagek Prime",
+      "superStatusOnCrit": {
+        "chance": 0.059999999,
+        "statusChance": 5
+      },
+      "source": "Packages.bin 00ca8221 GrnOrokinPistolInnateUpgrade: Script GrnOrokinPistol.lua",
+      "scriptSource": "Packages.bin 00ca8221 GrnOrokinPistolInnateUpgrade: Script GrnOrokinPistol.lua"
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSynapse": {
+      "name": "Coda Synapse",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Infested/LongGuns/InfestedRifleInnateUpgrade",
+          "name": "InfestedRifleInnateUpgrade",
+          "nameEn": "Coda Synapse passive",
+          "nameZh": "终幕·突触生化枪·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": 0.2
+            }
+          ],
+          "descZh": "爆头时，增加 20% 伤害"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaCatabolyst": {
+      "name": "Coda Catabolyst",
+      "reloadProjectiles": {
+        "count": 1,
+        "unusedStats": [
+          "FireRate",
+          "Mag",
+          "Multishot"
+        ],
+        "landsAt": 0.5,
+        "empty": {
+          "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaCatabolystReloadFromEmptyProj",
+          "contact": {
+            "damage": {
+              "DT_IMPACT": 11
+            },
+            "critChance": 0.31,
+            "critMultiplier": 2.9000001,
+            "procChance": 0.58999997
+          },
+          "explosion": {
+            "damage": {
+              "DT_CORROSIVE": 658
+            },
+            "critChance": 0.31,
+            "critMultiplier": 2.9000001,
+            "procChance": 0.58999997,
+            "radius": 5,
+            "falloff": 0.5,
+            "radiusMods": false
+          }
+        },
+        "partial": {
+          "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaCatabolystQuickReloadProj",
+          "contact": {
+            "damage": {
+              "DT_IMPACT": 11
+            },
+            "critChance": 0.11,
+            "critMultiplier": 2.9000001,
+            "procChance": 0.43000001
+          },
+          "explosion": {
+            "damage": {
+              "DT_CORROSIVE": 74
+            },
+            "critChance": 0.11,
+            "critMultiplier": 2.9000001,
+            "procChance": 0.43000001,
+            "radius": 3,
+            "falloff": 0.5,
+            "radiusMods": false
+          }
+        }
+      },
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaCatabolyst/CodaCatabolystReloadFromEmptyMod",
+          "name": "CodaCatabolystReloadFromEmptyMod",
+          "nameEn": "Coda Catabolyst passive",
+          "nameZh": "终幕·异化者·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 2,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_RELOAD_SPEED",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": -0.2
+                }
+              ],
+              "conditionText": "装填时会投掷一个 腐蚀手榴弹。从空弹匣重新装填时，会投掷一枚更巨威力的手榴弹，且伤害、暴击几率和触发几率都会增加",
+              "sourcePath": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaCatabolyst/CodaCatabolystReloadFromEmptyMod",
+              "eventKind": "on-reload-empty",
+              "conditions": [
+                "InfBeamPistolFromEmptyClipCondition"
+              ]
+            }
+          ],
+          "descZh": "装填时会投掷一个 <DT_CORROSIVE_COLOR>腐蚀手榴弹。从空弹匣重新装填时，会投掷一枚更巨威力的手榴弹，且伤害、暴击几率和触发几率都会增加"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Infested/LongGuns/InfestedRifle": {
+      "name": "Synapse",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Infested/LongGuns/InfestedRifleInnateUpgrade",
+          "name": "InfestedRifleInnateUpgrade",
+          "nameEn": "Synapse passive",
+          "nameZh": "突触生化枪·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": 0.2
+            }
+          ],
+          "descZh": "爆头时，增加 20% 伤害"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Infested/Melee/TipedoStaff/InfTipedoStaff": {
+      "name": "Lesion",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Infested/Melee/TipedoStaff/InfTipedoProcMeleeMod",
+          "name": "InfTipedoProcMeleeMod",
+          "nameEn": "Lesion passive",
+          "nameZh": "病变·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 6,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_FIRE_RATE",
+                  "operation": "MULTIPLY",
+                  "valuePerRank": 1.15
+                },
+                {
+                  "upgradeType": "WEAPON_PERCENT_BASE_DAMAGE_ADDED",
+                  "operation": "ADD",
+                  "valuePerRank": 1,
+                  "damageType": "DT_POISON"
+                },
+                {
+                  "upgradeType": "WEAPON_PROC_CHANCE",
+                  "operation": "ADD",
+                  "valuePerRank": 0.25
+                }
+              ],
+              "noRefresh": true,
+              "conditionText": "近战造成异常状态时增加 15% 攻击速度和 100% 毒素伤害，持续 6 秒。毒素和 Mod 效果组合。",
+              "sourcePath": "/Lotus/Weapons/Infested/Melee/TipedoStaff/InfTipedoProcMeleeMod",
+              "eventKind": "on-proc",
+              "conditions": [
+                "OnAnyProcCondition"
+              ]
+            }
+          ],
+          "descZh": "近战造成异常状态时增加 15% 攻击速度和 100% <DT_POISON_COLOR>毒素伤害，持续 6 秒。<DT_POISON_COLOR>毒素和 Mod 效果组合。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Infested/Pistols/InfBeamPistol/InfBeamPistol": {
+      "name": "Catabolyst",
+      "reloadProjectiles": {
+        "count": 1,
+        "unusedStats": [
+          "FireRate",
+          "Mag",
+          "Multishot"
+        ],
+        "landsAt": 0.5,
+        "empty": {
+          "path": "/Lotus/Weapons/Infested/Pistols/InfBeamPistol/InfBeamPistolReloadFromEmptyProj",
+          "contact": {
+            "damage": {
+              "DT_IMPACT": 11
+            },
+            "critChance": 0.31,
+            "critMultiplier": 2.9000001,
+            "procChance": 0.58999997
+          },
+          "explosion": {
+            "damage": {
+              "DT_CORROSIVE": 1997
+            },
+            "critChance": 0.31,
+            "critMultiplier": 2.9000001,
+            "procChance": 0.58999997,
+            "radius": 7,
+            "falloff": 0.5,
+            "radiusMods": false
+          }
+        },
+        "partial": {
+          "path": "/Lotus/Weapons/Infested/Pistols/InfBeamPistol/InfBeamPistolQuickReloadProj",
+          "contact": {
+            "damage": {
+              "DT_IMPACT": 11
+            },
+            "critChance": 0.11,
+            "critMultiplier": 2.9000001,
+            "procChance": 0.43000001
+          },
+          "explosion": {
+            "damage": {
+              "DT_CORROSIVE": 203
+            },
+            "critChance": 0.11,
+            "critMultiplier": 2.9000001,
+            "procChance": 0.43000001,
+            "radius": 5,
+            "falloff": 0.5,
+            "radiusMods": false
+          }
+        }
+      },
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Infested/Pistols/InfBeamPistol/InfBeamPistolReloadFromEmptyMod",
+          "name": "InfBeamPistolReloadFromEmptyMod",
+          "nameEn": "Catabolyst passive",
+          "nameZh": "异化者·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 2,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_RELOAD_SPEED",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": -0.2
+                }
+              ],
+              "conditionText": "装填时会投掷一个 腐蚀手榴弹。从空弹匣重新装填时，会投掷一枚更巨威力的手榴弹，且伤害、暴击几率和触发几率都会增加",
+              "sourcePath": "/Lotus/Weapons/Infested/Pistols/InfBeamPistol/InfBeamPistolReloadFromEmptyMod",
+              "eventKind": "on-reload-empty",
+              "conditions": [
+                "InfBeamPistolFromEmptyClipCondition"
+              ]
+            }
+          ],
+          "descZh": "装填时会投掷一个 <DT_CORROSIVE_COLOR>腐蚀手榴弹。从空弹匣重新装填时，会投掷一枚更巨威力的手榴弹，且伤害、暴击几率和触发几率都会增加"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Lasria/AK47/TC2024AK47Weapon": {
+      "name": "AX-52",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Lasria/AK47/AK47WeaponInnateMod",
+          "name": "AK47WeaponInnateMod",
+          "nameEn": "AX-52 passive",
+          "nameZh": "AX-52·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_CRIT_CHANCE_BODY_PART",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": 4,
+              "symbolFilter": "HEAD",
+              "validModifiers": [
+                "PM_AIM"
+              ]
+            },
+            {
+              "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": -0.75,
+              "invalidModifiers": [
+                "PM_AIM"
+              ]
+            }
+          ],
+          "descZh": "腰射时 +75% 弹药效率。瞄准爆头时 +400% 暴击几率。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Lasria/LasGooSickle/LasGooSicklePlayerWeapon": {
+      "name": "Dual Viciss",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Lasria/LasGooSickle/DualVicissInnateMod",
+          "name": "DualVicissInnateMod",
+          "nameEn": "Dual Viciss passive",
+          "nameZh": "双子恶行·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 10,
+              "maxStacks": 5,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_FIRE_RATE",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 0.07
+                }
+              ],
+              "sourcePath": "/Lotus/Weapons/Lasria/LasGooSickle/DualVicissInnateMod",
+              "eventKind": "proc-DT_GAS",
+              "conditions": [
+                "DualVicissGasProcCondition"
+              ]
+            }
+          ],
+          "ignored": [
+            "AVATAR_MOVEMENT_SPEED"
+          ]
+        }
+      ]
+    },
+    "/Lotus/Weapons/Lasria/LasSilencedPistol/LasSilencedPistolWeapon": {
+      "name": "Vesper 77"
+    },
+    "/Lotus/Weapons/Orokin/BallasSword/TNWQuestBallasSwordWeapon": {
+      "name": "Paracesis",
+      "innate": [
+        {
+          "path": "/Lotus/Upgrades/Mods/Quests/TNWQuestTempParacesisSentientFactionDamage",
+          "name": "TNWQuestTempParacesisSentientFactionDamage",
+          "nameEn": "Paracesis passive",
+          "nameZh": "心智之殁·固有被动",
+          "effects": [
+            {
+              "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+              "operation": "ADD",
+              "valuePerRank": 0.60000002,
+              "symbolFilter": "Sentient"
+            }
+          ]
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Akimbo/DualMagnusPrime": {
+      "name": "Akmagnus Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeMagnus/PrimeMagnusInnateUpgrade",
+          "name": "PrimeMagnusInnateUpgrade",
+          "nameEn": "Akmagnus Prime passive",
+          "nameZh": "麦格努斯双枪 Prime·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 4,
+              "maxStacks": 1,
+              "chance": 0.039999999,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                  "operation": "SET",
+                  "valuePerRank": 0
+                }
+              ],
+              "conditionText": "击中有 4% 几率获得 +100% 弹药效率，持续 4 秒",
+              "sourcePath": "/Lotus/Weapons/Tenno/Pistols/PrimeMagnus/PrimeMagnusInnateUpgrade",
+              "eventKind": "on-hit",
+              "conditions": [
+                "/Lotus/Upgrades/Mods/PvPMods/Conditions/OnPistolHitCondition"
+              ]
+            }
+          ],
+          "descZh": "击中有 4% 几率获得 +100% 弹药效率，持续 4 秒"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Bayonet/TnBayonetMeleeWeapon": {
+      "name": "Vinquibus (Melee)",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Bayonet/TnBayonetRifleHeadshotBuff",
+          "name": "TnBayonetRifleHeadshotBuff",
+          "nameEn": "Vinquibus passive",
+          "nameZh": "制胜者·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_MELEE_DAMAGE",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": 2.5
+            }
+          ],
+          "descZh": "极化、特殊功能槽位解锁和专精安装也会反映在近战槽位上。\r\n\r\n爆头可使接下来的 2 次近战攻击伤害提高 250%，最多可叠加 16 层。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Bayonet/TnBayonetRifleWeapon": {
+      "name": "Vinquibus",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Bayonet/TnBayonetMeleeKillBuff",
+          "name": "TnBayonetMeleeKillBuff",
+          "nameEn": "Vinquibus (Melee) passive",
+          "nameZh": "制胜者（近战）·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+              "operation": "SET",
+              "valuePerRank": 0
+            }
+          ],
+          "descZh": "极化、特殊功能槽位解锁和专精安装也会反映在主要槽位上。\r\n\r\n近战击杀会使你的下 4 发步枪弹药效率提升 100%，最多可叠加 16 层。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Bows/PrimeCernos/PrimeCernos": {
+      "name": "Cernos Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Bows/PrimeCernos/CernosPrimeInnateMod",
+          "name": "CernosPrimeInnateMod",
+          "nameEn": "Cernos Prime passive",
+          "nameZh": "西诺斯 Prime·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_HEADSHOT_MULTIPLIER",
+              "operation": "MULTIPLY",
+              "valuePerRank": 1.5
+            }
+          ],
+          "descZh": "爆头造成 1.5 倍伤害。次要射击可在箭矢的垂直扩散和水平扩散之间切换"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Bows/PrimeDaikyu/PrimeDaikyuBow": {
+      "name": "Daikyu Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Bows/PrimeDaikyu/PrimeDaikyuInnateMod",
+          "name": "PrimeDaikyuInnateMod",
+          "nameEn": "Daikyu Prime passive",
+          "nameZh": "大久和弓 Prime·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_CRIT_CHANCE_WEAKPOINT",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": 2.5
+            }
+          ],
+          "descZh": "命中弱点时有 +250% 暴击几率"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Bows/TnChoirBow/TnChoirBow": {
+      "name": "Evensong",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Bows/TnChoirBow/TnChoirBowInnateUpgrade",
+          "name": "TnChoirBowInnateUpgrade",
+          "nameEn": "Evensong passive",
+          "nameZh": "晚祷·固有被动",
+          "effects": [
+            {
+              "upgradeType": "RUNTIME_TYPED_PROC_MAX_STACK",
+              "operation": "ADD",
+              "valuePerRank": 2,
+              "damageType": "DT_PUNCTURE",
+              "packageUpgradeType": "WEAPON_PROC_MAX_STACK"
+            }
+          ],
+          "ignored": [
+            "WEAPON_PROC_MAX_STACK"
+          ],
+          "descZh": "晚祷的箭矢造成的伤害附加 7 层穿刺异常状态，使目标的伤害输出降低 100%，并使其受到伤害的暴击几率提高 35%。使用晚祷杀敌人将激活\"晚祷灵修\"，此增益为友军增加 35% 多重射击。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/GarudaCrossbow/GarudaCrossbow": {
+      "name": "Nagantaka",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/GarudaCrossbow/GarudaCrossbowInnateUpgrade",
+          "name": "GarudaCrossbowInnateUpgrade",
+          "nameEn": "Nagantaka passive",
+          "nameZh": "噬蛇弩·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 3,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_RELOAD_SPEED",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 0.5
+                }
+              ],
+              "noRefresh": true,
+              "conditionText": "次要射击以单次点射快速射空弹匣。爆头击杀后，下一次装填的速度增加 50%。Garuda 持有时，+1 米穿透",
+              "sourcePath": "/Lotus/Weapons/Tenno/LongGuns/GarudaCrossbow/GarudaCrossbowInnateUpgrade",
+              "eventKind": "on-headshot-kill",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnGarudaCrossbowHeadshotKillCondition"
+              ]
+            }
+          ],
+          "descZh": "次要射击以单次点射快速射空弹匣。爆头击杀后，下一次装填的速度增加 50%。Garuda 持有时，+1 米穿透"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeapon": {
+      "name": "Cedo Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeaponInnateMod",
+          "name": "PrimeCedoWeaponInnateMod",
+          "nameEn": "Cedo Prime passive",
+          "nameZh": "塞多 Prime·固有被动",
+          "fireModes": [
+            0
+          ],
+          "effects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": 0.60000002
+            }
+          ],
+          "descZh": "次要射击发射一把必定触发异常状态的弹跳型战刃。主要射击对目标身上的每个异常状态造成 60% 的额外伤害。Lavos 持有时，将拾取的次要武器弹药转化为 50% 的霰弹枪弹药"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeNagantaka/PrimeNagantakaWeapon": {
+      "name": "Nagantaka Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/GarudaCrossbow/GarudaCrossbowInnateUpgrade",
+          "name": "GarudaCrossbowInnateUpgrade",
+          "nameEn": "Nagantaka Prime passive",
+          "nameZh": "噬蛇弩 Prime·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 3,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_RELOAD_SPEED",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 0.5
+                }
+              ],
+              "noRefresh": true,
+              "conditionText": "次要射击以单次点射快速射空弹匣。爆头击杀后，下一次装填的速度增加 50%。Garuda 持有时，+1 米穿透",
+              "sourcePath": "/Lotus/Weapons/Tenno/LongGuns/GarudaCrossbow/GarudaCrossbowInnateUpgrade",
+              "eventKind": "on-headshot-kill",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnGarudaCrossbowHeadshotKillCondition"
+              ]
+            }
+          ],
+          "descZh": "次要射击以单次点射快速射空弹匣。爆头击杀后，下一次装填的速度增加 50%。Garuda 持有时，+1 米穿透"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePerigale/PrimePerigaleSniper": {
+      "name": "Perigale Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniperInnateMod",
+          "name": "TnQuadSniperInnateMod",
+          "nameEn": "Perigale Prime passive",
+          "nameZh": "月面狂风 Prime·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 4,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                  "operation": "SET",
+                  "valuePerRank": 0
+                }
+              ],
+              "conditionText": "一次爆头击杀或在一次点射中 4 次爆头，增加 100% 弹药效率，持续 4 秒。Voruna 持有时，+24 弹药最大值",
+              "sourcePath": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniperInnateMod",
+              "eventKind": "on-burst-headshot",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnFourHeadshotsCondition",
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotKillCondition"
+              ]
+            },
+            {
+              "duration": 4,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                  "operation": "SET",
+                  "valuePerRank": 0
+                }
+              ],
+              "conditionText": "一次爆头击杀或在一次点射中 4 次爆头，增加 100% 弹药效率，持续 4 秒。Voruna 持有时，+24 弹药最大值",
+              "sourcePath": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniperInnateMod",
+              "eventKind": "on-headshot-kill",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnFourHeadshotsCondition",
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotKillCondition"
+              ]
+            }
+          ],
+          "descZh": "一次爆头击杀或在一次点射中 4 次爆头，增加 100% 弹药效率，持续 4 秒。Voruna 持有时，+24 弹药最大值"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeCrossbow": {
+      "name": "Zhuge Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/ZhugePrimeReloadFromEmptyMod",
+          "name": "ZhugePrimeReloadFromEmptyMod",
+          "nameEn": "Zhuge Prime passive",
+          "nameZh": "诸葛连弩 Prime·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 2,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_RELOAD_SPEED",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 0.5
+                }
+              ],
+              "conditionText": "弹匣清空时，增加 50% 装填速度",
+              "sourcePath": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/ZhugePrimeReloadFromEmptyMod",
+              "eventKind": "on-reload-empty",
+              "conditions": [
+                "OnReloadFromEmptyClipCondition"
+              ]
+            }
+          ],
+          "descZh": "弹匣清空时，增加 50% 装填速度"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgun": {
+      "name": "Cedo",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgunInnateMod",
+          "name": "TnAlchemistShotgunInnateMod",
+          "nameEn": "Cedo passive",
+          "nameZh": "塞多·固有被动",
+          "fireModes": [
+            0
+          ],
+          "effects": [
+            {
+              "upgradeType": "WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": 0.60000002
+            }
+          ],
+          "descZh": "次要射击发射一把必定触发异常状态的弹跳型战刃。主要射击对目标身上的每个异常状态造成 60% 的额外伤害。Lavos 持有时，将拾取的次要武器弹药转化为 50% 的霰弹枪弹药"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnBeltFedRifle/TnBeltFedRifleWeapon": {
+      "name": "Reconifex",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnBeltFedRifle/TnBeltFedRifleInnateUpgrade",
+          "name": "TnBeltFedRifleInnateUpgrade",
+          "nameEn": "Reconifex passive",
+          "nameZh": "侦察者·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_RELOAD_TIME",
+              "operation": "MULTIPLY",
+              "valuePerRank": 0.22
+            }
+          ],
+          "perfectReloadRange": [
+            0.22,
+            0.38
+          ],
+          "conditionalEffects": [
+            {
+              "duration": 0,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "RUNTIME_EXTRA_HIT",
+                  "operation": "ADD",
+                  "valuePerRank": 0.25,
+                  "damageType": "DT_FIRE",
+                  "runtimeChance": 1.0
+                }
+              ],
+              "conditionText": "完美装填可使下一弹匣具有 火焰伤害，射击增加 25% 伤害且必定触发异常状态。",
+              "sourcePath": "/Lotus/Weapons/Tenno/LongGuns/TnBeltFedRifle/TnBeltFedRifleInnateUpgrade",
+              "eventKind": "on-reload-complete",
+              "conditions": [
+                "TnBeltFedRiflePerfectReloadCondition"
+              ]
+            }
+          ],
+          "descZh": "完美装填可使下一弹匣具有 <DT_FIRE_COLOR>火焰伤害，射击增加 25% 伤害且必定触发异常状态。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkRifleWeapon": {
+      "name": "Enkaus",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkRifleWeaponPassiveDescUpgrade",
+          "name": "TnInkRifleWeaponPassiveDescUpgrade",
+          "nameEn": "Enkaus passive",
+          "nameZh": "绘墨·固有被动",
+          "fireModes": [
+            0
+          ],
+          "executeBelowHealth": 0.35,
+          "effects": [
+            {
+              "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+              "operation": "SET",
+              "valuePerRank": 0
+            }
+          ],
+          "descZh": "次要射击会喷出墨汁，浸染敌人。使用绘墨射击被墨汁浸染的敌人时，墨汁会被吸回武器而重新装弹，并且当敌人的生命值低于 35% 时，敌人会被溶解。当通过 Follie 使用绘墨时，敌人也会受到墨蚀效果影响。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniper": {
+      "name": "Perigale",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniperInnateMod",
+          "name": "TnQuadSniperInnateMod",
+          "nameEn": "Perigale passive",
+          "nameZh": "月面狂风·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 4,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                  "operation": "SET",
+                  "valuePerRank": 0
+                }
+              ],
+              "conditionText": "一次爆头击杀或在一次点射中 4 次爆头，增加 100% 弹药效率，持续 4 秒。Voruna 持有时，+24 弹药最大值",
+              "sourcePath": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniperInnateMod",
+              "eventKind": "on-burst-headshot",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnFourHeadshotsCondition",
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotKillCondition"
+              ]
+            },
+            {
+              "duration": 4,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                  "operation": "SET",
+                  "valuePerRank": 0
+                }
+              ],
+              "conditionText": "一次爆头击杀或在一次点射中 4 次爆头，增加 100% 弹药效率，持续 4 秒。Voruna 持有时，+24 弹药最大值",
+              "sourcePath": "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniperInnateMod",
+              "eventKind": "on-headshot-kill",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnFourHeadshotsCondition",
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotKillCondition"
+              ]
+            }
+          ],
+          "descZh": "一次爆头击杀或在一次点射中 4 次爆头，增加 100% 弹药效率，持续 4 秒。Voruna 持有时，+24 弹药最大值"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Polearms/Naginata/ShrineMaidenNaginataWeapon": {
+      "name": "Amanata",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Melee/Polearms/Naginata/ShrineMaidenNaginataInnateMod",
+          "name": "ShrineMaidenNaginataInnateMod",
+          "nameEn": "Amanata passive",
+          "nameZh": "天薙刀·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_CRIT_CHANCE",
+              "operation": "ADD",
+              "valuePerRank": 0.13333333666666666
+            },
+            {
+              "upgradeType": "WEAPON_PROC_CHANCE",
+              "operation": "ADD",
+              "valuePerRank": 0.10000000333333332
+            },
+            {
+              "upgradeType": "WEAPON_PROC_DAMAGE",
+              "operation": "ADD",
+              "valuePerRank": 0.10000000333333332
+            },
+            {
+              "upgradeType": "WEAPON_FIRE_RATE",
+              "operation": "STACKING_MULTIPLY",
+              "valuePerRank": 0.06666666666666667
+            }
+          ],
+          "ignored": [
+            "WEAPON_RANGE"
+          ]
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Scythe/PrimeVento/PrimeVentoScythe": {
+      "name": "Venato Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Melee/Scythe/PrimeVento/PrimeVentoProcOnProcUpgrade",
+          "name": "PrimeVentoProcOnProcUpgrade",
+          "nameEn": "Venato Prime passive",
+          "nameZh": "脉纹 Prime·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 8,
+              "maxStacks": 10,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_PROC_CHANCE",
+                  "operation": "MULTIPLY",
+                  "valuePerRank": 1.1
+                }
+              ],
+              "stackMode": "per-stack",
+              "conditionText": "触发异常状态时：造成 Tau 异常状态。Caliban 持有时，增加 50% 额外连击数几率",
+              "sourcePath": "/Lotus/Weapons/Tenno/Melee/Scythe/PrimeVento/PrimeVentoProcOnProcUpgrade",
+              "eventKind": "on-proc",
+              "conditions": [
+                "OnProcCondition"
+              ]
+            }
+          ],
+          "descZh": "触发异常状态时：造成 <DT_SENTIENT_COLOR>Tau 异常状态。Caliban 持有时，增加 50% 额外连击数几率"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Swords/TnDagathBladeWhip/TnDagathBladeWhip": {
+      "name": "Dorrclave",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Melee/Swords/TnDagathBladeWhip/TnDagathBladeWhipInnateMod",
+          "name": "TnDagathBladeWhipInnateMod",
+          "nameEn": "Dorrclave passive",
+          "nameZh": "怒斩·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 0,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_PROC_CHANCE",
+                  "operation": "ADD",
+                  "valuePerRank": 1
+                }
+              ],
+              "requiredCount": 10,
+              "charges": 10,
+              "consumeOn": "on-melee-attack",
+              "conditionText": "完成 10 次击杀后，接下来的 10 次攻击增加 50% 伤害穿透系数和 100% 触发几率。Dagath 持有时，每击中一个带有异常状态的敌人可以恢复 6 生命值。",
+              "sourcePath": "/Lotus/Weapons/Tenno/Melee/Swords/TnDagathBladeWhip/TnDagathBladeWhipInnateMod",
+              "eventKind": "on-melee-kill",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeHitCondition"
+              ]
+            }
+          ],
+          "ignored": [
+            "WEAPON_MELEE_AVATAR_DAMAGE_FALL_OFF"
+          ],
+          "descZh": "完成 10 次击杀后，接下来的 10 次攻击增加 50% 伤害穿透系数和 100% 触发几率。Dagath 持有时，每击中一个带有异常状态的敌人可以恢复 6 生命值。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Swords/TnRailjackGreatKatana/TnRailJackGreatKatanaWeapon": {
+      "name": "Pennant",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Melee/Swords/TnRailjackGreatKatana/TnRailJackGreatKatanaInnateUpgrade",
+          "name": "TnRailJackGreatKatanaInnateUpgrade",
+          "nameEn": "Pennant passive",
+          "nameZh": "尖幡·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 2,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_FIRE_RATE",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 0.5
+                }
+              ],
+              "noRefresh": true,
+              "durationPerTier": 4,
+              "conditionText": "重击击杀提供 +50% 攻击速度，最多持续 46 秒，此效果根据连击数变化",
+              "sourcePath": "/Lotus/Weapons/Tenno/Melee/Swords/TnRailjackGreatKatana/TnRailJackGreatKatanaInnateUpgrade",
+              "eventKind": "on-melee-heavy-kill",
+              "conditions": [
+                "/Lotus/Upgrades/Mods/Melee/OnMeleeChargeAttackKillCondition"
+              ]
+            }
+          ],
+          "descZh": "重击击杀提供 +50% 攻击速度，最多持续 46 秒，此效果根据连击数变化"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeAthodai/PrimeAthodaiPistolWeapon": {
+      "name": "Athodai Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAthodai/PrimeAthodaiInnateMod",
+          "name": "PrimeAthodaiInnateMod",
+          "nameEn": "Athodai Prime passive",
+          "nameZh": "阿索代 Prime·固有被动",
+          "fireModes": [
+            0
+          ],
+          "conditionalEffects": [
+            {
+              "duration": 12,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                  "operation": "SET",
+                  "valuePerRank": 0
+                },
+                {
+                  "upgradeType": "WEAPON_FIRE_RATE",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 1
+                },
+                {
+                  "upgradeType": "WEAPON_RECOIL",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": -1
+                }
+              ],
+              "noRefresh": true,
+              "conditionText": "弱点击杀可消除后坐力并增加 100% 射速和弹药效率，持续 12 秒。次要射击以单次连发快速射空弹匣",
+              "sourcePath": "/Lotus/Weapons/Tenno/Pistols/PrimeAthodai/PrimeAthodaiInnateMod",
+              "eventKind": "on-headshot-kill",
+              "conditions": [
+                "PistolPrimaryFireHeadshotKillCondition"
+              ]
+            }
+          ],
+          "descZh": "弱点击杀可消除后坐力并增加 100% 射速和弹药效率，持续 12 秒。次要射击以单次连发快速射空弹匣"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeKnell/PrimeKnellWeapon": {
+      "name": "Knell Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolInnateMod",
+          "name": "TnPriestPistolInnateMod",
+          "nameEn": "Knell Prime passive",
+          "nameZh": "丧钟 Prime·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 2,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                  "operation": "SET",
+                  "valuePerRank": 0
+                }
+              ],
+              "conditionText": "爆头后增加 100% 弹药效率，持续 2 秒，以及 0.5 倍暴击伤害和 20% 触发几率，最多可叠加 3 层。Harrow 持有时，弹匣容量翻倍",
+              "sourcePath": "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolInnateMod",
+              "eventKind": "on-headshot",
+              "conditions": []
+            }
+          ],
+          "descZh": "爆头后增加 100% 弹药效率，持续 2 秒，以及 0.5 倍暴击伤害和 20% 触发几率，最多可叠加 3 层。Harrow 持有时，弹匣容量翻倍"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolInnateModB",
+          "name": "TnPriestPistolInnateModB",
+          "nameEn": "Knell Prime passive",
+          "nameZh": "丧钟 Prime·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 2,
+              "maxStacks": 3,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "RUNTIME_FINAL_CRIT_DAMAGE",
+                  "operation": "ADD",
+                  "valuePerRank": 0.5,
+                  "packageUpgradeType": "WEAPON_CRIT_DAMAGE"
+                },
+                {
+                  "upgradeType": "WEAPON_PROC_CHANCE",
+                  "operation": "ADD",
+                  "valuePerRank": 0.2
+                }
+              ],
+              "stackMode": "SM_DECAY",
+              "conditionText": "一个未经使用，未融合过的神器。",
+              "sourcePath": "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolInnateModB",
+              "eventKind": "on-headshot",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotPistolCondition"
+              ]
+            }
+          ],
+          "descZh": "一个未经使用，未融合过的神器。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeMagnus/PrimeMagnusWeapon": {
+      "name": "Magnus Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeMagnus/PrimeMagnusInnateUpgrade",
+          "name": "PrimeMagnusInnateUpgrade",
+          "nameEn": "Magnus Prime passive",
+          "nameZh": "麦格努斯 Prime·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 4,
+              "maxStacks": 1,
+              "chance": 0.039999999,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                  "operation": "SET",
+                  "valuePerRank": 0
+                }
+              ],
+              "conditionText": "击中有 4% 几率获得 +100% 弹药效率，持续 4 秒",
+              "sourcePath": "/Lotus/Weapons/Tenno/Pistols/PrimeMagnus/PrimeMagnusInnateUpgrade",
+              "eventKind": "on-hit",
+              "conditions": [
+                "/Lotus/Upgrades/Mods/PvPMods/Conditions/OnPistolHitCondition"
+              ]
+            }
+          ],
+          "descZh": "击中有 4% 几率获得 +100% 弹药效率，持续 4 秒"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeVelox/PrimeVeloxPistol": {
+      "name": "Velox Prime",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVelox/PrimeVeloxAmmoEfficiencyMod",
+          "name": "PrimeVeloxAmmoEfficiencyMod",
+          "nameEn": "Velox Prime passive",
+          "nameZh": "逐电 Prime·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+              "operation": "ADD",
+              "valuePerRank": -0.2
+            }
+          ],
+          "descZh": "弹匣清空时，增加 50% 装填速度。自带 20% 弹药效率。Protea 持有时，增加额外 20% 弹药效率"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/PrimeVelox/PrimeVeloxReloadFromEmptyMod",
+          "name": "PrimeVeloxReloadFromEmptyMod",
+          "nameEn": "Velox Prime passive",
+          "nameZh": "逐电 Prime·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 1.5,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_RELOAD_SPEED",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 0.5
+                }
+              ],
+              "sourcePath": "/Lotus/Weapons/Tenno/Pistols/PrimeVelox/PrimeVeloxReloadFromEmptyMod",
+              "eventKind": "on-reload-empty",
+              "conditions": [
+                "/Lotus/Weapons/Tenno/Pistols/TnOdaliskSmg/TnOdaliskFromEmptyClipCondition"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnJetTurbine/TnJetTurbinePistolWeapon": {
+      "name": "Athodai",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/TnJetTurbine/TnTurbineInnateMod",
+          "name": "TnTurbineInnateMod",
+          "nameEn": "Athodai passive",
+          "nameZh": "阿索代·固有被动",
+          "fireModes": [
+            0
+          ],
+          "conditionalEffects": [
+            {
+              "duration": 8,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                  "operation": "SET",
+                  "valuePerRank": 0
+                },
+                {
+                  "upgradeType": "WEAPON_FIRE_RATE",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 1
+                },
+                {
+                  "upgradeType": "WEAPON_RECOIL",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": -1
+                }
+              ],
+              "noRefresh": true,
+              "conditionText": "弱点击杀可消除后坐力并增加 100% 射速和弹药效率，持续 8 秒。次要射击以单次连发快速射空弹匣",
+              "sourcePath": "/Lotus/Weapons/Tenno/Pistols/TnJetTurbine/TnTurbineInnateMod",
+              "eventKind": "on-headshot-kill",
+              "conditions": [
+                "PistolPrimaryFireHeadshotKillCondition"
+              ]
+            }
+          ],
+          "descZh": "弱点击杀可消除后坐力并增加 100% 射速和弹药效率，持续 8 秒。次要射击以单次连发快速射空弹匣"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnOdaliskSmg/TnOdaliskSmgPistol": {
+      "name": "Velox",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/TnOdaliskSmg/TnOdaliskAmmoEfficiencyMod",
+          "name": "TnOdaliskAmmoEfficiencyMod",
+          "nameEn": "Velox passive",
+          "nameZh": "逐电·固有被动",
+          "effects": [
+            {
+              "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+              "operation": "ADD",
+              "valuePerRank": -0.2
+            }
+          ],
+          "descZh": "弹匣清空时，增加 50% 装填速度。自带 20% 弹药效率。Protea 持有时，增加额外 20% 弹药效率"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/TnOdaliskSmg/TnOdaliskReloadFromEmptyMod",
+          "name": "TnOdaliskReloadFromEmptyMod",
+          "nameEn": "Velox passive",
+          "nameZh": "逐电·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 1.5,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_RELOAD_SPEED",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 0.5
+                }
+              ],
+              "sourcePath": "/Lotus/Weapons/Tenno/Pistols/TnOdaliskSmg/TnOdaliskReloadFromEmptyMod",
+              "eventKind": "on-reload-empty",
+              "conditions": [
+                "TnOdaliskFromEmptyClipCondition"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolWeapon": {
+      "name": "Knell",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolInnateMod",
+          "name": "TnPriestPistolInnateMod",
+          "nameEn": "Knell passive",
+          "nameZh": "丧钟·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 2,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_AMMO_CONSUME_RATE",
+                  "operation": "SET",
+                  "valuePerRank": 0
+                }
+              ],
+              "conditionText": "爆头后增加 100% 弹药效率，持续 2 秒，以及 0.5 倍暴击伤害和 20% 触发几率，最多可叠加 3 层。Harrow 持有时，弹匣容量翻倍",
+              "sourcePath": "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolInnateMod",
+              "eventKind": "on-headshot",
+              "conditions": []
+            }
+          ],
+          "descZh": "爆头后增加 100% 弹药效率，持续 2 秒，以及 0.5 倍暴击伤害和 20% 触发几率，最多可叠加 3 层。Harrow 持有时，弹匣容量翻倍"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolInnateModB",
+          "name": "TnPriestPistolInnateModB",
+          "nameEn": "Knell passive",
+          "nameZh": "丧钟·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 2,
+              "maxStacks": 3,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "RUNTIME_FINAL_CRIT_DAMAGE",
+                  "operation": "ADD",
+                  "valuePerRank": 0.5,
+                  "packageUpgradeType": "WEAPON_CRIT_DAMAGE"
+                },
+                {
+                  "upgradeType": "WEAPON_PROC_CHANCE",
+                  "operation": "ADD",
+                  "valuePerRank": 0.2
+                }
+              ],
+              "stackMode": "SM_DECAY",
+              "conditionText": "一个未经使用，未融合过的神器。",
+              "sourcePath": "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolInnateModB",
+              "eventKind": "on-headshot",
+              "conditions": [
+                "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotPistolCondition"
+              ]
+            }
+          ],
+          "descZh": "一个未经使用，未融合过的神器。"
+        }
+      ]
+    },
+    "/Lotus/Weapons/Thanotech/EntSphereHammer/EntSphereHammer": {
+      "name": "Ekhein",
+      "innate": [
+        {
+          "path": "/Lotus/Weapons/Thanotech/EntSphereHammer/EntSphereHammerInnateMod",
+          "name": "EntSphereHammerInnateMod",
+          "nameEn": "Ekhein passive",
+          "nameZh": "映声战锤·固有被动",
+          "conditionalEffects": [
+            {
+              "duration": 8,
+              "maxStacks": 1,
+              "chance": 1,
+              "effects": [
+                {
+                  "upgradeType": "WEAPON_MELEE_DAMAGE",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 0.80000001
+                },
+                {
+                  "upgradeType": "WEAPON_FIRE_RATE",
+                  "operation": "STACKING_MULTIPLY",
+                  "valuePerRank": 0.2
+                }
+              ],
+              "conditionText": "重击可增加 +80% 近战伤害和 +20% 攻击速度，持续 8 秒",
+              "sourcePath": "/Lotus/Weapons/Thanotech/EntSphereHammer/EntSphereHammerInnateMod",
+              "eventKind": "on-melee-heavy-hit",
+              "conditions": [
+                "/Lotus/Upgrades/Boons/Offensive/OnMeleeHeavyHit"
+              ]
+            }
+          ],
+          "descZh": "重击可增加 +80% 近战伤害和 +20% 攻击速度，持续 8 秒"
+        }
+      ]
+    }
+  },
+  "innateSource": {
+    "packagesBin": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+    "scan": "scan_passives.py (DefaultUpgrades, parents merged)"
+  },
+  "excluded": {
+    "/Lotus/Animations/FlightSuit/TestMeleeAttacks/FairyMeleeTree": {
+      "reason": "Exalted ability melee tree script",
+      "weapons": [
+        "Diwata",
+        "Diwata Prime"
+      ]
+    },
+    "/Lotus/Powersuits/Pagemaster/ExaltedBookInnateUpdate": {
+      "reason": "tome slots",
+      "weapons": [
+        "Noctua"
+      ]
+    },
+    "/Lotus/Upgrades/Evolutions/Melee/Dagger/EvoDaggerVoidFinisherBuff": {
+      "reason": "damage taken",
+      "weapons": [
+        "Innodem"
+      ]
+    },
+    "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowConvertAmmoMod": {
+      "reason": "no scored term (WEAPON_CONVERT_AMMO)",
+      "weapons": [
+        "Lenz",
+        "Prisma Lenz"
+      ]
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncherInnateMod": {
+      "reason": "no scored term (WEAPON_AUTO_RELOAD_RATE)",
+      "weapons": [
+        "Tenet Envoy"
+      ]
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniperConvertAmmoMod": {
+      "reason": "no scored term (WEAPON_CONVERT_AMMO)",
+      "weapons": [
+        "Komorex"
+      ]
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/GunSpearInnateMod": {
+      "reason": "no scored term (WEAPON_AUTO_RELOAD_RATE)",
+      "weapons": [
+        "Tenet Ferrox",
+        "Ferrox"
+      ]
+    },
+    "/Lotus/Weapons/Corpus/Melee/CrpBriefcase2HKatana/CrpBriefcase2HKatanaInnateUpgrade": {
+      "reason": "parry angle",
+      "weapons": [
+        "Tenet Livia"
+      ]
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CorpusModularPistol/Vandal/CrpLaserPistolVandalInnateMod": {
+      "reason": "ricochet",
+      "weapons": [
+        "Spectra Vandal"
+      ]
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpBriefcaseAkimbo/CrpBriefcaseAkimboInnateMod": {
+      "reason": "no scored term (WEAPON_AUTO_RELOAD_RATE)",
+      "weapons": [
+        "Tenet Diplos"
+      ]
+    },
+    "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowInnateMod": {
+      "reason": "no scored term (WEAPON_AMMO_RETRIEVED)",
+      "weapons": [
+        "Kuva Bramma"
+      ]
+    },
+    "/Lotus/Weapons/Grineer/KuvaLich/Melee/Ghoulsaw/KuvaGhoulsawInnateMod": {
+      "reason": "no scored term (WEAPON_GORE_CHANCE)",
+      "weapons": [
+        "Kuva Ghoulsaw",
+        "Ghoulsaw"
+      ]
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/MiterDismemberUpgrade": {
+      "reason": "no scored term (WEAPON_GORE_CHANCE)",
+      "weapons": [
+        "Miter"
+      ]
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GunSpearInnateMod": {
+      "reason": "no scored term (WEAPON_AUTO_RELOAD_RATE)",
+      "weapons": [
+        "Javlok",
+        "Afentis Prime",
+        "Scourge Prime",
+        "Afentis",
+        "Scourge"
+      ]
+    },
+    "/Lotus/Weapons/Grineer/LongGuns/GrnOrokinRifle/GrnOrokinRifleInnateUpgrade": {
+      "reason": "modelled elsewhere: superCritOnStatus in this file (Gotva Prime)",
+      "weapons": [
+        "Gotva Prime"
+      ]
+    },
+    "/Lotus/Weapons/Grineer/Melee/Tonfa/GrnChainSawTonfa/GrnChainSawTonfaComboResetUpgrade": {
+      "reason": "modelled elsewhere: the resetOn of GrnChainSawTonfaPassiveDescUpgrade (OnComboReset)",
+      "weapons": [
+        "Tonkkatt"
+      ]
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/1999InfShotgun/1999InfShotgunInnateMod": {
+      "reason": "granted by a Mercy kill",
+      "weapons": [
+        "Coda Bassocyst"
+      ]
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/Pistols/1999InfSporePistol/1999InfSPorePistolOnKillUpgrade": {
+      "reason": "spore spread on kill (other enemies)",
+      "weapons": [
+        "Dual Coda Torxica"
+      ]
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/Pistols/1999InfSporePistol/1999InfSporePistolInnateMod": {
+      "reason": "x1.5 on spore-marked enemies (WEAPON_MARKED_DAMAGE_AMOUNT); spores come from other kills",
+      "weapons": [
+        "Dual Coda Torxica"
+      ]
+    },
+    "/Lotus/Weapons/Infested/LongGuns/InfArmCannon/BubonicoPassiveDescUpgrade": {
+      "reason": "no scored term (AVATAR_MOVEMENT_SPEED)",
+      "weapons": [
+        "Coda Bubonico",
+        "Bubonico"
+      ]
+    },
+    "/Lotus/Weapons/Infested/Melee/InfWFAccompanyingSparring/InfestedKogakeUpgrade": {
+      "reason": "life steal and health",
+      "weapons": [
+        "Coda Hirudo",
+        "Hirudo"
+      ]
+    },
+    "/Lotus/Weapons/Infested/Pistols/InfVomitGun/FireRateOnHeadshotPistolMod": {
+      "reason": "modelled elsewhere: combat-reference.json nativeTriggers dual-toxocyst-frenzy",
+      "weapons": [
+        "Dual Toxocyst"
+      ]
+    },
+    "/Lotus/Weapons/Lasria/LasSilencedPistol/Vesper77InnateUpgrade": {
+      "reason": "modelled elsewhere: sniper-mechanics.json zoom effects (aimed +40% crit damage)",
+      "weapons": [
+        "Vesper 77"
+      ]
+    },
+    "/Lotus/Weapons/Operator/Pistols/DrifterPistol/DrifterPistolInnateStealthUpgrade": {
+      "reason": "no scored term (WEAPON_STEALTH_MULTIPLIER)",
+      "weapons": [
+        "Sirocco"
+      ]
+    },
+    "/Lotus/Weapons/Sentients/SentJointedScythe/SentJointedScytheInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Sentient/SentientBaseSuit)",
+      "weapons": [
+        "Venato",
+        "Venato Prime"
+      ]
+    },
+    "/Lotus/Weapons/Sentients/Shedu/SheduInnateUpgrade": {
+      "reason": "no scored term (AVATAR_MOVEMENT_SPEED)",
+      "weapons": [
+        "Shedu"
+      ]
+    },
+    "/Lotus/Weapons/Syndicates/ArbitersOfHexis/Melee/AHBoltaceMobilizeMod": {
+      "reason": "no scored term (AVATAR_PARKOUR_BOOST, AVATAR_PARKOUR_GLIDE)",
+      "weapons": [
+        "Telos Boltace"
+      ]
+    },
+    "/Lotus/Weapons/Syndicates/CephalonSuda/Melee/CreateSpectreOnKill": {
+      "reason": "spectre on kill",
+      "weapons": [
+        "Synoid Heliocor"
+      ]
+    },
+    "/Lotus/Weapons/Syndicates/NewLoka/Melee/NLMagistarLifeStrikeAOEMod": {
+      "reason": "healing script",
+      "weapons": [
+        "Sancti Magistar"
+      ]
+    },
+    "/Lotus/Weapons/Syndicates/RedVeil/Melee/RVDarkDaggerInnateUpgrade": {
+      "reason": "enemy detection range",
+      "weapons": [
+        "Rakta Dark Dagger"
+      ]
+    },
+    "/Lotus/Weapons/Syndicates/SteelMeridian/Melee/SMSydonSpecialUpgrade": {
+      "reason": "blinding script",
+      "weapons": [
+        "Vaykor Sydon"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Melee/ExaltedArchScythe/GunScytheInnateMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Geode/GeodeBaseSuit)",
+      "weapons": [
+        "Corufell"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunInnateMod": {
+      "reason": "modelled elsewhere: runtime_adapters (Arbucep multishot-to-damage)",
+      "weapons": [
+        "Arbucep"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGunInnateMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/IronFrame/IronFrameBaseSuit)",
+      "weapons": [
+        "Larkspur Prime",
+        "Larkspur"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Bayonet/TnBayonetMeleeAttackBuff": {
+      "reason": "melee actions charging the rifle's next shot (_damageBonuses 0.5..3): no text, the wiki names no such mechanic",
+      "weapons": [
+        "Vinquibus (Melee)"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Bayonet/TnBayonetRifleConsumeAmmoBuff": {
+      "reason": "the rifle-shot half of TnBayonetMeleeAttackBuff (same undocumented mechanic)",
+      "weapons": [
+        "Vinquibus"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Bows/TnChoirBow/TnChoirBowAuraMod": {
+      "reason": "ally aura on kill",
+      "weapons": [
+        "Evensong"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireInnateUpgrade": {
+      "reason": "ammo pickup script",
+      "weapons": [
+        "Grimoire",
+        "Grimoire"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/GarudaCrossbow/GarudaCrossbowInnateUpgradeTwo": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Garuda/GarudaBaseSuit)",
+      "weapons": [
+        "Nagantaka",
+        "Nagantaka Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/Gunbrella/InnateShrineMaidenAssistMod": {
+      "reason": "shield on assist",
+      "weapons": [
+        "Higasa"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Gyre/GyreBaseSuit)",
+      "weapons": [
+        "Alternox",
+        "Alternox Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PaxDuviricusShotgun/PaxDuviricusShotgunInnateMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/PaxDuviricus/PaxDuviricusBaseSuit)",
+      "weapons": [
+        "Rauta"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeaponSignatureMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Alchemist/AlchemistBaseSuit)",
+      "weapons": [
+        "Cedo Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeRevenantShotgunInnateMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Revenant/RevenantBaseSuit)",
+      "weapons": [
+        "Phantasma Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeaponInnateMod": {
+      "reason": "no scored term (WEAPON_HOLSTER_RATE)",
+      "weapons": [
+        "Trumna Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgunInnateMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Revenant/RevenantBaseSuit)",
+      "weapons": [
+        "Phantasma"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryInnateUpgrade": {
+      "reason": "sprinting only (ValidPostures RUN)",
+      "weapons": [
+        "Acceltra Prime",
+        "Acceltra"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryRunnerInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Runner/Runner)",
+      "weapons": [
+        "Acceltra Prime",
+        "Acceltra"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgunSignatureMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Alchemist/AlchemistBaseSuit)",
+      "weapons": [
+        "Cedo"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnBardRifle/TnBardRifleInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Bard/BardBaseSuit)",
+      "weapons": [
+        "Tenora Prime",
+        "Tenora"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Glass/GlassBaseSuit)",
+      "weapons": [
+        "Astilla Prime",
+        "Astilla"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteGunSpearInnateMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Hoplite/HopliteBaseSuit)",
+      "weapons": [
+        "Afentis Prime",
+        "Afentis"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnQuadSniper/TnQuadSniperSignatureMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Werewolf/WerewolfBaseSuit)",
+      "weapons": [
+        "Perigale Prime",
+        "Perigale"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnWispRifle/TnWispRifleInnateMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Wisp/WispBaseSuit)",
+      "weapons": [
+        "Fulmin Prime",
+        "Fulmin"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/TnoLotusPodShotgun/TnoLotusPodShotgunInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Geode/Geode)",
+      "weapons": [
+        "Steflos"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Gauntlet/BrawlerKnuckles/BrawlerKnucklesInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Brawler/BrawlerBaseSuit)",
+      "weapons": [
+        "Tekko",
+        "Tekko Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Hammer/GlassHammer/GlassHammerInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Glass/GlassBaseSuit)",
+      "weapons": [
+        "Volnus",
+        "Volnus Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Hammer/ThrowingHammerInnateMod": {
+      "reason": "throw reflection",
+      "weapons": [
+        "Wolf Sledge"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/MeleeTrees/AtlasPunchMeleeTree": {
+      "reason": "Exalted ability melee tree script",
+      "weapons": [
+        "Landslide Fists",
+        "Landslide Fists Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/MeleeTrees/BerserkerMeleeTree": {
+      "reason": "Exalted ability melee tree script",
+      "weapons": [
+        "Valkyr Talons",
+        "Valkyr Prime Talons"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/MeleeTrees/DoomSwordMeleeTree": {
+      "reason": "Exalted ability melee tree script",
+      "weapons": [
+        "Exalted Blade",
+        "Exalted Prime Blade",
+        "Exalted Umbra Blade"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/MeleeTrees/GaraShankMeleeTree": {
+      "reason": "Exalted ability melee tree script",
+      "weapons": [
+        "Shattered Lash",
+        "Shattered Lash Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KhoraWhipclawMeleeTree": {
+      "reason": "Exalted ability melee tree script",
+      "weapons": [
+        "Whipclaw",
+        "Whipclaw Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/MeleeTrees/MonkeyKingStaffMeleeTreeRework": {
+      "reason": "Exalted ability melee tree script",
+      "weapons": [
+        "Iron Staff",
+        "Iron Staff Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/MeleeTrees/NinjaStormMeleeTree": {
+      "reason": "Exalted ability melee tree script",
+      "weapons": [
+        "Shadow Clones",
+        "Shadow Clones Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/MeleeTrees/PacifistMeleeTree": {
+      "reason": "Exalted ability melee tree script",
+      "weapons": [
+        "Desert Wind",
+        "Desert Wind Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/MeleeTrees/ReaperMeleeTree": {
+      "reason": "Exalted ability melee tree script",
+      "weapons": [
+        "Shadow Claws",
+        "Shadow Claws Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Polearms/Naginata/ShrineMaidenNaginataInnateModB": {
+      "reason": "modelled elsewhere: the equip roll of ShrineMaidenNaginataInnateMod's die (same faces, one average)",
+      "weapons": [
+        "Amanata"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Scythe/TnChoirScythe/TnChoirScytheAuraMod": {
+      "reason": "ally aura on kill",
+      "weapons": [
+        "Harmony"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Swords/DaxDuviriTwoHandedKatana/DaxDuviriTwoHandKatanaInnateMod": {
+      "reason": "combo on slam script",
+      "weapons": [
+        "Azothane"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Swords/QuillSword/QuillDualSwordsSignatureUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Khora/KhoraBaseSuit)",
+      "weapons": [
+        "Dual Keres Prime",
+        "Dual Keres"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Swords/TnChiselKanabo/GrendelInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Devourer/DevourerBaseSuit)",
+      "weapons": [
+        "Masseter Prime",
+        "Masseter"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Swords/TnDagathBladeWhip/TnDagathBladeWhipSignatureMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Dagath/DagathBaseSuit)",
+      "weapons": [
+        "Dorrclave"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Swords/UmbraKatana/UmbraAbilityCastUpgrade": {
+      "reason": "ability-cast script",
+      "weapons": [
+        "Skiajati"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Warfan/PrimeQuassus/PrimeQuassusInnateMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/BrokenFrame/BrokenFrame)",
+      "weapons": [
+        "Quassus Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Warfan/TnBrokenFrameWarfan/TnBrokenFrameWarfanInnateMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/BrokenFrame/BrokenFrame)",
+      "weapons": [
+        "Quassus"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Melee/Whips/SpiderWhip/SpiderWhipInnateUpgrade": {
+      "reason": "explosion on kill (other enemies)",
+      "weapons": [
+        "Spinnerex"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeVelox/PrimeVeloxAmmoEfficiencySignatureMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Odalisk/Odalisk)",
+      "weapons": [
+        "Velox Prime"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/QuillDartgun/QuillDartgunInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Khora/KhoraBaseSuit)",
+      "weapons": [
+        "Hystrix Prime",
+        "Hystrix"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/SapientPistol/SapientPistoRunnerInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Runner/Runner)",
+      "weapons": [
+        "Akarius Prime",
+        "Akarius"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/SapientPistol/SapientPistolInnateUpgrade": {
+      "reason": "sprinting only (ValidPostures RUN)",
+      "weapons": [
+        "Akarius Prime",
+        "Akarius"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnBardPistol/TnBardPistolInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Bard/BardBaseSuit)",
+      "weapons": [
+        "Pandero Prime",
+        "Pandero"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnOdaliskSmg/TnOdaliskAmmoEfficiencySignatureMod": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Odalisk/OdaliskBaseSuit)",
+      "weapons": [
+        "Velox"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnPriestPistolScope/TnPriestPistolInnateModC": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Priest/PriestBaseSuit)",
+      "weapons": [
+        "Knell Prime",
+        "Knell"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnWraitheSidearm/TnWraitheSidearmInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Wraith/WraithBaseSuit)",
+      "weapons": [
+        "Epitaph Prime",
+        "Epitaph"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnYareliPistol/TnYareliPistolInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Yareli/Yareli)",
+      "weapons": [
+        "Kompressa Prime",
+        "Kompressa"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/ThrowingWeapons/GlassKunai/GlassKunaiInnateUpgrade": {
+      "reason": "signature bonus while its Warframe holds it (/Lotus/Powersuits/Glass/Glass)",
+      "weapons": [
+        "Fusilai"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/ThrowingWeapons/TnChoirframeKunai/TnChoirKunaiAuraMod": {
+      "reason": "ally aura on hit",
+      "weapons": [
+        "Cantare"
+      ]
+    },
+    "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistolWeaponInnateMod": {
+      "reason": "no scored term (WEAPON_HOLSTER_RATE)",
+      "weapons": [
+        "Sepulcrum"
+      ]
+    },
+    "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifleWeaponInnateMod": {
+      "reason": "no scored term (WEAPON_HOLSTER_RATE)",
+      "weapons": [
+        "Trumna"
+      ]
+    }
+  }
+}

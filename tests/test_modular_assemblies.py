@@ -48,12 +48,15 @@ def test_assemblies_cache_under_their_parts():
 
 
 def test_modular_dispositions_follow_the_client_rivens():
+    # The client values survive as legacy*; since 2026-10-23 every Riven uses 1.2.
     barrels = {row["nameEn"]: row for row in app.EXPORTS["kitguns"]["barrels"].values()}
-    assert barrels["Tombfinger"]["omegaAttenuation"] == pytest.approx(0.9)
-    assert barrels["Tombfinger"]["primaryOmegaAttenuation"] == pytest.approx(1.0)
-    assert barrels["Catchmoon"]["primaryOmegaAttenuation"] == pytest.approx(1.1)
+    assert barrels["Tombfinger"]["legacyOmegaAttenuation"] == pytest.approx(0.9)
+    assert barrels["Tombfinger"]["legacyPrimaryOmegaAttenuation"] == pytest.approx(1.0)
+    assert barrels["Catchmoon"]["legacyPrimaryOmegaAttenuation"] == pytest.approx(1.1)
+    assert barrels["Tombfinger"]["omegaAttenuation"] == barrels["Tombfinger"]["primaryOmegaAttenuation"] == pytest.approx(1.2)
     strikes = {row["nameEn"]: row for row in app.EXPORTS["zaws"]["strikes"].values()}
-    assert strikes["Ooltha"]["omegaAttenuation"] == pytest.approx(1.3)
+    assert strikes["Ooltha"]["legacyOmegaAttenuation"] == pytest.approx(1.3)
+    assert strikes["Ooltha"]["omegaAttenuation"] == pytest.approx(1.2)
     assert strikes["Ooltha"]["rivenPath"].endswith("/Tip/TipTwo")
 
 
@@ -80,8 +83,10 @@ def test_zaw_assembly_analysis_accepts_melee_fusion_traits():
     base = _base("LotusModularWeapon")
     zaws = app.EXPORTS["zaws"]
     strike = next(p for p, row in zaws["strikes"].items() if row["nameEn"] == "Plague Kripath")
+    scale = zaws["strikes"][strike]["omegaAttenuation"] / zaws["strikes"][strike]["legacyOmegaAttenuation"]
     payload = dict(weapon=base["path"], disposition=zaws["strikes"][strike]["omegaAttenuation"], profile="ultra",
                    kitgunParts=[strike, sorted(zaws["grips"])[0], sorted(zaws["links"])[0]],
-                   stats=[dict(code="0", value=115), dict(code="GA", value=58)])
+                   # In-game card at the old 0.65 disposition, rescaled to the uniform one.
+                   stats=[dict(code="0", value=115 * scale), dict(code="GA", value=58 * scale)])
     result = app.analyze_payload(payload)
     assert result["actual"]["objectiveScore"] > 0

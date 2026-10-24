@@ -92,6 +92,14 @@ pub(crate) fn core_of(obj: &Bound<'_, PyAny>, types: &mut Types, target_faction:
         weakpoint_damage_bonus: match opt_attr(obj, "weakpoint_damage_bonus")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
         status_chance: f(obj, "status_chance")?,
         proc_duration_multiplier: f(obj, "proc_duration_multiplier")?,
+        proc_duration_types: match opt_attr(obj, "proc_duration_types")? {
+            Some(v) => vector_of(types, &v)?,
+            None => Vec::new(),
+        },
+        proc_max_stacks: match opt_attr(obj, "proc_max_stacks")? {
+            Some(v) => vector_of(types, &v)?,
+            None => Vec::new(),
+        },
         proc_damage_multiplier: f(obj, "proc_damage_multiplier")?,
         native_forced_procs: native_forced_procs.clone(),
         independent_proc_chances: independent_proc_chances.clone(),
@@ -218,6 +226,10 @@ struct Stats {
     charge_time: f64,
     initial_combo: f64,
     heavy_charge_speed: f64,
+    // A thrown glaive: flight speed, Volatile bounce chance, Power Throw's bonus.
+    projectile_speed_multiplier: f64,
+    reflection_explosion_chance: f64,
+    throw_damage_bonus: f64,
     combo_duration: f64,
     combo_extra_chance: f64,
     combo_miss_chance: f64,
@@ -244,6 +256,10 @@ struct Stats {
     incarnon_charge_multiplier: f64,
     /// `_stackable`: the deployment profile and its damage parts.
     stackable: Option<(Rc<stackable::Profile>, stackable::Parts)>,
+    /// Reload grenade parts (combat_replay `_reload_projectiles`): from empty, partial, landing fraction.
+    reload_empty: Vec<usize>,
+    reload_partial: Vec<usize>,
+    reload_lands_at: f64,
 }
 
 impl Stats {
@@ -262,6 +278,9 @@ impl Stats {
         self.additional = Vec::new();
         self.co_spec = None;
         self.stackable = None;
+        self.reload_empty = Vec::new();
+        self.reload_partial = Vec::new();
+        self.reload_lands_at = 0.0;
     }
 
     fn clone_with(&self, py: Python<'_>) -> Stats {
@@ -297,6 +316,9 @@ impl Stats {
             charge_time: self.charge_time,
             initial_combo: self.initial_combo,
             heavy_charge_speed: self.heavy_charge_speed,
+            projectile_speed_multiplier: self.projectile_speed_multiplier,
+            reflection_explosion_chance: self.reflection_explosion_chance,
+            throw_damage_bonus: self.throw_damage_bonus,
             combo_duration: self.combo_duration,
             combo_extra_chance: self.combo_extra_chance,
             combo_miss_chance: self.combo_miss_chance,
@@ -319,6 +341,9 @@ impl Stats {
             slam_damage_ratio: self.slam_damage_ratio,
             incarnon_charge_multiplier: self.incarnon_charge_multiplier,
             stackable: self.stackable.clone(),
+            reload_empty: self.reload_empty.clone(),
+            reload_partial: self.reload_partial.clone(),
+            reload_lands_at: self.reload_lands_at,
         }
     }
 }
@@ -414,6 +439,36 @@ impl Ord for Event {
 
 // ── trigger sources ──────────────────────────────────────────────────────
 
+/// `combat_replay._settle`: a branch's verdict on a free-ammo buff at an empty magazine.
+fn settle(q: &mut Source, on: bool) {
+    if on {
+        let mut end = q.expires;
+        let mut first = true;
+        for x in q.expiries.iter() {
+            if first || x.0 > end {
+                end = x.0;
+                first = false;
+            }
+        }
+        q.stacks = q.max_stacks;
+        if q.decay == "per-stack" || q.decay == "union" {
+            q.expiries = vec![(end, q.max_stacks)];
+        }
+    } else {
+        q.stacks = 0.0;
+        q.expiries.clear();
+    }
+}
+
+/// `combat_replay._union`: chance a one-stack buff is up while any live independent roll holds it.
+fn union_of(expiries: &[(f64, f64)]) -> f64 {
+    let mut idle = 1.0;
+    for x in expiries {
+        idle *= 1.0 - x.1;
+    }
+    1.0 - idle
+}
+
 struct Source {
     obj: Py<PyDict>,
     id: PyObject,
@@ -424,6 +479,17 @@ struct Source {
     duration: f64,
     per_event: f64,
     decay: String,
+    no_refresh: bool,
+    free_ammo: bool,
+    // Melee passives (combat_replay): Pennant's duration per combo tier,
+    // Dorrclave's count of attacks, Arca Titron's slam-spent stacks.
+    duration_per_tier: f64,
+    charges: f64,
+    charges_left: f64,
+    consume_on: Option<String>,
+    lock_on: Option<String>,
+    locked: bool,
+    deferred: f64,
     initial_stacks: f64,
     hold: bool,
     reset_on: Vec<String>,
@@ -514,6 +580,10 @@ pub struct Replay<'py> {
     melee_last_hit: f64,
     melee_pending: Option<MeleeHit>,
     heavy_flag: bool,
+    // A glaive explosion's model: Condition Overload stripped (combat_replay `__noCO`).
+    no_co_flag: bool,
+    // The event being resolved is a heavy melee hit (Pennant's kills).
+    melee_heavy_now: bool,
     affinity_per_kill: f64,
     affinity: f64,
     syndicate_ready: f64,
@@ -905,6 +975,18 @@ impl<'py> Replay<'py> {
                 if v.is_truthy()? { v.extract::<f64>()? } else { 0.0 }
             },
             heavy_charge_speed: f(obj, "heavy_charge_speed")?,
+            projectile_speed_multiplier: match opt_attr(obj, "projectile_speed_multiplier")? {
+                Some(v) => v.extract::<f64>()?,
+                None => 1.0,
+            },
+            reflection_explosion_chance: match opt_attr(obj, "reflection_explosion_chance")? {
+                Some(v) => v.extract::<f64>()?,
+                None => 0.0,
+            },
+            throw_damage_bonus: match opt_attr(obj, "throw_damage_bonus")? {
+                Some(v) => v.extract::<f64>()?,
+                None => 0.0,
+            },
             combo_duration: f(obj, "combo_duration")?,
             combo_extra_chance: f(obj, "combo_extra_chance")?,
             combo_miss_chance: f(obj, "combo_miss_chance")?,
@@ -933,6 +1015,9 @@ impl<'py> Replay<'py> {
             slam_damage_ratio: f(obj, "slam_damage_ratio")?,
             incarnon_charge_multiplier: f(obj, "incarnon_charge_multiplier")?,
             stackable: None,
+            reload_empty: Vec::new(),
+            reload_partial: Vec::new(),
+            reload_lands_at: 0.0,
         };
         self.stats.push(s);
         let i = self.stats.len() - 1;
@@ -944,6 +1029,25 @@ impl<'py> Replay<'py> {
                 out.push(self.view(&part?)?);
             }
             self.stats[i].additional = out;
+        }
+        if let Some(thrown) = opt_attr(obj, "_reload_projectiles")? {
+            if thrown.is_truthy()? {
+                let d = thrown.cast::<PyDict>()?.clone();
+                self.stats[i].reload_lands_at = get_f(&d, "landsAt", 0.0)?;
+                for (key, empty) in [("empty", true), ("partial", false)] {
+                    if let Some(parts) = d.get_item(key)? {
+                        let mut out = Vec::new();
+                        for part in parts.try_iter()? {
+                            out.push(self.view(&part?)?);
+                        }
+                        if empty {
+                            self.stats[i].reload_empty = out;
+                        } else {
+                            self.stats[i].reload_partial = out;
+                        }
+                    }
+                }
+            }
         }
         if let Some(spec) = opt_attr(obj, "_stackable")? {
             if spec.is_truthy()? {
@@ -1079,13 +1183,16 @@ impl<'py> Replay<'py> {
                     let missed = 1 + trunc_i((t - q.expires) / q.duration);
                     q.stacks = pmax(0.0, q.stacks - missed as f64);
                     q.expires += missed as f64 * q.duration;
-                } else if q.decay != "per-stack" {
+                } else if q.decay != "per-stack" && q.decay != "union" {
                     q.stacks = 0.0;
                 }
             }
             if q.decay == "per-stack" {
                 q.expiries.retain(|x| x.0 > t);
                 q.stacks = psum(q.expiries.iter().map(|x| x.1));
+            } else if q.decay == "union" {
+                q.expiries.retain(|x| x.0 > t);
+                q.stacks = union_of(&q.expiries);
             }
         }
     }
@@ -1139,6 +1246,27 @@ impl<'py> Replay<'py> {
                 q.expires = f64::INFINITY;
                 continue;
             }
+            if q.consume_on.as_deref() == Some(kind) && q.per_event != 0.0 {
+                if q.charges != 0.0 {
+                    // Dorrclave: each attack spends a charge as it starts.
+                    if q.charges_left <= 1e-9 {
+                        q.stacks = 0.0;
+                    }
+                    if q.stacks > 0.0 {
+                        q.charges_left -= weight;
+                    }
+                } else {
+                    // Arca Titron: a slam spends what it started with.
+                    q.stacks = pmin(q.max_stacks, q.deferred);
+                    q.deferred = 0.0;
+                    q.locked = false;
+                }
+                continue;
+            }
+            if q.lock_on.as_deref() == Some(kind) && q.per_event != 0.0 {
+                q.locked = true;
+                continue;
+            }
             let gate_probability = match q.victim_proc_type {
                 Some(d) => self.victim_before.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0),
                 None => 1.0,
@@ -1184,11 +1312,40 @@ impl<'py> Replay<'py> {
             } else {
                 delta = weight * gate_probability * q.per_event;
             }
+            // CanReproc 0: a running buff is not renewed; only its idle share starts one.
+            let delta = if q.no_refresh { delta * pmax(0.0, 1.0 - q.stacks / q.max_stacks) } else { delta };
             if delta <= 0.0 {
                 continue;
             }
+            if q.locked {
+                q.deferred = pmin(q.max_stacks, q.deferred + delta);
+                continue;
+            }
+            if q.charges != 0.0 {
+                q.charges_left = q.charges;
+            }
+            let mut life = q.duration;
+            if q.duration_per_tier != 0.0 {
+                if let Some(spec) = &self.melee {
+                    // Pennant: 2 s and 4 s per combo multiplier above 1x at the kill.
+                    life += q.duration_per_tier * spec.tier(self.melee_count) as f64;
+                }
+            }
+            if q.decay == "union" {
+                // A share of one event rolls once (weight x p); several events
+                // roll each, 1 - (1 - p)^weight, not weight x p.
+                let roll = if required > 1.0 || weight <= 1.0 {
+                    pmin(1.0, delta)
+                } else {
+                    1.0 - pow(1.0 - pmin(1.0, gate_probability * q.per_event), weight)
+                };
+                q.expiries.push((t + life, roll));
+                q.stacks = union_of(&q.expiries);
+                q.expires = t + life;
+                continue;
+            }
             if q.decay == "per-stack" {
-                q.expiries.push((t + q.duration, delta));
+                q.expiries.push((t + life, delta));
                 let mut excess = psum(q.expiries.iter().map(|x| x.1)) - q.max_stacks;
                 while excess > 1e-9 && !q.expiries.is_empty() {
                     let (end, n) = q.expiries[0];
@@ -1202,7 +1359,7 @@ impl<'py> Replay<'py> {
                 }
             }
             q.stacks = pmin(q.max_stacks, q.stacks + delta);
-            q.expires = if q.duration != 0.0 { t + q.duration } else { f64::INFINITY };
+            q.expires = if q.duration != 0.0 { t + life } else { f64::INFINITY };
         }
     }
 
@@ -1269,6 +1426,9 @@ impl<'py> Replay<'py> {
         if self.heavy_flag {
             sorted.push(("__heavy".to_string(), 1));
         }
+        if self.no_co_flag {
+            sorted.push(("__noCO".to_string(), 1));
+        }
         sorted.sort();
         for (name, bits) in &sorted {
             stacks.push(u64::MAX);
@@ -1323,6 +1483,9 @@ impl<'py> Replay<'py> {
         }
         if self.heavy_flag {
             stacks_dict.set_item("__heavy", true)?;
+        }
+        if self.no_co_flag {
+            stacks_dict.set_item("__noCO", true)?;
         }
         let live: PyObject = if self.live_types_enabled {
             live_types.into_pyobject(py)?.into_any().unbind()
@@ -1604,6 +1767,9 @@ impl<'py> Replay<'py> {
             proc_atten: t.get_item(9)?.extract()?,
             radial: t.get_item(10)?.extract()?,
             duplicate: if duplicate.is_none() { None } else { Some(duplicate.extract::<(f64, f64)>()?) },
+            throw: t.get_item(12)?.extract()?,
+            bounce: t.get_item(13)?.extract()?,
+            no_co: t.get_item(14)?.extract()?,
         });
         if self.hit_specs.len() <= i {
             self.hit_specs.resize(i + 1, None);
@@ -1625,6 +1791,11 @@ impl<'py> Replay<'py> {
         if hit.slam {
             let ratio = v.slam_damage_ratio;
             factor *= if ratio != 0.0 { ratio } else { 1.0 };
+        }
+        if hit.throw && v.throw_damage_bonus != 0.0 {
+            // Power Throw: weapon damage on the throw alone, in the base bracket.
+            let bracket = if v.base_damage_bracket != 0.0 { v.base_damage_bracket } else { 1.0 };
+            factor *= 1.0 + v.throw_damage_bonus / bracket;
         }
         if hit.combo_multiplier {
             factor *= heavy_multiplier;
@@ -1678,7 +1849,8 @@ impl<'py> Replay<'py> {
         v.core.status_chance = v.status_chance;
         v.native_forced_procs = forced.clone();
         v.core.native_forced_procs = forced;
-        v.multishot = 1.0;
+        // A Volatile bounce explosion lands at the build's bounce chance.
+        v.multishot = if hit.bounce { pmin(1.0, pmax(0.0, v.reflection_explosion_chance)) } else { 1.0 };
         v.radial_only = hit.radial;
         v.core.radial_only = hit.radial;
         if let Some((chance, uptime)) = hit.duplicate {
@@ -1697,8 +1869,8 @@ impl<'py> Replay<'py> {
         Ok(i)
     }
 
-    fn melee_next(&mut self, speed: f64, charge: f64) -> PyResult<(MeleeHit, f64)> {
-        let r = self.helper.call_method1("melee_next", (speed, charge))?;
+    fn melee_next(&mut self, speed: f64, charge: f64, projectile: f64) -> PyResult<(MeleeHit, f64)> {
+        let r = self.helper.call_method1("melee_next", (speed, charge, projectile))?;
         let t = r.cast::<PyTuple>()?;
         Ok((
             MeleeHit {
@@ -1706,6 +1878,7 @@ impl<'py> Replay<'py> {
                 heavy: t.get_item(2)?.extract()?,
                 combo_hits: t.get_item(3)?.extract()?,
                 consumes: t.get_item(4)?.extract()?,
+                phase: t.get_item(5)?.extract()?,
             },
             t.get_item(1)?.extract()?,
         ))
@@ -2049,6 +2222,9 @@ impl<'py> Replay<'py> {
         }
         if slot.contains("melee") {
             self.signal("on-melee-kill", t, 1.0);
+            if self.melee_heavy_now && weapon_kill {
+                self.signal("on-melee-heavy-kill", t, 1.0);
+            }
         }
         if let Some(distance) = self.distance {
             if distance <= 5.0 {
@@ -2356,7 +2532,6 @@ impl<'py> Replay<'py> {
         if self.gen != generation {
             return Ok(()); // a derived status killed the original target
         }
-        let scale = pmax(self.stats[st].proc_duration_multiplier, 0.0);
         let sorted;
         let procs: &Vector = if self.empowered.is_some() {
             // The reference sorts by type name for a stable grouped order.
@@ -2369,6 +2544,7 @@ impl<'py> Replay<'py> {
             &data.procs
         };
         for &(d, n0) in procs.iter() {
+            let scale = self.stats[st].core.duration_scale(d);
             let n = n0 * pmax(self.status_rate_multiplier, 0.0);
             if n <= 0.0 || (d == FREEZE && self.frozen_until > t) {
                 continue;
@@ -2620,14 +2796,15 @@ impl ShotCombo {
         let pellets = pmax(pellets, 0.0);
         let whole = pellets.floor();
         let part = pellets - whole;
+        // A hit is counted before it is paid (sniper.py, WFSim M118).
         let mut sum = PySum::new();
         let mut i = 0.0;
         while i < whole {
-            sum.add(self.multiplier(now + i));
+            sum.add(self.multiplier(now + i + 1.0));
             i += 1.0;
         }
         let mut total = sum.value();
-        total += part * self.multiplier(now + whole);
+        total += part * self.multiplier(now + whole + 1.0);
         let factor = if pellets > 0.0 { total / pellets } else { self.multiplier(now) };
         if pellets > 0.0 {
             self.count = now + pellets;
@@ -2661,6 +2838,11 @@ struct HitSpec {
     proc_atten: f64,
     radial: bool,
     duplicate: Option<(f64, f64)>,
+    // A glaive's strike (Power Throw), its Volatile bounce, an explosion
+    // Condition Overload does not reach (melee_sequence glaive route).
+    throw: bool,
+    bounce: bool,
+    no_co: bool,
 }
 
 /// `enervate.EnervateState`: a joint distribution over (stacks, big crits
@@ -2754,6 +2936,8 @@ struct MeleeHit {
     heavy: bool,
     combo_hits: f64,
     consumes: bool,
+    // Bits: 1 a slam starts, 2 it ends (melee_sequence slamStart / slamEnd).
+    phase: u8,
 }
 
 impl MeleeSpec {
@@ -2804,6 +2988,7 @@ impl<'py> Replay<'py> {
                 return Err(Self::unsupported("replay-clock-went-backwards"));
             }
             self.current_time = t;
+            self.melee_heavy_now = false;
             self.clean(t);
             if let Some(g) = event.gen {
                 if g != self.gen {
@@ -3051,28 +3236,61 @@ impl<'py> Replay<'py> {
                     if speed <= 0.0 {
                         continue;
                     }
+                    // combat_replay speed_state: what the swing's speed was read from.
+                    let speed_state: Option<(Vec<u64>, i64)> = self.melee.as_ref().map(|spec| {
+                        (self.sources.iter().map(|q| q.stacks.to_bits()).collect(), spec.tier(self.melee_count) as i64)
+                    });
                     let mut melee_hit: Option<MeleeHit> = None;
                     if self.melee.is_some() {
                         let pending = match self.melee_pending {
                             None => {
                                 self.melee_count = self.stats[active].initial_combo;
                                 self.melee_heavy_multiplier = self.melee.as_ref().unwrap().multiplier(self.melee_count);
-                                let (hit, wait) = self.melee_next(speed, self.stats[active].heavy_charge_speed)?;
+                                let (charge, projectile) =
+                                    (self.stats[active].heavy_charge_speed, self.stats[active].projectile_speed_multiplier);
+                                let (hit, wait) = self.melee_next(speed, charge, projectile)?;
                                 self.melee_pending = Some(hit);
                                 self.push(t + wait, Kind::Fire, None);
                                 continue;
                             }
                             Some(hit) => hit,
                         };
+                        let spec = self.hit_spec(pending.id)?;
+                        if spec.bounce && !(self.stats[active].reflection_explosion_chance > 0.0) {
+                            // No Volatile card: the glaive's bounce sets nothing off.
+                            let (charge, projectile) =
+                                (self.stats[active].heavy_charge_speed, self.stats[active].projectile_speed_multiplier);
+                            let (hit, wait) = self.melee_next(speed, charge, projectile)?;
+                            self.melee_pending = Some(hit);
+                            self.push(t + wait, Kind::Fire, None);
+                            continue;
+                        }
                         melee_hit = Some(pending);
                         if t - self.melee_last_hit > pmax(self.stats[active].combo_duration, 0.0) + 1e-9
                             && self.melee_last_hit > f64::NEG_INFINITY
                         {
-                            self.melee_count = self.stats[active].initial_combo;
+                            let initial = self.stats[active].initial_combo;
+                            let dropped = {
+                                let spec = self.melee.as_ref().unwrap();
+                                spec.tier(self.melee_count) > spec.tier(initial)
+                            };
+                            self.melee_count = initial;
+                            if dropped {
+                                self.signal("on-combo-tier-reset", t, 1.0);
+                            }
+                        }
+                        self.melee_heavy_now = pending.heavy;
+                        // An attack starts: Dorrclave spends a charge, a slam
+                        // locks Arca Titron's stacks before this hit reads them.
+                        self.signal("on-melee-attack", t, 1.0);
+                        if pending.phase & 1 != 0 {
+                            self.signal("on-melee-slam-start", t, 1.0);
                         }
                         self.heavy_flag = pending.heavy;
+                        self.no_co_flag = spec.no_co;
                         let (heavy_active, _) = self.model(t)?;
                         self.heavy_flag = false;
+                        self.no_co_flag = false;
                         active = self.melee_apply(heavy_active, pending.id, self.melee_heavy_multiplier)?;
                     }
                     let mut radial = if self.melee.is_some() { None } else { radial };
@@ -3113,8 +3331,52 @@ impl<'py> Replay<'py> {
                     if self.infinite_ammo && magazine > 0.0 && !(self.cycle.is_some() && self.form == INCARNON) {
                         self.ammo = pmax(self.ammo, magazine);
                     }
+                    let mut ammo_cost = ammo_cost;
+                    if let Some((probe, offset, golden)) = self.weak_draw {
+                        // combat_replay: a branch settles infinite ammo that is up with some
+                        // probability at an empty magazine (free shots go on, or a reload).
+                        if self.ammo <= 1e-9 && ammo_cost > 1e-9 && magazine > 0.0 {
+                            let mut idle = 1.0;
+                            let mut any = false;
+                            for q in self.sources.iter() {
+                                if q.free_ammo && q.stacks > 0.0 {
+                                    any = true;
+                                    idle *= 1.0 - pmin(1.0, q.stacks / q.max_stacks);
+                                }
+                            }
+                            let presence = 1.0 - idle;
+                            if any && 1e-9 < presence && presence < 1.0 - 1e-9 {
+                                if probe {
+                                    self.weak_uncertainty = pmax(self.weak_uncertainty, pmin(presence, 1.0 - presence));
+                                } else {
+                                    let u = (offset + self.weak_index * golden) % 1.0;
+                                    self.weak_index += 1.0;
+                                    let on = u < presence;
+                                    let mut held: Option<usize> = None;
+                                    if on {
+                                        for (i, q) in self.sources.iter().enumerate() {
+                                            if q.free_ammo && q.stacks > 0.0
+                                                && held.map_or(true, |h| q.stacks > self.sources[h].stacks) {
+                                                held = Some(i);
+                                            }
+                                        }
+                                    }
+                                    for (i, q) in self.sources.iter_mut().enumerate() {
+                                        if q.free_ammo && q.stacks > 0.0 {
+                                            settle(q, held == Some(i));
+                                        }
+                                    }
+                                    let (a, r) = self.model(t)?;
+                                    active = a;
+                                    radial = r;
+                                    ammo_cost = self.stats[active].ammo_cost;
+                                }
+                            }
+                        }
+                    }
                     let insufficient = self.stats[active].requires_full_ammo && self.ammo + 1e-9 < pmax(ammo_cost, 0.0);
-                    if (self.ammo <= 1e-9 || insufficient) && magazine > 0.0 {
+                    // A shot reloads only when it cannot fire: a free one fires on an empty magazine.
+                    if ((self.ammo <= 1e-9 && ammo_cost > 1e-9) || insufficient) && magazine > 0.0 {
                         if let (Some(c), INCARNON) = (self.cycle, self.form) {
                             self.push(t + c.exit, Kind::Transform(BASE), None);
                             continue;
@@ -3164,6 +3426,12 @@ impl<'py> Replay<'py> {
                             if (k == Some("on-reload-empty") || k == Some("on-reload")) && q.duration == 0.0 && !q.hold {
                                 q.stacks = if q.per_event == 0.0 { q.initial_stacks } else { 0.0 };
                             }
+                        }
+                        // The reload grenade (Catabolyst): the big one from empty, landing partway in.
+                        let thrown = if was_empty { self.stats[reloading].reload_empty.clone() } else { self.stats[reloading].reload_partial.clone() };
+                        let lands_at = self.stats[reloading].reload_lands_at;
+                        for part in thrown {
+                            self.push(t + reload_time * lands_at, Kind::DelayedRadial(part, 1.0), Some(self.gen));
                         }
                         if let Some(spool) = self.spool {
                             if reload_time >= spool.spindown {
@@ -3537,6 +3805,7 @@ impl<'py> Replay<'py> {
                         delay = if s.reload_time != 0.0 { s.reload_time } else { 1.0 / speed };
                     }
                     if let Some(hit) = melee_hit {
+                        let tier_before = self.melee.as_ref().unwrap().tier(self.melee_count);
                         let s = &self.stats[active];
                         let gained = hit.combo_hits * (1.0 + pmax(s.combo_extra_chance, 0.0));
                         self.melee_count += gained * pmin(pmax(1.0 - s.combo_miss_chance, 0.0), 1.0);
@@ -3547,8 +3816,36 @@ impl<'py> Replay<'py> {
                         let cap = self.melee.as_ref().unwrap().cap;
                         self.melee_count = pmin(self.melee_count, cap);
                         self.melee_last_hit = t;
-                        let charge = self.stats[active].heavy_charge_speed;
-                        let (next, wait) = self.melee_next(speed, charge)?;
+                        // combat_replay: melee events (a heavy hit; a combo tier gained or lost).
+                        let tier_after = self.melee.as_ref().unwrap().tier(self.melee_count);
+                        if hit.heavy {
+                            self.signal("on-melee-heavy-hit", t, 1.0);
+                        }
+                        if tier_after > tier_before {
+                            self.signal("on-combo-tier-increase", t, (tier_after - tier_before) as f64);
+                        } else if tier_after < tier_before {
+                            self.signal("on-combo-tier-reset", t, 1.0);
+                        }
+                        if hit.phase & 2 != 0 {
+                            self.signal("on-melee-slam", t, 1.0);
+                        }
+                        if self.hit_spec(hit.id)?.throw {
+                            // Power Throw: a loop buffers every throw (combat_replay).
+                            self.signal("on-glaive-throw", t, 1.0);
+                        }
+                        let mut after = active;
+                        let mut speed = speed;
+                        let now_state: Option<(Vec<u64>, i64)> = self.melee.as_ref().map(|spec| {
+                            (self.sources.iter().map(|q| q.stacks.to_bits()).collect(), spec.tier(self.melee_count) as i64)
+                        });
+                        if now_state != speed_state {
+                            // This hit changed a buff: the next swing plays at its speed.
+                            after = self.model(t)?.0;
+                            speed = self.stats[after].fire_rate;
+                        }
+                        let charge = self.stats[after].heavy_charge_speed;
+                        let projectile = self.stats[after].projectile_speed_multiplier;
+                        let (next, wait) = self.melee_next(speed, charge, projectile)?;
                         self.melee_pending = Some(next);
                         delay = wait;
                     }
@@ -3818,6 +4115,14 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
             Some(v) if v.is_truthy()? => Some(types.id(&v.extract::<String>()?)),
             _ => None,
         };
+        let consume_on = match d.get_item("consumeOn")? {
+            Some(v) if !v.is_none() => Some(v.extract::<String>()?),
+            _ => None,
+        };
+        let lock_on = match d.get_item("lockOn")? {
+            Some(v) if !v.is_none() => Some(v.extract::<String>()?),
+            _ => None,
+        };
         let required_time = match d.get_item("requiredTime")? {
             Some(v) if v.is_truthy()? => Some(v.extract::<f64>()?),
             _ => None,
@@ -3838,6 +4143,15 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
                 Some(v) if !v.is_none() => v.extract::<String>()?,
                 _ => "reset".to_string(),
             },
+            no_refresh: truthy(&d, "noRefresh")?,
+            free_ammo: truthy(&d, "freeAmmo")?,
+            duration_per_tier: get_f(&d, "durationPerTier", 0.0)?,
+            charges: get_f(&d, "charges", 0.0)?,
+            charges_left: 0.0,
+            consume_on,
+            lock_on,
+            locked: false,
+            deferred: 0.0,
             initial_stacks: get_f(&d, "initialStacks", 0.0)?,
             hold: truthy(&d, "hold")?,
             reset_on,
@@ -3989,13 +4303,17 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
         melee_last_hit: f64::NEG_INFINITY,
         melee_pending: None,
         heavy_flag: false,
+        no_co_flag: false,
+        melee_heavy_now: false,
         affinity_per_kill: item("affinityPerKill")?.extract()?,
         affinity: 0.0,
         syndicate_ready: 0.0,
         syndicate_events: Vec::new(),
         pools: [full[0], full[1], full[2]],
         states: FxIndexMap::default(),
-        pooled: [CappedPool::new(10.0), CappedPool::new(10.0), CappedPool::new(10.0), CappedPool::new(5.0)],
+        // combat_replay: a weapon's extra Puncture stacks (Evensong) raise the cap.
+        pooled: [CappedPool::new(10.0), CappedPool::new(10.0), CappedPool::new(10.0),
+                 CappedPool::new(item("punctureCap")?.extract()?)],
         presence: FxIndexMap::default(),
         gas_procs: Vec::new(),
         dots: Vec::new(),
