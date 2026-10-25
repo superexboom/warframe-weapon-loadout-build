@@ -68,6 +68,68 @@ def test_pick_arcane_keeps_base_when_nothing_screens_better():
     assert outcome.choice is None and outcome.evaluation is base and outcome.searches == 0
 
 
+def test_coupled_move_crosses_a_valley_that_each_axis_alone_cannot():
+    # Exhaustive small space: changing either the route or the Arcane loses;
+    # changing both reaches the unique optimum.
+    truth = {(0, 0): 10., (0, 1): 8., (1, 0): 9., (1, 1): 15.}
+    base = Ev(truth[0, 0], ("kept",))
+    assert all(truth[axis] < base.score for axis in [(0, 1), (1, 0)])
+    choices = [ls.Choice(key=str(axis), data=axis, passives=axis) for axis in truth if axis != (0, 0)]
+    calls = []
+
+    def search(axis, seed):
+        calls.append((axis, seed))
+        return Ev(truth[axis], seed)
+
+    result = ls.pick_coupled(choices, base, screen=lambda cards, axes: [truth[a] for a in axes], search=search)
+    assert result.evaluation.score == max(truth.values()) and result.choice.data == (1, 1)
+    assert calls == [((1, 1), base.cards)]
+
+
+def test_coupled_refinement_never_replaces_the_incumbent_with_a_worse_search():
+    base = Ev(10., ("kept",))
+    choices = [ls.Choice(key="pair", data=None, passives="pair")]
+    result = ls.pick_coupled(choices, base, screen=lambda cards, options: [11.],
+                             search=lambda option, seed: Ev(9., ("worse",)))
+    assert result.evaluation is base and result.choice is None
+
+
+def test_joint_search_returns_the_route_arcane_and_score_it_actually_selected(monkeypatch):
+    import app
+    o = app.optimizer
+    frame = dict(path="frame", rank=5)
+    arcane = dict(path="weapon-arcane", maxRank=5, slotKind="weapon", nameZh="arcane")
+    monkeypatch.setattr(app, "MANUAL_ARCANES", [arcane])
+    monkeypatch.setattr(app, "MANUAL_ARCANES_BY_PATH", {arcane["path"]: arcane})
+    monkeypatch.setattr(o, "resolve_record", lambda *a, **k: {})
+    monkeypatch.setattr(o, "_arcane_matches_weapon", lambda *a: True)
+    monkeypatch.setattr(o, "_incarnon_card", lambda weapon, route, **kw: (route["tier5"], route, [], {}))
+    monkeypatch.setattr(o, "_route_options", lambda weapon, route: [("tier5", ["old", "new"])])
+    monkeypatch.setattr(ls, "route_choices", lambda *a: [{"tier5": "old"}, {"tier5": "new"}])
+    monkeypatch.setattr(ls, "pick_route", lambda choices, default, base, **kw: ls.Outcome(base, None))
+    monkeypatch.setattr(ls, "pick_arcane", lambda choices, base, **kw: ls.Outcome(base, None))
+    seen = []
+
+    def arcane_card_for(rows):
+        assert rows[0] == frame
+        seen.append(rows)
+        return ("weapon-arcane" if len(rows) > 1 else None), []
+
+    truth = {("old", None): 10., ("new", None): 9., ("old", "weapon-arcane"): 8.,
+             ("new", "weapon-arcane"): 15.}
+    result = app._auto_loadout(Ev(10., ("kept",)), fixed=False, auto_incarnon=True, auto_arcane=True,
+        weapon={}, scenario=None, metric="killsPerMinute", incarnon_card="old", incarnon_choices={"tier5": "old"},
+        incarnon_unsupported=[], arcane_card=None, frame_rows=[frame], user_rows=[frame], weapon_arcane_limit=1,
+        arcane_card_for=arcane_card_for, compose=lambda route, arc: (route, arc),
+        search=lambda passives, seed: Ev(truth[passives], seed), evaluate_fixed=lambda passives: None,
+        screen=lambda cards, passives: [truth[p] for p in passives], profile="fast")
+    evaluation, route_card, choices, _, arcane_card, report = result
+    assert evaluation.score == 15. and route_card == "new" and choices == {"tier5": "new"}
+    assert arcane_card == "weapon-arcane" and report["arcane"]["score"] == evaluation.score
+    assert report["arcane"]["chosen"][0]["path"] == "weapon-arcane"
+    assert report["coupled"]["adopted"] and report["coupled"]["searches"] == 1
+
+
 def test_pick_route_finds_a_weapon_changing_branch_and_never_ends_below_default():
     # tier5 '5-1' changes the weapon: it screens badly on the default build
     # but wins once the MODs follow it.

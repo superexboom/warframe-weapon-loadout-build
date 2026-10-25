@@ -1,0 +1,99 @@
+{
+  "weapon": "/Lotus/Weapons/Tenno/Melee/Swords/PrimeKatana/PrimeNikana",
+  "fireMode": 0,
+  "mods": [
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponMeleeRangeIncModExpert",
+      "rank": 10,
+      "slot": 0
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/DualStat/FireEventMeleeMod",
+      "rank": 3,
+      "slot": 1
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/DualStat/MagneticAttackSpeedMeleeMod",
+      "rank": 3,
+      "slot": 2
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponMeleeDamageModExpert",
+      "rank": 10,
+      "slot": 3
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/WeaponDamageIfVictimProcActive",
+      "rank": 5,
+      "slot": 4
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Event/ComboCritChanceMod",
+      "rank": 10,
+      "slot": 5
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/Expert/WeaponFireRateModExpert",
+      "rank": 10,
+      "slot": 6
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Melee/WeaponCritDamageMod",
+      "rank": 5,
+      "slot": 7
+    }
+  ],
+  "arcanes": [
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/CorrosiveMeleePerAbilityCast",
+      "rank": 5
+    }
+  ],
+  "mode": "auto",
+  "profile": "standard",
+  "metric": "attackDps",
+  "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+  "level": 9999,
+  "steelPath": true,
+  "windowSeconds": 30.0,
+  "headshotChance": 1.0,
+  "aiming": true,
+  "triggerPolicy": "emergent",
+  "distance": 0.5,
+  "incarnonCycle": false,
+  "incarnonChoices": {},
+  "slotPolarities": [
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_ATTACK"
+  ],
+  "specialSlotPolarities": {
+    "stance": "AP_ANY",
+    "exilus": "AP_ANY"
+  },
+  "optimizeWithArcanes": true,
+  "scenario": {
+    "aiming": true,
+    "triggerPolicy": "emergent",
+    "distance": 0.5,
+    "incarnonCycle": false,
+    "combatState": {
+      "meleeRoute": "combo",
+      "meleeCombo": "CC_GROUND",
+      "selfShieldBreakForced": false
+    }
+  },
+  "combatState": {
+    "meleeRoute": "combo",
+    "meleeCombo": "CC_GROUND",
+    "selfShieldBreakForced": false
+  },
+  "stancePath": "/Lotus/Weapons/Tenno/Melee/MeleeTrees/KatanaCmbThreeMeleeTree",
+  "exilus": null,
+  "riven": null
+}

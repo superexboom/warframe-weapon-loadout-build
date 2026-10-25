@@ -44,6 +44,7 @@ pub fn fold(dist: &[f64], kernel: &Kernel, cap: usize) -> Vec<f64> {
     out
 }
 
+#[derive(Clone)]
 pub struct CappedPool {
     pub cap: usize,
     front: Vec<(f64, Kernel, Vec<f64>)>,
@@ -166,6 +167,7 @@ impl CappedPool {
 
 // ── StatusPresence ────────────────────────────────────────────────────────
 
+#[derive(Clone)]
 struct PresenceEvent {
     expiry: f64,
     serial: u64,
@@ -188,7 +190,7 @@ impl Ord for PresenceEvent {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct StatusPresence {
     events: BinaryHeap<PresenceEvent>,
     log_absence: f64,
@@ -308,6 +310,7 @@ pub struct Row {
     pub direct: bool,
 }
 
+#[derive(Clone)]
 pub struct KillAttribution {
     period: f64,
     interval: f64,

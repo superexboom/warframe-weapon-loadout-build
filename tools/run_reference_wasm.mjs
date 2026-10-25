@@ -2,6 +2,7 @@
 // Usage: node tools/run_reference_wasm.mjs REPO ENDPOINT INPUT.json OUTPUT.json
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 const args = process.argv.slice(2);
 if (args.length !== 4) {
   console.error('Usage: node tools/run_reference_wasm.mjs REPO ENDPOINT INPUT.json OUTPUT.json');
@@ -17,6 +18,14 @@ const base = path.join(repo, 'site/pkg');
 const source = fs.readFileSync(path.join(base, `wfsim_wasm.${release.wasm}.js`), 'utf8');
 const engine = new Function(source + ';return wasm_bindgen;')();
 engine.initSync({ module: fs.readFileSync(path.join(base, `wfsim_wasm_bg.${release.wasm}.wasm`)) });
+for (const name of release.packs || []) {
+  const match = /^pack\.(data|site|text)\.([a-f0-9]{12,64})\.json$/.exec(name);
+  if (!match) throw new Error('Invalid data-pack name');
+  const bytes = fs.readFileSync(path.join(base, name));
+  if (!createHash('sha256').update(bytes).digest('hex').startsWith(match[2])) throw new Error('Data-pack hash mismatch: ' + name);
+  const error = engine.install_data_bytes(new Uint8Array(bytes));
+  if (error) throw new Error(name + ': ' + error);
+}
 const result = JSON.parse(engine.api(endpoint, JSON.stringify(readJson(input))));
 fs.mkdirSync(path.dirname(path.resolve(output)), { recursive: true });
 fs.writeFileSync(output, JSON.stringify(result, null, 2) + String.fromCharCode(10), { flag: 'wx' });

@@ -1,0 +1,119 @@
+{
+  "weapon": "/Lotus/Weapons/Tenno/Pistol/CoHLoanerPistol",
+  "fireMode": 1,
+  "stats": [
+    {
+      "code": "D",
+      "value": 197.64000000000004,
+      "negative": false
+    },
+    {
+      "code": "1",
+      "value": 80.99999838,
+      "negative": false
+    },
+    {
+      "code": "0",
+      "value": 134.9946081,
+      "negative": false
+    }
+  ],
+  "incarnonChoices": {
+    "tier2": "2-2",
+    "tier3": "3-1",
+    "tier4": "4-1"
+  },
+  "target": {
+    "enemyPath": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+    "enemyName": "Thrax Centurion",
+    "level": 170,
+    "steelPath": true,
+    "enemyEnhancements": {
+      "eximus": false,
+      "noOverguard": true
+    },
+    "armourStrip": 0.0,
+    "elementalArmourStrip": 0.0,
+    "hitLocation": "body",
+    "headshotChance": 0.0,
+    "windowSeconds": 30.0
+  },
+  "hardnessNodes": [
+    {
+      "ttkSeconds": 1.402,
+      "healthScale": 0.023901124704672847,
+      "weight": 0.2777777777777778,
+      "healthSpread": 0.030138522407756406
+    },
+    {
+      "ttkSeconds": 4.472,
+      "healthScale": 0.3215672597752659,
+      "weight": 0.4444444444444444,
+      "healthSpread": 0.018335353541991093
+    },
+    {
+      "ttkSeconds": 14.269,
+      "healthScale": 1.8473529747559287,
+      "weight": 0.2777777777777778,
+      "healthSpread": 0.011663147234798278
+    }
+  ],
+  "finalists": [
+    {
+      "centre": 26.10025486706116,
+      "final": 31.167909771434083,
+      "cards": [
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponDamageAmountMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert"
+      ],
+      "riven_index": 7
+    },
+    {
+      "centre": 34.33174362099669,
+      "final": 35.01778605257714,
+      "cards": [
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/RadiationFireratePistolMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponCritChanceModBeginnerExpert"
+      ],
+      "riven_index": 7
+    },
+    {
+      "centre": 38.5424499301342,
+      "final": 41.41059859972201,
+      "cards": [
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFreezeDamageMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponToxinDamageMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod"
+      ],
+      "riven_index": 7
+    },
+    {
+      "centre": 38.182454606453035,
+      "final": 42.45851179009912,
+      "cards": [
+        "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponToxinDamageMod",
+        "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod"
+      ],
+      "riven_index": 7
+    }
+  ]
+}

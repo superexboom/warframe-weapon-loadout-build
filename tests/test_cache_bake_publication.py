@@ -19,6 +19,29 @@ def test_python_checkout_line_endings_do_not_change_cache_identity(monkeypatch):
     assert app._analysis_inputs_fingerprint()==fingerprint
 
 
+def test_frozen_runtime_merges_matching_baked_cache_and_local_updates(monkeypatch, tmp_path):
+    bundled, local = tmp_path / 'bundled.json', tmp_path / 'local.json'
+    base = dict(buildLabel=app.EXPORTS['buildLabel'], stances=app._stances_fingerprint(),
+                inputs=app._analysis_inputs_fingerprint(), cacheVersion=app.ANALYSIS_STATICS_CACHE_VERSION)
+    bundled.write_text(json.dumps(dict(base, entries={'bundled': {'value': 1}, 'both': {'value': 1}})))
+    local.write_text(json.dumps(dict(base, entries={'local': {'value': 2}, 'both': {'value': 2}})))
+    monkeypatch.setattr(app.sys, 'frozen', True, raising=False)
+    monkeypatch.setattr(app, 'BUNDLED_ANALYSIS_STATICS_CACHE_PATH', bundled)
+    monkeypatch.setattr(app, 'ANALYSIS_STATICS_CACHE_PATH', local)
+    assert app._load_analysis_statics_cache() == {
+        'bundled': {'value': 1}, 'local': {'value': 2}, 'both': {'value': 2}}
+    local.write_text(json.dumps(dict(base, inputs='old', entries={'stale': {}})))
+    assert app._load_analysis_statics_cache() == {'bundled': {'value': 1}, 'both': {'value': 1}}
+    bundled.write_text(json.dumps(dict(base, inputs='old', entries={'also-stale': {}})))
+    assert app._load_analysis_statics_cache() == {}
+
+
+def test_bundled_cache_cannot_bypass_missing_engine_identity(monkeypatch, tmp_path):
+    monkeypatch.setattr(app.sys, 'frozen', True, raising=False)
+    monkeypatch.setattr(app, '_analysis_inputs_fingerprint', lambda: (_ for _ in ()).throw(app.SimulationError('missing')))
+    assert app._load_analysis_statics_cache() == {}
+
+
 def test_live_process_preserves_entries_published_by_a_bake(monkeypatch,tmp_path):
     path=tmp_path/'cache.json'
     fingerprint=app._analysis_inputs_fingerprint()

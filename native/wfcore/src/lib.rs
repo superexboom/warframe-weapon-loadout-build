@@ -191,6 +191,7 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(py_sum, m)?)?;
     m.add_function(wrap_pyfunction!(native_counters, m)?)?;
     m.add_function(wrap_pyfunction!(replay::trajectory, m)?)?;
+    m.add_function(wrap_pyfunction!(replay::trajectory_health_batch, m)?)?;
     m.add("NativeUnsupported", m.py().get_type::<replay::NativeUnsupported>())?;
     m.add("ReplayRunaway", m.py().get_type::<replay::ReplayRunaway>())?;
     m.add_function(wrap_pyfunction!(c_math, m)?)?;

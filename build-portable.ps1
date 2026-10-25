@@ -1,7 +1,8 @@
 [CmdletBinding()]
 param(
     [string]$Snapshot,
-    [string]$OutputDirectory
+    [string]$OutputDirectory,
+    [switch]$RequireBakedCache
 )
 
 $ErrorActionPreference = "Stop"
@@ -19,6 +20,10 @@ $bundleArguments = @('tools/data_pipeline.py', 'bundle', $packageRoot)
 if ($Snapshot) { $bundleArguments += @('--snapshot', $Snapshot) }
 python @bundleArguments
 if ($LASTEXITCODE -ne 0) { throw "Frozen runtime validation failed." }
+$cacheArguments = @('tools/stage_portable_cache.py', $packageRoot)
+if ($RequireBakedCache) { $cacheArguments += '--require-cache' }
+python @cacheArguments
+if ($LASTEXITCODE -ne 0) { throw "Runtime source identity or baked cache staging failed." }
 
 # Native engine core (Rust, native/wfcore). Without a Rust toolchain the build
 # still succeeds and the engine runs its Python reference, only slower.
@@ -44,7 +49,8 @@ python -m PyInstaller @nativeArguments `
     --paths (Join-Path $projectRoot "vendor") `
     --add-data "$(Join-Path $packageRoot 'frontend');frontend" `
     --add-data "$(Join-Path $packageRoot 'data');data" `
-    --add-data "$(Join-Path $projectRoot 'vendor\wfarsenal\optimizer.py');wfarsenal" `
+    --add-data "$(Join-Path $packageRoot 'wfarsenal');wfarsenal" `
+    --add-data "$(Join-Path $packageRoot 'app.py');." `
     --add-data "$(Join-Path $projectRoot 'README.md');." `
     --add-data "$(Join-Path $projectRoot 'README.en.md');." `
     --add-data "$(Join-Path $projectRoot 'LICENSE');." `

@@ -49,7 +49,12 @@ def session_request(fn):
                                      stage='baseline', hook=None, evaluations=0, memoHits=0, memo=OrderedDict(),
                                      searches=OrderedDict(), limited=0, lastBeat=0.))
             try:
-                return fn(*args, **kwargs)
+                result = fn(*args, **kwargs)
+                state = SESSION.get()
+                result['searchWork'] = {key: state[key] for key in ('evaluations', 'memoHits', 'limited')}
+                result['searchWork']['negative'] = dict(state.get('negativeWork') or {})
+                result['searchWork']['elapsedSeconds'] = time.monotonic() - state['start']
+                return result
             finally:
                 SESSION.reset(token)
         profile = str(request.get('profile') or 'standard').strip().casefold()
@@ -63,6 +68,7 @@ def session_request(fn):
         try:
             result = fn(*args, **kwargs)
             result['searchWork'] = {key: state[key] for key in ('evaluations','memoHits','limited')}
+            result['searchWork']['negative'] = dict(state.get('negativeWork') or {})
             result['searchWork'].update(elapsedSeconds=time.monotonic()-state['start'],
                 budgetSeconds=state['deadline']-state['start'],
                 status='heuristic-budget-limited' if state['limited'] else 'heuristic-best-found')

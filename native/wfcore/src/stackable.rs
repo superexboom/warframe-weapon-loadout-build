@@ -93,6 +93,7 @@ pub enum Action {
     Child { time: f64, group: usize, multiplier: f64, hits: f64, generation: i64 },
 }
 
+#[derive(Clone)]
 struct Group {
     profile: std::rc::Rc<Profile>,
     parts: Parts,
@@ -106,6 +107,7 @@ struct Group {
     next_embed: Option<f64>,
 }
 
+#[derive(Clone)]
 pub struct Projectiles {
     pub state: State,
     groups: Vec<Group>,

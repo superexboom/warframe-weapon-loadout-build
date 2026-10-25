@@ -10,6 +10,9 @@ A local Warframe Riven analyzer, weapon loadout builder, and Warframe loadout bu
 
 - **Riven analysis**: scores a Riven from its weapon, disposition, stat count, and roll values; reports per-stat contribution, dynamic T0-T3 gains, recommended negatives, and fatal negatives.
 - **Weapon loadouts**: supports guns, melee, Kitguns, Zaws, exalted weapons, stances, Exilus slots, Arcanes, Incarnon branches, Forma, and A/B/C configurations.
+- **Automatic search**: reuses evaluated candidates within the same combat context. With automatic Incarnon and Arcane selection both enabled, it also checks joint changes and adopts only builds with a higher combat score. Results remain the best builds found within the search budget.
+- **Final evaluation**: Riven analysis compares the main search, elemental seeds and baseline replacement builds on the same three target-hardness nodes. The native core batches independent health variants, sharing initialization while keeping combat state separate.
+- **Completed-build refinement**: Automatic builds revisit alternatives in each MOD family, including Galvanized cards discarded by their weak starting state. Standard and deep profiles also check single-card replacements, additions and removals across the complete candidate pool. Only stronger results that preserve the original constraints are adopted.
 - **Companions**: companion weapons follow the AI's real behavior (torso shots only, no aiming, no Arcanes, switchable Galvanized stacks); robotic sentinel bodies take 10 sentinel mods with a stats panel, and weapon-relevant ones such as Fired Up count toward damage.
 - **Build constraints**: auto builds take required / per-weapon forbidden / global blocked mods and a one-click faction (bane) mod block; right-click an equipped mod to drop it and rebuild.
 - **Exalted weapons**: all 35 exalted weapons (including Whipclaw, Shattered Lash, Landslide and Blade Storm) are in the weapon builder, linked to a saved Warframe build for Ability Strength / Efficiency / energy; damage follows the ability figures and Strength, cast-type weapons use per-cast hits with the ability combo; the result shows energy sustain without regeneration and keeps a warning when the ability could not start or chain. Calculations always assume unlimited energy.
@@ -19,6 +22,8 @@ A local Warframe Riven analyzer, weapon loadout builder, and Warframe loadout bu
 - **Target simulation**: includes a local enemy catalog, custom defenses, level scaling, Steel Path, Eximus and Overguard options, armor strip, headshots, and multiple damage metrics.
 - **Local assets**: card art, frames, polarities, Warframe portraits, ability icons, and datasets ship with the project. Configurations can be imported or exported, including the compact Warframe Rabbit format.
 - **Explicit degradation**: unsupported runtime scripts, projectile components, and conditional mechanics remain visible as `unsupported` / `skipped` diagnostics instead of being guessed.
+
+Tennokai cards currently retain equipment and capacity metadata. Opportunity triggers and subsequent automatic heavy attacks are not modeled, and affected results explicitly disclose that limitation.
 
 Current frozen game-data build: `2026.08.13.13.24`.
 
@@ -56,6 +61,21 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build-portable.ps1
 ```
 
 The executable is written to `.local/artifacts/release/Warframe-Weapon-Loadout-Build-win-x64.exe` with an `.exe.sha256` checksum. Only the EXE is required to run; the checksum is provided to verify the download. `.local/` contains machine-local builds, caches, audits, and archived development material and is never committed.
+
+## Development Checks
+
+Run `python -m pytest -q` for regression tests and `python tools/check_runtime.py` to check the frozen dataset and actual import paths. The loadout, manual simulation and contribution APIs accept an explicit `windowSeconds` (0.1–600 seconds); the default stays 30 seconds. Compared scores must use the same battle window.
+
+The optional WFSim comparison tools require Node.js and PyYAML. They fetch public reference assets and replay builds locally, without submitting board entries or baking caches:
+
+```powershell
+python tools/fetch_wfsim_runtime.py --output .local/wfsim-reference
+python tools/compare_wfsim_boards.py prepare --runtime .local/wfsim-reference --output .local/wfsim-comparison --weapons laetum nikana_prime --profile fast --window-seconds 30
+python tools/compare_wfsim_boards.py run --runtime .local/wfsim-reference --output .local/wfsim-comparison --runs 1000 --workers 2
+python tools/compare_wfsim_boards.py summarize --runtime .local/wfsim-reference --output .local/wfsim-comparison
+```
+
+Omit `--window-seconds` to use the official board duration. `cross-window --window-seconds 180` replays existing search results at 180 seconds without searching again. Reports retain mapping exclusions, timeouts and disagreements between model rankings. They measure MOD search with fixed Arcanes, evolution choices and exact Riven values; they do not prove a global optimum. Official WASM is the default backend. An optional simfleet native library is checked against its matching build manifest and engine identity before use.
 
 ## Repository Layout
 

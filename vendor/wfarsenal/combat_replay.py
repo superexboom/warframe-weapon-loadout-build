@@ -149,6 +149,7 @@ def _trajectory(
     combat=None,
     weak_draw=None,
     life_curve=None,
+    score_only=False,
 ):
     # Expected proc counts; attack/tick/resource clocks are discrete.
     # Mechanics: WFSim 69e6a139, data/debuffs/ignite.yaml and syndicates/.
@@ -162,11 +163,18 @@ def _trajectory(
                    weak_draw=weak_draw, life_curve=life_curve)
     if native_replay.supported(stats, options):
         if native_replay.SHADOW:
-            return native_replay.shadow(stats, target, options, _reference_trajectory)
-        result = native_replay.trajectory(stats, target, **options)
+            result = native_replay.shadow(stats, target, options, _reference_trajectory)
+            return _score_result(result) if score_only else result
+        result = native_replay.trajectory(stats, target, score_only=score_only, **options)
         if result is not None:
             return result
-    return _reference_trajectory(stats, target, **options)
+    result = _reference_trajectory(stats, target, **options)
+    return _score_result(result) if score_only else result
+
+
+def _score_result(result):
+    return {**{k: result[k] for k in ("killsPerMinute", "windowDps", "totalWindowDamage", "unsupported")},
+            "limitations": []}
 
 
 def _reference_trajectory(

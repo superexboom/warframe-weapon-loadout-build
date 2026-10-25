@@ -85,6 +85,38 @@ def test_search_memo_is_request_local_and_context_bound():
     assert evaluate(1,target={'headshotChance':.5}) == 3
 
 
+def test_static_work_is_reported_without_retaining_another_requests_counts():
+    from wfarsenal.search_session import session_request, heartbeat
+
+    @session_request
+    def analyze(_directory, request):
+        assert not SESSION.get().get('negativeWork')
+        heartbeat(3)
+        SESSION.get()['negativeWork'] = {'fastSearches': 1, 'fastProofs': 1}
+        return {'bakeStaticsOnly': True}
+
+    for _ in range(2):
+        result = analyze('.', {'_bakeStaticsOnly': True})
+        assert result['searchWork']['evaluations'] == 3
+        assert result['searchWork']['negative'] == {'fastSearches': 1, 'fastProofs': 1}
+        assert SESSION.get() is None
+
+
+@pytest.mark.parametrize('profile,seconds', [('fast', 8.), ('standard', 15.), ('deep', 45.)])
+def test_negative_classification_flag_does_not_disable_the_callers_budget(profile, seconds):
+    import math
+    from wfarsenal.search_session import session_request
+
+    @session_request
+    def analyze(_directory, request):
+        state = SESSION.get()
+        assert math.isfinite(state['deadline']) and state['phaseSeconds'] == seconds
+        return dict(searchStatus={}, skipped=[])
+
+    result = analyze('.', dict(profile=profile, _bakeNegativeClassificationOnly=True))
+    assert result['searchWork']['budgetSeconds'] > seconds
+
+
 def test_phase_heartbeat_is_monotonic_and_exposes_work():
     app._begin_analysis_progress('work-test')
     app._report_analysis_progress('work-test','quality|123')

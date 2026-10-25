@@ -99,13 +99,15 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
     outcomes = []
     for profile, shard_path in profiles:
         app.ANALYSIS_STATICS_CACHE.clear()
+        started, cpu_started = time.perf_counter(), time.process_time()
+        work = {}
         try:
             # Three positives first (the trigger structure the bake always
             # used), then two: the second request finds the baseline,
             # hardness nodes and archetype bases in the statics and only adds
             # the two-positive recommendation and negatives.
             for positives in positive_counts:
-                app.analyze_payload({
+                response = app.analyze_payload({
                     "weapon": weapon_path,
                     "disposition": disposition,
                     "profile": profile,
@@ -113,6 +115,7 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
                     "_bakeStaticsOnly": True,
                     "stats": _trigger_stats(app, weapon_type, disposition, positives),
                 })
+                work[str(positives)] = response.get('searchWork') or {}
         except Exception as exc:  # noqa: BLE001
             outcomes.append({"weapon": weapon_path, "profile": profile, "ok": False, "error": str(exc)[:200]})
             continue
@@ -153,7 +156,10 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
         except OSError as exc:
             outcomes.append({"weapon": weapon_path, "profile": profile, "ok": False, "error": f"shard write: {exc}"})
             continue
-        outcomes.append({"weapon": weapon_path, "profile": profile, "ok": True, "entries": len(entries)})
+        outcomes.append({"weapon": weapon_path, "fireMode": fire_mode, "profile": profile,
+                         "ok": True, "entries": len(entries), "searchWork": work,
+                         "elapsedSeconds": time.perf_counter() - started,
+                         "cpuSeconds": time.process_time() - cpu_started})
     return outcomes
 
 
@@ -357,6 +363,7 @@ def main() -> int:
                            weapons=len(weapons), expectedShards=len(expected_shards[profile]),
                            skippedCurrent=skipped[profile], completed=len(completed[profile]),
                            excludedModes=excluded_modes, failures=failures[profile],
+                           targetWork=completed[profile],
                            elapsedSeconds=round(time.time() - started, 3))
             path.parent.mkdir(parents=True, exist_ok=True)
             temp = path.with_suffix('.tmp')

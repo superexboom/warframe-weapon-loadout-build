@@ -21,6 +21,8 @@ except ImportError:  # pragma: no cover - depends on the build
     wfcore = None
 
 ENABLED = wfcore is not None and os.environ.get("WF_NATIVE", "1") != "0"
+HEALTH_BATCH = os.environ.get("WF_NATIVE_HEALTH_BATCH", "1") != "0"
+HEALTH_BATCH_STATS = {"batches": 0, "runs": 0}
 SHADOW = os.environ.get("WF_NATIVE_SHADOW") == "1"
 STATS = {"native": 0, "fallback": 0}
 
@@ -399,6 +401,8 @@ def trajectory(
     combat=None,
     weak_draw=None,
     life_curve=None,
+    score_only=False,
+    health_targets=None,
 ):
     """The native replay, or None when it must fall back to the reference."""
     from .damage import (
@@ -531,6 +535,21 @@ def trajectory(
         weakDraw=weak_draw.native_spec() if weak_draw is not None else None,
     )
     try:
+        if health_targets is not None:
+            targets = []
+            for enhancements in health_targets:
+                _, pools, _, _, _, _, _, _ = _target_setup(target, level, armour_strip, steel_path, enhancements)
+                pools = list(pools)
+                if execute:
+                    pools[2] *= 1.0 - execute
+                targets.append((pools, sum(pools)))
+            rows = wfcore.trajectory_health_batch(config, helper, targets)
+            STATS["native"] += len(rows)
+            HEALTH_BATCH_STATS["batches"] += 1
+            HEALTH_BATCH_STATS["runs"] += len(rows)
+            return [dict(killsPerMinute=kpm, windowDps=dps, totalWindowDamage=damage,
+                         unsupported=[*unsupported, *(['talons-single-throw-deployment-overflow-unmodeled'] * overflows)],
+                         limitations=[]) for kpm, dps, damage, overflows in rows]
         core = wfcore.trajectory(config, helper)
     except wfcore.NativeUnsupported:
         STATS["fallback"] += 1
@@ -554,6 +573,11 @@ def trajectory(
     totals = dict(zip(("direct", "dot", "nonDot", "syndicate", "arcane"), core["totals"]))
     averaged = {k: 0.0 for k in names.values()}
     score = kills + (1 - sum(pools) / ehp if ehp else 0.0)
+    if score_only and life_curve is None and not collect_timeline:
+        unsupported.extend(['talons-single-throw-deployment-overflow-unmodeled'] * core["mines"][3])
+        return dict(killsPerMinute=score * 60 / window if window else 0.0,
+                    windowDps=sum(totals.values()) / window if window else 0.0,
+                    totalWindowDamage=sum(totals.values()), unsupported=unsupported, limitations=[])
     initial = damage_against_cached_armour(
         stats, armour_base, defenses, target=target, _target_cache=locations["body"]
     )

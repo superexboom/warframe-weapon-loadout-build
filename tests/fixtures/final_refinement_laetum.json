@@ -1,0 +1,140 @@
+{
+  "source": "https://cdn.wfsim.app/board/laetum.json",
+  "engine": "3194962a0af7",
+  "payload": {
+    "weapon": "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
+    "fireMode": 0,
+    "mods": [
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+        "rank": 5,
+        "slot": 0
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+        "rank": 3,
+        "slot": 1
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+        "rank": 3,
+        "slot": 2
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+        "rank": 10,
+        "slot": 3
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+        "rank": 10,
+        "slot": 4
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+        "rank": 3,
+        "slot": 5
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsMod",
+        "rank": 5,
+        "slot": 6
+      },
+      {
+        "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+        "rank": 5,
+        "slot": 7
+      }
+    ],
+    "arcanes": [
+      {
+        "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+        "rank": 5
+      }
+    ],
+    "mode": "auto",
+    "profile": "standard",
+    "metric": "killsPerMinute",
+    "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+    "level": 9999,
+    "steelPath": true,
+    "windowSeconds": 180,
+    "headshotChance": 1.0,
+    "aiming": true,
+    "triggerPolicy": "emergent",
+    "distance": 0.5,
+    "incarnonCycle": false,
+    "incarnonChoices": {
+      "tier2": "2-2",
+      "tier3": "3-1",
+      "tier4": "4-1",
+      "tier5": "5-3"
+    },
+    "slotPolarities": [
+      "AP_ATTACK",
+      "AP_ATTACK",
+      "AP_ATTACK",
+      "AP_ATTACK",
+      "AP_TACTIC",
+      "AP_ATTACK",
+      "AP_ATTACK",
+      "AP_TACTIC"
+    ],
+    "specialSlotPolarities": {},
+    "optimizeWithArcanes": true,
+    "scenario": {
+      "aiming": true,
+      "triggerPolicy": "emergent",
+      "distance": 0.5,
+      "incarnonCycle": false,
+      "combatState": {}
+    },
+    "combatState": {
+      "selfShieldBreakForced": false
+    },
+    "riven": null,
+    "exilus": null
+  },
+  "board_mods": [
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/IceEventPistolMod",
+      "rank": 3,
+      "slot": 0
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/PoisonEventPistolMod",
+      "rank": 3,
+      "slot": 1
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/WeaponFireDamageModExpert",
+      "rank": 10,
+      "slot": 2
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+      "rank": 10,
+      "slot": 3
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponCritDamageMod",
+      "rank": 10,
+      "slot": 4
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+      "rank": 5,
+      "slot": 5
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol",
+      "rank": 5,
+      "slot": 6
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/MagneticCritDamagePistolMod",
+      "rank": 3,
+      "slot": 7
+    }
+  ]
+}

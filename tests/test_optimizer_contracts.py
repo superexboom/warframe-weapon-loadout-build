@@ -109,7 +109,7 @@ class HardnessIntegrationTests(unittest.TestCase):
         class Stats:
             _combat_inputs = {}
 
-        def fake(stats, context):
+        def fake(stats, context, **kwargs):
             scale = context["enemy_enhancements"]["healthScale"]
             seen.append(scale)
             return {"killsPerMinute": 60.0 / scale}
@@ -135,7 +135,7 @@ class HealthSpreadTests(unittest.TestCase):
             _combat_inputs = {}
 
         def score(damage, spread):
-            def fake(stats, context):
+            def fake(stats, context, **kwargs):
                 health = context["enemy_enhancements"]["healthScale"]
                 return {"killsPerMinute": 60.0 / math.ceil(health / damage - 1e-9)}  # shots-to-kill steps
             optimizer._event_window = fake

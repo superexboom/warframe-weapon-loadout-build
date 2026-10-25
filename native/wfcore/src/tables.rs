@@ -59,6 +59,7 @@ pub struct Location {
     pub head: bool,
 }
 
+#[derive(Clone)]
 pub struct TargetTables {
     pub target_faction: bool,
     /// Damage target locations (body, head).

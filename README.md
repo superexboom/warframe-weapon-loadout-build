@@ -10,6 +10,9 @@
 
 - **紫卡分析**：按武器、倾向、词条数量与数值区间计算评分、逐词条贡献、T0-T3 收益、推荐负面和致命负面。
 - **武器配装**：支持枪械、近战、Kitgun、Zaw、显赫武器、架势、Exilus、赋能、Incarnon 分支、Forma 与 A/B/C 配置。
+- **自动搜索**：复用同一场景下已评估的候选；同时开启自动灵化与自动赋能时，额外检查两者联合调整的组合，只采用实际评分更高的配装。搜索结果仍为预算内找到的较优解。
+- **最终复评**：紫卡分析的主搜索、元素种子和保底配装按同一组三个硬度节点比较；原生核心批量计算这些独立测试点，复用初始化但不共享战斗状态。
+- **完整配装精修**：自动配装最后重新检查同家族卡片，避免零层时较弱的镀层 MOD 提前被淘汰；标准和深度档还检查完整候选池的单卡替换、增减。只采纳当前战斗指标更高且满足原约束的结果。
 - **守护**：同伴武器按 AI 实际行为计算（只打躯干、不开镜、不能装赋能，镀层叠层可开关）；可为机械守护本体配 10 个守护 MOD，查看本体属性，过热射击等影响武器的守护 MOD 计入伤害。
 - **配装约束**：自动配装可设必选 / 本武器禁选 / 全局屏蔽，一键屏蔽派系歧视卡；右键已装备的卡可直接剔除并重新配装。
 - **紫卡收藏夹**：跨武器保存紫卡，按武器分组查看，一键载入分析或装进配装，可导出 / 导入。
@@ -19,6 +22,8 @@
 - **目标模拟**：支持本地敌人目录、自定义防御、等级缩放、钢铁之路、卓越者、超宏护盾、护甲削减、爆头和多种伤害口径。
 - **本地素材**：卡图、边框、极性、战甲头像、技能图标和数据均随项目提供；配置可导入/导出，并兼容 Warframe Rabbit 紧凑格式。
 - **明确降级**：未覆盖的运行时脚本、投射物组件或条件机制会保留 `unsupported` / `skipped` 诊断，不用猜值冒充精确结果。
+
+Tennokai 卡目前保留装备与容量信息，机会触发及随后的自动重击尚未建模，相关结果会明确提示该限制。
 
 当前冻结游戏数据 build：`2026.08.13.13.24`。
 
@@ -56,6 +61,21 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build-portable.ps1
 ```
 
 输出位于 `.local/artifacts/release/Warframe-Weapon-Loadout-Build-win-x64.exe`，同目录生成 `.exe.sha256` 校验文件。分发时只需 EXE，校验文件供核对下载完整性。`.local/` 保存本机构建、缓存、审计与归档材料，不会提交到 Git。
+
+## 开发验证
+
+`python -m pytest -q` 运行回归，`python tools/check_runtime.py` 检查本地冻结数据与实际导入路径。自动配装、手动模拟及贡献分析 API 可显式传入 `windowSeconds`（0.1–600 秒），缺省保持 30 秒；比较结果必须使用相同战斗窗口。
+
+开发用 WFSim 对照工具需要 Node.js 和 PyYAML。以下命令只抓取公开参考资源并在本机复测，不提交榜单，也不生成计算缓存：
+
+```powershell
+python tools/fetch_wfsim_runtime.py --output .local/wfsim-reference
+python tools/compare_wfsim_boards.py prepare --runtime .local/wfsim-reference --output .local/wfsim-comparison --weapons laetum nikana_prime --profile fast --window-seconds 30
+python tools/compare_wfsim_boards.py run --runtime .local/wfsim-reference --output .local/wfsim-comparison --runs 1000 --workers 2
+python tools/compare_wfsim_boards.py summarize --runtime .local/wfsim-reference --output .local/wfsim-comparison
+```
+
+省略 `--window-seconds` 使用官方榜单的窗口。`cross-window --window-seconds 180` 可将已有搜索结果放到 180 秒条件复测，不重新搜索。报告保留不能映射的样例、超时及两个模型的排序差异；它衡量固定赋能、灵化路线和紫卡数值下的 MOD 搜索，不证明全局最优。默认使用官方 WASM；提供带匹配构建清单的 simfleet 原生库时，会校验引擎标识和文件哈希后使用它。
 
 ## 项目结构
 

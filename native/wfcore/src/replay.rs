@@ -122,6 +122,7 @@ pub(crate) fn core_of(obj: &Bound<'_, PyAny>, types: &mut Types, target_faction:
 
 type D = u32;
 
+#[derive(Clone)]
 pub(crate) struct Types {
     names: Vec<String>,
     index: FxHashMap<String, D>,
@@ -407,6 +408,7 @@ enum Kind {
     StackChild(usize, f64, f64),
 }
 
+#[derive(Clone)]
 struct Event {
     t: f64,
     seq: u64,
@@ -416,6 +418,7 @@ struct Event {
 
 /// The remaining ticks of one DoT instance: tick k is at `t + (first + k)`
 /// with sequence number `base + 1 + k`.
+#[derive(Clone)]
 struct TickChain {
     t: f64,
     first: i64,
@@ -524,6 +527,7 @@ struct Row {
     coefficient: f64,
 }
 
+#[derive(Clone)]
 struct Blast {
     count: f64,
     per: f64,
@@ -725,6 +729,80 @@ pub struct Replay<'py> {
     first_shot: FxHashMap<usize, usize>,
     no_status: FxHashMap<(usize, D, u64), f64>,
     proc_names: Vec<Option<Rc<str>>>,
+}
+
+// Fork only a freshly prepared replay; no completed fight state is reused.
+
+impl Source {
+    fn fork_initial(&self, py: Python<'_>) -> Self {
+        macro_rules! copied {
+            ($($field:ident),* $(,)?) => {
+                Self {
+                    obj: self.obj.clone_ref(py),
+                    id: self.id.clone_ref(py),
+                    $($field: self.$field.clone(),)*
+                }
+            };
+        }
+        copied!(
+            kind, stacks, expires, max_stacks, duration, per_event,
+            decay, no_refresh, free_ammo, duration_per_tier, charges, charges_left,
+            consume_on, lock_on, locked, deferred, initial_stacks, hold,
+            reset_on, toggle_on, victim_proc_type, required_count, required_time, actor_only,
+            minimum_consecutive, energy_threshold, expiries, progress, run_distribution
+        )
+    }
+}
+
+impl<'py> Replay<'py> {
+    fn fork_initial(&self) -> Self {
+        macro_rules! copied {
+            ($($field:ident),* $(,)?) => {
+                Self {
+                    stats: self.stats.iter().map(|s| s.clone_with(self.py)).collect(),
+                    sources: self.sources.iter().map(|s| s.fork_initial(self.py)).collect(),
+                    melee: self.melee.as_ref().map(|m| MeleeSpec {
+                        base_hits: m.base_hits, tier_step: m.tier_step, cap: m.cap,
+                        base_multiplier: m.base_multiplier,
+                        tier_keys: m.tier_keys.iter().map(|(obj, name, value)|
+                            (obj.clone_ref(self.py), name.clone(), *value)).collect(),
+                        segments: m.segments.clone(),
+                    }),
+                    $($field: self.$field.clone(),)*
+                }
+            };
+        }
+        copied!(
+            py, helper, resolver, types, window, head,
+            rate, status_rate_multiplier, damage_rate_multiplier, full, ehp, armour_base,
+            elemental_armour_strip, forced_procs, faction_deltas, armour_bypass, shield_bypass, extra_hits,
+            extra_scale, weapon_slot, distance, punchthrough, live_types_enabled, beam_floor,
+            burst, burst_rate, infinite_ammo, victim_before, syndicate, target_faction,
+            faction_bracket, tables, battery, spool, rate_spool, shell,
+            shot_combo, reload_after_every_shot, refill_growth, restore, pending_restore, recharges,
+            delayed_attacks, reload_shell_events, derived, selected_incarnon, melee_count, melee_heavy_multiplier,
+            melee_last_hit, melee_pending, melee_index, heavy_flag, no_co_flag, melee_heavy_now,
+            affinity_per_kill, affinity, syndicate_ready, syndicate_events, pools, states,
+            pooled, presence, gas_procs, dots, blasts, blast_procs,
+            heat_acc, heat_token, heat_chains, attribution, puncture_strip, frozen_until,
+            frozen_scale, heap, seq, gen, kills, weak_kill_events,
+            weak_draw, weak_index, weak_uncertainty, attacks, stale, first_kill,
+            last_kill, min_interval, totals, fortifier, fortifier_damage, fortifier_stolen,
+            self_overguard, empowered, status_pool, empowered_count, empowered_by_type, cryogenic,
+            cryogenic_expected, puncture_armor_strip, encumber, encumber_time, encumber_remaining, encumber_expected,
+            enervate, life_curve, onos, onos_crits, onos_ticks, onos_hits,
+            onos_start, onos_condition_hits, projectiles, projectile_state, stack_profiles, mines,
+            pending_mines, pending_throws, waiting_mines, detonations, mine_overflows, form,
+            cycle, gauge, base_ammo_saved, transforms, shells_owed, shell_mode_switch,
+            burst_base, burst_rate_base, burst_incarnon, burst_rate_incarnon, beam_floor_base, last_burst,
+            tap_other, tap, tap_hits, tap_expires, field_duration, field_duration_ready,
+            field_duration_used, enervate_views, enervate_weights, proc_counts, dot_by_type, magnetic_breaks,
+            ammo, shot_in_progress, reloads, last_round, current_time, beam_progress,
+            beam_last, actor_signal, actor_signal_used, armour_view, stats_by_ptr, model_cache,
+            model_key, tick_chains, co_specs, varied, elements, hit_specs,
+            applied, packets, spreads, first_shot, no_status, proc_names
+        )
+    }
 }
 
 const DIRECT: usize = 0;
@@ -2780,6 +2858,7 @@ struct SpoolSpec {
     spindown: f64,
 }
 
+#[derive(Clone)]
 struct ShotCombo {
     min: f64,
     seconds: f64,
@@ -2866,6 +2945,7 @@ struct HitSpec {
 
 /// `enervate.EnervateState`: a joint distribution over (stacks, big crits
 /// since the last reset), kept as an insertion-ordered list like its dict.
+#[derive(Clone)]
 struct Enervate {
     reset_after: i64,
     min_interval: f64,
@@ -2953,6 +3033,7 @@ struct MeleeSpec {
 /// One step of a melee route (melee_sequence.Loop): ``fixed`` seconds, divided
 /// by the charge or projectile speed when flagged, plus ``anim`` seconds at
 /// attack speed, then optionally a hit.
+#[derive(Clone)]
 struct MeleeSegment {
     fixed: f64,
     anim: f64,
@@ -3919,6 +4000,52 @@ fn list_f(v: &Bound<'_, PyAny>) -> PyResult<Vec<f64>> {
     v.extract::<Vec<f64>>()
 }
 
+/// Same loadout and fight, independent target-pool variants in input order.
+/// Parsing, initial stat views and event scheduling are shared; clocks and
+/// target/trigger state are copied from the pristine template for each run.
+#[pyfunction]
+pub fn trajectory_health_batch<'py>(
+    py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bound<'py, PyAny>,
+    targets: Vec<([f64; 3], f64)>,
+) -> PyResult<Vec<(f64, f64, f64, i64)>> {
+    let started = std::time::Instant::now();
+    let result = health_batch_inner(py, config, helper, targets);
+    crate::counters::add(crate::counters::TOTAL, started.elapsed().as_nanos() as u64);
+    result
+}
+
+fn health_batch_inner<'py>(
+    py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bound<'py, PyAny>,
+    targets: Vec<([f64; 3], f64)>,
+) -> PyResult<Vec<(f64, f64, f64, i64)>> {
+    if targets.is_empty() || targets.len() > 64 {
+        return Err(PyValueError::new_err("health batch requires 1..64 targets"));
+    }
+    if targets.iter().any(|(pools, ehp)| !ehp.is_finite() || *ehp < 0.0
+        || pools.iter().any(|v| !v.is_finite() || *v < 0.0)) {
+        return Err(PyValueError::new_err("health batch requires finite nonnegative pools"));
+    }
+    let prepared = prepare_replay(py, config, helper)?;
+    if prepared.weak_draw.is_some() || prepared.life_curve.is_some() {
+        return Err(NativeUnsupported::new_err("health batch needs an ordinary score replay"));
+    }
+    let mut result = Vec::with_capacity(targets.len());
+    for (full, ehp) in targets {
+        py.check_signals()?;
+        let mut replay = prepared.fork_initial();
+        replay.full = full;
+        replay.pools = full;
+        replay.ehp = ehp;
+        replay.run()?;
+        let score = replay.kills as f64 + if ehp != 0.0 { 1.0 - psum(replay.pools) / ehp } else { 0.0 };
+        let damage = psum(replay.totals);
+        let kpm = if replay.window != 0.0 { score * 60.0 / replay.window } else { 0.0 };
+        let dps = if replay.window != 0.0 { damage / replay.window } else { 0.0 };
+        result.push((kpm, dps, damage, replay.mine_overflows));
+    }
+    Ok(result)
+}
+
 #[pyfunction]
 pub fn trajectory<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bound<'py, PyAny>) -> PyResult<Bound<'py, PyDict>> {
     let started = std::time::Instant::now();
@@ -3927,7 +4054,7 @@ pub fn trajectory<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
     result
 }
 
-fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bound<'py, PyAny>) -> PyResult<Bound<'py, PyDict>> {
+fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bound<'py, PyAny>) -> PyResult<Replay<'py>> {
     let setup_timer = crate::counters::Timer::start(crate::counters::SETUP);
     let item = |k: &str| -> PyResult<Bound<'py, PyAny>> {
         config.get_item(k)?.ok_or_else(|| PyValueError::new_err(format!("config.{k} missing")))
@@ -4525,6 +4652,11 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
         }
     }
     drop(setup_timer);
+    Ok(replay)
+}
+
+fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bound<'py, PyAny>) -> PyResult<Bound<'py, PyDict>> {
+    let mut replay = prepare_replay(py, config, helper)?;
     replay.run()?;
     let _result_timer = crate::counters::Timer::start(crate::counters::RESULT);
     // Core results; the Python wrapper assembles the reference's result dict.

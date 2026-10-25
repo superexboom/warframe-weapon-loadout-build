@@ -177,6 +177,35 @@ def route_choices(weapon: Mapping[str, Any], tier_number: Callable[[Any], int | 
     return [dict(combo) for combo in itertools.product(*tiers)] if tiers else []
 
 
+def pick_coupled(
+    choices: Sequence[Choice], base: Any, *,
+    screen: Callable[[Sequence[Any], Sequence[Any]], list[float | None]],
+    search: Callable[[Any, Sequence[Any]], Any], refine: int = 2,
+) -> Outcome:
+    """Refine improving joint moves with the current build as their floor.
+
+    A route and an Arcane can lose separately and win together. Screen their
+    pairs on the same fight, then spend full searches only on the best ones.
+    """
+    started = time.perf_counter()
+    outcome = Outcome(evaluation=base, choice=None)
+    if not choices:
+        return outcome
+    scores = screen(base.cards, [c.passives for c in choices])
+    rows = [dict(key=c.key, screen=s) for c, s in zip(choices, scores)]
+    ranked = sorted((i for i, score in enumerate(scores) if score is not None and score > base.score + EPS),
+                    key=lambda i: (-scores[i], i))
+    for index in ranked[:refine]:
+        found = search(choices[index].passives, base.cards)
+        outcome.searches += 1
+        rows[index]["refined"] = found.score
+        if found.score > outcome.evaluation.score + EPS:
+            outcome.evaluation, outcome.choice = found, choices[index]
+    outcome.rows = sorted(rows, key=lambda row: -(row.get("refined") or row["screen"] or 0.))
+    outcome.seconds = time.perf_counter() - started
+    return outcome
+
+
 def pick_route(
     choices: Sequence[Choice],
     default_key: str | None,

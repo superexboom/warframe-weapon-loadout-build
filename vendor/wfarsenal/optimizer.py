@@ -1959,9 +1959,9 @@ def _bind_combat_inputs(stats, weapon, cards, effects, scenario, passives=None):
     return stats
 
 
-def _event_window(stats, context):
+def _event_window(stats, context, *, score_only=False):
     from .search_combat import window
-    return window(stats, context)
+    return window(stats, context, score_only=score_only)
 
 
 def _score(
@@ -2024,18 +2024,29 @@ def _score(
             # health points at +-1 baseline spread (2-point Gauss-Hermite),
             # which turns shots-to-kill steps into a monotone ramp.
             single = {key: value for key, value in context.items() if key != "hardnessNodes"}
+            from .search_combat import windows
+            contexts = []
+            for node in nodes:
+                scale, spread = float(node["healthScale"]), float(node.get("healthSpread") or 0.0)
+                points = (scale * (1.0 - spread), scale * (1.0 + spread)) if spread > 0 else (scale,)
+                contexts.extend(_with_health_scale(single, point) for point in points)
+            batched = windows(stats, contexts)
+            values = iter(batched) if batched is not None else None
+            field = {"killsPerMinute": "killsPerMinute", "windowedDps": "windowDps",
+                     "windowedTotalDamage": "totalWindowDamage"}[metric]
             total = weights = 0.0
             for node in nodes:
                 scale, spread = float(node["healthScale"]), float(node.get("healthSpread") or 0.0)
                 points = (scale * (1.0 - spread), scale * (1.0 + spread)) if spread > 0 else (scale,)
-                value = sum(_score(stats, metric, projectile_events, _with_health_scale(single, point))
-                            for point in points) / len(points)
+                value = (sum(float(next(values)[field]) for _ in points) if values is not None else
+                         sum(_score(stats, metric, projectile_events, _with_health_scale(single, point))
+                             for point in points)) / len(points)
                 total += float(node["weight"]) * math.log(max(value, 1e-12))
                 weights += float(node["weight"])
             return math.exp(total / weights)
         target = context.get("target")
         target = target if isinstance(target, Mapping) else None
-        windowed = _event_window(stats, context) if hasattr(stats, "_combat_inputs") else windowed_status_damage(
+        windowed = _event_window(stats, context, score_only=True) if hasattr(stats, "_combat_inputs") else windowed_status_damage(
             stats,
             target,
             attacks_per_second=stats.sustained_attack_rate,
@@ -2219,6 +2230,81 @@ def proxy_seed_best(
     return best
 
 
+def refine_final_build(
+    weapon: Mapping[str, Any], candidates: Sequence[_Card], riven: _Card | None,
+    incumbent: _Evaluation, *, scenario: Scenario, metric: str,
+    passives: _Card | None = None, slot_count: int = 8, capacity_limit: int = 60,
+    required_damage_type: str | None = None, target_context: Mapping[str, Any] | None = None,
+    profile: str = 'standard', required_mod_keys: Sequence[str] | None = None,
+    forbidden_mod_keys: Sequence[str] | None = None, min_fill: int | None = None,
+    max_fill: int | None = None,
+) -> _Evaluation:
+    """Refine the final event-scored build, including discarded family variants.
+
+    A single-card ranking cannot choose between ordinary and Galvanized cards
+    for a completed build. The beam collapses those families, and panel seeds
+    arrive after its climb. Revisit both omissions once, after route selection.
+    Fast only checks same-family replacements; standard/deep also check the
+    full legal single-card neighbourhood. This is bounded local search, never
+    a claim of global optimality.
+    """
+    if metric not in {'killsPerMinute', 'windowedDps', 'windowedTotalDamage'} or not target_context:
+        return incumbent
+    fast = profile in {'fast', 'ultra'}
+    rounds = 1 if fast else 4 if profile == 'deep' else 2
+    forbidden = set(forbidden_mod_keys or ())
+    required = set(required_mod_keys or ()) | {c.key for c in candidates if c.required}
+    pool = tuple(c for c in candidates if c.key not in forbidden)
+    constraints = dict(slot_count=slot_count, capacity_limit=capacity_limit,
+                       required_mod_keys=tuple(required), forbidden_mod_keys=forbidden_mod_keys,
+                       min_fill=min_fill, max_fill=max_fill)
+    best = incumbent
+    seen = {tuple(c.key for c in best.cards)}
+    deadline = phase_deadline()
+    for _ in range(rounds):
+        base = best
+        cards = tuple(base.cards)
+        used = {c.key for c in cards}
+
+        def neighbours():
+            for index, old in enumerate(cards):
+                if old.required or old.key in required:
+                    continue
+                other_families = {_mod_family(c) for i, c in enumerate(cards) if i != index}
+                for new in pool:
+                    if new.key in used or _mod_family(new) in other_families:
+                        continue
+                    if fast and _mod_family(new) != _mod_family(old):
+                        continue
+                    yield (*cards[:index], new, *cards[index + 1:])
+                if not fast:
+                    yield (*cards[:index], *cards[index + 1:])
+            if not fast and len(cards) + bool(riven) < slot_count:
+                families = {_mod_family(c) for c in cards}
+                for new in pool:
+                    if new.key not in used and _mod_family(new) not in families:
+                        yield (*cards, new)
+
+        for proposal in neighbours():
+            if expired(deadline):
+                return best
+            signature = tuple(c.key for c in proposal)
+            if signature in seen or validate_build(proposal, riven, **constraints):
+                continue
+            seen.add(signature)
+            value = _evaluate(weapon, proposal, riven, scenario=scenario, metric=metric,
+                              passives=passives, slot_limit=slot_count, capacity_limit=capacity_limit,
+                              target_context=target_context)
+            if value is None or value.score <= best.score + 1e-9:
+                continue
+            if required_damage_type and value.stats.damage_types.get(required_damage_type, 0.) <= 0.:
+                continue
+            best = value
+        if best is base:
+            break
+    return best
+
+
 def _with_health_scale(context: Mapping[str, Any], scale: float) -> dict[str, Any]:
     enhancements = dict(context.get("enemy_enhancements") or {})
     enhancements["healthScale"] = float(scale)
@@ -2372,6 +2458,23 @@ def _pairing_key(cards: Sequence[_Card]) -> tuple:
     return (frozenset(sequence[:2]), frozenset(sequence[2:4]))
 
 
+def _best_finalist(candidates, rescore):
+    """Rank whole builds on the final objective, keeping original tie order."""
+    best = None
+    seen = set()
+    for candidate in candidates:
+        identity = (tuple((card.key, card.rank) for card in candidate.cards), candidate.riven_index)
+        if identity in seen:
+            continue
+        seen.add(identity)
+        scored = rescore(candidate)
+        if best is None or scored.score > best.score:
+            best = scored
+    if best is None:
+        raise SimulationError("no finalists to score")
+    return best
+
+
 def _evaluate(
     weapon: Mapping[str, Any],
     cards: Sequence[_Card],
@@ -2391,6 +2494,37 @@ def _evaluate(
     heartbeat(1)
     if len(cards) + (1 if riven else 0) > slot_limit:
         return None
+    from . import evaluation_cache
+    cache_key = evaluation_cache.key(
+        weapon, cards, riven, scenario=scenario, metric=metric, passives=passives,
+        slot_limit=slot_limit, capacity_limit=capacity_limit, special_cards=special_cards,
+        special_capacity_cost=special_capacity_cost, target_context=target_context,
+        fixed_riven_index=fixed_riven_index, reorder_elements=reorder_elements)
+    if cache_key is not None:
+        # Keep the evaluator identity too: instrumentation or a replaced scorer
+        # must never consume an answer produced by the previous function.
+        from . import native_replay, mods_native
+        cache_key = ((_score, _event_window, apply_mods, _effects, evaluate_projectile_events,
+                      native_replay.ENABLED, mods_native.ENABLED), cache_key)
+        if native_replay.SHADOW or mods_native.SHADOW:
+            cache_key = None
+    cached = evaluation_cache.get(cache_key)
+    if cached is not evaluation_cache.MISSING:
+        if cached is None:
+            return None
+        score, order, fields, capacity, position, victim_count = cached
+        from .damage import ModdedStats
+        stats = ModdedStats.__new__(ModdedStats)
+        stats.__dict__.update(pickle.loads(fields))
+        card_order = tuple(cards[i] for i in order)
+        ordered = list(card_order)
+        if riven is not None and position is not None:
+            ordered.insert(position, riven)
+        all_cards = [*ordered, *special_cards]
+        effects = _effects([*all_cards, passives] if passives is not None else all_cards, scenario)
+        derived = scenario_with(scenario, victim_status_count=victim_count)
+        _bind_combat_inputs(stats, weapon, all_cards, effects, derived, passives)
+        return _Evaluation(score, card_order, stats, capacity, position, derived)
     positions: Iterable[int | None] = (None,)
     if riven is not None and fixed_riven_index is not None:
         positions = (fixed_riven_index,)
@@ -2456,6 +2590,11 @@ def _evaluate(
         )
         if best is None or current.score > best.score:
             best = current
+    if cache_key is not None:
+        try:
+            evaluation_cache.put(cache_key, evaluation_cache.snapshot(best, cards) if best is not None else None)
+        except (TypeError, AttributeError, pickle.PicklingError):
+            pass  # Optional extension objects may not support a value snapshot.
     return best
 
 
@@ -3579,6 +3718,7 @@ def _assess_negatives(
     capacity_limit: int,
     target_context: Mapping[str, Any] | None,
     keep_cap: int | None,
+    classification_only: bool = False,
 ) -> list[dict[str, Any]]:
     """Every negative stat of the weapon, judged on its best build.
 
@@ -3621,17 +3761,71 @@ def _assess_negatives(
                          fixedDelta=score / reference - 1.0, reoptimizedDelta=None, fatal=False, fatalAbove=None))
     suspects = [row for row in rows if not row["neutral"] and row["fixedDelta"] < -FATAL_NEGATIVE_LOSS]
     if suspects:
-        def search(lines):
+        witnesses: OrderedDict = OrderedDict()
+        state = SESSION.get()
+        work = (state.setdefault('negativeWork', {}) if state is not None else {})
+
+        def count(name):
+            work[name] = work.get(name, 0) + 1
+
+        def remember(best):
+            cards = tuple(getattr(best, "cards", ()))
+            if cards:
+                key = tuple((card.key, card.rank) for card in cards)
+                witnesses[key] = cards
+                witnesses.move_to_end(key)
+                while len(witnesses) > 8:
+                    witnesses.popitem(last=False)
+            return best.score
+
+        def search(lines, proof_reference=None):
             riven = _card_from_lines(list(lines))
+            def proves_safe(found):
+                return (proof_reference is not None and proof_reference > 0
+                        and found.score / proof_reference - 1.0 >= -FATAL_NEGATIVE_LOSS)
+
+            count('fastSearches')
             seeded = _optimize(weapon, mod_pool, riven, profile="fast", seed_cards=tuple(baseline.cards), **common)
+            if proves_safe(seeded):
+                count('fastProofs')
+                return remember(seeded), False
+            if proof_reference is not None:
+                # Cheap proxy seeds often recover a status/crit alternative
+                # before the expensive event-scored standard beam is needed.
+                count('proxyScreens')
+                screened = proxy_seed_best(weapon, mod_pool, riven, seeded, profile="standard", **common)
+                if proves_safe(screened):
+                    count('proxyProofs')
+                    return remember(screened), False
+            count('standardSearches')
             fresh = _optimize(weapon, mod_pool, riven, profile="standard", element_niches=2, **common)
             best = max((seeded, fresh), key=lambda found: found.score)
-            return proxy_seed_best(weapon, mod_pool, riven, best, profile="standard", **common).score
-        scores = [search(positive_lines)] + [search([*positive_lines, negative_map[row["code"]]]) for row in suspects]
-        searched_reference = max(scores[0], reference)
-        for row, score in zip(suspects, scores[1:]):
+            if proves_safe(best):
+                count('standardProofs')
+                return remember(best), False
+            count('proxySearches')
+            best = proxy_seed_best(weapon, mod_pool, riven, best, profile="standard", **common)
+            return remember(best), True
+        # The denominator always receives the complete original search.
+        reference_score, _ = search(positive_lines)
+        searched_reference = max(reference_score, reference)
+        for row in suspects:
+            lines = [*positive_lines, negative_map[row["code"]]]
+            score, complete = None, False
+            if classification_only:
+                riven = _card_from_lines(lines)
+                for cards in tuple(witnesses.values()):
+                    found = _evaluate(weapon, cards, riven, **common)
+                    if found is not None and found.score / searched_reference - 1.0 >= -FATAL_NEGATIVE_LOSS:
+                        score = found.score
+                        count('classificationWitnessProofs')
+                        break
+            if score is None:
+                score, complete = search(lines, searched_reference if classification_only else None)
             best = max(score, (1.0 + row["fixedDelta"]) * reference)
             row["reoptimizedDelta"] = best / searched_reference - 1.0
+            if not complete:
+                row["reoptimizedDeltaIsLowerBound"] = True
             row["fatal"] = row["reoptimizedDelta"] < -FATAL_NEGATIVE_LOSS
 
         def fixed_delta(line):
@@ -3645,7 +3839,19 @@ def _assess_negatives(
             """The same two-step judgement as above, for one roll of a malus."""
             if delta >= -FATAL_NEGATIVE_LOSS:
                 return False
-            best = max(search([*positive_lines, line]), (1.0 + delta) * reference)
+            riven = _card_from_lines([*positive_lines, line])
+            witnessed = 0.0
+            for cards in tuple(witnesses.values()):
+                found = _evaluate(weapon, cards, riven, **common)
+                if found is not None:
+                    witnessed = max(witnessed, found.score)
+                    # One legal build above the cutoff proves non-fatal. A
+                    # score below it cannot prove fatal: keep the full search.
+                    if witnessed / searched_reference - 1.0 >= -FATAL_NEGATIVE_LOSS:
+                        count('witnessProofs')
+                        return False
+            score, _ = search([*positive_lines, line], searched_reference)
+            best = max(score, witnessed, (1.0 + delta) * reference)
             return best / searched_reference - 1.0 < -FATAL_NEGATIVE_LOSS
 
         for row in suspects:
@@ -5268,17 +5474,13 @@ def analyze_riven_request(
             if pool is not None:
                 for _cards, _fixed, outcome in pending:
                     outcome.cancel()
-        # The first best of the main result and the seeds, as max() picks.
-        chosen_seed = None
-        best_score = max((result.score for result in results), default=None)
-        for item in seed_results:
-            if best_score is None or item[0] > best_score:
-                chosen_seed, best_score = item, item[0]
-        if chosen_seed is not None:
-            score, cards, fixed, evaluation = chosen_seed
+        # Each seed is a finalist. A middle-node winner need not win the
+        # three-node objective, so none is discarded before final scoring.
+        for score, cards, fixed, evaluation in seed_results:
             if evaluation is None:
                 evaluation = _evaluate(weapon, cards, riven, fixed_riven_index=fixed, **seed_kwargs)
-            results.append(evaluation)
+            if evaluation is not None:
+                results.append(evaluation)
         if not results and required_damage_type and ultra:
             unsupported.append(f"element-target-infeasible-{required_damage_type}-using-unconstrained")
             found = _optimize(weapon, mod_pool, riven, required_mod_keys=list(search_required_keys), **common, **proxy)
@@ -5290,12 +5492,11 @@ def analyze_riven_request(
                 results.append(scored)
         if not results:
             raise SimulationError("no capacity-valid build found")
-        best = max(results, key=lambda result: result.score)
         if ultra and riven is not None:
-            best = _evaluate(weapon, best.cards, riven, scenario=kwargs["scenario"], metric=kwargs["metric"],
-                             passives=kwargs.get("passives"), capacity_limit=kwargs.get("capacity_limit", 60),
-                             target_context=context) or best
-        return _rescore(best, riven, kwargs)
+            results = [_evaluate(weapon, result.cards, riven, scenario=kwargs["scenario"], metric=kwargs["metric"],
+                                 passives=kwargs.get("passives"), capacity_limit=kwargs.get("capacity_limit", 60),
+                                 target_context=context) or result for result in results]
+        return _best_finalist(results, lambda result: _rescore(result, riven, kwargs))
 
     def _rescore(result: _Evaluation, riven: _Card | None, kwargs: Mapping[str, Any]) -> _Evaluation:
         # Searches run on the middle hardness node; the chosen build is scored
@@ -5444,7 +5645,7 @@ def analyze_riven_request(
             )
             floor_candidates.append(kept)
         floor_candidates.append(tuple(baseline.cards))
-        floor: _Evaluation | None = None
+        floors: list[_Evaluation] = []
         for kept in floor_candidates:
             if validate_build(
                 kept,
@@ -5469,21 +5670,23 @@ def analyze_riven_request(
                 reorder_elements=False,  # the baseline's element order is already chosen
                 fixed_riven_index=len(kept) if ultra else None,  # ultra: place the Riven in the winner only
             )
-            if evaluated is not None and (floor is None or evaluated.score > floor.score):
-                floor = evaluated
-        if floor is not None and ultra:
-            floor = _evaluate(weapon, floor.cards, riven_card, scenario=scenario, metric=floor_metric or ranking_metric,
-                              passives=floor_passives, capacity_limit=capacity_limit, target_context=search_context,
-                              reorder_elements=False) or floor
-        if floor is not None and search_context is not benchmark_context:
-            # Candidates compete on the middle node; the winner is scored on all.
-            floor = _evaluate(weapon, floor.cards, riven_card, scenario=scenario,
-                              metric=floor_metric or ranking_metric, passives=floor_passives,
-                              capacity_limit=capacity_limit, target_context=benchmark_context,
-                              fixed_riven_index=floor.riven_index, reorder_elements=False) or floor
-        if floor is not None and floor.score > result.score:
-            return floor
-        return result
+            if evaluated is not None:
+                floors.append(evaluated)
+
+        def final_floor(candidate):
+            if ultra:
+                candidate = _evaluate(weapon, candidate.cards, riven_card, scenario=scenario,
+                    metric=floor_metric or ranking_metric, passives=floor_passives, capacity_limit=capacity_limit,
+                    target_context=search_context, reorder_elements=False) or candidate
+            if search_context is not benchmark_context:
+                candidate = _evaluate(weapon, candidate.cards, riven_card, scenario=scenario,
+                    metric=floor_metric or ranking_metric, passives=floor_passives, capacity_limit=capacity_limit,
+                    target_context=benchmark_context, fixed_riven_index=candidate.riven_index,
+                    reorder_elements=False) or candidate
+            return candidate
+
+        floor = _best_finalist(floors, final_floor) if floors else None
+        return floor if floor is not None and floor.score > result.score else result
 
     _progress("actual")
     actual_card = _card_from_lines(actual_lines)
@@ -5833,7 +6036,8 @@ def analyze_riven_request(
         negative_assessment = _assess_negatives(
             weapon, mod_pool, baseline, negative_seed, negative_ranked, negative_map, neutral_negative_codes,
             scenario=scenario, metric=ranking_metric, passives=passives, capacity_limit=capacity_limit,
-            target_context=search_context, keep_cap=negative_keep_cap)
+            target_context=search_context, keep_cap=negative_keep_cap,
+            classification_only=statics_only or bool(request.get('_bakeNegativeClassificationOnly')))
         fatal_codes = [row["code"] for row in negative_assessment if row["fatal"]]
         fatal_above = {row["code"]: row["fatalAbove"] for row in negative_assessment
                        if row["fatal"] and row["fatalAbove"] is not None}

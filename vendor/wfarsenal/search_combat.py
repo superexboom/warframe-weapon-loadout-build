@@ -60,24 +60,32 @@ def _record_digest(record):
 def _replay_key(stats, data, context_key):
     """Digest of everything a window replay reads; equal digests, equal replays."""
     fields = stats.__dataclass_fields__
-    extras = sorted((k, repr(v)) for k, v in vars(stats).items() if k not in fields and k not in _UNHASHED)
+    extras = sorted((k, v) for k, v in vars(stats).items() if k not in fields and k not in _UNHASHED)
     engine = data["engine"]
     engine_key = (_record_digest(engine["weapon"]), engine["effects"], engine["scenario"], engine["fire_mode"])
     mods = [(_record_digest(record), rank, extra) for record, rank, extra in data["mods"]]
-    blob = pickle.dumps((repr(stats), extras, engine_key, mods, data["arcanes"],
-                         data["choices"], context_key), protocol=5)
+    tail = (engine_key, mods, data["arcanes"], data["choices"], context_key)
+    try:
+        blob = pickle.dumps((type(stats), tuple(getattr(stats, name) for name in fields), extras, *tail), protocol=5)
+    except (TypeError, pickle.PicklingError):
+        # Extension attributes may only expose their value through repr.
+        blob = pickle.dumps((repr(stats), [(k, repr(v)) for k, v in extras], *tail), protocol=5)
     return hashlib.blake2b(blob, digest_size=20).digest()
 
 
-def window(stats, context):
+def window(stats, context, *, score_only=False):
     from .manual_combat import prepare
     from .combat_replay import replay
     data = stats._combat_inputs
     key = json.dumps(context, sort_keys=True, ensure_ascii=False, default=str)
     cache = stats._combat_scores
+    if score_only and (key, False) in cache:
+        return cache[key, False]
+    context_key = key
+    key = (key, score_only)
     if key in cache:
         return cache[key]
-    shared = _replay_key(stats, data, key)
+    shared = (score_only, _replay_key(stats, data, context_key))
     result = _REPLAYS.get(shared)
     if result is not None:
         # Concurrent searches of one request share this cache (loadout_search).
@@ -112,6 +120,7 @@ def window(stats, context):
         forced_procs=context.get("forcedProcs"),
         kill_branches=context.get("killBranches"),
         collect_timeline=False,
+        score_only=score_only,
     )
     for reason in result.get("unsupported") or []:
         if reason not in stats.unsupported:
@@ -124,6 +133,88 @@ def window(stats, context):
         except KeyError:
             break
     return result
+
+
+def windows(stats, contexts):
+    """Score one loadout on health-only variants, or request the scalar path.
+
+    Batched rows have independent clocks, targets and trigger state. Weak-kill
+    branching and shadow comparisons keep their existing scalar protocol.
+    """
+    from . import native_replay
+    from .manual_combat import prepare
+    from .search_session import check_cancelled
+    if (not contexts or len(contexts) > 64 or not native_replay.ENABLED or not native_replay.HEALTH_BATCH
+            or native_replay.SHADOW or not hasattr(native_replay.wfcore, 'trajectory_health_batch')):
+        return None
+    data = getattr(stats, '_combat_inputs', None)
+    if not data or 'engine' not in data:
+        return None
+    check_cancelled()
+    signatures = []
+    for context in contexts:
+        other = {**context, 'enemy_enhancements': {k: v for k, v in (context.get('enemy_enhancements') or {}).items()
+                                                 if k != 'healthScale'}}
+        signatures.append(json.dumps(other, sort_keys=True, ensure_ascii=False, default=str))
+    if any(signature != signatures[0] for signature in signatures[1:]):
+        return None
+    cache = stats._combat_scores
+    rows, pending = [None] * len(contexts), []
+    for i, context in enumerate(contexts):
+        key = json.dumps(context, sort_keys=True, ensure_ascii=False, default=str)
+        value = cache.get((key, False)) or cache.get((key, True))
+        shared = None
+        if value is None:
+            shared = (True, _replay_key(stats, data, key))
+            value = _REPLAYS.get(shared)
+        if value is not None:
+            rows[i] = value
+        else:
+            pending.append((i, key, shared, context))
+    if pending:
+        context = pending[0][3]
+        scenario = data['engine']['scenario']
+        target = context.get('target') or {}
+        enhancements = context.get('enemy_enhancements') or {}
+        combat = prepare(data['engine'], data['mods'], data['arcanes'],
+            cycle_enabled=scenario.incarnon_cycle, assumed=scenario.trigger_policy == 'assumed_max',
+            incarnon_choices=data['choices'], affinity_target=target, level=context.get('level'),
+            eximus=bool(enhancements.get('eximus')), resolve_cache=getattr(stats, '_resolve_cache', None))
+        restore = combat.get('magazineRestore') or {}
+        if (restore.get('kind') == 'on-headshot-kill'
+                or any((q.get('kind') == 'on-headshot-kill' or q.get('freeAmmo')) and q.get('perEvent', 1.) != 0
+                       for q in combat['trigger_sources'])):
+            return None
+        options = dict(combat=combat, trigger_sources=combat['trigger_sources'],
+            attacks_per_second=stats.sustained_attack_rate,
+            window_seconds=float(context.get('windowSeconds') or 30.),
+            headshot_chance=float(context.get('headshotChance', 1. if context.get('hit_location') == 'head' else 0.)),
+            status_rate_multiplier=float(context.get('statusRateMultiplier') or 1.),
+            damage_rate_multiplier=float(context.get('stanceMultiplier') or 1.), level=context.get('level'),
+            armour_strip=float(context.get('armour_strip') or 0.),
+            elemental_armour_strip=float(context.get('elemental_armour_strip') or 0.),
+            steel_path=bool(context.get('steel_path')), enemy_enhancements=enhancements,
+            forced_procs=context.get('forcedProcs'), collect_timeline=False, score_only=True)
+        if not native_replay.supported(stats, options):
+            return None
+        results = native_replay.trajectory(stats, target,
+            health_targets=[row[3].get('enemy_enhancements') for row in pending], **options)
+        if results is None:
+            return None
+        for (i, key, shared, _), result in zip(pending, results):
+            rows[i] = result
+            cache[key, True] = result
+            _REPLAYS[shared] = result
+        while len(_REPLAYS) > _REPLAYS_MAX:
+            try:
+                _REPLAYS.popitem(last=False)
+            except KeyError:
+                break
+    for row in rows:
+        for reason in row.get('unsupported') or ():
+            if reason not in stats.unsupported:
+                stats.unsupported.append(reason)
+    return rows
 
 
 def body_ttk_health(stats, context, seconds):

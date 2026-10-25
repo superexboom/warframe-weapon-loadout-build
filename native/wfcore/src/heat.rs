@@ -52,6 +52,7 @@ pub fn heat_ramp(age: f64, scale: f64) -> f64 {
     HEAT_RAMP[ramp_index(age, scale)]
 }
 
+#[derive(Clone)]
 struct DeadItem {
     end: f64,
     scale: f64,
@@ -61,6 +62,7 @@ struct DeadItem {
     cleared: bool,
 }
 
+#[derive(Clone)]
 struct BoostItem {
     start: f64,
     scale: f64,
@@ -75,6 +77,7 @@ enum Ev {
     Boost { item: usize, index: usize },
 }
 
+#[derive(Clone)]
 struct Event {
     time: f64,
     seq: u64,
@@ -98,6 +101,7 @@ impl Ord for Event {
     }
 }
 
+#[derive(Clone)]
 struct Entry {
     end: f64,
     serial: u64,
@@ -125,6 +129,7 @@ impl Ord for Entry {
     }
 }
 
+#[derive(Clone)]
 pub struct HeatChains {
     g: f64,
     entries: BinaryHeap<Entry>,

@@ -56,6 +56,7 @@ pub fn combine(base: f64, parts: &[&[(u8, f64)]], base_value: Option<f64>) -> f6
 }
 
 /// Damage-type ids the element rules name.
+#[derive(Clone)]
 pub struct Elements {
     pub physical: [D; 3],
     pub base: [D; 4],

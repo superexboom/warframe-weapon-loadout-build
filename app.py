@@ -664,6 +664,7 @@ if getattr(sys, "frozen", False) and not os.environ.get("WF_ANALYSIS_STATICS_CAC
         / "Warframe-Weapon-Loadout-Build" / "cache" / "riven-analysis-statics.json"
     )
 ANALYSIS_STATICS_CACHE_VERSION = 26  # + Zaw hit schedules / two-handed factor, Zymos head bursts, melee files in the fingerprint
+BUNDLED_ANALYSIS_STATICS_CACHE_PATH = ROOT / "data" / "riven-analysis-statics.json"
 
 
 def _stances_fingerprint() -> str:
@@ -732,6 +733,8 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("enervate.py"),
         Path(optimizer.__file__).with_name("status_arcanes.py"),
         Path(optimizer.__file__).with_name("search_combat.py"),
+        Path(optimizer.__file__).with_name("evaluation_cache.py"),
+        Path(optimizer.__file__).with_name("loadout_search.py"),
         Path(optimizer.__file__).with_name("search_session.py"),
         Path(optimizer.__file__).with_name("riven_recommendation.py"),
         Path(optimizer.__file__).with_name("parallel.py"),
@@ -765,15 +768,10 @@ def _analysis_inputs_fingerprint() -> str:
     return digest.hexdigest()[:16]
 
 
-def _load_analysis_statics_cache() -> dict[str, Any]:
+def _read_analysis_statics_cache(path: Path, inputs_fingerprint: str) -> dict[str, Any]:
     try:
-        payload = json.loads(ANALYSIS_STATICS_CACHE_PATH.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return {}
-    try:
-        inputs_fingerprint = _analysis_inputs_fingerprint()
-    except SimulationError:
-        # F13：依赖缺失 → 缓存整体不可用（加载空表），不把空指纹当正常版本。
         return {}
     if (
         not isinstance(payload, dict)
@@ -785,6 +783,19 @@ def _load_analysis_statics_cache() -> dict[str, Any]:
         return {}
     entries = payload.get("entries")
     return dict(entries) if isinstance(entries, dict) else {}
+
+
+def _load_analysis_statics_cache() -> dict[str, Any]:
+    try:
+        inputs_fingerprint = _analysis_inputs_fingerprint()
+    except SimulationError:
+        return {}
+    entries = (_read_analysis_statics_cache(BUNDLED_ANALYSIS_STATICS_CACHE_PATH, inputs_fingerprint)
+               if getattr(sys, "frozen", False) else {})
+    # A valid local update wins; an old or partial local cache cannot hide
+    # matching shipped entries. Both sources pass the same identity checks.
+    entries.update(_read_analysis_statics_cache(ANALYSIS_STATICS_CACHE_PATH, inputs_fingerprint))
+    return entries
 
 
 try:
@@ -1928,6 +1939,12 @@ def _utility_card_at_rank(
         skipped=tuple(effects.skipped),
         drain=max(0, int(record.get("baseDrain") or 0) + rank),
     )
+
+
+def _utility_model_gaps(row: Mapping[str, Any] | None) -> list[str]:
+    if row and row.get('sourceKind') == 'tennokai' and not row.get('catalogJoined'):
+        return ['tennokai-opportunities-not-modeled']
+    return []
 
 
 def _score_with_special_card(
@@ -3202,6 +3219,12 @@ _BENCHMARK_WINDOW_SECONDS = 30.0
 _BENCHMARK_ENHANCEMENTS = {"eximus": False, "noOverguard": True}
 
 
+def _requested_combat_window(payload: Mapping[str, Any]) -> float:
+    """An explicit fight window for loadout, manual and contribution parity."""
+    return _manual_number(payload.get('windowSeconds', _BENCHMARK_WINDOW_SECONDS),
+                          'windowSeconds', low=0.1, high=600.0)
+
+
 def _benchmark_target_context(stance_multiplier: float = 1.0, status_rate_multiplier: float = 1.0) -> dict[str, Any]:
     enemy = MANUAL_ENEMIES_BY_PATH.get(_BENCHMARK_ENEMY_PATH)
     if enemy is None:
@@ -3706,6 +3729,63 @@ def _auto_loadout(
             # The Arcane may move the best route: one exact re-screen (and a
             # seeded search when a route beats the winner on its own build).
             evaluation = choose_route(evaluation, arcane_card, rescreen=True)
+    if auto_incarnon and auto_arcane and not fixed and weapon_arcane_limit:
+        # The one-axis passes cannot cross a route/Arcane synergy valley.
+        # Change one selectable tier and one weapon Arcane seat together.
+        coupled = dict(candidates=0, searches=0, baseScore=evaluation.score, adopted=False)
+        for _ in range(1 if profile == "fast" else 2):
+            routes = []
+            for tier, branches in optimizer._route_options(weapon, incarnon_choices):
+                routes.extend(dict(incarnon_choices, **{tier: branch}) for branch in branches
+                              if branch != incarnon_choices.get(tier))
+            if not routes:
+                break
+            variants = {}
+            for slot in range(min(weapon_arcane_limit, len(picked) + 1)):
+                for row in [None, *candidates]:
+                    trial = [dict(item) for item in picked]
+                    if row is None:
+                        if slot >= len(trial):
+                            continue
+                        trial.pop(slot)
+                    else:
+                        if any(item["path"] == row["path"] for i, item in enumerate(trial) if i != slot):
+                            continue
+                        choice = dict(path=row["path"], rank=int(row.get("maxRank") or 0))
+                        if slot < len(trial):
+                            if trial[slot] == choice:
+                                continue
+                            trial[slot] = choice
+                        else:
+                            trial.append(choice)
+                    key = json.dumps(trial, sort_keys=True)
+                    if key not in variants:
+                        card, _ = arcane_card_for([*frame_rows, *trial])
+                        if card is not False:
+                            variants[key] = (trial, card)
+            pairs = []
+            for route in routes:
+                for arc_key, (trial, card) in variants.items():
+                    pairs.append(loadout_search.Choice(
+                        key=json.dumps(route, sort_keys=True) + arc_key,
+                        data=dict(route=route, arcanes=trial), passives=compose(route_card(route)[0], card)))
+            outcome = loadout_search.pick_coupled(pairs, evaluation, screen=screen, search=search,
+                                                   refine=3 if profile == "deep" else 2)
+            coupled["candidates"] += len(pairs)
+            coupled["searches"] += outcome.searches
+            if outcome.choice is None:
+                break
+            evaluation = outcome.evaluation
+            incarnon_card, incarnon_choices, incarnon_unsupported = route_card(outcome.choice.data["route"])
+            picked = outcome.choice.data["arcanes"]
+            arcane_card, _ = arcane_card_for([*frame_rows, *picked])
+            coupled["adopted"] = True
+        coupled["score"] = evaluation.score
+        report["coupled"] = coupled
+        report["arcane"]["chosen"] = [dict(row, nameZh=MANUAL_ARCANES_BY_PATH.get(row["path"], {}).get("nameZh"))
+                                        for row in picked]
+    if "arcane" in report:
+        report["arcane"]["score"] = evaluation.score
     report["seconds"] = round(time.perf_counter() - started, 2)
     return evaluation, incarnon_card, dict(incarnon_choices), list(incarnon_unsupported), arcane_card, report
 
@@ -3963,6 +4043,7 @@ def build_weapon_payload(
     stance = _resolve_stance(
         selected_weapon, catalog_weapon["weaponType"], payload.get("stancePath")
     )
+    scenario = _with_melee_stance(scenario, stance)
     stance_multiplier = float((stance or {}).get("dpsMultiplier") or 1.0)
     status_rate_multiplier = float((stance or {}).get("statusRateMultiplier") or 1.0)
     capacity_limit = 60 + int((stance or {}).get("capacityGain") or 0)
@@ -4187,6 +4268,7 @@ def build_weapon_payload(
     )
     if isinstance(target, Mapping) and target.get("health"):
         benchmark_context = dict(target_context, windowSeconds=_BENCHMARK_WINDOW_SECONDS)
+    benchmark_context["windowSeconds"] = _requested_combat_window(payload)
     benchmark_context["headshotChance"] = _manual_number(
         payload.get("headshotChance", 0.0), "headshotChance", low=0.0, high=1.0
     )
@@ -4313,9 +4395,17 @@ def build_weapon_payload(
                 evaluation = optimizer._evaluate(selected_weapon,fixed_cards,None,scenario=scenario,
                     metric='killsPerMinute' if dual_route else objective,passives=arcane_passives,
                     slot_limit=slot_count,capacity_limit=capacity_limit,
-                    special_cards=(card,), special_capacity_cost=int(selected_exilus.get('drain') or 0),
+                    special_cards=(card,) if card else (), special_capacity_cost=int(selected_exilus.get('drain') or 0),
                     target_context=benchmark_context if dual_route else None)
         else:
+            evaluation = optimizer.refine_final_build(
+                selected_weapon, candidates, equipped_riven, evaluation,
+                scenario=scenario, metric=search_metric, passives=arcane_passives,
+                slot_count=slot_count, capacity_limit=capacity_limit,
+                required_damage_type=required_damage_type, target_context=search_context,
+                profile=profile, required_mod_keys=required_keys, forbidden_mod_keys=forbidden_keys,
+                min_fill=min_fill, max_fill=max_fill,
+            )
             evaluation, selected_exilus = _auto_exilus(
                 selected_weapon,
                 catalog_weapon,
@@ -4346,6 +4436,10 @@ def build_weapon_payload(
         build["objectiveScore"] = evaluation.score
         build["stance"] = stance
         build["exilus"] = selected_exilus
+        if auto_report.get('arcane'):
+            auto_report['arcane']['score'] = evaluation.score
+        if auto_report.get('coupled'):
+            auto_report['coupled']['score'] = evaluation.score
         build['forma'] = _forma_summary(selected_weapon, evaluation, equipped_riven, stance, selected_exilus,
                                         catalog_weapon["weaponType"])
         alternate_modes = _alternate_build_modes(
@@ -4354,7 +4448,7 @@ def build_weapon_payload(
 
     skipped = [
         f"optimizer-assumption: {slot_count} ordinary slots, {capacity_limit} capacity after stance, Catalyst and matching ordinary-slot Forma",
-        "optimizer-objective: 当前目标/爆头率/瞄准/灵化循环的 30 秒事件 KPM；未选择有效目标时回退标准靶",
+        f"optimizer-objective: 当前目标/爆头率/瞄准/灵化循环的 {benchmark_context['windowSeconds']:g} 秒事件 KPM；未选择有效目标时回退标准靶",
         (
             f"optimizer-profile: {_PROFILE_LABELS[profile]}档"
             + (
@@ -4415,6 +4509,9 @@ def build_weapon_payload(
             f"optimizer-element-target: final build must contain {required_damage_type}"
         )
     skipped.extend(evaluation.stats.skipped)
+    utility_gaps = _utility_model_gaps(selected_exilus)
+    if fixed_cards is None and catalog_weapon['weaponType'] in {'melee', 'zaw'}:
+        utility_gaps.extend(gap for row in CATALOG_UTILITY_MODS for gap in _utility_model_gaps(row))
     result = {
         "buildLabel": EXPORTS["buildLabel"],
         "schemaVersion": EXPORTS["schemaVersion"],
@@ -4450,7 +4547,7 @@ def build_weapon_payload(
             evaluation.stats, catalog_weapon["weaponType"], stance_multiplier
         ),
         "alternateModes": alternate_modes,
-        "unsupported": sorted(set(build.get("unsupported") or ()) | set(incarnon_unsupported) | set(evaluation.stats.unsupported)),
+        "unsupported": sorted(set(build.get("unsupported") or ()) | set(incarnon_unsupported) | set(evaluation.stats.unsupported) | set(utility_gaps)),
         "skipped": list(dict.fromkeys(skipped)),
         "profile": profile,
         "limitations": CATALOG["buildOptions"]["limitations"],
@@ -5694,6 +5791,7 @@ def _manual_resolve_sim_context(payload: Mapping[str, Any]) -> dict[str, Any]:
     ]
     return {
         "common": common,
+        "window_seconds": _requested_combat_window(payload),
         "weapon": weapon,
         "exalted": _exalted_result(weapon_record, exalted_context, loadout=payload.get("_exaltedLoadout")),
         "exalted_context": exalted_context,
@@ -6236,6 +6334,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
         | set(enhancement_unsupported)
         | set(ctx.get("enemy_value_unsupported") or ())
         | set(ctx.get("mechanic_unsupported") or ())
+        | set(_utility_model_gaps(exilus))
     )
     result["diagnostics"] = {
         "unsupported": list(result.get("unsupported") or ()),
@@ -6411,7 +6510,7 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     headshot_chance=headshot_chance,
                     armour_strip=float(common.get('armour_strip') or 0.0),
                     elemental_armour_strip=float(common.get('elemental_armour_strip') or 0.0),
-                    window_seconds=_BENCHMARK_WINDOW_SECONDS,
+                    window_seconds=ctx['window_seconds'],
                     level=_replay_ctx["level"],
                     steel_path=_replay_ctx["steel_path"],
                     enemy_enhancements=_replay_ctx["enemy_enhancements"],
@@ -6603,7 +6702,7 @@ def _variant_measurer(payload: Mapping[str, Any]) -> SimpleNamespace:
             dict(cycle_enabled=arguments['scenario'].incarnon_cycle, assumed=payload.get('triggerPolicy') == 'assumed_max', incarnon_choices=choices, affinity_target=enemy, level=arguments['level'], eximus=bool(arguments['enemy_enhancements'].get('eximus'))),
             st,
             enemy,
-            dict(attacks_per_second=st.sustained_attack_rate, window_seconds=_BENCHMARK_WINDOW_SECONDS, headshot_chance=weight, collect_timeline=False, level=arguments['level'], steel_path=arguments['steel_path'], enemy_enhancements=arguments['enemy_enhancements'], armour_strip=arguments['armour_strip'], elemental_armour_strip=arguments['elemental_armour_strip'], forced_procs=arguments['forced_procs'], status_rate_multiplier=arguments['status_rate_multiplier'], damage_rate_multiplier=arguments['damage_rate_multiplier']),
+            dict(attacks_per_second=st.sustained_attack_rate, window_seconds=ctx['window_seconds'], headshot_chance=weight, collect_timeline=False, level=arguments['level'], steel_path=arguments['steel_path'], enemy_enhancements=arguments['enemy_enhancements'], armour_strip=arguments['armour_strip'], elemental_armour_strip=arguments['elemental_armour_strip'], forced_procs=arguments['forced_procs'], status_rate_multiplier=arguments['status_rate_multiplier'], damage_rate_multiplier=arguments['damage_rate_multiplier']),
         )
         return body, None, job
 

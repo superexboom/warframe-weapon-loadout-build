@@ -43,7 +43,7 @@ def registry(root):
  return rows
 
 def public_evolutions(weapon,wid,ids,definitions):
- """Map only unique weapon/tier/icon identities; reject ambiguous routes."""
+ """Map unique weapon/tier/icon or declared tier positions; reject conflicts."""
  def icon(value):
   name=str(value or '').rsplit('/',1)[-1]
   return name.replace('(xWhite)','').casefold()
@@ -56,10 +56,19 @@ def public_evolutions(weapon,wid,ids,definitions):
   matches=[b for t in (weapon.get('incarnon') or {}).get('tiers',[]) if t.get('tier')==tier
            for b in t.get('branches',[]) if row.get('icon') and icon(row['icon']) in
            {icon(s.get('icon')) for s in b.get('sources',[]) if s.get('icon')}]
-  if len(matches)!=1:raise ValueError('unmapped or ambiguous evolution icon: '+eid)
+  method='icon'
+  position=row.get('position_in_tier')
+  positioned=[b for t in (weapon.get('incarnon') or {}).get('tiers',[]) if t.get('tier')==tier
+              for b in t.get('branches',[]) if isinstance(position,int) and not isinstance(position,bool)
+              and b.get('id')==f'{tier}-{position}']
+  if len(matches)==1 and len(positioned)==1 and matches[0].get('id')!=positioned[0].get('id'):
+   raise ValueError('conflicting evolution icon and position: '+eid)
+  if len(matches)!=1:
+   if len(positioned)!=1:raise ValueError('unmapped or ambiguous evolution identity: '+eid)
+   matches=positioned;method='declared-tier-position'
   key='tier'+str(tier)
   if key in choices:raise ValueError('duplicate public evolution tier: '+key)
-  choices[key]=matches[0]['id'];proof.append(dict(reference=eid,native=matches[0]['path'],icon=row['icon']))
+  choices[key]=matches[0]['id'];proof.append(dict(reference=eid,native=matches[0]['path'],icon=row.get('icon'),method=method,position=position))
  return choices,proof
 def exact_record(row,records):
  matches=[r for r in records if r['path']==row.get('internal_name')]
@@ -74,7 +83,9 @@ RIVEN_CODES = dict(critical_chance='0',critical_damage='1',status_chance='2',sta
     weak_point_damage='W',weak_point_critical_chance='Y',status_damage='SD',gas='GA',
     corrosive='CO',viral='VI',radiation='RA',blast='BL',magnetic='MA',
     ammo_efficiency='AE',reload_while_holstered='HR',damage_to_orokin='FO',
-    damage_to_techrot='FT',damage_to_scaldra='FS')
+    damage_to_techrot='FT',damage_to_scaldra='FS',attack_speed='J',melee_damage='K',
+    initial_combo='B',critical_chance_for_slide_attack='E',combo_duration='N',
+    range='T',finisher_damage='X',heavy_attack_efficiency='U')
 
 
 def public_riven_spec(row):
