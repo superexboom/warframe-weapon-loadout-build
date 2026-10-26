@@ -3110,7 +3110,8 @@
             "childLife": 4.0,
             "childBounceCount": 2,
             "childDeathMultiplier": 2.5,
-            "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)"
+            "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)",
+            "childActiveLimit": 70
           }
         }
       },
@@ -4554,7 +4555,7 @@
               "nativeField": "EmbedAttack",
               "hit": "embed-body-tick",
               "bodyOnly": true,
-              "impact_delay_seconds": 1.25
+              "impact_delay_seconds": 1.0
             },
             {
               "takes_condition_overload": false,
@@ -4573,7 +4574,7 @@
               "nativeField": "EmbedAttack",
               "hit": "embed-body-tick",
               "bodyOnly": true,
-              "impact_delay_seconds": 2.5
+              "impact_delay_seconds": 2.0
             },
             {
               "takes_condition_overload": false,
@@ -4593,7 +4594,9 @@
               "hit": "headshot-explosion",
               "headOnly": true,
               "count": 2,
-              "impact_delay_seconds": 0.40000001
+              "impact_delay_seconds": 0.40000001,
+              "snapshotHeadshotMultiplier": true,
+              "persistAfterKill": true
             }
           ]
         }
@@ -4864,7 +4867,7 @@
               "nativeField": "EmbedAttack",
               "hit": "embed-body-tick",
               "bodyOnly": true,
-              "impact_delay_seconds": 1.25
+              "impact_delay_seconds": 1.0
             },
             {
               "takes_condition_overload": false,
@@ -4883,7 +4886,7 @@
               "nativeField": "EmbedAttack",
               "hit": "embed-body-tick",
               "bodyOnly": true,
-              "impact_delay_seconds": 2.5
+              "impact_delay_seconds": 2.0
             },
             {
               "takes_condition_overload": false,
@@ -4903,7 +4906,9 @@
               "hit": "headshot-explosion",
               "headOnly": true,
               "count": 2,
-              "impact_delay_seconds": 0.40000001
+              "impact_delay_seconds": 0.40000001,
+              "snapshotHeadshotMultiplier": true,
+              "persistAfterKill": true
             }
           ]
         }

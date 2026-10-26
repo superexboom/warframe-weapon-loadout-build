@@ -44,16 +44,17 @@ def _incarnon(weapon, fire_mode):
 def zoom_effects(weapon, fire_mode, scenario):
     """The top zoom level's buffs as engine effects, or () when not scoped.
 
-    A sniper rifle is evaluated scoped (its combo and zoom are only paid
-    scoped in); any other weapon's aim bonus follows ``scenario.aiming``.
-    Incarnon forms get none, as in WFSim.
+    Scope buffs require aiming. An Incarnon form retains the scope only when
+    its native attack still declares SniperImpactBehavior (Vectis / Prime).
     """
     from .damage import ModEffect
     row = entry(weapon)
     zoom = (row or {}).get("zoom") or {}
-    if not zoom.get("effects") or _incarnon(weapon, fire_mode):
+    if not zoom.get("effects"):
         return ()
-    if zoom.get("aimGated") and not getattr(scenario, "aiming", False):
+    if _incarnon(weapon, fire_mode) and not (row.get('combo') or {}).get('incarnonModes'):
+        return ()
+    if (row.get('sniper') or zoom.get("aimGated")) and not getattr(scenario, "aiming", False):
         return ()
     source = ZOOM_SOURCE + str(weapon.get("path"))
     return tuple(ModEffect(e["upgradeType"], e["operation"], float(e["value"]),
@@ -66,7 +67,8 @@ def combo_spec(weapon):
     if not combo:
         return None
     return dict(min=int(combo["min"]), tierBonus=float(combo["tierBonus"]),
-                tierFactor=float(combo["tierFactor"]), seconds=float(combo["seconds"]))
+                tierFactor=float(combo["tierFactor"]), seconds=float(combo["seconds"]),
+                incarnon=bool(combo.get('incarnonModes')))
 
 
 def multiplier(spec, hits):

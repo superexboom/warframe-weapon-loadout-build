@@ -158,8 +158,11 @@ def build(build: Path, export: Path, wfsim: Path) -> dict:
         except ValueError:
             continue
         combo = _combo(resolved) if sniper else None
+        if combo:
+            combo['incarnonModes'] = [i for i, mode in enumerate(w.get('fireModes') or ())
+                                      if mode.get('isIncarnonForm') and i in combo['behaviors']]
         zoom = _zoom(resolved)
-        if zoom and not sniper and zoom.get('effects'):
+        if zoom and zoom.get('effects'):
             zoom['aimGated'] = True
         key, ref = by_internal.get(path) or next(
             ((k, r) for k, r in reference.items() if k == _snake(w.get('nameEn') or '')), (None, None))
@@ -181,7 +184,7 @@ def build(build: Path, export: Path, wfsim: Path) -> dict:
                                        seconds=float(ref['sniperCombo'].get('seconds', 2.)))
                                   if ref.get('sniperCombo') else None)
                 entry['zoom'] = (dict(level=None, magnification=(ref.get('scope') or {}).get('magnification'),
-                                      effects=_scope_effects(ref['scope']), aimGated=not sniper)
+                                      effects=_scope_effects(ref['scope']), aimGated=True)
                                  if ref.get('scope') else None)
                 entry['wfsim']['disagrees'] = []
         entries[path] = entry
@@ -191,11 +194,12 @@ def build(build: Path, export: Path, wfsim: Path) -> dict:
         exportBuild=json.loads((export / 'weapons.json').read_text(encoding='utf-8')).get('buildLabel'),
         semantics=dict(
             combo='multiplier(hits)=1 below min, else 1+tierBonus*(1+k) where k=max tier with hits>=min*tierFactor^k; '
-                  'read before the hit is counted; one count per landing direct pellet; loses 1 per `seconds` without a landing hit; '
-                  'multiplies direct and radial hit damage, not the status payload; paid only scoped in, never in an Incarnon form',
+                  'count the landing pellet before paying it; one count per landing direct pellet; loses 1 per `seconds` without a landing hit; '
+                  'multiplies direct and radial hit damage and their status payloads; paid only while aiming; '
+                  'incarnonModes lists transformed attacks retaining native SniperImpactBehavior',
             zoom='top zoom level whose upgrades are all buffs; injected as engine effects with the native upgrade operation '
-                 '(STACKING_MULTIPLY joins the mod bucket, ADD is flat after mods); snipers are evaluated scoped, other weapons '
-                 'only when the scenario is aiming; Incarnon forms receive none',
+                 '(STACKING_MULTIPLY joins the mod bucket, ADD is flat after mods); requires scenario aiming; '
+                 'Incarnon forms retaining native SniperImpactBehavior retain the weapon scope',
             reference='WFSim engine/src/model/weapon.rs SniperCombo, fight/run.rs combo_at, fight/pellet.rs, '
                       'build/loadout/resolve.rs (scope)'),
         wfsimUnmatched=sorted(set(reference) - used),

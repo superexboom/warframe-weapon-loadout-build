@@ -65,15 +65,17 @@ def test_data_comes_from_game_packages_and_matches_wfsim():
     assert by_name['Vesper 77']['source'] == 'wfsim-yaml' and by_name['Vesper 77']['zoom']['aimGated']
 
 
-def test_scope_crit_joins_the_mod_bucket_and_only_the_base_form():
-    rubico = apply_mods(weapon('Rubico Prime'), [VITAL_SENSE], scenario=Scenario())
+def test_scope_requires_aim_and_vectis_keeps_it_in_both_forms():
+    aimed = Scenario(aiming=True)
+    rubico = apply_mods(weapon('Rubico Prime'), [VITAL_SENSE], scenario=aimed)
     assert rubico.crit_multiplier == pytest.approx(3. * (1 + 1.2 + .5), rel=1e-3)
-    lanka = apply_mods(weapon('Lanka'), [], scenario=Scenario())
+    lanka = apply_mods(weapon('Lanka'), [], scenario=aimed)
     assert lanka.crit_chance == pytest.approx(.25 + .5)
     vectis = weapon('Vectis Prime')
-    assert apply_mods(vectis, [], fire_mode=0).headshot_bonus_multiplier == pytest.approx(1.6)
-    incarnon = apply_mods(vectis, [VITAL_SENSE], fire_mode=1)
-    assert incarnon.headshot_bonus_multiplier == pytest.approx(1.)
+    assert apply_mods(vectis, [], fire_mode=0, scenario=aimed).headshot_bonus_multiplier == pytest.approx(1.6)
+    assert apply_mods(vectis, [], fire_mode=0, scenario=Scenario()).headshot_bonus_multiplier == 1.
+    incarnon = apply_mods(vectis, [VITAL_SENSE], fire_mode=1, scenario=aimed)
+    assert incarnon.headshot_bonus_multiplier == pytest.approx(1.6)
     assert incarnon.crit_multiplier == pytest.approx(
         apply_mods({**vectis, 'path': 'no-scope'}, [VITAL_SENSE], fire_mode=1).crit_multiplier)
     vesper = weapon('Vesper 77')
@@ -84,13 +86,14 @@ def test_scope_crit_joins_the_mod_bucket_and_only_the_base_form():
 
 def test_scope_bonus_is_not_applied_twice_when_effects_are_reused():
     w = weapon('Rubico Prime')
-    once = apply_mods(w, [VITAL_SENSE])
+    scenario = Scenario(aiming=True)
+    once = apply_mods(w, [VITAL_SENSE], scenario=scenario)
     from wfarsenal.sniper import zoom_effects
-    assert apply_mods(w, [VITAL_SENSE, *zoom_effects(w, 0, Scenario())]).crit_multiplier == pytest.approx(once.crit_multiplier)
+    assert apply_mods(w, [VITAL_SENSE, *zoom_effects(w, 0, scenario)], scenario=scenario).crit_multiplier == pytest.approx(once.crit_multiplier)
 
 
 def _run(w, mode=0, combo=True, status=1.):
-    combat = prepare(dict(weapon=w, fire_mode=mode, scenario=Scenario(), effects=[]), [], [])
+    combat = prepare(dict(weapon=w, fire_mode=mode, scenario=Scenario(aiming=True), effects=[]), [], [])
     if not combo:
         combat['sniperCombo'] = None
     stats, _ = combat['resolve']('selected', {}, 0)
@@ -108,24 +111,27 @@ def test_combo_multiplies_each_direct_hit_by_the_count_including_it():
     assert off['sniperCombo'] is None
 
 
-def test_combo_does_not_reach_the_status_payload():
+def test_combo_scales_the_status_seed_as_measured_in_m117():
     w = weapon('Rubico Prime')
     on, off = _run(w), _run(w, combo=False)
     assert on['directWindow'] > 1.5 * off['directWindow']
-    assert on['dotWindow'] == pytest.approx(off['dotWindow'])
+    assert on['dotWindow'] > 1.5 * off['dotWindow']
+    assert on['procCounts'] == pytest.approx(off['procCounts'])
 
 
-def test_incarnon_form_neither_builds_nor_pays_the_combo():
+def test_vectis_incarnon_builds_and_pays_its_native_combo():
     w = weapon('Vectis Prime')
     w['isIncarnonForm'] = True
     result = _run(w, mode=1)
-    assert result['sniperCombo']['events'] == []
+    assert len(result['sniperCombo']['events']) == result['shots']
+    assert result['sniperCombo']['events'][-1]['multiplier'] > 1.
 
 
 def test_shared_paths_carry_the_combo_spec():
     w = weapon('Vectis Prime')
-    combat = prepare(dict(weapon=w, fire_mode=0, scenario=Scenario(), effects=[]), [], [])
-    assert combat['sniperCombo'] == dict(min=5, tierBonus=.5, tierFactor=3., seconds=2.)
+    combat = prepare(dict(weapon=w, fire_mode=0, scenario=Scenario(aiming=True), effects=[]), [], [])
+    assert combat['sniperCombo'] == dict(min=5, tierBonus=.5, tierFactor=3., seconds=2., incarnon=True)
+    assert prepare(dict(weapon=w, fire_mode=1, scenario=Scenario(aiming=False), effects=[]), [], [])['sniperCombo'] is None
     assert prepare(dict(weapon=weapon('Braton Prime'), fire_mode=0, scenario=Scenario(), effects=[]),
                    [], [])['sniperCombo'] is None
 
@@ -139,7 +145,7 @@ def test_perigale_fires_native_four_round_bursts(name):
     profile = combat_reference()['cadenceProfiles'][w['path']]
     assert profile['burst'] == dict(count=4, delay_seconds=pytest.approx(.04))
     assert profile['nativeSources'] and profile['referenceId'] == name.lower().replace(' ', '_')
-    combat = prepare(dict(weapon=w, fire_mode=0, scenario=Scenario(), effects=[]), [], [])
+    combat = prepare(dict(weapon=w, fire_mode=0, scenario=Scenario(aiming=True), effects=[]), [], [])
     assert combat['baseBurst']['count'] == 4
     stats, _ = combat['resolve']('selected', {}, 0)
     run = lambda window: replay(stats, target(1e12), attacks_per_second=stats.fire_rate, window_seconds=window,

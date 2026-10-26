@@ -63,6 +63,7 @@ pub struct Profile {
     pub child_bounces: f64,
     pub child_life: f64,
     pub child_death_multiplier: f64,
+    pub child_active_limit: f64,
 }
 
 /// `combat['projectileState']` as the clocks read it.
@@ -113,6 +114,7 @@ pub struct Projectiles {
     groups: Vec<Group>,
     active: Option<usize>,
     shots: i64,
+    children_alive: Vec<(f64, f64)>,
     pub deployed: f64,
     pub merged: f64,
     pub explosions: i64,
@@ -122,7 +124,7 @@ pub struct Projectiles {
 
 impl Projectiles {
     pub fn new(state: State) -> Self {
-        Projectiles { state, groups: Vec::new(), active: None, shots: 0, deployed: 0.0, merged: 0.0,
+        Projectiles { state, groups: Vec::new(), active: None, shots: 0, children_alive: Vec::new(), deployed: 0.0, merged: 0.0,
                       explosions: 0, singularities: 0, child_projectiles: 0 }
     }
 
@@ -151,6 +153,11 @@ impl Projectiles {
             let next = time + profile.embed_interval;
             self.groups[id].next_embed = Some(next);
             self.schedule(out, next, ACT_EMBED, id);
+            // Intended impact-time detonation, including an initially full
+            // charged blob. Do not reproduce the game's skipped callback.
+            if stacks >= profile.max_stack {
+                self.explode(out, time, id);
+            }
         }
         id
     }
@@ -202,6 +209,24 @@ impl Projectiles {
         self.deployed += quantity;
         self.shots += 1;
         let isolated = self.state.isolated;
+        if profile.kind == STUG && !isolated {
+            let mut remaining = quantity * profile.initial_stack;
+            while remaining > 1e-9 {
+                let amount = profile.max_stack.min(remaining);
+                remaining -= amount;
+                let current = self.active.filter(|&id| {
+                    let g = &self.groups[id];
+                    g.alive && g.generation == generation && g.profile.kind == STUG
+                });
+                if let Some(id) = current {
+                    self.merge(out, time, id, amount);
+                } else {
+                    let id = self.create(out, time, profile, parts, generation, amount, 1.0);
+                    self.active = self.groups[id].alive.then_some(id);
+                }
+            }
+            return 0.0;
+        }
         let full = quantity.trunc();
         let mut fractions: Vec<f64> = vec![1.0; full as usize];
         if quantity - full > 1e-9 {
@@ -218,7 +243,7 @@ impl Projectiles {
                     let initial = profile.initial_stack;
                     let (stacks, w) = if isolated { (initial, weight) } else { (initial * weight, 1.0) };
                     let id = self.create(out, time, profile, parts, generation, stacks, w);
-                    self.active = Some(id);
+                    self.active = self.groups[id].alive.then_some(id);
                 }
             }
         }
@@ -248,12 +273,16 @@ impl Projectiles {
         let profile = self.groups[id].profile.clone();
         let generation = self.groups[id].generation;
         if profile.child {
-            let count = profile.child_max.min(profile.child_min.max((profile.child_max * stacks / profile.max_stack).ceil()));
+            let lifetime = profile.child_life.min(self.state.child_detonate.unwrap_or(profile.child_life));
+            self.children_alive.retain(|&(end, _)| end > time + 1e-9);
+            let available = (profile.child_active_limit - self.children_alive.iter().map(|x| x.1).sum::<f64>()).max(0.0);
+            let limit = profile.child_max.min(available);
+            let count = if limit > 1.0 { profile.child_min.max((limit * stacks / profile.max_stack).floor()) } else { limit.trunc() };
+            if count != 0.0 { self.children_alive.push((time + lifetime, count)); }
             self.child_projectiles += count as i64;
             let hits = count.min(self.state.child_hits.trunc());
             let bounces = profile.child_bounces.min(self.state.bounce_hits.trunc());
             let interval = self.state.bounce_delay;
-            let lifetime = profile.child_life.min(self.state.child_detonate.unwrap_or(profile.child_life));
             let mut n = 0.0;
             while n < bounces {
                 if (n + 1.0) * interval < lifetime {

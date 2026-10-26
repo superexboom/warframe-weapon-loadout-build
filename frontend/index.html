@@ -592,9 +592,9 @@
                       <label class="field"><span>投射物落点模式</span><select data-combat-state="projectileMode"><option value="">默认</option><option value="stacked">同一落点叠加</option><option value="isolated">独立落点</option><option value="manual">分批手动起爆</option></select></label>
                       <label class="field"><span>每批射击次数</span><input data-combat-state="detonateAfterShots" type="number" min="1" max="20" step="1" placeholder="未设置"></label>
                       <label class="field"><span>分批起爆等待（秒）</span><input data-combat-state="detonationWaitSeconds" type="number" min="0" step="0.1" placeholder="未设置"></label>
-                      <label class="field"><span>Stug 派生弹命中数</span><input data-combat-state="stugChildHits" type="number" min="0" max="5" step="1" placeholder="未设置"></label>
-                      <label class="field"><span>Stug 弹跳命中次数</span><input data-combat-state="stugBounceHits" type="number" min="0" max="2" step="1" placeholder="未设置"></label>
-                      <label class="field"><span>弹跳命中间隔（秒）</span><input data-combat-state="stugBounceDelaySeconds" type="number" min="0" step="0.1" placeholder="未设置"></label>
+                      <label class="field"><span>Stug 派生弹命中数</span><input data-combat-state="stugChildHits" type="number" min="0" max="5" step="1" placeholder="默认全部命中（最多 5）" title="单体计算默认所有派生胶团在目标脚下造成完整爆炸伤害；爆炸不触发弱点击杀赋能。"></label>
+                      <label class="field"><span>Stug 弹跳命中次数</span><input data-combat-state="stugBounceHits" type="number" min="0" max="2" step="1" placeholder="默认 2 次"></label>
+                      <label class="field"><span>弹跳命中间隔（秒）</span><input data-combat-state="stugBounceDelaySeconds" type="number" min="0" step="0.1" placeholder="默认 0（忽略飞行）" title="史特克按正常满层引爆计算，默认子胶团在目标脚下，忽略弹跳飞行时间；可填写间隔比较命中时序。"></label>
                       <label class="field"><span>Stug 派生弹死亡时间（秒）</span><input data-combat-state="stugChildDetonateSeconds" type="number" min="0" max="4" step="0.1" placeholder="默认 4 秒"></label>
                       <label class="check-field" title="Lex / Gorgon / Atomos / Cestra 等灵化进化的“自身护盾 / 超宏击破时”效果需要战甲配合；勾选时按常驻生效，取消后按上方“自身护盾 / 超宏击破”时间轴触发。"><input data-combat-state="selfShieldBreakForced" data-default-on type="checkbox" checked><span>自身护盾击破类灵化效果强制生效</span></label>
                       <label class="check-field" title="带完美蓄力窗口的武器（如 Nataruk）按窗口起点松手、发射完美弹体；只在完美蓄力单位时间伤害不低于满蓄时启用（Cinta 的定时释放不划算，仍按满蓄）。取消后一律按满蓄。"><input data-combat-state="perfectCharge" data-default-on type="checkbox" checked><span>完美蓄力（时机释放）</span></label>

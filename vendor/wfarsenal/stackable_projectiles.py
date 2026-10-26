@@ -28,6 +28,7 @@ class StackableProjectiles:
         self.active = None
         self.sequence = 0
         self.shots = 0
+        self.children_alive = []
         self.stats = dict(deployed=0.,merged=0.,explosions=0,singularities=0,childProjectiles=0)
 
     def record(self, time, kind, group, **values):
@@ -60,6 +61,11 @@ class StackableProjectiles:
             group.next_embed = time+profile['embedInterval']
             self.schedule(group.next_embed,'embed',group)
         self.record(time,'deploy',group)
+        # Portable models intended full-stack detonation at the impact point.
+        # The game's initial-stack path skips its callback at the cap; that
+        # bug must not leave a fully charged blob permanently unable to merge.
+        if profile['kind']=='stug' and stacks>=profile['maxStack']:
+            self.explode(time,group)
         return group
 
     def merge(self, time, group, amount):
@@ -101,6 +107,22 @@ class StackableProjectiles:
         self.stats['deployed'] += quantity
         self.shots += 1
         isolated = self.state.get('projectileMode')=='isolated'
+        if profile['kind']=='stug' and not isolated:
+            # Native multishot pre-stacks each newly emitted blob. A later
+            # blob merges as one unit, clamping at the cap (3 + 3 -> 5),
+            # rather than spilling its last pellet into a new group.
+            remaining = quantity*profile.get('initialStack',1.)
+            while remaining>1e-9:
+                amount = min(profile['maxStack'],remaining)
+                remaining -= amount
+                group = self.groups.get(self.active)
+                if (group is not None and group.alive and group.generation==generation
+                        and group.profile['kind']=='stug'):
+                    self.merge(time,group,amount)
+                else:
+                    group = self.create(time,profile,parts,generation,amount)
+                    self.active = group.id if group.alive else None
+            return 0.
         # Fractional multishot is an expected deployment mass. Each full
         # projectile remains a real merge event; isolated fractions keep a
         # weighted independent lifecycle instead of rounding to a free orb.
@@ -112,7 +134,7 @@ class StackableProjectiles:
                     or group.profile['kind']!=profile['kind']):
                 initial = profile.get('initialStack',1.)
                 group = self.create(time,profile,parts,generation,initial if isolated else initial*weight,weight if isolated else 1.)
-                self.active = group.id
+                self.active = group.id if group.alive else None
             else:
                 self.merge(time,group,weight*profile.get('initialStack',1.))
         batch = self.state.get('detonateAfterShots')
@@ -133,19 +155,26 @@ class StackableProjectiles:
         self.hit(group,'explosion',time,group.stacks)
         profile = group.profile
         if profile.get('child'):
-            count = min(profile['childMaxCount'],max(profile['childMinCount'],math.ceil(
-                profile['childMaxCount']*group.stacks/profile['maxStack'])))
+            lifetime = min(profile['childLife'],self.state.get('stugChildDetonateSeconds',profile['childLife']))
+            self.children_alive = [(end,n) for end,n in self.children_alive if end>time+1e-9]
+            available = max(0,profile.get('childActiveLimit',70)-sum(n for _,n in self.children_alive))
+            limit = min(profile['childMaxCount'],available)
+            count = (max(profile['childMinCount'],math.floor(limit*group.stacks/profile['maxStack']))
+                     if limit>1 else int(limit))
+            if count:
+                self.children_alive.append((time+lifetime,count))
             self.stats['childProjectiles'] += count
             self.record(time,'children-created',group,count=count)
-            hits = min(count,int(self.state.get('stugChildHits',0)))
-            bounces = min(profile['childBounceCount'],int(self.state.get('stugBounceHits',0)))
+            # Single-target contract: all children land at the target's feet.
+            # Explicit zero remains available for a controlled parent-only run.
+            hits = min(count,int(self.state.get('stugChildHits',profile['childMaxCount'])))
+            bounces = min(profile['childBounceCount'],int(self.state.get('stugBounceHits',profile['childBounceCount'])))
             interval = self.state.get('stugBounceDelaySeconds',0.)
-            lifetime = min(profile['childLife'],self.state.get('stugChildDetonateSeconds',profile['childLife']))
             for n in range(bounces):
                 if (n+1)*interval<lifetime:
-                    self.push(time+(n+1)*interval,'stackable-child',(group.id,1.,hits),group.generation)
+                    self.push(time+(n+1)*interval,'stackable-child',(group.id,1.,hits),None)
             self.push(time+lifetime,'stackable-child',
-                      (group.id,profile['childDeathMultiplier'],hits),group.generation)
+                      (group.id,profile['childDeathMultiplier'],hits),None)
         if profile.get('kind')=='mq' and self.state.get('mqAugmentEquipped'):
             if group.parts.get('orbRadial') is not None:
                 self.hit(group,'orbRadial',time)

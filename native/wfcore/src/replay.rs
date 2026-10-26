@@ -244,6 +244,7 @@ struct Stats {
     head_only: bool,
     body_only: bool,
     impact_delay: f64,
+    persist_after_kill: bool,
     lingering: Option<(usize, f64, f64)>,
     primary_delay: f64,
     fixed_radial: bool,
@@ -280,6 +281,7 @@ impl Stats {
         self.head_only = false;
         self.body_only = false;
         self.impact_delay = 0.0;
+        self.persist_after_kill = false;
         self.fixed_radial = false;
         self.additional = Vec::new();
         self.co_spec = None;
@@ -333,6 +335,7 @@ impl Stats {
             head_only: self.head_only,
             body_only: self.body_only,
             impact_delay: self.impact_delay,
+            persist_after_kill: self.persist_after_kill,
             lingering: self.lingering,
             primary_delay: self.primary_delay,
             fixed_radial: self.fixed_radial,
@@ -1081,6 +1084,7 @@ impl<'py> Replay<'py> {
             head_only: match opt_attr(obj, "_head_only")? { Some(v) => v.is_truthy()?, None => false },
             body_only: match opt_attr(obj, "_body_only")? { Some(v) => v.is_truthy()?, None => false },
             impact_delay: match opt_attr(obj, "_impact_delay")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
+            persist_after_kill: match opt_attr(obj, "_persist_after_kill")? { Some(v) => v.is_truthy()?, None => false },
             lingering: None,
             primary_delay: match opt_attr(obj, "_primary_delay_seconds")? {
                 Some(v) if v.is_truthy()? => v.extract::<f64>()?,
@@ -2369,9 +2373,20 @@ impl<'py> Replay<'py> {
     }
 
     fn add_procs(&mut self, st: usize, aim: f64, t: f64, key: PacketKey) -> PyResult<()> {
+        self.add_procs_scaled(st, aim, t, key, 1.0)
+    }
+
+    fn add_procs_scaled(&mut self, st: usize, aim: f64, t: f64, key: PacketKey, scale: f64) -> PyResult<()> {
         let _timer = crate::counters::Timer::start(crate::counters::ADD_PROCS);
         let data = self.packets[&key].clone();
-        self.add_procs_data(st, aim, t, &data, true)
+        if scale == 1.0 {
+            return self.add_procs_data(st, aim, t, &data, true);
+        }
+        let mut scaled = Packet { vector: Vec::new(), procs: data.procs.clone(),
+                                  rows: data.rows.clone(), non: data.non.clone() };
+        for row in scaled.rows.values_mut() { row.seed *= scale; row.accumulator *= scale; }
+        for value in scaled.non.values_mut() { *value *= scale; }
+        self.add_procs_data(st, aim, t, &scaled, true)
     }
 
     /// `status_arcanes.encumber_roll`: the chance a shot spawns an extra
@@ -2449,6 +2464,7 @@ impl<'py> Replay<'py> {
             child_bounces: get_f(d, "childBounceCount", 0.0)?,
             child_life: get_f(d, "childLife", 0.0)?,
             child_death_multiplier: get_f(d, "childDeathMultiplier", 1.0)?,
+            child_active_limit: get_f(d, "childActiveLimit", 70.0)?,
         });
         self.stack_profiles.insert(ptr, p.clone());
         Ok(p)
@@ -2489,8 +2505,10 @@ impl<'py> Replay<'py> {
                 stackable::Action::Life { time, group, token, action, generation } => {
                     self.push(time, Kind::StackLife(group, token, action), Some(generation));
                 }
-                stackable::Action::Child { time, group, multiplier, hits, generation } => {
-                    self.push(time, Kind::StackChild(group, multiplier, hits), Some(generation));
+                stackable::Action::Child { time, group, multiplier, hits, generation: _ } => {
+                    // Child blobs are independent projectiles at the fixed
+                    // target location, even after their parent kills a body.
+                    self.push(time, Kind::StackChild(group, multiplier, hits), None);
                 }
             }
         }
@@ -2801,7 +2819,7 @@ impl<'py> Replay<'py> {
         };
         let cv2 = self.spread(part, 0.0);
         if !self.take(&rvector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
-            self.add_procs(part, 0.0, t, rkey)?;
+            self.add_procs_scaled(part, 0.0, t, rkey, sniper_factor)?;
         }
         self.noncrit_no_proc_hit(part, 0.0, t);
         Ok(())
@@ -2863,6 +2881,7 @@ struct SpoolSpec {
 
 #[derive(Clone)]
 struct ShotCombo {
+    incarnon: bool,
     min: f64,
     seconds: f64,
     tier_bonus: f64,
@@ -3749,7 +3768,7 @@ impl<'py> Replay<'py> {
                     let radial_only = s.radial_only;
                     let continuous = s.continuous;
                     let mut sniper_factor = 1.0;
-                    if !radial_only && !self.incarnon_form() {
+                    if !radial_only && (!self.incarnon_form() || self.shot_combo.as_ref().is_some_and(|c| c.incarnon)) {
                         if let Some(combo) = self.shot_combo.as_mut() {
                             sniper_factor = combo.shot(t, hit_count);
                         }
@@ -3815,7 +3834,7 @@ impl<'py> Replay<'py> {
                         let died = self.take(&vector, t, DIRECT, WeakKill::Flag(!radial_only), cv2, false)?;
                         self.noncrit_no_proc_hit(active, aim, t);
                         if !died {
-                            self.add_procs(active, aim, t, key)?;
+                            self.add_procs_scaled(active, aim, t, key, sniper_factor)?;
                             if let Some((part, tick_rate, duration)) = self.stats[active].lingering {
                                 let mut duration = duration;
                                 if let Some(multiplier) = self.field_duration {
@@ -3839,7 +3858,7 @@ impl<'py> Replay<'py> {
                         parts.extend(self.stats[r].additional.iter().copied());
                     }
                     for mut part in parts {
-                        if self.gen != generation {
+                        if self.gen != generation && !self.stats[part].persist_after_kill {
                             self.stale += 1;
                             continue;
                         }
@@ -3856,7 +3875,8 @@ impl<'py> Replay<'py> {
                         }
                         let delay = pmax(0.0, self.stats[part].impact_delay);
                         if delay != 0.0 {
-                            self.push(t + delay, Kind::DelayedRadial(part, sniper_factor), Some(generation));
+                            let generation = if self.stats[part].persist_after_kill { None } else { Some(generation) };
+                            self.push(t + delay, Kind::DelayedRadial(part, sniper_factor), generation);
                         } else {
                             self.radial_hit(part, sniper_factor, t)?;
                         }
@@ -4244,7 +4264,7 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         None => None,
     };
     let shot_combo = match opt_dict("sniperCombo")? {
-        Some(d) => Some(ShotCombo { min: get_f(&d, "min", 0.0)?, seconds: get_f(&d, "seconds", 0.0)?,
+        Some(d) => Some(ShotCombo { incarnon: truthy(&d, "incarnon")?, min: get_f(&d, "min", 0.0)?, seconds: get_f(&d, "seconds", 0.0)?,
                                     tier_bonus: get_f(&d, "tierBonus", 0.0)?, tier_factor: get_f(&d, "tierFactor", 1.0)?,
                                     count: 0.0, last_hit: 0.0 }),
         None => None,

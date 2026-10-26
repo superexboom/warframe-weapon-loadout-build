@@ -68,6 +68,7 @@ def import_profiles(packages, export, reference):
                     child_path=path.rsplit('/',1)[0]+'/'+script['_secondaryProjectile']
                     child=pkg.resolve(child_path)
                     profile.update(child=component(child['ExplosiveAttack'],child), childMaxCount=5,
+                                   childActiveLimit=70,
                                    childMinCount=2, childLife=float(child['MaxLife']),
                                    childBounceCount=int(script['_maxExplosiveBounces']),
                                    childDeathMultiplier=float(script['_deathExplosionMult']))

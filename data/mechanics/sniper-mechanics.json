@@ -3,8 +3,8 @@
  "packageBuild": "2026.08.13.13.24",
  "exportBuild": "2026.08.13.13.24",
  "semantics": {
-  "combo": "multiplier(hits)=1 below min, else 1+tierBonus*(1+k) where k=max tier with hits>=min*tierFactor^k; read before the hit is counted; one count per landing direct pellet; loses 1 per `seconds` without a landing hit; multiplies direct and radial hit damage, not the status payload; paid only scoped in, never in an Incarnon form",
-  "zoom": "top zoom level whose upgrades are all buffs; injected as engine effects with the native upgrade operation (STACKING_MULTIPLY joins the mod bucket, ADD is flat after mods); snipers are evaluated scoped, other weapons only when the scenario is aiming; Incarnon forms receive none",
+  "combo": "count the landing pellet before paying it; one count per landing direct pellet; loses 1 per seconds without a landing hit; multiplies direct and radial hit damage, and their status payloads; requires aiming; incarnonModes identifies transformed attacks retaining native SniperImpactBehavior",
+  "zoom": "top buff-only zoom level; native upgrade operations; requires aiming; transformed attacks retaining native SniperImpactBehavior retain the weapon scope",
   "reference": "WFSim engine/src/model/weapon.rs SniperCombo, fight/run.rs combo_at, fight/pellet.rs, build/loadout/resolve.rs (scope)"
  },
  "wfsimUnmatched": [],
@@ -82,7 +82,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -270,7 +271,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -365,7 +367,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -442,7 +445,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -519,7 +523,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -634,7 +639,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -718,7 +724,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -802,7 +809,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -855,6 +863,14 @@
      "ComboMissDecay": 1,
      "ComboTimeOverDecay": 1,
      "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    },
+    "incarnonModes": [
+     1
+    ],
+    "formVerification": {
+     "build": "2026.10.22.13.12",
+     "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+     "rule": "Both base and Incarnon attack blocks declare SniperImpactBehavior; shared ZoomLevels remain in scope."
     }
    },
    "zoom": {
@@ -891,7 +907,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -975,7 +992,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -1059,7 +1077,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -1143,7 +1162,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -1192,6 +1212,14 @@
      "ComboMissDecay": 1,
      "ComboTimeOverDecay": 1,
      "TimeUpgrade": "WEAPON_SNIPER_COMBO_DURATION_BONUS"
+    },
+    "incarnonModes": [
+     1
+    ],
+    "formVerification": {
+     "build": "2026.10.22.13.12",
+     "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+     "rule": "Both base and Incarnon attack blocks declare SniperImpactBehavior; shared ZoomLevels remain in scope."
     }
    },
    "zoom": {
@@ -1228,7 +1256,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {
@@ -1312,7 +1341,8 @@
        }
       ]
      }
-    ]
+    ],
+    "aimGated": true
    },
    "packageSources": [
     {

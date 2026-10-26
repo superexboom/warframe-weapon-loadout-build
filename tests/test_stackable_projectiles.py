@@ -102,7 +102,7 @@ def test_stug_incarnon_children_obey_count_bounces_and_death_multiplier():
     assert [e['time'] for e in children]==pytest.approx([1.6,1.7,5.5])
     assert [e['damageScale'] for e in children]==[1.,1.,2.5]
     assert result['projectileLifecycle']['childProjectiles']==2
-    empty = run('Stug',5.51,mode=2,rate=.1)
+    empty = run('Stug',5.51,mode=2,rate=.1,state={'stugChildHits':0})
     assert not any(e['kind']=='child' for e in empty['projectileEvents'])
     assert result['directWindow']-empty['directWindow']==pytest.approx(200.*2*(1+1+2.5))
 
@@ -114,13 +114,13 @@ def test_stug_child_early_death_cancels_later_bounce_hits():
     assert [(e['time'],e['damageScale']) for e in events]==pytest.approx([(2.,1.),(2.1,2.5)])
 
 
-def test_stug_full_charge_consumes_ten_rounds_and_keeps_initial_embed_fuse():
+def test_stug_full_charge_consumes_ten_rounds_and_detonates_at_impact():
     stats,combat = setup('Stug',mode=1)
     assert stats.ammo_cost==10
     assert stats._stackable[0]['initialStack']==10
     result = replay(stats,target(1e12),attacks_per_second=stats.fire_rate,window_seconds=1.51,combat=combat)
     explosions = [e for e in result['projectileEvents'] if e['kind']=='explosion']
-    assert len(explosions)==1 and explosions[0]['time']==1.5
+    assert len(explosions)==1 and explosions[0]['time']==0.
     assert explosions[0]['damageScale']==10
     assert result['shots']==1
 
@@ -132,3 +132,61 @@ def test_stug_full_charge_is_limited_by_modded_magazine():
     stats,_=combat['resolve']('selected',{},0)
     assert stats.magazine==5 and stats.ammo_cost==5
     assert stats._stackable[0]['initialStack']==5
+
+
+@pytest.mark.parametrize('multishot,stacks,children', [(3.,3.,3),(3.9,3.9,3),(5.,5.,5),(6.,5.,5)])
+def test_stug_pre_stacks_a_new_blob_and_uses_native_child_count(multishot,stacks,children):
+    # A 3-stack shot is one pre-stacked blob; fractional expected mass must
+    # not round its child count upward into a free additional projectile.
+    result=run('Stug',1.51,mode=2,rate=.1,multishot=multishot)
+    deployed=[e for e in result['projectileEvents'] if e['kind']=='deploy']
+    assert deployed[0]['stacks']==stacks
+    embeds=[e for e in result['projectileEvents'] if e['kind']=='embed']
+    assert embeds[0]['damageScale']==stacks
+    created=[e for e in result['projectileEvents'] if e['kind']=='children-created']
+    assert created[0]['count']==children
+    first=next(e for e in result['projectileEvents'] if e['kind']=='explosion')
+    assert first['time']==(0. if multishot>=5 else 1.5)
+
+
+def test_stug_merges_whole_blobs_and_clamps_cross_shot_overflow():
+    result=run('Stug',1.01,mode=2,rate=1.,multishot=3.)
+    events=result['projectileEvents']
+    explosions=[e for e in events if e['kind']=='explosion']
+    assert [(e['time'],e['stacks']) for e in explosions]==[(1.,5.)]
+    assert len([e for e in events if e['kind']=='deploy'])==1
+
+
+def test_stug_default_counts_every_child_and_bounce_without_weakpoint_damage():
+    full=run('Stug',5.51,mode=2,rate=.1)
+    empty=run('Stug',5.51,mode=2,rate=.1,state={'stugChildHits':0})
+    child=[e for e in full['projectileEvents'] if e['kind']=='child']
+    assert [(e['damageScale'],e['hitWeight']) for e in child]==[(1.,2.),(1.,2.),(2.5,2.)]
+    assert full['directWindow']-empty['directWindow']==pytest.approx(1800.)
+    stats,combat=setup('Stug',mode=2,multishot=5.)
+    for part in stats._stackable[1].values():
+        assert part.radial_only and part.headshot_bonus_multiplier==1.
+        assert part.weakpoint_damage_bonus==part.weakpoint_crit_chance_bonus==0.
+    head=replay(stats,target(1e12),attacks_per_second=.1,window_seconds=4.1,combat=combat,headshot_chance=1.)
+    body=replay(stats,target(1e12),attacks_per_second=.1,window_seconds=4.1,combat=combat,headshot_chance=0.)
+    assert head['directWindow']==pytest.approx(body['directWindow'])
+
+
+def test_stug_child_population_cap_releases_slots_when_children_expire():
+    result=run('Stug',4.01,mode=2,rate=20.,multishot=5.)
+    births=[e for e in result['projectileEvents'] if e['kind']=='children-created']
+    assert sum(e['count'] for e in births if e['time']<4.-1e-8)==70
+    assert any(e['count']==0 for e in births if 1.<e['time']<4.-1e-8)
+    assert births[-1]['time']==pytest.approx(4.) and births[-1]['count']==5
+
+
+def test_stug_children_survive_the_parents_kill_and_never_earn_deadhead():
+    stats,combat=setup('Stug',mode=2,multishot=5.,rate=.1)
+    sources=[dict(id=kind,label=kind,kind=kind,duration=20.,maxStacks=3.,perEvent=1.)
+             for kind in ('on-headshot','on-headshot-kill')]
+    result=replay(stats,target(100.),attacks_per_second=.1,window_seconds=4.1,
+                  combat=combat,trigger_sources=sources,headshot_chance=1.)
+    children=[e for e in result['projectileEvents'] if e['kind']=='child']
+    assert len(children)==3 and children[-1]['time']==4.
+    assert result['weakpointKillEvents']==0
+    assert all(row['avgStacks']==0 for row in result['triggerSeries'])

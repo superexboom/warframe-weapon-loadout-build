@@ -6,10 +6,11 @@ The Incarnon Form projectile (OnProjectileStoppedScript VectisIncarnon.lua)
 lands its direct hit, then embeds an orb whose ``EmbedAttack`` hits at once.
 On a body shot the orb stays ``EmbedTime`` (2.5 s) and hits twice more; on a
 headshot it instead explodes ``_growthDuration`` (0.4 s) later with two
-simultaneous ``ExplosiveAttack`` hits (wiki Vectis Prime, Evolution 1). The
-WFSim import carried one explosion on every shot. The two later embed hits are
-placed at half and all of ``EmbedTime``: the script's tick spacing is not in
-the client data.
+simultaneous ``ExplosiveAttack`` hits. WFSim's direct measurements M117/M118
+place the later body hits at 1 and 2 seconds, and the head explosions inherit
+the shot's additive headshot bracket without the victim's head multiplier.
+The script creates a separate growing projectile; its explosion remains
+scheduled when the original victim dies.
 """
 from __future__ import annotations
 
@@ -41,14 +42,14 @@ def orb(raw: dict) -> list[dict]:
     script = raw.get("OnProjectileStoppedScript") or {}
     if script.get("Script") != SCRIPT or not raw.get("Embed"):
         raise SystemExit(f"not a {SCRIPT} projectile")
-    embed_time = max(float(t) for t in raw["EmbedTime"])
     embed = lambda **extra: part(raw, "EmbedAttack", "EmbedDamageRadius", "EmbedFallOff", **extra)
     return [
         embed(hit="embed"),
-        embed(hit="embed-body-tick", bodyOnly=True, impact_delay_seconds=embed_time / 2),
-        embed(hit="embed-body-tick", bodyOnly=True, impact_delay_seconds=embed_time),
+        embed(hit="embed-body-tick", bodyOnly=True, impact_delay_seconds=1.0),
+        embed(hit="embed-body-tick", bodyOnly=True, impact_delay_seconds=2.0),
         part(raw, "ExplosiveAttack", "DamageRadius", "ExplosionFallOff", hit="headshot-explosion", headOnly=True,
-             count=2, impact_delay_seconds=float(script["_growthDuration"])),
+             count=2, impact_delay_seconds=float(script["_growthDuration"]),
+             snapshotHeadshotMultiplier=True, persistAfterKill=True),
     ]
 
 

@@ -1099,10 +1099,15 @@ def _reference_trajectory(
         empowered_by_type[dtype] = empowered_by_type.get(dtype, 0.0) + totals['arcane'] - before
         return died
 
-    def add_procs(st, aim, t, data=None, allow_encumber=True):
+    def add_procs(st, aim, t, data=None, allow_encumber=True, damage_scale=1.):
         nonlocal frozen_until,frozen_scale,encumber_time,encumber_remaining,encumber_expected,cryogenic_expected,puncture_strip
         generation = gen
         _, procs, rows, non = data if data is not None else packet(st, aim)
+        if damage_scale!=1.:
+            rows={k:{**row,'seedPerSecondPerProc':row['seedPerSecondPerProc']*damage_scale,
+                     'accumulatorPerSecondPerAttack':row['accumulatorPerSecondPerAttack']*damage_scale}
+                  for k,row in rows.items()}
+            non={k:{**row,'perProc':row['perProc']*damage_scale} for k,row in non.items()}
         if combat.get('punctureArmorStrip') and not st.radial_only and allow_encumber:
             from .damage import expected_status_procs
             forced=st.native_forced_procs.get('DT_PUNCTURE',0.)+(forced_procs or {}).get('DT_PUNCTURE',0.)
@@ -1332,7 +1337,7 @@ def _reference_trajectory(
             radial_packet = packet(part, 0.0)
             radial_vector = radial_packet[0] if sniper_factor == 1. else {k: v*sniper_factor for k, v in radial_packet[0].items()}
             if not take(radial_vector, t, 'direct', cv2=spread(part,0.)):
-                add_procs(part, 0.0, t, radial_packet)
+                add_procs(part, 0.0, t, radial_packet, damage_scale=sniper_factor)
             noncrit_no_proc_hit(part, 0.0, t)
         elif kind == 'delayed-attack':
             part, aim = payload
@@ -1689,10 +1694,11 @@ def _reference_trajectory(
             field_duration_boost = field_duration_ready
             field_duration_ready = False  # A shot consumes it, even when that shot kills.
             hit_count = (1.0 if active.continuous else max(active.multishot,0.0))
-            # Shot Combo: read before this shot's landing pellets are counted;
-            # it scales the hit, never the status payload (WFSim pellet.rs).
+            # Each landing pellet counts before its combo tier is paid. The
+            # shot snapshots this multiplier for its hits and status seeds.
             sniper_factor = 1.
-            if shot_combo and form != 'incarnon' and not combat.get('selectedIncarnon') and not active.radial_only:
+            if shot_combo and not active.radial_only and (shot_combo.spec.get('incarnon') or (
+                    form != 'incarnon' and not combat.get('selectedIncarnon'))):
                 sniper_factor = shot_combo.shot(t, hit_count)
                 if collect_timeline:
                     combo_events.append(dict(time=t, hits=shot_combo.count, multiplier=sniper_factor))
@@ -1738,7 +1744,7 @@ def _reference_trajectory(
                 )
                 noncrit_no_proc_hit(active, aim, t)
             if not died and not manual_detonation and not primary_delay and not stackable:
-                add_procs(active, aim, t, direct_packet)
+                add_procs(active, aim, t, direct_packet, damage_scale=sniper_factor)
                 field = getattr(active, '_lingering', None)
                 if field and gen == generation:
                     part, tick_rate, duration = field
@@ -1754,7 +1760,7 @@ def _reference_trajectory(
             # A remote mine's blast waits for its detonation (queued with the mine).
             radial_parts = (radial, *getattr(radial, '_additional_radials', ())) if radial and not stackable and not manual_detonation else ()
             for part in radial_parts:
-                if gen != generation:
+                if gen != generation and not getattr(part,'_persist_after_kill',False):
                     stale += 1
                     continue
                 head_only = getattr(part, '_head_only', False)
@@ -1772,12 +1778,13 @@ def _reference_trajectory(
                         continue
                 delay = max(0.0, getattr(part, '_impact_delay', 0.0))
                 if delay:
-                    push(t + delay, 'delayed-radial', (part, sniper_factor), generation)
+                    push(t + delay, 'delayed-radial', (part, sniper_factor),
+                         None if getattr(part,'_persist_after_kill',False) else generation)
                 else:
                     radial_packet = packet(part, 0.0)
                     radial_vector = radial_packet[0] if sniper_factor == 1. else {k: v*sniper_factor for k, v in radial_packet[0].items()}
                     if not take(radial_vector, t, "direct", cv2=spread(part,0.)):
-                        add_procs(part, 0.0, t, radial_packet)
+                        add_procs(part, 0.0, t, radial_packet, damage_scale=sniper_factor)
                     noncrit_no_proc_hit(part, 0.0, t)
             if hit_count > 0 and burst and burst_round==burst_size-1:
                 signal("on-burst-hit", t)

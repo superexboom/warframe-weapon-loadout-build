@@ -300,7 +300,7 @@ def prepare(
                                    passive_incarnon_condition, self_break_forced, self_break_condition,
                                    incarnon_actor_stacks)
     from .arcane_runtime import configuration as runtime_arcane
-    sniper_combo=combo_spec(weapon)
+    sniper_combo=combo_spec(weapon) if scenario.aiming else None
     from .companion import kill_condition, player_only, player_stacks
     companion = player_stacks(scenario)
 
@@ -866,6 +866,13 @@ def prepare(
                 part, part_spec = apply_mods_spec(
                     _part_record(wp, ('radial', idx, repr(component), repr(extra.get('compression'))), radial_part),
                     part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
+                if component.get('snapshotHeadshotMultiplier'):
+                    # Vectis's scripted head orb inherits this weapon bracket
+                    # (scope + Deadhead), not the victim's head x3, head crit,
+                    # or Acuity / Riven weak-point bonuses (WFSim M117/M118).
+                    scale = st.headshot_bonus_multiplier
+                    part = replace(part,damage_types={k:v*scale for k,v in part.damage_types.items()},
+                                   dot_base_damage=part.dot_base_damage*scale if part.dot_base_damage is not None else None)
                 part = replace(part, radial_only=True, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
                 if component.get('takes_multishot') is False:
                     part = replace(part, multishot=1.0)
@@ -878,6 +885,8 @@ def prepare(
                     part._head_only = True
                 if component.get('bodyOnly'):
                     part._body_only = True
+                if component.get('persistAfterKill'):
+                    part._persist_after_kill = True
                 if extra.get('radial') or extra.get('radials'):
                     radial_parts.append(part)
                 else:
@@ -1036,6 +1045,10 @@ def prepare(
         onosCharge=onos_sequence,
         doubleTap=double_tap,
         sniperCombo=sniper_combo,
+        stugIdealDetonation=any((attack.get('stackable') or {}).get('kind')=='stug'
+                               for attack in (base_attack, selected_attack)),
+        persistentRadials=any(part.get('persistAfterKill') for attack in (base_attack,selected_attack)
+                              for part in attack.get('radials') or ()),
         onosCrits=onos_crit,
         punctureArmorStrip=next((v for b in branches if (v:=latron_puncture_strip(b))),0.),
         magazineRestore=next((v for b in branches if (v:=ammo_restore_configuration(b))),None),

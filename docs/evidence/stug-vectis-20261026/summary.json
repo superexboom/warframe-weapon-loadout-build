@@ -1,0 +1,256 @@
+{
+  "date": "2026-10-26",
+  "timezone": "Asia/Shanghai",
+  "userInputSha256": "07e264770687f08f4a5a2a81a8ab1106a69f62d3ac7906abba87d3284d246870",
+  "finalFingerprint": "c37a210b5a65a0e9",
+  "nativeSha256": "90e7a9e9fc4be716d952b77be6903c76b11382ac3cab1904289bbfa0f9f71e72",
+  "referenceRelease": {
+    "accepted": [
+      {
+        "engine": "99dec9ad6d01",
+        "join": true,
+        "until": "2026-10-25T16:04:36.000Z"
+      },
+      {
+        "engine": "62a82930d1d3",
+        "join": true,
+        "until": "2026-10-26T02:22:47.000Z"
+      },
+      {
+        "engine": "4296a0964da6",
+        "join": true,
+        "until": "2026-10-26T11:57:54.000Z"
+      },
+      {
+        "engine": "5c64c380e5f2",
+        "join": true,
+        "until": "2026-10-27T01:51:23.000Z"
+      },
+      {
+        "engine": "db272037fe1d",
+        "join": true,
+        "until": "2026-10-27T02:58:18.000Z"
+      },
+      {
+        "engine": "dac6ecbaf97e",
+        "join": true,
+        "until": "2026-10-27T15:12:14.000Z"
+      },
+      {
+        "engine": "0d425ff4e358",
+        "join": true,
+        "until": "2026-10-27T16:56:38.000Z"
+      },
+      {
+        "engine": "bd0cc9e70106",
+        "join": true,
+        "until": "2026-10-27T19:02:26.000Z"
+      },
+      {
+        "engine": "6c720edfd739",
+        "join": true,
+        "until": "2026-10-28T08:21:59.000Z"
+      }
+    ],
+    "commit": "13640639+",
+    "data": "f8bc96ccab7e",
+    "data_format": 1,
+    "engine": "3194962a0af7",
+    "packs": [
+      "pack.data.f8bc96ccab7e.json",
+      "pack.site.709511779bc7.json",
+      "pack.text.7b85680cc4c5.json"
+    ],
+    "protocol": 8,
+    "protocols_served": [
+      8,
+      7,
+      6
+    ],
+    "release": "e3502415d4d0",
+    "wasm": "8b7fd3c95320"
+  },
+  "originalUserBeforeKpm": 43.19753738186053,
+  "sameUserPools": [
+    {
+      "aiming": false,
+      "localKpm": 43.639007487354014,
+      "referenceKpm": 42.23358330902185,
+      "referenceSe": 0.16116499109601967,
+      "deltaPercent": 3.3277407887668753
+    },
+    {
+      "aiming": true,
+      "localKpm": 177.05587701607186,
+      "referenceKpm": 178.03005430898375,
+      "referenceSe": 0.05655072852529954,
+      "deltaPercent": -0.5471982226220806
+    }
+  ],
+  "referenceAligned": [
+    {
+      "name": "board-aligned",
+      "ours": 163.16666666666669,
+      "reference": 166.63994165574272,
+      "se": 0.061605054079481664,
+      "localShots": 542.0,
+      "referenceShots": 565.67,
+      "deltaPercent": -2.084299210960705
+    },
+    {
+      "name": "hip-aligned",
+      "ours": 10.841939440357695,
+      "reference": 11.244104537487942,
+      "se": 0.031453641077806245,
+      "localShots": 542.0,
+      "referenceShots": 563.602,
+      "deltaPercent": -3.5766751882235326
+    },
+    {
+      "name": "roar-aimed",
+      "ours": 182.29166666666669,
+      "reference": 183.35021724096308,
+      "se": 0.015432124660488477,
+      "localShots": 542.0,
+      "referenceShots": 555.851,
+      "deltaPercent": -0.5773380529488059
+    },
+    {
+      "name": "roar-hip",
+      "ours": 57.13168174118535,
+      "reference": 62.07880830333356,
+      "se": 0.04103664986526319,
+      "localShots": 542.0,
+      "referenceShots": 563.527,
+      "deltaPercent": -7.969106845568352
+    },
+    {
+      "name": "board-aligned-30",
+      "ours": 121.46669667571187,
+      "reference": 109.36073228188096,
+      "se": 0.2445730840622656,
+      "localShots": 93.0,
+      "referenceShots": 94.992,
+      "deltaPercent": 11.069754327016934
+    },
+    {
+      "name": "roar-hip-30",
+      "ours": 46.8541730545944,
+      "reference": 48.84433189057884,
+      "se": 0.15495960922073468,
+      "localShots": 93.0,
+      "referenceShots": 94.918,
+      "deltaPercent": -4.074492902150451
+    }
+  ],
+  "officialWasmNativeParity": {
+    "wasmScoreKpm": 166.63994165574272,
+    "nativeScoreKpm": 166.63994165574272,
+    "identical": {
+      "score": true,
+      "score_se": true,
+      "kills": true,
+      "dps": true,
+      "shots": true,
+      "transforms": true,
+      "damage_sources": true,
+      "procs": true
+    }
+  },
+  "finalSourcesReplay": {
+    "fingerprint": "c37a210b5a65a0e9",
+    "nativeSha256": "90e7a9e9fc4be716d952b77be6903c76b11382ac3cab1904289bbfa0f9f71e72",
+    "cases": [
+      {
+        "case": "exact-board-aligned-30.json",
+        "kpm": 121.46669667571187,
+        "unchanged": true
+      },
+      {
+        "case": "exact-board-aligned.json",
+        "kpm": 163.16666666666669,
+        "unchanged": true
+      },
+      {
+        "case": "exact-hip-aligned.json",
+        "kpm": 10.841939440357695,
+        "unchanged": true
+      },
+      {
+        "case": "exact-roar-aimed.json",
+        "kpm": 182.29166666666669,
+        "unchanged": true
+      },
+      {
+        "case": "exact-roar-hip-30.json",
+        "kpm": 46.8541730545944,
+        "unchanged": true
+      },
+      {
+        "case": "exact-roar-hip.json",
+        "kpm": 57.13168174118535,
+        "unchanged": true
+      }
+    ]
+  },
+  "tests": {
+    "runs": [
+      {
+        "name": "regression",
+        "count": 1341,
+        "failures": 1
+      },
+      {
+        "name": "final-focused",
+        "count": 117,
+        "failures": 0
+      }
+    ],
+    "uniqueTestsCovered": 1342,
+    "allCoveredTestsPassedInFinalExecution": true,
+    "note": "Full suite loaded the old native DLL before child-survival was changed; the one shadow mismatch and all touched feature tests pass in a fresh process with the final DLL. Full suite also reported 12 subtests."
+  },
+  "additionalFocusedTests": 17,
+  "stugAutomatic": {
+    "seconds": 139.6810070000065,
+    "profile": "fast",
+    "level": 9999,
+    "windowSeconds": 30,
+    "kpm": 19.211869797823404,
+    "arcanePaths": [
+      "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OverguardSteal"
+    ],
+    "mods": [
+      "Lethal Torrent",
+      "Magnetic Might",
+      "Hornet Strike",
+      "Frostbite",
+      "Pistol Pestilence",
+      "Primed Heated Charge",
+      "Galvanized Diffusion",
+      "Gunslinger"
+    ],
+    "nativeStats": {
+      "native": 17337,
+      "fallback": 0
+    },
+    "manualReplaysExactly": true
+  },
+  "assumptions": [
+    "Stug intended full-cap impact detonation, ignoring official bug",
+    "all Stug children hit fixed single-target position at full damage",
+    "default two bounce contacts ignore flight time; final detonation at configured 4s lifetime",
+    "fractional multishot remains expected deployment mass"
+  ],
+  "limitations": [
+    "30s no-external-buff reference case differs by +11.07%; deterministic expected replay is not full Monte Carlo parity",
+    "remaining shot cadence and within-shot stochastic differences not fully decomposed",
+    "no game process runtime trace in this turn"
+  ],
+  "held": [
+    "cache baking",
+    "Portable executable packaging",
+    "Bot synchronization",
+    "Bot commits"
+  ]
+}

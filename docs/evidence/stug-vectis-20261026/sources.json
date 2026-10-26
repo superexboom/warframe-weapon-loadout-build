@@ -1,0 +1,26 @@
+{
+  "gameVersion": "2026.10.22.13.12",
+  "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "files": [
+    {
+      "localEvidence": "work/packages/Lotus/Weapons/Tenno/LongGuns/PrimeVectis/PrimeVectisRifle.txt",
+      "sha256": "d29d4524f8e4d8d6a81b9c54e64f0a2db0a8d1c579905296c03af6354874fd81"
+    },
+    {
+      "localEvidence": "work/vectis-ir/VectisIncarnon.json",
+      "sha256": "cf777102c4485cb8ffb67699fc17b409b256e1581da0e7239105c2107934a086"
+    },
+    {
+      "localEvidence": "evidence/vectis-bindings.json",
+      "sha256": "f8e28e94b92080b5b4a89a4243cc5ab4aa02e3dce51aa9fa1d8aff227dbce380"
+    },
+    {
+      "localEvidence": "artifacts/reference-source/M117-chamber-and-sniper-combo.md",
+      "sha256": "889ecf1855e94774380378ddb79cccf644729f8be46a838ddf00bf47c300e457"
+    },
+    {
+      "localEvidence": "artifacts/reference-source/M118-vectis-prime-compression-and-combo-order.md",
+      "sha256": "f2a0163c53d5e7ad4f30843c25d9d94141c8d2fba161086922b96e0c12124dcf"
+    }
+  ]
+}

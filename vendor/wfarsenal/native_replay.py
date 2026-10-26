@@ -45,6 +45,14 @@ def supported(stats, options) -> bool:
         return False  # Older cores treat every expected Blast proc as a real hit.
     if getattr(stats, 'ignore_headshot_bonus', False) and not getattr(wfcore, 'IGNORE_HEADSHOT_BONUS', 0):
         return False
+    if combat.get('stugIdealDetonation') and not getattr(wfcore, 'STUG_IDEAL_DETONATION', 0):
+        return False
+    if (combat.get('sniperCombo') or {}).get('incarnon') and not getattr(wfcore, 'SNIPER_INCARNON_COMBO', 0):
+        return False
+    if combat.get('persistentRadials') and not getattr(wfcore, 'PERSISTENT_RADIALS', 0):
+        return False
+    if combat.get('sniperCombo') and not getattr(wfcore, 'SNIPER_COMBO_STATUS', 0):
+        return False
     if combat.get('cycle') and combat.get('melee'):
         return False  # no melee Incarnon cycle is modelled natively
     return not any(combat.get(key) for key in _UNSUPPORTED_COMBAT)
@@ -105,6 +113,7 @@ class _Helper:
             childMaxCount=profile.get('childMaxCount') or 0, childMinCount=profile.get('childMinCount') or 0,
             childBounceCount=profile.get('childBounceCount') or 0, childLife=profile.get('childLife') or 0.0,
             childDeathMultiplier=profile.get('childDeathMultiplier', 1.0),
+            childActiveLimit=profile.get('childActiveLimit',70),
         )
 
     def hit_spec(self, hit_id):
@@ -372,7 +381,7 @@ def _projectile_state(state):
     return dict(isolated=mode == 'isolated', manual=mode == 'manual',
                 detonateAfterShots=state.get('detonateAfterShots') or None,
                 detonationWaitSeconds=state.get('detonationWaitSeconds', 0.),
-                stugChildHits=int(state.get('stugChildHits', 0)), stugBounceHits=int(state.get('stugBounceHits', 0)),
+                stugChildHits=int(state.get('stugChildHits', 5)), stugBounceHits=int(state.get('stugBounceHits', 2)),
                 stugBounceDelaySeconds=state.get('stugBounceDelaySeconds', 0.),
                 stugChildDetonateSeconds=state.get('stugChildDetonateSeconds'),
                 mqAugmentEquipped=bool(state.get('mqAugmentEquipped')))
