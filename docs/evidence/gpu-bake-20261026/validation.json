@@ -1,0 +1,19 @@
+{
+  "userPathsPreserved": 21,
+  "tests": "47 passed",
+  "deviceRuns": 2,
+  "configurationsPerRun": 24,
+  "fullCandidateGpuBackend": false,
+  "sampleTasks": 8,
+  "completedStructures": 16,
+  "productionEngineFingerprint": "3f9f649c32743106",
+  "nativeSha256": "e95b94511caa48cf6b407caccc45ccb2baafa60cbb1c79bb85da641a3b8e4287",
+  "nvrtcVersion": "12.9.86",
+  "backgroundGpu": "simfleet left running",
+  "files": {
+    "tools/audit_gpu_bake.py": "a2d5c14ea4b9cd3f0d251706f944b5ae540cf82e1f7f0fa2a8fc0bbd78099f93",
+    "tools/benchmark_gpu_bake.py": "1c9d8a4a36fa2d170e4cbd6ef41458699e0a0cea54bc644a0af85d3dd4dcbeb0",
+    "tools/gpu_bake_plan.py": "d5b4d0749ee8adeb1e0696e3acde1e91ae49426a2141b60773c78593d1e917c2",
+    "tools/gpu_status_probe.cu": "c9c37617fc6d9866e87b9e122efb4211e671eb562d906e0f55d570523b3d793d"
+  }
+}

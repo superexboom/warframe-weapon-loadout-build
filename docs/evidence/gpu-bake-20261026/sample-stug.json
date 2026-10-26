@@ -1,0 +1,176 @@
+{
+  "kind": "in-memory-bake-task-profile",
+  "weapon": "Stug",
+  "mode": 2,
+  "profile": "fast",
+  "completed": true,
+  "error": null,
+  "wallSeconds": 156.29484849999972,
+  "cpuSeconds": 155.59375,
+  "structures": [
+    {
+      "positives": 3,
+      "seconds": 134.62685950000014,
+      "searchWork": {
+        "evaluations": 17356,
+        "memoHits": 4,
+        "limited": 0,
+        "negative": {
+          "fastSearches": 2,
+          "standardSearches": 1,
+          "proxySearches": 1,
+          "fastProofs": 1
+        },
+        "elapsedSeconds": 134.5479634000003
+      }
+    },
+    {
+      "positives": 2,
+      "seconds": 21.66796930000055,
+      "searchWork": {
+        "evaluations": 640,
+        "memoHits": 0,
+        "limited": 0,
+        "negative": {},
+        "elapsedSeconds": 21.57921069999975
+      }
+    }
+  ],
+  "inclusiveTimers": {
+    "apply": [
+      55.96598720039037,
+      1156556
+    ],
+    "prepare": [
+      3.824680900106614,
+      18368
+    ],
+    "native_adapter": [
+      130.47463210008937,
+      18368
+    ],
+    "score": [
+      0.24852439988171682,
+      10578
+    ],
+    "_best_finalist": [
+      0.3179647999986628,
+      4
+    ],
+    "_recommend_positive": [
+      27.370122000000265,
+      2
+    ],
+    "_assess_negatives": [
+      88.2171799000007,
+      2
+    ]
+  },
+  "nativeFeatures": {
+    "stateful-cpu-first": [
+      130.47463210008937,
+      18368
+    ]
+  },
+  "nativePhases": {
+    "baseline": 32.22796850004852,
+    "_best_finalist": 0.3005146000014065,
+    "_recommend_positive": 24.966507300006924,
+    "_assess_negatives": 72.97964170003252
+  },
+  "nativeCounters": [
+    [
+      "total",
+      129.58803880000002,
+      18368
+    ],
+    [
+      "resolve",
+      85.17931610000001,
+      260732
+    ],
+    [
+      "view",
+      22.868995,
+      260732
+    ],
+    [
+      "clean",
+      0.0,
+      0
+    ],
+    [
+      "take",
+      0.0,
+      0
+    ],
+    [
+      "add_procs",
+      0.0,
+      0
+    ],
+    [
+      "model",
+      0.0,
+      0
+    ],
+    [
+      "packet",
+      1.2907844000000002,
+      6013331
+    ],
+    [
+      "signal",
+      0.0,
+      0
+    ],
+    [
+      "fire",
+      0.0,
+      0
+    ],
+    [
+      "setup",
+      9.432784900000001,
+      18368
+    ],
+    [
+      "result",
+      0.0,
+      0
+    ],
+    [
+      "presence",
+      0.6836998000000001,
+      14826865
+    ],
+    [
+      "heat",
+      0.6507268,
+      948292
+    ],
+    [
+      "pooled",
+      1.4379811,
+      8648255
+    ],
+    [
+      "no_status",
+      0.8472872,
+      14826865
+    ]
+  ],
+  "nativeStats": {
+    "native": 18413,
+    "fallback": 0
+  },
+  "evaluationCache": {
+    "hits": 1705,
+    "misses": 16291,
+    "stores": 16291,
+    "evictions": 10238
+  },
+  "fingerprint": "3f9f649c32743106",
+  "nativeSha256": "e95b94511caa48cf6b407caccc45ccb2baafa60cbb1c79bb85da641a3b8e4287",
+  "staticsEntries": 2
+}

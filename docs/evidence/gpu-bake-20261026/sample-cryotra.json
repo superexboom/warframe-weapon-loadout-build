@@ -1,0 +1,175 @@
+{
+  "kind": "in-memory-bake-task-profile",
+  "weapon": "Cryotra",
+  "mode": 0,
+  "profile": "fast",
+  "completed": true,
+  "error": null,
+  "wallSeconds": 5.865420399999493,
+  "cpuSeconds": 5.828125,
+  "structures": [
+    {
+      "positives": 3,
+      "seconds": 5.436913300000015,
+      "searchWork": {
+        "evaluations": 9357,
+        "memoHits": 4,
+        "limited": 0,
+        "negative": {},
+        "elapsedSeconds": 5.431042800000796
+      }
+    },
+    {
+      "positives": 2,
+      "seconds": 0.42849349999960396,
+      "searchWork": {
+        "evaluations": 656,
+        "memoHits": 0,
+        "limited": 0,
+        "negative": {},
+        "elapsedSeconds": 0.42656429999988177
+      }
+    }
+  ],
+  "inclusiveTimers": {
+    "apply": [
+      1.6209356000017578,
+      46588
+    ],
+    "prepare": [
+      0.41305249992547033,
+      4630
+    ],
+    "native_adapter": [
+      2.3211264998972183,
+      4630
+    ],
+    "score": [
+      0.12996809994911018,
+      7407
+    ],
+    "_best_finalist": [
+      0.04008770000109507,
+      4
+    ],
+    "_recommend_positive": [
+      0.7111626999994769,
+      2
+    ],
+    "_assess_negatives": [
+      0.12540399999852525,
+      2
+    ]
+  },
+  "nativeFeatures": {
+    "fixed-form-candidate": [
+      0.7577853998900537,
+      2867
+    ],
+    "finite-buff-preparation-required": [
+      1.5633411000071646,
+      1763
+    ]
+  },
+  "nativePhases": {
+    "baseline": 1.8143717998900684,
+    "_best_finalist": 0.02919320000182779,
+    "_recommend_positive": 0.4548533000070165,
+    "_assess_negatives": 0.022708199998305645
+  },
+  "nativeCounters": [
+    [
+      "total",
+      2.1682140000000003,
+      4630
+    ],
+    [
+      "resolve",
+      1.1362845000000001,
+      22422
+    ],
+    [
+      "view",
+      0.5249027,
+      22422
+    ],
+    [
+      "clean",
+      0.0,
+      0
+    ],
+    [
+      "take",
+      0.0,
+      0
+    ],
+    [
+      "add_procs",
+      0.0,
+      0
+    ],
+    [
+      "model",
+      0.0,
+      0
+    ],
+    [
+      "packet",
+      0.0292852,
+      62325
+    ],
+    [
+      "signal",
+      0.0,
+      0
+    ],
+    [
+      "fire",
+      0.0,
+      0
+    ],
+    [
+      "setup",
+      0.5812702000000001,
+      4630
+    ],
+    [
+      "result",
+      0.0,
+      0
+    ],
+    [
+      "presence",
+      0.0081737,
+      133782
+    ],
+    [
+      "heat",
+      0.0185078,
+      33121
+    ],
+    [
+      "pooled",
+      0.0009904,
+      4756
+    ],
+    [
+      "no_status",
+      0.0132686,
+      133782
+    ]
+  ],
+  "nativeStats": {
+    "native": 4675,
+    "fallback": 0
+  },
+  "evaluationCache": {
+    "hits": 907,
+    "misses": 9106,
+    "stores": 9106,
+    "evictions": 2805
+  },
+  "fingerprint": "3f9f649c32743106",
+  "nativeSha256": "e95b94511caa48cf6b407caccc45ccb2baafa60cbb1c79bb85da641a3b8e4287",
+  "staticsEntries": 2
+}

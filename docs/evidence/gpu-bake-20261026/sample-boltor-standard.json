@@ -1,0 +1,182 @@
+{
+  "kind": "in-memory-bake-task-profile",
+  "weapon": "Boltor Prime",
+  "mode": 1,
+  "profile": "standard",
+  "completed": true,
+  "error": null,
+  "wallSeconds": 214.33177940000132,
+  "cpuSeconds": 213.09375,
+  "structures": [
+    {
+      "positives": 3,
+      "seconds": 133.23324550000143,
+      "searchWork": {
+        "evaluations": 40760,
+        "memoHits": 31,
+        "limited": 0,
+        "negative": {
+          "fastSearches": 4,
+          "standardSearches": 3,
+          "proxySearches": 3,
+          "proxyScreens": 3,
+          "proxyProofs": 1
+        },
+        "elapsedSeconds": 133.20040440000048
+      }
+    },
+    {
+      "positives": 2,
+      "seconds": 81.09851499999968,
+      "searchWork": {
+        "evaluations": 21850,
+        "memoHits": 36,
+        "limited": 0,
+        "negative": {
+          "fastSearches": 3,
+          "standardSearches": 3,
+          "proxySearches": 3,
+          "proxyScreens": 2
+        },
+        "elapsedSeconds": 81.05958389999978
+      }
+    }
+  ],
+  "inclusiveTimers": {
+    "apply": [
+      20.02568320066348,
+      451225
+    ],
+    "prepare": [
+      11.790292799958479,
+      62034
+    ],
+    "native_adapter": [
+      171.89556969978912,
+      62034
+    ],
+    "score": [
+      0.43208950010193803,
+      23729
+    ],
+    "_best_finalist": [
+      0.18197739999959595,
+      4
+    ],
+    "_recommend_positive": [
+      33.073895899999115,
+      2
+    ],
+    "_assess_negatives": [
+      129.5422294,
+      2
+    ]
+  },
+  "nativeFeatures": {
+    "finite-buff-preparation-required": [
+      171.89556969978912,
+      62034
+    ]
+  },
+  "nativePhases": {
+    "baseline": 41.36991910004872,
+    "_best_finalist": 0.17002190000130213,
+    "_recommend_positive": 29.098069400000895,
+    "_assess_negatives": 101.2575592997382
+  },
+  "nativeCounters": [
+    [
+      "total",
+      169.1951118,
+      62034
+    ],
+    [
+      "resolve",
+      19.6822471,
+      279950
+    ],
+    [
+      "view",
+      7.717980600000001,
+      279950
+    ],
+    [
+      "clean",
+      0.0,
+      0
+    ],
+    [
+      "take",
+      0.0,
+      0
+    ],
+    [
+      "add_procs",
+      0.0,
+      0
+    ],
+    [
+      "model",
+      0.0,
+      0
+    ],
+    [
+      "packet",
+      15.6197476,
+      27818759
+    ],
+    [
+      "signal",
+      0.0,
+      0
+    ],
+    [
+      "fire",
+      0.0,
+      0
+    ],
+    [
+      "setup",
+      9.5708704,
+      62034
+    ],
+    [
+      "result",
+      0.0,
+      0
+    ],
+    [
+      "presence",
+      5.5242885,
+      127016735
+    ],
+    [
+      "heat",
+      7.2038178,
+      6372331
+    ],
+    [
+      "pooled",
+      8.1398735,
+      51803316
+    ],
+    [
+      "no_status",
+      4.6384327,
+      127016735
+    ]
+  ],
+  "nativeStats": {
+    "native": 62079,
+    "fallback": 0
+  },
+  "evaluationCache": {
+    "hits": 6667,
+    "misses": 55943,
+    "stores": 55943,
+    "evictions": 49669
+  },
+  "fingerprint": "3f9f649c32743106",
+  "nativeSha256": "e95b94511caa48cf6b407caccc45ccb2baafa60cbb1c79bb85da641a3b8e4287",
+  "staticsEntries": 2
+}

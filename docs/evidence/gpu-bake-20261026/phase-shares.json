@@ -1,0 +1,209 @@
+{
+  "samples": [
+    {
+      "name": "Boltor Prime",
+      "tier": "fixed-form-candidate",
+      "profile": "standard",
+      "complete": true,
+      "wallSeconds": 214.33177940000132,
+      "cpuSeconds": 213.09375,
+      "kernelLowerSeconds": 132.2240137,
+      "kernelUpperSeconds": 141.7948841,
+      "poolSeconds": 8.1398735,
+      "packetSeconds": 15.6197476,
+      "hostResolverSeconds": 19.6822471,
+      "viewSeconds": 7.717980600000001,
+      "setupSeconds": 9.5708704,
+      "nativeSeconds": 169.1951118,
+      "negativeSeconds": 129.5422294,
+      "evaluations": 55943,
+      "replays": 62079,
+      "structures": [
+        3,
+        2
+      ]
+    },
+    {
+      "name": "Cryotra",
+      "tier": "fixed-form-candidate",
+      "profile": "fast",
+      "complete": true,
+      "wallSeconds": 5.865420399999493,
+      "cpuSeconds": 5.828125,
+      "kernelLowerSeconds": 0,
+      "kernelUpperSeconds": 0.5070268000000002,
+      "poolSeconds": 0.0009904,
+      "packetSeconds": 0.0292852,
+      "hostResolverSeconds": 1.1362845000000001,
+      "viewSeconds": 0.5249027,
+      "setupSeconds": 0.5812702000000001,
+      "nativeSeconds": 2.1682140000000003,
+      "negativeSeconds": 0.12540399999852525,
+      "evaluations": 9106,
+      "replays": 4675,
+      "structures": [
+        3,
+        2
+      ]
+    },
+    {
+      "name": "Lato",
+      "tier": "fixed-form-candidate",
+      "profile": "fast",
+      "complete": true,
+      "wallSeconds": 100.91134990000137,
+      "cpuSeconds": 100.453125,
+      "kernelLowerSeconds": 33.26614969999999,
+      "kernelUpperSeconds": 42.3398685,
+      "poolSeconds": 2.6750703000000002,
+      "packetSeconds": 4.4471045,
+      "hostResolverSeconds": 11.355394700000002,
+      "viewSeconds": 4.3707253,
+      "setupSeconds": 9.0737188,
+      "nativeSeconds": 58.0659885,
+      "negativeSeconds": 84.39447950000067,
+      "evaluations": 45083,
+      "replays": 61253,
+      "structures": [
+        3,
+        2
+      ]
+    },
+    {
+      "name": "Nikana Prime",
+      "tier": "stateful-cpu-first",
+      "profile": "fast",
+      "complete": true,
+      "wallSeconds": 33.59002569999939,
+      "cpuSeconds": 33.375,
+      "kernelLowerSeconds": 10.8469203,
+      "kernelUpperSeconds": 12.8141712,
+      "poolSeconds": 0.5536487,
+      "packetSeconds": 1.8677158,
+      "hostResolverSeconds": 7.817836300000001,
+      "viewSeconds": 3.4041499,
+      "setupSeconds": 1.9672509,
+      "nativeSeconds": 24.0361574,
+      "negativeSeconds": 19.87245979999898,
+      "evaluations": 14188,
+      "replays": 12957,
+      "structures": [
+        3,
+        2
+      ]
+    },
+    {
+      "name": "Stug",
+      "tier": "stateful-cpu-first",
+      "profile": "fast",
+      "complete": true,
+      "wallSeconds": 156.29484849999972,
+      "cpuSeconds": 155.59375,
+      "kernelLowerSeconds": 12.10694280000001,
+      "kernelUpperSeconds": 21.539727700000014,
+      "poolSeconds": 1.4379811,
+      "packetSeconds": 1.2907844000000002,
+      "hostResolverSeconds": 85.17931610000001,
+      "viewSeconds": 22.868995,
+      "setupSeconds": 9.432784900000001,
+      "nativeSeconds": 129.58803880000002,
+      "negativeSeconds": 88.2171799000007,
+      "evaluations": 16291,
+      "replays": 18413,
+      "structures": [
+        3,
+        2
+      ]
+    },
+    {
+      "name": "Torid",
+      "tier": "fixed-form-candidate",
+      "profile": "fast",
+      "complete": true,
+      "wallSeconds": 32.97258030000012,
+      "cpuSeconds": 32.828125,
+      "kernelLowerSeconds": 15.0675599,
+      "kernelUpperSeconds": 17.4478036,
+      "poolSeconds": 0.9836141,
+      "packetSeconds": 0.46076710000000004,
+      "hostResolverSeconds": 1.640878,
+      "viewSeconds": 0.7393657,
+      "setupSeconds": 2.5377006,
+      "nativeSeconds": 19.9855042,
+      "negativeSeconds": 18.321002900000167,
+      "evaluations": 20243,
+      "replays": 17874,
+      "structures": [
+        3,
+        2
+      ]
+    },
+    {
+      "name": "Vectis Prime",
+      "tier": "stateful-cpu-first",
+      "profile": "fast",
+      "complete": true,
+      "wallSeconds": 33.7510125000008,
+      "cpuSeconds": 33.65625,
+      "kernelLowerSeconds": 0,
+      "kernelUpperSeconds": 7.847490200000003,
+      "poolSeconds": 0.4512817,
+      "packetSeconds": 0.3784612,
+      "hostResolverSeconds": 11.6341371,
+      "viewSeconds": 2.9511255000000003,
+      "setupSeconds": 10.274719000000001,
+      "nativeSeconds": 22.432752800000003,
+      "negativeSeconds": 14.510802899998453,
+      "evaluations": 15371,
+      "replays": 16655,
+      "structures": [
+        3,
+        2
+      ]
+    },
+    {
+      "name": "Kuva Zarr",
+      "tier": "stateful-cpu-first",
+      "profile": "fast",
+      "complete": true,
+      "wallSeconds": 44.13044339999942,
+      "cpuSeconds": 43.921875,
+      "kernelLowerSeconds": 0,
+      "kernelUpperSeconds": 6.415515000000003,
+      "poolSeconds": 0.2515,
+      "packetSeconds": 0.38265930000000004,
+      "hostResolverSeconds": 21.3992229,
+      "viewSeconds": 5.4924824,
+      "setupSeconds": 8.2688723,
+      "nativeSeconds": 33.307220300000004,
+      "negativeSeconds": 19.22102089999862,
+      "evaluations": 16128,
+      "replays": 16090,
+      "structures": [
+        3,
+        2
+      ]
+    }
+  ],
+  "groups": {
+    "fixed-form-candidate": {
+      "samples": 4,
+      "wall": 354.0811300000023,
+      "kernelLowerShare": 0.509933198925339,
+      "kernelUpperShare": 0.5707437247503099
+    },
+    "finite-buff-preparation-required": {
+      "samples": 0,
+      "wall": 0,
+      "kernelLowerShare": null,
+      "kernelUpperShare": null
+    },
+    "stateful-cpu-first": {
+      "samples": 4,
+      "wall": 267.7663300999993,
+      "kernelLowerShare": 0.08572348544130892,
+      "kernelUpperShare": 0.18156466528799076
+    }
+  },
+  "inclusiveAccounting": "setup overlaps resolver and view; lower subtracts both, upper subtracts their maximum; bounds only"
+}

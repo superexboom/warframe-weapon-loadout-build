@@ -1,0 +1,1111 @@
+{
+  "status": "complete",
+  "layers": [
+    {
+      "size": 32,
+      "metric": "killsPerMinute",
+      "slots": 1
+    },
+    {
+      "size": 306,
+      "metric": "killsPerMinute",
+      "slots": 2
+    },
+    {
+      "size": 169,
+      "metric": "killsPerMinute",
+      "slots": 3
+    },
+    {
+      "size": 85,
+      "metric": "killsPerMinute",
+      "slots": 4
+    },
+    {
+      "size": 56,
+      "metric": "killsPerMinute",
+      "slots": 5
+    },
+    {
+      "size": 54,
+      "metric": "killsPerMinute",
+      "slots": 6
+    },
+    {
+      "size": 51,
+      "metric": "killsPerMinute",
+      "slots": 7
+    },
+    {
+      "size": 49,
+      "metric": "killsPerMinute",
+      "slots": 8
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 1
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 2
+    },
+    {
+      "size": 63,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 37,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 35,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 17,
+      "metric": "statusSustainedDps",
+      "slots": 8
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 37,
+      "metric": "statusSustainedDps",
+      "slots": 8
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 37,
+      "metric": "statusSustainedDps",
+      "slots": 8
+    },
+    {
+      "size": 32,
+      "metric": "killsPerMinute",
+      "slots": 1
+    },
+    {
+      "size": 306,
+      "metric": "killsPerMinute",
+      "slots": 2
+    },
+    {
+      "size": 169,
+      "metric": "killsPerMinute",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "killsPerMinute",
+      "slots": 4
+    },
+    {
+      "size": 83,
+      "metric": "killsPerMinute",
+      "slots": 5
+    },
+    {
+      "size": 80,
+      "metric": "killsPerMinute",
+      "slots": 6
+    },
+    {
+      "size": 51,
+      "metric": "killsPerMinute",
+      "slots": 7
+    },
+    {
+      "size": 49,
+      "metric": "killsPerMinute",
+      "slots": 8
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 1
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 2
+    },
+    {
+      "size": 63,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 37,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 35,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 17,
+      "metric": "statusSustainedDps",
+      "slots": 8
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 37,
+      "metric": "statusSustainedDps",
+      "slots": 8
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 37,
+      "metric": "statusSustainedDps",
+      "slots": 8
+    },
+    {
+      "size": 32,
+      "metric": "killsPerMinute",
+      "slots": 1
+    },
+    {
+      "size": 306,
+      "metric": "killsPerMinute",
+      "slots": 2
+    },
+    {
+      "size": 171,
+      "metric": "killsPerMinute",
+      "slots": 3
+    },
+    {
+      "size": 112,
+      "metric": "killsPerMinute",
+      "slots": 4
+    },
+    {
+      "size": 81,
+      "metric": "killsPerMinute",
+      "slots": 5
+    },
+    {
+      "size": 53,
+      "metric": "killsPerMinute",
+      "slots": 6
+    },
+    {
+      "size": 51,
+      "metric": "killsPerMinute",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 1
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 2
+    },
+    {
+      "size": 64,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 78,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 19,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 18,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 82,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 32,
+      "metric": "killsPerMinute",
+      "slots": 1
+    },
+    {
+      "size": 306,
+      "metric": "killsPerMinute",
+      "slots": 2
+    },
+    {
+      "size": 198,
+      "metric": "killsPerMinute",
+      "slots": 3
+    },
+    {
+      "size": 112,
+      "metric": "killsPerMinute",
+      "slots": 4
+    },
+    {
+      "size": 108,
+      "metric": "killsPerMinute",
+      "slots": 5
+    },
+    {
+      "size": 79,
+      "metric": "killsPerMinute",
+      "slots": 6
+    },
+    {
+      "size": 51,
+      "metric": "killsPerMinute",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 1
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 2
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 40,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 38,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 35,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 82,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 32,
+      "metric": "windowedDps",
+      "slots": 1
+    },
+    {
+      "size": 306,
+      "metric": "windowedDps",
+      "slots": 2
+    },
+    {
+      "size": 171,
+      "metric": "windowedDps",
+      "slots": 3
+    },
+    {
+      "size": 85,
+      "metric": "windowedDps",
+      "slots": 4
+    },
+    {
+      "size": 55,
+      "metric": "windowedDps",
+      "slots": 5
+    },
+    {
+      "size": 53,
+      "metric": "windowedDps",
+      "slots": 6
+    },
+    {
+      "size": 52,
+      "metric": "windowedDps",
+      "slots": 7
+    },
+    {
+      "size": 40,
+      "metric": "windowedDps",
+      "slots": 1
+    },
+    {
+      "size": 702,
+      "metric": "windowedDps",
+      "slots": 2
+    },
+    {
+      "size": 724,
+      "metric": "windowedDps",
+      "slots": 3
+    },
+    {
+      "size": 628,
+      "metric": "windowedDps",
+      "slots": 4
+    },
+    {
+      "size": 575,
+      "metric": "windowedDps",
+      "slots": 5
+    },
+    {
+      "size": 528,
+      "metric": "windowedDps",
+      "slots": 6
+    },
+    {
+      "size": 514,
+      "metric": "windowedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 1
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 2
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 21,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 20,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 19,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 18,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 21,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 20,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 21,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 20,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 32,
+      "metric": "windowedDps",
+      "slots": 1
+    },
+    {
+      "size": 306,
+      "metric": "windowedDps",
+      "slots": 2
+    },
+    {
+      "size": 171,
+      "metric": "windowedDps",
+      "slots": 3
+    },
+    {
+      "size": 114,
+      "metric": "windowedDps",
+      "slots": 4
+    },
+    {
+      "size": 159,
+      "metric": "windowedDps",
+      "slots": 5
+    },
+    {
+      "size": 104,
+      "metric": "windowedDps",
+      "slots": 6
+    },
+    {
+      "size": 100,
+      "metric": "windowedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 1
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 2
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 37,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 35,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 32,
+      "metric": "windowedDps",
+      "slots": 1
+    },
+    {
+      "size": 306,
+      "metric": "windowedDps",
+      "slots": 2
+    },
+    {
+      "size": 194,
+      "metric": "windowedDps",
+      "slots": 3
+    },
+    {
+      "size": 110,
+      "metric": "windowedDps",
+      "slots": 4
+    },
+    {
+      "size": 55,
+      "metric": "windowedDps",
+      "slots": 5
+    },
+    {
+      "size": 27,
+      "metric": "windowedDps",
+      "slots": 6
+    },
+    {
+      "size": 26,
+      "metric": "windowedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 1
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 2
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 19,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 18,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 21,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 20,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 21,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 20,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 41,
+      "metric": "windowedDps",
+      "slots": 1
+    },
+    {
+      "size": 784,
+      "metric": "windowedDps",
+      "slots": 2
+    },
+    {
+      "size": 690,
+      "metric": "windowedDps",
+      "slots": 3
+    },
+    {
+      "size": 610,
+      "metric": "windowedDps",
+      "slots": 4
+    },
+    {
+      "size": 594,
+      "metric": "windowedDps",
+      "slots": 5
+    },
+    {
+      "size": 544,
+      "metric": "windowedDps",
+      "slots": 6
+    },
+    {
+      "size": 528,
+      "metric": "windowedDps",
+      "slots": 7
+    },
+    {
+      "size": 32,
+      "metric": "windowedDps",
+      "slots": 1
+    },
+    {
+      "size": 306,
+      "metric": "windowedDps",
+      "slots": 2
+    },
+    {
+      "size": 189,
+      "metric": "windowedDps",
+      "slots": 3
+    },
+    {
+      "size": 110,
+      "metric": "windowedDps",
+      "slots": 4
+    },
+    {
+      "size": 82,
+      "metric": "windowedDps",
+      "slots": 5
+    },
+    {
+      "size": 27,
+      "metric": "windowedDps",
+      "slots": 6
+    },
+    {
+      "size": 26,
+      "metric": "windowedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 1
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 2
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 19,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 18,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 41,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 39,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 24,
+      "metric": "statusSustainedDps",
+      "slots": 3
+    },
+    {
+      "size": 86,
+      "metric": "statusSustainedDps",
+      "slots": 4
+    },
+    {
+      "size": 43,
+      "metric": "statusSustainedDps",
+      "slots": 5
+    },
+    {
+      "size": 21,
+      "metric": "statusSustainedDps",
+      "slots": 6
+    },
+    {
+      "size": 20,
+      "metric": "statusSustainedDps",
+      "slots": 7
+    },
+    {
+      "size": 41,
+      "metric": "windowedDps",
+      "slots": 1
+    },
+    {
+      "size": 784,
+      "metric": "windowedDps",
+      "slots": 2
+    },
+    {
+      "size": 690,
+      "metric": "windowedDps",
+      "slots": 3
+    },
+    {
+      "size": 647,
+      "metric": "windowedDps",
+      "slots": 4
+    },
+    {
+      "size": 561,
+      "metric": "windowedDps",
+      "slots": 5
+    },
+    {
+      "size": 544,
+      "metric": "windowedDps",
+      "slots": 6
+    },
+    {
+      "size": 528,
+      "metric": "windowedDps",
+      "slots": 7
+    }
+  ],
+  "seconds": 53.845778099999734
+}

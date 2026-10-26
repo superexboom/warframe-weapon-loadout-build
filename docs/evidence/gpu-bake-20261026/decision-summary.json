@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "baselineMinutes": 240.0,
+  "baselineOrigin": "user-reported approximate time; not a current full-roster rerun",
+  "currentFullGpuBackend": false,
+  "currentProductionGpuSavingsMinutes": 0,
+  "sampledJobs": 8,
+  "sampledStructures": 16,
+  "fingerprint": "3f9f649c32743106",
+  "historicalMatchedJobs": 635,
+  "historicalTotalJobs": 658,
+  "historicalMatchedWorkerSeconds": 134481.3999999999,
+  "fixedFormHistoricalShare": 0.49734163981041246,
+  "includingFiniteBuffHistoricalShare": 0.554513114824801,
+  "pooledSampleShare": 0.023307902226808442,
+  "perfectPooledOffloadCeilingMinutes": 5.593896534434026,
+  "currentBatchSize": {
+    "layers": 221,
+    "totalCandidates": 24063,
+    "median": 43,
+    "max": 784,
+    "atLeast512Share": 0.4644059344221419,
+    "atLeast2048": 0
+  },
+  "scenarios": [
+    {
+      "name": "conservative",
+      "offloadShare": 0.17406957393364436,
+      "serializedMinutes": 226.23257878041125,
+      "serializedSavedMinutes": 13.767421219588751,
+      "idealOverlapMinutes": 203.02330225592533,
+      "assumptions": {
+        "eligibleJobShare": 0.49734163981041246,
+        "replayShare": 0.35,
+        "gpuSpeedupVsFullCpuPool": 1.8,
+        "overheadShare": 0.02
+      }
+    },
+    {
+      "name": "central",
+      "offloadShare": 0.24867081990520623,
+      "serializedMinutes": 208.9914019336503,
+      "serializedSavedMinutes": 31.00859806634969,
+      "idealOverlapMinutes": 185.1190032227505,
+      "assumptions": {
+        "eligibleJobShare": 0.49734163981041246,
+        "replayShare": 0.5,
+        "gpuSpeedupVsFullCpuPool": 2.5,
+        "overheadShare": 0.02
+      }
+    },
+    {
+      "name": "extended-pilot",
+      "offloadShare": 0.33270786889488063,
+      "serializedMinutes": 191.56674097681912,
+      "serializedSavedMinutes": 48.43325902318088,
+      "idealOverlapMinutes": 164.95011146522867,
+      "assumptions": {
+        "eligibleJobShare": 0.554513114824801,
+        "replayShare": 0.6,
+        "gpuSpeedupVsFullCpuPool": 3.0,
+        "overheadShare": 0.02
+      }
+    }
+  ],
+  "scope": "bounded representative measurements and conditional engineering estimates, not measured whole-bake speedup",
+  "hardware": {
+    "cpu": "AMD Ryzen 7 9700X",
+    "physicalCores": 8,
+    "logicalCores": 16,
+    "gpu": "RTX 5080",
+    "vramMiB": 16303,
+    "driver": "616.92",
+    "architecture": "compute_120",
+    "background": "simfleet CPU/GPU running throughout; not paused"
+  }
+}
