@@ -1,0 +1,23 @@
+{
+  "runs": 128,
+  "firstKillMean": 5.2780859375,
+  "firstKillWeakRate": 0.9140625,
+  "firstKillRange": [
+    4.732,
+    6.013
+  ],
+  "milestones": {
+    "1": {
+      "mean": 5.6421093749999995,
+      "misses": 0
+    },
+    "2": {
+      "mean": 7.1375234375,
+      "misses": 0
+    },
+    "3": {
+      "mean": 8.032484375,
+      "misses": 0
+    }
+  }
+}

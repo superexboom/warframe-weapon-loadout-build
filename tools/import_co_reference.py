@@ -25,7 +25,7 @@ def import_reference(source, export, reference):
     rows = []
     for path in sorted((source/'data/weapons').rglob('*.yaml')):
         row = yaml.safe_load(path.read_text(encoding='utf-8'))
-        if isinstance(row,dict) and row.get('co_behavior') in {'independent','additive_with_base_damage'}:
+        if isinstance(row,dict) and row.get('co_behavior') in {'independent','additive_with_base_damage','inert'}:
             rows.append((row,path))
     evolutions = []
     for path in sorted((source/'data/evolutions').glob('*.yaml')):
@@ -74,7 +74,7 @@ def import_reference(source, export, reference):
                             if (effect.get('upgradeType')=='WEAPON_DAMAGE_AMOUNT' and effect.get('operation')=='ADD_BASE'
                                     and not effect.get('isSubUpgrade') and abs(effect['valuePerRank']-amounts[0])<1e-5):
                                 exclusions.append(effect.get('sourcePath') or branch['path'])
-            by_mode[str(i)] = dict(behavior=row['co_behavior'],baseFraction=float(row.get('co_base_fraction',1.)),
+            by_mode[str(i)] = dict(behavior=row['co_behavior'],baseFraction=0. if row['co_behavior']=='inert' else float(row.get('co_base_fraction',1.)),
                                   excludeFlatSources=sorted(set(exclusions)),projectile=damage.get('projectile'),
                                   directTotal=sum((damage.get('types') or {}).values()),source=path.relative_to(source).as_posix(),
                                   sourceSha256=hashlib.sha256(path.read_bytes()).hexdigest(),revision=revision)

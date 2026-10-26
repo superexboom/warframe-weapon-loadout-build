@@ -1,0 +1,341 @@
+[
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnAbilityHeatProcCondition",
+    "ignore": [
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": {
+      "Script": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbilityDamageCondition.lua",
+      "Function": "MatchAttackEvent",
+      "_areSummonsValid": 0.0,
+      "_areExaltedWeaponValid": 1.0
+    }
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnAbilityRadiationProcCondition",
+    "ignore": [
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": {
+      "Script": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbilityDamageCondition.lua",
+      "Function": "MatchAttackEvent",
+      "_areSummonsValid": 0.0,
+      "_areExaltedWeaponValid": 1.0
+    }
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnAltHitIgnoreDOTCondition",
+    "ignore": [
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnArchwingHeadshotKillCondition",
+    "ignore": [
+      "DHT_RADIAL"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnBowHitCondition",
+    "ignore": [
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnBowWeakPointHitCondition",
+    "ignore": [
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": {
+      "Script": "IsWeakpoint.lua",
+      "Function": "MatchAttackEvent",
+      "_weakness": 0.5
+    }
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnColdProcCondition",
+    "ignore": [
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnElectricityProcCondition",
+    "ignore": [
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnFinisherCondition",
+    "ignore": [
+      "DHT_RADIAL"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnFourHeadshotsCondition",
+    "ignore": [
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnGarudaCrossbowHeadshotKillCondition",
+    "ignore": [
+      "DHT_RADIAL"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotCondition",
+    "ignore": [
+      "DHT_RADIAL"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotKillCondition",
+    "ignore": [
+      "DHT_RADIAL"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotKillNoScriptHitTypeCondition",
+    "ignore": [
+      "DHT_SCRIPT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeatProcCondition",
+    "ignore": [
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHitIgnoreDOTCondition",
+    "ignore": [
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHitLiftedEnemyCondition",
+    "ignore": [
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnImpactProcCondition",
+    "ignore": [
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnLiftedCondition",
+    "ignore": [
+      "DHT_SCRIPT",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMagneticProcCondition",
+    "ignore": [
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMaxRadiationHitCondition",
+    "ignore": [
+      "DHT_RADIAL",
+      "DHT_SCRIPT",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": [
+      "RadialDamageOnMaxRadiationStackHit"
+    ],
+    "script": {
+      "Script": "RadialDamageOnMaxRadiationStackHit.lua",
+      "Function": "MatchAttackEvent",
+      "_damageToSpreadBase": 0.5,
+      "_damageToSpreadPerLevel": 0.1,
+      "_radiusToSpreadBase": 2.5,
+      "_radiusToSpreadPerLevel": 0.5,
+      "_cooldownBase": 0.0,
+      "_cooldownPerLevel": 0.0,
+      "_shockwaveVfx": ""
+    }
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeCritCondition",
+    "ignore": [
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeHitCondition",
+    "ignore": [
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeKnockdownCondition",
+    "ignore": [
+      "DHT_SCRIPT",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": {
+      "Script": "DuplicateStatus.lua",
+      "Function": "MatchAttackEvent",
+      "_duplicateNum": 2.0,
+      "_duplciateNumPerFusionLevel": 1.0,
+      "_failOnActiveProcs": [
+        "PT_KNOCKED_DOWN",
+        "PT_RAGDOLL",
+        "PT_LIFT_HIT"
+      ]
+    }
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+    "ignore": [
+      "DHT_RADIAL"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPunctureProcCondition",
+    "ignore": [
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnRagdollCondition",
+    "ignore": [
+      "DHT_SCRIPT",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcALLCondition",
+    "ignore": [
+      "DHT_SCRIPT",
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcCondition",
+    "ignore": [
+      "DHT_SCRIPT",
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnSummonHitCondition",
+    "ignore": [
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": {
+      "Script": "OnSummonHitCondition.lua",
+      "Function": "MatchAttackEvent"
+    }
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnToxinProcCondition",
+    "ignore": [
+      "DHT_LINK",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnWeakPointHitCondition",
+    "ignore": [
+      "DHT_RADIAL",
+      "DHT_DOT"
+    ],
+    "excludeIntermediates": null,
+    "script": {
+      "Script": "IsWeakpoint.lua",
+      "Function": "MatchAttackEvent",
+      "_weakness": 0.5
+    }
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnWeakPointKillAnySourceCondition",
+    "ignore": [
+      "DHT_RADIAL"
+    ],
+    "excludeIntermediates": null,
+    "script": {
+      "Script": "IsWeakpoint.lua",
+      "Function": "MatchAttackEvent",
+      "_weakness": 0.5
+    }
+  },
+  {
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/RadialDamageSelfProcCondition",
+    "ignore": [
+      "DHT_SCRIPT"
+    ],
+    "excludeIntermediates": null,
+    "script": null
+  }
+]

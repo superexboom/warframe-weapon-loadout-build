@@ -1,0 +1,65 @@
+{
+  "fingerprint": "3f9f649c32743106",
+  "cases": [
+    {
+      "case": "board180",
+      "localKpm": 171.09339615778782,
+      "referenceKpm": 166.63994165574272,
+      "relativeDifference": 0.026725012369755774,
+      "referenceSe": 0.061605054079481664,
+      "shots": 566.0,
+      "referenceShots": 565.67
+    },
+    {
+      "case": "board30",
+      "localKpm": 125.0,
+      "referenceKpm": 109.36073228188096,
+      "relativeDifference": 0.14300624540267615,
+      "referenceSe": 0.2445730840622656,
+      "shots": 95.0,
+      "referenceShots": 94.992
+    },
+    {
+      "case": "roarHip180",
+      "localKpm": 59.78493568006702,
+      "referenceKpm": 62.07880830333356,
+      "relativeDifference": -0.03695097708799544,
+      "referenceSe": 0.04103664986526319,
+      "shots": 566.0,
+      "referenceShots": 563.527
+    },
+    {
+      "case": "original",
+      "localKpm": 45.095924217655366,
+      "referenceKpm": 42.23358330902185,
+      "relativeDifference": 0.06777404814765187,
+      "referenceSe": 0.16116499109601967,
+      "shots": 95.0,
+      "referenceShots": 94.926
+    },
+    {
+      "case": "originalAimed",
+      "localKpm": 182.0,
+      "referenceKpm": 178.03005430898375,
+      "relativeDifference": 0.022299300567117264,
+      "referenceSe": 0.05655072852529954,
+      "shots": 95,
+      "referenceShots": 94.997
+    }
+  ],
+  "stug": {
+    "seconds": 141.62139249999927,
+    "objective": 19.120075582220682,
+    "native": {
+      "native": 19398,
+      "fallback": 0
+    },
+    "arcane": [
+      {
+        "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OverguardSteal",
+        "rank": 5,
+        "nameZh": "次要·筑垒"
+      }
+    ]
+  }
+}

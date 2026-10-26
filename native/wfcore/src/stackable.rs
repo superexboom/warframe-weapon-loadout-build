@@ -130,7 +130,7 @@ impl Projectiles {
 
     fn schedule(&self, out: &mut Vec<Action>, time: f64, action: u8, id: usize) {
         let g = &self.groups[id];
-        out.push(Action::Life { time, group: id, token: g.token, action, generation: g.generation });
+        out.push(Action::Life { time, group: id, token: g.token, action, generation: if g.profile.kind == STUG { -1 } else { g.generation } });
     }
 
     fn hit(&self, out: &mut Vec<Action>, id: usize, kind: u8, scale: f64, weight: Option<f64>) {
@@ -217,6 +217,7 @@ impl Projectiles {
                 let current = self.active.filter(|&id| {
                     let g = &self.groups[id];
                     g.alive && g.generation == generation && g.profile.kind == STUG
+                        && g.profile.embed_seconds == profile.embed_seconds && g.profile.max_stack == profile.max_stack
                 });
                 if let Some(id) = current {
                     self.merge(out, time, id, amount);

@@ -702,16 +702,19 @@ def _candidate_mods(
             rejected += 1
         else:
             cards.append(card)
-    # Primed Reach rides along on every melee build, except a glaive's
-    # throw: Reach only widens the glaive's hitbox, never its flight (wiki
-    # Glaive), so on the throw route the slot goes to a card that scores.
-    from .melee_sequence import default_route
+    # Reach is a comfort reservation for ordinary melee builds. Hammers
+    # normally use the slam route, whose radius Reach does not increase;
+    # they and glaive throws must leave all damage slots available.
+    from .melee_sequence import default_route, weapon_row
+    tags = {str(tag).upper() for tag in weapon.get("compatTags") or ()}
+    hammer = "HAMMERS_STANCE" in tags or str((weapon_row(weapon) or {}).get("tree", "")).endswith("/HammerMeleeTree")
     route = (getattr(scenario, "combat_state", None) or {}).get("meleeRoute") or default_route(weapon)
     if (
         _weapon_type(None, weapon) == "melee"
         and not weapon.get("isExalted")
         and reach is not None
         and route != "glaive"
+        and not hammer
     ):
         required_reach = _mod_card(
             reach, scenario, required=True, allow_empty=True

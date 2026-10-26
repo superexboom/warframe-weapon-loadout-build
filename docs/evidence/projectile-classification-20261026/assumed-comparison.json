@@ -1,0 +1,20 @@
+{
+  "validForSameCondition": false,
+  "reason": "WFSim legacy assume_max is not the same as Portable fixed event stacks; use pinned-comparison.json",
+  "exploratoryRows": [
+    {
+      "seconds": 30,
+      "local": 152.0,
+      "ref": 129.6490412954325,
+      "localDps": 63817995.1499879,
+      "referenceDps": 57806660.90468262
+    },
+    {
+      "seconds": 180,
+      "local": 175.5933961577878,
+      "ref": 170.26813647447224,
+      "localDps": 73723805.94978786,
+      "referenceDps": 77138789.68185979
+    }
+  ]
+}

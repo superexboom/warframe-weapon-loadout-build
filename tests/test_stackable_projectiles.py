@@ -164,8 +164,9 @@ def test_stug_default_counts_every_child_and_bounce_without_weakpoint_damage():
     assert [(e['damageScale'],e['hitWeight']) for e in child]==[(1.,2.),(1.,2.),(2.5,2.)]
     assert full['directWindow']-empty['directWindow']==pytest.approx(1800.)
     stats,combat=setup('Stug',mode=2,multishot=5.)
-    for part in stats._stackable[1].values():
-        assert part.radial_only and part.headshot_bonus_multiplier==1.
+    for name, part in stats._stackable[1].items():
+        assert part.radial_only == (name != "explosion")
+        assert part.headshot_bonus_multiplier==1.
         assert part.weakpoint_damage_bonus==part.weakpoint_crit_chance_bonus==0.
     head=replay(stats,target(1e12),attacks_per_second=.1,window_seconds=4.1,combat=combat,headshot_chance=1.)
     body=replay(stats,target(1e12),attacks_per_second=.1,window_seconds=4.1,combat=combat,headshot_chance=0.)
@@ -188,5 +189,7 @@ def test_stug_children_survive_the_parents_kill_and_never_earn_deadhead():
                   combat=combat,trigger_sources=sources,headshot_chance=1.)
     children=[e for e in result['projectileEvents'] if e['kind']=='child']
     assert len(children)==3 and children[-1]['time']==4.
-    assert result['weakpointKillEvents']==0
-    assert all(row['avgStacks']==0 for row in result['triggerSeries'])
+    # Exactly the main explosion earns a weak-point kill; all three child
+    # events remain ordinary radial hits even when they also kill.
+    assert result['weakpointKillEvents']==1
+    assert all(max(row['series'])==1 for row in result['triggerSeries'])

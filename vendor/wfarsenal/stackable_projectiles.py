@@ -37,12 +37,14 @@ class StackableProjectiles:
                                    targetGeneration=group.generation,**values))
 
     def schedule(self, time, action, group):
-        self.push(time,'stackable-life',(group.id,group.token,action),group.generation)
+        self.push(time,'stackable-life',(group.id,group.token,action),
+                  None if group.profile['kind']=='stug' else group.generation)
 
     def hit(self, group, kind, time, scale=1., weight=None):
         part = group.parts.get(kind)
         if part is None:
             return
+        scale = 1. + (scale - 1.) * part.stack_native_fraction
         if scale!=1.:
             part = replace(part,damage_types={k:v*scale for k,v in part.damage_types.items()},
                            dot_base_damage=part.dot_base_damage*scale if part.dot_base_damage is not None else None)
@@ -117,7 +119,7 @@ class StackableProjectiles:
                 remaining -= amount
                 group = self.groups.get(self.active)
                 if (group is not None and group.alive and group.generation==generation
-                        and group.profile['kind']=='stug'):
+                        and group.profile['kind']=='stug' and group.profile['explosion']==profile['explosion']):
                     self.merge(time,group,amount)
                 else:
                     group = self.create(time,profile,parts,generation,amount)

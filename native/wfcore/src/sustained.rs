@@ -135,7 +135,7 @@ impl Context<'_> {
     fn damage_against(&self, s: &Core, armour: f64) -> (Vector, f64) {
         let (hm, hcm, _head) = self.location(s);
         let hcm = if s.ignore_headshot_bonus { 1.0 } else { hcm };
-        let applied_hm = if s.ignore_headshot_bonus { 1.0 } else { hm };
+        let applied_hm = if s.ignore_headshot_bonus || s.area_direct { 1.0 } else { hm };
         let base = match s.dot_base_damage {
             Some(v) => v,
             None => s.total_damage(),

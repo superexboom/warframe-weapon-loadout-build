@@ -89,6 +89,7 @@ pub(crate) fn core_of(obj: &Bound<'_, PyAny>, types: &mut Types, target_faction:
         continuous: b(obj, "continuous")?,
         radial_only: b(obj, "radial_only")?,
         ignore_headshot_bonus: b(obj, "ignore_headshot_bonus")?,
+        area_direct: b(obj, "area_direct")?,
         bodyshot_crit_multiplier: f(obj, "bodyshot_crit_multiplier")?,
         weakpoint_crit_chance_bonus: f(obj, "weakpoint_crit_chance_bonus")?,
         base_crit_chance: f(obj, "base_crit_chance")?,
@@ -207,6 +208,9 @@ struct Stats {
     ammo_cost: f64,
     fire_rate: f64,
     reload_time: f64,
+    transform_time_scale: f64,
+    stack_native_fraction: f64,
+    stackable_hit_event: bool,
     multishot: f64,
     continuous: bool,
     radial_only: bool,
@@ -299,6 +303,9 @@ impl Stats {
             ammo_cost: self.ammo_cost,
             fire_rate: self.fire_rate,
             reload_time: self.reload_time,
+            transform_time_scale: self.transform_time_scale,
+            stack_native_fraction: self.stack_native_fraction,
+            stackable_hit_event: self.stackable_hit_event,
             multishot: self.multishot,
             continuous: self.continuous,
             radial_only: self.radial_only,
@@ -1036,6 +1043,9 @@ impl<'py> Replay<'py> {
             ammo_cost: f(obj, "ammo_cost")?,
             fire_rate: f(obj, "fire_rate")?,
             reload_time: f(obj, "reload_time")?,
+            transform_time_scale: f(obj, "transform_time_scale")?,
+            stack_native_fraction: f(obj, "stack_native_fraction")?,
+            stackable_hit_event: b(obj, "stackable_hit_event")?,
             multishot: f(obj, "multishot")?,
             continuous: b(obj, "continuous")?,
             radial_only: b(obj, "radial_only")?,
@@ -2476,6 +2486,7 @@ impl<'py> Replay<'py> {
         for action in actions {
             match action {
                 stackable::Action::Hit { part, scale, weight } => {
+                    let scale = 1.0 + (scale - 1.0) * self.stats[part].stack_native_fraction;
                     let mut part = part;
                     if scale != 1.0 {
                         part = self.derive(part, 14, scale, |v| {
@@ -2494,16 +2505,25 @@ impl<'py> Replay<'py> {
                         v.core.multishot = weight;
                         v.drop_private();
                     });
-                    let key = self.packet(part, 0.0)?;
+                    let area_direct = self.stats[part].core.area_direct;
+                    let aim = if area_direct { self.head } else { 0.0 };
+                    let key = self.packet(part, aim)?;
                     let packet = self.packets[&key].clone();
-                    let cv2 = self.spread(part, 0.0);
-                    if !self.take(&packet.vector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
-                        self.add_procs(part, 0.0, t, key)?;
+                    let cv2 = self.spread(part, aim);
+                    if !self.take(&packet.vector, t, DIRECT, WeakKill::Value(aim), cv2, false)? {
+                        self.add_procs(part, aim, t, key)?;
                     }
-                    self.noncrit_no_proc_hit(part, 0.0, t);
+                    self.noncrit_no_proc_hit(part, aim, t);
+                    if self.stats[part].stackable_hit_event { self.signal("on-hit", t, weight); }
+                    if area_direct {
+                        self.signal("on-headshot", t, aim * weight);
+                        self.consecutive_heads(aim);
+                    }
+                    let puncture = if self.stats[part].radial_only { 0.0 } else { self.live_crit().0 };
+                    if self.stats[part].stackable_hit_event { self.enervate_hit(part, t, puncture, aim); }
                 }
                 stackable::Action::Life { time, group, token, action, generation } => {
-                    self.push(time, Kind::StackLife(group, token, action), Some(generation));
+                    self.push(time, Kind::StackLife(group, token, action), if generation < 0 { None } else { Some(generation) });
                 }
                 stackable::Action::Child { time, group, multiplier, hits, generation: _ } => {
                     // Child blobs are independent projectiles at the fixed
@@ -3513,7 +3533,7 @@ impl<'py> Replay<'py> {
                                 let m = self.stats[active].magazine;
                                 self.shells_owed = pmax(0.0, (m - pmax(self.ammo, 0.0) - 1e-9).ceil());
                             }
-                            self.push(t + c.enter, Kind::Transform(INCARNON), None);
+                            self.push(t + c.enter * (if c.kill_charged { 1.0 } else { self.stats[active].transform_time_scale }), Kind::Transform(INCARNON), None);
                             continue;
                         }
                     }
@@ -3574,7 +3594,7 @@ impl<'py> Replay<'py> {
                     // A shot reloads only when it cannot fire: a free one fires on an empty magazine.
                     if ((self.ammo <= 1e-9 && ammo_cost > 1e-9) || insufficient) && magazine > 0.0 {
                         if let (Some(c), INCARNON) = (self.cycle, self.form) {
-                            self.push(t + c.exit, Kind::Transform(BASE), None);
+                            self.push(t + c.exit * (if c.kill_charged { 1.0 } else { self.stats[active].transform_time_scale }), Kind::Transform(BASE), None);
                             continue;
                         }
                         if self.battery.is_some() {

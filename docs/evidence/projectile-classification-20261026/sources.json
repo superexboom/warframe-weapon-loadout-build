@@ -1,0 +1,133 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "clientBuild": "2026.10.22.13.12",
+  "reference": {
+    "accepted": [
+      {
+        "engine": "4296a0964da6",
+        "join": true,
+        "until": "2026-10-26T11:57:54.000Z"
+      },
+      {
+        "engine": "5c64c380e5f2",
+        "join": true,
+        "until": "2026-10-27T01:51:23.000Z"
+      },
+      {
+        "engine": "db272037fe1d",
+        "join": true,
+        "until": "2026-10-27T02:58:18.000Z"
+      },
+      {
+        "engine": "dac6ecbaf97e",
+        "join": true,
+        "until": "2026-10-27T15:12:14.000Z"
+      },
+      {
+        "engine": "0d425ff4e358",
+        "join": true,
+        "until": "2026-10-27T16:56:38.000Z"
+      },
+      {
+        "engine": "bd0cc9e70106",
+        "join": true,
+        "until": "2026-10-27T19:02:26.000Z"
+      },
+      {
+        "engine": "6c720edfd739",
+        "join": true,
+        "until": "2026-10-28T08:21:59.000Z"
+      },
+      {
+        "engine": "3194962a0af7",
+        "join": true,
+        "until": "2026-10-29T10:10:36.000Z"
+      }
+    ],
+    "commit": "81e07477+",
+    "data": "087697e90dd4",
+    "data_format": 1,
+    "engine": "14c617506965",
+    "packs": [
+      "pack.data.087697e90dd4.json",
+      "pack.site.8e53d8ea2efe.json",
+      "pack.text.b0eb69b184b8.json"
+    ],
+    "protocol": 8,
+    "protocols_served": [
+      8,
+      7,
+      6
+    ],
+    "release": "2eb28b213f80",
+    "wasm": "4bf7c5c9f316"
+  },
+  "referenceSourceRevision": "b43ee664bddddbcd4f62e03b99a2a24b9ad39026",
+  "artifacts": [
+    {
+      "path": "artifacts/original/Debug/Packages.bin_H",
+      "sha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+    },
+    {
+      "path": "artifacts/original/Debug/Lotus/Upgrades/CosmeticEnhancers/Offensive/RadialDamageOnMaxRadiationStackHit.lua_B",
+      "sha256": "b7edc40c063e2f0caf24a49563716a91aedf45adb2cb7ddb379dba24c5054a6b"
+    },
+    {
+      "path": "artifacts/original/Debug/Lotus/Scripts/Libs/WeaponStatsLib.lua_B",
+      "sha256": "81cbebd40703506d7e26d8a36652ff1cf94005c6a02aff835364952ce7f53dd7"
+    }
+  ],
+  "nativeSymbols": {
+    "projectileConstructor": "0x140fba500",
+    "explosionDirectHitTypeOffset": "0x634",
+    "radialParamsBuilder": "0x141234720",
+    "irradiateCounterGetter": "0x1419c7bb0",
+    "counterAccessorOffset": "0x244",
+    "directAttackDataBuilder": "0x1416373e0",
+    "weaponDamageData": "0x141b9bf90"
+  },
+  "extraction": {
+    "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+    "headerOffsets": [
+      83,
+      2309,
+      86986,
+      328445,
+      21456046
+    ],
+    "entityCount": 468745,
+    "uniqueTypePaths": 468744,
+    "duplicatePaths": [
+      "/Lotus/Types/Enemies/Tau/GuiltSentient/DactolystBossAvatar"
+    ],
+    "entitiesWithAttributes": 204792,
+    "selectedWithAttributes": 842,
+    "parsedObjects": 842,
+    "parseErrors": [],
+    "directoryEnd": 53590427,
+    "fileSize": 53590427
+  },
+  "primaryReferences": [
+    {
+      "url": "https://github.com/magenie33/wfsim/blob/b43ee664bddddbcd4f62e03b99a2a24b9ad39026/docs/measurements/M127-stug-base-blob-ticks-and-multishot.md",
+      "sha256": "cfbd7989cf969d3f12fea2f3387c906ff967c17f633ffa3b23c8787267bf0056"
+    },
+    {
+      "url": "https://github.com/magenie33/wfsim/blob/b43ee664bddddbcd4f62e03b99a2a24b9ad39026/docs/measurements/M100-electricity-and-gas-ticks-land-on-a-part.md",
+      "sha256": "157847f93cadcbe5da9502a046797f94de1c70a7f54ca70620c86ee73a374fd2"
+    },
+    {
+      "url": "https://github.com/magenie33/wfsim/blob/b43ee664bddddbcd4f62e03b99a2a24b9ad39026/data/weapons/secondary/stug_incarnon.yaml",
+      "sha256": "259c0ba42add0bb8f22734794d1f125db51326933d1983416bcbb5b856396b6b"
+    },
+    {
+      "url": "https://github.com/magenie33/wfsim/blob/b43ee664bddddbcd4f62e03b99a2a24b9ad39026/engine/src/fight/cycle.rs",
+      "sha256": "5633fdd117b437d04bbc77b6408643e2acbc6f7fd96b923dc25f218845d1df2b"
+    },
+    {
+      "url": "https://github.com/magenie33/wfsim/blob/13640639/docs/measurements/M59-laetum-incarnon-irradiate-echo.md",
+      "sha256": "156e948232875ed3febf98d348ba30b464f01de2be9e81cd07ab80abe48d184b"
+    }
+  ],
+  "nativeCoreSha256": "e95b94511caa48cf6b407caccc45ccb2baafa60cbb1c79bb85da641a3b8e4287"
+}

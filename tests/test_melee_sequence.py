@@ -103,3 +103,27 @@ def test_melee_incarnon_flat_base_damage_is_not_a_multiplier():
 
 def test_homing_glaive_has_the_glaive_route():
     assert ms.default_route(_weapon("Orvius")) == "glaive"
+
+
+@pytest.mark.parametrize("name,route,required", [
+    ("Fragor Prime", None, False), ("Magistar", "combo", False),
+    ("Glaive Prime", None, False), ("Nikana Prime", None, True),
+])
+def test_reach_reservation_excludes_hammers_and_glaive_throws(name, route, required):
+    from wfarsenal.damage import Scenario
+    scenario = Scenario(combat_state={"meleeRoute": route} if route else {})
+    cards, _ = optimizer._candidate_mods(app.EXPORTS, _weapon(name), scenario)
+    reserved = [c for c in cards if c.required and c.record.get("nameEn") == "Primed Reach"]
+    assert bool(reserved) is required
+
+
+def test_assembled_hammer_does_not_reserve_reach():
+    from wfarsenal.damage import Scenario
+    from wfarsenal.simulator import resolve_zaw_record
+    zaw = app.EXPORTS["zaws"]
+    parts = [next(path for path, row in zaw[table].items() if row["nameEn"] == name)
+             for table, name in (("strikes", "Rabvee"), ("grips", "Shtung"), ("links", "Jai"))]
+    base = next(w for w in app.EXPORTS["weapons"] if w["path"].endswith("/LotusModularWeapon"))
+    weapon = resolve_zaw_record(base, parts, zaw)
+    cards, _ = optimizer._candidate_mods(app.EXPORTS, weapon, Scenario())
+    assert not any(c.required and c.record.get("nameEn") == "Primed Reach" for c in cards)

@@ -101,6 +101,11 @@ def import_profiles(packages, export, reference):
                 'stug-projectile-stack-lifecycle-unmodeled','stug-embed-ticks-unmodeled',
                 'stug-full-charge-stack-unmodeled','stug-bouncing-child-contact-unmodeled',
                 'orb-merging-and-singularity-unmodeled','orb-multishot-merging-economy-unmodeled'}]
+            if kind=='stug':
+                # Direct event eligibility is not GunCO eligibility (M127).
+                for name in ('embed','explosion','child'):
+                    if profile.get(name): profile[name]['takesConditionOverload'] = False
+                profile['classificationSource'] = 'WFSim M127 2026-10-26: area direct main explosion; GunCO excluded on embed and main. Child radial stage stays separate.'
             if kind=='stug' and i==1:
                 entry['charge'] = dict(seconds=2.,source='native-ChargeTime')
                 entry['unmodeled'] = [n for n in entry['unmodeled'] if n!='stug-charged-ammo-stack-input-required']

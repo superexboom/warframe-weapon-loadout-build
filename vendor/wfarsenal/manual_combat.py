@@ -805,8 +805,16 @@ def prepare(
                 part_fx = fx if component.get('takesConditionOverload') else [e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE']
                 part, part_spec = apply_mods_spec(_part_record(wp, ('stackable', idx, name, repr(component)), stackable_part),
                                                   part_fx,scenario=replace(scenario,incarnon_cycle=False,victim_status_count=count_ceiling))
-                part = replace(part,radial_only=True,multishot=1.,weakpoint_damage_bonus=0.,
-                               weakpoint_crit_chance_bonus=0.,weakpoint_crit_chance_relative=0.,headshot_bonus_multiplier=1.)
+                area_direct = stackable.get('kind') == 'stug' and name == 'explosion'
+                native_fraction = (sum(component['damage'].values()) / part_spec.base_total
+                                   if stackable.get('kind') == 'stug' and name in ('embed', 'explosion')
+                                   and part_spec and part_spec.base_total > 0 else 1.)
+                part = replace(part, radial_only=not area_direct, area_direct=area_direct,
+                               stack_native_fraction=native_fraction, stackable_hit_event=stackable.get("kind")=="stug",
+                               multishot=1., weakpoint_damage_bonus=0.,
+                               weakpoint_crit_chance_bonus=part.weakpoint_crit_chance_bonus if area_direct else 0.,
+                               weakpoint_crit_chance_relative=part.weakpoint_crit_chance_relative if area_direct else 0.,
+                               headshot_bonus_multiplier=part.headshot_bonus_multiplier if area_direct else 1.)
                 if name=='singularity':
                     part = replace(part,crit_chance=0.,crit_multiplier=1.,noncrit_damage_multiplier=1.)
                 part._co_spec = part_spec

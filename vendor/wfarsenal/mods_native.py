@@ -30,7 +30,7 @@ try:  # pragma: no cover - exercised when the native core is built
 except ImportError:  # pragma: no cover
     wfcore = None
 
-ENABLED = (wfcore is not None and hasattr(wfcore, "ModsPrep") and os.environ.get("WF_NATIVE") != "0"
+ENABLED = (wfcore is not None and hasattr(wfcore, "ModsPrep") and getattr(wfcore, "RELOAD_SCALED_TRANSFORMS", 0) and os.environ.get("WF_NATIVE") != "0"
            and os.environ.get("WF_NATIVE_MODS") != "0")
 SHADOW = os.environ.get("WF_NATIVE_SHADOW") == "1"
 

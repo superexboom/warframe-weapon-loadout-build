@@ -1,0 +1,18 @@
+{
+  "pytest": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "1376",
+    "time": "837.048",
+    "timestamp": "2026-10-26T22:16:10.147276+08:00",
+    "hostname": "DESKTOP-BFB9HVK"
+  },
+  "summary": "1364 passed, 12 subtests passed",
+  "nativeSha256": "e95b94511caa48cf6b407caccc45ccb2baafa60cbb1c79bb85da641a3b8e4287",
+  "nativeRustTests": 0,
+  "stugAutoObjective": 19.120075582220682,
+  "unrelatedPathsPreserved": 21,
+  "releaseUnchangedAtClose": true
+}

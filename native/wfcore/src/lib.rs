@@ -186,9 +186,11 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ENERVATE_PROBABILISTIC_HITS", 1)?;
     m.add("IGNORE_HEADSHOT_BONUS", 1)?;
     m.add("STUG_IDEAL_DETONATION", 1)?;
+    m.add("STUG_AREA_DIRECT", 1)?;
     m.add("SNIPER_INCARNON_COMBO", 1)?;
     m.add("PERSISTENT_RADIALS", 1)?;
     m.add("SNIPER_COMBO_STATUS", 1)?;
+    m.add("RELOAD_SCALED_TRANSFORMS", 1)?;
     m.add_class::<PyHeatChains>()?;
     m.add_class::<PyCappedPool>()?;
     m.add_class::<PyStatusPresence>()?;

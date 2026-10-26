@@ -1,0 +1,38 @@
+[
+  {
+    "case": "full",
+    "localKpm": 125.0,
+    "referenceKpm": 109.36073228188096,
+    "localDps": 52481903.906240076,
+    "referenceDps": 48721406.08407478,
+    "localShots": 95.0,
+    "referenceShots": 94.992
+  },
+  {
+    "case": "no-deadhead",
+    "localKpm": 25.624740255617986,
+    "referenceKpm": 25.124895581905488,
+    "localDps": 10758681.245741641,
+    "referenceDps": 10665002.367191024,
+    "localShots": 95.0,
+    "referenceShots": 94.998
+  },
+  {
+    "case": "no-feedback",
+    "localKpm": 4.4979416223699085,
+    "referenceKpm": 4.470787109265185,
+    "localDps": 1888484.320008759,
+    "referenceDps": 1887291.6400061059,
+    "localShots": 94,
+    "referenceShots": 94.395
+  },
+  {
+    "case": "infinite-health",
+    "localKpm": 2.58404283748348e-06,
+    "referenceKpm": 2.5913674514528307e-06,
+    "localDps": 43067380.48778675,
+    "referenceDps": 43189457.523634866,
+    "localShots": 95,
+    "referenceShots": 95.0
+  }
+]

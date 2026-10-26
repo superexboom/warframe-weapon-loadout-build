@@ -28,6 +28,7 @@ pub struct Core {
     pub continuous: bool,
     pub radial_only: bool,
     pub ignore_headshot_bonus: bool,
+    pub area_direct: bool,
     pub bodyshot_crit_multiplier: f64,
     pub weakpoint_crit_chance_bonus: f64,
     pub base_crit_chance: f64,
@@ -194,7 +195,7 @@ fn weakpoint_noncrit_scale(s: &Core, hm: f64) -> f64 {
         return 1.0;
     }
     let mut scale = s.headshot_bonus_multiplier;
-    if !s.ignore_headshot_bonus && s.weakpoint_damage_bonus > 0.0 {
+    if !s.ignore_headshot_bonus && !s.area_direct && s.weakpoint_damage_bonus > 0.0 {
         scale *= (hm + 1.5 * s.weakpoint_damage_bonus) / hm;
     }
     scale
@@ -247,7 +248,7 @@ fn direct(s: &Core, loc: Location, tables: &TargetTables) -> (Vector, f64) {
         hcm = 1.0;
     }
     if s.ignore_headshot_bonus { hcm = 1.0; }
-    let applied_hm = if s.ignore_headshot_bonus { 1.0 } else { hm };
+    let applied_hm = if s.ignore_headshot_bonus || s.area_direct { 1.0 } else { hm };
     let base = match s.dot_base_damage {
         Some(v) => v,
         None => s.total_damage(),
@@ -390,7 +391,7 @@ fn dot_multiplier(tables: &TargetTables, d: D) -> f64 {
 pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Status {
     let loc = if s.radial_only { tables.dot[0] } else { tables.dot[loc_index] };
     let (hm, hcm) = (loc.hit_multiplier, if s.ignore_headshot_bonus { 1.0 } else { loc.hit_critical_multiplier });
-    let applied_hm = if s.ignore_headshot_bonus { 1.0 } else { hm };
+    let applied_hm = if s.ignore_headshot_bonus || s.area_direct { 1.0 } else { hm };
     let forced = &tables.forced_procs;
     let procs = expected_status_procs(s, forced, loc.head);
     let dot_base = pmax(match s.dot_base_damage {

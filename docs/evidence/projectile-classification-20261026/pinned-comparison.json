@@ -1,0 +1,26 @@
+[
+  {
+    "case": "finite",
+    "seconds": 30,
+    "localKpm": 152.0,
+    "referenceKpm": 134.62314678424852,
+    "localDps": 63817995.1499879,
+    "referenceDps": 60076975.62937155
+  },
+  {
+    "case": "finite",
+    "seconds": 180,
+    "localKpm": 175.5933961577878,
+    "referenceKpm": 170.88994415510103,
+    "localDps": 73723805.94978786,
+    "referenceDps": 77424696.82461324
+  },
+  {
+    "case": "infinite",
+    "seconds": 30,
+    "localKpm": 3.96397862143516e-05,
+    "referenceKpm": 3.932083367704164e-05,
+    "localDps": 660663103.3693126,
+    "referenceDps": 655347227.4380949
+  }
+]

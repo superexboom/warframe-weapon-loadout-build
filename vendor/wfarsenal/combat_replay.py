@@ -437,10 +437,18 @@ def _reference_trajectory(
         push(t + manual_detonation['delaySeconds'], 'manual-detonation', batch)
 
     def deliver_projectile(part,t):
-        result = packet(part,0.)
-        if not take(result[0],t,'direct',cv2=spread(part,0.)):
-            add_procs(part,0.,t,result)
-        noncrit_no_proc_hit(part,0.,t)
+        aim = head if part.area_direct else 0.
+        result = packet(part,aim)
+        if not take(result[0],t,'direct',weak_kill=aim,cv2=spread(part,aim)):
+            add_procs(part,aim,t,result)
+        noncrit_no_proc_hit(part,aim,t)
+        if part.stackable_hit_event:
+            signal('on-hit',t,part.multishot)
+        if part.area_direct:
+            signal('on-headshot',t,aim*part.multishot)
+            consecutive_heads(t,aim)
+        if part.stackable_hit_event:
+            enervate_hit(part,t,0. if part.radial_only else live_crit()[0],aim)
 
     def count(dtype):
         if dtype == "DT_FIRE":
@@ -1536,7 +1544,7 @@ def _reference_trajectory(
             if cycle and form == "base" and gauge >= cycle["hits"] - 1e-9:
                 if shell_reload:
                     mode_switch_shells_owed = max(0., math.ceil(active.magazine - max(ammo, 0.) - 1e-9))
-                push(t + cycle["enterSeconds"], "transform", "incarnon")
+                push(t + cycle["enterSeconds"] * (1.0 if cycle.get("killCharged") else active.transform_time_scale), "transform", "incarnon")
                 continue
             battery = combat.get('battery')
             if battery and math.isfinite(last_fire_time):
@@ -1566,7 +1574,7 @@ def _reference_trajectory(
             # Knell chains headshots on its one round).
             if ((ammo <= 1e-9 and active.ammo_cost > 1e-9) or insufficient_ammo) and active.magazine > 0.0 and combat:
                 if cycle and form == "incarnon":
-                    push(t + cycle["exitSeconds"], "transform", "base")
+                    push(t + cycle["exitSeconds"] * (1.0 if cycle.get("killCharged") else active.transform_time_scale), "transform", "base")
                 else:
                     if battery:
                         recharges += 1

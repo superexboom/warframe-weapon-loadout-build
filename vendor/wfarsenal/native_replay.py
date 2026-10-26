@@ -45,13 +45,15 @@ def supported(stats, options) -> bool:
         return False  # Older cores treat every expected Blast proc as a real hit.
     if getattr(stats, 'ignore_headshot_bonus', False) and not getattr(wfcore, 'IGNORE_HEADSHOT_BONUS', 0):
         return False
-    if combat.get('stugIdealDetonation') and not getattr(wfcore, 'STUG_IDEAL_DETONATION', 0):
+    if (combat.get('stugIdealDetonation') or getattr(stats, 'area_direct', False)) and not getattr(wfcore, 'STUG_AREA_DIRECT', 0):
         return False
     if (combat.get('sniperCombo') or {}).get('incarnon') and not getattr(wfcore, 'SNIPER_INCARNON_COMBO', 0):
         return False
     if combat.get('persistentRadials') and not getattr(wfcore, 'PERSISTENT_RADIALS', 0):
         return False
     if combat.get('sniperCombo') and not getattr(wfcore, 'SNIPER_COMBO_STATUS', 0):
+        return False
+    if combat.get('cycle') and not getattr(wfcore, 'RELOAD_SCALED_TRANSFORMS', 0):
         return False
     if combat.get('cycle') and combat.get('melee'):
         return False  # no melee Incarnon cycle is modelled natively

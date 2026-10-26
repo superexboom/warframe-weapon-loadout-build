@@ -3018,7 +3018,7 @@
               "critMultiplier": 1.5,
               "statusChance": 0.0,
               "forcedProcs": [],
-              "takesConditionOverload": true
+              "takesConditionOverload": false
             },
             "explosion": {
               "damage": {
@@ -3028,10 +3028,11 @@
               "critMultiplier": 1.5,
               "statusChance": 0.0,
               "forcedProcs": [],
-              "takesConditionOverload": true
+              "takesConditionOverload": false
             },
             "chargedStacks": true,
-            "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)"
+            "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)",
+            "classificationSource": "WFSim M127 2026-10-26: area direct main explosion; GunCO excluded on embed and main. Child radial stage stays separate."
           },
           "charge": {
             "seconds": 2.0,
@@ -3083,7 +3084,7 @@
               "critMultiplier": 2.0,
               "statusChance": 0.2,
               "forcedProcs": [],
-              "takesConditionOverload": true
+              "takesConditionOverload": false
             },
             "explosion": {
               "damage": {
@@ -3093,7 +3094,7 @@
               "critMultiplier": 2.0,
               "statusChance": 0.2,
               "forcedProcs": [],
-              "takesConditionOverload": true
+              "takesConditionOverload": false
             },
             "child": {
               "damage": {
@@ -3103,7 +3104,7 @@
               "critMultiplier": 2.0,
               "statusChance": 0.2,
               "forcedProcs": [],
-              "takesConditionOverload": true
+              "takesConditionOverload": false
             },
             "childMaxCount": 5,
             "childMinCount": 2,
@@ -3111,7 +3112,8 @@
             "childBounceCount": 2,
             "childDeathMultiplier": 2.5,
             "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)",
-            "childActiveLimit": 70
+            "childActiveLimit": 70,
+            "classificationSource": "WFSim M127 2026-10-26: area direct main explosion; GunCO excluded on embed and main. Child radial stage stays separate."
           }
         }
       },
@@ -3141,7 +3143,7 @@
           "critMultiplier": 1.5,
           "statusChance": 0.0,
           "forcedProcs": [],
-          "takesConditionOverload": true
+          "takesConditionOverload": false
         },
         "explosion": {
           "damage": {
@@ -3151,9 +3153,10 @@
           "critMultiplier": 1.5,
           "statusChance": 0.0,
           "forcedProcs": [],
-          "takesConditionOverload": true
+          "takesConditionOverload": false
         },
-        "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)"
+        "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)",
+        "classificationSource": "WFSim M127 2026-10-26: area direct main explosion; GunCO excluded on embed and main. Child radial stage stays separate."
       }
     },
     "/Lotus/Weapons/ClanTech/Energy/Railgun": {
@@ -8948,14 +8951,34 @@
     },
     "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun": {
       "2": {
-        "behavior": "additive_with_base_damage",
-        "baseFraction": 1.0,
+        "behavior": "inert",
+        "baseFraction": 0.0,
         "excludeFlatSources": [],
         "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/IncarnonAdapterGrineerCrossbow/IncarnonGooProjectile",
         "directTotal": 200.0,
         "source": "data/weapons/secondary/stug_incarnon.yaml",
-        "sourceSha256": "f3da52dbc3544025c56c75c9029fea3f6728baf7241893b75ab7011dc166b139",
-        "revision": "5ccb12ad8b3d6f8085cb655d353028edfce7db65"
+        "sourceSha256": "259c0ba42add0bb8f22734794d1f125db51326933d1983416bcbb5b856396b6b",
+        "revision": "b43ee664bddddbcd4f62e03b99a2a24b9ad39026"
+      },
+      "0": {
+        "behavior": "inert",
+        "baseFraction": 0.0,
+        "excludeFlatSources": [],
+        "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+        "directTotal": 75.0,
+        "source": "data/weapons/secondary/stug.yaml",
+        "sourceSha256": "bd3d5be7ab36ba0a31c3e475f2167a8bcedb9e4e6fea7fad1a9b5ade6d32b078",
+        "revision": "b43ee664bddddbcd4f62e03b99a2a24b9ad39026"
+      },
+      "1": {
+        "behavior": "inert",
+        "baseFraction": 0.0,
+        "excludeFlatSources": [],
+        "projectile": "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GooProjectile",
+        "directTotal": 75.0,
+        "source": "data/weapons/secondary/stug.yaml",
+        "sourceSha256": "bd3d5be7ab36ba0a31c3e475f2167a8bcedb9e4e6fea7fad1a9b5ade6d32b078",
+        "revision": "b43ee664bddddbcd4f62e03b99a2a24b9ad39026"
       }
     },
     "/Lotus/Weapons/Grineer/Pistols/GrineerHandShotgun/GrineerHandCannon": {

@@ -789,7 +789,7 @@ pub fn apply_mods<'py>(
         if let Some(pool) = prep.incarnon_pool {
             magazine = pool;
             if let Some(seconds) = prep.incarnon_cycle_seconds {
-                reload_time = Num::F(seconds);
+                reload_time = divide(Num::F(seconds));
             }
         } else if prep.incarnon_cycle {
             unsupported.insert("incarnon-cycle-data-unavailable".to_string());
@@ -1102,6 +1102,10 @@ pub fn apply_mods<'py>(
     let unique: Vec<&String> = skipped.iter().filter(|s| seen.insert(s.as_str())).collect();
     out.set_item("skipped", PyList::new(py, unique)?)?;
     out.set_item("falloff_multiplier", falloff_multiplier)?;
+    out.set_item("transform_time_scale", divide(Num::F(1.0)).to_py(py))?;
+    out.set_item("area_direct", false)?;
+    out.set_item("stack_native_fraction", 1.0)?;
+    out.set_item("stackable_hit_event", false)?;
     out.set_item("dot_base_damage", dot_basis)?;
     let dots = PyDict::new(py);
     for (k, v) in dot_elements.iter() {

@@ -1,0 +1,23 @@
+{
+  "kind": "static-equivalent-not-game-observation",
+  "scenarios": {
+    "1": {
+      "base": 175,
+      "coefficient": 1.8,
+      "echoBase": 315.0,
+      "counterAfter": 0
+    },
+    "2": {
+      "base": 175,
+      "coefficient": 3.6,
+      "echoBase": 630.0,
+      "counterAfter": 0
+    },
+    "3": {
+      "base": 175,
+      "coefficient": 5.4,
+      "echoBase": 945.0000000000001,
+      "counterAfter": 0
+    }
+  }
+}

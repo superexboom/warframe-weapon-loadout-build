@@ -107,6 +107,8 @@ def score(stats, target: Mapping[str, Any], target_kwargs: Mapping[str, Any], *,
         raise Unsupported("no target")
     if getattr(stats,'ignore_headshot_bonus',False) and not getattr(wfcore,'IGNORE_HEADSHOT_BONUS',0):
         raise Unsupported('core predates native projectile headshot rules')
+    if getattr(stats, 'area_direct', False) and not getattr(wfcore, 'STUG_AREA_DIRECT', 0):
+        raise Unsupported('core predates area direct hit classification')
     core = _target(target, target_kwargs)
     value = wfcore.sustained_status(core, stats, float(stats.sustained_attack_rate), float(status_rate_multiplier),
                                     float(damage_rate_multiplier), total)
