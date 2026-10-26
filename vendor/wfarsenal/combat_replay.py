@@ -1222,6 +1222,7 @@ def _reference_trajectory(
                             "count": kept,
                             "per": non[dtype]["perProc"],
                             "end": t + 1.5 * scale,
+                            "hitProbability": min(kept,1.0-no_status_probability(st,dtype,forced_procs,aim)),
                         }
                         blast_procs.append(instance)
                         push(instance["end"], "blast", instance, gen)
@@ -1306,7 +1307,8 @@ def _reference_trajectory(
                 take({"DT_EXPLOSION": value}, t, "nonDot", cv2=1/procs)
                 # Only natural expiration is an Enervate hit; the 10-stack
                 # detonation is not. Counts remain the replay's expected procs.
-                if enervate and kind == 'blast':enervate.advance(t)
+                if enervate and kind == 'blast':
+                    enervate.advance(t,event_probability=payload['hitProbability'])
         elif kind == "independent-dot":
             alive = stack_alive(payload)
             if payload["count"] * alive > 0 and t <= payload["end"] + 1e-9:

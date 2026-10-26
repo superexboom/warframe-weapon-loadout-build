@@ -685,7 +685,7 @@ function applyBuildConfig(config) {
   state.forbiddenMods = Array.isArray(config.forbiddenMods) ? [...config.forbiddenMods] : [];
   setControlValue("build-min-fill", config.minFill ?? "");
   setControlValue("build-max-fill", config.maxFill ?? "");
-  if (ui["build-optimize-arcanes"]) ui["build-optimize-arcanes"].checked = config.optimizeWithArcanes !== false;
+  if (ui["build-optimize-arcanes"]) ui["build-optimize-arcanes"].checked = config.autoArcane === true || config.optimizeWithArcanes !== false;
   if (ui["build-auto-arcane"]) ui["build-auto-arcane"].checked = config.autoArcane === true;
   if (ui["build-auto-incarnon"]) ui["build-auto-incarnon"].checked = config.autoIncarnon === true;
   state.rivenSolveBudget = [10, 20, 30, 60].includes(Number(config.rivenSolveBudget)) ? Number(config.rivenSolveBudget) : 10;
@@ -11638,6 +11638,8 @@ function bindEvents() {
   }
   for (const id of ["build-optimize-arcanes", "build-auto-arcane", "build-auto-incarnon"]) {
     document.getElementById(id)?.addEventListener("change", () => {
+      if (id === "build-auto-arcane" && ui[id].checked) ui["build-optimize-arcanes"].checked = true;
+      if (id === "build-optimize-arcanes" && !ui[id].checked) ui["build-auto-arcane"].checked = false;
       persistActiveBuildConfig();
       scheduleLiveBuild();
     });

@@ -12,7 +12,8 @@ import math
 PATH = '/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit'
 IGNORED_ALT = '/Lotus/Weapons/Tenno/Pistols/SundialGun/SundialPistol'
 ASSUMPTIONS = ['enervate-grouped-hit-any-big-crit', 'enervate-gain-then-reset-after-damage',
-               'enervate-minimum-interval-30hz', 'enervate-state-target-correlation-expected']
+               'enervate-minimum-interval-30hz', 'enervate-state-target-correlation-expected',
+               'enervate-blast-hit-probability-with-cooldown-branches']
 
 
 def configuration(record, rank):
@@ -58,6 +59,7 @@ class EnervateState:
         self.fixed=config.get('fixedStacks')
         self.uptime=min(1.0,max(0.0,config.get('uptime',1.0)))
         self.states={(0,0):1.0}
+        self._timed_states=None
         if self.fixed is not None:
             value=max(0.0,float(self.fixed));lo=int(value);frac=value-lo
             self.states={(lo,0):1-frac}
@@ -73,7 +75,12 @@ class EnervateState:
         weights[0]=weights.get(0,0)+1-self.uptime
         return {s:p for s,p in weights.items() if p>0}
 
-    def advance(self,t,probabilities=None,*,gain=True):
+    def advance(self,t,probabilities=None,*,gain=True,event_probability=1.0):
+        event_probability=min(1.0,max(0.0,float(event_probability)))
+        if not event_probability:
+            return
+        if event_probability < 1.0 or self._timed_states is not None:
+            return self._advance_probabilistic(t,probabilities,gain,event_probability)
         if (not gain or self.fixed is not None or self.uptime==0
                 or t-self.last<self.config['minInterval']-1e-9):
             return
@@ -86,6 +93,39 @@ class EnervateState:
                 following[(0,0)]+=mass*prob;self.resets+=mass*prob
             else:following[(s+int(gain),b+1)]+=mass*prob
         self.states={k:v for k,v in following.items() if v>0}
+
+    def _advance_probabilistic(self,t,probabilities,gain,event_probability):
+        """A fractional proc is a possible hit, not a certain cooldown reset.
+
+        Keep the cooldown clock coupled to each branch. Eligible old clocks
+        are equivalent for every future event and collapse to -inf, bounding
+        the history without dropping probability mass.
+        """
+        if not gain or self.fixed is not None or self.uptime==0:
+            return
+        states=self._timed_states
+        if states is None:
+            states={(s,b,self.last):mass for (s,b),mass in self.states.items()}
+        following=defaultdict(float)
+        for (s,b,last),mass in states.items():
+            if t-last<self.config['minInterval']-1e-9:
+                following[(s,b,last)]+=mass
+                continue
+            following[(s,b,-math.inf)]+=mass*(1-event_probability)
+            accepted=mass*event_probability
+            self.hits+=accepted
+            probability=min(1.0,max(0.0,(probabilities or {}).get(s,0.0)))
+            following[(s+1,b,t)]+=accepted*(1-probability)
+            if b+1>=self.config['resetAfter']:
+                following[(0,0,t)]+=accepted*probability
+                self.resets+=accepted*probability
+            else:
+                following[(s+1,b+1,t)]+=accepted*probability
+        self._timed_states={k:v for k,v in following.items() if v>0}
+        totals=defaultdict(float)
+        for (s,b,_),mass in self._timed_states.items():totals[s,b]+=mass
+        self.states=dict(totals)
+        self.last=max((key[2] for key in self._timed_states),default=-math.inf)
 
     def snapshot(self):
         return dict(stacks=sum(s*p for s,p in self.damage_marginal().items()),

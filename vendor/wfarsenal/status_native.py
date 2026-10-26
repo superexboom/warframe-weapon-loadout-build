@@ -105,6 +105,8 @@ def score(stats, target: Mapping[str, Any], target_kwargs: Mapping[str, Any], *,
     """``sustained_status_damage(...)["totalDps" if total else "directDps"]``."""
     if not isinstance(target, Mapping):
         raise Unsupported("no target")
+    if getattr(stats,'ignore_headshot_bonus',False) and not getattr(wfcore,'IGNORE_HEADSHOT_BONUS',0):
+        raise Unsupported('core predates native projectile headshot rules')
     core = _target(target, target_kwargs)
     value = wfcore.sustained_status(core, stats, float(stats.sustained_attack_rate), float(status_rate_multiplier),
                                     float(damage_rate_multiplier), total)

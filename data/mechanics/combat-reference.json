@@ -1786,11 +1786,16 @@
         "crit_chance": 0.1,
         "crit_multiplier": 2.0,
         "status_chance": 0.25,
-        "takes_multishot": false,
+        "takes_multishot": true,
         "takes_blast_radius_mods": true,
         "damage": {
           "impact": 50
-        }
+        },
+        "referenceTakesMultishot": false,
+        "multishotSource": "one native attack per spawned projectile",
+        "nativeSource": "/Lotus/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolProjectile",
+        "nativeField": "ExplosiveAttack",
+        "nativeMultishotSourceSha256": "4731e3fb2aa17d7af090db142c039c25d013abdb341b669f516a36fadb3ad6cf"
       }
     },
     "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Ogris/KuvaOgris": {
@@ -1839,11 +1844,16 @@
         "crit_chance": 0.35,
         "crit_multiplier": 2.1,
         "status_chance": 0.21,
-        "takes_multishot": false,
+        "takes_multishot": true,
         "takes_blast_radius_mods": true,
         "damage": {
           "blast": 839.0
-        }
+        },
+        "referenceTakesMultishot": false,
+        "multishotSource": "one native attack per spawned projectile",
+        "nativeSource": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterProjectile",
+        "nativeField": "ExplosiveAttack",
+        "nativeMultishotSourceSha256": "ee12f56f38f892f47702b5bcc6df6f4786a776a21f76a6ccb3c152602c9b903b"
       },
       "bow": true,
       "drawSeconds": 0.40000001,
@@ -1867,9 +1877,13 @@
             "crit_chance": 0.34999999,
             "crit_multiplier": 2.0999999,
             "status_chance": 0.21,
-            "takes_multishot": false,
+            "takes_multishot": true,
             "nativeField": "AttackData",
-            "damageTypeSource": "native-explicit"
+            "damageTypeSource": "native-explicit",
+            "referenceTakesMultishot": false,
+            "multishotSource": "one native attack per spawned projectile",
+            "nativeSource": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile",
+            "nativeMultishotSourceSha256": "41cfd4e72557e395f2b36e3775f69dee4ab410dd1ef525fe7e610875a00480b6"
           },
           "radial": {
             "damage": {
@@ -1878,12 +1892,16 @@
             "crit_chance": 0.34999999,
             "crit_multiplier": 2.0999999,
             "status_chance": 0.21,
-            "takes_multishot": false,
+            "takes_multishot": true,
             "nativeField": "ExplosiveAttack",
             "damageTypeSource": "reference-confirmed-native-default",
             "radius_m": 3.5,
             "falloff_start_m": 0.0,
-            "falloff_reduction": 0.5
+            "falloff_reduction": 0.5,
+            "referenceTakesMultishot": false,
+            "multishotSource": "one native attack per spawned projectile",
+            "nativeSource": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile",
+            "nativeMultishotSourceSha256": "41cfd4e72557e395f2b36e3775f69dee4ab410dd1ef525fe7e610875a00480b6"
           },
           "nativeChild": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile",
           "nativeSources": [
@@ -1918,11 +1936,16 @@
         "crit_chance": 0.1,
         "crit_multiplier": 2.0,
         "status_chance": 0.1,
-        "takes_multishot": false,
+        "takes_multishot": true,
         "takes_blast_radius_mods": true,
         "damage": {
           "blast": 350
-        }
+        },
+        "referenceTakesMultishot": false,
+        "multishotSource": "one native attack per spawned projectile",
+        "nativeSource": "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncherProjectile",
+        "nativeField": "ExplosiveAttack",
+        "nativeMultishotSourceSha256": "3a0ff93e8377dca84af1a9524840b48f5ff2c14ef90ff7516c412de874d2f624"
       },
       "compression": {
         "effectiveness": 1.0,
@@ -1947,11 +1970,16 @@
         "crit_chance": 0.26,
         "crit_multiplier": 2.0,
         "status_chance": 0.26,
-        "takes_multishot": false,
+        "takes_multishot": true,
         "takes_blast_radius_mods": true,
         "damage": {
           "blast": 300
-        }
+        },
+        "referenceTakesMultishot": false,
+        "multishotSource": "one native attack per spawned projectile",
+        "nativeSource": "/Lotus/Weapons/Syndicates/PerrinSequence/LongGuns/PSPentaProjectile",
+        "nativeField": "ExplosiveAttack",
+        "nativeMultishotSourceSha256": "94d6ca3e1dd8be2f26283f3dc8a190368d72f14dd9a5df1d890d3cdb3895d6fa"
       },
       "compression": {
         "effectiveness": 1.0,
@@ -1976,11 +2004,16 @@
         "crit_chance": 0.17,
         "crit_multiplier": 2.5,
         "status_chance": 0.29,
-        "takes_multishot": false,
+        "takes_multishot": true,
         "takes_blast_radius_mods": true,
         "damage": {
           "blast": 175
-        }
+        },
+        "referenceTakesMultishot": false,
+        "multishotSource": "one native attack per spawned projectile",
+        "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterProjectile",
+        "nativeField": "ExplosiveAttack",
+        "nativeMultishotSourceSha256": "0173df57ee79166472543c4036c32a982d547f584ee242f958aefd9cb205a69c"
       },
       "compression": {
         "effectiveness": 1.0,
@@ -2000,7 +2033,7 @@
             "crit_chance": 0.15000001,
             "crit_multiplier": 2.0,
             "status_chance": 0.2,
-            "takes_multishot": false,
+            "takes_multishot": true,
             "nativeField": "AttackData",
             "damageTypeSource": "native-explicit",
             "takes_condition_overload": true,
@@ -2010,7 +2043,11 @@
               "excludeFlatSources": [],
               "source": "wiki CO catalog via WFSim unmodelled row",
               "row": "Zarr | Cannon Child Bomb | Projectile | 15 | 25 | 167% | Adding"
-            }
+            },
+            "referenceTakesMultishot": false,
+            "multishotSource": "one native attack per spawned projectile",
+            "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
+            "nativeMultishotSourceSha256": "f57e28a68a438ff1d3709efe60e1158f069030fc3af2d10eb22f2bbfdfc6021e"
           },
           "radial": {
             "damage": {
@@ -2019,12 +2056,16 @@
             "crit_chance": 0.15000001,
             "crit_multiplier": 2.0,
             "status_chance": 0.1,
-            "takes_multishot": false,
+            "takes_multishot": true,
             "nativeField": "ExplosiveAttack",
             "damageTypeSource": "reference-confirmed-native-default",
             "radius_m": 3.0,
             "falloff_start_m": 0.0,
-            "falloff_reduction": 0.89999998
+            "falloff_reduction": 0.89999998,
+            "referenceTakesMultishot": false,
+            "multishotSource": "one native attack per spawned projectile",
+            "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
+            "nativeMultishotSourceSha256": "f57e28a68a438ff1d3709efe60e1158f069030fc3af2d10eb22f2bbfdfc6021e"
           },
           "nativeChild": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
           "nativeSources": [
@@ -2059,7 +2100,7 @@
         "crit_chance": 0.34,
         "crit_multiplier": 3.0,
         "status_chance": 0.18,
-        "takes_multishot": false,
+        "takes_multishot": true,
         "takes_blast_radius_mods": true,
         "damage": {
           "puncture": 42.4,
@@ -2071,7 +2112,12 @@
           "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraProjectile",
           "inheritedFrom": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
           "nativeValue": 6
-        }
+        },
+        "referenceTakesMultishot": false,
+        "multishotSource": "one native attack per spawned projectile",
+        "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraProjectile",
+        "nativeField": "ExplosiveAttack",
+        "nativeMultishotSourceSha256": "9f59a8f5be3b5d6612ab0c17b204a2efdc0f1306975015647e223292578f1108"
       },
       "compression": {
         "effectiveness": 1.0,
@@ -2494,11 +2540,16 @@
         "crit_chance": 0.1,
         "crit_multiplier": 2.0,
         "status_chance": 0.1,
-        "takes_multishot": false,
+        "takes_multishot": true,
         "takes_blast_radius_mods": true,
         "damage": {
           "blast": 350
-        }
+        },
+        "referenceTakesMultishot": false,
+        "multishotSource": "one native attack per spawned projectile",
+        "nativeSource": "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncherProjectile",
+        "nativeField": "ExplosiveAttack",
+        "nativeMultishotSourceSha256": "3a0ff93e8377dca84af1a9524840b48f5ff2c14ef90ff7516c412de874d2f624"
       },
       "compression": {
         "effectiveness": 1.0,
@@ -3241,13 +3292,15 @@
           "crit_multiplier": 2.2,
           "status_chance": 0.28,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Corpus/Pistols/CrpElectroMag/CrpElectroMagProjectileCharged",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "f8669725fae176df4c091650e0bf8b485f93883b4970d7d6d8dee321406f9bf7"
         }
       ],
       "nativeSources": [
@@ -3340,13 +3393,15 @@
               "crit_multiplier": 2.0,
               "status_chance": 0.25,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpearChargedProjectile",
               "nativeField": "ExplosiveAttack",
               "damageTypeSource": "native-explicit",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "150eccc9d0d128889cd68d9a4d833af264e114f2fadb82a0d61435ca103b341b"
             }
           ],
           "nativeSources": [
@@ -3381,13 +3436,15 @@
           "crit_multiplier": 2.0,
           "status_chance": 0.25,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpearPrimaryWaveProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "19a82c47a6540c154ad641ef200b2992fff4f75af5e6ad8024acb2e1d185a1d7"
         }
       ],
       "nativeSources": [
@@ -3592,13 +3649,15 @@
           "crit_multiplier": 1.9,
           "status_chance": 0.43,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 1.7,
           "nativeSource": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernosChargedArrow",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "e2ef139eacc5341dafd07cf181c5aa0a917c697a6bae0f33ed06083b35aaf765"
         }
       ],
       "nativeSources": [
@@ -3653,13 +3712,15 @@
           "crit_multiplier": 2.2,
           "status_chance": 0.38,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Tenno/Bows/TnChoirBow/ChargedChoirArrow",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-physical-reference-split",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "92deb7669f882a6f90c242a67835f5f5d2c93e25295596c6b18b04b947645af8"
         }
       ],
       "nativeSources": [
@@ -3707,13 +3768,15 @@
           "crit_multiplier": 2.0,
           "status_chance": 0.3,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePanthera/PrimePantheraBladeWaveProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "ace805e8da8ebf182e764ccc2b497d3482144dd86c1cd0eaf6a47bd6a0964fcd"
         }
       ],
       "nativeSources": [
@@ -3901,13 +3964,15 @@
               "crit_multiplier": 2.3,
               "status_chance": 0.33,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzRifleChargeProj",
               "nativeField": "ExplosiveAttack",
               "damageTypeSource": "reference-confirmed-native-default",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "b061f5339e69694f6bb0781a3fc558ba3610a577c8d59e5b9fd20225ef47e5b1"
             }
           ],
           "nativeSources": [
@@ -5047,13 +5112,15 @@
           "crit_multiplier": 2.2,
           "status_chance": 0.1,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.80000001,
           "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpeargunPrimaryProjectile",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "reference-confirmed-native-default",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "140040841b74655248e38f0585c6e0df867c2e415266f4aa85f0da4f73c1926f"
         }
       ],
       "nativeSources": [
@@ -5092,13 +5159,15 @@
           "crit_multiplier": 1.9,
           "status_chance": 0.33,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-physical-reference-split",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "24ec265337db98b5bbfa0ac63105be9059377328e0cd701100927871687f6f0d"
         }
       ],
       "nativeSources": [
@@ -5134,13 +5203,15 @@
           "crit_multiplier": 1.9,
           "status_chance": 0.37,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeAstilla/AstillaPrimeProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-physical-reference-split",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "ce8f4569401ef8026a94bbc0810212575dad3286ae714fc4ace38516fcb97393"
         }
       ],
       "nativeSources": [
@@ -5175,13 +5246,15 @@
           "crit_multiplier": 2.0,
           "status_chance": 0.29,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleProj",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "8a8dfd13e3d335a4288b2e0962fec13760887919e47a91e7992a2998bce8bfd7"
         }
       ],
       "nativeSources": [
@@ -5298,13 +5371,15 @@
           "crit_multiplier": 2.5,
           "status_chance": 0.1,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnGrenadeLauncher/GrnGrenadeLauncherProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "reference-confirmed-native-default",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "8aa34d83e6dc210eeeb33d5ed43c40c7fe5fd9e4822bd676a248e3e3c2a10073"
         }
       ],
       "nativeSources": [
@@ -5344,13 +5419,15 @@
           "crit_multiplier": 2.0,
           "status_chance": 0.3,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.60000002,
           "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeArrow",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "native-physical-reference-split",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "ac6c2b09ec57b7e7789487e498dede8e760f8b522d43a8a58d7711895c71fab3"
         }
       ],
       "nativeSources": [
@@ -5470,13 +5547,15 @@
           "crit_multiplier": 2.0,
           "status_chance": 0.26,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireGuidedProj",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "65fda477b011ca47dacfe575c36126a194024dac18ac5c22622a08291ac81c97"
         }
       ],
       "nativeSources": [
@@ -5511,13 +5590,15 @@
           "crit_multiplier": 1.8,
           "status_chance": 0.36,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.700000015,
           "nativeSource": "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressaBoltoProj",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "9ec8effef038feec2b26bc634963844f8fd56c52b4da086c233d2327d26ab173"
         }
       ],
       "nativeSources": [
@@ -5556,13 +5637,15 @@
           "crit_multiplier": 2.3,
           "status_chance": 0.19,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "reference-confirmed-native-default",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "414e0eb6aad69c4d0aa90086135dc85282db0d47ff743788e7bad6f9ad2c3889"
         }
       ],
       "nativeSources": [
@@ -5586,7 +5669,7 @@
             "crit_chance": 0.1,
             "crit_multiplier": 2.0,
             "status_chance": 0.19,
-            "takes_multishot": false,
+            "takes_multishot": true,
             "nativeField": "AttackData",
             "damageTypeSource": "native-explicit",
             "takes_condition_overload": true,
@@ -5596,7 +5679,11 @@
               "excludeFlatSources": [],
               "source": "wiki CO catalog via WFSim unmodelled row",
               "row": "Kulstar | Cluster Bombs | Projectile | 75 | 200 | 257% | Adding — \"CO-bonus uses parent projectile damage value\""
-            }
+            },
+            "referenceTakesMultishot": false,
+            "multishotSource": "one native attack per spawned projectile",
+            "nativeSource": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoClusterProjectile",
+            "nativeMultishotSourceSha256": "4d31a51f58195c5d57bb6be61e89736f353a96186db392de38901dd416e497fd"
           },
           "radial": {
             "damage": {
@@ -5605,12 +5692,16 @@
             "crit_chance": 0.1,
             "crit_multiplier": 2.0,
             "status_chance": 0.19,
-            "takes_multishot": false,
+            "takes_multishot": true,
             "nativeField": "ExplosiveAttack",
             "damageTypeSource": "reference-confirmed-native-default",
             "radius_m": 4.0,
             "falloff_start_m": 0.0,
-            "falloff_reduction": 1.0
+            "falloff_reduction": 1.0,
+            "referenceTakesMultishot": false,
+            "multishotSource": "one native attack per spawned projectile",
+            "nativeSource": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoClusterProjectile",
+            "nativeMultishotSourceSha256": "4d31a51f58195c5d57bb6be61e89736f353a96186db392de38901dd416e497fd"
           },
           "nativeChild": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoClusterProjectile",
           "nativeSources": [
@@ -5654,13 +5745,15 @@
           "crit_multiplier": 1.9,
           "status_chance": 0.33,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeerProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "8e53a95f65e895c244934deb7d6ed6c89f36283e3bcd3bde6181957a78b64ba2"
         }
       ],
       "nativeSources": [
@@ -5695,13 +5788,15 @@
           "crit_multiplier": 2.2,
           "status_chance": 0.14,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanoPistolProj",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "8b2dee5a7760fe2fe7dd3bc588f81c9c8a80a0fc892acabfead68e0f6b779a67"
         }
       ],
       "nativeSources": [
@@ -5736,13 +5831,15 @@
               "crit_multiplier": 3.0,
               "status_chance": 0.26,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanoPistolGuidedProj",
               "nativeField": "ExplosiveAttack",
               "damageTypeSource": "native-explicit",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "7523962667c8caa0ce83ad8e58f25918ad25ab0a5b903bfe87c8120f96895bbb"
             }
           ],
           "nativeSources": [
@@ -5820,13 +5917,15 @@
           "crit_multiplier": 1.5,
           "status_chance": 0.2,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 1.0,
           "nativeSource": "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolProjectile",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "fba8c7afee1853add813355f6076e99190f6373f18652e15ebd9799d54286c40"
         }
       ],
       "nativeSources": [
@@ -5861,13 +5960,15 @@
           "crit_multiplier": 1.8,
           "status_chance": 0.42,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 1.0,
           "nativeSource": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiProjectile",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "c870d0d5f7322cc641a487c8fb1be43563e72235dfdf8efa0b3a51675fae3e55"
         }
       ],
       "nativeSources": [
@@ -5902,13 +6003,15 @@
           "crit_multiplier": 2.3,
           "status_chance": 0.3,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "5b590a279082ffc5df53ab09cc2cbf8221071c9b5974118319a08380fc11ddeb"
         },
         {
           "damage": {
@@ -6009,13 +6112,15 @@
           "crit_multiplier": 2.5999999,
           "status_chance": 0.1,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.40000001,
           "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisPrimaryProjectile",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "native-per-type",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "c1dc3fac3c0bc9f691acebe6253e301f1e32da54c47bc8b715c0470ea07d9e6f"
         }
       ],
       "nativeSources": [
@@ -6100,13 +6205,15 @@
               "crit_multiplier": 1.4,
               "status_chance": 0.5,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnAlchemistShotgun/TnAlchemistShotgunGlaiveProjectile",
               "nativeField": "ExplosiveAttack",
               "damageTypeSource": "reference-confirmed-native-default",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "d5bef11912261df133ec7b8ce0ceda3e366eb75c2ea8e708c5afc9b0970cec40"
             }
           ],
           "nativeSources": [
@@ -6145,13 +6252,15 @@
               "crit_multiplier": 2.0,
               "status_chance": 0.5,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeCedo/PrimeCedoWeaponGlaiveProjectile",
               "nativeField": "ExplosiveAttack",
               "damageTypeSource": "reference-confirmed-native-default",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "4039aff7a8df22f175ada9326c60e3678df4d736ced0e017c2a46521a85b730d"
             }
           ],
           "nativeSources": [
@@ -6277,13 +6386,15 @@
               "crit_multiplier": 1.6,
               "status_chance": 0.28,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunProjectile",
               "nativeField": "ExplosiveAttack",
               "damageTypeSource": "reference-confirmed-native-default",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "2c216dbf5ab424d02487b93b9ea1a796a8f7ed123ae3040c1c354a6a0e608677"
             }
           ],
           "nativeSources": [
@@ -6322,13 +6433,15 @@
               "crit_multiplier": 1.6,
               "status_chance": 0.5,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeCorinth/PrimeCorinthProjectile",
               "nativeField": "ExplosiveAttack",
               "damageTypeSource": "reference-confirmed-native-default",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "5eea5a9a2f2325d1b8f156eacab1734d266146c64dc53de16e5a4839a83fb276"
             }
           ],
           "nativeSources": [
@@ -6368,13 +6481,15 @@
               "crit_multiplier": 1.8,
               "status_chance": 0.32,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkProjectile",
               "nativeField": "ExplosiveAttack",
               "damageTypeSource": "native-per-type",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "4c17f081c6d31bafa8604bc1bccc6005a1bf1aa2fffe3edeaf89950d3024644c"
             }
           ],
           "nativeSources": [
@@ -6413,13 +6528,15 @@
           "crit_multiplier": 2.3,
           "status_chance": 0.27,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-per-type",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "48d726fcd1ae8580a20d031136e4812b177692b9590a436e3d94f6fb74774cc1"
         }
       ],
       "nativeSources": [
@@ -6456,13 +6573,15 @@
           "crit_multiplier": 2.5,
           "status_chance": 0.17,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Tonkor/KuvaTonkorProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-per-type",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "11abaa9db0596c3470c6839ad093021d3226f4654b0205cbba25e40f3c2764d7"
         }
       ],
       "nativeSources": [
@@ -6497,13 +6616,15 @@
           "crit_multiplier": 2.5,
           "status_chance": 0.31,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterProjectile",
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "reference-confirmed-native-default",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "802c896041e96818bb9a306e5de81783cdbfd988726a1cb23b707f535e3779bb"
         }
       ],
       "nativeSources": [
@@ -6527,7 +6648,7 @@
             "crit_chance": 0.25,
             "crit_multiplier": 2.5,
             "status_chance": 0.31,
-            "takes_multishot": false,
+            "takes_multishot": true,
             "nativeField": "AttackData",
             "damageTypeSource": "native-explicit",
             "takes_condition_overload": true,
@@ -6537,7 +6658,11 @@
               "excludeFlatSources": [],
               "source": "wiki CO catalog via WFSim unmodelled row",
               "row": "Kuva Zarr | Cannon Child Bomb | Projectile | 15 | 50 | 333% | Adding"
-            }
+            },
+            "referenceTakesMultishot": false,
+            "multishotSource": "one native attack per spawned projectile",
+            "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
+            "nativeMultishotSourceSha256": "68043f0d15b60ccd0bf0683b3ea8a4b7f97c280a3872a471dff68b6eb9158957"
           },
           "radial": {
             "damage": {
@@ -6546,12 +6671,16 @@
             "crit_chance": 0.25,
             "crit_multiplier": 2.5,
             "status_chance": 0.31,
-            "takes_multishot": false,
+            "takes_multishot": true,
             "nativeField": "ExplosiveAttack",
             "damageTypeSource": "reference-confirmed-native-default",
             "radius_m": 3.0,
             "falloff_start_m": 0.0,
-            "falloff_reduction": 0.1
+            "falloff_reduction": 0.1,
+            "referenceTakesMultishot": false,
+            "multishotSource": "one native attack per spawned projectile",
+            "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
+            "nativeMultishotSourceSha256": "68043f0d15b60ccd0bf0683b3ea8a4b7f97c280a3872a471dff68b6eb9158957"
           },
           "nativeChild": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
           "nativeSources": [
@@ -6678,13 +6807,15 @@
               "crit_multiplier": 2.4000001,
               "status_chance": 0.5,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanoRifleAltProj",
               "nativeField": "ExplosiveAttack",
               "damageTypeSource": "native-per-type",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "ab51841be07f646d040720bb86f124d62d13f9458072e2eda4c3959d7c7ebbe3"
             }
           ],
           "nativeSources": [
@@ -6758,13 +6889,15 @@
               "crit_multiplier": 2.4000001,
               "status_chance": 0.5,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaAltProj",
               "nativeField": "ExplosiveAttack",
               "damageTypeSource": "native-per-type",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "0fa1ea32380e952d6a5fb7a2eff1780b67bdce5635e35098c864f9e266091936"
             }
           ],
           "nativeSources": [
@@ -6964,13 +7097,15 @@
               "crit_multiplier": 2.0,
               "status_chance": 0.44,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 10.0,
               "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
               "nativeField": "EmbedDeathAttack",
               "damageTypeSource": "native-explicit",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "7ff4cddf54c87a605b1274f48f88ab38950bde24cb663b117771a9f22fa9dbb0"
             }
           ],
           "nativeSources": [
@@ -7012,13 +7147,15 @@
               "crit_multiplier": 2.0,
               "status_chance": 0.5,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 10.0,
               "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj",
               "nativeField": "EmbedDeathAttack",
               "damageTypeSource": "native-explicit",
-              "multishotSource": "reference takes_multishot"
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": false,
+              "nativeMultishotSourceSha256": "9122c4dcf62aaf90fa7b1aba5f01574bc6c88e1f55d70bd858030f9cad13253f"
             }
           ],
           "nativeSources": [
@@ -7058,13 +7195,15 @@
           "crit_multiplier": 1.9,
           "status_chance": 0.19,
           "forced_procs": [],
-          "takes_multishot": false,
+          "takes_multishot": true,
           "takes_blast_radius_mods": true,
           "impact_delay_seconds": 0.0,
           "nativeSource": "/Lotus/Weapons/Grineer/ThrowingWeapons/GrnVorStickyBomb/GrnVorStickyBombProj",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "native-explicit",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "one native attack per spawned projectile",
+          "referenceTakesMultishot": false,
+          "nativeMultishotSourceSha256": "48fc1eb38dbc3bbcadb59f05d08a353a76001c142dc59f00268a7036c4c5040e"
         }
       ],
       "nativeSources": [

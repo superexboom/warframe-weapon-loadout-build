@@ -12,7 +12,9 @@ amounts, type, radius) and the pinned WFSim ``attack.cluster`` block (count,
 direct and radial totals). Crit is taken from the native child when present
 and status from the reference, as tools/import_projectile_components.py does
 for the shell's explosion; every disagreement is recorded. WFSim does not
-multiply the shell's explosion by multishot; the bomblets follow the shell.
+multiply the shell's explosion by multishot. Native projectile ownership takes
+precedence here: each spawned shell releases its own bomblets, and each child
+owns its contact and radial attack. The child parts still have no weak point.
 
 Condition Overload: the wiki catalog row WFSim quotes as unmodelled
 (``cluster_bomblet_co``: "name | attack | Projectile | unmodded | actual CO
@@ -52,7 +54,8 @@ def part(name, raw, child, reference, differences, multishot):
     elif not close(float(raw['ProcChance']) / multishot, status, .15):
         differences.append(f"{name}: status native {raw['ProcChance']} vs reference {status}; reference used")
     return dict(damage={element: amount}, crit_chance=float(crit[0]), crit_multiplier=float(crit[1]), status_chance=float(status),
-                takes_multishot=False, nativeField=name, damageTypeSource='native-explicit' if raw.get('Type') else 'reference-confirmed-native-default')
+                takes_multishot=True, nativeField=name, multishotSource='one child group per spawned parent projectile',
+                damageTypeSource='native-explicit' if raw.get('Type') else 'reference-confirmed-native-default')
 
 
 def main():

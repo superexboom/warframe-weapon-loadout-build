@@ -117,7 +117,7 @@ def test_sonicor_shipped_vector_is_the_native_delegated_impact():
     from wfarsenal.event_profiles import base_profile
     profile=base_profile(w)
     assert profile['radial']['damage']=={'impact':50.}
-    assert profile['radial']['takes_multishot'] is False
+    assert profile['radial']['takes_multishot'] is True
 
 
 @pytest.mark.parametrize('multishot',[1.,2.5])

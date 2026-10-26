@@ -20,6 +20,19 @@ def is_incarnon_mode(weapon,index):
         return index>0
     return len(modes)>1 and index==len(modes)-1
 
+
+def ignores_headshot_bonus(weapon, fire_mode=0):
+    """Charged/perfect Nataruk projectiles set IgnoreHeadShotBonus=1.
+
+    Packages 2026.08.13.13.24: OmicrusWavePlayerProj and
+    OmicrusPerfectWavePlayerProj set it; the tap projectile does not.
+    The exported mode is the charged attack, including perfect release.
+    This controls damage bonuses, not hit location or headshot triggers.
+    """
+    return (weapon.get('path') == '/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPlayerWep'
+            and weapon.get('__selectedFireMode__', fire_mode) == 0
+            and not weapon.get('isIncarnonForm'))
+
 # Battery (regenerating magazine) weapons: data/mechanics/battery-profiles.json
 # (tools/import_battery_profiles.py; native package values, pinned WFSim
 # battery list for membership). A battery belongs to the weapon, not to a

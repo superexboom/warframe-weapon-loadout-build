@@ -72,6 +72,15 @@ def test_element_contract_survives_local_improvement(monkeypatch):
     assert found is old
 
 
+def test_deep_pair_search_crosses_a_valley_standard_cannot(monkeypatch):
+    a,b,c,d=(card(k) for k in ['a','b','c','d'])
+    scores={('a','b'):10.,('c','b'):9.,('a','d'):9.,('c','d'):20.}
+    old=evaluation((a,b),10.)
+    standard=run(monkeypatch,(a,b,c,d),old,scores,profile='standard',slot_count=2,min_fill=2)
+    deep=run(monkeypatch,(a,b,c,d),old,scores,profile='deep',slot_count=2,min_fill=2)
+    assert standard.score==10. and deep.score==max(scores.values())
+
+
 def test_real_laetum_family_variant_matches_independently_replayed_board():
     import app
     fixture = json.loads((Path(__file__).parent / 'fixtures/final_refinement_laetum.json').read_text(encoding='utf-8'))

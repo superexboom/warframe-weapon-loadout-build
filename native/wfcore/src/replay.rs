@@ -88,6 +88,7 @@ pub(crate) fn core_of(obj: &Bound<'_, PyAny>, types: &mut Types, target_faction:
         multishot: f(obj, "multishot")?,
         continuous: b(obj, "continuous")?,
         radial_only: b(obj, "radial_only")?,
+        ignore_headshot_bonus: b(obj, "ignore_headshot_bonus")?,
         bodyshot_crit_multiplier: f(obj, "bodyshot_crit_multiplier")?,
         weakpoint_crit_chance_bonus: f(obj, "weakpoint_crit_chance_bonus")?,
         base_crit_chance: f(obj, "base_crit_chance")?,
@@ -532,6 +533,7 @@ struct Blast {
     count: f64,
     per: f64,
     end: f64,
+    hit_probability: f64,
 }
 
 pub struct Replay<'py> {
@@ -2758,7 +2760,8 @@ impl<'py> Replay<'py> {
                     let room = pmax(0.0, 10.0 - psum(self.blast_procs.iter().map(|&i| self.blasts[i].count)));
                     let kept = pmin(n, room);
                     if kept > 0.0 {
-                        self.blasts.push(Blast { count: kept, per, end: t + 1.5 * scale });
+                        let hit_probability = pmin(kept, 1.0 - self.no_status_probability(st, d, aim)?);
+                        self.blasts.push(Blast { count: kept, per, end: t + 1.5 * scale, hit_probability });
                         let blast = self.blasts.len() - 1;
                         self.blast_procs.push_back(blast);
                         let end = self.blasts[blast].end;
@@ -2953,15 +2956,25 @@ struct Enervate {
     uptime: f64,
     ignore_selected: bool,
     last: f64,
-    hits: i64,
+    hits: f64,
     resets: f64,
     states: Vec<((i64, i64), f64)>,
+    timed_states: Option<Vec<((i64, i64, u64), f64)>>,
 }
 
 fn ordered_add<K: PartialEq + Copy>(list: &mut Vec<(K, f64)>, key: K, value: f64) {
     match list.iter_mut().find(|e| e.0 == key) {
         Some(e) => e.1 += value,
         None => list.push((key, 0.0 + value)),
+    }
+}
+
+fn indexed_add<K: Eq + std::hash::Hash + Copy>(list: &mut Vec<(K, f64)>, index: &mut FxHashMap<K, usize>, key: K, value: f64) {
+    if let Some(&at) = index.get(&key) {
+        list[at].1 += value;
+    } else {
+        index.insert(key, list.len());
+        list.push((key, 0.0 + value));
     }
 }
 
@@ -2985,25 +2998,72 @@ impl Enervate {
     }
 
     fn advance(&mut self, t: f64, probabilities: Option<&[(i64, f64)]>) {
+        self.advance_probability(t, probabilities, 1.0);
+    }
+
+    fn advance_probability(&mut self, t: f64, probabilities: Option<&[(i64, f64)]>, event_probability: f64) {
+        let event_probability = pmin(1.0, pmax(0.0, event_probability));
+        if event_probability == 0.0 { return; }
+        if event_probability < 1.0 || self.timed_states.is_some() {
+            self.advance_probabilistic(t, probabilities, event_probability);
+            return;
+        }
         if self.fixed || self.uptime == 0.0 || t - self.last < self.min_interval - 1e-9 {
             return;
         }
         self.last = t;
-        self.hits += 1;
+        self.hits += 1.0;
         let mut following: Vec<((i64, i64), f64)> = Vec::new();
+        let mut index = FxHashMap::default();
         for &((s, b), mass) in &self.states {
             let given = probabilities.and_then(|ps| ps.iter().find(|e| e.0 == s).map(|e| e.1)).unwrap_or(0.0);
             let prob = pmin(1.0, pmax(0.0, given));
-            ordered_add(&mut following, (s + 1, b), mass * (1.0 - prob));
+            indexed_add(&mut following, &mut index, (s + 1, b), mass * (1.0 - prob));
             if b + 1 >= self.reset_after {
-                ordered_add(&mut following, (0, 0), mass * prob);
+                indexed_add(&mut following, &mut index, (0, 0), mass * prob);
                 self.resets += mass * prob;
             } else {
-                ordered_add(&mut following, (s + 1, b + 1), mass * prob);
+                indexed_add(&mut following, &mut index, (s + 1, b + 1), mass * prob);
             }
         }
         following.retain(|e| e.1 > 0.0);
         self.states = following;
+    }
+
+    fn advance_probabilistic(&mut self, t: f64, probabilities: Option<&[(i64, f64)]>, probability: f64) {
+        if self.fixed || self.uptime == 0.0 { return; }
+        let states = self.timed_states.take().unwrap_or_else(||
+            self.states.iter().map(|&((s,b),p)| ((s,b,self.last.to_bits()),p)).collect());
+        let mut following = Vec::new();
+        let mut index = FxHashMap::default();
+        for ((s,b,last),mass) in states {
+            if t-f64::from_bits(last) < self.min_interval-1e-9 {
+                indexed_add(&mut following,&mut index,(s,b,last),mass);
+                continue;
+            }
+            indexed_add(&mut following,&mut index,(s,b,f64::NEG_INFINITY.to_bits()),mass*(1.0-probability));
+            let accepted = mass*probability;
+            self.hits += accepted;
+            let given = probabilities.and_then(|ps| ps.iter().find(|e| e.0==s).map(|e|e.1)).unwrap_or(0.0);
+            let prob = pmin(1.0,pmax(0.0,given));
+            indexed_add(&mut following,&mut index,(s+1,b,t.to_bits()),accepted*(1.0-prob));
+            if b+1>=self.reset_after {
+                indexed_add(&mut following,&mut index,(0,0,t.to_bits()),accepted*prob);
+                self.resets += accepted*prob;
+            } else {
+                indexed_add(&mut following,&mut index,(s+1,b+1,t.to_bits()),accepted*prob);
+            }
+        }
+        following.retain(|e|e.1>0.0);
+        let mut totals = Vec::new();
+        let mut total_index = FxHashMap::default();
+        self.last = f64::NEG_INFINITY;
+        for &((s,b,last),mass) in &following {
+            indexed_add(&mut totals,&mut total_index,(s,b),mass);
+            self.last = self.last.max(f64::from_bits(last));
+        }
+        self.states = totals;
+        self.timed_states = Some(following);
     }
 }
 
@@ -3150,9 +3210,9 @@ impl<'py> Replay<'py> {
                     if value != 0.0 {
                         self.take(&vec![(EXPLOSION, value)], t, NONDOT, WeakKill::Flag(false), 1.0 / procs, false)?;
                         // Only natural expiration is an Enervate hit, not the 10-stack detonation.
-                        if matches!(event.kind, Kind::Blast(_)) {
+                        if let Kind::Blast(i) = event.kind {
                             if let Some(en) = self.enervate.as_mut() {
-                                en.advance(t, None);
+                                en.advance_probability(t, None, self.blasts[i].hit_probability);
                             }
                         }
                     }
@@ -4392,9 +4452,10 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
                 uptime,
                 ignore_selected: truthy(&d, "ignoreSelected")?,
                 last: f64::NEG_INFINITY,
-                hits: 0,
+                hits: 0.0,
                 resets: 0.0,
                 states,
+                timed_states: None,
             })
         }
         None => None,

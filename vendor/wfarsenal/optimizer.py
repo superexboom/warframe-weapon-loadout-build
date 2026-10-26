@@ -2265,6 +2265,7 @@ def refine_final_build(
         base = best
         cards = tuple(base.cards)
         used = {c.key for c in cards}
+        alternatives: dict[int, list[tuple[float, _Card]]] = {}
 
         def neighbours():
             for index, old in enumerate(cards):
@@ -2295,13 +2296,45 @@ def refine_final_build(
             value = _evaluate(weapon, proposal, riven, scenario=scenario, metric=metric,
                               passives=passives, slot_limit=slot_count, capacity_limit=capacity_limit,
                               target_context=target_context)
+            if profile == 'deep' and value is not None and len(proposal) == len(cards):
+                changed = [i for i,(before,after) in enumerate(zip(cards,proposal)) if before.key != after.key]
+                if len(changed) == 1:
+                    at = changed[0]
+                    alternatives.setdefault(at, []).append((value.score, proposal[at]))
             if value is None or value.score <= best.score + 1e-9:
                 continue
             if required_damage_type and value.stats.damage_types.get(required_damage_type, 0.) <= 0.:
                 continue
             best = value
         if best is base:
-            break
+            if profile == 'deep':
+                # The strongest bounded pair neighbourhood spans every slot,
+                # rather than exhausting the first pair's arbitrary pool prefix.
+                pairs = []
+                for left,right in itertools.combinations(sorted(alternatives),2):
+                    a = sorted(alternatives[left],key=lambda row:(-row[0],row[1].key))[:4]
+                    b = sorted(alternatives[right],key=lambda row:(-row[0],row[1].key))[:4]
+                    for sa,ca in a:
+                        for sb,cb in b:
+                            proposal = list(cards);proposal[left]=ca;proposal[right]=cb
+                            if len({_mod_family(c) for c in proposal}) != len(proposal):
+                                continue
+                            if validate_build(proposal,riven,**constraints):
+                                continue
+                            signature=tuple(c.key for c in proposal)
+                            if signature not in seen:
+                                pairs.append((sa+sb,signature,tuple(proposal)))
+                pairs.sort(key=lambda row:(-row[0],row[1]))
+                for _,signature,proposal in pairs[:256]:
+                    if expired(deadline):return best
+                    seen.add(signature)
+                    value=_evaluate(weapon,proposal,riven,scenario=scenario,metric=metric,passives=passives,
+                                    slot_limit=slot_count,capacity_limit=capacity_limit,target_context=target_context)
+                    if (value is not None and value.score>best.score+1e-9 and
+                            (not required_damage_type or value.stats.damage_types.get(required_damage_type,0.)>0.)):
+                        best=value
+            if best is base:
+                break
     return best
 
 
@@ -2426,7 +2459,7 @@ def _card_elements(card: _Card) -> list[str]:
             if getattr(effect, "damage_type", None) in BASE_ELEMENTS and effect.value > 0]
 
 
-def _element_orders(cards: Sequence[_Card]) -> list[tuple[_Card, ...]]:
+def _element_orders(cards: Sequence[_Card], *, anchor: tuple[int, _Card] | None = None) -> list[tuple[_Card, ...]]:
     """One card order per distinct element pairing, the given order first.
 
     MOD base elements combine pairwise in order of first appearance (native
@@ -2435,10 +2468,15 @@ def _element_orders(cards: Sequence[_Card]) -> list[tuple[_Card, ...]]:
     one pairing; permute only the element cards among their own slots.
     """
     slots = [index for index, card in enumerate(cards) if _card_elements(card)]
-    if len(slots) < 3:
+    if len(slots) < (2 if anchor else 3):
         return [tuple(cards)]
     original = tuple(cards)
-    key = _pairing_key(original)
+    def pairing(ordered):
+        if anchor is None:
+            return _pairing_key(ordered)
+        position, card = anchor
+        return _pairing_key((*ordered[:position], card, *ordered[position:]))
+    key = pairing(original)
     if not key[1]:  # fewer than three distinct elements: one pairing only
         return [original]
     orders = {key: original}
@@ -2446,7 +2484,7 @@ def _element_orders(cards: Sequence[_Card]) -> list[tuple[_Card, ...]]:
         ordered = list(cards)
         for index, card in zip(slots, permutation):
             ordered[index] = card
-        orders.setdefault(_pairing_key(ordered), tuple(ordered))
+        orders.setdefault(pairing(ordered), tuple(ordered))
     return list(orders.values())
 
 
@@ -2554,11 +2592,21 @@ def _evaluate(
         else:
             positions = (len(cards),)
     best: _Evaluation | None = None
-    orders = _element_orders(cards) if reorder_elements else [tuple(cards)]
-    for position, card_order in itertools.product(positions, orders):
+    # An elemental Riven splits ordinary pairings. Deduplicating the MODs
+    # before inserting it can lose real combinations; canonicalize the full
+    # layout, including its exact insertion point, before any expensive work.
+    variants = ((position, order) for position in positions for order in
+                (_element_orders(cards, anchor=(position, riven) if riven is not None else None)
+                 if reorder_elements else [tuple(cards)]))
+    seen_pairings = set()
+    for position, card_order in variants:
         ordered = list(card_order)
         if riven is not None and position is not None:
             ordered.insert(position, riven)
+        pairing = _pairing_key(ordered)
+        if pairing in seen_pairings:
+            continue
+        seen_pairings.add(pairing)
         capacity = _capacity(ordered) + special_capacity_cost
         if capacity > capacity_limit:
             continue
@@ -2879,12 +2927,17 @@ def _optimize(
     # 直接评估（按容量逐张保留，装不下就丢），确保带紫卡搜索不劣于
     # 「baseline 配装去掉最贵的一张」这个自然下界。
     if seed_cards:
-        candidate_pool_keys = {card.key for card in pool}
+        # A scout/Arcane screen has already evaluated this legal build. Its
+        # cards may lose the new single-card shortlist (especially Galvanized
+        # family variants); that is no reason to discard the known floor.
+        admitted = {card.key: card for card in (*candidates, *required_cards)}
+        required_seed_keys = {card.key for card in required_cards}
         seed_kept: list[_Card] = []
-        for card in seed_cards:
-            if card.required or card.key in candidate_pool_keys or any(
-                c.key == card.key for c in required_cards
-            ):
+        for previous in seed_cards:
+            card = admitted.get(previous.key)
+            if card is not None and card.key not in required_seed_keys:
+                if _mod_family(card) in {_mod_family(c) for c in (*required_cards,*seed_kept)}:
+                    continue
                 if validate_build(
                     (*required_cards, *seed_kept, card),
                     riven,
@@ -2892,11 +2945,15 @@ def _optimize(
                     capacity_limit=capacity_limit,
                     required_mod_keys=required_mod_keys,
                     forbidden_mod_keys=forbidden_mod_keys,
-                    min_fill=min_fill,
+                    min_fill=None,  # A prefix is not the completed seed.
                     max_fill=max_fill,
                 ) is None:
                     seed_kept.append(card)
-        if seed_kept:
+        if seed_kept and validate_build(
+            (*required_cards, *seed_kept), riven, slot_count=slot_count,
+            capacity_limit=capacity_limit, required_mod_keys=required_mod_keys,
+            forbidden_mod_keys=forbidden_mod_keys, min_fill=min_fill, max_fill=max_fill,
+        ) is None:
             seed_eval = _evaluate(
                 weapon,
                 (*required_cards, *seed_kept),
@@ -2918,7 +2975,7 @@ def _optimize(
     # the order does not change the score: replay each set once and share it.
     # An elemental Riven is placed relative to the element cards' order, so
     # there the order stays part of the key.
-    order_free = riven is None or not any(effect.damage_type in BASE_ELEMENTS for effect in riven.effects)
+    order_free = True  # _evaluate enumerates pairings with the Riven included.
 
     def score_key(cards: Sequence[_Card]) -> tuple[str, ...]:
         keys = tuple(card.key for card in cards)

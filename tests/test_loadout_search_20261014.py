@@ -68,6 +68,14 @@ def test_pick_arcane_keeps_base_when_nothing_screens_better():
     assert outcome.choice is None and outcome.evaluation is base and outcome.searches == 0
 
 
+def test_deep_arcane_exploration_can_escape_a_mod_arcane_synergy_valley():
+    base=Ev(10.,('base',))
+    choices=[ls.Choice(key='A',data={},passives='A')]
+    outcome=ls.pick_arcane(choices,base,screen=lambda cards,passives:[9.],
+                          search=lambda passives,seed:Ev(15.,('new',)),explore=True,refine=6)
+    assert outcome.choice.key=='A' and outcome.evaluation.score==15. and outcome.searches==1
+
+
 def test_coupled_move_crosses_a_valley_that_each_axis_alone_cannot():
     # Exhaustive small space: changing either the route or the Arcane loses;
     # changing both reaches the unique optimum.
@@ -234,3 +242,13 @@ def test_auto_arcane_fills_the_weapon_slot_and_keeps_frame_arcanes():
     assert chosen[0]["rank"] == app.MANUAL_ARCANES_BY_PATH[chosen[0]["path"]]["maxRank"]
     # The frame Arcane stayed part of the solve.
     assert auto["build"]["objectiveScore"] == info["score"]
+
+
+def test_auto_arcane_overrides_an_old_exclude_arcane_setting():
+    # Independent saved controls used to silently disable auto-selection.
+    normal = _build('Akarius Prime', autoArcane=True)
+    restored = _build('Akarius Prime', autoArcane=True, optimizeWithArcanes=False)
+    assert restored['optimizeWithArcanes'] is True
+    assert restored['autoLoadout']['arcane']['chosen'] == normal['autoLoadout']['arcane']['chosen']
+    assert restored['autoLoadout']['arcane']['chosen']
+    assert restored['build']['objectiveScore'] == normal['build']['objectiveScore']

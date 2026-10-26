@@ -7,7 +7,10 @@ reason (fail closed):
 - the native projectile record: an ExplosiveAttack/EmbedDeathAttack whose
   Amount equals the reference radial total, its Type (or an omitted native
   default the reference spells out), radius, falloff, crit and embed delay;
-- the pinned WFSim YAML radial block (status chance, takes_multishot).
+- the pinned WFSim YAML radial block (status chance and unresolved fields).
+Native projectile-owned attacks repeat per spawned projectile, even when a
+reference row says takes_multishot=false. Hitscan impact exceptions keep their
+separate MultiShotBuffsRadialDamage contract.
 Already audited attacks are never overwritten.
 
 2026-10-07: a native attack with UseNewFormat = 1 spells each type as its own
@@ -167,10 +170,11 @@ def build_entry(file, spec, attack, radial, row, mode_index, pkg, reference):
         damage=damage or ({elements[0]: float(raw.get('Amount'))} if len(elements) == 1 else dict(reference_damage)),
         radius_m=radius, falloff_start_m=float(radial.get('falloff_start_m', 0.)), falloff_reduction=falloff,
         crit_chance=float(crit[0]), crit_multiplier=float(crit[1]), status_chance=status,
-        forced_procs=forced, takes_multishot=bool(radial.get('takes_multishot', True)),
+        forced_procs=forced, takes_multishot=(True if field in ('ExplosiveAttack','EmbedDeathAttack') else bool(radial.get('takes_multishot', True))),
         takes_blast_radius_mods=bool(radial.get('takes_blast_radius_mods', True)),
         impact_delay_seconds=delay, nativeSource=native_path, nativeField=field,
-        damageTypeSource=type_source, multishotSource='reference takes_multishot')
+        damageTypeSource=type_source, multishotSource=('one native attack per spawned projectile' if field in ('ExplosiveAttack','EmbedDeathAttack') else 'native hitscan impact contract'),
+        referenceTakesMultishot=radial.get('takes_multishot', True))
     sources = []
     for path in dict.fromkeys((row['path'], native_path)):
         f = pkg._path_to_file(path)

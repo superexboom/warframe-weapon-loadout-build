@@ -118,6 +118,7 @@ def pick_arcane(
     screen: Callable[[Sequence[Any], Sequence[Any]], list[float | None]],
     search: Callable[[Any, Sequence[Any]], Any],
     refine: int = 2,
+    explore: bool = False,
 ) -> Outcome:
     """The best weapon Arcane for the build ``base`` was searched without one.
 
@@ -130,7 +131,7 @@ def pick_arcane(
         return outcome
     first = screen(base.cards, [c.passives for c in choices])
     rows = {c.key: dict(key=c.key, screen=s) for c, s in zip(choices, first)}
-    ranked = sorted((i for i, s in enumerate(first) if s is not None and s > base.score + EPS),
+    ranked = sorted((i for i, s in enumerate(first) if s is not None and (explore or s > base.score + EPS)),
                     key=lambda i: (-first[i], i))
     refined: set[int] = set()
 

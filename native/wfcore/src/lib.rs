@@ -183,6 +183,8 @@ fn c_math(name: &str, x: f64, y: f64) -> f64 {
 #[pymodule]
 fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ABI", 1)?;
+    m.add("ENERVATE_PROBABILISTIC_HITS", 1)?;
+    m.add("IGNORE_HEADSHOT_BONUS", 1)?;
     m.add_class::<PyHeatChains>()?;
     m.add_class::<PyCappedPool>()?;
     m.add_class::<PyStatusPresence>()?;

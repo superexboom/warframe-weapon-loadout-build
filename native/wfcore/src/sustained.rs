@@ -134,6 +134,8 @@ impl Context<'_> {
     /// `damage_against(stats, target, ...)`: (perType, perShot).
     fn damage_against(&self, s: &Core, armour: f64) -> (Vector, f64) {
         let (hm, hcm, _head) = self.location(s);
+        let hcm = if s.ignore_headshot_bonus { 1.0 } else { hcm };
+        let applied_hm = if s.ignore_headshot_bonus { 1.0 } else { hm };
         let base = match s.dot_base_damage {
             Some(v) => v,
             None => s.total_damage(),
@@ -157,9 +159,9 @@ impl Context<'_> {
                 e.1 *= faction;
             }
         }
-        if hm != 1.0 {
+        if applied_hm != 1.0 {
             for e in per_type.iter_mut() {
-                e.1 *= hm;
+                e.1 *= applied_hm;
             }
         }
         let mut raw = psum(per_type.iter().map(|e| e.1))

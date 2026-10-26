@@ -1,0 +1,116 @@
+{
+  "weapon": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
+  "fireMode": 0,
+  "mods": [
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Expert/PrimedWeaponElectricityDamageMod",
+      "rank": 10,
+      "slot": 0
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponToxinDamageMod",
+      "rank": 5,
+      "slot": 1
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFreezeDamageMod",
+      "rank": 5,
+      "slot": 2
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponStatusChanceSPMod",
+      "rank": 10,
+      "slot": 3
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/DualStat/RadiationFireratePistolMod",
+      "rank": 3,
+      "slot": 4
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/WeaponFireIterationsSPMod",
+      "rank": 10,
+      "slot": 5
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Pistol/Event/CritChanceWhileAimingPistolSPMod",
+      "rank": 10,
+      "slot": 6
+    }
+  ],
+  "arcanes": [
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+      "rank": 5
+    }
+  ],
+  "mode": "auto",
+  "profile": "fast",
+  "metric": "killsPerMinute",
+  "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+  "level": 9999,
+  "steelPath": true,
+  "windowSeconds": 30.0,
+  "headshotChance": 1.0,
+  "aiming": true,
+  "triggerPolicy": "emergent",
+  "distance": 0.5,
+  "incarnonCycle": false,
+  "incarnonChoices": {},
+  "slotPolarities": [
+    "AP_TACTIC",
+    "AP_TACTIC",
+    "AP_DEFENSE",
+    "AP_DEFENSE",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_ATTACK"
+  ],
+  "specialSlotPolarities": {
+    "exilus": "AP_ANY"
+  },
+  "optimizeWithArcanes": true,
+  "scenario": {
+    "aiming": true,
+    "triggerPolicy": "emergent",
+    "distance": 0.5,
+    "incarnonCycle": false,
+    "combatState": {
+      "selfShieldBreakForced": false
+    }
+  },
+  "combatState": {
+    "selfShieldBreakForced": false
+  },
+  "exilus": null,
+  "innateElement": "DT_MAGNETIC",
+  "innateElementValue": 0.6,
+  "riven": {
+    "slot": 7,
+    "rank": 8,
+    "polarity": "AP_ATTACK",
+    "stats": [
+      {
+        "code": "1",
+        "value": 111.3749977725,
+        "negative": false
+      },
+      {
+        "code": "S",
+        "value": 148.12875,
+        "negative": false
+      },
+      {
+        "code": "VI",
+        "value": 111.3749977725,
+        "negative": false
+      },
+      {
+        "code": "3",
+        "value": 80.9919,
+        "negative": true
+      }
+    ]
+  }
+}

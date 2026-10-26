@@ -3668,7 +3668,10 @@ def _auto_loadout(
         # route's final is then exactly the search the option replaces.
         final = (lambda passives, seed: search(passives, seed))
         outcome = loadout_search.pick_route(choices, default_key, current, screen=screen,
-                                            search_fast=fast, search_final=final)
+                                            search_fast=fast, search_final=final,
+                                            shortlist=6 if profile == 'deep' else 3,
+                                            finalists=4 if profile == 'deep' else 2,
+                                            final_margin=.15 if profile == 'deep' else .03)
         if outcome.choice is not None and outcome.choice.key != default_key:
             incarnon_card, incarnon_choices, incarnon_unsupported = route_card(outcome.choice.data)
         default_row = next((row for row in outcome.rows if row["key"] == default_key), {})
@@ -3711,7 +3714,8 @@ def _auto_loadout(
                         evaluation, chosen = again, best[1]
                 searches = 0
             else:
-                outcome = loadout_search.pick_arcane(choices, evaluation, screen=screen, search=search)
+                outcome = loadout_search.pick_arcane(choices, evaluation, screen=screen, search=search,
+                    refine=6 if profile == 'deep' else 2, explore=profile == 'deep')
                 evaluation, chosen, rows, searches = (outcome.evaluation, outcome.choice, outcome.rows,
                                                       outcome.searches)
             arcane_rows.append(dict(candidates=len(choices), searches=searches, rows=[
@@ -4166,7 +4170,7 @@ def build_weapon_payload(
     # 保留真实赋能记录及显式覆盖。每个候选由共享事件回放解析触发；
     # 用户关闭此项时仅求解评分排除赋能，手动实战回放仍使用已装备赋能。
     optimize_arcanes = payload.get("optimizeWithArcanes")
-    optimize_with_arcanes = (
+    optimize_with_arcanes = payload.get('autoArcane') is True or (
         bool(optimize_arcanes)
         if isinstance(optimize_arcanes, bool)
         else True  # 默认纳入：用户已配置的赋能就是本次解算语境的一部分
@@ -4245,7 +4249,7 @@ def build_weapon_payload(
         return passives
 
     # 自动选择（配装页开关，默认关闭）：武器赋能槽位交给求解，战甲赋能保持用户设置。
-    auto_arcane = payload.get("autoArcane") is True and optimize_with_arcanes
+    auto_arcane = payload.get("autoArcane") is True
     auto_incarnon = payload.get("autoIncarnon") is True and bool(incarnon_choices)
     frame_arcane_rows = [row for row in validated
                          if str(MANUAL_ARCANES_BY_PATH[row["path"]].get("slotKind") or "weapon") != "weapon"]

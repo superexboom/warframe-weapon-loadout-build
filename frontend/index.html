@@ -549,7 +549,7 @@
                     <div class="scenario-group-title">交战修正</div>
                     <div class="scenario-fields">
                       <label class="field"><span>普通削甲</span><input id="build-armour-strip" type="range" min="0" max="1" step="0.05" value="0"><output id="build-armour-strip-output">0%</output></label>
-                      <label class="field"><span>爆头率</span><input id="build-headshot-chance" type="range" min="0" max="1" step="0.01" value="0"><output id="build-headshot-output">0%</output></label>
+                      <label class="field" title="仅作用于允许命中头部的直击部分；爆炸与分裂子弹不获得弱点加成，也不能触发爆头击杀赋能。"><span>直击爆头率</span><input id="build-headshot-chance" type="range" min="0" max="1" step="0.01" value="0"><output id="build-headshot-output">0%</output></label>
                     <label class="check-field" title="瞄准与命中弱点是不同条件；镀层氩晶等效果需要瞄准。"><input type="checkbox" id="build-aiming"><span>射击时瞄准（ADS）</span></label>
                       <label class="field"><span>距离</span><input id="build-distance" type="number" min="0" max="1000" step="1" value="0"><small>大于 0 计入距离衰减；散布暂不参与计算</small></label>
                       <div id="build-manual-detonation" class="scenario-fields" hidden>

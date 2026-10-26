@@ -1184,6 +1184,7 @@ class ModdedStats:
     continuous: bool = False
     # An exported explosion has no direct weakpoint impact.
     radial_only: bool = False
+    ignore_headshot_bonus: bool = False
     explosion_radius_multiplier: float = 1.0
     # Native forced statuses per projectile; explicit caller forced_procs remain
     # additional per-trigger counts. Never inherit a different component here.
@@ -2126,6 +2127,7 @@ def _apply_mods_spec_py(
         if effect.damage_type and effect.value > 0 and effect.runtime_chance:
             forced_statuses[effect.damage_type] = forced_statuses.get(effect.damage_type, 0.0) + float(effect.runtime_chance)
     co = _co_damage(spec, co_effects)
+    from .event_profiles import ignores_headshot_bonus
     return ModdedStats(
         damage_types=co.damage_types,
         crit_chance=crit_chance,
@@ -2150,6 +2152,7 @@ def _apply_mods_spec_py(
         explosion_radius_multiplier=_combine(1.0, buckets['WEAPON_EXPLOSION_RADIUS']),
         incarnon_charge_multiplier=max(0.0, _combine(1.0, buckets['WEAPON_ADD_CHARGE_COUNTER_MULTIPLIER'])),
         radial_only=radial_only,
+        ignore_headshot_bonus=ignores_headshot_bonus(weapon, fire_mode),
         native_forced_procs=forced_statuses,
         extra_hits=extra_hits,
         cold_stack_damage=0.0 if cold_stack_forced else cold_stack_rate,
@@ -3284,6 +3287,7 @@ def damage_against_cached_armour(
 
     if stats.radial_only:
         hit_multiplier = hit_critical_multiplier = 1.0
+    hit_critical_multiplier = _weapon_hit_crit_multiplier(stats, hit_critical_multiplier)
 
     quantized_types = quantize_damage_vector(
         stats.damage_types,
@@ -3322,7 +3326,7 @@ def damage_against_cached_armour(
         }
     if hit_multiplier != 1.0:
         per_type = {
-            damage_type: amount * hit_multiplier
+            damage_type: amount * _weapon_hit_damage_multiplier(stats, hit_multiplier)
             for damage_type, amount in per_type.items()
         }
     raw = sum(per_type.values()) * effective_hit_multiplier(
@@ -3354,7 +3358,7 @@ def _weakpoint_noncrit_scale(stats: "ModdedStats", hit_multiplier: float) -> flo
     if stats.radial_only or hit_multiplier <= 1.0 + 1e-9:
         return 1.0
     scale = float(stats.headshot_bonus_multiplier)
-    if getattr(stats, "weakpoint_damage_bonus", 0.0) > 0.0:
+    if not stats.ignore_headshot_bonus and getattr(stats, "weakpoint_damage_bonus", 0.0) > 0.0:
         scale *= (hit_multiplier + 1.5 * float(stats.weakpoint_damage_bonus)) / hit_multiplier
     return scale
 
@@ -3410,6 +3414,14 @@ def _apply_weakpoint_folding(
     return raw
 
 
+def _weapon_hit_damage_multiplier(stats: "ModdedStats", multiplier: float) -> float:
+    return 1.0 if stats.ignore_headshot_bonus else multiplier
+
+
+def _weapon_hit_crit_multiplier(stats: "ModdedStats", multiplier: float) -> float:
+    return 1.0 if stats.ignore_headshot_bonus else multiplier
+
+
 def damage_against(
     stats: ModdedStats,
     target: Mapping[str, Any],
@@ -3447,6 +3459,7 @@ def damage_against(
     location, hit_multiplier, hit_critical_multiplier, hit_unsupported, hit_metadata = _hit_location_info(
         target, "body" if stats.radial_only else hit_location
     )
+    hit_critical_multiplier = _weapon_hit_crit_multiplier(stats, hit_critical_multiplier)
     armour = defenses["armour"]
     overguard = float(defenses.get("overguard") or 0.0)
     magnetic_stacks = int(defenses.get("magneticStacks") or 0)
@@ -3504,7 +3517,7 @@ def damage_against(
         }
     if hit_multiplier != 1.0:
         per_type = {
-            damage_type: amount * hit_multiplier
+            damage_type: amount * _weapon_hit_damage_multiplier(stats, hit_multiplier)
             for damage_type, amount in per_type.items()
         }
     raw = sum(per_type.values()) * effective_hit_multiplier(
@@ -3571,6 +3584,7 @@ def enemy_kill_metrics(
     location, hit_multiplier, hit_critical_multiplier, hit_unsupported, hit_metadata = _hit_location_info(
         target, "body" if stats.radial_only else hit_location
     )
+    hit_critical_multiplier = _weapon_hit_crit_multiplier(stats, hit_critical_multiplier)
     unsupported = [*defenses["unsupported"], *hit_unsupported]
     pool_damage = _direct_damage_by_pool(
         stats,
@@ -3623,7 +3637,7 @@ def enemy_kill_metrics(
             * stats.falloff_multiplier
             * faction_multiplier
             * stats.multishot
-            * hit_multiplier
+            * _weapon_hit_damage_multiplier(stats, hit_multiplier)
         )
         effective_health = trigger_equivalents * raw_per_trigger
         if ammo_required == 0:
@@ -3849,6 +3863,7 @@ def expected_dot_damage(
     location, hit_multiplier, hit_critical_multiplier, hit_unsupported, hit_metadata = _hit_location_info(
         target, "body" if stats.radial_only else hit_location
     )
+    hit_critical_multiplier = _weapon_hit_crit_multiplier(stats, hit_critical_multiplier)
     armour = defenses["armour"]
     overguard = float(defenses.get("overguard") or 0.0)
     magnetic_stacks = int(defenses.get("magneticStacks") or 0)
@@ -3968,7 +3983,7 @@ def expected_dot_damage(
             * elemental_factor
             * proc_damage
             * stats.falloff_multiplier
-            * hit_multiplier
+            * _weapon_hit_damage_multiplier(stats, hit_multiplier)
             * target_multiplier
             * max(float(faction_mod), 0.0) ** 2
         )
@@ -4104,6 +4119,7 @@ def expected_status_damage(
             hit_unsupported,
             _hit_metadata,
         ) = _hit_location_info(target, "body" if stats.radial_only else hit_location)
+        hit_critical_multiplier = _weapon_hit_crit_multiplier(stats, hit_critical_multiplier)
         armour = defenses["armour"]
         overguard = float(defenses.get("overguard") or 0.0)
         magnetic_stacks = int(defenses.get("magneticStacks") or 0)
@@ -4156,7 +4172,7 @@ def expected_status_damage(
             * crit
             * proc_damage
             * stats.falloff_multiplier
-            * hit_multiplier
+            * _weapon_hit_damage_multiplier(stats, hit_multiplier)
             * target_multiplier
             * max(float(faction_mod), 0.0) ** 2
         )
@@ -5492,6 +5508,7 @@ def _direct_damage_by_pool(
     """Split one trigger's expected direct damage across overguard/shield/health."""
     if stats.radial_only:
         hit_multiplier = hit_critical_multiplier = 1.0
+    hit_critical_multiplier = _weapon_hit_crit_multiplier(stats, hit_critical_multiplier)
     faction_deltas = _faction_damage_deltas(target)
     armour_bypass = _damage_type_set(
         target.get("armourBypassDamageTypes"), DEFAULT_ARMOUR_BYPASS_DAMAGE_TYPES
@@ -5510,7 +5527,7 @@ def _direct_damage_by_pool(
         * stats.falloff_multiplier
         * stats.faction_damage_multipliers.get(str(target.get("faction") or ""), 1.0)
         * stats.multishot
-        * hit_multiplier
+        * _weapon_hit_damage_multiplier(stats, hit_multiplier)
     )
     shield_damage = 0.0
     health_bypass = 0.0

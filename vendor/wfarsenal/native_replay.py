@@ -41,6 +41,10 @@ def supported(stats, options) -> bool:
     combat = options.get("combat")
     if not combat or not combat.get("resolve"):
         return False
+    if combat.get('enervate') and not getattr(wfcore, 'ENERVATE_PROBABILISTIC_HITS', 0):
+        return False  # Older cores treat every expected Blast proc as a real hit.
+    if getattr(stats, 'ignore_headshot_bonus', False) and not getattr(wfcore, 'IGNORE_HEADSHOT_BONUS', 0):
+        return False
     if combat.get('cycle') and combat.get('melee'):
         return False  # no melee Incarnon cycle is modelled natively
     return not any(combat.get(key) for key in _UNSUPPORTED_COMBAT)

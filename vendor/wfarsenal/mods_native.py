@@ -269,6 +269,10 @@ def apply(weapon, effects, fire_mode, scenario, *, need_spec=True):
     prep = prep_for(weapon, fire_mode, scenario)
     fields, spec_parts = wfcore.apply_mods(prep.core, effects, skipped, scenario.victim_status_count, need_spec)
     fields["innate_element_candidates"] = prep.candidates
+    from .event_profiles import ignores_headshot_bonus
+    ignored = ignores_headshot_bonus(weapon, fire_mode)
+    fields = {name:value for key,value in fields.items() for name,value in
+              ([(key,value),('ignore_headshot_bonus',ignored)] if key=='radial_only' else [(key,value)])}
     stats = ModdedStats.__new__(ModdedStats)
     stats.__dict__.update(fields)
     if not need_spec:

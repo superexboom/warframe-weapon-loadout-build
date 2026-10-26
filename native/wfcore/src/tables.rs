@@ -27,6 +27,7 @@ pub struct Core {
     pub multishot: f64,
     pub continuous: bool,
     pub radial_only: bool,
+    pub ignore_headshot_bonus: bool,
     pub bodyshot_crit_multiplier: f64,
     pub weakpoint_crit_chance_bonus: f64,
     pub base_crit_chance: f64,
@@ -193,7 +194,7 @@ fn weakpoint_noncrit_scale(s: &Core, hm: f64) -> f64 {
         return 1.0;
     }
     let mut scale = s.headshot_bonus_multiplier;
-    if s.weakpoint_damage_bonus > 0.0 {
+    if !s.ignore_headshot_bonus && s.weakpoint_damage_bonus > 0.0 {
         scale *= (hm + 1.5 * s.weakpoint_damage_bonus) / hm;
     }
     scale
@@ -245,6 +246,8 @@ fn direct(s: &Core, loc: Location, tables: &TargetTables) -> (Vector, f64) {
         hm = 1.0;
         hcm = 1.0;
     }
+    if s.ignore_headshot_bonus { hcm = 1.0; }
+    let applied_hm = if s.ignore_headshot_bonus { 1.0 } else { hm };
     let base = match s.dot_base_damage {
         Some(v) => v,
         None => s.total_damage(),
@@ -257,9 +260,9 @@ fn direct(s: &Core, loc: Location, tables: &TargetTables) -> (Vector, f64) {
             e.1 *= faction;
         }
     }
-    if hm != 1.0 {
+    if applied_hm != 1.0 {
         for e in per_type.iter_mut() {
-            e.1 *= hm;
+            e.1 *= applied_hm;
         }
     }
     let mut raw = psum(per_type.iter().map(|e| e.1))
@@ -386,7 +389,8 @@ fn dot_multiplier(tables: &TargetTables, d: D) -> f64 {
 /// `expected_status_damage` against the unit DoT target at one location.
 pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Status {
     let loc = if s.radial_only { tables.dot[0] } else { tables.dot[loc_index] };
-    let (hm, hcm) = (loc.hit_multiplier, loc.hit_critical_multiplier);
+    let (hm, hcm) = (loc.hit_multiplier, if s.ignore_headshot_bonus { 1.0 } else { loc.hit_critical_multiplier });
+    let applied_hm = if s.ignore_headshot_bonus { 1.0 } else { hm };
     let forced = &tables.forced_procs;
     let procs = expected_status_procs(s, forced, loc.head);
     let dot_base = pmax(match s.dot_base_damage {
@@ -432,7 +436,7 @@ pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Statu
         let accumulator = if shared { 1.0 } else { pmin(count, 10.0) };
         let accumulator_multiplier = pmax(elemental, 0.0) * proc_damage;
         let mut unit = coefficient * seed_basis * seed_merge(s, d, forced) * elemental_factor * proc_damage
-            * s.falloff_multiplier * hm * target_multiplier * pow(pmax(faction_mod, 0.0), 2.0);
+            * s.falloff_multiplier * applied_hm * target_multiplier * pow(pmax(faction_mod, 0.0), 2.0);
         if (d == ELECTRICITY || d == GAS) && !s.radial_only && hm > 1.0 + 1e-9 {
             // WFSim M100: an Electricity / Gas tick lands on a head with the
             // headshot bonuses once more (Python reference, same order).
@@ -460,7 +464,7 @@ pub(crate) fn status(s: &Core, loc_index: usize, tables: &TargetTables) -> Statu
             None => s.total_damage(),
         }, 0.0);
         let per_proc = 0.3 * seed_merge(s, EXPLOSION, forced) * modded_base * crit * proc_damage * s.falloff_multiplier
-            * hm * target_multiplier * pow(pmax(faction_mod, 0.0), 2.0);
+            * applied_hm * target_multiplier * pow(pmax(faction_mod, 0.0), 2.0);
         non.push((EXPLOSION, per_proc));
     }
     Status { procs, rows, non }

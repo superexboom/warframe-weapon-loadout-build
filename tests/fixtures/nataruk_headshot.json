@@ -1,0 +1,96 @@
+{
+  "weapon": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPlayerWep",
+  "fireMode": 0,
+  "mods": [
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedDamageRecoilRifle",
+      "rank": 10,
+      "slot": 0
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponWeakpointCriticalChanceMod",
+      "rank": 10,
+      "slot": 1
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/Expert/WeaponFreezeDamageModExpert",
+      "rank": 10,
+      "slot": 2
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/PoisonEventRifleMod",
+      "rank": 3,
+      "slot": 3
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponCritDamageMod",
+      "rank": 5,
+      "slot": 4
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponFireDamageMod",
+      "rank": 5,
+      "slot": 5
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/DualStat/CorruptedFireRateDamageRifle",
+      "rank": 5,
+      "slot": 6
+    },
+    {
+      "path": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+      "rank": 10,
+      "slot": 7
+    }
+  ],
+  "arcanes": [
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+      "rank": 5
+    }
+  ],
+  "mode": "auto",
+  "profile": "standard",
+  "metric": "killsPerMinute",
+  "enemy": "/Lotus/Types/Enemies/Duviri/Avatars/DuviriMeleeAvatar",
+  "level": 9999,
+  "steelPath": true,
+  "windowSeconds": 30.0,
+  "headshotChance": 1.0,
+  "aiming": true,
+  "triggerPolicy": "emergent",
+  "distance": 0.5,
+  "incarnonCycle": false,
+  "incarnonChoices": {},
+  "slotPolarities": [
+    "AP_ATTACK",
+    "AP_TACTIC",
+    "AP_DEFENSE",
+    "AP_ATTACK",
+    "AP_ATTACK",
+    "AP_TACTIC",
+    "AP_TACTIC",
+    "AP_ATTACK"
+  ],
+  "specialSlotPolarities": {
+    "exilus": "AP_ANY"
+  },
+  "optimizeWithArcanes": true,
+  "scenario": {
+    "aiming": true,
+    "triggerPolicy": "emergent",
+    "distance": 0.5,
+    "incarnonCycle": false,
+    "combatState": {
+      "selfShieldBreakForced": false
+    }
+  },
+  "combatState": {
+    "selfShieldBreakForced": false
+  },
+  "riven": null,
+  "exilus": {
+    "path": "/Lotus/Upgrades/Mods/Sets/Vigilante/PrimaryVigilanteSuppliesMod",
+    "rank": 0
+  }
+}
