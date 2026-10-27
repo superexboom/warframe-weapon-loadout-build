@@ -98,10 +98,10 @@
   "missingLocalizationTags": 0,
   "missingWeaponPaths": 64,
   "omegaMismatches": 3,
-  "statEntries": 262,
+  "statEntries": 263,
   "templates": 7,
   "uniqueDispositionPaths": 696,
-  "upgradeRows": 271
+  "upgradeRows": 272
  },
  "fusionRecipes": [
   {
@@ -2024,6 +2024,41 @@
        "rawValue": 0.0049999999,
        "smallerIsBetter": 0,
        "symbolFilter": "Grineer",
+       "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
+       "validModifiers": [],
+       "validPostures": [],
+       "validProcTypes": [],
+       "validType": ""
+      }
+     ]
+    },
+    {
+     "buffRestrictions": [],
+     "canBeBuff": true,
+     "canBeCurse": true,
+     "compatibilityTags": [],
+     "curseRestrictions": [],
+     "icon": "/Lotus/Interface/Cards/Images/Rifle/RifleDamageInfested.png",
+     "prefix": "pura",
+     "prefixTag": "/Lotus/Language/Omega/InfestedDamagePrefix",
+     "rarity": "COMMON",
+     "sourceBuild": "2026.10.22.13.12",
+     "sourceSha256": "48fb9fcc60a5f1b4d65225c00f2dccf468b21a75a54799daa7570a9cb1bcc3c3",
+     "sourceTemplate": "LotusArchgunRandomModRare",
+     "suffix": "ada",
+     "suffixTag": "/Lotus/Language/Omega/InfestedDamageSuffix",
+     "tag": "WeaponFactionDamageInfested",
+     "upgrades": [
+      {
+       "damageType": "DT_ANY",
+       "displayAsMultiplier": 1,
+       "displayAsPercent": 0,
+       "locTag": "/Lotus/Language/Upgrades/WeaponFactionDamageInfestedDesc",
+       "localizedText": "|val| 对 Infested 的伤害",
+       "operation": "STACKING_MULTIPLY",
+       "rawValue": 0.0049999999,
+       "smallerIsBetter": 0,
+       "symbolFilter": "Infestation",
        "upgradeType": "GAMEPLAY_FACTION_DAMAGE",
        "validModifiers": [],
        "validPostures": [],
