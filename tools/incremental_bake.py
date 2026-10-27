@@ -141,6 +141,18 @@ def main():
                 routes = json.loads(route_path.read_bytes())
                 if routes.get("inputs") == current["inputs"]:
                     body["routes"] = routes
+        if args.shard_dir and not args.bot_bundle:
+            groups = []
+            for profile in ("fast", "standard", "deep"):
+                for path in (args.shard_dir / ("riven-statics-shards-" + profile)).glob("*.json"):
+                    shard = json.loads(path.read_bytes())
+                    if (shard.get("schemaVersion") != 3 or shard.get("inputs") != current["inputs"]
+                            or shard.get("cacheVersion") != current["cacheVersion"] or shard.get("profile") != profile):
+                        continue
+                    keys = list(shard.get("entries", {}))
+                    if keys and all(k in entries and entries[k] == shard["entries"][k] for k in keys):
+                        groups.append({"profile": profile, "file": path.name, "keys": keys})
+            body["shards"] = groups
         identity = digest(body)
         atomic(args.store / "objects" / (identity + ".json"), body)
         atomic(args.store / "latest.json", {"object": identity})
@@ -170,21 +182,18 @@ def main():
                                 "entries": merged})
         shard_count = 0
         if args.shard_dir and not args.bot_bundle:
-            # Main Portable bake clears each worker's in-memory statics. Feed
-            # its real shard skip gate, not merely the unused main cache.
-            for key, entry in retained.items():
-                context = json.loads(key)
-                weapon, mode, profile = (context.get(k) for k in ("weapon", "fireMode", "profile"))
-                if (profile not in ("fast", "standard", "deep") or type(mode) is not int
-                        or not entry.get("baselineCards") or "#" in weapon):
+            # Only restore previously validated bake shards. Arbitrary user
+            # contexts in a main cache must never satisfy a default bake task.
+            for group in body.get("shards", []):
+                keys = group["keys"]
+                profile, name = group["profile"], group["file"]
+                if (profile not in ("fast", "standard", "deep") or Path(name).name != name
+                        or not keys or not all(k in retained for k in keys)):
                     continue
-                counts = entry.get("counts", {})
-                if any(len(counts.get(str(n), {}).get("recommended", [])) != n for n in (2,3)):
-                    continue
-                tag = hashlib.sha1(f"{weapon}#{mode}".encode()).hexdigest()[:12]
-                path = args.shard_dir / ("riven-statics-shards-" + profile) / (tag + ".json")
+                path = args.shard_dir / ("riven-statics-shards-" + profile) / name
                 atomic(path, {"schemaVersion": 3, "cacheVersion": current["cacheVersion"],
-                              "inputs": current["inputs"], "profile": profile, "entries": {key:entry}})
+                              "inputs": current["inputs"], "profile": profile,
+                              "entries": {k:retained[k] for k in keys}})
                 shard_count += 1
         route_count = 0
         if retained and args.bot_bundle and body.get("routes"):

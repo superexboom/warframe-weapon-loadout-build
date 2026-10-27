@@ -109,7 +109,7 @@ THIRD_PARTY_NOTICES.md 第三方来源与授权说明
 `tools/incremental_bake.py` 为完整缓存建立按依赖校验的不可变归档。先在改动前 `save`，修改数据后 `restore`，最后仍运行正常烘焙补齐缺项并验证覆盖。Bot 使用 `--bot-bundle <组件目录>`，Portable 使用 `--shard-dir .local/cache` 将可复用结果恢复为烘焙分片。
 
 ```powershell
-python tools/incremental_bake.py save --store .local/cache/incremental-portable
+python tools/incremental_bake.py save --store .local/cache/incremental-portable --shard-dir .local/cache
 python tools/incremental_bake.py restore --store .local/cache/incremental-portable --shard-dir .local/cache
 ```
 

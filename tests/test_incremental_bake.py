@@ -39,3 +39,19 @@ def test_object_identity_detects_nested_output_or_dependency_mutation():
     body=dict(inventory=snapshot(),entries=entries());before=digest(body)
     body["inventory"]["records"]["/A"]="different"
     assert digest(body)!=before
+
+
+def test_changes_in_common_parts_and_native_library_reject_reuse():
+    old=snapshot()
+    for filename in ("kitguns.json", "zaws.json", "wfcore.pyd", "bot_riven.py", "bot-policy.json"):
+        old["shared"][filename]="old"
+        new=deepcopy(old);new["shared"][filename]="new"
+        assert not select(old,new,entries())[0]
+
+
+def test_reused_payload_is_preserved_without_recomputing_or_relabelling_scores():
+    old=snapshot();current=deepcopy(old);current["inputs"]="new"
+    values=entries();key=json.dumps(dict(weapon="/A",profile="deep"))
+    values[key]={"contextHash":"a"*20,"score":123.456,"counts":{"3":{"fatal":["3"],"fatalAbove":{"3":97.3}}}}
+    retained,_=select(old,current,values)
+    assert retained[key] is values[key]
