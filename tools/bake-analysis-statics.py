@@ -33,6 +33,23 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from tools.run_riven_acceptance_bake import MAX_BAKE_WORKERS, limited_workers
 
+# Select the actual Bot runtime before any app import, also in spawned workers.
+# The bundle worker is part of its cache identity; Portable caches are distinct.
+_bootstrap = argparse.ArgumentParser(add_help=False)
+_bootstrap.add_argument('--bot-bundle', type=Path)
+_bootstrap_args, _ = _bootstrap.parse_known_args()
+BOT_BUNDLE = _bootstrap_args.bot_bundle or (Path(os.environ['WF_BAKE_BOT_BUNDLE'])
+                                           if os.environ.get('WF_BAKE_BOT_BUNDLE') else None)
+if BOT_BUNDLE:
+    BOT_BUNDLE = BOT_BUNDLE.resolve()
+    os.environ['WF_BAKE_BOT_BUNDLE'] = str(BOT_BUNDLE)
+    os.environ['WF_RIVEN_ROOT'] = str(BOT_BUNDLE)
+    os.environ['WF_ANALYSIS_STATICS_CACHE_PATH'] = str(BOT_BUNDLE / 'data/riven-analysis-statics.json')
+    sys.path.insert(0, str(BOT_BUNDLE / 'src'))
+    import bot_riven
+    if Path(bot_riven.app.__file__).resolve() != BOT_BUNDLE / 'src/app.py':
+        raise RuntimeError('Bot bake imported app outside the selected bundle')
+
 SHARD_ROOT = ROOT / ".local" / "cache"
 SHARD_SCHEMA_VERSION = 3
 
@@ -107,14 +124,21 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
             # hardness nodes and archetype bases in the statics and only adds
             # the two-positive recommendation and negatives.
             for positives in positive_counts:
-                response = app.analyze_payload({
+                payload = {
                     "weapon": weapon_path,
                     "disposition": disposition,
                     "profile": profile,
                     "fireMode": fire_mode,
                     "_bakeStaticsOnly": True,
                     "stats": _trigger_stats(app, weapon_type, disposition, positives),
-                })
+                }
+                if BOT_BUNDLE:
+                    import bot_riven
+                    payload, notes = bot_riven._payload(payload, profile)
+                    if notes:
+                        raise RuntimeError(f'Bot bake trigger card required correction: {notes}')
+                    payload['_bakeStaticsOnly'] = True
+                response = app.analyze_payload(payload)
                 work[str(positives)] = response.get('searchWork') or {}
         except Exception as exc:  # noqa: BLE001
             outcomes.append({"weapon": weapon_path, "profile": profile, "ok": False, "error": str(exc)[:200]})
@@ -246,7 +270,11 @@ def main() -> int:
                         help='烘焙的正面词条数（逗号分隔，默认 3,2：两套推荐都进缓存；只写 3 与旧流程相同）')
     parser.add_argument('--shard-dir', type=Path,
                         help='分片根目录，档位子目录为 riven-statics-shards-<档位>（默认 .local/cache）；配合 --shards-only 做对照烘焙')
+    parser.add_argument('--bot-bundle', type=Path,
+                        help='Bake the actual Bot runtime with its fixed preset (fast only)')
     args = parser.parse_args()
+    if BOT_BUNDLE and (args.profile != ['fast'] or args.fire_modes):
+        parser.error('Bot baking requires --profile fast and default fire modes')
     if not args.dry_run and not args.allow_full_bake and not (args.weapon or args.limit):
         parser.error('full-roster baking requires explicit user authorization and --allow-full-bake')
     profiles = args.profile
@@ -359,6 +387,8 @@ def main() -> int:
             path = Path(str(args.report).replace("{profile}", profile))
             payload = dict(status=status_of(profile), updatedAt=datetime.now(timezone.utc).isoformat(),
                            profile=profile, fireModes=args.fire_modes, workers=workers,
+                           botBundle=str(BOT_BUNDLE) if BOT_BUNDLE else None,
+                           gpuEnabled=False, positiveCounts=positive_counts,
                            cacheVersion=cache_version, inputs=input_fingerprint,
                            weapons=len(weapons), expectedShards=len(expected_shards[profile]),
                            skippedCurrent=skipped[profile], completed=len(completed[profile]),
