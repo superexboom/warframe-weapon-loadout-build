@@ -111,7 +111,7 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
     raw_weapon = app.optimizer.resolve_record(
         app.EXPORTS["weapons"], weapon_path, kind="weapon"
     )
-    weapon_type = app.optimizer._weapon_type(None, raw_weapon)
+    weapon_type = app.optimizer._riven_type(None, raw_weapon)
     disposition = float(raw_weapon.get("omegaAttenuation") or 1.0)
     outcomes = []
     for profile, shard_path in profiles:
@@ -134,10 +134,12 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
                 }
                 if BOT_BUNDLE:
                     import bot_riven
-                    payload, notes = bot_riven._payload(payload, profile)
-                    if notes:
-                        raise RuntimeError(f'Bot bake trigger card required correction: {notes}')
-                    payload['_bakeStaticsOnly'] = True
+                    # This is a synthetic trigger, not an OCR card. Keep the
+                    # engine's legal Riven family (primary Kitguns use pistol
+                    # Rivens) rather than the Bot's legacy OCR clamp family.
+                    trigger_stats = payload['stats']
+                    payload, _ = bot_riven._payload({**payload, 'stats': []}, profile)
+                    payload.update(stats=trigger_stats, _bakeStaticsOnly=True)
                 response = app.analyze_payload(payload)
                 work[str(positives)] = response.get('searchWork') or {}
         except Exception as exc:  # noqa: BLE001

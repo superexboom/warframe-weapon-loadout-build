@@ -49,3 +49,30 @@ def test_bot_does_not_silently_bake_a_different_online_preset(tmp_path, options)
                              "--dry-run", *options], capture_output=True, text=True)
     assert result.returncode == 2
     assert "Bot baking requires" in result.stderr
+
+
+def test_primary_kitgun_bake_trigger_uses_pistol_riven_family(monkeypatch, tmp_path):
+    import importlib.util
+    import app
+    spec = importlib.util.spec_from_file_location("kitgun_bake", SCRIPT)
+    bake = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bake)
+    path = "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary"
+    captured = []
+    monkeypatch.setattr(app, "ANALYSIS_STATICS_CACHE", {})
+    from types import SimpleNamespace
+    monkeypatch.setattr(app, "_disable_analysis_statics_persistence", lambda: SimpleNamespace(enabled=False))
+    def analyze(payload):
+        captured.append(payload)
+        app.ANALYSIS_STATICS_CACHE["test"] = {"valid": True}
+        return {}
+    monkeypatch.setattr(app, "analyze_payload", analyze)
+    outcomes = bake._shard_worker((path, 0, [("fast", str(tmp_path / "shard.json"))], (3, 2)))
+    assert outcomes[0]["ok"]
+    assert len(captured) == 2
+    for payload in captured:
+        count = len(payload["stats"])
+        for stat in payload["stats"]:
+            base = app.RIVEN_BASE_VALUES["pistol"][stat["code"]]
+            _, low, high = app.optimizer.riven_stat_window(base, payload["disposition"], count, 0)
+            assert low - .11 <= stat["value"] <= high + .11
