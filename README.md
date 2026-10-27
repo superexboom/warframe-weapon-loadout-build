@@ -103,3 +103,14 @@ THIRD_PARTY_NOTICES.md 第三方来源与授权说明
 *Warframe* 是 Digital Extremes Ltd. 的商标。游戏数据、卡面文本，以及 `frontend/assets/` 中的卡图、图标和其他美术均为 Digital Extremes 版权所有，不在本项目的代码许可范围内，本项目不就其授予任何权利；权利人要求移除的内容将予以移除。
 
 各项来源、作者与条款详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+### 增量烘焙缓存
+
+`tools/incremental_bake.py` 为完整缓存建立按依赖校验的不可变归档。先在改动前 `save`，修改数据后 `restore`，最后仍运行正常烘焙补齐缺项并验证覆盖。Bot 使用 `--bot-bundle <组件目录>`，Portable 使用 `--shard-dir .local/cache` 将可复用结果恢复为烘焙分片。
+
+```powershell
+python tools/incremental_bake.py save --store .local/cache/incremental-portable
+python tools/incremental_bake.py restore --store .local/cache/incremental-portable --shard-dir .local/cache
+```
+
+当前支持同一计算核心下的武器记录局部变化：只保留最终武器记录及公共依赖均未变的结果。引擎代码、原生库、MOD、赋能、敌人、组合部件或其他公共数据变化时，保守拒绝复用。归档校验 SHA-256、保留旧文件备份；它不会绕过正常缓存加载、目标覆盖和数值校验。Bot 复用后须运行自己的 `rebuild_cache.ps1` 并刷新完整性清单。GPU 加速与增量复用是独立机制。
