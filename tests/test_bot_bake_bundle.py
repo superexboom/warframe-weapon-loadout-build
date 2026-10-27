@@ -76,3 +76,12 @@ def test_primary_kitgun_bake_trigger_uses_pistol_riven_family(monkeypatch, tmp_p
             base = app.RIVEN_BASE_VALUES["pistol"][stat["code"]]
             _, low, high = app.optimizer.riven_stat_window(base, payload["disposition"], count, 0)
             assert low - .11 <= stat["value"] <= high + .11
+
+
+def test_modern_bot_requires_its_owned_complete_bake(tmp_path):
+    bundle = fake_bundle(tmp_path)
+    (bundle / "src/bot_riven.py").write_text("import app\nBAKE_PROFILE = 'deep'\n", encoding="utf-8")
+    result = subprocess.run([sys.executable, str(SCRIPT), "--bot-bundle", str(bundle),
+                             "--profile", "fast", "--dry-run"], capture_output=True, text=True)
+    assert result.returncode == 2
+    assert "owned deep bake" in result.stderr

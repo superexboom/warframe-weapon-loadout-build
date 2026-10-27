@@ -275,6 +275,9 @@ def main() -> int:
     parser.add_argument('--bot-bundle', type=Path,
                         help='Bake the actual Bot runtime with its fixed preset (fast only)')
     args = parser.parse_args()
+    if BOT_BUNDLE and getattr(bot_riven, 'BAKE_PROFILE', 'fast') != 'fast':
+        parser.error('This Bot requires its owned deep bake, Incarnon routes and damage references; '
+                     'use tools/wfarsenal/rebuild_cache.ps1 instead of the legacy fast adapter')
     if BOT_BUNDLE and (args.profile != ['fast'] or args.fire_modes):
         parser.error('Bot baking requires --profile fast and default fire modes')
     if not args.dry_run and not args.allow_full_bake and not (args.weapon or args.limit):
