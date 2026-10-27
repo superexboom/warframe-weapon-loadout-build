@@ -2071,18 +2071,29 @@ MANUAL_MODS: list[dict[str, Any]] = []
 MANUAL_ARCANES: list[dict[str, Any]] = []
 
 
-def _exalted_catalog_payload(block: Mapping[str, Any] | None) -> dict[str, Any] | None:
+def _exalted_catalog_payload(block: Mapping[str, Any] | None, weapon: Mapping[str, Any] | None = None) -> dict[str, Any] | None:
     if block is None:
         return None
-    frames = {str(f.get("path")): f for f in WARFRAME_CATALOG.get("warframes") or () if isinstance(f, Mapping)}
+    frames = {
+        str(f.get("path")): f
+        for key in ("warframes", "warframeForms")
+        for f in WARFRAME_CATALOG.get(key) or () if isinstance(f, Mapping)
+    }
+    linked_paths = exalted_weapons.linked_frame_paths(WARFRAME_CATALOG, weapon or {"exalted": block})
     return {
         "family": block.get("family"),
         "tier": block.get("tier"),
         "abilitySlot": block.get("abilitySlot"),
         "headshotIssue": exalted_weapons.NO_HEADSHOT.get(str(block.get("family") or "")),
         "frames": [
-            {"id": path, "nameZh": (frames.get(path) or {}).get("nameZh"), "nameEn": (frames.get(path) or {}).get("nameEn")}
-            for path in block.get("framePaths") or ()
+            {
+                "id": path,
+                "nameZh": (frames.get(path) or {}).get("nameZh"),
+                "nameEn": (frames.get(path) or {}).get("nameEn"),
+                "parentFrameId": (frames.get(path) or {}).get("parentFrameId"),
+                "formKind": (frames.get(path) or {}).get("formKind"),
+            }
+            for path in linked_paths
         ],
     }
 
@@ -2159,7 +2170,7 @@ def build_catalog() -> dict[str, Any]:
             "innateElementSources": list(weapon.get("innateElementSources") or ()),
             "innateElement": _innate_catalog_payload(weapon),
             "isExalted": bool(stance_slot and stance_slot.get("builtIn")) or exalted_block is not None,
-            "exalted": _exalted_catalog_payload(exalted_block),
+            "exalted": _exalted_catalog_payload(exalted_block, weapon),
             "specialSlots": {
                 "stance": stance_slot,
                 "exilus": {
@@ -3837,7 +3848,7 @@ def warframe_calculate_payload(payload: Any) -> dict[str, Any]:
     summaries = []
     for weapon in EXPORTS["weapons"]:
         block = exalted_weapons.meta(weapon)
-        if not block or frame_id not in (block.get("framePaths") or ()):
+        if not block or frame_id not in exalted_weapons.linked_frame_paths(WARFRAME_CATALOG, weapon):
             continue
         context = exalted_weapons.context_from_result(result, weapon, frame_id)
         summaries.append({**exalted_weapons.frame_summary(weapon, context),
@@ -3909,7 +3920,7 @@ def _exalted_result(
     return {
         "loadout": dict(loadout or {}),
         "cast": exalted_weapons.cast_metrics(weapon, context, average_hit),
-        "frame": {k: context.get(k) for k in ("frameId", "frameName", "configName", "configured")},
+        "frame": {k: context.get(k) for k in ("frameId", "frameName", "parentFrameId", "formKind", "configName", "configured")},
         "panel": context.get("panel"),
         "ability": {k: (context.get("ability") or {}).get(k) for k in ("slot", "nameZh", "nameEn", "energyCost")},
         "tier": (exalted_weapons.meta(weapon) or {}).get("tier"),

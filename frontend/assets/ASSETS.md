@@ -15,8 +15,8 @@ rights in it are granted. See `THIRD_PARTY_NOTICES.md`.
 | `weapons/*` | 796 | Weapon icons | Official 2D asset export (`Lotus/Interface/Icons/StoreIcons`) |
 | `enemies/art/**` | 874 | Enemy icons | Game interface textures (`Lotus/Interface/Icons/Npcs`) |
 | `sentinels/*` | 17 | Robotic sentinel portraits | Official 2D asset export (`Lotus/Interface/Icons/StoreIcons/Companions/Sentinels`) |
-| `warframes/portraits/*` | 119 | Warframe portraits | `warframe-items` image set |
-| `warframes/abilities/*` | 284 | Ability icons | `warframe-items` image set |
+| `warframes/portraits/*` | 121 | Warframe portraits, including both Sevagoth Shadow variants | `warframe-items` image set + official 2D asset export |
+| `warframes/abilities/*` | 288 | Ability icons, including the four Shadow abilities | `warframe-items` image set + official WARFRAME Wiki icons |
 | `warframes/mods/*` | 338 | Warframe MOD illustrations | `warframe-items` image set |
 | `warframes/shards/*` | 12 | Archon Shard icons | `warframe-items` image set |
 | `game/slots/*`, `game/formas/*` | 9 | Aura / Exilus / Stance / Arcane slot marks, Stance and Umbra Forma | Official 2D asset export and Companion menu icons |

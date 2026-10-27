@@ -141,8 +141,9 @@ def _empty_catalog(status: str, error: str | None = None) -> dict[str, Any]:
         "buildLabel": None,
         "status": status,
         "provenance": {},
-        "counts": {"warframes": 0, "mods": 0, "arcanes": 0, "helminth": 0, "invigoration": 0, "shards": 0},
+        "counts": {"warframes": 0, "warframeForms": 0, "mods": 0, "arcanes": 0, "helminth": 0, "invigoration": 0, "shards": 0},
         "warframes": [],
+        "warframeForms": [],
         "abilities": [],
         "mods": [],
         "arcanes": [],
@@ -197,6 +198,7 @@ def _fallback_catalog(exports: Mapping[str, Any]) -> dict[str, Any]:
             "buildLabel": exports.get("buildLabel"),
             "provenance": {"source": "frozen-export", "slotSemantics": "unavailable"},
             "warframes": frames,
+            "warframeForms": [],
             "mods": mods,
             "arcanes": arcanes,
             "abilities": [ability for frame in frames for ability in frame.get("abilities") or ()],
@@ -205,6 +207,53 @@ def _fallback_catalog(exports: Mapping[str, Any]) -> dict[str, Any]:
         }
     )
     return result
+
+
+def load_alternate_forms(catalog: Mapping[str, Any], path: Path) -> tuple[list[dict[str, Any]], list[str]]:
+    """Load independently moddable suits attached to an ordinary Warframe.
+
+    These rows intentionally live outside ``warframes``: a Shadow is a second
+    loadout target, not another standalone frame in the picker.  The additive
+    mechanics sidecar keeps older frozen catalogs usable and is bundled by the
+    same data pipeline as the other runtime rules.
+    """
+    if not path.is_file():
+        return [], []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8-sig"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return [], [f"无法读取战甲第二形态数据：{exc}"]
+    if not isinstance(payload, Mapping) or payload.get("schemaVersion") != 1:
+        return [], ["战甲第二形态数据的 schemaVersion 不受支持"]
+    if payload.get("buildLabel") != catalog.get("buildLabel"):
+        return [], [f"战甲第二形态数据版本不匹配：{payload.get('buildLabel')!r} != {catalog.get('buildLabel')!r}"]
+    parents = {_row_id(row) for row in catalog.get("warframes") or () if isinstance(row, Mapping)}
+    forms: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    errors: list[str] = []
+    for source in payload.get("forms") or ():
+        if not isinstance(source, Mapping):
+            errors.append("战甲第二形态含非对象记录，已跳过")
+            continue
+        form_id = _row_id(source)
+        parent_id = str(source.get("parentFrameId") or "")
+        abilities = source.get("abilities")
+        slots = source.get("slotPolarities")
+        if not form_id or form_id in seen or parent_id not in parents:
+            errors.append(f"战甲第二形态 {form_id or '<missing>'} 的 ID 重复或本体不存在，已跳过")
+            continue
+        if not isinstance(abilities, list) or len(abilities) != ABILITY_SLOT_COUNT:
+            errors.append(f"战甲第二形态 {form_id} 缺少四技能，已跳过")
+            continue
+        if not isinstance(slots, Mapping) or not isinstance(slots.get("normal"), list) or len(slots["normal"]) != NORMAL_SLOT_COUNT:
+            errors.append(f"战甲第二形态 {form_id} 的极性不完整，已跳过")
+            continue
+        if not isinstance(source.get("rank30Panel"), Mapping) or not isinstance(source.get("basePanel"), Mapping):
+            errors.append(f"战甲第二形态 {form_id} 缺少面板，已跳过")
+            continue
+        seen.add(form_id)
+        forms.append(dict(source))
+    return forms, errors
 
 
 def load_warframe_catalog(path: str | Path, *, fallback: Mapping[str, Any] | None = None) -> dict[str, Any]:
@@ -236,11 +285,15 @@ def load_warframe_catalog(path: str | Path, *, fallback: Mapping[str, Any] | Non
     result.setdefault("status", "ready")
     result.setdefault("provenance", {})
     result.setdefault("abilities", [])
+    result.setdefault("warframeForms", [])
     result.setdefault("modSets", {})
     result.setdefault("gaps", [])
+    forms, form_gaps = load_alternate_forms(result, path.parent / "mechanics" / "warframe-forms.json")
+    result["warframeForms"] = forms
+    result["gaps"] = [*result["gaps"], *form_gaps]
     result["counts"] = {
         key: len(result.get(key) or ())
-        for key in ("warframes", "mods", "arcanes", "helminth", "invigoration", "shards")
+        for key in ("warframes", "warframeForms", "mods", "arcanes", "helminth", "invigoration", "shards")
     }
     result["helminth"] = apply_helminth_altered(result["helminth"], path.parent / "mechanics" / "helminth-altered.json")
     return result
@@ -588,7 +641,11 @@ class WarframeEngine:
 
     def __init__(self, catalog: Mapping[str, Any]):
         self.catalog = dict(catalog)
-        self.frames = [row for row in self.catalog.get("warframes") or () if isinstance(row, Mapping)]
+        self.forms = [row for row in self.catalog.get("warframeForms") or () if isinstance(row, Mapping)]
+        self.frames = [
+            *[row for row in self.catalog.get("warframes") or () if isinstance(row, Mapping)],
+            *self.forms,
+        ]
         self.mods = [row for row in self.catalog.get("mods") or () if isinstance(row, Mapping)]
         self.arcanes = [row for row in self.catalog.get("arcanes") or () if isinstance(row, Mapping)]
         self.helminth = [row for row in self.catalog.get("helminth") or () if isinstance(row, Mapping)]
@@ -600,6 +657,11 @@ class WarframeEngine:
         if not self.frames:
             raise SimulationError("warframe catalog is unavailable; generate data/warframe_build_data.json first")
         return _resolve(self.frames, query, "frameId")
+
+    def form_record(self, frame_id: Any) -> Mapping[str, Any] | None:
+        """Return an alternate-form row for a frame/form id, if it has one."""
+        wanted = _token(frame_id)
+        return next((row for row in self.forms if _token(_row_id(row)) == wanted), None)
 
     def _resolve_mod(self, value: Any, kind: str, frame: Mapping[str, Any]) -> tuple[Mapping[str, Any], int, int, str]:
         choice = _choice(value, kind)
@@ -743,6 +805,9 @@ class WarframeEngine:
             add_card(row, 0)
 
         replacement = payload.get("helminthReplacement")
+        inheritance = frame.get("inheritance") if isinstance(frame.get("inheritance"), Mapping) else {}
+        if replacement is not None and inheritance.get("helminth") is False:
+            raise SimulationError("该第二形态使用固定技能组，不能进行 Helminth 替换")
         abilities = [dict(ability) for ability in frame.get("abilities") or () if isinstance(ability, Mapping)]
         if len(abilities) > ABILITY_SLOT_COUNT:
             abilities = abilities[:ABILITY_SLOT_COUNT]
@@ -912,7 +977,8 @@ class WarframeEngine:
         forma["normal"] = sum(a != b for a, b in zip(normal_pols, source_normal))
         return {
             "catalogRevision": self.catalog.get("buildLabel"),
-            "frame": {key: frame.get(key) for key in ("id", "path", "nameEn", "nameZh", "iconAsset", "portraitAsset") if frame.get(key) is not None},
+            "frame": {key: frame.get(key) for key in ("id", "path", "nameEn", "nameZh", "iconAsset", "portraitAsset", "parentFrameId", "formKind", "formLabelZh", "formLabelEn") if frame.get(key) is not None},
+            "inheritance": dict(inheritance),
             "rank": 30,
             "capacityBreakdown": {"base": DEFAULT_CAPACITY, "auraGain": capacity - DEFAULT_CAPACITY, "used": used, "limit": capacity, "remaining": capacity - used, "valid": used <= capacity, "assignments": assignments, "aura": aura_assignment},
             "formaBreakdown": forma,
@@ -938,4 +1004,4 @@ class WarframeEngine:
         }
 
 
-__all__ = ["WarframeEngine", "load_warframe_catalog", "DEFAULT_CAPACITY", "NORMAL_SLOT_COUNT", "ARCANE_SLOT_COUNT", "SHARD_SLOT_COUNT"]
+__all__ = ["WarframeEngine", "load_warframe_catalog", "load_alternate_forms", "DEFAULT_CAPACITY", "NORMAL_SLOT_COUNT", "ARCANE_SLOT_COUNT", "SHARD_SLOT_COUNT"]

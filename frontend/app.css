@@ -2013,3 +2013,46 @@ body:not(.mod-slot) :is(.button, .tool-tab, input, select, textarea) { font-size
 .exalted-loadout-row strong { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
 .exalted-loadout-row em { flex: 0 0 auto; font-style: normal; font-size: 11px; color: var(--muted); }
 .exalted-loadout-row.is-counted em { color: var(--success); }
+
+/* 战甲第二形态：与现有配置槽同源，但以头像、名称和紫色标识明确区分目标。 */
+.warframe-form-switch { display: grid; grid-template-columns: minmax(150px,.34fr) minmax(0,1fr); gap: 14px; margin: -18px -16px 0; padding: 14px 16px; border-bottom: 1px solid var(--line-soft); background: linear-gradient(105deg,rgba(115,207,223,.045),rgba(181,128,225,.055)); }
+.warframe-form-switch-copy { display: flex; min-width: 0; flex-direction: column; justify-content: center; gap: 3px; }
+.warframe-form-switch-copy > span { color: var(--muted-dark); font-size: 8px; letter-spacing: .12em; }
+.warframe-form-switch-copy > strong { color: var(--text-soft); font-size: 14px; }
+.warframe-form-switch-copy > small { color: var(--muted); font-size: 9px; line-height: 1.45; }
+.warframe-form-switch-options { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+.warframe-form-tab { position: relative; display: grid; min-width: 0; min-height: 78px; grid-template-columns: 52px minmax(0,1fr) auto; align-items: center; gap: 9px; padding: 8px 9px; border: 1px solid var(--line); border-radius: 5px; color: var(--text); background: rgba(5,9,14,.38); cursor: pointer; text-align: left; transition: border-color .16s ease,background .16s ease,transform .16s ease; }
+.warframe-form-tab:hover, .warframe-form-tab:focus-visible { border-color: var(--ice); outline: 0; transform: translateY(-1px); }
+.warframe-form-tab.is-active { border-color: rgba(115,207,223,.72); background: linear-gradient(110deg,rgba(115,207,223,.13),rgba(115,207,223,.035)); box-shadow: inset 0 0 0 1px rgba(115,207,223,.09); }
+.warframe-form-tab.is-alternate { border-color: rgba(181,128,225,.32); background: linear-gradient(110deg,rgba(181,128,225,.08),rgba(5,9,14,.38)); }
+.warframe-form-tab.is-alternate.is-active { border-color: rgba(199,151,239,.82); background: linear-gradient(110deg,rgba(181,128,225,.2),rgba(115,207,223,.055)); box-shadow: inset 0 0 0 1px rgba(181,128,225,.12),0 0 18px rgba(181,128,225,.07); }
+.warframe-form-tab-visual { display: grid; width: 52px; height: 58px; place-items: center; overflow: hidden; border: 1px solid var(--line-soft); border-radius: 4px; background: rgba(0,0,0,.28); color: var(--muted); font-size: 20px; }
+.warframe-form-tab-visual img { width: 100%; height: 100%; object-fit: contain; }
+.warframe-form-tab-copy { display: grid; min-width: 0; gap: 2px; }
+.warframe-form-tab-copy small { color: var(--muted-dark); font-size: 7px; letter-spacing: .09em; }
+.warframe-form-tab-copy strong { overflow: hidden; color: var(--text-soft); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.warframe-form-tab.is-alternate .warframe-form-tab-copy strong { color: var(--riven-bright); }
+.warframe-form-tab-copy em { overflow: hidden; color: var(--muted); font-size: 8px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
+.warframe-form-tab-badge { align-self: start; padding: 2px 5px; border: 1px solid var(--line-soft); border-radius: 3px; color: var(--muted); font-size: 7px; font-weight: 600; white-space: nowrap; }
+.warframe-form-tab.is-active .warframe-form-tab-badge { border-color: rgba(115,207,223,.45); color: var(--ice); }
+.warframe-form-tab.is-alternate.is-active .warframe-form-tab-badge { border-color: rgba(181,128,225,.55); color: var(--riven-bright); }
+.warframe-form-switch:not([hidden]) + .warframe-build-config-strip { margin-top: 0; }
+.warframe-workspace[data-active-form="shadow"] .warframe-hud { background: linear-gradient(100deg,rgba(181,128,225,.12),transparent 64%); }
+.warframe-workspace[data-active-form="shadow"] .warframe-hud > div:first-child strong { color: var(--riven-bright); }
+.warframe-workspace[data-active-form="shadow"] .warframe-profile { border-color: rgba(181,128,225,.28); background: rgba(181,128,225,.035); }
+.warframe-workspace[data-active-form="shadow"] .warframe-profile strong { color: var(--riven-bright); }
+.warframe-shard-slot.is-inherited { border-style: dashed; background: rgba(181,128,225,.035); cursor: help; }
+.warframe-shard-slot.is-inherited:hover, .warframe-shard-slot.is-inherited:focus-visible { border-color: var(--riven); }
+.warframe-image-select:disabled { opacity: .72; cursor: not-allowed; }
+[data-theme="light"] .warframe-form-tab { background: rgba(255,255,255,.62); }
+[data-theme="light"] .warframe-form-tab.is-alternate { background: linear-gradient(110deg,rgba(181,128,225,.1),rgba(255,255,255,.65)); }
+[data-theme="light"] .warframe-form-tab-visual { background: rgba(224,230,238,.65); }
+@media (max-width: 900px) {
+  .warframe-form-switch { grid-template-columns: 1fr; }
+  .warframe-form-switch-copy { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 2px 8px; }
+  .warframe-form-switch-copy > small { grid-column: 1 / -1; }
+}
+@media (max-width: 620px) {
+  .warframe-form-switch-options { grid-template-columns: 1fr; }
+  .warframe-form-tab { min-height: 70px; }
+}

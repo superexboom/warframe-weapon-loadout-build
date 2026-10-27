@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 import hashlib
@@ -974,6 +974,14 @@ _ABILITY_SCALAR_SPECS = {
         ("spark_duration", "spark duration", "火花持续时间", [5, 5, 5, 5], "s", "none"),
         ("cooldown", "cooldown", "冷却时间", [20, 20, 20, 20], "s", "none"),
         ("energy_cost", "energy cost", "能量消耗", [50, 50, 50, 50], "E", "efficiency"),
+    ),
+    # Sevagoth's Shadow is not part of the ordinary four-ability frame table.
+    # Overframe omits Consume's Radiation damage and only exposes its final
+    # Life Steal value; preserve the official Wiki's complete rank vectors.
+    "/Lotus/Powersuits/Wraith/Abilities/ReaperHarvestAbility": (
+        ("radiation_damage", "Radiation damage", "辐射伤害", [1000, 1500, 2000, 2500], "", "strength"),
+        ("life_steal", "Life steal", "生命窃取", [10, 15, 20, 25], "%", "strength"),
+        ("range", "Range", "范围", [5, 8, 11, 14], "m", "range"),
     ),
 }
 

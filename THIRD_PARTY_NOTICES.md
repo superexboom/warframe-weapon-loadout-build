@@ -112,6 +112,12 @@ under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/); tha
 license applies to this file, which is kept unmodified. `data/stances.json` is
 generated from it together with game data.
 
+`data/mechanics/warframe-forms.json` also cross-checks Sevagoth Shadow ability
+rank vectors against the official ability articles (Embrace, Consume, Death's
+Harvest, Reunite and Exalted Shadow). The four corresponding ability icons are
+served from the same official Wiki and bundled locally; they remain Digital
+Extremes artwork rather than project-licensed assets.
+
 ## Digital Extremes
 
 *Warframe* is a trademark of Digital Extremes Ltd. This is an unofficial
@@ -199,8 +205,9 @@ SOFTWARE.
 `data/overframe_abilitystats.json` holds Warframe ability statistics (labels,
 values and scaling modifiers per ability) read from
 [Overframe](https://overframe.gg/); the game generator uses it to label and fill
-ability panels. Overframe is credited as the source; this project is not affiliated
-with Overframe.
+ability panels. The ordinary Shadow's rank-30 panel and independent loadout
+entry were cross-checked against its public Overframe page. Overframe is
+credited as the source; this project is not affiliated with Overframe.
 
 ## Design references
 

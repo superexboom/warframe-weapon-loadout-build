@@ -99,7 +99,9 @@ const state = {
     invigoration: [],
     applyConditionals: false,
     activeConfig: "A",
+    activeForm: "main",
     configs: { A: null, B: null, C: null },
+    formConfigs: { main: { A: null, B: null, C: null } },
     store: {},
     result: null,
   },
@@ -161,7 +163,8 @@ const ui = Object.fromEntries([
   "part-values", "part-values-run", "part-values-status", "part-values-content",
   "warframe-catalog-status", "warframe-frame-select", "warframe-frame-open", "warframe-frame-select-visual", "warframe-frame-select-name", "warframe-frame-select-description", "warframe-frame-caption", "warframe-portrait", "warframe-profile-name", "warframe-profile-description", "warframe-passive",
   "warframe-apply-conditionals", "warframe-helminth-slot", "warframe-helminth-slot-open", "warframe-helminth-slot-visual", "warframe-helminth-slot-name", "warframe-helminth-slot-description", "warframe-helminth-ability", "warframe-helminth-ability-open", "warframe-helminth-ability-visual", "warframe-helminth-ability-name", "warframe-helminth-ability-source", "warframe-helminth-description", "warframe-invigoration-open", "warframe-invigoration-name", "warframe-invigoration-description",
-  "warframe-config-tabs", "warframe-config-status", "warframe-config-copy", "warframe-config-import", "warframe-config-export", "warframe-config-import-json", "warframe-config-import-rabbit", "warframe-config-export-json", "warframe-config-export-rabbit", "warframe-config-import-file", "warframe-clear", "warframe-message", "warframe-result-name", "warframe-capacity-readout", "warframe-capacity-bar", "warframe-forma-readout", "warframe-loading", "warframe-build-content",
+  "warframe-config-tabs", "warframe-config-status", "warframe-config-copy", "warframe-config-import", "warframe-config-export", "warframe-config-import-json", "warframe-config-import-rabbit", "warframe-config-export-json", "warframe-config-export-rabbit", "warframe-config-import-file", "warframe-clear", "warframe-message", "warframe-result-name", "warframe-result-kicker", "warframe-capacity-readout", "warframe-capacity-bar", "warframe-forma-readout", "warframe-loading", "warframe-build-content",
+  "warframe-form-switch", "warframe-form-tabs", "warframe-form-switch-note", "warframe-shard-inheritance-note",
   "warframe-special-slots", "warframe-normal-slots", "warframe-arcane-slots", "warframe-shard-slots", "warframe-effect-status", "warframe-panel-grid", "warframe-ability-grid",
   "warframe-diagnostics", "warframe-diagnostic-count", "warframe-diagnostic-list", "warframe-picker", "warframe-picker-title", "warframe-picker-sub", "warframe-picker-search", "warframe-picker-close", "warframe-picker-categories", "warframe-picker-list",
   "rabbit-dialog-scrim", "rabbit-dialog", "rabbit-dialog-title", "rabbit-dialog-close", "rabbit-export-form", "rabbit-import-panel", "rabbit-target", "rabbit-archetype", "rabbit-build-title", "rabbit-summary", "rabbit-usage", "rabbit-cautions", "rabbit-export-status", "rabbit-generate", "rabbit-code-result", "rabbit-code-count", "rabbit-code", "rabbit-copy", "rabbit-import-code", "rabbit-import-status", "rabbit-import-apply",
@@ -1248,7 +1251,9 @@ function rabbitWeaponConfig() {
 }
 
 function rabbitWarframeConfig() {
+  const build = state.warframeBuild;
   const source = captureWarframeConfig();
+  const alternate = isAlternateWarframeForm();
   const config = {
     schema: 1,
     buildLabel: source.buildLabel,
@@ -1256,14 +1261,14 @@ function rabbitWarframeConfig() {
     exilus: source.exilus,
     normalMods: source.normalMods,
     arcanes: source.arcanes,
-    shards: source.shards,
+    shards: alternate ? build.shards.map((row) => row ? { path: warframeId(row), tau: Boolean(row.tau) } : null) : source.shards,
     slotPolarities: source.slotPolarities,
     helminthSlot: source.helminthSlot,
     helminthAbility: source.helminthAbility,
-    invigoration: source.invigoration,
+    invigoration: alternate ? build.invigoration.map(warframeId) : source.invigoration,
     applyConditionals: source.applyConditionals,
   };
-  return { schema: 1, kind: "warframe", target: warframeId(state.warframeBuild.frame), config };
+  return { schema: 1, kind: "warframe", target: warframeId(activeWarframeRecord()), config };
 }
 
 async function rabbitCleanWeaponResult() {
@@ -1309,7 +1314,7 @@ function rabbitWeaponFormaRows() {
 
 function rabbitWarframeFormaRows() {
   const build = state.warframeBuild;
-  const native = frameSlotPolarities(build.frame);
+  const native = frameSlotPolarities(activeWarframeRecord());
   const result = [];
   for (const kind of ["aura", "exilus"]) {
     const polarity = build.slotPolarities[kind];
@@ -1335,7 +1340,7 @@ function rabbitWeaponSlotPolarityRows() {
 
 function rabbitWarframeSlotPolarityRows() {
   const build = state.warframeBuild;
-  const native = frameSlotPolarities(build.frame);
+  const native = frameSlotPolarities(activeWarframeRecord());
   const rows = [];
   for (const kind of ["aura", "exilus"]) {
     const polarity = build.slotPolarities[kind] || null;
@@ -1349,7 +1354,7 @@ function rabbitWarframeSlotPolarityRows() {
 
 function rabbitWarframeAbilityRows(result) {
   const build = state.warframeBuild;
-  const source = Array.isArray(build.frame?.abilities) ? build.frame.abilities : [];
+  const source = Array.isArray(activeWarframeRecord()?.abilities) ? activeWarframeRecord().abilities : [];
   const rows = Array.isArray(result.abilityScalars) ? result.abilityScalars : source;
   return Array.from({ length: Math.max(source.length, rows.length) }, (_, slot) => {
     const raw = rows[slot] || {};
@@ -1450,13 +1455,13 @@ async function rabbitWarframeMeta(fields) {
   if (build.exilus) mods.push(rabbitBuildMod(build.exilus, 9, "exilus", build.slotPolarities.exilus));
   const panel = result.finalPanel || {};
   const formaRows = rabbitWarframeFormaRows();
-  const sourceAbility = build.helminthSlot === null ? null : build.frame?.abilities?.[build.helminthSlot];
+  const sourceAbility = build.helminthSlot === null ? null : activeWarframeRecord()?.abilities?.[build.helminthSlot];
   return {
     schema: 1,
     kind: "warframe",
     build_label: state.warframeCatalog?.buildLabel || "OFFLINE",
     game_version: state.warframeCatalog?.buildLabel || "OFFLINE",
-    target: { id: warframeId(build.frame), name_zh: warframeName(build.frame), name_en: build.frame?.nameEn || "" },
+    target: { id: warframeId(activeWarframeRecord()), name_zh: warframeName(activeWarframeRecord()), name_en: activeWarframeRecord()?.nameEn || "" },
     ...fields,
     forma_count: formaRows.length,
     mods,
@@ -1474,8 +1479,8 @@ async function rabbitWarframeMeta(fields) {
         // 全槽位极性（v2.5+）与无 MOD 基准面板（用于变动数值着色）
         slot_polarities: rabbitWarframeSlotPolarityRows(),
         panel_base: {
-          health: Number(build.frame?.basePanel?.health || 0), shield: Number(build.frame?.basePanel?.shield || 0),
-          armor: Number(build.frame?.basePanel?.armor || 0), energy: Number(build.frame?.basePanel?.energy || 0),
+          health: Number(activeWarframeRecord()?.basePanel?.health || 0), shield: Number(activeWarframeRecord()?.basePanel?.shield || 0),
+          armor: Number(activeWarframeRecord()?.basePanel?.armor || 0), energy: Number(activeWarframeRecord()?.basePanel?.energy || 0),
           abilityStrength: 1, abilityDuration: 1, abilityRange: 1, abilityEfficiency: 1,
         },
       },
@@ -1505,7 +1510,7 @@ function openRabbitDialog(mode, kind) {
   ui["rabbit-export-form"].hidden = !exporting;
   ui["rabbit-import-panel"].hidden = exporting;
   ui["rabbit-dialog-title"].textContent = exporting ? "导出到 Warframe Rabbit" : "从 Warframe Rabbit 导入";
-  ui["rabbit-target"].value = kind === "weapon" ? weaponName(state.buildWeapon) : warframeName(state.warframeBuild.frame);
+  ui["rabbit-target"].value = kind === "weapon" ? weaponName(state.buildWeapon) : warframeName(activeWarframeRecord());
   ui["rabbit-archetype"].replaceChildren(...RABBIT_ARCHETYPES[kind].map(([value, label]) => {
     const option = document.createElement("option"); option.value = value; option.textContent = label; return option;
   }));
@@ -1596,10 +1601,12 @@ async function applyRabbitWeaponConfig(wrapper) {
 
 async function applyRabbitWarframeConfig(wrapper) {
   await loadWarframeCatalog();
-  const frame = warframeResolve(warframeRows("warframes"), wrapper.target);
-  if (!frame) throw new Error("Rabbit 配装中的战甲不在当前战甲目录里");
+  const target = warframeResolve([...warframeRows("warframes"), ...warframeRows("warframeForms")], wrapper.target);
+  const frame = target?.parentFrameId ? warframeResolve(warframeRows("warframes"), target.parentFrameId) : target;
+  if (!frame) throw new Error("Rabbit 配装中的战甲或第二形态不在当前目录里");
   setActiveTool("warframe");
   selectWarframeFrame(frame);
+  switchWarframeForm(target.parentFrameId ? warframeId(target) : "main");
   const build = state.warframeBuild;
   build.configs[build.activeConfig] = wrapper.config || {};
   applyWarframeConfig(build.configs[build.activeConfig]);
@@ -8124,6 +8131,59 @@ function warframeName(record) {
   return record?.nameZh || record?.nameEn || record?.nameInternal || warframeId(record) || "--";
 }
 
+function warframeFormRecords(frame = state.warframeBuild.frame) {
+  const parentId = warframeId(frame);
+  return warframeRows("warframeForms").filter((row) => row.parentFrameId === parentId);
+}
+
+function activeWarframeRecord() {
+  const build = state.warframeBuild;
+  if (build.activeForm === "main") return build.frame;
+  return warframeFormRecords().find((row) => warframeId(row) === build.activeForm) || build.frame;
+}
+
+function isAlternateWarframeForm(record = activeWarframeRecord()) {
+  return Boolean(record?.isAlternateForm && record?.parentFrameId);
+}
+
+function warframeFormOptions() {
+  const build = state.warframeBuild;
+  if (!build.frame) return [];
+  return [
+    { id: "main", record: build.frame, alternate: false, label: "本体" },
+    ...warframeFormRecords().map((record) => ({ id: warframeId(record), record, alternate: true, label: record.formLabelZh || record.formLabelEn || "第二形态" })),
+  ];
+}
+
+// Read one saved A/B/C config from either the legacy carrier-only store or the
+// additive per-form store. parentConfig is only used for inherited effects;
+// it is never merged into the alternate form's own MOD/Arcane calculations.
+function warframeStoredConfig(frameId, configName) {
+  const store = exaltedWarframeStore();
+  const form = warframeRows("warframeForms").find((row) => warframeId(row) === frameId);
+  const parentFrameId = form?.parentFrameId || null;
+  const entry = store[parentFrameId || frameId] || {};
+  const config = configName
+    ? (parentFrameId ? entry.forms?.[frameId]?.[configName] : entry[configName]) || null
+    : null;
+  return {
+    config,
+    parentConfig: parentFrameId && configName ? entry[configName] || null : null,
+    parentFrameId,
+    saved: Boolean(config),
+  };
+}
+
+function loadWarframeFormConfigs(frame) {
+  const saved = state.warframeBuild.store[warframeId(frame)] || {};
+  const result = { main: { A: saved.A || null, B: saved.B || null, C: saved.C || null } };
+  for (const form of warframeFormRecords(frame)) {
+    const configs = saved.forms?.[warframeId(form)] || {};
+    result[warframeId(form)] = { A: configs.A || null, B: configs.B || null, C: configs.C || null };
+  }
+  return result;
+}
+
 function warframeDescription(record) {
   const lines = damageTokenText(record?.descriptionZh || record?.description || record?.effect || "")
     .replace(/\\n/g, "\n")
@@ -8204,7 +8264,7 @@ function normalizeFrameSlotPolarities(frame) {
   };
 }
 
-function emptyWarframeSnapshot(frame = state.warframeBuild.frame) {
+function emptyWarframeSnapshot(frame = activeWarframeRecord()) {
   return {
     aura: null,
     exilus: null,
@@ -8222,6 +8282,7 @@ function emptyWarframeSnapshot(frame = state.warframeBuild.frame) {
 
 function captureWarframeConfig() {
   const build = state.warframeBuild;
+  const alternate = isAlternateWarframeForm();
   return {
     schema: 1,
     buildLabel: state.warframeCatalog?.buildLabel || "OFFLINE",
@@ -8230,7 +8291,9 @@ function captureWarframeConfig() {
     normalMods: build.normalMods.map(warframeSelection),
     normalLocks: build.normalLocks.map(Boolean),
     arcanes: build.arcanes.map(warframeSelection),
-    shards: build.shards.map((row) => row ? { path: warframeId(row), tau: Boolean(row.tau) } : null),
+    // Inherited carrier effects are resolved at calculation time, never
+    // duplicated into the Shadow's own saved config.
+    shards: alternate ? [] : build.shards.map((row) => row ? { path: warframeId(row), tau: Boolean(row.tau) } : null),
     slotPolarities: {
       aura: build.slotPolarities.aura || null,
       exilus: build.slotPolarities.exilus || null,
@@ -8238,7 +8301,7 @@ function captureWarframeConfig() {
     },
     helminthSlot: build.helminthSlot,
     helminthAbility: build.helminthAbility ? warframeId(build.helminthAbility) : null,
-    invigoration: build.invigoration.map(warframeId),
+    invigoration: alternate ? [] : build.invigoration.map(warframeId),
     applyConditionals: Boolean(build.applyConditionals),
   };
 }
@@ -8256,8 +8319,23 @@ function persistWarframeConfig() {
   const build = state.warframeBuild;
   const frameId = warframeId(build.frame);
   if (!frameId) return;
+  build.formConfigs ||= { main: { A: null, B: null, C: null } };
+  build.formConfigs.main ||= { A: null, B: null, C: null };
+  build.formConfigs[build.activeForm] ||= { A: null, B: null, C: null };
+  build.configs = build.formConfigs[build.activeForm];
   build.configs[build.activeConfig] = captureWarframeConfig();
-  build.store[frameId] = build.configs;
+  const entry = {
+    A: build.formConfigs.main.A || null,
+    B: build.formConfigs.main.B || null,
+    C: build.formConfigs.main.C || null,
+    forms: {},
+  };
+  for (const form of warframeFormRecords()) {
+    const id = warframeId(form);
+    const configs = build.formConfigs[id] || { A: null, B: null, C: null };
+    entry.forms[id] = { A: configs.A || null, B: configs.B || null, C: configs.C || null };
+  }
+  build.store[frameId] = entry;
   try { localStorage.setItem(WARFRAME_CONFIG_STORAGE_KEY, JSON.stringify(build.store)); } catch (_error) { /* private mode */ }
 }
 
@@ -8298,6 +8376,16 @@ function applyWarframeConfig(config) {
     applyConditionals: Boolean(source.applyConditionals),
     result: null,
   });
+  if (isAlternateWarframeForm()) {
+    const inherited = state.warframeBuild.formConfigs.main?.[state.warframeBuild.activeConfig] || {};
+    const inheritedShards = Array.isArray(inherited.shards) ? inherited.shards : [];
+    const inheritedInvigoration = Array.isArray(inherited.invigoration) ? inherited.invigoration : [];
+    state.warframeBuild.shards = Array.from({ length: 5 }, (_, index) => hydrate(inheritedShards[index], warframeRows("shards")));
+    state.warframeBuild.invigoration = inheritedInvigoration
+      .map((value) => warframeResolve(warframeRows("invigoration"), value)).filter(Boolean).slice(0, 2);
+    state.warframeBuild.helminthSlot = null;
+    state.warframeBuild.helminthAbility = null;
+  }
   renderWarframeWorkbench();
   scheduleWarframeCalculation();
 }
@@ -8308,9 +8396,25 @@ function selectWarframeFrame(frame) {
   const build = state.warframeBuild;
   build.frame = frame;
   build.activeConfig = "A";
-  const saved = build.store[warframeId(frame)];
-  build.configs = { A: saved?.A || null, B: saved?.B || null, C: saved?.C || null };
+  build.activeForm = "main";
+  build.formConfigs = loadWarframeFormConfigs(frame);
+  build.configs = build.formConfigs.main;
   applyWarframeConfig(build.configs.A);
+}
+
+function switchWarframeForm(formId) {
+  const build = state.warframeBuild;
+  const option = warframeFormOptions().find((row) => row.id === formId);
+  if (!option || formId === build.activeForm) return;
+  persistWarframeConfig();
+  build.activeForm = formId;
+  build.formConfigs[formId] ||= { A: null, B: null, C: null };
+  build.configs = build.formConfigs[formId];
+  // Invalidate any in-flight carrier result before the form's new request.
+  warframeRequestId += 1;
+  applyWarframeConfig(build.configs[build.activeConfig]);
+  const label = option.alternate ? `${option.label}第二套配装` : "本体配装";
+  if (ui["warframe-config-status"]) ui["warframe-config-status"].textContent = `${label} · 配置 ${build.activeConfig}`;
 }
 
 function switchWarframeConfig(name) {
@@ -8328,26 +8432,29 @@ function copyWarframeConfig() {
   const names = ["A", "B", "C"];
   const target = names[(names.indexOf(build.activeConfig) + 1) % names.length];
   build.configs[target] = JSON.parse(JSON.stringify(build.configs[build.activeConfig] || captureWarframeConfig()));
-  build.store[warframeId(build.frame)] = build.configs;
-  try { localStorage.setItem(WARFRAME_CONFIG_STORAGE_KEY, JSON.stringify(build.store)); } catch (_error) { /* private mode */ }
+  persistWarframeConfig();
   if (ui["warframe-config-status"]) ui["warframe-config-status"].textContent = `已复制到配置 ${target}`;
 }
 
 function exportWarframeConfig() {
   persistWarframeConfig();
   const build = state.warframeBuild;
+  const active = activeWarframeRecord();
   const payload = {
     schema: 1,
     kind: "warframe-build",
     buildLabel: state.warframeCatalog?.buildLabel || "OFFLINE",
-    frameId: warframeId(build.frame),
+    frameId: warframeId(active),
+    parentFrameId: isAlternateWarframeForm(active) ? warframeId(build.frame) : null,
+    formId: build.activeForm,
+    formKind: active?.formKind || "main",
     configId: build.activeConfig,
     config: build.configs[build.activeConfig] || captureWarframeConfig(),
   };
   const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }));
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = `wf-warframe-${String(build.frame?.nameEn || "build").replace(/[^a-z0-9_-]+/gi, "-")}-${build.activeConfig}.json`;
+  anchor.download = `wf-warframe-${String(active?.nameEn || "build").replace(/[^a-z0-9_-]+/gi, "-")}-${build.activeConfig}.json`;
   document.body.append(anchor);
   anchor.click();
   anchor.remove();
@@ -8363,21 +8470,27 @@ function importWarframeConfig(file) {
       const config = parsed.config || parsed;
       if (!config || Number(parsed.schema ?? config.schema ?? 1) !== 1) throw new Error("战甲配置文件格式不兼容");
       const build = state.warframeBuild;
-      const frame = parsed.frameId ? warframeResolve(warframeRows("warframes"), parsed.frameId) : build.frame;
-      if (!frame) throw new Error("导入文件中的战甲不在当前战甲目录里");
+      const target = parsed.frameId
+        ? warframeResolve([...warframeRows("warframes"), ...warframeRows("warframeForms")], parsed.frameId)
+        : activeWarframeRecord();
+      const frame = target?.parentFrameId ? warframeResolve(warframeRows("warframes"), target.parentFrameId) : target;
+      if (!frame) throw new Error("导入文件中的战甲或第二形态不在当前目录里");
       const active = build.activeConfig;
+      const formId = target.parentFrameId ? warframeId(target) : "main";
       if (warframeId(frame) !== warframeId(build.frame)) {
         persistWarframeConfig();
         build.frame = frame;
-        const saved = build.store[warframeId(frame)];
-        build.configs = { A: saved?.A || null, B: saved?.B || null, C: saved?.C || null };
-        build.activeConfig = active;
+        build.formConfigs = loadWarframeFormConfigs(frame);
       }
+      build.activeForm = formId;
+      build.formConfigs[formId] ||= { A: null, B: null, C: null };
+      build.configs = build.formConfigs[formId];
+      build.activeConfig = active;
       build.configs[active] = config;
       applyWarframeConfig(config);
       persistWarframeConfig();
       if (ui["warframe-config-status"]) ui["warframe-config-status"].textContent = `已导入配置 ${active}`;
-      toast(`已导入 ${warframeName(frame)} 配置 ${active}`, "success");
+      toast(`已导入 ${warframeName(target)} 配置 ${active}`, "success");
     } catch (error) {
       toast(error.message || "战甲配置导入失败", "error");
     } finally {
@@ -8479,7 +8592,7 @@ function warframeModFitsFrame(mod) {
   // Empty compatibility arrays mean the mod is generic, not incompatible.
   if (!explicit || (Array.isArray(explicit) && explicit.length === 0)) return true;
   const allowed = new Set((Array.isArray(explicit) ? explicit : [explicit]).map(warframeFamilyToken));
-  const frame = state.warframeBuild.frame;
+  const frame = activeWarframeRecord();
   return [frame?.id, frame?.path, frame?.nameEn, frame?.nameZh, frame?.nameInternal]
     .filter(Boolean).some((value) => allowed.has(warframeFamilyToken(value)));
 }
@@ -8497,7 +8610,7 @@ function warframeSlotRelation(item, polarity) {
 function warframeSlotForma(kind, index) {
   const build = state.warframeBuild;
   const current = kind === "normal" ? build.slotPolarities.normal[index] : build.slotPolarities[kind];
-  const native = kind === "normal" ? frameSlotPolarities(build.frame).normal[index] : frameSlotPolarities(build.frame)[kind];
+  const native = kind === "normal" ? frameSlotPolarities(activeWarframeRecord()).normal[index] : frameSlotPolarities(activeWarframeRecord())[kind];
   return Boolean(current && current !== native);
 }
 
@@ -8748,7 +8861,8 @@ function renderWarframeArcaneSlot(index) {
 function renderWarframeShardSlot(index) {
   const build = state.warframeBuild;
   const item = build.shards[index];
-  const slot = create("article", `warframe-shard-slot${item ? " is-filled" : ""}${item?.tau ? " is-tau" : ""}`);
+  const inherited = isAlternateWarframeForm();
+  const slot = create("article", `warframe-shard-slot${item ? " is-filled" : ""}${item?.tau ? " is-tau" : ""}${inherited ? " is-inherited" : ""}`);
   slot.tabIndex = 0;
   slot.setAttribute("role", "button");
   const visual = create("div", "warframe-shard-visual");
@@ -8759,9 +8873,9 @@ function renderWarframeShardSlot(index) {
   }
   else visual.append(create("span", "", "+"));
   const copy = create("div", "warframe-shard-copy");
-  copy.append(create("small", "", `源力石 ${index + 1}`), create("strong", "", item ? warframeName(item) : "空槽位"), create("p", "", item ? warframeDescription(item) : "未安装"));
+  copy.append(create("small", "", `${inherited ? "继承" : "源力石"} ${index + 1}`), create("strong", "", item ? warframeName(item) : "空槽位"), create("p", "", item ? warframeDescription(item) : inherited ? "本体未安装" : "未安装"));
   slot.append(visual, copy);
-  if (item) {
+  if (item && !inherited) {
     const remove = create("button", "warframe-shard-remove", "×");
     remove.type = "button";
     remove.title = "移除源力石";
@@ -8783,7 +8897,7 @@ function warframeLoadoutSignature(kind, index) {
   const relation = ["normal", "aura", "exilus"].includes(kind) ? warframeSlotRelation(item, polarity) : "";
   const forma = ["normal", "aura", "exilus"].includes(kind) ? warframeSlotForma(kind, index) : "";
   return [
-    kind, index, warframeId(item), Number(item?.rank ?? item?.maxRank ?? 0), item?.rarity || "", item?.tau ? 1 : 0,
+    kind, index, build.activeForm, warframeId(item), Number(item?.rank ?? item?.maxRank ?? 0), item?.rarity || "", item?.tau ? 1 : 0,
     polarity || "none", relation, forma, kind === "normal" && build.normalLocks[index] ? 1 : 0,
     item?.modSet || "", item?.modSet && activeSetPieces(item), item && warframeArcaneHint(item), item && warframeShardAssets(item)?.base,
   ].join("|");
@@ -8835,35 +8949,74 @@ function renderWarframeLoadout() {
   })));
 }
 
+function renderWarframeFormSwitch() {
+  const build = state.warframeBuild;
+  const options = warframeFormOptions();
+  const host = ui["warframe-form-switch"];
+  if (!host) return;
+  host.hidden = options.length <= 1;
+  ui["warframe-form-tabs"].replaceChildren(...options.map((option) => {
+    const active = option.id === build.activeForm;
+    const button = create("button", `warframe-form-tab${active ? " is-active" : ""}${option.alternate ? " is-alternate" : ""}`);
+    button.type = "button";
+    button.dataset.warframeForm = option.id;
+    button.setAttribute("role", "tab");
+    button.setAttribute("aria-selected", String(active));
+    button.setAttribute("aria-label", `${warframeName(option.record)} · ${option.alternate ? "第二套配装" : "本体配装"}`);
+    const visual = create("span", "warframe-form-tab-visual");
+    const portrait = option.record.portraitAsset || option.record.iconAsset;
+    if (portrait) visual.append(imageNode(portrait, "", warframeName(option.record), "lazy"));
+    else visual.append(create("i", "", option.alternate ? "S" : "W"));
+    const copy = create("span", "warframe-form-tab-copy");
+    copy.append(
+      create("small", "", option.alternate ? "SECOND LOADOUT" : "WARFRAME"),
+      create("strong", "", warframeName(option.record)),
+      create("em", "", option.alternate ? `${option.label} · 独立 MOD / 赋能 / 技能` : "本体 MOD / 赋能 / 技能"),
+    );
+    button.append(visual, copy, create("b", "warframe-form-tab-badge", option.alternate ? "第二套" : "本体"));
+    button.addEventListener("click", () => switchWarframeForm(option.id));
+    return button;
+  }));
+  const active = activeWarframeRecord();
+  ui["warframe-form-switch-note"].textContent = isAlternateWarframeForm(active)
+    ? "幽影独立配装 · 源力石与活化继承同配置槽的本体"
+    : "本体与第二形态分别保存独立 A / B / C 配置";
+}
+
 function renderWarframeProfile() {
   const build = state.warframeBuild;
-  const frame = build.frame;
-  if (!frame) return;
-  const frameId = warframeId(frame);
-  ui["warframe-frame-select"].value = frameId;
-  ui["warframe-frame-select-name"].textContent = warframeName(frame);
+  const rootFrame = build.frame;
+  const frame = activeWarframeRecord();
+  if (!rootFrame || !frame) return;
+  const alternate = isAlternateWarframeForm(frame);
+  renderWarframeFormSwitch();
+  ui["warframe-tool"].dataset.activeForm = alternate ? "shadow" : "main";
+  ui["warframe-result-kicker"].textContent = alternate ? "SHADOW BUILD · RANK 30" : "WARFRAME BUILD · RANK 30";
+  ui["warframe-frame-select"].value = warframeId(rootFrame);
+  ui["warframe-frame-select-name"].textContent = warframeName(rootFrame);
   // 描述已在下方档案卡完整显示，选择器里只留操作提示。
   ui["warframe-frame-select-description"].textContent = "点击更换战甲";
   const frameVisual = ui["warframe-frame-select-visual"];
   if (frameVisual) {
     frameVisual.replaceChildren();
-    const portrait = frame.portraitAsset || frame.iconAsset;
-    if (portrait) frameVisual.append(imageNode(portrait, "warframe-selector-icon", warframeName(frame), "lazy"));
+    const selectorPortrait = rootFrame.portraitAsset || rootFrame.iconAsset;
+    if (selectorPortrait) frameVisual.append(imageNode(selectorPortrait, "warframe-selector-icon", warframeName(rootFrame), "lazy"));
     else frameVisual.append(create("i", "", "W"));
   }
   ui["warframe-profile-name"].textContent = warframeName(frame);
   ui["warframe-result-name"].textContent = warframeName(frame);
-  ui["warframe-profile-description"].textContent = warframeLocalizedDescription(frame, "暂无战甲简介");
-  ui["warframe-passive"].textContent = warframePassiveText(frame) || "--";
+  ui["warframe-profile-description"].textContent = warframeLocalizedDescription(frame, "暂无形态简介");
+  ui["warframe-passive"].textContent = warframePassiveText(frame) || (alternate ? "无独立被动 · 源力石与活化继承同配置槽的本体" : "--");
   const portrait = frame.portraitAsset || frame.iconAsset;
   ui["warframe-portrait"].hidden = !portrait;
   if (portrait) { ui["warframe-portrait"].src = portrait; ui["warframe-portrait"].alt = warframeName(frame); }
-  ui["warframe-frame-caption"].textContent = `${state.warframeCatalog?.buildLabel || "OFFLINE"} · 固定满级 30`;
+  ui["warframe-frame-caption"].textContent = `${state.warframeCatalog?.buildLabel || "OFFLINE"} · 固定满级 30 · ${alternate ? "第二套配装" : "本体配置"}`;
   ui["warframe-apply-conditionals"].checked = build.applyConditionals;
   ui["warframe-helminth-slot"].value = build.helminthSlot === null ? "" : String(build.helminthSlot);
-  const replacedAbility = build.helminthSlot === null ? null : frame.abilities?.[Number(build.helminthSlot)];
-  ui["warframe-helminth-slot-name"].textContent = replacedAbility ? warframeName(replacedAbility) : "不替换";
-  ui["warframe-helminth-slot-description"].textContent = replacedAbility ? warframeLocalizedDescription(replacedAbility, `第 ${Number(build.helminthSlot) + 1} 个主动技能`) : "保留战甲原本的四个主动技能";
+  const replacedAbility = !alternate && build.helminthSlot !== null ? frame.abilities?.[Number(build.helminthSlot)] : null;
+  ui["warframe-helminth-slot-open"].disabled = alternate;
+  ui["warframe-helminth-slot-name"].textContent = alternate ? "固定技能组" : replacedAbility ? warframeName(replacedAbility) : "不替换";
+  ui["warframe-helminth-slot-description"].textContent = alternate ? "幽影不能进行 Helminth 替换" : replacedAbility ? warframeLocalizedDescription(replacedAbility, `第 ${Number(build.helminthSlot) + 1} 个主动技能`) : "保留战甲原本的四个主动技能";
   const slotVisual = ui["warframe-helminth-slot-visual"];
   if (slotVisual) {
     slotVisual.replaceChildren();
@@ -8872,9 +9025,9 @@ function renderWarframeProfile() {
     else slotVisual.append(create("i", "", "—"));
   }
   ui["warframe-helminth-ability"].value = build.helminthAbility ? warframeId(build.helminthAbility) : "";
-  ui["warframe-helminth-ability-open"].disabled = build.helminthSlot === null;
-  ui["warframe-helminth-ability-name"].textContent = build.helminthAbility ? warframeName(build.helminthAbility) : "选择技能";
-  ui["warframe-helminth-ability-source"].textContent = build.helminthAbility ? warframeSourceLabel(build.helminthAbility) : "先选择替换技能槽";
+  ui["warframe-helminth-ability-open"].disabled = alternate || build.helminthSlot === null;
+  ui["warframe-helminth-ability-name"].textContent = alternate ? "不可替换" : build.helminthAbility ? warframeName(build.helminthAbility) : "选择技能";
+  ui["warframe-helminth-ability-source"].textContent = alternate ? "使用幽影自己的四个技能" : build.helminthAbility ? warframeSourceLabel(build.helminthAbility) : "先选择替换技能槽";
   const helminthVisual = ui["warframe-helminth-ability-visual"];
   if (helminthVisual) {
     helminthVisual.replaceChildren();
@@ -8882,9 +9035,11 @@ function renderWarframeProfile() {
     if (icon) helminthVisual.append(imageNode(icon, "warframe-selector-icon", warframeName(build.helminthAbility), "lazy"));
     else helminthVisual.append(create("i", "", "H"));
   }
-  ui["warframe-helminth-description"].textContent = build.helminthAbility ? warframeLocalizedDescription(build.helminthAbility, "该技能只替换一个主动技能槽。") : "未替换技能。";
-  ui["warframe-invigoration-name"].textContent = build.invigoration.length ? build.invigoration.map(warframeName).join(" + ") : "未选择";
-  ui["warframe-invigoration-description"].textContent = build.invigoration.length ? build.invigoration.map((row) => warframeLocalizedDescription(row, "增幅效果")).join("；") : "一项攻势 + 一项辅助";
+  ui["warframe-helminth-description"].textContent = alternate ? "本体的 Helminth 配置与幽影固定技能组互不影响。" : build.helminthAbility ? warframeLocalizedDescription(build.helminthAbility, "该技能只替换一个主动技能槽。") : "未替换技能。";
+  ui["warframe-invigoration-open"].disabled = alternate;
+  ui["warframe-invigoration-name"].textContent = (alternate ? "继承本体 · " : "") + (build.invigoration.length ? build.invigoration.map(warframeName).join(" + ") : "未选择");
+  ui["warframe-invigoration-description"].textContent = alternate ? "读取同配置槽的本体活化，不在幽影上重复装备" : build.invigoration.length ? build.invigoration.map((row) => warframeLocalizedDescription(row, "增幅效果")).join("；") : "一项攻势 + 一项辅助";
+  ui["warframe-shard-inheritance-note"].textContent = alternate ? "继承本体 · 只读" : "普通 / Tau · 5 槽";
   ui["warframe-config-tabs"].querySelectorAll("[data-warframe-config]").forEach((button) => {
     const active = button.dataset.warframeConfig === build.activeConfig;
     button.classList.toggle("is-active", active);
@@ -8909,7 +9064,7 @@ function warframePickerRowsBase() {
   else if (kind === "helminth") rows = warframeRows("helminth");
   else if (kind === "helminthSlot") rows = [
     { id: "", slot: null, nameZh: "不替换", nameEn: "None", description: "保留战甲原本的四个主动技能" },
-    ...(build.frame?.abilities || []).slice(0, 4).map((ability, slot) => ({ ...ability, id: `helminth-slot-${slot}`, slot })),
+    ...(activeWarframeRecord()?.abilities || []).slice(0, 4).map((ability, slot) => ({ ...ability, id: `helminth-slot-${slot}`, slot })),
   ];
   else if (["aura", "exilus", "normal"].includes(kind)) {
     rows = dedupeWarframeMods(warframeRows("mods").filter((row) => (kind === "normal" ? warframeModKind(row) !== "aura" : warframeModKind(row) === kind) && warframeModFitsFrame(row)));
@@ -9024,6 +9179,10 @@ function warframePickerRowsForCategory(kind, category) {
 }
 
 function openWarframePicker(kind, slot = 0) {
+  if (isAlternateWarframeForm() && ["helminthSlot", "helminth", "shard", "invigoration"].includes(kind)) {
+    const message = kind === "shard" ? "源力石继承同配置槽的本体，请切换到本体后编辑" : kind === "invigoration" ? "活化继承同配置槽的本体，请切换到本体后编辑" : "幽影使用固定技能组，不能进行 Helminth 替换";
+    return toast(message);
+  }
   const titles = { frame: "选择战甲", helminthSlot: "选择替换技能", helminth: "选择 Helminth 技能", aura: "选择光环 MOD", exilus: "选择战甲 MOD（功能槽）", normal: "选择战甲 MOD", arcane: "选择战甲赋能", shard: "选择执刑官源力石", invigoration: "选择活化增幅" };
   state.warframePickerKind = kind;
   state.warframePickerSlot = Number(slot) || 0;
@@ -9083,7 +9242,7 @@ function applyWarframePickerRow(row) {
 function warframePayload() {
   const build = state.warframeBuild;
   return {
-    frameId: warframeId(build.frame),
+    frameId: warframeId(activeWarframeRecord()),
     aura: warframeSelection(build.aura),
     exilus: warframeSelection(build.exilus),
     normalMods: build.normalMods.flatMap((row, slot) => row ? [{ ...warframeSelection(row), slot }] : []),
@@ -9351,7 +9510,7 @@ function renderWarframeResult(result) {
   }));
   renderWarframeExaltedCard();
   const globalScale = `强度 ${warframePanelValue("abilityStrength", final.abilityStrength)} · 持续 ${warframePanelValue("abilityDuration", final.abilityDuration)} · 范围 ${warframePanelValue("abilityRange", final.abilityRange)} · 效率 ${warframePanelValue("abilityEfficiency", final.abilityEfficiency)}`;
-  const sourceAbilities = Array.isArray(state.warframeBuild.frame?.abilities) ? state.warframeBuild.frame.abilities : [];
+  const sourceAbilities = Array.isArray(activeWarframeRecord()?.abilities) ? activeWarframeRecord().abilities : [];
   const abilities = Array.isArray(result.abilityScalars) ? result.abilityScalars : sourceAbilities;
   ui["warframe-ability-grid"].replaceChildren(...abilities.map((ability, index) => {
     const source = sourceAbilities[index] || {};
@@ -9455,11 +9614,8 @@ function bindWarframeEvents() {
   ui["warframe-config-import-rabbit"]?.addEventListener("click", () => openRabbitDialog("import", "warframe"));
   ui["warframe-config-import-file"]?.addEventListener("change", () => importWarframeConfig(ui["warframe-config-import-file"].files?.[0]));
   ui["warframe-clear"]?.addEventListener("click", () => {
-    const frame = state.warframeBuild.frame;
-    Object.assign(state.warframeBuild, emptyWarframeSnapshot(frame), { frame, activeConfig: state.warframeBuild.activeConfig, configs: state.warframeBuild.configs, store: state.warframeBuild.store, result: null });
-    renderWarframeWorkbench();
+    applyWarframeConfig(null);
     persistWarframeConfig();
-    scheduleWarframeCalculation();
   });
   ui["warframe-picker-search"]?.addEventListener("input", renderWarframePicker);
   ui["warframe-picker-close"]?.addEventListener("click", closeWarframePicker);
@@ -10678,8 +10834,8 @@ function restoreExaltedLink(config) {
 function exaltedPayload() {
   if (!isExaltedWeapon() || !state.exaltedLink) return undefined;
   const { frameId, configName } = state.exaltedLink;
-  const config = configName ? exaltedWarframeStore()[frameId]?.[configName] || null : null;
-  return { frameId, configName: configName || null, config };
+  const saved = warframeStoredConfig(frameId, configName);
+  return { frameId, configName: configName || null, config: saved.config, parentConfig: saved.parentConfig };
 }
 
 function exaltedChanged() {
@@ -10692,7 +10848,7 @@ const EXALTED_TIER_NOTES = {
   weapon: "按普通武器口径计算；基础伤害取技能满级数值并按技能强度缩放",
   strength: "伤害受技能强度缩放，强度读取自关联战甲",
   cast: "每次施放 = 一次攻击：伤害按技能强度缩放，5 秒内连续施放每次 +20 连击，伤害随连击倍率 1:1 增长（最高 12×）",
-  always: "常驻武器，不消耗能量，不受技能强度影响",
+  always: "常驻武器，不消耗能量；技能提供的基础伤害仍按关联形态的强度缩放",
 };
 
 function renderExaltedPanel() {
@@ -10711,13 +10867,14 @@ function renderExaltedPanel() {
     return option;
   }));
   frameSelect.value = state.exaltedLink?.frameId || "";
-  const saved = exaltedWarframeStore()[state.exaltedLink?.frameId] || {};
+  const linkedFrameId = state.exaltedLink?.frameId;
   const configSelect = document.getElementById("build-exalted-config");
   configSelect.replaceChildren(...["A", "B", "C", ""].map((name) => {
+    const saved = name ? warframeStoredConfig(linkedFrameId, name).saved : false;
     const option = document.createElement("option");
     option.value = name;
-    option.textContent = name ? `配置 ${name}${saved[name] ? "" : "（未保存）"}` : "满级无 MOD";
-    option.title = name && !saved[name] ? "战甲配装页这个配置还没保存过，按满级无 MOD 计算" : "";
+    option.textContent = name ? `配置 ${name}${saved ? "" : "（未保存）"}` : "满级无 MOD";
+    option.title = name && !saved ? "战甲配装页这个配置还没保存过，按满级无 MOD 计算" : "";
     return option;
   }));
   configSelect.value = state.exaltedLink?.configName ?? "A";
@@ -10776,8 +10933,11 @@ async function openExaltedFrameConfig() {
   } catch (_error) {
     return;
   }
-  const frame = warframeRows("warframes").find((row) => warframeId(row) === link.frameId);
-  if (frame && warframeId(state.warframeBuild.frame) !== link.frameId) selectWarframeFrame(frame);
+  const form = warframeRows("warframeForms").find((row) => warframeId(row) === link.frameId);
+  const rootId = form?.parentFrameId || link.frameId;
+  const frame = warframeRows("warframes").find((row) => warframeId(row) === rootId);
+  if (frame && warframeId(state.warframeBuild.frame) !== rootId) selectWarframeFrame(frame);
+  switchWarframeForm(form ? warframeId(form) : "main");
   if (/^[ABC]$/.test(link.configName || "")) switchWarframeConfig(link.configName);
 }
 
@@ -10829,7 +10989,7 @@ function bindExaltedControls() {
 function renderWarframeExaltedCard() {
   const host = document.getElementById("warframe-exalted-card");
   if (!host) return;
-  const frameId = warframeId(state.warframeBuild?.frame);
+  const frameId = warframeId(activeWarframeRecord());
   const weapons = (state.catalog?.weapons || []).filter((weapon) => weapon.exalted?.frames?.some((frame) => frame.id === frameId));
   host.hidden = !weapons.length;
   if (!weapons.length) return;

@@ -820,13 +820,21 @@
 
           <section class="warframe-result-pane" aria-label="战甲配装结果">
             <header class="warframe-hud">
-              <div><span>WARFRAME BUILD · RANK 30</span><strong id="warframe-result-name">--</strong></div>
+              <div><span id="warframe-result-kicker">WARFRAME BUILD · RANK 30</span><strong id="warframe-result-name">--</strong></div>
               <div class="warframe-capacity"><span>容量</span><strong id="warframe-capacity-readout">-- / 60</strong><i id="warframe-capacity-bar"></i></div>
               <div><span>极化</span><strong id="warframe-forma-readout">--</strong></div>
             </header>
             <div class="warframe-result-state" id="warframe-loading"><div class="scan-core" aria-hidden="true"><i></i><b></b></div><p>正在载入战甲目录</p></div>
             <div class="warframe-build-content" id="warframe-build-content" hidden>
               <section class="warframe-mod-bench">
+                <section class="warframe-form-switch" id="warframe-form-switch" hidden aria-label="本体与第二形态配装切换">
+                  <div class="warframe-form-switch-copy">
+                    <span>LOADOUT TARGET</span>
+                    <strong>配装目标</strong>
+                    <small id="warframe-form-switch-note">本体与第二形态分别保存独立配置</small>
+                  </div>
+                  <div class="warframe-form-switch-options" id="warframe-form-tabs" role="tablist" aria-label="选择配装目标"></div>
+                </section>
                 <section class="build-config-strip warframe-build-config-strip" aria-label="战甲 A / B / C 配置槽">
                   <div class="config-strip-row">
                     <strong class="config-strip-label">配置槽</strong>
@@ -867,7 +875,7 @@
                   <div class="warframe-arcane-slots" id="warframe-arcane-slots"></div>
                 </div>
                 <div>
-                  <div class="result-section-title"><div><span>ARCHON SHARDS</span><h3>执刑官源力石</h3></div><small>普通 / Tau · 5 槽</small></div>
+                  <div class="result-section-title"><div><span>ARCHON SHARDS</span><h3>执刑官源力石</h3></div><small id="warframe-shard-inheritance-note">普通 / Tau · 5 槽</small></div>
                   <div class="warframe-shard-slots" id="warframe-shard-slots"></div>
                 </div>
               </section>

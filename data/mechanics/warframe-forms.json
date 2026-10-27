@@ -1,0 +1,1566 @@
+{
+  "schemaVersion": 1,
+  "buildLabel": "2026.08.13.13.24",
+  "generatedAtUtc": "2026-10-26T03:21:01.362553+00:00",
+  "forms": [
+    {
+      "id": "/Lotus/Powersuits/Wraith/Reaper",
+      "path": "/Lotus/Powersuits/Wraith/Reaper",
+      "parentFrameId": "/Lotus/Powersuits/Wraith/Wraith",
+      "parentAbilitySlot": 3,
+      "isAlternateForm": true,
+      "formKind": "shadow",
+      "formLabelEn": "Shadow",
+      "formLabelZh": "幽影",
+      "nameEn": "Sevagoth's Shadow",
+      "nameZh": "Sevagoth 的幽影",
+      "description": "Sevagoth 的游魂，由凝聚的虚空能量形成。",
+      "descriptionEn": "Sevagoth's roving spirit, formed from concentrated Void energy.",
+      "basePanel": {
+        "health": 270.0,
+        "shield": 135.0,
+        "armor": 475.0,
+        "energy": 100.0,
+        "sprint": 1.1
+      },
+      "rank30Panel": {
+        "health": 370.0,
+        "shield": 185.0,
+        "armor": 475.0,
+        "energy": 150.0,
+        "sprint": 1.1
+      },
+      "rankGrowth": {
+        "health": 100.0,
+        "shield": 50.0,
+        "energy": 50.0
+      },
+      "rankGrowthSource": "/Lotus/Powersuits/Wraith/ReaperBaseSuit LevelUpgrades",
+      "slotPolarities": {
+        "aura": "AP_ATTACK",
+        "exilus": null,
+        "normal": [
+          null,
+          null,
+          null,
+          "AP_ATTACK",
+          null,
+          null,
+          null,
+          "AP_ATTACK"
+        ]
+      },
+      "slotPolaritySource": "/Lotus/Powersuits/Wraith/Reaper ArtifactSlots",
+      "auraPolarity": "AP_ATTACK",
+      "exilusPolarity": null,
+      "abilities": [
+        {
+          "id": "/Lotus/Powersuits/Wraith/Abilities/ReaperGraspAbility",
+          "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperGraspAbility",
+          "slot": 0,
+          "nameEn": "Embrace",
+          "nameZh": "幽影之拥",
+          "description": "通过幽灵之手把敌人聚成一堆。",
+          "descriptionEn": "Ghostly hands pull enemies into a flailing mass.",
+          "nameTag": "/Lotus/Language/Suits/ReaperGraspAbilityName",
+          "descriptionTag": "/Lotus/Language/Suits/ReaperGraspAbilityDesc",
+          "iconAsset": "/assets/warframes/abilities/EmbraceIcon(xWhite).png",
+          "energyCost": {
+            "activation": 25,
+            "resource": "energy",
+            "sourceKind": "wiki"
+          },
+          "scalars": [
+            {
+              "id": "range_0",
+              "label": "Range",
+              "labelEn": "Range",
+              "labelZh": "范围",
+              "valueTemplate": "{}m",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 20
+              },
+              "values": [
+                20
+              ],
+              "rankCount": 4,
+              "base": 20,
+              "unit": "m",
+              "scale": "range",
+              "modifier": "AVATAR_ABILITY_RANGE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 0,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                10,
+                12,
+                15,
+                20
+              ]
+            },
+            {
+              "id": "duration_1",
+              "label": "Duration",
+              "labelEn": "Duration",
+              "labelZh": "持续时间",
+              "valueTemplate": "{}s",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 8
+              },
+              "values": [
+                8
+              ],
+              "rankCount": 4,
+              "base": 8,
+              "unit": "s",
+              "scale": "duration",
+              "modifier": "AVATAR_ABILITY_DURATION",
+              "group": null,
+              "variant": null,
+              "displayOrder": 1,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "id": "pull_angle_2",
+              "label": "Pull Angle",
+              "labelEn": "Pull Angle",
+              "labelZh": "牵引角度",
+              "valueTemplate": "{}°",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 80
+              },
+              "values": [
+                80
+              ],
+              "rankCount": 1,
+              "base": 80,
+              "unit": "°",
+              "scale": "none",
+              "modifier": "NONE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 2,
+              "isStatic": true,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                80
+              ]
+            }
+          ],
+          "scalarGroups": [],
+          "supportLevel": "full",
+          "sourceEvidence": [
+            {
+              "kind": "wiki",
+              "url": "https://wiki.warframe.com/w/Embrace",
+              "title": "Embrace",
+              "snapshotPath": "WarframeWikiKnowledgeRunner/rollback-cleaning-20260829-014123/work/cleaned/https___wiki_warframe_com_w_Embrace_1a350e1dc335.json",
+              "fragmentHash": "e8da0ba3b197ba92"
+            },
+            {
+              "kind": "packages",
+              "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperGraspAbility",
+              "available": true,
+              "uniquePowerIdentifier": "REAPER_GRASP"
+            },
+            {
+              "kind": "overframe-abilitystats",
+              "url": "https://static.overframe.gg/_next/static/chunks/db/abilitystats.9ea999d1b387ea33.js",
+              "path": "data/overframe_abilitystats.json",
+              "fieldCount": 3,
+              "sha256": "9f21b3088ed833ba9d395c7d8eb22ffd492170c806ab781ad45249f62d93ebe5"
+            }
+          ],
+          "unresolvedFields": [],
+          "validForCalculation": true,
+          "sourceRevision": "2026.08.13.13.24",
+          "sourceUrl": "frozen://packages + frozen://overframe-abilitystats + frozen://wiki",
+          "fetchedAt": "2026-10-26T03:21:01.362553+00:00",
+          "officialExportVersion": "2026.08.13.13.24",
+          "parserHash": "d169a3b8bc4bab8697c4402ada9cdd7bed8a6e2ab404bd7301534096ffa958bc",
+          "localizationHash": "5e7b1ef5ac1bc149eb1f3e85747f8f892bd37ed27fc77799faae8b507d5bca41",
+          "localizationSource": "input://languages-zh + input://languages-en"
+        },
+        {
+          "id": "/Lotus/Powersuits/Wraith/Abilities/ReaperHarvestAbility",
+          "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperHarvestAbility",
+          "slot": 1,
+          "nameEn": "Consume",
+          "nameZh": "亡魂吞噬",
+          "description": "冲刺穿过敌人并撕裂他们的灵魂来治疗幽影。",
+          "descriptionEn": "Dash through enemies and rip out their souls to heal Shadow.",
+          "nameTag": "/Lotus/Language/Suits/ReaperHarvestAbilityName",
+          "descriptionTag": "/Lotus/Language/Suits/ReaperHarvestAbilityDesc",
+          "iconAsset": "/assets/warframes/abilities/ConsumeIcon(xWhite).png",
+          "energyCost": {
+            "activation": 25,
+            "resource": "energy",
+            "sourceKind": "wiki"
+          },
+          "scalars": [
+            {
+              "id": "energy_cost_0",
+              "label": "Energy Cost",
+              "labelEn": "Energy Cost",
+              "labelZh": "能量消耗",
+              "valueTemplate": "{}",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 25
+              },
+              "values": [
+                25
+              ],
+              "rankCount": 4,
+              "base": 25,
+              "unit": "",
+              "scale": "efficiency",
+              "modifier": "AVATAR_ABILITY_EFFICIENCY",
+              "group": null,
+              "variant": null,
+              "displayOrder": 0,
+              "isStatic": false,
+              "isEnergy": true,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                25,
+                25,
+                25,
+                25
+              ]
+            },
+            {
+              "id": "life_steal_1",
+              "label": "Life Steal",
+              "labelEn": "Life Steal",
+              "labelZh": "生命偷取",
+              "valueTemplate": "{}%",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 25
+              },
+              "values": [
+                25
+              ],
+              "rankCount": 4,
+              "base": 25,
+              "unit": "%",
+              "scale": "strength",
+              "modifier": "AVATAR_ABILITY_STRENGTH",
+              "group": null,
+              "variant": null,
+              "displayOrder": 1,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                10,
+                15,
+                20,
+                25
+              ]
+            },
+            {
+              "id": "range_2",
+              "label": "Range",
+              "labelEn": "Range",
+              "labelZh": "锁定范围",
+              "valueTemplate": "{}m",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 14
+              },
+              "values": [
+                14
+              ],
+              "rankCount": 4,
+              "base": 14,
+              "unit": "m",
+              "scale": "range",
+              "modifier": "AVATAR_ABILITY_RANGE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 2,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                5,
+                8,
+                11,
+                14
+              ]
+            },
+            {
+              "id": "untargeted_dash_range_3",
+              "label": "Untargeted Dash Range",
+              "labelEn": "Untargeted Dash Range",
+              "labelZh": "未锁定冲刺范围",
+              "valueTemplate": "{}m",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 30
+              },
+              "values": [
+                30
+              ],
+              "rankCount": 1,
+              "base": 30,
+              "unit": "m",
+              "scale": "none",
+              "modifier": "NONE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 3,
+              "isStatic": true,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                30
+              ]
+            },
+            {
+              "id": "passive_hitpoint_damage_sp_hp_4",
+              "label": "Passive Hitpoint Damage SP/HP",
+              "labelEn": "Passive Hitpoint Damage SP/HP",
+              "labelZh": "被动生命/护盾伤害",
+              "valueTemplate": "{}%",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 100
+              },
+              "values": [
+                100
+              ],
+              "rankCount": 4,
+              "base": 100,
+              "unit": "%",
+              "scale": "none",
+              "modifier": "NONE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 4,
+              "isStatic": true,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                100,
+                100,
+                100,
+                100
+              ]
+            },
+            {
+              "id": "wiki_misc_confusion_duration_0",
+              "label": "confusion duration",
+              "labelEn": "confusion duration",
+              "labelZh": "混乱持续时间",
+              "valueTemplate": "{}s",
+              "valueKeys": [],
+              "parts": {},
+              "values": [],
+              "rankValues": [],
+              "rankCount": 0,
+              "base": null,
+              "unit": "s",
+              "scale": "none",
+              "modifier": "NONE",
+              "displayOrder": 5,
+              "isStatic": true,
+              "displayValue": "?",
+              "sourceKind": "wiki-misc"
+            },
+            {
+              "id": "radiation_damage",
+              "label": "Radiation damage",
+              "labelEn": "Radiation damage",
+              "labelZh": "辐射伤害",
+              "values": [
+                1000,
+                1500,
+                2000,
+                2500
+              ],
+              "rankCount": 4,
+              "base": 2500,
+              "unit": "",
+              "scale": "strength",
+              "sourceKind": "wiki-audited",
+              "rankValues": [
+                1000,
+                1500,
+                2000,
+                2500
+              ]
+            }
+          ],
+          "scalarGroups": [],
+          "supportLevel": "full",
+          "sourceEvidence": [
+            {
+              "kind": "wiki",
+              "url": "https://wiki.warframe.com/w/Consume",
+              "title": "Consume",
+              "snapshotPath": "WarframeWikiKnowledgeRunner/rollback-cleaning-20260829-014123/work/cleaned/https___wiki_warframe_com_w_Consume_7e305a6ecea0.json",
+              "fragmentHash": "b58565ac278a2b3f"
+            },
+            {
+              "kind": "packages",
+              "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperHarvestAbility",
+              "available": true,
+              "uniquePowerIdentifier": "REAPER_HARVEST"
+            },
+            {
+              "kind": "overframe-abilitystats",
+              "url": "https://static.overframe.gg/_next/static/chunks/db/abilitystats.9ea999d1b387ea33.js",
+              "path": "data/overframe_abilitystats.json",
+              "fieldCount": 5,
+              "sha256": "9f21b3088ed833ba9d395c7d8eb22ffd492170c806ab781ad45249f62d93ebe5"
+            }
+          ],
+          "unresolvedFields": [],
+          "validForCalculation": true,
+          "sourceRevision": "2026.08.13.13.24",
+          "sourceUrl": "frozen://packages + frozen://overframe-abilitystats + frozen://wiki",
+          "fetchedAt": "2026-10-26T03:21:01.362553+00:00",
+          "officialExportVersion": "2026.08.13.13.24",
+          "parserHash": "d169a3b8bc4bab8697c4402ada9cdd7bed8a6e2ab404bd7301534096ffa958bc",
+          "localizationHash": "5e7b1ef5ac1bc149eb1f3e85747f8f892bd37ed27fc77799faae8b507d5bca41",
+          "localizationSource": "input://languages-zh + input://languages-en"
+        },
+        {
+          "id": "/Lotus/Powersuits/Wraith/Abilities/ReaperWailAbility",
+          "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperWailAbility",
+          "slot": 2,
+          "nameEn": "Death's Harvest",
+          "nameZh": "死亡收割",
+          "description": "使周围的敌人痛苦不堪。",
+          "descriptionEn": "Inflict nearby enemies with a harrowing condition.",
+          "nameTag": "/Lotus/Language/Suits/ReaperWailAbilityName",
+          "descriptionTag": "/Lotus/Language/Suits/ReaperWailAbilityDesc",
+          "iconAsset": "/assets/warframes/abilities/Death'sHarvestIcon(xWhite).png",
+          "energyCost": {
+            "activation": 75,
+            "resource": "energy",
+            "sourceKind": "packages"
+          },
+          "scalars": [
+            {
+              "id": "energy_cost_0",
+              "label": "Energy Cost",
+              "labelEn": "Energy Cost",
+              "labelZh": "能量消耗",
+              "valueTemplate": "{}",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 75
+              },
+              "values": [
+                75
+              ],
+              "rankCount": 4,
+              "base": 75,
+              "unit": "",
+              "scale": "efficiency",
+              "modifier": "AVATAR_ABILITY_EFFICIENCY",
+              "group": null,
+              "variant": null,
+              "displayOrder": 0,
+              "isStatic": false,
+              "isEnergy": true,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                75,
+                75,
+                75,
+                75
+              ]
+            },
+            {
+              "id": "damage_vulnerability_1",
+              "label": "Damage Vulnerability",
+              "labelEn": "Damage Vulnerability",
+              "labelZh": "易伤加成",
+              "valueTemplate": "{}%",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 50
+              },
+              "values": [
+                50
+              ],
+              "rankCount": 4,
+              "base": 50,
+              "unit": "%",
+              "scale": "strength",
+              "modifier": "AVATAR_ABILITY_STRENGTH",
+              "group": null,
+              "variant": null,
+              "displayOrder": 1,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                10,
+                20,
+                30,
+                50
+              ]
+            },
+            {
+              "id": "range_2",
+              "label": "Range",
+              "labelEn": "Range",
+              "labelZh": "范围",
+              "valueTemplate": "{}m",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 12
+              },
+              "values": [
+                12
+              ],
+              "rankCount": 4,
+              "base": 12,
+              "unit": "m",
+              "scale": "range",
+              "modifier": "AVATAR_ABILITY_RANGE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 2,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                5,
+                8,
+                10,
+                12
+              ]
+            },
+            {
+              "id": "debuff_duration_3",
+              "label": "Debuff Duration",
+              "labelEn": "Debuff Duration",
+              "labelZh": "减益持续时间",
+              "valueTemplate": "{}s",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 10
+              },
+              "values": [
+                10
+              ],
+              "rankCount": 4,
+              "base": 10,
+              "unit": "s",
+              "scale": "duration",
+              "modifier": "AVATAR_ABILITY_DURATION",
+              "group": null,
+              "variant": null,
+              "displayOrder": 3,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                5,
+                7,
+                8,
+                10
+              ]
+            },
+            {
+              "id": "death_well_gain_per_enemy_4",
+              "label": "Death Well Gain Per Enemy",
+              "labelEn": "Death Well Gain Per Enemy",
+              "labelZh": "每个敌人死亡之井充能",
+              "valueTemplate": "{}%",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 5
+              },
+              "values": [
+                5
+              ],
+              "rankCount": 1,
+              "base": 5,
+              "unit": "%",
+              "scale": "none",
+              "modifier": "NONE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 4,
+              "isStatic": true,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                5
+              ]
+            }
+          ],
+          "scalarGroups": [],
+          "supportLevel": "full",
+          "sourceEvidence": [
+            {
+              "kind": "wiki",
+              "url": "https://wiki.warframe.com/w/Death's_Harvest",
+              "title": "Death's Harvest",
+              "snapshotPath": "WarframeWikiKnowledgeRunner/rollback-cleaning-20260829-014123/work/cleaned/https___wiki_warframe_com_w_Death_27s_Harvest_73605ae8cf51.json",
+              "fragmentHash": "f5a7d1f6cda28b74"
+            },
+            {
+              "kind": "packages",
+              "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperWailAbility",
+              "available": true,
+              "numericFields": [
+                "EnergyRequiredToActivate"
+              ],
+              "uniquePowerIdentifier": "REAPER_WAIL"
+            },
+            {
+              "kind": "overframe-abilitystats",
+              "url": "https://static.overframe.gg/_next/static/chunks/db/abilitystats.9ea999d1b387ea33.js",
+              "path": "data/overframe_abilitystats.json",
+              "fieldCount": 5,
+              "sha256": "9f21b3088ed833ba9d395c7d8eb22ffd492170c806ab781ad45249f62d93ebe5"
+            }
+          ],
+          "unresolvedFields": [],
+          "validForCalculation": true,
+          "sourceRevision": "2026.08.13.13.24",
+          "sourceUrl": "frozen://packages + frozen://overframe-abilitystats + frozen://wiki",
+          "fetchedAt": "2026-10-26T03:21:01.362553+00:00",
+          "officialExportVersion": "2026.08.13.13.24",
+          "parserHash": "d169a3b8bc4bab8697c4402ada9cdd7bed8a6e2ab404bd7301534096ffa958bc",
+          "localizationHash": "5e7b1ef5ac1bc149eb1f3e85747f8f892bd37ed27fc77799faae8b507d5bca41",
+          "localizationSource": "input://languages-zh + input://languages-en"
+        },
+        {
+          "id": "/Lotus/Powersuits/Wraith/Abilities/ReaperWraithAbility",
+          "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperWraithAbility",
+          "slot": 3,
+          "nameEn": "Reunite",
+          "nameZh": "重聚",
+          "description": "Sevagoth 和他的幽影合为一体。",
+          "descriptionEn": "Sevagoth and his Shadow become one.",
+          "nameTag": "/Lotus/Language/Suits/ReaperWraithAbilityName",
+          "descriptionTag": "/Lotus/Language/Suits/ReaperWraithAbilityDesc",
+          "iconAsset": "/assets/warframes/abilities/ReuniteIcon(xWhite).png",
+          "energyCost": null,
+          "scalars": [
+            {
+              "id": "wiki_misc_teleport_range_0",
+              "label": "teleport range",
+              "labelEn": "teleport range",
+              "labelZh": "重聚传送范围",
+              "valueTemplate": "{}",
+              "valueKeys": [],
+              "parts": {},
+              "values": [],
+              "rankValues": [],
+              "rankCount": 0,
+              "base": null,
+              "unit": "",
+              "scale": "none",
+              "modifier": "NONE",
+              "displayOrder": 1000,
+              "isStatic": true,
+              "displayValue": "∞",
+              "sourceKind": "wiki-misc"
+            }
+          ],
+          "scalarGroups": [],
+          "supportLevel": "partial",
+          "sourceEvidence": [
+            {
+              "kind": "wiki",
+              "url": "https://wiki.warframe.com/w/Reunite",
+              "title": "Reunite",
+              "snapshotPath": "WarframeWikiKnowledgeRunner/rollback-cleaning-20260829-014123/work/cleaned/https___wiki_warframe_com_w_Reunite_04d7da46911b.json",
+              "fragmentHash": "189626b56bf52bec"
+            },
+            {
+              "kind": "packages",
+              "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperWraithAbility",
+              "available": true,
+              "numericFields": [
+                "EnergyRequiredToActivate",
+                "Script._timeBetweenTransform"
+              ],
+              "uniquePowerIdentifier": "REAPER_WRAITH"
+            }
+          ],
+          "unresolvedFields": [
+            "wiki article has no explicit four-rank numeric vector"
+          ],
+          "validForCalculation": true,
+          "sourceRevision": "2026.08.13.13.24",
+          "sourceUrl": "frozen://packages + frozen://overframe-abilitystats + frozen://wiki",
+          "fetchedAt": "2026-10-26T03:21:01.362553+00:00",
+          "officialExportVersion": "2026.08.13.13.24",
+          "parserHash": "d169a3b8bc4bab8697c4402ada9cdd7bed8a6e2ab404bd7301534096ffa958bc",
+          "localizationHash": "5e7b1ef5ac1bc149eb1f3e85747f8f892bd37ed27fc77799faae8b507d5bca41",
+          "localizationSource": "input://languages-zh + input://languages-en"
+        }
+      ],
+      "passive": "",
+      "passiveEn": "",
+      "portraitAsset": "/assets/warframes/portraits/WraithReaper.png",
+      "iconAsset": "/assets/warframes/portraits/WraithReaper.png",
+      "masteryReq": 0,
+      "inheritance": {
+        "shardsFromParent": true,
+        "invigorationFromParent": true,
+        "helminth": false
+      },
+      "exaltedWeapons": [
+        "/Lotus/Powersuits/Wraith/ReaperMeleeWeapon"
+      ],
+      "sourceEvidence": [
+        {
+          "kind": "packages",
+          "path": "/Lotus/Powersuits/Wraith/Reaper"
+        },
+        {
+          "kind": "packages",
+          "path": "/Lotus/Powersuits/Wraith/ReaperBaseSuit"
+        },
+        {
+          "kind": "overframe",
+          "url": "https://overframe.gg/items/arsenal/5443/"
+        },
+        {
+          "kind": "wiki",
+          "url": "https://wiki.warframe.com/w/Exalted_Shadow"
+        }
+      ],
+      "sourceRevision": "2026.08.13.13.24",
+      "sourceUrl": "frozen://packages + frozen://overframe-abilitystats + frozen://wiki",
+      "fetchedAt": "2026-10-26T03:21:01.362553+00:00",
+      "officialExportVersion": "2026.08.13.13.24",
+      "parserHash": "d169a3b8bc4bab8697c4402ada9cdd7bed8a6e2ab404bd7301534096ffa958bc",
+      "localizationHash": "5e7b1ef5ac1bc149eb1f3e85747f8f892bd37ed27fc77799faae8b507d5bca41",
+      "localizationSource": "input://languages-zh + input://languages-en"
+    },
+    {
+      "id": "/Lotus/Powersuits/Wraith/SevagothShadowPrime",
+      "path": "/Lotus/Powersuits/Wraith/SevagothShadowPrime",
+      "parentFrameId": "/Lotus/Powersuits/Wraith/SevagothPrime",
+      "parentAbilitySlot": 3,
+      "isAlternateForm": true,
+      "formKind": "shadow",
+      "formLabelEn": "Shadow",
+      "formLabelZh": "幽影",
+      "nameEn": "Sevagoth Prime's Shadow",
+      "nameZh": "Sevagoth Prime 的幽影",
+      "description": "当「风暴使者号」成为虚空诡舰，Sevagoth 舍弃身躯，化为幽影来继续肩负庄严的救援职责。",
+      "descriptionEn": "When the Tempestarii became a void phantom, Sevagoth set aside his body and became a Shadow, to continue his solemn duty of saving lives.",
+      "basePanel": {
+        "health": 270.0,
+        "shield": 135.0,
+        "armor": 475.0,
+        "energy": 100.0,
+        "sprint": 1.1
+      },
+      "rank30Panel": {
+        "health": 370.0,
+        "shield": 185.0,
+        "armor": 475.0,
+        "energy": 150.0,
+        "sprint": 1.1
+      },
+      "rankGrowth": {
+        "health": 100.0,
+        "shield": 50.0,
+        "energy": 50.0
+      },
+      "rankGrowthSource": "/Lotus/Powersuits/Wraith/ReaperBaseSuit LevelUpgrades",
+      "slotPolarities": {
+        "aura": "AP_ATTACK",
+        "exilus": null,
+        "normal": [
+          "AP_ATTACK",
+          null,
+          null,
+          "AP_ATTACK",
+          "AP_TACTIC",
+          null,
+          null,
+          "AP_DEFENSE"
+        ]
+      },
+      "slotPolaritySource": "/Lotus/Powersuits/Wraith/SevagothShadowPrime ArtifactSlots",
+      "auraPolarity": "AP_ATTACK",
+      "exilusPolarity": null,
+      "abilities": [
+        {
+          "id": "/Lotus/Powersuits/Wraith/Abilities/ReaperGraspAbility",
+          "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperGraspAbility",
+          "slot": 0,
+          "nameEn": "Embrace",
+          "nameZh": "幽影之拥",
+          "description": "通过幽灵之手把敌人聚成一堆。",
+          "descriptionEn": "Ghostly hands pull enemies into a flailing mass.",
+          "nameTag": "/Lotus/Language/Suits/ReaperGraspAbilityName",
+          "descriptionTag": "/Lotus/Language/Suits/ReaperGraspAbilityDesc",
+          "iconAsset": "/assets/warframes/abilities/EmbraceIcon(xWhite).png",
+          "energyCost": {
+            "activation": 25,
+            "resource": "energy",
+            "sourceKind": "wiki"
+          },
+          "scalars": [
+            {
+              "id": "range_0",
+              "label": "Range",
+              "labelEn": "Range",
+              "labelZh": "范围",
+              "valueTemplate": "{}m",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 20
+              },
+              "values": [
+                20
+              ],
+              "rankCount": 4,
+              "base": 20,
+              "unit": "m",
+              "scale": "range",
+              "modifier": "AVATAR_ABILITY_RANGE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 0,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                10,
+                12,
+                15,
+                20
+              ]
+            },
+            {
+              "id": "duration_1",
+              "label": "Duration",
+              "labelEn": "Duration",
+              "labelZh": "持续时间",
+              "valueTemplate": "{}s",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 8
+              },
+              "values": [
+                8
+              ],
+              "rankCount": 4,
+              "base": 8,
+              "unit": "s",
+              "scale": "duration",
+              "modifier": "AVATAR_ABILITY_DURATION",
+              "group": null,
+              "variant": null,
+              "displayOrder": 1,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                5,
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "id": "pull_angle_2",
+              "label": "Pull Angle",
+              "labelEn": "Pull Angle",
+              "labelZh": "牵引角度",
+              "valueTemplate": "{}°",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 80
+              },
+              "values": [
+                80
+              ],
+              "rankCount": 1,
+              "base": 80,
+              "unit": "°",
+              "scale": "none",
+              "modifier": "NONE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 2,
+              "isStatic": true,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                80
+              ]
+            }
+          ],
+          "scalarGroups": [],
+          "supportLevel": "full",
+          "sourceEvidence": [
+            {
+              "kind": "wiki",
+              "url": "https://wiki.warframe.com/w/Embrace",
+              "title": "Embrace",
+              "snapshotPath": "WarframeWikiKnowledgeRunner/rollback-cleaning-20260829-014123/work/cleaned/https___wiki_warframe_com_w_Embrace_1a350e1dc335.json",
+              "fragmentHash": "e8da0ba3b197ba92"
+            },
+            {
+              "kind": "packages",
+              "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperGraspAbility",
+              "available": true,
+              "uniquePowerIdentifier": "REAPER_GRASP"
+            },
+            {
+              "kind": "overframe-abilitystats",
+              "url": "https://static.overframe.gg/_next/static/chunks/db/abilitystats.9ea999d1b387ea33.js",
+              "path": "data/overframe_abilitystats.json",
+              "fieldCount": 3,
+              "sha256": "9f21b3088ed833ba9d395c7d8eb22ffd492170c806ab781ad45249f62d93ebe5"
+            }
+          ],
+          "unresolvedFields": [],
+          "validForCalculation": true,
+          "sourceRevision": "2026.08.13.13.24",
+          "sourceUrl": "frozen://packages + frozen://overframe-abilitystats + frozen://wiki",
+          "fetchedAt": "2026-10-26T03:21:01.362553+00:00",
+          "officialExportVersion": "2026.08.13.13.24",
+          "parserHash": "d169a3b8bc4bab8697c4402ada9cdd7bed8a6e2ab404bd7301534096ffa958bc",
+          "localizationHash": "5e7b1ef5ac1bc149eb1f3e85747f8f892bd37ed27fc77799faae8b507d5bca41",
+          "localizationSource": "input://languages-zh + input://languages-en"
+        },
+        {
+          "id": "/Lotus/Powersuits/Wraith/Abilities/ReaperHarvestAbility",
+          "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperHarvestAbility",
+          "slot": 1,
+          "nameEn": "Consume",
+          "nameZh": "亡魂吞噬",
+          "description": "冲刺穿过敌人并撕裂他们的灵魂来治疗幽影。",
+          "descriptionEn": "Dash through enemies and rip out their souls to heal Shadow.",
+          "nameTag": "/Lotus/Language/Suits/ReaperHarvestAbilityName",
+          "descriptionTag": "/Lotus/Language/Suits/ReaperHarvestAbilityDesc",
+          "iconAsset": "/assets/warframes/abilities/ConsumeIcon(xWhite).png",
+          "energyCost": {
+            "activation": 25,
+            "resource": "energy",
+            "sourceKind": "wiki"
+          },
+          "scalars": [
+            {
+              "id": "energy_cost_0",
+              "label": "Energy Cost",
+              "labelEn": "Energy Cost",
+              "labelZh": "能量消耗",
+              "valueTemplate": "{}",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 25
+              },
+              "values": [
+                25
+              ],
+              "rankCount": 4,
+              "base": 25,
+              "unit": "",
+              "scale": "efficiency",
+              "modifier": "AVATAR_ABILITY_EFFICIENCY",
+              "group": null,
+              "variant": null,
+              "displayOrder": 0,
+              "isStatic": false,
+              "isEnergy": true,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                25,
+                25,
+                25,
+                25
+              ]
+            },
+            {
+              "id": "life_steal_1",
+              "label": "Life Steal",
+              "labelEn": "Life Steal",
+              "labelZh": "生命偷取",
+              "valueTemplate": "{}%",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 25
+              },
+              "values": [
+                25
+              ],
+              "rankCount": 4,
+              "base": 25,
+              "unit": "%",
+              "scale": "strength",
+              "modifier": "AVATAR_ABILITY_STRENGTH",
+              "group": null,
+              "variant": null,
+              "displayOrder": 1,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                10,
+                15,
+                20,
+                25
+              ]
+            },
+            {
+              "id": "range_2",
+              "label": "Range",
+              "labelEn": "Range",
+              "labelZh": "锁定范围",
+              "valueTemplate": "{}m",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 14
+              },
+              "values": [
+                14
+              ],
+              "rankCount": 4,
+              "base": 14,
+              "unit": "m",
+              "scale": "range",
+              "modifier": "AVATAR_ABILITY_RANGE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 2,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                5,
+                8,
+                11,
+                14
+              ]
+            },
+            {
+              "id": "untargeted_dash_range_3",
+              "label": "Untargeted Dash Range",
+              "labelEn": "Untargeted Dash Range",
+              "labelZh": "未锁定冲刺范围",
+              "valueTemplate": "{}m",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 30
+              },
+              "values": [
+                30
+              ],
+              "rankCount": 1,
+              "base": 30,
+              "unit": "m",
+              "scale": "none",
+              "modifier": "NONE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 3,
+              "isStatic": true,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                30
+              ]
+            },
+            {
+              "id": "passive_hitpoint_damage_sp_hp_4",
+              "label": "Passive Hitpoint Damage SP/HP",
+              "labelEn": "Passive Hitpoint Damage SP/HP",
+              "labelZh": "被动生命/护盾伤害",
+              "valueTemplate": "{}%",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 100
+              },
+              "values": [
+                100
+              ],
+              "rankCount": 4,
+              "base": 100,
+              "unit": "%",
+              "scale": "none",
+              "modifier": "NONE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 4,
+              "isStatic": true,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                100,
+                100,
+                100,
+                100
+              ]
+            },
+            {
+              "id": "wiki_misc_confusion_duration_0",
+              "label": "confusion duration",
+              "labelEn": "confusion duration",
+              "labelZh": "混乱持续时间",
+              "valueTemplate": "{}s",
+              "valueKeys": [],
+              "parts": {},
+              "values": [],
+              "rankValues": [],
+              "rankCount": 0,
+              "base": null,
+              "unit": "s",
+              "scale": "none",
+              "modifier": "NONE",
+              "displayOrder": 5,
+              "isStatic": true,
+              "displayValue": "?",
+              "sourceKind": "wiki-misc"
+            },
+            {
+              "id": "radiation_damage",
+              "label": "Radiation damage",
+              "labelEn": "Radiation damage",
+              "labelZh": "辐射伤害",
+              "values": [
+                1000,
+                1500,
+                2000,
+                2500
+              ],
+              "rankCount": 4,
+              "base": 2500,
+              "unit": "",
+              "scale": "strength",
+              "sourceKind": "wiki-audited",
+              "rankValues": [
+                1000,
+                1500,
+                2000,
+                2500
+              ]
+            }
+          ],
+          "scalarGroups": [],
+          "supportLevel": "full",
+          "sourceEvidence": [
+            {
+              "kind": "wiki",
+              "url": "https://wiki.warframe.com/w/Consume",
+              "title": "Consume",
+              "snapshotPath": "WarframeWikiKnowledgeRunner/rollback-cleaning-20260829-014123/work/cleaned/https___wiki_warframe_com_w_Consume_7e305a6ecea0.json",
+              "fragmentHash": "b58565ac278a2b3f"
+            },
+            {
+              "kind": "packages",
+              "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperHarvestAbility",
+              "available": true,
+              "uniquePowerIdentifier": "REAPER_HARVEST"
+            },
+            {
+              "kind": "overframe-abilitystats",
+              "url": "https://static.overframe.gg/_next/static/chunks/db/abilitystats.9ea999d1b387ea33.js",
+              "path": "data/overframe_abilitystats.json",
+              "fieldCount": 5,
+              "sha256": "9f21b3088ed833ba9d395c7d8eb22ffd492170c806ab781ad45249f62d93ebe5"
+            }
+          ],
+          "unresolvedFields": [],
+          "validForCalculation": true,
+          "sourceRevision": "2026.08.13.13.24",
+          "sourceUrl": "frozen://packages + frozen://overframe-abilitystats + frozen://wiki",
+          "fetchedAt": "2026-10-26T03:21:01.362553+00:00",
+          "officialExportVersion": "2026.08.13.13.24",
+          "parserHash": "d169a3b8bc4bab8697c4402ada9cdd7bed8a6e2ab404bd7301534096ffa958bc",
+          "localizationHash": "5e7b1ef5ac1bc149eb1f3e85747f8f892bd37ed27fc77799faae8b507d5bca41",
+          "localizationSource": "input://languages-zh + input://languages-en"
+        },
+        {
+          "id": "/Lotus/Powersuits/Wraith/Abilities/ReaperWailAbility",
+          "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperWailAbility",
+          "slot": 2,
+          "nameEn": "Death's Harvest",
+          "nameZh": "死亡收割",
+          "description": "使周围的敌人痛苦不堪。",
+          "descriptionEn": "Inflict nearby enemies with a harrowing condition.",
+          "nameTag": "/Lotus/Language/Suits/ReaperWailAbilityName",
+          "descriptionTag": "/Lotus/Language/Suits/ReaperWailAbilityDesc",
+          "iconAsset": "/assets/warframes/abilities/Death'sHarvestIcon(xWhite).png",
+          "energyCost": {
+            "activation": 75,
+            "resource": "energy",
+            "sourceKind": "packages"
+          },
+          "scalars": [
+            {
+              "id": "energy_cost_0",
+              "label": "Energy Cost",
+              "labelEn": "Energy Cost",
+              "labelZh": "能量消耗",
+              "valueTemplate": "{}",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 75
+              },
+              "values": [
+                75
+              ],
+              "rankCount": 4,
+              "base": 75,
+              "unit": "",
+              "scale": "efficiency",
+              "modifier": "AVATAR_ABILITY_EFFICIENCY",
+              "group": null,
+              "variant": null,
+              "displayOrder": 0,
+              "isStatic": false,
+              "isEnergy": true,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                75,
+                75,
+                75,
+                75
+              ]
+            },
+            {
+              "id": "damage_vulnerability_1",
+              "label": "Damage Vulnerability",
+              "labelEn": "Damage Vulnerability",
+              "labelZh": "易伤加成",
+              "valueTemplate": "{}%",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 50
+              },
+              "values": [
+                50
+              ],
+              "rankCount": 4,
+              "base": 50,
+              "unit": "%",
+              "scale": "strength",
+              "modifier": "AVATAR_ABILITY_STRENGTH",
+              "group": null,
+              "variant": null,
+              "displayOrder": 1,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                10,
+                20,
+                30,
+                50
+              ]
+            },
+            {
+              "id": "range_2",
+              "label": "Range",
+              "labelEn": "Range",
+              "labelZh": "范围",
+              "valueTemplate": "{}m",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 12
+              },
+              "values": [
+                12
+              ],
+              "rankCount": 4,
+              "base": 12,
+              "unit": "m",
+              "scale": "range",
+              "modifier": "AVATAR_ABILITY_RANGE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 2,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                5,
+                8,
+                10,
+                12
+              ]
+            },
+            {
+              "id": "debuff_duration_3",
+              "label": "Debuff Duration",
+              "labelEn": "Debuff Duration",
+              "labelZh": "减益持续时间",
+              "valueTemplate": "{}s",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 10
+              },
+              "values": [
+                10
+              ],
+              "rankCount": 4,
+              "base": 10,
+              "unit": "s",
+              "scale": "duration",
+              "modifier": "AVATAR_ABILITY_DURATION",
+              "group": null,
+              "variant": null,
+              "displayOrder": 3,
+              "isStatic": false,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                5,
+                7,
+                8,
+                10
+              ]
+            },
+            {
+              "id": "death_well_gain_per_enemy_4",
+              "label": "Death Well Gain Per Enemy",
+              "labelEn": "Death Well Gain Per Enemy",
+              "labelZh": "每个敌人死亡之井充能",
+              "valueTemplate": "{}%",
+              "valueKeys": [
+                "val1"
+              ],
+              "parts": {
+                "val1": 5
+              },
+              "values": [
+                5
+              ],
+              "rankCount": 1,
+              "base": 5,
+              "unit": "%",
+              "scale": "none",
+              "modifier": "NONE",
+              "group": null,
+              "variant": null,
+              "displayOrder": 4,
+              "isStatic": true,
+              "isEnergy": false,
+              "sourceKind": "overframe-abilitystats",
+              "rankValues": [
+                5
+              ]
+            }
+          ],
+          "scalarGroups": [],
+          "supportLevel": "full",
+          "sourceEvidence": [
+            {
+              "kind": "wiki",
+              "url": "https://wiki.warframe.com/w/Death's_Harvest",
+              "title": "Death's Harvest",
+              "snapshotPath": "WarframeWikiKnowledgeRunner/rollback-cleaning-20260829-014123/work/cleaned/https___wiki_warframe_com_w_Death_27s_Harvest_73605ae8cf51.json",
+              "fragmentHash": "f5a7d1f6cda28b74"
+            },
+            {
+              "kind": "packages",
+              "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperWailAbility",
+              "available": true,
+              "numericFields": [
+                "EnergyRequiredToActivate"
+              ],
+              "uniquePowerIdentifier": "REAPER_WAIL"
+            },
+            {
+              "kind": "overframe-abilitystats",
+              "url": "https://static.overframe.gg/_next/static/chunks/db/abilitystats.9ea999d1b387ea33.js",
+              "path": "data/overframe_abilitystats.json",
+              "fieldCount": 5,
+              "sha256": "9f21b3088ed833ba9d395c7d8eb22ffd492170c806ab781ad45249f62d93ebe5"
+            }
+          ],
+          "unresolvedFields": [],
+          "validForCalculation": true,
+          "sourceRevision": "2026.08.13.13.24",
+          "sourceUrl": "frozen://packages + frozen://overframe-abilitystats + frozen://wiki",
+          "fetchedAt": "2026-10-26T03:21:01.362553+00:00",
+          "officialExportVersion": "2026.08.13.13.24",
+          "parserHash": "d169a3b8bc4bab8697c4402ada9cdd7bed8a6e2ab404bd7301534096ffa958bc",
+          "localizationHash": "5e7b1ef5ac1bc149eb1f3e85747f8f892bd37ed27fc77799faae8b507d5bca41",
+          "localizationSource": "input://languages-zh + input://languages-en"
+        },
+        {
+          "id": "/Lotus/Powersuits/Wraith/Abilities/ReaperWraithAbility",
+          "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperWraithAbility",
+          "slot": 3,
+          "nameEn": "Reunite",
+          "nameZh": "重聚",
+          "description": "Sevagoth 和他的幽影合为一体。",
+          "descriptionEn": "Sevagoth and his Shadow become one.",
+          "nameTag": "/Lotus/Language/Suits/ReaperWraithAbilityName",
+          "descriptionTag": "/Lotus/Language/Suits/ReaperWraithAbilityDesc",
+          "iconAsset": "/assets/warframes/abilities/ReuniteIcon(xWhite).png",
+          "energyCost": null,
+          "scalars": [
+            {
+              "id": "wiki_misc_teleport_range_0",
+              "label": "teleport range",
+              "labelEn": "teleport range",
+              "labelZh": "重聚传送范围",
+              "valueTemplate": "{}",
+              "valueKeys": [],
+              "parts": {},
+              "values": [],
+              "rankValues": [],
+              "rankCount": 0,
+              "base": null,
+              "unit": "",
+              "scale": "none",
+              "modifier": "NONE",
+              "displayOrder": 1000,
+              "isStatic": true,
+              "displayValue": "∞",
+              "sourceKind": "wiki-misc"
+            }
+          ],
+          "scalarGroups": [],
+          "supportLevel": "partial",
+          "sourceEvidence": [
+            {
+              "kind": "wiki",
+              "url": "https://wiki.warframe.com/w/Reunite",
+              "title": "Reunite",
+              "snapshotPath": "WarframeWikiKnowledgeRunner/rollback-cleaning-20260829-014123/work/cleaned/https___wiki_warframe_com_w_Reunite_04d7da46911b.json",
+              "fragmentHash": "189626b56bf52bec"
+            },
+            {
+              "kind": "packages",
+              "path": "/Lotus/Powersuits/Wraith/Abilities/ReaperWraithAbility",
+              "available": true,
+              "numericFields": [
+                "EnergyRequiredToActivate",
+                "Script._timeBetweenTransform"
+              ],
+              "uniquePowerIdentifier": "REAPER_WRAITH"
+            }
+          ],
+          "unresolvedFields": [
+            "wiki article has no explicit four-rank numeric vector"
+          ],
+          "validForCalculation": true,
+          "sourceRevision": "2026.08.13.13.24",
+          "sourceUrl": "frozen://packages + frozen://overframe-abilitystats + frozen://wiki",
+          "fetchedAt": "2026-10-26T03:21:01.362553+00:00",
+          "officialExportVersion": "2026.08.13.13.24",
+          "parserHash": "d169a3b8bc4bab8697c4402ada9cdd7bed8a6e2ab404bd7301534096ffa958bc",
+          "localizationHash": "5e7b1ef5ac1bc149eb1f3e85747f8f892bd37ed27fc77799faae8b507d5bca41",
+          "localizationSource": "input://languages-zh + input://languages-en"
+        }
+      ],
+      "passive": "",
+      "passiveEn": "",
+      "portraitAsset": "/assets/warframes/portraits/SevagothShadowPrime.png",
+      "iconAsset": "/assets/warframes/portraits/SevagothShadowPrime.png",
+      "masteryReq": 0,
+      "inheritance": {
+        "shardsFromParent": true,
+        "invigorationFromParent": true,
+        "helminth": false
+      },
+      "exaltedWeapons": [
+        "/Lotus/Powersuits/Wraith/SevagothShadowPrimeClawsWeapon"
+      ],
+      "sourceEvidence": [
+        {
+          "kind": "packages",
+          "path": "/Lotus/Powersuits/Wraith/SevagothShadowPrime"
+        },
+        {
+          "kind": "packages",
+          "path": "/Lotus/Powersuits/Wraith/ReaperBaseSuit"
+        },
+        {
+          "kind": "wiki",
+          "url": "https://wiki.warframe.com/w/Exalted_Shadow"
+        }
+      ],
+      "sourceRevision": "2026.08.13.13.24",
+      "sourceUrl": "frozen://packages + frozen://overframe-abilitystats + frozen://wiki",
+      "fetchedAt": "2026-10-26T03:21:01.362553+00:00",
+      "officialExportVersion": "2026.08.13.13.24",
+      "parserHash": "d169a3b8bc4bab8697c4402ada9cdd7bed8a6e2ab404bd7301534096ffa958bc",
+      "localizationHash": "5e7b1ef5ac1bc149eb1f3e85747f8f892bd37ed27fc77799faae8b507d5bca41",
+      "localizationSource": "input://languages-zh + input://languages-en"
+    }
+  ],
+  "audit": {
+    "missingAssets": []
+  }
+}

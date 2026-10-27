@@ -19,6 +19,7 @@ A local Warframe Riven analyzer, weapon loadout builder, and Warframe loadout bu
 - **Riven disposition (2026-10-23)**: every Riven weapon uses 1.2; the old value is shown in brackets.
 - **Riven vault**: save Rivens across weapons, browse them by weapon, load one into analysis or a build in one click, and export / import the list.
 - **Warframe loadouts**: supports Aura, Exilus and normal mods, Arcanes, Archon Shards, Helminth abilities, Invigorations, conditional effects, capacity, and ability-panel calculations.
+- **Alternate-form loadouts**: Sevagoth / Sevagoth Prime have independent carrier and Shadow A/B/C configs, MODs, Arcanes, polarities, and ability scaling. The Shadow inherits the carrier's shards and Invigoration in the same config slot, and Shadow Claws read the Shadow build. Legacy saves and exalted links migrate automatically.
 - **Target simulation**: includes a local enemy catalog, custom defenses, level scaling, Steel Path, Eximus and Overguard options, armor strip, headshots, and multiple damage metrics.
 - **Local assets**: card art, frames, polarities, Warframe portraits, ability icons, and datasets ship with the project. Configurations can be imported or exported, including the compact Warframe Rabbit format.
 - **Explicit degradation**: unsupported runtime scripts, projectile components, and conditional mechanics remain visible as `unsupported` / `skipped` diagnostics instead of being guessed.

@@ -232,6 +232,9 @@ def prepare(root: Path, config: Path) -> Path:
     run_stage(stage, "generate_warframe_data.py", "--build", build, "--export-dir", export, "--raw", raw, "--items", items,
               "--localization", languages / "zh.json", "--wiki", inputs["wikiSnapshot"], "--rabbit-assets", inputs["artRoot"],
               "--rabbit-mods", inputs["modIndex"], "--output", catalog)
+    run_stage(stage, "tools/import_warframe_forms.py", "--raw", raw,
+              "--localization", languages / "zh.json", "--localization-en", languages / "en.json",
+              "--items", items, "--art-root", inputs["completeArtRoot"], "--wiki", inputs["wikiSnapshot"], "--catalog", catalog)
     run_stage(stage, "tools/extract_ability_luau_ir.py", "--catalog", catalog, "--packages-root", raw, "--font-root", inputs["fontRoot"],
               "--localization-en", languages / "en.json", "--localization-zh", languages / "zh.json", "--wiki", inputs["wikiSnapshot"], "--output", runtime)
     run_stage(stage, "tools/diff_ability_runtime_fields.py", "--catalog", catalog, "--runtime", runtime, "--output", stage / "data/ability_runtime_diff.json")

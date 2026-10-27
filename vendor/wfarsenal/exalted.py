@@ -31,6 +31,27 @@ def meta(weapon: Mapping[str, Any]) -> Mapping[str, Any] | None:
     return block if isinstance(block, Mapping) else None
 
 
+def linked_frame_paths(catalog: Mapping[str, Any], weapon: Mapping[str, Any]) -> list[str]:
+    """Map legacy carrier ids to the independently moddable form of a weapon.
+
+    Before alternate forms existed, Shadow Claws pointed at Sevagoth itself.
+    Keep that old link as a migration input, but resolve it to the Shadow whose
+    own Strength/Aura/Arcanes actually drive the claws. Other exalted weapons
+    retain their original carrier unchanged.
+    """
+    block = meta(weapon) or {}
+    weapon_path = str(weapon.get("path") or "")
+    forms = [row for row in catalog.get("warframeForms") or () if isinstance(row, Mapping)]
+    result: list[str] = []
+    for original in block.get("framePaths") or ():
+        replacement = next((row for row in forms if str(row.get("parentFrameId") or "") == str(original)
+                            and weapon_path in (row.get("exaltedWeapons") or ())), None)
+        resolved = str((replacement or {}).get("id") or (replacement or {}).get("path") or original)
+        if resolved not in result:
+            result.append(resolved)
+    return result
+
+
 # Exalted weapons that never land a headshot bonus (client Packages.bin):
 # Regulators fire through LotusCustomAimFireBehavior (RequiresTarget=1), which
 # locks a target and aims at its aimAtPart = TORSO; Lizzie's impact behaviour
@@ -83,10 +104,29 @@ def frame_context(engine: Any, weapon: Mapping[str, Any], link: Any) -> dict[str
     """
     block = meta(weapon) or {}
     link = link if isinstance(link, Mapping) else {}
-    frame_id = link.get("frameId") or next(iter(block.get("framePaths") or ()), None)
+    linked_paths = linked_frame_paths(engine.catalog, weapon)
+    original_paths = [str(value) for value in block.get("framePaths") or ()]
+    requested = str(link.get("frameId") or "")
+    if requested in linked_paths:
+        frame_id = requested
+    elif requested in original_paths:
+        # Legacy saved links used the carrier rather than its second form.
+        frame_id = linked_paths[original_paths.index(requested)]
+    elif requested:
+        raise ValueError(f"frameId is not linked to this exalted weapon: {requested}")
+    else:
+        frame_id = next(iter(linked_paths), None)
     if not frame_id:
         raise ValueError("exalted weapon has no frame")
-    result = engine.calculate(warframe_request(str(frame_id), link.get("config")))
+    request = warframe_request(str(frame_id), link.get("config"))
+    form = engine.form_record(frame_id) if hasattr(engine, "form_record") else None
+    if form and isinstance(link.get("parentConfig"), Mapping):
+        inherited = warframe_request(str(form.get("parentFrameId")), link.get("parentConfig"))
+        # The Shadow owns MODs/Aura/Arcanes, but uses the carrier's shards and
+        # Invigoration. Never merge the carrier's Strength/MODs into this build.
+        for key in ("shards", "invigoration"):
+            request[key] = inherited.get(key) or []
+    result = engine.calculate(request)
     return context_from_result(result, weapon, frame_id, link)
 
 
@@ -110,6 +150,8 @@ def context_from_result(result: Mapping[str, Any], weapon: Mapping[str, Any], fr
         "abilityReplaced": replaced,
         "frameId": frame.get("id") or frame_id,
         "frameName": frame.get("nameZh") or frame.get("nameEn") or frame_id,
+        "parentFrameId": frame.get("parentFrameId"),
+        "formKind": frame.get("formKind"),
         "configName": link.get("configName") if isinstance(link.get("configName"), str) else None,
         "configured": isinstance(link.get("config"), Mapping),
         "panel": {key: _number(panel.get(key)) for key in (
