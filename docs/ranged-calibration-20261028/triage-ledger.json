@@ -1,0 +1,1518 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-10-28",
+  "scope": "named-ranged-weapons-with-known-limitations-or-priority-audit-candidates",
+  "count": 62,
+  "countsAre": "Triage lower bound; includes variants and spatial scope candidates. Not a count of broken weapons or uncalibrated gameplay percentage.",
+  "baseline": {
+    "weaponRecords": 399,
+    "weaponRecordsWithNoModes": 6,
+    "explicitModes": 607,
+    "evaluableModes": 600,
+    "excludedOrMissing": {
+      "auxiliary-melee-excluded": 6,
+      "missing-damage-data": 1
+    },
+    "weaponsWithExplicitGaps": 13,
+    "evaluableModesWithExplicitGaps": 14,
+    "modesWithNoReportedGap": 586,
+    "nativeStaticSpecialEvidenceModes": 94,
+    "referenceOnlySpecialEvidenceModes": 87,
+    "modesWithCOReference": 517,
+    "contextRequiredModes": 17,
+    "prepareErrors": 0,
+    "fullGameplayCalibration": "not-established-by-this-inventory",
+    "reasons": [
+      {
+        "reason": "quanta-cube-chain-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "quanta-idle-detonation-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "quanta-player-shot-detonation-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "alternox-host-death-lifecycle-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-instant-detonation-order-idealized",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-multishot-active-cap-unresolved",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-same-time-expiry-order-fixed-explosion-first",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-ammo-efficiency-integer-accounting-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-charge-completion-buff-snapshot-boundary-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-charge-release-and-flight-timing-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-full-charge-ideal-projectile-coverage",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "spatial-projectile-hit-loss-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "cortege-firefield-clock-boundary-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-mod-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-spatial-overlap-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "embed-delay-uniform-approximated-by-mean",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "hema-player-health-cost-not-modeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mausolon-radial-multishot-routing-unverified",
+        "weapons": 1,
+        "modes": 2
+      },
+      {
+        "reason": "projectile-homing-and-bounce-target-selection-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "talons-multishot-spatial-hit-loss-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      }
+    ]
+  },
+  "genericModularRowsExcluded": [
+    "Kitgun: inherited generic beam prototype; actual assembly depends on parts"
+  ],
+  "auxiliarySourceMappingDebt": [
+    "Acrid exported auxiliary mode1 has no matching current native normal behavior",
+    "Imperator current native normal behavior1 absent from old export"
+  ],
+  "source": {
+    "exportBuild": "2026.08.13.13.24",
+    "nativeClientBuild": "2026.10.22.13.12",
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "packagesSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+    "packageProvenance": "preserved sample; current live EXE matches, package not freshly re-extracted"
+  },
+  "weapons": [
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryWeapon",
+      "name": "Acceltra",
+      "issues": [
+        {
+          "id": "unreplayed-declared-secondary-mode-0",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 0,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 44.0,
+                "types": {
+                  "DT_PUNCTURE": 35.2,
+                  "DT_SLASH": 8.8
+                }
+              },
+              {
+                "kind": null,
+                "source": "EmbedDeathAttack",
+                "amount": 100.0,
+                "types": {
+                  "DT_PUNCTURE": 22.0,
+                  "DT_SLASH": 77.999997
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzWeapon",
+      "name": "Aeolak",
+      "issues": [
+        {
+          "id": "unreplayed-declared-secondary-mode-0",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 0,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 25.0,
+                "types": {}
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+      "name": "Alternox",
+      "nameZh": "电幻步枪",
+      "issues": [
+        {
+          "id": "existing-mode-1",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 1,
+            "reasons": [
+              "alternox-host-death-lifecycle-unverified",
+              "alternox-instant-detonation-order-idealized",
+              "alternox-multishot-active-cap-unresolved",
+              "alternox-same-time-expiry-order-fixed-explosion-first"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
+      "name": "Alternox Prime",
+      "nameZh": "电幻步枪 Prime",
+      "issues": [
+        {
+          "id": "existing-mode-1",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 1,
+            "reasons": [
+              "alternox-host-death-lifecycle-unverified",
+              "alternox-instant-detonation-order-idealized",
+              "alternox-multishot-active-cap-unresolved",
+              "alternox-same-time-expiry-order-fixed-explosion-first"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/ChainLightningGun/ChainLightningRifle",
+      "name": "Amprex",
+      "nameZh": "安培克斯",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher",
+      "name": "Angstrum",
+      "nameZh": "安格斯壮",
+      "issues": [
+        {
+          "id": "existing-mode-0",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 0,
+            "reasons": [
+              "angstrum-ammo-efficiency-integer-accounting-unverified",
+              "angstrum-charge-completion-buff-snapshot-boundary-unverified",
+              "angstrum-charge-release-and-flight-timing-unverified",
+              "angstrum-full-charge-ideal-projectile-coverage"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun",
+      "name": "Arbucep",
+      "issues": [
+        {
+          "id": "unreplayed-declared-secondary-mode-0",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 0,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 228.0,
+                "types": {
+                  "DT_CORROSIVE": 38.0,
+                  "DT_EXPLOSION": 38.0,
+                  "DT_GAS": 38.0,
+                  "DT_MAGNETIC": 38.0,
+                  "DT_RADIATION": 38.0,
+                  "DT_VIRAL": 38.0
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun",
+      "name": "Atomos",
+      "nameZh": "原子矿融炮",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleNewWarGun",
+      "name": "Basmu",
+      "nameZh": "巴什穆",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
+      "name": "Battacor",
+      "nameZh": "武使之力",
+      "issues": [
+        {
+          "id": "battacor-alt-radial-and-charge",
+          "category": "confirmed-independent-payload-and-gate",
+          "evidence": {
+            "remaining": "Base radial and first-charge cycle implemented this audit; banked charge, augment, and exact event dispatch remain separate."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun",
+      "name": "Boar",
+      "nameZh": "野猪",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Shotgun/PrimeBoar",
+      "name": "Boar Prime",
+      "nameZh": "野猪 Prime",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/HandShotGun",
+      "name": "Bronco",
+      "nameZh": "野马",
+      "issues": [
+        {
+          "id": "hitscan-ricochet-eligibility",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "10 distinct path/mode pairs declare RicochetChance>0; Dual Toxocyst Incarnon=1 with RicochetRange=5.",
+            "remaining": "Native hit/ray ricochet state, damage/status/crit inheritance, exclusion of original victim, weakpoint selection and kill-credit eligibility."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/BroncoPrime",
+      "name": "Bronco Prime",
+      "nameZh": "野马 Prime",
+      "issues": [
+        {
+          "id": "hitscan-ricochet-eligibility",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "10 distinct path/mode pairs declare RicochetChance>0; Dual Toxocyst Incarnon=1 with RicochetRange=5.",
+            "remaining": "Native hit/ray ricochet state, damage/status/crit inheritance, exclusion of original victim, weakpoint selection and kill-credit eligibility."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifle",
+      "name": "Buzlok",
+      "issues": [
+        {
+          "id": "unreplayed-declared-secondary-mode-0",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 0,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 40.0,
+                "types": {}
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/1999InfShotgun/1999InfShotgunWeapon",
+      "name": "Coda Bassocyst",
+      "nameZh": "终幕·低音爆囊",
+      "issues": [
+        {
+          "id": "coda-bassocyst-alt-script-route",
+          "category": "zero-contact-mode-classification-unresolved",
+          "evidence": {
+            "remaining": "Impact and projectile contact both explicitly zero; leech script lifetime/forced procs/teleport and positive inherited EmbedAttack need active-route proof. Not counted as a confirmed missing-damage defect."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix",
+      "name": "Coda Sporothrix",
+      "nameZh": "终幕·孢丝感染枪",
+      "issues": [
+        {
+          "id": "delayed-radial-event-dispatch",
+          "category": "producer-notification-route-unresolved",
+          "evidence": {
+            "remaining": "Original proposal held: SendEvents has a per-projectile one-shot notice latch. Trace damage-controller challenge bridge separately before deciding whether the delayed explosion should notify again; GenericChallenge filter acceptance alone is insufficient."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+      "name": "Cortege",
+      "nameZh": "送葬者",
+      "issues": [
+        {
+          "id": "existing-mode-1",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 1,
+            "reasons": [
+              "cortege-firefield-clock-boundary-unverified",
+              "cortege-firefield-mod-routing-unverified",
+              "cortege-firefield-spatial-overlap-unverified"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpSentAmalgPistol/CrpSentAmalgPistol",
+      "name": "Cyanex",
+      "nameZh": "氰毒",
+      "issues": [
+        {
+          "id": "existing-mode-0",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 0,
+            "reasons": [
+              "projectile-homing-and-bounce-target-selection-unmodeled",
+              "spatial-projectile-hit-loss-unmodeled"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep",
+      "name": "Dual Toxocyst",
+      "nameZh": "毒囊双枪",
+      "issues": [
+        {
+          "id": "hitscan-ricochet-eligibility",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "10 distinct path/mode pairs declare RicochetChance>0; Dual Toxocyst Incarnon=1 with RicochetRange=5.",
+            "remaining": "Native hit/ray ricochet state, damage/status/crit inheritance, exclusion of original victim, weakpoint selection and kill-credit eligibility."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon",
+      "name": "EFV-8 Mars",
+      "issues": [
+        {
+          "id": "unreplayed-declared-secondary-mode-1",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 1,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 313.0,
+                "types": {
+                  "DT_CORROSIVE": 313.0
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
+      "name": "Grakata",
+      "issues": [
+        {
+          "id": "unreplayed-declared-secondary-mode-0",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 0,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "EmbedDeathAttack",
+                "amount": 30.0,
+                "types": {
+                  "DT_POISON": 30.0
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+      "name": "Grimoire",
+      "nameZh": "魔典",
+      "issues": [
+        {
+          "id": "grimoire-alt-direct-chain",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "Player TnGrimoireAltProj declares DirectHitChainLength=8, MaxChainDepth=2 and ChainDamageMultiplier=.8.",
+            "remaining": "Native alternate projectile chain/bounce per-target hit ledger, parent/child damage snapshot and tome hit/kill trigger ownership."
+          }
+        },
+        {
+          "id": "unreplayed-declared-secondary-mode-1",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 1,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 250.0,
+                "types": {
+                  "DT_ELECTRICITY": 250.0
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/LongGuns/InfWFAccompanyingPri/InfestedBurstRifle",
+      "name": "Hema",
+      "nameZh": "血肢",
+      "issues": [
+        {
+          "id": "existing-mode-0",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 0,
+            "reasons": [
+              "hema-player-health-cost-not-modeled"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnYareliPistol/TnYareliPistolWeapon",
+      "name": "Kompressa",
+      "nameZh": "卡帕压力枪",
+      "issues": [
+        {
+          "id": "existing-mode-0",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 0,
+            "reasons": [
+              "embed-delay-uniform-approximated-by-mean",
+              "spatial-projectile-hit-loss-unmodeled"
+            ]
+          }
+        },
+        {
+          "id": "delayed-radial-event-dispatch",
+          "category": "producer-notification-route-unresolved",
+          "evidence": {
+            "remaining": "Original proposal held: SendEvents has a per-projectile one-shot notice latch. Trace damage-controller challenge bridge separately before deciding whether the delayed explosion should notify again; GenericChallenge filter acceptance alone is insufficient."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressa",
+      "name": "Kompressa Prime",
+      "nameZh": "卡帕压力枪 Prime",
+      "issues": [
+        {
+          "id": "delayed-radial-event-dispatch",
+          "category": "producer-notification-route-unresolved",
+          "evidence": {
+            "remaining": "Original proposal held: SendEvents has a per-projectile one-shot notice latch. Trace damage-controller challenge bridge separately before deciding whether the delayed explosion should notify again; GenericChallenge filter acceptance alone is insufficient."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Nukor/KuvaNukor",
+      "name": "Kuva Nukor",
+      "nameZh": "赤毒·努寇微波枪",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
+      "name": "Larkspur",
+      "nameZh": "翠雀",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        },
+        {
+          "id": "unreplayed-declared-secondary-mode-1",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 1,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 1600.0,
+                "types": {
+                  "DT_EXPLOSION": 800.0,
+                  "DT_RADIATION": 800.0
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
+      "name": "Larkspur Prime",
+      "nameZh": "翠雀 Prime",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        },
+        {
+          "id": "unreplayed-declared-secondary-mode-1",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 1,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 1600.0,
+                "types": {
+                  "DT_EXPLOSION": 800.0,
+                  "DT_RADIATION": 800.0
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/Pistol",
+      "name": "Lato",
+      "nameZh": "拉托",
+      "issues": [
+        {
+          "id": "hitscan-ricochet-eligibility",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "10 distinct path/mode pairs declare RicochetChance>0; Dual Toxocyst Incarnon=1 with RicochetRange=5.",
+            "remaining": "Native hit/ray ricochet state, damage/status/crit inheritance, exclusion of original victim, weakpoint selection and kill-credit eligibility."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/LatoPrime",
+      "name": "Lato Prime",
+      "nameZh": "拉托 Prime",
+      "issues": [
+        {
+          "id": "hitscan-ricochet-eligibility",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "10 distinct path/mode pairs declare RicochetChance>0; Dual Toxocyst Incarnon=1 with RicochetRange=5.",
+            "remaining": "Native hit/ray ricochet state, damage/status/crit inheritance, exclusion of original victim, weakpoint selection and kill-credit eligibility."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/LatoVandal",
+      "name": "Lato Vandal",
+      "nameZh": "拉托·破坏者",
+      "issues": [
+        {
+          "id": "hitscan-ricochet-eligibility",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "10 distinct path/mode pairs declare RicochetChance>0; Dual Toxocyst Incarnon=1 with RicochetRange=5.",
+            "remaining": "Native hit/ray ricochet state, damage/status/crit inheritance, exclusion of original victim, weakpoint selection and kill-credit eligibility."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBow",
+      "name": "Lenz",
+      "nameZh": "楞次弓",
+      "issues": [
+        {
+          "id": "delayed-radial-event-dispatch",
+          "category": "producer-notification-route-unresolved",
+          "evidence": {
+            "remaining": "Original proposal held: SendEvents has a per-projectile one-shot notice latch. Trace damage-controller challenge bridge separately before deciding whether the delayed explosion should notify again; GenericChallenge filter acceptance alone is insufficient."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunWeapon",
+      "name": "Mandonel",
+      "nameZh": "辐光弩炮",
+      "issues": [
+        {
+          "id": "mandonel-field-and-deployment-variants",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "Alt field DamageTrigger: 25 radiation normal /50 heavy, HitType=DHT_DOT, DamageOnEnter=1, interval=.2; script _lifetime=7. Normal/heavy projectile contact script _lifetime=10.",
+            "remaining": "TnConcreteArchgun.lua creation/buff/cleanup, field placement, actor overlap, normal-versus-heavy weapon context and eligibility of field damage."
+          }
+        },
+        {
+          "id": "hitscan-radial-on-hit-versus-miss",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "30 modes declare ApplyRadialDamageOnHit=1 and 28 modes ApplyRadialDamageOnMiss=1. Mandonel impact specifically hit=0/miss=1, while its fire behavior hit=0/miss=0.",
+            "remaining": "Trace-versus-impact precedence, hit/miss/world-contact gates, direct target inclusion, radius mods and multishot split."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+      "name": "Mausolon",
+      "nameZh": "惩戒者",
+      "issues": [
+        {
+          "id": "existing-mode-0",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 0,
+            "reasons": [
+              "mausolon-radial-multishot-routing-unverified"
+            ]
+          }
+        },
+        {
+          "id": "existing-mode-1",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 1,
+            "reasons": [
+              "mausolon-radial-multishot-routing-unverified"
+            ]
+          }
+        },
+        {
+          "id": "hitscan-radial-on-hit-versus-miss",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "30 modes declare ApplyRadialDamageOnHit=1 and 28 modes ApplyRadialDamageOnMiss=1. Mandonel impact specifically hit=0/miss=1, while its fire behavior hit=0/miss=0.",
+            "remaining": "Trace-versus-impact precedence, hit/miss/world-contact gates, direct target inclusion, radius mods and multishot split."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun",
+      "name": "Miter",
+      "issues": [
+        {
+          "id": "unreplayed-declared-secondary-mode-0",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 0,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 700.0,
+                "types": {}
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Bow/InfCernosBow/InfCernos",
+      "name": "Mutalist Cernos",
+      "nameZh": "异融西诺斯",
+      "issues": [
+        {
+          "id": "mutalist-cernos-script-spawned-swarm",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "Embed FX contains InfCernos.lua _damageTriggerType. Charged trigger: Amount=6, ProcChance=1, ForcedProcs poison, HitType=DHT_PROJECTILE, DamageOnEnter=1, interval=.5, duration=2; uncharged Amount=3.",
+            "remaining": "InfCernos.lua spawning and ownership plus native DamageTrigger interval/entry/default CanCrit; establish replacement versus additive events."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpSentExperimentPistol/CrpSentExperimentPistol",
+      "name": "Ocucor",
+      "nameZh": "视使之触",
+      "issues": [
+        {
+          "id": "ocucor-specialized-beam-consumer",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "Distinct CrpSentPistolFireBehavior/ImpactBehavior, MultiBeam=1, CentralBeam=1, four BeamChildren and LockOnMaxTargets=4; inherited generic NumChains=0.",
+            "remaining": "Native kill-to-tendril state, reload reset, secondary target selection and multiplier, status/crit/headshot/kill trigger attribution; augment interactions separate."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/CrpBFG",
+      "name": "Opticor",
+      "nameZh": "奥堤克光子枪",
+      "issues": [
+        {
+          "id": "hitscan-radial-on-hit-versus-miss",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "30 modes declare ApplyRadialDamageOnHit=1 and 28 modes ApplyRadialDamageOnMiss=1. Mandonel impact specifically hit=0/miss=1, while its fire behavior hit=0/miss=0.",
+            "remaining": "Trace-versus-impact precedence, hit/miss/world-contact gates, direct target inclusion, radius mods and multishot split."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG",
+      "name": "Opticor Vandal",
+      "nameZh": "奥堤克光子枪·破坏者",
+      "issues": [
+        {
+          "id": "hitscan-radial-on-hit-versus-miss",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "30 modes declare ApplyRadialDamageOnHit=1 and 28 modes ApplyRadialDamageOnMiss=1. Mandonel impact specifically hit=0/miss=1, while its fire behavior hit=0/miss=0.",
+            "remaining": "Trace-versus-impact precedence, hit/miss/world-contact gates, direct target inclusion, radius mods and multishot split."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+      "name": "Phantasma",
+      "nameZh": "幻离子",
+      "issues": [
+        {
+          "id": "phantasma-explosiveattack-is-projectile-hit-type",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "Both exported alt projectiles declare ExplosiveAttack Amount=73, HitType=DHT_PROJECTILE while inherited EmbedDeathAttack declares DHT_RADIAL.",
+            "remaining": "Identify actual dispatched death path and native HitType override, then independently audit weakpoint/condition-overload/head-kill/event gates. HitType alone must not be renamed area-direct."
+          }
+        },
+        {
+          "id": "unreplayed-declared-secondary-mode-1",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 1,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 73.0,
+                "types": {
+                  "DT_RADIATION": 73.0
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
+      "name": "Phantasma Prime",
+      "nameZh": "幻离子 Prime",
+      "issues": [
+        {
+          "id": "phantasma-explosiveattack-is-projectile-hit-type",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "Both exported alt projectiles declare ExplosiveAttack Amount=73, HitType=DHT_PROJECTILE while inherited EmbedDeathAttack declares DHT_RADIAL.",
+            "remaining": "Identify actual dispatched death path and native HitType override, then independently audit weakpoint/condition-overload/head-kill/event gates. HitType alone must not be renamed area-direct."
+          }
+        },
+        {
+          "id": "unreplayed-declared-secondary-mode-1",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 1,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 73.0,
+                "types": {
+                  "DT_RADIATION": 73.0
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum",
+      "name": "Prisma Angstrum",
+      "nameZh": "棱晶·安格斯壮",
+      "issues": [
+        {
+          "id": "existing-mode-0",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 0,
+            "reasons": [
+              "angstrum-ammo-efficiency-integer-accounting-unverified",
+              "angstrum-charge-completion-buff-snapshot-boundary-unverified",
+              "angstrum-charge-release-and-flight-timing-unverified",
+              "angstrum-full-charge-ideal-projectile-coverage"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon",
+      "name": "Prisma Lenz",
+      "nameZh": "棱晶·楞次弓",
+      "issues": [
+        {
+          "id": "delayed-radial-event-dispatch",
+          "category": "producer-notification-route-unresolved",
+          "evidence": {
+            "remaining": "Original proposal held: SendEvents has a per-projectile one-shot notice latch. Trace damage-controller challenge bridge separately before deciding whether the delayed explosion should notify again; GenericChallenge filter acceptance alone is insufficient."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle",
+      "name": "Quanta",
+      "nameZh": "量子切割器",
+      "issues": [
+        {
+          "id": "existing-mode-1",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 1,
+            "reasons": [
+              "quanta-cube-chain-unmodeled",
+              "quanta-idle-detonation-unmodeled",
+              "quanta-player-shot-detonation-unmodeled"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/QuantaVandal",
+      "name": "Quanta Vandal",
+      "nameZh": "量子切割器·破坏者",
+      "issues": [
+        {
+          "id": "existing-mode-1",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 1,
+            "reasons": [
+              "quanta-cube-chain-unmodeled",
+              "quanta-idle-detonation-unmodeled",
+              "quanta-player-shot-detonation-unmodeled"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+      "name": "Scourge Prime",
+      "issues": [
+        {
+          "id": "unreplayed-declared-secondary-mode-1",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 1,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 55.0,
+                "types": {
+                  "DT_CORROSIVE": 55.0
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/BurstPistol",
+      "name": "Sicarus",
+      "nameZh": "暗杀者",
+      "issues": [
+        {
+          "id": "hitscan-ricochet-eligibility",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "10 distinct path/mode pairs declare RicochetChance>0; Dual Toxocyst Incarnon=1 with RicochetRange=5.",
+            "remaining": "Native hit/ray ricochet state, damage/status/crit inheritance, exclusion of original victim, weakpoint selection and kill-credit eligibility."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeSicarus/PrimeSicarusPistol",
+      "name": "Sicarus Prime",
+      "nameZh": "暗杀者 Prime",
+      "issues": [
+        {
+          "id": "hitscan-ricochet-eligibility",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "10 distinct path/mode pairs declare RicochetChance>0; Dual Toxocyst Incarnon=1 with RicochetRange=5.",
+            "remaining": "Native hit/ray ricochet state, damage/status/crit inheritance, exclusion of original victim, weakpoint selection and kill-credit eligibility."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/TennoAR",
+      "name": "Soma",
+      "nameZh": "月神",
+      "issues": [
+        {
+          "id": "hitscan-ricochet-eligibility",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "10 distinct path/mode pairs declare RicochetChance>0; Dual Toxocyst Incarnon=1 with RicochetRange=5.",
+            "remaining": "Native hit/ray ricochet state, damage/status/crit inheritance, exclusion of original victim, weakpoint selection and kill-credit eligibility."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle",
+      "name": "Sporothrix",
+      "nameZh": "孢丝感染枪",
+      "issues": [
+        {
+          "id": "delayed-radial-event-dispatch",
+          "category": "producer-notification-route-unresolved",
+          "evidence": {
+            "remaining": "Original proposal held: SendEvents has a per-projectile one-shot notice latch. Trace damage-controller challenge bridge separately before deciding whether the delayed explosion should notify again; GenericChallenge filter acceptance alone is insufficient."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+      "name": "Talons",
+      "nameZh": "鹰爪",
+      "issues": [
+        {
+          "id": "existing-mode-0",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 0,
+            "reasons": [
+              "talons-multishot-spatial-hit-loss-unmodeled"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
+      "name": "Tenet Cycron",
+      "nameZh": "信条·循环离子枪",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox",
+      "name": "Tenet Ferrox",
+      "nameZh": "信条·铁晶磁轨炮",
+      "issues": [
+        {
+          "id": "hitscan-radial-on-hit-versus-miss",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "30 modes declare ApplyRadialDamageOnHit=1 and 28 modes ApplyRadialDamageOnMiss=1. Mandonel impact specifically hit=0/miss=1, while its fire behavior hit=0/miss=0.",
+            "remaining": "Trace-versus-impact precedence, hit/miss/world-contact gates, direct target inclusion, radius mods and multishot split."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEGlaxion/CrpBEGlaxion",
+      "name": "Tenet Glaxion",
+      "nameZh": "信条·冷冻光束步枪",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
+      "name": "Tenet Plinx",
+      "issues": [
+        {
+          "id": "unreplayed-declared-secondary-mode-1",
+          "category": "positive-declaration-without-runtime-part",
+          "evidence": {
+            "mode": 1,
+            "positiveComponents": [
+              {
+                "kind": null,
+                "source": "ExplosiveAttack",
+                "amount": 500.0,
+                "types": {
+                  "DT_RADIATION": 500.0
+                }
+              },
+              {
+                "kind": null,
+                "source": "EmbedDeathAttack",
+                "amount": 100.0,
+                "types": {
+                  "DT_RADIATION": 100.0
+                }
+              }
+            ],
+            "boundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta",
+      "name": "Tenet Quanta",
+      "nameZh": "信条·量子切割器",
+      "issues": [
+        {
+          "id": "existing-mode-1",
+          "category": "reported-model-limitation",
+          "evidence": {
+            "mode": 1,
+            "reasons": [
+              "quanta-cube-chain-unmodeled",
+              "quanta-idle-detonation-unmodeled",
+              "quanta-player-shot-detonation-unmodeled"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+      "name": "Torid",
+      "nameZh": "托里德",
+      "issues": [
+        {
+          "id": "beam-chain-recipient-events",
+          "category": "spatial-or-recipient-scope-unverified",
+          "evidence": {
+            "confirmed": "12 modes declare NumChains>0 with SequentialChains, ChainDistance and ChainDamageMultiplier; current fireModes do not export those fields.",
+            "remaining": "Native beam chain target selection, per-hop damage scaling, head-hit suppression, per-recipient status/critical and kill ownership."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolGun",
+      "name": "Zakti",
+      "nameZh": "毒芽",
+      "issues": [
+        {
+          "id": "delayed-radial-event-dispatch",
+          "category": "producer-notification-route-unresolved",
+          "evidence": {
+            "remaining": "Original proposal held: SendEvents has a per-projectile one-shot notice latch. Trace damage-controller challenge bridge separately before deciding whether the delayed explosion should notify again; GenericChallenge filter acceptance alone is insufficient."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiPistol",
+      "name": "Zakti Prime",
+      "nameZh": "毒芽 Prime",
+      "issues": [
+        {
+          "id": "delayed-radial-event-dispatch",
+          "category": "producer-notification-route-unresolved",
+          "evidence": {
+            "remaining": "Original proposal held: SendEvents has a per-projectile one-shot notice latch. Trace damage-controller challenge bridge separately before deciding whether the delayed explosion should notify again; GenericChallenge filter acceptance alone is insufficient."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ConclaveLeverPistol",
+      "name": "Zylok",
+      "nameZh": "席尔火枪",
+      "issues": [
+        {
+          "id": "hitscan-radial-on-hit-versus-miss",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "30 modes declare ApplyRadialDamageOnHit=1 and 28 modes ApplyRadialDamageOnMiss=1. Mandonel impact specifically hit=0/miss=1, while its fire behavior hit=0/miss=0.",
+            "remaining": "Trace-versus-impact precedence, hit/miss/world-contact gates, direct target inclusion, radius mods and multishot split."
+          }
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziWeapon",
+      "name": "Zymos",
+      "nameZh": "邪莫斯",
+      "issues": [
+        {
+          "id": "zymos-script-cluster-inheritance",
+          "category": "native-declaration-needs-consumer-closure",
+          "evidence": {
+            "confirmed": "Head embed death callback InfUziWeapon.lua OnRadialDamage points to EmbedDeathKillClusterProj, which declares ClusterSetsChildrenDamageInfo=1 and ExplosiveAttack.HitType=DHT_PROJECTILE.",
+            "remaining": "OnRadialDamage target gate and native cluster damage info propagation including crit, proc, mods and child kill credit; parent delayed event is independently modeled."
+          }
+        }
+      ]
+    }
+  ],
+  "secondaryPresenceJoin": {
+    "baselineWeapons": 399,
+    "baselineModes": 607,
+    "positiveComponentModes": 121,
+    "candidateModes": 14,
+    "candidateWeapons": 14,
+    "candidateModesWithoutBaselineWarning": 14,
+    "runtimeSecondaryPresentModes": 102,
+    "pureRadialMainExcludedModes": 5,
+    "missingExportJoins": 0
+  },
+  "afterDiagnostics": {
+    "weaponRecords": 399,
+    "weaponRecordsWithNoModes": 6,
+    "explicitModes": 607,
+    "evaluableModes": 600,
+    "excludedOrMissing": {
+      "auxiliary-melee-excluded": 6,
+      "missing-damage-data": 1
+    },
+    "weaponsWithExplicitGaps": 17,
+    "evaluableModesWithExplicitGaps": 18,
+    "modesWithNoReportedGap": 582,
+    "nativeStaticSpecialEvidenceModes": 97,
+    "referenceOnlySpecialEvidenceModes": 87,
+    "modesWithCOReference": 517,
+    "contextRequiredModes": 17,
+    "prepareErrors": 0,
+    "fullGameplayCalibration": "not-established-by-this-inventory",
+    "reasons": [
+      {
+        "reason": "quanta-cube-chain-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "quanta-idle-detonation-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "quanta-player-shot-detonation-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "alternox-host-death-lifecycle-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-instant-detonation-order-idealized",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-multishot-active-cap-unresolved",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-same-time-expiry-order-fixed-explosion-first",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-ammo-efficiency-integer-accounting-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-charge-completion-buff-snapshot-boundary-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-charge-release-and-flight-timing-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-full-charge-ideal-projectile-coverage",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-explosion-co-and-head-event-routing-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-parent-explosion-and-children-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "spatial-projectile-hit-loss-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "battacor-banked-two-three-charge-damage-scaling-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-first-charge-dynamic-buff-snapshot-timing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-first-charge-windup-event-timing-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-radial-condition-overload-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-radial-hit-arcane-dispatch-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-radial-per-trigger-multiplicity-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-clock-boundary-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-mod-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-spatial-overlap-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "embed-delay-uniform-approximated-by-mean",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "hema-player-health-cost-not-modeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mausolon-radial-multishot-routing-unverified",
+        "weapons": 1,
+        "modes": 2
+      },
+      {
+        "reason": "projectile-homing-and-bounce-target-selection-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "talons-multishot-spatial-hit-loss-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "zymos-child-damage-inheritance-and-event-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "zymos-child-spawn-and-targeting-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      }
+    ]
+  }
+}

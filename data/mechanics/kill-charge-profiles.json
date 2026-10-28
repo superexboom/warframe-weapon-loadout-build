@@ -164,6 +164,53 @@
           }
         ]
       }
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle": {
+      "name": "Battacor",
+      "altMode": 1,
+      "primaryMode": 0,
+      "killsPerUse": 1,
+      "shotsPerGauge": 1,
+      "switchInSeconds": 0.0,
+      "switchOutSeconds": 0.0,
+      "policy": "spend-first-primary-kill-charge-immediately",
+      "native": {
+        "AddChargeConditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumChargesToAdd": 1,
+        "NumChargesToConsume": 0,
+        "MaxCharges": 3,
+        "RequireFullCharges": 0,
+        "zeroConsumptionMeans": "consume-all-current-charges",
+        "selectedChargeCount": 1
+      },
+      "nativeSha256": "a53933a6ad5b6062bd41d9df1a41dea522472f2d506110c2654d764ab9d016b1",
+      "source": {
+        "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+        "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+        "descriptorNameOffset": 8,
+        "radialOnHit": "0x14140f7c5: impact +0x1e4",
+        "radialOnMiss": "0x14140f7d3: impact +0x1e3",
+        "radialBuild": "0x14140f948 -> 0x140e91ec0",
+        "multishotBranch": "0x140e92204: impact +0x1e2 false skips multiplication at 0x140e92270",
+        "noFullGateDefault": "0x140bf8fb8 initializes RequireFullCharges +0x3238 to zero",
+        "availability": "0x140b169c0 -> 0x1418cee00; current +0x3218 and max +0x3220 must be positive",
+        "consumeAll": "0x141377168 zero consumption takes current; returns consumed count and clears current",
+        "chargeSnapshot": {
+          "countSnapshot": "0x141377160 -> 0x140164110 stores pre-consumption current count as float in active state +0xac; current clears afterward",
+          "cachedChargeMultiplier": "0x140584f1b..0x140584f30: UseClipSizeAsDamageMultiplier=false gives 1+(DamageMultiplier[+0x170]-1)*releaseRatio; raw DamageMultiplier=1 yields 1 at every ratio",
+          "stateMultiplier": "0x1403b99c0: cached state +0x184 times 0x14176c6d0 max(snapshot +0xac,1) while ApplyNumChargesToDamageMultiplier +0xb1 is enabled",
+          "weaponStateQuery": "0x1412d9b00 selects active mode bank +0x58 then state virtual +0x268",
+          "radialSnapshotConsumer": "0x140e921c7..0x140e92204 queries weapon virtual +0x4a0 and +0x4a8",
+          "directSnapshotConsumer": "0x1415ecd9d..0x1415ecdc7 queries identical weapon virtual +0x4a0 and +0x4a8",
+          "oneChargeDamageFactor": 1.0,
+          "twoChargeDamageFactor": 2.0,
+          "threeChargeDamageFactor": 3.0,
+          "zeroChargeGetterMinimumIsPermission": false
+        }
+      },
+      "generatedBy": "tools/import_battacor_radial.py"
     }
   },
   "skipped": [

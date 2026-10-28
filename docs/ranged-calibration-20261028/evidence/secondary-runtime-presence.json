@@ -1,0 +1,594 @@
+{
+  "summary": {
+    "baselineWeapons": 399,
+    "baselineModes": 607,
+    "positiveComponentModes": 121,
+    "candidateModes": 14,
+    "candidateWeapons": 14,
+    "candidateModesWithoutBaselineWarning": 14,
+    "runtimeSecondaryPresentModes": 102,
+    "pureRadialMainExcludedModes": 5,
+    "missingExportJoins": 0
+  },
+  "sources": {
+    "baseline": {
+      "path": "C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\.local\\delivery\\ranged-calibration-20261028\\coverage-baseline.json",
+      "sha256": "505a141b360ca48b615f7130cb308b83a4db821771a293b185a99ca79600eeaa"
+    },
+    "exports": {
+      "path": "C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\.local\\delivery\\ranged-calibration-20261028\\native-inventory\\current-ranged-exports.json",
+      "sha256": "b0659f04f3fad87618c46feaff493cfb9958c6c93908e5d6ff3d9e88da02426a"
+    }
+  },
+  "interpretation": "Presence-only structural coverage audit, not count of gameplay bugs or validation of existing secondary runtime.",
+  "fullLocalEvidenceSha256": "6df4e32f29c386241734303b906a3b5a62c3b51dbd38f734d57752b4428dfa0f",
+  "candidates": [
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
+      "name": "Tenet Plinx",
+      "slot": "secondary",
+      "mode": 1,
+      "nativeMode": 1,
+      "selectedProjectile": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAltFireProj",
+      "mainDamage": {
+        "source": null,
+        "total": 100.0,
+        "types": {
+          "DT_IMPACT": 100.0
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 500.0,
+          "types": {
+            "DT_RADIATION": 500.0
+          }
+        },
+        {
+          "kind": null,
+          "source": "EmbedDeathAttack",
+          "amount": 100.0,
+          "types": {
+            "DT_RADIATION": 100.0
+          }
+        }
+      ],
+      "componentKinds": [
+        "battery",
+        "charge"
+      ],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun",
+      "name": "Miter",
+      "slot": "primary",
+      "mode": 0,
+      "nativeMode": 0,
+      "selectedProjectile": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeWaveProjectileCharged",
+      "mainDamage": {
+        "source": null,
+        "total": 250.0,
+        "types": {
+          "DT_IMPACT": 12.5,
+          "DT_PUNCTURE": 12.5,
+          "DT_SLASH": 224.999995
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 700.0,
+          "types": {}
+        }
+      ],
+      "componentKinds": [
+        "charge"
+      ],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
+      "name": "Grakata",
+      "slot": "primary",
+      "mode": 0,
+      "nativeMode": 0,
+      "selectedProjectile": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxProjectilePvE",
+      "mainDamage": {
+        "source": null,
+        "total": 30.0,
+        "types": {
+          "DT_IMPACT": 30.0
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "EmbedDeathAttack",
+          "amount": 30.0,
+          "types": {
+            "DT_POISON": 30.0
+          }
+        }
+      ],
+      "componentKinds": [],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifle",
+      "name": "Buzlok",
+      "slot": "primary",
+      "mode": 0,
+      "nativeMode": 0,
+      "selectedProjectile": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifleHomingProjectile",
+      "mainDamage": {
+        "source": null,
+        "total": 60.0,
+        "types": {
+          "DT_IMPACT": 30.0,
+          "DT_PUNCTURE": 24.000001,
+          "DT_SLASH": 6.000001
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 40.0,
+          "types": {}
+        }
+      ],
+      "componentKinds": [],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon",
+      "name": "EFV-8 Mars",
+      "slot": "secondary",
+      "mode": 1,
+      "nativeMode": 1,
+      "selectedProjectile": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolAltFire/LasrianGooPistolPlayerAltFireProjectileFullcharge",
+      "mainDamage": {
+        "source": null,
+        "total": 35.0,
+        "types": {
+          "DT_CORROSIVE": 35.0
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 313.0,
+          "types": {
+            "DT_CORROSIVE": 313.0
+          }
+        }
+      ],
+      "componentKinds": [
+        "charge"
+      ],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun",
+      "name": "Arbucep",
+      "slot": "arch_gun",
+      "mode": 0,
+      "nativeMode": 0,
+      "selectedProjectile": null,
+      "mainDamage": {
+        "source": null,
+        "total": 31.999997999999998,
+        "types": {
+          "DT_CORROSIVE": 5.333333,
+          "DT_EXPLOSION": 5.333333,
+          "DT_GAS": 5.333333,
+          "DT_MAGNETIC": 5.333333,
+          "DT_RADIATION": 5.333333,
+          "DT_VIRAL": 5.333333
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 228.0,
+          "types": {
+            "DT_CORROSIVE": 38.0,
+            "DT_EXPLOSION": 38.0,
+            "DT_GAS": 38.0,
+            "DT_MAGNETIC": 38.0,
+            "DT_RADIATION": 38.0,
+            "DT_VIRAL": 38.0
+          }
+        }
+      ],
+      "componentKinds": [],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
+      "name": "Larkspur Prime",
+      "slot": "arch_gun",
+      "mode": 1,
+      "nativeMode": 1,
+      "selectedProjectile": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurHeavyProjectile",
+      "mainDamage": {
+        "source": null,
+        "total": 840.0,
+        "types": {
+          "DT_EXPLOSION": 360.0,
+          "DT_IMPACT": 280.0,
+          "DT_RADIATION": 200.0
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 1600.0,
+          "types": {
+            "DT_EXPLOSION": 800.0,
+            "DT_RADIATION": 800.0
+          }
+        }
+      ],
+      "componentKinds": [
+        "charge"
+      ],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
+      "name": "Larkspur",
+      "slot": "arch_gun",
+      "mode": 1,
+      "nativeMode": 1,
+      "selectedProjectile": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameHeavyArchgunProjectile",
+      "mainDamage": {
+        "source": null,
+        "total": 840.0,
+        "types": {
+          "DT_EXPLOSION": 360.0,
+          "DT_IMPACT": 280.0,
+          "DT_RADIATION": 200.0
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 1600.0,
+          "types": {
+            "DT_EXPLOSION": 800.0,
+            "DT_RADIATION": 800.0
+          }
+        }
+      ],
+      "componentKinds": [
+        "charge"
+      ],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+      "name": "Grimoire",
+      "slot": "secondary",
+      "mode": 1,
+      "nativeMode": 1,
+      "selectedProjectile": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireAltProj",
+      "mainDamage": {
+        "source": null,
+        "total": 350.0,
+        "types": {
+          "DT_ELECTRICITY": 350.0
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 250.0,
+          "types": {
+            "DT_ELECTRICITY": 250.0
+          }
+        }
+      ],
+      "componentKinds": [],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
+      "name": "Phantasma Prime",
+      "slot": "primary",
+      "mode": 1,
+      "nativeMode": 1,
+      "selectedProjectile": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj",
+      "mainDamage": {
+        "source": null,
+        "total": 15.0,
+        "types": {
+          "DT_IMPACT": 15.0
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 73.0,
+          "types": {
+            "DT_RADIATION": 73.0
+          }
+        }
+      ],
+      "componentKinds": [
+        "charge"
+      ],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+      "name": "Scourge Prime",
+      "slot": "primary",
+      "mode": 1,
+      "nativeMode": 1,
+      "selectedProjectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
+      "mainDamage": {
+        "source": null,
+        "total": 300.0,
+        "types": {
+          "DT_IMPACT": 209.999997,
+          "DT_PUNCTURE": 45.000003,
+          "DT_SLASH": 44.999994
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 55.0,
+          "types": {
+            "DT_CORROSIVE": 55.0
+          }
+        }
+      ],
+      "componentKinds": [],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+      "name": "Phantasma",
+      "slot": "primary",
+      "mode": 1,
+      "nativeMode": 1,
+      "selectedProjectile": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+      "mainDamage": {
+        "source": null,
+        "total": 15.0,
+        "types": {
+          "DT_IMPACT": 15.0
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 73.0,
+          "types": {
+            "DT_RADIATION": 73.0
+          }
+        }
+      ],
+      "componentKinds": [
+        "charge"
+      ],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryWeapon",
+      "name": "Acceltra",
+      "slot": "primary",
+      "mode": 0,
+      "nativeMode": 0,
+      "selectedProjectile": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
+      "mainDamage": {
+        "source": null,
+        "total": 35.0,
+        "types": {
+          "DT_IMPACT": 35.0
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 44.0,
+          "types": {
+            "DT_PUNCTURE": 35.2,
+            "DT_SLASH": 8.8
+          }
+        },
+        {
+          "kind": null,
+          "source": "EmbedDeathAttack",
+          "amount": 100.0,
+          "types": {
+            "DT_PUNCTURE": 22.0,
+            "DT_SLASH": 77.999997
+          }
+        }
+      ],
+      "componentKinds": [],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzWeapon",
+      "name": "Aeolak",
+      "slot": "primary",
+      "mode": 0,
+      "nativeMode": 0,
+      "selectedProjectile": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzRifleProj",
+      "mainDamage": {
+        "source": null,
+        "total": 60.0,
+        "types": {
+          "DT_IMPACT": 15.0,
+          "DT_PUNCTURE": 23.0,
+          "DT_RADIATION": 5.0,
+          "DT_SLASH": 17.0
+        }
+      },
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 25.0,
+          "types": {}
+        }
+      ],
+      "componentKinds": [],
+      "gaps": [],
+      "hasClusterProfile": false,
+      "candidateReason": "Positive secondary declaration present but every baseline probe reports no radial/lingering/embed/stackable/sequence runtime.",
+      "consumerBoundary": "Declaration can be inactive, alternate, radius-zero/default or script-managed. No proof all listed amounts are live additive attacks.",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    }
+  ],
+  "mainPayloadAlreadySelected": [
+    {
+      "path": "/Lotus/Weapons/Syndicates/NewLoka/Pistols/NLCastanas",
+      "name": "Sancti Castanas",
+      "mode": 0,
+      "mainDamage": {
+        "source": "ExplosiveAttack",
+        "total": 300.0,
+        "types": {
+          "DT_ELECTRICITY": 300.0
+        }
+      },
+      "exclusionReason": "Main damage itself selects a secondary/radial packet; additional fields may be alternate destruction paths, not omitted additive attacks."
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombs",
+      "name": "Castanas",
+      "mode": 0,
+      "mainDamage": {
+        "source": "ExplosiveAttack",
+        "total": 160.0,
+        "types": {
+          "DT_ELECTRICITY": 160.0
+        }
+      },
+      "exclusionReason": "Main damage itself selects a secondary/radial packet; additional fields may be alternate destruction paths, not omitted additive attacks."
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+      "name": "Talons",
+      "mode": 0,
+      "mainDamage": {
+        "source": "EmbedDeathAttack",
+        "total": 250.0,
+        "types": {
+          "DT_EXPLOSION": 250.0
+        }
+      },
+      "exclusionReason": "Main damage itself selects a secondary/radial packet; additional fields may be alternate destruction paths, not omitted additive attacks."
+    },
+    {
+      "path": "/Lotus/Powersuits/Choir/ChoirEruptWeapon",
+      "name": "Glory",
+      "mode": 0,
+      "mainDamage": {
+        "source": "ExplosiveAttack",
+        "total": 15.0,
+        "types": {
+          "DT_FIRE": 15.0
+        }
+      },
+      "exclusionReason": "Main damage itself selects a secondary/radial packet; additional fields may be alternate destruction paths, not omitted additive attacks."
+    },
+    {
+      "path": "/Lotus/Powersuits/Frumentarius/ExaltedSniper",
+      "name": "Neutralizer",
+      "mode": 1,
+      "mainDamage": {
+        "source": "ExplosiveAttack",
+        "total": 20.0,
+        "types": {
+          "DT_FREEZE": 20.0
+        }
+      },
+      "exclusionReason": "Main damage itself selects a secondary/radial packet; additional fields may be alternate destruction paths, not omitted additive attacks."
+    }
+  ]
+}

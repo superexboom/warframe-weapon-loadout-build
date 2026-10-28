@@ -6099,6 +6099,58 @@
       "generatedBy": "tools/import_projectile_components.py",
       "referenceDifferences": [
         "status-chance native 0 vs reference 0.3; reference used"
+      ],
+      "childSpawnAudit": {
+        "status": "partial-consumer-audit-no-added-damage",
+        "carrier": "/Lotus/Weapons/Infested/Pistols/InfUzi/EmbedDeathKillClusterProj",
+        "child": "/Lotus/Weapons/Infested/Pistols/InfUzi/EmbedDeathKillGuidedProj",
+        "script": "/Lotus/Scripts/WeaponAttachments/InfUziWeapon.lua",
+        "scriptSha256": "47a343ce7d22c4948178bb11067b2532e082729b310853438a64c647ad1e7751",
+        "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+        "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+        "callbackBranches": [
+          {
+            "callback": "OnRadialDamage",
+            "prototype": 3,
+            "requestedChildCount": 5
+          },
+          {
+            "callback": "OnDeath",
+            "prototype": 4,
+            "requestedChildCount": 5
+          }
+        ],
+        "branchCombination": "unresolved-do-not-sum",
+        "childCountSetter": "0x141b454b0 -> mNumClusterProjectiles+0x1730",
+        "childDeclarations": {
+          "attack": {
+            "Type": "DT_POISON",
+            "Amount": 333,
+            "ProcChance": 0.30000001
+          },
+          "criticalChance": 0.050000001,
+          "criticalMultiplier": 2.3,
+          "SendEvents": 0,
+          "DamageUpgradeTypes": [],
+          "ClusterSetsChildrenDamageInfo": 1
+        },
+        "provenNoticeConsumers": [
+          "0x1407eb9b2",
+          "0x14093a39e",
+          "0x14098be19",
+          "0x1410e32a9"
+        ],
+        "unresolved": [
+          "shared-embed-metadata-spawn-exclusivity",
+          "child-target-selection",
+          "parent-to-child-damage-snapshot",
+          "critical-and-mod-upgrade-routing",
+          "status-and-kill-event-consumers"
+        ]
+      },
+      "unmodeled": [
+        "zymos-child-spawn-and-targeting-unmodeled",
+        "zymos-child-damage-inheritance-and-event-routing-unverified"
       ]
     },
     "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraWeapon": {
@@ -7761,6 +7813,177 @@
           "vtableSlot": "0x738",
           "immediateCall": "0x140c3f312 -> 0x140297cf0",
           "schedule": "0x140c3f352 -> 0x14144c410(delay=1.0f)"
+        }
+      }
+    },
+    "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle": {
+      "modes": {
+        "1": {
+          "name": "Battacor",
+          "fireMode": 1,
+          "directTotal": 208.0,
+          "scope": "base alternate at one charge; primary kill followed by immediate alt use; direct and native hit radial independent; no Sentient Barrage",
+          "radials": [
+            {
+              "damage": {
+                "radiation": 208.0
+              },
+              "radius_m": 3.4000001,
+              "falloff_start_m": 0,
+              "falloff_reduction": 0.40000001,
+              "crit_chance": 0.2,
+              "crit_multiplier": 2,
+              "status_chance": 0.5,
+              "forced_procs": [],
+              "takes_multishot": false,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
+              "nativeField": "Behaviors[1].impact.RadialDamage",
+              "damageTypeSource": "native-per-type",
+              "multishotSource": "native single-packet MS factor false; one-packet-per-trigger remains unverified",
+              "takes_condition_overload": false,
+              "conditionOverloadSource": "existing-model-policy-unverified-not-native-proof"
+            }
+          ],
+          "unmodeled": [
+            "battacor-banked-two-three-charge-damage-scaling-unmodeled",
+            "battacor-radial-hit-arcane-dispatch-unverified",
+            "battacor-radial-condition-overload-routing-unverified",
+            "battacor-radial-per-trigger-multiplicity-unverified",
+            "battacor-first-charge-windup-event-timing-unmodeled",
+            "battacor-first-charge-dynamic-buff-snapshot-timing-unverified"
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
+              "sha256": "a53933a6ad5b6062bd41d9df1a41dea522472f2d506110c2654d764ab9d016b1"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+              "sha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+              "sha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+              "sha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+              "sha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9"
+            }
+          ],
+          "source": {
+            "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+            "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+            "descriptorNameOffset": 8,
+            "radialOnHit": "0x14140f7c5: impact +0x1e4",
+            "radialOnMiss": "0x14140f7d3: impact +0x1e3",
+            "radialBuild": "0x14140f948 -> 0x140e91ec0",
+            "multishotBranch": "0x140e92204: impact +0x1e2 false skips multiplication at 0x140e92270",
+            "noFullGateDefault": "0x140bf8fb8 initializes RequireFullCharges +0x3238 to zero",
+            "availability": "0x140b169c0 -> 0x1418cee00; current +0x3218 and max +0x3220 must be positive",
+            "consumeAll": "0x141377168 zero consumption takes current; returns consumed count and clears current",
+            "chargeSnapshot": {
+              "countSnapshot": "0x141377160 -> 0x140164110 stores pre-consumption current count as float in active state +0xac; current clears afterward",
+              "cachedChargeMultiplier": "0x140584f1b..0x140584f30: UseClipSizeAsDamageMultiplier=false gives 1+(DamageMultiplier[+0x170]-1)*releaseRatio; raw DamageMultiplier=1 yields 1 at every ratio",
+              "stateMultiplier": "0x1403b99c0: cached state +0x184 times 0x14176c6d0 max(snapshot +0xac,1) while ApplyNumChargesToDamageMultiplier +0xb1 is enabled",
+              "weaponStateQuery": "0x1412d9b00 selects active mode bank +0x58 then state virtual +0x268",
+              "radialSnapshotConsumer": "0x140e921c7..0x140e92204 queries weapon virtual +0x4a0 and +0x4a8",
+              "directSnapshotConsumer": "0x1415ecd9d..0x1415ecdc7 queries identical weapon virtual +0x4a0 and +0x4a8",
+              "oneChargeDamageFactor": 1.0,
+              "twoChargeDamageFactor": 2.0,
+              "threeChargeDamageFactor": 3.0,
+              "zeroChargeGetterMinimumIsPermission": false
+            }
+          },
+          "packageBuild": "2026.10.22.13.12",
+          "generatedBy": "tools/import_battacor_radial.py"
+        }
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun": {
+      "modes": {
+        "1": {
+          "name": "Phantasma",
+          "fireMode": 1,
+          "directTotal": 15.0,
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+          "packetAudit": {
+            "status": "partial-native-consumer-no-added-damage",
+            "sourceHitType": "DHT_PROJECTILE",
+            "parentExplosion": {
+              "Type": "DT_RADIATION",
+              "Amount": 73,
+              "ProcChance": 0.37,
+              "ForcedProcs": [
+                "PT_KNOCKBACK"
+              ],
+              "HitType": "DHT_PROJECTILE"
+            },
+            "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+            "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+            "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+            "nativeField": "ExplosiveAttack",
+            "packetTypeConsumer": "0x141234988 -> 0x140bc28b0: explicit type2 preserved",
+            "headDamageSuppression": "0x140bc29fc sets packet+0x25c; 0x141482db7 consumes separately",
+            "unresolved": [
+              "weapon-parent-handle-lifecycle",
+              "region-recipient-hook-exclusivity",
+              "exactly-once-co-upgrade-context",
+              "head-crit-and-head-kill-qualification",
+              "child-payload-and-target-selection"
+            ],
+            "noPermissionInference": "raw HitType does not authorize CO or all weakpoint events"
+          },
+          "unmodeled": [
+            "phantasma-parent-explosion-and-children-unmodeled",
+            "phantasma-explosion-co-and-head-event-routing-unverified"
+          ]
+        }
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun": {
+      "modes": {
+        "1": {
+          "name": "Phantasma Prime",
+          "fireMode": 1,
+          "directTotal": 15.0,
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj",
+          "packetAudit": {
+            "status": "partial-native-consumer-no-added-damage",
+            "sourceHitType": "DHT_PROJECTILE",
+            "parentExplosion": {
+              "Type": "DT_RADIATION",
+              "Amount": 73,
+              "ProcChance": 0.37,
+              "ForcedProcs": [
+                "PT_KNOCKBACK"
+              ],
+              "HitType": "DHT_PROJECTILE"
+            },
+            "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+            "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+            "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj",
+            "nativeField": "ExplosiveAttack",
+            "packetTypeConsumer": "0x141234988 -> 0x140bc28b0: explicit type2 preserved",
+            "headDamageSuppression": "0x140bc29fc sets packet+0x25c; 0x141482db7 consumes separately",
+            "unresolved": [
+              "weapon-parent-handle-lifecycle",
+              "region-recipient-hook-exclusivity",
+              "exactly-once-co-upgrade-context",
+              "head-crit-and-head-kill-qualification",
+              "child-payload-and-target-selection"
+            ],
+            "noPermissionInference": "raw HitType does not authorize CO or all weakpoint events"
+          },
+          "unmodeled": [
+            "phantasma-parent-explosion-and-children-unmodeled",
+            "phantasma-explosion-co-and-head-event-routing-unverified"
+          ]
         }
       }
     }

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "status": "declarations-only-consumers-not-inferred",
+  "denominators": {
+    "exportWeapons": 399,
+    "scopedWeapons": 399,
+    "exportModes": 607,
+    "nativeBehaviors": 607,
+    "heavyBehaviors": 28,
+    "nativeBehaviorMappedModes": 606,
+    "nativeBehaviorsWithoutExport": 1,
+    "exportedModesWithProjectile": 271,
+    "distinctExportedProjectiles": 262,
+    "referencedNodes": 1380,
+    "nodeKinds": {
+      "projectile": 498,
+      "behavior": 13,
+      "support": 863,
+      "damage-trigger": 6
+    },
+    "referencedDamageNodes": 504,
+    "referencedProjectiles": 498,
+    "sourceRecords": 1899,
+    "slots": {
+      "primary": 208,
+      "secondary": 171,
+      "arch_gun": 20
+    }
+  },
+  "provenance": {
+    "packagesBin": {
+      "path": "C:\\Users\\SuperExboom\\Documents\\WF_Rever\\research\\stug-detonation-20261026\\artifacts\\original\\Debug\\Packages.bin_H",
+      "sha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+      "entityCount": 468744
+    },
+    "client": {
+      "path": "C:\\Users\\SuperExboom\\Documents\\WF_Rever\\research\\stug-detonation-20261026\\artifacts\\original\\Warframe.x64.exe",
+      "sha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+      "buildLabel": "2026.10.22.13.12"
+    },
+    "currentExports": {
+      "path": "C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\.local\\delivery\\ranged-calibration-20261028\\native-inventory\\send-events-refresh\\current-ranged-exports.json",
+      "sha256": "17fa841ba2d5e6d55181e99789f5f9fd90ac2d0847ce717bdfb4073d6adb776b"
+    },
+    "auditScript": {
+      "path": "C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\tools\\audit_native_ranged_flags.py",
+      "sha256": "1417b6127f4b25212ef535277c83b693f465d75aa83a52f4866be7249a29fa33"
+    },
+    "liveClient": {
+      "path": "E:\\warframe\\Warframe\\Downloaded\\Public\\Warframe.x64.exe",
+      "sha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+      "matchesPreserved": true
+    }
+  },
+  "limitations": [
+    "No missing native field is treated as false or zero.",
+    "Reference closure is an overapproximation of declared reachability, including optional support effects and inactive variants; it is not an active-event denominator.",
+    "Inherited and inactive attack declarations do not prove execution.",
+    "Projectile references include alternate charged, multishot and PvP declarations; these are counted separately from active exported mode projectiles.",
+    "Consumers, Lua content, event eligibility, ownership, kill credit and geometry require separate native/runtime evidence.",
+    "Production code and WFSim parity are not correctness evidence."
+  ],
+  "missingWeapons": [],
+  "sendEventsDeclared": {
+    "projectile": {
+      "present": 10,
+      "values": {
+        "0": 10
+      },
+      "examples": [
+        "/Lotus/Powersuits/Choir/ChoirEruptProjectile",
+        "/Lotus/Powersuits/Pagemaster/ExaltedBookFragmentProj",
+        "/Lotus/Weapons/Infested/Pistols/InfUzi/EmbedDeathKillGuidedProj",
+        "/Lotus/Weapons/MK1Series/Mk1KunaiAltFireGuidedProj"
+      ]
+    },
+    "activeExportedProjectile": {
+      "present": 3,
+      "values": {
+        "0": 3
+      },
+      "examples": [
+        "/Lotus/Powersuits/Choir/ChoirEruptProjectile",
+        "/Lotus/Weapons/MK1Series/Mk1KunaiAltFireGuidedProj",
+        "/Lotus/Weapons/Tenno/ThrowingWeapons/KunaiAltFireGuidedProj"
+      ]
+    }
+  }
+}

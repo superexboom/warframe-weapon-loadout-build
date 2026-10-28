@@ -1,0 +1,380 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "regions": {
+    "attack-to-plan": {
+      "start": "0x140508e9e",
+      "end": "0x140508ee7",
+      "sha256": "ce68ea79dae4c831ff97743409608b3f344014b0d125309a802ca4aed53fd3db",
+      "hex": "0fb6422532db440f287c2470440f28b42480000000440f28ac2490000000440f28a424a0000000440f289c24b0000000440f289424c0000000440f288c24d000000041888139010000"
+    },
+    "script-or-radial-default": {
+      "start": "0x141234988",
+      "end": "0x1412349aa",
+      "sha256": "792af3efe7902ad4fef8944034b3fbe83fa507e97ef73e5eeb0dffddd876c3eb",
+      "hex": "4538a6b11500007409c6863901000005eb104438a6390100007507c6863901000004"
+    },
+    "plan-to-victim": {
+      "start": "0x140bc28b0",
+      "end": "0x140bc28bd",
+      "sha256": "4d27965caa21c574ce0d5138522f97fae7cbda59092b47ccdce6af019759850a",
+      "hex": "0fb687390100008883bf010000"
+    },
+    "head-suppression-store": {
+      "start": "0x140bc29fc",
+      "end": "0x140bc2a03",
+      "sha256": "4567b5ac5264211fbfe019d5d37a4574348bfd35225eaf4742662e8441399a77",
+      "hex": "c6835c02000001"
+    },
+    "head-prefix": {
+      "start": "0x141482db7",
+      "end": "0x141482dd3",
+      "sha256": "e50649cc92504aa0b8fb51f4137e043d2723fc888e7259914d9267f41b88aadb",
+      "hex": "4180be10020000010f85940200004180be5c020000000f8564010000"
+    },
+    "co-prefix": {
+      "start": "0x14113e27e",
+      "end": "0x14113e2c2",
+      "sha256": "1d3fff23dac3e296c75bf2a5b5f82f571c2cb0a7638d438d8528d1c47a5a6def",
+      "hex": "488b81c8000000488be9440f28c34c89442468498bf84c8bf2488b88f8000000488339000f843307000080babf010000070f842607000080ba680200001e0f8519070000"
+    }
+  },
+  "packetCases": [
+    {
+      "sourceHitType": 0,
+      "scriptFlag": 0,
+      "planHitType": 4,
+      "victimHitType": 4,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 0,
+      "scriptFlag": 1,
+      "planHitType": 5,
+      "victimHitType": 5,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 1,
+      "scriptFlag": 0,
+      "planHitType": 1,
+      "victimHitType": 1,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 1,
+      "scriptFlag": 1,
+      "planHitType": 5,
+      "victimHitType": 5,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 2,
+      "scriptFlag": 0,
+      "planHitType": 2,
+      "victimHitType": 2,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 2,
+      "scriptFlag": 1,
+      "planHitType": 5,
+      "victimHitType": 5,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 3,
+      "scriptFlag": 0,
+      "planHitType": 3,
+      "victimHitType": 3,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 3,
+      "scriptFlag": 1,
+      "planHitType": 5,
+      "victimHitType": 5,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 4,
+      "scriptFlag": 0,
+      "planHitType": 4,
+      "victimHitType": 4,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 4,
+      "scriptFlag": 1,
+      "planHitType": 5,
+      "victimHitType": 5,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 5,
+      "scriptFlag": 0,
+      "planHitType": 5,
+      "victimHitType": 5,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 5,
+      "scriptFlag": 1,
+      "planHitType": 5,
+      "victimHitType": 5,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 6,
+      "scriptFlag": 0,
+      "planHitType": 6,
+      "victimHitType": 6,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 6,
+      "scriptFlag": 1,
+      "planHitType": 5,
+      "victimHitType": 5,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 7,
+      "scriptFlag": 0,
+      "planHitType": 7,
+      "victimHitType": 7,
+      "ignoreHeadDamageBonus": 1
+    },
+    {
+      "sourceHitType": 7,
+      "scriptFlag": 1,
+      "planHitType": 5,
+      "victimHitType": 5,
+      "ignoreHeadDamageBonus": 1
+    }
+  ],
+  "headCases": [
+    {
+      "hitType": 2,
+      "location": 0,
+      "suppression": 0,
+      "branch": "0x141483059"
+    },
+    {
+      "hitType": 2,
+      "location": 0,
+      "suppression": 1,
+      "branch": "0x141483059"
+    },
+    {
+      "hitType": 2,
+      "location": 1,
+      "suppression": 0,
+      "branch": "0x141482dd3"
+    },
+    {
+      "hitType": 2,
+      "location": 1,
+      "suppression": 1,
+      "branch": "0x141482f37"
+    }
+  ],
+  "coPrefixCases": [
+    {
+      "hitType": 0,
+      "validContext": 0,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 0,
+      "validContext": 0,
+      "sourceFlavor": 30,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 0,
+      "validContext": 1,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 0,
+      "validContext": 1,
+      "sourceFlavor": 30,
+      "passesPrefix": true
+    },
+    {
+      "hitType": 1,
+      "validContext": 0,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 1,
+      "validContext": 0,
+      "sourceFlavor": 30,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 1,
+      "validContext": 1,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 1,
+      "validContext": 1,
+      "sourceFlavor": 30,
+      "passesPrefix": true
+    },
+    {
+      "hitType": 2,
+      "validContext": 0,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 2,
+      "validContext": 0,
+      "sourceFlavor": 30,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 2,
+      "validContext": 1,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 2,
+      "validContext": 1,
+      "sourceFlavor": 30,
+      "passesPrefix": true
+    },
+    {
+      "hitType": 3,
+      "validContext": 0,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 3,
+      "validContext": 0,
+      "sourceFlavor": 30,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 3,
+      "validContext": 1,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 3,
+      "validContext": 1,
+      "sourceFlavor": 30,
+      "passesPrefix": true
+    },
+    {
+      "hitType": 4,
+      "validContext": 0,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 4,
+      "validContext": 0,
+      "sourceFlavor": 30,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 4,
+      "validContext": 1,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 4,
+      "validContext": 1,
+      "sourceFlavor": 30,
+      "passesPrefix": true
+    },
+    {
+      "hitType": 5,
+      "validContext": 0,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 5,
+      "validContext": 0,
+      "sourceFlavor": 30,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 5,
+      "validContext": 1,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 5,
+      "validContext": 1,
+      "sourceFlavor": 30,
+      "passesPrefix": true
+    },
+    {
+      "hitType": 6,
+      "validContext": 0,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 6,
+      "validContext": 0,
+      "sourceFlavor": 30,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 6,
+      "validContext": 1,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 6,
+      "validContext": 1,
+      "sourceFlavor": 30,
+      "passesPrefix": true
+    },
+    {
+      "hitType": 7,
+      "validContext": 0,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 7,
+      "validContext": 0,
+      "sourceFlavor": 30,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 7,
+      "validContext": 1,
+      "sourceFlavor": 29,
+      "passesPrefix": false
+    },
+    {
+      "hitType": 7,
+      "validContext": 1,
+      "sourceFlavor": 30,
+      "passesPrefix": false
+    }
+  ],
+  "limits": [
+    "Original-byte bounded fragments only; no target geometry, scene enumeration, actual damage/crit/status/kill event simulation.",
+    "CO prefix acceptance is necessary but not sufficient: valid weapon/controller upgrade context, owner selection, status enumeration and effect application remain separate.",
+    "No constructor or launch/spawn state emulated. The actual ordinary script flag=0 is established separately through the base and ClusterBombProjectile constructors plus raw type ancestry."
+  ]
+}

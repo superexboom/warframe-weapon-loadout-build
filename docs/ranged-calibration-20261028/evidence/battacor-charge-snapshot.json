@@ -1,0 +1,59 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "method": "Original native instructions executed offline, actual charge-to-float setter and actual active-state getter retained; zero-consumption native method executes charge clear. Owner/authority/UI scaffolding stubbed as documented in prior harness.",
+  "cases": [
+    {
+      "startingCharges": 0,
+      "snapshot": 0.0,
+      "remainingAfterConsume": 0,
+      "stateCachedMultiplier": 1.0,
+      "factor": 1.0,
+      "direct208AfterSharedFactors": 208.0,
+      "radial208AfterSharedFactors": 208.0,
+      "liveGaugeMutatedAfterConsume": 99
+    },
+    {
+      "startingCharges": 1,
+      "snapshot": 1.0,
+      "remainingAfterConsume": 0,
+      "stateCachedMultiplier": 1.0,
+      "factor": 1.0,
+      "direct208AfterSharedFactors": 208.0,
+      "radial208AfterSharedFactors": 208.0,
+      "liveGaugeMutatedAfterConsume": 99
+    },
+    {
+      "startingCharges": 2,
+      "snapshot": 2.0,
+      "remainingAfterConsume": 0,
+      "stateCachedMultiplier": 1.0,
+      "factor": 2.0,
+      "direct208AfterSharedFactors": 416.0,
+      "radial208AfterSharedFactors": 416.0,
+      "liveGaugeMutatedAfterConsume": 99
+    },
+    {
+      "startingCharges": 3,
+      "snapshot": 3.0,
+      "remainingAfterConsume": 0,
+      "stateCachedMultiplier": 1.0,
+      "factor": 3.0,
+      "direct208AfterSharedFactors": 624.0,
+      "radial208AfterSharedFactors": 624.0,
+      "liveGaugeMutatedAfterConsume": 99
+    }
+  ],
+  "proof": {
+    "snapshot": "0x141377160 ->0x140164110 writes state+0xac BEFORE current-charge clear",
+    "nonClipCachedDamage": "0x140584f1b..0x140584f30:1+(DamageMultiplier[+170]-1)*releaseRatio; rawDamageMultiplier1 yields1 independent of ratio",
+    "stateGetter": "0x1403b99c0: cached+184 *0x14176c6d0; enabled+0xb1 reads max(snapshot+0xac,1)",
+    "weaponGetter": "0x1412d9b00 active mode bank+0x58 ->state virtual+0x268",
+    "radialFactors": "0x140e921bb..0x140e92204 queries weapon+4a0 and+4a8",
+    "directFactors": "0x1415ecd9d..0x1415ecdc7 queries same weapon+4a0,+4a8 and multiplies payload factor"
+  },
+  "limits": [
+    "0-charge getter minimum1 is not permission; availability previously provedfalse at0",
+    "2/3 snapshots are proven but current replay policy still spends first charge; no automatic banked-charge strategy added",
+    "No live game or unstubbed effect/query pipeline acceptance"
+  ]
+}

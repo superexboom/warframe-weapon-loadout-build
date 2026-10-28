@@ -1,0 +1,530 @@
+{
+  "schemaVersion": 1,
+  "scope": "positive-secondary-declarations-versus-runtime-presence",
+  "summary": {
+    "weaponRecords": 399,
+    "explicitModes": 607,
+    "positiveSecondaryDeclarationModes": 121,
+    "candidateModes": 14,
+    "candidateWeaponRecords": 14,
+    "candidateModesWithoutBaselineWarning": 12,
+    "secondaryRuntimePresentModes": 102,
+    "mainPayloadAlreadySecondaryModes": 5,
+    "preparationErrorModes": 0,
+    "missingExportJoins": 0,
+    "runtimeUnobservedModes": 0,
+    "noPositiveSecondaryDeclarationModes": 479,
+    "nonEvaluableModes": 7
+  },
+  "inputs": {
+    "coverage": {
+      "path": "C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\.local\\delivery\\ranged-calibration-20261028\\coverage-after-mode-scoped.json",
+      "sha256": "923fcd0797e16151ce2a0176b41bbd3a46a9f16e822b0f8e394944bf2a964bec"
+    },
+    "exports": {
+      "path": "C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\.local\\delivery\\ranged-calibration-20261028\\native-inventory\\current-ranged-exports.json",
+      "sha256": "b0659f04f3fad87618c46feaff493cfb9958c6c93908e5d6ff3d9e88da02426a"
+    }
+  },
+  "limitations": [
+    "A positive inherited payload may be inactive or an alternate destruction path.",
+    "Secondary runtime presence does not establish gameplay correctness or complete coverage.",
+    "Names are labels only; identity is exact path and exported mode position, not native mode index.",
+    "Modes with preparation errors or absent probes are not treated as absent secondary runtime."
+  ],
+  "fullLocalEvidenceSha256": "bcc8005e82b5487aeb251eac5127a823c90d1a99c0ddc42ef408a3ad3655a8a7",
+  "candidates": [
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
+      "mode": 1,
+      "name": "Tenet Plinx",
+      "slot": "secondary",
+      "nativeMode": 1,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 500.0,
+          "types": {
+            "DT_RADIATION": 500.0
+          }
+        },
+        {
+          "kind": null,
+          "source": "EmbedDeathAttack",
+          "amount": 100.0,
+          "types": {
+            "DT_RADIATION": 100.0
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 100.0,
+        "types": {
+          "DT_IMPACT": 100.0
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAltFireProj",
+      "componentKinds": [
+        "battery",
+        "charge"
+      ],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun",
+      "mode": 0,
+      "name": "Miter",
+      "slot": "primary",
+      "nativeMode": 0,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 700.0,
+          "types": {}
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 250.0,
+        "types": {
+          "DT_IMPACT": 12.5,
+          "DT_PUNCTURE": 12.5,
+          "DT_SLASH": 224.999995
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeWaveProjectileCharged",
+      "componentKinds": [
+        "charge"
+      ],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
+      "mode": 0,
+      "name": "Grakata",
+      "slot": "primary",
+      "nativeMode": 0,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "EmbedDeathAttack",
+          "amount": 30.0,
+          "types": {
+            "DT_POISON": 30.0
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 30.0,
+        "types": {
+          "DT_IMPACT": 30.0
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxProjectilePvE",
+      "componentKinds": [],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifle",
+      "mode": 0,
+      "name": "Buzlok",
+      "slot": "primary",
+      "nativeMode": 0,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 40.0,
+          "types": {}
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 60.0,
+        "types": {
+          "DT_IMPACT": 30.0,
+          "DT_PUNCTURE": 24.000001,
+          "DT_SLASH": 6.000001
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifleHomingProjectile",
+      "componentKinds": [],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon",
+      "mode": 1,
+      "name": "EFV-8 Mars",
+      "slot": "secondary",
+      "nativeMode": 1,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 313.0,
+          "types": {
+            "DT_CORROSIVE": 313.0
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 35.0,
+        "types": {
+          "DT_CORROSIVE": 35.0
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolAltFire/LasrianGooPistolPlayerAltFireProjectileFullcharge",
+      "componentKinds": [
+        "charge"
+      ],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun",
+      "mode": 0,
+      "name": "Arbucep",
+      "slot": "arch_gun",
+      "nativeMode": 0,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 228.0,
+          "types": {
+            "DT_CORROSIVE": 38.0,
+            "DT_EXPLOSION": 38.0,
+            "DT_GAS": 38.0,
+            "DT_MAGNETIC": 38.0,
+            "DT_RADIATION": 38.0,
+            "DT_VIRAL": 38.0
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 31.999997999999998,
+        "types": {
+          "DT_CORROSIVE": 5.333333,
+          "DT_EXPLOSION": 5.333333,
+          "DT_GAS": 5.333333,
+          "DT_MAGNETIC": 5.333333,
+          "DT_RADIATION": 5.333333,
+          "DT_VIRAL": 5.333333
+        }
+      },
+      "selectedProjectile": null,
+      "componentKinds": [],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
+      "mode": 1,
+      "name": "Larkspur Prime",
+      "slot": "arch_gun",
+      "nativeMode": 1,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 1600.0,
+          "types": {
+            "DT_EXPLOSION": 800.0,
+            "DT_RADIATION": 800.0
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 840.0,
+        "types": {
+          "DT_EXPLOSION": 360.0,
+          "DT_IMPACT": 280.0,
+          "DT_RADIATION": 200.0
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurHeavyProjectile",
+      "componentKinds": [
+        "charge"
+      ],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
+      "mode": 1,
+      "name": "Larkspur",
+      "slot": "arch_gun",
+      "nativeMode": 1,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 1600.0,
+          "types": {
+            "DT_EXPLOSION": 800.0,
+            "DT_RADIATION": 800.0
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 840.0,
+        "types": {
+          "DT_EXPLOSION": 360.0,
+          "DT_IMPACT": 280.0,
+          "DT_RADIATION": 200.0
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameHeavyArchgunProjectile",
+      "componentKinds": [
+        "charge"
+      ],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+      "mode": 1,
+      "name": "Grimoire",
+      "slot": "secondary",
+      "nativeMode": 1,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 250.0,
+          "types": {
+            "DT_ELECTRICITY": 250.0
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 350.0,
+        "types": {
+          "DT_ELECTRICITY": 350.0
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireAltProj",
+      "componentKinds": [],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
+      "mode": 1,
+      "name": "Phantasma Prime",
+      "slot": "primary",
+      "nativeMode": 1,
+      "baselineGaps": [
+        "phantasma-explosion-co-and-head-event-routing-unverified",
+        "phantasma-parent-explosion-and-children-unmodeled"
+      ],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 73.0,
+          "types": {
+            "DT_RADIATION": 73.0
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 15.0,
+        "types": {
+          "DT_IMPACT": 15.0
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj",
+      "componentKinds": [
+        "charge"
+      ],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+      "mode": 1,
+      "name": "Scourge Prime",
+      "slot": "primary",
+      "nativeMode": 1,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 55.0,
+          "types": {
+            "DT_CORROSIVE": 55.0
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 300.0,
+        "types": {
+          "DT_IMPACT": 209.999997,
+          "DT_PUNCTURE": 45.000003,
+          "DT_SLASH": 44.999994
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
+      "componentKinds": [],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+      "mode": 1,
+      "name": "Phantasma",
+      "slot": "primary",
+      "nativeMode": 1,
+      "baselineGaps": [
+        "phantasma-explosion-co-and-head-event-routing-unverified",
+        "phantasma-parent-explosion-and-children-unmodeled"
+      ],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 73.0,
+          "types": {
+            "DT_RADIATION": 73.0
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 15.0,
+        "types": {
+          "DT_IMPACT": 15.0
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+      "componentKinds": [
+        "charge"
+      ],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryWeapon",
+      "mode": 0,
+      "name": "Acceltra",
+      "slot": "primary",
+      "nativeMode": 0,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 44.0,
+          "types": {
+            "DT_PUNCTURE": 35.2,
+            "DT_SLASH": 8.8
+          }
+        },
+        {
+          "kind": null,
+          "source": "EmbedDeathAttack",
+          "amount": 100.0,
+          "types": {
+            "DT_PUNCTURE": 22.0,
+            "DT_SLASH": 77.999997
+          }
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 35.0,
+        "types": {
+          "DT_IMPACT": 35.0
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
+      "componentKinds": [],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzWeapon",
+      "mode": 0,
+      "name": "Aeolak",
+      "slot": "primary",
+      "nativeMode": 0,
+      "baselineGaps": [],
+      "positiveComponents": [
+        {
+          "kind": null,
+          "source": "ExplosiveAttack",
+          "amount": 25.0,
+          "types": {}
+        }
+      ],
+      "mainDamage": {
+        "source": null,
+        "total": 60.0,
+        "types": {
+          "DT_IMPACT": 15.0,
+          "DT_PUNCTURE": 23.0,
+          "DT_RADIATION": 5.0,
+          "DT_SLASH": 17.0
+        }
+      },
+      "selectedProjectile": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzRifleProj",
+      "componentKinds": [],
+      "clusterBoundary": "Child multiplicity, inheritance and alternate destruction paths are not inferred from parent components.",
+      "interpretation": "structural candidate, not a proven gameplay bug; activation, defaults, timing and consumers need audit",
+      "runtimeProbeCount": 3,
+      "secondaryRuntimeObserved": false
+    }
+  ]
+}

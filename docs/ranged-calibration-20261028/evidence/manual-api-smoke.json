@@ -1,0 +1,63 @@
+{
+  "inputs": "548eb999444298bd",
+  "rows": [
+    {
+      "name": "Battacor",
+      "mode": 1,
+      "unsupported": [
+        "battacor-banked-two-three-charge-damage-scaling-unmodeled",
+        "battacor-radial-hit-arcane-dispatch-unverified",
+        "battacor-first-charge-windup-event-timing-unmodeled",
+        "battacor-first-charge-dynamic-buff-snapshot-timing-unverified"
+      ],
+      "shots": 14,
+      "kpm": 5.72304717466229,
+      "nativeStats": {
+        "native": 0,
+        "fallback": 0
+      }
+    },
+    {
+      "name": "Zymos",
+      "mode": 0,
+      "unsupported": [
+        "zymos-child-spawn-and-targeting-unmodeled",
+        "zymos-child-damage-inheritance-and-event-routing-unverified"
+      ],
+      "shots": 4,
+      "kpm": 1.7696641884864863,
+      "nativeStats": {
+        "native": 0,
+        "fallback": 0
+      }
+    },
+    {
+      "name": "Phantasma",
+      "mode": 1,
+      "unsupported": [
+        "phantasma-parent-explosion-and-children-unmodeled",
+        "phantasma-explosion-co-and-head-event-routing-unverified"
+      ],
+      "shots": 6,
+      "kpm": 0.401930249148601,
+      "nativeStats": {
+        "native": 0,
+        "fallback": 0
+      }
+    },
+    {
+      "name": "Phantasma Prime",
+      "mode": 1,
+      "unsupported": [
+        "phantasma-parent-explosion-and-children-unmodeled",
+        "phantasma-explosion-co-and-head-event-routing-unverified"
+      ],
+      "shots": 6,
+      "kpm": 0.401930249148601,
+      "nativeStats": {
+        "native": 0,
+        "fallback": 0
+      }
+    }
+  ]
+}

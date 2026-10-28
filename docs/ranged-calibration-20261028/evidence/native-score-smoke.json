@@ -1,0 +1,59 @@
+{
+  "inputs": "548eb999444298bd",
+  "rows": [
+    {
+      "weapon": "Battacor",
+      "mode": 1,
+      "dispatch": {
+        "native": 1,
+        "fallback": 0
+      },
+      "damage": 800.0,
+      "unsupported": [
+        "battacor-banked-two-three-charge-damage-scaling-unmodeled",
+        "battacor-radial-hit-arcane-dispatch-unverified",
+        "battacor-first-charge-windup-event-timing-unmodeled",
+        "battacor-first-charge-dynamic-buff-snapshot-timing-unverified"
+      ]
+    },
+    {
+      "weapon": "Zymos",
+      "mode": 0,
+      "dispatch": {
+        "native": 1,
+        "fallback": 0
+      },
+      "damage": 300.0,
+      "unsupported": [
+        "zymos-child-spawn-and-targeting-unmodeled",
+        "zymos-child-damage-inheritance-and-event-routing-unverified"
+      ]
+    },
+    {
+      "weapon": "Phantasma",
+      "mode": 1,
+      "dispatch": {
+        "native": 1,
+        "fallback": 0
+      },
+      "damage": 100.00000000000001,
+      "unsupported": [
+        "phantasma-parent-explosion-and-children-unmodeled",
+        "phantasma-explosion-co-and-head-event-routing-unverified"
+      ]
+    },
+    {
+      "weapon": "Phantasma Prime",
+      "mode": 1,
+      "dispatch": {
+        "native": 1,
+        "fallback": 0
+      },
+      "damage": 100.00000000000001,
+      "unsupported": [
+        "phantasma-parent-explosion-and-children-unmodeled",
+        "phantasma-explosion-co-and-head-event-routing-unverified"
+      ]
+    }
+  ]
+}

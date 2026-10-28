@@ -1,0 +1,22 @@
+{
+  "finalInputs": "9983f13029bf9133",
+  "checks": [
+    {
+      "file": "combat-reference.json",
+      "beforeSha256": "8529549b12185ff383b22bc5713b6265b71066efd957ea06f2cc9e9c45b1e80a",
+      "afterSha256": "7a22ab1454dab18819a9eca573bb47efa48763a01abfe08c07659af1c9fcafa5",
+      "numericModelUnchanged": true
+    },
+    {
+      "file": "kill-charge-profiles.json",
+      "beforeSha256": "90e8fe37f5fc0d84230b81cd786c12156b0f4b507cf1d955676c818a76fe1d33",
+      "afterSha256": "90e8fe37f5fc0d84230b81cd786c12156b0f4b507cf1d955676c818a76fe1d33",
+      "numericModelUnchanged": true
+    }
+  ],
+  "excludedMetadataOnly": [
+    "unmodeled",
+    "conditionOverloadSource",
+    "multishotSource"
+  ]
+}

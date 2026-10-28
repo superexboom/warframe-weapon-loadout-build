@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "scope": "ranged-exported-model-coverage-not-gameplay-correctness",
+  "identity": {
+    "sourceCommit": "1a25c44db6c97bff0dc9abc83d820aae67999193",
+    "inputs": "9983f13029bf9133",
+    "toolSha256": "658d169d73bf3167a2b3cf4d7ff3795a6e206e796a3d7d1dff643c86b66835bc"
+  },
+  "includesCompanions": false,
+  "summary": {
+    "weaponRecords": 399,
+    "weaponRecordsWithNoModes": 6,
+    "explicitModes": 607,
+    "evaluableModes": 600,
+    "excludedOrMissing": {
+      "auxiliary-melee-excluded": 6,
+      "missing-damage-data": 1
+    },
+    "weaponsWithExplicitGaps": 17,
+    "evaluableModesWithExplicitGaps": 18,
+    "modesWithNoReportedGap": 582,
+    "nativeStaticSpecialEvidenceModes": 97,
+    "referenceOnlySpecialEvidenceModes": 87,
+    "modesWithCOReference": 517,
+    "contextRequiredModes": 17,
+    "prepareErrors": 0,
+    "fullGameplayCalibration": "not-established-by-this-inventory",
+    "reasons": [
+      {
+        "reason": "quanta-cube-chain-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "quanta-idle-detonation-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "quanta-player-shot-detonation-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "alternox-host-death-lifecycle-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-instant-detonation-order-idealized",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-multishot-active-cap-unresolved",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-same-time-expiry-order-fixed-explosion-first",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-ammo-efficiency-integer-accounting-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-charge-completion-buff-snapshot-boundary-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-charge-release-and-flight-timing-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-full-charge-ideal-projectile-coverage",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-explosion-co-and-head-event-routing-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-parent-explosion-and-children-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "spatial-projectile-hit-loss-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "battacor-banked-two-three-charge-damage-scaling-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-first-charge-dynamic-buff-snapshot-timing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-first-charge-windup-event-timing-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-radial-condition-overload-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-radial-hit-arcane-dispatch-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-radial-per-trigger-multiplicity-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-clock-boundary-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-mod-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-spatial-overlap-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "embed-delay-uniform-approximated-by-mean",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "hema-player-health-cost-not-modeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mausolon-radial-multishot-routing-unverified",
+        "weapons": 1,
+        "modes": 2
+      },
+      {
+        "reason": "projectile-homing-and-bounce-target-selection-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "talons-multishot-spatial-hit-loss-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "zymos-child-damage-inheritance-and-event-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "zymos-child-spawn-and-targeting-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      }
+    ]
+  },
+  "inputsStable": true,
+  "interpretation": [
+    "No warning does not establish correct modeling.",
+    "Native static evidence declares a source; final modifier/trigger consumer proof is a separate axis.",
+    "Three bounded 4s replay probes cover both trigger policies and a multishot/headshot probe, not every MOD/Arcane/Incarnon route combination.",
+    "Weapon variants and explicit modes count separately; components and reasons overlap."
+  ]
+}

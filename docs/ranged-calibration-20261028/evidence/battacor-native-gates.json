@@ -1,0 +1,120 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "gate": [
+    {
+      "current": 0,
+      "maximum": 3,
+      "requireFullCharges": false,
+      "consume": 0,
+      "allowed": false
+    },
+    {
+      "current": 1,
+      "maximum": 3,
+      "requireFullCharges": false,
+      "consume": 0,
+      "allowed": true
+    },
+    {
+      "current": 2,
+      "maximum": 3,
+      "requireFullCharges": false,
+      "consume": 0,
+      "allowed": true
+    },
+    {
+      "current": 3,
+      "maximum": 3,
+      "requireFullCharges": false,
+      "consume": 0,
+      "allowed": true
+    }
+  ],
+  "consume": [
+    {
+      "current": 1,
+      "consumed": 1,
+      "remaining": 0
+    },
+    {
+      "current": 2,
+      "consumed": 2,
+      "remaining": 0
+    },
+    {
+      "current": 3,
+      "consumed": 3,
+      "remaining": 0
+    }
+  ],
+  "multishot": [
+    {
+      "multishotFlag": 0,
+      "multishot": 3,
+      "baseAmount": 208,
+      "result": 208.0
+    },
+    {
+      "multishotFlag": 1,
+      "multishot": 3,
+      "baseAmount": 208,
+      "result": 624.0
+    }
+  ],
+  "hitMiss": [
+    {
+      "onHit": 0,
+      "onMiss": 0,
+      "hit": false,
+      "radialSelected": false
+    },
+    {
+      "onHit": 0,
+      "onMiss": 0,
+      "hit": true,
+      "radialSelected": false
+    },
+    {
+      "onHit": 1,
+      "onMiss": 0,
+      "hit": false,
+      "radialSelected": false
+    },
+    {
+      "onHit": 1,
+      "onMiss": 0,
+      "hit": true,
+      "radialSelected": true
+    },
+    {
+      "onHit": 0,
+      "onMiss": 1,
+      "hit": false,
+      "radialSelected": true
+    },
+    {
+      "onHit": 0,
+      "onMiss": 1,
+      "hit": true,
+      "radialSelected": false
+    },
+    {
+      "onHit": 1,
+      "onMiss": 1,
+      "hit": false,
+      "radialSelected": true
+    },
+    {
+      "onHit": 1,
+      "onMiss": 1,
+      "hit": true,
+      "radialSelected": true
+    }
+  ],
+  "method": "Original preserved native bytes executed offline in Unicorn; owner/query/authority scaffolding stubbed; exact radial flag and multishot branches executed.",
+  "limits": [
+    "Not live-game validation",
+    "Does not prove 2/3-charge damage multiplier or event dispatch from damage",
+    "Replay admission can use immediate-use-at-one-primary-kill policy only"
+  ]
+}

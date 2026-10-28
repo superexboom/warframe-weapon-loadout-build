@@ -1,0 +1,855 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "region": {
+    "start": "0x14113e250",
+    "bytes": 1968,
+    "sha256": "71f18fe23d197f0fa40250c9490dd75b826e717604e20b151541c6d1cf6fde06"
+  },
+  "cases": 36,
+  "stubs": {
+    "buildVictimConditionalList": 5376959664,
+    "hasUpgrade": 5379957232,
+    "alternateMode": 5376417600,
+    "readCurrentDamage": 5371773168,
+    "queryUpgrade": 5370313104,
+    "checkCookie": 5398036352
+  },
+  "rows": [
+    {
+      "hitType": 1,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": []
+    },
+    {
+      "hitType": 1,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 360.0,
+      "expected": 360.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 100.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 100.0
+        }
+      ]
+    },
+    {
+      "hitType": 1,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 1,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 2,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": []
+    },
+    {
+      "hitType": 2,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 360.0,
+      "expected": 360.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 100.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 100.0
+        }
+      ]
+    },
+    {
+      "hitType": 2,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 2,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 3,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": []
+    },
+    {
+      "hitType": 3,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 360.0,
+      "expected": 360.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 100.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 100.0
+        }
+      ]
+    },
+    {
+      "hitType": 3,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 3,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 4,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": []
+    },
+    {
+      "hitType": 4,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 360.0,
+      "expected": 360.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 100.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 100.0
+        }
+      ]
+    },
+    {
+      "hitType": 4,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 4,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 5,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": []
+    },
+    {
+      "hitType": 5,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 360.0,
+      "expected": 360.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 100.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 100.0
+        }
+      ]
+    },
+    {
+      "hitType": 5,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 5,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 6,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": []
+    },
+    {
+      "hitType": 6,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 360.0,
+      "expected": 360.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 100.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 100.0
+        }
+      ]
+    },
+    {
+      "hitType": 6,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 6,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 7,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 7,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 7,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": false,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 7,
+      "procContext": 5,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 4,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": false,
+      "result": 200.0,
+      "expected": 200.0,
+      "hasQueries": [],
+      "valueQueries": []
+    },
+    {
+      "hitType": 4,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 360.0,
+      "expected": 360.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 100.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 100.0
+        }
+      ]
+    },
+    {
+      "hitType": 1,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 360.0,
+      "expected": 360.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 100.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 100.0
+        }
+      ]
+    },
+    {
+      "hitType": 2,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 360.0,
+      "expected": 360.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 100.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 100.0
+        }
+      ]
+    },
+    {
+      "hitType": 4,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 100.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 360.0,
+      "expected": 360.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 100.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 100.0
+        }
+      ]
+    },
+    {
+      "hitType": 1,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 200.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 520.0,
+      "expected": 520.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 200.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 200.0
+        }
+      ]
+    },
+    {
+      "hitType": 2,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 200.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 520.0,
+      "expected": 520.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 200.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 200.0
+        }
+      ]
+    },
+    {
+      "hitType": 4,
+      "procContext": 30,
+      "statuses": [
+        1,
+        5
+      ],
+      "perStatus": 0.8,
+      "base": 200.0,
+      "current": 200.0,
+      "upgradePresent": true,
+      "alive": true,
+      "result": 520.0,
+      "expected": 520.0,
+      "hasQueries": [
+        259,
+        261,
+        247
+      ],
+      "valueQueries": [
+        {
+          "upgrade": 259,
+          "procType": 1,
+          "base": 200.0
+        },
+        {
+          "upgrade": 259,
+          "procType": 5,
+          "base": 200.0
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "External upgrade lookup, current damage read, victim statuses and logging are dependency stubs. Original CO consumer code is unchanged.",
+    "Does not establish which real weapon path supplies upgradePresent or the base/current ratio.",
+    "No blanket rule can be inferred from radial type or DealDamageThroughImpactBehavior alone."
+  ]
+}

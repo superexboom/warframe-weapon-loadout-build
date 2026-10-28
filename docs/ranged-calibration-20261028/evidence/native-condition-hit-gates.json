@@ -1,0 +1,2927 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "region": {
+    "start": "0x14051da09",
+    "end": "0x14051da4d",
+    "reject": "0x14051d8d7",
+    "sha256": "19d5fc9f47ba618ccf784143b1ea354fcef1d5df7c29b58417b1dabefc91aad2"
+  },
+  "hitTypes": {
+    "DHT_NONE": 0,
+    "DHT_TRACE": 1,
+    "DHT_PROJECTILE": 2,
+    "DHT_MELEE": 3,
+    "DHT_RADIAL": 4,
+    "DHT_SCRIPT": 5,
+    "DHT_LINK": 6,
+    "DHT_DOT": 7
+  },
+  "exhaustiveCases": 10240,
+  "conditionCases": 1232,
+  "conditions": [
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnDamageCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnDamageNoDotCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnHealthDamageCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnOverguardBrokenCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnOverguardDamagedCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnOverguardGainedCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnOverguardLostCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnParryCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnPredeathCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "PRE_DEATH",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/OnShieldDamageCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotEximusCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "/Lotus/Scripts/Challenges/MatchEximus.lua",
+        "Function": "MatchAttackEvent",
+        "_altFireOnly": 0.0
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHeadshotPistolCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitGunNoDotsCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitPistolCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitPistolNoDotsCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitRifleCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnHitShotgunCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillEximusCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "/Lotus/Upgrades/Stickers/Scripts/PizzaParty.lua",
+        "Function": "MatchAttackEvent"
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillGunCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "/Lotus/Types/Challenges/Scripts/MatchWeaponSlot.lua",
+        "Function": "MatchAttackEvent",
+        "_weaponSlot": "SLOT_2"
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillPistolCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillPistolNoAbilityWeaponsCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillRifleCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillShotgunCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnKillWeakPointRifleCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "DEATH",
+      "script": {
+        "Script": "IsWeakpoint.lua",
+        "Function": "MatchAttackEvent",
+        "_weakness": 0.5
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnMeleeTransferenceInCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnOperatorEnergyDepletedCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnReloadArchgunFromEmptyClipCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnReloadPistolCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnReloadRifleCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnReloadShotgunCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnTransferenceInCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnTransferenceOutCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnVoidDashCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnVoidModeCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnVoidProjectionCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnWeakPointHitPistolNoAbilityWeaponsCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/IsWeakpoint.lua",
+        "Function": "MatchAttackEvent",
+        "_weakness": 0.5
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Events/OnWeakPointHitShotgunCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/IsWeakpoint.lua",
+        "Function": "MatchAttackEvent",
+        "_weakness": 0.5
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnAbilityHeatProcCondition",
+      "ignoreMask": 192,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbilityDamageCondition.lua",
+        "Function": "MatchAttackEvent",
+        "_areSummonsValid": 0.0,
+        "_areExaltedWeaponValid": 1.0
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnAbilityRadiationProcCondition",
+      "ignoreMask": 192,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbilityDamageCondition.lua",
+        "Function": "MatchAttackEvent",
+        "_areSummonsValid": 0.0,
+        "_areExaltedWeaponValid": 1.0
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnAltHitIgnoreDOTCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnArchwingHeadshotKillCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnBowHitCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnBowWeakPointHitCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "IsWeakpoint.lua",
+        "Function": "MatchAttackEvent",
+        "_weakness": 0.5
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnBulletJumpCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnBulletOrDoubleJumpCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnColdProcCondition",
+      "ignoreMask": 192,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnComboTierCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "/Lotus/Scripts/Challenges/MatchSpecificTag.lua",
+        "Function": "MatchTagEvent",
+        "_specificTag": "COMBO_TIER_REACHED"
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnComboTierResetCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "/Lotus/Scripts/Challenges/MatchSpecificTag.lua",
+        "Function": "MatchTagEvent",
+        "_specificTag": "COMBO_RESET"
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnCritCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": "T_YES",
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnCritNoIntermediateCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": "T_YES",
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnDoubleJumpCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnElectricityProcCondition",
+      "ignoreMask": 192,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnEmpoweredHeavyMeleeAttackKilledCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "/Lotus/Upgrades/EmpoweredHeavyMelee/OnEmpoweredHeavyMeleeKillCondition.lua",
+        "Function": "MatchAttackEvent"
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnEnemyDamagedCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnFinisherCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnFinisherWorkaroundCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "/Lotus/Scripts/Challenges/FinisherOrMercyKill.lua",
+        "Function": "MatchAttackEvent",
+        "_mercyKillTag": "EXECUTION_END",
+        "_finisherType": "/Lotus/Types/Game/LotusFinisher"
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnFourHeadshotsCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnFrozenSolidCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnGarudaCrossbowHeadshotKillCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnGlaiveMeleeKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnGroundJumpCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnGroundSlamCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotKillCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeadshotKillNoScriptHitTypeCondition",
+      "ignoreMask": 32,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": false,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeatProcCondition",
+      "ignoreMask": 192,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeavyGunEquippedCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHeavyMeleeHitCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHitCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHitElementalAmmoCondition",
+      "ignoreMask": 0,
+      "requiredMask": 22,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": false,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": false,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": false,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHitIgnoreDOTCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHitLiftedEnemyCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnHoverboardRollCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnImpactProcCondition",
+      "ignoreMask": 192,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnKillElementalAmmoCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnLiftedCondition",
+      "ignoreMask": 160,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": false,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnLiftedKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMagneticProcCondition",
+      "ignoreMask": 192,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMaxRadiationHitCondition",
+      "ignoreMask": 176,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "RadialDamageOnMaxRadiationStackHit.lua",
+        "Function": "MatchAttackEvent",
+        "_damageToSpreadBase": 0.5,
+        "_damageToSpreadPerLevel": 0.1,
+        "_radiusToSpreadBase": 2.5,
+        "_radiusToSpreadPerLevel": 0.5,
+        "_cooldownBase": 0.0,
+        "_cooldownPerLevel": 0.0,
+        "_shockwaveVfx": ""
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": false,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeCritCondition",
+      "ignoreMask": 192,
+      "requiredMask": 0,
+      "criticalHit": "T_YES",
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeHeavyAttackKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeHitCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeKillAnySourceCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMeleeKnockdownCondition",
+      "ignoreMask": 160,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "KNOCKDOWN",
+      "script": {
+        "Script": "DuplicateStatus.lua",
+        "Function": "MatchAttackEvent",
+        "_duplicateNum": 2.0,
+        "_duplciateNumPerFusionLevel": 1.0,
+        "_failOnActiveProcs": [
+          "PT_KNOCKED_DOWN",
+          "PT_RAGDOLL",
+          "PT_LIFT_HIT"
+        ]
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": false,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnMercyKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnNonHeavyMeleeHitCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnOverguardHitCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPistolHeadshotCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPrimaryKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnPunctureProcCondition",
+      "ignoreMask": 192,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnRagdollCondition",
+      "ignoreMask": 160,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "RAGDOLL",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": false,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnRangeHitIgnoreDOTCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnReloadFromEmptyClipCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnRollCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnRollEndedCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnShotgunCloseKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnShotgunKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnSixMeleeKillsCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnSixMeleeKillsLongTimerCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcALLAnySourceCondition",
+      "ignoreMask": 224,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": false,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcALLCondition",
+      "ignoreMask": 224,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": false,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnStatusProcCondition",
+      "ignoreMask": 224,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": false,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnSummonHitCondition",
+      "ignoreMask": 128,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "OnSummonHitCondition.lua",
+        "Function": "MatchAttackEvent"
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnToxinProcCondition",
+      "ignoreMask": 192,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": false,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnWeakPointHitCondition",
+      "ignoreMask": 144,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "IsWeakpoint.lua",
+        "Function": "MatchAttackEvent",
+        "_weakness": 0.5
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": false
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnWeakPointHitRifleCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "IsWeakpoint.lua",
+        "Function": "MatchAttackEvent",
+        "_weakness": 0.5
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OnWeakPointKillAnySourceCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "IsWeakpoint.lua",
+        "Function": "MatchAttackEvent",
+        "_weakness": 0.5
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/RadialDamageSelfProcCondition",
+      "ignoreMask": 32,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": false,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SplitStatusProcsOnStackedStatusHitCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "SplitStatusProcsOnStackedStatusHit.lua",
+        "Function": "MatchAttackEvent",
+        "_stacksRequiredToSplit": 10.0
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/OnAnyWeaponCritCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": "T_YES",
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/OnAnyWeaponHitCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": "T_NO",
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/OnAnyWeaponImpactProcCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/OnAnyWeaponMagneticProcCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/OnEximusKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityEfficiencyOnAbilityObjectCreationCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AfterWallLatchCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/EnergyEfficiencyOnHeadshotCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "DEATH",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbility1Condition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbility2Condition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbility3Condition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbility4Condition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbilityCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAbilityFirstUseCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnAimCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnDoubleProcCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnEnergyPickupCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnFreeCastAbilityCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "/Lotus/Scripts/FreeAbilities/FreeAbilitiesListener.lua",
+        "Function": "MatchItemEvent"
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnHealthPickUpLimiterForSubModCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnHealthPickupCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnInjuryBlockedCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "INJURY_BLOCKED",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnInjuryResistedCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "INJURY_RESISTED",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnKnockdownCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "KNOCKDOWN",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnOperatorAbilityCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnOperatorCausePreDeathCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "PRE_DEATH",
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnOperatorKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnOutOfAmmoCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnPassiveReloadCompleteCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnPassiveReloadCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnReloadCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnResidualKillCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnTwoSecondsWallLatchCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnWallLatchCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnWarframeOnlyAbilityCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "OnWarframeAbilityCondition.lua",
+        "Function": "MatchItemEvent"
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnWeaponBehaviorChangeAltCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnWeaponBehaviorChangePrimaryCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/OnZoomLevelChangeCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/WhileWallLatchingCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": null,
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/EvoPistolOnHeadshotCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "/Lotus/Types/Challenges/EvolvingWeaponUpgrades.lua",
+        "Function": "MatchAttackEvent",
+        "_evoRank": 3.0,
+        "_evoSkillIndex": 0.0,
+        "_checkIsSliding": 0.0
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/EvoPistolOnNoCritOrProcCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": "T_NO",
+      "injury": "ANY",
+      "script": {
+        "Script": "/Lotus/Types/Challenges/EvolvingWeaponUpgrades.lua",
+        "Function": "MatchAttackEvent",
+        "_evoRank": 5.0,
+        "_evoSkillIndex": 2.0,
+        "_checkIsSliding": 0.0
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/EvoRifleFromEmptyClipCondition",
+      "ignoreMask": 0,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "/Lotus/Types/Challenges/EvolvingWeaponUpgrades.lua",
+        "Function": "MatchAttackEvent",
+        "_evoRank": 3.0,
+        "_evoSkillIndex": 1.0,
+        "_checkIsSliding": 0.0
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": true,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/EvoRifleOnHeadshotKillCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": null,
+      "script": {
+        "Script": "/Lotus/Types/Challenges/EvolvingWeaponUpgrades.lua",
+        "Function": "MatchAttackEvent",
+        "_evoRank": 3.0,
+        "_evoSkillIndex": 2.0,
+        "_checkIsSliding": 0.0
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    },
+    {
+      "path": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/EvoRifleOnTwoHeadshotsCondition",
+      "ignoreMask": 16,
+      "requiredMask": 0,
+      "criticalHit": null,
+      "injury": "ANY",
+      "script": {
+        "Script": "/Lotus/Types/Challenges/EvolvingWeaponUpgrades.lua",
+        "Function": "MatchAttackEvent",
+        "_evoRank": 5.0,
+        "_evoSkillIndex": 2.0,
+        "_checkIsSliding": 0.0
+      },
+      "passesHitTypeGate": {
+        "DHT_NONE": true,
+        "DHT_TRACE": true,
+        "DHT_PROJECTILE": true,
+        "DHT_MELEE": true,
+        "DHT_RADIAL": false,
+        "DHT_SCRIPT": true,
+        "DHT_LINK": true,
+        "DHT_DOT": true
+      }
+    }
+  ],
+  "limits": [
+    "Only the raw HitType filter is executed. Injury, owner, weapon, critical and script checks are independent gates.",
+    "Gate acceptance does not prove event multiplicity, grouping, ordering or cooldown."
+  ]
+}

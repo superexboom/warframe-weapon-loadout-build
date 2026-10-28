@@ -373,6 +373,11 @@ def _flatten_behaviours(
         mode["damage"] = _resolve_damage(
             index, weapon_path, fire or {}, impact or {}
         )
+        declarations = _native_event_declarations(
+            index, weapon_path, fire or {}, impact or {}
+        )
+        if declarations:
+            mode["nativeEventDeclarations"] = declarations
         projectile_layer = _extract_projectile_events(
             index, weapon_path, fire or {}
         )
@@ -1164,6 +1169,33 @@ def _heavy_recall_variants(
     return list({variant["id"]: variant for variant in variants}.values())
 
 
+def _native_event_declarations(index, weapon_path, fire, impact):
+    """Keep independent native event lanes without assigning combat eligibility.
+
+    Missing fields remain absent. Explicit zero and empty upgrade lists are
+    meaningful declarations, but neither proves the final damage/kill/status
+    consumer's policy. In particular SendEvents controls projectile notices;
+    it is not a global switch for all Arcane or status triggers.
+    """
+    result = {}
+    impact_fields = ("ApplyRadialDamageOnHit", "ApplyRadialDamageOnMiss",
+                     "MultiShotBuffsRadialDamage", "RadialDamageUpgradeType",
+                     "DamageUpgradeTypes", "IgnoreHeadshotBonus")
+    values = {key: impact[key] for key in impact_fields if key in impact}
+    if values:
+        result["impact"] = values
+    reference = fire.get("projectileType")
+    if isinstance(reference, str) and reference:
+        path, projectile = _resolve_weapon_reference(index, weapon_path, reference)
+        projectile_fields = ("SendEvents", "DamageUpgradeTypes",
+                             "DealDamageThroughImpactBehavior", "IgnoreHeadShotBonus",
+                             "ClusterSetsChildrenDamageInfo")
+        values = {key: projectile[key] for key in projectile_fields if key in projectile}
+        if values:
+            result["projectile"] = {"path": path, "fields": values}
+    return result
+
+
 def _resolve_damage(
     index: PackageIndex,
     weapon_path: str,
@@ -1861,6 +1893,12 @@ def _damage_block(
     }
     if source_total != total:
         result["sourceTotal"] = source_total
+    # This is the serialized DamageInfo declaration, not the final attack
+    # classification: native callers may replace it before dispatch.
+    for key in ("HitType", "hitType"):
+        if key in source:
+            result["sourceHitType"] = source[key]
+            break
     return result
 
 

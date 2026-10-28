@@ -7,9 +7,11 @@ head and, ``EmbedTime`` later, lands its ``EmbedDeathAttack`` (Zymos: 953
 Toxin, 50% status, 1.1 s). tools/import_projectile_components.py imports only
 the radial WFSim models (the 61 Toxin explosion), so the burst is appended
 here as a second radial with ``headOnly``: the replay scales it by the shot's
-head share. Spores that need a kill (EmbedDeathKillClusterProj, spawned by a
-Lua script the client cache does not carry) stay out: the single target is
-dead by then.
+head share. Child spores are a separate unresolved event lane: current Font
+contains InfUziWeapon.lua with OnRadialDamage and OnDeath spawn branches.
+The carrier requests five children, but inheritance, spawn exclusivity and
+target selection need independent native consumer proof. Do not discard them
+merely because the embedded victim died, or add an unconditional five hits.
 """
 from __future__ import annotations
 

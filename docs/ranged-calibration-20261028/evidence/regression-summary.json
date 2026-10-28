@@ -1,0 +1,59 @@
+{
+  "inputs": "548eb999444298bd",
+  "nativeSha256": "a70d22afc7b9799c7afef3b4be3de8deca7d3131e40bad8b36de7595e5effb60",
+  "expectedTests": 1956,
+  "actualUniqueTests": 1956,
+  "missing": [],
+  "extra": [],
+  "counters": {
+    "tests": 1963,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "shard": 0,
+      "exitCode": 0
+    },
+    {
+      "shard": 1,
+      "exitCode": 0
+    },
+    {
+      "shard": 2,
+      "exitCode": 0
+    },
+    {
+      "shard": 3,
+      "exitCode": 0
+    }
+  ],
+  "inputsStable": true,
+  "elapsedSeconds": 617.2192653000238,
+  "passed": true,
+  "finalUniqueTests": 1985,
+  "additionalAuditOnlyTests": 29,
+  "allFinalNodesAccountedFor": true,
+  "combinedExecutedCountersIncludingRechecks": {
+    "tests": 2069,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "finalCollectionSha256": "71024f01462e8569a7d21d22de72e3e2f6410c8e5898465517e36591672b54ad",
+  "validationScope": "Project regressions and Python/native agreement; native executable gate harnesses listed separately; no live game accuracy claim.",
+  "finalInputs": "9983f13029bf9133",
+  "finalDiagnosticOnlyRecheck": {
+    "tests": 66,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "numericalModelUnchanged": true,
+    "evidence": "final-diagnostics-equivalence.json"
+  },
+  "retiredRenamedTestIds": [
+    "tests/test_battacor_radial.py::test_one_trigger_direct_takes_multishot_radial_does_not[1.0-416.0]",
+    "tests/test_battacor_radial.py::test_one_trigger_direct_takes_multishot_radial_does_not[3.0-832.0]"
+  ]
+}
