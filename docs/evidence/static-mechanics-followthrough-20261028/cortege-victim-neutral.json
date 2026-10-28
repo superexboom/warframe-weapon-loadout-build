@@ -1,0 +1,307 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "entry": "0x141482900 (actual victim packet resolver +0x738)",
+  "cases": [
+    {
+      "inputAmount": 2000,
+      "neutralVictimGlobalMultiplier": 1.0,
+      "outputAmount": 2000.0,
+      "damageTypes": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "procChance": 0.699999988079071,
+      "calls": [
+        {
+          "function": "0x141482900",
+          "amount": 2000.0
+        },
+        {
+          "function": "0x14111fa60",
+          "amount": 2000.0
+        },
+        {
+          "function": "0x140563c60",
+          "amount": 2000.0
+        }
+      ],
+      "upgradeCallbacks": [
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xb4",
+          "beforeBase": 2000.0
+        }
+      ]
+    },
+    {
+      "inputAmount": 2000,
+      "neutralVictimGlobalMultiplier": 1.5,
+      "outputAmount": 3000.0,
+      "damageTypes": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "procChance": 0.699999988079071,
+      "calls": [
+        {
+          "function": "0x141482900",
+          "amount": 2000.0
+        },
+        {
+          "function": "0x14111fa60",
+          "amount": 2000.0
+        },
+        {
+          "function": "0x140563c60",
+          "amount": 2000.0
+        }
+      ],
+      "upgradeCallbacks": [
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xb4",
+          "beforeBase": 3000.0
+        }
+      ]
+    },
+    {
+      "inputAmount": 4000,
+      "neutralVictimGlobalMultiplier": 1.0,
+      "outputAmount": 4000.0,
+      "damageTypes": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "procChance": 0.699999988079071,
+      "calls": [
+        {
+          "function": "0x141482900",
+          "amount": 4000.0
+        },
+        {
+          "function": "0x14111fa60",
+          "amount": 4000.0
+        },
+        {
+          "function": "0x140563c60",
+          "amount": 4000.0
+        }
+      ],
+      "upgradeCallbacks": [
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xb4",
+          "beforeBase": 4000.0
+        }
+      ]
+    },
+    {
+      "inputAmount": 4000,
+      "neutralVictimGlobalMultiplier": 1.5,
+      "outputAmount": 6000.0,
+      "damageTypes": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "procChance": 0.699999988079071,
+      "calls": [
+        {
+          "function": "0x141482900",
+          "amount": 4000.0
+        },
+        {
+          "function": "0x14111fa60",
+          "amount": 4000.0
+        },
+        {
+          "function": "0x140563c60",
+          "amount": 4000.0
+        }
+      ],
+      "upgradeCallbacks": [
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xb4",
+          "beforeBase": 6000.0
+        }
+      ]
+    },
+    {
+      "inputAmount": 6000,
+      "neutralVictimGlobalMultiplier": 1.0,
+      "outputAmount": 6000.0,
+      "damageTypes": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "procChance": 0.699999988079071,
+      "calls": [
+        {
+          "function": "0x141482900",
+          "amount": 6000.0
+        },
+        {
+          "function": "0x14111fa60",
+          "amount": 6000.0
+        },
+        {
+          "function": "0x140563c60",
+          "amount": 6000.0
+        }
+      ],
+      "upgradeCallbacks": [
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xb4",
+          "beforeBase": 6000.0
+        }
+      ]
+    },
+    {
+      "inputAmount": 6000,
+      "neutralVictimGlobalMultiplier": 1.5,
+      "outputAmount": 9000.0,
+      "damageTypes": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "procChance": 0.699999988079071,
+      "calls": [
+        {
+          "function": "0x141482900",
+          "amount": 6000.0
+        },
+        {
+          "function": "0x14111fa60",
+          "amount": 6000.0
+        },
+        {
+          "function": "0x140563c60",
+          "amount": 6000.0
+        }
+      ],
+      "upgradeCallbacks": [
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xb4",
+          "beforeBase": 9000.0
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Offline emulation, no live game process",
+    "Victim/instigator are synthetic neutral actor fixtures with isolated class metadata (negative type index, no specialized parent); runtime class registration is not emulated",
+    "No weapon metadata (+0x270 null); ordinary field packet does not restore weapon elemental or crit data",
+    "Upgrade value evaluation and transform/getter services are controlled neutral callbacks; target global multiplier is an explicit fixture; no armor/shield/resistance/weakspots",
+    "Target mitigation and HP reducers are not part of this stage test; this validates the pre-mitigation attack contract, not live target HP parity"
+  ]
+}

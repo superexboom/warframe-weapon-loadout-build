@@ -1,0 +1,60 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "scriptSha256": "363abf02d54c70bdbb05e5affaba477310a887b3a10b5ffefe89e7ec821a2c65",
+  "p6Unknown": [],
+  "p6InvalidJumps": [],
+  "cacheWrites": [
+    {
+      "pc": 147,
+      "op": 9,
+      "semantic": "SETTABLEKS",
+      "a": 17,
+      "b": 16,
+      "c": 151,
+      "sd": -26864,
+      "aux": 12,
+      "width": 2
+    },
+    {
+      "pc": 151,
+      "op": 61,
+      "semantic": "SETTABLE",
+      "a": 12,
+      "b": 16,
+      "c": 11,
+      "sd": 2832,
+      "aux": null,
+      "width": 1
+    }
+  ],
+  "binding": {
+    "query": {
+      "hash": "0x09fdbd10",
+      "wrapper": "0x141a05ca0",
+      "inventoryVirtual": "0x488",
+      "concrete": "0x140ba2670",
+      "upgradeVirtual": "0x1a8"
+    },
+    "refresh": {
+      "hash": "0x89ae7d55",
+      "wrapper": "0x141a05910",
+      "inventoryVirtual": "0x480",
+      "concrete": "0x1401e5840",
+      "upgradeVirtual": "0x1a0"
+    },
+    "add": {
+      "hash": "0x629a3012",
+      "wrapper": "0x141a05740",
+      "inventoryVirtual": "0x478",
+      "concrete": "0x1415c73b0",
+      "upgradeVirtual": "0x198"
+    }
+  },
+  "proved": "P6 does not clear old cached value when native timed entry is absent; it uses oldCache+step in both refresh and add branches",
+  "notProved": [
+    "opaque global root0x20bbc0cd mapped to actual shared engine table",
+    "global table lifetime across OnHit invocations after five-second expiry",
+    "other engine or script cleanup ofFiredUpValue[id]"
+  ],
+  "safeProductionChange": null
+}

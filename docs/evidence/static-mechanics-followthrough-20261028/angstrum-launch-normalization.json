@@ -1,0 +1,262 @@
+{
+  "imageSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "boundary": "original post-common-init branch, charge getter, current fire getter, rounding/compensation, packet multiplication bytes; no-upgrades engine query and multishot=1 scaffolding explicitly supplied; no scene/spawn/hit or total DPS emulated",
+  "stubs": [
+    "140187990 property query returns input except charge rate=1; no weapon upgrades",
+    "owner current ammo/capacity and active state selection; supplied bank agrees with state",
+    "native generic wrapper not scene/common initialization; execute exact post-common-init suffix",
+    "security cookie and allocation-free state setter side effect no-op"
+  ],
+  "rows": [
+    {
+      "status": [
+        {
+          "rawProc": 0.22,
+          "copiedPlanProc": 0.2199999988079071,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.2199999988079071
+        },
+        {
+          "rawProc": 0.1,
+          "copiedPlanProc": 0.10000000149011612,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.10000000149011612
+        }
+      ],
+      "loaded": 1,
+      "maxCharges": 0,
+      "iterations": 1,
+      "fireIterationCompensation": 1.0,
+      "perProjectileScale": 1.0,
+      "perProjectileBlast": 250.0,
+      "perProjectileDirect": 200.0,
+      "volleyBlast": 250.0,
+      "volleyDirect": 200.0
+    },
+    {
+      "status": [
+        {
+          "rawProc": 0.22,
+          "copiedPlanProc": 0.2199999988079071,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.2199999988079071
+        },
+        {
+          "rawProc": 0.1,
+          "copiedPlanProc": 0.10000000149011612,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.10000000149011612
+        }
+      ],
+      "loaded": 1,
+      "maxCharges": 120,
+      "iterations": 1,
+      "fireIterationCompensation": 1.0,
+      "perProjectileScale": 1.0,
+      "perProjectileBlast": 250.0,
+      "perProjectileDirect": 200.0,
+      "volleyBlast": 250.0,
+      "volleyDirect": 200.0
+    },
+    {
+      "status": [
+        {
+          "rawProc": 0.22,
+          "copiedPlanProc": 0.2199999988079071,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.2199999988079071
+        },
+        {
+          "rawProc": 0.1,
+          "copiedPlanProc": 0.10000000149011612,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.10000000149011612
+        }
+      ],
+      "loaded": 2,
+      "maxCharges": 0,
+      "iterations": 2,
+      "fireIterationCompensation": 1.0,
+      "perProjectileScale": 1.0,
+      "perProjectileBlast": 250.0,
+      "perProjectileDirect": 200.0,
+      "volleyBlast": 500.0,
+      "volleyDirect": 400.0
+    },
+    {
+      "status": [
+        {
+          "rawProc": 0.22,
+          "copiedPlanProc": 0.2199999988079071,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.2199999988079071
+        },
+        {
+          "rawProc": 0.1,
+          "copiedPlanProc": 0.10000000149011612,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.10000000149011612
+        }
+      ],
+      "loaded": 2,
+      "maxCharges": 120,
+      "iterations": 2,
+      "fireIterationCompensation": 1.0,
+      "perProjectileScale": 2.0,
+      "perProjectileBlast": 500.0,
+      "perProjectileDirect": 400.0,
+      "volleyBlast": 1000.0,
+      "volleyDirect": 800.0
+    },
+    {
+      "status": [
+        {
+          "rawProc": 0.22,
+          "copiedPlanProc": 0.2199999988079071,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.2199999988079071
+        },
+        {
+          "rawProc": 0.1,
+          "copiedPlanProc": 0.10000000149011612,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.10000000149011612
+        }
+      ],
+      "loaded": 3,
+      "maxCharges": 0,
+      "iterations": 3,
+      "fireIterationCompensation": 1.0,
+      "perProjectileScale": 1.0,
+      "perProjectileBlast": 250.0,
+      "perProjectileDirect": 200.0,
+      "volleyBlast": 750.0,
+      "volleyDirect": 600.0
+    },
+    {
+      "status": [
+        {
+          "rawProc": 0.22,
+          "copiedPlanProc": 0.2199999988079071,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.2199999988079071
+        },
+        {
+          "rawProc": 0.1,
+          "copiedPlanProc": 0.10000000149011612,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.10000000149011612
+        }
+      ],
+      "loaded": 3,
+      "maxCharges": 120,
+      "iterations": 3,
+      "fireIterationCompensation": 1.0,
+      "perProjectileScale": 3.0,
+      "perProjectileBlast": 750.0,
+      "perProjectileDirect": 600.0,
+      "volleyBlast": 2250.0,
+      "volleyDirect": 1800.0
+    },
+    {
+      "status": [
+        {
+          "rawProc": 0.22,
+          "copiedPlanProc": 0.2199999988079071,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.2199999988079071
+        },
+        {
+          "rawProc": 0.1,
+          "copiedPlanProc": 0.10000000149011612,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.10000000149011612
+        }
+      ],
+      "loaded": 4,
+      "maxCharges": 0,
+      "iterations": 4,
+      "fireIterationCompensation": 1.0,
+      "perProjectileScale": 1.0,
+      "perProjectileBlast": 250.0,
+      "perProjectileDirect": 200.0,
+      "volleyBlast": 1000.0,
+      "volleyDirect": 800.0
+    },
+    {
+      "status": [
+        {
+          "rawProc": 0.22,
+          "copiedPlanProc": 0.2199999988079071,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.2199999988079071
+        },
+        {
+          "rawProc": 0.1,
+          "copiedPlanProc": 0.10000000149011612,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.10000000149011612
+        }
+      ],
+      "loaded": 4,
+      "maxCharges": 120,
+      "iterations": 4,
+      "fireIterationCompensation": 1.0,
+      "perProjectileScale": 4.0,
+      "perProjectileBlast": 1000.0,
+      "perProjectileDirect": 800.0,
+      "volleyBlast": 4000.0,
+      "volleyDirect": 3200.0
+    },
+    {
+      "status": [
+        {
+          "rawProc": 0.22,
+          "copiedPlanProc": 0.2199999988079071,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.2199999988079071
+        },
+        {
+          "rawProc": 0.1,
+          "copiedPlanProc": 0.10000000149011612,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.10000000149011612
+        }
+      ],
+      "loaded": 6,
+      "maxCharges": 0,
+      "iterations": 6,
+      "fireIterationCompensation": 1.0,
+      "perProjectileScale": 1.0,
+      "perProjectileBlast": 250.0,
+      "perProjectileDirect": 200.0,
+      "volleyBlast": 1500.0,
+      "volleyDirect": 1200.0
+    },
+    {
+      "status": [
+        {
+          "rawProc": 0.22,
+          "copiedPlanProc": 0.2199999988079071,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.2199999988079071
+        },
+        {
+          "rawProc": 0.1,
+          "copiedPlanProc": 0.10000000149011612,
+          "nativeStatusDenominator": 1,
+          "finalNativeNoUpgradeProc": 0.10000000149011612
+        }
+      ],
+      "loaded": 6,
+      "maxCharges": 120,
+      "iterations": 6,
+      "fireIterationCompensation": 1.0,
+      "perProjectileScale": 6.0,
+      "perProjectileBlast": 1500.0,
+      "perProjectileDirect": 1200.0,
+      "volleyBlast": 9000.0,
+      "volleyDirect": 7200.0
+    }
+  ]
+}

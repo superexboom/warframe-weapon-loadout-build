@@ -7419,15 +7419,201 @@
     },
     "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher": {
       "unmodeled": [
-        "angstrum-single-rocket-explosion-unmodeled",
-        "angstrum-charge-volley-unmodeled"
-      ]
+        "angstrum-full-charge-ideal-projectile-coverage",
+        "angstrum-charge-release-and-flight-timing-unverified",
+        "angstrum-charge-completion-buff-snapshot-boundary-unverified",
+        "angstrum-ammo-efficiency-integer-accounting-unverified"
+      ],
+      "name": "Angstrum",
+      "directTotal": 200.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketProjectile",
+      "behaviourSource": "Behaviors[0]",
+      "scope": "ordinary mode0 full magazine; amounts per projectile before charge scale; separate direct and radial packets",
+      "charge": {
+        "seconds": 0.5,
+        "cadence": "draw-then-rate",
+        "modifier": "WEAPON_FIRE_RATE",
+        "scalesWithFireRate": true,
+        "nativeField": "Behaviors[0].state.ChargeTime",
+        "nativeSource": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher"
+      },
+      "chargeVolley": {
+        "policy": "full-magazine",
+        "damageScale": "loaded-rounds",
+        "minimumProjectiles": 1,
+        "rawFireIterations": 1
+      },
+      "radials": [
+        {
+          "damage": {
+            "blast": 250.0
+          },
+          "radius_m": 3.5999999,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.40000001,
+          "crit_chance": 0.16,
+          "crit_multiplier": 2.0,
+          "status_chance": 0.22,
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-constructor-DT_EXPLOSION",
+          "statusSource": "native-explicit",
+          "statusDenominatorSource": "native-raw-fireIterations=1"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher",
+          "sha256": "416665491c0a882456daf78beb9359006ab4f5246f15eba4b304fe9f354309c6"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistolOther",
+          "sha256": "73e0eab4999729eda5678d251ed6e3fa02f7671393a952008e018fc81723ab5a"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistol",
+          "sha256": "411b62316f5f598f161d3c5c31f175ad4c69d16ac1477264e1cd16a4825e0c49"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "sha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614"
+        },
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketProjectile",
+          "sha256": "ee1c169d09edad93cb4b425fec1895312154598197da5ced2d6c13dd2ea40f5a"
+        },
+        {
+          "path": "/Lotus/Types/Weapons/GunProjectile",
+          "sha256": null,
+          "attributeRecord": false
+        },
+        {
+          "path": "/EE/Types/Engine/Projectile",
+          "sha256": "8b5fe36bc4e7e28d621d2b59a52648b98d1ca7738ca0fb4d85436ecd03548d2e"
+        }
+      ],
+      "generatedBy": "tools/import_native_angstrum.py",
+      "packageBuild": "2026.10.22.13.12",
+      "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+      "source": {
+        "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+        "descriptorNameOffset": 8,
+        "maxCharges": 120,
+        "chargeGate": "0x14015efb0",
+        "projectileScaleStore": "0x1403c4cef",
+        "directScaleConsumer": "0x1416377a4",
+        "radialScaleConsumer": "0x141234a7a",
+        "radialTypeDefault": "0x140fba662",
+        "radialStatusDefault": "0x1400e8080",
+        "radialPacketProcCopy": "0x140508ee7",
+        "rawIterationGetter": "0x1404728b0",
+        "statusNormalization": "0x141586f50"
+      }
     },
     "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum": {
       "unmodeled": [
-        "angstrum-single-rocket-explosion-unmodeled",
-        "angstrum-charge-volley-unmodeled"
-      ]
+        "angstrum-full-charge-ideal-projectile-coverage",
+        "angstrum-charge-release-and-flight-timing-unverified",
+        "angstrum-charge-completion-buff-snapshot-boundary-unverified",
+        "angstrum-ammo-efficiency-integer-accounting-unverified"
+      ],
+      "name": "Prisma Angstrum",
+      "directTotal": 200.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrumRocketProjectile",
+      "behaviourSource": "Behaviors[0]",
+      "scope": "ordinary mode0 full magazine; amounts per projectile before charge scale; separate direct and radial packets",
+      "charge": {
+        "seconds": 0.2,
+        "cadence": "draw-then-rate",
+        "modifier": "WEAPON_FIRE_RATE",
+        "scalesWithFireRate": true,
+        "nativeField": "Behaviors[0].state.ChargeTime",
+        "nativeSource": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum"
+      },
+      "chargeVolley": {
+        "policy": "full-magazine",
+        "damageScale": "loaded-rounds",
+        "minimumProjectiles": 1,
+        "rawFireIterations": 1
+      },
+      "radials": [
+        {
+          "damage": {
+            "blast": 250.0
+          },
+          "radius_m": 3.5999999,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.40000001,
+          "crit_chance": 0.18000001,
+          "crit_multiplier": 2.2,
+          "status_chance": 0.10000000149011612,
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrumRocketProjectile",
+          "nativeField": "ExplosiveAttack",
+          "damageTypeSource": "native-constructor-DT_EXPLOSION",
+          "statusSource": "native-constructor-ProcChance-0.1",
+          "statusDenominatorSource": "native-raw-fireIterations=1"
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum",
+          "sha256": "9fef678a59f3991e71d8fda7270a0fef9aed47f4b7a147e0230ac7f504ad7418"
+        },
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher",
+          "sha256": "416665491c0a882456daf78beb9359006ab4f5246f15eba4b304fe9f354309c6"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistolOther",
+          "sha256": "73e0eab4999729eda5678d251ed6e3fa02f7671393a952008e018fc81723ab5a"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistol",
+          "sha256": "411b62316f5f598f161d3c5c31f175ad4c69d16ac1477264e1cd16a4825e0c49"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "sha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614"
+        },
+        {
+          "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrumRocketProjectile",
+          "sha256": "1bc2b3f1c2508a743ae2cce251022620093cf94d9613cfab93266b9e6a47298f"
+        },
+        {
+          "path": "/Lotus/Types/Weapons/GunProjectile",
+          "sha256": null,
+          "attributeRecord": false
+        },
+        {
+          "path": "/EE/Types/Engine/Projectile",
+          "sha256": "8b5fe36bc4e7e28d621d2b59a52648b98d1ca7738ca0fb4d85436ecd03548d2e"
+        }
+      ],
+      "generatedBy": "tools/import_native_angstrum.py",
+      "packageBuild": "2026.10.22.13.12",
+      "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+      "source": {
+        "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+        "descriptorNameOffset": 8,
+        "maxCharges": 120,
+        "chargeGate": "0x14015efb0",
+        "projectileScaleStore": "0x1403c4cef",
+        "directScaleConsumer": "0x1416377a4",
+        "radialScaleConsumer": "0x141234a7a",
+        "radialTypeDefault": "0x140fba662",
+        "radialStatusDefault": "0x1400e8080",
+        "radialPacketProcCopy": "0x140508ee7",
+        "rawIterationGetter": "0x1404728b0",
+        "statusNormalization": "0x141586f50"
+      }
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun": {
       "modes": {

@@ -14,6 +14,7 @@ SCORING_ADAPTERS = (
 )
 MECHANICS_RECORDS = (
     "sentinels.json",
+    "companion-projectile-sequences.json",
     "player-only-conditions.json",
     "burst-profiles.json",
     "charge-profiles.json",

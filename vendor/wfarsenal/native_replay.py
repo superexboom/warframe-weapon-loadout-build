@@ -58,6 +58,10 @@ def supported(stats, options) -> bool:
         return False
     if combat.get('cycle') and not getattr(wfcore, 'RELOAD_SCALED_TRANSFORMS', 0):
         return False
+    if combat.get('chargeVolley') and not getattr(wfcore, 'MAGAZINE_CHARGE_VOLLEY', 0):
+        return False
+    if combat.get('projectileSequence') and not getattr(wfcore, 'COMPANION_PROJECTILE_SEQUENCE', 0):
+        return False
     if combat.get('melee') and not getattr(wfcore, 'MELEE_INITIAL_COMBO_RECOVERY', 0):
         return False
     if combat.get('cycle') and combat.get('melee'):
@@ -543,7 +547,7 @@ def trajectory(
         victimBefore=dict(combat.get('victimProcTypesBeforeHit') or {}),
         syndicate=dict(syndrome) if syndrome else None,
         targetFaction=cache['target_faction'], factionBracket=cache['faction_bracket'], tables=tables,
-        melee=melee_config,
+        melee=melee_config, projectileSequence=combat.get("projectileSequence"),
         battery=combat.get('battery') or None, spool=combat.get('spool') or None,
         fireRateSpool=combat.get('fireRateSpool') or None, shellReload=combat.get('shellReload') or None,
         sniperCombo=combat.get('sniperCombo') or None, magazineRestore=combat.get('magazineRestore') or None,
@@ -678,6 +682,7 @@ def trajectory(
                              if manual_detonation else None),
         'delayedAttackEvents': core['delayedAttackEvents'],
         'projectileEvents': [],
+        'chargeVolley': {'policy':'full-magazine','events':[]} if combat.get('chargeVolley') else None,
         'projectileLifecycle': (dict(zip(('deployed', 'merged', 'explosions', 'singularities', 'childProjectiles'),
                                          core['projectiles'])) if 'projectiles' in core else {}),
         'onosSequence': ({'events': [], 'alignmentShots': combat['onosCharge']['alignmentShots'],

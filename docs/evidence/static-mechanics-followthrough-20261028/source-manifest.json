@@ -1,0 +1,26 @@
+{
+  "inputs": "734afae0e99ddf38",
+  "pythonNewlines": "LF normalized",
+  "files": {
+    "app.py": "02e034ff88d51bccc4230d77407470a577d8c1f85eb92f434b5b3816ae234a57",
+    "data/mechanics/combat-reference.json": "811b01ae8e7f2a8993ab7d2e23601cc25d8e58a7fe9ff6b96359bfc7c210078b",
+    "data/mechanics/companion-projectile-sequences.json": "d63074f5bf864269f11ae58e01e265b577cbf48d01ee782a61f1f0ad5d60cae1",
+    "frontend/app.js": "80ccb98bd877e31636ff0f1a16dce90c673c87eea7ea52b42ff178361f867cad",
+    "native/wfcore/src/lib.rs": "cf0baf4738ee1b1f9f943960d624670febedf94699f690dab9ef0793c7283c58",
+    "native/wfcore/src/replay.rs": "6af1a0a2871f8b897341cb438a52b5a82c6dd7cfd55c488d799374d33b2fe2a3",
+    "tests/test_analysis_fingerprint_mechanics_20261028.py": "93b4bd66dc8117601c3ee02c65762e2f5ea43d59cb8a7128c7d79cba688696d1",
+    "tests/test_angstrum_static_20261028.py": "450110b45b24f6bf658add1b87a7c6f06890133ff03506a312c922e4d566089c",
+    "tests/test_charge_volley_runtime_20261028.py": "7337e447449cc6f5015010ee15894406effa270daff2c4474b9da6f7f15034a7",
+    "tests/test_companion_mechanics_audit_20261028.py": "c01203de96022ee3b7aa74c04668533a19c92c8e58bc66c01968ee81b539f223",
+    "tests/test_companion_sequence_20261028.py": "bd91d8271aa9f71f73ab5420ffd05d8652bf350147e34696dd8a01167b2d9439",
+    "tests/test_cortege_field_reference_20261028.py": "4bbc34169e30b2e6637c06f3a9c0403ee9b9b4be3dd161439e49731e073a2299",
+    "tests/test_unmodeled_fields_20261028.py": "f589183d39de69f76a3b1adf0a713f15c36c5eb7bfefa7101a8e4468fc5a1918",
+    "tools/cortege_field_reference.py": "950523caddf977716d323c6263d87abf2666e236f893d416089eaa8d22353657",
+    "tools/import_companion_projectile_sequences.py": "fcb30e4c5ac21c2b8ac802f7c8a0ced7d3e43f90f31869634e469cd3d723c99a",
+    "tools/import_native_angstrum.py": "7c92fe3110381bf440c69774a8b42ed4fbf9b42e42149229f70dac7851b6f8d3",
+    "vendor/wfarsenal/combat_replay.py": "9c50b0318d79286bdcf2beb3d61a0385f224ae2de3813919e6d0ec0dc2397add",
+    "vendor/wfarsenal/companion.py": "229d3750fe9987c142528de8a497a2e317c3c50e2fb4c155b25ee8207bbadb82",
+    "vendor/wfarsenal/manual_combat.py": "11c536184fa6a68a076eda268897ba024a9f518cedc55919161301cdb7b5cd15",
+    "vendor/wfarsenal/native_replay.py": "3c95997c4a4e3c350af19d5ad6ad2b672d72b18fb56ff70df1d9074d700b9142"
+  }
+}

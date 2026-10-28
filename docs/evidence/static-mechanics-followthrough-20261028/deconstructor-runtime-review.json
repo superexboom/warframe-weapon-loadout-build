@@ -1,0 +1,335 @@
+{
+  "sourceIdentity": [
+    {
+      "types": {
+        "DT_IMPACT": 130.0
+      },
+      "projectile": null,
+      "source": null
+    },
+    {
+      "types": {
+        "DT_PUNCTURE": 130.0
+      },
+      "projectile": null,
+      "source": null
+    },
+    {
+      "types": {
+        "DT_SLASH": 130.0
+      },
+      "projectile": null,
+      "source": null
+    }
+  ],
+  "cases": [
+    {
+      "weapon": "Deconstructor",
+      "mods": [],
+      "target": {
+        "health": 10000000.0,
+        "shield": 0.0,
+        "armour": 0.0
+      },
+      "reference": {
+        "shots": 7,
+        "totalWindowDamage": 955.8529513888889,
+        "directWindow": 910.0027777777777,
+        "dotWindow": 45.8501736111111,
+        "procCounts": {
+          "DT_IMPACT": 0.75,
+          "DT_PUNCTURE": 0.5,
+          "DT_SLASH": 0.5
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      },
+      "native": {
+        "shots": 7,
+        "totalWindowDamage": 955.8529513888889,
+        "directWindow": 910.0027777777777,
+        "dotWindow": 45.8501736111111,
+        "procCounts": {
+          "DT_IMPACT": 0.75,
+          "DT_PUNCTURE": 0.5,
+          "DT_SLASH": 0.5
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      }
+    },
+    {
+      "weapon": "Deconstructor Prime",
+      "mods": [
+        "Pressure Point",
+        "Fury"
+      ],
+      "target": {
+        "health": 10000000.0,
+        "shield": 0.0,
+        "armour": 300.0
+      },
+      "reference": {
+        "shots": 9,
+        "totalWindowDamage": 1078.4419017094015,
+        "directWindow": 1008.0041025641024,
+        "dotWindow": 70.43779914529915,
+        "procCounts": {
+          "DT_IMPACT": 0.75,
+          "DT_PUNCTURE": 0.75,
+          "DT_SLASH": 0.75
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      },
+      "native": {
+        "shots": 9,
+        "totalWindowDamage": 1078.4419017094015,
+        "directWindow": 1008.0041025641024,
+        "dotWindow": 70.43779914529915,
+        "procCounts": {
+          "DT_IMPACT": 0.75,
+          "DT_PUNCTURE": 0.75,
+          "DT_SLASH": 0.75
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      }
+    },
+    {
+      "weapon": "Deconstructor",
+      "mods": [
+        "Jagged Edge"
+      ],
+      "target": {
+        "health": 10000000.0,
+        "shield": 1000.0,
+        "armour": 0.0
+      },
+      "reference": {
+        "shots": 7,
+        "totalWindowDamage": 1154.8535544394842,
+        "directWindow": 1109.003380828373,
+        "dotWindow": 45.8501736111111,
+        "procCounts": {
+          "DT_IMPACT": 0.75,
+          "DT_PUNCTURE": 0.5,
+          "DT_SLASH": 0.5
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      },
+      "native": {
+        "shots": 7,
+        "totalWindowDamage": 1154.8535544394842,
+        "directWindow": 1109.003380828373,
+        "dotWindow": 45.8501736111111,
+        "procCounts": {
+          "DT_IMPACT": 0.75,
+          "DT_PUNCTURE": 0.5,
+          "DT_SLASH": 0.5
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      }
+    },
+    {
+      "weapon": "Deconstructor Prime",
+      "mods": [
+        "Fever Strike",
+        "North Wind"
+      ],
+      "target": {
+        "health": 10000000.0,
+        "shield": 0.0,
+        "armour": 1000.0
+      },
+      "reference": {
+        "shots": 7,
+        "totalWindowDamage": 2027.5275794457705,
+        "directWindow": 1993.730967596943,
+        "dotWindow": 33.79661184882749,
+        "procCounts": {
+          "DT_IMPACT": 0.2678571313775515,
+          "DT_VIRAL": 1.125000026785713,
+          "DT_PUNCTURE": 0.17857142091836767,
+          "DT_SLASH": 0.17857142091836767
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      },
+      "native": {
+        "shots": 7,
+        "totalWindowDamage": 2027.5275794457705,
+        "directWindow": 1993.730967596943,
+        "dotWindow": 33.79661184882749,
+        "procCounts": {
+          "DT_IMPACT": 0.2678571313775515,
+          "DT_VIRAL": 1.125000026785713,
+          "DT_PUNCTURE": 0.17857142091836767,
+          "DT_SLASH": 0.17857142091836767
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      }
+    },
+    {
+      "weapon": "Deconstructor",
+      "mods": [
+        "Condition Overload",
+        "Fever Strike",
+        "North Wind",
+        "Jagged Edge"
+      ],
+      "target": {
+        "health": 3000.0,
+        "shield": 1000.0,
+        "armour": 300.0
+      },
+      "reference": {
+        "shots": 7,
+        "totalWindowDamage": 3999.9999999999995,
+        "directWindow": 3971.6868783562686,
+        "dotWindow": 28.313121643730902,
+        "procCounts": {
+          "DT_IMPACT": 0.1785714209183677,
+          "DT_VIRAL": 0.886100405789269,
+          "DT_PUNCTURE": 0.1785714209183677,
+          "DT_SLASH": 0.2567567523739958
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      },
+      "native": {
+        "shots": 7,
+        "totalWindowDamage": 3999.9999999999995,
+        "directWindow": 3971.6868783562686,
+        "dotWindow": 28.313121643730902,
+        "procCounts": {
+          "DT_IMPACT": 0.1785714209183677,
+          "DT_VIRAL": 0.886100405789269,
+          "DT_PUNCTURE": 0.1785714209183677,
+          "DT_SLASH": 0.2567567523739958
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      }
+    },
+    {
+      "weapon": "Deconstructor Prime",
+      "mods": [
+        "Melee Elementalist",
+        "Voltaic Strike",
+        "Fired Up"
+      ],
+      "target": {
+        "health": 15000.0,
+        "shield": 2000.0,
+        "armour": 500.0
+      },
+      "reference": {
+        "shots": 7,
+        "totalWindowDamage": 2413.6607282121777,
+        "directWindow": 1595.0267381752888,
+        "dotWindow": 818.633990036889,
+        "procCounts": {
+          "DT_IMPACT": 0.75,
+          "DT_ELECTRICITY": 1.0500000699999998,
+          "DT_PUNCTURE": 0.5,
+          "DT_SLASH": 0.5
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      },
+      "native": {
+        "shots": 7,
+        "totalWindowDamage": 2413.6607282121777,
+        "directWindow": 1595.0267381752888,
+        "dotWindow": 818.633990036889,
+        "procCounts": {
+          "DT_IMPACT": 0.75,
+          "DT_ELECTRICITY": 1.0500000699999998,
+          "DT_PUNCTURE": 0.5,
+          "DT_SLASH": 0.5
+        },
+        "unsupported": [
+          "companion-projectile-bounce-return-timing-unverified",
+          "companion-active-projectile-refire-limit-unmodeled"
+        ]
+      }
+    }
+  ],
+  "fractionalCo": [
+    {
+      "phase": 0,
+      "damage": {
+        "DT_IMPACT": 285.9610117,
+        "DT_POISON": 257.36492768766067
+      },
+      "base": 130.0
+    },
+    {
+      "phase": 1,
+      "damage": {
+        "DT_PUNCTURE": 285.9610117,
+        "DT_POISON": 257.36492768766067
+      },
+      "base": 130.0
+    },
+    {
+      "phase": 2,
+      "damage": {
+        "DT_SLASH": 543.3259393876606,
+        "DT_POISON": 257.36492768766067
+      },
+      "base": 130.0
+    },
+    {
+      "phase": 0,
+      "damage": {
+        "DT_IMPACT": 285.9610117,
+        "DT_POISON": 257.36492768766067
+      },
+      "base": 130.0
+    },
+    {
+      "phase": 2,
+      "damage": {
+        "DT_SLASH": 543.3259393876606,
+        "DT_POISON": 257.36492768766067
+      },
+      "base": 130.0
+    }
+  ],
+  "abnormal": {
+    "multishot": 2.0,
+    "unsupported": [
+      "companion-projectile-bounce-return-timing-unverified",
+      "companion-active-projectile-refire-limit-unmodeled",
+      "companion-projectile-sequence-multishot-unmodeled"
+    ]
+  },
+  "nativeFeature": true
+}

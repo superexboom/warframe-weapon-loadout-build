@@ -1,0 +1,20 @@
+{
+  "imageSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "stateRows": [
+    {
+      "useClipSizeAsDamageMultiplier": 0,
+      "lastRoundStateGate": 1
+    },
+    {
+      "useClipSizeAsDamageMultiplier": 1,
+      "lastRoundStateGate": 0
+    }
+  ],
+  "iterationOverrideQuery": [
+    {
+      "query": "WEAPON_FIRE_ITERATIONS",
+      "base": 3.0
+    }
+  ],
+  "boundary": "original state veto and complete fire override bytes; existing owner query scaffolding; default branch and weapon last-round getter trapped, neither visited"
+}

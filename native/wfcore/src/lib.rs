@@ -185,6 +185,8 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ABI", 1)?;
     m.add("ALT_EMBEDDED_LIFECYCLE", 1)?;
     m.add("MELEE_INITIAL_COMBO_RECOVERY", 1)?;
+    m.add("COMPANION_PROJECTILE_SEQUENCE", 1)?;
+    m.add("MAGAZINE_CHARGE_VOLLEY", 1)?;
     m.add("ENERVATE_PROBABILISTIC_HITS", 1)?;
     m.add("IGNORE_HEADSHOT_BONUS", 1)?;
     m.add("STUG_IDEAL_DETONATION", 1)?;

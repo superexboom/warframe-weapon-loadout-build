@@ -234,6 +234,7 @@ struct Stats {
     requires_full_ammo: bool,
     bow_draw: Option<f64>,
     charge_time: f64,
+    charge_volley: bool,
     initial_combo: f64,
     heavy_charge_speed: f64,
     // A thrown glaive: flight speed, Volatile bounce chance, Power Throw's bonus.
@@ -279,6 +280,7 @@ impl Stats {
     fn drop_private(&mut self) {
         self.bow_draw = None;
         self.charge_time = 0.0;
+        self.charge_volley = false;
         self.primary_delay = 0.0;
         self.lingering = None;
         self.embedded = None;
@@ -331,6 +333,7 @@ impl Stats {
             requires_full_ammo: self.requires_full_ammo,
             bow_draw: self.bow_draw,
             charge_time: self.charge_time,
+            charge_volley: self.charge_volley,
             initial_combo: self.initial_combo,
             heavy_charge_speed: self.heavy_charge_speed,
             projectile_speed_multiplier: self.projectile_speed_multiplier,
@@ -610,6 +613,10 @@ pub struct Replay<'py> {
     reload_shell_events: Vec<(f64, f64, &'static str, u8)>,
     derived: FxHashMap<(usize, u8, u64), usize>,
     selected_incarnon: bool,
+    projectile_sequence_length: usize,
+    projectile_sequence_index: usize,
+    volley_rounds: f64,
+    volley_shot_resume: Option<f64>,
     melee: Option<MeleeSpec>,
     melee_count: f64,
     melee_heavy_multiplier: f64,
@@ -814,7 +821,7 @@ impl<'py> Replay<'py> {
             burst, burst_rate, infinite_ammo, victim_before, syndicate, target_faction,
             faction_bracket, tables, battery, spool, rate_spool, shell,
             shot_combo, reload_after_every_shot, refill_growth, restore, pending_restore, recharges,
-            delayed_attacks, reload_shell_events, derived, selected_incarnon, melee_count, melee_heavy_multiplier,
+            delayed_attacks, reload_shell_events, derived, selected_incarnon, projectile_sequence_length, projectile_sequence_index, volley_rounds, volley_shot_resume, melee_count, melee_heavy_multiplier,
             melee_last_hit, melee_combo_at, melee_recovery_token, melee_recovery_initial, melee_buff_boundary, melee_pending, melee_index, heavy_flag, no_co_flag, melee_heavy_now,
             affinity_per_kill, affinity, syndicate_ready, syndicate_events, pools, states,
             pooled, presence, gas_procs, dots, blasts, blast_procs,
@@ -1091,6 +1098,7 @@ impl<'py> Replay<'py> {
             requires_full_ammo,
             bow_draw,
             charge_time,
+            charge_volley: match opt_attr(obj,"_charge_volley")? { Some(v) => v.is_truthy()?, None => false },
             initial_combo: {
                 let v = obj.getattr("initial_combo")?;
                 if v.is_truthy()? { v.extract::<f64>()? } else { 0.0 }
@@ -1537,6 +1545,8 @@ impl<'py> Replay<'py> {
         let mut stacks: Vec<u64> = std::mem::take(&mut self.model_key);
         stacks.clear();
         stacks.push(self.form as u64);
+        stacks.push(self.volley_rounds.to_bits());
+        if self.projectile_sequence_length > 0 { stacks.push(self.projectile_sequence_index as u64); }
         stacks.extend(self.sources.iter().map(|q| q.stacks.to_bits()));
         // Melee: combo-tier stacks and the heavy flag join the key, sorted by
         // name like the reference's sorted(extra_stacks.items()).
@@ -1610,6 +1620,8 @@ impl<'py> Replay<'py> {
         stacks_dict.set_item("__onosPower", power)?;
         stacks_dict.set_item("__onosHits", hits)?;
         stacks_dict.set_item("__onosBeamSeconds", beam)?;
+        stacks_dict.set_item("__chargeVolleyRounds",self.volley_rounds)?;
+        if self.projectile_sequence_length > 0 { stacks_dict.set_item("__projectileSequenceIndex",self.projectile_sequence_index)?; }
         for (_, value, obj) in &extra {
             stacks_dict.set_item(obj.bind(py), *value)?;
         }
@@ -2193,6 +2205,7 @@ impl<'py> Replay<'py> {
     }
 
     fn resume_time(&mut self, t: f64) -> PyResult<Option<f64>> {
+        if self.shot_in_progress && self.volley_shot_resume.is_some() { return Ok(self.volley_shot_resume); }
         let (active, _) = self.model(t)?;
         let a = &self.stats[active];
         if self.shot_in_progress && a.magazine > 0.0 && !self.infinite_ammo && self.ammo - pmax(a.ammo_cost, 0.0) <= 1e-9 {
@@ -3274,6 +3287,7 @@ fn armour_reduction(armour: f64) -> f64 {
 impl<'py> Replay<'py> {
     pub fn run(&mut self) -> PyResult<()> {
         let mut first_round = true;
+        let mut volley_pending: Option<f64> = None;
         let mut burst_round: i64 = 0;
         let mut burst_size: i64 = 1;
         let mut burst_head_probability = 1.0;
@@ -3581,6 +3595,9 @@ impl<'py> Replay<'py> {
                     self.last_round = magazine_form
                         && a.magazine > 0.0 && self.ammo > 0.0 && self.ammo <= pmax(a.ammo_cost, 1.0) + 1e-9;
                     let (mut active, radial) = self.model(t)?;
+                    if self.projectile_sequence_length > 0 && self.stats[active].multishot != 1.0 {
+                        return Err(Self::unsupported("companion-projectile-sequence-multishot-unmodeled"));
+                    }
                     let speed = self.stats[active].fire_rate;
                     if speed <= 0.0 {
                         continue;
@@ -3794,6 +3811,44 @@ impl<'py> Replay<'py> {
                         }
                         self.push(t + reload_time, Kind::ReloadComplete(was_empty), None);
                         continue;
+                    }
+                    if self.stats[active].charge_volley {
+                        let loaded = match volley_pending.take() {
+                            Some(n) => n,
+                            None => {
+                                let n=pmax(1.0,pmax(0.0,pmin(self.ammo,self.stats[active].magazine)).floor());
+                                volley_pending=Some(n);
+                                self.push(t+n*self.stats[active].charge_time,Kind::Fire,None);
+                                continue;
+                            }
+                        };
+                        self.volley_rounds=loaded;
+                        let views=self.model(t)?;
+                        active=views.0;radial=views.1;
+                        self.volley_rounds=1.0;
+                        let a=&self.stats[active];
+                        let shot_cost=a.ammo_cost*loaded;
+                        let mut next_ammo=self.ammo-shot_cost;
+                        let mut reload_wait=0.0;
+                        if !self.infinite_ammo && next_ammo<=1e-9 && shot_cost>0.0 {
+                            next_ammo=a.magazine;reload_wait=a.reload_time;
+                        } else if self.infinite_ammo { next_ammo=a.magazine; }
+                        let next_loaded=pmax(1.0,pmax(0.0,pmin(next_ammo,a.magazine)).floor());
+                        self.volley_shot_resume=Some(t+1.0/pmax(a.fire_rate,1e-9)+reload_wait+next_loaded*a.charge_time);
+                        active=self.derive(active,34,loaded,|v| {
+                            for entry in v.core.damage_types.iter_mut() { entry.1*=loaded; }
+                            v.damage_types=v.core.damage_types.clone();
+                            v.core.dot_base_damage=v.core.dot_base_damage.map(|x|x*loaded);
+                            v.ammo_cost*=loaded;v.charge_time=0.0;
+                        });
+                        if let Some(part)=radial {
+                            radial=Some(self.derive(part,35,loaded,|v| {
+                                for entry in v.core.damage_types.iter_mut() { entry.1*=loaded; }
+                                v.damage_types=v.core.damage_types.clone();
+                                v.core.dot_base_damage=v.core.dot_base_damage.map(|x|x*loaded);
+                                v.ammo_cost*=loaded;v.charge_time=0.0;
+                            }));
+                        }
                     }
                     if let Some((remaining_clip, count, _, _)) = self.form_burst().0 {
                         if burst_round == 0 {
@@ -4274,6 +4329,10 @@ impl<'py> Replay<'py> {
                             delay = pmax(delay, delay_seconds);
                         }
                     }
+                    if self.projectile_sequence_length > 0 {
+                        self.projectile_sequence_index = (self.projectile_sequence_index+1)%self.projectile_sequence_length;
+                    }
+                    self.volley_shot_resume=None;
                     rate_spool_due = t + delay;
                     self.push(t + delay, Kind::Fire, None);
                 }
@@ -4776,6 +4835,13 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         tables,
         selected_incarnon: item("selectedIncarnon")?.is_truthy()?,
         melee,
+        projectile_sequence_length: match opt_dict("projectileSequence")? {
+            Some(d) => get_f(&d,"length",0.0)? as usize,
+            None => 0,
+        },
+        projectile_sequence_index: 0,
+        volley_rounds: 1.0,
+        volley_shot_resume: None,
         melee_count: 0.0,
         melee_heavy_multiplier: 1.0,
         melee_last_hit: f64::NEG_INFINITY,

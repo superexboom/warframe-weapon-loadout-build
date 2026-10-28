@@ -220,6 +220,12 @@ def _reference_trajectory(
     # Melee hit schedule (melee_sequence): discrete hits replace the abstract
     # stance-multiplied attack; the stance multipliers must not apply twice.
     melee = combat.get('melee')
+    projectile_sequence = combat.get('projectileSequence')
+    projectile_sequence_index = 0
+    volley_pending = None
+    volley_rounds = 1.0
+    volley_shot_resume = None
+    volley_events = []
     melee_loop = melee_pending = None
     melee_count = 0.0
     melee_last_hit = -math.inf
@@ -767,6 +773,8 @@ def _reference_trajectory(
         # When the weapon lands its next direct hit after a kill at t: past a
         # reload when this shot empties the magazine (ammo is paid after the
         # hit resolves), else the next scheduled fire/reload-complete event.
+        if shot_in_progress and volley_shot_resume is not None:
+            return volley_shot_resume
         active = model(t)[0]
         if (shot_in_progress and combat and active.magazine > 0 and not combat.get('infiniteAmmo')
                 and ammo - max(active.ammo_cost, 0.0) <= 1e-9):
@@ -935,6 +943,10 @@ def _reference_trajectory(
                        '__onosHits':onos_hits,
                        '__onosBeamSeconds':round(min(onos['rampSeconds'],max(0.,t-onos_start)),6) if onos else 0.}
         extra_stacks = melee_stacks(heavy, no_co)
+        if combat.get('chargeVolley'):
+            extra_stacks['__chargeVolleyRounds'] = volley_rounds
+        if projectile_sequence:
+            extra_stacks["__projectileSequenceIndex"] = projectile_sequence_index
         key = (form, tuple(q["stacks"] for q in sources), live_types, last_round,
                tuple(onos_values.values()) if onos and form!='base' else (),
                tuple(sorted(extra_stacks.items())))
@@ -1744,6 +1756,47 @@ def _reference_trajectory(
                         spool_shots=0
                     push(t + reload_time, "reload-complete", was_empty)
                 continue
+            volley = getattr(active, '_charge_volley', None)
+            if volley:
+                if volley_pending is None:
+                    loaded = max(1., math.floor(max(0., min(ammo, active.magazine))))
+                    wait = loaded * getattr(active, '_charge_time', 0.)
+                    volley_pending = (loaded, wait)
+                    push(t + wait, 'fire')
+                    continue
+                loaded, charged_seconds = volley_pending
+                volley_pending = None
+                volley_rounds = loaded
+                active, radial = model(t)
+                volley_rounds = 1.0
+                # The actual loaded base enters the multishot upgrade query;
+                # flat/SET iterations do not commute with multiplying by N.
+                shot_cost = active.ammo_cost*loaded
+                next_ammo = ammo-shot_cost
+                reload_wait = 0.
+                if not combat.get('infiniteAmmo') and next_ammo <= 1e-9 and shot_cost > 0.:
+                    next_ammo = active.magazine
+                    reload_wait = active.reload_time
+                elif combat.get('infiniteAmmo'):
+                    next_ammo = active.magazine
+                next_loaded = max(1., math.floor(max(0., min(next_ammo, active.magazine))))
+                volley_shot_resume = t+1./max(active.fire_rate,1e-9)+reload_wait+next_loaded*getattr(active,'_charge_time',0.)
+                # Native launch stores F on each projectile independently from
+                # its F spawned iterations. Scale both once, never status chance.
+                def charged_part(part):
+                    updated = copy(part)
+                    updated.damage_types = {k:v*loaded for k,v in part.damage_types.items()}
+                    updated.dot_base_damage = part.dot_base_damage*loaded if part.dot_base_damage is not None else None
+                    updated.ammo_cost = part.ammo_cost*loaded
+                    updated._charge_time = 0.
+                    return updated
+                active = charged_part(active)
+                if radial is not None:
+                    radial = charged_part(radial)
+                if collect_timeline:
+                    volley_events.append(dict(time=round(t,6), loadedRounds=loaded,
+                        chargeSeconds=charged_seconds, projectiles=active.multishot,
+                        perProjectileDamageScale=loaded, ammoCost=active.ammo_cost))
             burst, burst_rate = form_burst()
             if burst and burst_round == 0:
                 # BurstRemainingClip: one pull empties what the magazine holds.
@@ -2080,6 +2133,11 @@ def _reference_trajectory(
                 schedule_melee_recovery(t,
                     initial_combo_floor(after.initial_combo or 0., float(melee['comboSpec'].get('cap') or 220.)),
                     float(melee['comboSpec'].get('recoveryPerSecond') or 0.))
+            if projectile_sequence:
+                if active.multishot != 1. and 'companion-projectile-sequence-multishot-unmodeled' not in unsupported:
+                    unsupported.append('companion-projectile-sequence-multishot-unmodeled')
+                projectile_sequence_index = (projectile_sequence_index+1) % projectile_sequence['length']
+            volley_shot_resume = None
             rate_spool_due = t + delay
             push(t + delay, "fire")
         elif kind == "sample":
@@ -2198,6 +2256,7 @@ def _reference_trajectory(
                               'events':detonation_events} if manual_detonation else None),
         'delayedAttackEvents': delayed_attack_count,
         'projectileEvents': projectile_events or [],
+        'chargeVolley': {'policy':'full-magazine', 'events':volley_events} if combat.get('chargeVolley') else None,
         'projectileLifecycle': projectiles.stats if projectiles else {},
         'onosSequence': {'events':onos_events,'alignmentShots':onos['alignmentShots'],'powerCost':onos['powerCost']} if onos else None,
         'doubleTap':{'events':tap_events,'maximum':tap.maximum,'duration':tap.duration} if tap else None,

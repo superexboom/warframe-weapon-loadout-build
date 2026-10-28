@@ -68,5 +68,6 @@
     "rebaked": false,
     "botSynchronized": false,
     "newRelease": false
-  }
+  },
+  "historicalStatus": "Validation and boundaries at commit dc0036d; Angstrum scalar/proc/volley and Deconstructor sequence were subsequently completed. See docs/static-mechanics-followthrough-20261028.md and its final summary."
 }

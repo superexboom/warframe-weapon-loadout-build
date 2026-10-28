@@ -123,8 +123,8 @@ def test_fired_up_native_reference_parity(name):
 
 @pytest.mark.parametrize("name,expected", [
     ("Cryotra", {"cryotra-field-host-death-and-spatial-persistence-unverified", "cryotra-field-overlap-unverified"}),
-    ("Deconstructor", {"companion-projectile-damage-sequence-unmodeled"}),
-    ("Deconstructor Prime", {"companion-projectile-damage-sequence-unmodeled"})])
+    ("Deconstructor", {"companion-projectile-bounce-return-timing-unverified", "companion-active-projectile-refire-limit-unmodeled"}),
+    ("Deconstructor Prime", {"companion-projectile-bounce-return-timing-unverified", "companion-active-projectile-refire-limit-unmodeled"})])
 def test_known_missing_companion_damage_is_visible_in_real_simulation(name, expected):
     weapon = next(w for w in app.EXPORTS["weapons"] if w.get("nameEn") == name)
     result = app.simulate_manual_payload(dict(weapon=weapon["path"], enemy=app._BENCHMARK_ENEMY_PATH,

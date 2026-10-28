@@ -15,6 +15,7 @@ A companion fires through its own avatar under AI control:
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 import sys
 from functools import lru_cache
 from pathlib import Path
@@ -85,6 +86,36 @@ def companion_payload(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> 
     return out
 
 
+@lru_cache(maxsize=1)
+def projectile_sequence_reference() -> dict[str, Any]:
+    root = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[2]))
+    try:
+        data = json.loads((root / "data/mechanics/companion-projectile-sequences.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return data if data.get("schemaVersion") == 1 else {}
+
+
+def projectile_sequence(weapon: Mapping[str, Any], fire_mode: int = 0) -> dict[str, Any] | None:
+    """Audited launch lanes; the replay currently admits one spawned pellet.
+
+    Native increments per actual spawn, including multishot. A fractional extra
+    spawn changes future phase, so callers must diagnose unsupported multishot
+    instead of multiplying or averaging one lane by expected pellet count.
+    """
+    if not is_companion(weapon):
+        return None
+    selected = int(weapon.get("__selectedFireMode__", fire_mode))
+    mode = (projectile_sequence_reference().get("weapons", {}).get(str(weapon.get("path") or ""), {})
+            .get("modes", {}).get(str(selected)))
+    if not mode or not mode.get("lanes"):
+        return None
+    profile = deepcopy(mode)
+    profile.update(length=len(profile["lanes"]), supportedMultishot=1.0,
+                   admission="single-projectile-launch")
+    return profile
+
+
 def unresolved_weapon_mechanics(weapon: Mapping[str, Any]) -> list[str]:
     """Verified native/export omissions, kept visible until event timing is known."""
     if not is_companion(weapon):
@@ -104,5 +135,9 @@ def unresolved_weapon_mechanics(weapon: Mapping[str, Any]) -> list[str]:
             result.append('cryotra-projectile-forced-cold-unmodeled')
     if any((mode.get("damage") or {}).get("sequenceDamage")
            for mode in weapon.get("fireModes") or () if isinstance(mode, Mapping)):
-        result.append("companion-projectile-damage-sequence-unmodeled")
+        sequence = projectile_sequence(weapon)
+        if sequence:
+            result.extend(sequence["unverified"])
+        else:
+            result.append("companion-projectile-damage-sequence-unmodeled")
     return result

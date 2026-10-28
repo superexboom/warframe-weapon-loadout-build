@@ -1,0 +1,2290 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "kind": "Original projectile query and damage-builder bytes executed offline; synthetic actor/weapon/upgrades provide controlled modifier callback values.",
+  "actualCode": [
+    "0x14160c5a0",
+    "0x141234720",
+    "0x140508a50",
+    "0x14116ac70",
+    "0x140b42420",
+    "0x140451710",
+    "0x14186adc0",
+    "0x140d12e30",
+    "0x14123df60",
+    "0x141708b90",
+    "0x140bd53f0",
+    "0x1408070a0",
+    "0x140c80000",
+    "0x14171ab62..0x14171afa6",
+    "0x140b84370"
+  ],
+  "stubbed": [
+    "owner/ref getters and class metadata scaffolding",
+    "upgrade service injects WEAPON_DAMAGE_AMOUNT multiplier; this does NOT validate real mod-value evaluation",
+    "crit/status-upgrade callbacks return input",
+    "damage-type conversion/proc normalization helpers and damage-percent clamp no-op",
+    "weapon scalar multipliers neutral; no real target/context conditional evaluation"
+  ],
+  "conclusion": "Returned baseAmount contains WEAPON_DAMAGE_AMOUNT changes before SpawnElementTrigger reads it; it is not an unmodified raw constant.",
+  "limits": [
+    "Not game execution",
+    "Regular elemental upgrade0x166 is called by real builder but its complex conversion callback is still stubbed; numerical coverage here is only base-damage routing",
+    "Element callback and exact overlap clock not executed in this harness",
+    "Ordinary elemental stage is a bounded native fragment; conversion/coalescing helper outcome held fixed before original wrapper runs",
+    "Element hit packet has no explicit weapon crit copy; final victim resolution and actor global multipliers are not fully traced"
+  ],
+  "cases": [
+    {
+      "inputAmount": 1000,
+      "injectedDamageUpgradeMultiplier": 1.0,
+      "outputFlags": "00",
+      "baseAmount": 1000.0,
+      "radius": 4.0,
+      "procChance": 0.5,
+      "nativeSuccess": true,
+      "callbacks": [
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x112"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "at": "0x141234a7a",
+          "amount": 1000.0,
+          "xmm0bits": "0x447a0000",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xfd",
+          "beforeBase": 1000.0
+        },
+        {
+          "at": "0x141234c56",
+          "amount": 1000.0,
+          "xmm0bits": "0x447a0000",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234e4c",
+          "amount": 1000.0,
+          "xmm0bits": "0x447a0000",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234ed3",
+          "amount": 1000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234edb",
+          "amount": 1000.0,
+          "xmm0bits": "0x447a0000",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f4f",
+          "amount": 1000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f93",
+          "amount": 1000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x1412350be",
+          "amount": 1000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x17d"
+        },
+        {
+          "at": "0x1412356a9",
+          "amount": 1000.0,
+          "xmm0bits": "0x447a0000",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        }
+      ]
+    },
+    {
+      "inputAmount": 1000,
+      "injectedDamageUpgradeMultiplier": 2.0,
+      "outputFlags": "00",
+      "baseAmount": 2000.0,
+      "radius": 4.0,
+      "procChance": 0.5,
+      "nativeSuccess": true,
+      "callbacks": [
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x112"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "at": "0x141234a7a",
+          "amount": 1000.0,
+          "xmm0bits": "0x447a0000",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xfd",
+          "beforeBase": 1000.0
+        },
+        {
+          "at": "0x141234c56",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234e4c",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234ed3",
+          "amount": 2000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234edb",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f4f",
+          "amount": 2000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f93",
+          "amount": 2000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x1412350be",
+          "amount": 2000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x17d"
+        },
+        {
+          "at": "0x1412356a9",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        }
+      ]
+    },
+    {
+      "inputAmount": 1000,
+      "injectedDamageUpgradeMultiplier": 3.0,
+      "outputFlags": "00",
+      "baseAmount": 3000.0,
+      "radius": 4.0,
+      "procChance": 0.5,
+      "nativeSuccess": true,
+      "callbacks": [
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x112"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "at": "0x141234a7a",
+          "amount": 1000.0,
+          "xmm0bits": "0x447a0000",
+          "nativeAmountState": "000000000000000031d1bee42663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xfd",
+          "beforeBase": 1000.0
+        },
+        {
+          "at": "0x141234c56",
+          "amount": 3000.0,
+          "xmm0bits": "0x453b8000",
+          "nativeAmountState": "000000000000000091d1be248663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234e4c",
+          "amount": 3000.0,
+          "xmm0bits": "0x453b8000",
+          "nativeAmountState": "000000000000000091d1be248663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234ed3",
+          "amount": 3000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "000000000000000091d1be248663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234edb",
+          "amount": 3000.0,
+          "xmm0bits": "0x453b8000",
+          "nativeAmountState": "000000000000000091d1be248663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f4f",
+          "amount": 3000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "000000000000000091d1be248663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f93",
+          "amount": 3000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "000000000000000091d1be248663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x1412350be",
+          "amount": 3000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "000000000000000091d1be248663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x17d"
+        },
+        {
+          "at": "0x1412356a9",
+          "amount": 3000.0,
+          "xmm0bits": "0x453b8000",
+          "nativeAmountState": "000000000000000091d1be248663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        }
+      ]
+    },
+    {
+      "inputAmount": 2000,
+      "injectedDamageUpgradeMultiplier": 1.0,
+      "outputFlags": "00",
+      "baseAmount": 2000.0,
+      "radius": 4.0,
+      "procChance": 0.5,
+      "nativeSuccess": true,
+      "callbacks": [
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x112"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "at": "0x141234a7a",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xfd",
+          "beforeBase": 2000.0
+        },
+        {
+          "at": "0x141234c56",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234e4c",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234ed3",
+          "amount": 2000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234edb",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f4f",
+          "amount": 2000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f93",
+          "amount": 2000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x1412350be",
+          "amount": 2000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x17d"
+        },
+        {
+          "at": "0x1412356a9",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        }
+      ]
+    },
+    {
+      "inputAmount": 2000,
+      "injectedDamageUpgradeMultiplier": 2.0,
+      "outputFlags": "00",
+      "baseAmount": 4000.0,
+      "radius": 4.0,
+      "procChance": 0.5,
+      "nativeSuccess": true,
+      "callbacks": [
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x112"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "at": "0x141234a7a",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xfd",
+          "beforeBase": 2000.0
+        },
+        {
+          "at": "0x141234c56",
+          "amount": 4000.0,
+          "xmm0bits": "0x457a0000",
+          "nativeAmountState": "0000000000000000b1d1bee4a663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234e4c",
+          "amount": 4000.0,
+          "xmm0bits": "0x457a0000",
+          "nativeAmountState": "0000000000000000b1d1bee4a663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234ed3",
+          "amount": 4000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "0000000000000000b1d1bee4a663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234edb",
+          "amount": 4000.0,
+          "xmm0bits": "0x457a0000",
+          "nativeAmountState": "0000000000000000b1d1bee4a663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f4f",
+          "amount": 4000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "0000000000000000b1d1bee4a663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f93",
+          "amount": 4000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "0000000000000000b1d1bee4a663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x1412350be",
+          "amount": 4000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "0000000000000000b1d1bee4a663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x17d"
+        },
+        {
+          "at": "0x1412356a9",
+          "amount": 4000.0,
+          "xmm0bits": "0x457a0000",
+          "nativeAmountState": "0000000000000000b1d1bee4a663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        }
+      ]
+    },
+    {
+      "inputAmount": 2000,
+      "injectedDamageUpgradeMultiplier": 3.0,
+      "outputFlags": "00",
+      "baseAmount": 6000.0,
+      "radius": 4.0,
+      "procChance": 0.5,
+      "nativeSuccess": true,
+      "callbacks": [
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x112"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x119",
+          "input": 0.0
+        },
+        {
+          "at": "0x141234a7a",
+          "amount": 2000.0,
+          "xmm0bits": "0x44fa0000",
+          "nativeAmountState": "000000000000000071d1bee46663d9c800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "scalar-upgrade",
+          "upgrade": "0x1a1",
+          "input": 0.0
+        },
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xfd",
+          "beforeBase": 2000.0
+        },
+        {
+          "at": "0x141234c56",
+          "amount": 6000.0,
+          "xmm0bits": "0x45bb8000",
+          "nativeAmountState": "0000000000000000d1d1be24c663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234e4c",
+          "amount": 6000.0,
+          "xmm0bits": "0x45bb8000",
+          "nativeAmountState": "0000000000000000d1d1be24c663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234ed3",
+          "amount": 6000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "0000000000000000d1d1be24c663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234edb",
+          "amount": 6000.0,
+          "xmm0bits": "0x45bb8000",
+          "nativeAmountState": "0000000000000000d1d1be24c663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f4f",
+          "amount": 6000.0,
+          "xmm0bits": "0x0",
+          "nativeAmountState": "0000000000000000d1d1be24c663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x141234f93",
+          "amount": 6000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "0000000000000000d1d1be24c663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "at": "0x1412350be",
+          "amount": 6000.0,
+          "xmm0bits": "0x3f000000",
+          "nativeAmountState": "0000000000000000d1d1be24c663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x188"
+        },
+        {
+          "callback": "weapon-scalar-upgrade",
+          "upgrade": "0x17d"
+        },
+        {
+          "at": "0x1412356a9",
+          "amount": 6000.0,
+          "xmm0bits": "0x45bb8000",
+          "nativeAmountState": "0000000000000000d1d1be24c663d90800000000000000000000803f00000000000000000000000000008000ffff7f7f0000000000000000"
+        }
+      ]
+    }
+  ],
+  "amountBridge": [
+    {
+      "luaFloat32": 1999.9000244140625,
+      "storedElementAmountInt32": 1999
+    },
+    {
+      "luaFloat32": 2000.0,
+      "storedElementAmountInt32": 2000
+    },
+    {
+      "luaFloat32": 2000.9000244140625,
+      "storedElementAmountInt32": 2000
+    },
+    {
+      "luaFloat32": 4321.9990234375,
+      "storedElementAmountInt32": 4321
+    }
+  ],
+  "elementPackets": [
+    {
+      "amount": 40,
+      "typePercent20": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packetAmount": 40.0,
+      "procChance": 0.699999988079071,
+      "procExtraTimePackedQuarterSeconds": 108,
+      "critChance": 0.0,
+      "critMultiplier": 0.0
+    },
+    {
+      "amount": 2000,
+      "typePercent20": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packetAmount": 2000.0,
+      "procChance": 0.699999988079071,
+      "procExtraTimePackedQuarterSeconds": 108,
+      "critChance": 0.0,
+      "critMultiplier": 0.0
+    },
+    {
+      "amount": 4000,
+      "typePercent20": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packetAmount": 4000.0,
+      "procChance": 0.699999988079071,
+      "procExtraTimePackedQuarterSeconds": 108,
+      "critChance": 0.0,
+      "critMultiplier": 0.0
+    }
+  ],
+  "regularElementStage": [
+    {
+      "elementAdds": {
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "nativePercentageStage": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "wrapperBaseAmount": 2000.0,
+      "note": "original bounded element modifier stage + original scalar wrapper; conversion/coalescing helper outcome held fixed"
+    },
+    {
+      "elementAdds": {
+        "3": 0.0,
+        "4": 0.0,
+        "5": 0.9
+      },
+      "nativePercentageStage": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.8999999761581421,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "wrapperBaseAmount": 2000.0,
+      "note": "original bounded element modifier stage + original scalar wrapper; conversion/coalescing helper outcome held fixed"
+    },
+    {
+      "elementAdds": {
+        "3": 0.0,
+        "4": 0.6,
+        "5": 0.9
+      },
+      "nativePercentageStage": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.6000000238418579,
+        0.8999999761581421,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "wrapperBaseAmount": 2000.0,
+      "note": "original bounded element modifier stage + original scalar wrapper; conversion/coalescing helper outcome held fixed"
+    },
+    {
+      "elementAdds": {
+        "3": 1.2,
+        "4": 0.0,
+        "5": 0.0
+      },
+      "nativePercentageStage": [
+        0.0,
+        0.0,
+        0.0,
+        2.200000047683716,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "wrapperBaseAmount": 2000.0,
+      "note": "original bounded element modifier stage + original scalar wrapper; conversion/coalescing helper outcome held fixed"
+    }
+  ]
+}

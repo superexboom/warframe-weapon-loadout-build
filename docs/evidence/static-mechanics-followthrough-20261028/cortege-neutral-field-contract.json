@@ -1,0 +1,38 @@
+{
+  "schema": "cortege-field-neutral-contract-v1",
+  "productionAdmission": "restricted-pre-mitigation-per-accepted-hit",
+  "sourceExeSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "snapshot": {
+    "sourceAttack": "EmbedDeathAttack",
+    "rawAmount": 2000,
+    "scalar": "float32(2000 * ordinaryUnconditionalBaseDamageMultiplier)",
+    "boundary": "trunc_int32(lua_float32_baseAmount)"
+  },
+  "field": {
+    "damageType": "Heat",
+    "perAcceptedHit": "snapshot",
+    "weaponBaseDamageApplications": 1,
+    "inheritWeaponCriticalChance": false,
+    "inheritWeaponCriticalMultiplier": false,
+    "inheritWeaponElementalShares": false,
+    "inheritWeaponStatusChance": false,
+    "procChanceFloat32": 0.699999988079071,
+    "procExtraTimeRaw": -3,
+    "guaranteedContactCount": null,
+    "idealizedScheduleRequired": true
+  },
+  "admission": [
+    "same EXE and full raw chain proof",
+    "neutral actor global/ability/conditional/gameplay/faction modifiers",
+    "neutral victim gameplay scalar or established target mitigation applied once",
+    "no special innate/conversion/extreme elemental share clamps",
+    "one declared field-target contact per numerical primitive"
+  ],
+  "unsupported": [
+    "final generic victim shield/HP implementation parity",
+    "status duration and proc DoT integration",
+    "real overlap field count and expiry clock",
+    "global instigator region service scalar default/class binding"
+  ],
+  "nativeCases": 23
+}

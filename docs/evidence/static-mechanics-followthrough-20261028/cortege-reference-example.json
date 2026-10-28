@@ -1,0 +1,30 @@
+{
+  "supported": true,
+  "scope": "independent-research-pre-defense-direct-heat-per-declared-contact",
+  "base_damage_multiplier": 0.95,
+  "hit_contacts": 1,
+  "target_scalar": 1.0,
+  "query_base_amount_float32": 1900.0,
+  "field_snapshot_int32": 1900,
+  "predefense_heat_per_contact": 1900.0,
+  "predefense_heat_amount": 1900.0,
+  "source_build": "2026.10.22.13.12",
+  "source_hashes": {
+    "Warframe.x64.exe": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "Packages.bin_H": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+    "ThanotechArchgun.lua_B": "35dc689324bd96ca125913066a71fa5a1a266fce6c25a156f8793647cd14278a"
+  },
+  "native_contract": {
+    "query": "0x14160c5a0 -> 0x141234720; EmbedDeathAttack",
+    "lua_int32": "0x141708b90 -> 0x140bd53f0; Element+0x628",
+    "victim_packet": "0x141482900 -> 0x14111fa60 -> 0x140563c60"
+  },
+  "limits": [
+    "Independent research reference; not an enabled production firefield profile.",
+    "Only ordinary unconditional base-damage query scaling is admitted; special innate, conversions, conditional, faction and actor gameplay MOD coverage is incomplete.",
+    "The caller declares contacts for one field; real tick scheduling, expiry and spatial overlap are unverified.",
+    "The caller supplies a known target scalar; default 1 is an explicit neutral assumption, not a discovered global actor default.",
+    "Heat is pre-defense: armor, shields, resistance, weakspots and final target HP parity are outside this reference.",
+    "Status DoT and status duration are omitted; weapon elemental, critical and status values are not inherited."
+  ]
+}

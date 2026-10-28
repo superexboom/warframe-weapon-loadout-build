@@ -1,0 +1,71 @@
+{
+  "sourceBuild": "2026.10.22.13.12",
+  "baseCommit": "dc0036d7b76a6aa519285e4f02b8608bf807e90c",
+  "inputs": "734afae0e99ddf38",
+  "nativeSha256": "a70d22afc7b9799c7afef3b4be3de8deca7d3131e40bad8b36de7595e5effb60",
+  "changes": [
+    "Deconstructor/Prime cyclic IPS source selection and projectile identity before MODs",
+    "phase retained across kills/reloads; native feature gate; multishot approximation explicit",
+    "Angstrum/Prisma full charge: before-impact wait, per-projectile charge factor, base-N multishot modifier query, coupled ammo/cadence, raw-1 status denominator",
+    "Prisma separate radial status0.1; native charged mode vetoes LAST_MULTISHOT",
+    "actual volley cost and next landed hit supplied to kill attribution",
+    "independent Cortege neutral firefield contact reference; not enabled in full scorer"
+  ],
+  "validation": {
+    "fullRegression": {
+      "tests": 1919,
+      "subtests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "inputsStable": true,
+      "missing": [],
+      "extra": [],
+      "elapsedSeconds": 602.2120940000023
+    },
+    "rangedMatrix": {
+      "weapons": 412,
+      "cases": 2476,
+      "failed": 0,
+      "workerErrors": 0,
+      "nativeFallback": 0,
+      "nativeCoverageComplete": true,
+      "changedInputs": false,
+      "coverageComplete": true,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "passed": true,
+      "modes": 619,
+      "windowSeconds": 8,
+      "toolSha256": "a75a9f5db860d491a80d896ba81cf171ab9f1e244b3b7939194786577805f7bd"
+    },
+    "healthBatch": "12 Angstrum/Prisma/Deconstructor/Prime shield/overguard/scalar/duplicate-target cases passed",
+    "chargeGoldens": "base and status N1/2/3/4/6, ADD/SET/percentage iterations, partial magazine, cooldown/reload, Incarnon return, DoT kill while charging, kill attribution resume",
+    "independentNativeEvidence": {
+      "angstrumChargeArithmetic": 40,
+      "angstrumLaunchGateDifferentials": 10,
+      "angstrumStatusConsumers": 20,
+      "cortegeChargeGate": 14,
+      "cortegeConsumeAll": 5,
+      "cortegeFieldBoundedNative": 23
+    },
+    "independentReferenceToolTests": 28,
+    "javascriptSyntax": true,
+    "gitWhitespaceCheck": true
+  },
+  "limitations": [
+    "No in-game measurements; source build pinned, not a live latest-version claim",
+    "Angstrum per-projectile scale gate is specific to raw MaxCharges120; ideal single-target projectile and blast-centre coverage",
+    "Angstrum early release/flight, completion buff snapshot and real integer ammo-efficiency accounting remain explicit limits",
+    "Deconstructor ordinary single-projectile launch admitted; bounce/return/active-projectile limits remain unmodeled",
+    "Cortege field formula is one accepted contact with declared neutral/known scalars; no predicted full field, DoT or overlap integration",
+    "Fired Up cache root / script environment lifecycle still unresolved; retain expiry-resume warning"
+  ],
+  "delivery": {
+    "sourceOnly": true,
+    "rebaked": false,
+    "botSynchronized": false,
+    "newRelease": false
+  }
+}

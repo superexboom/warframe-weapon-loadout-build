@@ -347,7 +347,8 @@ def prepare(
         # The source stores the actual bonus, not a rounded integer hit count.
         dynamic.append((key, [replace(marker, value=1.0, runtime_kind=None,
                                       runtime_chance=None, runtime_threshold=None, runtime_multiplier=1.0)]))
-    from .companion import unresolved_weapon_mechanics
+    from .companion import unresolved_weapon_mechanics, projectile_sequence
+    companion_sequence = projectile_sequence(weapon, mode_index)
     notes.extend(unresolved_weapon_mechanics(weapon))
     from .event_profiles import execute_below, innate_conditionals
     innate = innate_conditionals(weapon, mode_index)
@@ -739,13 +740,31 @@ def prepare(
                 fx.extend(ModEffect(kind,'STACKING_MULTIPLY',onos_crit['perHit']*n)
                           for kind in ('WEAPON_CRIT_CHANCE','WEAPON_CRIT_DAMAGE'))
         # One record per form and mode (only read and copied below).
-        wp = form_weapons.get((form != "base", idx))
+        sequence_index = (int(stacks.get('__projectileSequenceIndex', 0)) % companion_sequence['length']
+                          if companion_sequence else None)
+        volley_rounds = float(stacks.get('__chargeVolleyRounds', 1.))
+        form_key = (form != "base", idx, sequence_index, volley_rounds)
+        wp = form_weapons.get(form_key)
         if wp is None:
             wp = {
                 **weapon,
                 "isIncarnonForm": form != "base" and weapon.get("isIncarnonForm", False),
             }
             wp = {**wp, '__selectedFireMode__': idx}
+            if companion_sequence:
+                # Change the source lane BEFORE applying mods: IPS-specific
+                # mods and elemental/proc bases belong to each actual projectile.
+                lane = companion_sequence['lanes'][sequence_index]
+                lane_modes = list(weapon['fireModes'])
+                lane_mode = dict(lane_modes[idx])
+                amount = sum(lane['damageTypes'].values())
+                lane_mode['damage'] = {**lane_mode['damage'],
+                    'projectile': lane['projectile'],
+                    'types': dict(lane['damageTypes']), 'total': amount,
+                    'shares': {k: v / amount for k, v in lane['damageTypes'].items()} if amount else {},
+                    'procChance': lane['procChance'], 'forcedProcs': list(lane['forcedProcs'])}
+                lane_modes[idx] = lane_mode
+                wp = {**wp, 'fireModes': lane_modes}
             if melee:
                 # A hit schedule scales each hit itself (a heavy slam's x3 / x5,
                 # a glaive detonation's recall blast): a heavy hit only turns on
@@ -753,11 +772,12 @@ def prepare(
                 # the heavy-attack record (x6 on a hammer, the whole throw on
                 # a glaive).
                 wp.pop('heavyAttack', None)
-            form_weapons[(form != "base", idx)] = wp
+            form_weapons[form_key] = wp
         if wp.get('isIncarnonForm'):
             for terms in form_dynamic:
                 fx.extend(terms)
-        if last_round and last_round_multishot and form != 'incarnon' and not wp.get('isIncarnonForm'):
+        if (last_round and last_round_multishot and form != 'incarnon' and not wp.get('isIncarnonForm')
+                and not base_profile(weapon, idx).get('chargeVolley')):
             fx.append(ModEffect('WEAPON_FIRE_ITERATIONS', 'ADD', last_round_multishot,
                                 source_path='incarnon:last-round-multishot'))
         form_scenario = scenario_with(
@@ -944,6 +964,18 @@ def prepare(
             st._requires_full_ammo = True
         if extra.get('primaryDelaySeconds') is not None:
             st._primary_delay_seconds = float(extra['primaryDelaySeconds'])
+        if extra.get('chargeVolley'):
+            from .damage import _combine
+            # Only the fire-iteration query receives loaded N. Keep original
+            # raw iterations for status normalization and all other MOD terms.
+            iterations = volley_rounds*float(extra['chargeVolley']['rawFireIterations'])
+            locked = any(e.upgrade_type == 'RUNTIME_LOCK_MULTISHOT' for e in fx)
+            pellets = iterations if locked else max(0., _combine(iterations,
+                [e for e in fx if e.upgrade_type == 'WEAPON_FIRE_ITERATIONS']))
+            st.multishot = pellets
+            if radial is not None:
+                radial.multishot = pellets
+            st._charge_volley = dict(extra['chargeVolley'])
         if extra.get('charge'):
             scales = extra['charge'].get('scalesWithFireRate', wp.get('slot') != 'arch_gun')
             fire_scaling = max(st.fire_rate / float(modes[idx]['fireRate']),1e-9) if scales else 1.
@@ -1078,6 +1110,8 @@ def prepare(
     entry = cached if resolve_cache is not None else resolve
     return dict(
         resolve=entry,
+        projectileSequence=companion_sequence,
+        chargeVolley=any(attack.get('chargeVolley') for attack in (base_attack, selected_attack)),
         melee=melee,
         comboTierKeys=combo_tier_keys,
         beamRampFloors={
