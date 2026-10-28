@@ -14,6 +14,8 @@ def fixture(tmp_path, monkeypatch):
     (modules / 'wfcore.pyd.old-test').write_bytes(b'old binary')
     for name in ('app.py', 'data_sources.py', 'enemy_assets.py'):
         (root / name).write_text('# app source\n')
+    (root / 'data').mkdir()
+    (root / 'data/source-lock.json').write_text('{}')
     (destination / 'data').mkdir(parents=True)
     (destination / 'data/source-lock.json').write_text('{}')
     metadata = dict(inputs='current', stances='stance', buildLabel='build', cacheVersion=26)
@@ -48,3 +50,20 @@ def test_staging_refuses_the_source_checkout_as_its_destination(tmp_path, monkey
     root, destination, cache = fixture(tmp_path, monkeypatch)
     with pytest.raises(ValueError, match='separately staged'):
         staging.stage(root, root)
+
+
+def test_unchanged_lock_preserves_exact_identity_bytes(tmp_path, monkeypatch):
+    root, destination, cache = fixture(tmp_path, monkeypatch)
+    original = b'{"activeBuild":"build", "policy":{"same":true}}\r\n'
+    (root / 'data/source-lock.json').write_bytes(original)
+    (destination / 'data/source-lock.json').write_text(json.dumps(json.loads(original), indent=2))
+    staging.stage(root, destination, require_cache=True)
+    assert (destination / 'data/source-lock.json').read_bytes() == original
+
+
+def test_different_snapshot_lock_is_never_replaced(tmp_path, monkeypatch):
+    root, destination, cache = fixture(tmp_path, monkeypatch)
+    staged = b'{"snapshotRoot":"data/snapshots/next"}'
+    (destination / 'data/source-lock.json').write_bytes(staged)
+    staging.stage(root, destination, require_cache=True)
+    assert (destination / 'data/source-lock.json').read_bytes() == staged

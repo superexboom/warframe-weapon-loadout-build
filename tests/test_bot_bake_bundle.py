@@ -64,7 +64,9 @@ def test_primary_kitgun_bake_trigger_uses_pistol_riven_family(monkeypatch, tmp_p
     monkeypatch.setattr(app, "_disable_analysis_statics_persistence", lambda: SimpleNamespace(enabled=False))
     def analyze(payload):
         captured.append(payload)
-        app.ANALYSIS_STATICS_CACHE["test"] = {"valid": True}
+        key = json.dumps(dict(weapon=payload["weapon"], fireMode=0, profile="fast"))
+        entry = app.ANALYSIS_STATICS_CACHE.setdefault(key, {"counts": {}})
+        entry["counts"][str(len(payload["stats"]))] = {"recommended": [s["code"] for s in payload["stats"]]}
         return {}
     monkeypatch.setattr(app, "analyze_payload", analyze)
     outcomes = bake._shard_worker((path, 0, [("fast", str(tmp_path / "shard.json"))], (3, 2)))

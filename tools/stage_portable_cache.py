@@ -33,6 +33,13 @@ def stage(root: Path, destination: Path, *, require_cache: bool = False) -> dict
     root, destination = root.resolve(), destination.resolve()
     if root == destination or not (destination / 'data/source-lock.json').is_file():
         raise ValueError('destination must be a separately staged runtime with data/source-lock.json')
+    # The data bundler may pretty-print the unchanged source lock. Identity
+    # hashes its bytes, so preserve the source bytes only after semantic equality
+    # is proven. A different snapshot/lock must retain its own identity.
+    original_lock = root / 'data/source-lock.json'
+    staged_lock = destination / 'data/source-lock.json'
+    if json.loads(original_lock.read_bytes()) == json.loads(staged_lock.read_bytes()):
+        staged_lock.write_bytes(original_lock.read_bytes())
     module_dir = destination / 'wfarsenal'
     module_dir.mkdir(parents=True, exist_ok=True)
     for source in (root / 'vendor/wfarsenal').glob('*.py'):

@@ -103,6 +103,9 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
     import app  # noqa: PLC0415
 
     persistence_guard = app._disable_analysis_statics_persistence()
+    # A bake worker owns its isolated shard. Refreshing the shared live cache
+    # midway can import another task/test's entries and overwrite this task.
+    app._refresh_analysis_statics_cache_if_newer = lambda: None
     worker_inputs = app._analysis_inputs_fingerprint()
     # Catalog rows use ``companion`` for sentinel/pet weapons, while the
     # optimizer deliberately maps that family to the ordinary riven pool by
@@ -145,7 +148,22 @@ def _shard_worker(args: tuple[str, int, list[tuple[str, str]], tuple[int, ...]])
         except Exception as exc:  # noqa: BLE001
             outcomes.append({"weapon": weapon_path, "profile": profile, "ok": False, "error": str(exc)[:200]})
             continue
-        entries = {key: value for key, value in app.ANALYSIS_STATICS_CACHE.items() if isinstance(value, dict)}
+        entries = {}
+        for key, value in app.ANALYSIS_STATICS_CACHE.items():
+            if not isinstance(value, dict):
+                continue
+            try:
+                context = json.loads(key)
+            except (ValueError, TypeError):
+                continue
+            if (context.get('weapon') == weapon_path and context.get('fireMode') == fire_mode
+                    and context.get('profile') == profile):
+                entries[key] = value
+        if not any(all(len(value.get('counts', {}).get(str(n), {}).get('recommended', [])) == n
+                       for n in positive_counts) for value in entries.values()):
+            outcomes.append({'weapon': weapon_path, 'profile': profile, 'ok': False,
+                             'error': 'missing complete positive structures for the requested context'})
+            continue
         if not entries:
             outcomes.append({"weapon": weapon_path, "profile": profile, "ok": False,
                              "error": "no statics entries produced (candidate generation failed)"})
