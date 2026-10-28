@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "sourceBuild": "2026.10.22.13.12",
+  "packagesSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "gameplayMeasurements": "not-performed-this-round",
+  "fixes": [
+    {
+      "id": "atomos-incarnon-radial",
+      "before": "100 Impact only",
+      "after": "100 Impact + 450 Blast event",
+      "proof": "native payload and separate blast event; 500 embedded-death alternative excluded"
+    },
+    {
+      "id": "mausolon-heavy-radial",
+      "before": "1500 direct, no charged radial",
+      "after": "1500 direct + 4500 Heat heavy radial",
+      "proof": "HeavyBehaviors[1], not space Behaviors[1] 1000+3000",
+      "limit": "total multishot radial callback multiplicity unverified"
+    },
+    {
+      "id": "riot-848-radial",
+      "before": "12 Puncture only",
+      "after": "12 Puncture + one 48 Blast event",
+      "proof": "Embed=1, EmbedTime=[0,0], inherited explicit DT_EXPLOSION"
+    },
+    {
+      "id": "cryotra-cold-field",
+      "before": "10 Impact only",
+      "after": "10 Impact + forced Cold; 20 Cold at0/1/2/3/4s per living-target projectile",
+      "proof": "EmbedAttack and common native 1s timer",
+      "limit": "host death, overlap, CO and same-frame expiry unverified"
+    },
+    {
+      "id": "alternox-embedded-lifecycle",
+      "before": "all direct delayed, no field",
+      "after": "direct now + immediate/1s electric ticks + single terminal blast",
+      "proof": "Projectile::DoEmbedDamage immediate scheduler1.0",
+      "limit": "host death, multishot-cap routing and equal-time ordering labelled",
+      "implementationRegressionFixes": [
+        "clip hit_count before combo and trigger signals",
+        "retire generation-bound pending entities at host death"
+      ]
+    },
+    {
+      "id": "stug-preview-mutual-exclusion",
+      "before": "main explosion plus EmbedDeath double upper bound",
+      "after": "exclusive alternatives; area-direct/noGunCO matches timeline"
+    },
+    {
+      "id": "companion-riven-policy",
+      "before": "Riven bypasses companion actor rules",
+      "after": "zero weakpoint/aim, player-only stack switch applied before solving"
+    },
+    {
+      "id": "fired-up-events",
+      "before": "full bonus from first shot",
+      "after": "static panel previews cap; emergent event replay starts empty and accumulates per hit, assumed_max event replay starts full",
+      "limit": "script accumulator after expiry/re-hit not dynamically verified"
+    },
+    {
+      "id": "headshot-source-flags",
+      "before": "only Nataruk special case",
+      "after": "projectile OR impact declarations;15 selected modes covered",
+      "limit": "impact headcrit/event mapping follows the existing model contract and Python/native parity; no independent native-path proof or live measurement this round"
+    },
+    {
+      "id": "partial-diagnostics",
+      "before": "timeline-only missing mechanics; unverified reasons could remain modeled",
+      "after": "top-level and diagnostics include limitations; unverified marks partial"
+    },
+    {
+      "id": "cache-identity-dependencies",
+      "after": "hash companion/sentinel, three native adapters, and eight mechanics dependencies; preserve Python line-ending normalization"
+    }
+  ],
+  "nativeClock": {
+    "attachCall": "0x140c3f312 -> 0x140297cf0",
+    "callback": "Projectile::DoEmbedDamage @0x140297cf0",
+    "repeat": "0x140297dca ->0x14144c410 delay1.0",
+    "damage": "0x140a58cb0 reads EmbedAttack+0x8f8 radius+0x960"
+  },
+  "headFlagGate": {
+    "projectile": "object+0xdac -> packet+0x25c",
+    "impact": "getter0x141079080 reads PvE+0x18d",
+    "commonConsumer": "0x141482900; both true paths branch0x141482f37"
+  },
+  "unresolved": [
+    "Cortege full-charge gate (consume0 with RequireFullCharges), explosion routing and lingering flames",
+    "Angstrum/Prisma ordinary rocket250 explosion and charge volley semantics",
+    "Deconstructor projectile sequence and return schedule",
+    "Mausolon radial multishot callback count",
+    "Alternox/Cryotra corpse/spatial lifecycle and overlapping projectiles",
+    "Fired Up expiry-resume script accumulator",
+    "Stug fractional multishot branch/overflow topology",
+    "Simulor/MQ free orb persistence after victim death",
+    "Quanta manual shot/idle/chain explosion",
+    "Vectis full stochastic multishot/crit/proc/kill-feedback replay",
+    "General GPU stateful scorer and optimizer candidate batching"
+  ],
+  "validationStatus": "passed",
+  "validation": {
+    "inputs": "36938e55ceb05aa3",
+    "nativeSha256": "dc1d0540ccef820a716bbcac140c91be006a90a566228d038e99ebdce81f971e",
+    "baseCommit": "3e231da15e79abc1eaae0b1ae03058448ab3c9aa",
+    "fullRegression": {
+      "ordinaryTests": 1683,
+      "subtests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "inputsStable": true,
+      "missing": [],
+      "unexpected": [],
+      "elapsedSeconds": 414.1523426000058,
+      "processes": 4
+    },
+    "matrix": {
+      "weapons": 412,
+      "cases": 2476,
+      "failed": 0,
+      "workerErrors": 0,
+      "nativeFallback": 0,
+      "nativeCoverageComplete": true,
+      "changedInputs": false,
+      "coverageComplete": true,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "passed": true,
+      "modes": 619,
+      "windowSeconds": 8,
+      "elapsedSeconds": 11.795784800007823,
+      "nativeOrPythonAgreementOnly": true,
+      "toolSha256": "a75a9f5db860d491a80d896ba81cf171ab9f1e244b3b7939194786577805f7bd"
+    },
+    "additional": {
+      "javascriptSyntax": true,
+      "gitDiffWhitespace": true,
+      "cacheTestIsolation": "16 sequential tests passed"
+    }
+  },
+  "publication": {
+    "scope": "source-data-tests-evidence",
+    "rebaked": false,
+    "repackaged": false,
+    "botSynchronized": false,
+    "note": "Previous v2026.10.28 and Bot cache predate these changes. Regenerate under the new input identity before binary/cache delivery."
+  },
+  "reproduce": [
+    "Set WF_ANALYZER_SERIAL=1 and WF_ANALYSIS_STATICS_CACHE_PATH to an isolated file.",
+    "python tools/build_native.py",
+    "python -m pytest -q tests",
+    "python tools/audit_mechanics_matrix.py --output <new-evidence-file>.json --window 8 --workers 4",
+    "node --check frontend/app.js"
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "before": {
+    "multishot_trigger_probe": [
+      {
+        "multishot": 1.0,
+        "firstShotDamage": 400.09767809719176,
+        "firstShotTriggerStacks": {
+          "/Lotus/Upgrades/CosmeticEnhancers/Offensive/LongGunSpeedOnCrit:0:0": 0.5100000139999998
+        },
+        "windows": {
+          "python": {
+            "shots": 3,
+            "directWindow": 1200.2930342915752
+          },
+          "native": {
+            "shots": 3,
+            "directWindow": 1200.2930342915752
+          }
+        }
+      },
+      {
+        "multishot": 2.2,
+        "firstShotDamage": 400.09767809719176,
+        "firstShotTriggerStacks": {
+          "/Lotus/Upgrades/CosmeticEnhancers/Offensive/LongGunSpeedOnCrit:0:0": 0.680615593722901
+        },
+        "windows": {
+          "python": {
+            "shots": 4,
+            "directWindow": 1600.390712388767
+          },
+          "native": {
+            "shots": 4,
+            "directWindow": 1600.390712388767
+          }
+        }
+      }
+    ],
+    "generation_cleanup_probe": [
+      {
+        "engine": "python",
+        "window": 0.1,
+        "kills": 1,
+        "totalWindowDamage": 75.0,
+        "pendingMines": 1.0
+      },
+      {
+        "engine": "native",
+        "window": 0.1,
+        "kills": 1,
+        "totalWindowDamage": 75.0,
+        "pendingMines": 1.0
+      },
+      {
+        "engine": "python",
+        "window": 1.01,
+        "kills": 1,
+        "totalWindowDamage": 75.0,
+        "pendingMines": 0.0
+      },
+      {
+        "engine": "native",
+        "window": 1.01,
+        "kills": 1,
+        "totalWindowDamage": 75.0,
+        "pendingMines": 0.0
+      }
+    ]
+  },
+  "after": {
+    "multishot_trigger_probe": [
+      {
+        "multishot": 1.0,
+        "firstShotDamage": 400.09767809719176,
+        "firstShotTriggerStacks": {
+          "/Lotus/Upgrades/CosmeticEnhancers/Offensive/LongGunSpeedOnCrit:0:0": 0.5100000139999998
+        },
+        "windows": {
+          "python": {
+            "shots": 3,
+            "directWindow": 1200.2930342915752
+          },
+          "native": {
+            "shots": 3,
+            "directWindow": 1200.2930342915752
+          }
+        }
+      },
+      {
+        "multishot": 2.2,
+        "firstShotDamage": 400.09767809719176,
+        "firstShotTriggerStacks": {
+          "/Lotus/Upgrades/CosmeticEnhancers/Offensive/LongGunSpeedOnCrit:0:0": 0.5100000139999998
+        },
+        "windows": {
+          "python": {
+            "shots": 3,
+            "directWindow": 1200.2930342915752
+          },
+          "native": {
+            "shots": 3,
+            "directWindow": 1200.2930342915752
+          }
+        }
+      }
+    ],
+    "generation_cleanup_probe": [
+      {
+        "engine": "python",
+        "window": 0.1,
+        "kills": 1,
+        "totalWindowDamage": 75.0,
+        "pendingMines": 0.0
+      },
+      {
+        "engine": "native",
+        "window": 0.1,
+        "kills": 1,
+        "totalWindowDamage": 75.0,
+        "pendingMines": 0.0
+      },
+      {
+        "engine": "python",
+        "window": 1.01,
+        "kills": 1,
+        "totalWindowDamage": 75.0,
+        "pendingMines": 0.0
+      },
+      {
+        "engine": "native",
+        "window": 1.01,
+        "kills": 1,
+        "totalWindowDamage": 75.0,
+        "pendingMines": 0.0
+      }
+    ]
+  }
+}

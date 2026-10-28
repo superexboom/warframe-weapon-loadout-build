@@ -317,6 +317,38 @@ def prepare(
                 last_round_multishot += float(term['valuePerRank'])
 
     replaced_terms = set()
+    # Body MODs arrive through external effects, not weapon MOD records. Their
+    # native per-hit Heat bonus must not remain a permanent full-stack term.
+    # The existing on-hit signal is emitted after the triggering attack, so
+    # a cold first shot receives no heat and hits refresh the expiry clock.
+    for marker in original:
+        if (marker.runtime_kind != 'sentinel-fired-up'
+                or marker.source_path != 'sentinel:/Lotus/Upgrades/Mods/Sentinel/SentinelOverheatDamageMod'):
+            continue
+        replaced_terms.add((marker.source_path, marker.upgrade_type, marker.operation, marker.damage_type))
+        cap = float(marker.runtime_multiplier)
+        step = float(marker.runtime_chance or 0.0)
+        duration = float(marker.runtime_threshold or 0.0)
+        if min(cap, step, duration) <= 0.0:
+            notes.append('sentinel-fired-up-script-parameters-unavailable')
+            continue
+        # Script P6 confirms per-hit increment, capped value and duration
+        # refresh. Its global FiredUpValue is retained between invocations;
+        # whether an expired native upgrade clears that storage is not proven.
+        # Keep the documented no-hit reset as the explicit model assumption.
+        if not assumed:
+            notes.append('sentinel-fired-up-expiry-resume-unverified')
+        key = marker.source_path + ':on-hit'
+        sources.append(dict(id=key, label='过热射击 / Fired Up', kind='on-hit',
+                            maxStacks=cap, perEvent=0.0 if assumed else step,
+                            duration=0.0 if assumed else duration, initialStacks=cap if assumed else 0.0,
+                            simulationMode='fixed' if assumed else 'events', decay='reset',
+                            conditionText='每次命中后增加火焰伤害；连续未命中满5秒后清空。'))
+        # The source stores the actual bonus, not a rounded integer hit count.
+        dynamic.append((key, [replace(marker, value=1.0, runtime_kind=None,
+                                      runtime_chance=None, runtime_threshold=None, runtime_multiplier=1.0)]))
+    from .companion import unresolved_weapon_mechanics
+    notes.extend(unresolved_weapon_mechanics(weapon))
     from .event_profiles import execute_below, innate_conditionals
     innate = innate_conditionals(weapon, mode_index)
     for record, rank, override in [
@@ -838,6 +870,8 @@ def prepare(
         components = [*components, *(dict(cluster[key], count=cluster['count'])
                                      for cluster in extra.get('clusters') or () for key in ('radial', 'direct'))]
         radial_parts = []
+        if extra.get('embedded'):
+            components = [*components, dict(extra['embedded'], __embedded=True)]
         for component in components:
             if component and component.get('requiresOnosRadialHit') and not scenario.combat_state.get('onosRadialHit'):
                 component = None
@@ -863,7 +897,7 @@ def prepare(
                     return {**wp, 'fireModes': [rm], '__innateResolved__': True, '__compressionProfile__': extra.get('compression'),
                             **({'__coProfile__': component['coProfile']} if component.get('coProfile') else {})}
                 part_fx = fx if component.get('takes_condition_overload') else ModEffectList(e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
-                if not (extra.get('radial') or extra.get('radials')):
+                if component.get('__embedded') or not (extra.get('radial') or extra.get('radials')):
                     # A lingering field has its own native base damage: flat
                     # "+N base damage" belongs to the shot (WFSim Torid: field
                     # ticks 40 x crit with Plentiful Mayhem's +31 base). The
@@ -895,7 +929,9 @@ def prepare(
                     part._body_only = True
                 if component.get('persistAfterKill'):
                     part._persist_after_kill = True
-                if extra.get('radial') or extra.get('radials'):
+                if component.get('__embedded'):
+                    st._embedded = (part, component['tick_rate'], component['duration_seconds'])
+                elif extra.get('radial') or extra.get('radials'):
                     radial_parts.append(part)
                 else:
                     st._lingering = (part, component['tick_rate'], component['duration_seconds'])

@@ -7,9 +7,11 @@ transitions excluded from aggregate totals.
 
 from __future__ import annotations
 
+from dataclasses import replace
 from typing import Any, Iterable, Mapping
 
 from .damage import ModEffect, ModEffectList, Scenario, apply_mods, damage_against
+from .event_profiles import base_profile
 
 
 def evaluate_projectile_events(
@@ -65,6 +67,15 @@ def evaluate_projectile_events(
     for event in derived_events:
         unsupported.update(event.get("unsupported") or ())
 
+    # The bounded preview uses the same verified projectile identity as the
+    # timeline. Generic ExplosiveAttack fields alone do not imply area-direct.
+    stackable = base_profile(weapon, fire_mode).get("stackable") or {}
+    stug_main_events = {
+        str(raw.get("id")): raw for raw in raw_events
+        if isinstance(raw, Mapping) and _stug_main_event(raw, stackable, (mode.get("damage") or {}).get("projectile"))
+    }
+    stug_explosion = next((raw for raw in stug_main_events.values()
+                           if raw.get("kind") == "explosion"), None)
     for raw in raw_events:
         if not isinstance(raw, Mapping):
             continue
@@ -72,11 +83,32 @@ def evaluate_projectile_events(
         unsupported.update(raw.get("unsupported") or ())
         damage = raw.get("damage")
         if isinstance(damage, Mapping) and damage.get("types"):
+            main_blob = str(raw.get("id")) in stug_main_events
+            event_effects = selected_effects
+            if main_blob and not stackable["explosion"].get("takesConditionOverload"):
+                event_effects = ModEffectList(
+                    [effect for effect in selected_effects
+                     if effect.upgrade_type != "WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE"],
+                    skipped=selected_effects.skipped,
+                )
             stats = apply_mods(
                 _event_weapon(weapon, mode, damage),
-                selected_effects,
+                event_effects,
                 scenario=scenario,
             )
+            if main_blob:
+                # M127/native lifecycle: the parent blast is an area direct
+                # event; target head-location damage is suppressed, while its
+                # separate head bonus/crit bracket stays available. Children
+                # remain radial and never inherit this classification.
+                stats = replace(stats, radial_only=False, area_direct=True,
+                                weakpoint_damage_bonus=0.0)
+                result["hitClassification"] = "area-direct"
+                if raw.get("kind") == "embedDeath" and stug_explosion is not None:
+                    # ExplosiveAttack and EmbedDeathAttack are alternative
+                    # destruction paths of this one parent blob, not two hits.
+                    result["aggregate"] = False
+                    result["alternativeOf"] = stug_explosion["id"]
             copies = stats.multishot
             per_occurrence: dict[str, Any] = {
                 "moddedDamage": stats.total_damage,
@@ -164,6 +196,18 @@ def evaluate_projectile_events(
         "excluded": excluded,
         "unsupported": sorted(unsupported),
     }
+
+
+
+def _stug_main_event(event: Mapping[str, Any], profile: Mapping[str, Any], projectile: Any) -> bool:
+    """Apply an audited exception only to its matched parent damage payload."""
+    if (profile.get("kind") != "stug" or event.get("kind") not in {"explosion", "embedDeath"}
+            or not projectile or event.get("projectile") != projectile):
+        return False
+    damage = event.get("damage")
+    component = profile.get("explosion")
+    return (isinstance(damage, Mapping) and isinstance(component, Mapping)
+            and damage.get("types") == component.get("damage"))
 
 
 def _event_weapon(

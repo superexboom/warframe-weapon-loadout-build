@@ -6422,6 +6422,10 @@ def analyze_riven_request(
         "not-applied",
         "not-evaluated",
         "unmodeled",
+        "unverified",
+        "unresolved",
+        "idealized",
+        "order-fixed",
     )
     model_uncertainty_reasons = sorted(
         {
@@ -6449,6 +6453,9 @@ def analyze_riven_request(
                 "not-applied",
                 "not-evaluated",
                 "unresolved",
+                "unverified",
+                "idealized",
+                "order-fixed",
             )
         )
         else "modeled"
@@ -6650,6 +6657,9 @@ def analyze_riven_request(
                 "not-applied",
                 "not-evaluated",
                 "unresolved",
+                "unverified",
+                "idealized",
+                "order-fixed",
             )
         )
         else "modeled"

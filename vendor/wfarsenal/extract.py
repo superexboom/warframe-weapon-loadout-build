@@ -1199,11 +1199,17 @@ def _resolve_damage(
                     for damage_type, share in data["shares"].items()
                 }
             data["projectile"] = projectile_path
+            if "IgnoreHeadShotBonus" in proj:
+                # Persist the resolved projectile declaration for every new
+                # export; impact.IgnoreHeadshotBonus is a separate contract.
+                data["ignoreHeadshotBonus"] = bool(proj["IgnoreHeadShotBonus"])
             data["flightSpeed"] = proj.get("KinematicInitialSpeed")
             components = _projectile_damage_components(proj)
             if components:
                 data["components"] = components
                 data["radial"] = components[0]
+            if "IgnoreHeadshotBonus" in impact:
+                data["impactIgnoreHeadshotBonus"] = bool(impact["IgnoreHeadshotBonus"])
             return data
         # A zero-contact projectile can delegate its actual direct hit to the
         # weapon impact behavior (Sonicor). Do not replace authoritative nonzero
@@ -1218,11 +1224,15 @@ def _resolve_damage(
                 and proj['AttackData'].get('Amount') == 0 and inline):
             inline['source'] = 'ImpactBehavior'
             inline['projectile'] = projectile_path
+            if 'IgnoreHeadShotBonus' in proj:
+                inline['ignoreHeadshotBonus'] = bool(proj['IgnoreHeadShotBonus'])
             inline['flightSpeed'] = proj.get('KinematicInitialSpeed')
             components = _projectile_damage_components(proj)
             if components:
                 inline['components'] = components
                 inline['radial'] = components[0]
+            if "IgnoreHeadshotBonus" in impact:
+                inline["impactIgnoreHeadshotBonus"] = bool(impact["IgnoreHeadshotBonus"])
             return inline
         components = _projectile_damage_components(proj)
         if components:
@@ -1240,6 +1250,10 @@ def _resolve_damage(
                     primary = embedded
             data = dict(primary)
             data["projectile"] = projectile_path
+            if "IgnoreHeadShotBonus" in proj:
+                # Persist the resolved projectile declaration for every new
+                # export; impact.IgnoreHeadshotBonus is a separate contract.
+                data["ignoreHeadshotBonus"] = bool(proj["IgnoreHeadShotBonus"])
             data["flightSpeed"] = proj.get("KinematicInitialSpeed")
             data["critChance"] = _first_number(
                 proj, "CriticalChance", "criticalHitChance"
@@ -1249,6 +1263,8 @@ def _resolve_damage(
             ) or 1.0
             data["components"] = components
             data["radial"] = primary
+            if "IgnoreHeadshotBonus" in impact:
+                data["impactIgnoreHeadshotBonus"] = bool(impact["IgnoreHeadshotBonus"])
             return data
 
     for source in (impact, fire):
@@ -1264,6 +1280,8 @@ def _resolve_damage(
             if radial_components:
                 inline["components"] = radial_components
                 inline["radial"] = radial_components[0]
+            if "IgnoreHeadshotBonus" in impact:
+                inline["impactIgnoreHeadshotBonus"] = bool(impact["IgnoreHeadshotBonus"])
             return inline
     return None
 

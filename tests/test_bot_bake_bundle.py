@@ -62,6 +62,9 @@ def test_primary_kitgun_bake_trigger_uses_pistol_riven_family(monkeypatch, tmp_p
     monkeypatch.setattr(app, "ANALYSIS_STATICS_CACHE", {})
     from types import SimpleNamespace
     monkeypatch.setattr(app, "_disable_analysis_statics_persistence", lambda: SimpleNamespace(enabled=False))
+    # The production worker disables refresh for its isolated process; restore
+    # that global when exercising the worker in this shared pytest process.
+    monkeypatch.setattr(app, "_refresh_analysis_statics_cache_if_newer", app._refresh_analysis_statics_cache_if_newer)
     def analyze(payload):
         captured.append(payload)
         key = json.dumps(dict(weapon=payload["weapon"], fireMode=0, profile="fast"))

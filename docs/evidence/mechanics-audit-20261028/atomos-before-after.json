@@ -1,0 +1,42 @@
+[
+  {
+    "patched": false,
+    "health": 1000000000000.0,
+    "kpm": 1.2241186397865533e-08,
+    "damage": 816.0791328835165,
+    "direct": 816.0791328835165,
+    "shots": 6,
+    "unsupported": [
+      "atomos_incarnon:radial-payload-unmodeled"
+    ]
+  },
+  {
+    "patched": false,
+    "health": 3000.0,
+    "kpm": 4.080395664417583,
+    "damage": 816.0791328835165,
+    "direct": 816.0791328835165,
+    "shots": 6,
+    "unsupported": [
+      "atomos_incarnon:radial-payload-unmodeled"
+    ]
+  },
+  {
+    "patched": true,
+    "health": 1000000000000.0,
+    "kpm": 7.184352612821243e-08,
+    "damage": 4789.568430893358,
+    "direct": 4488.435230859341,
+    "shots": 6,
+    "unsupported": []
+  },
+  {
+    "patched": true,
+    "health": 3000.0,
+    "kpm": 22.48072538476557,
+    "damage": 4496.145076953114,
+    "direct": 4420.861776944609,
+    "shots": 6,
+    "unsupported": []
+  }
+]

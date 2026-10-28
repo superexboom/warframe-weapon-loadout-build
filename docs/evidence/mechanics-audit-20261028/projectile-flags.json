@@ -1,0 +1,183 @@
+{
+  "objectsSha256": "087a7570a092a9d67de755a4762b9e0794d30eaff82a0a3d6e15172ed9b67273",
+  "parentsSha256": "fc1e17ae43c5583cffc1a2a56e543cb78d69d9bc2d74ad5e837045379f6bed61",
+  "rows": [
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWavePlayerProj",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWavePlayerProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "e1cd06f47bbc75f7dd436b066034235eb3283cf6f24674104bb3234bcdc63e19"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWavePlayerProj",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWavePlayerProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "5d73d51160b329a6e6f646dde70e129d10ae13a3f6b566045fe45a43c5c8de6c"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/HuntingBowIncarnonAltFireWaveProj",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/Bows/HuntingBowIncarnonAltFireWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "5b52be94167bb41b36f42aa2454101a2602be2cae70780ff7427bf10557a6e71"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/MkIHuntingBowIncarnonAltFireWaveProj",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/Bows/MkIHuntingBowIncarnonAltFireWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/HuntingBowIncarnonAltFireWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "c0b0828271dbdcb005c92eefe8ee78a17812878c9a07f1c0e2924164d1bd5c34"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBowIncarnonAltFireWaveProj",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBowIncarnonAltFireWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/HuntingBowIncarnonAltFireWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "63116153e01b7eb1375b619138e8310fee6feaa4aaf71034d142cc623c46578b"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Bows/StalkerBowIncarnonAltFireWaveProj",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/Bows/StalkerBowIncarnonAltFireWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/HuntingBowIncarnonAltFireWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "c5c6022a8c25fe6fe71eb4d2d0c2705eceb09e94ae831422b20b1362a48a9083"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyrRifleWaveProj",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyrRifleWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "d2ddf9486817a009dccf665de5eb01ff080e7d677519bd0332f78fbfe2ce73c7"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyrRifleWaveProjMS",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyrRifleWaveProjMS",
+        "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyrRifleWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "0cf34bbb11b5027efd6eb97353c1da0d8a12fb83176ff974aba71df0fa01a5dc"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistol/LexAltFireProjectile",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Pistol/LexAltFireProjectile",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/Pistol/LexAltFireProjectile",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "e89facd1b19607e6e211dc0d8e877e5d418a0460ccce04d1491b92d85d4659a5"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLexAltFireProjectile",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Pistol/LexAltFireProjectile",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLexAltFireProjectile",
+        "/Lotus/Weapons/Tenno/Pistol/LexAltFireProjectile",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "b30d302d82ff4a444a849d5caea4a7dd9073d31902465542b9cdb7be56243f34"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnoLotusPodShotgun/TnoLotusPodShotgunWaveProj",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/LongGuns/TnoLotusPodShotgun/TnoLotusPodShotgunWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/LongGuns/TnoLotusPodShotgun/TnoLotusPodShotgunWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "ddb05f05c55632fb388a153714707fdc74796e18c6864ee19e67e2c0e83a1361"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanShotgunAltWaveProj",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanShotgunAltWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanShotgunAltWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "682ee56576c24fa549d112eae21d00db61a1f8f97a212bc483d43d7c78da0849"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWaveProj",
+      "ignoreHeadShotBonus": false,
+      "declaredBy": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWaveProj",
+        "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyrRifleWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "01e210a2d9ec8540cd1049c91083c6e1dd3668daebcf055981e3b49c5dbfb232"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWaveProjMS",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWaveProjMS",
+        "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyrRifleWaveProjMS",
+        "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyrRifleWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWaveProj",
+        "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "567a08b85c31222066e5c5d9f82ee92132e120d203297123c3b53a52f2aee2ae"
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeSteflos/PrimeSteflosShotgunWaveProj",
+      "ignoreHeadShotBonus": true,
+      "declaredBy": "/Lotus/Weapons/Tenno/LongGuns/PrimeSteflos/PrimeSteflosShotgunWaveProj",
+      "inheritance": [
+        "/Lotus/Weapons/Tenno/LongGuns/PrimeSteflos/PrimeSteflosShotgunWaveProj",
+        "/Lotus/Types/Weapon/WaveProjectile"
+      ],
+      "sha256": "78bb8763c4b0e9f5e4260ff2369f2a3892c47d03dadb48f55bd7b56da10b672a"
+    }
+  ]
+}

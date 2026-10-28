@@ -50,8 +50,11 @@ def candidates(reference: Path):
         if isinstance(spec, dict) and spec.get('id'):
             specs[spec['id']] = (file, spec)
     for file, spec in specs.values():
-        if not spec.get('internal_name') and spec.get('form') == 'alt_fire' and spec.get('inherits') in specs:
-            spec = {**spec, 'internal_name': specs[spec['inherits']][1].get('internal_name')}
+        if not spec.get('internal_name') and spec.get('form') in ('alt_fire', 'incarnon', 'charged', 'uncharged'):
+            parent_id = spec.get('inherits') or spec.get('transforms_from')
+            parent = specs.get(parent_id, (None, {}))[1]
+            if parent.get('internal_name'):
+                spec = {**spec, 'internal_name': parent['internal_name']}
         if not spec.get('internal_name'):
             continue
         attack = spec.get('attack') or {}
@@ -60,12 +63,32 @@ def candidates(reference: Path):
             yield file, spec, attack, radial
 
 
+def exported_behaviours(native, row):
+    """Use the exact behaviour bank the weapon exporter selected.
+
+    Archguns expose space and ground behaviours in parallel. Mixing a Heavy
+    direct hit with a space explosion silently loses one third of its payload.
+    Explicit provenance wins; legacy archgun rows choose Heavy when present.
+    An explicit missing bank is an import failure, never a fallback to another
+    loadout that merely happens to have a radial attack.
+    """
+    source = row.get('fireModeSource')
+    if source is None:
+        source = ('HeavyBehaviors' if row.get('slot') == 'arch_gun'
+                  and isinstance(native.get('HeavyBehaviors'), list) and native['HeavyBehaviors']
+                  else 'Behaviors')
+    if source not in ('Behaviors', 'HeavyBehaviors'):
+        return []
+    selected = native.get(source)
+    return selected if isinstance(selected, list) else []
+
+
 def hitscan_radial(pkg, row, mode):
-    """The RadialDamage of a hitscan behaviour, shaped like a projectile record."""
+    """The selected mode's RadialDamage, shaped like a projectile record."""
     weapon = pkg.resolve(row['path']) or {}
-    behaviours = weapon.get('Behaviors') or []
+    behaviours = exported_behaviours(weapon, row)
     position = mode.get('index')
-    if not isinstance(position, int) or position >= len(behaviours) or not isinstance(behaviours[position], dict):
+    if isinstance(position, bool) or not isinstance(position, int) or position < 0 or position >= len(behaviours) or not isinstance(behaviours[position], dict):
         return None
     impact = next((v for k, v in behaviours[position].items() if k.startswith('impact:') and 'RadialOnMiss' in k
                    and isinstance(v, dict)), None)
@@ -82,9 +105,9 @@ def hitscan_radial(pkg, row, mode):
 
 def remote_mine(pkg, row, mode):
     weapon = pkg.resolve(row['path']) or {}
-    behaviours = weapon.get('Behaviors') or []
+    behaviours = exported_behaviours(weapon, row)
     position = mode.get('index')
-    if not isinstance(position, int) or position >= len(behaviours) or not isinstance(behaviours[position], dict):
+    if isinstance(position, bool) or not isinstance(position, int) or position < 0 or position >= len(behaviours) or not isinstance(behaviours[position], dict):
         return None
     state = behaviours[position].get('state:RemoteMineStateBehavior')
     return state if isinstance(state, dict) and state.get('DetonateManually') else None
@@ -187,6 +210,8 @@ def build_entry(file, spec, attack, radial, row, mode_index, pkg, reference):
                  directTotal=round(sum((mode['damage'].get('types') or {}).values()), 6), fireMode=mode_index,
                  projectile=projectile, scope='direct-hit target at explosion centre; native radial event',
                  radials=[component], nativeSources=sources, generatedBy='tools/import_projectile_components.py')
+    if mode.get('isIncarnonForm') or spec.get('form') == 'incarnon':
+        entry['allowIncarnon'] = True
     if mine:
         entry['manualDetonation'] = dict(maxProjectiles=int(mine.get('MaxNumProjectiles') or 1))
         entry['scope'] = 'single-target embedded remote mines; explicit throw batches and manual detonation delay'

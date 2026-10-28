@@ -1,0 +1,170 @@
+[
+  {
+    "weapon": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/AiCrpBEArcaPlasmor",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": true,
+    "ignorePvp": false,
+    "sha256": "88a544022c433c37242bf754e61a14de186fdb2ebc4cdca2f981cc495db70ceb"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": true,
+    "ignorePvp": false,
+    "sha256": "7dfc71e3426ce05837c8c017f4f05aa05d6d037640d2d135df3b7c14218174ab"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Corpus/LongGuns/CrpShotgun/CrpShotgun",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": true,
+    "ignorePvp": false,
+    "sha256": "bb9d43a00fd90fe7f80b6e123183706f74af042e437f0c90b7cb40817edc2563"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Infested/InfestedLich/DJRom/DJRomGyreRifleWeapon",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": true,
+    "ignorePvp": false,
+    "sha256": "572bbe1f1551251e840defc39d80548f2f30c865e7f91e265f2c10413aaa6010"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Infested/InfestedLich/DJRom/DJRomGyreRifleWeapon",
+    "behavior": 1,
+    "kind": "impact:WeaponImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "572bbe1f1551251e840defc39d80548f2f30c865e7f91e265f2c10413aaa6010"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/LotusBow",
+    "behavior": 0,
+    "kind": "impact:WeaponImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "d4f2257c6f6dcaab3f3ade462818d7e8f5877bb4ca2e7cff28f031b952454859"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/LotusBow",
+    "behavior": 1,
+    "kind": "impact:WeaponImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "d4f2257c6f6dcaab3f3ade462818d7e8f5877bb4ca2e7cff28f031b952454859"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPlayerWep",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "ade05be0a3f013583f70059dcfe8831632e49603f4a95468392f59944a419b21"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWep",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "15e1a2a676015872befc667e7117baddc2d3f6d852274a187114c050dcf58c28"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": true,
+    "ignorePvp": false,
+    "sha256": "a07c204ae953eea4a0a3e28b69c9232c765037efb1127862bba707647eb92cd7"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+    "behavior": 1,
+    "kind": "impact:WeaponImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "a07c204ae953eea4a0a3e28b69c9232c765037efb1127862bba707647eb92cd7"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": true,
+    "ignorePvp": false,
+    "sha256": "97a644dcdace54e4371f333bb62b8574d337ae36eb35fb744f187c2884b20183"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
+    "behavior": 1,
+    "kind": "impact:WeaponImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "97a644dcdace54e4371f333bb62b8574d337ae36eb35fb744f187c2884b20183"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulmin",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": true,
+    "ignorePvp": true,
+    "sha256": "84d2d9d82fc4013ac98ffd573af029e7cdc60e7f7227db53311207518ff84692"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulmin",
+    "behavior": 1,
+    "kind": "impact:RadialOnMissImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "84d2d9d82fc4013ac98ffd573af029e7cdc60e7f7227db53311207518ff84692"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimeSteflos/PrimeSteflosShotgun",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": true,
+    "ignorePvp": false,
+    "sha256": "4a84fc69b2ccbba67d6bfb6a5ba013a62b5dc3dfd723b8dd5b9c030f3a59f4b4"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/TnWispRifle/TnWispRifle",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": true,
+    "ignorePvp": true,
+    "sha256": "ba5c8ec5ff2889441636cf6ea42437cad5e4c2af8f4fc09277492011d26ee9d9"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/TnWispRifle/TnWispRifle",
+    "behavior": 1,
+    "kind": "impact:RadialOnMissImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "ba5c8ec5ff2889441636cf6ea42437cad5e4c2af8f4fc09277492011d26ee9d9"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/LongGuns/TnoLotusPodShotgun/TnoLotusPodShotgun",
+    "behavior": 0,
+    "kind": "impact:LotusWeaponImpactBehavior",
+    "ignore": true,
+    "ignorePvp": false,
+    "sha256": "803cc712a7acdc40e6b0e4bbe9f0f42ee11aa435a9e8505949682fc432effacb"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+    "behavior": 0,
+    "kind": "impact:WeaponImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4"
+  },
+  {
+    "weapon": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+    "behavior": 1,
+    "kind": "impact:WeaponImpactBehavior",
+    "ignore": false,
+    "ignorePvp": false,
+    "sha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4"
+  }
+]

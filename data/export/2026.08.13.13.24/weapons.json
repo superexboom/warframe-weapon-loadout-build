@@ -95,7 +95,11 @@
       "critChance": 0.1,
       "critMultiplier": 1.75,
       "flightSpeed": 20,
+      "forcedProcs": [
+       "PT_CHILLED"
+      ],
       "procChance": 0.1,
+      "projectile": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionProjectile",
       "shares": {
        "DT_IMPACT": 1.0
       },

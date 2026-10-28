@@ -250,6 +250,7 @@ struct Stats {
     impact_delay: f64,
     persist_after_kill: bool,
     lingering: Option<(usize, f64, f64)>,
+    embedded: Option<(usize, f64, f64)>,
     primary_delay: f64,
     fixed_radial: bool,
     victim_full_crit_chance: f64,
@@ -280,6 +281,7 @@ impl Stats {
         self.charge_time = 0.0;
         self.primary_delay = 0.0;
         self.lingering = None;
+        self.embedded = None;
         self.charge_pool_cost = 1.0;
         self.requires_full_ammo = false;
         self.head_only = false;
@@ -344,6 +346,7 @@ impl Stats {
             impact_delay: self.impact_delay,
             persist_after_kill: self.persist_after_kill,
             lingering: self.lingering,
+            embedded: self.embedded,
             primary_delay: self.primary_delay,
             fixed_radial: self.fixed_radial,
             victim_full_crit_chance: self.victim_full_crit_chance,
@@ -411,6 +414,8 @@ enum Kind {
     DelayedRadial(usize, f64),
     DelayedAttack(usize, f64),
     Lingering(usize),
+    EmbeddedTick(usize),
+    EmbeddedDeath(usize),
     /// A remote-mine batch: (view, generation, blast part riding a mine).
     Detonation(Rc<Vec<(usize, i64, bool)>>),
     /// 'stackable-life': (group, token, action)
@@ -546,6 +551,15 @@ struct Blast {
     hit_probability: f64,
 }
 
+#[derive(Clone)]
+struct EmbeddedEntity {
+    part: usize,
+    blast: usize,
+    expires: f64,
+    generation: i64,
+    alive: bool,
+}
+
 pub struct Replay<'py> {
     py: Python<'py>,
     helper: Bound<'py, PyAny>,
@@ -679,6 +693,8 @@ pub struct Replay<'py> {
     stack_profiles: FxHashMap<usize, Rc<stackable::Profile>>,
     /// Manual detonation (Talons-style mines): (delay, max projectiles, batch size).
     mines: Option<(f64, f64, f64)>,
+    impact_embed: bool,
+    embedded_entities: Vec<EmbeddedEntity>,
     pending_mines: Vec<(usize, i64, bool)>,
     pending_throws: i64,
     waiting_mines: f64,
@@ -803,7 +819,7 @@ impl<'py> Replay<'py> {
             self_overguard, empowered, status_pool, empowered_count, empowered_by_type, cryogenic,
             cryogenic_expected, puncture_armor_strip, encumber, encumber_time, encumber_remaining, encumber_expected,
             enervate, life_curve, onos, onos_crits, onos_ticks, onos_hits,
-            onos_start, onos_condition_hits, projectiles, projectile_state, stack_profiles, mines,
+            onos_start, onos_condition_hits, projectiles, projectile_state, stack_profiles, mines, impact_embed, embedded_entities,
             pending_mines, pending_throws, waiting_mines, detonations, mine_overflows, form,
             cycle, gauge, base_ammo_saved, transforms, shells_owed, shell_mode_switch,
             burst_base, burst_rate_base, burst_incarnon, burst_rate_incarnon, beam_floor_base, last_burst,
@@ -1096,6 +1112,7 @@ impl<'py> Replay<'py> {
             impact_delay: match opt_attr(obj, "_impact_delay")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
             persist_after_kill: match opt_attr(obj, "_persist_after_kill")? { Some(v) => v.is_truthy()?, None => false },
             lingering: None,
+            embedded: None,
             primary_delay: match opt_attr(obj, "_primary_delay_seconds")? {
                 Some(v) if v.is_truthy()? => v.extract::<f64>()?,
                 _ => 0.0,
@@ -1176,6 +1193,15 @@ impl<'py> Replay<'py> {
                 let rate: f64 = t.get_item(1)?.extract()?;
                 let duration: f64 = t.get_item(2)?.extract()?;
                 self.stats[i].lingering = Some((part, rate, duration));
+            }
+        }
+        if let Some(field) = opt_attr(obj, "_embedded")? {
+            if field.is_truthy()? {
+                let t = field.cast::<PyTuple>()?;
+                let part = self.view(&t.get_item(0)?)?;
+                let rate: f64 = t.get_item(1)?.extract()?;
+                let duration: f64 = t.get_item(2)?.extract()?;
+                self.stats[i].embedded = Some((part, rate, duration));
             }
         }
         Ok(i)
@@ -2305,6 +2331,17 @@ impl<'py> Replay<'py> {
         }
         self.kills += 1;
         self.gen += 1;
+        if self.impact_embed && self.waiting_mines != 0.0 {
+            // Retire fields at the generation boundary under the declared
+            // single-target policy, even if no later tick enters the window.
+            for entity in self.embedded_entities.iter_mut() {
+                if entity.alive {
+                    entity.alive = false;
+                    self.stale += 1;
+                }
+            }
+            self.waiting_mines = 0.0;
+        }
         if self.first_kill.is_none() {
             self.first_kill = Some(t);
         }
@@ -3328,6 +3365,35 @@ impl<'py> Replay<'py> {
                     self.signal("on-crit", t, pmin(cc, 1.0) * ms);
                     self.noncrit_no_proc_hit(part, aim, t);
                 }
+                Kind::EmbeddedTick(id) | Kind::EmbeddedDeath(id) => {
+                    let death=matches!(event.kind,Kind::EmbeddedDeath(_));
+                    let entity=self.embedded_entities[id].clone();
+                    if !entity.alive { continue; }
+                    if entity.generation != self.gen {
+                        self.embedded_entities[id].alive=false;
+                        self.waiting_mines=pmax(0.0,self.waiting_mines-self.stats[entity.part].multishot);
+                        self.stale+=1;continue;
+                    }
+                    if !death && t>=entity.expires-1e-9 { continue; }
+                    let part=if death {entity.blast}else{entity.part};
+                    if death {
+                        self.embedded_entities[id].alive=false;self.detonations+=1;
+                        self.waiting_mines=pmax(0.0,self.waiting_mines-self.stats[part].multishot);
+                    }
+                    let key=if death {self.packet(part,0.0)?}else{self.raw_packet(part,0.0)};
+                    let vector=self.packets[&key].vector.clone();
+                    let cv2=self.spread(part,0.0);
+                    if !self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)? {
+                        let procs=if death {key}else{self.packet(part,0.0)?};
+                        self.add_procs(part,0.0,t,procs)?;
+                    }
+                    if death {
+                        self.enervate_hit(part,t,0.0,0.0);
+                        let ms=self.stats[part].multishot;
+                        self.signal("on-hit",t,ms);
+                        self.signal("on-crit",t,pmin(self.stats[part].crit_chance,1.0)*ms);
+                    }
+                }
                 Kind::Lingering(part) => {
                     let raw = self.raw_packet(part, 0.0);
                     let packet = self.packets[&raw].clone();
@@ -3510,7 +3576,7 @@ impl<'py> Replay<'py> {
                         active = self.melee_apply(heavy_active, pending.id, self.melee_heavy_multiplier)?;
                     }
                     let mut radial = if self.melee.is_some() { None } else { radial };
-                    if let Some((delay_seconds, max_projectiles, _)) = self.mines {
+                    if let (Some((delay_seconds, max_projectiles, _)), false) = (self.mines, self.impact_embed) {
                         // A player detonates the existing batch before another throw
                         // could exceed the native deployment limit.
                         let gen = self.gen;
@@ -3780,6 +3846,19 @@ impl<'py> Replay<'py> {
                             });
                         }
                     }
+                    if self.impact_embed {
+                        if self.stats[active].embedded.is_none() || radial.is_none() {
+                            return Err(PyValueError::new_err("embedded detonation lacks native field/blast parts"));
+                        }
+                        let max_projectiles = self.mines.unwrap().1;
+                        if self.stats[active].multishot > max_projectiles {
+                            self.mine_overflows += 1;
+                            active = self.derive(active, 31, max_projectiles, |v| {
+                                v.multishot = max_projectiles;
+                                v.core.multishot = max_projectiles;
+                            });
+                        }
+                    }
                     // A shot consumes an armed field boost, even when that shot kills.
                     let field_duration_boost = self.field_duration_ready;
                     self.field_duration_ready = false;
@@ -3811,7 +3890,7 @@ impl<'py> Replay<'py> {
                         let multishot = self.stats[active].multishot;
                         projectile_wait = self.projectiles.as_mut().unwrap().deploy(&mut out, t, &profile, parts, multishot, generation);
                         self.apply_stack_actions(out, t)?;
-                    } else if let Some((_, max_projectiles, _)) = self.mines {
+                    } else if let (Some((_, max_projectiles, _)), false) = (self.mines, self.impact_embed) {
                         if self.stats[active].multishot > max_projectiles {
                             self.mine_overflows += 1;
                             active = self.derive(active, 12, max_projectiles, |v| {
@@ -3872,6 +3951,33 @@ impl<'py> Replay<'py> {
                             }
                         }
                     }
+                    if self.impact_embed {
+                        let (field, tick_rate, duration) = self.stats[active].embedded.unwrap();
+                        let ms = self.stats[active].multishot;
+                        let part = self.derive(field, 32, ms, |v| { v.multishot=ms; v.core.multishot=ms; });
+                        let blast = self.derive(radial.unwrap(), 33, ms, |v| { v.multishot=ms; v.core.multishot=ms; });
+                        let lifetime = pmin(duration, self.mines.unwrap().0);
+                        let id = self.embedded_entities.len();
+                        let alive = self.gen == generation;
+                        if alive { self.waiting_mines += ms; }
+                        self.embedded_entities.push(EmbeddedEntity {part,blast,expires:t+lifetime,generation,alive});
+                        if alive {
+                            let key=self.raw_packet(part, 0.0);
+                            let vector=self.packets[&key].vector.clone();
+                            let cv2=self.spread(part,0.0);
+                            if !self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)? {
+                                let key=self.packet(part,0.0)?;
+                                self.add_procs(part,0.0,t,key)?;
+                            }
+                        }
+                        self.push(t+lifetime,Kind::EmbeddedDeath(id),None);
+                        let mut tick=1;
+                        while tick as f64 / tick_rate < lifetime-1e-9 {
+                            self.push(t+tick as f64/tick_rate,Kind::EmbeddedTick(id),None);
+                            tick+=1;
+                        }
+                        projectile_wait=pmax(0.0,lifetime-1.0/speed);
+                    }
                     let mut parts: Vec<usize> = Vec::new();
                     if let (Some(r), None, true) = (radial, self.mines, stack.is_none()) {
                         parts.push(r);
@@ -3911,11 +4017,11 @@ impl<'py> Replay<'py> {
                             burst_head_probability = 1.0;
                         }
                     }
-                    if primary_delay == 0.0 && self.mines.is_none() && stack.is_none() {
+                    if primary_delay == 0.0 && (self.mines.is_none() || self.impact_embed) && stack.is_none() {
                         self.enervate_hit(active, t, shot_puncture, aim);
                     }
                     self.signal("on-fire", t, 1.0);
-                    let delayed = primary_delay != 0.0 || self.mines.is_some() || stack.is_some();
+                    let delayed = primary_delay != 0.0 || (self.mines.is_some() && !self.impact_embed) || stack.is_some();
                     let through = self.punchthrough;
                     if through != 0.0 {
                         self.signal("on-punchthrough", t, through);
@@ -4079,7 +4185,7 @@ impl<'py> Replay<'py> {
                             burst_round = 0;
                         }
                     }
-                    if let Some((delay_seconds, _, batch_size)) = self.mines {
+                    if let (Some((delay_seconds, _, batch_size)), false) = (self.mines,self.impact_embed) {
                         if self.pending_throws as f64 >= batch_size || self.ammo <= 1e-9 {
                             self.queue_mines(t);
                             delay = pmax(delay, delay_seconds);
@@ -4666,6 +4772,11 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         projectiles: None,
         projectile_state,
         stack_profiles: FxHashMap::default(),
+        impact_embed: match opt_dict("manualDetonation")? {
+            Some(d) => match d.get_item("impactThenEmbed")? { Some(v) => v.is_truthy()?, None => false },
+            None => false,
+        },
+        embedded_entities: Vec::new(),
         pending_mines: Vec::new(),
         pending_throws: 0,
         waiting_mines: 0.0,

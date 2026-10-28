@@ -712,6 +712,14 @@ def _analysis_inputs_fingerprint() -> str:
         ROOT / "data" / "mechanics" / "battery-profiles.json",
         ROOT / "data" / "mechanics" / "weapon-passives.json",
         ROOT / "data" / "mechanics" / "client-updates.json",
+        ROOT / "data" / "mechanics" / "sentinels.json",
+        ROOT / "data" / "mechanics" / "player-only-conditions.json",
+        ROOT / "data" / "mechanics" / "burst-profiles.json",
+        ROOT / "data" / "mechanics" / "charge-profiles.json",
+        ROOT / "data" / "mechanics" / "shell-reload-profiles.json",
+        ROOT / "data" / "mechanics" / "reload-after-shot.json",
+        ROOT / "data" / "mechanics" / "kill-charge-profiles.json",
+        ROOT / "data" / "mechanics" / "infinite-conditions.json",
         EXPORT_DIR / "kitguns.json",
         EXPORT_DIR / "zaws.json",
         # The mechanics override sidecar currently feeds only the manual
@@ -727,6 +735,9 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("runtime_adapters.py"),
         Path(optimizer.__file__).with_name("combat_events.py"),
         Path(optimizer.__file__).with_name("combat_replay.py"),
+        Path(optimizer.__file__).with_name("native_replay.py"),
+        Path(optimizer.__file__).with_name("mods_native.py"),
+        Path(optimizer.__file__).with_name("status_native.py"),
         Path(optimizer.__file__).with_name("proc_probability.py"),
         Path(optimizer.__file__).with_name("beam_ramp.py"),
         Path(optimizer.__file__).with_name("manual_combat.py"),
@@ -747,6 +758,8 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("arcane_runtime.py"),
         Path(optimizer.__file__).with_name("riven_disposition.py"),
         Path(optimizer.__file__).with_name("client_updates.py"),
+        Path(optimizer.__file__).with_name("companion.py"),
+        Path(optimizer.__file__).with_name("sentinel.py"),
         EXPORT_DIR / "arcanes.json",
         Path(__file__),  # app.py — 运行时补丁与分析入口语义
         # The Bot bundle's worker beside app.py: its disposition and bake
@@ -3266,6 +3279,7 @@ def analyze_payload(payload: Any) -> dict[str, Any]:
     weapon = CATALOG_WEAPONS_BY_PATH.get(weapon_path.strip())
     if weapon is None:
         raise SimulationError("weapon is not in the portable Riven catalog")
+    request = dict(companion_payload(request, weapon))
     selected_catalog_weapon, innate_selection = _innate_element_selection(request, weapon)
     # 组合枪/组合近战：带齐部件时按装配后的记录分析（与配装路由同口径），
     # 并跳过基体的可用性检查（基体本身不可直接使用）。
@@ -6535,6 +6549,11 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
                     trigger_sources=combat["trigger_sources"],
                     combat=combat,
                 )
+                # Missing damage mechanics are part of the result contract,
+                # not just an optional timeline footnote consumed by one UI.
+                result["unsupported"] = sorted(set(result.get("unsupported") or ())
+                                               | set(windowed.get("unsupported") or ()))
+                result["diagnostics"]["unsupported"] = list(result["unsupported"])
                 result["benchmarkTimeline"] = {
                     **{k: windowed[k] for k in ("shots", "transforms", "reloads", "syndicateEvents", "syndicateWindow", "limitations", "unsupported")},
                     "model": windowed.get("model"),

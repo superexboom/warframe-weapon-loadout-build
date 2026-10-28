@@ -398,6 +398,9 @@ def _reference_trajectory(
     field_duration_used = 0
     field_events = []
     manual_detonation = combat.get('manualDetonation')
+    impact_embed = bool(manual_detonation and manual_detonation.get('impactThenEmbed'))
+    embedded_entities = {}
+    embedded_sequence = 0
     pending_mines = []
     pending_throws = 0
     waiting_mines = 0.0
@@ -419,6 +422,9 @@ def _reference_trajectory(
     syndicate_ready = 0.0
     syndicate_events = []
     unsupported = list(combat.get("unsupported") or [])
+    if impact_embed:
+        unsupported.extend(['alternox-host-death-lifecycle-unverified',
+                            'alternox-instant-detonation-order-idealized'])
     if syndrome and not combat.get("affinityPerKill"):
         unsupported.append("syndicate-affinity-unavailable")
 
@@ -640,10 +646,19 @@ def _reference_trajectory(
 
     def die(t, weak_kill=False, weapon_kill=True):
         nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, frozen_until, puncture_strip, ammo, pending_magazine_restore,weak_kill_events,gauge
+        nonlocal waiting_mines, stale
         kills += 1
         if cycle and cycle.get('chargeOn') == 'kills' and form == 'base' and weapon_kill:
             gauge = min(cycle['hits'], gauge + 1.0)  # native AddChargeConditions PRIMARY_KILL
         gen += 1
+        if impact_embed and waiting_mines:
+            # The current single-target policy binds attached fields to this
+            # victim. Retire them at death, not at their next scheduled tick.
+            for entity in embedded_entities.values():
+                if entity['alive']:
+                    entity['alive'] = False
+                    stale += 1
+            waiting_mines = 0.
         if first_kill is None:
             first_kill = t
         if last_kill is not None:
@@ -1378,6 +1393,38 @@ def _reference_trajectory(
             if collect_timeline:
                 detonation_events.append(dict(time=t, expectedMines=mines,
                                               staleMines=discarded, damage=totals['direct']-before))
+        elif kind in {'embedded-tick', 'embedded-death'}:
+            entity = embedded_entities.get(payload)
+            if entity is None or not entity['alive']:
+                continue
+            if entity['generation'] != gen:
+                entity['alive'] = False
+                waiting_mines = max(0., waiting_mines-entity['part'].multishot)
+                stale += 1
+                continue
+            if kind == 'embedded-tick' and t >= entity['expires']-1e-9:
+                continue
+            part = entity['blast'] if kind == 'embedded-death' else entity['part']
+            if kind == 'embedded-death':
+                entity['alive'] = False
+                waiting_mines = max(0., waiting_mines-part.multishot)
+                detonation_count += 1
+            before = totals['direct']
+            if kind == 'embedded-death':
+                hit = packet(part, 0.)
+                if not take(hit[0],t,'direct',cv2=spread(part,0.)):
+                    add_procs(part,0.,t,hit)
+                enervate_hit(part,t,0.,0.)
+                signal('on-hit',t,part.multishot)
+                signal('on-crit',t,min(part.crit_chance,1.)*part.multishot)
+            else:
+                vec, _, _, _ = attack_data(part,0.)
+                if not take(vec,t,'direct',cv2=spread(part,0.)):
+                    add_procs(part,0.,t)
+            if collect_timeline:
+                projectile_events.append(dict(time=t,kind=kind,entity=payload,damage=totals['direct']-before))
+                if kind == 'embedded-death':
+                    detonation_events.append(dict(time=t,expectedMines=part.multishot,staleMines=0.,damage=totals['direct']-before))
         elif kind == 'lingering':
             part = payload
             vec, _, _, _ = attack_data(part, 0.0)
@@ -1531,7 +1578,7 @@ def _reference_trajectory(
                     if factor != 1.0:
                         active = replace(active, multishot=active.multishot * factor)
                 radial = None
-            if manual_detonation:
+            if manual_detonation and not impact_embed:
                 # A player detonates the existing batch before another throw
                 # could exceed the native eight-projectile deployment limit.
                 pending_mines = [(part, g) for part, g in pending_mines if g == gen]
@@ -1699,6 +1746,15 @@ def _reference_trajectory(
                     active = replace(active,multishot=1.+afforded,ammo_pool_multishot_cost=afforded,
                                      damage_types={k:v*adjustment for k,v in active.damage_types.items()},
                                      dot_base_damage=active.dot_base_damage*adjustment if active.dot_base_damage is not None else None)
+            if impact_embed:
+                field = getattr(active, '_embedded', None)
+                if not field or radial is None:
+                    raise ValueError('embedded detonation lacks native field/blast parts')
+                if active.multishot > manual_detonation['maxProjectiles']:
+                    unsupported.append('alternox-multishot-active-cap-unresolved')
+                    clipped = copy(active)
+                    clipped.multishot = float(manual_detonation['maxProjectiles'])
+                    active = clipped
             field_duration_boost = field_duration_ready
             field_duration_ready = False  # A shot consumes it, even when that shot kills.
             hit_count = (1.0 if active.continuous else max(active.multishot,0.0))
@@ -1722,7 +1778,7 @@ def _reference_trajectory(
                     projectiles = StackableProjectiles(combat.get('projectileState') or {},push,deliver_projectile,projectile_events)
                 projectile_wait = projectiles.deploy(t,active,generation)
                 died = gen!=generation
-            elif manual_detonation:
+            elif manual_detonation and not impact_embed:
                 if active.multishot > manual_detonation['maxProjectiles']:
                     unsupported.append('talons-single-throw-deployment-overflow-unmodeled')
                     active = replace(active, multishot=float(manual_detonation['maxProjectiles']))
@@ -1751,6 +1807,31 @@ def _reference_trajectory(
                 spread(active,aim),
                 )
                 noncrit_no_proc_hit(active, aim, t)
+            if impact_embed:
+                field_part, tick_rate, duration = active._embedded
+                part = replace(field_part, multishot=active.multishot)
+                blast = replace(radial, multishot=active.multishot)
+                lifetime = min(duration, manual_detonation['delaySeconds'])
+                embedded_sequence += 1
+                identity = embedded_sequence
+                if not died:
+                    add_procs(active, aim, t, direct_packet, damage_scale=sniper_factor)
+                alive = gen == generation
+                waiting_mines += active.multishot if alive else 0.
+                embedded_entities[identity] = dict(part=part, blast=blast, expires=t+lifetime,
+                                                    generation=generation, alive=alive)
+                # The native attachment callback damages immediately before
+                # arranging the periodic timer. Expiry wins at later equal times.
+                if alive:
+                    vec, _, _, _ = attack_data(part, 0.)
+                    if not take(vec, t, 'direct', cv2=spread(part, 0.)):
+                        add_procs(part, 0., t)
+                push(t+lifetime, 'embedded-death', identity)
+                tick = 1
+                while tick/tick_rate < lifetime-1e-9:
+                    push(t+tick/tick_rate, 'embedded-tick', identity)
+                    tick += 1
+                projectile_wait = max(0., lifetime-1./speed)
             if not died and not manual_detonation and not primary_delay and not stackable:
                 add_procs(active, aim, t, direct_packet, damage_scale=sniper_factor)
                 field = getattr(active, '_lingering', None)
@@ -1801,7 +1882,7 @@ def _reference_trajectory(
                 if burst_round==burst_size-1:
                     signal('on-burst-headshot',t,burst_head_probability)
                     burst_head_probability=1.
-            if not manual_detonation and not primary_delay and not stackable:
+            if (not manual_detonation or impact_embed) and not primary_delay and not stackable:
                 enervate_hit(active,t,shot_puncture,aim)
             signal('on-fire', t)
             through=(combat.get('projectileState') or {}).get('punchthroughTargets',0)
@@ -1817,7 +1898,7 @@ def _reference_trajectory(
                 onos_condition_hits-=completed*2.
                 if completed:
                     signal('on-onos-damage-condition',t,completed)
-            if not manual_detonation and not primary_delay and not stackable:
+            if (not manual_detonation or impact_embed) and not primary_delay and not stackable:
                 signal("on-hit", t, hit_count)
                 if aim<1.:
                     signal('on-body-hit',t,(1.-aim)*hit_count)
@@ -1887,7 +1968,7 @@ def _reference_trajectory(
                     ))
                 else:
                     burst_round = 0
-            if manual_detonation and (pending_throws >= manual_detonation['batchSize'] or ammo <= 1e-9):
+            if manual_detonation and not impact_embed and (pending_throws >= manual_detonation['batchSize'] or ammo <= 1e-9):
                 queue_mines(t)
                 delay = max(delay, manual_detonation['delaySeconds'])
             if melee_hit is not None:
@@ -2104,7 +2185,7 @@ def _reference_trajectory(
             'spread-hit-loss-not-modeled',
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
           + (['fire-rate-spool-reference-transcribed','fire-rate-spool-resets-on-any-pause'] if combat.get('fireRateSpool') else [])
-          + (['talons-expected-projectile-capacity','manual-detonation-explicit-player-cadence'] if manual_detonation else [])
+          + ([('alternox-active-cap-conservative-lower-bound' if manual_detonation.get('impactThenEmbed') else 'talons-expected-projectile-capacity'),'manual-detonation-explicit-player-cadence'] if manual_detonation else [])
           + (['onos-native-alignment-shots-held-rate-and-postfire-cadence','onos-radial-target-coverage-explicit'] if onos else [])
           + (ASSUMPTIONS if enervate else [])
           + (['encumber-poisson-status-presence','encumber-single-target-expected-procs'] if encumber else [])

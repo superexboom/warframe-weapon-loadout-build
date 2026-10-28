@@ -10,9 +10,10 @@ body is never auto-built; its MODs are user-picked. What this module returns:
   MODs that change its damage, each from its own script parameters
   (``*PerRank`` values count rank + 1 levels):
 
-  - Fired Up (FiredUp.lua OnHit): +Heat per hit, ``_maxDamagePctPerLevel``
-    cap, held full (switch ``firedUp``, default on: the stacks refill within
-    20 hits and reset only after 5 s without one);
+  - Fired Up (FiredUp.lua OnHit): +Heat per hit up to its script cap,
+    reset after the script's no-hit duration. The static panel previews the
+    cap; manual_combat turns the marker into an event buff starting empty
+    (unless the caller explicitly selects assumed_max);
   - Astral Bond (VoidVinculum.lua ApplyUpgrade): +damage and +Void for 10 s
     after Operator damage -- switch ``astralBond`` (default off);
   - Momentous Bond (EximusHunter.lua): +a random element for 30 s after an
@@ -193,9 +194,18 @@ def weapon_effects(request: Any, weapon: Mapping[str, Any]) -> tuple[ModEffectLi
         levels = rank + 1
         source = f"sentinel:{mod['path']}"
         if mod["path"] == FIRED_UP and options.get("firedUp", True) is not False:
-            cap = _script(mod, "OnHit").get("_maxDamagePctPerLevel", 0.0) * levels
+            params = _script(mod, "OnHit")
+            cap = params.get("_maxDamagePctPerLevel", 0.0) * levels
+            per_hit = params.get("_damagePctPerHitPerLevel", 0.0) * levels
+            duration = params.get("_duration", 0.0)
+            if min(cap, per_hit, duration) <= 0.0:
+                notes.append("sentinel-fired-up-script-parameters-unavailable")
+                continue
             effects.append(ModEffect("WEAPON_PERCENT_BASE_DAMAGE_ADDED", "STACKING_MULTIPLY", cap,
-                                     damage_type="DT_FIRE", source_path=source))
+                                     damage_type="DT_FIRE", source_path=source,
+                                     runtime_kind="sentinel-fired-up", runtime_chance=per_hit,
+                                     runtime_threshold=duration, runtime_multiplier=cap))
+            notes.append("sentinel-fired-up-panel-shows-cap; replay-starts-empty-and-resets-after-no-hit-duration")
         elif mod["path"] == ASTRAL_BOND and options.get("astralBond") is True:
             params = _script(mod, "ApplyUpgrade")
             effects.append(ModEffect("WEAPON_DAMAGE_AMOUNT", "STACKING_MULTIPLY", params.get("_damagePctPerRank", 0.0) * levels,

@@ -55,15 +55,54 @@ def companion_payload(payload: Mapping[str, Any], weapon: Mapping[str, Any]) -> 
     """Pin a request for a companion weapon to what its AI can actually do."""
     if not is_companion(weapon):
         return payload
-    player = payload.get("companionPlayerStacks") is True
-    out = {key: value for key, value in payload.items() if key not in _ARCANE_KEYS}
-    out["headshotChance"] = 0.0
-    out["aiming"] = False
+    from .simulator import SimulationError
+
     nested = payload.get("scenario")
-    state = dict((nested or {}).get("combatState") or payload.get("combatState") or {})
+    if nested is not None and not isinstance(nested, Mapping):
+        raise SimulationError("scenario must be an object")
+    scenario = nested or {}
+    # Match the shared parser: an explicit nested value, including {}, wins.
+    raw_state = scenario.get("combatState", payload.get("combatState", {}))
+    if not isinstance(raw_state, Mapping):
+        raise SimulationError("combatState must be an object")
+    state = dict(raw_state)
+    player = scenario.get("companionPlayerStacks",
+                          payload.get("companionPlayerStacks", state.get("companionPlayerStacks", False)))
+    if not isinstance(player, bool):
+        raise SimulationError("companionPlayerStacks must be a boolean")
+    out = {key: value for key, value in payload.items() if key not in _ARCANE_KEYS}
+    out.update(headshotChance=0.0, hitLocation="body", aiming=False, companionPlayerStacks=player)
     state.update(companion=True, companionPlayerStacks=player)
     if isinstance(nested, Mapping):
         out["scenario"] = {**nested, "aiming": False, "combatState": state}
     else:
         out["combatState"] = state
+    # Riven callers can supply their own target. It must not bypass the same
+    # torso-only restriction applied to build/manual requests.
+    target = payload.get("benchmarkTarget")
+    if isinstance(target, Mapping):
+        out["benchmarkTarget"] = {**target, "headshotChance": 0.0, "hitLocation": "body"}
     return out
+
+
+def unresolved_weapon_mechanics(weapon: Mapping[str, Any]) -> list[str]:
+    """Verified native/export omissions, kept visible until event timing is known."""
+    if not is_companion(weapon):
+        return []
+    path = str(weapon.get("path") or "")
+    result = []
+    if path == "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionWeapon":
+        from .event_profiles import base_profile
+        selected = int(weapon.get('__selectedFireMode__', 0))
+        mode = (weapon.get('fireModes') or [{}])[0 if len(weapon.get('fireModes') or []) == 1 else selected]
+        damage = mode.get('damage') or {}
+        profile = base_profile(weapon, 0 if len(weapon.get('fireModes') or []) == 1 else selected)
+        if not profile.get('lingering'):
+            result.append('cryotra-cold-field-unmodeled')
+        if (damage.get('projectile') != '/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionProjectile'
+                or 'PT_CHILLED' not in (damage.get('forcedProcs') or [])):
+            result.append('cryotra-projectile-forced-cold-unmodeled')
+    if any((mode.get("damage") or {}).get("sequenceDamage")
+           for mode in weapon.get("fireModes") or () if isinstance(mode, Mapping)):
+        result.append("companion-projectile-damage-sequence-unmodeled")
+    return result

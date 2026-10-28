@@ -1553,9 +1553,52 @@
           "charge": {
             "seconds": 0.80000001,
             "source": "native-ChargeTime"
-          }
+          },
+          "name": "Mausolon",
+          "source": "data/weapons/archgun/mausolon_charged.yaml",
+          "sha256": "de160e8b001db4f7c5afa31ca7c8051e9b94c90dc6711677788504c65c72f757",
+          "fireMode": 1,
+          "scope": "direct-hit target at explosion centre; native radial event",
+          "radials": [
+            {
+              "damage": {
+                "heat": 4500.0
+              },
+              "radius_m": 8,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.40000001,
+              "crit_chance": 0.5,
+              "crit_multiplier": 3.5,
+              "status_chance": 0.5,
+              "forced_procs": [],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+              "nativeField": "RadialDamage",
+              "damageTypeSource": "native-per-type",
+              "multishotSource": "native hitscan impact contract",
+              "referenceTakesMultishot": true
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+              "sha256": "228816a723e14e397806f72bc023a4d402c5b820467961794cf62553c55f1a59"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py",
+          "packageBuild": "2026.10.22.13.12",
+          "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+          "behaviourSource": "HeavyBehaviors[1]",
+          "unmodeled": [
+            "mausolon-radial-multishot-routing-unverified"
+          ]
         }
-      }
+      },
+      "unmodeled": [
+        "mausolon-radial-multishot-routing-unverified"
+      ]
     },
     "/Lotus/Weapons/Corpus/LongGuns/CrpBFG/Vandal/VandalCrpBFG": {
       "name": "Opticor Vandal",
@@ -7092,7 +7135,7 @@
           "directTotal": 49.999999,
           "fireMode": 1,
           "projectile": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
-          "scope": "single-target embedded remote mines; explicit throw batches and manual detonation delay",
+          "scope": "single stationary target; direct impact then attached electric ticks and one manual/expiry explosion; endpoint ordering explicit",
           "radials": [
             {
               "damage": {
@@ -7128,7 +7171,32 @@
           ],
           "generatedBy": "tools/import_projectile_components.py",
           "manualDetonation": {
-            "maxProjectiles": 1
+            "maxProjectiles": 1,
+            "impactThenEmbed": true
+          },
+          "unmodeled": [
+            "alternox-same-time-expiry-order-fixed-explosion-first"
+          ],
+          "embedded": {
+            "damage": {
+              "electricity": 50.0
+            },
+            "tick_rate": 1.0,
+            "duration_seconds": 10.0,
+            "radius_m": 6.0,
+            "crit_chance": 0.02,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.40000001,
+            "takes_multishot": true,
+            "takes_condition_overload": false,
+            "nativeField": "EmbedAttack",
+            "clockSource": {
+              "clientBuild": "2026.10.22.13.12",
+              "exeSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+              "callback": "0x140297cf0 Projectile::DoEmbedDamage",
+              "attach": "0x140c3f312 immediate callback;0x140c3f317 delay=1.0",
+              "reschedule": "0x140297d8f delay=1.0;0x140297dca scheduler"
+            }
           }
         }
       }
@@ -7142,7 +7210,7 @@
           "directTotal": 69.999999,
           "fireMode": 1,
           "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj",
-          "scope": "single-target embedded remote mines; explicit throw batches and manual detonation delay",
+          "scope": "single stationary target; direct impact then attached electric ticks and one manual/expiry explosion; endpoint ordering explicit",
           "radials": [
             {
               "damage": {
@@ -7178,7 +7246,32 @@
           ],
           "generatedBy": "tools/import_projectile_components.py",
           "manualDetonation": {
-            "maxProjectiles": 1
+            "maxProjectiles": 1,
+            "impactThenEmbed": true
+          },
+          "unmodeled": [
+            "alternox-same-time-expiry-order-fixed-explosion-first"
+          ],
+          "embedded": {
+            "damage": {
+              "electricity": 70.0
+            },
+            "tick_rate": 1.0,
+            "duration_seconds": 10.0,
+            "radius_m": 6.0,
+            "crit_chance": 0.02,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.5,
+            "takes_multishot": true,
+            "takes_condition_overload": false,
+            "nativeField": "EmbedAttack",
+            "clockSource": {
+              "clientBuild": "2026.10.22.13.12",
+              "exeSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+              "callback": "0x140297cf0 Projectile::DoEmbedDamage",
+              "attach": "0x140c3f312 immediate callback;0x140c3f317 delay=1.0",
+              "reschedule": "0x140297d8f delay=1.0;0x140297dca scheduler"
+            }
           }
         }
       }
@@ -7227,6 +7320,191 @@
       "generatedBy": "tools/import_projectile_components.py",
       "manualDetonation": {
         "maxProjectiles": 4
+      }
+    },
+    "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun": {
+      "modes": {
+        "1": {
+          "name": "Atomos",
+          "source": "data/weapons/secondary/atomos_incarnon.yaml",
+          "sha256": "71650ab2054f11b9c0ba56bc2ddd3151eee0969d7d71d3220db71e1945baa456",
+          "directTotal": 100.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Grineer/Pistols/HeatGun/AtomosAltFireProjectile",
+          "scope": "ordinary Incarnon projectile impact and one 450 Blast explosion; Adhesive Blast embedded-death variant not enabled",
+          "radials": [
+            {
+              "damage": {
+                "blast": 450.0
+              },
+              "radius_m": 7.9000001,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.80000001,
+              "crit_chance": 0.18000001,
+              "crit_multiplier": 3.0,
+              "status_chance": 0.41,
+              "forced_procs": [],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Grineer/Pistols/HeatGun/AtomosAltFireProjectile",
+              "nativeField": "ExplosiveAttack",
+              "damageTypeSource": "reference-confirmed-native-default",
+              "multishotSource": "one native attack per spawned projectile",
+              "referenceTakesMultishot": true
+            }
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun",
+              "sha256": "8a3c8432c237888fd5ec19fc71bd4123330f02b40944e51d182f05a5b24013eb"
+            },
+            {
+              "path": "/Lotus/Weapons/Grineer/Pistols/HeatGun/AtomosAltFireProjectile",
+              "sha256": "34ac276363483c83637234b4626dea1e7a1c553a230732765958194e93539016"
+            }
+          ],
+          "generatedBy": "tools/import_projectile_components.py",
+          "allowIncarnon": true,
+          "packageBuild": "2026.10.22.13.12",
+          "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+        }
+      }
+    },
+    "/Lotus/Weapons/Tenno/Pistols/1999EntHybridPistolWeapon/1999EntHybridPistolWeapon": {
+      "name": "Riot-848",
+      "directTotal": 12.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/Pistols/1999EntHybridPistolWeapon/1999EntHybridPistolProjectile",
+      "scope": "single-target direct impact plus one immediate embedded-death explosion; alternate death fields are not summed",
+      "radials": [
+        {
+          "damage": {
+            "blast": 48.0
+          },
+          "radius_m": 1.5,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.5,
+          "crit_chance": 0.25999999,
+          "crit_multiplier": 2.2,
+          "status_chance": 0.25999999,
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/Pistols/1999EntHybridPistolWeapon/1999EntHybridPistolProjectile",
+          "nativeField": "EmbedDeathAttack",
+          "damageTypeSource": "native-inherited-explicit",
+          "exclusiveAlternatives": [
+            "ExplosiveAttack"
+          ]
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistols/1999EntHybridPistolWeapon/1999EntHybridPistolProjectile",
+          "sha256": "6cc736e570db1d880f2a8112df15ed9f6e1344052574c9d7be647563eb396f01"
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Grenades/GrenadeProjectile",
+          "sha256": "f31e9dd889969bf2dd5b0e25de117a8fe67420ae88e35c8c6446a311bc17cc82"
+        },
+        {
+          "path": "/EE/Types/Engine/Projectile",
+          "sha256": "8b5fe36bc4e7e28d621d2b59a52648b98d1ca7738ca0fb4d85436ecd03548d2e"
+        }
+      ],
+      "generatedBy": "tools/import_native_riot_radial.py",
+      "packageBuild": "2026.10.22.13.12",
+      "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06"
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/CorpusHandRocketLauncher": {
+      "unmodeled": [
+        "angstrum-single-rocket-explosion-unmodeled",
+        "angstrum-charge-volley-unmodeled"
+      ]
+    },
+    "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum": {
+      "unmodeled": [
+        "angstrum-single-rocket-explosion-unmodeled",
+        "angstrum-charge-volley-unmodeled"
+      ]
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun": {
+      "modes": {
+        "1": {
+          "name": "Cortege",
+          "directTotal": 20.0,
+          "fireMode": 1,
+          "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/AltFireHeavyProjectile",
+          "scope": "incomplete alternate projectile: full-charge gating, explosion death routing and fire field require native confirmation",
+          "unmodeled": [
+            "cortege-full-charge-gate-unmodeled",
+            "cortege-explosion-and-lingering-field-unmodeled"
+          ]
+        }
+      }
+    },
+    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionWeapon": {
+      "name": "Cryotra",
+      "directTotal": 10.0,
+      "projectile": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionProjectile",
+      "fireMode": 0,
+      "scope": "single stationary direct-hit target at field centre; immediate and 1s Cold ticks before 5s expiry",
+      "lingering": {
+        "damage": {
+          "cold": 20.0
+        },
+        "tick_rate": 1.0,
+        "duration_seconds": 5.0,
+        "radius_m": 1.5,
+        "falloff_start_m": 0.0,
+        "falloff_reduction": 0.69999999,
+        "crit_chance": 0.1,
+        "crit_multiplier": 1.75,
+        "status_chance": 0.30000001,
+        "forcedProcs": [],
+        "stacking": "stack",
+        "takes_condition_overload": false,
+        "nativeSource": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionProjectile",
+        "nativeField": "EmbedAttack",
+        "tickRateSource": "native Projectile::DoEmbedDamage immediate + one-second scheduler"
+      },
+      "unmodeled": [
+        "cryotra-field-host-death-and-spatial-persistence-unverified",
+        "cryotra-field-overlap-unverified",
+        "cryotra-field-condition-overload-unverified",
+        "cryotra-embed-expiry-boundary-order-unverified"
+      ],
+      "lingeringSource": {
+        "nativeSources": [
+          {
+            "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionWeapon",
+            "sha256": "b9262711d1dddd943d9faf98711520197cd994ec7fc4d3075677ac719926db4d"
+          },
+          {
+            "path": "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionProjectile",
+            "sha256": "60233345c0e74ad9987b0e74d2d4a9c444891b0c8162852c7a716994a92d9d23"
+          }
+        ],
+        "generatedBy": "tools/import_cryotra_field.py",
+        "sourceBuild": "2026.10.22.13.12",
+        "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+        "nativeClock": {
+          "function": "0x140297cf0",
+          "nameString": "0x142102fb8 Projectile::DoEmbedDamage",
+          "damageCall": "0x140297d78 -> 0x140a58cb0",
+          "repeatSchedule": "0x140297dca -> 0x14144c410(delay=1.0f)",
+          "stateChecks": [
+            "EmbedAttack field+0x14 >0",
+            "not flags0xc1d/0xc34"
+          ]
+        },
+        "nativeEmbedEntry": {
+          "function": "0x140c3ecb0",
+          "vtableSlot": "0x738",
+          "immediateCall": "0x140c3f312 -> 0x140297cf0",
+          "schedule": "0x140c3f352 -> 0x14144c410(delay=1.0f)"
+        }
       }
     }
   },

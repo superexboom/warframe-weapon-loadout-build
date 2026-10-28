@@ -42,15 +42,34 @@ def test_explosions_and_children_follow_projectile_count_and_ignore_weakpoint_bo
 @pytest.mark.parametrize('name',['Kuva Zarr','Kuva Bramma','Kulstar','Lenz','Stahlta'])
 def test_isolated_radial_cannot_earn_headshot_hits_or_headshot_kills(name,monkeypatch):
     _,_,components=parts(name,2.5,True)
+    core=native_replay.wfcore
+    observed=[]
+    if native_replay.ENABLED and core is not None:
+        original=core.trajectory
+        def capture(*args):
+            result=original(*args)
+            observed.append(tuple(result['sourceStacks']))
+            return result
+        monkeypatch.setattr(core,'trajectory',capture)
+    monkeypatch.setattr(native_replay,'SHADOW',True)
     for part in components:
         sources=[dict(id=kind,label=kind,kind=kind,duration=20.,maxStacks=3.,perEvent=1.)
                  for kind in ['on-headshot','on-headshot-kill']]
         combat=dict(resolve=lambda *a:(part,None))
-        monkeypatch.setattr(native_replay,'SHADOW',True)
+        observed.clear()
         r=replay(part,dict(target(),health=1.),combat=combat,trigger_sources=sources,
                  attacks_per_second=4.,window_seconds=1.,headshot_chance=1.,collect_timeline=False)
+        assert r['killEvents']>0  # The test must actually exercise killing damage.
         assert r['weakpointKillEvents']==0
-        assert all(row['avgStacks']==0 for row in r['triggerSeries'])
+        if native_replay.ENABLED and core is not None:
+            assert observed and all(stacks==(0.,0.) for stacks in observed)
+        # No-timeline avgStacks defaults to zero even if events happened. A
+        # full Python timeline provides the independent negative observation.
+        full=replay(part,dict(target(),health=1.),combat=combat,trigger_sources=sources,
+                    attacks_per_second=4.,window_seconds=1.,headshot_chance=1.,collect_timeline=True)
+        assert full['killEvents']>0 and full['weakpointKillEvents']==0
+        assert all(row['series'] and not any(row['series']) and row['avgStacks']==0
+                   for row in full['triggerSeries'])
 
 
 def test_acuity_lock_reduces_zarr_explosion_and_child_count():

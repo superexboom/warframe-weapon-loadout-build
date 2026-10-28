@@ -21,17 +21,78 @@ def is_incarnon_mode(weapon,index):
     return len(modes)>1 and index==len(modes)-1
 
 
-def ignores_headshot_bonus(weapon, fire_mode=0):
-    """Charged/perfect Nataruk projectiles set IgnoreHeadShotBonus=1.
+# Projectile identities whose IgnoreHeadShotBonus declaration was recovered
+# from Packages 2026.10.22.13.12 (SHA256 00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06).
+# The inherited Omicrus declaration has the same damage-only contract already
+# modelled for Nataruk: retain head events, Deadhead and weakpoint crit chance.
+# Do not classify every WaveProjectile alike. Prime Alternox explicitly clears
+# the projectile flag for its main shot but inherits it on the multishot-copy
+# projectile. Its separate impact behavior still disables head damage bonuses.
+_PROJECTILE_HEADSHOT_BONUS_OVERRIDES = {
+    '/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusWavePlayerProj': True,
+    '/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPerfectWavePlayerProj': True,
+    '/Lotus/Weapons/Tenno/Bows/HuntingBowIncarnonAltFireWaveProj': True,
+    '/Lotus/Weapons/Tenno/Bows/MkIHuntingBowIncarnonAltFireWaveProj': True,
+    '/Lotus/Weapons/Tenno/Bows/PrimeHuntingBowIncarnonAltFireWaveProj': True,
+    '/Lotus/Weapons/Tenno/Bows/StalkerBowIncarnonAltFireWaveProj': True,
+    '/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyrRifleWaveProj': True,
+    '/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyrRifleWaveProjMS': True,
+    '/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWaveProj': False,
+    '/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWaveProjMS': True,
+    '/Lotus/Weapons/Tenno/LongGuns/TnoLotusPodShotgun/TnoLotusPodShotgunWaveProj': True,
+    '/Lotus/Weapons/Tenno/LongGuns/PrimeSteflos/PrimeSteflosShotgunWaveProj': True,
+    '/Lotus/Weapons/Tenno/Pistol/LexAltFireProjectile': True,
+    '/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLexAltFireProjectile': True,
+    '/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanShotgunAltWaveProj': True,
+}
 
-    Packages 2026.08.13.13.24: OmicrusWavePlayerProj and
-    OmicrusPerfectWavePlayerProj set it; the tap projectile does not.
-    The exported mode is the charged attack, including perfect release.
-    This controls damage bonuses, not hit location or headshot triggers.
+
+# Older frozen exports omitted the weapon impact behavior's separate flag.
+# Match weapon, original mode and projectile together; never a name-only rule.
+# Current EXE 0x141482900 branches to the same bypass when projectile +0x25c
+# OR the impact getter 0x141079080 returns true (PvE byte +0x18d).
+_IMPACT_HEADSHOT_BONUS_OVERRIDES = {
+    ('/Lotus/Weapons/Corpus/LongGuns/CrpShotgun/CrpShotgun', 0,
+     '/Lotus/Weapons/Corpus/LongGuns/CrpShotgun/CrpShotgunProjectile'),
+    ('/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor', 0,
+     '/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmorProjectile'),
+    ('/Lotus/Weapons/Tenno/LongGuns/TnWispRifle/TnWispRifle', 0,
+     '/Lotus/Weapons/Tenno/LongGuns/TnWispRifle/TnWispRifleShotgunProj'),
+    ('/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulmin', 0,
+     '/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulminShotgunProj'),
+    ('/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon', 0,
+     '/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWaveProj'),
+}
+
+
+def ignores_headshot_bonus(weapon, fire_mode=0):
+    """Combine the active projectile and impact behavior's head-damage flags.
+
+    Each explicit exported boolean takes precedence over its own legacy rule;
+    a projectile false cannot override impact true. Unknown mechanisms do not
+    inherit flags from the weapon name, and derived radial/field parts cannot
+    borrow the direct attack's impact declaration.
     """
-    return (weapon.get('path') == '/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPlayerWep'
-            and weapon.get('__selectedFireMode__', fire_mode) == 0
-            and not weapon.get('isIncarnonForm'))
+    modes = weapon.get('fireModes') or ()
+    if not isinstance(fire_mode, int) or fire_mode < 0 or fire_mode >= len(modes):
+        return False
+    mode = modes[fire_mode]
+    damage = mode.get('damage') or {}
+    # manual_combat copies the direct damage block into derived components,
+    # including both explicit flags. They are parent provenance there; radial
+    # hit semantics take priority over either copied flag or legacy fallback.
+    if mode.get('__radialPart__') or damage.get('source') in (
+            'ExplosiveAttack', 'RadialDamage', 'EmbedDeathAttack', 'StackingAttack'):
+        return False
+    projectile = damage.get('projectile')
+    declared = damage.get('ignoreHeadshotBonus')
+    projectile_ignored = (declared if isinstance(declared, bool)
+                          else bool(_PROJECTILE_HEADSHOT_BONUS_OVERRIDES.get(projectile, False)))
+    impact_declared = damage.get('impactIgnoreHeadshotBonus')
+    index = weapon.get('__selectedFireMode__', fire_mode)
+    impact_ignored = (impact_declared if isinstance(impact_declared, bool) else
+                      (weapon.get('path'), index, projectile) in _IMPACT_HEADSHOT_BONUS_OVERRIDES)
+    return projectile_ignored or impact_ignored
 
 # Battery (regenerating magazine) weapons: data/mechanics/battery-profiles.json
 # (tools/import_battery_profiles.py; native package values, pinned WFSim

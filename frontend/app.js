@@ -2681,6 +2681,22 @@ function renderContributions() {
 }
 
 const DIAGNOSTIC_CODE_LABELS = {
+  "alternox-host-death-lifecycle-unverified": "电幻步枪的附着目标死亡后，电场和末次爆炸是否保留尚未核实；当前按该目标死亡后停止计算",
+  "alternox-multishot-active-cap-unresolved": "电幻步枪同时存在多个电球的替换规则尚未核实；超过单球上限时暂按一颗计算，可能低估伤害",
+  "alternox-instant-detonation-order-idealized": "电幻步枪零等待引爆按直击、首跳电场、爆炸的顺序计算",
+  "alternox-same-time-expiry-order-fixed-explosion-first": "电幻步枪到期与电场跳伤同一时刻时，当前先结算爆炸，不再追加该跳电场伤害",
+  "cryotra-field-host-death-and-spatial-persistence-unverified": "急冻喷枪的目标死亡后冷场是否保留尚未核实；当前只计算目标存活期间的冷场",
+  "cryotra-field-overlap-unverified": "急冻喷枪多个冷场的重叠规则尚未核实；当前按每颗命中投射物独立叠加",
+  "cryotra-field-condition-overload-unverified": "急冻喷枪冷场是否受到异况增伤尚未核实，当前冷场不计该加成",
+  "cryotra-embed-expiry-boundary-order-unverified": "急冻喷枪冷场按附着后0至4秒共5跳计算，5秒到期同刻的处理尚未核实",
+  "companion-projectile-damage-sequence-unmodeled": "解构者的冲击、穿刺、切割三种投射物序列尚未完整建模，当前伤害与触发类型可能有偏差",
+  "sentinel-fired-up-expiry-resume-unverified": "过热射击按命中逐层增加，5秒无命中后清空；过期后再命中的层数恢复规则仍待实测",
+  "sentinel-fired-up-panel-shows-cap; replay-starts-empty-and-resets-after-no-hit-duration": "过热射击面板显示上限，战斗回放从零层开始，按实际命中逐层增加",
+  "cortege-full-charge-gate-unmodeled": "Cortege副射击的满蓄能门槛尚未完整建模，当前独立副射击结果不代表实际循环效率",
+  "cortege-explosion-and-lingering-field-unmodeled": "Cortege副射击的爆炸与残留火场尚未完整计入，伤害结果会偏低",
+  "angstrum-single-rocket-explosion-unmodeled": "安格斯壮普通模式的单枚火箭爆炸尚未计入；当前只计算弹体命中，伤害会偏低",
+  "angstrum-charge-volley-unmodeled": "安格斯壮普通模式的蓄力齐射、扣弹和随弹匣变化的蓄力时长尚未建模；当前采用单发近似",
+  "mausolon-radial-multishot-routing-unverified": "葬铭的多重射击如何产生范围伤害事件仍有待核实；当前沿用每个弹头的范围伤害模型",
   'quanta-player-shot-detonation-unmodeled': '量子切割器副模式按立方体碰撞引爆；另外射击立方体的强化引爆尚未计入',
   'quanta-idle-detonation-unmodeled': '未碰撞立方体的 9 秒自然引爆未计入当前单目标接触模型',
   'quanta-cube-chain-unmodeled': '立方体之间的连锁引爆与射击转换尚未计入',
