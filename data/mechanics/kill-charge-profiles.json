@@ -117,16 +117,59 @@
         "RequireFullCharges": null
       },
       "nativeSha256": "d9c4808683a82d6139708c12c3eba11f32248d1d4f38e2111062b5ba56ae894e"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun": {
+      "name": "Cortege",
+      "altMode": 1,
+      "primaryMode": 0,
+      "killsPerUse": 5,
+      "shotsPerGauge": 1,
+      "switchInSeconds": 0.0,
+      "switchOutSeconds": 0.0,
+      "native": {
+        "AddChargeConditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumChargesToAdd": 1.0,
+        "NumChargesToConsume": 0.0,
+        "MaxCharges": null,
+        "RequireFullCharges": 1,
+        "effectiveMaxCharges": 5.0,
+        "zeroConsumptionMeans": "consume-all-current-charges"
+      },
+      "nativeSha256": "dcc64234db4a416585f825e5f7ec98e0a7da813fdaaac1872d6162533fd78b18",
+      "source": {
+        "value": 5,
+        "nativeSha256": "dcc64234db4a416585f825e5f7ec98e0a7da813fdaaac1872d6162533fd78b18",
+        "packageBuild": "2026.10.22.13.12",
+        "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+        "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+        "defaultMaxAddress": "0x140bf8f9b",
+        "maxRegistrationAddress": "0x14102c567",
+        "fullGateFunction": "0x140b169c0",
+        "consumeAllFunction": "0x141377080",
+        "descriptorNameOffset": 8,
+        "ancestrySources": [
+          {
+            "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+            "sha256": "dcc64234db4a416585f825e5f7ec98e0a7da813fdaaac1872d6162533fd78b18"
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+            "sha256": "cc06e93ed07418ffeb897430531ce364815d2088a237b3486319eca4d0f4e356"
+          },
+          {
+            "path": "/Lotus/Types/Game/LotusWeapon",
+            "sha256": "4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881"
+          }
+        ]
+      }
     }
   },
   "skipped": [
     {
       "name": "Battacor",
-      "reason": "NumChargesToConsume 0: charges scale the shot, not gate it"
-    },
-    {
-      "name": "Cortege",
-      "reason": "NumChargesToConsume 0: charges scale the shot, not gate it"
+      "reason": "zero consumption without a proven full-charge gate; shot scaling remains unresolved"
     }
   ]
 }

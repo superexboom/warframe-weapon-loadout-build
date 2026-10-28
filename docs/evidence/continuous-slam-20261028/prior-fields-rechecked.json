@@ -1,0 +1,110 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "fields": {
+    "mIgnoreHeadShotBonus": {
+      "string": "0x142101e20",
+      "symbols": [
+        "0x1427912a0"
+      ],
+      "references": [
+        {
+          "instruction": "0x140da0b54",
+          "function": "0x140da0a30",
+          "end": "0x140da2b7b"
+        }
+      ]
+    },
+    "mIgnoreHeadshotBonus": {
+      "string": "0x14218cc18",
+      "symbols": [
+        "0x1427bb260"
+      ],
+      "references": [
+        {
+          "instruction": "0x1413c4786",
+          "function": "0x1413c40f0",
+          "end": "0x1413c4816"
+        }
+      ]
+    },
+    "mIgnoreHeadshotBonusPvp": {
+      "string": "0x14218cc30",
+      "symbols": [
+        "0x1427bb270"
+      ],
+      "references": [
+        {
+          "instruction": "0x1413c47ac",
+          "function": "0x1413c40f0",
+          "end": "0x1413c4816"
+        }
+      ]
+    },
+    "mEmbedAttack": {
+      "string": "0x1421027f0",
+      "symbols": [
+        "0x142791990"
+      ],
+      "references": [
+        {
+          "instruction": "0x140da1f20",
+          "function": "0x140da0a30",
+          "end": "0x140da2b7b"
+        }
+      ]
+    },
+    "mEmbedTime": {
+      "string": "0x142102828",
+      "symbols": [
+        "0x1427919c0"
+      ],
+      "references": [
+        {
+          "instruction": "0x140da1fc1",
+          "function": "0x140da0a30",
+          "end": "0x140da2b7b"
+        }
+      ]
+    },
+    "mMultiShotBuffsRadialDamage": {
+      "string": "0x14239fb28",
+      "symbols": [
+        "0x142868f78"
+      ],
+      "references": [
+        {
+          "instruction": "0x141527582",
+          "function": "0x141527520",
+          "end": "0x1415276a0"
+        }
+      ]
+    },
+    "mDealDamageThroughImpactBehavior": {
+      "string": "0x142101de0",
+      "symbols": [
+        "0x142791280"
+      ],
+      "references": [
+        {
+          "instruction": "0x140da0b08",
+          "function": "0x140da0a30",
+          "end": "0x140da2b7b"
+        }
+      ]
+    }
+  },
+  "vtables": {},
+  "members": {},
+  "callers": {},
+  "regions": [],
+  "verifiedMembers": {
+    "mIgnoreHeadShotBonus": "0xdac",
+    "mIgnoreHeadshotBonus": "0x18d",
+    "mIgnoreHeadshotBonusPvp": "0x18e",
+    "mEmbedAttack": "0x8f8",
+    "mEmbedTime": "0x8ec",
+    "mMultiShotBuffsRadialDamage": "0x1e2",
+    "mDealDamageThroughImpactBehavior": "0xda8"
+  },
+  "descriptorConvention": "descriptor base = string pointer address -8; read descriptor+8 for the name. Prior adopted member/consumer mappings were rechecked and remain valid."
+}

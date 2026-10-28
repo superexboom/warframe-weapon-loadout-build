@@ -58,6 +58,8 @@ def supported(stats, options) -> bool:
         return False
     if combat.get('cycle') and not getattr(wfcore, 'RELOAD_SCALED_TRANSFORMS', 0):
         return False
+    if combat.get('melee') and not getattr(wfcore, 'MELEE_INITIAL_COMBO_RECOVERY', 0):
+        return False
     if combat.get('cycle') and combat.get('melee'):
         return False  # no melee Incarnon cycle is modelled natively
     return not any(combat.get(key) for key in _UNSUPPORTED_COMBAT)
@@ -510,6 +512,7 @@ def trajectory(
         melee_config = dict(baseHits=first, tierStep=float(spec.get("tierStep") or first),
                             cap=float(spec.get("cap") or 220.0),
                             baseMultiplier=float(spec.get("baseMultiplier") or 1.0),
+                            recoveryPerSecond=float(spec.get('recoveryPerSecond') or 0.),
                             tierKeys=dict(combat.get('comboTierKeys') or {}),
                             segments=helper.melee_segments())
     config = dict(

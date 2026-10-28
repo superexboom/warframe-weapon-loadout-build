@@ -393,6 +393,7 @@ function restoreCombatState(value = {}) {
     if (control.type === 'checkbox') control.checked = 'defaultOn' in control.dataset ? value[control.dataset.combatState] !== false : Boolean(value[control.dataset.combatState]);
     else control.value = value[control.dataset.combatState] ?? '';
   });
+  refreshMeleeRouteOptions(document.getElementById("build-melee-route-select"), state.buildWeapon, "build");
   document.querySelectorAll('[data-combat-gear]').forEach((control) => {
     const family = control.dataset.combatGear;
     const weapons = state.catalog?.weapons || [];
@@ -2147,10 +2148,21 @@ function refreshAnalysisMeleeRoute() {
   const weapon = state.weapon || {};
   const melee = ["melee", "zaw"].includes(String(weapon.weaponType || "").toLowerCase()) || weapon.slot === "melee";
   field.hidden = !melee;
-  const glaive = (weapon.compatTags || []).some((tag) => String(tag).toUpperCase() === "GLAIVES_STANCE");
-  const option = select.querySelector('option[value="glaive"]');
-  if (option) option.hidden = !glaive;
-  if (!melee || (!glaive && select.value === "glaive")) select.value = "";
+  refreshMeleeRouteOptions(select, weapon, "analysis");
+  if (!melee) select.value = "";
+}
+function refreshMeleeRouteOptions(select, weapon, surface) {
+  if (!select) return;
+  const tags = new Set((weapon?.compatTags || []).map((tag) => String(tag).toUpperCase()));
+  if (isZawBase(weapon) && state.assemblyFor === surface) {
+    const tag = zawAssemblyStanceTag();
+    if (tag) tags.add(tag);
+  }
+  for (const [route, allowed] of [["glaive", tags.has("GLAIVES_STANCE")], ["slamContinuous", tags.has("HAMMERS_STANCE")]]) {
+    const option = select.querySelector(`option[value="${route}"]`);
+    if (option) { option.hidden = !allowed; option.disabled = !allowed; }
+    if (!allowed && select.value === route) select.value = "";
+  }
 }
 function setAnalysisElementIcons() {
   const innate = ui["analysis-innate-element-select"]?.value || "";
@@ -2692,10 +2704,14 @@ const DIAGNOSTIC_CODE_LABELS = {
   "companion-projectile-damage-sequence-unmodeled": "解构者的冲击、穿刺、切割三种投射物序列尚未完整建模，当前伤害与触发类型可能有偏差",
   "sentinel-fired-up-expiry-resume-unverified": "过热射击按命中逐层增加，5秒无命中后清空；过期后再命中的层数恢复规则仍待实测",
   "sentinel-fired-up-panel-shows-cap; replay-starts-empty-and-resets-after-no-hit-duration": "过热射击面板显示上限，战斗回放从零层开始，按实际命中逐层增加",
-  "cortege-full-charge-gate-unmodeled": "Cortege副射击的满蓄能门槛尚未完整建模，当前独立副射击结果不代表实际循环效率",
-  "cortege-explosion-and-lingering-field-unmodeled": "Cortege副射击的爆炸与残留火场尚未完整计入，伤害结果会偏低",
+  "cortege-firefield-mod-routing-unverified": "Cortege按5次主射击击杀蓄能，并计入副射击爆炸；残留火场的MOD伤害传递仍待核实，暂未计入",
+  "cortege-firefield-spatial-overlap-unverified": "Cortege多个火场的空间重叠和目标覆盖尚未验证",
+  "cortege-firefield-clock-boundary-unverified": "Cortege火场按目标冷却触发，首次接触和到期同帧顺序仍待核实",
+  "melee-initial-combo-recovery-rate-unverified": "当前武器缺少可核实的初始连击恢复速度，暂不计消耗后的恢复量",
+  "melee-combo-recovery-event-integration-and-impact-consumption": "初始连击按游戏数据随时间恢复，按重击命中时读取和消耗；未逐帧模拟输入与回调顺序",
   "angstrum-single-rocket-explosion-unmodeled": "安格斯壮普通模式的单枚火箭爆炸尚未计入；当前只计算弹体命中，伤害会偏低",
   "angstrum-charge-volley-unmodeled": "安格斯壮普通模式的蓄力齐射、扣弹和随弹匣变化的蓄力时长尚未建模；当前采用单发近似",
+  "continuous-slam-user-cadence-0.2s-minimum-height-no-recovery": "连续震地按0.2秒一次、最低高度和取消后摇计算；实际频率取决于操作",
   "mausolon-radial-multishot-routing-unverified": "葬铭的多重射击如何产生范围伤害事件仍有待核实；当前沿用每个弹头的范围伤害模型",
   'quanta-player-shot-detonation-unmodeled': '量子切割器副模式按立方体碰撞引爆；另外射击立方体的强化引爆尚未计入',
   'quanta-idle-detonation-unmodeled': '未碰撞立方体的 9 秒自然引爆未计入当前单目标接触模型',
@@ -4809,6 +4825,7 @@ function analysisAssemblyDisposition() {
 
 function syncAnalysisAssembly() {
   if (state.assemblyFor !== "analysis" || !state.weapon) return;
+  refreshAnalysisMeleeRoute();
   const ready = assemblyWeaponReady();
   const disposition = analysisAssemblyDisposition();
   state.weapon = { ...state.weapon, disposition: ready ? disposition : null };
@@ -4889,6 +4906,8 @@ function syncBuildAssemblyDisposition() {
 }
 
 function syncZawAssemblyStance() {
+  refreshAnalysisMeleeRoute();
+  refreshMeleeRouteOptions(document.getElementById("build-melee-route-select"), state.buildWeapon, "build");
   // Zaw 部件改变武器类别后，当前架势可能不再兼容：兼容则保留，否则改选
   // 新类别的默认架势（与 resetSpecialSelections 同口径）。
   if (!isZawBase(state.buildWeapon) || state.assemblyFor !== "build") return;

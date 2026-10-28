@@ -1,0 +1,58 @@
+[
+  {
+    "before": 40,
+    "efficiency": 0.9,
+    "after": 36.0,
+    "rounded": 40,
+    "spent": 4,
+    "branch": "integer-subtract"
+  },
+  {
+    "before": 20,
+    "efficiency": 0.9,
+    "after": 18.0,
+    "rounded": 20,
+    "spent": 2,
+    "branch": "integer-subtract"
+  },
+  {
+    "before": 8,
+    "efficiency": 0.9,
+    "after": 8.0,
+    "rounded": 8,
+    "spent": 0,
+    "branch": "integer-subtract"
+  },
+  {
+    "before": 19.75,
+    "efficiency": 0.5,
+    "after": 9.75,
+    "rounded": 20,
+    "spent": 10,
+    "branch": "integer-subtract"
+  },
+  {
+    "before": 19.75,
+    "efficiency": 0,
+    "after": 0.0,
+    "rounded": 20,
+    "spent": 19.75,
+    "branch": "clear"
+  },
+  {
+    "before": 0,
+    "efficiency": 0.9,
+    "after": 0.0,
+    "rounded": 0,
+    "spent": 0,
+    "branch": "integer-subtract"
+  },
+  {
+    "before": 8,
+    "efficiency": 0,
+    "after": 0.0,
+    "rounded": 8,
+    "spent": 8.0,
+    "branch": "clear"
+  }
+]

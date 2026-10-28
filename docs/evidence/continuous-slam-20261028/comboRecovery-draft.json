@@ -1,0 +1,33 @@
+{
+  "ratePerSecond": 40.0,
+  "delaySeconds": 0.0,
+  "accumulator": "float32",
+  "quantizedCounter": "floor(current+0.5)",
+  "cap": "moddedInitialCombo",
+  "source": {
+    "kind": "game-package-plus-native-consumer",
+    "build": "2026.10.22.13.12",
+    "packagesSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "field": "Behaviors[].impact:MeleeImpactBehavior.InitialHitCounterRecoveryRate",
+    "consumer": "0x1415f7410..0x1415f7509",
+    "rateScope": "explicit player hammer configurations sampled; native fallback is20",
+    "evidence": "recovery-fields.json"
+  },
+  "notes": [
+    "Do not globally infer 40 for NPC/exalted/other cases: explicit corpus has20 and0",
+    "Recovery branch is independent from combo decay timer; no heavy-recovery delay reset",
+    "rounding getter0x140ec47d0 is floor(current+0.5); tier threshold recovery does same",
+    "first hit may start already charged per scenario; post-heavy never clamp toinitial"
+  ],
+  "efficiencyCap": 0.9,
+  "consume": "if f32(1-eff)>=1:0; else max(0,C-floor(f32(f32(floor(f32(C+.5)))*f32(1-eff))))",
+  "minimumCost": 0,
+  "consumeSource": "0x1416b81d0 / 0x140c5def0 / 0x140883a60",
+  "tierGetter": "0x140124850 with tail0x140124887",
+  "counterGetter": "0x140ec47d0",
+  "events": {
+    "recoverTierReached": "COMBO_TIER_REACHED",
+    "clearOrLoseTier": "COMBO_RESET"
+  }
+}

@@ -42013,6 +42013,21 @@
  "schemaVersion": 1,
  "sources": {
   "animHeaders": "Warframe-Exporter-CLI --write-raw /Lotus/Animations/... (_H, 1/duration before 'Take 001')",
+  "initialComboRecovery": {
+   "build": "2026.10.22.13.12",
+   "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+   "consumer": "0x1415f7410",
+   "field": "Behaviors/impact:MeleeImpactBehavior/InitialHitCounterRecoveryRate",
+   "mappedWeapons": 257,
+   "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+   "unresolvedWeapons": [
+    "/Lotus/Types/Enemies/TennoReplicants/OraxiaEnemy/OraxiaEnemyMeleeWeapon",
+    "/Lotus/Types/Game/LotusMeleeWeapon",
+    "/Lotus/Types/Game/LotusSpeedballMeleeWeapon",
+    "/Lotus/Weapons/Mitw/MITWOctopedeSweepWeapon",
+    "/Lotus/Weapons/Tenno/Melee/Swords/DarkSword/DarkSwordDaggerHybridWeapon"
+   ]
+  },
   "packagesBin": "Packages.bin_H",
   "packagesBinSha256": "0d5881641f87e9746fb307a4fae76422cbba314bf4f808f9d5ca57bd20f0ea78"
  },
@@ -47451,6 +47466,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -47593,6 +47609,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -47735,6 +47752,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -47776,6 +47794,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -47817,6 +47836,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -47922,6 +47942,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48027,6 +48048,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48132,6 +48154,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48216,6 +48239,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48300,6 +48324,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48441,6 +48466,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48582,6 +48608,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48623,6 +48650,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48664,6 +48692,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48707,6 +48736,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48750,6 +48780,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -48898,6 +48929,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -49046,6 +49078,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -49089,6 +49122,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -49132,6 +49166,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -49216,6 +49251,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -49300,6 +49336,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -49405,6 +49442,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -49546,6 +49584,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -49742,6 +49781,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -49848,6 +49888,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -49974,6 +50015,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -50079,6 +50121,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -50224,6 +50267,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -50328,6 +50372,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -50431,6 +50476,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -50536,6 +50582,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -50641,6 +50688,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -50746,6 +50794,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -50851,6 +50900,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -50957,6 +51007,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -51199,6 +51250,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -51442,6 +51494,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -51611,6 +51664,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -51736,6 +51790,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -51976,6 +52031,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -52216,6 +52272,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -52320,6 +52377,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -52443,6 +52501,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -52548,6 +52607,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -52654,6 +52714,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -52759,6 +52820,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -52902,6 +52964,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -53007,6 +53070,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -53112,6 +53176,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -53257,6 +53322,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -53362,6 +53428,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -53467,6 +53534,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -53572,6 +53640,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -53677,6 +53746,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -53782,6 +53852,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -53906,6 +53977,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -54011,6 +54083,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -54234,6 +54307,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -54457,6 +54531,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -54563,6 +54638,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -54668,6 +54744,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -54773,6 +54850,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -54878,6 +54956,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -55005,6 +55084,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -55129,6 +55209,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -55213,6 +55294,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -55318,6 +55400,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -55423,6 +55506,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -55606,6 +55690,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -55710,6 +55795,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -55880,6 +55966,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -55985,6 +56072,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -56089,6 +56177,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -56195,6 +56284,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -56378,6 +56468,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -56486,6 +56577,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -56710,6 +56802,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -56855,6 +56948,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -57081,6 +57175,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -57305,6 +57400,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -57411,6 +57507,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -57555,6 +57652,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -57738,6 +57836,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -57902,6 +58001,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 9.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -58006,6 +58106,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -58110,6 +58211,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -58215,6 +58317,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -58323,6 +58426,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -58428,6 +58532,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -58533,6 +58638,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -58638,6 +58744,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -58742,6 +58849,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -58942,6 +59050,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -59046,6 +59155,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -59208,6 +59318,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -59372,6 +59483,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -59456,6 +59568,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -59540,6 +59653,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -59645,6 +59759,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -59750,6 +59865,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 20.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -59895,6 +60011,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -60059,6 +60176,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -60164,6 +60282,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -60269,6 +60388,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -60373,6 +60493,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -60478,6 +60599,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -60622,6 +60744,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -60746,6 +60869,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -60851,6 +60975,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -60957,6 +61082,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -61081,6 +61207,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -61205,6 +61332,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -61310,6 +61438,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -61434,6 +61563,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -61617,6 +61747,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -61760,6 +61891,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -61865,6 +61997,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -61970,6 +62103,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -62074,6 +62208,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -62181,6 +62316,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -62286,6 +62422,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -62364,6 +62501,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -62469,6 +62607,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -62574,6 +62713,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -62679,6 +62819,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -62784,6 +62925,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -62889,6 +63031,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -62994,6 +63137,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -63099,6 +63243,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -63204,6 +63349,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -63368,6 +63514,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 20.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -63530,6 +63677,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -63692,6 +63840,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -63854,6 +64003,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -64018,6 +64168,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -64241,6 +64392,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -64462,6 +64614,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -64658,6 +64811,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -64885,6 +65039,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -65108,6 +65263,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -65331,6 +65487,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -65455,6 +65612,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -65622,6 +65780,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -65792,6 +65951,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -65962,6 +66122,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -66126,6 +66287,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -66271,6 +66433,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -66416,6 +66579,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -66562,6 +66726,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -66766,6 +66931,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -66871,6 +67037,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -66975,6 +67142,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -67079,6 +67247,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -67185,6 +67354,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -67290,6 +67460,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -67414,6 +67585,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -67578,6 +67750,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -67682,6 +67855,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -67783,6 +67957,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -67888,6 +68063,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -67993,6 +68169,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -68098,6 +68275,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -68202,6 +68380,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -68307,6 +68486,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 6.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -68412,6 +68592,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -68517,6 +68698,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -68622,6 +68804,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -68727,6 +68910,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -68832,6 +69016,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 30.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -68977,6 +69162,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -69160,6 +69346,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -69266,6 +69453,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -69386,6 +69574,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -69548,6 +69737,7 @@
     "baseMultiplier": 1.0,
     "cap": 240.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -69691,6 +69881,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -69836,6 +70027,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -69941,6 +70133,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -70046,6 +70239,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -70126,6 +70320,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -70231,6 +70426,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -70336,6 +70532,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -70441,6 +70638,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -70545,6 +70743,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -70650,6 +70849,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -70755,6 +70955,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -70860,6 +71061,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -70964,6 +71166,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -71068,6 +71271,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -71172,6 +71376,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -71277,6 +71482,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -71401,6 +71607,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -71524,6 +71731,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -71629,6 +71837,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -71734,6 +71943,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -71840,6 +72050,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -71981,6 +72192,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -72105,6 +72317,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -72248,6 +72461,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -72374,6 +72588,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -72479,6 +72694,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -72603,6 +72819,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -72709,6 +72926,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -72814,6 +73032,7 @@
     "baseMultiplier": 1.0,
     "cap": 110.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 11.0
@@ -72919,6 +73138,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -73024,6 +73244,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -73129,6 +73350,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -73213,6 +73435,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -73319,6 +73542,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 10.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -73441,6 +73665,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -73546,6 +73771,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -73652,6 +73878,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -73759,6 +73986,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -73864,6 +74092,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -73988,6 +74217,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -74131,6 +74361,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -74237,6 +74468,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -74342,6 +74574,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -74465,6 +74698,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -74570,6 +74804,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -74675,6 +74910,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -74781,6 +75017,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -74887,6 +75124,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -75034,6 +75272,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -75139,6 +75378,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -75245,6 +75485,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -75351,6 +75592,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -75498,6 +75740,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -75603,6 +75846,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -75708,6 +75952,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -75813,6 +76058,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -75936,6 +76182,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -76037,6 +76284,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -76142,6 +76390,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -76248,6 +76497,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -76353,6 +76603,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -76458,6 +76709,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -76581,6 +76833,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -76701,6 +76954,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -76824,6 +77078,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -76998,6 +77253,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -77172,6 +77428,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -77351,6 +77608,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -77456,6 +77714,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -77561,6 +77820,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -77666,6 +77926,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -77830,6 +78091,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -77994,6 +78256,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -78158,6 +78421,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -78322,6 +78586,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -78486,6 +78751,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -78587,6 +78853,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -78692,6 +78959,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -78796,6 +79064,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -78901,6 +79170,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -79063,6 +79333,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0
@@ -79223,6 +79494,7 @@
     "baseMultiplier": 1.0,
     "cap": 220.0,
     "initial": 0.0,
+    "recoveryPerSecond": 40.0,
     "seconds": 5.0,
     "tierOperation": "HTO_ADDITIVE",
     "tierStep": 20.0

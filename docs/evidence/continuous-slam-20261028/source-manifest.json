@@ -1,0 +1,24 @@
+{
+  "pythonNewlines": "LF normalized",
+  "files": {
+    "data/mechanics/combat-reference.json": "69e0b7bdefe9e32010224c75e5b6f8ffd92ecc88173c4d85bbe6ec1eb93f6f9d",
+    "data/mechanics/kill-charge-profiles.json": "b2f87c98716f56dfd8ffd921ee2a4b5c7878657012a58493346ac95de8800a3c",
+    "data/mechanics/melee-mechanics.json": "726295ee59414fb0c8d3ca66e319b536f3916130e1b03712fb51ff53868d5b0e",
+    "data/mechanics/weapon-passives.json": "b16905e97d97436e3a1874cc7cc824db12e13d7ae9e32c72c7bf55e93285417d",
+    "frontend/app.js": "62fb9866873efd797be49b439f2dc3535376a8f3ac38446cdceb68295dc5750d",
+    "frontend/index.html": "03c52284e60f2dc56376d4635dbc15ef7c8d9af47633a0fe2585d1f9f9f19a6b",
+    "native/wfcore/src/lib.rs": "0f43dfc684bd6be89b2af7d84d03ba10f1efc3c07a00d491034d9f0afa0bee9f",
+    "native/wfcore/src/replay.rs": "89f1e95d4c8c01a844dc1affb38ac6a6b6a01080eab1630b80304b0cca54dd52",
+    "tests/test_continuous_slam_20261028.py": "872359c1aa9e9c39585028f0ea28a032b2c12aa1bc1bc9ade5a32b85c22deb36",
+    "tests/test_cortege_static_completion_20261028.py": "5b4a939769f5c5cd1ed7d5c057d50d966cebad663d9cc2e30b5eeae2e44052c5",
+    "tests/test_initial_combo_contract_20261028.py": "e942af7e479414f402c9a3e1b435c4e4ef17c77cb75f71b80450082da9e00c75",
+    "tests/test_unmodeled_fields_20261028.py": "73dc7a42a6b096be668095bc28693a54822955f7f5ef9afe43a393fae73de912",
+    "tools/import_kill_charged_alts.py": "a68cff996714b4b5dd551a56a2bd52ef3987574d97f694105eb9d73748d03669",
+    "tools/import_melee_mechanics.py": "119a1ccbf200ff391a23b01646b428b6cfbc4644ad361c929168a4f99b3f7494",
+    "tools/import_native_cortege.py": "08f4c7fffadb797efc44f801b2b405b2d0c32e598226f42b00e753da6feb870e",
+    "tools/import_weapon_passives.py": "4e77f22037649a7fb72abfcf109a5eaeb94bee19647802cfa2053925ef0c2214",
+    "vendor/wfarsenal/combat_replay.py": "117cfdfa757328444412c0d7b57b2689901fb3c43a66390d14fbd5cf265cebf4",
+    "vendor/wfarsenal/melee_sequence.py": "60f4aef9e0155084db25283729f50b1f796e3b48ab707b6555f325ae439805b6",
+    "vendor/wfarsenal/native_replay.py": "2e3e4b0122c048d2efa7e1ed78b6ff29d2554d86cc3f32e123ad3b66073d2f22"
+  }
+}

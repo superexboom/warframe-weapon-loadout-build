@@ -21,7 +21,7 @@ def test_alternox_remaining_lifecycle_assumptions_are_reported_by_both_score_pat
 
 
 @pytest.mark.parametrize('name,mode,expected',[
-    ('Cortege',1,{'cortege-full-charge-gate-unmodeled','cortege-explosion-and-lingering-field-unmodeled'}),
+    ('Cortege',1,{'cortege-firefield-mod-routing-unverified','cortege-firefield-spatial-overlap-unverified','cortege-firefield-clock-boundary-unverified'}),
     ('Angstrum',0,{'angstrum-single-rocket-explosion-unmodeled','angstrum-charge-volley-unmodeled'}),
     ('Prisma Angstrum',0,{'angstrum-single-rocket-explosion-unmodeled','angstrum-charge-volley-unmodeled'}),
     ('Cryotra',0,{'cryotra-field-host-death-and-spatial-persistence-unverified','cryotra-field-overlap-unverified'}),

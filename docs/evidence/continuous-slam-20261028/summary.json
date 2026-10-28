@@ -1,0 +1,72 @@
+{
+  "sourceBuild": "2026.10.22.13.12",
+  "packagesSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "baseCommit": "f7ee3a52a0cc443d3117ed0b1acf8030ebb52100",
+  "inputs": "8c0ccecbc662aee1",
+  "nativeSha256": "9e6e2e8d3dc0bb0d00c07b57072848d362db5b0096f0189c988f88bb0847f0db",
+  "changes": [
+    "hammer continuous slam route at user-specified0.2s cadence",
+    "per-primary-impact data-driven combo recovery rate for257 rows",
+    "float32 initial/counter/efficiency integer contracts",
+    "live heavy multiplier and timed tier events",
+    "dynamic initial buff boundaries",
+    "Cortege 5 primary kills/full gauge consume-all cycle and single2000 Heat blast"
+  ],
+  "validation": {
+    "fullRegression": {
+      "tests": 1784,
+      "subtests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "inputsStable": true,
+      "coverageComplete": true,
+      "elapsedSeconds": 585.2074031999946
+    },
+    "rangedMatrix": {
+      "weapons": 412,
+      "cases": 2476,
+      "failed": 0,
+      "workerErrors": 0,
+      "nativeFallback": 0,
+      "nativeCoverageComplete": true,
+      "changedInputs": false,
+      "coverageComplete": true,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "passed": true
+    },
+    "hammerMatrix": {
+      "inputs": "8c0ccecbc662aee1",
+      "inputsStable": true,
+      "weapons": 16,
+      "cases": 96,
+      "failed": 0
+    },
+    "ui": {
+      "origin": "http://127.0.0.1:8774",
+      "weapon": "Fragor Prime",
+      "analysisRoute": "slamContinuous",
+      "buildRoute": "slamContinuous",
+      "reloadRestoredBuildRoute": true,
+      "consoleErrors": [],
+      "screenshotSha256": "7456c011c00506c570ce85caeec6869881da1d83c5b074c7e3f530f5343e9f22"
+    }
+  },
+  "boundaries": [
+    "No in-game measurements this round",
+    "0.2s and minimum height are a user-defined cancellation scenario",
+    "Event integration is not bit-exact simulation of unknown per-frame dt partitions",
+    "Impact is the modeled combo snapshot and consumption event; exact sub-frame ordering remains outside this proof",
+    "Cortege firefield MOD routing and spatial lifetime remain omitted",
+    "Angstrum launch normalization and Prisma final explosion proc still require static closure"
+  ],
+  "delivery": {
+    "sourceOnly": true,
+    "rebaked": false,
+    "botSynchronized": false,
+    "newRelease": false
+  }
+}

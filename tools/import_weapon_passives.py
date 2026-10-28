@@ -133,7 +133,7 @@ MODELLED = {
     # route without slams never gets it; +2 m radius has no second target.
     "CorpusHammerWeaponInnateMod": {
         "events": ["on-melee-kill"], "airOnly": True, "ignore": ["WEAPON_EXPLOSION_RADIUS"],
-        "scriptCondition": lambda script: {"meleeRoutes": ["slam", "slamBullet"],
+        "scriptCondition": lambda script: {"meleeRoutes": ["slam", "slamBullet", "slamContinuous"],
                                            "lockOn": "on-melee-slam-start", "consumeOn": "on-melee-slam"}},
     # Enkaus (TnInkRifle.lua), every target ink-stained (the Vinquibus rule,
     # user 2026-10-24: a state the sim cannot feed is held on; one alt-fire

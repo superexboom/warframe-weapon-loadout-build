@@ -7436,11 +7436,82 @@
           "directTotal": 20.0,
           "fireMode": 1,
           "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/AltFireHeavyProjectile",
-          "scope": "incomplete alternate projectile: full-charge gating, explosion death routing and fire field require native confirmation",
+          "scope": "ground heavy mode; per projectile direct impact plus one alternative death explosion; exported multishot already carries three fire iterations; primary-kill charge cycle; firefield omitted pending mod routing and spatial clock contract",
+          "radials": [
+            {
+              "damage": {
+                "heat": 2000.0
+              },
+              "radius_m": 4.0,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.30000001,
+              "crit_chance": 0.30000001,
+              "crit_multiplier": 2.4000001,
+              "status_chance": 0.5,
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/AltFireHeavyProjectile",
+              "nativeField": "EmbedDeathAttack",
+              "damageTypeSource": "native-inherited-explicit",
+              "exclusiveAlternatives": [
+                "ExplosiveAttack"
+              ]
+            }
+          ],
           "unmodeled": [
-            "cortege-full-charge-gate-unmodeled",
-            "cortege-explosion-and-lingering-field-unmodeled"
-          ]
+            "cortege-firefield-mod-routing-unverified",
+            "cortege-firefield-spatial-overlap-unverified",
+            "cortege-firefield-clock-boundary-unverified"
+          ],
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+              "sha256": "dcc64234db4a416585f825e5f7ec98e0a7da813fdaaac1872d6162533fd78b18"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/AltFireHeavyProjectile",
+              "sha256": "2e8f8fde371ec2c7447df190879f5f22c5b23afee44be7c1b8f630f9f4bb7925"
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/AltFireProjectile",
+              "sha256": "255f1d75284000cdcf9a9262a540bcd3adde9072bb9dfd4433901eb7c8e7961b"
+            }
+          ],
+          "generatedBy": "tools/import_native_cortege.py",
+          "packageBuild": "2026.10.22.13.12",
+          "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+          "behaviourSource": "HeavyBehaviors[1]",
+          "source": {
+            "value": 5,
+            "nativeSha256": "dcc64234db4a416585f825e5f7ec98e0a7da813fdaaac1872d6162533fd78b18",
+            "packageBuild": "2026.10.22.13.12",
+            "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+            "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+            "defaultMaxAddress": "0x140bf8f9b",
+            "maxRegistrationAddress": "0x14102c567",
+            "fullGateFunction": "0x140b169c0",
+            "consumeAllFunction": "0x141377080",
+            "descriptorNameOffset": 8,
+            "projectileDeathScriptSha256": "35dc689324bd96ca125913066a71fa5a1a266fce6c25a156f8793647cd14278a",
+            "fireIterationsSource": "HeavyBehaviors[1].fire.fireIterations=3; export mode.multishot=3 already carries it",
+            "firefieldAmountRouting": "SpawnElementTrigger P1 pc126-133 overrides Element.AttackData.Amount from projectile query baseAmount",
+            "firefieldClock": "DamageTick default1 at 0x1408c279b; immediate contact 0x1416c5768; cache strict lastTime+tick<now at 0x140755840-84c after damage attempts",
+            "ancestrySources": [
+              {
+                "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+                "sha256": "dcc64234db4a416585f825e5f7ec98e0a7da813fdaaac1872d6162533fd78b18"
+              },
+              {
+                "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+                "sha256": "cc06e93ed07418ffeb897430531ce364815d2088a237b3486319eca4d0f4e356"
+              },
+              {
+                "path": "/Lotus/Types/Game/LotusWeapon",
+                "sha256": "4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881"
+              }
+            ]
+          }
         }
       }
     },

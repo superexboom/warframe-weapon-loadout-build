@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import math
+import struct
 import sys
 from functools import lru_cache
 from pathlib import Path
@@ -102,7 +103,9 @@ def weapon_row(weapon: Mapping[str, Any]) -> dict[str, Any] | None:
 # then optionally one hit. The replay lands a hit, then waits the segments up
 # to the next hit.
 
-ROUTES = ("combo", "slam", "slamBullet", "glaive")
+ROUTES = ("combo", "slam", "slamBullet", "slamContinuous", "glaive")
+# User-specified cancel cadence, not a recovered animation duration.
+CONTINUOUS_SLAM_INTERVAL = 0.2
 COMBO_CONTEXTS = ("CC_GROUND", "CC_GROUND_BRANCH_A", "CC_GROUND_BRANCH_B", "CC_GROUND_BRANCH_C")
 # TennoWalkAttribs: JumpHeight 5, AdditionalGravity -9 (on top of 9.8);
 # TennoClimbController.BulletJumpSpeed 2.5; PlayerMeleeWeapon
@@ -116,6 +119,12 @@ GLAIVE_DEFAULT_DISTANCE = 10.0
 # 77 weapons carry HeavyMeleeChargeTime 2.0 where their class siblings carry
 # 0.35-1.25; 2.0 is read as unset and the class value is used instead.
 UNSET_CHARGE_TIME = 2.0
+
+
+def is_hammer(weapon: Mapping[str, Any]) -> bool:
+    tags = {str(t).upper() for t in weapon.get("compatTags") or ()}
+    return ("HAMMERS_STANCE" in tags or
+            str((weapon_row(weapon) or {}).get("tree", "")).endswith("/HammerMeleeTree"))
 
 
 def default_route(weapon: Mapping[str, Any]) -> str:
@@ -228,15 +237,20 @@ def _build_schedule(weapon, route, *, stance, combo, target_distance):
             return dict(schedule, stance=None, notes=["exalted-cast-loop"], comboSpec=row.get("combo") or {},
                         meleeCrit=(melee_damage.get("crit"), melee_damage.get("critMultiplier")))
     route = route or default_route(weapon)
+    if route == "slamContinuous" and not is_hammer(weapon):
+        raise ValueError("continuous slam requires a hammer weapon")
     attacks = ref.get("attacks") or {}
     slams = {s["event"]: s for s in row.get("slams") or () if s.get("event")}
     notes: list[str] = []
+    if (row.get('combo') or {}).get('recoveryPerSecond') is None:
+        notes.append('melee-initial-combo-recovery-rate-unverified')
+    notes.append('melee-combo-recovery-event-integration-and-impact-consumption')
     melee_damage = row.get("damage") or {}
     melee_amount = float(melee_damage.get("amount") or 0.0)
     if route == "glaive" and not row.get("glaive"):
         notes.append("melee-route-glaive-unavailable-using-combo")
         route = "combo"
-    if route in ("slam", "slamBullet") and not (slams.get("HeavySlam") or slams.get("MeleeSlam")):
+    if route in ("slam", "slamBullet", "slamContinuous") and not (slams.get("HeavySlam") or slams.get("MeleeSlam")):
         notes.append("melee-route-slam-unavailable-using-combo")
         route = "combo"
     tree_path, tree = _stance_tree(ref, row, stance)
@@ -255,7 +269,7 @@ def _build_schedule(weapon, route, *, stance, combo, target_distance):
             return None
         _rate, context, segments = max(options, key=lambda item: item[0])
         return dict(common, route="combo", combo=context, segments=segments, label=context)
-    if route in ("slam", "slamBullet"):
+    if route in ("slam", "slamBullet", "slamContinuous"):
         heavy = slams.get("HeavySlam")
         slam = heavy or slams["MeleeSlam"]
         direct_path = row.get("heavySlamAttack") if heavy else row.get("slamAttack")
@@ -263,8 +277,16 @@ def _build_schedule(weapon, route, *, stance, combo, target_distance):
         aerial = (tree or {}).get("aerial") or {}
         strike = attacks.get(aerial.get("BP_CROUCH") or "") or {}
         strike_seconds = float(strike.get("duration") or 1.0) * (_wait_fraction(strike) or 1.0)
-        rise, fall, height = jump_times(route)
-        notes.append(f"slam-cycle: rise {rise:.2f}s + free-fall {fall:.2f}s from {height:g} m (plunge speed not in data)")
+        if route == "slamContinuous":
+            # The requested minimum-height cancel loop pays one fixed period
+            # between impacts. Attack-speed MODs do not shorten this contract.
+            rise, fall, height = CONTINUOUS_SLAM_INTERVAL, 0.0, 0.0
+            strike_seconds = 0.0
+            notes.append("continuous-slam-user-cadence-0.2s-minimum-height-no-recovery")
+        else:
+            rise, fall, height = jump_times(route)
+        if route != "slamContinuous":
+            notes.append(f"slam-cycle: rise {rise:.2f}s + free-fall {fall:.2f}s from {height:g} m (plunge speed not in data)")
         # One area strike, the slam attack's own DamageAtten (SlamAoE 2,
         # HeavySlamAoE 3: wiki Melee "Slam attacks deal 2x weapon damage (3x
         # for Heavy Slams)", Arca Titron's heavy slam 1,080 = 3 x 360) in the
@@ -340,12 +362,51 @@ def _build_schedule(weapon, route, *, stance, combo, target_distance):
     return dict(common, route="glaive", segments=segments, label="heavy-throw-detonate")
 
 
+def initial_combo_floor(initial: float, cap: float = 220.0) -> float:
+    # Native upgrade result converts from float32 to unsigned integer by truncation.
+    return float(min(math.floor(_float32(max(0.0, initial))), cap))
+
+
+def recover_initial_combo(count: float, initial: float, elapsed: float, rate: float) -> float:
+    """Native update tail: fractional linear recovery to the initial floor.
+
+    Packages supply the per-weapon rate; the consumer has no post-heavy delay.
+    Integrate elapsed time without inventing a frame rate for the event replay.
+    """
+    initial = max(0.0, float(initial))
+    if count >= initial:
+        return count
+    return min(initial, count + max(0.0, elapsed) * max(0.0, rate))
+
+
+def _float32(value: float) -> float:
+    return struct.unpack('<f', struct.pack('<f', value))[0]
+
+
+def combo_counter(count: float) -> int:
+    return math.floor(_float32(_float32(max(0.0,count)) + 0.5))
+
+
+def consume_combo(count: float, efficiency: float) -> float:
+    """Heavy attack spends integer points; zero efficiency clears the fraction.
+
+    0x1416b81d0 -> getter floor(C+0.5), floor(rounded*(1-eff)) -> subtract.
+    It never clamps the remainder to InitialHitCounter.
+    """
+    retained = _float32(min(max(float(efficiency), 0.0), 0.9))
+    cost = _float32(1.0-retained)
+    if cost >= 1.0:
+        return 0.0
+    spent = math.floor(_float32(combo_counter(count) * cost))
+    return max(0.0, _float32(_float32(count)-spent))
+
+
 def combo_multiplier(spec: Mapping[str, Any], count: float) -> float:
     """1x below the first tier, then +1x per tier (wiki: 2x to 12x)."""
     first = float(spec.get("baseHits") or 20.0)
     step = float(spec.get("tierStep") or first)
     cap = float(spec.get("cap") or 220.0)
-    count = min(max(float(count), 0.0), cap)
+    count = min(combo_counter(float(count)), cap)
     if count < first:
         return 1.0
     return float(spec.get("baseMultiplier") or 1.0) + 1.0 + math.floor((count - first) / step + 1e-9)
@@ -457,16 +518,20 @@ def route_note(schedule: Mapping[str, Any], stance_name: str | None = None) -> s
         return (f"攻击路线：轻击连段（{stance} · {_COMBO_NAMES.get(schedule.get('combo'), schedule.get('combo'))}连段，"
                 f"{len(hits)} 击 / 总倍率 {sum(h['atten'] for h in hits):g}，1.0 攻速下 {seconds:.2f} 秒一轮）；"
                 "逐次命中，连击数从初始连击逐击累加，嗜血类效果按实时档位")
-    if route in ("slam", "slamBullet"):
+    if route in ("slam", "slamBullet", "slamContinuous"):
         slam = hits[0]
+        if route == "slamContinuous":
+            return (f"攻击路线：连续震地（最低跳跃高度、取消后摇，按 {CONTINUOUS_SLAM_INTERVAL:g} 秒一次）；"
+                    f"一次范围打击 ×{slam['atten']:g}（靶在最小范围中心），每击使用当时已恢复的连击并消耗；"
+                    "频率采用用户给定操作条件，不受攻击速度缩短")
         jump = "原地跳到最高点" if route == "slam" else "垂直子弹跳"
         kind = "重击震地" if slam.get("heavy") else "震地"
         return (f"攻击路线：{kind}（{jump}，{schedule.get('slamHeight', 0):g} 米，1.0 攻速下 {seconds:.2f} 秒一轮）；"
                 f"一次范围打击 ×{slam['atten']:g}（{_DAMAGE_NAMES.get(slam.get('damageType'), slam.get('damageType'))}，可暴击，靶在中心）"
-                + ("，按初始连击倍率并消耗连击" if slam.get("heavy") else ""))
+                + ("，按攻击时的连击倍率并消耗连击" if slam.get("heavy") else ""))
     if route == "glaive":
         by_kind = {h["kind"]: h for h in hits}
         return (f"攻击路线：蓄力重投 + 立即引爆（1.0 攻速下 {seconds:.2f} 秒一轮）；投掷直击 ×{by_kind['glaiveDirect']['atten']:.2f} + "
-                f"引爆 ×{by_kind['glaiveExplosion']['atten']:.2f}（重击，按初始连击倍率并消耗连击，不吃异况超量）"
+                f"引爆 ×{by_kind['glaiveExplosion']['atten']:.2f}（重击，按攻击时的连击倍率并消耗连击，不吃异况超量）"
                 f"；易爆弹跳 / 易爆速返的弹跳爆炸 ×{by_kind['glaiveBounce']['atten']:.2f} 按弹跳爆炸几率")
     return "攻击路线：" + str(route)

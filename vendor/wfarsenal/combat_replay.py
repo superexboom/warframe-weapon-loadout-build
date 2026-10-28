@@ -223,11 +223,16 @@ def _reference_trajectory(
     melee_loop = melee_pending = None
     melee_count = 0.0
     melee_last_hit = -math.inf
+    melee_combo_at = 0.0
+    melee_recovery_token = 0
+    melee_recovered = 0.0
+    melee_recovery_initial = 0.0
+    melee_buff_boundary = math.inf
     melee_heavy_multiplier = 1.0
     melee_heavy_now = False  # the event being resolved is a heavy melee hit (Pennant's kills)
     melee_events = []
     if melee:
-        from .melee_sequence import Loop, apply_hit, combo_multiplier, combo_tier
+        from .melee_sequence import Loop, apply_hit, combo_multiplier, combo_tier, initial_combo_floor, recover_initial_combo, consume_combo
         melee_loop = Loop(melee)
         damage_rate_multiplier = 1.0
         status_rate_multiplier = 1.0
@@ -628,6 +633,48 @@ def _reference_trajectory(
                         q["expiries"][0] = (end, n - removed)
             q["stacks"] = min(q["maxStacks"], q["stacks"] + delta)
             q["expires"] = t + life if q["duration"] else math.inf
+
+    def advance_melee_recovery(t, initial, rate, snap=None):
+        nonlocal melee_count, melee_combo_at, melee_recovered
+        before = melee_count
+        tier_before = combo_tier(melee['comboSpec'], before)
+        melee_count = recover_initial_combo(before, initial, t-melee_combo_at, rate)
+        if snap is not None and before < initial:
+            melee_count = max(melee_count, min(initial, snap))
+        melee_combo_at = t
+        melee_recovered += melee_count-before
+        tier_after = combo_tier(melee['comboSpec'], melee_count)
+        if tier_after > tier_before:
+            signal('on-combo-tier-increase', t, float(tier_after-tier_before))
+
+    def schedule_melee_recovery(t, initial, rate):
+        # Wake only at the next rounded tier boundary or the initial floor,
+        # so recovery buffs have an event time independent of UI sample rate.
+        if rate <= 0. or melee_count >= initial:
+            return
+        spec = melee['comboSpec']
+        first = float(spec.get('baseHits') or 20.)
+        next_threshold = first + combo_tier(spec,melee_count)*float(spec.get('tierStep') or first)-.5
+        target = min(initial, next_threshold)
+        push(t+max(1e-9,(target-melee_count)/rate), 'melee-recovery', (melee_recovery_token,target))
+
+    def sync_melee_recovery(t):
+        nonlocal melee_recovery_initial, melee_recovery_token, melee_buff_boundary
+        if melee_pending is None:
+            return
+        initial = initial_combo_floor(model(t)[0].initial_combo or 0., float(melee['comboSpec'].get('cap') or 220.))
+        if initial != melee_recovery_initial:
+            melee_recovery_initial = initial
+            melee_recovery_token += 1
+            schedule_melee_recovery(t, initial, float(melee['comboSpec'].get('recoveryPerSecond') or 0.))
+        expiries = [when for q in sources if q['stacks'] for when in
+                    ([v[0] for v in q.get('expiries', [])] if q.get('decay') in ('per-stack','union') else [q['expires']])
+                    if t+1e-9 < when < math.inf]
+        boundary = min(expiries, default=math.inf)
+        if boundary != melee_buff_boundary:
+            melee_buff_boundary = boundary
+            if boundary < math.inf:
+                push(boundary, 'melee-buff-boundary')
 
     def consecutive_heads(t,probability):
         for q in sources:
@@ -1307,10 +1354,23 @@ def _reference_trajectory(
             raise SimulationError(f"replay clock went backwards: {kind} at {t:.3f}s after {current_time:.3f}s")
         current_time=t
         melee_heavy_now = False
+        if melee and melee_pending is not None:
+            advance_melee_recovery(t, melee_recovery_initial, float(melee['comboSpec'].get('recoveryPerSecond') or 0.))
         clean(t)
         if event_gen is not None and event_gen != gen:
             continue
-        if kind in {'stackable-life','stackable-child'}:
+        if kind == 'melee-buff-boundary':
+            melee_buff_boundary = math.inf
+        elif kind == 'melee-recovery':
+            token, snap = payload
+            if token != melee_recovery_token:
+                continue
+            active = model(t)[0]
+            initial = initial_combo_floor(active.initial_combo or 0., float(melee['comboSpec'].get('cap') or 220.))
+            recovery_rate = float(melee['comboSpec'].get('recoveryPerSecond') or 0.)
+            advance_melee_recovery(t, initial, recovery_rate, snap)
+            schedule_melee_recovery(t, initial, recovery_rate)
+        elif kind in {'stackable-life','stackable-child'}:
             projectiles.event(t,payload,child=kind=='stackable-child')
         elif kind == 'energy-spent':
             q = payload
@@ -1537,12 +1597,14 @@ def _reference_trajectory(
                            combo_tier(melee['comboSpec'], melee_count)) if melee else None
             if melee:
                 if melee_pending is None:
-                    # Combo starts at the initial combo; heavy hits use its
-                    # multiplier (heavy attacks read the initial combo only).
-                    melee_count = float(active.initial_combo or 0.0)
-                    melee_heavy_multiplier = combo_multiplier(melee['comboSpec'], melee_count)
+                    # Start from the configured initial floor, then let native
+                    # recovery replenish spent points over elapsed time.
+                    melee_count = initial_combo_floor(active.initial_combo or 0., float(melee['comboSpec'].get('cap') or 220.0))
+                    melee_combo_at = t
                     melee_pending, wait = melee_loop.next(speed, active.heavy_charge_speed,
                                                           getattr(active, 'projectile_speed_multiplier', 1.0))
+                    melee_recovery_initial = melee_count
+                    sync_melee_recovery(t)
                     push(t + wait, 'fire')
                     continue
                 melee_hit = melee_pending
@@ -1552,12 +1614,18 @@ def _reference_trajectory(
                                                           getattr(active, 'projectile_speed_multiplier', 1.0))
                     push(t + wait, 'fire')
                     continue
-                if t - melee_last_hit > max(active.combo_duration, 0.0) + 1e-9 and melee_last_hit > -math.inf:
+                melee_initial = initial_combo_floor(active.initial_combo or 0., float(melee['comboSpec'].get('cap') or 220.0))
+                advance_melee_recovery(t, melee_initial, melee['comboSpec'].get('recoveryPerSecond') or 0.)
+                melee_regenerated = melee_recovered
+                if (t - melee_last_hit > max(active.combo_duration, 0.0) + 1e-9
+                        and melee_last_hit > -math.inf and melee_count > melee_initial):
                     dropped = (combo_tier(melee['comboSpec'], melee_count)
-                               > combo_tier(melee['comboSpec'], float(active.initial_combo or 0.0)))
-                    melee_count = float(active.initial_combo or 0.0)
+                               > combo_tier(melee['comboSpec'], melee_initial))
+                    melee_count = melee_initial
                     if dropped:
                         signal('on-combo-tier-reset', t)
+                melee_count_before_hit = melee_count
+                melee_heavy_multiplier = combo_multiplier(melee['comboSpec'], melee_count)
                 melee_heavy_now = bool(melee_hit.get('heavy'))
                 # An attack starts: Dorrclave spends a charge, a slam locks
                 # Arca Titron's stacks before this hit reads them.
@@ -1976,11 +2044,13 @@ def _reference_trajectory(
                 gained = float(melee_hit.get('comboHits', 1.0)) * (1.0 + max(active.combo_extra_chance, 0.0))
                 melee_count += gained * min(max(1.0 - active.combo_miss_chance, 0.0), 1.0)
                 if melee_hit.get('consumesCombo'):
-                    retained = min(max(active.heavy_attack_efficiency, 0.0), 0.9)
-                    melee_count = max(float(active.initial_combo or 0.0), melee_count * retained)
+                    melee_count = consume_combo(melee_count, active.heavy_attack_efficiency)
                 melee_cap = float(melee['comboSpec'].get('cap') or 220.0)
                 melee_count = min(melee_count, melee_cap)
                 melee_last_hit = t
+                melee_combo_at = t
+                melee_recovery_token += 1
+                melee_recovered = 0.0
                 # Melee events (Ekhein: a heavy hit; Tonkkatt: a combo tier gained or lost).
                 tier_after = combo_tier(melee['comboSpec'], melee_count)
                 if melee_hit.get('heavy'):
@@ -1996,7 +2066,9 @@ def _reference_trajectory(
                     # after the first is consecutive (wiki; WFSim MELEE §10).
                     signal('on-glaive-throw', t)
                 if collect_timeline:
-                    melee_events.append(dict(time=round(t, 6), kind=melee_hit['kind'], combo=round(melee_count, 3)))
+                    melee_events.append(dict(time=round(t, 6), kind=melee_hit['kind'], combo=round(melee_count, 3),
+                        comboBefore=round(melee_count_before_hit, 6), comboRegenerated=round(melee_regenerated, 6),
+                        heavyMultiplier=melee_heavy_multiplier if melee_hit.get('comboMultiplier') else 1.))
                 after = active
                 if speed_state != (tuple(q['stacks'] for q in sources), combo_tier(melee['comboSpec'], melee_count)):
                     # This hit changed a buff: the next swing plays at the
@@ -2005,6 +2077,9 @@ def _reference_trajectory(
                     speed = after.fire_rate
                 melee_pending, delay = melee_loop.next(speed, after.heavy_charge_speed,
                                                        getattr(after, 'projectile_speed_multiplier', 1.0))
+                schedule_melee_recovery(t,
+                    initial_combo_floor(after.initial_combo or 0., float(melee['comboSpec'].get('cap') or 220.)),
+                    float(melee['comboSpec'].get('recoveryPerSecond') or 0.))
             rate_spool_due = t + delay
             push(t + delay, "fire")
         elif kind == "sample":
@@ -2058,6 +2133,8 @@ def _reference_trajectory(
             last_totals = totals.copy()
             for q in sources:
                 q["series"].append(q["stacks"])
+        if melee:
+            sync_melee_recovery(t)
     score = kills + (1 - sum(pools) / ehp if ehp else 0.0)
     initial = damage_against_cached_armour(
         stats, armour_base, defenses, target=target, _target_cache=locations["body"]

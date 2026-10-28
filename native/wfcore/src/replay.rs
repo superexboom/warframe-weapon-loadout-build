@@ -416,6 +416,8 @@ enum Kind {
     Lingering(usize),
     EmbeddedTick(usize),
     EmbeddedDeath(usize),
+    MeleeRecovery(u64, f64),
+    MeleeBuffBoundary,
     /// A remote-mine batch: (view, generation, blast part riding a mine).
     Detonation(Rc<Vec<(usize, i64, bool)>>),
     /// 'stackable-life': (group, token, action)
@@ -612,6 +614,10 @@ pub struct Replay<'py> {
     melee_count: f64,
     melee_heavy_multiplier: f64,
     melee_last_hit: f64,
+    melee_combo_at: f64,
+    melee_recovery_token: u64,
+    melee_recovery_initial: f64,
+    melee_buff_boundary: f64,
     melee_pending: Option<MeleeHit>,
     // melee_sequence.Loop.index: the route segment the next swing starts at.
     melee_index: usize,
@@ -791,7 +797,7 @@ impl<'py> Replay<'py> {
                     sources: self.sources.iter().map(|s| s.fork_initial(self.py)).collect(),
                     melee: self.melee.as_ref().map(|m| MeleeSpec {
                         base_hits: m.base_hits, tier_step: m.tier_step, cap: m.cap,
-                        base_multiplier: m.base_multiplier,
+                        base_multiplier: m.base_multiplier, recovery_per_second: m.recovery_per_second,
                         tier_keys: m.tier_keys.iter().map(|(obj, name, value)|
                             (obj.clone_ref(self.py), name.clone(), *value)).collect(),
                         segments: m.segments.clone(),
@@ -809,7 +815,7 @@ impl<'py> Replay<'py> {
             faction_bracket, tables, battery, spool, rate_spool, shell,
             shot_combo, reload_after_every_shot, refill_growth, restore, pending_restore, recharges,
             delayed_attacks, reload_shell_events, derived, selected_incarnon, melee_count, melee_heavy_multiplier,
-            melee_last_hit, melee_pending, melee_index, heavy_flag, no_co_flag, melee_heavy_now,
+            melee_last_hit, melee_combo_at, melee_recovery_token, melee_recovery_initial, melee_buff_boundary, melee_pending, melee_index, heavy_flag, no_co_flag, melee_heavy_now,
             affinity_per_kill, affinity, syndicate_ready, syndicate_events, pools, states,
             pooled, presence, gas_procs, dots, blasts, blast_procs,
             heat_acc, heat_token, heat_chains, attribution, puncture_strip, frozen_until,
@@ -1996,6 +2002,55 @@ impl<'py> Replay<'py> {
     }
 
     /// melee_sequence.Loop.next: the route's next hit and the seconds until it lands.
+    fn advance_melee_recovery(&mut self, t: f64, initial: f64, snap: Option<f64>) {
+        let spec = self.melee.as_ref().unwrap();
+        let before = self.melee_count;
+        let tier_before = spec.tier(before);
+        if before < initial {
+            self.melee_count = pmin(initial,before+pmax(0.0,t-self.melee_combo_at)*spec.recovery_per_second);
+            if let Some(target) = snap { self.melee_count=pmax(self.melee_count,pmin(initial,target)); }
+        }
+        self.melee_combo_at = t;
+        let tier_after = spec.tier(self.melee_count);
+        if tier_after > tier_before {
+            self.signal("on-combo-tier-increase", t, (tier_after-tier_before) as f64);
+        }
+    }
+
+    fn schedule_melee_recovery(&mut self, t: f64, initial: f64) {
+        let spec=self.melee.as_ref().unwrap();
+        let rate=spec.recovery_per_second;
+        if rate <= 0.0 || self.melee_count >= initial { return; }
+        let next=spec.base_hits+spec.tier(self.melee_count) as f64*spec.tier_step-0.5;
+        let target=pmin(initial,next);
+        self.push(t+pmax(1e-9,(target-self.melee_count)/rate),Kind::MeleeRecovery(self.melee_recovery_token,target),None);
+    }
+
+    fn sync_melee_recovery(&mut self, t: f64) -> PyResult<()> {
+        if self.melee_pending.is_none() { return Ok(()); }
+        let active=self.model(t)?.0;
+        let initial=pmin((pmax(0.0,self.stats[active].initial_combo) as f32).trunc() as f64,self.melee.as_ref().unwrap().cap);
+        if initial != self.melee_recovery_initial {
+            self.melee_recovery_initial=initial;
+            self.melee_recovery_token+=1;
+            self.schedule_melee_recovery(t,initial);
+        }
+        let mut boundary=f64::INFINITY;
+        for q in &self.sources {
+            if q.stacks==0.0 { continue; }
+            if q.decay=="per-stack" || q.decay=="union" {
+                for &(when,_) in &q.expiries {
+                    if when>t+1e-9 { boundary=pmin(boundary,when); }
+                }
+            } else if q.expires>t+1e-9 { boundary=pmin(boundary,q.expires); }
+        }
+        if boundary != self.melee_buff_boundary {
+            self.melee_buff_boundary=boundary;
+            if boundary.is_finite() { self.push(boundary,Kind::MeleeBuffBoundary,None); }
+        }
+        Ok(())
+    }
+
     fn melee_next(&mut self, speed: f64, charge: f64, projectile: f64) -> PyResult<(MeleeHit, f64)> {
         let segments = &self.melee.as_ref().expect("melee route").segments;
         if segments.is_empty() {
@@ -3162,6 +3217,7 @@ struct MeleeSpec {
     tier_step: f64,
     cap: f64,
     base_multiplier: f64,
+    recovery_per_second: f64,
     tier_keys: Vec<(PyObject, String, f64)>,
     segments: Vec<MeleeSegment>,
 }
@@ -3190,7 +3246,7 @@ struct MeleeHit {
 
 impl MeleeSpec {
     fn multiplier(&self, count: f64) -> f64 {
-        let count = pmin(pmax(count, 0.0), self.cap);
+        let count = pmin(((pmax(count, 0.0) as f32) + 0.5_f32).floor() as f64, self.cap);
         if count < self.base_hits {
             return 1.0;
         }
@@ -3242,6 +3298,9 @@ impl<'py> Replay<'py> {
             }
             self.current_time = t;
             self.melee_heavy_now = false;
+            if self.melee_pending.is_some() {
+                self.advance_melee_recovery(t,self.melee_recovery_initial,None);
+            }
             self.clean(t);
             if let Some(g) = event.gen {
                 if g != self.gen {
@@ -3249,6 +3308,14 @@ impl<'py> Replay<'py> {
                 }
             }
             match event.kind {
+                Kind::MeleeBuffBoundary => { self.melee_buff_boundary=f64::INFINITY; }
+                Kind::MeleeRecovery(token,snap) => {
+                    if token != self.melee_recovery_token { continue; }
+                    let active=self.model(t)?.0;
+                    let initial=pmin((pmax(0.0,self.stats[active].initial_combo) as f32).trunc() as f64,self.melee.as_ref().unwrap().cap);
+                    self.advance_melee_recovery(t,initial,Some(snap));
+                    self.schedule_melee_recovery(t,initial);
+                }
                 Kind::Energy(i) => {
                     let q = &mut self.sources[i];
                     q.stacks = pmin(q.max_stacks, q.stacks + q.per_event);
@@ -3526,12 +3593,14 @@ impl<'py> Replay<'py> {
                     if self.melee.is_some() {
                         let pending = match self.melee_pending {
                             None => {
-                                self.melee_count = self.stats[active].initial_combo;
-                                self.melee_heavy_multiplier = self.melee.as_ref().unwrap().multiplier(self.melee_count);
+                                self.melee_count = pmin((pmax(0.0,self.stats[active].initial_combo) as f32).trunc() as f64, self.melee.as_ref().unwrap().cap);
+                                self.melee_combo_at = t;
                                 let (charge, projectile) =
                                     (self.stats[active].heavy_charge_speed, self.stats[active].projectile_speed_multiplier);
                                 let (hit, wait) = self.melee_next(speed, charge, projectile)?;
                                 self.melee_pending = Some(hit);
+                                self.melee_recovery_initial=self.melee_count;
+                                self.sync_melee_recovery(t)?;
                                 self.push(t + wait, Kind::Fire, None);
                                 continue;
                             }
@@ -3548,10 +3617,12 @@ impl<'py> Replay<'py> {
                             continue;
                         }
                         melee_hit = Some(pending);
+                        let initial = pmin((pmax(0.0,self.stats[active].initial_combo) as f32).trunc() as f64, self.melee.as_ref().unwrap().cap);
+                        self.advance_melee_recovery(t,initial,None);
                         if t - self.melee_last_hit > pmax(self.stats[active].combo_duration, 0.0) + 1e-9
                             && self.melee_last_hit > f64::NEG_INFINITY
+                            && self.melee_count > initial
                         {
-                            let initial = self.stats[active].initial_combo;
                             let dropped = {
                                 let spec = self.melee.as_ref().unwrap();
                                 spec.tier(self.melee_count) > spec.tier(initial)
@@ -3561,6 +3632,7 @@ impl<'py> Replay<'py> {
                                 self.signal("on-combo-tier-reset", t, 1.0);
                             }
                         }
+                        self.melee_heavy_multiplier = self.melee.as_ref().unwrap().multiplier(self.melee_count);
                         self.melee_heavy_now = pending.heavy;
                         // An attack starts: Dorrclave spends a charge, a slam
                         // locks Arca Titron's stacks before this hit reads them.
@@ -4133,12 +4205,21 @@ impl<'py> Replay<'py> {
                         let gained = hit.combo_hits * (1.0 + pmax(s.combo_extra_chance, 0.0));
                         self.melee_count += gained * pmin(pmax(1.0 - s.combo_miss_chance, 0.0), 1.0);
                         if hit.consumes {
-                            let retained = pmin(pmax(s.heavy_attack_efficiency, 0.0), 0.9);
-                            self.melee_count = pmax(s.initial_combo, self.melee_count * retained);
+                            let retained = pmin(pmax(s.heavy_attack_efficiency, 0.0), 0.9) as f32;
+                            let cost = 1.0_f32-retained;
+                            if cost >= 1.0 {
+                                self.melee_count = 0.0;
+                            } else {
+                                let rounded = (pmax(0.0,self.melee_count) as f32 + 0.5_f32).floor();
+                                let spent = (rounded * cost).floor();
+                                self.melee_count = pmax(0.0,(self.melee_count as f32-spent) as f64);
+                            }
                         }
                         let cap = self.melee.as_ref().unwrap().cap;
                         self.melee_count = pmin(self.melee_count, cap);
                         self.melee_last_hit = t;
+                        self.melee_combo_at = t;
+                        self.melee_recovery_token += 1;
                         // combat_replay: melee events (a heavy hit; a combo tier gained or lost).
                         let tier_after = self.melee.as_ref().unwrap().tier(self.melee_count);
                         if hit.heavy {
@@ -4171,6 +4252,8 @@ impl<'py> Replay<'py> {
                         let (next, wait) = self.melee_next(speed, charge, projectile)?;
                         self.melee_pending = Some(next);
                         delay = wait;
+                        let initial=pmin((pmax(0.0,self.stats[after].initial_combo) as f32).trunc() as f64,self.melee.as_ref().unwrap().cap);
+                        self.schedule_melee_recovery(t,initial);
                     }
                     let (form_burst, form_burst_rate) = self.form_burst();
                     if let Some((_, _, delay_seconds, ignore_rate)) = form_burst {
@@ -4195,6 +4278,7 @@ impl<'py> Replay<'py> {
                     self.push(t + delay, Kind::Fire, None);
                 }
             }
+            if self.melee.is_some() { self.sync_melee_recovery(t)?; }
         }
         Ok(())
     }
@@ -4472,6 +4556,7 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
                 tier_step: get_f(d, "tierStep", 20.0)?,
                 cap: get_f(d, "cap", 220.0)?,
                 base_multiplier: get_f(d, "baseMultiplier", 1.0)?,
+                recovery_per_second: get_f(d, "recoveryPerSecond", 0.0)?,
                 tier_keys,
                 segments,
             })
@@ -4694,6 +4779,10 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         melee_count: 0.0,
         melee_heavy_multiplier: 1.0,
         melee_last_hit: f64::NEG_INFINITY,
+        melee_combo_at: 0.0,
+        melee_recovery_token: 0,
+        melee_recovery_initial: 0.0,
+        melee_buff_boundary: f64::INFINITY,
         melee_pending: None,
         melee_index: 0,
         heavy_flag: false,

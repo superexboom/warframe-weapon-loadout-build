@@ -44,7 +44,8 @@
               ],
               "meleeRoutes": [
                 "slam",
-                "slamBullet"
+                "slamBullet",
+                "slamContinuous"
               ],
               "lockOn": "on-melee-slam-start",
               "consumeOn": "on-melee-slam",

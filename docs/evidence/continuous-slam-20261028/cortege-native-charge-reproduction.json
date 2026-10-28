@@ -1,0 +1,129 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "method": "Original native bytes executed offline in Unicorn; owner/authority/query/UI scaffolding stubbed. Constructor is a bounded original snippet. No game execution.",
+  "constructor": {
+    "current": 0,
+    "max": 5,
+    "numChargesToConsumeDefault": 1
+  },
+  "gateCases": [
+    {
+      "current": 0,
+      "max": 0,
+      "allowed": false
+    },
+    {
+      "current": 1,
+      "max": 0,
+      "allowed": false
+    },
+    {
+      "current": 2,
+      "max": 0,
+      "allowed": false
+    },
+    {
+      "current": 3,
+      "max": 0,
+      "allowed": false
+    },
+    {
+      "current": 4,
+      "max": 0,
+      "allowed": false
+    },
+    {
+      "current": 5,
+      "max": 0,
+      "allowed": false
+    },
+    {
+      "current": 6,
+      "max": 0,
+      "allowed": false
+    },
+    {
+      "current": 0,
+      "max": 5,
+      "allowed": false
+    },
+    {
+      "current": 1,
+      "max": 5,
+      "allowed": false
+    },
+    {
+      "current": 2,
+      "max": 5,
+      "allowed": false
+    },
+    {
+      "current": 3,
+      "max": 5,
+      "allowed": false
+    },
+    {
+      "current": 4,
+      "max": 5,
+      "allowed": false
+    },
+    {
+      "current": 5,
+      "max": 5,
+      "allowed": true
+    },
+    {
+      "current": 6,
+      "max": 5,
+      "allowed": false
+    }
+  ],
+  "consumeZeroCases": [
+    {
+      "current": 0,
+      "consumed": 0,
+      "remaining": 0
+    },
+    {
+      "current": 1,
+      "consumed": 1,
+      "remaining": 0
+    },
+    {
+      "current": 4,
+      "consumed": 4,
+      "remaining": 0
+    },
+    {
+      "current": 5,
+      "consumed": 5,
+      "remaining": 0
+    },
+    {
+      "current": 6,
+      "consumed": 6,
+      "remaining": 0
+    }
+  ],
+  "verifiedNativeRanges": [
+    {
+      "start": "0x140b169c0",
+      "size": 135,
+      "sha256": "37fd92c5f683d9676d559e1ce141e5d7fab980a67beb89b593ea55d74387d5b8"
+    },
+    {
+      "start": "0x141377080",
+      "size": 1204,
+      "sha256": "0cc617e087f1e37ab248495f1058b171f1b76c10a15ffbe829a763c07d457a55"
+    }
+  ],
+  "stubs": {
+    "virtual owner getters": "null",
+    "authority flag": "object+0x21=1",
+    "generic availability": "true",
+    "UI/network side effects": "stubbed"
+  },
+  "limits": [
+    "Does not execute real PRIMARY_KILL event dispatch, projectile spatial behavior, damage resolver, or actual firing state transitions."
+  ]
+}
