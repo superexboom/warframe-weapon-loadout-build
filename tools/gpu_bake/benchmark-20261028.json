@@ -1,0 +1,2520 @@
+{
+  "device": "NVIDIA GeForce RTX 5080",
+  "architecture": "compute_120",
+  "realScenarios": 100,
+  "realEligible": 1,
+  "fixtureEligible": 54,
+  "exactCPUReplayMatches": 55,
+  "rows": [
+    {
+      "weapon": "Twin Rogga",
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnQueenGuardDualPistol/GrnQueenGuardDualPistols",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0014870000013615936,
+      "prepareSeconds": 0.00025860000459942967,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Telos Akbolto",
+      "path": "/Lotus/Weapons/Syndicates/ArbitersOfHexis/Pistols/AHAkbolto",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003741999971680343,
+      "prepareSeconds": 0.00015190000704023987,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Proboscis Cernos",
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernos",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00037390000943560153,
+      "prepareSeconds": 0.0002852999896276742,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Purgator 1",
+      "path": "/Lotus/Weapons/Lasria/LasGrenadeLauncher/LasrianNoxPlayerWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002423999976599589,
+      "prepareSeconds": 0.00012310000602155924,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Prisma Grakata",
+      "path": "/Lotus/Weapons/VoidTrader/PrismaGrakata",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0008369999850401655,
+      "prepareSeconds": 0.0001112000027205795,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Paris Prime",
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00029960001120343804,
+      "prepareSeconds": 0.0001247999898623675,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Paracyst",
+      "path": "/Lotus/Weapons/Infested/LongGuns/QuantaFullyInfested/InfQuantaRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00045619999582413584,
+      "prepareSeconds": 0.00011989999620709568,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Castanas",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombs",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002494000073056668,
+      "prepareSeconds": 0.00011399999493733048,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Hystrix",
+      "path": "/Lotus/Weapons/Tenno/Pistols/QuillDartgun/QuillDartGunWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00045059999683871865,
+      "prepareSeconds": 0.00011390000872779638,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Secura Penta",
+      "path": "/Lotus/Weapons/Syndicates/PerrinSequence/LongGuns/PSPenta",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003397999971639365,
+      "prepareSeconds": 0.00047810000251047313,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Kompressa",
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnYareliPistol/TnYareliPistolWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003927999932784587,
+      "prepareSeconds": 0.0002280000044265762,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Burston Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0015755999920656905,
+      "prepareSeconds": 0.0002069000038318336,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Thornbak",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnModQuestRifle/TnModQuestRifleWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0006248999998206273,
+      "prepareSeconds": 0.00012879999121651053,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Rakta Cernos",
+      "path": "/Lotus/Weapons/Syndicates/RedVeil/Bows/RVCernos",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00027040000713896006,
+      "prepareSeconds": 0.00012549999519251287,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Astilla",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunGun",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004096000047866255,
+      "prepareSeconds": 0.00024480000138282776,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Ambassador",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpArSniper/CrpArSniperRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004557000065688044,
+      "prepareSeconds": 0.00011239999730605632,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Argonak",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/LaserAimRifle/LaserAimRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00035570000181905925,
+      "prepareSeconds": 0.00011100000119768083,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Coda Sporothrix",
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003823999868473038,
+      "prepareSeconds": 0.00024590000975877047,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Kuva Chakkhurr",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003586999810067937,
+      "prepareSeconds": 0.0002511000056983903,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "MK1-Braton",
+      "path": "/Lotus/Weapons/Tenno/Rifle/StartingRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.000578600011067465,
+      "prepareSeconds": 0.00023599999258294702,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Amprex",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/ChainLightningGun/ChainLightningRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00048320001224055886,
+      "prepareSeconds": 0.0001142999972216785,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Tenet Tetra",
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00040589999116491526,
+      "prepareSeconds": 0.00011500000255182385,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Talons",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00041649999911896884,
+      "prepareSeconds": 0.00011950000771321356,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Rakta Ballistica",
+      "path": "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002975000097649172,
+      "prepareSeconds": 0.00011729999096132815,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Boar Prime",
+      "path": "/Lotus/Weapons/Tenno/Shotgun/PrimeBoar",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0005665000062435865,
+      "prepareSeconds": 0.00010679999832063913,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Akvasto",
+      "path": "/Lotus/Weapons/Tenno/Akimbo/DualVastos",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004084000102011487,
+      "prepareSeconds": 0.00011949999316129833,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Sicarus",
+      "path": "/Lotus/Weapons/Tenno/Pistol/BurstPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0008513999928254634,
+      "prepareSeconds": 0.00016830000095069408,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Vaykor Hek",
+      "path": "/Lotus/Weapons/Syndicates/SteelMeridian/LongGuns/SMHek",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003189999988535419,
+      "prepareSeconds": 0.00015490000077988952,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Prisma Lenz",
+      "path": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00042040001426357776,
+      "prepareSeconds": 0.00041599999531172216,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Coda Pox",
+      "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPox",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004895000020042062,
+      "prepareSeconds": 0.00023469999723602086,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Scyotid",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnOraxiaFlechette/TnOraxiaFlechette",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00035510001180227846,
+      "prepareSeconds": 0.00015199999324977398,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Zakti Prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.000509100005729124,
+      "prepareSeconds": 0.00025769999774638563,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Hystrix Prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeHystrix/PrimeHystrixWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.000477400011732243,
+      "prepareSeconds": 0.00011839999933727086,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Paris",
+      "path": "/Lotus/Weapons/Tenno/Bows/HuntingBow",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002820999943651259,
+      "prepareSeconds": 0.00012040000001434237,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Kuva Brakk",
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Brakk/KuvaBrakk",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003592999855754897,
+      "prepareSeconds": 0.00011930000619031489,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Strun",
+      "path": "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00036359998921398073,
+      "prepareSeconds": 0.00044450000859797,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Arca Plasmor",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShotgun/CrpShotgun",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00022170001466292888,
+      "prepareSeconds": 0.00011199999426025897,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Arca Scisco",
+      "path": "/Lotus/Weapons/Corpus/Pistols/SniperPistol/CrpScopeGun",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0012721999955829233,
+      "prepareSeconds": 0.00015829999756533653,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Paris",
+      "path": "/Lotus/Weapons/Tenno/Bows/ValentinesConclaveVariantBow",
+      "fixtureZeroStatus": false,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00019459999748505652,
+      "prepareSeconds": 0.00017269999079871923,
+      "reasons": []
+    },
+    {
+      "weapon": "Acrid",
+      "path": "/Lotus/Weapons/ClanTech/Bio/AcidDartPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003046000056201592,
+      "prepareSeconds": 0.00011399999493733048,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Latron",
+      "path": "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00043879999429918826,
+      "prepareSeconds": 0.0002700000040931627,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Lex Prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002859999949578196,
+      "prepareSeconds": 0.00019950000569224358,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Boltor",
+      "path": "/Lotus/Weapons/Tenno/Rifle/BoltoRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0007125999982235953,
+      "prepareSeconds": 0.00012660000356845558,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Akmagnus Prime",
+      "path": "/Lotus/Weapons/Tenno/Akimbo/DualMagnusPrime",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.011061600060202181,
+      "prepareSeconds": 0.0007506999390898272,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Kuva Drakgoon",
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002871000033337623,
+      "prepareSeconds": 0.0001424999936716631,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Kuva Kohm",
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Kohm/KuvaKohm",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003954999992856756,
+      "prepareSeconds": 0.00014910000027157366,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Fusilai",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/GlassKunai/GlassKunaiWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0005486000009113923,
+      "prepareSeconds": 0.00012889999197795987,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Twin Vipers",
+      "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboViperPistols",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0007004000071901828,
+      "prepareSeconds": 0.00011269999959040433,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Quellor",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnRailjackRifle/RailjackRifleGun",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00043729999742936343,
+      "prepareSeconds": 0.00011660000018309802,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Ogris",
+      "path": "/Lotus/Weapons/ClanTech/Chemical/RocketLauncher",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003099000023212284,
+      "prepareSeconds": 0.00024789999588392675,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Atomos",
+      "path": "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00025549999554641545,
+      "prepareSeconds": 0.00011470000026747584,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Solstice Spheres",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/VariantSnowBalls",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002066000015474856,
+      "prepareSeconds": 0.0001044000091496855,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Soma",
+      "path": "/Lotus/Weapons/Tenno/Rifle/TennoAR",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004889000119874254,
+      "prepareSeconds": 0.00011280000035185367,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Basmu",
+      "path": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleNewWarGun",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0006028000061633065,
+      "prepareSeconds": 0.00023389999114442617,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Akbronco Prime",
+      "path": "/Lotus/Weapons/Tenno/Akimbo/PrimeAkimboShotGun",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002880000101868063,
+      "prepareSeconds": 0.00011569999333005399,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Cernos",
+      "path": "/Lotus/Weapons/Tenno/Bows/AntlerBow/AntlerBow",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00024259999918285757,
+      "prepareSeconds": 0.00011409999569877982,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Dread",
+      "path": "/Lotus/Weapons/Tenno/Bows/StalkerBow",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003012999950442463,
+      "prepareSeconds": 0.00011520000407472253,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Carmine Penta",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/CarminePenta",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00031659999513067305,
+      "prepareSeconds": 0.00022810000518802553,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Lex Variant",
+      "path": "/Lotus/Weapons/Tenno/Pistol/HeavyPistolVariant",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00019850001262966543,
+      "prepareSeconds": 0.00010639999527484179,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "EFV-5 Jupiter",
+      "path": "/Lotus/Weapons/Lasria/LasGooAK/LasGooAKPlayerWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004633999924408272,
+      "prepareSeconds": 0.00010210000618826598,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Velox",
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnOdaliskSmg/TnOdaliskSmgPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0010637999948812649,
+      "prepareSeconds": 0.00012989999959245324,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Quanta",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00048189998778980225,
+      "prepareSeconds": 0.00011770000855904073,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Akarius Prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004101999948034063,
+      "prepareSeconds": 0.0002938999969046563,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Nagantaka Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeNagantaka/PrimeNagantakaWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00034389999927952886,
+      "prepareSeconds": 0.00012080000306013972,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Nukor",
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrineerMicrowavegun/GrnMicrowavePistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002700000040931627,
+      "prepareSeconds": 0.00011490000179037452,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Viper Wraith",
+      "path": "/Lotus/Weapons/Grineer/Pistols/WraithSingleViper/WraithSingleViper",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0006333000055747107,
+      "prepareSeconds": 0.00010819999442901462,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Komorex",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniper",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004385999927762896,
+      "prepareSeconds": 0.00023440000950358808,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Lato",
+      "path": "/Lotus/Weapons/Tenno/Pistol/CoHLoanerPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00037930000689812005,
+      "prepareSeconds": 0.00011229999654460698,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Twin Grakatas",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/TwinGrakatas",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0006191000138642266,
+      "prepareSeconds": 0.00010709998605307192,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Tenet Arca Plasmor",
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00020709999080281705,
+      "prepareSeconds": 0.00011580000864341855,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Viper",
+      "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrineerLightPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0005651999963447452,
+      "prepareSeconds": 0.00010479999764356762,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Kitgun",
+      "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00023310001415666193,
+      "prepareSeconds": 0.00010829999519046396,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Zylok",
+      "path": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ConclaveLeverPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.000269199998001568,
+      "prepareSeconds": 0.00023999999393709004,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Hema",
+      "path": "/Lotus/Weapons/Infested/LongGuns/InfWFAccompanyingPri/InfestedBurstRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002831999881891534,
+      "prepareSeconds": 0.00011230001109652221,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Zarr",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0006595999875571579,
+      "prepareSeconds": 0.0004709000058937818,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Embolist",
+      "path": "/Lotus/Weapons/Infested/Pistols/InfestedPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00040360000275541097,
+      "prepareSeconds": 0.0002040999970631674,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Kraken",
+      "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrnHeavyPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00036929998896084726,
+      "prepareSeconds": 0.00013350001245271415,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Dual Toxocyst",
+      "path": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00044610000622924417,
+      "prepareSeconds": 0.00012929999502375722,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Prisma Angstrum",
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004464000085135922,
+      "prepareSeconds": 0.00011759999324567616,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Hind",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/BurstRifle/GrnBurstRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004914000019198284,
+      "prepareSeconds": 0.00011809999705292284,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Grakata",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/GrnAssaultRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0007114000036381185,
+      "prepareSeconds": 0.000115999995614402,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Vasto",
+      "path": "/Lotus/Weapons/Tenno/Pistol/RevolverPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003302999975858256,
+      "prepareSeconds": 0.00012070000229869038,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Fulmin Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulmin",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00024900000425986946,
+      "prepareSeconds": 0.00011239999730605632,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Tiberon Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTiberon/PrimeTiberonRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00044839999463874847,
+      "prepareSeconds": 0.00011500000255182385,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Vulkar",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/GrnSniperRifle",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00024449999909847975,
+      "prepareSeconds": 0.00010800000745803118,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Twin Vipers Wraith",
+      "path": "/Lotus/Weapons/Grineer/Pistols/WraithTwinVipers/WraithTwinVipers",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0006720999954268336,
+      "prepareSeconds": 0.00010380000458098948,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Sobek",
+      "path": "/Lotus/Weapons/Tenno/Shotgun/DoubleBarrelShotgun",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002705999941099435,
+      "prepareSeconds": 0.0001112000027205795,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Sagek Prime",
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnOrokinPistol/GrnOrokinPistol",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0005855999916093424,
+      "prepareSeconds": 0.00010980000661220402,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Despair",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StalkerKunai",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.000599899998633191,
+      "prepareSeconds": 0.00024310000299010426,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Acceltra Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0005928999889874831,
+      "prepareSeconds": 0.00024300000222865492,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Kunai",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/Kunai",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00037640001391991973,
+      "prepareSeconds": 0.00011619999713730067,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Akzani",
+      "path": "/Lotus/Weapons/Tenno/Pistols/HarlequinGun/HarlequinPistols",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0008507000020472333,
+      "prepareSeconds": 0.00011700000322889537,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Coda Bassocyst",
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/1999InfShotgun/1999InfShotgunWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00023150000197347254,
+      "prepareSeconds": 0.00011670000094454736,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Akstiletto Prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00046100000326987356,
+      "prepareSeconds": 0.00011219999578315765,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "MK1-Furis",
+      "path": "/Lotus/Weapons/MK1Series/MK1Furis",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0006280999950831756,
+      "prepareSeconds": 0.00011249999806750566,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Spira",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/LiDagger/LiDagger",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00030369998421519995,
+      "prepareSeconds": 0.00011020000965800136,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Corinth",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunGun",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002933000068878755,
+      "prepareSeconds": 0.00016460000188089907,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Grimoire",
+      "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00037560000782832503,
+      "prepareSeconds": 0.0002485999866621569,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Stubba",
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnUzi/GrnUziWeapon",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004763999895658344,
+      "prepareSeconds": 0.00014150000060908496,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Zhuge Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeCrossbow",
+      "fixtureZeroStatus": false,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0007707000040682033,
+      "prepareSeconds": 0.00025430000096093863,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Twin Rogga",
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnQueenGuardDualPistol/GrnQueenGuardDualPistols",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0001903000083984807,
+      "prepareSeconds": 0.00017139999545179307,
+      "reasons": []
+    },
+    {
+      "weapon": "Telos Akbolto",
+      "path": "/Lotus/Weapons/Syndicates/ArbitersOfHexis/Pistols/AHAkbolto",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002373000024817884,
+      "prepareSeconds": 0.0002970999921672046,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Proboscis Cernos",
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernos",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002897000085795298,
+      "prepareSeconds": 0.00024369999300688505,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Purgator 1",
+      "path": "/Lotus/Weapons/Lasria/LasGrenadeLauncher/LasrianNoxPlayerWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00021320000814739615,
+      "prepareSeconds": 0.00010989999282173812,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Prisma Grakata",
+      "path": "/Lotus/Weapons/VoidTrader/PrismaGrakata",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00027209999097976834,
+      "prepareSeconds": 0.0002533000078983605,
+      "reasons": []
+    },
+    {
+      "weapon": "Paris Prime",
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00023859999782871455,
+      "prepareSeconds": 0.0001244000013684854,
+      "reasons": []
+    },
+    {
+      "weapon": "Paracyst",
+      "path": "/Lotus/Weapons/Infested/LongGuns/QuantaFullyInfested/InfQuantaRifle",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00021980000019539148,
+      "prepareSeconds": 0.00020760000916197896,
+      "reasons": []
+    },
+    {
+      "weapon": "Castanas",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StickyBomb/StickyBombs",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00019169998995494097,
+      "prepareSeconds": 0.00010600000678095967,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Hystrix",
+      "path": "/Lotus/Weapons/Tenno/Pistols/QuillDartgun/QuillDartGunWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003017000126419589,
+      "prepareSeconds": 0.00010269999620504677,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Secura Penta",
+      "path": "/Lotus/Weapons/Syndicates/PerrinSequence/LongGuns/PSPenta",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002826999989338219,
+      "prepareSeconds": 0.00023210000654216856,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Kompressa",
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnYareliPistol/TnYareliPistolWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.000288200011709705,
+      "prepareSeconds": 0.0002226999931735918,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Burston Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeBurston/PrimeBurston",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004375999851617962,
+      "prepareSeconds": 0.00019640001119114459,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Thornbak",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnModQuestRifle/TnModQuestRifleWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00023659999715164304,
+      "prepareSeconds": 0.00038579999818466604,
+      "reasons": []
+    },
+    {
+      "weapon": "Rakta Cernos",
+      "path": "/Lotus/Weapons/Syndicates/RedVeil/Bows/RVCernos",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00025860000459942967,
+      "prepareSeconds": 0.00015259999781847,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Astilla",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnGlassShotgun/TnGlassShotgunGun",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004090000002179295,
+      "prepareSeconds": 0.0019257999956607819,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Ambassador",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpArSniper/CrpArSniperRifle",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00024629998370073736,
+      "prepareSeconds": 0.00023990000772755593,
+      "reasons": []
+    },
+    {
+      "weapon": "Argonak",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/LaserAimRifle/LaserAimRifle",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00019920000340789557,
+      "prepareSeconds": 0.0001762000028975308,
+      "reasons": []
+    },
+    {
+      "weapon": "Coda Sporothrix",
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00030270002025645226,
+      "prepareSeconds": 0.00023749998945277184,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Kuva Chakkhurr",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003259999939473346,
+      "prepareSeconds": 0.00025510000705253333,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "MK1-Braton",
+      "path": "/Lotus/Weapons/Tenno/Rifle/StartingRifle",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00030940001306589693,
+      "prepareSeconds": 0.0002327999973203987,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Amprex",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/ChainLightningGun/ChainLightningRifle",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.000255000006291084,
+      "prepareSeconds": 0.0001083999959519133,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Tenet Tetra",
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00020080000103916973,
+      "prepareSeconds": 0.0001838000025600195,
+      "reasons": []
+    },
+    {
+      "weapon": "Talons",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00023350000265054405,
+      "prepareSeconds": 0.00010959999053739011,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Rakta Ballistica",
+      "path": "/Lotus/Weapons/Syndicates/RedVeil/Pistols/RVBallistica",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002542000001994893,
+      "prepareSeconds": 0.00011110000195913017,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Boar Prime",
+      "path": "/Lotus/Weapons/Tenno/Shotgun/PrimeBoar",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00026160001289099455,
+      "prepareSeconds": 0.00010349998774472624,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Akvasto",
+      "path": "/Lotus/Weapons/Tenno/Akimbo/DualVastos",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00016969999705906957,
+      "prepareSeconds": 0.0001598999951966107,
+      "reasons": []
+    },
+    {
+      "weapon": "Sicarus",
+      "path": "/Lotus/Weapons/Tenno/Pistol/BurstPistol",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002755000168690458,
+      "prepareSeconds": 0.00015899998834356666,
+      "reasons": []
+    },
+    {
+      "weapon": "Vaykor Hek",
+      "path": "/Lotus/Weapons/Syndicates/SteelMeridian/LongGuns/SMHek",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00020389999554026872,
+      "prepareSeconds": 0.00010390000534243882,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Prisma Lenz",
+      "path": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.000375300005543977,
+      "prepareSeconds": 0.0005532000068342313,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Coda Pox",
+      "path": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPox",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003132999991066754,
+      "prepareSeconds": 0.00022729999909643084,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Scyotid",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnOraxiaFlechette/TnOraxiaFlechette",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0001866999955382198,
+      "prepareSeconds": 0.00016700000560376793,
+      "reasons": []
+    },
+    {
+      "weapon": "Zakti Prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiPistol",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00031350000062957406,
+      "prepareSeconds": 0.00022190000163391232,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Hystrix Prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeHystrix/PrimeHystrixWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002982000005431473,
+      "prepareSeconds": 0.00010619999375194311,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Paris",
+      "path": "/Lotus/Weapons/Tenno/Bows/HuntingBow",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002389000146649778,
+      "prepareSeconds": 0.0001289999927394092,
+      "reasons": []
+    },
+    {
+      "weapon": "Kuva Brakk",
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Brakk/KuvaBrakk",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00018900001305155456,
+      "prepareSeconds": 0.0001753999968059361,
+      "reasons": []
+    },
+    {
+      "weapon": "Strun",
+      "path": "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002685000072233379,
+      "prepareSeconds": 0.00023469999723602086,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Arca Plasmor",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShotgun/CrpShotgun",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0001652999926591292,
+      "prepareSeconds": 0.00014850001025479287,
+      "reasons": []
+    },
+    {
+      "weapon": "Arca Scisco",
+      "path": "/Lotus/Weapons/Corpus/Pistols/SniperPistol/CrpScopeGun",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0007338000141317025,
+      "prepareSeconds": 0.00011299998732283711,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Paris",
+      "path": "/Lotus/Weapons/Tenno/Bows/ValentinesConclaveVariantBow",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00017659999139141291,
+      "prepareSeconds": 0.00016789999790489674,
+      "reasons": []
+    },
+    {
+      "weapon": "Acrid",
+      "path": "/Lotus/Weapons/ClanTech/Bio/AcidDartPistol",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00027359998784959316,
+      "prepareSeconds": 0.0001019000046653673,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Latron",
+      "path": "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00029689999064430594,
+      "prepareSeconds": 0.0004361000028438866,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Lex Prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeLex/PrimeLex",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00024300000222865492,
+      "prepareSeconds": 0.0001201999984914437,
+      "reasons": []
+    },
+    {
+      "weapon": "Boltor",
+      "path": "/Lotus/Weapons/Tenno/Rifle/BoltoRifle",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00026980000257026404,
+      "prepareSeconds": 0.00016989999858196825,
+      "reasons": []
+    },
+    {
+      "weapon": "Akmagnus Prime",
+      "path": "/Lotus/Weapons/Tenno/Akimbo/DualMagnusPrime",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.007440699962899089,
+      "prepareSeconds": 0.0006658000347670168,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits",
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Kuva Drakgoon",
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Drakgoon/KuvaDrakgoon",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00020399999630171806,
+      "prepareSeconds": 0.00018659999477677047,
+      "reasons": []
+    },
+    {
+      "weapon": "Kuva Kohm",
+      "path": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Kohm/KuvaKohm",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002068000176222995,
+      "prepareSeconds": 0.00019949999114032835,
+      "reasons": []
+    },
+    {
+      "weapon": "Fusilai",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/GlassKunai/GlassKunaiWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0001779000012902543,
+      "prepareSeconds": 0.00016619999951217324,
+      "reasons": []
+    },
+    {
+      "weapon": "Twin Vipers",
+      "path": "/Lotus/Weapons/Tenno/Akimbo/AkimboViperPistols",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002091999922413379,
+      "prepareSeconds": 0.0002097000106004998,
+      "reasons": []
+    },
+    {
+      "weapon": "Quellor",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnRailjackRifle/RailjackRifleGun",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0001866999955382198,
+      "prepareSeconds": 0.00014709999959450215,
+      "reasons": []
+    },
+    {
+      "weapon": "Ogris",
+      "path": "/Lotus/Weapons/ClanTech/Chemical/RocketLauncher",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00028530000417958945,
+      "prepareSeconds": 0.00024819999816827476,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Atomos",
+      "path": "/Lotus/Weapons/Grineer/Pistols/HeatGun/GrnHeatGun",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002275000006193295,
+      "prepareSeconds": 0.0001218999968841672,
+      "reasons": []
+    },
+    {
+      "weapon": "Solstice Spheres",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/VariantSnowBalls",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00016169999435078353,
+      "prepareSeconds": 0.00016039999900385737,
+      "reasons": []
+    },
+    {
+      "weapon": "Soma",
+      "path": "/Lotus/Weapons/Tenno/Rifle/TennoAR",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0004588000010699034,
+      "prepareSeconds": 0.00016630000027362257,
+      "reasons": []
+    },
+    {
+      "weapon": "Basmu",
+      "path": "/Lotus/Weapons/Sentients/SentRifleNewWar/SentRifleNewWarGun",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00041259999852627516,
+      "prepareSeconds": 0.0003249000001233071,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Akbronco Prime",
+      "path": "/Lotus/Weapons/Tenno/Akimbo/PrimeAkimboShotGun",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00020969999604858458,
+      "prepareSeconds": 0.0001897000038297847,
+      "reasons": []
+    },
+    {
+      "weapon": "Cernos",
+      "path": "/Lotus/Weapons/Tenno/Bows/AntlerBow/AntlerBow",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002449999883538112,
+      "prepareSeconds": 0.0002496000088285655,
+      "reasons": []
+    },
+    {
+      "weapon": "Dread",
+      "path": "/Lotus/Weapons/Tenno/Bows/StalkerBow",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002699000033317134,
+      "prepareSeconds": 0.00015029999485705048,
+      "reasons": []
+    },
+    {
+      "weapon": "Carmine Penta",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/CarminePenta",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003288000007160008,
+      "prepareSeconds": 0.00026440000510774553,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Lex Variant",
+      "path": "/Lotus/Weapons/Tenno/Pistol/HeavyPistolVariant",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00018339999951422215,
+      "prepareSeconds": 0.00016209999739658087,
+      "reasons": []
+    },
+    {
+      "weapon": "EFV-5 Jupiter",
+      "path": "/Lotus/Weapons/Lasria/LasGooAK/LasGooAKPlayerWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00020850000146310776,
+      "prepareSeconds": 0.00019439999596215785,
+      "reasons": []
+    },
+    {
+      "weapon": "Velox",
+      "path": "/Lotus/Weapons/Tenno/Pistols/TnOdaliskSmg/TnOdaliskSmgPistol",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00040779999108053744,
+      "prepareSeconds": 0.00012260000221431255,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Quanta",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00028539999038912356,
+      "prepareSeconds": 0.00011180000728927553,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Akarius Prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003139000036753714,
+      "prepareSeconds": 0.00024160000612027943,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Nagantaka Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeNagantaka/PrimeNagantakaWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00026980001712217927,
+      "prepareSeconds": 0.00011499998799990863,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Nukor",
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrineerMicrowavegun/GrnMicrowavePistol",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00023010000586509705,
+      "prepareSeconds": 0.00010379999002907425,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Viper Wraith",
+      "path": "/Lotus/Weapons/Grineer/Pistols/WraithSingleViper/WraithSingleViper",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0003988000098615885,
+      "prepareSeconds": 0.0002204999909736216,
+      "reasons": []
+    },
+    {
+      "weapon": "Komorex",
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentAmlgSniper/CrpSentAmlgSniper",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003863000019919127,
+      "prepareSeconds": 0.0012190999987069517,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Lato",
+      "path": "/Lotus/Weapons/Tenno/Pistol/CoHLoanerPistol",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00028530000417958945,
+      "prepareSeconds": 0.00014109999756328762,
+      "reasons": []
+    },
+    {
+      "weapon": "Twin Grakatas",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/TwinGrakatas",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00022690001060254872,
+      "prepareSeconds": 0.00021600000036414713,
+      "reasons": []
+    },
+    {
+      "weapon": "Tenet Arca Plasmor",
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00016850000247359276,
+      "prepareSeconds": 0.00015719998918939382,
+      "reasons": []
+    },
+    {
+      "weapon": "Viper",
+      "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrineerLightPistol",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00020819999917875975,
+      "prepareSeconds": 0.00021149999520275742,
+      "reasons": []
+    },
+    {
+      "weapon": "Kitgun",
+      "path": "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00015900000289548188,
+      "prepareSeconds": 0.00014659999578725547,
+      "reasons": []
+    },
+    {
+      "weapon": "Zylok",
+      "path": "/Lotus/Weapons/Tenno/Pistols/ConclaveLeverPistol/ConclaveLeverPistol",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00023209999199025333,
+      "prepareSeconds": 0.00022990000434219837,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Hema",
+      "path": "/Lotus/Weapons/Infested/LongGuns/InfWFAccompanyingPri/InfestedBurstRifle",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0001981999957934022,
+      "prepareSeconds": 0.00018740000086836517,
+      "reasons": []
+    },
+    {
+      "weapon": "Zarr",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004588000010699034,
+      "prepareSeconds": 0.0004771999956574291,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Embolist",
+      "path": "/Lotus/Weapons/Infested/Pistols/InfestedPistol",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00022560000070370734,
+      "prepareSeconds": 0.0001049999991664663,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Kraken",
+      "path": "/Lotus/Weapons/Grineer/GrineerPistol/GrnHeavyPistol",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0001736999984132126,
+      "prepareSeconds": 0.0001657999964663759,
+      "reasons": []
+    },
+    {
+      "weapon": "Dual Toxocyst",
+      "path": "/Lotus/Weapons/Infested/Pistols/InfVomitGun/InfVomitGunWep",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00026640000578481704,
+      "prepareSeconds": 0.00010829999519046396,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    },
+    {
+      "weapon": "Prisma Angstrum",
+      "path": "/Lotus/Weapons/Corpus/Pistols/CrpHandRL/PrismaAngstrum",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00025599999935366213,
+      "prepareSeconds": 0.00014730000111740083,
+      "reasons": []
+    },
+    {
+      "weapon": "Hind",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/BurstRifle/GrnBurstRifle",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00019740001880563796,
+      "prepareSeconds": 0.0003961999900639057,
+      "reasons": []
+    },
+    {
+      "weapon": "Grakata",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/GrnAssaultRifle",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002356000040890649,
+      "prepareSeconds": 0.0002271999983349815,
+      "reasons": []
+    },
+    {
+      "weapon": "Vasto",
+      "path": "/Lotus/Weapons/Tenno/Pistol/RevolverPistol",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002466000005370006,
+      "prepareSeconds": 0.0001269999920623377,
+      "reasons": []
+    },
+    {
+      "weapon": "Fulmin Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeFulmin/PrimeFulmin",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00017040000238921493,
+      "prepareSeconds": 0.0001512000017100945,
+      "reasons": []
+    },
+    {
+      "weapon": "Tiberon Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTiberon/PrimeTiberonRifle",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00019789999350905418,
+      "prepareSeconds": 0.0001816000003600493,
+      "reasons": []
+    },
+    {
+      "weapon": "Vulkar",
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSniperRifle/GrnSniperRifle",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00015720000374130905,
+      "prepareSeconds": 0.00014689999807160348,
+      "reasons": []
+    },
+    {
+      "weapon": "Twin Vipers Wraith",
+      "path": "/Lotus/Weapons/Grineer/Pistols/WraithTwinVipers/WraithTwinVipers",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00022149999858811498,
+      "prepareSeconds": 0.00022059999173507094,
+      "reasons": []
+    },
+    {
+      "weapon": "Sobek",
+      "path": "/Lotus/Weapons/Tenno/Shotgun/DoubleBarrelShotgun",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00016739999409765005,
+      "prepareSeconds": 0.00015619999612681568,
+      "reasons": []
+    },
+    {
+      "weapon": "Sagek Prime",
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnOrokinPistol/GrnOrokinPistol",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00060299999313429,
+      "prepareSeconds": 0.00010140000085812062,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Despair",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/StalkerKunai",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002767999976640567,
+      "prepareSeconds": 0.0002367999986745417,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Acceltra Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0003943999909097329,
+      "prepareSeconds": 0.00024410001060459763,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Kunai",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/Kunai",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002350000140722841,
+      "prepareSeconds": 0.00013359999866224825,
+      "reasons": []
+    },
+    {
+      "weapon": "Akzani",
+      "path": "/Lotus/Weapons/Tenno/Pistols/HarlequinGun/HarlequinPistols",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0002364999963901937,
+      "prepareSeconds": 0.00023669999791309237,
+      "reasons": []
+    },
+    {
+      "weapon": "Coda Bassocyst",
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/1999InfShotgun/1999InfShotgunWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.0001638000103412196,
+      "prepareSeconds": 0.00014999999257270247,
+      "reasons": []
+    },
+    {
+      "weapon": "Akstiletto Prime",
+      "path": "/Lotus/Weapons/Tenno/Pistols/PrimeAkstiletto/PrimeAkstiletto",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00018819999240804464,
+      "prepareSeconds": 0.0003829000052064657,
+      "reasons": []
+    },
+    {
+      "weapon": "MK1-Furis",
+      "path": "/Lotus/Weapons/MK1Series/MK1Furis",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0002948000037577003,
+      "prepareSeconds": 0.00010679999832063913,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Spira",
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/LiDagger/LiDagger",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00016700000560376793,
+      "prepareSeconds": 0.00015789999451953918,
+      "reasons": []
+    },
+    {
+      "weapon": "Corinth",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunGun",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00024380000832024962,
+      "prepareSeconds": 0.00015279999934136868,
+      "reasons": []
+    },
+    {
+      "weapon": "Grimoire",
+      "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.00031090000993572176,
+      "prepareSeconds": 0.00023759999021422118,
+      "reasons": [
+        "GPU stream cannot discard statuses or target-dependent parts"
+      ]
+    },
+    {
+      "weapon": "Stubba",
+      "path": "/Lotus/Weapons/Grineer/Pistols/GrnUzi/GrnUziWeapon",
+      "fixtureZeroStatus": true,
+      "eligible": true,
+      "cpuReplaySeconds": 0.00018909999926108867,
+      "prepareSeconds": 0.00018230000569019467,
+      "reasons": []
+    },
+    {
+      "weapon": "Zhuge Prime",
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeZhuge/PrimeZhugeCrossbow",
+      "fixtureZeroStatus": true,
+      "eligible": false,
+      "cpuReplaySeconds": 0.0004791999817825854,
+      "prepareSeconds": 0.00023230000806506723,
+      "reasons": [
+        "GPU stream requires independent fixed-state direct hits"
+      ]
+    }
+  ],
+  "probes": [
+    {
+      "label": "real",
+      "count": 1,
+      "admitted": false,
+      "reason": "verified-cost-gate",
+      "exact": true,
+      "cpuSeconds": 5.49999822396785e-06,
+      "gpuSeconds": 0.00015550000534858555,
+      "gain": 0.035369762281605474,
+      "candidates": 1,
+      "costs": [
+        {
+          "prepare": 0.00015929999062791467,
+          "upload": 0.000294700002996251,
+          "kernel": 0.00011069999891333282,
+          "download": 6.78000069456175e-05,
+          "total": 0.000632499999483116
+        },
+        {
+          "prepare": 8.500006515532732e-06,
+          "upload": 5.229999078437686e-05,
+          "kernel": 4.440000338945538e-05,
+          "download": 6.44999963697046e-05,
+          "total": 0.00016969999705906957
+        },
+        {
+          "prepare": 4.399989848025143e-06,
+          "upload": 3.809999907389283e-05,
+          "kernel": 4.600000102072954e-05,
+          "download": 6.390000635292381e-05,
+          "total": 0.00015239999629557133
+        },
+        {
+          "prepare": 3.6999990697950125e-06,
+          "upload": 2.950000634882599e-05,
+          "kernel": 4.3199994252063334e-05,
+          "download": 6.630001007579267e-05,
+          "total": 0.000142700009746477
+        },
+        {
+          "prepare": 3.4999975468963385e-06,
+          "upload": 3.789999755099416e-05,
+          "kernel": 4.0400002035312355e-05,
+          "download": 7.37000082153827e-05,
+          "total": 0.00015550000534858555
+        }
+      ]
+    },
+    {
+      "label": "real",
+      "count": 100,
+      "admitted": false,
+      "reason": "verified-cost-gate",
+      "exact": true,
+      "cpuSeconds": 0.0001964999974006787,
+      "gpuSeconds": 0.0003274000046076253,
+      "gain": 0.6001832456788613,
+      "candidates": 100,
+      "costs": [
+        {
+          "prepare": 0.00039450000622309744,
+          "upload": 0.00019710000196937472,
+          "kernel": 4.8699992476031184e-05,
+          "download": 7.160000677686185e-05,
+          "total": 0.0007119000074453652
+        },
+        {
+          "prepare": 0.00017929999739862978,
+          "upload": 4.230000195093453e-05,
+          "kernel": 4.0400002035312355e-05,
+          "download": 5.5199998314492404e-05,
+          "total": 0.0003171999996993691
+        },
+        {
+          "prepare": 0.00017689999367576092,
+          "upload": 3.91000066883862e-05,
+          "kernel": 4.060000355821103e-05,
+          "download": 7.080000068526715e-05,
+          "total": 0.0003274000046076253
+        },
+        {
+          "prepare": 0.00017690000822767615,
+          "upload": 4.2100000428035855e-05,
+          "kernel": 4.3499996536411345e-05,
+          "download": 4.7900000936351717e-05,
+          "total": 0.00031040000612847507
+        },
+        {
+          "prepare": 0.00017649999062996358,
+          "upload": 3.9300008211284876e-05,
+          "kernel": 4.050000279676169e-05,
+          "download": 7.879998884163797e-05,
+          "total": 0.0003350999904796481
+        }
+      ]
+    },
+    {
+      "label": "real",
+      "count": 1024,
+      "admitted": false,
+      "reason": "verified-cost-gate",
+      "exact": true,
+      "cpuSeconds": 0.001990799995837733,
+      "gpuSeconds": 0.001999300002353266,
+      "gain": 0.99574850872529,
+      "candidates": 1024,
+      "costs": [
+        {
+          "prepare": 0.002359600010095164,
+          "upload": 0.0003212999872630462,
+          "kernel": 6.080001185182482e-05,
+          "download": 6.910000229254365e-05,
+          "total": 0.002810800011502579
+        },
+        {
+          "prepare": 0.001776600009179674,
+          "upload": 9.449999197386205e-05,
+          "kernel": 7.340000593103468e-05,
+          "download": 5.4799995268695056e-05,
+          "total": 0.001999300002353266
+        },
+        {
+          "prepare": 0.0017548999894643202,
+          "upload": 8.850000449456275e-05,
+          "kernel": 4.6200002543628216e-05,
+          "download": 6.750000466126949e-05,
+          "total": 0.0019571000011637807
+        },
+        {
+          "prepare": 0.001772600007825531,
+          "upload": 0.00017449998995289207,
+          "kernel": 5.26000076206401e-05,
+          "download": 5.099999543745071e-05,
+          "total": 0.002050700000836514
+        },
+        {
+          "prepare": 0.0017762999923434108,
+          "upload": 8.320000779349357e-05,
+          "kernel": 4.3199994252063334e-05,
+          "download": 5.390000296756625e-05,
+          "total": 0.001956599997356534
+        }
+      ]
+    },
+    {
+      "label": "real",
+      "count": 8192,
+      "admitted": false,
+      "reason": "verified-cost-gate",
+      "exact": true,
+      "cpuSeconds": 0.018474399999831803,
+      "gpuSeconds": 0.01707769998756703,
+      "gain": 1.081785018666542,
+      "candidates": 8192,
+      "costs": [
+        {
+          "prepare": 0.016600200004177168,
+          "upload": 0.0004760000010719523,
+          "kernel": 0.00010039999324362725,
+          "download": 5.8900011936202645e-05,
+          "total": 0.01723550001042895
+        },
+        {
+          "prepare": 0.01652819999435451,
+          "upload": 0.00030220000189729035,
+          "kernel": 0.00010250000923406333,
+          "download": 5.9699988923966885e-05,
+          "total": 0.01699259999440983
+        },
+        {
+          "prepare": 0.01666569999360945,
+          "upload": 0.00029170000925660133,
+          "kernel": 0.00010579999070614576,
+          "download": 5.1300012273713946e-05,
+          "total": 0.017114500005845912
+        },
+        {
+          "prepare": 0.016425499998149462,
+          "upload": 0.00030089999199844897,
+          "kernel": 9.940000018104911e-05,
+          "download": 5.640000745188445e-05,
+          "total": 0.016882199997780845
+        },
+        {
+          "prepare": 0.016610599996056408,
+          "upload": 0.00029939999512862414,
+          "kernel": 0.00010820000898092985,
+          "download": 5.949998740106821e-05,
+          "total": 0.01707769998756703
+        }
+      ]
+    },
+    {
+      "label": "zero-status-fixture",
+      "count": 54,
+      "admitted": false,
+      "reason": "verified-cost-gate",
+      "exact": true,
+      "cpuSeconds": 0.00043929999810643494,
+      "gpuSeconds": 0.0006271000020205975,
+      "gain": 0.7005262265842026,
+      "candidates": 54,
+      "costs": [
+        {
+          "prepare": 0.00040720000106375664,
+          "upload": 6.320000102277845e-05,
+          "kernel": 0.0001145999995060265,
+          "download": 4.2100000428035855e-05,
+          "total": 0.0006271000020205975
+        },
+        {
+          "prepare": 0.0004023000074084848,
+          "upload": 4.610000178217888e-05,
+          "kernel": 9.380000119563192e-05,
+          "download": 4.3799998820759356e-05,
+          "total": 0.000586000009207055
+        },
+        {
+          "prepare": 0.0004132999893045053,
+          "upload": 4.5200009481050074e-05,
+          "kernel": 9.370000043418258e-05,
+          "download": 5.94000011915341e-05,
+          "total": 0.000611600000411272
+        },
+        {
+          "prepare": 0.0004668000037781894,
+          "upload": 7.870000263210386e-05,
+          "kernel": 9.599998884368688e-05,
+          "download": 5.150001379661262e-05,
+          "total": 0.0006930000090505928
+        },
+        {
+          "prepare": 0.00040430000808555633,
+          "upload": 9.099999442696571e-05,
+          "kernel": 0.00027119999867863953,
+          "download": 7.040001219138503e-05,
+          "total": 0.0008369000133825466
+        }
+      ]
+    },
+    {
+      "label": "zero-status-fixture",
+      "count": 100,
+      "admitted": false,
+      "reason": "verified-cost-gate",
+      "exact": true,
+      "cpuSeconds": 0.0007898999901954085,
+      "gpuSeconds": 0.0009832999930949882,
+      "gain": 0.8033153622925969,
+      "candidates": 100,
+      "costs": [
+        {
+          "prepare": 0.0007862000056775287,
+          "upload": 0.00017349999689031392,
+          "kernel": 0.00011000000813510269,
+          "download": 4.429998807609081e-05,
+          "total": 0.001113999998779036
+        },
+        {
+          "prepare": 0.0007464000082109123,
+          "upload": 8.38999985717237e-05,
+          "kernel": 0.00010469999688211828,
+          "download": 4.329999501351267e-05,
+          "total": 0.000978299998678267
+        },
+        {
+          "prepare": 0.0007455000013578683,
+          "upload": 8.229998638853431e-05,
+          "kernel": 0.00010430000838823617,
+          "download": 4.2799991206265986e-05,
+          "total": 0.0009748999873409048
+        },
+        {
+          "prepare": 0.0007622999983141199,
+          "upload": 7.690000347793102e-05,
+          "kernel": 0.0001016000023810193,
+          "download": 4.2499988921917975e-05,
+          "total": 0.0009832999930949882
+        },
+        {
+          "prepare": 0.0007566000131191686,
+          "upload": 8.799998613540083e-05,
+          "kernel": 0.00010920000204350799,
+          "download": 4.410000110510737e-05,
+          "total": 0.0009979000024031848
+        }
+      ]
+    },
+    {
+      "label": "zero-status-fixture",
+      "count": 1024,
+      "admitted": false,
+      "reason": "verified-cost-gate",
+      "exact": true,
+      "cpuSeconds": 0.009430099991732277,
+      "gpuSeconds": 0.00944069999968633,
+      "gain": 0.998877201059836,
+      "candidates": 1024,
+      "costs": [
+        {
+          "prepare": 0.009110900005907752,
+          "upload": 0.00026030000299215317,
+          "kernel": 0.00012469998910091817,
+          "download": 4.950001311954111e-05,
+          "total": 0.009545400011120364
+        },
+        {
+          "prepare": 0.00879480000003241,
+          "upload": 0.0002474999928381294,
+          "kernel": 0.00017120000848080963,
+          "download": 5.23999915458262e-05,
+          "total": 0.009265899992897175
+        },
+        {
+          "prepare": 0.009015399991767481,
+          "upload": 0.0002516999957151711,
+          "kernel": 0.00012620000052265823,
+          "download": 4.740001168102026e-05,
+          "total": 0.00944069999968633
+        },
+        {
+          "prepare": 0.008450900000752881,
+          "upload": 0.0002489000034984201,
+          "kernel": 0.00011950000771321356,
+          "download": 4.509999416768551e-05,
+          "total": 0.0088644000061322
+        },
+        {
+          "prepare": 0.009034199989400804,
+          "upload": 0.00024920000578276813,
+          "kernel": 0.00013640000543091446,
+          "download": 4.939999780617654e-05,
+          "total": 0.009469199998420663
+        }
+      ]
+    },
+    {
+      "label": "zero-status-fixture",
+      "count": 8192,
+      "admitted": false,
+      "reason": "verified-cost-gate",
+      "exact": true,
+      "cpuSeconds": 0.08016739999584388,
+      "gpuSeconds": 0.07559519998903852,
+      "gain": 1.060482676247544,
+      "candidates": 8192,
+      "costs": [
+        {
+          "prepare": 0.0757071999978507,
+          "upload": 0.001014599998597987,
+          "kernel": 0.00019669999892357737,
+          "download": 6.560000474564731e-05,
+          "total": 0.0769841000001179
+        },
+        {
+          "prepare": 0.07473219999519642,
+          "upload": 0.0006317000079434365,
+          "kernel": 0.00017439998919144273,
+          "download": 5.6899996707215905e-05,
+          "total": 0.07559519998903852
+        },
+        {
+          "prepare": 0.07901349999883678,
+          "upload": 0.0006342999986372888,
+          "kernel": 0.00017519999528303742,
+          "download": 5.6200005928985775e-05,
+          "total": 0.07987919999868609
+        },
+        {
+          "prepare": 0.07477380000636913,
+          "upload": 0.0005717000021832064,
+          "kernel": 0.00017889999435283244,
+          "download": 5.780000356025994e-05,
+          "total": 0.07558220000646543
+        },
+        {
+          "prepare": 0.07420909999927972,
+          "upload": 0.000597700010985136,
+          "kernel": 0.0001807999942684546,
+          "download": 6.160000339150429e-05,
+          "total": 0.07504920000792481
+        }
+      ]
+    }
+  ],
+  "scope": "whole fixed direct replays, not complete loadout searches",
+  "engineFingerprint": "90f4e863b652ae2e"
+}

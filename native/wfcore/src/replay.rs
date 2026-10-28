@@ -4854,3 +4854,52 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
     }
     Ok(out)
 }
+
+
+/// Exact immutable damage stream for the first GPU-admitted domain.
+/// Health-only, body hits, no status/kill feedback or persistent projectiles.
+/// Unknown mechanics fail closed; normal CPU health_batch remains authoritative.
+#[pyfunction]
+pub fn direct_bake_stream<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bound<'py, PyAny>)
+    -> PyResult<(Vec<f64>, f64, f64)> {
+    let mut replay = prepare_replay(py, config, helper)?;
+    if replay.head != 0.0 || replay.full[0] != 0.0 || replay.full[1] != 0.0
+        || !replay.sources.is_empty() || replay.melee.is_some() || replay.cycle.is_some()
+        || replay.shot_combo.is_some() || replay.restore.is_some() || replay.syndicate.is_some()
+        || replay.empowered.is_some() || replay.cryogenic.is_some() || replay.encumber.is_some()
+        || replay.enervate.is_some() || replay.onos.is_some() || replay.mines.is_some()
+        || replay.projectiles.is_some() || replay.fortifier.is_some() || replay.weak_draw.is_some()
+        || replay.live_types_enabled || !replay.extra_hits.is_empty() || !replay.forced_procs.is_empty()
+        || replay.life_curve.is_some() || replay.puncture_armor_strip != 0.0
+        || !replay.victim_before.is_empty() || replay.field_duration.is_some() {
+        return Err(NativeUnsupported::new_err("GPU stream requires independent fixed-state direct hits"));
+    }
+    let (active, radial) = replay.model(0.0)?;
+    let st = &replay.stats[active];
+    if radial.is_some() || st.status_chance > 0.0 || !st.native_forced_procs.is_empty()
+        || !st.independent_proc_chances.is_empty() || st.has_crit_procs
+        || !st.core.impact_proc_conversions.is_empty() || !st.core.extra_hits.is_empty()
+        || st.impact_delay != 0.0 || st.primary_delay != 0.0 || st.lingering.is_some()
+        || !st.additional.is_empty() || st.persist_after_kill || st.stackable.is_some()
+        || !st.reload_empty.is_empty() || !st.reload_partial.is_empty()
+        || st.victim_full_crit_chance != 0.0 || st.victim_full_crit_damage != 0.0
+        || st.victim_low_health_multiplier != 1.0 || st.continuous
+        || st.head_only || st.body_only || st.radial_only || !st.co_bucket.is_empty() {
+        return Err(NativeUnsupported::new_err("GPU stream cannot discard statuses or target-dependent parts"));
+    }
+    let health = replay.full[2];
+    replay.full = [0.0, 0.0, 1e250];
+    replay.pools = replay.full;
+    replay.ehp = 1e250;
+    replay.life_curve = Some(Vec::new());
+    replay.run()?;
+    if replay.kills != 0 || replay.proc_counts.values().any(|v| *v != 0.0)
+        || replay.totals[1..].iter().any(|v| *v != 0.0) {
+        return Err(NativeUnsupported::new_err("GPU stream observed non-direct damage"));
+    }
+    let rows = replay.life_curve.as_ref().unwrap();
+    if rows.len() > 100000 || rows.iter().any(|r| r.3 != DIRECT || !r.1.is_finite() || r.1 < 0.0) {
+        return Err(NativeUnsupported::new_err("GPU stream event bounds exceeded"));
+    }
+    Ok((rows.iter().map(|r| r.1).collect(), health, replay.window))
+}
