@@ -89,7 +89,7 @@ def inventory(include_companions=False):
                 inc=refs.get('incarnon',{}).get(weapon['path'],{}) if item['incarnon'] else {}
                 kinds=sorted(set(kinds)|set(source_kinds(inc)))
                 item.update(sourceKinds=kinds,coSourceKinds=source_kinds(co),
-                    componentKinds=sorted(k for k in ('radial','radials','lingering','embedded','clusters','stackable','charge','chargeVolley','burst','battery','manualDetonation') if profile.get(k)),
+                    componentKinds=sorted(k for k in ('radial','radials','lingering','embedded','clusters','stackable','charge','chargeVolley','burst','battery','manualDetonation','projectileLanes','periodicTriggers') if profile.get(k)),
                     ignoreHeadshotBonus=ep.ignores_headshot_bonus(selected,0),nativeProjectile=(mode.get('damage') or {}).get('projectile'),
                     declaredDamageComponents=[dict(kind=c.get('kind'),source=c.get('source'),amount=c.get('total'),types=c.get('types')) for c in (mode.get('damage') or {}).get('components',[]) if isinstance(c,dict)])
                 gaps=set();notes=set();details=[]
@@ -105,7 +105,9 @@ def inventory(include_companions=False):
                     notes.update(runtime.get('unsupported') or [])
                     details.append(dict(assumedMax=assumed,multishotProbe=probe,hasRadial=radial is not None,hasLingering=bool(getattr(stats,'_lingering',None)),
                         hasEmbedded=bool(getattr(stats,'_embedded',None)),hasStackable=bool(getattr(stats,'_stackable',None)),
-                        hasSequence=bool(fight.get('projectileSequence')),triggerKinds=sorted({s['kind'] for s in fight.get('trigger_sources',[]) if s.get('kind')})))
+                        hasSequence=bool(fight.get('projectileSequence')),
+                        hasPhysicalProjectileLanes=bool(fight.get('physicalProjectileLanes')),
+                        hasSourceOwnedFields=bool(getattr(stats,'_source_owned_fields',())),triggerKinds=sorted({s['kind'] for s in fight.get('trigger_sources',[]) if s.get('kind')})))
                 gaps={n for n in notes if GAP.search(n) and n not in CONTEXT_GAPS}
                 item.update(contextRequirements=sorted(notes & CONTEXT_GAPS),gaps=sorted(gaps),notes=sorted(notes),runtime=details)
             except Exception as exc:item.update(error=type(exc).__name__+': '+str(exc),gaps=['audit-preparation-error'])

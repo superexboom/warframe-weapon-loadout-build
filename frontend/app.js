@@ -2693,6 +2693,42 @@ function renderContributions() {
 }
 
 const DIAGNOSTIC_CODE_LABELS = {
+  "radial-arming-distance-assumed-armed": "未填写射击距离，当前假定投射物已满足爆炸解锁距离",
+  "mutalist-cernos-swarm-first-update-versus-enter-phase-unmodeled": "异融西诺斯毒雾按进入与首次更新各结算一次伤害，实际帧内先后仍待核实",
+  "mutalist-cernos-swarm-shared-weapon-replacement-ms-order-unverified": "异融西诺斯按同源最后一个有效毒雾计算；同帧多重的中间进入次数尚未校准",
+  "mutalist-cernos-swarm-special-source-upgrades-unmodeled": "异融西诺斯毒雾已计算基础伤害与普通元素，其他特殊来源加成尚未核实",
+  "mutalist-cernos-swarm-status-kill-arcane-dispatch-unverified": "异融西诺斯毒雾的异常及击杀类赋能通知路径尚未完整核实",
+  "source-owned-field-upgrades-snapshot-at-embed": "持续场的加成按嵌入时快照计算，场存续期间变化的加成尚未动态读取",
+  "source-owned-field-same-frame-enter-update-and-replacement-order-approximated": "持续场的进入、首次更新与替换采用固定顺序近似",
+  "larkspur-contact-flight-and-scene-geometry-idealized": "翠雀蓄力弹按命中目标后立即爆炸计算，飞行与场景碰撞采用中心命中假设",
+  "larkspur-maxlife1-launch-expiry-recipient-excluded-from-contact-model": "翠雀蓄力弹飞行超时的空中爆炸未另计目标覆盖",
+  "larkspur-projectile-speed-mods-obstacles-and-out-of-range-contact-unmodeled": "翠雀蓄力弹的弹速、障碍物和超射程命中率尚未模拟",
+  "larkspur-flight-time-dynamic-buff-snapshot-unverified": "翠雀蓄力弹飞行期间的动态加成快照时点尚未核实",
+  "larkspur-main-explosion-CO-neutral-fallback-unverified": "翠雀蓄力爆炸的异况加成路径尚未核实，当前不计该加成",
+  "larkspur-main-explosion-weakpoint-and-hit-events-neutral-fallback-unverified": "翠雀蓄力爆炸的弱点与命中类赋能路径尚未核实",
+  "arbucep-projectile-contact-and-radial-centre-coverage-idealized": "Arbucep 当前假定各弹体直击和爆炸中心均命中单体目标",
+  "arbucep-packet-condition-overload-neutral-pending-routing": "Arbucep 各弹体的异况加成路径尚未核实，当前不计该加成",
+  "arbucep-packet-weakpoint-events-neutral-pending-routing": "Arbucep 各弹体的弱点加成和事件路径尚未核实，当前按普通命中计算",
+  "arbucep-innate-mushroom-and-ammo-deco-script-unmodeled": "Arbucep 菌菇及弹药装饰脚本效果尚未计入",
+  "projectile-lanes-fractional-count-16-stratified-trajectories-approximation": "小数多重按 16 条离散弹体序列轨迹近似，保留每颗弹体的元素顺序",
+  "battacor-radial-condition-overload-routing-unverified": "武使之力副射击范围伤害的异况加成路径尚未核实，当前不计该加成",
+  "battacor-radial-per-trigger-multiplicity-unverified": "武使之力多重射线产生多少次范围包尚未核实，当前按每次副射击一个范围包计算",
+  "battacor-radial-hit-arcane-dispatch-unverified": "武使之力范围包的命中类赋能触发路径尚未核实",
+  "battacor-first-charge-dynamic-buff-snapshot-timing-unverified": "武使之力蓄力期间变化的临时加成按完成时读取，原生快照时点仍待核实",
+  "battacor-primary-dot-charge-during-alt-windup-unmodeled": "武使之力蓄力期间，先前主射击持续伤害击杀额外补充蓄能的情况尚未计入",
+  "zymos-child-spawn-and-targeting-unmodeled": "邪莫斯孢子子弹体的创建条件与目标选择尚未完整建模",
+  "zymos-child-damage-inheritance-and-event-routing-unverified": "邪莫斯子弹体的伤害继承和状态／击杀触发路径尚未核实",
+  "phantasma-main-explosion-CO-neutral-fallback-unverified": "幻离子主爆炸已计入；其异况加成路径尚未核实，当前不计该加成",
+  "phantasma-main-explosion-weakpoint-events-neutral-fallback-unverified": "幻离子主爆炸不计普通头部增伤，额外弱点暴击与弱点击杀资格尚未核实",
+  "phantasma-cluster-child-payload-unmodeled": "幻离子分裂子弹体的伤害和命中次数仍未计入",
+  "phantasma-charge-ammo-scale-and-contact-routing-approximated": "幻离子副射击的蓄力耗弹与伤害缩放仍采用当前近似路径",
+  "efv8-main-explosion-CO-neutral-fallback-unverified": "艾弗旺-8 火星的副射击爆炸已计入；异况加成路径尚未核实，当前不计该加成",
+  "efv8-release-flight-and-recipient-coverage-idealized": "艾弗旺-8 火星副射击假定爆炸中心命中目标，忽略真实飞行和覆盖损失",
+  "acceltra-arming-distance-default-assumed-armed": "迅发电浆炮未填写距离时假定已飞行6米解锁爆炸；小于6米仅计算接触伤害",
+  "acceltra-main-explosion-CO-neutral-fallback-unverified": "迅发电浆炮主爆炸的异况加成路径尚未核实，当前不计该加成",
+  "acceltra-main-explosion-weakpoint-events-neutral-fallback-unverified": "迅发电浆炮主爆炸按普通范围包处理，不额外授予弱点事件资格",
+  "acceltra-contact-death-timing-and-target-centre-coverage-idealized": "迅发电浆炮假定已武装投射物在目标中心死亡爆炸，真实碰撞时序与覆盖损失尚未模拟",
+  "acceltra-embedded-alternative-payload-excluded": "迅发电浆炮继承的另一条嵌入死亡伤害不属于普通弹体路径，未重复计入",
   "alternox-host-death-lifecycle-unverified": "电幻步枪的附着目标死亡后，电场和末次爆炸是否保留尚未核实；当前按该目标死亡后停止计算",
   "alternox-multishot-active-cap-unresolved": "电幻步枪同时存在多个电球的替换规则尚未核实；超过单球上限时暂按一颗计算，可能低估伤害",
   "alternox-instant-detonation-order-idealized": "电幻步枪零等待引爆按直击、首跳电场、爆炸的顺序计算",
@@ -2702,7 +2738,7 @@ const DIAGNOSTIC_CODE_LABELS = {
   "cryotra-field-condition-overload-unverified": "急冻喷枪冷场是否受到异况增伤尚未核实，当前冷场不计该加成",
   "cryotra-embed-expiry-boundary-order-unverified": "急冻喷枪冷场按附着后0至4秒共5跳计算，5秒到期同刻的处理尚未核实",
   "companion-projectile-damage-sequence-unmodeled": "解构者的冲击、穿刺、切割三种投射物序列尚未完整建模，当前伤害与触发类型可能有偏差",
-  "sentinel-fired-up-expiry-resume-unverified": "过热射击按命中逐层增加，5秒无命中后清空；过期后再命中的层数恢复规则仍待实测",
+  "sentinel-fired-up-expiry-resume-unverified": "过热射击按命中逐层增加，5秒无命中后清空；过期后再命中的层数恢复规则仍待核实",
   "sentinel-fired-up-panel-shows-cap; replay-starts-empty-and-resets-after-no-hit-duration": "过热射击面板显示上限，战斗回放从零层开始，按实际命中逐层增加",
   "cortege-firefield-mod-routing-unverified": "Cortege按5次主射击击杀蓄能，并计入副射击爆炸；残留火场的MOD伤害传递仍待核实，暂未计入",
   "cortege-firefield-spatial-overlap-unverified": "Cortege多个火场的空间重叠和目标覆盖尚未验证",
@@ -9770,6 +9806,8 @@ function selectBuildWeapon(weapon, writeInput = true) {
   state.buildWeapon = weapon;
   state.buildResult = null;
   if (ui["build-manual-detonation"]) ui["build-manual-detonation"].hidden = weapon?.path !== "/Lotus/Weapons/Tenno/ThrowingWeapons/U18ThrowingKnives/U18throwingknives";
+  const battacorCharges = document.getElementById("build-battacor-charges-field");
+  if (battacorCharges) battacorCharges.hidden = weapon?.path !== "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle";
   const isKitgunBase = weapon && String(weapon.nameEn || "").trim() === "Kitgun";
   const isZawWeapon = isZawBase(weapon);
   const isAssemblyBase = isKitgunBase || isZawWeapon;

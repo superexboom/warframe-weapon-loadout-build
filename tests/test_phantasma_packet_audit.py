@@ -39,15 +39,18 @@ def test_boundary_import_is_idempotent_and_preserves_primary_mode():
 
 
 @pytest.mark.parametrize("path,projectile", PAIRS)
-def test_runtime_missing_packet_is_explicit_only_on_alternate(path, projectile):
+def test_runtime_parent_packet_is_restored_and_remaining_bounds_are_alternate_only(path, projectile):
     import app
     from wfarsenal.damage import Scenario
     from wfarsenal.manual_combat import prepare
     weapon = next(w for w in app.EXPORTS["weapons"] if w.get("path") == path)
     for mode in (0, 1):
         combat = prepare(dict(weapon=weapon, fire_mode=mode, effects=[], scenario=Scenario()), [], [])
-        assert set(WARNINGS).issubset(combat["unsupported"]) == bool(mode)
+        assert not set(WARNINGS) & set(combat["unsupported"])
+        assert ('phantasma-cluster-child-payload-unmodeled' in combat['unsupported']) == bool(mode)
         if mode == 1:
             direct, radial = combat["resolve"]("selected", {}, 0.)
             assert direct.damage_types == {"DT_IMPACT": 15.}
-            assert radial is None  # Explicit unresolved result; never mislabeled fully calibrated.
+            assert radial.damage_types == {'DT_RADIATION':73.}
+            assert 'phantasma-main-explosion-CO-neutral-fallback-unverified' in combat['unsupported']
+            assert not radial.area_direct  # Native type2 alone never grants every weakpoint effect.

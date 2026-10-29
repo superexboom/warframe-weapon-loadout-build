@@ -20,7 +20,7 @@ class Packages:
 def test_child_spawn_branches_do_not_become_ten_automatic_hits():
     evidence = child_audit(Packages())
     assert [branch["requestedChildCount"] for branch in evidence["callbackBranches"]] == [5, 5]
-    assert evidence["branchCombination"] == "unresolved-do-not-sum"
+    assert evidence["branchCombination"] == "shared-record-consumed-once-do-not-sum"
     assert evidence["status"] == "partial-consumer-audit-no-added-damage"
     assert evidence["childDeclarations"]["SendEvents"] == 0
     assert "status-and-kill-event-consumers" in evidence["unresolved"]

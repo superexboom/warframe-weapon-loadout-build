@@ -1,0 +1,67 @@
+[
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\trigger-routing\\BATTACOR-MULTIPLICITY.md",
+    "saved": "battacor-multiplicity.md",
+    "sha256": "e67c17fe1cedc12350a7ec60c927b0ff208c8b2e336fe334e3e7cf8f466cffa8"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\trigger-routing\\battacor-ray-multiplicity-results.json",
+    "saved": "battacor-ray-multiplicity.json",
+    "sha256": "3528ca7f1f7cea29622532f8e8d45e6b28168c0ce5b733af29033c77491fd9e0"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\trigger-routing\\REPORT.md",
+    "saved": "delayed-radial-producer.md",
+    "sha256": "c422a4bdbca5d4363c68b453ae811deeea8de8febb3eb7acfc1a60ba49305be6"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\trigger-routing\\authority-agc-results.json",
+    "saved": "authority-agc-results.json",
+    "sha256": "9199fd77b06dc50443f675b6be49fea2d30c2840f9d71b68a75bc33fc2b654e3"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\native-payloads\\ARBUCEP-REVIEW.md",
+    "saved": "arbucep-review.md",
+    "sha256": "cdc51f2958d95d7e093f3da526471252b70412e04c99cf8b59a7589ef32a8554"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\native-payloads\\ARBUCEP-IMPLEMENTATION-READY.md",
+    "saved": "arbucep-contract.md",
+    "sha256": "f6a3f23d2aaebf9b199a173dc3611e807876220d63c78d3796960c346ba60ecb"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\native-payloads\\LARKSPUR-CONTACT-V5-HANDOFF.md",
+    "saved": "larkspur-contact.md",
+    "sha256": "85cacec16807b8bc3b3dab01b90cbf3f4395a7b721d89ab2752284ad666f14ec"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\native-payloads\\larkspur-lifecycle-original-byte-results.json",
+    "saved": "larkspur-native-lifecycle.json",
+    "sha256": "1efe30ffa3ea7feec0d956edceb0bd320de99a09d99eb00db4f1b28139aed387"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\script-mechanics\\MUTALIST-CERNOS-NATIVE-FIELD.md",
+    "saved": "mutalist-source-lifecycle.md",
+    "sha256": "1057d6c246134262ebce04993c6fe440e867f1858b56eca446954c085cb33a83"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\script-mechanics\\owner-cleanup-reproduction.json",
+    "saved": "mutalist-owner-cleanup.json",
+    "sha256": "3754a3ee22768ab38c07df2236b99de4807157a333d1640cae1d71082c2b620a"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\native-payloads\\MUTALIST-FINAL-SELF-REVIEW.md",
+    "saved": "mutalist-review.md",
+    "sha256": "8f26b3722ecd5fb24d383f71019cec20ed4b1fafc09aef41864441a433e2f579"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\script-mechanics\\MANDONEL-NATIVE-FIELD.md",
+    "saved": "mandonel-source-contract-pending.md",
+    "sha256": "39eba013bef5e9a9bbd2a901a1e0fca8ecc39d26c1a0651a2d77af6a2cc2ae8f"
+  },
+  {
+    "source": ".local\\delivery\\ranged-implementation-20261029\\native-payloads\\GRIMOIRE-STATIC-HANDOFF.md",
+    "saved": "grimoire-source-contract-pending.md",
+    "sha256": "baa36194ecdbadbe0efb8ea9bc2ed97261607f85322b0ba77d5c54c3b78428b6"
+  }
+]

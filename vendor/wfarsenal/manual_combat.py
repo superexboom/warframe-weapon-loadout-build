@@ -202,6 +202,12 @@ def live_variant(template, live_types, count_ceiling):
                 raise _NoVariant
             scaled = [with_value(e, e.value*live_types/count_ceiling) for e in obj.co_bucket]
             out = co_variant(obj, spec, scaled)
+        owned=getattr(obj,'_source_owned_fields',None)
+        if owned:
+            parts=tuple((vary(part),rate,duration,initial) for part,rate,duration,initial in owned)
+            if any(a[0] is not b[0] for a,b in zip(parts,owned)):
+                out=out if out is not obj else copy(obj)
+                out._source_owned_fields=parts
         lingering = getattr(obj, '_lingering', None)
         if lingering:
             part = vary(lingering[0])
@@ -349,6 +355,12 @@ def prepare(
                                       runtime_chance=None, runtime_threshold=None, runtime_multiplier=1.0)]))
     from .companion import unresolved_weapon_mechanics, projectile_sequence
     companion_sequence = projectile_sequence(weapon, mode_index)
+    from .projectile_lanes import profile as physical_lane_profile, lane_mode as physical_lane_mode
+    from .event_profiles import base_profile
+    physical_lanes = physical_lane_profile(base_profile(weapon, mode_index))
+    if base_profile(weapon,mode_index).get('periodicTriggers'):
+        notes.extend(['source-owned-field-upgrades-snapshot-at-embed',
+            'source-owned-field-same-frame-enter-update-and-replacement-order-approximated'])
     notes.extend(unresolved_weapon_mechanics(weapon))
     from .event_profiles import execute_below, innate_conditionals
     innate = innate_conditionals(weapon, mode_index)
@@ -651,9 +663,11 @@ def prepare(
     from .runtime_adapters import onos_crits_for_hits
     onos_crit = next((q for b in branches if (q:=onos_crits_for_hits(b))),None)
     if selected_attack:
-        notes.extend(selected_attack.get('unmodeled') or [])
-        minimum=(selected_attack.get('radial') or {}).get('armingDistance')
-        if minimum is not None and scenario.distance is None:
+        notes.extend(note for note in selected_attack.get('unmodeled') or []
+                     if scenario.distance is None or note != 'acceltra-arming-distance-default-assumed-armed')
+        components = [selected_attack.get('radial'), *(selected_attack.get('radials') or ())]
+        if (scenario.distance is None and any(isinstance(part, dict) and part.get('armingDistance') is not None
+                                             for part in components)):
             notes.append('radial-arming-distance-assumed-armed')
     cycle = (
         profile
@@ -667,6 +681,14 @@ def prepare(
         # A kill-charged alternate cannot fire on its own: replay the primary
         # until its kills fill the gauge, then the alternate (Trumna grenade).
         cycle = kill_cycle
+        charge_count = scenario.combat_state.get('battacorCharges', 1)
+        if weapon.get('path') == '/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle':
+            if (isinstance(charge_count, bool) or not isinstance(charge_count, (int, float))
+                    or charge_count not in (1, 2, 3)):
+                from .simulator import SimulationError
+                raise SimulationError('battacorCharges must be 1, 2 or 3')
+            if charge_count != 1:
+                cycle = {**cycle, 'hits': float(charge_count), 'damageScale': float(charge_count)}
     if (
         profile
         and profile.get("radial")
@@ -740,10 +762,14 @@ def prepare(
                 fx.extend(ModEffect(kind,'STACKING_MULTIPLY',onos_crit['perHit']*n)
                           for kind in ('WEAPON_CRIT_CHANCE','WEAPON_CRIT_DAMAGE'))
         # One record per form and mode (only read and copied below).
+        physical_index = (int(stacks['__physicalProjectileIndex']) % physical_lanes['length']
+                          if physical_lanes and '__physicalProjectileIndex' in stacks else None)
+        if physical_index is not None:
+            fx=ModEffectList(e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
         sequence_index = (int(stacks.get('__projectileSequenceIndex', 0)) % companion_sequence['length']
                           if companion_sequence else None)
         volley_rounds = float(stacks.get('__chargeVolleyRounds', 1.))
-        form_key = (form != "base", idx, sequence_index, volley_rounds)
+        form_key = (form != "base", idx, sequence_index, volley_rounds,physical_index)
         wp = form_weapons.get(form_key)
         if wp is None:
             wp = {
@@ -751,6 +777,10 @@ def prepare(
                 "isIncarnonForm": form != "base" and weapon.get("isIncarnonForm", False),
             }
             wp = {**wp, '__selectedFireMode__': idx}
+            if physical_index is not None:
+                lane=physical_lanes['lanes'][physical_index]
+                lane_modes=list(weapon['fireModes']);lane_modes[idx]=physical_lane_mode(lane_modes[idx],lane)
+                wp={**wp,'fireModes':lane_modes,'__coProfile__':{'behavior':'none'}}
             if companion_sequence:
                 # Change the source lane BEFORE applying mods: IPS-specific
                 # mods and elemental/proc bases belong to each actual projectile.
@@ -832,6 +862,8 @@ def prepare(
             )
             radial._co_spec = radial_spec
         extra = form_profiles.get((form != "base", idx))
+        if physical_index is not None:
+            extra={**base_profile(wp,idx),'radials':[physical_lanes['lanes'][physical_index]['radial']]}
         if extra is None:
             from .event_profiles import perfect_release
             extra, _ = perfect_release(base_profile(wp, idx), modes[idx], scenario.combat_state)
@@ -943,6 +975,8 @@ def prepare(
                 part._co_spec = part_spec
                 if component.get('impact_delay_seconds') is not None:
                     part._impact_delay = float(component['impact_delay_seconds'])
+                from .delayed_radial_events import admitted
+                part.delayed_radial_hit_event = admitted(component)
                 if component.get('headOnly'):
                     part._head_only = True
                 if component.get('bodyOnly'):
@@ -996,6 +1030,45 @@ def prepare(
             radial._co_spec=radial_spec
             st.charge_seconds+=miter_aoe['holdSeconds']
             st._charge_time=getattr(st,'_charge_time',st.charge_seconds-miter_aoe['holdSeconds'])+miter_aoe['holdSeconds']
+        owned=[field for field in extra.get('periodicTriggers') or []
+               if field.get('defaultEnabled') and field.get('expiresWithSourceOwner')]
+        if owned:
+            source_fields=[]
+            # One current arrow owns both its EmbedAttack and trigger children.
+            # Capture each part before replacing stats: private attributes are
+            # intentionally not copied by dataclasses.replace.
+            embed=getattr(st,'_lingering',None)
+            if embed:
+                embed_part=copy(embed[0])
+                embed_part.multishot=1.  # Keep _co_spec for fractional live CO variants.
+                source_fields.append((embed_part,float(embed[1]),
+                    float(owned[0]['sourceOwnerLifetimeAfterEmbed_seconds']),1))
+                del st._lingering
+            for field in owned:
+                def source_field_record(field=field):
+                    rm=deepcopy(modes[idx]);rm.pop('multishotCopy',None)
+                    rm.update(multishot=1.,falloffRange=[0,0],falloffMinDamage=1.)
+                    rm['damage']={**rm['damage'],'types':{mapped.get(k,k):v for k,v in field['damage'].items()},
+                        'forcedProcs':list(field.get('forcedProcs') or []),'critChance':0.,'critMultiplier':1.,
+                        'procChance':float(field['status_chance'])}
+                    return {**wp,'fireModes':[rm],'__innateResolved__':True,'__coProfile__':{'behavior':'none'}}
+                # Audited native source routes: weapon amount and ordinary
+                # added elements. Parent crit/status/MS/duration are not queried.
+                field_fx=ModEffectList(e for e in fx if e.upgrade_type in
+                    {'WEAPON_DAMAGE_AMOUNT','WEAPON_PERCENT_BASE_DAMAGE_ADDED'})
+                part,part_spec=apply_mods_spec(_part_record(wp,('source-owner-field',idx,repr(field)),source_field_record),
+                    field_fx,scenario=replace(scenario,incarnon_cycle=False,victim_status_count=0))
+                part=replace(part,multishot=1.,radial_only=True,crit_chance=0.,crit_multiplier=1.,
+                    weakpoint_damage_bonus=0.,weakpoint_crit_chance_bonus=0.,weakpoint_crit_chance_relative=0.,
+                    headshot_bonus_multiplier=1.,status_chance=float(field['status_chance']))
+                part._co_spec=part_spec
+                source_fields.append((part,float(field['tick_rate']),float(field['sourceOwnerLifetimeAfterEmbed_seconds']),
+                    1+int(bool(field.get('damageOnEnter')))))
+            st._source_owned_fields=tuple(source_fields)
+        if physical_index is not None:
+            st=replace(st,multishot=1.,weakpoint_damage_bonus=0.,weakpoint_crit_chance_bonus=0.,
+                weakpoint_crit_chance_relative=0.,headshot_bonus_multiplier=1.,ignore_headshot_bonus=True)
+            if radial is not None:radial.multishot=1.
         return st, radial
 
     syndrome = None
@@ -1108,10 +1181,15 @@ def prepare(
         return resolve_cache[key]
 
     entry = cached if resolve_cache is not None else resolve
+    from .delayed_radial_events import profile_admitted
     return dict(
         resolve=entry,
         projectileSequence=companion_sequence,
+        sourceOwnedFields=bool((base_profile(weapon,mode_index).get('periodicTriggers') or [])),
+        physicalProjectileLanes=physical_lanes,
+        fractionalProjectileLanes=bool(physical_lanes and any(e.upgrade_type=='WEAPON_FIRE_ITERATIONS' for _,terms in dynamic for e in terms)),
         chargeVolley=any(attack.get('chargeVolley') for attack in (base_attack, selected_attack)),
+        delayedRadialEvents=any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
         melee=melee,
         comboTierKeys=combo_tier_keys,
         beamRampFloors={

@@ -58,7 +58,18 @@ def supported(stats, options) -> bool:
         return False
     if combat.get('cycle') and not getattr(wfcore, 'RELOAD_SCALED_TRANSFORMS', 0):
         return False
+    if (combat.get('cycle') or {}).get('chargeBeforeFire') and not getattr(wfcore, 'KILL_CHARGED_WINDUP', 0):
+        return False
+    if (combat.get('delayedRadialEvents') or getattr(stats, 'delayed_radial_hit_event', False)) and not getattr(wfcore, 'DELAYED_RADIAL_EVENTS', 0):
+        return False
     if combat.get('chargeVolley') and not getattr(wfcore, 'MAGAZINE_CHARGE_VOLLEY', 0):
+        return False
+    if combat.get('sourceOwnedFields') and not getattr(wfcore,'SOURCE_OWNED_FIELDS',0):
+        return False
+    if combat.get('physicalProjectileLanes') and '_laneStratum' not in combat:
+        if abs(stats.multishot-round(stats.multishot))>1e-9 or combat.get('fractionalProjectileLanes'):
+            return False  # Health batch must not bypass whole-trajectory stratification.
+    if combat.get('physicalProjectileLanes') and not getattr(wfcore,'PHYSICAL_PROJECTILE_LANES',0):
         return False
     if combat.get('projectileSequence') and not getattr(wfcore, 'COMPANION_PROJECTILE_SEQUENCE', 0):
         return False
@@ -401,7 +412,7 @@ def _projectile_state(state):
 def _cycle_spec(cycle):
     if not cycle:
         return None
-    return {key: cycle.get(key) for key in ('hits', 'enterSeconds', 'exitSeconds', 'pool', 'chargeOn', 'killCharged')}
+    return {key: cycle.get(key) for key in ('hits', 'enterSeconds', 'exitSeconds', 'pool', 'chargeOn', 'killCharged', 'chargeBeforeFire', 'damageScale')}
 
 
 def trajectory(
@@ -442,6 +453,9 @@ def trajectory(
         direct_fire_ledger,
     )
     combat = combat or {}
+    if health_targets is not None and combat.get('physicalProjectileLanes') and '_laneStratum' not in combat:
+        if abs(stats.multishot-round(stats.multishot))>1e-9 or combat.get('fractionalProjectileLanes'):
+            return None  # Caller uses scalar replay, which owns16strata.
     melee = combat.get('melee')
     if melee:
         damage_rate_multiplier = 1.0
@@ -548,6 +562,7 @@ def trajectory(
         syndicate=dict(syndrome) if syndrome else None,
         targetFaction=cache['target_faction'], factionBracket=cache['faction_bracket'], tables=tables,
         melee=melee_config, projectileSequence=combat.get("projectileSequence"),
+        physicalProjectileLanes=combat.get("physicalProjectileLanes"),laneStratum=float(combat.get("_laneStratum",.5)),
         battery=combat.get('battery') or None, spool=combat.get('spool') or None,
         fireRateSpool=combat.get('fireRateSpool') or None, shellReload=combat.get('shellReload') or None,
         sniperCombo=combat.get('sniperCombo') or None, magazineRestore=combat.get('magazineRestore') or None,
@@ -742,6 +757,8 @@ def trajectory(
         "continuousKillEvents": True,
         "activePool": "overguard" if full[0] else ("shield" if full[1] else "health"),
         "unsupported": unsupported,
+        **({"sourceOwnedFieldPackets":core["sourceOwnedFieldPackets"],"sourceOwnedFieldActivations":core["sourceOwnedFieldActivations"],"sourceOwnedFieldTrace":[]} if combat.get("sourceOwnedFields") else {}),
+        **({"physicalProjectileTrace":[],"physicalProjectilePhase":core["physicalProjectilePhase"]} if combat.get("physicalProjectileLanes") else {}),
         "limitations": [
             "expected-proc-counts-not-Monte-Carlo",
             "single-target",

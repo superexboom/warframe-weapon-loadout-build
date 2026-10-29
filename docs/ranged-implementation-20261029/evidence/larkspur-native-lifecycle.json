@@ -1,0 +1,83 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "cases": [
+    {
+      "case": "ordinary-avatar-contact",
+      "radials": 1,
+      "deathCallbacks": 1,
+      "contactDieCalls": 1,
+      "doubleDieRejected": 0,
+      "dead": true,
+      "selectedEmbedded": [
+        false
+      ]
+    },
+    {
+      "case": "contact-then-expiry",
+      "radials": 1,
+      "deathCallbacks": 1,
+      "contactDieCalls": 1,
+      "doubleDieRejected": 1,
+      "dead": true,
+      "selectedEmbedded": [
+        false
+      ]
+    },
+    {
+      "case": "contact-again-after-death",
+      "radials": 1,
+      "deathCallbacks": 1,
+      "contactDieCalls": 2,
+      "doubleDieRejected": 2,
+      "dead": true,
+      "selectedEmbedded": [
+        false
+      ]
+    },
+    {
+      "case": "expiry-without-contact",
+      "radials": 1,
+      "deathCallbacks": 1,
+      "contactDieCalls": 0,
+      "doubleDieRejected": 0,
+      "dead": true,
+      "selectedEmbedded": [
+        false
+      ]
+    },
+    {
+      "case": "second-expiry-rejected",
+      "radials": 1,
+      "deathCallbacks": 1,
+      "contactDieCalls": 0,
+      "doubleDieRejected": 1,
+      "dead": true,
+      "selectedEmbedded": [
+        false
+      ]
+    }
+  ],
+  "lifetime": {
+    "maxLife": 1.0,
+    "variance": 0.0,
+    "scheduled": [
+      {
+        "callback": "0x140273d98",
+        "delay": 1.0
+      }
+    ],
+    "timeOrigin": "Wave actual virtual780 launch lifecycle suffix; callback is plain Die because ExplodeOnLifeExpired0, not post-impact delay"
+  },
+  "selectedPacket": {
+    "nativeField": "ExplosiveAttack",
+    "selectedAttack": "0x5b4",
+    "radius": 9.600000381469727,
+    "sourceUpgradeDefault": "constructor140fbadf9 stores253 at db0; enum253 WEAPON_DAMAGE_AMOUNT; no source overrides"
+  },
+  "limits": [
+    "Collision acceptance and scene references supplied; contact execution starts after direct/FX construction at140780e28.",
+    "Die retains original c1d duplicate guard, c1d store, c10 property-change branch and native delegate -> virtual768 dispatch. Owner/position/replication serialization is skipped after c1d store.",
+    "Radial callback is counted at virtual7b8; its damage builder/world delivery tested separately.",
+    "Wave actual virtual780 launch suffix selects plain Die thunk140273d98 because ExplodeOnLifeExpired0. Scheduler is captured without running its external queue; scheduled expiry is invoked manually to test duplicate guard."
+  ]
+}

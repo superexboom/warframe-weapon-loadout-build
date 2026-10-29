@@ -541,7 +541,7 @@ class Scenario:
         numeric |= {'equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval','meleeTargetDistance'}
         binary = {'overshields','channeling','aimGliding','sliding','incarnonMeleeActive','orbSpecialShield','onosRadialHit','selfShieldBreakForced','perfectCharge','infiniteAmmo',
                   'companion','companionPlayerStacks'}
-        integers = {'nearbyEnemies':1000,'stugBounceHits':2,'stugChildHits':5,'detonateAfterShots':20,'orbPasses':3,'orbStacks':3,'orbRank':6,'punchthroughTargets':100,'abilityUses':100000}
+        integers = {'battacorCharges':3,'nearbyEnemies':1000,'stugBounceHits':2,'stugChildHits':5,'detonateAfterShots':20,'orbPasses':3,'orbStacks':3,'orbRank':6,'punchthroughTargets':100,'abilityUses':100000}
         melee_text = {'meleeRoute','meleeStance','meleeCombo'}
         allowed = numeric | binary | set(integers) | melee_text | {'projectileMode','equippedWeapons','emptySlots','orbAbsorbedDamageType','orbAbsorbedDamageTypes'}
         if set(self.combat_state) - allowed:
@@ -556,7 +556,7 @@ class Scenario:
                 state[key] = value
             elif key in integers:
                 state[key] = _require_int('combatState.'+key,value,maximum=integers[key])
-                if key in {'detonateAfterShots','orbStacks'} and not value:
+                if key in {'detonateAfterShots','orbStacks','battacorCharges'} and not value:
                     raise ValueError('combatState.'+key+' must be at least one')
             elif key=='meleeRoute':
                 from .melee_sequence import ROUTES
@@ -1229,6 +1229,8 @@ class ModdedStats:
     # throw-only weapon-damage bonus (it joins base_damage_bracket).
     reflection_explosion_chance: float = 0.0
     throw_damage_bonus: float = 0.0
+    # Audited authoritative delayed radial damage-event producer.
+    delayed_radial_hit_event: bool = False
 
 
     @property

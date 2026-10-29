@@ -1,9 +1,9 @@
-"""Import Battacor's native alt radial and a one-primary-kill immediate-use cycle.
+"""Import Battacor's per-ray native alt radial and selectable kill-charge cycle.
 
-The preserved native EXE proves zero charges cannot fire, positive charges can,
-and NumChargesToConsume=0 consumes every current charge. The admitted replay
-policy spends its first charge immediately. It does not model banking 2/3
-charges or Sentient Barrage. No WFSim data enters this importer.
+The preserved EXE proves positive-charge availability, consume-all snapshot
+scaling for 1/2/3 charges and one radial per accepted ray collision. The default
+policy spends its first charge immediately; configured banking selects 2/3.
+Sentient Barrage remains unsupported. No WFSim data enters this importer.
 """
 from __future__ import annotations
 import argparse
@@ -27,12 +27,10 @@ SOURCES = [
     ('/Lotus/Weapons/Tenno/LotusLongGun', '2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc'),
     ('/Lotus/Weapons/Tenno/LotusBulletWeapon', 'dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9'),
 ]
-UNMODELED = ['battacor-banked-two-three-charge-damage-scaling-unmodeled',
-             'battacor-radial-hit-arcane-dispatch-unverified',
-             'battacor-radial-condition-overload-routing-unverified',
-             'battacor-radial-per-trigger-multiplicity-unverified']
-TIMING_UNMODELED = ['battacor-first-charge-windup-event-timing-unmodeled',
-                    'battacor-first-charge-dynamic-buff-snapshot-timing-unverified']
+UNMODELED = ['battacor-radial-hit-arcane-dispatch-unverified',
+             'battacor-radial-condition-overload-routing-unverified']
+TIMING_UNMODELED = ['battacor-first-charge-dynamic-buff-snapshot-timing-unverified',
+                    'battacor-primary-dot-charge-during-alt-windup-unmodeled']
 SNAPSHOT_PROOF = dict(
     countSnapshot='0x141377160 -> 0x140164110 stores pre-consumption current count as float in active state +0xac; current clears afterward',
     cachedChargeMultiplier='0x140584f1b..0x140584f30: UseClipSizeAsDamageMultiplier=false gives 1+(DamageMultiplier[+0x170]-1)*releaseRatio; raw DamageMultiplier=1 yields 1 at every ratio',
@@ -95,6 +93,8 @@ def profile(pkg, row, *, native_image):
             or native.get('AddCharges') != [dict(Conditions=['PRIMARY_KILL'], NumCharges=1)]
             or native.get('ConsumeChargeConditions') != ['SECONDARY_FIRE']
             or fire.get('ConsumesChargesForFire') != 1
+            or fire.get('IgnoreFireIterations') != 0
+            or fire.get('OnlyHitEnitiesOnce') != 1
             or state.get('ApplyNumChargesToDamageMultiplier') != 1
             or state.get('MinDamageMultiplier') != 1 or state.get('MaxDamageMultiplier') != 3
             or state.get('UseClipSizeAsDamageMultiplier') != 0 or state.get('DamageMultiplier') != 1
@@ -121,28 +121,40 @@ def profile(pkg, row, *, native_image):
         descriptorNameOffset=8, radialOnHit='0x14140f7c5: impact +0x1e4',
         radialOnMiss='0x14140f7d3: impact +0x1e3',
         radialBuild='0x14140f948 -> 0x140e91ec0',
-        multishotBranch='0x140e92204: impact +0x1e2 false skips multiplication at 0x140e92270',
+        multishotBranch='0x140e92204: impact +0x1e2 false skips multiplication at 0x140e92270; this is per-packet damage, not per-trigger count',
+        radialMultiplicity=dict(
+            fireIterationCount='0x140f75d20 -> fire virtual +0x118 (0x1416a5ed0) queries weapon +0x6e0; integer multishot 1/2/3 yields native count 1/2/3',
+            emit='0x140be1db0: both zero-spread and spread loops submit one 0x14185ca50 trace per iteration; callback thunk 0x1406e6d4c -> fire +0x2a8 -> 0x1409b4480 -> 0x140ee5ca0',
+            collect='0x140ee5ca0 initializes an empty callback-local hit list; 0x1409c70a1..0x1409c7278 dedups only within that callback and appends original 0xd0-byte collision records',
+            dispatch='0x140581be1 -> weapon +0x650 (0x141550e40) -> mode1 impact +0xb8 (0x140fc83e0) -> 0x14139b3b0 per-record loop -> impact +0xf8 (0x14140f600) -> 0x140e91ec0',
+            observedRayCounts=[1,2,3], observedRadialCounts=[1,2,3],
+            perPacketDamage=208., perPacketTakesMultishot=False,
+            sameVictimAcrossRaysDeduplicated=False,
+            missScope='accepted non-avatar scene collisions; empty-space no-collision behavior is outside this proof',
+            acceptance='all modelled rays connect; scene collision and aim are supplied inputs, original count/emission/collection/dispatch/impact instructions execute'),
         noFullGateDefault='0x140bf8fb8 initializes RequireFullCharges +0x3238 to zero',
         availability='0x140b169c0 -> 0x1418cee00; current +0x3218 and max +0x3220 must be positive',
         consumeAll='0x141377168 zero consumption takes current; returns consumed count and clears current',
         chargeSnapshot=dict(SNAPSHOT_PROOF))
     entry = dict(name='Battacor', fireMode=1, directTotal=208.,
-        scope='base alternate at one charge; primary kill followed by immediate alt use; direct and native hit radial independent; no Sentient Barrage',
+        scope='one-charge base payload; selectable 1/2/3 primary-kill gate scales direct and radial at consumption; no Sentient Barrage',
         radials=[dict(damage={'radiation':208.}, radius_m=radial['radius'],
             falloff_start_m=radial['radiusMin'], falloff_reduction=radial['fallOff'],
             crit_chance=raw['CriticalChance'], crit_multiplier=raw['CriticalMultiplier'],
-            status_chance=attack['ProcChance'], forced_procs=[], takes_multishot=False,
+            status_chance=attack['ProcChance'], forced_procs=[], takes_multishot=True,
             takes_blast_radius_mods=True, impact_delay_seconds=0.,
             nativeSource=WEAPON, nativeField='Behaviors[1].impact.RadialDamage',
-            damageTypeSource='native-per-type', multishotSource='native single-packet MS factor false; one-packet-per-trigger remains unverified',
+            damageTypeSource='native-per-type', multishotSource='native one 208-damage radial packet per accepted ray collision; MultiShotBuffsRadialDamage=false prevents a second per-packet multishot factor',
+            perPacketTakesMultishot=False,
             takes_condition_overload=False,
             conditionOverloadSource='existing-model-policy-unverified-not-native-proof')],
         unmodeled=[*UNMODELED, *TIMING_UNMODELED], nativeSources=sources, source=proof,
         packageBuild='2026.10.22.13.12', generatedBy='tools/import_battacor_radial.py')
     cycle = dict(name='Battacor', altMode=1, primaryMode=0, killsPerUse=1,
-        shotsPerGauge=1, switchInSeconds=float(state.get('ModeSwitchTime') or 0),
+        shotsPerGauge=1, chargeBeforeFire=True, switchInSeconds=float(state.get('ModeSwitchTime') or 0),
         switchOutSeconds=float(_part(behaviors[0], 'state:').get('ModeSwitchTime') or 0),
         policy='spend-first-primary-kill-charge-immediately',
+        selectableChargeCounts=[1,2,3], configurationKey='battacorCharges',
         native=dict(AddChargeConditions=['PRIMARY_KILL'], NumChargesToAdd=1,
             NumChargesToConsume=0, MaxCharges=3, RequireFullCharges=0,
             zeroConsumptionMeans='consume-all-current-charges', selectedChargeCount=1),

@@ -1,8 +1,8 @@
 """Retain proven Zymos child declarations and unresolved consumer diagnostics.
 
 This importer adds no child damage and no global trigger veto. The admitted
-script/native evidence proves five-child spawn branches and projectile notice
-suppression, not spawn multiplicity, inherited damage or status/kill eligibility.
+script/native evidence proves shared metadata consumption, five-child candidate
+branches and modifier-bucket transfer, not target coverage or final gameplay DPS.
 """
 from __future__ import annotations
 import argparse
@@ -46,14 +46,31 @@ def child_audit(packages):
         clientSha256=CLIENT_SHA256,
         callbackBranches=[dict(callback="OnRadialDamage", prototype=3, requestedChildCount=5),
                           dict(callback="OnDeath", prototype=4, requestedChildCount=5)],
-        branchCombination="unresolved-do-not-sum", childCountSetter="0x141b454b0 -> mNumClusterProjectiles+0x1730",
+        branchCombination="shared-record-consumed-once-do-not-sum",
+        metadataConsumption=dict(lookupPrototype=1,lookupPc=[12,40],removePc=[43,48],
+            sharedClosure="P7 pc13/17 capture same P1; both branches remove before spawning",
+            scope="one stored host embed record cannot authorize both five-child requests; multiple independent records and failed callbacks remain separate"),
+        childCountSetter="0x141b454b0 -> mNumClusterProjectiles+0x1730",
         childDeclarations=dict(attack=deepcopy(child["ExplosiveAttack"]),
             criticalChance=child.get("CriticalChance"), criticalMultiplier=child.get("CriticalMultiplier"),
             SendEvents=child["SendEvents"], DamageUpgradeTypes=child["DamageUpgradeTypes"],
             ClusterSetsChildrenDamageInfo=carrier["ClusterSetsChildrenDamageInfo"]),
+        scriptHitClassification=dict(flag="Projectile+0x15b1 set by InfUzi P3/P4 Lua atom44bcd6fd ->0x1419850a0",
+            inherited="0x14121a561 copies carrier flag to child",
+            consumer="0x141234988..0x141234998 overrides radial plan hit type with DHT_SCRIPT=5",
+            scope="classification only; does not establish head, CO or Arcane notification eligibility"),
         provenNoticeConsumers=["0x1407eb9b2", "0x14093a39e", "0x14098be19", "0x1410e32a9"],
-        unresolved=["shared-embed-metadata-spawn-exclusivity", "child-target-selection",
-                    "parent-to-child-damage-snapshot", "critical-and-mod-upgrade-routing",
+        criticalTransfer=dict(consumer="0x141219c80 -> 0x14140ab20 / 0x140848e20",
+            upgradeManager="0x1401413d0 -> inventory+0x408 -> UpgradeManager+0xc0 / 0x1418c1aa0",
+            retainedBuckets="Projectile ctor FloatUpgradedValue vtable0x1420a3d48 +8 returns1; do not flatten before copying",
+            merge="0x141a1aeb0 -> 0x140d12e30; STACKING_MULTIPLY adds into retained bucket, MULTIPLY multiplies",
+            getter="0x14123df60",
+            radialPlanCopy="0x140f36198 ->0x140ede780 copies538/570 buckets; prior plan chance enters ADD bucket and prior multiplier enters MULTIPLY bucket",
+            verification="tools/verify_projectile_crit_transfer.py; 24 original-byte control cases",
+            example=dict(base=.05,stackingBonus=1.2,afterOneQuery=.11,afterTwoQueries=.17),
+            scope="transfer primitive only; complete carrier creation/query count and subsequent victim-side crit transforms not closed"),
+        unresolved=["child-target-selection",
+                    "complete-carrier-creation-and-damage-snapshot", "final-critical-query-count-and-victim-side-transforms",
                     "status-and-kill-event-consumers"])
 
 

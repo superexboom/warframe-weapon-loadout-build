@@ -3548,7 +3548,92 @@
         ],
         "generatedBy": "tools/import_embed_fields.py"
       },
-      "name": "Mutalist Cernos"
+      "name": "Mutalist Cernos",
+      "periodicTriggers": [
+        {
+          "id": "mutalist-cernos-swarm",
+          "damage": {
+            "toxin": 3.0
+          },
+          "nativeSource": "/Lotus/Weapons/Infested/Bow/InfCernosBow/InfCernosSwarmDamageTrigger",
+          "nativeField": "AttackData",
+          "sourceHitType": "DHT_PROJECTILE",
+          "status_chance": 1.0,
+          "forcedProcs": [
+            "PT_POISONED"
+          ],
+          "crit_chance": 0.0,
+          "crit_multiplier": 1.0,
+          "interval_seconds": 0.5,
+          "tick_rate": 2.0,
+          "damageOnEnter": true,
+          "countPolicy": "one-current-weapon-field-per-covered-target",
+          "admission": "source-projectile-embed-with-centered-target-coverage",
+          "defaultEnabled": true,
+          "coverageModel": "inherit-enclosing-centered-target-assumption",
+          "maxConcurrentFieldsPerSource": 1,
+          "sourceModifierAllowlist": [
+            "weapon-base-damage",
+            "ordinary-weapon-elements"
+          ],
+          "firstPeriodicPhase": "next-authoritative-update-if-constructor-clock-zero",
+          "clockPolicy": "decrement-dt-single-dispatch-reset-interval-no-catch-up",
+          "activation_event": "source-projectile-embed",
+          "first_periodic_delay_seconds": 0.0,
+          "firstPeriodicDelayModel": "first-authoritative-update-collapsed-to-activation-time",
+          "duration_seconds": 10.0,
+          "expiryBoundary": "owner-removal-before-further-field-damage",
+          "refreshPolicy": "replace-entity-and-reset-timer-not-extend-existing-clock",
+          "damageOnEnterSeparateFromFirstPeriodic": true,
+          "lifetimePolicy": "source-arrow-owner-expiry-or-replacement-no-DamageDuration-cutoff",
+          "sourceOwnerLifetimeAfterEmbed_seconds": 10.0,
+          "expiresWithSourceOwner": true,
+          "replacementPolicy": "destroy-previous-live-weapon-projectile-before-registering-new-field",
+          "replacementKey": "source-weapon-WeaponUtil.Projectile",
+          "damageSource": "PLAYER_AVATAR",
+          "sourceUpgradeRouting": "projectile-creator-weapon",
+          "damageUpgradeTypes": [
+            "WEAPON_DAMAGE_AMOUNT"
+          ],
+          "takes_weapon_base_damage": true,
+          "takes_weapon_elements": true,
+          "takes_parent_crit": false,
+          "takes_parent_status_chance": false,
+          "payloadMultishotMultiplier": false,
+          "multiplicityPolicy": "not-inferred-from-weapon-fire-iterations",
+          "radius_m": 2.5,
+          "activeAfter": "OnProjectileStopped-spawn-callback"
+        }
+      ],
+      "swarmSource": {
+        "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+        "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+        "script": "/Lotus/Scripts/WeaponAttachments/InfCernos.lua",
+        "scriptSha256": "869c8fe4e1acba195c9703e63fa5aa8d0314e770ba04589f125240f825249666",
+        "spawn": "InfCernos P0 pc85..98 creates _damageTriggerType at arrow position on host",
+        "sourceAssignment": "P0 pc117..122 arrow+0x708 getter0x14197af60 -> Entity wrapper0x141972340 -> native0x140570710 -> trigger+0x400",
+        "sourceConsumer": "0x140e5fd6b reads trigger+0x400; 0x140e5fdd6 resolves packet source; 0x140e5fde3..0x140e5fe34 validates LotusWeapon",
+        "baseDamageConsumer": "0x140e5ff7b weapon+0xaa0 upgrade list; 0x140e5ffbb ->0x1401413d0; actual route reproduces source multipliers1/2/3 as3/6/9",
+        "elementalConsumer": "0x140e60081..0x140e600c5 ->0x1403a6ea0 ->0x14171a350 with0x166 WEAPON_PERCENT_BASE_DAMAGE_ADDED; numerical combinations not replayed here",
+        "forcedProcConsumer": "0x140e5fe58 ->0x140451710 asks0x119 WEAPON_FORCED_PROC_CHANCE before converting trigger AttackData; no parent status chance read",
+        "periodicConsumer": "vtable0x1421635e0 slot0x230 ->0x141319fd0 ->0x141463ae0; +0x6b0 interval, +0x6c0 remaining, +0x660 ->0x1410f1e50 ->0x140e5f490",
+        "clockInitial": "constructor0x14024444c initializes +0x6c0 zero; update0x141463c24 subtracts dt, dispatches once if<=0 then resets .5 without catch-up",
+        "attachment": "P0 pc105..110 -> Lua wrapper0x14196c880 -> actual DamageTrigger slot0x298=0x141662640; inserts trigger handle in arrow+0x3b0 and writes trigger+0x3a0 parent",
+        "parentInheritance": "Entity constructor0x140529b6d..74 sets both dead/live parent rules2; this transfer rule is separate from native owner cleanup",
+        "ownerRegistration": "P0 pc94..98 passes arrow as sixth CreateEntity argument;0x141a24181 ->0x1400ef550 writes CreateParams+0x10;0x140cb72b3..0x140cb72fd registers child handle in Entity service owner map+0x1f0",
+        "ownerCleanup": "Entity service vtable0x1421a0a28 slot0x1f8=0x1402201a0 ->0x140185a50;0x140185c9b..0x140185cf5 recursively removes registered owner children then marks source+0x20 and queues removal; unchanged bytes reproduce child-before-owner deletion",
+        "ownerExpiry": "mEmbedTime serializer0x140da1fc1 maps projectile+0x8ec..0x8f0;0x140c3f156..0x140c3f1a4 schedules0x1402e1be0 using EmbedTime10; callback eventually0x140f4f1a0 -> Entity service removal",
+        "replace": "P0 pc37..83 WeaponUtil Projectile reference destroys previous source before storing new arrow",
+        "damageOnEnter": "0x14132ac78..0x14132ac9d tests DamageOnEnter+0x6ce and calls 0x140e5f490",
+        "rawAttack": "0x140e5fab4 loads trigger AttackData+0x610; 0x140e5fe68 calls original packet converter",
+        "duration": "DamageDuration+0x6b4 is only read after positive start multiplier +0x6b8 at0x140e600ca; default start multiplier0 means no lifetime cutoff"
+      },
+      "unmodeled": [
+        "mutalist-cernos-swarm-first-update-versus-enter-phase-unmodeled",
+        "mutalist-cernos-swarm-shared-weapon-replacement-ms-order-unverified",
+        "mutalist-cernos-swarm-special-source-upgrades-unmodeled",
+        "mutalist-cernos-swarm-status-kill-arcane-dispatch-unverified"
+      ]
     },
     "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon": {
       "modes": {
@@ -3558,7 +3643,116 @@
           "allowIncarnon": false,
           "charge": {
             "seconds": 1.5,
-            "source": "native-ChargeTime"
+            "modifier": "WEAPON_FIRE_RATE",
+            "scalesWithFireRate": true,
+            "source": "native-ChargeTime",
+            "nativeSource": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon",
+            "nativeField": "Behaviors[1].state.ChargeTime"
+          },
+          "name": "EFV-8 Mars",
+          "fireMode": 1,
+          "scope": "bounded single-target parent explosion; declared per spawned projectile; unresolved gates approximated explicitly",
+          "radials": [
+            {
+              "damage": {
+                "corrosive": 313.0
+              },
+              "radius_m": 3.0,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.80000001,
+              "crit_chance": 0.27000001,
+              "crit_multiplier": 2.0999999,
+              "status_chance": 0.33000001,
+              "forcedProcs": [
+                "PT_CAUSTIC_BURN",
+                "PT_STAGGERED"
+              ],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "takes_condition_overload": false,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolAltFire/LasrianGooPistolPlayerAltFireProjectileFullcharge",
+              "nativeField": "ExplosiveAttack",
+              "sourceHitType": "DHT_RADIAL",
+              "declaredHitType": null,
+              "hitTypeSource": "native-none-filled-radial-by-0x14123499a",
+              "damageTypeSource": "native-explicit",
+              "emissionContract": {
+                "baseFireIterations": 1,
+                "baseExportMultishot": 1,
+                "packetsPerSpawnedProjectile": 1,
+                "amountAlreadyIncludesProjectileCount": false,
+                "multishotCopyProjectiles": [],
+                "consumer": "0x140f360f0 -> +0x630 / 0x14160c5a0 -> +0x638 / 0x141234720"
+              },
+              "approximation": {
+                "conditionOverload": "neutral-pending-specific-routing",
+                "headDamageBonus": "suppressed",
+                "weakpointCriticalAndKillEvents": "neutral-pending-proof",
+                "recipient": "target at explosion centre assumed",
+                "flightAndCollisionTiming": "impact-immediate"
+              }
+            }
+          ],
+          "unmodeled": [
+            "efv8-main-explosion-CO-neutral-fallback-unverified",
+            "efv8-release-flight-and-recipient-coverage-idealized"
+          ],
+          "behaviourSource": "Behaviors[1]",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolPlayerWeapon",
+              "parent": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistol",
+              "rawAttributesSha256": "eba06b23fb55d64b649bec5d5cc66193b82ed2f9c09d997945cd541a0ebfc339",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistol",
+              "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+              "rawAttributesSha256": "411b62316f5f598f161d3c5c31f175ad4c69d16ac1477264e1cd16a4825e0c49",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+              "parent": "",
+              "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolAltFire/LasrianGooPistolPlayerAltFireProjectileFullcharge",
+              "parent": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolAltFire/LasrianGooPistolPlayerAltFireProjectile",
+              "rawAttributesSha256": "41944bf10910caa2deea600276422fcc408df2079549516f5f23b7b81e9e4513",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolAltFire/LasrianGooPistolPlayerAltFireProjectile",
+              "parent": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolAltFire/LasrianGooPistolAltFireProjectile",
+              "rawAttributesSha256": "750775a43679d07dc1e054d298acaa537cce460cd3fd16c27b9575327dda7c49",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolAltFire/LasrianGooPistolAltFireProjectile",
+              "parent": "/EE/Types/Engine/Projectile",
+              "rawAttributesSha256": "ff3af31886ba87228a75cc0cde8cf2365857dd2f36066979be0d8cd3af666c9b",
+              "attributeRecord": true
+            },
+            {
+              "path": "/EE/Types/Engine/Projectile",
+              "parent": "",
+              "rawAttributesSha256": "8b5fe36bc4e7e28d621d2b59a52648b98d1ca7738ca0fb4d85436ecd03548d2e",
+              "attributeRecord": true
+            }
+          ],
+          "packageBuild": "2026.10.22.13.12",
+          "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+          "generatedBy": "tools/import_native_secondary_payloads.py",
+          "nativeEvidence": {
+            "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+            "packetCopy": "0x140508e9e..0x140508eea",
+            "radiusPlan": "0x14160c618..0x14160c680",
+            "parentAmountScale": "0x141234a7a",
+            "statusNormalization": "0x1412353ef raw fireIterations / 0x141586f50",
+            "critFields": "Projectile.CriticalChance/CriticalMultiplier +0x538/+0x570; death path0x140f36198 ->0x140ede780 copies modifier buckets into radial plan, adding existing plan CC and multiplying existing plan CD"
           }
         }
       }
@@ -4286,6 +4480,152 @@
           "charge": {
             "seconds": 0.5,
             "source": "native-ChargeTime"
+          },
+          "name": "Larkspur Prime",
+          "fireMode": 1,
+          "scope": "ordinary single-target contact-death1600 radial once per projectile; launch-expiry alternatives excluded",
+          "radials": [
+            {
+              "damage": {
+                "blast": 800.0,
+                "radiation": 800.0
+              },
+              "radius_m": 9.6000004,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.60000002,
+              "crit_chance": 0.28,
+              "crit_multiplier": 2.2,
+              "status_chance": 0.34,
+              "forcedProcs": [
+                "PT_RAGDOLL"
+              ],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "takes_condition_overload": false,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurHeavyProjectile",
+              "nativeField": "ExplosiveAttack",
+              "sourceHitType": "DHT_RADIAL",
+              "declaredHitType": null,
+              "hitTypeSource": "native-none-filled-radial-by-0x14123499a",
+              "damageTypeSource": "native-explicit",
+              "emissionContract": {
+                "baseFireIterations": 1,
+                "baseExportMultishot": 1,
+                "packetsPerSpawnedProjectile": 1,
+                "amountAlreadyIncludesProjectileCount": false,
+                "multishotCopyProjectiles": [],
+                "consumer": "contact+568 -> Die+560 -> property delegate -> death+768 -> radial+7b8 -> common+630/+638"
+              },
+              "approximation": {
+                "conditionOverload": "neutral-pending-specific-routing",
+                "headDamageBonus": "suppressed",
+                "weakpointCriticalAndKillEvents": "neutral-pending-proof",
+                "recipient": "victim at accepted contact/explosion centre assumed; empty-space expiry excluded",
+                "flightAndCollisionTiming": "contact-death immediate at existing idealized hit time; launch lifetime excluded"
+              },
+              "activationEvidence": {
+                "waveVtable": "0x1423ebeb0",
+                "normalContact": "serializer14013dcaa -> Wave+1822 AllowNormalContactBehavior=1; Wave+5781401f16d0 can route normal contact",
+                "acceptedCollision": "0x1414447ee -> 0x14077fbb0; ordinary living avatar 140780e28..140780f33 sees ExplodeOnImpact0, cannot pierce positive-radius contact, calls projectile+568 -> 14037e980 -> +5601405ac4a0",
+                "deathOnce": "0x1405ac4da checks c1d; first call stores c1d1 at1405ac65c; duplicate exits before property callback; c10 change at1405ac8ee calls native delegate1420af3d0+20 ->14012b2c0 ->140907fec -> projectile+768140163a60",
+                "selectedDeathPayload": "0x140163b01..b34 with ExplodeOnImpact0/ExplodeOnLifeExpired0 calls +7b8 once; c250 -> common selector14160c689..6b2 selects ExplosiveAttack+5b4, never EmbedDeathAttack",
+                "launchLifetime": "Wave actual virtual+780140f874b0 suffix140f88871..88981 calls140dd80d0 MaxLife+variance; ExplodeOnLifeExpired0 selects plain Projectile::Die thunk140273d98 after1s from launch, not DieOfOldAge; impact-first then scheduled Die is rejected by c1d",
+                "sourceUpgrade": "base ctor140fbadf9 installs enum253 WEAPON_DAMAGE_AMOUNT in Projectile+db0; serializer140da0a9f and common builder141234bbb..c2e consume array; source chain has no override",
+                "amountScale": "0x141234a75 ->14116ac70 applies source stage then141234a7a multiplies projectile+7b8; native initial+7b8=1 at140fba8cb, weapon state DamageMultiplier1/nonclip; no hardcoded direct840-derived scalar",
+                "radius": "0x14160c665..67c multiplies native radius9.6000004 by Projectile+8101; positive radius admitted",
+                "contactClock": "impact_delay_seconds0 denotes immediate contact-death packet under shared single-target geometry; launch flight ignored explicitly; MaxLife1 is not added after hit",
+                "onceScope": "one radial per selected projectile that reaches ordinary victim contact; no extra life-expiry packet after contact death",
+                "evidence": ".local/delivery/ranged-implementation-20261029/native-payloads/larkspur-lifecycle-original-byte-results.json"
+              },
+              "sourceDamageUpgrade": "WEAPON_DAMAGE_AMOUNT native constructor253"
+            }
+          ],
+          "unmodeled": [
+            "larkspur-contact-flight-and-scene-geometry-idealized",
+            "larkspur-maxlife1-launch-expiry-recipient-excluded-from-contact-model",
+            "larkspur-projectile-speed-mods-obstacles-and-out-of-range-contact-unmodeled",
+            "larkspur-flight-time-dynamic-buff-snapshot-unverified",
+            "larkspur-main-explosion-CO-neutral-fallback-unverified",
+            "larkspur-main-explosion-weakpoint-and-hit-events-neutral-fallback-unverified"
+          ],
+          "behaviourSource": "HeavyBehaviors[1]",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
+              "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
+              "rawAttributesSha256": "759acf12c9444508d509abfd66c6e4f6167e7fbb465e4056c65d33e6445ce5ba",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
+              "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+              "rawAttributesSha256": "3e70ccb93deb5278009c40170fd2fff76e02ff6c42b9524f67c70448870441a0",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+              "parent": "/Lotus/Types/Game/LotusWeapon",
+              "rawAttributesSha256": "cc06e93ed07418ffeb897430531ce364815d2088a237b3486319eca4d0f4e356",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Types/Game/LotusWeapon",
+              "parent": "",
+              "rawAttributesSha256": "4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurHeavyProjectile",
+              "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurProjectile",
+              "rawAttributesSha256": "dd675ee17669eb9a860cc76e6db8455f4fce18408d552a2166956280e05b22af",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurProjectile",
+              "parent": "/Lotus/Types/Weapon/WaveProjectile",
+              "rawAttributesSha256": "50e93acc6e26f01b4fe3facac4f41ac24dfcf9ff0e7ff940b2b7aa30f7ddc8fc",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Types/Weapon/WaveProjectile",
+              "parent": "",
+              "rawAttributesSha256": "d9f3f1dd60ea8b5e69ea5dc5ddc88817826f8b6a60061ea7ed2ece450fb42cfd",
+              "attributeRecord": true
+            }
+          ],
+          "packageBuild": "2026.10.22.13.12",
+          "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+          "generatedBy": "tools/import_larkspur_contact_radial.py",
+          "nativeEvidence": {
+            "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+            "packetCopy": "0x140508e9e..0x140508eea",
+            "radiusPlan": "0x14160c618..0x14160c680",
+            "parentAmountScale": "0x141234a7a",
+            "statusNormalization": "0x1412353ef raw fireIterations / 0x141586f50",
+            "critFields": "Projectile+538/+570 CriticalChance/CriticalMultiplier; radial callback140f36187..36198 calls140ede780 after selector to copy+combine crit state; plan118/11c are not crit proof",
+            "lifecycle": {
+              "waveVtable": "0x1423ebeb0",
+              "normalContact": "serializer14013dcaa -> Wave+1822 AllowNormalContactBehavior=1; Wave+5781401f16d0 can route normal contact",
+              "acceptedCollision": "0x1414447ee -> 0x14077fbb0; ordinary living avatar 140780e28..140780f33 sees ExplodeOnImpact0, cannot pierce positive-radius contact, calls projectile+568 -> 14037e980 -> +5601405ac4a0",
+              "deathOnce": "0x1405ac4da checks c1d; first call stores c1d1 at1405ac65c; duplicate exits before property callback; c10 change at1405ac8ee calls native delegate1420af3d0+20 ->14012b2c0 ->140907fec -> projectile+768140163a60",
+              "selectedDeathPayload": "0x140163b01..b34 with ExplodeOnImpact0/ExplodeOnLifeExpired0 calls +7b8 once; c250 -> common selector14160c689..6b2 selects ExplosiveAttack+5b4, never EmbedDeathAttack",
+              "launchLifetime": "Wave actual virtual+780140f874b0 suffix140f88871..88981 calls140dd80d0 MaxLife+variance; ExplodeOnLifeExpired0 selects plain Projectile::Die thunk140273d98 after1s from launch, not DieOfOldAge; impact-first then scheduled Die is rejected by c1d",
+              "sourceUpgrade": "base ctor140fbadf9 installs enum253 WEAPON_DAMAGE_AMOUNT in Projectile+db0; serializer140da0a9f and common builder141234bbb..c2e consume array; source chain has no override",
+              "amountScale": "0x141234a75 ->14116ac70 applies source stage then141234a7a multiplies projectile+7b8; native initial+7b8=1 at140fba8cb, weapon state DamageMultiplier1/nonclip; no hardcoded direct840-derived scalar",
+              "radius": "0x14160c665..67c multiplies native radius9.6000004 by Projectile+8101; positive radius admitted",
+              "contactClock": "impact_delay_seconds0 denotes immediate contact-death packet under shared single-target geometry; launch flight ignored explicitly; MaxLife1 is not added after hit",
+              "onceScope": "one radial per selected projectile that reaches ordinary victim contact; no extra life-expiry packet after contact death",
+              "evidence": ".local/delivery/ranged-implementation-20261029/native-payloads/larkspur-lifecycle-original-byte-results.json"
+            }
+          },
+          "nativeCharge": {
+            "seconds": 0.5,
+            "modifier": "WEAPON_CHARGE_RATE",
+            "scalesWithFireRate": false,
+            "source": "native-ChargeTime",
+            "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurWeapon",
+            "nativeField": "HeavyBehaviors[1].state.ChargeTime"
           }
         }
       }
@@ -4308,6 +4648,146 @@
           "charge": {
             "seconds": 0.5,
             "source": "native-ChargeTime"
+          },
+          "name": "Larkspur",
+          "fireMode": 1,
+          "scope": "ordinary single-target contact-death1600 radial once per projectile; launch-expiry alternatives excluded",
+          "radials": [
+            {
+              "damage": {
+                "blast": 800.0,
+                "radiation": 800.0
+              },
+              "radius_m": 9.6000004,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.60000002,
+              "crit_chance": 0.25999999,
+              "crit_multiplier": 2.2,
+              "status_chance": 0.34,
+              "forcedProcs": [
+                "PT_RAGDOLL"
+              ],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "takes_condition_overload": false,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameHeavyArchgunProjectile",
+              "nativeField": "ExplosiveAttack",
+              "sourceHitType": "DHT_RADIAL",
+              "declaredHitType": null,
+              "hitTypeSource": "native-none-filled-radial-by-0x14123499a",
+              "damageTypeSource": "native-explicit",
+              "emissionContract": {
+                "baseFireIterations": 1,
+                "baseExportMultishot": 1,
+                "packetsPerSpawnedProjectile": 1,
+                "amountAlreadyIncludesProjectileCount": false,
+                "multishotCopyProjectiles": [],
+                "consumer": "contact+568 -> Die+560 -> property delegate -> death+768 -> radial+7b8 -> common+630/+638"
+              },
+              "approximation": {
+                "conditionOverload": "neutral-pending-specific-routing",
+                "headDamageBonus": "suppressed",
+                "weakpointCriticalAndKillEvents": "neutral-pending-proof",
+                "recipient": "victim at accepted contact/explosion centre assumed; empty-space expiry excluded",
+                "flightAndCollisionTiming": "contact-death immediate at existing idealized hit time; launch lifetime excluded"
+              },
+              "activationEvidence": {
+                "waveVtable": "0x1423ebeb0",
+                "normalContact": "serializer14013dcaa -> Wave+1822 AllowNormalContactBehavior=1; Wave+5781401f16d0 can route normal contact",
+                "acceptedCollision": "0x1414447ee -> 0x14077fbb0; ordinary living avatar 140780e28..140780f33 sees ExplodeOnImpact0, cannot pierce positive-radius contact, calls projectile+568 -> 14037e980 -> +5601405ac4a0",
+                "deathOnce": "0x1405ac4da checks c1d; first call stores c1d1 at1405ac65c; duplicate exits before property callback; c10 change at1405ac8ee calls native delegate1420af3d0+20 ->14012b2c0 ->140907fec -> projectile+768140163a60",
+                "selectedDeathPayload": "0x140163b01..b34 with ExplodeOnImpact0/ExplodeOnLifeExpired0 calls +7b8 once; c250 -> common selector14160c689..6b2 selects ExplosiveAttack+5b4, never EmbedDeathAttack",
+                "launchLifetime": "Wave actual virtual+780140f874b0 suffix140f88871..88981 calls140dd80d0 MaxLife+variance; ExplodeOnLifeExpired0 selects plain Projectile::Die thunk140273d98 after1s from launch, not DieOfOldAge; impact-first then scheduled Die is rejected by c1d",
+                "sourceUpgrade": "base ctor140fbadf9 installs enum253 WEAPON_DAMAGE_AMOUNT in Projectile+db0; serializer140da0a9f and common builder141234bbb..c2e consume array; source chain has no override",
+                "amountScale": "0x141234a75 ->14116ac70 applies source stage then141234a7a multiplies projectile+7b8; native initial+7b8=1 at140fba8cb, weapon state DamageMultiplier1/nonclip; no hardcoded direct840-derived scalar",
+                "radius": "0x14160c665..67c multiplies native radius9.6000004 by Projectile+8101; positive radius admitted",
+                "contactClock": "impact_delay_seconds0 denotes immediate contact-death packet under shared single-target geometry; launch flight ignored explicitly; MaxLife1 is not added after hit",
+                "onceScope": "one radial per selected projectile that reaches ordinary victim contact; no extra life-expiry packet after contact death",
+                "evidence": ".local/delivery/ranged-implementation-20261029/native-payloads/larkspur-lifecycle-original-byte-results.json"
+              },
+              "sourceDamageUpgrade": "WEAPON_DAMAGE_AMOUNT native constructor253"
+            }
+          ],
+          "unmodeled": [
+            "larkspur-contact-flight-and-scene-geometry-idealized",
+            "larkspur-maxlife1-launch-expiry-recipient-excluded-from-contact-model",
+            "larkspur-projectile-speed-mods-obstacles-and-out-of-range-contact-unmodeled",
+            "larkspur-flight-time-dynamic-buff-snapshot-unverified",
+            "larkspur-main-explosion-CO-neutral-fallback-unverified",
+            "larkspur-main-explosion-weakpoint-and-hit-events-neutral-fallback-unverified"
+          ],
+          "behaviourSource": "HeavyBehaviors[1]",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
+              "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+              "rawAttributesSha256": "3e70ccb93deb5278009c40170fd2fff76e02ff6c42b9524f67c70448870441a0",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+              "parent": "/Lotus/Types/Game/LotusWeapon",
+              "rawAttributesSha256": "cc06e93ed07418ffeb897430531ce364815d2088a237b3486319eca4d0f4e356",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Types/Game/LotusWeapon",
+              "parent": "",
+              "rawAttributesSha256": "4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameHeavyArchgunProjectile",
+              "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchgunProjectile",
+              "rawAttributesSha256": "dd675ee17669eb9a860cc76e6db8455f4fce18408d552a2166956280e05b22af",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchgunProjectile",
+              "parent": "/Lotus/Types/Weapon/WaveProjectile",
+              "rawAttributesSha256": "84e10aad1335d27d22251f3f4383617e943d25b1b3327167835353bf4d2f7573",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Types/Weapon/WaveProjectile",
+              "parent": "",
+              "rawAttributesSha256": "d9f3f1dd60ea8b5e69ea5dc5ddc88817826f8b6a60061ea7ed2ece450fb42cfd",
+              "attributeRecord": true
+            }
+          ],
+          "packageBuild": "2026.10.22.13.12",
+          "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+          "generatedBy": "tools/import_larkspur_contact_radial.py",
+          "nativeEvidence": {
+            "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+            "packetCopy": "0x140508e9e..0x140508eea",
+            "radiusPlan": "0x14160c618..0x14160c680",
+            "parentAmountScale": "0x141234a7a",
+            "statusNormalization": "0x1412353ef raw fireIterations / 0x141586f50",
+            "critFields": "Projectile+538/+570 CriticalChance/CriticalMultiplier; radial callback140f36187..36198 calls140ede780 after selector to copy+combine crit state; plan118/11c are not crit proof",
+            "lifecycle": {
+              "waveVtable": "0x1423ebeb0",
+              "normalContact": "serializer14013dcaa -> Wave+1822 AllowNormalContactBehavior=1; Wave+5781401f16d0 can route normal contact",
+              "acceptedCollision": "0x1414447ee -> 0x14077fbb0; ordinary living avatar 140780e28..140780f33 sees ExplodeOnImpact0, cannot pierce positive-radius contact, calls projectile+568 -> 14037e980 -> +5601405ac4a0",
+              "deathOnce": "0x1405ac4da checks c1d; first call stores c1d1 at1405ac65c; duplicate exits before property callback; c10 change at1405ac8ee calls native delegate1420af3d0+20 ->14012b2c0 ->140907fec -> projectile+768140163a60",
+              "selectedDeathPayload": "0x140163b01..b34 with ExplodeOnImpact0/ExplodeOnLifeExpired0 calls +7b8 once; c250 -> common selector14160c689..6b2 selects ExplosiveAttack+5b4, never EmbedDeathAttack",
+              "launchLifetime": "Wave actual virtual+780140f874b0 suffix140f88871..88981 calls140dd80d0 MaxLife+variance; ExplodeOnLifeExpired0 selects plain Projectile::Die thunk140273d98 after1s from launch, not DieOfOldAge; impact-first then scheduled Die is rejected by c1d",
+              "sourceUpgrade": "base ctor140fbadf9 installs enum253 WEAPON_DAMAGE_AMOUNT in Projectile+db0; serializer140da0a9f and common builder141234bbb..c2e consume array; source chain has no override",
+              "amountScale": "0x141234a75 ->14116ac70 applies source stage then141234a7a multiplies projectile+7b8; native initial+7b8=1 at140fba8cb, weapon state DamageMultiplier1/nonclip; no hardcoded direct840-derived scalar",
+              "radius": "0x14160c665..67c multiplies native radius9.6000004 by Projectile+8101; positive radius admitted",
+              "contactClock": "impact_delay_seconds0 denotes immediate contact-death packet under shared single-target geometry; launch flight ignored explicitly; MaxLife1 is not added after hit",
+              "onceScope": "one radial per selected projectile that reaches ordinary victim contact; no extra life-expiry packet after contact death",
+              "evidence": ".local/delivery/ranged-implementation-20261029/native-payloads/larkspur-lifecycle-original-byte-results.json"
+            }
+          },
+          "nativeCharge": {
+            "seconds": 0.5,
+            "modifier": "WEAPON_CHARGE_RATE",
+            "scalesWithFireRate": false,
+            "source": "native-ChargeTime",
+            "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun",
+            "nativeField": "HeavyBehaviors[1].state.ChargeTime"
           }
         }
       }
@@ -6120,7 +6600,20 @@
             "requestedChildCount": 5
           }
         ],
-        "branchCombination": "unresolved-do-not-sum",
+        "branchCombination": "shared-record-consumed-once-do-not-sum",
+        "metadataConsumption": {
+          "lookupPrototype": 1,
+          "lookupPc": [
+            12,
+            40
+          ],
+          "removePc": [
+            43,
+            48
+          ],
+          "sharedClosure": "P7 pc13/17 capture same P1; both branches remove before spawning",
+          "scope": "one stored host embed record cannot authorize both five-child requests; multiple independent records and failed callbacks remain separate"
+        },
         "childCountSetter": "0x141b454b0 -> mNumClusterProjectiles+0x1730",
         "childDeclarations": {
           "attack": {
@@ -6134,17 +6627,38 @@
           "DamageUpgradeTypes": [],
           "ClusterSetsChildrenDamageInfo": 1
         },
+        "scriptHitClassification": {
+          "flag": "Projectile+0x15b1 set by InfUzi P3/P4 Lua atom44bcd6fd ->0x1419850a0",
+          "inherited": "0x14121a561 copies carrier flag to child",
+          "consumer": "0x141234988..0x141234998 overrides radial plan hit type with DHT_SCRIPT=5",
+          "scope": "classification only; does not establish head, CO or Arcane notification eligibility"
+        },
         "provenNoticeConsumers": [
           "0x1407eb9b2",
           "0x14093a39e",
           "0x14098be19",
           "0x1410e32a9"
         ],
+        "criticalTransfer": {
+          "consumer": "0x141219c80 -> 0x14140ab20 / 0x140848e20",
+          "upgradeManager": "0x1401413d0 -> inventory+0x408 -> UpgradeManager+0xc0 / 0x1418c1aa0",
+          "retainedBuckets": "Projectile ctor FloatUpgradedValue vtable0x1420a3d48 +8 returns1; do not flatten before copying",
+          "merge": "0x141a1aeb0 -> 0x140d12e30; STACKING_MULTIPLY adds into retained bucket, MULTIPLY multiplies",
+          "getter": "0x14123df60",
+          "radialPlanCopy": "0x140f36198 ->0x140ede780 copies538/570 buckets; prior plan chance enters ADD bucket and prior multiplier enters MULTIPLY bucket",
+          "verification": "tools/verify_projectile_crit_transfer.py; 24 original-byte control cases",
+          "example": {
+            "base": 0.05,
+            "stackingBonus": 1.2,
+            "afterOneQuery": 0.11,
+            "afterTwoQueries": 0.17
+          },
+          "scope": "transfer primitive only; complete carrier creation/query count and subsequent victim-side crit transforms not closed"
+        },
         "unresolved": [
-          "shared-embed-metadata-spawn-exclusivity",
           "child-target-selection",
-          "parent-to-child-damage-snapshot",
-          "critical-and-mod-upgrade-routing",
+          "complete-carrier-creation-and-damage-snapshot",
+          "final-critical-query-count-and-victim-side-transforms",
           "status-and-kill-event-consumers"
         ]
       },
@@ -7822,7 +8336,7 @@
           "name": "Battacor",
           "fireMode": 1,
           "directTotal": 208.0,
-          "scope": "base alternate at one charge; primary kill followed by immediate alt use; direct and native hit radial independent; no Sentient Barrage",
+          "scope": "one-charge base payload; selectable 1/2/3 primary-kill gate scales direct and radial at consumption; no Sentient Barrage",
           "radials": [
             {
               "damage": {
@@ -7835,24 +8349,23 @@
               "crit_multiplier": 2,
               "status_chance": 0.5,
               "forced_procs": [],
-              "takes_multishot": false,
+              "takes_multishot": true,
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
               "nativeField": "Behaviors[1].impact.RadialDamage",
               "damageTypeSource": "native-per-type",
-              "multishotSource": "native single-packet MS factor false; one-packet-per-trigger remains unverified",
+              "multishotSource": "native one 208-damage radial packet per accepted ray collision; MultiShotBuffsRadialDamage=false prevents a second per-packet multishot factor",
+              "perPacketTakesMultishot": false,
               "takes_condition_overload": false,
               "conditionOverloadSource": "existing-model-policy-unverified-not-native-proof"
             }
           ],
           "unmodeled": [
-            "battacor-banked-two-three-charge-damage-scaling-unmodeled",
             "battacor-radial-hit-arcane-dispatch-unverified",
             "battacor-radial-condition-overload-routing-unverified",
-            "battacor-radial-per-trigger-multiplicity-unverified",
-            "battacor-first-charge-windup-event-timing-unmodeled",
-            "battacor-first-charge-dynamic-buff-snapshot-timing-unverified"
+            "battacor-first-charge-dynamic-buff-snapshot-timing-unverified",
+            "battacor-primary-dot-charge-during-alt-windup-unmodeled"
           ],
           "nativeSources": [
             {
@@ -7883,7 +8396,28 @@
             "radialOnHit": "0x14140f7c5: impact +0x1e4",
             "radialOnMiss": "0x14140f7d3: impact +0x1e3",
             "radialBuild": "0x14140f948 -> 0x140e91ec0",
-            "multishotBranch": "0x140e92204: impact +0x1e2 false skips multiplication at 0x140e92270",
+            "multishotBranch": "0x140e92204: impact +0x1e2 false skips multiplication at 0x140e92270; this is per-packet damage, not per-trigger count",
+            "radialMultiplicity": {
+              "fireIterationCount": "0x140f75d20 -> fire virtual +0x118 (0x1416a5ed0) queries weapon +0x6e0; integer multishot 1/2/3 yields native count 1/2/3",
+              "emit": "0x140be1db0: both zero-spread and spread loops submit one 0x14185ca50 trace per iteration; callback thunk 0x1406e6d4c -> fire +0x2a8 -> 0x1409b4480 -> 0x140ee5ca0",
+              "collect": "0x140ee5ca0 initializes an empty callback-local hit list; 0x1409c70a1..0x1409c7278 dedups only within that callback and appends original 0xd0-byte collision records",
+              "dispatch": "0x140581be1 -> weapon +0x650 (0x141550e40) -> mode1 impact +0xb8 (0x140fc83e0) -> 0x14139b3b0 per-record loop -> impact +0xf8 (0x14140f600) -> 0x140e91ec0",
+              "observedRayCounts": [
+                1,
+                2,
+                3
+              ],
+              "observedRadialCounts": [
+                1,
+                2,
+                3
+              ],
+              "perPacketDamage": 208.0,
+              "perPacketTakesMultishot": false,
+              "sameVictimAcrossRaysDeduplicated": false,
+              "missScope": "accepted non-avatar scene collisions; empty-space no-collision behavior is outside this proof",
+              "acceptance": "all modelled rays connect; scene collision and aim are supplied inputs, original count/emission/collection/dispatch/impact instructions execute"
+            },
             "noFullGateDefault": "0x140bf8fb8 initializes RequireFullCharges +0x3238 to zero",
             "availability": "0x140b169c0 -> 0x1418cee00; current +0x3218 and max +0x3220 must be positive",
             "consumeAll": "0x141377168 zero consumption takes current; returns consumed count and clears current",
@@ -7940,9 +8474,126 @@
             "noPermissionInference": "raw HitType does not authorize CO or all weakpoint events"
           },
           "unmodeled": [
-            "phantasma-parent-explosion-and-children-unmodeled",
-            "phantasma-explosion-co-and-head-event-routing-unverified"
-          ]
+            "phantasma-main-explosion-CO-neutral-fallback-unverified",
+            "phantasma-main-explosion-weakpoint-events-neutral-fallback-unverified",
+            "phantasma-cluster-child-payload-unmodeled",
+            "phantasma-charge-ammo-scale-and-contact-routing-approximated"
+          ],
+          "scope": "bounded single-target parent explosion; declared per spawned projectile; unresolved gates approximated explicitly",
+          "radials": [
+            {
+              "damage": {
+                "radiation": 73.0
+              },
+              "radius_m": 4.8000002,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.5,
+              "crit_chance": 0.029999999,
+              "crit_multiplier": 1.5,
+              "status_chance": 0.37,
+              "forcedProcs": [
+                "PT_KNOCKBACK"
+              ],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "takes_condition_overload": false,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+              "nativeField": "ExplosiveAttack",
+              "sourceHitType": "DHT_PROJECTILE",
+              "declaredHitType": "DHT_PROJECTILE",
+              "hitTypeSource": "native-explicit-preserved-by-0x141234988..0x1412349aa",
+              "damageTypeSource": "native-explicit",
+              "emissionContract": {
+                "baseFireIterations": 1,
+                "baseExportMultishot": 1,
+                "packetsPerSpawnedProjectile": 1,
+                "amountAlreadyIncludesProjectileCount": false,
+                "multishotCopyProjectiles": [
+                  "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProjMS"
+                ],
+                "consumer": "0x140f360f0 -> +0x630 / 0x14160c5a0 -> +0x638 / 0x141234720"
+              },
+              "approximation": {
+                "conditionOverload": "neutral-pending-specific-routing",
+                "headDamageBonus": "suppressed",
+                "weakpointCriticalAndKillEvents": "neutral-pending-proof",
+                "recipient": "target at explosion centre assumed",
+                "flightAndCollisionTiming": "impact-immediate"
+              },
+              "headSuppressionSource": "0x140bc29fc victimPacket+0x25c=1; independent of hitType"
+            }
+          ],
+          "behaviourSource": "Behaviors[1]",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+              "parent": "/Lotus/Weapons/Tenno/Shotgun/LotusStandardShotgun",
+              "rawAttributesSha256": "ac865497f35800dc6d894c4649db26f48ad9fe1038870f34370ee9334442d862",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Shotgun/LotusStandardShotgun",
+              "parent": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+              "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "attributeRecord": false
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+              "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+              "rawAttributesSha256": "804d8615a28ddc324467782535dae16524b4b2ac7ef72965836c6b0070cc2d3c",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+              "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+              "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+              "parent": "",
+              "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+              "parent": "/Lotus/Types/Game/ClusterBombProjectile",
+              "rawAttributesSha256": "a3dc83154fbd699b2ab58718af104dec85dc4abbcc24d282edf9b5edfac710b6",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Types/Game/ClusterBombProjectile",
+              "parent": "",
+              "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "attributeRecord": false
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProjMS",
+              "parent": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+              "rawAttributesSha256": "153d225912c09d9d9c0c34a0785e7286211dd7af0812af9303ef5a8f6d48c246",
+              "attributeRecord": true
+            }
+          ],
+          "packageBuild": "2026.10.22.13.12",
+          "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+          "generatedBy": "tools/import_native_secondary_payloads.py",
+          "nativeEvidence": {
+            "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+            "packetCopy": "0x140508e9e..0x140508eea",
+            "radiusPlan": "0x14160c618..0x14160c680",
+            "parentAmountScale": "0x141234a7a",
+            "statusNormalization": "0x1412353ef raw fireIterations / 0x141586f50",
+            "critFields": "Projectile.CriticalChance/CriticalMultiplier +0x538/+0x570; death path0x140f36198 ->0x140ede780 copies modifier buckets into radial plan, adding existing plan CC and multiplying existing plan CD"
+          },
+          "charge": {
+            "seconds": 0.090899996,
+            "modifier": "WEAPON_CHARGE_RATE",
+            "scalesWithFireRate": false,
+            "source": "native-ChargeTime",
+            "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+            "nativeField": "Behaviors[1].state.ChargeTime"
+          }
         }
       }
     },
@@ -7981,10 +8632,576 @@
             "noPermissionInference": "raw HitType does not authorize CO or all weakpoint events"
           },
           "unmodeled": [
-            "phantasma-parent-explosion-and-children-unmodeled",
-            "phantasma-explosion-co-and-head-event-routing-unverified"
-          ]
+            "phantasma-main-explosion-CO-neutral-fallback-unverified",
+            "phantasma-main-explosion-weakpoint-events-neutral-fallback-unverified",
+            "phantasma-cluster-child-payload-unmodeled",
+            "phantasma-charge-ammo-scale-and-contact-routing-approximated"
+          ],
+          "scope": "bounded single-target parent explosion; declared per spawned projectile; unresolved gates approximated explicitly",
+          "radials": [
+            {
+              "damage": {
+                "radiation": 73.0
+              },
+              "radius_m": 4.8000002,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.5,
+              "crit_chance": 0.029999999,
+              "crit_multiplier": 1.5,
+              "status_chance": 0.37,
+              "forcedProcs": [
+                "PT_KNOCKBACK"
+              ],
+              "takes_multishot": true,
+              "takes_blast_radius_mods": true,
+              "takes_condition_overload": false,
+              "impact_delay_seconds": 0.0,
+              "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj",
+              "nativeField": "ExplosiveAttack",
+              "sourceHitType": "DHT_PROJECTILE",
+              "declaredHitType": "DHT_PROJECTILE",
+              "hitTypeSource": "native-explicit-preserved-by-0x141234988..0x1412349aa",
+              "damageTypeSource": "native-explicit",
+              "emissionContract": {
+                "baseFireIterations": 1,
+                "baseExportMultishot": 1,
+                "packetsPerSpawnedProjectile": 1,
+                "amountAlreadyIncludesProjectileCount": false,
+                "multishotCopyProjectiles": [
+                  "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProjMS"
+                ],
+                "consumer": "0x140f360f0 -> +0x630 / 0x14160c5a0 -> +0x638 / 0x141234720"
+              },
+              "approximation": {
+                "conditionOverload": "neutral-pending-specific-routing",
+                "headDamageBonus": "suppressed",
+                "weakpointCriticalAndKillEvents": "neutral-pending-proof",
+                "recipient": "target at explosion centre assumed",
+                "flightAndCollisionTiming": "impact-immediate"
+              },
+              "headSuppressionSource": "0x140bc29fc victimPacket+0x25c=1; independent of hitType"
+            }
+          ],
+          "behaviourSource": "Behaviors[1]",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
+              "parent": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+              "rawAttributesSha256": "cd2782bf847747f4ebce5e97a7903c9f86a231a20fdd76e1d90766e866257d8d",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+              "parent": "/Lotus/Weapons/Tenno/Shotgun/LotusStandardShotgun",
+              "rawAttributesSha256": "ac865497f35800dc6d894c4649db26f48ad9fe1038870f34370ee9334442d862",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Shotgun/LotusStandardShotgun",
+              "parent": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+              "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "attributeRecord": false
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+              "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+              "rawAttributesSha256": "804d8615a28ddc324467782535dae16524b4b2ac7ef72965836c6b0070cc2d3c",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+              "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+              "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+              "parent": "",
+              "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj",
+              "parent": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+              "rawAttributesSha256": "4628319ed31455caf9f3d0d3cc3b8789ea32e95d278bc35ba8bb0c3b520de127",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+              "parent": "/Lotus/Types/Game/ClusterBombProjectile",
+              "rawAttributesSha256": "a3dc83154fbd699b2ab58718af104dec85dc4abbcc24d282edf9b5edfac710b6",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Types/Game/ClusterBombProjectile",
+              "parent": "",
+              "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "attributeRecord": false
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProjMS",
+              "parent": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProjMS",
+              "rawAttributesSha256": "855f3bd8d58dc1ff6fba54676f7c8912a98e453df13ba1f53e575b4d559be265",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProjMS",
+              "parent": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+              "rawAttributesSha256": "153d225912c09d9d9c0c34a0785e7286211dd7af0812af9303ef5a8f6d48c246",
+              "attributeRecord": true
+            }
+          ],
+          "packageBuild": "2026.10.22.13.12",
+          "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+          "generatedBy": "tools/import_native_secondary_payloads.py",
+          "nativeEvidence": {
+            "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+            "packetCopy": "0x140508e9e..0x140508eea",
+            "radiusPlan": "0x14160c618..0x14160c680",
+            "parentAmountScale": "0x141234a7a",
+            "statusNormalization": "0x1412353ef raw fireIterations / 0x141586f50",
+            "critFields": "Projectile.CriticalChance/CriticalMultiplier +0x538/+0x570; death path0x140f36198 ->0x140ede780 copies modifier buckets into radial plan, adding existing plan CC and multiplying existing plan CD"
+          },
+          "charge": {
+            "seconds": 0.090899996,
+            "modifier": "WEAPON_CHARGE_RATE",
+            "scalesWithFireRate": false,
+            "source": "native-ChargeTime",
+            "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
+            "nativeField": "Behaviors[1].state.ChargeTime"
+          }
         }
+      }
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryWeapon": {
+      "name": "Acceltra",
+      "directTotal": 26.0,
+      "fireMode": 0,
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
+      "scope": "bounded single-target parent explosion; declared per spawned projectile; unresolved gates approximated explicitly",
+      "radials": [
+        {
+          "damage": {
+            "puncture": 35.20000044,
+            "slash": 8.79999956
+          },
+          "radius_m": 4.0,
+          "falloff_start_m": 0.0,
+          "falloff_reduction": 0.5,
+          "crit_chance": 0.31999999,
+          "crit_multiplier": 2.8,
+          "status_chance": 0.059999999,
+          "forcedProcs": [],
+          "takes_multishot": true,
+          "takes_blast_radius_mods": true,
+          "takes_condition_overload": false,
+          "impact_delay_seconds": 0.0,
+          "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
+          "nativeField": "ExplosiveAttack",
+          "sourceHitType": "DHT_RADIAL",
+          "declaredHitType": null,
+          "hitTypeSource": "native-none-filled-radial-by-0x14123499a",
+          "damageTypeSource": "native-explicit",
+          "emissionContract": {
+            "baseFireIterations": 1,
+            "baseExportMultishot": 1,
+            "packetsPerSpawnedProjectile": 1,
+            "amountAlreadyIncludesProjectileCount": false,
+            "multishotCopyProjectiles": [],
+            "consumer": "0x1410e3b5d Die -> Projectile death callback0x140163a60 -> +0x7b8/0x140f360f0; normal c25=0 selects ExplosiveAttack"
+          },
+          "approximation": {
+            "conditionOverload": "neutral-pending-specific-routing",
+            "headDamageBonus": "suppressed",
+            "weakpointCriticalAndKillEvents": "neutral-pending-proof",
+            "recipient": "target at explosion centre assumed",
+            "flightAndCollisionTiming": "contact-death treated immediate; native launch lifetime not converted to post-hit delay"
+          },
+          "armingDistance": 6.0,
+          "activationEvidence": {
+            "armingMember": "Projectile+0x158c",
+            "compare": "0x140163ac7..0x140163afb euclidean displacement >= 6",
+            "deathGate": "0x140163b01..0x140163b34 zero ExplodeOnImpact/ExplodeOnLifeExpired -> one +0x7b8 call",
+            "embedDisabled": "mEmbed+0x8e0 constructor0; no source override; c25 normal0",
+            "impactDirect": "0x1410e2bba source Projectile+0x4d0 -> +0x628/0x1416373e0",
+            "timing": "contact death; flight and first bounce path idealized by existing single-target impact contract"
+          }
+        }
+      ],
+      "unmodeled": [
+        "acceltra-arming-distance-default-assumed-armed",
+        "acceltra-main-explosion-CO-neutral-fallback-unverified",
+        "acceltra-main-explosion-weakpoint-events-neutral-fallback-unverified",
+        "acceltra-contact-death-timing-and-target-centre-coverage-idealized",
+        "acceltra-embedded-alternative-payload-excluded"
+      ],
+      "behaviourSource": "Behaviors[0]",
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryWeapon",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "0e63b074eb921c3922dc75e488f42dddc506be8e757f57cf1c159946483286d2",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
+          "parent": "/Lotus/Weapons/Grineer/Projectiles/GrineerScopedPistolProjectile",
+          "rawAttributesSha256": "b3f39d0123fdb883962ebd270f6de2a1b8491bfc44db7b5b9179c789f0d2ebe3",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Grineer/Projectiles/GrineerScopedPistolProjectile",
+          "parent": "/Lotus/Types/Weapons/GunProjectile",
+          "rawAttributesSha256": "555187e4ec598d81b8f37b4940b0edb321ac016c073cf83a4e161b7407d5a0c3",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Types/Weapons/GunProjectile",
+          "parent": "/EE/Types/Engine/Projectile",
+          "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "attributeRecord": false
+        },
+        {
+          "path": "/EE/Types/Engine/Projectile",
+          "parent": "",
+          "rawAttributesSha256": "8b5fe36bc4e7e28d621d2b59a52648b98d1ca7738ca0fb4d85436ecd03548d2e",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/TnAcceltraDlx/TnAcceltraProjectileDelux",
+          "parent": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
+          "rawAttributesSha256": "3c24246f9c6bf116a08c240dbb852b0da845ef881b34aa79ace57f163c6f0a7d",
+          "attributeRecord": true
+        }
+      ],
+      "packageBuild": "2026.10.22.13.12",
+      "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+      "generatedBy": "tools/import_native_secondary_payloads.py",
+      "nativeEvidence": {
+        "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+        "packetCopy": "0x140508e9e..0x140508eea",
+        "radiusPlan": "0x14160c618..0x14160c680",
+        "parentAmountScale": "0x141234a7a",
+        "statusNormalization": "0x1412353ef raw fireIterations / 0x141586f50",
+        "critFields": "Projectile.CriticalChance/CriticalMultiplier +0x538/+0x570; death path0x140f36198 ->0x140ede780 copies modifier buckets into radial plan, adding existing plan CC and multiplying existing plan CD"
+      },
+      "nativeDirectCorrection": {
+        "damageTypes": {
+          "DT_IMPACT": 26.0
+        },
+        "procChance": 0.059999999,
+        "reason": "current native AttackData26 replaces wiki_weapon_overrides Rocket Impact35; remove stale wiki damage/proc override before merging",
+        "source": "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile",
+        "nativeField": "AttackData",
+        "acceptedPriorExportTotals": [
+          26.0,
+          35.0
+        ]
+      }
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun": {
+      "name": "Arbucep",
+      "fireMode": 0,
+      "projectileLanes": {
+        "kind": "cyclic-physical-projectile",
+        "length": 6,
+        "rawFireIterations": 6,
+        "extraPolicy": "continue-sequence",
+        "initialPhase": 0,
+        "lanes": [
+          {
+            "index": 0,
+            "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+            "direct": {
+              "types": {
+                "DT_EXPLOSION": 32.0
+              },
+              "procChance": 2.0940001,
+              "forcedProcs": [],
+              "critChance": 0.1,
+              "critMultiplier": 2.9000001,
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj"
+            },
+            "radial": {
+              "damage": {
+                "DT_EXPLOSION": 228.0
+              },
+              "radius_m": 4.0,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.0,
+              "status_chance": 0.3490000166666667,
+              "crit_chance": 0.1,
+              "crit_multiplier": 2.9000001,
+              "takes_multishot": false,
+              "takes_condition_overload": false,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+              "nativeField": "ExplosiveAttack",
+              "impact_delay_seconds": 0.0,
+              "forcedProcs": []
+            }
+          },
+          {
+            "index": 1,
+            "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+            "direct": {
+              "types": {
+                "DT_CORROSIVE": 32.0
+              },
+              "procChance": 2.0940001,
+              "forcedProcs": [],
+              "critChance": 0.1,
+              "critMultiplier": 2.9000001,
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj"
+            },
+            "radial": {
+              "damage": {
+                "DT_CORROSIVE": 228.0
+              },
+              "radius_m": 4.0,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.0,
+              "status_chance": 0.3490000166666667,
+              "crit_chance": 0.1,
+              "crit_multiplier": 2.9000001,
+              "takes_multishot": false,
+              "takes_condition_overload": false,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+              "nativeField": "ExplosiveAttack",
+              "impact_delay_seconds": 0.0,
+              "forcedProcs": []
+            }
+          },
+          {
+            "index": 2,
+            "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+            "direct": {
+              "types": {
+                "DT_GAS": 32.0
+              },
+              "procChance": 2.0940001,
+              "forcedProcs": [],
+              "critChance": 0.1,
+              "critMultiplier": 2.9000001,
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj"
+            },
+            "radial": {
+              "damage": {
+                "DT_GAS": 228.0
+              },
+              "radius_m": 4.0,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.0,
+              "status_chance": 0.3490000166666667,
+              "crit_chance": 0.1,
+              "crit_multiplier": 2.9000001,
+              "takes_multishot": false,
+              "takes_condition_overload": false,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+              "nativeField": "ExplosiveAttack",
+              "impact_delay_seconds": 0.0,
+              "forcedProcs": []
+            }
+          },
+          {
+            "index": 3,
+            "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+            "direct": {
+              "types": {
+                "DT_MAGNETIC": 32.0
+              },
+              "procChance": 2.0940001,
+              "forcedProcs": [],
+              "critChance": 0.1,
+              "critMultiplier": 2.9000001,
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj"
+            },
+            "radial": {
+              "damage": {
+                "DT_MAGNETIC": 228.0
+              },
+              "radius_m": 4.0,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.0,
+              "status_chance": 0.3490000166666667,
+              "crit_chance": 0.1,
+              "crit_multiplier": 2.9000001,
+              "takes_multishot": false,
+              "takes_condition_overload": false,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+              "nativeField": "ExplosiveAttack",
+              "impact_delay_seconds": 0.0,
+              "forcedProcs": []
+            }
+          },
+          {
+            "index": 4,
+            "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+            "direct": {
+              "types": {
+                "DT_RADIATION": 32.0
+              },
+              "procChance": 2.0940001,
+              "forcedProcs": [],
+              "critChance": 0.1,
+              "critMultiplier": 2.9000001,
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj"
+            },
+            "radial": {
+              "damage": {
+                "DT_RADIATION": 228.0
+              },
+              "radius_m": 4.0,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.0,
+              "status_chance": 0.3490000166666667,
+              "crit_chance": 0.1,
+              "crit_multiplier": 2.9000001,
+              "takes_multishot": false,
+              "takes_condition_overload": false,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+              "nativeField": "ExplosiveAttack",
+              "impact_delay_seconds": 0.0,
+              "forcedProcs": []
+            }
+          },
+          {
+            "index": 5,
+            "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
+            "direct": {
+              "types": {
+                "DT_VIRAL": 32.0
+              },
+              "procChance": 2.0940001,
+              "forcedProcs": [],
+              "critChance": 0.1,
+              "critMultiplier": 2.9000001,
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj"
+            },
+            "radial": {
+              "damage": {
+                "DT_VIRAL": 228.0
+              },
+              "radius_m": 4.0,
+              "falloff_start_m": 0.0,
+              "falloff_reduction": 0.0,
+              "status_chance": 0.3490000166666667,
+              "crit_chance": 0.1,
+              "crit_multiplier": 2.9000001,
+              "takes_multishot": false,
+              "takes_condition_overload": false,
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
+              "nativeField": "ExplosiveAttack",
+              "impact_delay_seconds": 0.0,
+              "forcedProcs": []
+            }
+          }
+        ]
+      },
+      "unmodeled": [
+        "arbucep-projectile-contact-and-radial-centre-coverage-idealized",
+        "arbucep-packet-condition-overload-neutral-pending-routing",
+        "arbucep-packet-weakpoint-events-neutral-pending-routing",
+        "arbucep-innate-mushroom-and-ammo-deco-script-unmodeled"
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun",
+          "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+          "rawAttributesSha256": "698a987fa3c18c82facf0b6a97074f85a08ed97bd44b69bdad34fe5abc307bdf",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+          "parent": "/Lotus/Types/Game/LotusWeapon",
+          "rawAttributesSha256": "cc06e93ed07418ffeb897430531ce364815d2088a237b3486319eca4d0f4e356",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Types/Game/LotusWeapon",
+          "parent": "",
+          "rawAttributesSha256": "4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+          "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedProj",
+          "rawAttributesSha256": "59e99f1bf9d14ce6c7a0efc2d76b03c68ec6350991cca6d1c105026a0584605a",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedProj",
+          "parent": "/EE/Types/Engine/GuidedProjectile",
+          "rawAttributesSha256": "79b41f4a46064d509f4c2d31d050352921fd4f55d71875aa37c9143baf9f6b4e",
+          "attributeRecord": true
+        },
+        {
+          "path": "/EE/Types/Engine/GuidedProjectile",
+          "parent": "",
+          "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "attributeRecord": false
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+          "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedProj",
+          "rawAttributesSha256": "c5c0f143d2c8c37f6d6d8d4b8807f0be6235aaf7d187fd3566c84a7219a5d5f0",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+          "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedProj",
+          "rawAttributesSha256": "9996c11cef641970be028437fa6bbef88d96527de8c0f930a941a78d8c1c8654",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+          "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedProj",
+          "rawAttributesSha256": "263708df115ec1c40c1f41e3999bc277551fdff87605eae7e84a4ec90ae85889",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+          "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedProj",
+          "rawAttributesSha256": "67444b7670b950977f01b45670805bcef77d5f66c6ad4efac26ff50bfc9248d3",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
+          "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedProj",
+          "rawAttributesSha256": "d1645a4224919c178fac38a53be514211d1c26af94315bf6ba51a2cb61901106",
+          "attributeRecord": true
+        }
+      ],
+      "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+      "nativeEvidence": {
+        "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+        "selector": "0x140e496d0 -> 0x141809340; null+6c8 blocks MS override",
+        "advance": "0x14126e103..0x14126e13f every physical spawn",
+        "count": "0x140f75d71..0x140f75e16 floor + Bernoulli",
+        "status": "raw2.0940001 / basefireIterations6; not modded total"
       }
     }
   },

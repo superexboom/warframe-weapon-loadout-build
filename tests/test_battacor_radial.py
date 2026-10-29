@@ -36,8 +36,13 @@ def test_native_radial_keeps_its_own_crit_status_and_multishot_contract():
     radial = profile['radials'][0]
     assert radial['damage'] == {'radiation':208.}
     assert (radial['crit_chance'],radial['crit_multiplier'],radial['status_chance']) == (.2,2.,.5)
-    assert radial['takes_multishot'] is False
-    assert 'per-trigger-multiplicity-unverified' in ' '.join(profile['unmodeled'])
+    assert radial['takes_multishot'] is True
+    assert radial['perPacketTakesMultishot'] is False
+    assert 'per-trigger-multiplicity-unverified' not in ' '.join(profile['unmodeled'])
+    proof=profile['source']['radialMultiplicity']
+    assert proof['observedRayCounts']==proof['observedRadialCounts']==[1,2,3]
+    assert proof['perPacketDamage']==208. and proof['perPacketTakesMultishot'] is False
+    assert proof['sameVictimAcrossRaysDeduplicated'] is False
     assert radial['conditionOverloadSource'] == 'existing-model-policy-unverified-not-native-proof'
     assert radial['nativeField'] == 'Behaviors[1].impact.RadialDamage'
     assert all(key in profile['unmodeled'] for key in importer.UNMODELED)
@@ -45,12 +50,14 @@ def test_native_radial_keeps_its_own_crit_status_and_multishot_contract():
     assert base_profile(selected,0)['radials'] == profile['radials']
 
 
-@pytest.mark.parametrize('pellets,expected',[(1.,416.),(3.,832.)])
-def test_current_single_packet_policy_direct_takes_multishot_radial_does_not(pellets,expected,monkeypatch):
+@pytest.mark.parametrize('pellets,expected',[(1.,416.),(2.,832.),(3.,1248.)])
+def test_native_per_ray_radial_multiplies_packet_count_without_extra_packet_damage_factor(pellets,expected,monkeypatch):
     monkeypatch.setattr(native_replay,'ENABLED',False)
     fight = combat(pellets)
     direct,radial = fight['resolve']('selected',{},0)
-    assert direct.multishot == pellets and radial.multishot == 1.
+    assert direct.multishot == pellets and radial.multishot == pellets
+    # Native single radial payload remains 208; multiplicity comes from rays.
+    assert radial.damage_types == {'DT_RADIATION':208.}
     result = replay(direct,enemy(),attacks_per_second=direct.fire_rate,
                     window_seconds=.001,combat={**fight,'cycle':None},collect_timeline=False)
     assert result['shots'] == 1
@@ -59,7 +66,7 @@ def test_current_single_packet_policy_direct_takes_multishot_radial_does_not(pel
 
 def test_cycle_needs_one_primary_kill_and_does_not_assume_a_full_gauge():
     assert kill_charge_cycle(weapon(),0) is None
-    assert kill_charge_cycle(weapon(),1) == dict(hits=1.,pool=1.,enterSeconds=0.,exitSeconds=0.,chargeOn='kills',killCharged=True)
+    assert kill_charge_cycle(weapon(),1) == dict(hits=1.,pool=1.,enterSeconds=0.,exitSeconds=0.,chargeOn='kills',killCharged=True,chargeBeforeFire=True)
     entry=json.loads((ROOT/'data/mechanics/kill-charge-profiles.json').read_bytes())['weapons'][importer.WEAPON]
     assert entry['policy']=='spend-first-primary-kill-charge-immediately'
     assert entry['native']['RequireFullCharges']==0
@@ -118,3 +125,37 @@ def test_importer_rejects_charge_multiplier_routing_drift(changes,monkeypatch):
         def resolve(self,path):return native
     with pytest.raises(ValueError,match='minimum-charge contract'):
         importer.profile(Index(),weapon(),native_image=None)
+
+
+@pytest.mark.parametrize('charges',[1,2,3])
+@pytest.mark.parametrize('pellets',[1.,2.,3.])
+@pytest.mark.parametrize('native',[False,True])
+def test_banked_charge_snapshot_scales_every_radial_packet_once(charges,pellets,native,monkeypatch):
+    from copy import copy
+    fx=[ModEffect('WEAPON_CRIT_CHANCE','SET',0.),
+        ModEffect('WEAPON_PROC_CHANCE','SET',0.),
+        ModEffect('WEAPON_FIRE_ITERATIONS','SET',pellets)]
+    fight=prepare(dict(weapon=weapon(),fire_mode=1,effects=fx,
+        scenario=Scenario(combat_state={'battacorCharges':charges})),[],[])
+    original=fight['resolve']
+    def resolve(form,*args):
+        direct,radial=original(form,*args)
+        direct=copy(direct);direct.fire_rate=2.;direct.native_forced_procs={}
+        direct.status_chance=0.;direct.crit_chance=0.
+        direct._charge_time=.4 if form!='base' else 0.
+        if form=='base':
+            direct.multishot=1.;direct.damage_types={'DT_IMPACT':20000.}
+        else:
+            radial=copy(radial);radial.native_forced_procs={}
+            radial.status_chance=0.;radial.crit_chance=0.
+            assert direct.multishot==radial.multishot==pellets
+            assert direct.total_damage==radial.total_damage==208.
+        return direct,radial
+    fight['resolve']=resolve;fight['baseBurst']=None;fight['incarnonBurst']=None
+    fight['baseFireRate']=2.;fight['incarnonFireRate']=2.
+    direct,_=resolve('base',{},0.)
+    monkeypatch.setattr(native_replay,'ENABLED',native)
+    result=replay(direct,enemy(10000.),attacks_per_second=2.,
+        window_seconds=charges*.5+.401,combat=fight,collect_timeline=False)
+    assert result['shots']==charges+1
+    assert result['directWindow']==pytest.approx(charges*10000.+416.*charges*pellets)

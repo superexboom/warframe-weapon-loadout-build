@@ -1,0 +1,28 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "registrationNative": "0x140cb72b3..0x140cb73a5",
+  "removeNative": "0x140185a50",
+  "creation": {
+    "ownerEntity": "0x20003000",
+    "registeredChild": "0x20005000",
+    "lookup": [
+      {
+        "map": "0x200011f0",
+        "keyHandle": "0x20007000"
+      }
+    ]
+  },
+  "removal": {
+    "queuedEntities": [
+      "0x20005000",
+      "0x20003000"
+    ],
+    "childAndOwnerMarkedRemoved": true
+  },
+  "stubs": [
+    "owner map lookup supplies prepared vector",
+    "main-thread check",
+    "red-black-tree erase"
+  ],
+  "scope": "original owner registration / recursion / queue operations; generic allocation, region scheduling and target clocks are not emulated"
+}

@@ -211,6 +211,7 @@ struct Stats {
     transform_time_scale: f64,
     stack_native_fraction: f64,
     stackable_hit_event: bool,
+    delayed_radial_hit_event: bool,
     multishot: f64,
     continuous: bool,
     radial_only: bool,
@@ -251,6 +252,7 @@ struct Stats {
     impact_delay: f64,
     persist_after_kill: bool,
     lingering: Option<(usize, f64, f64)>,
+    source_fields: Vec<(usize,f64,f64,usize)>,
     embedded: Option<(usize, f64, f64)>,
     primary_delay: f64,
     fixed_radial: bool,
@@ -283,6 +285,7 @@ impl Stats {
         self.charge_volley = false;
         self.primary_delay = 0.0;
         self.lingering = None;
+        self.source_fields.clear();
         self.embedded = None;
         self.charge_pool_cost = 1.0;
         self.requires_full_ammo = false;
@@ -310,6 +313,7 @@ impl Stats {
             transform_time_scale: self.transform_time_scale,
             stack_native_fraction: self.stack_native_fraction,
             stackable_hit_event: self.stackable_hit_event,
+            delayed_radial_hit_event: self.delayed_radial_hit_event,
             multishot: self.multishot,
             continuous: self.continuous,
             radial_only: self.radial_only,
@@ -349,6 +353,7 @@ impl Stats {
             impact_delay: self.impact_delay,
             persist_after_kill: self.persist_after_kill,
             lingering: self.lingering,
+            source_fields:self.source_fields.clone(),
             embedded: self.embedded,
             primary_delay: self.primary_delay,
             fixed_radial: self.fixed_radial,
@@ -417,6 +422,7 @@ enum Kind {
     DelayedRadial(usize, f64),
     DelayedAttack(usize, f64),
     Lingering(usize),
+    SourceField(u64,usize,usize),
     EmbeddedTick(usize),
     EmbeddedDeath(usize),
     MeleeRecovery(u64, f64),
@@ -615,6 +621,13 @@ pub struct Replay<'py> {
     selected_incarnon: bool,
     projectile_sequence_length: usize,
     projectile_sequence_index: usize,
+    source_field_token:u64,
+    source_field_packets:Vec<u64>,
+    source_field_activations:u64,
+    physical_lane_length: usize,
+    physical_lane_phase: usize,
+    physical_lane_selected: Option<usize>,
+    lane_stratum: f64,
     volley_rounds: f64,
     volley_shot_resume: Option<f64>,
     melee: Option<MeleeSpec>,
@@ -821,7 +834,7 @@ impl<'py> Replay<'py> {
             burst, burst_rate, infinite_ammo, victim_before, syndicate, target_faction,
             faction_bracket, tables, battery, spool, rate_spool, shell,
             shot_combo, reload_after_every_shot, refill_growth, restore, pending_restore, recharges,
-            delayed_attacks, reload_shell_events, derived, selected_incarnon, projectile_sequence_length, projectile_sequence_index, volley_rounds, volley_shot_resume, melee_count, melee_heavy_multiplier,
+            delayed_attacks, reload_shell_events, derived, selected_incarnon, projectile_sequence_length, projectile_sequence_index, source_field_token, source_field_packets, source_field_activations, physical_lane_length, physical_lane_phase, physical_lane_selected, lane_stratum, volley_rounds, volley_shot_resume, melee_count, melee_heavy_multiplier,
             melee_last_hit, melee_combo_at, melee_recovery_token, melee_recovery_initial, melee_buff_boundary, melee_pending, melee_index, heavy_flag, no_co_flag, melee_heavy_now,
             affinity_per_kill, affinity, syndicate_ready, syndicate_events, pools, states,
             pooled, presence, gas_procs, dots, blasts, blast_procs,
@@ -865,6 +878,8 @@ struct CycleSpec {
     /// 0: headshots (default), 1: direct hits, 2: kills.
     charge_on: u8,
     kill_charged: bool,
+    charge_before_fire: bool,
+    damage_scale: f64,
 }
 
 type BurstSpec = (bool, i64, f64, bool);
@@ -1008,6 +1023,17 @@ impl<'py> Replay<'py> {
                 self.stats[out].lingering = Some((varied, rate, duration));
             }
         }
+        let source_fields=self.stats[st].source_fields.clone();
+        if !source_fields.is_empty() {
+            let mut fields=Vec::with_capacity(source_fields.len());
+            for &(part,rate,duration,initial) in &source_fields {
+                fields.push((self.vary(part,live,ceil)?,rate,duration,initial));
+            }
+            if fields!=source_fields {
+                out=self.own(st,out);
+                self.stats[out].source_fields=fields;
+            }
+        }
         let extra = self.stats[st].additional.clone();
         if !extra.is_empty() {
             let mut parts = Vec::with_capacity(extra.len());
@@ -1075,6 +1101,7 @@ impl<'py> Replay<'py> {
             transform_time_scale: f(obj, "transform_time_scale")?,
             stack_native_fraction: f(obj, "stack_native_fraction")?,
             stackable_hit_event: b(obj, "stackable_hit_event")?,
+            delayed_radial_hit_event: b(obj, "delayed_radial_hit_event")?,
             multishot: f(obj, "multishot")?,
             continuous: b(obj, "continuous")?,
             radial_only: b(obj, "radial_only")?,
@@ -1125,7 +1152,7 @@ impl<'py> Replay<'py> {
             body_only: match opt_attr(obj, "_body_only")? { Some(v) => v.is_truthy()?, None => false },
             impact_delay: match opt_attr(obj, "_impact_delay")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
             persist_after_kill: match opt_attr(obj, "_persist_after_kill")? { Some(v) => v.is_truthy()?, None => false },
-            lingering: None,
+            lingering: None,source_fields:Vec::new(),
             embedded: None,
             primary_delay: match opt_attr(obj, "_primary_delay_seconds")? {
                 Some(v) if v.is_truthy()? => v.extract::<f64>()?,
@@ -1198,6 +1225,13 @@ impl<'py> Replay<'py> {
                     }
                 }
                 self.stats[i].stackable = Some((profile, parts));
+            }
+        }
+        if let Some(fields)=opt_attr(obj,"_source_owned_fields")? {
+            for field in fields.try_iter()? {
+                let field=field?;let row=field.cast::<PyTuple>()?;
+                let part=self.view(&row.get_item(0)?)?;
+                self.stats[i].source_fields.push((part,row.get_item(1)?.extract()?,row.get_item(2)?.extract()?,row.get_item(3)?.extract()?));
             }
         }
         if let Some(field) = opt_attr(obj, "_lingering")? {
@@ -1546,6 +1580,7 @@ impl<'py> Replay<'py> {
         stacks.clear();
         stacks.push(self.form as u64);
         stacks.push(self.volley_rounds.to_bits());
+        if self.physical_lane_length>0 {stacks.push(self.physical_lane_selected.map(|v|v as u64).unwrap_or(u64::MAX-2));}
         if self.projectile_sequence_length > 0 { stacks.push(self.projectile_sequence_index as u64); }
         stacks.extend(self.sources.iter().map(|q| q.stacks.to_bits()));
         // Melee: combo-tier stacks and the heavy flag join the key, sorted by
@@ -1621,6 +1656,7 @@ impl<'py> Replay<'py> {
         stacks_dict.set_item("__onosHits", hits)?;
         stacks_dict.set_item("__onosBeamSeconds", beam)?;
         stacks_dict.set_item("__chargeVolleyRounds",self.volley_rounds)?;
+        if let Some(index)=self.physical_lane_selected {stacks_dict.set_item("__physicalProjectileIndex",index)?;}
         if self.projectile_sequence_length > 0 { stacks_dict.set_item("__projectileSequenceIndex",self.projectile_sequence_index)?; }
         for (_, value, obj) in &extra {
             stacks_dict.set_item(obj.bind(py), *value)?;
@@ -2251,6 +2287,10 @@ impl<'py> Replay<'py> {
 
     #[allow(clippy::too_many_arguments)]
     fn take(&mut self, vector: &Vector, t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool) -> PyResult<bool> {
+        self.take_with_event(vector, t, source, weak_kill, cv2, extra, None)
+    }
+
+    fn take_with_event(&mut self, vector: &Vector, t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64, f64)>) -> PyResult<bool> {
         let _timer = crate::counters::Timer::start(crate::counters::TAKE);
         if let Some((alignment, _, _)) = self.onos {
             if self.onos_crits && self.form != BASE && (self.onos_ticks as f64) < alignment
@@ -2366,6 +2406,13 @@ impl<'py> Replay<'py> {
             // One target life: (time, health damage, its variance, source).
             let hit = health_hit + earlier_hit;
             curve.push((t, hit, pow(hit, 2.0) * cv2, source));
+        }
+        // The native AGC bridge notifies before retiring this victim.
+        if applied > 0.0 {
+            if let Some((hits, critical)) = damage_event {
+                self.signal("on-hit", t, hits);
+                self.signal("on-crit", t, critical);
+            }
         }
         if self.ehp > 0.0 && self.pools[0] <= 1e-7 && self.pools[2] <= 1e-7 {
             let resume = self.resume_time(t)?;
@@ -2935,7 +2982,11 @@ impl<'py> Replay<'py> {
         Ok(())
     }
 
-    fn radial_hit(&mut self, part: usize, sniper_factor: f64, t: f64) -> PyResult<()> {
+    fn radial_hit(&mut self, part: usize, sniper_factor: f64, t: f64, notify: bool) -> PyResult<()> {
+        if notify && self.stats[part].delayed_radial_hit_event {
+            let keys: Vec<D> = self.presence.keys().copied().collect();
+            self.victim_before = keys.into_iter().map(|d| (d, self.presence.get_mut(&d).unwrap().probability(t))).collect();
+        }
         let rkey = self.packet(part, 0.0)?;
         let rvector: Vector = if sniper_factor == 1.0 {
             self.packets[&rkey].vector.clone()
@@ -2943,7 +2994,15 @@ impl<'py> Replay<'py> {
             self.packets[&rkey].vector.iter().map(|(k, v)| (*k, v * sniper_factor)).collect()
         };
         let cv2 = self.spread(part, 0.0);
-        if !self.take(&rvector, t, DIRECT, WeakKill::Flag(false), cv2, false)? {
+        let damage_event = if notify && self.stats[part].delayed_radial_hit_event {
+            let s = &self.stats[part];
+            let full = (self.pools[1]-self.full[1]).abs()<1e-7 && (self.pools[2]-self.full[2]).abs()<1e-7;
+            let cc = s.crit_chance + if full { s.victim_full_crit_chance } else { 0.0 };
+            let weights = self.enervate.as_ref().map(|en| en.damage_marginal()).unwrap_or_else(|| vec![(0,1.0)]);
+            let critical = psum(weights.iter().map(|(stacks,weight)| weight*pmin(pmax((cc+*stacks as f64*0.1)*s.bodyshot_crit_multiplier,0.0),1.0)));
+            Some((s.multishot, critical*s.multishot))
+        } else { None };
+        if !self.take_with_event(&rvector, t, DIRECT, WeakKill::Flag(false), cv2, false, damage_event)? {
             self.add_procs_scaled(part, 0.0, t, rkey, sniper_factor)?;
         }
         self.noncrit_no_proc_hit(part, 0.0, t);
@@ -3427,7 +3486,7 @@ impl<'py> Replay<'py> {
                 }
                 Kind::DelayedRadial(part, sniper_factor) => {
                     self.delayed_attacks += 1;
-                    self.radial_hit(part, sniper_factor, t)?;
+                    self.radial_hit(part, sniper_factor, t, true)?;
                 }
                 Kind::DelayedAttack(part, aim) => {
                     self.delayed_attacks += 1;
@@ -3473,6 +3532,18 @@ impl<'py> Replay<'py> {
                         let ms=self.stats[part].multishot;
                         self.signal("on-hit",t,ms);
                         self.signal("on-crit",t,pmin(self.stats[part].crit_chance,1.0)*ms);
+                    }
+                }
+                Kind::SourceField(token,slot,part)=> {
+                    if token!=self.source_field_token {self.stale+=1;continue;}
+                    self.source_field_packets[slot]+=1;
+                    let keys:Vec<D>=self.presence.keys().copied().collect();
+                    self.victim_before=keys.into_iter().map(|d|(d,self.presence.get_mut(&d).unwrap().probability(t))).collect();
+                    let raw=self.raw_packet(part,0.0);
+                    let vector:Vector=self.packets[&raw].vector.iter().map(|(d,v)|(*d,v*self.damage_rate_multiplier)).collect();
+                    let cv2=self.spread(part,0.0);
+                    if !self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)? {
+                        self.add_procs(part,0.0,t,raw)?;
                     }
                 }
                 Kind::Lingering(part) => {
@@ -3562,7 +3633,10 @@ impl<'py> Replay<'py> {
                     if self.form == BASE {
                         self.gauge = 0.0;
                     }
-                    self.push(t, Kind::Fire, None);
+                    let windup = if self.form == INCARNON && c.charge_before_fire {
+                        self.stats[active].charge_time
+                    } else { 0.0 };
+                    self.push(t + windup, Kind::Fire, None);
                 }
                 Kind::ReloadShell(amount, limit) => {
                     self.ammo = pmin(limit, self.ammo + amount);
@@ -3850,6 +3924,18 @@ impl<'py> Replay<'py> {
                             }));
                         }
                     }
+                    let charge_scale = if self.form == INCARNON {
+                        self.cycle.map(|c| c.damage_scale).unwrap_or(1.0)
+                    } else { 1.0 };
+                    if charge_scale != 1.0 {
+                        let scaled = |v: &mut Stats| {
+                            for entry in v.core.damage_types.iter_mut() { entry.1 *= charge_scale; }
+                            v.damage_types = v.core.damage_types.clone();
+                            v.core.dot_base_damage = v.core.dot_base_damage.map(|x| x * charge_scale);
+                        };
+                        active = self.derive(active, 36, charge_scale, scaled);
+                        if let Some(part) = radial { radial = Some(self.derive(part, 37, charge_scale, scaled)); }
+                    }
                     if let Some((remaining_clip, count, _, _)) = self.form_burst().0 {
                         if burst_round == 0 {
                             burst_size = if remaining_clip {
@@ -3922,6 +4008,8 @@ impl<'py> Replay<'py> {
                     }
                     last_fire_time = t;
                     let generation = self.gen;
+                    let source_owned_fields=self.stats[active].source_fields.clone();
+                    if !source_owned_fields.is_empty() {self.source_field_token+=1;}
                     if self.last_burst && self.form == BASE && self.ammo <= 3.0 {
                         active = self.derive(active, 10, 0.0, |v| {
                             v.multishot *= 6.0;
@@ -3929,6 +4017,7 @@ impl<'py> Replay<'py> {
                             v.drop_private();
                         });
                     }
+                    let physical_first_round = first_round;
                     if first_round && self.stats[active].first_shot_damage_bonus != 0.0 {
                         let factor = 1.0 + self.stats[active].first_shot_damage_bonus;
                         active = self.derive(active, 1, factor, |v| {
@@ -3990,7 +4079,7 @@ impl<'py> Replay<'py> {
                     let field_duration_boost = self.field_duration_ready;
                     self.field_duration_ready = false;
                     let s = &self.stats[active];
-                    let hit_count = if s.continuous { 1.0 } else { pmax(s.multishot, 0.0) };
+                    let mut hit_count = if s.continuous { 1.0 } else { pmax(s.multishot, 0.0) };
                     let radial_only = s.radial_only;
                     let continuous = s.continuous;
                     let mut sniper_factor = 1.0;
@@ -4009,7 +4098,46 @@ impl<'py> Replay<'py> {
                     let primary_delay = self.stats[active].primary_delay;
                     let stack = self.stats[active].stackable.clone();
                     let mut projectile_wait = 0.0;
-                    if let Some((profile, parts)) = stack.clone() {
+                    if self.physical_lane_length>0 {
+                        let total=self.stats[active].multishot;
+                        let whole=total.floor();
+                        let uniform=(self.lane_stratum+(self.attacks-1) as f64*((5.0_f64.sqrt()-1.0)/2.0)).rem_euclid(1.0);
+                        let number=whole as usize+if total-whole>uniform {1}else{0};
+                        hit_count=number as f64;
+                        let phase=self.physical_lane_phase;
+                        self.physical_lane_phase=(phase+number)%self.physical_lane_length;
+                        for n in 0..number {
+                            if self.gen!=generation {self.stale+=1;continue;}
+                            let keys:Vec<D>=self.presence.keys().copied().collect();
+                            self.victim_before=keys.into_iter().map(|d|(d,self.presence.get_mut(&d).unwrap().probability(t))).collect();
+                            self.physical_lane_selected=Some((phase+n)%self.physical_lane_length);
+                            let (mut part,blast)=self.model(t)?;
+                            if physical_first_round && self.stats[part].first_shot_damage_bonus != 0.0 {
+                                let factor=1.0+self.stats[part].first_shot_damage_bonus;
+                                part=self.derive(part,1,factor,|v| {
+                                    for entry in v.core.damage_types.iter_mut() {entry.1*=factor;}
+                                    v.damage_types=v.core.damage_types.clone();
+                                    v.core.dot_base_damage=v.core.dot_base_damage.map(|x|x*factor);
+                                });
+                            }
+                            let key=self.packet(part,0.0)?;
+                            let vector:Vector=self.packets[&key].vector.iter().map(|(d,v)|(*d,v*self.damage_rate_multiplier)).collect();
+                            let cv2=self.spread(part,0.0);
+                            let died=self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)?;
+                            self.noncrit_no_proc_hit(part,0.0,t);
+                            if !died {self.add_procs_scaled(part,0.0,t,key,1.0)?;}
+                            self.enervate_hit(part,t,shot_puncture,0.0);
+                            self.signal("on-hit",t,1.0);self.signal("on-body-hit",t,1.0);
+                            let crit=pmin(pmax(self.stats[part].crit_chance*self.stats[part].bodyshot_crit_multiplier,0.0),1.0);
+                            self.signal("on-crit",t,crit);
+                            if self.gen==generation {if let Some(blast)=blast {
+                                let keys:Vec<D>=self.presence.keys().copied().collect();
+                                self.victim_before=keys.into_iter().map(|d|(d,self.presence.get_mut(&d).unwrap().probability(t))).collect();
+                                self.radial_hit(blast,self.damage_rate_multiplier,t,false)?;
+                            }}
+                        }
+                        self.physical_lane_selected=None;
+                    } else if let Some((profile, parts)) = stack.clone() {
                         if self.projectiles.is_none() {
                             self.projectiles = Some(Projectiles::new(self.projectile_state.clone()));
                         }
@@ -4061,6 +4189,17 @@ impl<'py> Replay<'py> {
                         self.noncrit_no_proc_hit(active, aim, t);
                         if !died {
                             self.add_procs_scaled(active, aim, t, key, sniper_factor)?;
+                            if !source_owned_fields.is_empty() && self.gen==generation && self.stats[active].multishot>0.0 {
+                                self.source_field_activations+=1;
+                                if self.source_field_packets.is_empty() {self.source_field_packets=vec![0;source_owned_fields.len()];}
+                                for (slot,(part,rate,duration,initial)) in source_owned_fields.iter().copied().enumerate() {
+                                    for _ in 0..initial {self.push(t,Kind::SourceField(self.source_field_token,slot,part),Some(generation));}
+                                    let mut tick=1;
+                                    while tick as f64/rate<duration-1e-9 {
+                                        self.push(t+tick as f64/rate,Kind::SourceField(self.source_field_token,slot,part),Some(generation));tick+=1;
+                                    }
+                                }
+                            }
                             if let Some((part, tick_rate, duration)) = self.stats[active].lingering {
                                 let mut duration = duration;
                                 if let Some(multiplier) = self.field_duration {
@@ -4106,7 +4245,7 @@ impl<'py> Replay<'py> {
                         projectile_wait=pmax(0.0,lifetime-1.0/speed);
                     }
                     let mut parts: Vec<usize> = Vec::new();
-                    if let (Some(r), None, true) = (radial, self.mines, stack.is_none()) {
+                    if let (Some(r), None, true) = (radial, self.mines, stack.is_none() && self.physical_lane_length==0) {
                         parts.push(r);
                         parts.extend(self.stats[r].additional.iter().copied());
                     }
@@ -4131,7 +4270,7 @@ impl<'py> Replay<'py> {
                             let generation = if self.stats[part].persist_after_kill { None } else { Some(generation) };
                             self.push(t + delay, Kind::DelayedRadial(part, sniper_factor), generation);
                         } else {
-                            self.radial_hit(part, sniper_factor, t)?;
+                            self.radial_hit(part, sniper_factor, t, false)?;
                         }
                     }
                     if self.form_burst().0.is_some() {
@@ -4144,7 +4283,7 @@ impl<'py> Replay<'py> {
                             burst_head_probability = 1.0;
                         }
                     }
-                    if primary_delay == 0.0 && (self.mines.is_none() || self.impact_embed) && stack.is_none() {
+                    if self.physical_lane_length==0 && primary_delay == 0.0 && (self.mines.is_none() || self.impact_embed) && stack.is_none() {
                         self.enervate_hit(active, t, shot_puncture, aim);
                     }
                     self.signal("on-fire", t, 1.0);
@@ -4169,7 +4308,7 @@ impl<'py> Replay<'py> {
                             }
                         }
                     }
-                    if !delayed {
+                    if !delayed && self.physical_lane_length==0 {
                     self.signal("on-hit", t, hit_count);
                     if aim < 1.0 {
                         self.signal("on-body-hit", t, (1.0 - aim) * hit_count);
@@ -4235,7 +4374,10 @@ impl<'py> Replay<'py> {
                     let s = &self.stats[active];
                     let mut delay = match s.bow_draw {
                         Some(v) => v,
-                        None => 1.0 / speed + s.charge_time,
+                        None => 1.0 / speed + if self.form == INCARNON
+                            && self.cycle.map(|c| c.charge_before_fire).unwrap_or(false) {
+                                0.0
+                            } else { s.charge_time },
                     };
                     if let (Some((alignment, post_fire, _)), true) = (self.onos, self.form != BASE) {
                         if self.onos_ticks as f64 >= alignment {
@@ -4529,6 +4671,8 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
                 _ => 0,
             },
             kill_charged: truthy(&d, "killCharged")?,
+            charge_before_fire: truthy(&d, "chargeBeforeFire")?,
+            damage_scale: get_f(&d, "damageScale", 1.0)?,
         }),
         None => None,
     };
@@ -4840,6 +4984,10 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
             None => 0,
         },
         projectile_sequence_index: 0,
+        source_field_token:0,source_field_packets:Vec::new(),source_field_activations:0,
+        physical_lane_length: match opt_dict("physicalProjectileLanes")? {Some(d)=>get_f(&d,"length",0.)? as usize,None=>0},
+        physical_lane_phase:match opt_dict("physicalProjectileLanes")? {Some(d)=>get_f(&d,"initialPhase",0.)? as usize,None=>0},
+        physical_lane_selected:None,lane_stratum:get_f(&config,"laneStratum",0.5)?,
         volley_rounds: 1.0,
         volley_shot_resume: None,
         melee_count: 0.0,
@@ -5065,6 +5213,9 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
     out.set_item("weakUncertainty", replay.weak_uncertainty)?;
     out.set_item("weakIndex", replay.weak_index)?;
     out.set_item("attacks", replay.attacks)?;
+    out.set_item("sourceOwnedFieldPackets",replay.source_field_packets.clone())?;
+    out.set_item("sourceOwnedFieldActivations",replay.source_field_activations)?;
+    if replay.physical_lane_length>0 {out.set_item("physicalProjectilePhase",replay.physical_lane_phase)?;}
     out.set_item("stale", replay.stale)?;
     out.set_item("firstKill", opt(replay.first_kill))?;
     out.set_item("minInterval", opt(replay.min_interval))?;

@@ -1,0 +1,406 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "traceLoops": [
+    {
+      "requestedMultishot": 1,
+      "nativeFireIterationCount": 1,
+      "rays": 1,
+      "spread": 0.0,
+      "jobs": [
+        0
+      ]
+    },
+    {
+      "requestedMultishot": 1,
+      "nativeFireIterationCount": 1,
+      "rays": 1,
+      "spread": 0.5,
+      "jobs": [
+        0
+      ]
+    },
+    {
+      "requestedMultishot": 2,
+      "nativeFireIterationCount": 2,
+      "rays": 2,
+      "spread": 0.0,
+      "jobs": [
+        0,
+        1
+      ]
+    },
+    {
+      "requestedMultishot": 2,
+      "nativeFireIterationCount": 2,
+      "rays": 2,
+      "spread": 0.5,
+      "jobs": [
+        0,
+        1
+      ]
+    },
+    {
+      "requestedMultishot": 3,
+      "nativeFireIterationCount": 3,
+      "rays": 3,
+      "spread": 0.0,
+      "jobs": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "requestedMultishot": 3,
+      "nativeFireIterationCount": 3,
+      "rays": 3,
+      "spread": 0.5,
+      "jobs": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "impactList": [
+    {
+      "collisionKinds": [
+        "hit"
+      ],
+      "baseImpactCallbacks": 1,
+      "radialCallbacks": 1,
+      "radials": [
+        {
+          "record": "0x2001b000",
+          "victim": true
+        }
+      ]
+    },
+    {
+      "collisionKinds": [
+        "hit",
+        "hit"
+      ],
+      "baseImpactCallbacks": 2,
+      "radialCallbacks": 2,
+      "radials": [
+        {
+          "record": "0x2001b000",
+          "victim": true
+        },
+        {
+          "record": "0x2001b0d0",
+          "victim": true
+        }
+      ]
+    },
+    {
+      "collisionKinds": [
+        "hit",
+        "hit",
+        "hit"
+      ],
+      "baseImpactCallbacks": 3,
+      "radialCallbacks": 3,
+      "radials": [
+        {
+          "record": "0x2001b000",
+          "victim": true
+        },
+        {
+          "record": "0x2001b0d0",
+          "victim": true
+        },
+        {
+          "record": "0x2001b1a0",
+          "victim": true
+        }
+      ]
+    },
+    {
+      "collisionKinds": [
+        "miss"
+      ],
+      "baseImpactCallbacks": 1,
+      "radialCallbacks": 1,
+      "radials": [
+        {
+          "record": "0x2001b000",
+          "victim": false
+        }
+      ]
+    },
+    {
+      "collisionKinds": [
+        "miss",
+        "miss"
+      ],
+      "baseImpactCallbacks": 2,
+      "radialCallbacks": 2,
+      "radials": [
+        {
+          "record": "0x2001b000",
+          "victim": false
+        },
+        {
+          "record": "0x2001b0d0",
+          "victim": false
+        }
+      ]
+    },
+    {
+      "collisionKinds": [
+        "miss",
+        "miss",
+        "miss"
+      ],
+      "baseImpactCallbacks": 3,
+      "radialCallbacks": 3,
+      "radials": [
+        {
+          "record": "0x2001b000",
+          "victim": false
+        },
+        {
+          "record": "0x2001b0d0",
+          "victim": false
+        },
+        {
+          "record": "0x2001b1a0",
+          "victim": false
+        }
+      ]
+    },
+    {
+      "collisionKinds": [
+        "hit",
+        "miss",
+        "hit"
+      ],
+      "baseImpactCallbacks": 3,
+      "radialCallbacks": 3,
+      "radials": [
+        {
+          "record": "0x2001b000",
+          "victim": true
+        },
+        {
+          "record": "0x2001b0d0",
+          "victim": false
+        },
+        {
+          "record": "0x2001b1a0",
+          "victim": true
+        }
+      ]
+    }
+  ],
+  "collisionCollection": [
+    {
+      "collisionKinds": [
+        "hit"
+      ],
+      "collected": 1,
+      "radialCallbacks": 1,
+      "localBefore": [
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        }
+      ],
+      "dedupFlags": [
+        false
+      ],
+      "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+    },
+    {
+      "collisionKinds": [
+        "hit",
+        "hit"
+      ],
+      "collected": 2,
+      "radialCallbacks": 2,
+      "localBefore": [
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        },
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        }
+      ],
+      "dedupFlags": [
+        false,
+        false
+      ],
+      "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+    },
+    {
+      "collisionKinds": [
+        "hit",
+        "hit",
+        "hit"
+      ],
+      "collected": 3,
+      "radialCallbacks": 3,
+      "localBefore": [
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        },
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        },
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        }
+      ],
+      "dedupFlags": [
+        false,
+        false,
+        false
+      ],
+      "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+    },
+    {
+      "collisionKinds": [
+        "miss"
+      ],
+      "collected": 1,
+      "radialCallbacks": 1,
+      "localBefore": [
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        }
+      ],
+      "dedupFlags": [
+        false
+      ],
+      "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+    },
+    {
+      "collisionKinds": [
+        "miss",
+        "miss"
+      ],
+      "collected": 2,
+      "radialCallbacks": 2,
+      "localBefore": [
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        },
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        }
+      ],
+      "dedupFlags": [
+        false,
+        false
+      ],
+      "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+    },
+    {
+      "collisionKinds": [
+        "miss",
+        "miss",
+        "miss"
+      ],
+      "collected": 3,
+      "radialCallbacks": 3,
+      "localBefore": [
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        },
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        },
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        }
+      ],
+      "dedupFlags": [
+        false,
+        false,
+        false
+      ],
+      "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+    },
+    {
+      "collisionKinds": [
+        "hit",
+        "miss",
+        "hit"
+      ],
+      "collected": 3,
+      "radialCallbacks": 3,
+      "localBefore": [
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        },
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        },
+        {
+          "pointer": "0x3002bf70",
+          "size": 0
+        }
+      ],
+      "dedupFlags": [
+        false,
+        false,
+        false
+      ],
+      "dispatch": "collector suffix -> weapon+650 -> impact+b8 -> impact+f8 -> radial builder"
+    }
+  ],
+  "payloadScaling": [
+    {
+      "multishot": 1.0,
+      "MultiShotBuffsRadialDamage": 0,
+      "packetDamage": 208.0
+    },
+    {
+      "multishot": 1.0,
+      "MultiShotBuffsRadialDamage": 1,
+      "packetDamage": 208.0
+    },
+    {
+      "multishot": 2.0,
+      "MultiShotBuffsRadialDamage": 0,
+      "packetDamage": 208.0
+    },
+    {
+      "multishot": 2.0,
+      "MultiShotBuffsRadialDamage": 1,
+      "packetDamage": 416.0
+    },
+    {
+      "multishot": 3.0,
+      "MultiShotBuffsRadialDamage": 0,
+      "packetDamage": 208.0
+    },
+    {
+      "multishot": 3.0,
+      "MultiShotBuffsRadialDamage": 1,
+      "packetDamage": 624.0
+    }
+  ],
+  "limits": [
+    "Aim setup, actual scene collision and hit acceptance are supplied inputs.",
+    "Collision acceptance is stubbed at 0x1409c6adb to the unchanged OnlyHitEnitiesOnce consumer, with frame/source references initialized. Its original dedup, append and callback-local list initialization execute. Packet copy/refcount-only constructors are stubbed.",
+    "Base packet constructors and unrelated scripts/status/logging are stubbed; actual radial selection and call execute.",
+    "Fire-iteration upgrade queries are supplied numeric inputs; actual query wrapper, count conversion, emission loops, callback-local dedup, append, collector dispatch and impact loop run original bytes.",
+    "Miss cases are accepted non-avatar scene collisions, not evidence for an uncollided ray in empty space."
+  ]
+}

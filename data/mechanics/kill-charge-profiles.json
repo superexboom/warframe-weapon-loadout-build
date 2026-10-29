@@ -171,9 +171,16 @@
       "primaryMode": 0,
       "killsPerUse": 1,
       "shotsPerGauge": 1,
+      "chargeBeforeFire": true,
       "switchInSeconds": 0.0,
       "switchOutSeconds": 0.0,
       "policy": "spend-first-primary-kill-charge-immediately",
+      "selectableChargeCounts": [
+        1,
+        2,
+        3
+      ],
+      "configurationKey": "battacorCharges",
       "native": {
         "AddChargeConditions": [
           "PRIMARY_KILL"
@@ -193,7 +200,28 @@
         "radialOnHit": "0x14140f7c5: impact +0x1e4",
         "radialOnMiss": "0x14140f7d3: impact +0x1e3",
         "radialBuild": "0x14140f948 -> 0x140e91ec0",
-        "multishotBranch": "0x140e92204: impact +0x1e2 false skips multiplication at 0x140e92270",
+        "multishotBranch": "0x140e92204: impact +0x1e2 false skips multiplication at 0x140e92270; this is per-packet damage, not per-trigger count",
+        "radialMultiplicity": {
+          "fireIterationCount": "0x140f75d20 -> fire virtual +0x118 (0x1416a5ed0) queries weapon +0x6e0; integer multishot 1/2/3 yields native count 1/2/3",
+          "emit": "0x140be1db0: both zero-spread and spread loops submit one 0x14185ca50 trace per iteration; callback thunk 0x1406e6d4c -> fire +0x2a8 -> 0x1409b4480 -> 0x140ee5ca0",
+          "collect": "0x140ee5ca0 initializes an empty callback-local hit list; 0x1409c70a1..0x1409c7278 dedups only within that callback and appends original 0xd0-byte collision records",
+          "dispatch": "0x140581be1 -> weapon +0x650 (0x141550e40) -> mode1 impact +0xb8 (0x140fc83e0) -> 0x14139b3b0 per-record loop -> impact +0xf8 (0x14140f600) -> 0x140e91ec0",
+          "observedRayCounts": [
+            1,
+            2,
+            3
+          ],
+          "observedRadialCounts": [
+            1,
+            2,
+            3
+          ],
+          "perPacketDamage": 208.0,
+          "perPacketTakesMultishot": false,
+          "sameVictimAcrossRaysDeduplicated": false,
+          "missScope": "accepted non-avatar scene collisions; empty-space no-collision behavior is outside this proof",
+          "acceptance": "all modelled rays connect; scene collision and aim are supplied inputs, original count/emission/collection/dispatch/impact instructions execute"
+        },
         "noFullGateDefault": "0x140bf8fb8 initializes RequireFullCharges +0x3238 to zero",
         "availability": "0x140b169c0 -> 0x1418cee00; current +0x3218 and max +0x3220 must be positive",
         "consumeAll": "0x141377168 zero consumption takes current; returns consumed count and clears current",

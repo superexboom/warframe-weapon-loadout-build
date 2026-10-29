@@ -17,13 +17,13 @@ sys.path.insert(0,str(ROOT))
 def cases():
     return [dict(id='body-bare',head=0.,health=3000.,shield=0.,overguard=0.,armour=200.,effects=[]),
             dict(id='head-heat-multi',head=1.,health=3000.,shield=0.,overguard=0.,armour=200.,effects=[
-                ('WEAPON_FIRE_DAMAGE','ADD',.6,'DT_FIRE'),('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',1.2,None),
+                ('WEAPON_PERCENT_BASE_DAMAGE_ADDED','ADD',.6,'DT_FIRE'),('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',1.2,None),
                 ('WEAPON_PROC_CHANCE','STACKING_MULTIPLY',.6,None)]),
             dict(id='mixed-corrosive-pools',head=.5,health=3000.,shield=800.,overguard=1200.,armour=2700.,effects=[
-                ('WEAPON_ELECTRICITY_DAMAGE','ADD',.6,'DT_ELECTRICITY'),('WEAPON_POISON_DAMAGE','ADD',.6,'DT_POISON'),
+                ('WEAPON_PERCENT_BASE_DAMAGE_ADDED','ADD',.6,'DT_ELECTRICITY'),('WEAPON_PERCENT_BASE_DAMAGE_ADDED','ADD',.6,'DT_POISON'),
                 ('WEAPON_PROC_CHANCE','STACKING_MULTIPLY',1.2,None)]),
             dict(id='blast-multi',head=.5,health=1200.,shield=0.,overguard=0.,armour=0.,effects=[
-                ('WEAPON_FIRE_DAMAGE','ADD',.6,'DT_FIRE'),('WEAPON_FREEZE_DAMAGE','ADD',.6,'DT_FREEZE'),
+                ('WEAPON_PERCENT_BASE_DAMAGE_ADDED','ADD',.6,'DT_FIRE'),('WEAPON_PERCENT_BASE_DAMAGE_ADDED','ADD',.6,'DT_FREEZE'),
                 ('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',1.2,None)])]
 
 

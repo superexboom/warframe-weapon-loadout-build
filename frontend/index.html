@@ -550,7 +550,7 @@
                     <div class="scenario-group-title">交战修正</div>
                     <div class="scenario-fields">
                       <label class="field"><span>普通削甲</span><input id="build-armour-strip" type="range" min="0" max="1" step="0.05" value="0"><output id="build-armour-strip-output">0%</output></label>
-                      <label class="field" title="仅作用于允许命中头部的直击部分；爆炸与分裂子弹不获得弱点加成，也不能触发爆头击杀赋能。"><span>直击爆头率</span><input id="build-headshot-chance" type="range" min="0" max="1" step="0.01" value="0"><output id="build-headshot-output">0%</output></label>
+                      <label class="field" title="爆头率作用于已建模的可弱点命中事件；常规爆炸不获得弱点增伤。特殊投射物的伤害与触发资格以机制诊断为准。"><span>直击爆头率</span><input id="build-headshot-chance" type="range" min="0" max="1" step="0.01" value="0"><output id="build-headshot-output">0%</output></label>
                     <label class="check-field" title="瞄准与命中弱点是不同条件；镀层氩晶等效果需要瞄准。"><input type="checkbox" id="build-aiming"><span>射击时瞄准（ADS）</span></label>
                       <label class="field"><span>距离</span><input id="build-distance" type="number" min="0" max="1000" step="1" value="0"><small>大于 0 计入距离衰减；散布暂不参与计算</small></label>
                       <div id="build-manual-detonation" class="scenario-fields" hidden>
@@ -575,6 +575,7 @@
                   <details class="scenario-group" id="build-combat-state">
                     <summary class="scenario-group-title">战甲与武器状态</summary>
                     <div class="scenario-fields">
+                      <label class="field" id="build-battacor-charges-field" hidden><span>武使之力副射击蓄能</span><input data-combat-state="battacorCharges" type="number" min="1" max="3" step="1" placeholder="默认 1 次击杀"><small>主射击累积到指定击杀数后使用副射击；消耗全部蓄能</small></label>
                       <label class="field"><span>战甲护甲</span><input data-combat-state="frameArmor" type="number" min="0" step="1" placeholder="未设置"></label>
                       <label class="field"><span>战甲护盾</span><input data-combat-state="frameShield" type="number" min="0" step="1" placeholder="未设置"></label>
                       <label class="field"><span>最大能量</span><input data-combat-state="energyPool" type="number" min="0" step="1" placeholder="未设置"></label>

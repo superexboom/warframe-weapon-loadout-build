@@ -282,7 +282,8 @@ def kill_charge_cycle(weapon, fire_mode):
         return None
     return dict(hits=float(entry['killsPerUse']), pool=float(entry['shotsPerGauge']),
                 enterSeconds=float(entry['switchInSeconds']), exitSeconds=float(entry['switchOutSeconds']),
-                chargeOn='kills', killCharged=True)
+                chargeOn='kills', killCharged=True,
+                **({'chargeBeforeFire': True} if entry.get('chargeBeforeFire') else {}))
 
 
 # Modes that reload after every shot: data/mechanics/reload-after-shot.json

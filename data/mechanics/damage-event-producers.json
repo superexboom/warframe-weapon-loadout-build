@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "buildLabel": "2026.10.22.13.12",
+  "sources": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+    "deathCallback": "0x140163a60",
+    "authorityReceiver": "0x140d40ee0",
+    "authorityFinish": "0x1412dd467",
+    "injuryProducer": "0x141375130",
+    "notifyProducer": "0x1416a6090",
+    "challengeBridge": "0x14179b840"
+  },
+  "delayedRadialProducers": {
+    "/Lotus/Weapons/Tenno/Pistols/TnYareliPistol/TnYareliBoltoProj": {
+      "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
+      "nativeField": "EmbedDeathAttack",
+      "nativeDelayRange": [
+        0.60000002,
+        0.80000001
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressaBoltoProj": {
+      "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
+      "nativeField": "EmbedDeathAttack",
+      "nativeDelayRange": [
+        0.60000002,
+        0.80000001
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolProjectile": {
+      "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
+      "nativeField": "EmbedDeathAttack",
+      "nativeDelayRange": [
+        1,
+        1
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement"
+    },
+    "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiProjectile": {
+      "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
+      "nativeField": "EmbedDeathAttack",
+      "nativeDelayRange": [
+        1,
+        1
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement"
+    }
+  }
+}

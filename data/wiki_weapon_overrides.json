@@ -163,21 +163,6 @@
     }
    }
   },
-  "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryWeapon": {
-   "name": "Acceltra",
-   "modes": {
-    "0": {
-     "wikiAttack": "Rocket Impact",
-     "notes": [
-      "rocket impact 35 (wiki); export 26"
-     ],
-     "damageTypes": {
-      "DT_IMPACT": 35.0
-     },
-     "procChance": 0.06
-    }
-   }
-  },
   "/Lotus/Weapons/Tenno/LongGuns/TnRailjackRifle/RailjackRifleGun": {
    "name": "Quellor",
    "modes": {

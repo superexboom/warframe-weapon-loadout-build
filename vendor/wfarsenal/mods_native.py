@@ -273,6 +273,7 @@ def apply(weapon, effects, fire_mode, scenario, *, need_spec=True):
     ignored = ignores_headshot_bonus(weapon, fire_mode)
     fields = {name:value for key,value in fields.items() for name,value in
               ([(key,value),('ignore_headshot_bonus',ignored)] if key=='radial_only' else [(key,value)])}
+    fields.setdefault("delayed_radial_hit_event", False)
     stats = ModdedStats.__new__(ModdedStats)
     stats.__dict__.update(fields)
     if not need_spec:

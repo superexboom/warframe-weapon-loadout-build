@@ -186,7 +186,11 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ALT_EMBEDDED_LIFECYCLE", 1)?;
     m.add("MELEE_INITIAL_COMBO_RECOVERY", 1)?;
     m.add("COMPANION_PROJECTILE_SEQUENCE", 1)?;
+    m.add("PHYSICAL_PROJECTILE_LANES", 1)?;
+    m.add("SOURCE_OWNED_FIELDS", 1)?;
     m.add("MAGAZINE_CHARGE_VOLLEY", 1)?;
+    m.add("KILL_CHARGED_WINDUP", 1)?;
+    m.add("DELAYED_RADIAL_EVENTS", 1)?;
     m.add("ENERVATE_PROBABILISTIC_HITS", 1)?;
     m.add("IGNORE_HEADSHOT_BONUS", 1)?;
     m.add("STUG_IDEAL_DETONATION", 1)?;

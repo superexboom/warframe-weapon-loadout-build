@@ -1,0 +1,356 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "cases": 9,
+  "rows": [
+    {
+      "name": "Kompressa direct then delayed radial",
+      "critical": 0,
+      "AGCEnabled": 0,
+      "notifications": [],
+      "entered": [
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ],
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ]
+      ],
+      "slots": [
+        2,
+        4
+      ]
+    },
+    {
+      "name": "Kompressa direct then delayed radial",
+      "critical": 0,
+      "AGCEnabled": 1,
+      "notifications": [
+        {
+          "hitType": 2,
+          "critical": 0,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        },
+        {
+          "hitType": 4,
+          "critical": 0,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        }
+      ],
+      "entered": [
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ],
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ]
+      ],
+      "slots": [
+        2,
+        4
+      ]
+    },
+    {
+      "name": "Kompressa direct then delayed radial",
+      "critical": 1,
+      "AGCEnabled": 0,
+      "notifications": [],
+      "entered": [
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ],
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ]
+      ],
+      "slots": [
+        2,
+        4
+      ]
+    },
+    {
+      "name": "Kompressa direct then delayed radial",
+      "critical": 1,
+      "AGCEnabled": 1,
+      "notifications": [
+        {
+          "hitType": 2,
+          "critical": 1,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        },
+        {
+          "hitType": 4,
+          "critical": 1,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        }
+      ],
+      "entered": [
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ],
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ]
+      ],
+      "slots": [
+        2,
+        4
+      ]
+    },
+    {
+      "name": "Zakti direct then delayed radial",
+      "notifications": [
+        {
+          "hitType": 2,
+          "critical": 1,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        },
+        {
+          "hitType": 4,
+          "critical": 1,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        }
+      ],
+      "entered": [
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ],
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ]
+      ]
+    },
+    {
+      "name": "Zakti delayed radial kills original target",
+      "hp": -10,
+      "default": 0,
+      "notifications": [
+        {
+          "hitType": 2,
+          "critical": 1,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        },
+        {
+          "hitType": 4,
+          "critical": 1,
+          "injury": 11,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        }
+      ],
+      "entered": [
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ],
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ]
+      ]
+    },
+    {
+      "name": "dead host suppresses later radial notification",
+      "hp": -10,
+      "default": 0,
+      "notifications": [
+        {
+          "hitType": 2,
+          "critical": 1,
+          "injury": 11,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        }
+      ],
+      "entered": [
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ],
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ]
+      ]
+    },
+    {
+      "name": "repeated same-source radial cache aggregation",
+      "notifications": [
+        {
+          "hitType": 4,
+          "critical": 0,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        },
+        {
+          "hitType": 4,
+          "critical": 0,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        }
+      ],
+      "entered": [
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ],
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ]
+      ],
+      "cachedCount": 2
+    },
+    {
+      "name": "status packet remains DOT through authority notify",
+      "notifications": [
+        {
+          "hitType": 2,
+          "critical": 0,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        },
+        {
+          "hitType": 7,
+          "critical": 0,
+          "injury": 1,
+          "count": 1,
+          "owner": "0x2000e000",
+          "eventSource": 536932608
+        }
+      ],
+      "entered": [
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ],
+        [
+          "0x1416a6090",
+          "0x20005000"
+        ],
+        [
+          "0x14179b840",
+          "0x20005000"
+        ]
+      ]
+    }
+  ],
+  "executedOriginal": [
+    "0x1412dd461 authority controller+790 call suffix",
+    "0x141375130 authoritative injury producer/aggregation",
+    "0x1416a6090 notification producer through0x1416a6207",
+    "0x14179b840 complete AGC bridge",
+    "0x141025650 packet assignment",
+    "0x140c43220 packet copy",
+    "0x14175edc0 nonzero damage gate",
+    "0x1413e6d00 identity leaf"
+  ],
+  "limits": [
+    "External avatar/owner/world lookups and HP set/get are stubbed.",
+    "Original authority controller+790 call suffix0x1412dd461 executes into injury producer; unrelated earlier defense processing is represented by completed packet inputs.",
+    "No game process,collision geometry or real scheduler timing is emulated.",
+    "No effect Lua cooldown/grouping or proc/death ownership generalized."
+  ]
+}
