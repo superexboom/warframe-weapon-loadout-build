@@ -61,3 +61,19 @@ A static inventory suggests reviewing `test_initial_combo_contract_20261028.py` 
 - Final validation intentionally targets changed event/field/mode/native contracts. Full bake, full optimizer suite and whole-game parity were not required for this scoped change.
 
 Final integrated result: **100 passed**, plus **20** existing selected-mode parity scenarios with zero mismatches/fallbacks. These are targeted checks, not an all2247 execution. Exact engine/native identity is in `evidence/validation.json`.
+
+
+## R1–R8 continuation after dd78e98
+
+The completed continuation collects **2248 tests**, versus2247 at its own baseline (net+1); no new test modules. Do not combine this baseline with the earlier2443→2247 reduction.
+
+- Existing spread tests now assert actual per-child contact→blast order and Bramma native187/49 CO; removed the obsolete source-string assertion that every area packet rejects Cold/Puncture.
+- Existing delayed-event tests cover corrected explicit-recipient crit, independent body multiplier exclusion and one attached-Pox contract. That Pox case exercises actual Galvanized/Merciless expiry and retained Crosshairs crit through the same field/replay; no per-weapon coefficient matrix was introduced.
+- Phantasma remains3 cases: source axis independence, full-clip/extra-MS/low-health paired order, and real cold MOD native SHADOW. Five obsolete duplicate runtime cases were removed from the older secondary-payload module.
+- Quanta adds exactly3 expanded cases across real variants. They verify paid ammo/time, no enemy damage from the detonating beam, separate seed/sibling terminal events, actual native invocation and manual/optimizer selected-mode parity.
+- Zymos remains3 existing cases. Ordered bucket math is paired with actual carrier/spawn/contact replay, original-host death, contact-only Shiver and Enervate snapshots; unsupported source effects do not abort the parent build. No new per-feature file or one-off acceptance script.
+- Stug adds1 real regression in its existing module: lethal packets notify hit/crit before target retirement, using full-victim and actual body/head probabilities, under native SHADOW.
+
+Final focused execution: **137 passed**, no failures/errors/skips. Includes the strengthened Pox Crosshairs expiry/retained-crit assertion and final Zymos source-identity gate; these are not additional unique cases. Selected-mode existing audit: **28 scenarios** across5 representative weapons, zero differences/fallbacks and stable input identity. Optional Quanta/Zymos policies are separately exercised by the retained feature cases; the28 default scenarios are not misrepresented as those opt-in policies.
+
+No full-suite execution, no full bake and no gameplay-measurement claim. Exact native/input identity is in `evidence/validation-r1-r8.json`.

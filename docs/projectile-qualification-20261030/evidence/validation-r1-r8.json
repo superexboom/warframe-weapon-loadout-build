@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "dd78e984eb23df2ffc013895ada27c98f98466b6",
+  "inputs": "bc77957493b0dd90",
+  "nativeSha256": "671627078a79fdcdc3b457b0db7f66d307c9c7fb1c3acb16b74aa3dfd8d92882",
+  "focused": {
+    "tests": 137,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "collectionBefore": 2247,
+  "collectionAfter": 2248,
+  "testModulesAdded": 0,
+  "testModulesRemoved": 0,
+  "selectedModeParity": {
+    "weapons": 5,
+    "cases": 28,
+    "failed": 0,
+    "workerErrors": 0,
+    "nativeFallback": 0,
+    "nativeCoverageComplete": true,
+    "changedInputs": false,
+    "coverageComplete": true,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "passed": true
+  },
+  "selectedWeapons": [
+    "Kuva Bramma",
+    "Coda Pox",
+    "Phantasma Prime",
+    "Zymos",
+    "Quanta"
+  ],
+  "nativeCapabilities": {
+    "DELAYED_RADIAL_EVENTS": 3,
+    "RADIAL_VICTIM_CRIT": 1,
+    "RADIAL_LIVE_CO": 1,
+    "STACKABLE_CRITICAL_EVENTS": 1,
+    "QUANTA_PAID_PRIMARY": 1,
+    "ZYMOS_ORDERED_CHILDREN": 1
+  },
+  "scope": "R1-R8 focused implementation regression and representative actual search/native parity; explicit optional flight/overlap policies separately covered in existing Quanta/Phantasma/Zymos tests; not all-weapons gameplay validation",
+  "baked": false,
+  "botSynced": false,
+  "releaseBuilt": false,
+  "producerReimport": {
+    "sources": 23,
+    "fieldRouteRecords": 30,
+    "unchanged": true
+  }
+}

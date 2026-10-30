@@ -208,6 +208,8 @@ def profile(pkg,row,spec):
     if native_field=='EmbedDeathAttack':component['exclusiveAlternatives']=['ExplosiveAttack']
     if spec['family']=='nox-player':component['falloffSource']='native-constructor0; Projectile+0x634 within zeroed+0x630 qword'
     if spec['family']=='tenet-plinx':component['approximation']['chargeDamageScale']='neutral1 pending ammo/clip consumer; no double-count of alternative500'
+    from import_projectile_components import apply_native_contract
+    apply_native_contract(component)
     if spec['family']=='phantasma':
         if attack.get('HitType')!='DHT_PROJECTILE':raise ValueError('Phantasma explicit hit type changed')
         component['hitTypeSource']='native-explicit-preserved-by-0x141234988..0x1412349aa'
@@ -238,7 +240,58 @@ def profile(pkg,row,spec):
         profile['charge']=dict(seconds=float(state['ChargeTime']),modifier=state.get('ChargeModifier'),
             scalesWithFireRate=state.get('ChargeModifier')=='WEAPON_FIRE_RATE',source='native-ChargeTime',
             nativeSource=path,nativeField=f'{bank}[{native_index}].state.ChargeTime')
+    if spec['family']=='phantasma':
+        profile.pop('charge', None)
+        profile.update(phantasma_lifecycle(pkg, path, projectile))
+        profile['unmodeled'] = [note for note in profile['unmodeled'] if note not in (
+            'phantasma-cluster-child-payload-unmodeled', 'phantasma-charge-ammo-scale-and-contact-routing-approximated')]
+        profile['unmodeled'].append('phantasma-child-body-geometry-and-flight-policy-explicit')
     return profile
+
+
+def phantasma_lifecycle(pkg, path, projectile):
+    """Native full-clip charge plus opt-in, explicitly ideal child overlap."""
+    mode = pkg.resolve(path)['Behaviors'][1]
+    state = mode['state:WeaponChargedStateBehavior']
+    fire = mode['fire:LotusWeaponProjectileFireBehavior']
+    required = dict(ClipSizeAffectsChargeTime=1, UseClipSizeAsDamageMultiplier=1,
+                    UseClipWhileCharging=1, MinChargeRatio=1, AutoFireWhenChargeCompleted=1)
+    if any(state.get(k) != v for k, v in required.items()) or state['ChargeTime'] != .090899996:
+        raise ValueError('Phantasma charged-state source changed')
+    if fire.get('AttenuateForCharge') != 1 or fire.get('AttenuateFireIterationsForCharge') != 0:
+        raise ValueError('Phantasma charge routing changed')
+    extra_carrier = _resolve_ref(pkg, path, fire['MultiShotProjectileType'])
+    lanes = {}
+    for kind, owner, count, amounts in [('normal-parent', projectile, 5, (3, 18)),
+                                         ('extra-ms-parent', extra_carrier, 2, (6, 36))]:
+        source = pkg.resolve(owner)
+        if source.get('ClusterApplyDamageMultiplier') != 1 or source.get('NumClusterProjectiles', 5) != count:
+            raise ValueError('Phantasma child generation changed')
+        child_path = _resolve_ref(pkg, owner, source['ClusterProjectiles'])
+        child = pkg.resolve(child_path)
+        packets = []
+        for field, amount in zip(('AttackData', 'ExplosiveAttack'), amounts):
+            attack = child[field]
+            if attack['Amount'] != amount:
+                raise ValueError('Phantasma child template changed')
+            packets.append(dict(damage={attack['Type']: float(amount)}, takes_multishot=False,
+                takes_condition_overload=False,
+                crit_chance=float(child['CriticalChance']), crit_multiplier=float(child['CriticalMultiplier']),
+                status_chance=float(attack['ProcChance']), forcedProcs=list(attack.get('ForcedProcs') or ()),
+                nativeSource=child_path, nativeField=field,
+                approximation=dict(recipient='explicit ideal-contact policy only',
+                    arrival='configured arrival assumption, not native expiry',
+                    qualification='body damage; CO and modifier/event consumers remain independently bounded')))
+            from import_projectile_components import apply_native_contract
+            apply_native_contract(packets[-1])
+        lanes[kind] = dict(count=count, nativeCarrier=owner, packets=packets)
+    return dict(fullClipCharge=dict(cadencePolicy='ordinary-reload-full-clip',
+                    chargeSecondsPerRound=float(state['ChargeTime']), nativeSource=path,
+                    nativeField='Behaviors[1].state:WeaponChargedStateBehavior',
+                    parentScale='captured loaded rounds; native projectile+7b8',
+                    childScale='independent ClusterApplyDamageMultiplier snapshot+1738, default1'),
+                phantasmaChildren=dict(idealArrivalSeconds=.7, defaultOverlapPolicy='off',
+                    lifetimeRangeSeconds=[2.2, 2.9], **lanes))
 
 
 def row_name(row):

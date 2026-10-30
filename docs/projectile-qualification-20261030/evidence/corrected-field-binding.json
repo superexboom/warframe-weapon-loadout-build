@@ -1,0 +1,19 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "fields": {
+    "ExplosionDirectHitDamageHitType": {
+      "descriptor": "0x1427913d0",
+      "namePointer": "0x142102000",
+      "actual": "mExplosionDirectHitDamageHitType"
+    },
+    "ExplosionFallOff": {
+      "descriptor": "0x1427913e0",
+      "namePointer": "0x142102028",
+      "actual": "mExplosionFallOff"
+    }
+  },
+  "actualBindings": {
+    "ExplosionDirectHitDamageHitType": "Projectile+c24",
+    "ExplosionFallOff": "Projectile+634 -> radialPlan+e8"
+  }
+}

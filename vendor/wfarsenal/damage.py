@@ -538,12 +538,12 @@ class Scenario:
             raise TypeError('combatState must be an object')
         numeric = {'frameArmor','frameShield','energyPool','sprintMultiplier','energySpent','energySpendPerSecond','nearbyRadius','detonationWaitSeconds','stugBounceDelaySeconds','stugChildDetonateSeconds','orbAbsorbedDamage',
                    'selfShieldBreakAt','selfShieldBreakInterval','selfOverguardBreakAt','selfOverguardBreakInterval','selfShieldHitAt','selfShieldHitInterval'}
-        numeric |= {'equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval','meleeTargetDistance'}
+        numeric |= {'equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval','meleeTargetDistance','phantasmaChildArrivalSeconds','zymosChildArrivalSeconds','zymosChildFrameSeconds'}
         binary = {'overshields','channeling','aimGliding','sliding','incarnonMeleeActive','orbSpecialShield','onosRadialHit','selfShieldBreakForced','perfectCharge','infiniteAmmo',
                   'companion','companionPlayerStacks'}
-        integers = {'battacorCharges':3,'nearbyEnemies':1000,'stugBounceHits':2,'stugChildHits':5,'detonateAfterShots':20,'orbPasses':3,'orbStacks':3,'orbRank':6,'punchthroughTargets':100,'abilityUses':100000}
+        integers = {'zymosChildContacts':5,'battacorCharges':3,'nearbyEnemies':1000,'stugBounceHits':2,'stugChildHits':5,'detonateAfterShots':20,'orbPasses':3,'orbStacks':3,'orbRank':6,'punchthroughTargets':100,'abilityUses':100000}
         melee_text = {'meleeRoute','meleeStance','meleeCombo'}
-        allowed = numeric | binary | set(integers) | melee_text | {'projectileMode','equippedWeapons','emptySlots','orbAbsorbedDamageType','orbAbsorbedDamageTypes'}
+        allowed = numeric | binary | set(integers) | melee_text | {'projectileMode','equippedWeapons','emptySlots','orbAbsorbedDamageType','orbAbsorbedDamageTypes','quantaStrategy','phantasmaChildOverlap','zymosChildOverlap'}
         if set(self.combat_state) - allowed:
             raise ValueError('combatState has unsupported fields: ' + ', '.join(sorted(set(self.combat_state)-allowed)))
         state = {}
@@ -567,6 +567,12 @@ class Scenario:
                 if not isinstance(value,str):
                     raise TypeError('combatState.'+key+' must be a string')
                 state[key] = value
+            elif key in {'quantaStrategy','phantasmaChildOverlap','zymosChildOverlap'}:
+                choices = {'contact','shoot'} if key=='quantaStrategy' else {'off','ideal-contact'}
+                if not isinstance(value,str) or value not in choices:
+                    raise ValueError('combatState.'+key+' must be one of '+', '.join(sorted(choices)))
+                if value not in {'contact','off'}:
+                    state[key] = value
             elif key=='projectileMode':
                 if value not in {'stacked','isolated','manual'}:
                     raise ValueError('combatState.projectileMode must be stacked, isolated or manual')
@@ -589,6 +595,10 @@ class Scenario:
                 if key=='emptySlots' and any(x not in {'primary','secondary','melee'} for x in value):
                     raise ValueError('combatState.emptySlots contains an unsupported slot')
                 state[key] = tuple(value)
+        if state.get('phantasmaChildOverlap') != 'ideal-contact':
+            state.pop('phantasmaChildArrivalSeconds',None)
+        if state.get('zymosChildOverlap') != 'ideal-contact':
+            for key in ('zymosChildArrivalSeconds','zymosChildFrameSeconds','zymosChildContacts'):state.pop(key,None)
         object.__setattr__(self,'combat_state',MappingProxyType(state))
 
         stacks: dict[str, int] = {}

@@ -16,12 +16,10 @@ multiply the shell's explosion by multishot. Native projectile ownership takes
 precedence here: each spawned shell releases its own bomblets, and each child
 owns its contact and radial attack. The child parts still have no weak point.
 
-Condition Overload: the wiki catalog row WFSim quotes as unmodelled
-(``cluster_bomblet_co``: "name | attack | Projectile | unmodded | actual CO
-bonus at +100% | relative | rule") gives the bomblet's projectile hit its own
-rule; with ``Adding`` the bonus per +100% is the parent's value, i.e. a CO
-base fraction of actual / unmodded. The bomblet explosion has no row and
-takes none (as in WFSim).
+Condition Overload: exact native contact consumers override historical catalog
+rows. Four verified families query the parent projectile's base amount once;
+the same direct child also retains its independent victim-crit/event rights.
+A missing third-party catalog row is not evidence that native CO is disabled.
 """
 from __future__ import annotations
 import argparse, hashlib, json, sys
@@ -30,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'vendor'))
 sys.path.insert(0, str(ROOT / 'tools'))
 from wfarsenal.packages import PackageIndex
-from import_projectile_components import DT, close
+from import_projectile_components import DT, close, apply_native_contract
 
 
 def part(name, raw, child, reference, differences, multishot):
@@ -106,9 +104,13 @@ def main():
                 direct = part('AttackData', child.get('AttackData') or {}, child,
                               dict(cluster, damage=cluster['damage']), differences, multishot)
                 radial = part('ExplosiveAttack', child.get('ExplosiveAttack') or {}, child, cluster['radial'], differences, multishot)
+                direct.update(nativeSource=child_path, impact_delay_seconds=0.)
+                apply_native_contract(direct)
+                radial.update(nativeSource=child_path, impact_delay_seconds=0.)
+                apply_native_contract(radial)
                 co_row = next((u.get('row') for u in spec.get('unmodeled') or () if isinstance(u, dict)
                             and u.get('reason') == 'cluster_bomblet_co'), None)
-                if co_row:
+                if co_row and not direct.get('coProfile'):
                     cells = [c.strip() for c in co_row.split('|')]
                     unmodded, actual, rule = float(cells[3]), float(cells[4]), cells[6].split()[0].lower()
                     if not close(unmodded, sum(direct['damage'].values())):
@@ -118,8 +120,8 @@ def main():
                     direct.update(takes_condition_overload=True, coProfile=dict(
                         behavior='additive_with_base_damage', baseFraction=actual / unmodded, excludeFlatSources=[],
                         source='wiki CO catalog via WFSim unmodelled row', row=co_row))
-                else:
-                    differences.append('no CO catalog row: bomblets take no Condition Overload')
+                elif not direct.get('coProfile'):
+                    differences.append('child CO consumer unverified; neutral fallback')
                 radial.update(radius_m=float(child.get('DamageRadius', cluster['radial'].get('radius_m'))),
                               falloff_start_m=float(cluster['radial'].get('falloff_start_m', 0.)),
                               falloff_reduction=float(child.get('ExplosionFallOff', cluster['radial'].get('falloff_reduction', 0.))))

@@ -96,3 +96,79 @@ def test_quanta_compression_and_progenitor_reach_each_attack_without_duplication
     assert part.total_damage==pytest.approx(blast.total_damage*1.4)
     assert st.ammo_cost==pytest.approx(10*(1-.055*.4))
     assert getattr(st,'_requires_full_ammo',False)
+
+
+@pytest.mark.parametrize('name,primary_rate', [('Quanta',12.),('Quanta Vandal',12.),('Tenet Quanta',10.)])
+def test_paid_cube_strategy_keeps_contact_default_and_accounts_for_both_modes(name,primary_rate,monkeypatch):
+    import pickle
+    from wfarsenal.projectile_events import quanta_strategy,quanta_strategy_cycle
+    w=weapon(name)
+    scenario=Scenario(combat_state={'quantaStrategy':'shoot'})
+    assert pickle.dumps(Scenario(combat_state={'quantaStrategy':'contact'}))==pickle.dumps(Scenario())
+    assert pickle.dumps(scenario)!=pickle.dumps(Scenario())
+    assert quanta_strategy(w,1,{}) is None
+    assert quanta_strategy(w,0,scenario.combat_state) is None
+    selected,_=app.optimizer._select_fire_mode(w,1,weapon_type='rifle')
+    strategy=quanta_strategy(selected,0,scenario.combat_state)
+    assert strategy==quanta_strategy(w,1,scenario.combat_state)
+    assert strategy['damageMultiplier']==4 and strategy['radiusMultiplier']==12
+    assert strategy['enemyContactDamage'] is False and strategy['enemyPrimaryBeamDamage'] is False
+    alt=prepare(dict(weapon=w,fire_mode=1,effects=[],scenario=Scenario()),[],[])
+    primary=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario()),[],[])
+    launch,blast=alt['resolve']('selected',{})
+    beam,_=primary['resolve']('selected',{})
+    cycle=quanta_strategy_cycle(strategy,launch,beam)
+    assert launch.total_damage==pytest.approx(180 if name=='Tenet Quanta' else 100)
+    assert blast.total_damage==150  # Selecting a contract does not mutate default contact stats.
+    assert cycle['ammoCost']==pytest.approx(10.5)
+    assert cycle['primaryPeriodSeconds']==pytest.approx(1/primary_rate)
+    assert cycle['impactDelaySeconds']==pytest.approx(.25+1/primary_rate+.1125)
+    # Real fire-rate modifiers shorten only the paid beam quantum; settling and
+    # the native delay approximation remain independent clock terms.
+    fast_primary=prepare(dict(weapon=w,fire_mode=0,effects=[ModEffect('WEAPON_FIRE_RATE','STACKING_MULTIPLY',1.)],scenario=Scenario()),[],[])
+    fast,_=fast_primary['resolve']('selected',{})
+    faster=quanta_strategy_cycle(strategy,launch,fast)
+    assert faster['impactDelaySeconds']==pytest.approx(.25+1/(2*primary_rate)+.1125)
+    assert faster['cycleSeconds']>=1/launch.fire_rate
+    assert faster['ammoCost']==cycle['ammoCost']
+
+    # One paid volley: the beam is an action on the cube, never an enemy hit.
+    from wfarsenal import native_replay
+    extra_cubes={'Quanta':0.,'Quanta Vandal':1.2,'Tenet Quanta':.2}[name]
+    fight=prepare(dict(weapon=w,fire_mode=1,effects=[ModEffect('WEAPON_CRIT_CHANCE','SET',0),
+        ModEffect('WEAPON_PROC_CHANCE','SET',0),ModEffect('WEAPON_FIRE_ITERATIONS','ADD',extra_cubes)],scenario=scenario),[],[])
+    st,part=fight['resolve']('selected',{})
+    st.fire_rate=.001  # Hold off the next volley, preserving this resolved action's native clocks.
+    fight['resolve']=lambda *args,**kwargs:(st,part)
+    sources=[dict(id=key,label=key,kind=kind,maxStacks=10,duration=30)
+             for key,kind in [('fire','on-fire'),('hit','on-hit'),('head','on-headshot')]]
+    options=dict(combat=fight,trigger_sources=sources,attacks_per_second=.001,
+                 window_seconds=.8,time_step=.05)
+    trace=replay(st,target(),**options)
+    assert trace['shots']==1 and trace['directWindow']==pytest.approx(600.*(1+extra_cubes))
+    assert trace['dotWindow']==0 and trace['procCounts']=={}
+    before=[point for point in trace['timeline'] if point['time']<part._impact_delay]
+    assert before and all(point['health']==1e8 and point['triggerStacks']['hit']==0
+                          and point['triggerStacks']['head']==0 for point in before)
+    final=trace['timeline'][-1]
+    assert final['ammo']==pytest.approx(st.magazine-10.5)
+    assert final['triggerStacks']==pytest.approx({'fire':2.,'hit':1.+extra_cubes,'head':0.})
+    if extra_cubes:
+        assert part.multishot==1. and part._additional_radials[0].multishot==pytest.approx(extra_cubes)
+        between=[point for point in trace['timeline'] if part._impact_delay<point['time']<part._additional_radials[0]._impact_delay]
+        assert between and all(point['health']==pytest.approx(1e8-600.) for point in between)
+    if native_replay.wfcore is not None:
+        monkeypatch.setattr(native_replay,'ENABLED',True)
+        monkeypatch.setattr(native_replay,'SHADOW',True)
+        native_before=native_replay.STATS['native']
+        checked=replay(st,target(),collect_timeline=False,**options)
+        assert native_replay.STATS['native']>native_before
+        assert checked['directWindow']==trace['directWindow'] and checked['shots']==1
+
+    payload=dict(weapon=w['path'],fireMode=1,metric='killsPerMinute',mods=[],
+        enemy=app._BENCHMARK_ENEMY_PATH,level=9999,steelPath=True,headshotChance=.5,
+        triggerPolicy='emergent',combatState={'quantaStrategy':'shoot'})
+    if name=='Tenet Quanta':payload.update(innateElement='DT_MAGNETIC',innateElementValue=.6)
+    evaluated=evaluate_payload(payload)
+    assert evaluated['manual']==pytest.approx(evaluated['optimizer'],rel=1e-9)
+    assert 'quanta-paid-primary-one-pulse-hit-assumed' in evaluated['manualUnsupported']

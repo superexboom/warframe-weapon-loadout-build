@@ -734,6 +734,7 @@ def _analysis_inputs_fingerprint() -> str:
         Path(optimizer.__file__).with_name("simulator.py"),
         Path(optimizer.__file__).with_name("catalog_releases.py"),
         Path(optimizer.__file__).with_name("projectile_events.py"),
+        Path(optimizer.__file__).with_name("zymos.py"),
         Path(optimizer.__file__).with_name("runtime_adapters.py"),
         Path(optimizer.__file__).with_name("combat_events.py"),
         Path(optimizer.__file__).with_name("combat_replay.py"),

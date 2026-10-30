@@ -1,0 +1,116 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "cases": [
+    {
+      "field": "0x538",
+      "upgrade": "0xf4",
+      "base": 0.05,
+      "modifiers": [
+        [
+          3,
+          1.2
+        ]
+      ],
+      "eligible": true,
+      "carrier": 0.11000000685453415,
+      "child": 0.17000000178813934,
+      "radialSnapshot": 0.17000000178813934,
+      "planCriticalChanceBefore": 0.0,
+      "planCriticalMultiplierBefore": 1.0,
+      "managerCalls": 2,
+      "buckets": [
+        0.0,
+        0.0,
+        1.0,
+        2.4000000953674316,
+        0.0,
+        0.0,
+        1.1754943508222875e-38,
+        3.4028234663852886e+38
+      ],
+      "flags": 8
+    },
+    {
+      "field": "0x570",
+      "upgrade": "0xf8",
+      "base": 2.3,
+      "modifiers": [
+        [
+          3,
+          1.2
+        ]
+      ],
+      "eligible": true,
+      "carrier": 5.059999942779541,
+      "child": 7.820000171661377,
+      "radialSnapshot": 7.820000171661377,
+      "planCriticalChanceBefore": 0.0,
+      "planCriticalMultiplierBefore": 1.0,
+      "managerCalls": 2,
+      "buckets": [
+        0.0,
+        0.0,
+        1.0,
+        2.4000000953674316,
+        0.0,
+        0.0,
+        1.1754943508222875e-38,
+        3.4028234663852886e+38
+      ],
+      "flags": 8
+    }
+  ],
+  "regions": [
+    {
+      "start": "0x14140ab20",
+      "end": "0x14140abc6",
+      "sha256": "dcf178a3443bf7ad30ab1605e12c80be96fd6a73ea612f877cc752f6b6ab45cf"
+    },
+    {
+      "start": "0x140848e20",
+      "end": "0x140848ebd",
+      "sha256": "14d5086bc3d62b382783b38c02f4fd95a406db1fc5f44705d5b334a36a65b283"
+    },
+    {
+      "start": "0x1401413d0",
+      "end": "0x14014146d",
+      "sha256": "6cab576f8d595a9071aa17deeee47771d3ab7f9ec7e36bca1c9b64d2b38a7328"
+    },
+    {
+      "start": "0x1418c1aa0",
+      "end": "0x1418c1d5e",
+      "sha256": "549f573812c03698c6f5334cbc02852629d24d506ccf640245eafed54be60f27"
+    },
+    {
+      "start": "0x141a1aeb0",
+      "end": "0x141a1b03a",
+      "sha256": "2da4980beecf633719a64c9093cf89952cdf7f7eff1a3e11ba5ecf1254281527"
+    },
+    {
+      "start": "0x140d12e30",
+      "end": "0x140d12ef1",
+      "sha256": "dec49edb9c1969b2daeee9eb4eee48956fd98cdb102e26366a8e7d77eca449e6"
+    },
+    {
+      "start": "0x14123df60",
+      "end": "0x14123dffd",
+      "sha256": "53be345c1aeffc5d226df09e139f6707af67b1943e1dacd77b7ae89bf5647503"
+    },
+    {
+      "start": "0x140ede780",
+      "end": "0x140ede8a2",
+      "sha256": "45a8316ce8818b15327524ac2cc20c13e40f56be50af0c3e7a7e92afee5becf6"
+    }
+  ],
+  "sourceRoute": "weapon+f8 -> actor+938(supplied inventory) -> actual inventory+408 -> actual UpgradeManager+c0",
+  "formula": "((base+n*ADD_BASE)*(1+n*STACKING_MULTIPLY)+n*ADD)*product(MULTIPLY)^n for n repeated identical eligible queries",
+  "stubs": [
+    "actor+938 returns the controlled inventory",
+    "security-cookie verification only"
+  ],
+  "limits": [
+    "Eligible upgrade records and source/owner handles are controlled offline inputs; ordinary record filters and bucket/transfer/getter execute original bytes.",
+    "No carrier creation sequence, count of all gameplay queries, subsequent victim-side crit transforms, hit events, or gameplay DPS proven.",
+    "Repeated query alone does not imply squared STACKING_MULTIPLY: retained buckets add the bonus twice."
+  ]
+}

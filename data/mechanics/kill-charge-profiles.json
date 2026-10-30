@@ -90,14 +90,14 @@
       "switchOutSeconds": 0.0,
       "native": {
         "AddChargeConditions": [
-          "DEFAULT_BEHAVIOR_KILL"
+          "PRIMARY_KILL"
         ],
         "NumChargesToAdd": 1.0,
         "NumChargesToConsume": 5.0,
         "MaxCharges": null,
         "RequireFullCharges": null
       },
-      "nativeSha256": "ce7594df5fda56c128533dd30aaee1594e7d2f85d44bbe58e4557f64e5db249b"
+      "nativeSha256": "b1ef8f59783c7f9359853a9ed1984ab0a4a71c7c961126241006408e43f4c507"
     },
     "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle": {
       "name": "Trumna",

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "buildLabel": "2026.10.22.13.12",
   "sources": {
     "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
@@ -12,141 +12,632 @@
     "challengeBridge": "0x14179b840"
   },
   "delayedRadialProducers": {
-    "/Lotus/Weapons/Tenno/Pistols/TnYareliPistol/TnYareliBoltoProj": {
-      "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
-      "nativeField": "EmbedDeathAttack",
-      "nativeDelayRange": [
-        0.60000002,
-        0.80000001
-      ],
-      "genericHit": true,
-      "genericCriticalHit": true,
-      "headHit": false,
-      "enervate": false,
-      "semantics": "per-damage-packet-after-damage-before-victim-retirement"
-    },
-    "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressaBoltoProj": {
-      "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
-      "nativeField": "EmbedDeathAttack",
-      "nativeDelayRange": [
-        0.60000002,
-        0.80000001
-      ],
-      "genericHit": true,
-      "genericCriticalHit": true,
-      "headHit": false,
-      "enervate": false,
-      "semantics": "per-damage-packet-after-damage-before-victim-retirement"
-    },
-    "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolProjectile": {
-      "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
-      "nativeField": "EmbedDeathAttack",
-      "nativeDelayRange": [
-        1,
-        1
-      ],
-      "genericHit": true,
-      "genericCriticalHit": true,
-      "headHit": false,
-      "enervate": false,
-      "semantics": "per-damage-packet-after-damage-before-victim-retirement"
-    },
-    "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiProjectile": {
-      "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
-      "nativeField": "EmbedDeathAttack",
-      "nativeDelayRange": [
-        1,
-        1
-      ],
-      "genericHit": true,
-      "genericCriticalHit": true,
-      "headHit": false,
-      "enervate": false,
-      "semantics": "per-damage-packet-after-damage-before-victim-retirement"
-    },
-    "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameHeavyArchgunProjectile": {
-      "nativeField": "ExplosiveAttack",
-      "nativeDelayRange": [
-        0,
-        0
-      ],
-      "genericHit": true,
-      "genericCriticalHit": true,
-      "headHit": false,
-      "enervate": false,
-      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
-      "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
-      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
-    },
-    "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurHeavyProjectile": {
-      "nativeField": "ExplosiveAttack",
-      "nativeDelayRange": [
-        0,
-        0
-      ],
-      "genericHit": true,
-      "genericCriticalHit": true,
-      "headHit": false,
-      "enervate": false,
-      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
-      "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
-      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
-    },
-    "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile": {
-      "nativeField": "ExplosiveAttack",
-      "nativeDelayRange": [
-        0,
-        0
-      ],
-      "genericHit": true,
-      "genericCriticalHit": true,
-      "headHit": false,
-      "enervate": false,
-      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
-      "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
-      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
-    },
-    "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile": {
-      "nativeField": "ExplosiveAttack",
-      "nativeDelayRange": [
-        0,
-        0
-      ],
-      "genericHit": true,
-      "genericCriticalHit": true,
-      "headHit": false,
-      "enervate": false,
-      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
-      "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
-      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
-    },
-    "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj": {
-      "nativeField": "ExplosiveAttack",
-      "nativeDelayRange": [
-        0,
-        0
-      ],
-      "genericHit": true,
-      "genericCriticalHit": true,
-      "headHit": false,
-      "enervate": false,
-      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
-      "nativeDelivery": "ClusterBomb ordinary contact +7b8 actual victim; preservedPROJECTILE2 -> common Avatar+340/348 -> authority AGC",
-      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
-    },
-    "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj": {
-      "nativeField": "ExplosiveAttack",
-      "nativeDelayRange": [
-        0,
-        0
-      ],
-      "genericHit": true,
-      "genericCriticalHit": true,
-      "headHit": false,
-      "enervate": false,
-      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
-      "nativeDelivery": "ClusterBomb ordinary contact +7b8 actual victim; preservedPROJECTILE2 -> common Avatar+340/348 -> authority AGC",
-      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
-    }
+    "/Lotus/Weapons/Tenno/Pistols/TnYareliPistol/TnYareliBoltoProj": [
+      {
+        "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
+        "nativeField": "EmbedDeathAttack",
+        "nativeDelayRange": [
+          0.60000002,
+          0.80000001
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE"
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Pistols/PrimeKompressa/PrimeKompressaBoltoProj": [
+      {
+        "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
+        "nativeField": "EmbedDeathAttack",
+        "nativeDelayRange": [
+          0.60000002,
+          0.80000001
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE"
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Pistols/TnGuandoPistol/TnGuandoPistolProjectile": [
+      {
+        "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
+        "nativeField": "EmbedDeathAttack",
+        "nativeDelayRange": [
+          1,
+          1
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE"
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Pistols/PrimeZakti/PrimeZaktiProjectile": [
+      {
+        "nativeClass": "/Lotus/Types/Weapon/BoltoProjectile",
+        "nativeField": "EmbedDeathAttack",
+        "nativeDelayRange": [
+          1,
+          1
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE"
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameHeavyArchgunProjectile": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
+        "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "takes_condition_overload": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurHeavyProjectile": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
+        "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "takes_condition_overload": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
+        "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "takes_condition_overload": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
+        "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "takes_condition_overload": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "nativeDelivery": "ClusterBomb ordinary contact +7b8 actual victim; preservedPROJECTILE2 -> common Avatar+340/348 -> authority AGC",
+        "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "takes_condition_overload": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "nativeDelivery": "ClusterBomb ordinary contact +7b8 actual victim; preservedPROJECTILE2 -> common Avatar+340/348 -> authority AGC",
+        "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "takes_condition_overload": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "current child-contact packet once before victim retirement",
+        "nativeDelivery": "actual child source/mode -> weapon818 -> impact+f8 ->victim340/348; finalPROJECTILE2",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "additive_with_base_damage",
+            "baseFraction": 1.6666666666666667,
+            "excludeFlatSources": [],
+            "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
+            "parentBase": 25,
+            "childBase": 15
+          }
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "1410e3a69 failed avatar bounce ->1410e3b4b +568 actual recipient ->15b8 ->140163b34 common+c24 type2; scene type4 remains separate",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "recipientPolicy": "terminal-contact-on-current-avatar"
+        }
+      }
+    ],
+    "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "current child-contact packet once before victim retirement",
+        "nativeDelivery": "actual child source/mode -> weapon818 -> impact+f8 ->victim340/348; finalPROJECTILE2",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "additive_with_base_damage",
+            "baseFraction": 3.3333333333333335,
+            "excludeFlatSources": [],
+            "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
+            "parentBase": 50,
+            "childBase": 15
+          }
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "1410e3a69 failed avatar bounce ->1410e3b4b +568 actual recipient ->15b8 ->140163b34 common+c24 type2; scene type4 remains separate",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "recipientPolicy": "terminal-contact-on-current-avatar"
+        }
+      }
+    ],
+    "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "current child-contact packet once before victim retirement",
+        "nativeDelivery": "actual child source/mode -> weapon818 -> impact+f8 ->victim340/348; finalPROJECTILE2",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "additive_with_base_damage",
+            "baseFraction": 3.816326530612245,
+            "excludeFlatSources": [],
+            "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
+            "parentBase": 187,
+            "childBase": 49
+          }
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "1410e3a69 failed avatar bounce ->1410e3b4b +568 actual recipient ->15b8 ->140163b34 common+c24 type2; scene type4 remains separate",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "recipientPolicy": "terminal-contact-on-current-avatar"
+        }
+      }
+    ],
+    "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoClusterProjectile": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "current child-contact packet once before victim retirement",
+        "nativeDelivery": "actual child source/mode -> weapon818 -> impact+f8 ->victim340/348; finalPROJECTILE2",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "additive_with_base_damage",
+            "baseFraction": 2.6666666666666665,
+            "excludeFlatSources": [],
+            "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
+            "parentBase": 200,
+            "childBase": 75
+          }
+        }
+      }
+    ],
+    "/Lotus/Weapons/ClanTech/Bio/BioGrenadeProjectile": [
+      {
+        "nativeField": "EmbedAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "one attached-target tick; same recipient excluded from area plan",
+        "nativeDelivery": "DoEmbedDamage +628 defaultRADIAL4 ->+790 ->weapon818 or820 ->victim340/348",
+        "componentOverrides": {
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1.0,
+            "excludeFlatSources": [],
+            "source": "native attached target weapon+820",
+            "callerBase": "fully-source-built-current-EmbedAttack-base-before-victim"
+          },
+          "liveVictimCO": true,
+          "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
+          "tick_rate": 1.0,
+          "tickRateSource": "native embed initial call140c3f312; fixed1s DoEmbedDamage callback140297d78",
+          "duration_seconds": 10.0
+        }
+      }
+    ],
+    "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile": [
+      {
+        "nativeField": "EmbedAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "one attached-target tick; same recipient excluded from area plan",
+        "nativeDelivery": "DoEmbedDamage +628 defaultRADIAL4 ->+790 ->weapon818 or820 ->victim340/348",
+        "componentOverrides": {
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "additive_with_base_damage",
+            "baseFraction": 2.5,
+            "excludeFlatSources": [],
+            "source": "native attached target weapon+818-success",
+            "callerBase": "source-mode-projectile-base50-with-native-source-base-hooks"
+          },
+          "liveVictimCO": true,
+          "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
+          "tick_rate": 1.0,
+          "tickRateSource": "native embed initial call140c3f312; fixed1s DoEmbedDamage callback140297d78",
+          "duration_seconds": 5.0
+        }
+      }
+    ],
+    "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile": [
+      {
+        "nativeField": "EmbedAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "one attached-target tick; same recipient excluded from area plan",
+        "nativeDelivery": "DoEmbedDamage +628 defaultRADIAL4 ->+790 ->weapon818 or820 ->victim340/348",
+        "componentOverrides": {
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "additive_with_base_damage",
+            "baseFraction": 1.5714285714285714,
+            "excludeFlatSources": [],
+            "source": "native attached target weapon+818-success",
+            "callerBase": "source-mode-projectile-base55-with-native-source-base-hooks"
+          },
+          "liveVictimCO": true,
+          "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
+          "tick_rate": 1.0,
+          "tickRateSource": "native embed initial call140c3f312; fixed1s DoEmbedDamage callback140297d78",
+          "duration_seconds": 5.0
+        }
+      }
+    ],
+    "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifleProjectile": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeRoute": "shot-region",
+        "nativeDelayRange": [
+          0.075,
+          0.15
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "1401c2190 positive cube damage schedules shot terminal; 14160c5a0 selects4x/12x; common region1413a6670 ->141027d20 ->victim+340/348; ordinary creator15b1=0; recipient is not explicit15b8",
+        "componentOverrides": {
+          "takes_victim_crit": false,
+          "takes_condition_overload": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuantaProjectile": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeRoute": "shot-region",
+        "nativeDelayRange": [
+          0.075,
+          0.15
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "1401c2190 positive cube damage schedules shot terminal; 14160c5a0 selects4x/12x; common region1413a6670 ->141027d20 ->victim+340/348; ordinary creator15b1=0; recipient is not explicit15b8",
+        "componentOverrides": {
+          "takes_victim_crit": false,
+          "takes_condition_overload": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterMiniProj": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "Guided790->base790->weapon820->CO once using same pre-CO child packet amount",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1.0,
+            "excludeFlatSources": []
+          },
+          "native_event_delay_seconds": 0.0
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "No790/820; ordinary target-CO predicate rejects; CO excluded",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "native_event_delay_seconds": 0.0
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterMiniProjMS": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "Guided790->base790->weapon820->CO once using same pre-CO child packet amount",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1.0,
+            "excludeFlatSources": []
+          },
+          "native_event_delay_seconds": 0.0
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "No790/820; ordinary target-CO predicate rejects; CO excluded",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "native_event_delay_seconds": 0.0
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterMiniProj": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "Guided790->base790->weapon820->CO once using same pre-CO child packet amount",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1.0,
+            "excludeFlatSources": []
+          },
+          "native_event_delay_seconds": 0.0
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "No790/820; ordinary target-CO predicate rejects; CO excluded",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "native_event_delay_seconds": 0.0
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterMiniProjMS": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "Guided790->base790->weapon820->CO once using same pre-CO child packet amount",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1.0,
+            "excludeFlatSources": []
+          },
+          "native_event_delay_seconds": 0.0
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "evidence": "No790/820; ordinary target-CO predicate rejects; CO excluded",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "native_event_delay_seconds": 0.0
+        }
+      }
+    ]
   }
 }

@@ -1,0 +1,120 @@
+{
+  "status": "production-candidate-explicit-standoff-cube-and-beam-detonation-policy",
+  "scope": "own-player-normal-source-cubes-single-enemy-with-explicit-standoff-overlap-and-optional-volley-chain-adjacency",
+  "rows": [
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle",
+      "name": "Quanta",
+      "launchMode": 1,
+      "detonatorMode": 0,
+      "launchAmmo": 10.0,
+      "launchNeedsFullRequirement": true,
+      "detonatorPulseAmmo": 0.5,
+      "detonatorPulses": 1,
+      "baseAlternateRate": 4.0,
+      "basePrimaryRate": 12.0,
+      "nativeModeSwitchTime": 0.0,
+      "policySettleSeconds": 0.25,
+      "holdPrimaryForSeconds": 0.08333333333333333,
+      "shotDelayNativeRange": [
+        0.075,
+        0.15
+      ],
+      "shotDelayRepresentative": 0.1125,
+      "shotDamage": {
+        "blast": 600.0
+      },
+      "shotRadius": 6.0,
+      "idleDamage": {
+        "blast": 150.0
+      },
+      "idleRadius": 0.5,
+      "idleLife": 9.0,
+      "sourceField": "ExplosiveAttack",
+      "sourceModeRetained": 1,
+      "enemyDirectContactDamage": false,
+      "enemyDetonatorBeamDamage": false,
+      "nativeAreaHitType": 4,
+      "chainDamageMultiplierPerCube": 4.0,
+      "chainDamageCompoundsAcrossGenerations": false,
+      "oneTerminalExplosionPerCube": true,
+      "globalAlreadyProducedCubeIsNotFreeAmmo": true
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/QuantaVandal",
+      "name": "Quanta Vandal",
+      "launchMode": 1,
+      "detonatorMode": 0,
+      "launchAmmo": 10.0,
+      "launchNeedsFullRequirement": true,
+      "detonatorPulseAmmo": 0.5,
+      "detonatorPulses": 1,
+      "baseAlternateRate": 4.0,
+      "basePrimaryRate": 12.0,
+      "nativeModeSwitchTime": 0.0,
+      "policySettleSeconds": 0.25,
+      "holdPrimaryForSeconds": 0.08333333333333333,
+      "shotDelayNativeRange": [
+        0.075,
+        0.15
+      ],
+      "shotDelayRepresentative": 0.1125,
+      "shotDamage": {
+        "blast": 600.0
+      },
+      "shotRadius": 6.0,
+      "idleDamage": {
+        "blast": 150.0
+      },
+      "idleRadius": 0.5,
+      "idleLife": 9.0,
+      "sourceField": "ExplosiveAttack",
+      "sourceModeRetained": 1,
+      "enemyDirectContactDamage": false,
+      "enemyDetonatorBeamDamage": false,
+      "nativeAreaHitType": 4,
+      "chainDamageMultiplierPerCube": 4.0,
+      "chainDamageCompoundsAcrossGenerations": false,
+      "oneTerminalExplosionPerCube": true,
+      "globalAlreadyProducedCubeIsNotFreeAmmo": true
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta",
+      "name": "Tenet Quanta",
+      "launchMode": 1,
+      "detonatorMode": 0,
+      "launchAmmo": 10.0,
+      "launchNeedsFullRequirement": true,
+      "detonatorPulseAmmo": 0.5,
+      "detonatorPulses": 1,
+      "baseAlternateRate": 4.0,
+      "basePrimaryRate": 10.0,
+      "nativeModeSwitchTime": 0.0,
+      "policySettleSeconds": 0.25,
+      "holdPrimaryForSeconds": 0.1,
+      "shotDelayNativeRange": [
+        0.075,
+        0.15
+      ],
+      "shotDelayRepresentative": 0.1125,
+      "shotDamage": {
+        "blast": 600.0
+      },
+      "shotRadius": 6.0,
+      "idleDamage": {
+        "blast": 150.0
+      },
+      "idleRadius": 0.5,
+      "idleLife": 9.0,
+      "sourceField": "ExplosiveAttack",
+      "sourceModeRetained": 1,
+      "enemyDirectContactDamage": false,
+      "enemyDetonatorBeamDamage": false,
+      "nativeAreaHitType": 4,
+      "chainDamageMultiplierPerCube": 4.0,
+      "chainDamageCompoundsAcrossGenerations": false,
+      "oneTerminalExplosionPerCube": true,
+      "globalAlreadyProducedCubeIsNotFreeAmmo": true
+    }
+  ]
+}

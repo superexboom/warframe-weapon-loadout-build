@@ -1,0 +1,91 @@
+{
+  "status": "source-field-lifetime-bound-qualification-proposal-not-production-write",
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "delayedRadialProducers": {
+    "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifleProjectile": {
+      "nativeClass": "/EE/Types/Engine/Projectile",
+      "nativeField": "ExplosiveAttack",
+      "recipientScope": "region-ordinary-avatar",
+      "nativeDelayRange": [
+        0.0,
+        9.0
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+      "componentOverrides": {
+        "takes_victim_crit": false,
+        "takes_condition_overload": false
+      },
+      "nativeDelivery": "140163b34->7b8=140f360f0 region2c8->1413a6670->141027d20->ordinary victim340/348",
+      "phaseContracts": [
+        {
+          "phase": "collision",
+          "launchDelay": "accepted-contact-time; existing model collapses flight to0",
+          "modeledDelay": 0.0
+        },
+        {
+          "phase": "player-shot",
+          "nativeHitToDeathDelayRange": [
+            0.075,
+            0.15
+          ],
+          "modeledLaunchDelay": ".25+1/moddedPrimaryRate+.1125; chain siblings add.1125",
+          "nativeHitType": "DHT_RADIAL4"
+        },
+        {
+          "phase": "idle",
+          "modeledLaunchDelay": 9.0,
+          "nativeHitType": "DHT_RADIAL4"
+        }
+      ],
+      "sourceContract": "own-player normal original-source mode1; no runtime15b1 script override; region-ordinary-avatar recipient; cube terminal unique",
+      "evidence": "quanta-completion/NOTES.md and region sender141027d20.asm"
+    },
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuantaProjectile": {
+      "nativeClass": "/EE/Types/Engine/Projectile",
+      "nativeField": "ExplosiveAttack",
+      "recipientScope": "region-ordinary-avatar",
+      "nativeDelayRange": [
+        0.0,
+        9.0
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+      "componentOverrides": {
+        "takes_victim_crit": false,
+        "takes_condition_overload": false
+      },
+      "nativeDelivery": "140163b34->7b8=140f360f0 region2c8->1413a6670->141027d20->ordinary victim340/348",
+      "phaseContracts": [
+        {
+          "phase": "collision",
+          "launchDelay": "accepted-contact-time; existing model collapses flight to0",
+          "modeledDelay": 0.0
+        },
+        {
+          "phase": "player-shot",
+          "nativeHitToDeathDelayRange": [
+            0.075,
+            0.15
+          ],
+          "modeledLaunchDelay": ".25+1/moddedPrimaryRate+.1125; chain siblings add.1125",
+          "nativeHitType": "DHT_RADIAL4"
+        },
+        {
+          "phase": "idle",
+          "modeledLaunchDelay": 9.0,
+          "nativeHitType": "DHT_RADIAL4"
+        }
+      ],
+      "sourceContract": "own-player normal original-source mode1; no runtime15b1 script override; region-ordinary-avatar recipient; cube terminal unique",
+      "evidence": "quanta-completion/NOTES.md and region sender141027d20.asm"
+    }
+  },
+  "explanation": "Delay0..9 is launch-lifetime envelope for these terminal-only source packets; shot-native[.075,.15] is measured from accepted hit, not launch. Explicit contact victim c24 override is not imported into region packets."
+}

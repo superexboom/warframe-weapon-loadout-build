@@ -489,11 +489,20 @@ def _reference_trajectory(
     def deliver_projectile(part,t):
         aim = head if part.area_direct else 0.
         result = packet(part,aim)
-        if not take(result[0],t,'direct',weak_kill=aim,cv2=spread(part,aim)):
+        damage_event = None
+        if part.stackable_hit_event:
+            puncture = live_crit()[0] if not part.radial_only or part.radial_victim_crit else 0.
+            full_victim = abs(pools[1]-full[1])<1e-7 and abs(pools[2]-full[2])<1e-7
+            cc = part.crit_chance + (part.victim_full_crit_chance if full_victim else 0.)
+            weak = part.weakpoint_crit_chance_bonus + part.base_crit_chance*part.weakpoint_crit_chance_relative
+            weights = enervate.damage_marginal() if enervate else {0:1.}
+            body_multiplier = 1. if part.radial_only else part.bodyshot_crit_multiplier
+            critical = sum(weight*((1.-aim)*min(max(max(0.,cc+stacks*.1+puncture)*body_multiplier,0.),1.)
+                + aim*min(max(max(0.,cc+stacks*.1+puncture)+weak,0.),1.)) for stacks,weight in weights.items())
+            damage_event = (part.multishot,critical*part.multishot)
+        if not take(result[0],t,'direct',weak_kill=aim,cv2=spread(part,aim),damage_event=damage_event):
             add_procs(part,aim,t,result)
         noncrit_no_proc_hit(part,aim,t)
-        if part.stackable_hit_event:
-            signal('on-hit',t,part.multishot)
         if part.area_direct:
             signal('on-headshot',t,aim*part.multishot)
             consecutive_heads(t,aim)
@@ -849,6 +858,14 @@ def _reference_trajectory(
         extra_scale *= ((1 - head) + head * head_part * head_part) / ((1 - head) + head * head_part)
 
     def radial_hit(part, sniper_factor, t):
+        unit=getattr(part,'_live_co_unit',None)
+        refresh=getattr(part,'_live_hit_refresh',None)
+        if refresh is not None:
+            part=refresh({q['id']:q['stacks'] for q in sources},sum(p.probability(t) for p in presence.values()))
+        elif unit is not None:
+            from .damage import co_variant,with_value
+            live=sum(p.probability(t) for p in presence.values())
+            part=co_variant(unit,unit._co_spec,[with_value(e,e.value*live) for e in unit.co_bucket])
         if part.delayed_radial_hit_event:
             combat['victimProcTypesBeforeHit'] = {dtype:p.probability(t) for dtype,p in presence.items()}
         radial_packet = packet(part, 0.0)
@@ -857,8 +874,8 @@ def _reference_trajectory(
         if part.delayed_radial_hit_event:
             full_victim = abs(pools[1]-full[1])<1e-7 and abs(pools[2]-full[2])<1e-7
             cc = part.crit_chance + (part.victim_full_crit_chance if full_victim else 0.) + (live_crit()[0] if part.radial_victim_crit else 0.)
-            weights = enervate.damage_marginal() if enervate else {0: 1.}
-            critical = sum(weight*min(max((cc+stacks*.1)*part.bodyshot_crit_multiplier,0.),1.)
+            weights = enervate.damage_marginal() if enervate and not getattr(part,'_snapshot_enervate',False) else {0: 1.}
+            critical = sum(weight*min(max((cc+stacks*.1)*(1. if part.radial_only else part.bodyshot_crit_multiplier),0.),1.)
                            for stacks,weight in weights.items())
             damage_event = (part.multishot, critical*part.multishot)
         if not take(radial_vector, t, 'direct', cv2=spread(part,0.), damage_event=damage_event):
@@ -1131,6 +1148,9 @@ def _reference_trajectory(
         return .05*count('DT_PUNCTURE'),cd
 
     def packet(st, aim):
+        snapshot_enervate=getattr(st,'_snapshot_enervate',False)
+        contact_shiver=getattr(st,'_contact_shiver',False)
+        contact_cold=count('DT_FREEZE') if contact_shiver else 0.
         if getattr(st,'_fixed_radial',False):
             return attack_data(st,0.)
         puncture,cold=live_crit()
@@ -1143,20 +1163,20 @@ def _reference_trajectory(
                          crit_multiplier=st.crit_multiplier+st.victim_full_crit_damage)
         if full[2]>0 and pools[2]<full[2]*.5 and st.victim_low_health_multiplier!=1.:
             st = replace(st,damage_types={k:v*st.victim_low_health_multiplier for k,v in st.damage_types.items()})
-        if not enervate and not puncture and not cold:
+        if (not enervate or snapshot_enervate) and not puncture and not cold and not contact_cold:
             return attack_data(st, aim)
         # Secondary Shiver adds each live Cold stack to the base-damage
         # bracket; Melee Careen multiplies hits on a frozen target.
         shiver = frozen = 1.0
-        if cold and not st.radial_only and (st.cold_stack_damage or st.frozen_damage_multiplier != 1.0):
+        if (cold and not st.radial_only or contact_cold) and (st.cold_stack_damage or st.frozen_damage_multiplier != 1.0):
             stacks_cold = count('DT_FREEZE')
             if st.cold_stack_damage and st.base_damage_bracket > 0:
                 shiver = (st.base_damage_bracket + st.cold_stack_damage*min(stacks_cold, 10.))/st.base_damage_bracket
-            if frozen_until > current_time or stacks_cold >= 10-1e-9:
+            if not st.radial_only and (frozen_until > current_time or stacks_cold >= 10-1e-9):
                 frozen = st.frozen_damage_multiplier
         vector, procs, rows, non = {}, {}, {}, {}
         seed_sums, non_sums = {}, {}
-        weights=enervate.damage_marginal() if enervate else {0:1.0}
+        weights=enervate.damage_marginal() if enervate and not snapshot_enervate else {0:1.0}
         for stacks, weight in weights.items():
             key=(id(st), stacks, puncture, cold, shiver, frozen)
             if key not in crit_views:
@@ -1206,7 +1226,7 @@ def _reference_trajectory(
             return
         puncture = 0.0 if st.radial_only and not st.radial_victim_crit else live_crit()[0]
         weak = st.weakpoint_crit_chance_bonus + st.base_crit_chance * st.weakpoint_crit_chance_relative
-        marginal = enervate.damage_marginal() if enervate else {0: 1.0}
+        marginal = enervate.damage_marginal() if enervate and not getattr(st,'_snapshot_enervate',False) else {0: 1.0}
         noncrit = 0.0
         for stacks, weight in marginal.items():
             cc = max(0.0, st.crit_chance + stacks * .1 + puncture)
@@ -1570,11 +1590,38 @@ def _reference_trajectory(
             vec,_,_,_=attack_data(part,0.)
             if not take({k:v*damage_rate_multiplier for k,v in vec.items()},t,'direct',cv2=spread(part,0.)):
                 add_procs(part,0.,t)
+        elif kind == 'zymos-carrier':
+            source,weight=payload
+            snapshot=source._zymos_carrier({q['id']:q['stacks'] for q in sources},enervate.damage_marginal() if enervate else {0:1.})
+            push(t+source._zymos_policy['frameSeconds'],'zymos-spawn',(source,snapshot,weight),generation)
+        elif kind == 'zymos-spawn':
+            source,snapshot,weight=payload
+            packets=source._zymos_children(snapshot,{q['id']:q['stacks'] for q in sources},weight,enervate.damage_marginal() if enervate else {0:1.})
+            for contact,blast,delay in packets:
+                push(t+delay,'zymos-hit',(contact,blast),generation)
+        elif kind == 'zymos-hit':
+            contact,blast=payload
+            radial_hit(contact,1.,t)
+            if gen==generation:radial_hit(blast,1.,t)
+        elif kind == 'quanta-primary':
+            ammo -= payload
+            signal('on-fire',t)
         elif kind == 'lingering':
             part = payload
-            vec, _, _, _ = attack_data(part, 0.0)
-            if not take(vec, t, 'direct', cv2=spread(part,0.)):
-                add_procs(part, 0.0, t)
+            unit = getattr(part, '_live_co_unit', None)
+            refresh = getattr(part, '_live_hit_refresh', None)
+            if refresh is not None:
+                part = refresh({q['id']:q['stacks'] for q in sources},sum(p.probability(t) for p in presence.values()))
+            elif unit is not None:
+                from .damage import co_variant, with_value
+                live = sum(p.probability(t) for p in presence.values())
+                part = co_variant(unit, unit._co_spec, [with_value(e, e.value*live) for e in unit.co_bucket])
+            if part.delayed_radial_hit_event:
+                radial_hit(part, 1., t)
+            else:
+                vec, _, _, _ = attack_data(part, 0.0)
+                if not take(vec, t, 'direct', cv2=spread(part,0.)):
+                    add_procs(part, 0.0, t)
         elif kind == "dot":
             dtype, value, end = payload
             if t <= end + 1e-9:
@@ -1773,7 +1820,9 @@ def _reference_trajectory(
                         for q in free_sources:
                             _settle(q, q is free_held)
                         active, radial = model(t)
-            insufficient_ammo = getattr(active, '_requires_full_ammo', False) and ammo + 1e-9 < max(active.ammo_cost, 0.0)
+            paid_cube=getattr(active,'_quanta_strategy',None)
+            required_ammo=max(active.ammo_cost,0.)+(paid_cube['primaryAmmoCost'] if paid_cube else 0.)
+            insufficient_ammo = getattr(active, '_requires_full_ammo', False) and ammo + 1e-9 < required_ammo
             # A shot reloads only when it cannot fire: a free one (infinite
             # ammo up) fires on an empty magazine (WFSim rolls::can_fire;
             # Knell chains headshots on its one round).
@@ -1978,7 +2027,7 @@ def _reference_trajectory(
                     active = clipped
             field_duration_boost = field_duration_ready
             field_duration_ready = False  # A shot consumes it, even when that shot kills.
-            hit_count = (1.0 if active.continuous else max(active.multishot,0.0))
+            hit_count = 0. if paid_cube else (1.0 if active.continuous else max(active.multishot,0.0))
             # Each landing pellet counts before its combo tier is paid. The
             # shot snapshots this multiplier for its hits and status seeds.
             sniper_factor = 1.
@@ -2044,6 +2093,9 @@ def _reference_trajectory(
                     pending_mines.append((extra_part, generation))
                 pending_throws += 1
                 died = False
+            elif paid_cube:
+                push(t+paid_cube['primaryFireSeconds'],'quanta-primary',paid_cube['primaryAmmoCost'])
+                died=False
             elif primary_delay:
                 push(t + primary_delay, 'delayed-attack', (copy(active), aim), generation)
                 died = False
@@ -2060,7 +2112,7 @@ def _reference_trajectory(
                 spread(active,aim),
                 )
                 noncrit_no_proc_hit(active, aim, t)
-            if finite_fields and active.multishot>0 and not physical_lanes and not manual_detonation and not primary_delay and not stackable:
+            if finite_fields and active.multishot>0 and not physical_lanes and not manual_detonation and not primary_delay and not stackable and not paid_cube:
                 # The spatial field survives death; modeled coverage remains
                 # bound to the original victim generation, never the next target.
                 finite_field_activations+=1
@@ -2096,7 +2148,7 @@ def _reference_trajectory(
                     push(t+tick/tick_rate, 'embedded-tick', identity)
                     tick += 1
                 projectile_wait = max(0., lifetime-1./speed)
-            if not physical_lanes and not died and not manual_detonation and not primary_delay and not stackable:
+            if not physical_lanes and not died and not manual_detonation and not primary_delay and not stackable and not paid_cube:
                 add_procs(active, aim, t, direct_packet, damage_scale=sniper_factor)
                 if source_owned_fields and gen==generation and active.multishot>0:
                     source_field_activations+=1
@@ -2145,6 +2197,9 @@ def _reference_trajectory(
                          None if getattr(part,'_persist_after_kill',False) else generation)
                 else:
                     radial_hit(part, sniper_factor, t)
+            if getattr(active,'_zymos_policy',None) and head>0:
+                push(t+active._zymos_policy['embedDelaySeconds'],'zymos-carrier',
+                     (active,head*active.multishot),generation)
             if hit_count > 0 and burst and burst_round==burst_size-1:
                 signal("on-burst-hit", t)
             if burst:
@@ -2152,11 +2207,11 @@ def _reference_trajectory(
                 if burst_round==burst_size-1:
                     signal('on-burst-headshot',t,burst_head_probability)
                     burst_head_probability=1.
-            if not physical_lanes and (not manual_detonation or impact_embed) and not primary_delay and not stackable:
+            if not physical_lanes and (not manual_detonation or impact_embed) and not primary_delay and not stackable and not paid_cube:
                 enervate_hit(active,t,shot_puncture,aim)
             signal('on-fire', t)
             through=(combat.get('projectileState') or {}).get('punchthroughTargets',0)
-            if through:
+            if through and not paid_cube:
                 signal('on-punchthrough',t,through)
                 if form=='base' or not combat.get('selectedIncarnon'):
                     signal('on-onos-damage-condition',t)
@@ -2168,7 +2223,7 @@ def _reference_trajectory(
                 onos_condition_hits-=completed*2.
                 if completed:
                     signal('on-onos-damage-condition',t,completed)
-            if not physical_lanes and (not manual_detonation or impact_embed) and not primary_delay and not stackable:
+            if not physical_lanes and (not manual_detonation or impact_embed) and not primary_delay and not stackable and not paid_cube:
                 signal("on-hit", t, hit_count)
                 if aim<1.:
                     signal('on-body-hit',t,(1.-aim)*hit_count)
@@ -2202,7 +2257,7 @@ def _reference_trajectory(
                     # reload follows every shot, whatever the shot cost.
                     ammo = min(ammo, 0.0)
                 restore=combat.get('magazineRestore')
-                if restore and restore['kind'] in {'on-headshot','on-hit'} and magazine_form:
+                if restore and restore['kind'] in {'on-headshot','on-hit'} and magazine_form and not paid_cube:
                     eligible=not restore.get('victimProcType') or combat.get('victimProcTypesBeforeHit',{}).get(restore['victimProcType'])
                     if eligible:
                         probability=1.-(1.-aim)**hit_count if restore['kind']=='on-headshot' else 1.
@@ -2230,6 +2285,7 @@ def _reference_trajectory(
                     if combat.get('onosCrits'):
                         onos_hits = min(50.,onos_hits+hit_count)
             delay += projectile_wait
+            if paid_cube:delay=max(delay,paid_cube['cycleSeconds'])
             if delay == 0 and ammo > 0:
                 delay = active.reload_time or 1.0 / speed
             if burst:
@@ -2409,6 +2465,8 @@ def _reference_trajectory(
         'delayedAttackEvents': delayed_attack_count,
         'projectileEvents': projectile_events or [],
         'fullClipCharge': combat.get('fullClipCharge'),
+        'quantaStrategy': combat.get('quantaStrategy'),
+        'zymosChildren': combat.get('zymosChildren'),
         'chargeVolley': {'policy':'full-magazine', 'events':volley_events} if combat.get('chargeVolley') else None,
         'projectileLifecycle': projectiles.stats if projectiles else {},
         'onosSequence': {'events':onos_events,'alignmentShots':onos['alignmentShots'],'powerCost':onos['powerCost']} if onos else None,

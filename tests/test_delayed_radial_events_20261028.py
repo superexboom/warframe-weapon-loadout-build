@@ -88,7 +88,7 @@ def test_unclosed_delayed_producers_stay_unadmitted(name):
     assert all(not p.delayed_radial_hit_event for p in [r,*getattr(r,'_additional_radials',())])
 
 def test_unrelated_source_is_not_admitted_by_radial_shape():
-    path,row=next(iter(producers.producers().items()))
+    path,rows=next(iter(producers.producers().items()));row=rows[0]
     component=dict(nativeSource=path,nativeField=row['nativeField'],impact_delay_seconds=sum(row['nativeDelayRange'])/2)
     assert producers.admitted(component)
     component['nativeSource']='/unknown'
@@ -107,16 +107,18 @@ def test_delayed_lethal_packet_sees_old_victims_current_status(monkeypatch):
     s.native_forced_procs={'DT_PUNCTURE':1.}
     qs=sources()+[dict(id='gated',label='gated',kind='on-hit',victimProcType='DT_PUNCTURE',duration=100.,maxStacks=100.,perEvent=1.)]
     raw,_=run(monkeypatch,s,c,health=70.,trigger_sources=qs)
-    assert raw['sourceStacks']==pytest.approx([2.,0.,0.,0.,1.,1.])
+    # Explicit recipient is PROJECTILE2 after +c24 overwrite: one Puncture
+    # grants .05 crit, but never a head notification.
+    assert raw['sourceStacks']==pytest.approx([2.,.05,0.,0.,1.,1.])
 
 
-def test_radial_crit_uses_full_victim_and_body_multiplier(monkeypatch):
+def test_radial_crit_uses_full_victim_without_body_part_multiplier(monkeypatch):
     s,r,c=bound('Zakti')
     s.damage_types={k:0. for k in s.damage_types}
     r.victim_full_crit_chance=1.
     r.bodyshot_crit_multiplier=.5
     raw,_=run(monkeypatch,s,c)
-    assert raw['sourceStacks']==pytest.approx([2.,.5,0.,0.,0.])
+    assert raw['sourceStacks']==pytest.approx([2.,1.,0.,0.,0.])
 
 
 def test_zero_damage_delayed_packet_does_not_notify(monkeypatch):
@@ -159,3 +161,65 @@ def test_unarmed_acceltra_has_no_radial_notification(monkeypatch):
     assert r is None
     raw,_=run(monkeypatch,s,c)
     assert raw['sourceStacks']==pytest.approx([1.,1.,0.,0.,0.])
+
+
+def test_pox_attached_ticks_use_live_co_and_notify_once_per_tick(monkeypatch):
+    from wfarsenal.damage import ModEffect
+    weapon=next(w for w in app.EXPORTS['weapons'] if w['nameEn']=='Pox')
+    effects=[ModEffect('WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE','STACKING_MULTIPLY',1.),
+             ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.)]
+    c=prepare(dict(weapon=weapon,fire_mode=0,effects=effects,scenario=Scenario()),[],[])
+    s,_=c['resolve']('selected',{},0.)
+    s.fire_rate=.001;s.native_forced_procs={'DT_PUNCTURE':1.}
+    part,rate,duration=s._lingering
+    assert (rate,duration)==(1.,5.)
+    assert part.delayed_radial_hit_event and not part.radial_victim_crit
+    assert part.total_damage==20.  # launch had no victim statuses
+    c['resolve']=lambda *_:(s,None)
+    raw,ref=run(monkeypatch,s,c,window=1.001)
+    # The contact applies Puncture before immediate/1s ticks. Each tick uses
+    # its native 20 + parent-query 50 CO basis; no duplicate area hit on host.
+    assert ref['directWindow']==pytest.approx(50.+2*(20.+50.))
+    assert raw['sourceStacks']==pytest.approx([3.,0.,0.,0.,0.])
+
+    # Real Galvanized Shot stacks expire during a surviving host's field. The
+    # next tick must refresh the CO source bucket as well as victim statuses.
+    from wfarsenal.damage import mod_effects
+    mod=next(m for m in app.EXPORTS['mods'] if m.get('nameEn')=='Galvanized Shot')
+    scenario=Scenario(trigger_policy='emergent')
+    fx=[*mod_effects(mod,mod['maxRank'],scenario),*effects[1:]]
+    fight=prepare(dict(weapon=weapon,fire_mode=0,effects=fx,scenario=scenario),[(mod,mod['maxRank'],{})],[])
+    q=fight['trigger_sources'][0];q.update(initialStacks=1.,initialDuration=.5)
+    launched,_=fight['resolve']('selected',{q['id']:1.},0.)
+    launched.fire_rate=.001;launched.native_forced_procs={'DT_PUNCTURE':1.}
+    coefficient=launched._lingering[0].co_bucket[0].value
+    fight['resolve']=lambda *_:(launched,None)
+    _,expired=run(monkeypatch,launched,fight,window=1.001,trigger_sources=[q,*sources()])
+    assert expired['directWindow']==pytest.approx(50.+20.+50.*coefficient+20.)
+
+    # Ordinary source damage is live too; the retained projectile crit bucket
+    # is distinct. A real Secondary Merciless stack ends before the 1s tick.
+    arcane=next(a for a in app.EXPORTS['arcanes'] if a.get('nameEn')=='Secondary Merciless')
+    fight=prepare(dict(weapon=weapon,fire_mode=0,effects=effects[1:],scenario=scenario),[],[(arcane,5,{})])
+    q=fight['trigger_sources'][0];q.update(initialStacks=1.,initialDuration=.5)
+    launched,_=fight['resolve']('selected',{q['id']:1.},0.)
+    launched.fire_rate=.001
+    field=launched._lingering[0]
+    retained=field.crit_chance
+    refreshed=field._live_hit_refresh({q['id']:0.},0.)
+    assert field.total_damage>refreshed.total_damage==20.
+    assert refreshed.crit_chance==retained
+    expected=launched.total_damage+field.total_damage+20.
+    fight['resolve']=lambda *_:(launched,None)
+    _,expired=run(monkeypatch,launched,fight,window=1.001,trigger_sources=[q,*sources()])
+    assert expired['directWindow']==pytest.approx(expected)
+
+    crosshairs=next(m for m in app.EXPORTS['mods'] if m.get('nameEn')=='Galvanized Crosshairs')
+    aiming=Scenario(trigger_policy='emergent',aiming=True)
+    fight=prepare(dict(weapon=weapon,fire_mode=0,effects=mod_effects(crosshairs,crosshairs['maxRank'],aiming),
+        scenario=aiming),[(crosshairs,crosshairs['maxRank'],{})],[])
+    active={q['id']:1. for q in fight['trigger_sources']};inactive={key:0. for key in active}
+    fired,_=fight['resolve']('selected',active,0.);fresh,_=fight['resolve']('selected',inactive,0.)
+    old_field=fired._lingering[0]
+    assert old_field.crit_chance>fresh._lingering[0].crit_chance
+    assert old_field._live_hit_refresh(inactive,0.).crit_chance==old_field.crit_chance

@@ -60,9 +60,17 @@ def supported(stats, options) -> bool:
         return False
     if (combat.get('cycle') or {}).get('chargeBeforeFire') and not getattr(wfcore, 'KILL_CHARGED_WINDUP', 0):
         return False
-    if (combat.get('delayedRadialEvents') or getattr(stats, 'delayed_radial_hit_event', False)) and getattr(wfcore, 'DELAYED_RADIAL_EVENTS', 0) < 2:
+    if (combat.get('delayedRadialEvents') or getattr(stats, 'delayed_radial_hit_event', False)) and getattr(wfcore, 'DELAYED_RADIAL_EVENTS', 0) < 3:
         return False
     if (combat.get('radialCritStatus') or stats.radial_victim_crit) and not getattr(wfcore, 'RADIAL_VICTIM_CRIT', 0):
+        return False
+    if combat.get('zymosChildren') and not getattr(wfcore,'ZYMOS_ORDERED_CHILDREN',0):
+        return False
+    if combat.get('stugIdealDetonation') and not getattr(wfcore,'STACKABLE_CRITICAL_EVENTS',0):
+        return False
+    if combat.get('delayedRadialEvents') and not getattr(wfcore,'RADIAL_LIVE_CO',0):
+        return False
+    if combat.get('quantaStrategy') and not getattr(wfcore,'QUANTA_PAID_PRIMARY',0):
         return False
     if combat.get('nativeFireGate') and not getattr(wfcore, 'NATIVE_FIRE_COOLDOWN', 0):
         return False
@@ -710,6 +718,8 @@ def trajectory(
         'delayedAttackEvents': core['delayedAttackEvents'],
         'projectileEvents': [],
         'fullClipCharge': combat.get('fullClipCharge'),
+        'quantaStrategy': combat.get('quantaStrategy'),
+        'zymosChildren': combat.get('zymosChildren'),
         'chargeVolley': {'policy':'full-magazine','events':[]} if combat.get('chargeVolley') else None,
         'projectileLifecycle': (dict(zip(('deployed', 'merged', 'explosions', 'singularities', 'childProjectiles'),
                                          core['projectiles'])) if 'projectiles' in core else {}),

@@ -67,3 +67,51 @@
 - 本批只推Portable源码与审计记录，不烘焙、不迁移Bot、不构建发行包。公开未闭合机制仍列在上表，未声称完成所有武器校准。
 
 最终引擎输入 `4178a14118b19241`；验证native SHA256 `50a6ca44eda6654ebc1c9dea55edb5d2376cebc2e73d966aa3f16e5ed091ffba`。验证明细见 [evidence/validation.json](evidence/validation.json)。
+
+## 连续落地轮次（起点 dd78e98）
+
+本轮持续推进下列既定未尽项，只有确需游戏实测／场景输入的部分后置。主线程负责Stug及集成，不等待子代理空转。
+
+| ID | 静态目标 | 负责人 | 当前状态 |
+|---|---|---|---|
+| R1 | 四族集束contact实际impact提交、source、crit/事件/CO各自消费 | packet_native_routes | 完成：逐枚配对、实时CO、独立资格已验证 |
+| R2 | Pox/CodaPox/Torid EmbedAttack实际时钟与modifier/事件 | projectile_families | 完成：每跳当前伤害/元素/触发/CO，保留暴击桶 |
+| R3 | Phantasma普通/MS子弹生成和继承合同 | lifecycle_remaining | 满夹与普通/MS子弹已接入并验证 |
+| R4 | Trumna bounce/expiry实际回调，单体可用策略 | lifecycle_remaining | 已闭合；保留首次接触策略与几何边界 |
+| R5 | Sepulcrum lock-target到emission和时序 | lifecycle_remaining | 已闭合；现有5主击杀→单锁导弹循环正确 |
+| R6 | Stug plan+e8实际recipient consumer及特殊分类来源 | root | 错误descriptor已纠正；Stug通知已修复 |
+| R7 | Zymos/Quanta剩余来源、脚本/对象生命周期合同 | root／空闲子代理 | 完成普通来源策略：有序快照、付费动作、generation门；特殊外部context另列边界 |
+| R8 | 可证明修复接入、原有测试最少补改、清单收束与推送 | root | 实现/验证/文档完成；Portable提交与远端记录确认交付 |
+
+
+### 本轮落地结果
+
+- R1：四族contact已独立确认CO、victim crit及generic通知；三族终止碰撞爆炸的explicit recipient也独立开放，Kulstar不套用该终止接触结论。所有子包改为每枚contact→explosion，当前CO在到达时读取。
+- R2：Torid/Pox/Coda的1秒附着包、精确CO基数与generic通知完成。普通damage/element/status动态读取，保留发射暴击桶；真实Galvanized、Merciless及Crosshairs变动在同一个既有回归覆盖。
+- R3：Phantasma满夹蓄力/耗弹/父伤害与MS子弹数量分开；显式理想覆盖选项已接UI、Scenario、manual/optimizer、Rust。默认未假定每枚追踪命中。
+- R4/R5：Trumna生命周期、Sepulcrum单目标锁定预算已闭合，现有首次接触/5击杀循环保留；无免费7/8次bounce或5目标伤害。
+- R6：旧descriptor错移与c24后覆盖的结论已更正；Stug的genericcrit漏发已修，事件在旧目标retirement前递交。
+- R7：Quanta付费主射击引爆选项已落地；Zymos有序B物理接触+333独立毒伤、普通CC/CD两查询、Enervate时点读取与Shiver接触资格已落地。实际飞行/覆盖以显式策略配置，不伪装为已实测。
+- 旧核心能力不足自动回退Python；新增适配模块和机制数据均参与分析缓存指纹，旧缓存不能冒充新结果。导入器保留同source的多field/route记录，更新四种旧delayed来源不覆盖后来新增的消费者审核。
+
+### 验证与提交范围
+
+当前引擎输入 `bc77957493b0dd90`，本机native SHA256 `671627078a79fdcdc3b457b0db7f66d307c9c7fb1c3acb16b74aa3dfd8d92882`。
+
+- 聚焦 **137 passed**，零失败/错误/跳过；包含真实Crosshairs保留暴击及最终Zymos源身份门。
+- 现有工具选5种代表武器的 **28** 个实际搜索场景，Python/native评分完全一致，零回退，输入稳定。Quanta/Zymos可选策略另在原功能用例中经真实manual/optimizer及SHADOW验证。
+- 全项目collect **2248**，本轮起点2247，净 **+1**；新增测试文件0。删掉旧“爆炸一律不吃状态暴击”的源码字符串断言与重复Phantasma旧父弹数值用例，保留真实生命周期/消费者回归。
+- `node --check`、Python导入/编译及`git diff --check`通过。Rust编译完成；仅已有unused警告，没有发行包构建。
+- 已fetch核对远端；本轮仅提交Portable源码、机制数据与精简证据。不烘焙、不迁移Bot、不创建release。
+
+验证证据：[evidence/validation-r1-r8.json](evidence/validation-r1-r8.json)；实际源码链：[NATIVE-ROUTES.md](NATIVE-ROUTES.md)；测试范围：[TEST-SCOPE.md](TEST-SCOPE.md)。
+
+### 明确后置和支持边界
+
+| 类别 | 内容 | 处理 |
+|---|---|---|
+| 需要场景／实测 | 追踪子弹LOS、飞行命中率、具体命中部位；弹跳再次覆盖；cube相邻链、瞄准失败与重试 | 继续后置；UI提供显式理想单体策略，不额外发明必命中次数 |
+| 已知近似 | 分数MS期望权重、Enervate两个时间点边际概率相关性、Wait0按所选帧间隔、随机延迟取代表值 | 保留诊断；不称为实机帧级／随机轨迹精确复刻 |
+| 额外来源支持范围 | 能力/脚本向F/G/FE0/FE4/FE8临时缓存注入、非普通来源武器、特殊下一发伤害context | 普通静态MOD和本次Enervate不借用这些字段；已追setter/getter/reset并区分来源。不将未接入的任意能力组合称为“必须实测”或“全游戏已校准” |
+
+本轮完成R1–R8所列普通来源合同与可选操作策略；这不是全部武器、全部外部能力组合的游戏校准证明。

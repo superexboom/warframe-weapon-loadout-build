@@ -234,6 +234,10 @@ struct Stats {
     base_damage_bracket: f64,
     frozen_damage_multiplier: f64,
     requires_full_ammo: bool,
+    quanta: Option<(f64, f64, f64)>, // primary ammo, primary action time, complete cycle
+    zymos: Option<(f64, f64)>, // embed delay, next-frame carrier consumption
+    snapshot_enervate: bool,
+    contact_shiver: bool,
     bow_draw: Option<f64>,
     charge_time: f64,
     charge_before_fire: bool,
@@ -256,6 +260,7 @@ struct Stats {
     impact_delay: f64,
     persist_after_kill: bool,
     lingering: Option<(usize, f64, f64)>,
+    live_co_unit: Option<usize>,
     source_fields: Vec<(usize,f64,f64,usize)>,
     finite_fields: Vec<(usize,f64,f64,usize)>,
     embedded: Option<(usize, f64, f64)>,
@@ -296,6 +301,10 @@ impl Stats {
         self.embedded = None;
         self.charge_pool_cost = 1.0;
         self.requires_full_ammo = false;
+        self.quanta = None;
+        self.zymos = None;
+        self.snapshot_enervate = false;
+        self.contact_shiver = false;
         self.head_only = false;
         self.body_only = false;
         self.impact_delay = 0.0;
@@ -343,6 +352,10 @@ impl Stats {
             base_damage_bracket: self.base_damage_bracket,
             frozen_damage_multiplier: self.frozen_damage_multiplier,
             requires_full_ammo: self.requires_full_ammo,
+            quanta: self.quanta,
+            zymos: self.zymos,
+            snapshot_enervate: self.snapshot_enervate,
+            contact_shiver: self.contact_shiver,
             bow_draw: self.bow_draw,
             charge_time: self.charge_time,
             charge_before_fire: self.charge_before_fire,
@@ -364,6 +377,7 @@ impl Stats {
             impact_delay: self.impact_delay,
             persist_after_kill: self.persist_after_kill,
             lingering: self.lingering,
+            live_co_unit: self.live_co_unit,
             source_fields:self.source_fields.clone(),
             finite_fields:self.finite_fields.clone(),
             embedded: self.embedded,
@@ -433,6 +447,10 @@ enum Kind {
     ReloadShell(f64, f64),
     Transform(u8),
     DelayedRadial(usize, f64),
+    QuantaPrimary(f64),
+    ZymosCarrier(usize, f64),
+    ZymosSpawn(usize, Rc<Py<PyAny>>, f64),
+    ZymosHit(usize, usize),
     DelayedAttack(usize, f64),
     Lingering(usize),
     SourceField(u64,usize,usize),
@@ -1114,6 +1132,14 @@ impl<'py> Replay<'py> {
             Some(v) => v.is_truthy()?,
             None => false,
         };
+        let quanta = match opt_attr(obj, "_quanta_strategy")? {
+            Some(v) => {
+                let d = v.cast::<PyDict>()?;
+                Some((get_f(d, "primaryAmmoCost", 0.0)?, get_f(d, "primaryFireSeconds", 0.25)?,
+                      get_f(d, "cycleSeconds", 0.0)?))
+            },
+            None => None,
+        };
         let core = self.core_from(obj, &damage_types, &native_forced_procs, &independent_proc_chances)?;
         let s = Stats {
             obj: obj.clone().unbind(),
@@ -1148,6 +1174,16 @@ impl<'py> Replay<'py> {
             base_damage_bracket: f(obj, "base_damage_bracket")?,
             frozen_damage_multiplier: f(obj, "frozen_damage_multiplier")?,
             requires_full_ammo,
+            quanta,
+            contact_shiver: match opt_attr(obj, "_contact_shiver")? { Some(v) => v.is_truthy()?, None => false },
+            snapshot_enervate: match opt_attr(obj, "_snapshot_enervate")? { Some(v) => v.is_truthy()?, None => false },
+            zymos: match opt_attr(obj, "_zymos_policy")? {
+                Some(v) => {
+                    let d = v.cast::<PyDict>()?;
+                    Some((get_f(d, "embedDelaySeconds", 1.1)?, get_f(d, "frameSeconds", 1.0/60.0)?))
+                },
+                None => None,
+            },
             bow_draw,
             charge_time,
             charge_before_fire: match opt_attr(obj,"_charge_before_fire")? { Some(v) => v.is_truthy()?, None => false },
@@ -1180,7 +1216,7 @@ impl<'py> Replay<'py> {
             body_only: match opt_attr(obj, "_body_only")? { Some(v) => v.is_truthy()?, None => false },
             impact_delay: match opt_attr(obj, "_impact_delay")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
             persist_after_kill: match opt_attr(obj, "_persist_after_kill")? { Some(v) => v.is_truthy()?, None => false },
-            lingering: None,source_fields:Vec::new(),finite_fields:Vec::new(),
+            lingering: None,live_co_unit:None,source_fields:Vec::new(),finite_fields:Vec::new(),
             embedded: None,
             primary_delay: match opt_attr(obj, "_primary_delay_seconds")? {
                 Some(v) if v.is_truthy()? => v.extract::<f64>()?,
@@ -1208,6 +1244,9 @@ impl<'py> Replay<'py> {
         self.stats.push(s);
         let i = self.stats.len() - 1;
         self.stats_by_ptr.insert(ptr, i);
+        if let Some(unit)=opt_attr(obj, "_live_co_unit")? {
+            self.stats[i].live_co_unit=Some(self.view(&unit)?);
+        }
         // Parts that ride on this view (radial bomblets, a lingering field).
         if let Some(parts) = opt_attr(obj, "_additional_radials")? {
             let mut out = Vec::new();
@@ -1754,21 +1793,22 @@ impl<'py> Replay<'py> {
             puncture = 0.0;
             cold = 0.0;
         }
+        let contact_cold = if self.stats[st].contact_shiver { self.count(FREEZE) } else { 0.0 };
         let mut shiver = 1.0;
         let mut frozen = 1.0;
-        if cold != 0.0 && !radial_only && (csd != 0.0 || frozen_mult != 1.0) {
+        if ((cold != 0.0 && !radial_only) || contact_cold != 0.0) && (csd != 0.0 || frozen_mult != 1.0) {
             let stacks_cold = self.count(FREEZE);
             if csd != 0.0 && bracket > 0.0 {
                 shiver = (bracket + csd * pmin(stacks_cold, 10.0)) / bracket;
             }
-            if self.frozen_until > self.current_time || stacks_cold >= 10.0 - 1e-9 {
+            if !radial_only && (self.frozen_until > self.current_time || stacks_cold >= 10.0 - 1e-9) {
                 frozen = frozen_mult;
             }
         }
-        if self.enervate.is_some() {
+        if self.enervate.is_some() && !self.stats[st].snapshot_enervate {
             return self.enervate_packet(st, aim, puncture, cold, shiver, frozen);
         }
-        let fast = puncture == 0.0 && cold == 0.0;
+        let fast = puncture == 0.0 && cold == 0.0 && shiver == 1.0 && frozen == 1.0;
         let key = if fast {
             (st, aim.to_bits(), 0, 0, 0, 1, 0)
         } else {
@@ -2702,11 +2742,25 @@ impl<'py> Replay<'py> {
                     let key = self.packet(part, aim)?;
                     let packet = self.packets[&key].clone();
                     let cv2 = self.spread(part, aim);
-                    if !self.take(&packet.vector, t, DIRECT, WeakKill::Value(aim), cv2, false)? {
+                    let damage_event = if self.stats[part].stackable_hit_event {
+                        let puncture = if !self.stats[part].radial_only || self.stats[part].radial_victim_crit { self.live_crit().0 } else { 0.0 };
+                        let s = &self.stats[part];
+                        let full = (self.pools[1]-self.full[1]).abs()<1e-7 && (self.pools[2]-self.full[2]).abs()<1e-7;
+                        let cc = s.crit_chance + if full { s.victim_full_crit_chance } else { 0.0 };
+                        let weak = s.weakpoint_crit_chance_bonus + s.base_crit_chance*s.weakpoint_crit_chance_relative;
+                        let weights = self.enervate.as_ref().map(|en| en.damage_marginal()).unwrap_or_else(|| vec![(0,1.0)]);
+                        let body_multiplier = if s.radial_only { 1.0 } else { s.bodyshot_crit_multiplier };
+                        let critical = psum(weights.iter().map(|(stacks,weight)| {
+                            let cc = pmax(0.0,cc+*stacks as f64*0.1+puncture);
+                            weight*((1.0-aim)*pmin(pmax(cc*body_multiplier,0.0),1.0)
+                                +aim*pmin(pmax(cc+weak,0.0),1.0))
+                        }));
+                        Some((s.multishot,critical*s.multishot))
+                    } else { None };
+                    if !self.take_with_event(&packet.vector, t, DIRECT, WeakKill::Value(aim), cv2, false, damage_event)? {
                         self.add_procs(part, aim, t, key)?;
                     }
                     self.noncrit_no_proc_hit(part, aim, t);
-                    if self.stats[part].stackable_hit_event { self.signal("on-hit", t, weight); }
                     if area_direct {
                         self.signal("on-headshot", t, aim * weight);
                         self.consecutive_heads(aim);
@@ -3023,6 +3077,23 @@ impl<'py> Replay<'py> {
     }
 
     fn radial_hit(&mut self, part: usize, sniper_factor: f64, t: f64, notify: bool) -> PyResult<()> {
+        let stored=self.stats[part].obj.clone_ref(self.py);
+        let refresh=opt_attr(stored.bind(self.py), "_live_hit_refresh")?;
+        let part = if let Some(refresh)=refresh {
+            let stacks=PyDict::new(self.py);
+            for q in &self.sources {stacks.set_item(q.id.bind(self.py),q.stacks)?;}
+            let keys:Vec<D>=self.presence.keys().copied().collect();
+            let mut live=PySum::new();
+            for d in keys {live.add(self.presence.get_mut(&d).unwrap().probability(t));}
+            let out=refresh.call1((stacks,live.value()))?;
+            self.view(&out)?
+        } else if let Some(unit) = self.stats[part].live_co_unit {
+            let keys: Vec<D> = self.presence.keys().copied().collect();
+            let mut live = PySum::new();
+            for d in keys { live.add(self.presence.get_mut(&d).unwrap().probability(t)); }
+            self.vary(unit, live.value(), 1.0)
+                .ok_or_else(|| PyValueError::new_err("live radial CO template missing"))?
+        } else { part };
         if notify && self.stats[part].delayed_radial_hit_event {
             let keys: Vec<D> = self.presence.keys().copied().collect();
             self.victim_before = keys.into_iter().map(|d| (d, self.presence.get_mut(&d).unwrap().probability(t))).collect();
@@ -3039,8 +3110,10 @@ impl<'py> Replay<'py> {
             let s = &self.stats[part];
             let full = (self.pools[1]-self.full[1]).abs()<1e-7 && (self.pools[2]-self.full[2]).abs()<1e-7;
             let cc = s.crit_chance + puncture + if full { s.victim_full_crit_chance } else { 0.0 };
-            let weights = self.enervate.as_ref().map(|en| en.damage_marginal()).unwrap_or_else(|| vec![(0,1.0)]);
-            let critical = psum(weights.iter().map(|(stacks,weight)| weight*pmin(pmax((cc+*stacks as f64*0.1)*s.bodyshot_crit_multiplier,0.0),1.0)));
+            let weights = if s.snapshot_enervate { vec![(0,1.0)] } else {
+                self.enervate.as_ref().map(|en| en.damage_marginal()).unwrap_or_else(|| vec![(0,1.0)])
+            };
+            let critical = psum(weights.iter().map(|(stacks,weight)| weight*pmin(pmax((cc+*stacks as f64*0.1)*if s.radial_only {1.0} else {s.bodyshot_crit_multiplier},0.0),1.0)));
             Some((s.multishot, critical*s.multishot))
         } else { None };
         if !self.take_with_event(&rvector, t, DIRECT, WeakKill::Flag(false), cv2, false, damage_event)? {
@@ -3057,9 +3130,8 @@ impl<'py> Replay<'py> {
         let puncture = if self.stats[st].radial_only && !self.stats[st].radial_victim_crit { 0.0 } else { self.live_crit().0 };
         let s = &self.stats[st];
         let weak = s.weakpoint_crit_chance_bonus + s.base_crit_chance * s.weakpoint_crit_chance_relative;
-        let marginal = match &self.enervate {
-            Some(en) => en.damage_marginal(),
-            None => vec![(0, 1.0)],
+        let marginal = if s.snapshot_enervate { vec![(0,1.0)] } else {
+            self.enervate.as_ref().map(|en| en.damage_marginal()).unwrap_or_else(|| vec![(0,1.0)])
         };
         let mut noncrit = 0.0;
         for (stacks, weight) in marginal {
@@ -3525,6 +3597,50 @@ impl<'py> Replay<'py> {
                         }
                     }
                 }
+                Kind::ZymosCarrier(active, parent_weight) => {
+                    // The already-queued 953 head packet precedes this event.
+                    // Source stacks are read after this event's ordinary clean.
+                    let py = self.py;
+                    let stored = self.stats[active].obj.clone_ref(py);
+                    let stacks = PyDict::new(py);
+                    for q in &self.sources { stacks.set_item(q.id.bind(py), q.stacks)?; }
+                    let weights = PyDict::new(py);
+                    for (count, probability) in self.enervate.as_ref().map(|en| en.damage_marginal()).unwrap_or_else(|| vec![(0,1.0)]) {
+                        weights.set_item(count, probability)?;
+                    }
+                    let snapshot = stored.bind(py).getattr("_zymos_carrier")?.call1((stacks, weights))?;
+                    let frame = self.stats[active].zymos.unwrap().1;
+                    self.push(t + frame, Kind::ZymosSpawn(active, Rc::new(snapshot.unbind()), parent_weight), Some(self.gen));
+                }
+                Kind::ZymosSpawn(active, snapshot, parent_weight) => {
+                    let py = self.py;
+                    let stored = self.stats[active].obj.clone_ref(py);
+                    let stacks = PyDict::new(py);
+                    for q in &self.sources { stacks.set_item(q.id.bind(py), q.stacks)?; }
+                    let weights = PyDict::new(py);
+                    for (count, probability) in self.enervate.as_ref().map(|en| en.damage_marginal()).unwrap_or_else(|| vec![(0,1.0)]) {
+                        weights.set_item(count, probability)?;
+                    }
+                    let children = stored.bind(py).getattr("_zymos_children")?
+                        .call1((snapshot.bind(py), stacks, parent_weight, weights))?;
+                    for child in children.try_iter()? {
+                        let child = child?;
+                        let pair = child.cast::<PyTuple>()?;
+                        let contact = self.view(&pair.get_item(0)?)?;
+                        let blast = self.view(&pair.get_item(1)?)?;
+                        let arrival = pair.get_item(2)?.extract::<f64>()?;
+                        self.push(t + arrival, Kind::ZymosHit(contact, blast), Some(self.gen));
+                    }
+                }
+                Kind::ZymosHit(contact, blast) => {
+                    let generation = self.gen;
+                    self.radial_hit(contact, 1.0, t, true)?;
+                    if self.gen == generation { self.radial_hit(blast, 1.0, t, true)?; }
+                }
+                Kind::QuantaPrimary(cost) => {
+                    self.ammo -= pmax(cost, 0.0);
+                    self.signal("on-fire", t, 1.0);
+                }
                 Kind::DelayedRadial(part, sniper_factor) => {
                     self.delayed_attacks += 1;
                     self.radial_hit(part, sniper_factor, t, true)?;
@@ -3600,6 +3716,27 @@ impl<'py> Replay<'py> {
                     }
                 }
                 Kind::Lingering(part) => {
+                    let py = self.py;
+                    let stored = self.stats[part].obj.clone_ref(py);
+                    let refresh = opt_attr(stored.bind(py), "_live_hit_refresh")?;
+                    let part = if let Some(refresh) = refresh {
+                        let keys: Vec<D> = self.presence.keys().copied().collect();
+                        let mut live = PySum::new();
+                        for d in keys { live.add(self.presence.get_mut(&d).unwrap().probability(t)); }
+                        let stacks = PyDict::new(py);
+                        for q in &self.sources { stacks.set_item(q.id.bind(py), q.stacks)?; }
+                        let resolved = refresh.call1((stacks, live.value()))?;
+                        self.view(&resolved)?
+                    } else if let Some(unit)=self.stats[part].live_co_unit {
+                        let keys:Vec<D>=self.presence.keys().copied().collect();
+                        let mut live=PySum::new();
+                        for d in keys {live.add(self.presence.get_mut(&d).unwrap().probability(t));}
+                        self.vary(unit,live.value(),1.).ok_or_else(|| PyValueError::new_err("live field CO template missing"))?
+                    } else {part};
+                    if self.stats[part].delayed_radial_hit_event {
+                        self.radial_hit(part,1.,t,true)?;
+                        continue;
+                    }
                     let raw = self.raw_packet(part, 0.0);
                     let packet = self.packets[&raw].clone();
                     let cv2 = self.spread(part, 0.0);
@@ -3873,7 +4010,9 @@ impl<'py> Replay<'py> {
                             }
                         }
                     }
-                    let insufficient = self.stats[active].requires_full_ammo && self.ammo + 1e-9 < pmax(ammo_cost, 0.0);
+                    let reserved_primary = self.stats[active].quanta.map_or(0.0, |q| q.0);
+                    let insufficient = self.stats[active].requires_full_ammo
+                        && self.ammo + 1e-9 < pmax(ammo_cost + reserved_primary, 0.0);
                     // A shot reloads only when it cannot fire: a free one fires on an empty magazine.
                     if ((self.ammo <= 1e-9 && ammo_cost > 1e-9) || insufficient) && magazine > 0.0 {
                         if let (Some(c), INCARNON) = (self.cycle, self.form) {
@@ -4138,7 +4277,9 @@ impl<'py> Replay<'py> {
                     let field_duration_boost = self.field_duration_ready;
                     self.field_duration_ready = false;
                     let s = &self.stats[active];
-                    let mut hit_count = if s.continuous { 1.0 } else { pmax(s.multishot, 0.0) };
+                    let quanta = s.quanta;
+                    let mut quanta_last_impact = 0.0;
+                    let mut hit_count = if quanta.is_some() { 0.0 } else if s.continuous { 1.0 } else { pmax(s.multishot, 0.0) };
                     let radial_only = s.radial_only;
                     let continuous = s.continuous;
                     let mut sniper_factor = 1.0;
@@ -4153,7 +4294,7 @@ impl<'py> Replay<'py> {
                     };
                     self.victim_before = victim;
                     let shot_puncture = if radial_only { 0.0 } else { self.live_crit().0 };
-                    let aim = if radial_only { 0.0 } else { self.head };
+                    let aim = if radial_only || quanta.is_some() { 0.0 } else { self.head };
                     let primary_delay = self.stats[active].primary_delay;
                     let stack = self.stats[active].stackable.clone();
                     let mut projectile_wait = 0.0;
@@ -4229,6 +4370,8 @@ impl<'py> Replay<'py> {
                             }
                         }
                         self.pending_throws += 1;
+                    } else if quanta.is_some() {
+                        // The paid primary pulse hits the cube; enemy packets are its delayed radial parts.
                     } else if primary_delay != 0.0 {
                         self.push(t + primary_delay, Kind::DelayedAttack(active, aim), Some(generation));
                     } else {
@@ -4336,11 +4479,18 @@ impl<'py> Replay<'py> {
                             }
                         }
                         let delay = pmax(0.0, self.stats[part].impact_delay);
+                        if quanta.is_some() { quanta_last_impact = pmax(quanta_last_impact, delay); }
                         if delay != 0.0 {
                             let generation = if self.stats[part].persist_after_kill { None } else { Some(generation) };
                             self.push(t + delay, Kind::DelayedRadial(part, sniper_factor), generation);
                         } else {
                             self.radial_hit(part, sniper_factor, t, true)?;
+                        }
+                    }
+                    if let Some((embed_delay, _)) = self.stats[active].zymos {
+                        let parent_weight = self.head * self.stats[active].multishot;
+                        if parent_weight > 0.0 {
+                            self.push(t + embed_delay, Kind::ZymosCarrier(active, parent_weight), Some(generation));
                         }
                     }
                     if self.form_burst().0.is_some() {
@@ -4353,12 +4503,15 @@ impl<'py> Replay<'py> {
                             burst_head_probability = 1.0;
                         }
                     }
-                    if self.physical_lane_length==0 && primary_delay == 0.0 && (self.mines.is_none() || self.impact_embed) && stack.is_none() {
+                    if quanta.is_none() && self.physical_lane_length==0 && primary_delay == 0.0 && (self.mines.is_none() || self.impact_embed) && stack.is_none() {
                         self.enervate_hit(active, t, shot_puncture, aim);
+                    }
+                    if let Some((cost, fire_seconds, _)) = quanta {
+                        self.push(t + fire_seconds, Kind::QuantaPrimary(cost), None);
                     }
                     self.signal("on-fire", t, 1.0);
                     let delayed = primary_delay != 0.0 || (self.mines.is_some() && !self.impact_embed) || stack.is_some();
-                    let through = self.punchthrough;
+                    let through = if quanta.is_some() { 0.0 } else { self.punchthrough };
                     if through != 0.0 {
                         self.signal("on-punchthrough", t, through);
                         if self.form == BASE || !self.selected_incarnon {
@@ -4378,7 +4531,7 @@ impl<'py> Replay<'py> {
                             }
                         }
                     }
-                    if !delayed && self.physical_lane_length==0 {
+                    if quanta.is_none() && !delayed && self.physical_lane_length==0 {
                     self.signal("on-hit", t, hit_count);
                     if aim < 1.0 {
                         self.signal("on-body-hit", t, (1.0 - aim) * hit_count);
@@ -4422,7 +4575,7 @@ impl<'py> Replay<'py> {
                     }
                     let magazine_now = self.stats[active].magazine;
                     if let Some(restore) = self.restore.clone() {
-                        if (restore.kind == "on-headshot" || restore.kind == "on-hit") && magazine_form {
+                        if quanta.is_none() && (restore.kind == "on-headshot" || restore.kind == "on-hit") && magazine_form {
                             let eligible = match restore.victim_proc_type {
                                 None => 1.0,
                                 Some(d) => self.victim_before.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0),
@@ -4463,6 +4616,9 @@ impl<'py> Replay<'py> {
                         }
                     }
                     delay += projectile_wait;
+                    if let Some((_, _, cycle)) = quanta {
+                        delay = pmax(delay, pmax(cycle, quanta_last_impact));
+                    }
                     if delay == 0.0 && self.ammo > 0.0 {
                         delay = if s.reload_time != 0.0 { s.reload_time } else { 1.0 / speed };
                     }

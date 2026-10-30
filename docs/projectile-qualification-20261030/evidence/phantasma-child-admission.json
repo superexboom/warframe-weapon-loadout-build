@@ -1,0 +1,120 @@
+{
+  "rows": [
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterMiniProj",
+      "nativeField": "AttackData",
+      "takes_victim_crit": true,
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "takes_condition_overload": true,
+      "coProfile": {
+        "behavior": "independent",
+        "baseFraction": 1.0,
+        "excludeFlatSources": []
+      },
+      "geometry": "explicit ideal contact host; body amount approximation independent from parent aim",
+      "sourceContract": "ordinary retained player weapon, cached mode1, no ability/script parent",
+      "coRoute": "Guided790->base790->weapon820->CO once using same pre-CO child packet amount"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterMiniProj",
+      "nativeField": "ExplosiveAttack",
+      "takes_victim_crit": true,
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "takes_condition_overload": false,
+      "geometry": "explicit ideal contact host; body amount approximation independent from parent aim",
+      "sourceContract": "ordinary retained player weapon, cached mode1, no ability/script parent",
+      "coRoute": "No790/820; ordinary target-CO predicate rejects; CO excluded"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterMiniProjMS",
+      "nativeField": "AttackData",
+      "takes_victim_crit": true,
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "takes_condition_overload": true,
+      "coProfile": {
+        "behavior": "independent",
+        "baseFraction": 1.0,
+        "excludeFlatSources": []
+      },
+      "geometry": "explicit ideal contact host; body amount approximation independent from parent aim",
+      "sourceContract": "ordinary retained player weapon, cached mode1, no ability/script parent",
+      "coRoute": "Guided790->base790->weapon820->CO once using same pre-CO child packet amount"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterMiniProjMS",
+      "nativeField": "ExplosiveAttack",
+      "takes_victim_crit": true,
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "takes_condition_overload": false,
+      "geometry": "explicit ideal contact host; body amount approximation independent from parent aim",
+      "sourceContract": "ordinary retained player weapon, cached mode1, no ability/script parent",
+      "coRoute": "No790/820; ordinary target-CO predicate rejects; CO excluded"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterMiniProj",
+      "nativeField": "AttackData",
+      "takes_victim_crit": true,
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "takes_condition_overload": true,
+      "coProfile": {
+        "behavior": "independent",
+        "baseFraction": 1.0,
+        "excludeFlatSources": []
+      },
+      "geometry": "explicit ideal contact host; body amount approximation independent from parent aim",
+      "sourceContract": "ordinary retained player weapon, cached mode1, no ability/script parent",
+      "coRoute": "Guided790->base790->weapon820->CO once using same pre-CO child packet amount"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterMiniProj",
+      "nativeField": "ExplosiveAttack",
+      "takes_victim_crit": true,
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "takes_condition_overload": false,
+      "geometry": "explicit ideal contact host; body amount approximation independent from parent aim",
+      "sourceContract": "ordinary retained player weapon, cached mode1, no ability/script parent",
+      "coRoute": "No790/820; ordinary target-CO predicate rejects; CO excluded"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterMiniProjMS",
+      "nativeField": "AttackData",
+      "takes_victim_crit": true,
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "takes_condition_overload": true,
+      "coProfile": {
+        "behavior": "independent",
+        "baseFraction": 1.0,
+        "excludeFlatSources": []
+      },
+      "geometry": "explicit ideal contact host; body amount approximation independent from parent aim",
+      "sourceContract": "ordinary retained player weapon, cached mode1, no ability/script parent",
+      "coRoute": "Guided790->base790->weapon820->CO once using same pre-CO child packet amount"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterMiniProjMS",
+      "nativeField": "ExplosiveAttack",
+      "takes_victim_crit": true,
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "takes_condition_overload": false,
+      "geometry": "explicit ideal contact host; body amount approximation independent from parent aim",
+      "sourceContract": "ordinary retained player weapon, cached mode1, no ability/script parent",
+      "coRoute": "No790/820; ordinary target-CO predicate rejects; CO excluded"
+    }
+  ],
+  "removeUnmodeled": [
+    "phantasma-child-CO-head-and-event-consumers-neutral-fallback"
+  ],
+  "removePacketFields": [
+    "bodyOnly"
+  ],
+  "evidence": "NOTES.md R3 child qualification follow-through; Guided1420de498",
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d"
+}

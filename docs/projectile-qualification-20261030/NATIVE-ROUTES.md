@@ -100,3 +100,69 @@ Reused verify_target_co_routing.py in memory with exactly two controlled cases a
 Bounded admission: for ordinary player Phantasma/Prime parent73 under the existing normal source/no-ability-parent contract, use actual native type2 for the independent Puncture/Cold vulnerability axis while retaining head suppression and spatial geometry. It is safe to keep radial_only's geometry/head behavior and introduce an independent qualification bit instead of setting radial_only=false. The native vulnerability block does not read packet+25c, so the independently proven area head-damage suppression does not suppress these status-critical upgrades. Preserve diagnostics for nonstandard ability/script-generated/projectile-source states; no universal statement about all live weapon-parent lifecycle follows from the controlled constructor baseline. Generic hit/crit notifications follow the same victim route and source-specific conditions; no weakpoint/CO or Enervate Lua grouping is admitted from these facts.
 
 The four ordinary cluster children still need closure of their enabled contact-impact behavior route before applying the same source-specific permission. Their direct-role/type identity alone does not establish that path's final delivered event. No additional production test files or standalone acceptance scripts were created.
+
+## 本轮追加勘误：R3/R4/R5 生命周期与落地策略
+
+此前本文件及 FAMILY-INVENTORY 中“Phantasma 普通 child count 待查”“固定2.9秒”“Trumna 7 bounce/expiry次数与时钟待查”“Sepulcrum target→emission待查”的阶段性结论，按以下同版源码证据修正。旧段落保留调查历史，不应继续当成当前未闭合项。
+
+- **Phantasma／Prime**：Cluster ctor141babfb0明确设置普通NumClusterProjectiles5；MS载体资源设置2。真实发射14126d1f0在首个普通parent之后选择MS载体，已实现父MS期望M下普通5、额外2*max(M-1,0)的独立子弹数量。两个parent的15/73由full-clip charge倍率A缩放；子弹3/18、6/36使用独立+1738快照，普通默认1，不能再乘父charge的+7b8。满11发charge基础0.090899996*11≈0.9999秒，耗11发，普通reload；charge-rate修改器独立缩短蓄力。一个复用原字节工具的聚焦样例验证F11而cluster快照仍1。
+- **子弹到达策略**：子弹出生在carrier death，native防重复死亡避免重复生成。声明UnguidedFlightTime≈.7秒；寿命实为MaxLife2.9000001与MaxLifeVariance.69999999，原生抽样约[2.2,2.9)，到期不是到达。默认不计子弹覆盖；只有显式`phantasmaChildOverlap=ideal-contact`才按指定`phantasmaChildArrivalSeconds`计原目标存活下的理想接触。UI默认选值.7是该策略的时间假定，不能宣称为实机必达或所有接触的硬下限。
+- **子弹实际消费者**：真正GuidedProjectile表1420de498由ctor1406e1960安装；旧自动字符串搜索抓到的1422c2128/1423c9e28分别为GroundAligned/Sticky子类，应以精确ctor定位的本体表为准。其+790 wrapper1408cf240先调用普通1400dc970，保留原包。direct3/6的DealDamageThroughImpactBehavior默认0，因此走weapon+820 leaf14101fdb0→CO core，使用刚建成的同一child packet金额为CO基数，支持独立CO、baseFraction1。真实PROJECTILE2/source保留也允许generic hit/crit与Puncture/Cold；SendEvents0只挡单独script notice。独立18/36爆炸沿同一普通explicit-contact-host消费者，generic/victim-crit资格独立开放，CO仍不走direct fallback。不由这些资格推定头部命中。
+- **Trumna／Prime**：contact callback先递增+c38，predicate140e613c0以current<MaxBounces(可被0x175升级)控制继续生存。普通7上限是第7次eligible contact终止，不是7次后免费第8次。SetLifeOnImpact只在首次eligible impact排5秒expiry，后续不续期；Die会清空+1658同一timer列表，因此提前死不会再追加expiry包。默认单体只计首次接触；后续碰撞／半径覆盖仍需显式几何，未加单体7倍。
+- **Sepulcrum**：native锁记录每target最大1 stack，最多5个不同target，每个实际发射回调将一枚主导弹分给一个记录。单体1锁＝1枚主发射，额外普通MS另算。InitialLockTime0、ModeSwitchTime0；.3秒Relock仅用于再次堆锁，.01秒Rearming用于下一target acquisition，均不能无条件加给首个单锁。.08秒是多导弹间隔并受原生射速上限门缩短，不是首枚飞行时间。现有5 primary kills→1 alternate的kill-charge循环已符合单体预算，primary二连发继续保留；不把5-target上限变成单体5枚。
+
+原始证据与可复核地址：`.local/delivery/projectile-qualification-20261030/lifecycles/NOTES.md`、`candidate-contract.json`、`phantasma-child-admission.json`、`r4-r5-metadata-patch.json`。本节说明静态机制及当前选定模型，不声称实机轨迹、LOS、多人目标覆盖或连续跳弹命中通过。实现回归沿用既有文件；Phantasma满夹、父头命中不抑制孩子、独立CO与到达调度在三个现有展开例中验证。
+
+配对子包调度补充：当前manual解析按物理child顺序展开contact→explosion，再进入下一child；父radial仍在最前。相同weight的模板只解MOD一次后复用，最后fraction pair权重相同。这样低HP目标会在首孩子radial致死后丢弃后续孩子，避免旧“所有contact聚合先杀，吞掉全部radial”。分数MS仍是显式expected-multiplicity近似，不表示实机半枚子弹；alive-generation约束始终保留。
+
+
+## R1/R2/R6 勘误及最终接入（dd78e98 之后）
+
+本节优先于上文的阶段性“未闭合”结论，原始旧转储保留。游戏源版本仍为2026.10.22.13.12，EXE SHA256 `eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d`，Packages SHA256 `00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06`。
+
+### 明确接触对象的最终 HitType
+
+旧字段索引错移了一条 descriptor：`1427913d0 -> mExplosionDirectHitDamageHitType`，序列化140da1099实际寻址 **Projectile+c24**；下一descriptor1427913e0才是ExplosionFallOff，寻址 **Projectile+634 -> radial plan+e8**。base ctor140fbacf5把+c24初始化为2。此前“+634是direct-hit-type”的结论作废。
+
+common explosion140f360f0先调用140bc2730将plan+139复制到event+1bf，然后在140f36343..34a把+c24覆写到明确接触/附着对象的event+1bf。只跟踪前半段转换会把最终PROJECTILE2误判为RADIAL4。Region外围对象仍走原plan类型；plan+120把已经单独投递的对象排除，1413a71fc..7217匹配后跳候选advance，不能重复算一次范围命中。
+
+因此精确来源Larkspur/Prime、Acceltra、Scourge Prime、Zakti/Prime、Kompressa/Prime以及已知Phantasma/Prime的明确对象可接受Puncture/Cold暴击易伤。头部伤害抑制25c、CO、generic hit/crit、弱点事件各自独立；这些包仍沿用无头部几何，不授予未证明的爆头倍率。Stug保留既有M127数值规则边界，但分类来源已更正，不能再引用错误+634偏移。
+
+### 四族集束子弹的接触 CO 与实际提交
+
+child生成141219c80先设置owner+738，140f84b40同步初始+768；普通源weapon+708/mode+d91保留，script15b1默认0。base+790的da8/owner门通过后调用weapon+818=1414cef70 ->141300a00 ->CO core14113e250一次，再经impact+f8=1409febe0提交原包。四个接触子包均允许generic hit/crit及victim crit；CO基数来自原模式template查询：Zarr25/child15，KuvaZarr50/15，Bramma187/49，Kulstar200/75。缺少第三方catalog行不代表Bramma没有CO。
+
+Zarr/KuvaZarr/Bramma mini显式BounceOnAvatars0，终止接触1410e3b4b经+568保存实际victim到15b8，death转common+c24，故其明确接触爆炸也为2。Kulstar默认avatar bounce开启；eligibility140e613c0可跳过+568，KinematicRestitution0不等于保证终止。因此不把Kulstar所有爆炸冒充同一明确接触对象。普通子包按逐枚contact→explosion排序；飞行/接触覆盖仍是单体场景假定，分数多重采用期望权重。
+
+### 附着场的实际时钟与 CO
+
+DoEmbedDamage140297cf0在嵌入时立即调用，随后固定1秒调度；重复同delegate/延迟请求由14144c410去重。Torid10秒，Pox/Coda5秒，终止边界不额外加末尾一跳。半径大于0的附着包经+628构为type4，再走+790，**不经过common explosion+c24覆写**；region排除原附着对象，故每跳只算一个包。
+
+Torid da8默认0，fallback weapon+820=14101fdb0把当前已构建Embed包金额+1700传入CO，所以独立CO系数1。Pox/Coda da8=1，普通owner相同门走+818原武器基数，50/20与55/35分别对应additive2.5和11/7。三个场均接入generic hit/crit，不由重复伤害推定为avatar DoT7，也不授予type4不具备的victim crit或头部资格。
+
+每跳重新读取目标异常种类及当前镀层CO层数；普通非CO来源时点按下方R2后续修正的live/retained分拆，不把实际运行中镀层过期等价于保留旧系数。源码导入器使用同一精确source/field consumer registry，避免重导退回旧bool或参考表缺项结论。
+
+### 通知与版本兼容
+
+Stug已有审核通过的stackable_hit_event包原来只通知on-hit，遗漏on-crit。现在通过take的damage_event在目标退场前同时通知，两者不重复；原目标致死包不向替代目标发出通知。范围包没有body part，genericcrit概率与实际damage location规则一致，不能额外乘King's Gambit等body倍率。
+
+native能力DELAYED_RADIAL_EVENTS升级3，新增RADIAL_LIVE_CO、STACKABLE_CRITICAL_EVENTS、QUANTA_PAID_PRIMARY与ZYMOS_ORDERED_CHILDREN。不具备对应能力的旧核心走Python；没有替换缓存身份绕过失效检查。
+
+
+### R2 后续修正：普通场伤害也在每跳重读
+
+最终+628消费者证明，EmbedAttack每跳重读253普通伤害、358/359元素、265flat-type及365/281触发/强制触发；CC/CD则由投射物538/570保留桶复制，tick入口不重读244/248。FE0/FE4/FE8/FF8以及818仍属于投射物context缓存，只有source/owner setter的refresh路径更新。因此“冻结全部非CO加成”的中间实现已被替换：每跳刷新普通伤害、元素、status及CO，保留发射的CC/CD、发射数量、同源模式和发射轮身份。现有Pox用例同时验证真实镀层层数与Secondary Merciless层数在1秒跳伤前到期；不是只对照静态面板。
+
+R1/Phantasma/Zymos的已审子弹接触也在实际到达时刷新CO系数与目标异常种类。使用同一local callback保留各子包源谱及独立基数；没有把当前mode切换或新目标状态带给旧source。
+
+## R7 邪莫斯有序子弹适配器
+
+当前`zymos.py`与Python/Rust三段事件接通：原目标存活的1.1秒头部胶囊回调获取B和第一次暴击桶；下一次选定frame更新生成子弹并读取第二次普通暴击桶；所选飞行时间后逐枚投递contact B→333 Toxin。任一阶段原目标死亡都会结束这一代的后续命中。多重以当前callback新抽样floor+Bernoulli计算：140d4f1ea在原fire返回前清fire+64，延迟回调不能借用原射击缓存。B取整在各整数count分支内进行，不对期望均值先截断。
+
+普通同源CC/CD两次查询的STACKING项累加，MULTIPLY项相乘，不能直接平方最终暴击率。池回收先执行对象+A0恢复原型，清空creator和旧桶，不额外累积指数。CritOnHit/次要·激昂通过inventory+440将244 ADD写入与普通f4查询相同的UpgradeManager[c88]，所以在carrier和child生成时分别读取其状态。回放对两时刻的概率使用显式marginal近似，不声称保留完整跨时刻相关轨迹；已经复制的child包不再叠第三次当前Enervate。
+
+contact由SCRIPT5提交，generic hit/crit可以发生但Puncture/Cold暴击易伤不适用。其+790 fallback+820以当前packet基数应用CO；同一261消费者也支持Shiver实际Cold层数，因此用独立contact资格，不能因`radial_only`的几何用途把Shiver拒绝。333的空DamageUpgradeTypes跳过普通253基伤，但仍吃普通元素、独立暴击；明确contact victim由+c24覆写PROJECTILE2，可吃victim crit，不借用contact CO/Shiver。
+
+普通来源的上下文界限已写到产品diagnostic：weapon df4/df8与avatar1700有明确ctor/reset零值和专用setter；FE0源ramp默认0、FE4临时缓存默认1、FE8无额外元素。它们不是普通静态Mod或Enervate升级桶。当前适配不虚构未提供的外部能力/脚本上下文值；这些来源的完整生命周期是单独支持范围，并未伪称只能游戏实测。RUNTIME_NEXT_SHOT_DAMAGE无法从已追消费者确认映射，只在child部分排除并提示，不再令整次优化器候选抛错。
+
+源文件/原始字节入口：`zymos-completion/NOTES.md`、`actual-guided-vtable.json`、`crit-copy-final-control.json`、`enervate-current-bindings.json`及leaf writer记录。单体返回策略、飞行时间、Wait0对应的帧间隔为显式场景输入；默认仍不计追踪子弹覆盖，用户选定后才计入。

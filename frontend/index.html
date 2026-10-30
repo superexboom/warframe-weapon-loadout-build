@@ -557,6 +557,24 @@
                         <label class="field"><span>每批投掷次数</span><input id="build-detonation-batch" type="number" min="1" max="8" step="1" value="1"></label>
                         <label class="field"><span>起爆等待（秒）</span><input id="build-detonation-delay" type="number" min="0" step="0.1" value="0"></label>
                       </div>
+                      <div id="build-quanta-strategy-fields" class="scenario-fields" data-projectile-policy hidden>
+                        <label class="field"><span>立方体攻击策略</span><select data-combat-state="quantaStrategy">
+                          <option value="">碰撞引爆（默认）</option><option value="shoot">副射击立方体 → 主射击强化引爆</option>
+                        </select><small>强化引爆另计一次主射击的弹药与动作。假设立方体先避开敌人，再由一束光束命中；敌人处于爆炸范围，多枚立方体按理想连锁重叠。</small></label>
+                      </div>
+                      <div id="build-phantasma-child-fields" class="scenario-fields" data-projectile-policy hidden>
+                        <label class="field"><span>集束子弹覆盖</span><select data-combat-state="phantasmaChildOverlap">
+                          <option value="">不计子弹命中（默认）</option><option value="ideal-contact">理想子弹接触与爆炸重叠</option>
+                        </select><small>假定子弹命中并覆盖所选目标；实际寻敌、移动与遮挡会影响结果。</small></label>
+                        <label class="field"><span>子弹到达延迟（秒）</span><input data-combat-state="phantasmaChildArrivalSeconds" data-default-value="0.7" type="number" min="0" step="0.1" value="0.7"><small>0.7 秒是所选到达时间近似，不是原生保证。</small></label>
+                      </div>
+                      <div id="build-zymos-child-fields" class="scenario-fields" data-projectile-policy hidden>
+                        <label class="field"><span>子弹攻击策略</span><select data-combat-state="zymosChildOverlap">
+                          <option value="">不计追踪子弹（默认）</option><option value="ideal-contact">子弹返回存活的原目标</option>
+                        </select><small>假定头部胶囊引爆后，追踪子弹命中原目标身体；不计目标死亡后的其他敌人。</small></label>
+                        <label class="field"><span>每胶囊命中子弹数</span><input data-combat-state="zymosChildContacts" data-default-value="5" type="number" min="0" max="5" step="1" value="5"></label>
+                        <label class="field"><span>子弹飞行时间（秒）</span><input data-combat-state="zymosChildArrivalSeconds" data-default-value="0.4" type="number" min="0" step="0.1" value="0.4"><small>按所选飞行时间和 60 帧的生成节奏计算；实际距离、遮挡和帧率会影响到达时刻。</small></label>
+                      </div>
                       <label class="field melee-only-field"><span>近战攻击路线</span>
                         <select id="build-melee-route-select" data-combat-state="meleeRoute">
                           <option value="">默认（按武器类型）</option>

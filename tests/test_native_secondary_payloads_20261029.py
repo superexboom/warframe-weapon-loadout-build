@@ -34,6 +34,17 @@ def synthetic_sources():
         objects[p]=dict(CriticalChance=.03,CriticalMultiplier=1.5,**spec['required'])
         objects[p][spec.get('field','ExplosiveAttack')]=attack
         if spec['family']=='acceltra':objects[p]['AttackData']=dict(Type='DT_IMPACT',Amount=26,ProcChance=.059999999)
+        if spec['family']=='phantasma':
+            behavior['fire:LotusWeaponProjectileFireBehavior']=behavior.pop('fire:ProjectileFireBehavior')
+            fire.update(AttenuateForCharge=1, AttenuateFireIterationsForCharge=0, MultiShotProjectileType=p+'MS')
+            state.update(ChargeTime=.090899996, ClipSizeAffectsChargeTime=1, UseClipSizeAsDamageMultiplier=1,
+                         UseClipWhileCharging=1, MinChargeRatio=1, AutoFireWhenChargeCompleted=1)
+            objects[p].update(ClusterApplyDamageMultiplier=1, ClusterProjectiles=p+'/Mini')
+            objects[p+'MS']={**deepcopy(objects[p]), 'ClusterProjectiles':p+'/MiniMS', 'NumClusterProjectiles':2}
+            for child, contact, blast in [(p+'/Mini',3,18),(p+'/MiniMS',6,36)]:
+                objects[child]=dict(CriticalChance=.03, CriticalMultiplier=1.5,
+                    AttackData=dict(Type='DT_IMPACT',Amount=contact,ProcChance=.37),
+                    ExplosiveAttack=dict(Type='DT_RADIATION',Amount=blast,ProcChance=.37))
         rows.append(row)
     class Packages:
         def __init__(self):
@@ -74,8 +85,7 @@ def test_changed_source_type_or_projectile_identity_is_rejected():
 
 def test_multishot_copy_requires_identical_payload_and_count_is_not_prebaked():
     pkg,rows=synthetic_sources();spec=next(s for s in importer.SPECS if s['family']=='phantasma');row=next(r for r in rows if r['path']==spec['path']);p=spec['projectile'];copy=p+'MS'
-    pkg.objects[copy]=deepcopy(pkg.objects[p]);pkg.entities[copy]=(None,SimpleNamespace(attr=None))
-    pkg.objects[spec['path']]['Behaviors'][1]['fire:ProjectileFireBehavior']['MultiShotProjectileType']=copy
+    pkg.objects[spec['path']]['Behaviors'][1]['fire:LotusWeaponProjectileFireBehavior']['MultiShotProjectileType']=copy
     profile=importer.profile(pkg,row,spec)
     assert profile['radials'][0]['damage']=={'radiation':73.}
     pkg.objects[copy]['ExplosiveAttack']['Amount']=99
@@ -104,41 +114,9 @@ def runtime(monkeypatch):
     return app,manual_combat,patch
 
 
-@pytest.mark.parametrize('spec',[s for s in importer.SPECS if s['family']=='phantasma'])
-def test_actual_prepare_adds_73_packet_and_ms_once_without_head_or_co_grants(runtime,spec):
-    app,manual,_=runtime
-    from wfarsenal.damage import Scenario,ModEffect
-    row=deepcopy(next(w for w in app.EXPORTS['weapons'] if w['path']==spec['path']))
-    def resolve(extra):
-        fight=manual.prepare(dict(weapon=row,fire_mode=1,effects=extra,scenario=Scenario()),[],[])
-        return fight,*fight['resolve']('selected',{},0.)
-    fight,direct,part=resolve([])
-    assert direct.damage_types=={'DT_IMPACT':15.}
-    assert part.damage_types=={'DT_RADIATION':73.}
-    assert part.status_chance==pytest.approx(.37)
-    assert part.radial_only is True and not part.area_direct
-    assert part.headshot_bonus_multiplier==1. and part.weakpoint_crit_chance_bonus==0.
-    _,d2,p2=resolve([ModEffect('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',1.)])
-    assert p2.damage_types==part.damage_types and p2.multishot==pytest.approx(2*part.multishot)
-    assert d2.multishot==pytest.approx(2*direct.multishot)
-    assert any('CO-neutral-fallback' in n for n in fight['unsupported'])
+# Actual charged parent/child and replay contracts live in test_phantasma_packet_audit.py.
 
-
-def test_actual_replay_scores_primary_explosion_instead_of_omitting_it(runtime):
-    app,manual,_=runtime
-    from wfarsenal.damage import Scenario,ModEffect
-    from wfarsenal.combat_replay import replay
-    spec=next(s for s in importer.SPECS if s['family']=='phantasma');row=deepcopy(next(w for w in app.EXPORTS['weapons'] if w['path']==spec['path']))
-    fight=manual.prepare(dict(weapon=row,fire_mode=1,effects=[ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.)],scenario=Scenario()),[],[])
-    stats,part=fight['resolve']('selected',{},0.)
-    target=dict(health=1e12,shield=0.,overguard=0.,armour=0.,baseLevel=1)
-    result=replay(stats,target,attacks_per_second=stats.fire_rate,window_seconds=.2,combat=fight,
-                  trigger_sources=fight['trigger_sources'],collect_timeline=True)
-    assert result['shots']>0
-    assert result['directWindow']==pytest.approx(result['shots']*(15.+73.))
-
-
-@pytest.mark.parametrize('spec',importer.ADMITTED_SPECS,ids=lambda s:'runtime-'+s['family']+'-'+s['path'].rsplit('/',1)[-1])
+@pytest.mark.parametrize('spec',[s for s in importer.ADMITTED_SPECS if s['family']!='phantasma'],ids=lambda s:'runtime-'+s['family']+'-'+s['path'].rsplit('/',1)[-1])
 def test_actual_prepare_retains_independent_radial_packet_for_all_admitted_modes(runtime,spec):
     app,manual,_=runtime
     from wfarsenal.damage import Scenario
@@ -235,4 +213,5 @@ def test_merge_preserves_unrelated_warnings_and_retires_only_superseded_phantasm
     assert prior['auditedAttacks'][path]==(entry if mode=='0' else {'modes':{mode:entry}})
     assert ('phantasma-parent-explosion-and-children-unmodeled' in merged['unmodeled'])==(family!='phantasma')
     assert ('phantasma-explosion-co-and-head-event-routing-unverified' in merged['unmodeled'])==(family!='phantasma')
-    assert set(spec['bounds'])<=set(merged['unmodeled'])
+    retired={'phantasma-cluster-child-payload-unmodeled','phantasma-charge-ammo-scale-and-contact-routing-approximated'} if family=='phantasma' else set()
+    assert set(spec['bounds'])-retired<=set(merged['unmodeled'])

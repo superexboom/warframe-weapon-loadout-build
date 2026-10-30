@@ -193,3 +193,40 @@ def test_stug_children_survive_the_parents_kill_and_never_earn_deadhead():
     # events remain ordinary radial hits even when they also kill.
     assert result['weakpointKillEvents']==1
     assert all(max(row['series'])==1 for row in result['triggerSeries'])
+
+
+
+def test_stug_audited_packets_notify_critical_hits_before_lethal_retirement(monkeypatch):
+    from wfarsenal import native_replay
+    stats,combat=setup('Stug',mode=2,multishot=5.,rate=.1)
+    for name,part in stats._stackable[1].items():
+        part.crit_chance=.25
+        part.victim_full_crit_chance=.25
+        part.bodyshot_crit_multiplier=1.5
+        part.weakpoint_crit_chance_bonus=.5 if name=='explosion' else 0.
+        part.status_chance=0.
+    combat['resolve']=lambda *_:(stats,None)
+    sources=[dict(id=kind,label=kind,kind=kind,duration=30.,maxStacks=1000.,perEvent=1.)
+             for kind in ('on-hit','on-crit')]
+    # Each embed/blast/child delivery kills its victim; all notifications still
+    # belong to that packet, before the next target is installed.
+    with monkeypatch.context() as pure:
+        pure.setattr(native_replay,'ENABLED',False)
+        result=replay(stats,target(1.),attacks_per_second=.1,window_seconds=4.1,
+            combat=combat,trigger_sources=sources,headshot_chance=.5)
+    hits=sum(event['hitWeight'] for event in result['projectileEvents'] if 'hitWeight' in event)
+    final=result['timeline'][-1]['triggerStacks']
+    assert hits>3 and result['killEvents']>=3
+    main_hits=sum(event['hitWeight'] for event in result['projectileEvents'] if event['kind']=='explosion')
+    # Radial children/embed: .25+.25 full-victim chance. Main area-direct:
+    # half body (.5*1.5), half head (.5+.5), hence critical probability .875.
+    critical_hits=(hits-main_hits)*.5+main_hits*.875
+    assert final==pytest.approx({'on-hit':hits,'on-crit':critical_hits})
+    if native_replay.wfcore is not None:
+        monkeypatch.setattr(native_replay,'ENABLED',True)
+        monkeypatch.setattr(native_replay,'SHADOW',True)
+        previous=native_replay.STATS['native']
+        native=replay(stats,target(1.),attacks_per_second=.1,window_seconds=4.1,
+            combat=combat,trigger_sources=sources,headshot_chance=.5,collect_timeline=False)
+        assert native_replay.STATS['native']>previous
+        assert native['directWindow']==result['directWindow']

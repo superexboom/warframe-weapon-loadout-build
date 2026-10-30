@@ -38,6 +38,15 @@ FORCED = {'PT_CHILLED': 'cold', 'PT_ELECTROCUTION': 'electricity'}
 FIELDS = ('ExplosiveAttack', 'EmbedDeathAttack', 'RadialDamage')
 
 
+def apply_native_contract(component):
+    """Keep reimports aligned with independently audited exact-source consumers."""
+    from wfarsenal.delayed_radial_events import producer
+    row=producer(component)
+    if row and row.get('nativeField')==component.get('nativeField'):
+        component.update(row.get('componentOverrides') or {})
+    return component
+
+
 def close(a, b, rel=.01):
     return abs(float(a) - float(b)) <= rel * max(abs(float(a)), abs(float(b)), 1e-9)
 
@@ -198,6 +207,7 @@ def build_entry(file, spec, attack, radial, row, mode_index, pkg, reference):
         impact_delay_seconds=delay, nativeSource=native_path, nativeField=field,
         damageTypeSource=type_source, multishotSource=('one native attack per spawned projectile' if field in ('ExplosiveAttack','EmbedDeathAttack') else 'native hitscan impact contract'),
         referenceTakesMultishot=radial.get('takes_multishot', True))
+    apply_native_contract(component)
     sources = []
     for path in dict.fromkeys((row['path'], native_path)):
         f = pkg._path_to_file(path)

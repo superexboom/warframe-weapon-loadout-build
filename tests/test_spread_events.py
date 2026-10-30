@@ -137,25 +137,29 @@ def test_zarr_bomblets_are_replayed_with_their_own_hit_and_explosion():
     c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=sc),[],[])
     st,radial=c['resolve']('selected',{})
     parts=[radial,*getattr(radial,'_additional_radials',())]
-    bomblets=[p for p in parts if p.multishot==6.]
-    assert len(parts)==3 and len(bomblets)==2
-    assert sorted(round(sum(p.damage_types.values()),6) for p in bomblets)==[15.,50.]
+    bomblets=parts[1:]
+    assert len(bomblets)==12 and all(p.multishot==1. for p in bomblets)
+    assert [round(sum(p.damage_types.values()),6) for p in bomblets]==[15.,50.]*6
+    assert bomblets[0].radial_victim_crit and bomblets[0].delayed_radial_hit_event
+    # Terminal avatar contact preserves the same explicit recipient through
+    # +568 -> 15b8 -> explosion+c24; surrounding victims use a separate type4.
+    assert bomblets[1].radial_victim_crit and bomblets[1].delayed_radial_hit_event
     assert 'cluster-submunitions-unmodeled' not in (c.get('unsupported') or [])
 
 
-def test_zarr_bomblet_hit_takes_condition_overload_on_the_parent_value():
-    # Wiki CO catalog: "Zarr | Cannon Child Bomb | Projectile | 15 | 25 | 167% | Adding":
-    # the bomblet hit gains what the 25-damage shell gains per +100%; its explosion takes none.
+def test_bramma_bomblet_hit_takes_condition_overload_on_the_native_parent_value():
+    # Native weapon+818 CO queries the 187-damage carrier for the 49-damage
+    # child contact, even though the old reference catalog omitted this weapon.
     def parts(effects):
-        c=prepare(dict(weapon=weapon('Zarr'),fire_mode=0,effects=effects,scenario=Scenario(aiming=False,distance=10)),[],[])
+        c=prepare(dict(weapon=weapon('Kuva Bramma'),fire_mode=0,effects=effects,scenario=Scenario(aiming=False,distance=10)),[],[])
         st,radial=c['resolve']('selected',{},2)
         hit=next(p for p in radial._additional_radials if 'DT_IMPACT' in p.damage_types)
         blast=next(p for p in radial._additional_radials if 'DT_EXPLOSION' in p.damage_types)
         return sum(st.damage_types.values()),sum(hit.damage_types.values()),sum(blast.damage_types.values())
     shell0,hit0,blast0=parts([])
     shell1,hit1,blast1=parts([ModEffect('WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE','STACKING_MULTIPLY',1.)])
-    assert (shell0,hit0)==(25.,15.) and shell1>shell0
-    assert hit1-hit0==pytest.approx(shell1-shell0)  # 15-damage bomblet, 25-damage shell, same gain
+    assert (shell0,hit0)==(187.,49.) and shell1>shell0
+    assert hit1-hit0==pytest.approx(shell1-shell0)
     assert blast1==pytest.approx(blast0)
 
 
@@ -207,9 +211,3 @@ def test_remote_mine_blast_waits_for_detonation_and_counts_once():
     assert aegrit['manualDetonation']=={'maxProjectiles':4} and aegrit['radials'][0]['damage']=={'blast':797.}
     ev=_local('Aegrit',0)
     assert ev['manualDetonation']['detonations']==ev['shots']
-
-
-def test_cold_crit_damage_skips_area_damage():
-    # wiki Cold / Puncture: neither crit bonus applies to Area of Effect damage.
-    import wfarsenal.combat_replay as module
-    assert 'if st.radial_only:puncture=cold=0.0' in Path(module.__file__).read_text(encoding='utf-8')

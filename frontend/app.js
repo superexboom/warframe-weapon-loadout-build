@@ -358,6 +358,9 @@ function combatStatePayload() {
   const result = {};
   document.querySelectorAll('[data-combat-state]').forEach((control) => {
     const key = control.dataset.combatState;
+    if (control.closest('[data-projectile-policy]')?.hidden) return;
+    if (['zymosChildContacts','zymosChildArrivalSeconds'].includes(key) && document.querySelector('[data-combat-state="zymosChildOverlap"]')?.value !== 'ideal-contact') return;
+    if (key === 'phantasmaChildArrivalSeconds' && document.querySelector('[data-combat-state="phantasmaChildOverlap"]')?.value !== 'ideal-contact') return;
     if (control.type === 'checkbox') {
       // Default-on switches are only sent when turned off.
       if ('defaultOn' in control.dataset) { if (!control.checked) result[key] = false; }
@@ -391,8 +394,9 @@ function restoreCombatState(value = {}) {
   document.querySelectorAll('[data-combat-orbtype]').forEach((control) => { control.value = vector[control.dataset.combatOrbtype] ?? ''; });
   document.querySelectorAll('[data-combat-state]').forEach((control) => {
     if (control.type === 'checkbox') control.checked = 'defaultOn' in control.dataset ? value[control.dataset.combatState] !== false : Boolean(value[control.dataset.combatState]);
-    else control.value = value[control.dataset.combatState] ?? '';
+    else control.value = value[control.dataset.combatState] ?? control.dataset.defaultValue ?? '';
   });
+  refreshProjectileStrategyControls();
   refreshMeleeRouteOptions(document.getElementById("build-melee-route-select"), state.buildWeapon, "build");
   document.querySelectorAll('[data-combat-gear]').forEach((control) => {
     const family = control.dataset.combatGear;
@@ -2693,6 +2697,23 @@ function renderContributions() {
 }
 
 const DIAGNOSTIC_CODE_LABELS = {
+  'zymos-child-next-shot-source-context-unverified': '邪莫斯子弹暂不继承尚未校准的特殊下一发伤害来源；父弹照常计算',
+  'cluster-child-flight-and-contact-grouping-approximated': '集束子弹按逐枚直击、再爆炸结算；飞行与同目标覆盖采用所选近似',
+  'cluster-nonstandard-source-CO-base-query-unverified': '集束子弹按普通武器来源计算异况基数，特殊外部来源仍有未校准项',
+  'embedded-field-attached-target-coverage-assumed': '附着伤害场按持续覆盖原目标计算，原目标死亡后不自动覆盖下一敌人',
+  'embedded-field-live-damage-status-retained-crit-and-source-context': '附着场每跳读取当前伤害、元素、触发及异况加成；暴击与特殊来源缓存保留弹体快照',
+  'embedded-field-nonstandard-source-CO-base-query-unverified': '附着场的特殊外部来源基数尚未校准',
+  'phantasma-child-ideal-contact-and-arrival-time-assumed': '幻离子子弹按所选到达时间命中原目标身体，并计中心爆炸覆盖',
+  'phantasma-child-overlap-off-until-explicit-geometry-policy': '幻离子分裂子弹默认不计命中；可在攻击策略中选择理想覆盖',
+  'phantasma-child-body-geometry-and-flight-policy-explicit': '幻离子子弹的真实飞行、遮挡和命中部位取决于场景',
+  'trumna-single-target-first-contact-policy-additional-bounce-coverage-excluded': 'Trumna 当前只计首次有效接触，后续弹跳是否再次覆盖原目标需另行确定',
+  'sepulcrum-one-live-lock-ideal-contact-policy-geometric-arrival-assumed': 'Sepulcrum 单目标锁定按一枚主导弹计算，飞行与命中位置采用理想接触',
+  'zymos-child-overlap-off-until-explicit-geometry-policy': '邪莫斯追踪子弹默认不计命中；可选择返回仍存活原目标的策略',
+  'zymos-original-surviving-host-body-contact-policy': '邪莫斯追踪子弹按返回原目标身体计算；原目标死亡后不转移到下一敌人',
+  'zymos-selected-frame-and-flight-timing': '邪莫斯子弹按所选帧间隔与飞行时间到达，真实时间受帧率和场景影响',
+  'zymos-callback-firecount-independent-current-source-query': '邪莫斯子弹继承的直击伤害按创建时的武器加成与多重重新计算',
+  'zymos-two-source-enervate-snapshots-use-marginal-probabilities': '邪莫斯在两次创建阶段分别读取次要·激昂；跨时刻状态相关性采用概率近似',
+  'zymos-child-external-source-context-defaults': '邪莫斯按普通玩家武器来源计算；未提供的外部角色临时加成不额外假定',
   "radial-arming-distance-assumed-armed": "未填写射击距离，当前假定投射物已满足爆炸解锁距离",
   "mutalist-cernos-swarm-first-update-versus-enter-phase-unmodeled": "异融西诺斯毒雾按进入与首次更新各结算一次伤害，实际帧内先后仍待核实",
   "mutalist-cernos-swarm-shared-weapon-replacement-ms-order-unverified": "异融西诺斯按同源最后一个有效毒雾计算；同帧多重的中间进入次数尚未校准",
@@ -2789,6 +2810,9 @@ const DIAGNOSTIC_CODE_LABELS = {
   "mausolon-radial-multishot-routing-unverified": "葬铭的多重射击如何产生范围伤害事件仍有待核实；当前沿用每个弹头的范围伤害模型",
   'quanta-player-shot-detonation-unmodeled': '量子切割器副模式按立方体碰撞引爆；另外射击立方体的强化引爆尚未计入',
   'quanta-idle-detonation-unmodeled': '未碰撞立方体的 9 秒自然引爆未计入当前单目标接触模型',
+  'quanta-standoff-cube-and-chain-overlap-assumed': '强化引爆假设立方体先避开敌人碰撞，敌人和同批立方体均处于有效爆炸覆盖内',
+  'quanta-paid-primary-one-pulse-hit-assumed': '另计一次主射击的弹药与完整光束周期，假定这一脉冲命中立方体；光束本身不额外伤害敌人',
+  'quanta-shot-native-delay-approximated-by-mean': '立方体被射击后的原生引爆延迟为 0.075–0.15 秒，当前采用均值 0.1125 秒',
   'quanta-cube-chain-unmodeled': '立方体之间的连锁引爆与射击转换尚未计入',
 
   'spread-hit-loss-not-modeled': '散布暂不参与命中、伤害及评分计算',
@@ -8105,6 +8129,8 @@ function drawBenchmarkReplay(bench) {
     const caveats = ["期望触发数模型（非随机模拟）"];
     caveats.push('散布暂不参与命中和伤害计算');
     if (bench.fieldDuration) caveats.push(`空仓换弹首发毒云延时已触发 ${bench.fieldDuration.boostedShots} 次`);
+    if (bench.zymosChildren) caveats.push("追踪子弹按返回原目标的所选策略计算，目标死亡后的子弹不转移到下一敌人");
+    if (bench.quantaStrategy) caveats.push("立方体强化引爆已计入主射击消耗与动作；采用所选脱离碰撞与理想连锁覆盖");
     if (bench.manualDetonation) caveats.push(`每批 ${bench.manualDetonation.batchSize} 次投掷，等待 ${bench.manualDetonation.delaySeconds}s 起爆 · 已起爆 ${bench.manualDetonation.detonations} 批`);
     if (bench.delayedAttackEvents) caveats.push(`已结算 ${bench.delayedAttackEvents} 次延迟爆炸`);
     if (bench.syndicateEvents?.length) caveats.push(`集团爆发 ${bench.syndicateEvents.length} 次，实际伤害 ${formatMetric(bench.syndicateWindow || 0)}`);
@@ -9737,7 +9763,33 @@ function metricOptionsFor(weapon) {
   return state.catalog?.buildOptions?.metrics?.[kind] || [];
 }
 
+function refreshProjectileStrategyControls() {
+  const path = state.buildWeapon?.path;
+  const alternate = Number(ui["build-fire-mode-select"]?.value || 0) === 1;
+  const quanta = new Set([
+    "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle",
+    "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/QuantaVandal",
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta",
+  ]);
+  const phantasma = new Set([
+    "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
+  ]);
+  const cubes = document.getElementById("build-quanta-strategy-fields");
+  const children = document.getElementById("build-phantasma-child-fields");
+  if (cubes) cubes.hidden = !(alternate && quanta.has(path));
+  if (children) children.hidden = !(alternate && phantasma.has(path));
+  const overlap = document.querySelector('[data-combat-state="phantasmaChildOverlap"]');
+  const arrival = document.querySelector('[data-combat-state="phantasmaChildArrivalSeconds"]');
+  if (arrival) arrival.disabled = overlap?.value !== 'ideal-contact';
+  const zymos = document.getElementById('build-zymos-child-fields');
+  if (zymos) zymos.hidden = alternate || path !== '/Lotus/Weapons/Infested/Pistols/InfUzi/InfUziWeapon';
+  const zymosEnabled = document.querySelector('[data-combat-state="zymosChildOverlap"]')?.value === 'ideal-contact';
+  for (const input of document.querySelectorAll('#build-zymos-child-fields input')) input.disabled = !zymosEnabled;
+}
+
 function refreshBuildMetrics() {
+  refreshProjectileStrategyControls();
   const mode = state.buildWeapon?.fireModes?.find((entry) => String(entry.index) === ui["build-fire-mode-select"].value);
   const availability = mode?.metricAvailability || {};
   const previous = ui["build-metric-select"].value;
@@ -12090,7 +12142,7 @@ function bindEvents() {
   ui["arcane-picker-close"]?.addEventListener("click", closeArcanePicker);
   bindWarframeEvents();
   ui["weapon-build-form"]?.addEventListener("input", () => { updateCustomDamageControls(); persistActiveBuildConfig(); scheduleLiveManualSimulation(); });
-  ui["weapon-build-form"]?.addEventListener("change", () => { persistActiveBuildConfig(); scheduleLiveManualSimulation(); });
+  ui["weapon-build-form"]?.addEventListener("change", () => { refreshProjectileStrategyControls(); persistActiveBuildConfig(); scheduleLiveManualSimulation(); });
   ui["weapon-build-form"].addEventListener("submit", submitWeaponBuild);
   if (matchMedia("(pointer: fine)").matches) {
     ui["riven-stage"].addEventListener("pointermove", (event) => {

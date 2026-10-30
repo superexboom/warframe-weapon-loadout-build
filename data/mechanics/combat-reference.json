@@ -1509,7 +1509,20 @@
         "crit_multiplier": 2.0,
         "status_chance": 0.25,
         "stacking": "stack",
-        "takes_condition_overload": true
+        "takes_condition_overload": true,
+        "nativeSource": "/Lotus/Weapons/ClanTech/Bio/BioGrenadeProjectile",
+        "nativeField": "EmbedAttack",
+        "impact_delay_seconds": 0.0,
+        "liveVictimCO": true,
+        "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
+        "tickRateSource": "native embed initial call140c3f312; fixed1s DoEmbedDamage callback140297d78",
+        "coProfile": {
+          "behavior": "independent",
+          "baseFraction": 1.0,
+          "excludeFlatSources": [],
+          "source": "native attached target weapon+820",
+          "callerBase": "fully-source-built-current-EmbedAttack-base-before-victim"
+        }
       },
       "compression": {
         "effectiveness": 1.0,
@@ -1520,7 +1533,9 @@
       },
       "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
       "unmodeled": [
-        "embedded-field-CO-and-hit-consumers-unverified"
+        "embedded-field-attached-target-coverage-assumed",
+        "embedded-field-live-damage-status-retained-crit-and-source-context",
+        "embedded-field-nonstandard-source-CO-base-query-unverified"
       ]
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun": {
@@ -1929,7 +1944,18 @@
             "referenceTakesMultishot": false,
             "multishotSource": "one native attack per spawned projectile",
             "nativeSource": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile",
-            "nativeMultishotSourceSha256": "41cfd4e72557e395f2b36e3775f69dee4ab410dd1ef525fe7e610875a00480b6"
+            "nativeMultishotSourceSha256": "41cfd4e72557e395f2b36e3775f69dee4ab410dd1ef525fe7e610875a00480b6",
+            "impact_delay_seconds": 0.0,
+            "takes_victim_crit": true,
+            "takes_condition_overload": true,
+            "coProfile": {
+              "behavior": "additive_with_base_damage",
+              "baseFraction": 3.816326530612245,
+              "excludeFlatSources": [],
+              "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
+              "parentBase": 187,
+              "childBase": 49
+            }
           },
           "radial": {
             "damage": {
@@ -1947,7 +1973,11 @@
             "referenceTakesMultishot": false,
             "multishotSource": "one native attack per spawned projectile",
             "nativeSource": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile",
-            "nativeMultishotSourceSha256": "41cfd4e72557e395f2b36e3775f69dee4ab410dd1ef525fe7e610875a00480b6"
+            "nativeMultishotSourceSha256": "41cfd4e72557e395f2b36e3775f69dee4ab410dd1ef525fe7e610875a00480b6",
+            "impact_delay_seconds": 0.0,
+            "takes_victim_crit": true,
+            "directRecipientHitType": "DHT_PROJECTILE",
+            "recipientPolicy": "terminal-contact-on-current-avatar"
           },
           "nativeChild": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowClusterMiniProjectile",
           "nativeSources": [
@@ -1972,11 +2002,13 @@
             "runtimeScriptOverride": true,
             "consumer": "contact1416376a7..6cf/radial141234988..9aa; runtime+15b1 overrides both toSCRIPT5",
             "sourceEvidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
-          }
+          },
+          "nativeContactQualification": "ordinary mode0 owner/source; successful weapon818 preserves PROJECTILE2; native query parent base, one CO application, genericHit/Crit and victim crit allowed; body aim remains"
         }
       ],
       "unmodeled": [
-        "cluster-contact-and-radial-qualification-body-approximation"
+        "cluster-child-flight-and-contact-grouping-approximated",
+        "cluster-nonstandard-source-CO-base-query-unverified"
       ]
     },
     "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncher": {
@@ -2098,13 +2130,16 @@
               "behavior": "additive_with_base_damage",
               "baseFraction": 1.6666666666666667,
               "excludeFlatSources": [],
-              "source": "wiki CO catalog via WFSim unmodelled row",
-              "row": "Zarr | Cannon Child Bomb | Projectile | 15 | 25 | 167% | Adding"
+              "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
+              "parentBase": 25,
+              "childBase": 15
             },
             "referenceTakesMultishot": false,
             "multishotSource": "one native attack per spawned projectile",
             "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
-            "nativeMultishotSourceSha256": "f57e28a68a438ff1d3709efe60e1158f069030fc3af2d10eb22f2bbfdfc6021e"
+            "nativeMultishotSourceSha256": "f57e28a68a438ff1d3709efe60e1158f069030fc3af2d10eb22f2bbfdfc6021e",
+            "impact_delay_seconds": 0.0,
+            "takes_victim_crit": true
           },
           "radial": {
             "damage": {
@@ -2122,7 +2157,11 @@
             "referenceTakesMultishot": false,
             "multishotSource": "one native attack per spawned projectile",
             "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
-            "nativeMultishotSourceSha256": "f57e28a68a438ff1d3709efe60e1158f069030fc3af2d10eb22f2bbfdfc6021e"
+            "nativeMultishotSourceSha256": "f57e28a68a438ff1d3709efe60e1158f069030fc3af2d10eb22f2bbfdfc6021e",
+            "impact_delay_seconds": 0.0,
+            "takes_victim_crit": true,
+            "directRecipientHitType": "DHT_PROJECTILE",
+            "recipientPolicy": "terminal-contact-on-current-avatar"
           },
           "nativeChild": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
           "nativeSources": [
@@ -2147,11 +2186,13 @@
             "runtimeScriptOverride": true,
             "consumer": "contact1416376a7..6cf/radial141234988..9aa; runtime+15b1 overrides both toSCRIPT5",
             "sourceEvidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
-          }
+          },
+          "nativeContactQualification": "ordinary mode0 owner/source; successful weapon818 preserves PROJECTILE2; native query parent base, one CO application, genericHit/Crit and victim crit allowed; body aim remains"
         }
       ],
       "unmodeled": [
-        "cluster-contact-and-radial-qualification-body-approximation"
+        "cluster-child-flight-and-contact-grouping-approximated",
+        "cluster-nonstandard-source-CO-base-query-unverified"
       ]
     },
     "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon": {
@@ -2416,7 +2457,10 @@
         "nativeDelayRange": [
           0.60000002,
           0.80000001
-        ]
+        ],
+        "takes_victim_crit": true,
+        "directRecipientHitType": "DHT_PROJECTILE",
+        "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent"
       },
       "sourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
       "unmodeled": [
@@ -3100,7 +3144,7 @@
             },
             "chargedStacks": true,
             "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)",
-            "classificationSource": "WFSim M127 2026-10-26: area direct main explosion; GunCO excluded on embed and main. Child radial stage stays separate."
+            "classificationSource": "current native c24 default PROJECTILE2 overrides explicit recipient packet after conversion; 634/e8 is falloff. Head/Deadhead numeric rules retain M127 empirical boundary; ordinary CO and child-scene paths remain independent."
           },
           "charge": {
             "seconds": 2.0,
@@ -3181,7 +3225,7 @@
             "childDeathMultiplier": 2.5,
             "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)",
             "childActiveLimit": 70,
-            "classificationSource": "WFSim M127 2026-10-26: area direct main explosion; GunCO excluded on embed and main. Child radial stage stays separate."
+            "classificationSource": "current native c24 default PROJECTILE2 overrides explicit recipient packet after conversion; 634/e8 is falloff. Head/Deadhead numeric rules retain M127 empirical boundary; ordinary CO and child-scene paths remain independent."
           }
         }
       },
@@ -3224,7 +3268,7 @@
           "takesConditionOverload": false
         },
         "lifeSource": "native EmbedTime 1.5; refresh per stack from GooGun.lua behaviour (wiki Stug)",
-        "classificationSource": "WFSim M127 2026-10-26: area direct main explosion; GunCO excluded on embed and main. Child radial stage stays separate."
+        "classificationSource": "current native c24 default PROJECTILE2 overrides explicit recipient packet after conversion; 634/e8 is falloff. Head/Deadhead numeric rules retain M127 empirical boundary; ordinary CO and child-scene paths remain independent."
       }
     },
     "/Lotus/Weapons/ClanTech/Energy/Railgun": {
@@ -4430,7 +4474,10 @@
                   "scourge-prime-contact-geometry-and-source-snapshot-unverified",
                   "scourge-prime-main55-CO-weakpoint-events-unverified"
                 ]
-              }
+              },
+              "takes_victim_crit": true,
+              "directRecipientHitType": "DHT_PROJECTILE",
+              "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent"
             }
           ],
           "behaviourSource": "Behaviors[1]",
@@ -5146,7 +5193,10 @@
                 "onceScope": "one radial per selected projectile that reaches ordinary victim contact; no extra life-expiry packet after contact death",
                 "evidence": ".local/delivery/ranged-implementation-20261029/native-payloads/larkspur-lifecycle-original-byte-results.json"
               },
-              "sourceDamageUpgrade": "WEAPON_DAMAGE_AMOUNT native constructor253"
+              "sourceDamageUpgrade": "WEAPON_DAMAGE_AMOUNT native constructor253",
+              "takes_victim_crit": true,
+              "directRecipientHitType": "DHT_PROJECTILE",
+              "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent"
             }
           ],
           "unmodeled": [
@@ -5385,7 +5435,10 @@
                 "onceScope": "one radial per selected projectile that reaches ordinary victim contact; no extra life-expiry packet after contact death",
                 "evidence": ".local/delivery/ranged-implementation-20261029/native-payloads/larkspur-lifecycle-original-byte-results.json"
               },
-              "sourceDamageUpgrade": "WEAPON_DAMAGE_AMOUNT native constructor253"
+              "sourceDamageUpgrade": "WEAPON_DAMAGE_AMOUNT native constructor253",
+              "takes_victim_crit": true,
+              "directRecipientHitType": "DHT_PROJECTILE",
+              "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent"
             }
           ],
           "unmodeled": [
@@ -6921,7 +6974,10 @@
           "damageTypeSource": "native-explicit",
           "multishotSource": "one native attack per spawned projectile",
           "referenceTakesMultishot": false,
-          "nativeMultishotSourceSha256": "9ec8effef038feec2b26bc634963844f8fd56c52b4da086c233d2327d26ab173"
+          "nativeMultishotSourceSha256": "9ec8effef038feec2b26bc634963844f8fd56c52b4da086c233d2327d26ab173",
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent"
         }
       ],
       "nativeSources": [
@@ -7000,13 +7056,16 @@
               "behavior": "additive_with_base_damage",
               "baseFraction": 2.6666666666666665,
               "excludeFlatSources": [],
-              "source": "wiki CO catalog via WFSim unmodelled row",
-              "row": "Kulstar | Cluster Bombs | Projectile | 75 | 200 | 257% | Adding — \"CO-bonus uses parent projectile damage value\""
+              "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
+              "parentBase": 200,
+              "childBase": 75
             },
             "referenceTakesMultishot": false,
             "multishotSource": "one native attack per spawned projectile",
             "nativeSource": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoClusterProjectile",
-            "nativeMultishotSourceSha256": "4d31a51f58195c5d57bb6be61e89736f353a96186db392de38901dd416e497fd"
+            "nativeMultishotSourceSha256": "4d31a51f58195c5d57bb6be61e89736f353a96186db392de38901dd416e497fd",
+            "impact_delay_seconds": 0.0,
+            "takes_victim_crit": true
           },
           "radial": {
             "damage": {
@@ -7052,11 +7111,13 @@
             "runtimeScriptOverride": true,
             "consumer": "contact1416376a7..6cf/radial141234988..9aa; runtime+15b1 overrides both toSCRIPT5",
             "sourceEvidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
-          }
+          },
+          "nativeContactQualification": "ordinary mode0 owner/source; successful weapon818 preserves PROJECTILE2; native query parent base, one CO application, genericHit/Crit and victim crit allowed; body aim remains"
         }
       ],
       "unmodeled": [
-        "cluster-contact-and-radial-qualification-body-approximation"
+        "cluster-child-flight-and-contact-grouping-approximated",
+        "cluster-nonstandard-source-CO-base-query-unverified"
       ]
     },
     "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeer": {
@@ -7188,8 +7249,26 @@
           ],
           "generatedBy": "tools/import_projectile_components.py",
           "unmodeled": [
-            "sepulcrum-lock-target-emission-and-hit-selection-unmodeled"
-          ]
+            "sepulcrum-one-live-lock-ideal-contact-policy-geometric-arrival-assumed"
+          ],
+          "lockOnBurst": {
+            "singleTargetPolicy": "one-live-target-one-lock-one-assigned-missile",
+            "maxTargets": 5,
+            "maxStacks": 1,
+            "shotsWithoutLock": 0,
+            "initialLockSeconds": 0.0,
+            "initialStacks": 1,
+            "relockSeconds": 0.30000001,
+            "rearmingSeconds": 0.0099999998,
+            "modeSwitchSeconds": 0.0,
+            "burstDelaySeconds": 0.079999998,
+            "scalesWithFireRate": true,
+            "maintainLocksBetweenBursts": false,
+            "swapToPrimaryAfterBurst": true,
+            "sourceKillChargeLoop": "existing kill-charge-profiles: killsPerUse5 shotsPerGauge1 switchIn/Out0",
+            "targetPart": "HEAD request only; landed head hit still requires collision",
+            "expiryOrHomingArrival": "not treated as guaranteed hit delay"
+          }
         }
       }
     },
@@ -7262,7 +7341,10 @@
           "damageTypeSource": "native-explicit",
           "multishotSource": "one native attack per spawned projectile",
           "referenceTakesMultishot": false,
-          "nativeMultishotSourceSha256": "fba8c7afee1853add813355f6076e99190f6373f18652e15ebd9799d54286c40"
+          "nativeMultishotSourceSha256": "fba8c7afee1853add813355f6076e99190f6373f18652e15ebd9799d54286c40",
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent"
         }
       ],
       "nativeSources": [
@@ -7305,7 +7387,10 @@
           "damageTypeSource": "native-explicit",
           "multishotSource": "one native attack per spawned projectile",
           "referenceTakesMultishot": false,
-          "nativeMultishotSourceSha256": "c870d0d5f7322cc641a487c8fb1be43563e72235dfdf8efa0b3a51675fae3e55"
+          "nativeMultishotSourceSha256": "c870d0d5f7322cc641a487c8fb1be43563e72235dfdf8efa0b3a51675fae3e55",
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent"
         }
       ],
       "nativeSources": [
@@ -7387,7 +7472,7 @@
         "status-chance native 0 vs reference 0.3; reference used"
       ],
       "childSpawnAudit": {
-        "status": "partial-consumer-audit-no-added-damage",
+        "status": "ordered-source-adapter-with-explicit-contact-policy",
         "carrier": "/Lotus/Weapons/Infested/Pistols/InfUzi/EmbedDeathKillClusterProj",
         "child": "/Lotus/Weapons/Infested/Pistols/InfUzi/EmbedDeathKillGuidedProj",
         "script": "/Lotus/Scripts/WeaponAttachments/InfUziWeapon.lua",
@@ -7437,7 +7522,7 @@
           "flag": "Projectile+0x15b1 set by InfUzi P3/P4 Lua atom44bcd6fd ->0x1419850a0",
           "inherited": "0x14121a561 copies carrier flag to child",
           "consumer": "0x141234988..0x141234998 overrides radial plan hit type with DHT_SCRIPT=5",
-          "scope": "classification only; does not establish head, CO or Arcane notification eligibility"
+          "scope": "contact retains SCRIPT5; explicit explosion victim is overwritten by c24 PROJECTILE2; surrounding scene retains SCRIPT5"
         },
         "provenNoticeConsumers": [
           "0x1407eb9b2",
@@ -7459,18 +7544,39 @@
             "afterOneQuery": 0.11,
             "afterTwoQueries": 0.17
           },
-          "scope": "transfer primitive only; complete carrier creation/query count and subsequent victim-side crit transforms not closed"
+          "scope": "two surviving ordinary queries after normal registration/reset; Enervate is a timed ordinary244 ADD query, not contextual df4/ff8"
+        },
+        "orderedAdapter": {
+          "module": "wfarsenal.zymos",
+          "sharedRecordChildCount": 5,
+          "copiedContactAmount": "int(current primary damage query * fresh callback fire count)",
+          "callbackFireCount": "140d4f1ea clears fire+64 before return; delayed callback uses fresh floor+Bernoulli",
+          "sourceQueries": "carrier callback then child creation after next update; retained CC/CD buckets",
+          "enervate": "CritOnHit enum244 ADD; inventory+440/+408 share UpgradeManager[c88]",
+          "packets": [
+            {
+              "field": "AttackData",
+              "hitType": "DHT_SCRIPT",
+              "co": "same current packet once",
+              "victimCrit": false
+            },
+            {
+              "field": "ExplosiveAttack",
+              "amount": 333,
+              "hitType": "DHT_PROJECTILE",
+              "co": false,
+              "victimCrit": true
+            }
+          ],
+          "geometry": "explicit surviving-original-victim body contacts; arrival and frame duration are scenario inputs"
         },
         "unresolved": [
-          "child-target-selection",
-          "complete-carrier-creation-and-damage-snapshot",
-          "final-critical-query-count-and-victim-side-transforms",
-          "status-and-kill-event-consumers"
+          "actual-trajectory-contact-and-head-geometry",
+          "external-creator-and-avatar-context-defaults"
         ]
       },
       "unmodeled": [
-        "zymos-child-spawn-and-targeting-unmodeled",
-        "zymos-child-damage-inheritance-and-event-routing-unverified"
+        "zymos-child-external-source-context-defaults"
       ]
     },
     "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/HextraWeapon": {
@@ -8079,13 +8185,16 @@
               "behavior": "additive_with_base_damage",
               "baseFraction": 3.3333333333333335,
               "excludeFlatSources": [],
-              "source": "wiki CO catalog via WFSim unmodelled row",
-              "row": "Kuva Zarr | Cannon Child Bomb | Projectile | 15 | 50 | 333% | Adding"
+              "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
+              "parentBase": 50,
+              "childBase": 15
             },
             "referenceTakesMultishot": false,
             "multishotSource": "one native attack per spawned projectile",
             "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
-            "nativeMultishotSourceSha256": "68043f0d15b60ccd0bf0683b3ea8a4b7f97c280a3872a471dff68b6eb9158957"
+            "nativeMultishotSourceSha256": "68043f0d15b60ccd0bf0683b3ea8a4b7f97c280a3872a471dff68b6eb9158957",
+            "impact_delay_seconds": 0.0,
+            "takes_victim_crit": true
           },
           "radial": {
             "damage": {
@@ -8103,7 +8212,11 @@
             "referenceTakesMultishot": false,
             "multishotSource": "one native attack per spawned projectile",
             "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
-            "nativeMultishotSourceSha256": "68043f0d15b60ccd0bf0683b3ea8a4b7f97c280a3872a471dff68b6eb9158957"
+            "nativeMultishotSourceSha256": "68043f0d15b60ccd0bf0683b3ea8a4b7f97c280a3872a471dff68b6eb9158957",
+            "impact_delay_seconds": 0.0,
+            "takes_victim_crit": true,
+            "directRecipientHitType": "DHT_PROJECTILE",
+            "recipientPolicy": "terminal-contact-on-current-avatar"
           },
           "nativeChild": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
           "nativeSources": [
@@ -8125,11 +8238,13 @@
             "runtimeScriptOverride": true,
             "consumer": "contact1416376a7..6cf/radial141234988..9aa; runtime+15b1 overrides both toSCRIPT5",
             "sourceEvidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
-          }
+          },
+          "nativeContactQualification": "ordinary mode0 owner/source; successful weapon818 preserves PROJECTILE2; native query parent base, one CO application, genericHit/Crit and victim crit allowed; body aim remains"
         }
       ],
       "unmodeled": [
-        "cluster-contact-and-radial-qualification-body-approximation"
+        "cluster-child-flight-and-contact-grouping-approximated",
+        "cluster-nonstandard-source-CO-base-query-unverified"
       ]
     },
     "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle": {
@@ -8264,8 +8379,20 @@
           ],
           "generatedBy": "tools/import_projectile_components.py",
           "unmodeled": [
-            "trumna-alt-bounce-and-expiry-recipients-unmodeled"
-          ]
+            "trumna-alt-bounce-and-expiry-recipients-unmodeled",
+            "trumna-single-target-first-contact-policy-additional-bounce-coverage-excluded"
+          ],
+          "projectileLifecycle": {
+            "kind": "impact-bounce-first-impact-expiry",
+            "singleTargetPolicy": "first-eligible-contact-only",
+            "maxContacts": 7,
+            "maxContactsUpgrade": "WEAPON_PROJECTILE_BOUNCES",
+            "expiryStarts": "first-eligible-impact",
+            "expirySeconds": 5.0,
+            "resetExpiryOnLaterImpact": false,
+            "deathCancelsExpiry": true,
+            "additionalHits": "explicit recipient geometry required; no assumed seventh/eighth single-victim packet"
+          }
         }
       },
       "name": "Trumna",
@@ -8349,8 +8476,20 @@
           ],
           "generatedBy": "tools/import_projectile_components.py",
           "unmodeled": [
-            "trumna-alt-bounce-and-expiry-recipients-unmodeled"
-          ]
+            "trumna-alt-bounce-and-expiry-recipients-unmodeled",
+            "trumna-single-target-first-contact-policy-additional-bounce-coverage-excluded"
+          ],
+          "projectileLifecycle": {
+            "kind": "impact-bounce-first-impact-expiry",
+            "singleTargetPolicy": "first-eligible-contact-only",
+            "maxContacts": 7,
+            "maxContactsUpgrade": "WEAPON_PROJECTILE_BOUNCES",
+            "expiryStarts": "first-eligible-impact",
+            "expirySeconds": 5.0,
+            "resetExpiryOnLaterImpact": false,
+            "deathCancelsExpiry": true,
+            "additionalHits": "explicit recipient geometry required; no assumed seventh/eighth single-victim packet"
+          }
         }
       },
       "name": "Trumna Prime",
@@ -8446,10 +8585,20 @@
         "status_chance": 0.45,
         "forcedProcs": [],
         "stacking": "stack",
-        "takes_condition_overload": false,
+        "takes_condition_overload": true,
         "nativeSource": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile",
         "nativeField": "EmbedAttack",
-        "tickRateSource": "reference (native has no interval)"
+        "tickRateSource": "native embed initial call140c3f312; fixed1s DoEmbedDamage callback140297d78",
+        "impact_delay_seconds": 0.0,
+        "liveVictimCO": true,
+        "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
+        "coProfile": {
+          "behavior": "additive_with_base_damage",
+          "baseFraction": 1.5714285714285714,
+          "excludeFlatSources": [],
+          "source": "native attached target weapon+818-success",
+          "callerBase": "source-mode-projectile-base55-with-native-source-base-hooks"
+        }
       },
       "lingeringSource": {
         "reference": "data/weapons/secondary/coda_pox.yaml",
@@ -8473,7 +8622,9 @@
       "directTotal": 55.0,
       "projectile": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile",
       "unmodeled": [
-        "embedded-field-CO-and-hit-consumers-unverified"
+        "embedded-field-attached-target-coverage-assumed",
+        "embedded-field-live-damage-status-retained-crit-and-source-context",
+        "embedded-field-nonstandard-source-CO-base-query-unverified"
       ]
     },
     "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars": {
@@ -8494,7 +8645,17 @@
         "takes_condition_overload": true,
         "nativeSource": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile",
         "nativeField": "EmbedAttack",
-        "tickRateSource": "reference (native has no interval)"
+        "tickRateSource": "native embed initial call140c3f312; fixed1s DoEmbedDamage callback140297d78",
+        "impact_delay_seconds": 0.0,
+        "liveVictimCO": true,
+        "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
+        "coProfile": {
+          "behavior": "additive_with_base_damage",
+          "baseFraction": 2.5,
+          "excludeFlatSources": [],
+          "source": "native attached target weapon+818-success",
+          "callerBase": "source-mode-projectile-base50-with-native-source-base-hooks"
+        }
       },
       "lingeringSource": {
         "reference": "data/weapons/secondary/pox.yaml",
@@ -8518,7 +8679,9 @@
       "directTotal": 50.0,
       "projectile": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile",
       "unmodeled": [
-        "embedded-field-CO-and-hit-consumers-unverified"
+        "embedded-field-attached-target-coverage-assumed",
+        "embedded-field-live-damage-status-retained-crit-and-source-context",
+        "embedded-field-nonstandard-source-CO-base-query-unverified"
       ]
     },
     "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon": {
@@ -9305,9 +9468,8 @@
           "unmodeled": [
             "phantasma-main-explosion-CO-neutral-fallback-unverified",
             "phantasma-main-explosion-weakpoint-events-neutral-fallback-unverified",
-            "phantasma-cluster-child-payload-unmodeled",
-            "phantasma-charge-ammo-scale-and-contact-routing-approximated",
-            "phantasma-nonstandard-ability-parent-source-crit-routing-unverified"
+            "phantasma-nonstandard-ability-parent-source-crit-routing-unverified",
+            "phantasma-child-body-geometry-and-flight-policy-explicit"
           ],
           "scope": "bounded single-target parent explosion; declared per spawned projectile; unresolved gates approximated explicitly",
           "radials": [
@@ -9353,7 +9515,8 @@
               },
               "headSuppressionSource": "0x140bc29fc victimPacket+0x25c=1; independent of hitType",
               "takes_victim_crit": true,
-              "victimCritEvidence": "ordinary weapon source;1408ea872 mask0x0e acceptsPROJECTILE2;1408ea950/9d8 queriesAVATAR_CRIT_CHANCE/DAMAGE_VULNERABILITY; independent of head suppression25c"
+              "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent",
+              "directRecipientHitType": "DHT_PROJECTILE"
             }
           ],
           "behaviourSource": "Behaviors[1]",
@@ -9418,13 +9581,131 @@
             "statusNormalization": "0x1412353ef raw fireIterations / 0x141586f50",
             "critFields": "Projectile.CriticalChance/CriticalMultiplier +0x538/+0x570; death path0x140f36198 ->0x140ede780 copies modifier buckets into radial plan, adding existing plan CC and multiplying existing plan CD"
           },
-          "charge": {
-            "seconds": 0.090899996,
-            "modifier": "WEAPON_CHARGE_RATE",
-            "scalesWithFireRate": false,
-            "source": "native-ChargeTime",
+          "fullClipCharge": {
+            "cadencePolicy": "ordinary-reload-full-clip",
+            "chargeSecondsPerRound": 0.090899996,
             "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
-            "nativeField": "Behaviors[1].state.ChargeTime"
+            "nativeField": "Behaviors[1].state:WeaponChargedStateBehavior",
+            "parentScale": "captured loaded rounds; native projectile+7b8",
+            "childScale": "independent ClusterApplyDamageMultiplier snapshot+1738, default1"
+          },
+          "phantasmaChildren": {
+            "idealArrivalSeconds": 0.7,
+            "defaultOverlapPolicy": "off",
+            "lifetimeRangeSeconds": [
+              2.2,
+              2.9
+            ],
+            "normal-parent": {
+              "count": 5,
+              "nativeCarrier": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+              "packets": [
+                {
+                  "damage": {
+                    "DT_IMPACT": 3.0
+                  },
+                  "takes_multishot": false,
+                  "takes_condition_overload": true,
+                  "crit_chance": 0.029999999,
+                  "crit_multiplier": 1.5,
+                  "status_chance": 0.37,
+                  "forcedProcs": [
+                    "PT_STAGGERED"
+                  ],
+                  "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterMiniProj",
+                  "nativeField": "AttackData",
+                  "approximation": {
+                    "recipient": "explicit ideal-contact policy only",
+                    "arrival": "configured arrival assumption, not native expiry",
+                    "qualification": "independent native CO / victim crit / generic events; body-only child geometry assumption"
+                  },
+                  "takes_victim_crit": true,
+                  "coProfile": {
+                    "behavior": "independent",
+                    "baseFraction": 1.0,
+                    "excludeFlatSources": []
+                  },
+                  "native_event_delay_seconds": 0.0
+                },
+                {
+                  "damage": {
+                    "DT_RADIATION": 18.0
+                  },
+                  "takes_multishot": false,
+                  "takes_condition_overload": false,
+                  "crit_chance": 0.029999999,
+                  "crit_multiplier": 1.5,
+                  "status_chance": 0.37,
+                  "forcedProcs": [
+                    "PT_KNOCKBACK"
+                  ],
+                  "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterMiniProj",
+                  "nativeField": "ExplosiveAttack",
+                  "approximation": {
+                    "recipient": "explicit ideal-contact policy only",
+                    "arrival": "configured arrival assumption, not native expiry",
+                    "qualification": "independent native CO / victim crit / generic events; body-only child geometry assumption"
+                  },
+                  "takes_victim_crit": true,
+                  "native_event_delay_seconds": 0.0
+                }
+              ]
+            },
+            "extra-ms-parent": {
+              "count": 2,
+              "nativeCarrier": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProjMS",
+              "packets": [
+                {
+                  "damage": {
+                    "DT_IMPACT": 6.0
+                  },
+                  "takes_multishot": false,
+                  "takes_condition_overload": true,
+                  "crit_chance": 0.029999999,
+                  "crit_multiplier": 1.5,
+                  "status_chance": 0.37,
+                  "forcedProcs": [
+                    "PT_STAGGERED"
+                  ],
+                  "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterMiniProjMS",
+                  "nativeField": "AttackData",
+                  "approximation": {
+                    "recipient": "explicit ideal-contact policy only",
+                    "arrival": "configured arrival assumption, not native expiry",
+                    "qualification": "independent native CO / victim crit / generic events; body-only child geometry assumption"
+                  },
+                  "takes_victim_crit": true,
+                  "coProfile": {
+                    "behavior": "independent",
+                    "baseFraction": 1.0,
+                    "excludeFlatSources": []
+                  },
+                  "native_event_delay_seconds": 0.0
+                },
+                {
+                  "damage": {
+                    "DT_RADIATION": 36.0
+                  },
+                  "takes_multishot": false,
+                  "takes_condition_overload": false,
+                  "crit_chance": 0.029999999,
+                  "crit_multiplier": 1.5,
+                  "status_chance": 0.37,
+                  "forcedProcs": [
+                    "PT_KNOCKBACK"
+                  ],
+                  "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterMiniProjMS",
+                  "nativeField": "ExplosiveAttack",
+                  "approximation": {
+                    "recipient": "explicit ideal-contact policy only",
+                    "arrival": "configured arrival assumption, not native expiry",
+                    "qualification": "independent native CO / victim crit / generic events; body-only child geometry assumption"
+                  },
+                  "takes_victim_crit": true,
+                  "native_event_delay_seconds": 0.0
+                }
+              ]
+            }
           }
         }
       }
@@ -9466,9 +9747,8 @@
           "unmodeled": [
             "phantasma-main-explosion-CO-neutral-fallback-unverified",
             "phantasma-main-explosion-weakpoint-events-neutral-fallback-unverified",
-            "phantasma-cluster-child-payload-unmodeled",
-            "phantasma-charge-ammo-scale-and-contact-routing-approximated",
-            "phantasma-nonstandard-ability-parent-source-crit-routing-unverified"
+            "phantasma-nonstandard-ability-parent-source-crit-routing-unverified",
+            "phantasma-child-body-geometry-and-flight-policy-explicit"
           ],
           "scope": "bounded single-target parent explosion; declared per spawned projectile; unresolved gates approximated explicitly",
           "radials": [
@@ -9514,7 +9794,8 @@
               },
               "headSuppressionSource": "0x140bc29fc victimPacket+0x25c=1; independent of hitType",
               "takes_victim_crit": true,
-              "victimCritEvidence": "ordinary weapon source;1408ea872 mask0x0e acceptsPROJECTILE2;1408ea950/9d8 queriesAVATAR_CRIT_CHANCE/DAMAGE_VULNERABILITY; independent of head suppression25c"
+              "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent",
+              "directRecipientHitType": "DHT_PROJECTILE"
             }
           ],
           "behaviourSource": "Behaviors[1]",
@@ -9597,13 +9878,131 @@
             "statusNormalization": "0x1412353ef raw fireIterations / 0x141586f50",
             "critFields": "Projectile.CriticalChance/CriticalMultiplier +0x538/+0x570; death path0x140f36198 ->0x140ede780 copies modifier buckets into radial plan, adding existing plan CC and multiplying existing plan CD"
           },
-          "charge": {
-            "seconds": 0.090899996,
-            "modifier": "WEAPON_CHARGE_RATE",
-            "scalesWithFireRate": false,
-            "source": "native-ChargeTime",
+          "fullClipCharge": {
+            "cadencePolicy": "ordinary-reload-full-clip",
+            "chargeSecondsPerRound": 0.090899996,
             "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
-            "nativeField": "Behaviors[1].state.ChargeTime"
+            "nativeField": "Behaviors[1].state:WeaponChargedStateBehavior",
+            "parentScale": "captured loaded rounds; native projectile+7b8",
+            "childScale": "independent ClusterApplyDamageMultiplier snapshot+1738, default1"
+          },
+          "phantasmaChildren": {
+            "idealArrivalSeconds": 0.7,
+            "defaultOverlapPolicy": "off",
+            "lifetimeRangeSeconds": [
+              2.2,
+              2.9
+            ],
+            "normal-parent": {
+              "count": 5,
+              "nativeCarrier": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj",
+              "packets": [
+                {
+                  "damage": {
+                    "DT_IMPACT": 3.0
+                  },
+                  "takes_multishot": false,
+                  "takes_condition_overload": true,
+                  "crit_chance": 0.029999999,
+                  "crit_multiplier": 1.5,
+                  "status_chance": 0.37,
+                  "forcedProcs": [
+                    "PT_STAGGERED"
+                  ],
+                  "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterMiniProj",
+                  "nativeField": "AttackData",
+                  "approximation": {
+                    "recipient": "explicit ideal-contact policy only",
+                    "arrival": "configured arrival assumption, not native expiry",
+                    "qualification": "independent native CO / victim crit / generic events; body-only child geometry assumption"
+                  },
+                  "takes_victim_crit": true,
+                  "coProfile": {
+                    "behavior": "independent",
+                    "baseFraction": 1.0,
+                    "excludeFlatSources": []
+                  },
+                  "native_event_delay_seconds": 0.0
+                },
+                {
+                  "damage": {
+                    "DT_RADIATION": 18.0
+                  },
+                  "takes_multishot": false,
+                  "takes_condition_overload": false,
+                  "crit_chance": 0.029999999,
+                  "crit_multiplier": 1.5,
+                  "status_chance": 0.37,
+                  "forcedProcs": [
+                    "PT_KNOCKBACK"
+                  ],
+                  "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterMiniProj",
+                  "nativeField": "ExplosiveAttack",
+                  "approximation": {
+                    "recipient": "explicit ideal-contact policy only",
+                    "arrival": "configured arrival assumption, not native expiry",
+                    "qualification": "independent native CO / victim crit / generic events; body-only child geometry assumption"
+                  },
+                  "takes_victim_crit": true,
+                  "native_event_delay_seconds": 0.0
+                }
+              ]
+            },
+            "extra-ms-parent": {
+              "count": 2,
+              "nativeCarrier": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProjMS",
+              "packets": [
+                {
+                  "damage": {
+                    "DT_IMPACT": 6.0
+                  },
+                  "takes_multishot": false,
+                  "takes_condition_overload": true,
+                  "crit_chance": 0.029999999,
+                  "crit_multiplier": 1.5,
+                  "status_chance": 0.37,
+                  "forcedProcs": [
+                    "PT_STAGGERED"
+                  ],
+                  "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterMiniProjMS",
+                  "nativeField": "AttackData",
+                  "approximation": {
+                    "recipient": "explicit ideal-contact policy only",
+                    "arrival": "configured arrival assumption, not native expiry",
+                    "qualification": "independent native CO / victim crit / generic events; body-only child geometry assumption"
+                  },
+                  "takes_victim_crit": true,
+                  "coProfile": {
+                    "behavior": "independent",
+                    "baseFraction": 1.0,
+                    "excludeFlatSources": []
+                  },
+                  "native_event_delay_seconds": 0.0
+                },
+                {
+                  "damage": {
+                    "DT_RADIATION": 36.0
+                  },
+                  "takes_multishot": false,
+                  "takes_condition_overload": false,
+                  "crit_chance": 0.029999999,
+                  "crit_multiplier": 1.5,
+                  "status_chance": 0.37,
+                  "forcedProcs": [
+                    "PT_KNOCKBACK"
+                  ],
+                  "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterMiniProjMS",
+                  "nativeField": "ExplosiveAttack",
+                  "approximation": {
+                    "recipient": "explicit ideal-contact policy only",
+                    "arrival": "configured arrival assumption, not native expiry",
+                    "qualification": "independent native CO / victim crit / generic events; body-only child geometry assumption"
+                  },
+                  "takes_victim_crit": true,
+                  "native_event_delay_seconds": 0.0
+                }
+              ]
+            }
           }
         }
       }
@@ -9660,7 +10059,10 @@
             "embedDisabled": "mEmbed+0x8e0 constructor0; no source override; c25 normal0",
             "impactDirect": "0x1410e2bba source Projectile+0x4d0 -> +0x628/0x1416373e0",
             "timing": "contact death; flight and first bounce path idealized by existing single-target impact contract"
-          }
+          },
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent"
         }
       ],
       "unmodeled": [

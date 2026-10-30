@@ -1,0 +1,37 @@
+{
+  "build": "2026.10.22.13.12",
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "packagesSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "zymos": {
+    "normalRegistration": "actual carrier14226ff00 / child1420de498; same-source creator refresh may add context but does not repeat ordinary244/248",
+    "poolReset": "1418a5304 calls object+A0 before cache insertion; 1403927b0 restores source/raw attacks/538/570/15b1 caches",
+    "damageQuery": "LuaP3pc78 ->141af4a00 ->1407bc1f0; projectile+648 normalMods true; count140358430; float->signed integer1407bc31e; store140b936b0 +4e4",
+    "fireCount": "nativeFire IgnoreFireIterations0/fireIterations1; cached-count setter14047da30; original fire140d4f1ea clears+64 before returning; delayed callback fresh floor+Bernoulli",
+    "critQueries": 2,
+    "formula": "((base + ADD_BASE1 + ADD_BASE2) * (1 + STACK1 + STACK2) + ADD1 + ADD2) * MULT1 * MULT2",
+    "enervate": "CritOnHit P4pc354..362 enum244 ADD HitCount*.1; wrapper141a04bc0 inventory+440=140ae76c0 ->+400=1403ae270[c88] ->UpgradeManager+150; ordinary244 uses same manager via+408",
+    "frameOrder": "callback/carrier and B ->Wait0 carrier destruction/child create ->selected successful flight ->each contactB then333, bound original generation",
+    "externalSourceCaches": {
+      "F": "weapon+df4; ctor141819828 zero; setter140495850; pendingdf8 transferred1404af180",
+      "G": "avatar+1700; setter140431aa0 typed+fd0, getter141401de0 typed+fd8, reset1418989a8",
+      "FE0": "avatar+bc8=140d067d0 temporary ramp, neutral0; child appliesSTACKING independent from253",
+      "FE4": "avatar+fc8=1409f3c40 and weapon+918=1411ec840 temporary source lists, neutral1; child appliesMULTIPLY",
+      "scope": "ordinary source; external temporary cache mutations not supplied by this UI are not inferred from static MOD effects"
+    },
+    "shiver": "enum261 contact+820->14113e250 at14113e434..495 sums current per-proc count; SCRIPT5 admitted, 333 bypasses contact route"
+  },
+  "embedField": {
+    "clock": "immediate DoEmbedDamage140297cf0, fixed1s scheduling14144c410 with delegate dedup",
+    "liveQueries": {
+      "damage253": "141637a03..a87",
+      "elements358/359": "141637f25..14163801d ->14171a350 queries14171b729..b81a",
+      "flatType265": "14163818b..203",
+      "status365": "141637ed4..f1d",
+      "forced281": "140451710",
+      "radius274": "140a58d6e..dae"
+    },
+    "retained": "projectile538/570 crit buckets via140ede780; source contextFE0/FE4/FE8/FF8 refreshed by setters, not everytick; retainlaunch mode/count/last-round identity",
+    "recipients": "explicit attached victim through+790 once; exclude from same Region via plan120 compare1413a71fc..7217"
+  },
+  "scope": "source/native proof and software contracts, not live gameplay measurement"
+}

@@ -284,3 +284,76 @@ def _sum_contributions(
         if low == high:
             known += low
     return {"known": known, "minimum": minimum, "maximum": maximum}
+
+
+_QUANTA_CUBES = {
+    "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifle":
+        ("/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifleProjectile", 100.0),
+    "/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/QuantaVandal":
+        ("/Lotus/Weapons/Corpus/LongGuns/CrpShockRifle/CrpShockRifleProjectile", 100.0),
+    "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta":
+        ("/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuantaProjectile", 180.0),
+}
+
+
+def quanta_strategy(weapon, fire_mode=0, combat_state=None):
+    """Exact-source opt-in for launching a cube and paying a primary pulse.
+
+    This contract supplies integration metadata; the replay must reserve the
+    primary action and remove enemy contact/beam damage. Cubes must avoid enemy
+    contact until shot and overlap the selected enemy at their terminal event.
+    Ordinary contact remains the default. Native source: Packages 00ca8221 and
+    EXE eec0dbd7, Projectile receiver 1401c2190 / selector 14160c5a0.
+    """
+    if (combat_state or {}).get("quantaStrategy") != "shoot":
+        return None
+    identity = _QUANTA_CUBES.get(weapon.get("path"))
+    modes = weapon.get("fireModes") or ()
+    if identity is None or weapon.get("isIncarnonForm") or not 0 <= fire_mode < len(modes):
+        return None
+    index = weapon.get("__selectedFireMode__", fire_mode)
+    mode = modes[fire_mode]
+    damage = mode.get("damage") or {}
+    projectile, total = identity
+    if (index != 1 or damage.get("projectile") != projectile
+            or damage.get("types") != {"DT_ELECTRICITY": total}
+            or mode.get("ammoCost") != 10):
+        return None
+    original = weapon.get("__baseFireModes__") or modes
+    if not original or original[0].get("trigger") != "/Lotus/Language/Menu/Loadout_TriggerContinous":
+        return None
+    return dict(kind="quanta-paid-primary", nativeSource=projectile,
+                nativeField="ExplosiveAttack", launchMode=1, primaryMode=0,
+                damageMultiplier=4.0, radiusMultiplier=12.0, radiusMeters=6.0,
+                settleSeconds=0.25, meanDeathDelaySeconds=0.1125,
+                nativeDeathDelayRange=(0.075, 0.15),
+                chainDeathDelaySeconds=0.1125,
+                enemyContactDamage=False, enemyPrimaryBeamDamage=False,
+                coverage="standoff-volley-with-one-seed-and-sibling-chain-overlap",
+                unsupported=("quanta-standoff-cube-and-chain-overlap-assumed",
+                             "quanta-paid-primary-one-pulse-hit-assumed",
+                             "quanta-shot-native-delay-approximated-by-mean"))
+
+
+def quanta_strategy_cycle(strategy, launch_stats, primary_stats):
+    """Cost one full primary quantum using both modes' actual modded stats.
+
+    Reserve settle + primary period + native mean terminal delay sequentially;
+    do not shorten it by replacing the alternate's own cadence. The caller
+    applies normal ammo-efficiency/infinite-ammo rules and full-ammo gating.
+    """
+    import math
+    if not strategy or strategy.get("kind") != "quanta-paid-primary":
+        return None
+    launch_rate = float(launch_stats.fire_rate)
+    primary_rate = float(primary_stats.fire_rate)
+    costs = (float(launch_stats.ammo_cost), float(primary_stats.ammo_cost))
+    if (not all(math.isfinite(value) and value >= 0 for value in costs)
+            or not all(math.isfinite(rate) and rate > 0 for rate in (launch_rate, primary_rate))):
+        raise ValueError("Quanta strategy requires finite positive mode rates and nonnegative ammo costs")
+    primary_period = 1.0 / primary_rate
+    impact_delay = strategy["settleSeconds"] + primary_period + strategy["meanDeathDelaySeconds"]
+    return dict(launchAmmoCost=costs[0], primaryAmmoCost=costs[1],
+                ammoCost=sum(costs), primaryPeriodSeconds=primary_period,
+                impactDelaySeconds=impact_delay,
+                cycleSeconds=max(1.0 / launch_rate, impact_delay))

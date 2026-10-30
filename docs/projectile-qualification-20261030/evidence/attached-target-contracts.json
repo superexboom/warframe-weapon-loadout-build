@@ -1,0 +1,117 @@
+{
+  "status": "native-static-single-attached-target-admission-contract-not-production-patch",
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "rows": [
+    {
+      "weapon": "/Lotus/Weapons/ClanTech/Bio/BioWeapon",
+      "mode": 0,
+      "projectile": "/Lotus/Weapons/ClanTech/Bio/BioGrenadeProjectile",
+      "damage": 40.0,
+      "radius": 3.0,
+      "duration": 10.0,
+      "route": "weapon+820",
+      "coBehavior": "independent",
+      "coBaseFraction": 1.0,
+      "coCallerBase": "fully-source-built-current-EmbedAttack-base-before-victim",
+      "nativeField": "EmbedAttack",
+      "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
+      "initialEvent": "source-projectile-embed",
+      "tickIntervalSeconds": 1.0,
+      "nativeHitType": 4,
+      "genericHit": true,
+      "genericCrit": true,
+      "regionAttachedVictimExcluded": true,
+      "otherRecipientCoverage": "separate-scene-policy",
+      "sourceContract": [
+        "ordinary-player-source-weapon-alive",
+        "normal-selected-mode0-and-original-projectile-template",
+        "fresh-owner-setter-equal738-768",
+        "no-script-hit-override-or-ability-parent",
+        "normal-source-state-and-fire-scales",
+        "native-global-CO-mode-default0",
+        "source-base-hooks-and-innate-damage-must-be-applied-by-source-query"
+      ],
+      "doesNotGrant": [
+        "head-damage",
+        "weakpoint-crit",
+        "head-kill",
+        "all-region-recipient-CO",
+        "Enervate-Lua-grouping"
+      ]
+    },
+    {
+      "weapon": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars",
+      "mode": 0,
+      "projectile": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile",
+      "damage": 20.0,
+      "radius": 2.5,
+      "duration": 5.0,
+      "route": "weapon+818-success",
+      "coBehavior": "additive_with_base_damage",
+      "coBaseFraction": 2.5,
+      "coCallerBase": "source-mode-projectile-base50-with-native-source-base-hooks",
+      "nativeField": "EmbedAttack",
+      "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
+      "initialEvent": "source-projectile-embed",
+      "tickIntervalSeconds": 1.0,
+      "nativeHitType": 4,
+      "genericHit": true,
+      "genericCrit": true,
+      "regionAttachedVictimExcluded": true,
+      "otherRecipientCoverage": "separate-scene-policy",
+      "sourceContract": [
+        "ordinary-player-source-weapon-alive",
+        "normal-selected-mode0-and-original-projectile-template",
+        "fresh-owner-setter-equal738-768",
+        "no-script-hit-override-or-ability-parent",
+        "normal-source-state-and-fire-scales",
+        "native-global-CO-mode-default0",
+        "source-base-hooks-and-innate-damage-must-be-applied-by-source-query"
+      ],
+      "doesNotGrant": [
+        "head-damage",
+        "weakpoint-crit",
+        "head-kill",
+        "all-region-recipient-CO",
+        "Enervate-Lua-grouping"
+      ]
+    },
+    {
+      "weapon": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPox",
+      "mode": 0,
+      "projectile": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile",
+      "damage": 35.0,
+      "radius": 2.8,
+      "duration": 5.0,
+      "route": "weapon+818-success",
+      "coBehavior": "additive_with_base_damage",
+      "coBaseFraction": 1.5714285714285714,
+      "coCallerBase": "source-mode-projectile-base55-with-native-source-base-hooks",
+      "nativeField": "EmbedAttack",
+      "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
+      "initialEvent": "source-projectile-embed",
+      "tickIntervalSeconds": 1.0,
+      "nativeHitType": 4,
+      "genericHit": true,
+      "genericCrit": true,
+      "regionAttachedVictimExcluded": true,
+      "otherRecipientCoverage": "separate-scene-policy",
+      "sourceContract": [
+        "ordinary-player-source-weapon-alive",
+        "normal-selected-mode0-and-original-projectile-template",
+        "fresh-owner-setter-equal738-768",
+        "no-script-hit-override-or-ability-parent",
+        "normal-source-state-and-fire-scales",
+        "native-global-CO-mode-default0",
+        "source-base-hooks-and-innate-damage-must-be-applied-by-source-query"
+      ],
+      "doesNotGrant": [
+        "head-damage",
+        "weakpoint-crit",
+        "head-kill",
+        "all-region-recipient-CO",
+        "Enervate-Lua-grouping"
+      ]
+    }
+  ]
+}

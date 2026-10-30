@@ -669,16 +669,37 @@ def prepare(
         # release speed or extra shots are granted by treating them as a pair.
         base_attack={**base_attack,'burst':{'count':2,'delay_seconds':1./float(modes[0]['fireRate'])}}
     selected_attack = base_profile(weapon, mode_index)
-    if selected_attack.get('fullClipCharge'):
+    from .projectile_events import quanta_strategy, quanta_strategy_cycle
+    paid_cube = quanta_strategy(weapon, mode_index, scenario.combat_state)
+    if paid_cube:
+        notes.extend(paid_cube['unsupported'])
+    if (selected_attack.get('fullClipCharge') or {}).get('cadencePolicy') == 'wait-configured-empty-delay-then-full-recharge':
         notes.append('tenet-plinx-cadence-player-wait-policy-not-native-max-rate')
         notes.append('tenet-plinx-static-magazine-policy-charge-entry-capacity-snapshot-unmodeled')
         if any(e.upgrade_type == 'WEAPON_CLIP_MAX' for _, terms in dynamic for e in terms):
             raise ValueError('tenet-plinx-mid-charge-capacity-snapshot-unverified')
+    if selected_attack.get('phantasmaChildren'):
+        notes.append('phantasma-child-ideal-contact-and-arrival-time-assumed' if
+                     scenario.combat_state.get('phantasmaChildOverlap') == 'ideal-contact' else
+                     'phantasma-child-overlap-off-until-explicit-geometry-policy')
+    from .zymos import WEAPON as ZYMOS_WEAPON, ContactPolicy, SourceContext, carrier_snapshot, child_packets as zymos_packets, fire_count_distribution
+    zymos_policy = (ContactPolicy.from_state(scenario.combat_state)
+                    if weapon.get('path') == ZYMOS_WEAPON and selected_attack.get('childSpawnAudit') else None)
+    if weapon.get('path') == ZYMOS_WEAPON and not zymos_policy:
+        notes.append('zymos-child-overlap-off-until-explicit-geometry-policy')
+    if zymos_policy:
+        notes.extend(['zymos-original-surviving-host-body-contact-policy',
+                      'zymos-selected-frame-and-flight-timing', 'zymos-callback-firecount-independent-current-source-query'])
+        if enervate:
+            notes.append('zymos-two-source-enervate-snapshots-use-marginal-probabilities')
+        if any(e.upgrade_type=='RUNTIME_NEXT_SHOT_DAMAGE' for e in [*static,*actor_effects,*(e for _,terms in dynamic for e in terms)]):
+            notes.append('zymos-child-next-shot-source-context-unverified')
     onos_sequence = selected_attack.get('onosCharge')
     from .runtime_adapters import onos_crits_for_hits
     onos_crit = next((q for b in branches if (q:=onos_crits_for_hits(b))),None)
     if selected_attack:
         notes.extend(note for note in selected_attack.get('unmodeled') or []
+                     if not (paid_cube and note in {'quanta-player-shot-detonation-unmodeled','quanta-cube-chain-unmodeled'})
                      if scenario.distance is None or note != 'acceltra-arming-distance-default-assumed-armed')
         components = [selected_attack.get('radial'), *(selected_attack.get('radials') or ())]
         if (scenario.distance is None and any(isinstance(part, dict) and part.get('armingDistance') is not None
@@ -738,6 +759,27 @@ def prepare(
     form_weapons = {}
     # The event profile of each form record (read only below).
     form_profiles = {}
+
+    def live_co_callback(unit, wp, source_form):
+        # CO is queried on contact/tick, independently from the projectile's
+        # retained damage/crit source snapshot. Reuse actual source qualifiers.
+        kind='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'
+        from .damage import _qualifier_rejection, co_variant
+        base=[e for e in with_innate(weapon,ModEffectList([*static,*actor_effects]),
+              0 if source_form=='base' else mode_index) if e.upgrade_type==kind]
+        terms=[(key,e) for key,rows in dynamic for e in rows if e.upgrade_type==kind]
+        types={str(p).rstrip('/') for p in (*tuple(wp.get('ancestry') or ()),wp.get('path')) if p}
+        cache={}
+        def refresh(stacks, live):
+            key=(tuple((name,stacks.get(name,0.)) for name,_ in terms),live)
+            if key not in cache:
+                fx=[*base,*(with_value(e,(1.+(e.value-1.)*stacks[name]) if e.operation=='MULTIPLY'
+                            else e.value*stacks[name]) for name,e in terms if stacks.get(name,0.)>0)]
+                fx=[e for e in fx if e.supported and (not e.valid_type or e.valid_type.rstrip('/') in types)
+                    and not _qualifier_rejection(e,wp,scenario)]
+                cache[key]=co_variant(unit,unit._co_spec,[with_value(e,e.value*live) for e in fx])
+            return cache[key]
+        return refresh
 
     def resolve(form, stacks, live_types=0, last_round=False):
         # The weapon's always-on terms join here (not inside apply_mods) so a
@@ -939,9 +981,20 @@ def prepare(
         components = () if extra.get('pureRadial') else (extra.get('radials') or [extra.get('radial') or extra.get('lingering')])
         # Cluster bomblets (tools/import_cluster_submunitions.py): each child
         # lands its own hit and explosion, ``count`` per shell.
-        components = [*components, *(dict(cluster[key], count=cluster['count'])
-                                     for cluster in extra.get('clusters') or () for key in ('radial', 'direct'))]
+        components = [*components, *(dict(cluster[key], count=cluster['count'], __childGroup=('cluster', group))
+                                     for group, cluster in enumerate(extra.get('clusters') or ())
+                                     for key in ('direct', 'radial'))]
+        if extra.get('phantasmaChildren') and scenario.combat_state.get('phantasmaChildOverlap') == 'ideal-contact':
+            children = extra['phantasmaChildren']
+            arrival = float(scenario.combat_state.get('phantasmaChildArrivalSeconds', children['idealArrivalSeconds']))
+            # Selected overlap/arrival scenario; homing and lifetime do not
+            # guarantee that every child reaches the current victim.
+            components = [*components, *(dict(component, __phantasmaChild=True, __childGroup=('phantasma', kind),
+                count=lane['count'], parentMultishotPolicy=kind, impact_delay_seconds=arrival)
+                for kind in ('normal-parent', 'extra-ms-parent')
+                for lane in (children[kind],) for component in lane['packets'])]
         radial_parts = []
+        child_groups = {}
         if extra.get('embedded'):
             components = [*components, dict(extra['embedded'], __embedded=True)]
         for component in components:
@@ -990,8 +1043,14 @@ def prepare(
                 part = replace(part, radial_only=True, radial_victim_crit=bool(component.get("takes_victim_crit")), weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
                 if component.get('takes_multishot') is False:
                     part = replace(part, multishot=1.0)
+                if component.get('parentMultishotPolicy'):
+                    parents = (min(1., st.multishot) if component['parentMultishotPolicy'] == 'normal-parent'
+                               else max(0., st.multishot - 1.))
+                    part = replace(part, multishot=parents)
                 if component.get('count'):
                     part = replace(part, multishot=part.multishot * float(component['count']))
+                if component.get('__phantasmaChild'):
+                    part._phantasma_child = True
                 part._co_spec = part_spec
                 if component.get('impact_delay_seconds') is not None:
                     part._impact_delay = float(component['impact_delay_seconds'])
@@ -1003,12 +1062,64 @@ def prepare(
                     part._body_only = True
                 if component.get('persistAfterKill'):
                     part._persist_after_kill = True
+                if component.get('liveVictimCO'):
+                    # EmbedAttack rebuilds ordinary damage/elements/status on
+                    # every tick, but copies the projectile's retained CC/CD.
+                    launch=copy(part);refreshed={}
+                    def refresh_field(stacks,live,launch=launch,source_form=form,
+                                      source_last=last_round,cache=refreshed):
+                        key=(tuple(sorted(stacks.items())),live)
+                        if key not in cache:
+                            current,_=entry(source_form,stacks,live,source_last)
+                            out=copy(current._lingering[0])
+                            for field in ('multishot','crit_chance','crit_multiplier','base_crit_chance',
+                                          'low_crit_threshold','low_crit_damage_base','low_crit_damage_bonus'):
+                                setattr(out,field,getattr(launch,field))
+                            out.__dict__.pop('_live_hit_refresh',None)
+                            cache[key]=out
+                        return cache[key]
+                    part._live_hit_refresh=refresh_field
                 if component.get('__embedded'):
                     st._embedded = (part, component['tick_rate'], component['duration_seconds'])
+                elif component.get('__childGroup') is not None:
+                    part._physical_child = True
+                    part._child_takes_co = bool(component.get('takes_condition_overload'))
+                    part._child_co_fraction = float((component.get('coProfile') or {}).get('baseFraction',1.))
+                    child_groups.setdefault(component['__childGroup'], []).append(part)
                 elif extra.get('radial') or extra.get('radials'):
                     radial_parts.append(part)
                 else:
                     st._lingering = (part, component['tick_rate'], component['duration_seconds'])
+        for child_packets in child_groups.values():
+            # Resolve MODs once, then preserve each physical child's contact ->
+            # explosion order. Aggregating all contacts first can retire the
+            # victim before even the first child's explosion is delivered.
+            count = child_packets[0].multishot
+            whole = math.floor(count)
+            for weight in (1., count-whole):
+                if weight <= 1e-9:
+                    continue
+                instances = whole if weight == 1. else 1
+                pair = []
+                for template in child_packets:
+                    part = copy(template)
+                    part.multishot = weight
+                    if part._child_takes_co:
+                        unit = copy(part)
+                        unit._co_spec = copy(part._co_spec)
+                        unit._co_spec.victim_status_count = 1.
+                        unit._co_spec.native = None
+                        # co_bucket already passed type/condition qualification.
+                        # Undo only the resolver's fractional-presence scaling.
+                        source_scale = count_ceiling/live_types if count_ceiling and live_types != count_ceiling else 1.
+                        unit.co_bucket = [with_value(e, e.value*source_scale) for e in part.co_bucket]
+                        if unit._co_spec.gunco_fraction is None:
+                            unit._co_spec.gunco_fraction=part._child_co_fraction
+                        part._live_co_unit = unit
+                        part._live_hit_refresh=live_co_callback(unit,wp,form)
+                    pair.append(part)
+                for _ in range(instances):
+                    radial_parts.extend(pair)
         if radial_parts:
             radial = radial_parts[0]
             radial._additional_radials = tuple(radial_parts[1:])
@@ -1039,11 +1150,12 @@ def prepare(
             st._charge_before_fire = bool(extra['charge'].get('beforeFire'))
         if extra.get('fullClipCharge'):
             policy = extra['fullClipCharge']
-            if policy.get('cadencePolicy') != 'wait-configured-empty-delay-then-full-recharge':
+            ordinary_reload = policy.get('cadencePolicy') == 'ordinary-reload-full-clip'
+            if not ordinary_reload and policy.get('cadencePolicy') != 'wait-configured-empty-delay-then-full-recharge':
                 raise ValueError('full-clip-charge-native-countdown-order-unverified')
             # The source packet/N ordering is admitted only for homogeneous
             # percentage damage modifiers. Do not silently scale flat base.
-            if any(e.operation in ('ADD_BASE', 'SET_BASE') and e.value
+            if not ordinary_reload and any(e.operation in ('ADD_BASE', 'SET_BASE') and e.value
                    and e.upgrade_type in ('WEAPON_DAMAGE_AMOUNT', 'WEAPON_MELEE_DAMAGE')
                    for e in fx):
                 raise ValueError('tenet-plinx-flat-add-native-damage-provider-order-unverified')
@@ -1053,6 +1165,8 @@ def prepare(
             def full_clip_part(part):
                 # CoSpec describes pre-N damage. Fractional live CO must use
                 # the complete resolver, in both Python and native vary.
+                if getattr(part, '_phantasma_child', False):
+                    return
                 part._co_spec = None
                 part.damage_types = {k:v*rounds for k,v in part.damage_types.items()}
                 if part.dot_base_damage is not None:
@@ -1067,28 +1181,31 @@ def prepare(
             st.ammo_cost = rounds
             st._requires_full_ammo = True
             st._full_clip_charge = dict(policy)
-            st._charge_time = float(policy['chargeSeconds']) / max(
-                st.fire_rate / float(modes[idx]['fireRate']) * st.charge_rate_multiplier, 1e-9)
+            charge_seconds = (float(policy['chargeSecondsPerRound']) * rounds if ordinary_reload
+                              else float(policy['chargeSeconds']))
+            fire_scaling = 1. if ordinary_reload else st.fire_rate / float(modes[idx]['fireRate'])
+            st._charge_time = charge_seconds / max(fire_scaling * st.charge_rate_multiplier, 1e-9)
             st._charge_before_fire = True
-            from .damage import _combine, _qualifier_rejection
-            weapon_types = {str(path).rstrip('/') for path in
-                            (*tuple(wp.get('ancestry') or ()), wp.get('path')) if path}
-            def battery_terms(kind):
-                return [e for e in [*fx, *battery_parameter_fx] if e.upgrade_type == kind
-                        and (not e.valid_type or e.valid_type.rstrip('/') in weapon_types)
-                        and not _qualifier_rejection(e, wp, form_scenario)]
-            # Exact native query ordering: 184(empty delay), 186(reload time),
-            # divide by max(185(reload speed),.01). e2 modifies refill rate.
-            configured_delay = _combine(float(policy['emptyDelaySeconds']),
-                battery_terms('WEAPON_RELOAD_EMPTY_BATTERY'))
-            configured_delay = _combine(configured_delay, battery_terms('WEAPON_RELOAD_TIME'))
-            delay = configured_delay / max(_combine(1., battery_terms('WEAPON_RELOAD_SPEED')), .01)
-            regen = _combine(float(policy['regenPerSecond']), battery_terms('WEAPON_BATTERY_REGEN_RATE'))
-            if regen <= 0.:
-                raise ValueError('tenet-plinx-nonpositive-battery-regen-cannot-complete-full-clip-policy')
-            st.reload_time = max(0., delay) + rounds / regen
-            st._full_clip_charge = {**policy, 'resolvedEmptyDelaySeconds': max(0., delay),
-                                   'resolvedRegenPerSecond': regen}
+            if not ordinary_reload:
+                from .damage import _combine, _qualifier_rejection
+                weapon_types = {str(path).rstrip('/') for path in
+                                (*tuple(wp.get('ancestry') or ()), wp.get('path')) if path}
+                def battery_terms(kind):
+                    return [e for e in [*fx, *battery_parameter_fx] if e.upgrade_type == kind
+                            and (not e.valid_type or e.valid_type.rstrip('/') in weapon_types)
+                            and not _qualifier_rejection(e, wp, form_scenario)]
+                # Exact native query ordering: 184(empty delay), 186(reload time),
+                # divide by max(185(reload speed),.01). e2 modifies refill rate.
+                configured_delay = _combine(float(policy['emptyDelaySeconds']),
+                    battery_terms('WEAPON_RELOAD_EMPTY_BATTERY'))
+                configured_delay = _combine(configured_delay, battery_terms('WEAPON_RELOAD_TIME'))
+                delay = configured_delay / max(_combine(1., battery_terms('WEAPON_RELOAD_SPEED')), .01)
+                regen = _combine(float(policy['regenPerSecond']), battery_terms('WEAPON_BATTERY_REGEN_RATE'))
+                if regen <= 0.:
+                    raise ValueError('tenet-plinx-nonpositive-battery-regen-cannot-complete-full-clip-policy')
+                st.reload_time = max(0., delay) + rounds / regen
+                st._full_clip_charge = {**policy, 'resolvedEmptyDelaySeconds': max(0., delay),
+                                       'resolvedRegenPerSecond': regen}
         if extra.get('bow'):
             st._bow_draw = extra['drawSeconds'] / (max(st.fire_rate / float(modes[idx]['fireRate']), 1e-9)*st.charge_rate_multiplier)
         if miter_aoe and idx==0 and not wp.get('isIncarnonForm'):
@@ -1166,6 +1283,75 @@ def prepare(
             st=replace(st,multishot=1.,weakpoint_damage_bonus=0.,weakpoint_crit_chance_bonus=0.,
                 weakpoint_crit_chance_relative=0.,headshot_bonus_multiplier=1.,ignore_headshot_bonus=True)
             if radial is not None:radial.multishot=1.
+        if paid_cube and form != 'base':
+            primary_weapon={**wp,'fireModes':wp.get('__baseFireModes__') or modes,'__selectedFireMode__':0}
+            primary_stats=apply_mods_spec(primary_weapon,fx,fire_mode=0,scenario=form_scenario)[0]
+            timing=quanta_strategy_cycle(paid_cube,st,primary_stats)
+            # Both actions draw from this magazine. Reserve enough for the
+            # beam but spend it at its own action; neither contacts the enemy.
+            st.damage_types={}
+            st.dot_base_damage=0.
+            st.co_bucket=[];st._co_spec=None
+            st._quanta_strategy={**timing,'primaryFireSeconds':paid_cube['settleSeconds']}
+            st._requires_full_ammo=True
+            if radial is not None:
+                radial=copy(radial)
+                radial.damage_types={k:v*paid_cube['damageMultiplier'] for k,v in radial.damage_types.items()}
+                if radial.dot_base_damage is not None:radial.dot_base_damage*=paid_cube['damageMultiplier']
+                radial._co_spec=None
+                radial.radial_victim_crit=False
+                from .delayed_radial_events import admitted
+                radial.delayed_radial_hit_event=admitted({**paid_cube,'nativeRoute':'shot-region',
+                    'native_event_delay_seconds':paid_cube['meanDeathDelaySeconds']})
+                radial._impact_delay=timing['impactDelaySeconds']
+                siblings=max(0.,radial.multishot-1.)
+                radial.multishot=min(1.,radial.multishot)
+                radial._additional_radials=()
+                if siblings:
+                    child=copy(radial);child.multishot=siblings
+                    child._impact_delay+=paid_cube['chainDeathDelaySeconds']
+                    radial._additional_radials=(child,)
+                    st._quanta_strategy['cycleSeconds']=max(timing['cycleSeconds'],child._impact_delay)
+        if zymos_policy:
+            # Retain source identity, not a finalized effective crit number.
+            st._zymos_effects=tuple(fx)
+            st._zymos_weapon=wp
+            st._zymos_policy={'embedDelaySeconds':1.1,
+                'frameSeconds':float(scenario.combat_state.get('zymosChildFrameSeconds',1./60.))}
+            def source_terms(current,n):
+                return (*current._zymos_effects,ModEffect('WEAPON_CRIT_CHANCE','ADD',n*.1,
+                    source_path='/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit')) if n else current._zymos_effects
+            def carrier(stacks, marginal):
+                current,_=entry('selected',stacks,0.,False)
+                context=SourceContext.ordinary_static()
+                return tuple((weight,carrier_snapshot(current._zymos_weapon,source_terms(current,n),
+                    context=context,callback_counts=fire_count_distribution(current.multishot),scenario=scenario))
+                    for n,weight in marginal.items())
+            def children(snapshots, stacks, parent_weight, marginal):
+                current,_=entry('selected',stacks,0.,False)
+                packets=[]
+                for first_weight,snapshot in snapshots:
+                    for n,later_weight in marginal.items():
+                        groups=zymos_packets(snapshot,current._zymos_weapon,source_terms(current,n),
+                            context=SourceContext.ordinary_static(),policy=zymos_policy,scenario=scenario)
+                        for group in groups:
+                            whole=math.floor(parent_weight)
+                            weights=[1.]*whole+([parent_weight-whole] if parent_weight>whole else [])
+                            for weight in weights:
+                                for _ in range(group.contacts):
+                                    contact=copy(group.contact);blast=copy(group.explosion)
+                                    contact.multishot=blast.multishot=weight*group.weight*first_weight*later_weight
+                                    contact._snapshot_enervate=blast._snapshot_enervate=True
+                                    if contact.co_bucket or any(e.upgrade_type=='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE' for _,terms in dynamic for e in terms):
+                                        unit=copy(contact);unit._co_spec=copy(contact._co_spec)
+                                        unit._co_spec.victim_status_count=1.;unit._co_spec.native=None
+                                        if unit._co_spec.gunco_fraction is None:unit._co_spec.gunco_fraction=1.
+                                        contact._live_co_unit=unit
+                                        contact._live_hit_refresh=live_co_callback(unit,current._zymos_weapon,'selected')
+                                    packets.append((contact,blast,group.arrival_seconds))
+                return tuple(packets)
+            st._zymos_carrier=carrier
+            st._zymos_children=children
         return st, radial
 
     syndrome = None
@@ -1278,7 +1464,7 @@ def prepare(
         return resolve_cache[key]
 
     entry = cached if resolve_cache is not None else resolve
-    from .delayed_radial_events import profile_admitted
+    from .delayed_radial_events import profile_admitted, components as event_components
     return dict(
         resolve=entry,
         projectileSequence=companion_sequence,
@@ -1287,12 +1473,14 @@ def prepare(
         physicalProjectileLanes=physical_lanes,
         fractionalProjectileLanes=bool(physical_lanes and any(e.upgrade_type=='WEAPON_FIRE_ITERATIONS' for _,terms in dynamic for e in terms)),
         fullClipCharge=selected_attack.get('fullClipCharge'),
+        quantaStrategy=paid_cube,
+        zymosChildren=bool(zymos_policy),
         chargeVolley=any(attack.get('chargeVolley') for attack in (base_attack, selected_attack)),
         chargeBeforeFire=bool(selected_attack.get('fullClipCharge') or (selected_attack.get('charge') or {}).get('beforeFire')),
         nativeFireGate=bool(selected_attack.get('nativeFireCooldownSeconds')),
-        delayedRadialEvents=any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
-        radialCritStatus=any(part.get('takes_victim_crit') for attack in (base_attack,selected_attack)
-                             for part in (attack.get('radial') or {}, *(attack.get('radials') or ()))),
+        delayedRadialEvents=bool(paid_cube or zymos_policy) or any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
+        radialCritStatus=bool(zymos_policy) or any(part.get('takes_victim_crit') for attack in (base_attack,selected_attack)
+                             for part in event_components(attack)),
         melee=melee,
         comboTierKeys=combo_tier_keys,
         beamRampFloors={

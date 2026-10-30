@@ -1,8 +1,7 @@
-"""Retain proven Zymos child declarations and unresolved consumer diagnostics.
+"""Refresh the source contract for the ordered, opt-in Zymos child adapter.
 
-This importer adds no child damage and no global trigger veto. The admitted
-script/native evidence proves shared metadata consumption, five-child candidate
-branches and modifier-bucket transfer, not target coverage or final gameplay DPS.
+Source consumers and construction order are audited independently of the
+selected flight/coverage policy. Default geometry adds no child damage.
 """
 from __future__ import annotations
 import argparse
@@ -22,8 +21,9 @@ CARRIER = PREFIX + "EmbedDeathKillClusterProj"
 CHILD = PREFIX + "EmbedDeathKillGuidedProj"
 SCRIPT = "/Lotus/Scripts/WeaponAttachments/InfUziWeapon.lua"
 SCRIPT_SHA256 = "47a343ce7d22c4948178bb11067b2532e082729b310853438a64c647ad1e7751"
-WARNINGS = ["zymos-child-spawn-and-targeting-unmodeled",
-            "zymos-child-damage-inheritance-and-event-routing-unverified"]
+RETIRED_WARNINGS = {"zymos-child-spawn-and-targeting-unmodeled",
+                    "zymos-child-damage-inheritance-and-event-routing-unverified"}
+WARNINGS = ["zymos-child-external-source-context-defaults"]
 
 
 def child_audit(packages):
@@ -41,7 +41,7 @@ def child_audit(packages):
             or (child.get("ExplosiveAttack") or {}).get("Amount") != 333
             or (child.get("ExplosiveAttack") or {}).get("Type") != "DT_POISON"):
         raise ValueError("Zymos child declaration contract changed")
-    return dict(status="partial-consumer-audit-no-added-damage", carrier=CARRIER, child=CHILD,
+    return dict(status="ordered-source-adapter-with-explicit-contact-policy", carrier=CARRIER, child=CHILD,
         script=SCRIPT, scriptSha256=SCRIPT_SHA256, packagesBinSha256=PACKAGE_SHA256,
         clientSha256=CLIENT_SHA256,
         callbackBranches=[dict(callback="OnRadialDamage", prototype=3, requestedChildCount=5),
@@ -58,7 +58,7 @@ def child_audit(packages):
         scriptHitClassification=dict(flag="Projectile+0x15b1 set by InfUzi P3/P4 Lua atom44bcd6fd ->0x1419850a0",
             inherited="0x14121a561 copies carrier flag to child",
             consumer="0x141234988..0x141234998 overrides radial plan hit type with DHT_SCRIPT=5",
-            scope="classification only; does not establish head, CO or Arcane notification eligibility"),
+            scope="contact retains SCRIPT5; explicit explosion victim is overwritten by c24 PROJECTILE2; surrounding scene retains SCRIPT5"),
         provenNoticeConsumers=["0x1407eb9b2", "0x14093a39e", "0x14098be19", "0x1410e32a9"],
         criticalTransfer=dict(consumer="0x141219c80 -> 0x14140ab20 / 0x140848e20",
             upgradeManager="0x1401413d0 -> inventory+0x408 -> UpgradeManager+0xc0 / 0x1418c1aa0",
@@ -68,10 +68,16 @@ def child_audit(packages):
             radialPlanCopy="0x140f36198 ->0x140ede780 copies538/570 buckets; prior plan chance enters ADD bucket and prior multiplier enters MULTIPLY bucket",
             verification="tools/verify_projectile_crit_transfer.py; 24 original-byte control cases",
             example=dict(base=.05,stackingBonus=1.2,afterOneQuery=.11,afterTwoQueries=.17),
-            scope="transfer primitive only; complete carrier creation/query count and subsequent victim-side crit transforms not closed"),
-        unresolved=["child-target-selection",
-                    "complete-carrier-creation-and-damage-snapshot", "final-critical-query-count-and-victim-side-transforms",
-                    "status-and-kill-event-consumers"])
+            scope="two surviving ordinary queries after normal registration/reset; Enervate is a timed ordinary244 ADD query, not contextual df4/ff8"),
+        orderedAdapter=dict(module="wfarsenal.zymos", sharedRecordChildCount=5,
+            copiedContactAmount="int(current primary damage query * fresh callback fire count)",
+            callbackFireCount="140d4f1ea clears fire+64 before return; delayed callback uses fresh floor+Bernoulli",
+            sourceQueries="carrier callback then child creation after next update; retained CC/CD buckets",
+            enervate="CritOnHit enum244 ADD; inventory+440/+408 share UpgradeManager[c88]",
+            packets=[dict(field="AttackData", hitType="DHT_SCRIPT",co="same current packet once",victimCrit=False),
+                     dict(field="ExplosiveAttack",amount=333,hitType="DHT_PROJECTILE",co=False,victimCrit=True)],
+            geometry="explicit surviving-original-victim body contacts; arrival and frame duration are scenario inputs"),
+        unresolved=["actual-trajectory-contact-and-head-geometry", "external-creator-and-avatar-context-defaults"])
 
 
 def merge(reference, evidence):
@@ -80,7 +86,7 @@ def merge(reference, evidence):
     if entry.get("projectile") != PROJECTILE or entry.get("directTotal") != 23.:
         raise ValueError("Zymos runtime profile identity changed")
     entry["childSpawnAudit"] = evidence
-    entry["unmodeled"] = list(dict.fromkeys([*(entry.get("unmodeled") or []), *WARNINGS]))
+    entry["unmodeled"] = list(dict.fromkeys([*(n for n in entry.get("unmodeled",[]) if n not in RETIRED_WARNINGS), *WARNINGS]))
     return result
 
 

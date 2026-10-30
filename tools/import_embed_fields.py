@@ -8,8 +8,8 @@ existing ``lingering`` field (as Torid's audited cloud).
 Three sources must agree, otherwise the weapon is skipped with a reason: the
 export mode (projectile identity, direct total), the native EmbedAttack
 (amount and type) and the pinned WFSim ``attack.lingering`` block (damage).
-The native record carries no tick interval, so ``tick_rate`` and the status
-chance come from the reference (as the explosion importers do); amount, type,
+Native callbacks prove immediate and 1 Hz attached ticks for audited sources;
+other rates and status defaults still use the reference. Amount, type,
 duration, radius, falloff and forced procs are native. Differences are kept.
 Existing audited entries keep their keys; only ``lingering`` is added.
 """
@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'vendor'))
 sys.path.insert(0, str(ROOT / 'tools'))
 from wfarsenal.packages import PackageIndex
-from import_projectile_components import DT, close
+from import_projectile_components import DT, close, apply_native_contract
 
 
 def main():
@@ -88,6 +88,8 @@ def main():
                              forcedProcs=list(raw.get('ForcedProcs') or []), stacking=field.get('stacking', 'stack'),
                              takes_condition_overload=bool(field.get('takes_condition_overload', False)),
                              nativeSource=projectile, nativeField='EmbedAttack', tickRateSource='reference (native has no interval)')
+            component['impact_delay_seconds']=0.
+            apply_native_contract(component)
             sources = []
             for path in (row['path'], projectile):
                 f = pkg._path_to_file(path)

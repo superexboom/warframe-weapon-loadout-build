@@ -21,20 +21,26 @@ def producers():
         return {}
     sources = data.get('sources') or {}
     rows = data.get('delayedRadialProducers')
-    if (data.get('schemaVersion') != 1 or not isinstance(sources, dict)
+    if (data.get('schemaVersion') != 2 or not isinstance(sources, dict)
             or sources.get('clientSha256') != CLIENT or sources.get('packagesBinSha256') != PACKAGES
             or not isinstance(rows, dict)):
         return {}
     return rows
 
 
+def producer(component):
+    return next((row for row in producers().get(component.get('nativeSource'), ())
+                 if row.get('nativeField') == component.get('nativeField')
+                 and row.get('nativeRoute') == component.get('nativeRoute')), None)
+
+
 def admitted(component):
     """Identity, raw field and native contact/delay must all match the audit."""
-    row = producers().get(component.get('nativeSource'))
+    row = producer(component)
     if (not isinstance(row, dict) or component.get('nativeField') != row.get('nativeField')
             or not row.get('genericHit') or not row.get('genericCriticalHit')):
         return False
-    delay = component.get('impact_delay_seconds')
+    delay = component.get('native_event_delay_seconds', component.get('impact_delay_seconds'))
     bounds = row.get('nativeDelayRange') or []
     return (isinstance(delay, (int, float)) and not isinstance(delay, bool)
             and len(bounds) == 2 and 0 <= bounds[0] <= delay <= bounds[1]
@@ -42,6 +48,15 @@ def admitted(component):
             and not component.get('bodyOnly'))
 
 
+def components(profile):
+    """Source records for modeled secondary packets, preserving their own fields."""
+    return [part for part in [profile.get('radial'), *(profile.get('radials') or ()),
+            profile.get('lingering'), profile.get('embedded'),
+            *(c.get(k) for c in profile.get('clusters') or () for k in ('direct','radial')),
+            *(part for kind in ('normal-parent','extra-ms-parent')
+                for part in (profile.get('phantasmaChildren',{}).get(kind,{}) or {}).get('packets',()))]
+            if isinstance(part,dict)]
+
+
 def profile_admitted(profile):
-    return any(admitted(part) for part in [profile.get('radial'), *(profile.get('radials') or ())]
-               if isinstance(part, dict))
+    return any(admitted(part) for part in components(profile))
