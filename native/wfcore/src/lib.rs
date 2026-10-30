@@ -202,6 +202,12 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ZYMOS_ORDERED_CHILDREN", 1)?;
     m.add("STACKABLE_CRITICAL_EVENTS", 1)?;
     m.add("RADIAL_LIVE_CO", 1)?;
+    m.add("RADIAL_VICTIM_STACKS", 1)?;
+    m.add("ADMITTED_PHYSICAL_PACKETS", 1)?;
+    m.add("GRIMOIRE_SELECTED_COVERAGE", 1)?;
+    m.add("SOURCE_OWNED_EMBED", 1)?;
+    m.add("SOURCE_MODE_KILL_CHARGE", 1)?;
+    m.add("NATIVE_TYPE_QUANTIZATION", 1)?;
     m.add("ENERVATE_PROBABILISTIC_HITS", 1)?;
     m.add("IGNORE_HEADSHOT_BONUS", 1)?;
     m.add("STUG_IDEAL_DETONATION", 1)?;

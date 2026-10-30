@@ -1,0 +1,34 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "existingHarness": ".local\\delivery\\ranged-implementation-20261029\\native-payloads\\verify_larkspur_lifecycle_native.py",
+  "entry": "0x140dc9010",
+  "calls": 1,
+  "hitType": 7,
+  "processingFlag241": 0,
+  "fractionsBefore": [
+    0.015625,
+    0.046875,
+    0.640625
+  ],
+  "fractionsAfter": [
+    0.03125,
+    0.0625,
+    0.65625
+  ],
+  "pythonRoundFractions": [
+    0.0,
+    0.0625,
+    0.625
+  ],
+  "cdBefore": 2.0043957233428955,
+  "cdFloat32Scaled": 256.5,
+  "cdAfter": 2.008302927017212,
+  "cdPythonRound": 2.0083028083028083,
+  "originalBytes": true,
+  "limits": [
+    "One synthetic packet with three nonzero representative fraction slots and cachedCD; all native fraction/CD quantizer instructions execute.",
+    "Values demonstrate exact arithmetic boundaries, not a claim that a particular current catalog Riven rolled these exact numbers."
+  ],
+  "cdSourceDouble": 2.0043956043956044,
+  "cdPythonRoundOnSourceDouble": 2.0004884004884005
+}

@@ -538,12 +538,12 @@ class Scenario:
             raise TypeError('combatState must be an object')
         numeric = {'frameArmor','frameShield','energyPool','sprintMultiplier','energySpent','energySpendPerSecond','nearbyRadius','detonationWaitSeconds','stugBounceDelaySeconds','stugChildDetonateSeconds','orbAbsorbedDamage',
                    'selfShieldBreakAt','selfShieldBreakInterval','selfOverguardBreakAt','selfOverguardBreakInterval','selfShieldHitAt','selfShieldHitInterval'}
-        numeric |= {'equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval','meleeTargetDistance','phantasmaChildArrivalSeconds','zymosChildArrivalSeconds','zymosChildFrameSeconds'}
+        numeric |= {'grimoireCoverageSeconds','grimoireExpiryDistance','equipFromPrimaryAt','equipFromPrimaryInterval','abilityUseAt','abilityUseInterval','meleeTargetDistance','phantasmaChildArrivalSeconds','zymosChildArrivalSeconds','zymosChildFrameSeconds'}
         binary = {'overshields','channeling','aimGliding','sliding','incarnonMeleeActive','orbSpecialShield','onosRadialHit','selfShieldBreakForced','perfectCharge','infiniteAmmo',
                   'companion','companionPlayerStacks'}
         integers = {'zymosChildContacts':5,'battacorCharges':3,'nearbyEnemies':1000,'stugBounceHits':2,'stugChildHits':5,'detonateAfterShots':20,'orbPasses':3,'orbStacks':3,'orbRank':6,'punchthroughTargets':100,'abilityUses':100000}
         melee_text = {'meleeRoute','meleeStance','meleeCombo'}
-        allowed = numeric | binary | set(integers) | melee_text | {'projectileMode','equippedWeapons','emptySlots','orbAbsorbedDamageType','orbAbsorbedDamageTypes','quantaStrategy','phantasmaChildOverlap','zymosChildOverlap'}
+        allowed = numeric | binary | set(integers) | melee_text | {'projectileMode','equippedWeapons','emptySlots','orbAbsorbedDamageType','orbAbsorbedDamageTypes','quantaStrategy','grimoireStrategy','phantasmaChildOverlap','zymosChildOverlap'}
         if set(self.combat_state) - allowed:
             raise ValueError('combatState has unsupported fields: ' + ', '.join(sorted(set(self.combat_state)-allowed)))
         state = {}
@@ -567,8 +567,9 @@ class Scenario:
                 if not isinstance(value,str):
                     raise TypeError('combatState.'+key+' must be a string')
                 state[key] = value
-            elif key in {'quantaStrategy','phantasmaChildOverlap','zymosChildOverlap'}:
-                choices = {'contact','shoot'} if key=='quantaStrategy' else {'off','ideal-contact'}
+            elif key in {'quantaStrategy','grimoireStrategy','phantasmaChildOverlap','zymosChildOverlap'}:
+                choices = ({'contact','shoot'} if key=='quantaStrategy' else
+                           {'off','single-occupant'} if key=='grimoireStrategy' else {'off','ideal-contact'})
                 if not isinstance(value,str) or value not in choices:
                     raise ValueError('combatState.'+key+' must be one of '+', '.join(sorted(choices)))
                 if value not in {'contact','off'}:
@@ -595,6 +596,14 @@ class Scenario:
                 if key=='emptySlots' and any(x not in {'primary','secondary','melee'} for x in value):
                     raise ValueError('combatState.emptySlots contains an unsupported slot')
                 state[key] = tuple(value)
+        if state.get('grimoireStrategy') == 'single-occupant':
+            state.setdefault('grimoireCoverageSeconds',3.0)
+            for key in ('grimoireCoverageSeconds','grimoireExpiryDistance'):
+                if key in state and state[key] > 6.0:
+                    raise ValueError('combatState.'+key+' must not exceed 6')
+        else:
+            state.pop('grimoireCoverageSeconds',None)
+            state.pop('grimoireExpiryDistance',None)
         if state.get('phantasmaChildOverlap') != 'ideal-contact':
             state.pop('phantasmaChildArrivalSeconds',None)
         if state.get('zymosChildOverlap') != 'ideal-contact':
@@ -3203,10 +3212,13 @@ def _enemy_defenses(
 def quantize_damage_vector(
     damage_types: Mapping[str, float], modded_base: float
 ) -> dict[str, float]:
-    """Per-hit damage-type quantization (wfsim MEASUREMENTS M57, AGPL-3.0).
+    """Per-hit type quantization, source consumer140dc9010 (2026.10.22).
 
-    The game serializes a hit as one integer total plus per-type 1/32
-    multiples: each type value snaps to ``round(v / (ModdedBase/32))`` units
+    The native consumer rounds positive ties up independently per type.
+    This helper works in the existing modified-base representation (WFSim M57),
+    not the native stored-fraction representation; do not apply its fraction
+    cap to CO-scaled damage here. Arithmetic remains binary64.
+    Each type value snaps to ``floor(v / (ModdedBase/32) + .5)`` units
     of ``ModdedBase/32``.  THE DENOMINATOR IS ``ModdedBase`` — the base
     damage scaled by base-damage mods, elemental portions EXCLUDED — not the
     vector's own total: a non-elemental bonus scales numerator and
@@ -3224,20 +3236,20 @@ def quantize_damage_vector(
     result: dict[str, float] = {}
     for dtype, amount in damage_types.items():
         value = float(amount)
-        result[dtype] = round(value / unit) * unit if unit > 0.0 else value
+        result[dtype] = math.floor(max(value / unit, 0.0) + .5) * unit if unit > 0.0 else value
     return result
 
 
 def quantize_base_crit_damage(cd: float) -> float:
     """Base crit-damage quantization (wfsim MECHANICS §5 Quantization, AGPL-3.0).
 
-    ``quantized_base_cd = round(base_cd × 4095/32) × 32/4095`` — the game
+    ``quantized_base_cd = floor(base_cd × 4095/32 + .5) × 32/4095`` — the game
     serializes the base crit multiplier in steps of 32/4095.  FLAT/absolute
     CD bonuses (Incarnon "Critical Parallel" +0.4) must add into the base
     BEFORE quantization; RELATIVE (%) mods (Vital Sense) multiply AFTER.
     """
     step = 32.0 / 4095.0
-    return round(float(cd) / step) * step
+    return math.floor(float(cd) / step + .5) * step
 
 
 # 临界：flat CD（ADD/ADD_BASE 操作）与相对 CD（STACKING_MULTIPLY/MULTIPLY）

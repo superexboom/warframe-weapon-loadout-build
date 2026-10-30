@@ -236,7 +236,7 @@ pub(crate) fn quantize(damage: &Vector, modded_base: f64) -> Vector {
     let unit = modded_base / 32.0;
     damage
         .iter()
-        .map(|(d, v)| (*d, if unit > 0.0 { (v / unit).round_ties_even() * unit } else { *v }))
+        .map(|(d, v)| (*d, if unit > 0.0 { (pmax(v / unit,0.0)+0.5).floor() * unit } else { *v }))
         .collect()
 }
 

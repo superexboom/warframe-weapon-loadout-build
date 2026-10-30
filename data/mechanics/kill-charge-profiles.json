@@ -21,7 +21,8 @@
         "MaxCharges": null,
         "RequireFullCharges": null
       },
-      "nativeSha256": "274a7096a887b20a0bbcba33b65d9a2ffd0bd94b0e7d0a9f14a217c7eba3d241"
+      "nativeSha256": "274a7096a887b20a0bbcba33b65d9a2ffd0bd94b0e7d0a9f14a217c7eba3d241",
+      "sourceModeKillChargeTrue": true
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher": {
       "name": "Morgha",
@@ -40,7 +41,8 @@
         "MaxCharges": null,
         "RequireFullCharges": null
       },
-      "nativeSha256": "f4b5a336d84ddeade83f2791a23f4bda5efa134d514a7d9720f8b79e4cc76d96"
+      "nativeSha256": "f4b5a336d84ddeade83f2791a23f4bda5efa134d514a7d9720f8b79e4cc76d96",
+      "sourceModeKillChargeTrue": true
     },
     "/Lotus/Weapons/Tenno/LongGuns/Gunbrella/ShrineMaidenGunbrellaWeapon": {
       "name": "Higasa",
@@ -59,7 +61,8 @@
         "MaxCharges": 100,
         "RequireFullCharges": 1
       },
-      "nativeSha256": "e04fd8882310f6de30cea7c983ef48c4bb36e07297bfe62f247eb3b64ed9c3a0"
+      "nativeSha256": "e04fd8882310f6de30cea7c983ef48c4bb36e07297bfe62f247eb3b64ed9c3a0",
+      "sourceModeKillChargeTrue": true
     },
     "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon": {
       "name": "Trumna Prime",
@@ -78,7 +81,8 @@
         "MaxCharges": null,
         "RequireFullCharges": null
       },
-      "nativeSha256": "0013994fdd9881337dcb41dea6e676ece608ba3fc381e454bdbe43046a8e6869"
+      "nativeSha256": "0013994fdd9881337dcb41dea6e676ece608ba3fc381e454bdbe43046a8e6869",
+      "sourceModeKillChargeTrue": true
     },
     "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol": {
       "name": "Sepulcrum",
@@ -97,7 +101,8 @@
         "MaxCharges": null,
         "RequireFullCharges": null
       },
-      "nativeSha256": "b1ef8f59783c7f9359853a9ed1984ab0a4a71c7c961126241006408e43f4c507"
+      "nativeSha256": "b1ef8f59783c7f9359853a9ed1984ab0a4a71c7c961126241006408e43f4c507",
+      "sourceModeKillChargeTrue": true
     },
     "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle": {
       "name": "Trumna",
@@ -116,7 +121,8 @@
         "MaxCharges": null,
         "RequireFullCharges": null
       },
-      "nativeSha256": "d9c4808683a82d6139708c12c3eba11f32248d1d4f38e2111062b5ba56ae894e"
+      "nativeSha256": "d9c4808683a82d6139708c12c3eba11f32248d1d4f38e2111062b5ba56ae894e",
+      "sourceModeKillChargeTrue": true
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun": {
       "name": "Cortege",
@@ -163,7 +169,8 @@
             "sha256": "4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881"
           }
         ]
-      }
+      },
+      "sourceModeKillChargeTrue": true
     },
     "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle": {
       "name": "Battacor",
@@ -238,7 +245,8 @@
           "zeroChargeGetterMinimumIsPermission": false
         }
       },
-      "generatedBy": "tools/import_battacor_radial.py"
+      "generatedBy": "tools/import_battacor_radial.py",
+      "sourceModeKillChargeTrue": true
     }
   },
   "skipped": [

@@ -1284,6 +1284,7 @@ def _metric_availability(
     result = {}
     for option in _metric_options(weapon_type):
         metric = option["id"]
+        grimoire=None
         try:
             selected, _ = optimizer._select_fire_mode(
                 weapon, fire_mode, weapon_type=weapon_type
@@ -1291,6 +1292,9 @@ def _metric_availability(
             scenario = optimizer._scenario(metric)
             effects = optimizer._effects((), Scenario())
             stats = optimizer.apply_mods(selected, effects, scenario=scenario)
+            from wfarsenal.projectile_events import grimoire_strategy
+            grimoire=grimoire_strategy(selected,0,scenario.combat_state)
+            if grimoire is not None:optimizer._bind_combat_inputs(stats,selected,(),effects,scenario)
             events = optimizer.evaluate_projectile_events(
                 selected, effects, scenario=scenario
             )
@@ -1307,6 +1311,11 @@ def _metric_availability(
             "baseline": baseline if math.isfinite(float(baseline)) else 0.0,
             "issue": issue,
         }
+        if grimoire is not None:
+            # A zero unspecified-coverage baseline must not disable the control
+            # that lets the user select the admitted conditional scenario.
+            result[metric].update(available=True,requiresCoverage=True,
+                                  issue='select Grimoire coverage to evaluate alternate damage')
     return result
 
 
@@ -3538,6 +3547,10 @@ def _alternate_build_modes(
             stats = optimizer.apply_mods(
                 weapon, effects, fire_mode=index, scenario=scenario
             )
+            from wfarsenal.projectile_events import grimoire_strategy
+            if grimoire_strategy(weapon,index,scenario.combat_state) is not None:
+                selected,_=optimizer._select_fire_mode(weapon,index,weapon_type=weapon.get('weaponType'))
+                optimizer._bind_combat_inputs(stats,selected,(),effects,scenario,passives)
             events = optimizer.evaluate_projectile_events(
                 weapon, effects, fire_mode=index, scenario=scenario
             )
@@ -3592,6 +3605,11 @@ def _modded_stats_payload(
         "statusConditionDamageMultiplier": stats.status_condition_damage_multiplier,
         "coAssumedCount": getattr(stats, "co_assumed_count", 0.0),
     }
+    grimoire=optimizer._grimoire_metric_values(stats)
+    if grimoire is not None:
+        result.update(shotDamage=grimoire['shotDamage'],sustainedDps=grimoire['sustainedDps'],
+                      burstDps=grimoire['burstDps'],attackDps=grimoire['attackDps'],
+                      metricModel='selected-original-recipient-orb')
     if weapon_type in {"melee", "zaw"}:
         result.update(
             initialCombo=stats.initial_combo,
@@ -6244,8 +6262,9 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
     stance = ctx["stance"]
     stance_multiplier = ctx["stance_multiplier"]
     exilus = ctx["exilus"]
+    engine = {}
     with _engine_lock():
-        body = simulate(**common, hit_location="body", passive_effects=passive_effects)
+        body = simulate(**common, hit_location="body", passive_effects=passive_effects, engine_context_sink=engine)
         head = (
             simulate(**common, hit_location="head", passive_effects=passive_effects)
             if headshot_chance
@@ -6597,10 +6616,60 @@ def simulate_manual_payload(payload: Any) -> dict[str, Any]:
     except (SimulationError, TypeError, ValueError):
         # 回放是增强数据；主解算结果不受影响。
         pass
+    _apply_grimoire_metric_layer(result, engine, common, ctx['validated_arcanes'])
     return result
 
 
+def _apply_grimoire_metric_layer(result, engine, common, arcanes):
+    from wfarsenal.projectile_events import grimoire_strategy
+    if grimoire_strategy(engine['weapon'],engine['fire_mode'],engine['scenario'].combat_state) is None:
+        return
+    stats = _benchmark_timeline_stats(result['moddedStats'])
+    stats._combat_inputs = dict(engine=engine,
+        mods=[(optimizer.resolve_record(EXPORTS['mods'],r['path'],kind='mod'),r['rank'],None) for r in common['mods']],
+        arcanes=[(optimizer.resolve_record(EXPORTS['arcanes'],r['path'],kind='arcane'),r['rank'],r) for r in arcanes],choices={})
+    stats._combat_scores={}
+    enemy=common.get('enemy_override') or optimizer.resolve_record(EXPORTS['enemies'],common['enemy'],kind='enemy')
+    context=dict(target=enemy,level=common['level'],steel_path=common['steel_path'],
+        enemy_enhancements=common['enemy_enhancements'],armour_strip=common['armour_strip'],
+        elemental_armour_strip=common['elemental_armour_strip'],forcedProcs=common['forced_procs'],
+        statusRateMultiplier=common['status_rate_multiplier'],stanceMultiplier=common['damage_rate_multiplier'])
+    metrics=optimizer._grimoire_metric_values(stats,context)
+    result['grimoireMetrics']={**metrics,'model':'selected-original-recipient-orb',
+        'shotDefinition':'one orb direct packets over6s; no physical350 contact',
+        'dpsDefinition':'burst/attack over6s; sustained/status over native45s availability cycle'}
+    result['sourcePacketPreview']={key:result.pop(key) for key in
+        ('statusProcs','statusDamage','dot','headshotMix','projectileEvents') if key in result}
+    # Keep Arsenal source data, but replace numerical damage/scoring layers.
+    result['moddedStats'].update(shotDamage=metrics['shotDamage'],burstDps=metrics['burstDps'],
+                                attackDps=metrics['attackDps'],sustainedDps=metrics['sustainedDps'])
+    if result.get('targetDamage') is not None:
+        result['targetDamage']={**result['targetDamage'],'perShot':metrics['shotDamage'],
+                                'perHit':metrics['shotDamage'],'firstShot':metrics['shotDamage'],
+                                'dps':metrics['attackDps'],'perType':{},'hitDefinition':'one selected orb lifecycle'}
+    result.update(steadyDirectDps=metrics['sustainedDps'],dotSustainedDps=metrics['dotSustainedDps'],
+        nonDotStatusSustainedDps=metrics['nonDotStatusSustainedDps'],
+        statusSustainedDps=metrics['statusSustainedDps'],totalSustainedDps=metrics['totalSustainedDps'])
+    result['statusSustained']={'directDps':metrics['sustainedDps'],'dotDps':metrics['dotSustainedDps'],
+        'nonDotDps':metrics['nonDotStatusSustainedDps'],'totalDps':metrics['totalSustainedDps'],
+        'statusDps':metrics['totalSustainedDps']-metrics['sustainedDps']}
+    for key in ('killTimeline','timeline'):result.pop(key,None)
+    result['killMetrics']=None
+    result.setdefault('modelLayers',{})['grimoireMetrics']='selected-original-recipient-orb'
+    result['modelLayers']['sourcePacketPreview']='source-packet-preview'
+    for key in ('targetDamage','statusSustained','statusSustainedDps','dotSustainedDps',
+                'nonDotStatusSustainedDps','steadyDirectDps','totalSustainedDps'):
+        result['modelLayers'][key]='selected-original-recipient-orb'
+
+
 def _mod_gains_metric_value(result: Mapping[str, Any], metric: str) -> float:
+    if result.get('grimoireMetrics') is not None:
+        aliases={'perShot':'shotDamage','perHit':'shotDamage','sustained_dps':'sustainedDps','burst_dps':'burstDps',
+                 'attack_dps':'attackDps','totalSustainedDps':'totalSustainedDps'}
+        key=aliases.get(metric,metric)
+        if key in result['grimoireMetrics']:return float(result['grimoireMetrics'][key])
+        windows={'killsPerMinute':'killsPerMinute','windowedDps':'windowDps','windowedTotalDamage':'totalWindowDamage'}
+        if metric in windows:return float((result.get('benchmarkTimeline') or {}).get(windows[metric],0.))
     stats = result.get("moddedStats") or {}
     target = result.get("targetDamage") or {}
     if metric in {"sustainedDps", "sustained_dps"}:
@@ -6727,6 +6796,10 @@ def _variant_measurer(payload: Mapping[str, Any]) -> SimpleNamespace:
             body = simulate(**arguments, hit_location='body', passive_effects=passives, engine_context_sink=engine)
             weight = ctx['headshot_chance']
             if not event_metric:
+                from wfarsenal.projectile_events import grimoire_strategy
+                if grimoire_strategy(engine['weapon'],engine['fire_mode'],engine['scenario'].combat_state) is not None:
+                    _apply_grimoire_metric_layer(body,engine,arguments,ctx['validated_arcanes'] if arcs is None else arcs)
+                    return body,_mod_gains_metric_value(body,metric),None
                 if not weight:
                     return body, _mod_gains_metric_value(body, metric), None
                 head = simulate(**arguments, hit_location='head', passive_effects=passives)

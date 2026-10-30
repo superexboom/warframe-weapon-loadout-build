@@ -79,13 +79,18 @@ def test_status_kill_before_radial_does_not_add_generic_or_weakpoint_hit(monkeyp
     assert raw['dotByType']['DT_POISON']>0
     assert raw['sourceStacks']==pytest.approx([1.,0.,0.,0.,1.])
 
-@pytest.mark.parametrize('name',['Lenz','Sporothrix'])
-def test_unclosed_delayed_producers_stay_unadmitted(name):
-    w=next(w for w in app.EXPORTS['weapons'] if w['nameEn']==name)
-    c=prepare(dict(weapon=w,fire_mode=0,effects=[],scenario=Scenario()),[],[])
-    s,r=c['resolve']('selected',{})
-    assert not c['delayedRadialEvents']
-    assert all(not p.delayed_radial_hit_event for p in [r,*getattr(r,'_additional_radials',())])
+@pytest.mark.parametrize('name,delay', [('Lenz',1.4125),('Sporothrix',1.01249998)])
+def test_embedded_death_uses_final_type_and_post_embed_native_delay(monkeypatch,name,delay):
+    s,r,c=bound(name,critical=1.)
+    parts=[r,*getattr(r,'_additional_radials',())]
+    delayed=parts[-1]
+    delayed.crit_chance=1.;delayed.status_chance=0.;delayed.native_forced_procs={}
+    assert delayed._impact_delay==pytest.approx(delay)
+    assert c['delayedRadialEvents'] and delayed.delayed_radial_hit_event and delayed.radial_victim_crit
+    raw,_=run(monkeypatch,s,c,window=delay+.001)
+    # Actual source callbacks retain ordinary event qualification at late delivery.
+    assert raw['sourceStacks'][0]==pytest.approx(1.+len(parts))
+
 
 def test_unrelated_source_is_not_admitted_by_radial_shape():
     path,rows=next(iter(producers.producers().items()));row=rows[0]
@@ -223,3 +228,29 @@ def test_pox_attached_ticks_use_live_co_and_notify_once_per_tick(monkeypatch):
     old_field=fired._lingering[0]
     assert old_field.crit_chance>fresh._lingering[0].crit_chance
     assert old_field._live_hit_refresh(inactive,0.).crit_chance==old_field.crit_chance
+
+
+def test_attached_shiver_uses_native_parent_base_and_forced_matches_live(monkeypatch):
+    from wfarsenal.damage import ModEffect,arcane_effects
+    weapon=next(w for w in app.EXPORTS['weapons'] if w['nameEn']=='Pox')
+    arcane=next(a for a in app.EXPORTS['arcanes'] if a['nameEn']=='Secondary Shiver')
+    ordinary=[ModEffect('WEAPON_DAMAGE_AMOUNT','STACKING_MULTIPLY',1.),
+              ModEffect('WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE','STACKING_MULTIPLY',.4),
+              ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.)]
+    def setup(override):
+        sc=Scenario(trigger_policy='emergent')
+        fx=[*ordinary,*arcane_effects(arcane,5,**override)]
+        c=prepare(dict(weapon=weapon,fire_mode=0,effects=fx,scenario=sc),[],[(arcane,5,override)])
+        st,_=c['resolve']('selected',{},0.);st.fire_rate=.001
+        st.native_forced_procs={'DT_FREEZE':1.}
+        c['resolve']=lambda *_:(st,None)
+        return st,c
+    # Pox's current field is40 after +100% ordinary damage. Native+818 adds
+    # both CO and one Cold stack from parent50:40+50*(.4+.45)=82.5.
+    st,c=setup({});raw,result=run(monkeypatch,st,c,window=.01)
+    assert result['directWindow']==pytest.approx(100.+82.5)
+    fixed,c=setup({'stacks':1,'uptime':1.})
+    raw,forced=run(monkeypatch,fixed,c,window=.01)
+    # Specified Cold also buffs the initial parent shot; the field's bracket
+    # remains82.5, not raw20*.45 nor post-modified40*.45.
+    assert forced['directWindow']-fixed.total_damage==pytest.approx(82.5)

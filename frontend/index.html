@@ -562,6 +562,13 @@
                           <option value="">碰撞引爆（默认）</option><option value="shoot">副射击立方体 → 主射击强化引爆</option>
                         </select><small>强化引爆另计一次主射击的弹药与动作。假设立方体先避开敌人，再由一束光束命中；敌人处于爆炸范围，多枚立方体按理想连锁重叠。</small></label>
                       </div>
+                      <div id="build-grimoire-strategy-fields" class="scenario-fields" data-projectile-policy hidden>
+                        <label class="field"><span>魔典副射击覆盖策略</span><select data-combat-state="grimoireStrategy">
+                          <option value="">不计未指定覆盖的链伤害（默认）</option><option value="single-occupant">只覆盖存活的原目标</option>
+                        </select><small>副射击没有额外 350 接触伤害。所选窗口内每秒至多一次链伤害；原目标死亡后不转移给其他敌人。</small></label>
+                        <label class="field"><span>原目标有效覆盖时间（秒）</span><input data-combat-state="grimoireCoverageSeconds" data-default-value="3" type="number" min="0" max="6" step="0.1" value="3"><small>显式假定从发射起符合范围与遮挡条件的时间，不代表弹体原地停留。</small></label>
+                        <label class="field"><span>到期时原目标离爆心距离（米，可选）</span><input data-combat-state="grimoireExpiryDistance" type="number" min="0" max="6" step="0.1" placeholder="留空不计到期爆炸"><small>填入表示原目标在发射后 6 秒仍处于所选位置；按爆炸半径与距离衰减。</small></label>
+                      </div>
                       <div id="build-phantasma-child-fields" class="scenario-fields" data-projectile-policy hidden>
                         <label class="field"><span>集束子弹覆盖</span><select data-combat-state="phantasmaChildOverlap">
                           <option value="">不计子弹命中（默认）</option><option value="ideal-contact">理想子弹接触与爆炸重叠</option>

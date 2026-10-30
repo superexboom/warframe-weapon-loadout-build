@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT / 'vendor')]
 from wfarsenal.packages import PackageIndex
-from tools.import_projectile_components import exported_behaviours, hitscan_radial
+from tools.import_projectile_components import exported_behaviours, hitscan_radial, apply_native_contract
 
 WEAPON = '/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle'
 CLIENT_SHA = 'eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d'
@@ -27,10 +27,8 @@ SOURCES = [
     ('/Lotus/Weapons/Tenno/LotusLongGun', '2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc'),
     ('/Lotus/Weapons/Tenno/LotusBulletWeapon', 'dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9'),
 ]
-UNMODELED = ['battacor-radial-hit-arcane-dispatch-unverified',
-             'battacor-radial-condition-overload-routing-unverified']
-TIMING_UNMODELED = ['battacor-first-charge-dynamic-buff-snapshot-timing-unverified',
-                    'battacor-primary-dot-charge-during-alt-windup-unmodeled']
+UNMODELED = []
+TIMING_UNMODELED = []
 SNAPSHOT_PROOF = dict(
     countSnapshot='0x141377160 -> 0x140164110 stores pre-consumption current count as float in active state +0xac; current clears afterward',
     cachedChargeMultiplier='0x140584f1b..0x140584f30: UseClipSizeAsDamageMultiplier=false gives 1+(DamageMultiplier[+0x170]-1)*releaseRatio; raw DamageMultiplier=1 yields 1 at every ratio',
@@ -143,14 +141,17 @@ def profile(pkg, row, *, native_image):
             crit_chance=raw['CriticalChance'], crit_multiplier=raw['CriticalMultiplier'],
             status_chance=attack['ProcChance'], forced_procs=[], takes_multishot=True,
             takes_blast_radius_mods=True, impact_delay_seconds=0.,
-            nativeSource=WEAPON, nativeField='Behaviors[1].impact.RadialDamage',
+            nativeSource=WEAPON, nativeField='RadialDamage',
             damageTypeSource='native-per-type', multishotSource='native one 208-damage radial packet per accepted ray collision; MultiShotBuffsRadialDamage=false prevents a second per-packet multishot factor',
             perPacketTakesMultishot=False,
-            takes_condition_overload=False,
-            conditionOverloadSource='existing-model-policy-unverified-not-native-proof')],
+            takes_condition_overload=True,
+            coProfile=dict(behavior='additive_with_base_damage',baseFraction=1.,excludeFlatSources=[]),
+            conditionOverloadSource='native ray-hit avatar +818 -> 141300a00 -> 14113e250; source208/radial208; shared charge scale')],
         unmodeled=[*UNMODELED, *TIMING_UNMODELED], nativeSources=sources, source=proof,
         packageBuild='2026.10.22.13.12', generatedBy='tools/import_battacor_radial.py')
-    cycle = dict(name='Battacor', altMode=1, primaryMode=0, killsPerUse=1,
+    for component in entry['radials']:
+        apply_native_contract(component)
+    cycle = dict(name='Battacor', sourceModeKillChargeTrue=True, altMode=1, primaryMode=0, killsPerUse=1,
         shotsPerGauge=1, chargeBeforeFire=True, switchInSeconds=float(state.get('ModeSwitchTime') or 0),
         switchOutSeconds=float(_part(behaviors[0], 'state:').get('ModeSwitchTime') or 0),
         policy='spend-first-primary-kill-charge-immediately',

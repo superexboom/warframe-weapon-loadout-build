@@ -199,7 +199,7 @@ def test_spear_throw_reloads_after_every_shot():
 
 def test_kill_charged_alternate_fires_once_per_five_primary_kills():
     from wfarsenal.event_profiles import kill_charge_cycle
-    assert kill_charge_cycle(weapon('Trumna'),1)=={'hits':5.,'pool':1.,'enterSeconds':1.,'exitSeconds':0.,'chargeOn':'kills','killCharged':True}
+    assert kill_charge_cycle(weapon('Trumna'),1)=={'hits':5.,'pool':1.,'enterSeconds':1.,'exitSeconds':0.,'chargeOn':'kills','killCharged':True,'sourceModeKillChargeTrue':True}
     assert kill_charge_cycle(weapon('Trumna'),0) is None
     ev=_local('Trumna',1,seconds=60,level=10)
     assert ev['transforms']>0 and ev['transforms']<=2*ev['killEvents']/5+2

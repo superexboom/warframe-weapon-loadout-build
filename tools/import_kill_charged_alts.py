@@ -130,6 +130,9 @@ def build_profile(pkg, row, *, native_image=None):
         native=dict(AddChargeConditions=sorted(add_on), NumChargesToAdd=add,
             NumChargesToConsume=consume, MaxCharges=native.get('MaxCharges'),
             RequireFullCharges=native.get('RequireFullCharges')))
+    audited_mode_sources=('/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle', '/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun', '/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun', '/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher', '/Lotus/Weapons/Tenno/LongGuns/Gunbrella/ShrineMaidenGunbrellaWeapon', '/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon', '/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol', '/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle')
+    if row['path'] in audited_mode_sources and add_on=={'PRIMARY_KILL'}:
+        entry['sourceModeKillChargeTrue']=True
     sha = raw_source_sha(pkg, row['path'])
     if sha:
         entry['nativeSha256'] = sha

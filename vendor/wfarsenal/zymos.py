@@ -184,7 +184,7 @@ def _eligible(weapon: Mapping, effects: Iterable[ModEffect], scenario: Scenario)
         if not effect.supported or _qualifier_rejection(effect, weapon, scenario):
             continue
         if effect.upgrade_type == 'RUNTIME_NEXT_SHOT_DAMAGE':
-            continue  # Explicit child-context diagnostic is emitted by prepare.
+            continue  # Longbow Sharpshot cannot be equipped on this secondary.
         result.append(effect)
     return tuple(result)
 
@@ -274,14 +274,17 @@ def child_packets(snapshot: CarrierSnapshot, weapon: Mapping, effects: Iterable[
                   "__coProfile__": {"behavior": "none"} if explosion else
                       {"behavior": "additive_with_base_damage", "baseFraction": 1., "excludeFlatSources": []}}
         fx = tuple(e for e in remaining if not explosion or e.upgrade_type not in {"WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE", "RUNTIME_COLD_STACK_DAMAGE"})
+        forced=max((float(e.runtime_chance or 0.) for e in fx if e.upgrade_type=='RUNTIME_COLD_STACK_DAMAGE'),default=0.) or None
+        fx=tuple(replace(e,runtime_chance=0.) if e.upgrade_type=='RUNTIME_COLD_STACK_DAMAGE' else e for e in fx)
         stats, spec = apply_mods_spec(record, fx, scenario=replace(scenario, incarnon_cycle=False))
-        stats = replace(stats, crit_chance=cc.get(), crit_multiplier=cd.get(), base_crit_chance=.05,
+        stats = replace(stats, crit_chance=cc.get(), crit_multiplier=cd.get()+sum(e.value for e in eligible if e.upgrade_type=="RUNTIME_FINAL_CRIT_DAMAGE"), base_crit_chance=.05,
                         multishot=1., radial_only=True, radial_victim_crit=explosion,
                         weakpoint_damage_bonus=0., weakpoint_crit_chance_bonus=0.,
                         weakpoint_crit_chance_relative=0., headshot_bonus_multiplier=1.,
                         delayed_radial_hit_event=True)
         stats._co_spec = spec
         stats._contact_shiver = not explosion
+        stats._contact_shiver_fixed=forced
         stats._zymos_source = (CHILD, "ExplosiveAttack" if explosion else "AttackData")
         return stats
 

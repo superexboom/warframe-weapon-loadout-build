@@ -97,8 +97,7 @@ def test_native_python_state_machine_parity_and_old_core_fallback(monkeypatch):
 
 
 @pytest.mark.parametrize('charges',[1,2,3])
-@pytest.mark.parametrize('native',[False,True])
-def test_banked_charge_threshold_and_post_modifier_damage_scale(charges,native,monkeypatch):
+def test_banked_charge_threshold_and_post_modifier_damage_scale(charges,monkeypatch):
     weapon=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Battacor')
     combat=prepare(dict(weapon=weapon,fire_mode=1,effects=[
         ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.),
@@ -113,13 +112,14 @@ def test_banked_charge_threshold_and_post_modifier_damage_scale(charges,native,m
         st,radial=original(form,*args)
         st=copy(st);st.fire_rate=2.;st._charge_time=.4 if form!='base' else 0.
         st.multishot=1.;st.native_forced_procs={};st.status_chance=0.;st.crit_chance=0.
-        if form=='base':st.damage_types={'DT_IMPACT':20000.}
+        if form=='base':
+            st.damage_types={'DT_IMPACT':20000.};st.dot_base_damage=20000.
         else:
             radial=copy(radial);radial.native_forced_procs={};radial.status_chance=0.;radial.crit_chance=0.
         return st,radial
     combat['resolve']=resolve;combat['baseBurst']=None;combat['incarnonBurst']=None
     combat['baseFireRate']=2.;combat['incarnonFireRate']=2.
-    st,_=resolve('base',{},0.);monkeypatch.setattr(native_replay,'ENABLED',native)
+    st,_=resolve('base',{},0.);monkeypatch.setattr(native_replay,'ENABLED',True);monkeypatch.setattr(native_replay,'SHADOW',True)
     before=combat_replay.replay(st,{**TARGET,'health':10000.},attacks_per_second=2.,window_seconds=charges*.5+.399,combat=combat,collect_timeline=False)
     assert before['shots']==charges
     # Life curve captures an unclipped direct packet; inspect native/Python
@@ -161,3 +161,58 @@ def test_banked_charge_strategy_round_trips_and_separates_evaluation_context():
     assert _scenario_context(one)['combatState']['battacorCharges']==1
     assert _scenario_context(three)['combatState']['battacorCharges']==3
     assert _scenario_context(one)!=_scenario_context(three)
+
+
+def test_real_battacor_hit_radial_co_uses_same_charge_scale_as_source():
+    from wfarsenal.damage import co_variant
+    weapon=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Battacor')
+    fight=prepare(dict(weapon=weapon,fire_mode=1,effects=[
+        ModEffect('WEAPON_DAMAGE_AMOUNT','STACKING_MULTIPLY',1.),
+        ModEffect('WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE','STACKING_MULTIPLY',.8)],
+        scenario=Scenario(combat_state={'battacorCharges':3})),[],[])
+    _direct,radial=fight['resolve']('selected',{},0.)
+    assert radial.total_damage==pytest.approx(416.)
+    spec=copy(radial._co_spec);spec.victim_status_count=1
+    assert co_variant(radial,spec,radial.co_bucket).total_damage==pytest.approx(208.*2.8)
+    assert not radial._co_spec.gunco_independent
+    assert radial.delayed_radial_hit_event and not radial.radial_victim_crit
+    # Charge multiplies both the packet and its CO query base outside resolve.
+    scale=fight['cycle']['damageScale']
+    assert scale==3
+    assert co_variant(radial,spec,radial.co_bucket).total_damage*scale==pytest.approx(208.*3*2.8)
+
+
+def test_alternate_heat_and_toxin_keep_source_mode_after_primary_resumes(monkeypatch):
+    # Actual Battacor source records, with a controlled first primary kill.
+    # Alt Heat/Toxin kills after returning to base must not grant PRIMARY_KILL.
+    weapon=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Battacor')
+    fight=prepare(dict(weapon=weapon,fire_mode=1,effects=[
+        ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.)],
+        scenario=Scenario()),[],[])
+    original=fight['resolve']
+    fight['cycle']={**fight['cycle'],'sourceModeKillChargeTrue':True}
+    def resolve(form,stacks,*args):
+        st,_=original(form,stacks,*args);st=copy(st)
+        st.damage_types={'DT_FIRE':70.} if form!='base' else {'DT_IMPACT':1. if stacks.get('done') else 1000.}
+        st.fire_rate=2.;st.magazine=60.;st.multishot=1.;st.reload_time=1.
+        st.crit_chance=0.;st.status_chance=0.;st._charge_time=.4 if form!='base' else 0.
+        st.native_forced_procs={'DT_FIRE':1.,'DT_POISON':1.} if form!='base' else {}
+        return st,None
+    fight['resolve']=resolve;fight['baseBurst']=fight['incarnonBurst']=None
+    fight['baseFireRate']=fight['incarnonFireRate']=2.
+    fight['trigger_sources']=[dict(id='done',label='first kill',kind='on-kill',maxStacks=1.,
+        perEvent=1.,duration=100.,initialStacks=0.,decay='reset')]
+    monkeypatch.setattr(native_replay,'ENABLED',False)
+    st,_=resolve('base',{},0.)
+    trace=combat_replay.replay(st,{**TARGET,'health':100.},attacks_per_second=2.,
+        window_seconds=4.,combat=fight,trigger_sources=fight['trigger_sources'],collect_timeline=True)
+    assert trace['killEvents']==2 and trace['transforms']==2
+    assert trace['dotWindow']>0 and trace['timeline'][-1]['gauge']==0.
+    monkeypatch.setattr(native_replay,'ENABLED',True)
+    monkeypatch.setattr(native_replay,'SHADOW',True)
+    before=native_replay.STATS['native']
+    compact=combat_replay.replay(st,{**TARGET,'health':100.},attacks_per_second=2.,
+        window_seconds=4.,combat=fight,trigger_sources=fight['trigger_sources'],collect_timeline=False)
+    assert native_replay.STATS['native']>before
+    for key in ('directWindow','dotWindow','shots','killEvents','transforms'):
+        assert trace[key]==pytest.approx(compact[key])

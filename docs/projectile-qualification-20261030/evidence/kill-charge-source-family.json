@@ -1,0 +1,248 @@
+[
+  {
+    "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+    "name": "Mausolon",
+    "ancestry": [
+      "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun",
+      "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+      "/Lotus/Types/Game/LotusWeapon"
+    ],
+    "actualAddCharges": [
+      {
+        "Conditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumCharges": 1
+      }
+    ],
+    "stored": {
+      "AddChargeConditions": [
+        "PRIMARY_KILL"
+      ],
+      "NumChargesToAdd": 1.0,
+      "NumChargesToConsume": 5.0,
+      "MaxCharges": null,
+      "RequireFullCharges": null
+    },
+    "actualConsume": [
+      "SECONDARY_FIRE"
+    ]
+  },
+  {
+    "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher",
+    "name": "Morgha",
+    "ancestry": [
+      "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechGrenadeLaunch/ThanoTechGrenadeLauncher",
+      "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+      "/Lotus/Types/Game/LotusWeapon"
+    ],
+    "actualAddCharges": [
+      {
+        "Conditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumCharges": 1
+      }
+    ],
+    "stored": {
+      "AddChargeConditions": [
+        "PRIMARY_KILL"
+      ],
+      "NumChargesToAdd": 1.0,
+      "NumChargesToConsume": 5.0,
+      "MaxCharges": null,
+      "RequireFullCharges": null
+    },
+    "actualConsume": [
+      "SECONDARY_FIRE"
+    ]
+  },
+  {
+    "path": "/Lotus/Weapons/Tenno/LongGuns/Gunbrella/ShrineMaidenGunbrellaWeapon",
+    "name": "Higasa",
+    "ancestry": [
+      "/Lotus/Weapons/Tenno/LongGuns/Gunbrella/ShrineMaidenGunbrellaWeapon",
+      "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+      "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "/Lotus/Weapons/Tenno/LotusLongGun",
+      "/Lotus/Weapons/Tenno/LotusBulletWeapon"
+    ],
+    "actualAddCharges": [
+      {
+        "Conditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumCharges": 7
+      }
+    ],
+    "stored": {
+      "AddChargeConditions": [
+        "PRIMARY_KILL"
+      ],
+      "NumChargesToAdd": 7.0,
+      "NumChargesToConsume": 100.0,
+      "MaxCharges": 100,
+      "RequireFullCharges": 1
+    },
+    "actualConsume": [
+      "SECONDARY_FIRE"
+    ]
+  },
+  {
+    "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon",
+    "name": "Trumna Prime",
+    "ancestry": [
+      "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon",
+      "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle",
+      "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+      "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "/Lotus/Weapons/Tenno/LotusLongGun",
+      "/Lotus/Weapons/Tenno/LotusBulletWeapon"
+    ],
+    "actualAddCharges": [
+      {
+        "Conditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumCharges": 1
+      }
+    ],
+    "stored": {
+      "AddChargeConditions": [
+        "PRIMARY_KILL"
+      ],
+      "NumChargesToAdd": 1.0,
+      "NumChargesToConsume": 5.0,
+      "MaxCharges": null,
+      "RequireFullCharges": null
+    },
+    "actualConsume": [
+      "SECONDARY_FIRE"
+    ]
+  },
+  {
+    "path": "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol",
+    "name": "Sepulcrum",
+    "ancestry": [
+      "/Lotus/Weapons/Thanotech/ThanoPistol/ThanotechPistol",
+      "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistolGun",
+      "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistol",
+      "/Lotus/Weapons/Tenno/Pistol/LotusPistol"
+    ],
+    "actualAddCharges": [
+      {
+        "Conditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumCharges": 1
+      }
+    ],
+    "stored": {
+      "AddChargeConditions": [
+        "PRIMARY_KILL"
+      ],
+      "NumChargesToAdd": 1.0,
+      "NumChargesToConsume": 5.0,
+      "MaxCharges": null,
+      "RequireFullCharges": null
+    },
+    "actualConsume": [
+      "SECONDARY_FIRE"
+    ]
+  },
+  {
+    "path": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle",
+    "name": "Trumna",
+    "ancestry": [
+      "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle",
+      "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+      "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "/Lotus/Weapons/Tenno/LotusLongGun",
+      "/Lotus/Weapons/Tenno/LotusBulletWeapon"
+    ],
+    "actualAddCharges": [
+      {
+        "Conditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumCharges": 1
+      }
+    ],
+    "stored": {
+      "AddChargeConditions": [
+        "PRIMARY_KILL"
+      ],
+      "NumChargesToAdd": 1.0,
+      "NumChargesToConsume": 5.0,
+      "MaxCharges": null,
+      "RequireFullCharges": null
+    },
+    "actualConsume": [
+      "SECONDARY_FIRE"
+    ]
+  },
+  {
+    "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+    "name": "Cortege",
+    "ancestry": [
+      "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchGun/ThanoTechArchGun",
+      "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+      "/Lotus/Types/Game/LotusWeapon"
+    ],
+    "actualAddCharges": [
+      {
+        "Conditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumCharges": 1
+      }
+    ],
+    "stored": {
+      "AddChargeConditions": [
+        "PRIMARY_KILL"
+      ],
+      "NumChargesToAdd": 1.0,
+      "NumChargesToConsume": 0.0,
+      "MaxCharges": null,
+      "RequireFullCharges": 1,
+      "effectiveMaxCharges": 5.0,
+      "zeroConsumptionMeans": "consume-all-current-charges"
+    },
+    "actualConsume": [
+      "SECONDARY_FIRE"
+    ]
+  },
+  {
+    "path": "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
+    "name": "Battacor",
+    "ancestry": [
+      "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
+      "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+      "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "/Lotus/Weapons/Tenno/LotusLongGun",
+      "/Lotus/Weapons/Tenno/LotusBulletWeapon"
+    ],
+    "actualAddCharges": [
+      {
+        "Conditions": [
+          "PRIMARY_KILL"
+        ],
+        "NumCharges": 1
+      }
+    ],
+    "stored": {
+      "AddChargeConditions": [
+        "PRIMARY_KILL"
+      ],
+      "NumChargesToAdd": 1,
+      "NumChargesToConsume": 0,
+      "MaxCharges": 3,
+      "RequireFullCharges": 0,
+      "zeroConsumptionMeans": "consume-all-current-charges",
+      "selectedChargeCount": 1
+    },
+    "actualConsume": [
+      "SECONDARY_FIRE"
+    ]
+  }
+]

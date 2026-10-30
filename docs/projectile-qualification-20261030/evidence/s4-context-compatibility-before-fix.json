@@ -1,0 +1,279 @@
+{
+  "packagesSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "compatibility": "/Lotus/Weapons/Tenno/Bows/LotusLongBow",
+  "extra": [],
+  "compatibleWeapons": [
+    {
+      "name": "Lenz",
+      "path": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBow",
+      "slot": "primary"
+    },
+    {
+      "name": "Prisma Lenz",
+      "path": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon",
+      "slot": "primary"
+    },
+    {
+      "name": "Kuva Bramma",
+      "path": "/Lotus/Weapons/Grineer/Bows/GrnBow/GrnBowWeapon",
+      "slot": "primary"
+    },
+    {
+      "name": "Mutalist Cernos",
+      "path": "/Lotus/Weapons/Infested/Bow/InfCernosBow/InfCernos",
+      "slot": "primary"
+    },
+    {
+      "name": "MK1-Paris",
+      "path": "/Lotus/Weapons/MK1Series/MK1Paris",
+      "slot": "primary"
+    },
+    {
+      "name": "Rakta Cernos",
+      "path": "/Lotus/Weapons/Syndicates/RedVeil/Bows/RVCernos",
+      "slot": "primary"
+    },
+    {
+      "name": "Cernos",
+      "path": "/Lotus/Weapons/Tenno/Bows/AntlerBow/AntlerBow",
+      "slot": "primary"
+    },
+    {
+      "name": "Daikyu",
+      "path": "/Lotus/Weapons/Tenno/Bows/AsymetricalBow/AsymetricalBow",
+      "slot": "primary"
+    },
+    {
+      "name": "Cinta",
+      "path": "/Lotus/Weapons/Tenno/Bows/DaxDuviriAsymetricalBow/DaxDuviriAsymmetricalLongBowPlayerWeapon",
+      "slot": "primary"
+    },
+    {
+      "name": "Paris",
+      "path": "/Lotus/Weapons/Tenno/Bows/HuntingBow",
+      "slot": "primary"
+    },
+    {
+      "name": "Nataruk",
+      "path": "/Lotus/Weapons/Tenno/Bows/Omicrus/OmicrusPlayerWep",
+      "slot": "primary"
+    },
+    {
+      "name": "Cernos Prime",
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeCernos/PrimeCernos",
+      "slot": "primary"
+    },
+    {
+      "name": "Daikyu Prime",
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeDaikyu/PrimeDaikyuBow",
+      "slot": "primary"
+    },
+    {
+      "name": "Proboscis Cernos",
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeDerelictCernos/DerelictCernos",
+      "slot": "primary"
+    },
+    {
+      "name": "Paris Prime",
+      "path": "/Lotus/Weapons/Tenno/Bows/PrimeHuntingBow",
+      "slot": "primary"
+    },
+    {
+      "name": "Dread",
+      "path": "/Lotus/Weapons/Tenno/Bows/StalkerBow",
+      "slot": "primary"
+    },
+    {
+      "name": "Evensong",
+      "path": "/Lotus/Weapons/Tenno/Bows/TnChoirBow/TnChoirBow",
+      "slot": "primary"
+    },
+    {
+      "name": "Paris",
+      "path": "/Lotus/Weapons/Tenno/Bows/ValentinesConclaveVariantBow",
+      "slot": "primary"
+    },
+    {
+      "name": "Artemis Bow",
+      "path": "/Lotus/Powersuits/Ranger/ExaltedBow",
+      "slot": "primary"
+    },
+    {
+      "name": "Artemis Bow Prime",
+      "path": "/Lotus/Powersuits/Ranger/PrimeExaltedBow",
+      "slot": "primary"
+    }
+  ],
+  "zymosSharpshot": false,
+  "zymosCrepuscular": true,
+  "crepuscular": {
+    "compatibility": "PowerSuits/PlayerPowerSuit",
+    "conditionalEffects": [],
+    "descTag": "",
+    "effects": [
+      {
+        "autoType": 1,
+        "checkTypeOnInstall": 0,
+        "damageType": "DT_ANY",
+        "invalidModifiers": [],
+        "operation": "STACKING_MULTIPLY",
+        "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityStrengthAndCritDamageWhenInvisible",
+        "supported": false,
+        "supportedBy": [],
+        "symbolFilter": "",
+        "upgradeType": "NONE",
+        "validModifiers": [
+          "PM_CLOAK"
+        ],
+        "validPostures": [],
+        "validProcTypes": [],
+        "validType": "",
+        "valuePerRank": 42
+      }
+    ],
+    "extraEffects": [
+      {
+        "autoType": 0,
+        "checkTypeOnInstall": 0,
+        "damageType": "DT_ANY",
+        "invalidModifiers": [],
+        "operation": "ADD",
+        "scalesWithRank": false,
+        "sourcePath": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityStrengthAndCritDamageWhenInvisible",
+        "supported": false,
+        "supportedBy": [],
+        "symbolFilter": "",
+        "unlockRank": 5,
+        "upgradeType": "GAMEPLAY_FREE_REVIVE_COUNT",
+        "validModifiers": [],
+        "validPostures": [],
+        "validProcTypes": [],
+        "validType": "",
+        "valuePerRank": 1
+      }
+    ],
+    "icon": "/Lotus/Interface/Icons/CosmeticEnhancers/Arcanes/Projections/ArcaneProjectionDQ.png",
+    "maxRank": 5,
+    "name": "AbilityStrengthAndCritDamageWhenInvisible",
+    "nameEn": "Arcane Crepuscular",
+    "nameInternal": "AbilityStrengthAndCritDamageWhenInvisible",
+    "nameTag": "/Lotus/Language/1999/AbilityStrengthAndCritDamageWhenInvisibleName",
+    "nameZh": "赋能·影袭",
+    "path": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityStrengthAndCritDamageWhenInvisible",
+    "rarity": "RARE",
+    "runtimeScripts": {
+      "apply": {
+        "Function": "ApplyUpgrade",
+        "Script": "GiveStatsWhileInvisible.lua",
+        "_giveStatOneIncreaseBase": 0.050000001,
+        "_giveStatOneIncreasePerLevel": 0.050000001,
+        "_giveStatOneOperation": "STACKING_MULTIPLY",
+        "_giveStatOneType": "AVATAR_ABILITY_STRENGTH",
+        "_giveStatTwoIncreaseBase": 0.5,
+        "_giveStatTwoIncreasePerLevel": 0.5,
+        "_giveStatTwoOperation": "ADD",
+        "_giveStatTwoType": "AVATAR_CRIT_DAMAGE"
+      }
+    },
+    "support": {
+      "complete": false,
+      "manualState": true,
+      "totalEffects": 2,
+      "weaponEffects": 1,
+      "runtimeAdapter": true
+    },
+    "trigger": {
+      "applyUpgradesByDefault": null,
+      "chance": null,
+      "conditionTag": null,
+      "conditions": [],
+      "duration": null,
+      "durationScalesWithRank": null,
+      "maxStacks": null,
+      "stackMode": null
+    },
+    "effectsZhByRank": [
+      [
+        "隐形时，获得 +5% 技能强度和 +1 倍最终暴击伤害。"
+      ],
+      [
+        "隐形时，获得 +10% 技能强度和 +1 倍最终暴击伤害。"
+      ],
+      [
+        "隐形时，获得 +15% 技能强度和 +2 倍最终暴击伤害。"
+      ],
+      [
+        "隐形时，获得 +20% 技能强度和 +2 倍最终暴击伤害。\\n赋能复活次数 +1",
+        "赋能复活次数 +1"
+      ],
+      [
+        "隐形时，获得 +25% 技能强度和 +3 倍最终暴击伤害。\\n赋能复活次数 +1",
+        "赋能复活次数 +1"
+      ],
+      [
+        "隐形时，获得 +30% 技能强度和 +3 倍最终暴击伤害。\\n赋能复活次数 +1",
+        "赋能复活次数 +1"
+      ]
+    ],
+    "effectsEnByRank": [
+      [
+        "While invisible, gain +5% Ability Strength and +1x Final Critical Damage."
+      ],
+      [
+        "While invisible, gain +10% Ability Strength and +1x Final Critical Damage."
+      ],
+      [
+        "While invisible, gain +15% Ability Strength and +2x Final Critical Damage."
+      ],
+      [
+        "While invisible, gain +20% Ability Strength and +2x Final Critical Damage.\\n+1 Arcane Revive",
+        "+1 Arcane Revive"
+      ],
+      [
+        "While invisible, gain +25% Ability Strength and +3x Final Critical Damage.\\n+1 Arcane Revive",
+        "+1 Arcane Revive"
+      ],
+      [
+        "While invisible, gain +30% Ability Strength and +3x Final Critical Damage.\\n+1 Arcane Revive",
+        "+1 Arcane Revive"
+      ]
+    ],
+    "descriptionSource": {
+      "kind": "frozen-official-localized-levelStats",
+      "path": "warframe-items/data/json/i18n.json",
+      "sha256": "bb303f526be7f34c36946c8304544c3ffdd0d00ad2d2e07e5d6a5cb341aa9900"
+    },
+    "equipmentType": "Warframe Arcane"
+  },
+  "finalCdReproduction": {
+    "effects": [
+      {
+        "upgradeType": "WEAPON_CRIT_DAMAGE",
+        "value": 1.2,
+        "operation": "STACKING_MULTIPLY"
+      },
+      {
+        "upgradeType": "RUNTIME_FINAL_CRIT_DAMAGE",
+        "value": 3.0,
+        "operation": "ADD"
+      }
+    ],
+    "actualContact": 7.820000171661377,
+    "actualExplosion": 7.820000171661377,
+    "expectedRetainedOrdinary": 7.82,
+    "expectedWithFinalCd": 10.82
+  },
+  "actualCrepuscularAdapterReproduction": {
+    "arcanePath": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityStrengthAndCritDamageWhenInvisible",
+    "rank": 5,
+    "forcedStacks": 1,
+    "uptime": 1,
+    "runtimeEffectTypes": [
+      "WEAPON_CRIT_DAMAGE",
+      "RUNTIME_FINAL_CRIT_DAMAGE"
+    ],
+    "actualContactCd": 7.820000171661377,
+    "actualExplosionCd": 7.820000171661377,
+    "expected": 10.820000171661377
+  }
+}

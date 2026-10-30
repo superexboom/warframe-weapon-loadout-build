@@ -284,6 +284,7 @@ def kill_charge_cycle(weapon, fire_mode):
     return dict(hits=float(entry['killsPerUse']), pool=float(entry['shotsPerGauge']),
                 enterSeconds=float(entry['switchInSeconds']), exitSeconds=float(entry['switchOutSeconds']),
                 chargeOn='kills', killCharged=True,
+                **({'sourceModeKillChargeTrue':True} if entry.get('sourceModeKillChargeTrue') else {}),
                 **({'chargeBeforeFire': True} if entry.get('chargeBeforeFire') else {}))
 
 

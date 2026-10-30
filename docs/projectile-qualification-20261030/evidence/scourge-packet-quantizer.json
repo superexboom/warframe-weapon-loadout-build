@@ -1,0 +1,31 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "existingHarness": ".local\\delivery\\ranged-implementation-20261029\\native-payloads\\verify_larkspur_lifecycle_native.py",
+  "entry": "0x140dc9010",
+  "stopAfterTwentyTypes": "0x140dc93bd",
+  "source": "old-format DT_PHYSICAL copied float shares",
+  "hitType": 7,
+  "processingFlag241": 0,
+  "beforeFloat32": [
+    0.699999988079071,
+    0.10000000149011612,
+    0.19999998807907104
+  ],
+  "afterFloat32": [
+    0.6875,
+    0.09375,
+    0.1875
+  ],
+  "amount": 50.0,
+  "typedDamage": [
+    34.375,
+    4.6875,
+    9.375
+  ],
+  "totalDamage": 48.4375,
+  "unchangedOriginalBytes": true,
+  "limits": [
+    "Synthetic packet and authoritative source contract; executes original twenty-type quantizer only.",
+    "End-to-end local target delivery is separately proven by static140d9c670 entry before native damage controller; no live game or arbitrary network state claimed."
+  ]
+}

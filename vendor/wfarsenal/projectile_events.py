@@ -357,3 +357,75 @@ def quanta_strategy_cycle(strategy, launch_stats, primary_stats):
                 ammoCost=sum(costs), primaryPeriodSeconds=primary_period,
                 impactDelaySeconds=impact_delay,
                 cycleSeconds=max(1.0 / launch_rate, impact_delay))
+
+
+_GRIMOIRE_WEAPON = "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire"
+_GRIMOIRE_PROJECTILE = "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireAltProj"
+_GRIMOIRE_SOURCE_SHA256 = "a384ff36bc51b96972d82f317e6258ff1f7bf52b0f1754b082437cdb979401ac"
+
+
+def grimoire_strategy(weapon, fire_mode=0, combat_state=None):
+    """Exact-source launch contract; coverage is an explicit eligible window.
+
+    PlayerChainingProjectile+790 is an empty hook: the declared350 is only
+    the source for periodic350*.8 chains. Each selected packet remains bound
+    to the original recipient; this contract never supplies another enemy.
+    """
+    import math
+    modes = weapon.get("fireModes") or ()
+    if (weapon.get("path") != _GRIMOIRE_WEAPON or weapon.get("isIncarnonForm")
+            or not 0 <= fire_mode < len(modes)):
+        return None
+    mode = modes[fire_mode]
+    damage = mode.get("damage") or {}
+    if (weapon.get("__selectedFireMode__", fire_mode) != 1
+            or damage.get("projectile") != _GRIMOIRE_PROJECTILE
+            or damage.get("types") != {"DT_ELECTRICITY": 350.0}
+            or mode.get("nativeIgnoreFireIterations") is not True
+            or mode.get("ammoCost") != 1):
+        return None
+    result = dict(kind="grimoire-single-occupant", sourceKind="grimoire-single-occupant",
+                  noDirectContact=True, parts=[], launchMode=1, spawnedOrbs=1,
+                  nativeSource=_GRIMOIRE_PROJECTILE, sourceRawAttributesSha256=_GRIMOIRE_SOURCE_SHA256,
+                  clientSha256="eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+                  packageSha256="00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+                  lifetimeSeconds=6.0, attackIntervalSeconds=1.0,
+                  unsupported=("grimoire-alt-select-coverage-strategy",))
+    state = combat_state or {}
+    if state.get("grimoireStrategy") != "single-occupant":
+        return result
+    def bounded(key, default=None):
+        value = state.get(key, default)
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ValueError(key + " must be a finite number from 0 to 6")
+        value = float(value)
+        if not math.isfinite(value) or not 0.0 <= value <= 6.0:
+            raise ValueError(key + " must be a finite number from 0 to 6")
+        return value
+    coverage = bounded("grimoireCoverageSeconds", 3.0)
+    common = dict(nativeSource=_GRIMOIRE_PROJECTILE, takes_multishot=False,
+                  crit_chance=.2, crit_multiplier=2.0, status_chance=.25999999,
+                  takes_condition_overload=False, originalRecipientOnly=True,
+                  sourceUpgradeTiming="current-damage-elements-status-retained-launch-crit")
+    for tick in range(6):
+        if tick >= coverage:
+            break
+        result["parts"].append(dict(common, nativeField="AttackData",
+            nativeRoute="player-chain-selected-avatar", damage={"electricity":350.0},
+            damageMultiplier=.80000001, forcedProcs=["PT_ELECTROCUTION"],
+            impact_delay_seconds=float(tick), native_event_delay_seconds=0.0,
+            takes_victim_crit=True, nativeHitType=2, __grimoireChain=True))
+    diagnostics = ["grimoire-alt-original-target-eligible-window-assumed",
+                   "grimoire-alt-chain-first-update-at-launch-assumed"]
+    if "grimoireExpiryDistance" in state:
+        distance = bounded("grimoireExpiryDistance")
+        result["parts"].append(dict(common, nativeField="ExplosiveAttack",
+            nativeRoute="launch-expiry-region", damage={"electricity":250.0},
+            forcedProcs=[], impact_delay_seconds=6.0, native_event_delay_seconds=6.0,
+            radius_m=6.0, falloff_reduction=.80000001, takes_victim_crit=False,
+            nativeHitType=4, __expiryDistance=distance))
+        diagnostics.append("grimoire-alt-expiry-original-target-distance-assumed")
+    else:
+        diagnostics.append("grimoire-alt-expiry-distance-not-selected")
+    result.update(coverageSeconds=coverage, unsupported=tuple(diagnostics))
+    return result

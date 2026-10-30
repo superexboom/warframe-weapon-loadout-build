@@ -1,0 +1,32 @@
+# Battacor source-mode kill credit
+
+2026-10-30，same EXE `eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d`／Packages `00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06`。
+
+## 实际可达问题
+
+PRIMARY_KILL条件在WeaponEx+5a0=140e16350检查damage event+1bb==0（140e16663），匹配bit1后直接走chargeadd。DOT7排除在更晚分支，所以主模式留下的异常击杀可记primary；不能按玩家此时active mode来判断。
+
+当前单目标击杀策略中，达到N主击杀时die先递增generation并清所有旧状态，随后才切alternate/windup；这段windup没有旧主DoT打新目标的合法场景，因此没有为不可达场景增加extraGauge架构。真正会发生的是alternate伤害留下异常，返回primary后异常杀死仍存活敌人。旧代码按当前base模式错误增加PRIMARY_KILL。
+
+## Heat原生分组
+
+actualHeat registration1400a1300→ctor141bc4520→vtable142317ac8。新stack140ee4d60读原event1bb，140ee4d70存stack18，vector278步长80。consolidated tick140529f10构造key保留source/weapon handles和mode；map1418cc6a0的1418cc74c..755比较mode。因此同武器不同模式的Heat不是first/latest来源覆盖，也不是按伤害占比分配charge。
+
+tick在14052ade2设DOT7，14052ae06..12把nodekey28的mode恢复event1bb；14052b8f0..8fe逐组送victim340。旧alternateHeat被新primaryHeat刷新后仍保留mode1。
+
+## 实现
+
+仅对已审核PRIMARY_KILL来源打开`sourceModeKillChargeTrue`。独立DoT/Gas/Blast实例保存原模式；Heat保留全局状态/剥甲概率链，同时按两种实际来源各保存seed/count，另一模式应用只refresh已有链，不在未存在世界里创造来源。异常击杀使用原mode，原目标死亡结束该代所有后续伤害。普通状态mod读取与charge consumption snapshot分别处理；本轮不重写已有蓄能/射击时序。
+
+实际原生执行、源码传播和代表回归的最终结果写在本轮validation；曾经仅collect_timeline=True的两次运行不能算native验证，最终需assert原生调用次数并运行compact SHADOW。
+
+
+## 最终顺序／适用来源与验证
+
+Heat同源两模式顺序也已闭合：14052acfa从树header leftmost开始，14052b1db..22f按successor升序，comparator以unsigned mode比较。同source/weapon为mode0→mode1，逐组seed及accumulator在组内执行，按相同顺序排packet。不是把一个全池accumulator重复计入两个组。
+
+Blast不能套Heat分组：自然到期保留自己的stack18；满层1403caf8f取最后保留stack的source/mode，1403cb0d4..119汇总所有seed成单包。实现已修为满层aggregate单包、来源为affected[-1]；自然到期来源为该实例，保持原伤害/cap/时钟。
+
+相同实际WeaponEx/LotusWeapon+5A0条件消费者与Packages census确认8条确切PRIMARY_KILL配置可用：Mausolon、Morgha、Higasa、Trumna/Prime、Sepulcrum、Cortege、Battacor。启用flag仅对这些条目，不推及DEFAULT_BEHAVIOR_KILL。阈值/弹药/charge开销保持各自已审合同。census见[evidence/kill-charge-source-family.json](evidence/kill-charge-source-family.json)。
+
+原先trace-only双循环已删改：现在Python trace验证gauge，真实native compact SHADOW并断言调用计数增长；独立实际调用确认alternate Heat/Toxin在返回primary后击杀不会伪造第二次蓄能。原始59项局部结果为阶段验证，最终整合测试另记，不能把旧timeline调用冒称native。

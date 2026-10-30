@@ -140,6 +140,17 @@ def test_ordered_contexts_operations_and_explicit_admission(monkeypatch):
     pair = child_packets(negative, weapon, [], context=mapped, policy=policy)[0]
     assert pair.contact.total_damage == 0. and pair.explosion.total_damage == 333.
 
+    # A compatible frame Arcane's final CD is applied once after the two
+    # retained ordinary weapon queries, not erased by their replacement.
+    from wfarsenal.arcane_runtime import configuration
+    crepuscular=next(a for a in app.EXPORTS['arcanes'] if a['nameEn']=='Arcane Crepuscular')
+    final_cd=configuration(crepuscular,5)['build'](1,1.)
+    ordinary_cd=[ModEffect('WEAPON_CRIT_DAMAGE','STACKING_MULTIPLY',1.2),*final_cd]
+    retained=carrier_snapshot(weapon,ordinary_cd,context=mapped,callback_counts=fire_count_distribution(1.))
+    enhanced=child_packets(retained,weapon,ordinary_cd,context=mapped,policy=policy)[0]
+    assert enhanced.contact.crit_multiplier==pytest.approx(10.82)
+    assert enhanced.explosion.crit_multiplier==pytest.approx(10.82)
+
     from wfarsenal.manual_combat import prepare
     from wfarsenal.combat_replay import replay
     from wfarsenal import native_replay

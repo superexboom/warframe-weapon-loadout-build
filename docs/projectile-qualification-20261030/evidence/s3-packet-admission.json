@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "packetRoutes": [
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+      "nativeField": "AttackData",
+      "recipient": "physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "independent",
+        "baseFraction": 1,
+        "callerBase": "current-contact-pre-CO-Projectile+1700"
+      },
+      "headPolicy": "preserve-explicit-body-policy"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+      "nativeField": "ExplosiveAttack",
+      "recipient": "explicit-physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "none"
+      },
+      "headPolicy": "native-suppressed"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+      "nativeField": "AttackData",
+      "recipient": "physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "independent",
+        "baseFraction": 1,
+        "callerBase": "current-contact-pre-CO-Projectile+1700"
+      },
+      "headPolicy": "preserve-explicit-body-policy"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+      "nativeField": "ExplosiveAttack",
+      "recipient": "explicit-physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "none"
+      },
+      "headPolicy": "native-suppressed"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+      "nativeField": "AttackData",
+      "recipient": "physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "independent",
+        "baseFraction": 1,
+        "callerBase": "current-contact-pre-CO-Projectile+1700"
+      },
+      "headPolicy": "preserve-explicit-body-policy"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+      "nativeField": "ExplosiveAttack",
+      "recipient": "explicit-physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "none"
+      },
+      "headPolicy": "native-suppressed"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+      "nativeField": "AttackData",
+      "recipient": "physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "independent",
+        "baseFraction": 1,
+        "callerBase": "current-contact-pre-CO-Projectile+1700"
+      },
+      "headPolicy": "preserve-explicit-body-policy"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+      "nativeField": "ExplosiveAttack",
+      "recipient": "explicit-physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "none"
+      },
+      "headPolicy": "native-suppressed"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+      "nativeField": "AttackData",
+      "recipient": "physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "independent",
+        "baseFraction": 1,
+        "callerBase": "current-contact-pre-CO-Projectile+1700"
+      },
+      "headPolicy": "preserve-explicit-body-policy"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+      "nativeField": "ExplosiveAttack",
+      "recipient": "explicit-physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "none"
+      },
+      "headPolicy": "native-suppressed"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
+      "nativeField": "AttackData",
+      "recipient": "physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "independent",
+        "baseFraction": 1,
+        "callerBase": "current-contact-pre-CO-Projectile+1700"
+      },
+      "headPolicy": "preserve-explicit-body-policy"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
+      "nativeField": "ExplosiveAttack",
+      "recipient": "explicit-physical-contact-avatar",
+      "nativeHitType": 2,
+      "takes_victim_crit": true,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "none"
+      },
+      "headPolicy": "native-suppressed"
+    },
+    {
+      "nativeSource": "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
+      "nativeField": "Behaviors[1].impact.RadialDamage",
+      "recipient": "ray-hit-avatar",
+      "nativeHitType": 4,
+      "takes_victim_crit": false,
+      "generic_hit_crit": true,
+      "condition_overload": {
+        "behavior": "additive_with_base_damage",
+        "baseFraction": 1,
+        "callerBase": "weapon+498(mode1,1)*stateDamageScale*fireDamageScale; neutral fixed source208"
+      },
+      "headPolicy": "native-suppressed"
+    }
+  ],
+  "bounds": [
+    "ordinary-live-player-source-no-ability-parent",
+    "normal-global-upgrade-mode",
+    "same-selected-victim-generation",
+    "external-buffs-and-fixed-ADD_BASE-preserve-source-query-identity",
+    "bystander-and-miss-recipients-separate"
+  ]
+}

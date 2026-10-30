@@ -115,3 +115,55 @@
 | 额外来源支持范围 | 能力/脚本向F/G/FE0/FE4/FE8临时缓存注入、非普通来源武器、特殊下一发伤害context | 普通静态MOD和本次Enervate不借用这些字段；已追setter/getter/reset并区分来源。不将未接入的任意能力组合称为“必须实测”或“全游戏已校准” |
 
 本轮完成R1–R8所列普通来源合同与可选操作策略；这不是全部武器、全部外部能力组合的游戏校准证明。
+
+
+## 未尽静态事项续轮（起点 f47ef0b）
+
+继续现有普通来源之外的具体欠项，不重做上一轮已完成工作，不将原生可追路径归为实测。主线程并行负责独立消费者轴和实际模型查漏，子代理按既定6.1sol/high审计。
+
+| ID | 本轮目标 | 当前状态 | 完成标准 |
+|---|---|---|---|
+| S1 | CO接触/附着包的261逐层伤害（Shiver）与259异况共存，排查radial几何标签误关 | 已实现；Pox真实live/forced回归通过 | 用已确认原生callerBase分拆接入；一个代表回归覆盖真实数值与native对照 |
+| S2 | Grimoire周期链与direct重复接触、源/事件门 | 完成：空contact修正＋条件链/expiry策略；3例通过 | 静态合同闭合后显式单体策略落地，生命周期不按post-impact6秒冒充 |
+| S3 | Arbucep和Battacor独立CO/generic/victim-crit路线 | 已实现；实际源+native验证通过 | 按实际Projectile与hitscan分支分别确认并修复，不套c24到hitscan |
+| S4 | 特殊下一发伤害/临时source上下文的真实可装备来源 | Crepuscular/Sharpshot完成；Scourge附着50/量化/取消时点已接入 | 找实际Lua/native消费者；去掉不可能组合的假欠项，接入可确定真实修正 |
+| S5 | 新改动的必要验证、导入保持、MD及Portable提交 | 完成：260项聚焦＋56搜索场景验证，待随提交记录远端 | 测试不膨胀、精简证据、旧核心回退；不烘焙/Bot/release |
+
+
+S4继续追踪发现Scourge Prime原生50物理嵌入包（DOT7），脚本本身只是拾取/吸弹。已接触300→主55→即时50，1秒重复；下一次prefire立即取消旧DoEmbedDamage delegate，按原有串行3.2秒投掷策略为0/1/2/3秒四跳，上限10秒。触发资格与+半径场分开：无CO/victimcrit/head，有实际generic hit/crit。新token只结束源跳伤，不删除已经施加给原宿主的异常。
+
+Battacor中“primary旧DoT在切换副模式蓄力时补charge”在当前单体策略不可达：第N次kill先清旧generation全部状态，再进入windup，期间无主射击。未为此扩Heat架构。反向“副射击异常留在存活目标上，回主模式后击杀被误记primary”则真实可达，继续按原生Heat源身份修复，不能用当前active mode假代来源。
+
+
+S5延伸覆盖Lenz/PrismaLenz与Sporothrix/Coda：明确原host的晚爆最终type2/generic/victimcrit已接入，普通CO/Shiver保持关闭；EmbeddedDie额外.075–.15s调度纳入总延迟，源ordinary damage/status落地重读。旧“未admit”两例原位替换，无新增测试模块；详见[DELAYED-FAMILIES.md](DELAYED-FAMILIES.md)。
+
+
+本轮还闭合了Scourge量化：实际victim+340先调140dc9010进行每种比例1/32量化，35/5/10成为22/32、3/32、6/32，合计48.4375。没有为追求原始整数50而跳过真实消费者。源码链和单个原字节控制见[SCOURGE-EMBED.md](SCOURGE-EMBED.md)。
+
+Grimoire默认source350也已从非window指标/排序入口排除；源面板仍明确显示source，shotDamage按所选orb完整直接包定义，持续指标支付45秒可用周期，默认不选覆盖为0。此前仅窗口修正而静态指标仍用350的漏洞已补。
+
+
+S3真实跨模式异常来源已修：源mode从独立DoT/Gas实例保留，Heat按同武器mode0→mode1组提交且共享刷新不转移seed来源；满层Blast为总伤单包、来源取最后保留stack，自然到期仍归自身。8个已核PRIMARY_KILL profiles启用，其他条件码不擅自扩用。旧windup不可达问题没有触发无谓重写；真实alternate异常回primary后的误charge已回归验证。详见[BATTACOR-SOURCE.md](BATTACOR-SOURCE.md)。
+
+S5补原生量化half-up修正，明确binary64与float32边界，并保留baseCD-before-relative升级桶顺序；未把最终CD强制clamp32。删去3条“全局无穿刺/冰冻暴击加成”的过时测试；对应真实packet契约早已有精确替代。
+
+
+## S1–S5最终交付记录
+
+本轮已完成上表普通player source范围的可实现合同；原始现场几何/多目标覆盖仍为明确输入，不将其默认为额外命中。
+
+- S1：接触/附着261逐层伤害与259共享callerBase，Pox真实Shiver+CO为82.5而不是错误原基数。live/forced一致；CO、victimcrit、head、generic事件轴保持分离。
+- S2：Grimoire350实际contact空hook，默认不再虚构伤害；显式覆盖窗按1秒280、可选launch+6到期250计算，真实来源时点、singleorb预算、原目标退场约束及静态/窗口/搜索/贡献度统一。
+- S3：Arbucep六lane direct独立CO，explicit-host radial独立资格；Battacor208+208目标radial同区CO。Heat按原source mode分组，Blast保留满层最后stack来源，8条已核PRIMARY_KILL配置不再借active mode伪造蓄能。
+- S4：Zymos合法Crepuscular最终CD不再被覆盖；Sharpshot已定位weapon ring→FE4，仅兼容弓，去掉Zymos不可能装备的伪欠项。Scourge native50/DOT7的每秒source-owned tick已接入；实际1/32比例损失48.4375、main300→55→50次序、3.2秒prefire取消均闭合。
+- S5延伸：Lenz/Prisma与Sporothrix/Coda明确host晚爆资格、额外死亡调度延迟和late普通source刷新；正值half-up取整与Python/Rust/sustained一致，保持已证baseCD-before-relative阶段，不擅自改最终CD32上限。
+
+最终引擎输入 **898532bd9efba0d3**；本机native SHA256 **0ccec2621e1baaeb805dec11141b67de2477b5af999ed7002ca961d4dd354d9a**。**260 passed**，零失败/错误/跳过；9武器记录、**56搜索场景**Python/native一致、零回退且输入稳定。8个请求名称包含目录中的不同Grimoire记录，统计保持实际路径身份，未把名称合并为覆盖证明。可选Grimoire的实际API／optimizer／native在原功能用例内验证，不混入默认56场景数。
+
+全项目只collect，**2239例**，相对此轮起点2248净**-9**；新测试模块0、删除过时模块1。三档charge保留3个真实展开，用SHADOW替代Python×native双矩阵。没有执行全2239或宣称全部游戏校准。
+
+导入/语法/JS/格式检查通过，原生构建成功，仅原有unused warnings。新能力不足会从旧native回退，分析缓存指纹包含全部更新源码/数据；本轮没有烘焙、Bot同步或release。详见[evidence/validation-s1-s5.json](evidence/validation-s1-s5.json)、[TEST-SCOPE.md](TEST-SCOPE.md)、[GRIMOIRE.md](GRIMOIRE.md)、[SCOURGE-EMBED.md](SCOURGE-EMBED.md)、[BATTACOR-SOURCE.md](BATTACOR-SOURCE.md)。
+
+### 不夸大交付范围
+
+保留的近似包括真实飞行/LOS/目标覆盖、分数多重与状态概率的期望模型、部分随机延迟取均值、binary64与原生float32边界。外部能力/脚本对source缓存的任意更新、特殊ADD_BASE暴击桶的全组合等未在本轮普通来源合同内承诺；这类后续工作是具体静态支持范围，未一概归类为只能实测。原生金额、触发路线、时钟和已实现的来源规则已按上述合同接入，不停留在研究报告。

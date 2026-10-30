@@ -80,7 +80,7 @@ fn pysum(values: impl IntoIterator<Item = f64>) -> Num {
 /// `quantize_base_crit_damage`
 fn quantize(cd: f64) -> f64 {
     let step = 32.0 / 4095.0;
-    (cd / step).round_ties_even() * step
+    (cd / step + 0.5).floor() * step
 }
 
 /// `damage._combine` over (op, value) parts.

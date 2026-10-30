@@ -1,4 +1,4 @@
-"""Scourge Prime accepted-contact55 with explicit throw/reload/rethrow policy."""
+"""Scourge Prime contact55 and source-owned attached50 under explicit rethrow policy."""
 from __future__ import annotations
 import argparse,json
 from pathlib import Path
@@ -8,25 +8,42 @@ from tools.import_native_secondary_payloads import AuditedPackages,CLIENT_SHA256
 ROOT=Path(__file__).resolve().parents[1]
 BOUNDS=['scourge-prime-throw-reload-rethrow-input-policy-idealized',
     'scourge-prime-accepted-contact-flight-geometry-idealized',
-    'scourge-prime-stopped-embedded-script-payload-unmodeled',
-    'scourge-prime-main55-CO-weakpoint-events-neutral-fallback-unverified',
+    'scourge-prime-contact-main55-body-geometry-policy',
     'scourge-prime-pickup-recall-shortcuts-and-animation-interruption-unmodeled',
-    'scourge-prime-old-spear-deferred-die-and-embedded-damage-excluded']
+    'scourge-prime-original-surviving-host-attachment-policy']
 
 def build_patch(pkg,row):
     # Reuse the strict independent contact/count/state admission gate.
-    contact=build_contract(pkg,row)['pending'][0];w=pkg.resolve(WEAPON);state=w['Behaviors'][1]['state:LotusSpearGunStateBehavior']
+    contact=build_contract(pkg,row)['pending'][0];w=pkg.resolve(WEAPON);projectile=pkg.resolve(PROJECTILE);state=w['Behaviors'][1]['state:LotusSpearGunStateBehavior']
     if state.get('reloadTime')!=2.2 or state.get('fireRate')!=60 or state.get('IsAlternateFire')!=1:
         raise ValueError('Scourge source cadence signature changed')
+    embed=projectile.get('EmbedAttack') or {}
+    if (embed.get('Amount')!=50 or embed.get('Type')!='DT_PHYSICAL'
+            or abs(embed.get('DT_IMPACT',0)-.7)>2e-8 or embed.get('DT_PUNCTURE')!=.1
+            or abs(embed.get('DT_SLASH',0)-.2)>2e-8 or embed.get('ProcChance')!=.050000001
+            or projectile.get('EmbedDamageRadius',0)!=0 or projectile.get('EmbedTime')!=[10,10]
+            or state.get('DoPreFire')!=1 or state.get('PrefireTime')!=0 or state.get('FireOnButtonAction')!='PRESSED'):
+        raise ValueError('Scourge attached50 source/period/replacement contract changed')
     spec=deepcopy(next(x for x in SPECS if x['family']=='scourge-prime'));spec.update(delay=0.,bounds=list(BOUNDS))
     entry=profile(pkg,row,spec);part=entry['radials'][0]
     part['emissionContract'].update(physicalThrowsPerFire=1,packetsPerPhysicalThrow=1,nativeIgnoreFireIterations=True,
         consumer='Bolto+5781409397f0 ordinary accepted avatar14093a12c..a66b ->one+7b8at14093a64d ->common+630normalExplosiveAttack55')
     part['approximation'].update(flightAndCollisionTiming='immediate at idealized accepted contact; no expiry or embed55 added',
-        cadence='explicit repeated throw then ordinary reload then next charge; prefire MaxNumProjectiles evicts previous spear')
+        cadence='explicit repeated throw/refire/reload then next trigger; prefire cancels previous spear embed delegate')
     part['activationEvidence']=contact['evidence']
     entry['nativeCharge']=entry.pop('charge',None)
-    entry.update(generatedBy='tools/import_scourge_contact_radial.py',scope='one physical spear; single main55 at accepted contact; explicit throw-reload-rethrow policy',
+    entry.update(generatedBy='tools/import_scourge_contact_radial.py',scope='one physical spear; contact55 followed by native attached50 every1s on original surviving host; explicit throw-reload-rethrow policy',
+        attachedTicks=dict(damage={'DT_IMPACT':35.,'DT_PUNCTURE':5.,'DT_SLASH':10.},
+            status_chance=.050000001,crit_chance=.1,crit_multiplier=2.,takes_multishot=False,
+            tick_rate=1.,duration_seconds=10.,nativeSource=PROJECTILE,nativeField='EmbedAttack',
+            nativeRoute='zero-radius-embed',native_event_delay_seconds=0.,
+            takes_victim_crit=False,takes_condition_overload=False,sourceDestroyOnNextFire=True,
+            sourceHitType='DHT_DOT',excludesTypedFlat=True,forcedProcs=[],
+            genericHitEvent=True,genericCritEvent=True,headshotEligible=False,
+            sourceCritPolicy='retained-launch-crit',sourceQueryPolicy='current-damage-and-status',
+            recipientPolicy='original-surviving-physically-attached-victim',
+            packetOrder='contact300-main55-immediate50-then-1s',
+            provenance='source-context/scourge/NOTES.md; EXE/Packages SHA pinned by nativeEvidence'),
         nativeSpearThrowCycle=dict(policy='throw-reload-rethrow',reloadAfterEveryShot=True,reloadBaseSeconds=2.2,
             refireBaseSeconds=1.,firstShot='existing-initially-ready-selected-mode',activeProjectileLimit=1,oldSpearRemoval='automatic-prefire-destruction-request',oldSpearLifetimeWaitRequired=False,
             completion='existing idealized ordinary reload duration; accepts next explicit trigger',
@@ -38,9 +55,14 @@ def build_patch(pkg,row):
             removal='actual+300141050a70 indexesprojectilef88 and compares current handle target to callback projectile at141050add; mismatchjne141050af5 skipsnull+dec. Match calls140154520 and141050ae9 decrementsactive108. Original full suffix1415e7d70 appendsindex to118 removalqueue; local-slot reuse/duplicate safety verified, remote queue receiver ordering not emulated',
             hideRestore='SpearState+1f814026b2c0 dispatches140612180/140afd1d0; those readHideAttach+1a8, set/clearhidden1a4 and hide/showattachments',
             reload='hidden1a4 andReloadAfterEveryShot1a5 interceptstate1681402d4e10 ->state8; emitscontroller0x79 withweapon+2d0 reload duration. Normal reload completion remains existing animation-duration abstraction',
+            contactQualification='main55 accepted explicit victim uses common+c24PROJECTILE2; common7b8 bypasses790/818CO, ordinary source no-ability victim suffix rejectsCO; genericHit/Crit yes; bodygeometry retained independently of victimcritmask',
+            embedClock='Bolto+738140f25fa0 ->140c3ecb0 calls140297cf0 immediately then deduplicated1s delegate; radius0 builder140a58cb0 suppliesDOT7 and final retainedcrit140ede780; SC365 uses independent.05',
+            embedSourceReplacement='next trigger prefire141498140 ->140fbc360 ->old+418140414330 ->1402e1be0 removesDoEmbedDamage140297cf0 via1417d6e70 immediately before deferredDie; independent inflicted statuses survive source removal',
+            embedEvents='DOT7 skipsCO/weakpoint/victimcrit/flattyped265; actual victim340 authority1412dd461->141375771->1416a6207->14179b840 accepts genericOnHit/OnCrit on own nonzero/critical packet; no sourceSendEvents gate',
+            embedScript='OnPriestSpearEmbed only pickup/source ownership; UpdateAttractor managesHEAD bullet attractors, no independent DamageInfo payload',
             limits=list(BOUNDS)))
     return dict(schemaVersion=1,kind='auditedAttacks-mode-merge',clientSha256=CLIENT_SHA256,packageSha256=PACKAGE_SHA256,
-        weapons={WEAPON:{'1':entry}},pending=[],interpretation='Explicit throw-reload-rethrow single-target policy; prefire enforces one active spear. Not a claim that lifetime/embedded aura damage or arbitrary manual pickup is simulated.')
+        weapons={WEAPON:{'1':entry}},pending=[],interpretation='Explicit throw-reload-rethrow single-target policy; prefire enforces one active spear. Native attached50 uses original surviving host and cancels on next trigger; arbitrary manual pickup and attractor targeting are outside the selected policy.')
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--packages-bin',type=Path,required=True);ap.add_argument('--client-exe',type=Path,required=True);ap.add_argument('--export',type=Path,default=ROOT/'data/export/2026.08.13.13.24/weapons.json');ap.add_argument('--output',type=Path,required=True);a=ap.parse_args()

@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "f47ef0be0759e8ce8036b59f76895a4543d57d47",
+  "inputs": "898532bd9efba0d3",
+  "nativeSha256": "0ccec2621e1baaeb805dec11141b67de2477b5af999ed7002ca961d4dd354d9a",
+  "focused": {
+    "tests": 260,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "collectionBefore": 2248,
+  "collectionAfter": 2239,
+  "testModulesAdded": 0,
+  "testModulesRemoved": 1,
+  "selectedModeParity": {
+    "weapons": 9,
+    "cases": 56,
+    "failed": 0,
+    "workerErrors": 0,
+    "nativeFallback": 0,
+    "nativeCoverageComplete": true,
+    "changedInputs": false,
+    "coverageComplete": true,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "passed": true
+  },
+  "requestedWeapons": [
+    "Arbucep",
+    "Battacor",
+    "Grimoire",
+    "Scourge Prime",
+    "Lenz",
+    "Sporothrix",
+    "Trumna Prime",
+    "Mausolon"
+  ],
+  "nativeCapabilities": {
+    "NATIVE_TYPE_QUANTIZATION": 1,
+    "RADIAL_VICTIM_STACKS": 1,
+    "ADMITTED_PHYSICAL_PACKETS": 1,
+    "GRIMOIRE_SELECTED_COVERAGE": 1,
+    "SOURCE_OWNED_EMBED": 1,
+    "SOURCE_MODE_KILL_CHARGE": 1
+  },
+  "scope": "selected source contracts and actual software/native parity; optional Grimoire policy additionally covered by real API/optimizer case; no whole-game live measurement",
+  "baked": false,
+  "botSynced": false,
+  "releaseBuilt": false
+}

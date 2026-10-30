@@ -19,7 +19,7 @@ try:  # pragma: no cover - exercised when the native core is built
 except ImportError:  # pragma: no cover
     wfcore = None
 
-ENABLED = (wfcore is not None and hasattr(wfcore, "SustainedTarget") and os.environ.get("WF_NATIVE") != "0"
+ENABLED = (wfcore is not None and hasattr(wfcore, "SustainedTarget") and getattr(wfcore,"NATIVE_TYPE_QUANTIZATION",0) and os.environ.get("WF_NATIVE") != "0"
            and os.environ.get("WF_NATIVE_STATUS") != "0")
 SHADOW = os.environ.get("WF_NATIVE_SHADOW") == "1"
 

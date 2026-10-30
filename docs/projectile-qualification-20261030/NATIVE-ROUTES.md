@@ -166,3 +166,30 @@ contact由SCRIPT5提交，generic hit/crit可以发生但Puncture/Cold暴击易�
 普通来源的上下文界限已写到产品diagnostic：weapon df4/df8与avatar1700有明确ctor/reset零值和专用setter；FE0源ramp默认0、FE4临时缓存默认1、FE8无额外元素。它们不是普通静态Mod或Enervate升级桶。当前适配不虚构未提供的外部能力/脚本上下文值；这些来源的完整生命周期是单独支持范围，并未伪称只能游戏实测。RUNTIME_NEXT_SHOT_DAMAGE无法从已追消费者确认映射，只在child部分排除并提示，不再令整次优化器候选抛错。
 
 源文件/原始字节入口：`zymos-completion/NOTES.md`、`actual-guided-vtable.json`、`crit-copy-final-control.json`、`enervate-current-bindings.json`及leaf writer记录。单体返回策略、飞行时间、Wait0对应的帧间隔为显式场景输入；默认仍不计追踪子弹覆盖，用户选定后才计入。
+
+
+## S1/S3/S4 续轮：逐层伤害、实际packet路线与来源修正
+
+本节接续f47ef0b，仍使用同一SHA固定2026.10.22.13.12游戏源。旧段落中的阶段性缺口由下列精确来源修正，不覆盖原证据。
+
+### 259 与261共用callerBase，不由几何标签决定
+
+CO core14113e250在14113e329检查261，14113e434..495对每个实际proc种类查询增量并乘目标层数；它与259使用同一个callerBase xmm8。接触/附着实际走该core才能授予资格，不能只看HitType或者radial_only。当前已审的Pox/Coda attached+818分别用50/20与55/35；Torid/Phantasma child fallback+820用已构建本包基数，所以逐层伤害同样需要对应系数。已加入独立takes_victim_stack_damage与当前callerBase比例；forced层数与live层数走同一计算，独立于Puncture/Cold的暴击易伤门。无该接触路线的普通爆炸不再因为用户指定Shiver层数就获得额外伤害。
+
+Pox代表：+100%普通基伤使20tick变40，一种异常对应CO .4，Cold1层Shiver .45时，tick=40+50*(.4+.45)=82.5，而非40+20*.45或40*(1+.45)。一项真实Arcane回归覆盖live/forced与native；Zymos仍按SCRIPT5接触的已建B基数，333不借用该路线。
+
+### Battacor目标范围包有CO，且保持RADIAL4
+
+真实资源是208 direct+208 RadialDamage。actual RadialOnMissImpactBehavior+f8=14140f600把plan139写4后转换，**没有Projectile+c24覆写**。接受的命中avatar通过14140fb30调weapon+818→1414cef70→141300a00→14113e250一次；reentry flag+1e0阻止重复构造，递归impact最终经1409febe0提交原包。callerBase是mode1源208*stateChargeScale*fireScale，所以普通来源additive baseFraction1；charge消费数对两者共同缩放。最终4抑制victim crit/head，generic hit/crit可以按实际包通知。miss/旁观范围接收者不借用目标+818。
+
+### Arbucep六lane独立接触与爆炸
+
+每个32接触的Guided+790先调普通base，da8默认0→weapon+820以current packet1700为基数调用CO，独立系数1；type2允许victim crit及generic事件。228独立明确目标爆炸经common+c24后类型2，允许victim crit/generic但不走contact CO；外围scene仍4。六lane实际资源与OnProjectileStart已重新核验，脚本setter141290180只写flight171c，不是15b1。仍使用单目标身体/碰撞中心策略，不以飞行目标标签授予爆头。
+
+Python/Rust physical lane分支现使用source-admitted packet通知入口，通知属于原目标且在致死退场前发出；停止同发后续packet向新目标投递。CO-spec在body归一化时通过copy保留，旧dataclasses.replace丢私有信息的问题已避免。原有MS数字笛卡尔矩阵已压缩，保留跨6lane边界与fractional分支。
+
+### 最终暴伤与Sharpshot真实兼容范围
+
+邪莫斯保留桶计算后覆盖crit_multiplier曾抹掉合法战甲Arcane Crepuscular的RUNTIME_FINAL_CRIT_DAMAGE。现把该最终加成加一次：普通CD+120%两查询=7.82，CrepuscularR5再+3，得到10.82；不把final项查询两次。
+
+BonusDamageForNextShot.lua当前字节P3pc82..99计算1+bonus，通过weapon+920=1415b6000写e00 ring，+918=1411ec840读取同ring后进入FE4。这不是253基础伤害，也不是df4/ff8暴击缓存。Longbow Sharpshot实际仅兼容LotusLongBow，生产兼容枚举20目录记录均primary bow，邪莫斯/同伴无法装备。因此删除邪莫斯该项“下一发source未知”诊断，不为不可能装备组合扩充模型。合法弓的FE4快照身份保留原生证据，不能把这条标量证明泛化为所有武器子弹自动继承。

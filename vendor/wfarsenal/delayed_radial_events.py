@@ -51,7 +51,8 @@ def admitted(component):
 def components(profile):
     """Source records for modeled secondary packets, preserving their own fields."""
     return [part for part in [profile.get('radial'), *(profile.get('radials') or ()),
-            profile.get('lingering'), profile.get('embedded'),
+            profile.get('lingering'), profile.get('embedded'),profile.get('attachedTicks'),
+            *(lane.get(k) for lane in (profile.get('projectileLanes') or {}).get('lanes',()) for k in ('direct','radial')),
             *(c.get(k) for c in profile.get('clusters') or () for k in ('direct','radial')),
             *(part for kind in ('normal-parent','extra-ms-parent')
                 for part in (profile.get('phantasmaChildren',{}).get(kind,{}) or {}).get('packets',()))]

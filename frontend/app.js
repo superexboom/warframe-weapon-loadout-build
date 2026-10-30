@@ -360,6 +360,7 @@ function combatStatePayload() {
     const key = control.dataset.combatState;
     if (control.closest('[data-projectile-policy]')?.hidden) return;
     if (['zymosChildContacts','zymosChildArrivalSeconds'].includes(key) && document.querySelector('[data-combat-state="zymosChildOverlap"]')?.value !== 'ideal-contact') return;
+    if (['grimoireCoverageSeconds','grimoireExpiryDistance'].includes(key) && document.querySelector('[data-combat-state="grimoireStrategy"]')?.value !== 'single-occupant') return;
     if (key === 'phantasmaChildArrivalSeconds' && document.querySelector('[data-combat-state="phantasmaChildOverlap"]')?.value !== 'ideal-contact') return;
     if (control.type === 'checkbox') {
       // Default-on switches are only sent when turned off.
@@ -2697,7 +2698,11 @@ function renderContributions() {
 }
 
 const DIAGNOSTIC_CODE_LABELS = {
-  'zymos-child-next-shot-source-context-unverified': '邪莫斯子弹暂不继承尚未校准的特殊下一发伤害来源；父弹照常计算',
+  'arbucep-body-contact-explicit-target-packets-no-head-events': 'Arbucep 按每枚弹体命中原目标身体及中心爆炸计算，不额外假定头部事件',
+  'battacor-ray-hit-avatar-radial-CO-miss-bystanders-excluded': '武使之力范围包的异况用于射线命中的原目标，不将同一资格扩给旁观目标',
+  'scourge-prime-original-surviving-host-attachment-policy': '祸根 Prime 的每秒嵌入伤害仅作用于仍存活的原宿主，下次投掷取消旧矛跳伤',
+  'scourge-prime-contact-main55-body-geometry-policy': '祸根 Prime 主爆炸采用明确接触目标的身体覆盖策略，弱点事件不额外假定',
+  'embedded-death-native-jitter-mean-delay-assumed': '嵌入计时结束后还有原生死亡调度延迟，当前采用其均值',
   'cluster-child-flight-and-contact-grouping-approximated': '集束子弹按逐枚直击、再爆炸结算；飞行与同目标覆盖采用所选近似',
   'cluster-nonstandard-source-CO-base-query-unverified': '集束子弹按普通武器来源计算异况基数，特殊外部来源仍有未校准项',
   'embedded-field-attached-target-coverage-assumed': '附着伤害场按持续覆盖原目标计算，原目标死亡后不自动覆盖下一敌人',
@@ -2731,6 +2736,11 @@ const DIAGNOSTIC_CODE_LABELS = {
   "mandonel-on-hit-two-yield-coalescing-simultaneous-shots-unmodeled": "辐光弩炮同帧命中合并为一个场；跨帧合并边界尚未精确模拟",
   "mandonel-field-avatar-special-upgrades-and-event-routing-unverified": "辐光弩炮伤害场的特殊角色加成及赋能事件路径尚未核实",
   "finite-field-target-generation-bound-centered-coverage-approximated": "独立伤害场按原目标中心覆盖计算，不自动覆盖下一只目标",
+  "grimoire-alt-select-coverage-strategy": "魔典副射击：选择范围策略以评估链伤害及到期爆炸；不计额外接触伤害",
+  "grimoire-alt-original-target-eligible-window-assumed": "链伤害使用所选有效覆盖窗口，只作用于仍存活的原目标",
+  "grimoire-alt-chain-first-update-at-launch-assumed": "覆盖策略从发射时的首次有效选择开始，每秒至多一次链伤害",
+  "grimoire-alt-expiry-original-target-distance-assumed": "到期爆炸按所选原目标与爆心距离计算，不转移到其他敌人",
+  "grimoire-alt-expiry-distance-not-selected": "未指定到期距离，不计魔典副射击的到期爆炸",
   "grimoire-alt-launch-expiry-recipient-position-unmodeled": "魔典副射击到期爆炸是否覆盖目标尚未模拟，当前未计该爆炸",
   "grimoire-alt-chain-target-reselection-and-recursive-geometry-unmodeled": "魔典副射击的周期链目标选择与弹道覆盖尚未模拟",
   "grimoire-alt-direct-contact-repeat-lifecycle-unverified": "魔典副射击重复接触同一目标的规则尚未完整核实",
@@ -9775,6 +9785,10 @@ function refreshProjectileStrategyControls() {
     "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
     "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
   ]);
+  const grimoire = document.getElementById('build-grimoire-strategy-fields');
+  if (grimoire) grimoire.hidden = !(alternate && path === '/Lotus/Weapons/Tenno/Grimoire/TnGrimoire');
+  const grimoireEnabled = document.querySelector('[data-combat-state="grimoireStrategy"]')?.value === 'single-occupant';
+  for (const input of document.querySelectorAll('#build-grimoire-strategy-fields input')) input.disabled = !grimoireEnabled;
   const cubes = document.getElementById("build-quanta-strategy-fields");
   const children = document.getElementById("build-phantasma-child-fields");
   if (cubes) cubes.hidden = !(alternate && quanta.has(path));

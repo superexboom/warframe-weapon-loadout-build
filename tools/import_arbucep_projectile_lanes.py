@@ -5,13 +5,13 @@ from pathlib import Path
 from functools import lru_cache
 try:
     from .import_native_secondary_payloads import AuditedPackages,source_rows,CLIENT_SHA256,PACKAGE_SHA256
+    from .import_projectile_components import apply_native_contract
 except ImportError:  # direct CLI invocation
     from import_native_secondary_payloads import AuditedPackages,source_rows,CLIENT_SHA256,PACKAGE_SHA256
+    from import_projectile_components import apply_native_contract
 PATH='/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGun'
 ELEMENTS=('EXPLOSION','CORROSIVE','GAS','MAGNETIC','RADIATION','VIRAL')
 BOUNDS=['arbucep-projectile-contact-and-radial-centre-coverage-idealized',
-        'arbucep-packet-condition-overload-neutral-pending-routing',
-        'arbucep-packet-weakpoint-events-neutral-pending-routing',
         'arbucep-innate-mushroom-and-ammo-deco-script-unmodeled']
 
 def extract(pkg):
@@ -27,11 +27,16 @@ def extract(pkg):
         if a['ProcChance']!=2.0940001 or r['ProcChance']!=2.0940001 or p['CriticalChance']!=.1 or p['CriticalMultiplier']!=2.9000001:
             raise ValueError('Arbucep native packet chance changed')
         packet=dict(types={dtype:32.},procChance=a['ProcChance'],forcedProcs=list(a.get('ForcedProcs') or []),
-                    critChance=p['CriticalChance'],critMultiplier=p['CriticalMultiplier'],projectile=path)
+                    critChance=p['CriticalChance'],critMultiplier=p['CriticalMultiplier'],projectile=path,
+                    nativeSource=path,nativeField='AttackData',impact_delay_seconds=0.,
+                    takes_condition_overload=True,takes_victim_crit=True,
+                    coProfile=dict(behavior='independent',baseFraction=1.,excludeFlatSources=[]))
         radial=dict(damage={dtype:228.},radius_m=4.,falloff_start_m=0.,falloff_reduction=float(p.get('ExplosionFallOff',0.)),
             status_chance=r['ProcChance']/6,crit_chance=p['CriticalChance'],crit_multiplier=p['CriticalMultiplier'],
             takes_multishot=False,takes_condition_overload=False,nativeSource=path,nativeField='ExplosiveAttack',
             impact_delay_seconds=0.,forcedProcs=list(r.get('ForcedProcs') or []))
+        apply_native_contract(packet)
+        apply_native_contract(radial)
         lanes.append(dict(index=i,projectile=path,direct=packet,radial=radial));paths.append(path)
     entry=dict(name='Arbucep',fireMode=0,projectileLanes=dict(kind='cyclic-physical-projectile',length=6,rawFireIterations=6,
         extraPolicy='continue-sequence',initialPhase=0,lanes=lanes),unmodeled=BOUNDS,

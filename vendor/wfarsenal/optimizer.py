@@ -1912,6 +1912,10 @@ def _mod_family(card: _Card) -> str:
 def _metrics(
     stats: Any, projectile_events: Mapping[str, Any] | None = None
 ) -> dict[str, float]:
+    grimoire = _grimoire_metric_values(stats)
+    if grimoire is not None:
+        return {key: grimoire[key] for key in
+                ('shotDamage','burstDps','sustainedDps','attackDps','heavyDamage','heavyAttackDps')}
     crit = effective_hit_multiplier(
         stats.crit_chance, stats.crit_multiplier, stats.noncrit_damage_multiplier
     )
@@ -1967,12 +1971,58 @@ def _event_window(stats, context, *, score_only=False):
     return window(stats, context, score_only=score_only)
 
 
+def _grimoire_metric_values(stats, context=None):
+    """One original-recipient orb over its native45s availability cycle.
+
+    The exported350 is a packet source, not a physical contact. Shot damage
+    is the admitted orb's direct packets; burst/attack DPS spans its6s life,
+    and sustained metrics pay the full45s alt gate. Status ticks settle in
+    that same cycle through the normal replay, with no invented successor.
+    """
+    data = getattr(stats, '_combat_inputs', None)
+    if not data:
+        return None
+    engine = data['engine']
+    from .projectile_events import grimoire_strategy
+    contract = grimoire_strategy(engine['weapon'], engine['fire_mode'], engine['scenario'].combat_state)
+    if contract is None:
+        return None
+    for reason in contract['unsupported']:
+        if reason not in stats.unsupported:stats.unsupported.append(reason)
+    if not contract['parts']:
+        return dict.fromkeys(('shotDamage','burstDps','attackDps','sustainedDps','targetSustainedDps',
+            'statusSustainedDps','totalSustainedDps','dotSustainedDps','nonDotStatusSustainedDps',
+            'heavyDamage','heavyAttackDps'),0.) | dict(lifetimeSeconds=6.,cycleSeconds=45.)
+    neutral = dict(health=1e15,shield=0.,overguard=0.,armour=0.,baseLevel=1)
+    supplied = context or {}
+    options = {key:value for key,value in supplied.items() if key != 'hardnessNodes'}
+    options.setdefault('target', neutral)
+    options.setdefault('level', 1)
+    # A shot exactly at45 belongs to the next native availability cycle.
+    options['windowSeconds'] = 45.0-1e-7
+    options['headshotChance'] = 0.0
+    replayed = _event_window(stats, options)
+    direct = float(replayed.get('directWindow', 0.))
+    dots = float(replayed.get('dotWindow', 0.))
+    non = float(replayed.get('nonDotWindow', 0.))
+    return dict(shotDamage=direct, burstDps=direct/6., attackDps=direct/6.,
+                sustainedDps=direct/45., targetSustainedDps=direct/45.,
+                statusSustainedDps=(direct+dots+non)/45.,totalSustainedDps=(direct+dots+non)/45.,
+                dotSustainedDps=dots/45.,nonDotStatusSustainedDps=non/45.,
+                heavyDamage=0.,heavyAttackDps=0.,lifetimeSeconds=6.,cycleSeconds=45.)
+
+
 def _score(
     stats: Any,
     metric: str,
     projectile_events: Mapping[str, Any] | None = None,
     target_context: Mapping[str, Any] | None = None,
 ) -> float:
+    if metric in {'shotDamage','perShot','perHit','burstDps','attackDps','sustainedDps',
+                  'targetSustainedDps','statusSustainedDps','totalSustainedDps','heavyDamage','heavyAttackDps'}:
+        grimoire = _grimoire_metric_values(stats, target_context)
+        if grimoire is not None:
+            return float(grimoire['shotDamage' if metric in {'perShot','perHit'} else metric])
     if metric in {"targetSustainedDps", "statusSustainedDps"}:
         context = target_context or {}
         target = context.get("target")

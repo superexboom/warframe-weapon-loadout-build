@@ -237,7 +237,7 @@ class HeatChains:
         while self.boost and t-self.boost[0][0]>=2*self.boost[0][1]-1e-9:
             self.boost.popleft()
 
-    def add(self,t,absence,n,seed,duration,scale):
+    def add(self,t,absence,n,seed,duration,scale,*,refresh_only=False):
         self.expire(t)
         a=min(1.,max(0.,absence));p=1.-a
         if p<=0.:return
@@ -255,8 +255,11 @@ class HeatChains:
             self._schedule_boost(item)
         alive=self.weight*g
         young={k:p*v*g for k,v in self.young.items()}
-        young[t]=young.get(t,0.)+p*max(0.,1.-alive)
-        values=[p,p*self.stacks*g+n,p*self.seeds*g+seed,young,p*self.mature*g]
+        if not refresh_only:
+            young[t]=young.get(t,0.)+p*max(0.,1.-alive)
+        # A different native source group refreshes existing Heat stacks,
+        # but cannot create stacks or source ownership in absent worlds.
+        values=[p*alive if refresh_only else p,p*self.stacks*g+n,p*self.seeds*g+seed,young,p*self.mature*g]
         if a<=0.:
             self.entries=[];self.weight=self.stacks=self.seeds=self.mature=0.
             for item in self.dead:item[5]=True

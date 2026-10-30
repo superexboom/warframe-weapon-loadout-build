@@ -40,8 +40,11 @@ FIELDS = ('ExplosiveAttack', 'EmbedDeathAttack', 'RadialDamage')
 
 def apply_native_contract(component):
     """Keep reimports aligned with independently audited exact-source consumers."""
-    from wfarsenal.delayed_radial_events import producer
+    from wfarsenal.delayed_radial_events import producer,producers
     row=producer(component)
+    if row is None and not component.get('nativeRoute'):
+        candidates=[r for r in producers().get(component.get('nativeSource'),()) if r['nativeField']==component.get('nativeField')]
+        if len(candidates)==1:row=candidates[0]
     if row and row.get('nativeField')==component.get('nativeField'):
         component.update(row.get('componentOverrides') or {})
     return component

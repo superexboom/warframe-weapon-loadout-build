@@ -170,6 +170,22 @@
           "directRecipientHitType": "DHT_PROJECTILE",
           "takes_condition_overload": false
         }
+      },
+      {
+        "nativeField": "EmbedAttack",
+        "nativeRoute": "zero-radius-embed",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "componentOverrides": {
+          "takes_condition_overload": false,
+          "takes_victim_crit": false,
+          "takes_victim_stack_damage": false
+        },
+        "evidence": "radius0 +628 DOT7 then140ede780->victim340; no790/818; AGCgeneric conditions accept7; oldsourceprefire cancelsDoEmbedDamage"
       }
     ],
     "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj": [
@@ -237,7 +253,8 @@
             "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
             "parentBase": 25,
             "childBase": 15
-          }
+          },
+          "takes_victim_stack_damage": true
         }
       },
       {
@@ -279,7 +296,8 @@
             "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
             "parentBase": 50,
             "childBase": 15
-          }
+          },
+          "takes_victim_stack_damage": true
         }
       },
       {
@@ -321,7 +339,8 @@
             "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
             "parentBase": 187,
             "childBase": 49
-          }
+          },
+          "takes_victim_stack_damage": true
         }
       },
       {
@@ -363,7 +382,8 @@
             "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
             "parentBase": 200,
             "childBase": 75
-          }
+          },
+          "takes_victim_stack_damage": true
         }
       }
     ],
@@ -393,7 +413,8 @@
           "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
           "tick_rate": 1.0,
           "tickRateSource": "native embed initial call140c3f312; fixed1s DoEmbedDamage callback140297d78",
-          "duration_seconds": 10.0
+          "duration_seconds": 10.0,
+          "takes_victim_stack_damage": true
         }
       }
     ],
@@ -423,7 +444,8 @@
           "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
           "tick_rate": 1.0,
           "tickRateSource": "native embed initial call140c3f312; fixed1s DoEmbedDamage callback140297d78",
-          "duration_seconds": 5.0
+          "duration_seconds": 5.0,
+          "takes_victim_stack_damage": true
         }
       }
     ],
@@ -453,7 +475,8 @@
           "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
           "tick_rate": 1.0,
           "tickRateSource": "native embed initial call140c3f312; fixed1s DoEmbedDamage callback140297d78",
-          "duration_seconds": 5.0
+          "duration_seconds": 5.0,
+          "takes_victim_stack_damage": true
         }
       }
     ],
@@ -509,7 +532,8 @@
             "baseFraction": 1.0,
             "excludeFlatSources": []
           },
-          "native_event_delay_seconds": 0.0
+          "native_event_delay_seconds": 0.0,
+          "takes_victim_stack_damage": true
         }
       },
       {
@@ -546,7 +570,8 @@
             "baseFraction": 1.0,
             "excludeFlatSources": []
           },
-          "native_event_delay_seconds": 0.0
+          "native_event_delay_seconds": 0.0,
+          "takes_victim_stack_damage": true
         }
       },
       {
@@ -583,7 +608,8 @@
             "baseFraction": 1.0,
             "excludeFlatSources": []
           },
-          "native_event_delay_seconds": 0.0
+          "native_event_delay_seconds": 0.0,
+          "takes_victim_stack_damage": true
         }
       },
       {
@@ -620,7 +646,8 @@
             "baseFraction": 1.0,
             "excludeFlatSources": []
           },
-          "native_event_delay_seconds": 0.0
+          "native_event_delay_seconds": 0.0,
+          "takes_victim_stack_damage": true
         }
       },
       {
@@ -636,6 +663,489 @@
           "takes_victim_crit": true,
           "takes_condition_overload": false,
           "native_event_delay_seconds": 0.0
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1,
+            "excludeFlatSources": []
+          }
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "explicit-physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1,
+            "excludeFlatSources": []
+          }
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "explicit-physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1,
+            "excludeFlatSources": []
+          }
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "explicit-physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1,
+            "excludeFlatSources": []
+          }
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "explicit-physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1,
+            "excludeFlatSources": []
+          }
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "explicit-physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj": [
+      {
+        "nativeField": "AttackData",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1,
+            "excludeFlatSources": []
+          }
+        }
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "explicit-physical-contact-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle": [
+      {
+        "nativeField": "RadialDamage",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "recipient": "ray-hit-avatar",
+        "evidence": "projectile-followthrough-20261030/packet-routes/NOTES.md exact source consumer",
+        "componentOverrides": {
+          "takes_victim_crit": false,
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "coProfile": {
+            "behavior": "additive_with_base_damage",
+            "baseFraction": 1,
+            "excludeFlatSources": []
+          }
+        }
+      }
+    ],
+    "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireAltProj": [
+      {
+        "nativeField": "AttackData",
+        "nativeRoute": "player-chain-selected-avatar",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false
+        },
+        "evidence": "PlayerChaining +790=1400bb680 no-op; chain140907cb0 ->340/348 type2; expiry1410oldage commonregion type4; no790/818/820"
+      },
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeRoute": "launch-expiry-region",
+        "nativeDelayRange": [
+          6.0,
+          6.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "componentOverrides": {
+          "takes_victim_crit": false,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false
+        },
+        "evidence": "PlayerChaining +790=1400bb680 no-op; chain140907cb0 ->340/348 type2; expiry1410oldage commonregion type4; no790/818/820"
+      }
+    ],
+    "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowArrow": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeRoute": "contact-explicit-target",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "contact-explicit-target",
+          "impact_delay_seconds": 0.0,
+          "native_event_delay_seconds": 0.0
+        }
+      },
+      {
+        "nativeField": "EmbedDeathAttack",
+        "nativeRoute": "embed-death-explicit-target",
+        "nativeDelayRange": [
+          1.375,
+          1.45
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "embed-death-explicit-target",
+          "impact_delay_seconds": 1.4125,
+          "native_event_delay_seconds": 1.4125,
+          "liveSourceDamageAtImpact": true
+        }
+      }
+    ],
+    "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzArrow": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeRoute": "contact-explicit-target",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "contact-explicit-target",
+          "impact_delay_seconds": 0.0,
+          "native_event_delay_seconds": 0.0
+        }
+      },
+      {
+        "nativeField": "EmbedDeathAttack",
+        "nativeRoute": "embed-death-explicit-target",
+        "nativeDelayRange": [
+          1.375,
+          1.45
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "embed-death-explicit-target",
+          "impact_delay_seconds": 1.4125,
+          "native_event_delay_seconds": 1.4125,
+          "liveSourceDamageAtImpact": true
+        }
+      }
+    ],
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothixProjectile": [
+      {
+        "nativeField": "EmbedDeathAttack",
+        "nativeRoute": "embed-death-explicit-target",
+        "nativeDelayRange": [
+          0.97499998,
+          1.04999998
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "embed-death-explicit-target",
+          "impact_delay_seconds": 1.0124999799999999,
+          "native_event_delay_seconds": 1.0124999799999999,
+          "liveSourceDamageAtImpact": true
+        }
+      }
+    ],
+    "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifleProjectile": [
+      {
+        "nativeField": "EmbedDeathAttack",
+        "nativeRoute": "embed-death-explicit-target",
+        "nativeDelayRange": [
+          0.97499998,
+          1.04999998
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "embed-death-explicit-target",
+          "impact_delay_seconds": 1.0124999799999999,
+          "native_event_delay_seconds": 1.0124999799999999,
+          "liveSourceDamageAtImpact": true
         }
       }
     ]

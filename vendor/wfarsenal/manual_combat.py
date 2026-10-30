@@ -669,8 +669,10 @@ def prepare(
         # release speed or extra shots are granted by treating them as a pair.
         base_attack={**base_attack,'burst':{'count':2,'delay_seconds':1./float(modes[0]['fireRate'])}}
     selected_attack = base_profile(weapon, mode_index)
-    from .projectile_events import quanta_strategy, quanta_strategy_cycle
+    from .projectile_events import quanta_strategy, quanta_strategy_cycle, grimoire_strategy
     paid_cube = quanta_strategy(weapon, mode_index, scenario.combat_state)
+    chain_orb = grimoire_strategy(weapon, mode_index, scenario.combat_state)
+    if chain_orb:notes.extend(chain_orb['unsupported'])
     if paid_cube:
         notes.extend(paid_cube['unsupported'])
     if (selected_attack.get('fullClipCharge') or {}).get('cadencePolicy') == 'wait-configured-empty-delay-then-full-recharge':
@@ -692,8 +694,6 @@ def prepare(
                       'zymos-selected-frame-and-flight-timing', 'zymos-callback-firecount-independent-current-source-query'])
         if enervate:
             notes.append('zymos-two-source-enervate-snapshots-use-marginal-probabilities')
-        if any(e.upgrade_type=='RUNTIME_NEXT_SHOT_DAMAGE' for e in [*static,*actor_effects,*(e for _,terms in dynamic for e in terms)]):
-            notes.append('zymos-child-next-shot-source-context-unverified')
     onos_sequence = selected_attack.get('onosCharge')
     from .runtime_adapters import onos_crits_for_hits
     onos_crit = next((q for b in branches if (q:=onos_crits_for_hits(b))),None)
@@ -822,7 +822,10 @@ def prepare(
         physical_index = (int(stacks['__physicalProjectileIndex']) % physical_lanes['length']
                           if physical_lanes and '__physicalProjectileIndex' in stacks else None)
         if physical_index is not None:
-            fx=ModEffectList(e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
+            packet=physical_lanes['lanes'][physical_index]['direct']
+            if not packet.get('takes_condition_overload'):
+                fx=ModEffectList((e for e in fx if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'),
+                                 skipped=fx.skipped)
         sequence_index = (int(stacks.get('__projectileSequenceIndex', 0)) % companion_sequence['length']
                           if companion_sequence else None)
         volley_rounds = float(stacks.get('__chargeVolleyRounds', 1.))
@@ -837,7 +840,8 @@ def prepare(
             if physical_index is not None:
                 lane=physical_lanes['lanes'][physical_index]
                 lane_modes=list(weapon['fireModes']);lane_modes[idx]=physical_lane_mode(lane_modes[idx],lane)
-                wp={**wp,'fireModes':lane_modes,'__coProfile__':{'behavior':'none'}}
+                wp={**wp,'fireModes':lane_modes,
+                    '__coProfile__':lane['direct'].get('coProfile') or {'behavior':'none'}}
             if companion_sequence:
                 # Change the source lane BEFORE applying mods: IPS-specific
                 # mods and elemental/proc bases belong to each actual projectile.
@@ -981,9 +985,14 @@ def prepare(
         components = () if extra.get('pureRadial') else (extra.get('radials') or [extra.get('radial') or extra.get('lingering')])
         # Cluster bomblets (tools/import_cluster_submunitions.py): each child
         # lands its own hit and explosion, ``count`` per shell.
+        components = [dict(c,__radialSlot=i) if isinstance(c,dict) else c for i,c in enumerate(components)]
         components = [*components, *(dict(cluster[key], count=cluster['count'], __childGroup=('cluster', group))
                                      for group, cluster in enumerate(extra.get('clusters') or ())
                                      for key in ('direct', 'radial'))]
+        if extra.get('attachedTicks'):
+            components=[*components,dict(extra['attachedTicks'],__ownedEmbed=True)]
+        if chain_orb and idx==mode_index:
+            components=[dict(part,__grimoirePart=i) for i,part in enumerate(chain_orb['parts'])]
         if extra.get('phantasmaChildren') and scenario.combat_state.get('phantasmaChildOverlap') == 'ideal-contact':
             children = extra['phantasmaChildren']
             arrival = float(scenario.combat_state.get('phantasmaChildArrivalSeconds', children['idealArrivalSeconds']))
@@ -1022,7 +1031,19 @@ def prepare(
                     return {**wp, 'fireModes': [rm], '__innateResolved__': True, '__compressionProfile__': extra.get('compression'),
                             **({'__coProfile__': component['coProfile']} if component.get('coProfile') else {})}
                 part_fx = fx if component.get('takes_condition_overload') else ModEffectList(e for e in fx if e.upgrade_type != 'WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE')
-                if component.get('__embedded') or not (extra.get('radial') or extra.get('radials')):
+                shiver_fixed=None
+                if component.get('takes_victim_stack_damage'):
+                    shiver_fixed=max((float(e.runtime_chance or 0.) for e in part_fx
+                                      if e.upgrade_type=='RUNTIME_COLD_STACK_DAMAGE'),default=0.) or None
+                    # Forced and live stack counts share the exact caller base;
+                    # do not pre-add the forced count to an unrelated raw bucket.
+                    part_fx=ModEffectList(replace(e,runtime_chance=0.) if e.upgrade_type=='RUNTIME_COLD_STACK_DAMAGE'
+                                          else e for e in part_fx)
+                else:
+                    part_fx=ModEffectList(e for e in part_fx if e.upgrade_type!='RUNTIME_COLD_STACK_DAMAGE')
+                if component.get('__ownedEmbed'):
+                    part_fx=ModEffectList(e for e in part_fx if e.upgrade_type!='WEAPON_DAMAGE_TYPE_FLAT_AMOUNT')
+                if not component.get('__ownedEmbed') and component.get('__grimoirePart') is None and (component.get('__embedded') or not (extra.get('radial') or extra.get('radials'))):
                     # A lingering field has its own native base damage: flat
                     # "+N base damage" belongs to the shot (WFSim Torid: field
                     # ticks 40 x crit with Plentiful Mayhem's +31 base). The
@@ -1033,6 +1054,23 @@ def prepare(
                 part, part_spec = apply_mods_spec(
                     _part_record(wp, ('radial', idx, repr(component), repr(extra.get('compression'))), radial_part),
                     part_fx, scenario=replace(scenario, incarnon_cycle=False, victim_status_count=count_ceiling))
+                if component.get('__grimoirePart') is not None:
+                    part=copy(part)
+                    scale=float(component.get('damageMultiplier',1.))
+                    if component.get('__expiryDistance') is not None:
+                        radius=6.*part.explosion_radius_multiplier
+                        distance=float(component['__expiryDistance'])
+                        scale*=0. if radius<=0. or distance>radius else max(0.,1.-.80000001*distance/radius)
+                    part.damage_types={k:v*scale for k,v in part.damage_types.items()}
+                    if part.dot_base_damage is not None:part.dot_base_damage*=scale
+                    if component.get('nativeRoute')=='player-chain-selected-avatar':
+                        from .damage import _combine, _qualifier_rejection
+                        kinds={str(x).rstrip('/') for x in (*tuple(wp.get('ancestry') or ()),wp.get('path')) if x}
+                        budget_fx=[e for e in fx if e.upgrade_type=='WEAPON_FIRE_ITERATIONS'
+                            and (not e.valid_type or e.valid_type.rstrip('/') in kinds)
+                            and not _qualifier_rejection(e,wp,form_scenario)]
+                        budget=math.floor(max(0.,_combine(3.,budget_fx)))
+                        component={**component,'__noChainBudget':budget<1}
                 if component.get('snapshotHeadshotMultiplier'):
                     # Vectis's scripted head orb inherits this weapon bracket
                     # (scope + Deadhead), not the victim's head x3, head crit,
@@ -1052,6 +1090,31 @@ def prepare(
                 if component.get('__phantasmaChild'):
                     part._phantasma_child = True
                 part._co_spec = part_spec
+                if component.get('__grimoirePart') is not None:
+                    part.multishot=0. if component.get('__noChainBudget') else 1.
+                    # These final per-route scales are outside the CO resolver.
+                    part._co_spec=None
+                    launch=copy(part);refreshed={}
+                    def refresh_chain(stacks,live,launch=launch,slot=component['__grimoirePart'],
+                                      source_form=form,cache=refreshed):
+                        key=tuple(sorted(stacks.items()))
+                        if key not in cache:
+                            _,first=entry(source_form,stacks,0.,False)
+                            current=(first,*getattr(first,'_additional_radials',()))[slot]
+                            out=copy(current)
+                            for field in ('crit_chance','crit_multiplier','base_crit_chance',
+                                          'low_crit_threshold','low_crit_damage_base','low_crit_damage_bonus'):
+                                setattr(out,field,getattr(launch,field))
+                            out.__dict__.pop('_live_hit_refresh',None)
+                            cache[key]=out
+                        return cache[key]
+                    part._live_hit_refresh=refresh_chain
+                if component.get('takes_victim_stack_damage'):
+                    cp=component['coProfile']
+                    part._contact_shiver=True
+                    part._contact_shiver_scale=cp['baseFraction']*(part_spec.ordinary_scale
+                        if cp['behavior']=='independent' else 1.)
+                    part._contact_shiver_fixed=shiver_fixed
                 if component.get('impact_delay_seconds') is not None:
                     part._impact_delay = float(component['impact_delay_seconds'])
                 from .delayed_radial_events import admitted
@@ -1062,6 +1125,33 @@ def prepare(
                     part._body_only = True
                 if component.get('persistAfterKill'):
                     part._persist_after_kill = True
+                if component.get('liveSourceDamageAtImpact'):
+                    launch=copy(part);refreshed={}
+                    def refresh_impact(stacks,live,launch=launch,source_form=form,
+                                       slot=component['__radialSlot'],cache=refreshed):
+                        key=tuple(sorted(stacks.items()))
+                        if key not in cache:
+                            _,first=entry(source_form,stacks,0.,False)
+                            out=copy((first,*getattr(first,'_additional_radials',()))[slot])
+                            for field in ('multishot','crit_chance','crit_multiplier','base_crit_chance'):
+                                setattr(out,field,getattr(launch,field))
+                            out.__dict__.pop('_live_hit_refresh',None)
+                            cache[key]=out
+                        return cache[key]
+                    part._live_hit_refresh=refresh_impact
+                if component.get('__ownedEmbed'):
+                    launch=copy(part);refreshed={}
+                    def refresh_embed(stacks,live,launch=launch,source_form=form,cache=refreshed):
+                        key=tuple(sorted(stacks.items()))
+                        if key not in cache:
+                            current,_=entry(source_form,stacks,0.,False)
+                            out=copy(current._owned_embed[0])
+                            for field in ('multishot','crit_chance','crit_multiplier','base_crit_chance'):
+                                setattr(out,field,getattr(launch,field))
+                            out.__dict__.pop('_live_hit_refresh',None)
+                            cache[key]=out
+                        return cache[key]
+                    part._live_hit_refresh=refresh_embed
                 if component.get('liveVictimCO'):
                     # EmbedAttack rebuilds ordinary damage/elements/status on
                     # every tick, but copies the projectile's retained CC/CD.
@@ -1079,14 +1169,16 @@ def prepare(
                             cache[key]=out
                         return cache[key]
                     part._live_hit_refresh=refresh_field
-                if component.get('__embedded'):
+                if component.get('__ownedEmbed'):
+                    st._owned_embed=(part,float(component['tick_rate']),float(component['duration_seconds']))
+                elif component.get('__embedded'):
                     st._embedded = (part, component['tick_rate'], component['duration_seconds'])
                 elif component.get('__childGroup') is not None:
                     part._physical_child = True
                     part._child_takes_co = bool(component.get('takes_condition_overload'))
                     part._child_co_fraction = float((component.get('coProfile') or {}).get('baseFraction',1.))
                     child_groups.setdefault(component['__childGroup'], []).append(part)
-                elif extra.get('radial') or extra.get('radials'):
+                elif component.get('__grimoirePart') is not None or extra.get('radial') or extra.get('radials'):
                     radial_parts.append(part)
                 else:
                     st._lingering = (part, component['tick_rate'], component['duration_seconds'])
@@ -1280,9 +1372,21 @@ def prepare(
                     1+int(bool(field.get('damageOnEnter')))))
             st._finite_fields=tuple(finite_fields)
         if physical_index is not None:
-            st=replace(st,multishot=1.,weakpoint_damage_bonus=0.,weakpoint_crit_chance_bonus=0.,
-                weakpoint_crit_chance_relative=0.,headshot_bonus_multiplier=1.,ignore_headshot_bonus=True)
+            # Preserve _co_spec and other dynamic packet state through the
+            # body-only geometry normalization; dataclasses.replace drops it.
+            st=copy(st)
+            st.multishot=1.
+            st.weakpoint_damage_bonus=0.
+            st.weakpoint_crit_chance_bonus=0.
+            st.weakpoint_crit_chance_relative=0.
+            st.headshot_bonus_multiplier=1.
+            st.ignore_headshot_bonus=True
+            from .delayed_radial_events import admitted
+            st.delayed_radial_hit_event=admitted(physical_lanes['lanes'][physical_index]['direct'])
             if radial is not None:radial.multishot=1.
+        if chain_orb and idx==mode_index:
+            st.damage_types={};st.dot_base_damage=0.;st.co_bucket=[];st._co_spec=None
+            st._no_enemy_contact=True
         if paid_cube and form != 'base':
             primary_weapon={**wp,'fireModes':wp.get('__baseFireModes__') or modes,'__selectedFireMode__':0}
             primary_stats=apply_mods_spec(primary_weapon,fx,fire_mode=0,scenario=form_scenario)[0]
@@ -1474,12 +1578,15 @@ def prepare(
         fractionalProjectileLanes=bool(physical_lanes and any(e.upgrade_type=='WEAPON_FIRE_ITERATIONS' for _,terms in dynamic for e in terms)),
         fullClipCharge=selected_attack.get('fullClipCharge'),
         quantaStrategy=paid_cube,
+        grimoireStrategy=chain_orb,
+        ownedEmbed=bool(selected_attack.get('attachedTicks')),
         zymosChildren=bool(zymos_policy),
         chargeVolley=any(attack.get('chargeVolley') for attack in (base_attack, selected_attack)),
         chargeBeforeFire=bool(selected_attack.get('fullClipCharge') or (selected_attack.get('charge') or {}).get('beforeFire')),
         nativeFireGate=bool(selected_attack.get('nativeFireCooldownSeconds')),
-        delayedRadialEvents=bool(paid_cube or zymos_policy) or any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
-        radialCritStatus=bool(zymos_policy) or any(part.get('takes_victim_crit') for attack in (base_attack,selected_attack)
+        delayedRadialEvents=bool(paid_cube or zymos_policy or chain_orb or selected_attack.get('attachedTicks')) or any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
+        victimStackParts=bool(zymos_policy) or any(part.get('takes_victim_stack_damage') for attack in (base_attack,selected_attack) for part in event_components(attack)),
+        radialCritStatus=bool(zymos_policy or chain_orb) or any(part.get('takes_victim_crit') for attack in (base_attack,selected_attack)
                              for part in event_components(attack)),
         melee=melee,
         comboTierKeys=combo_tier_keys,

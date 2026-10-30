@@ -77,3 +77,15 @@ The completed continuation collects **2248 tests**, versus2247 at its own baseli
 Final focused execution: **137 passed**, no failures/errors/skips. Includes the strengthened Pox Crosshairs expiry/retained-crit assertion and final Zymos source-identity gate; these are not additional unique cases. Selected-mode existing audit: **28 scenarios** across5 representative weapons, zero differences/fallbacks and stable input identity. Optional Quanta/Zymos policies are separately exercised by the retained feature cases; the28 default scenarios are not misrepresented as those opt-in policies.
 
 No full-suite execution, no full bake and no gameplay-measurement claim. Exact native/input identity is in `evidence/validation-r1-r8.json`.
+
+
+## S1–S5 continuation after f47ef0b
+
+Real source cases were added only in existing modules: one Pox live/forced Shiver contract, one Arbucep exact-source CO/event contract, one Battacor additive-radial contract and one cross-mode status-source regression. Grimoire reuses two existing cases plus one new full policy case (3total), including actual API/static/optimizer/native paths. Scourge extends its two existing cases. Lenz/Sporothrix replace the two old unadmitted assertions in place. Crepuscular extends the existing Zymos operation case.
+
+Removed redundant Arbucep integer matrices, retaining native6-lane boundary6/7 and fractional7.25 where the path differs. Deleted obsolete `test_proc_crit_contract.py` (3cases): it asserted the now-disproved absence of all Puncture/Cold bonuses with broad35% tolerances, and one case depended on an untracked absolute `.local` path and skipped if absent. These claims are superseded by the original-byte type-mask/source proof and precise current packet regressions, not a removal to make the current test results appear green. No replacement test module was created.
+
+Final counts and execution evidence will be recorded after the active native/source changes are frozen. No routine full-suite or whole-game correctness claim.
+
+
+Final S1–S5 verification: **260passed**, no failures/errors/skips. The selected search audit covers9 distinct catalog records /56 scenarios, exact Python/native equality, zero fallback and stable inputs. Existing Grimoire feature tests separately exercise its optional strategy and static/API/mod-gains paths. Whole repository collection is **2239**, versus2248 at f47ef0b (net-9);0new modules,1obsolete module removed. Banked-charge cases keep1/2/3 withSHADOW rather than doublingPython/native parameters. A single additional original-byte-derived fraction/CD tie regression lives in the existing Scourge file. Exact source/native fingerprint is in`evidence/validation-s1-s5.json`; no entire2239 execution or live-game claim.

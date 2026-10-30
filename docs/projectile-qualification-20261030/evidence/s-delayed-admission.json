@@ -1,0 +1,202 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "delayedRadialProducers": {
+    "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowArrow": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeRoute": "contact-explicit-target",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md"
+      },
+      {
+        "nativeField": "EmbedDeathAttack",
+        "nativeRoute": "embed-death-explicit-target",
+        "nativeDelayRange": [
+          1.375,
+          1.45
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md"
+      }
+    ],
+    "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzArrow": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeRoute": "contact-explicit-target",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md"
+      },
+      {
+        "nativeField": "EmbedDeathAttack",
+        "nativeRoute": "embed-death-explicit-target",
+        "nativeDelayRange": [
+          1.375,
+          1.45
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md"
+      }
+    ],
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothixProjectile": [
+      {
+        "nativeField": "EmbedDeathAttack",
+        "nativeRoute": "embed-death-explicit-target",
+        "nativeDelayRange": [
+          0.97499998,
+          1.04999998
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md"
+      }
+    ],
+    "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifleProjectile": [
+      {
+        "nativeField": "EmbedDeathAttack",
+        "nativeRoute": "embed-death-explicit-target",
+        "nativeDelayRange": [
+          0.97499998,
+          1.04999998
+        ],
+        "nativeHitType": 2,
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "ordinaryHeadDamage": false,
+        "takesConditionOverload": false,
+        "takesColdStackDamage": false,
+        "takesVictimCrit": true,
+        "recipient": "original explicit contact host must remain valid; scene bystanders retain4",
+        "evidence": "docs/projectile-qualification-20261030/DELAYED-FAMILIES.md"
+      }
+    ]
+  },
+  "modePartUpdates": {
+    "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBow": {
+      "0": {
+        "radialQualificationUpdates": [
+          {
+            "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowArrow",
+            "nativeField": "ExplosiveAttack",
+            "nativeRoute": "contact-explicit-target",
+            "impact_delay_seconds": 0.0,
+            "native_event_delay_seconds": 0.0,
+            "takes_victim_crit": true,
+            "takes_condition_overload": false,
+            "takes_victim_stack_damage": false
+          },
+          {
+            "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowArrow",
+            "nativeField": "EmbedDeathAttack",
+            "nativeRoute": "embed-death-explicit-target",
+            "impact_delay_seconds": 1.4125,
+            "native_event_delay_seconds": 1.4125,
+            "takes_victim_crit": true,
+            "takes_condition_overload": false,
+            "takes_victim_stack_damage": false
+          }
+        ]
+      }
+    },
+    "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzWeapon": {
+      "0": {
+        "radialQualificationUpdates": [
+          {
+            "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzArrow",
+            "nativeField": "ExplosiveAttack",
+            "nativeRoute": "contact-explicit-target",
+            "impact_delay_seconds": 0.0,
+            "native_event_delay_seconds": 0.0,
+            "takes_victim_crit": true,
+            "takes_condition_overload": false,
+            "takes_victim_stack_damage": false
+          },
+          {
+            "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzArrow",
+            "nativeField": "EmbedDeathAttack",
+            "nativeRoute": "embed-death-explicit-target",
+            "impact_delay_seconds": 1.4125,
+            "native_event_delay_seconds": 1.4125,
+            "takes_victim_crit": true,
+            "takes_condition_overload": false,
+            "takes_victim_stack_damage": false
+          }
+        ]
+      }
+    },
+    "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothrix": {
+      "0": {
+        "radialQualificationUpdates": [
+          {
+            "nativeSource": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothixProjectile",
+            "nativeField": "EmbedDeathAttack",
+            "nativeRoute": "embed-death-explicit-target",
+            "impact_delay_seconds": 1.01249998,
+            "native_event_delay_seconds": 1.01249998,
+            "takes_victim_crit": true,
+            "takes_condition_overload": false,
+            "takes_victim_stack_damage": false
+          }
+        ]
+      }
+    },
+    "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle": {
+      "0": {
+        "radialQualificationUpdates": [
+          {
+            "nativeSource": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifleProjectile",
+            "nativeField": "EmbedDeathAttack",
+            "nativeRoute": "embed-death-explicit-target",
+            "impact_delay_seconds": 1.01249998,
+            "native_event_delay_seconds": 1.01249998,
+            "takes_victim_crit": true,
+            "takes_condition_overload": false,
+            "takes_victim_stack_damage": false
+          }
+        ]
+      }
+    }
+  }
+}

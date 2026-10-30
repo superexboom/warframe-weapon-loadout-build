@@ -331,6 +331,11 @@ def merge_patch(payload,patch):
             if 'unmodeled' in incoming:
                 retired={'phantasma-parent-explosion-and-children-unmodeled',
                          'phantasma-explosion-co-and-head-event-routing-unverified'} if 'Phantasma' in path or 'RevenantShotgun' in path else set()
+                if incoming.get('attachedTicks') and incoming.get('nativeSpearThrowCycle'):
+                    retired.update({'scourge-prime-main55-CO-weakpoint-events-neutral-fallback-unverified',
+                                    'scourge-prime-stopped-embedded-script-payload-unmodeled',
+                                    'scourge-prime-old-spear-deferred-die-and-embedded-damage-excluded',
+                                    'scourge-prime-script-lifetime-and-embedded-payload-unmodeled'})
                 incoming['unmodeled']=list(dict.fromkeys(
                     warning for warning in [*(target.get('unmodeled') or []),*incoming['unmodeled']]
                     if warning not in retired))

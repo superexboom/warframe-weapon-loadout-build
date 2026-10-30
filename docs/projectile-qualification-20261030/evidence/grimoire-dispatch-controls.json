@@ -1,0 +1,39 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "cases": [
+    {
+      "case": "full-chain-selected-avatar-dispatch",
+      "authority": true,
+      "deliveries": [
+        {
+          "slot": "340",
+          "packet": "0x2000e000"
+        }
+      ],
+      "limits": "avatar type ancestry and weakrefs supplied; external victim callback captured"
+    },
+    {
+      "case": "full-chain-selected-avatar-dispatch",
+      "authority": false,
+      "deliveries": [
+        {
+          "slot": "348",
+          "packet": "0x2000e000"
+        }
+      ],
+      "limits": "avatar type ancestry and weakrefs supplied; external victim callback captured"
+    },
+    {
+      "case": "actual-PlayerChainingProjectile-contact-hook",
+      "table": "0x1423910d0",
+      "slot": "790",
+      "leaf": "0x1400bb680",
+      "bytes": "c20000",
+      "instructions": [
+        "ret 0"
+      ],
+      "victimDeliveries": [],
+      "meaning": "normal contact caller builds350 packet then virtual790 emits no damage; chain bypasses this hook"
+    }
+  ]
+}

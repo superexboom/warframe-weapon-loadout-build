@@ -1522,7 +1522,8 @@
           "excludeFlatSources": [],
           "source": "native attached target weapon+820",
           "callerBase": "fully-source-built-current-EmbedAttack-base-before-victim"
-        }
+        },
+        "takes_victim_stack_damage": true
       },
       "compression": {
         "effectiveness": 1.0,
@@ -1955,7 +1956,8 @@
               "source": "native ordinary source impact->141300a00->14113e250; parent-mode base query",
               "parentBase": 187,
               "childBase": 49
-            }
+            },
+            "takes_victim_stack_damage": true
           },
           "radial": {
             "damage": {
@@ -2139,7 +2141,8 @@
             "nativeSource": "/Lotus/Weapons/Grineer/LongGuns/GrnCannon/GrnCannonClusterMiniProjectile",
             "nativeMultishotSourceSha256": "f57e28a68a438ff1d3709efe60e1158f069030fc3af2d10eb22f2bbfdfc6021e",
             "impact_delay_seconds": 0.0,
-            "takes_victim_crit": true
+            "takes_victim_crit": true,
+            "takes_victim_stack_damage": true
           },
           "radial": {
             "damage": {
@@ -2551,7 +2554,13 @@
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
           "multishotSource": "one radial event per spawned projectile",
-          "referenceTakesMultishot": false
+          "referenceTakesMultishot": false,
+          "previousReferenceDelaySeconds": 0.0,
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "contact-explicit-target",
+          "native_event_delay_seconds": 0.0
         },
         {
           "damage": {
@@ -2566,12 +2575,19 @@
           "forced_procs": [],
           "takes_multishot": true,
           "takes_blast_radius_mods": true,
-          "impact_delay_seconds": 1.3,
+          "impact_delay_seconds": 1.4125,
           "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/PrismaLenz/PrismaLenzArrow",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "reference-confirmed-native-default",
           "multishotSource": "one radial event per spawned projectile",
-          "referenceTakesMultishot": false
+          "referenceTakesMultishot": false,
+          "previousReferenceDelaySeconds": 1.3,
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "embed-death-explicit-target",
+          "native_event_delay_seconds": 1.4125,
+          "liveSourceDamageAtImpact": true
         }
       ],
       "packageBuild": "2026.09.22.16.46",
@@ -2611,7 +2627,10 @@
       ],
       "bow": true,
       "drawSeconds": 0.80000001,
-      "allowIncarnon": false
+      "allowIncarnon": false,
+      "unmodeled": [
+        "embedded-death-native-jitter-mean-delay-assumed"
+      ]
     },
     "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncher": {
       "name": "Tenet Envoy",
@@ -2763,7 +2782,13 @@
           "nativeField": "ExplosiveAttack",
           "damageTypeSource": "native-explicit",
           "multishotSource": "one radial event per spawned projectile",
-          "referenceTakesMultishot": false
+          "referenceTakesMultishot": false,
+          "previousReferenceDelaySeconds": 0.0,
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "contact-explicit-target",
+          "native_event_delay_seconds": 0.0
         },
         {
           "damage": {
@@ -2778,12 +2803,19 @@
           "forced_procs": [],
           "takes_multishot": true,
           "takes_blast_radius_mods": true,
-          "impact_delay_seconds": 1.3,
+          "impact_delay_seconds": 1.4125,
           "nativeSource": "/Lotus/Weapons/Corpus/Bow/Longbow/CrpBowArrow",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "reference-confirmed-native-default",
           "multishotSource": "one radial event per spawned projectile",
-          "referenceTakesMultishot": false
+          "referenceTakesMultishot": false,
+          "previousReferenceDelaySeconds": 1.3,
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "embed-death-explicit-target",
+          "native_event_delay_seconds": 1.4125,
+          "liveSourceDamageAtImpact": true
         }
       ],
       "packageBuild": "2026.09.22.16.46",
@@ -2816,7 +2848,10 @@
       },
       "bow": true,
       "drawSeconds": 1.2,
-      "allowIncarnon": false
+      "allowIncarnon": false,
+      "unmodeled": [
+        "embedded-death-native-jitter-mean-delay-assumed"
+      ]
     },
     "/Lotus/Weapons/Corpus/LongGuns/CrpRubanRifle/CrpRubanRifle": {
       "modes": {
@@ -4322,17 +4357,15 @@
             ]
           },
           "unmodeled": [
-            "scourge-prime-stopped-embedded-script-payload-unmodeled",
-            "scourge-prime-contact-geometry-and-source-snapshot-unverified",
             "scourge-prime-throw-reload-rethrow-input-policy-idealized",
             "scourge-prime-accepted-contact-flight-geometry-idealized",
-            "scourge-prime-main55-CO-weakpoint-events-neutral-fallback-unverified",
             "scourge-prime-pickup-recall-shortcuts-and-animation-interruption-unmodeled",
-            "scourge-prime-old-spear-deferred-die-and-embedded-damage-excluded"
+            "scourge-prime-original-surviving-host-attachment-policy",
+            "scourge-prime-contact-main55-body-geometry-policy"
           ],
           "name": "Scourge Prime",
           "fireMode": 1,
-          "scope": "one physical spear; single main55 at accepted contact; explicit throw-reload-rethrow policy",
+          "scope": "one physical spear; contact55 followed by native attached50 every1s on original surviving host; explicit throw-reload-rethrow policy",
           "radials": [
             {
               "damage": {
@@ -4374,8 +4407,10 @@
                 "weakpointCriticalAndKillEvents": "neutral-pending-proof",
                 "recipient": "target at explosion centre assumed",
                 "flightAndCollisionTiming": "immediate at idealized accepted contact; no expiry or embed55 added",
-                "cadence": "explicit repeated throw then ordinary reload then next charge; prefire MaxNumProjectiles evicts previous spear"
+                "cadence": "explicit repeated throw/refire/reload then next trigger; prefire cancels previous spear embed delegate"
               },
+              "takes_victim_crit": true,
+              "directRecipientHitType": "DHT_PROJECTILE",
               "activationEvidence": {
                 "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
                 "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
@@ -4474,10 +4509,7 @@
                   "scourge-prime-contact-geometry-and-source-snapshot-unverified",
                   "scourge-prime-main55-CO-weakpoint-events-unverified"
                 ]
-              },
-              "takes_victim_crit": true,
-              "directRecipientHitType": "DHT_PROJECTILE",
-              "victimCritEvidence": "actual target event overwritten by Projectile+c24=2 at140f36343..34a after common conversion; base ctor140fbacf5; ordinary source mask0x0e; source area plan is independent"
+              }
             }
           ],
           "behaviourSource": "Behaviors[1]",
@@ -4664,17 +4696,20 @@
             "limits": [
               "scourge-prime-throw-reload-rethrow-input-policy-idealized",
               "scourge-prime-accepted-contact-flight-geometry-idealized",
-              "scourge-prime-stopped-embedded-script-payload-unmodeled",
               "scourge-prime-main55-CO-weakpoint-events-neutral-fallback-unverified",
               "scourge-prime-pickup-recall-shortcuts-and-animation-interruption-unmodeled",
-              "scourge-prime-old-spear-deferred-die-and-embedded-damage-excluded"
+              "scourge-prime-original-surviving-host-attachment-policy"
             ],
             "prefire": "actual SpearState+d0141498140 calls selected+318140fbc360 when r8b1, then continues141330f10",
             "maxEnforcement": "140fbc428..445 counts local+58/8 plus replica+1b8/8 against+68; when occupied,140fbc490..49e dispatchesold14124eac0 ->+418;140fbc4aa..4b0 updates tracking. Actual Bolto418140414330 checks embedded8e1, not ScriptsPreventDestruction1589. Nonembedded8e10/15891 executes direct+560 Die; embedded8e11 with active script1e0 uses1402e1be0->14050b8c0 to schedule plainDie140273d98/pendingc34. Both continue original prefire141330f10. The two-field control matrix executes both1589 values",
             "destructionFieldBinding": "ScriptsPreventDestruction:serializer140da2aec..140da2b09 bindsProjectile+1589; embedded marker+8e1 is a separate runtime state",
             "removal": "actual+300141050a70 indexesprojectilef88 and compares current handle target to callback projectile at141050add; mismatchjne141050af5 skipsnull+dec. Match calls140154520 and141050ae9 decrementsactive108. Original full suffix1415e7d70 appendsindex to118 removalqueue; local-slot reuse/duplicate safety verified, remote queue receiver ordering not emulated",
             "hideRestore": "SpearState+1f814026b2c0 dispatches140612180/140afd1d0; those readHideAttach+1a8, set/clearhidden1a4 and hide/showattachments",
-            "reload": "hidden1a4 andReloadAfterEveryShot1a5 interceptstate1681402d4e10 ->state8; emitscontroller0x79 withweapon+2d0 reload duration. Normal reload completion remains existing animation-duration abstraction"
+            "reload": "hidden1a4 andReloadAfterEveryShot1a5 interceptstate1681402d4e10 ->state8; emitscontroller0x79 withweapon+2d0 reload duration. Normal reload completion remains existing animation-duration abstraction",
+            "embedClock": "Bolto+738140f25fa0 ->140c3ecb0 calls140297cf0 immediately then deduplicated1s delegate; radius0 builder140a58cb0 suppliesDOT7 and final retainedcrit140ede780; SC365 uses independent.05",
+            "embedSourceReplacement": "next trigger prefire141498140 ->140fbc360 ->old+418140414330 ->1402e1be0 removesDoEmbedDamage140297cf0 via1417d6e70 immediately before deferredDie; independent inflicted statuses survive source removal",
+            "embedEvents": "DOT7 skipsCO/weakpoint/victimcrit/flattyped265; actual victim340 authority1412dd461->141375771->1416a6207->14179b840 accepts genericOnHit/OnCrit on own nonzero/critical packet; no sourceSendEvents gate",
+            "embedScript": "OnPriestSpearEmbed only pickup/source ownership; UpdateAttractor managesHEAD bullet attractors, no independent DamageInfo payload"
           },
           "nativeCharge": null,
           "nativeSpearThrowCycle": {
@@ -4692,6 +4727,37 @@
               "pickup-shortcut",
               "manual-recall-shortcut"
             ]
+          },
+          "attachedTicks": {
+            "damage": {
+              "DT_IMPACT": 35.0,
+              "DT_PUNCTURE": 5.0,
+              "DT_SLASH": 10.0
+            },
+            "status_chance": 0.050000001,
+            "crit_chance": 0.1,
+            "crit_multiplier": 2.0,
+            "takes_multishot": false,
+            "tick_rate": 1.0,
+            "duration_seconds": 10.0,
+            "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
+            "nativeField": "EmbedAttack",
+            "nativeRoute": "zero-radius-embed",
+            "native_event_delay_seconds": 0.0,
+            "takes_victim_crit": false,
+            "takes_condition_overload": false,
+            "sourceDestroyOnNextFire": true,
+            "sourceHitType": "DHT_DOT",
+            "excludesTypedFlat": true,
+            "forcedProcs": [],
+            "genericHitEvent": true,
+            "genericCritEvent": true,
+            "headshotEligible": false,
+            "sourceCritPolicy": "retained-launch-crit",
+            "sourceQueryPolicy": "current-damage-and-status",
+            "recipientPolicy": "original-surviving-physically-attached-victim",
+            "packetOrder": "contact300-main55-immediate50-then-1s",
+            "provenance": "source-context/scourge/NOTES.md; EXE/Packages SHA pinned by nativeEvidence"
           }
         }
       },
@@ -6881,20 +6947,10 @@
             "duplicateExpiryCounterfactual": "Native Die+c1d guard suppresses a repeated death callback, but manually repeated DieOfOldAge still emits another radial; scheduler once gate is essential",
             "crit": "140f36187..36198 calls140ede780 after radial selector to copy+combine Projectile+538/+570 CC/CD; plan118/11c are not crit proof",
             "limits": [
-              "grimoire-alt-launch-expiry-recipient-position-unmodeled",
-              "grimoire-alt-chain-target-reselection-and-recursive-geometry-unmodeled",
-              "grimoire-alt-direct-contact-repeat-lifecycle-unverified",
-              "grimoire-alt-single-orb-ms-to-chain-budget-routing-unmodeled",
-              "grimoire-alt-chain-source-buffs-CO-and-events-unverified"
+              "explicit original-target coverage window and expiry centre distance"
             ]
           },
-          "unmodeled": [
-            "grimoire-alt-launch-expiry-recipient-position-unmodeled",
-            "grimoire-alt-chain-target-reselection-and-recursive-geometry-unmodeled",
-            "grimoire-alt-direct-contact-repeat-lifecycle-unverified",
-            "grimoire-alt-single-orb-ms-to-chain-budget-routing-unmodeled",
-            "grimoire-alt-chain-source-buffs-CO-and-events-unverified"
-          ],
+          "unmodeled": [],
           "nativeFireCooldownSeconds": 45.0,
           "nativeFireGate": {
             "kind": "instant-overheat",
@@ -6942,6 +6998,116 @@
             "ready": "actual leaf140a10c10..c29 returns abs(remaining+d0)<=native epsilon; no unwind-boundary inference",
             "charge": "140fbc71f..77c AddingChargesReducesOverheat loops weapon behaviors via1401f7de0 ->full14022a920;14022a9af..9ba subtracts ReduceOverheatAmount+d8 and clamps0;MaxCharges0 does not bypass this loop",
             "eventBoundary": "Exact AddCharges PRIMARY_DIRECT_HIT NumCharges1 source; accepted event dispatch count, misses, chain/tick recipients are not assumed to be primary events"
+          },
+          "noDirectContact": true,
+          "grimoireSourceContract": {
+            "nativeSource": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireAltProj",
+            "nativeField": "AttackData",
+            "sourceKind": "grimoire-single-occupant",
+            "sourceRawAttributesSha256": "a384ff36bc51b96972d82f317e6258ff1f7bf52b0f1754b082437cdb979401ac",
+            "noDirectContact": true,
+            "spawnedOrbs": 1,
+            "sourceAmount": 350.0,
+            "chainDamageMultiplier": 0.80000001,
+            "attackIntervalSeconds": 1.0,
+            "lifetimeSeconds": 6.0,
+            "rootRecipientCap": 1,
+            "takesConditionOverload": false,
+            "takesColdStackDamage": false,
+            "sourceUpgradeTiming": "current-damage-elements-status-retained-launch-crit",
+            "settings": {
+              "strategy": "grimoireStrategy",
+              "selected": "single-occupant",
+              "coverage": "grimoireCoverageSeconds",
+              "coverageDefaultSeconds": 3.0,
+              "coverageRange": [
+                0.0,
+                6.0
+              ],
+              "expiryDistance": "grimoireExpiryDistance",
+              "expiryDistanceRange": [
+                0.0,
+                6.0
+              ],
+              "defaultCoverage": "off"
+            },
+            "chain": {
+              "nativeField": "AttackData",
+              "nativeRoute": "player-chain-selected-avatar",
+              "nativeHitType": 2,
+              "genericHit": true,
+              "genericCrit": true,
+              "takesVictimCrit": true,
+              "forcedProcs": [
+                "PT_ELECTROCUTION"
+              ]
+            },
+            "expiry": {
+              "nativeField": "ExplosiveAttack",
+              "nativeRoute": "launch-expiry-region",
+              "nativeHitType": 4,
+              "sourceAmount": 250.0,
+              "radiusMeters": 6.0,
+              "falloff": 0.80000001,
+              "genericHit": true,
+              "genericCrit": true,
+              "takesVictimCrit": false
+            },
+            "evidence": {
+              "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+              "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+              "nativeSources": [
+                {
+                  "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+                  "parent": "/Lotus/Weapons/Tenno/Pistol/LotusGrimoire",
+                  "rawAttributesSha256": "1e95522336887a989dfe376263e394f5d4e4713658e6a37c485b7d498ea0fd2c",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/Pistol/LotusGrimoire",
+                  "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+                  "rawAttributesSha256": "f64b74e200709cd9c855552a9f547f366c50a1f0fe94e13449e067a930ab7e35",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+                  "parent": "",
+                  "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireAltProj",
+                  "parent": "/EE/Types/Game/PlayerChainingProjectile",
+                  "rawAttributesSha256": "a384ff36bc51b96972d82f317e6258ff1f7bf52b0f1754b082437cdb979401ac",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/EE/Types/Game/PlayerChainingProjectile",
+                  "parent": "",
+                  "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "attributeRecord": false
+                }
+              ],
+              "classTable": "PlayerChainingProjectile0x1423910d0; update+220140239ff0/+230140c02280 ->140d7fc60; Die+5601413556f0 ->1405ac4a0",
+              "singleOrb": "fire IgnoreFireIterations at +0x148 = 1 causes full native 0x140f75d20 to return raw count at +0x28 = 1 without weapon multishot query",
+              "chainBudgets": "140d7fd38..da0 queries weapon+6e0 for MaxTargetsPerAttack3;140d7ff87..d80086 queries same modifier for MaxChainDepth2 and rounds; multishot is not additional orbs",
+              "cooldown": "TimeBetweenAttacks->Projectile+1770; native140d7fcb7..fd06 decrements+1774 then gates new attack;141693034..305c arms+1774 when target-selection phase proceeds",
+              "perAttackDedup": "140d7fd14..33 calls1401bc7d0 to clear+1798 list at each new attack;140ccd260..d32d excludes candidates in that list;1416932a8..2db appends selected target before recursive14169333a",
+              "chainAmount": "140d7fdb4..fde8 builds source AttackData350 via projectile+628;141693108..3123 multiplies copied packet amount by ChainDamageMultiplier+.1768=.80000001 (about280) for selected chain recipient",
+              "chainRole": "141693283 calls140907cb0; packet target handle+170 and projectile source must be native avatars; authoritative target+340 or local target+348 receives current packet;140cc8cd0 separately manages chain visual beam slot",
+              "expirySchedule": "actual projectile+780140f874b0 suffix140f88871..88981 ->140dd80d0 MaxLife6+variance0; ExplodeOnLifeExpired1 selects1409a8700 DieOfOldAge callback, scheduled once by+639",
+              "expiryEmit": "1409a8700 calls class Die first; death callback140163b01 with16d61/c250 suppresses its radial;1409a8730..8785 explicitly emits+7b8 once per invoked expiry callback; common+630 selects ExplosiveAttack250",
+              "duplicateExpiryCounterfactual": "Native Die+c1d guard suppresses a repeated death callback, but manually repeated DieOfOldAge still emits another radial; scheduler once gate is essential",
+              "crit": "140f36187..36198 calls140ede780 after radial selector to copy+combine Projectile+538/+570 CC/CD; plan118/11c are not crit proof",
+              "limits": [
+                "grimoire-alt-select-coverage-strategy"
+              ],
+              "contact": "actual PlayerChainingProjectile1423910d0+790=1400bb680, bytesc20000 ret0; contact350 is constructed but not submitted",
+              "chainQualification": "defaultPROJECTILE2;140907cb0 selected-avatar340/348; ordinary source has no790/818/820 and no victim-side259/261",
+              "sourceTiming": "current ordinary damage/elements/status each attack; retain projectile538/570 crit and context caches",
+              "recipientPolicy": "fixed original recipient; explicit eligible window fromlaunch; no successor rebind; optional final expiry distance",
+              "followthroughEvidence": "docs/projectile-qualification-20261030/GRIMOIRE.md"
+            }
           }
         }
       }
@@ -7065,7 +7231,8 @@
             "nativeSource": "/Lotus/Weapons/Grineer/Pistols/GrnTorpedoPistol/GrnTorpedoClusterProjectile",
             "nativeMultishotSourceSha256": "4d31a51f58195c5d57bb6be61e89736f353a96186db392de38901dd416e497fd",
             "impact_delay_seconds": 0.0,
-            "takes_victim_crit": true
+            "takes_victim_crit": true,
+            "takes_victim_stack_damage": true
           },
           "radial": {
             "damage": {
@@ -7874,11 +8041,18 @@
           "forced_procs": [],
           "takes_multishot": true,
           "takes_blast_radius_mods": true,
-          "impact_delay_seconds": 0.89999998,
+          "impact_delay_seconds": 1.0124999799999999,
           "nativeSource": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/CodaSporothixProjectile",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "native-per-type",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "reference takes_multishot",
+          "previousReferenceDelaySeconds": 0.89999998,
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "embed-death-explicit-target",
+          "native_event_delay_seconds": 1.0124999799999999,
+          "liveSourceDamageAtImpact": true
         }
       ],
       "nativeSources": [
@@ -7891,7 +8065,10 @@
           "sha256": "7ad5cb5b3d04295fd9a30a458e777ad641a098b38c18d3a711c2a566b9eb0071"
         }
       ],
-      "generatedBy": "tools/import_projectile_components.py"
+      "generatedBy": "tools/import_projectile_components.py",
+      "unmodeled": [
+        "embedded-death-native-jitter-mean-delay-assumed"
+      ]
     },
     "/Lotus/Weapons/Tenno/LongGuns/TnHeavyShotgun/TnHeavyShotgunGun": {
       "modes": {
@@ -8194,7 +8371,8 @@
             "nativeSource": "/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarrClusterMiniProjectile",
             "nativeMultishotSourceSha256": "68043f0d15b60ccd0bf0683b3ea8a4b7f97c280a3872a471dff68b6eb9158957",
             "impact_delay_seconds": 0.0,
-            "takes_victim_crit": true
+            "takes_victim_crit": true,
+            "takes_victim_stack_damage": true
           },
           "radial": {
             "damage": {
@@ -8270,11 +8448,18 @@
           "forced_procs": [],
           "takes_multishot": true,
           "takes_blast_radius_mods": true,
-          "impact_delay_seconds": 0.89999998,
+          "impact_delay_seconds": 1.0124999799999999,
           "nativeSource": "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifleProjectile",
           "nativeField": "EmbedDeathAttack",
           "damageTypeSource": "native-per-type",
-          "multishotSource": "reference takes_multishot"
+          "multishotSource": "reference takes_multishot",
+          "previousReferenceDelaySeconds": 0.89999998,
+          "takes_victim_crit": true,
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "nativeRoute": "embed-death-explicit-target",
+          "native_event_delay_seconds": 1.0124999799999999,
+          "liveSourceDamageAtImpact": true
         }
       ],
       "nativeSources": [
@@ -8287,7 +8472,10 @@
           "sha256": "6f2c04d50573b036d97bff63da03f6c9b835c73c89306ed330dc4f64ac0975c4"
         }
       ],
-      "generatedBy": "tools/import_projectile_components.py"
+      "generatedBy": "tools/import_projectile_components.py",
+      "unmodeled": [
+        "embedded-death-native-jitter-mean-delay-assumed"
+      ]
     },
     "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra": {
       "modes": {
@@ -8598,7 +8786,8 @@
           "excludeFlatSources": [],
           "source": "native attached target weapon+818-success",
           "callerBase": "source-mode-projectile-base55-with-native-source-base-hooks"
-        }
+        },
+        "takes_victim_stack_damage": true
       },
       "lingeringSource": {
         "reference": "data/weapons/secondary/coda_pox.yaml",
@@ -8655,7 +8844,8 @@
           "excludeFlatSources": [],
           "source": "native attached target weapon+818-success",
           "callerBase": "source-mode-projectile-base50-with-native-source-base-hooks"
-        }
+        },
+        "takes_victim_stack_damage": true
       },
       "lingeringSource": {
         "reference": "data/weapons/secondary/pox.yaml",
@@ -9345,19 +9535,23 @@
               "takes_blast_radius_mods": true,
               "impact_delay_seconds": 0.0,
               "nativeSource": "/Lotus/Weapons/Corpus/LongGuns/CrpSentExperimentRifle/CrpSentExperimentRifle",
-              "nativeField": "Behaviors[1].impact.RadialDamage",
+              "nativeField": "RadialDamage",
               "damageTypeSource": "native-per-type",
               "multishotSource": "native one 208-damage radial packet per accepted ray collision; MultiShotBuffsRadialDamage=false prevents a second per-packet multishot factor",
               "perPacketTakesMultishot": false,
-              "takes_condition_overload": false,
-              "conditionOverloadSource": "existing-model-policy-unverified-not-native-proof"
+              "takes_condition_overload": true,
+              "conditionOverloadSource": "existing-model-policy-unverified-not-native-proof",
+              "takes_victim_crit": false,
+              "takes_victim_stack_damage": true,
+              "coProfile": {
+                "behavior": "additive_with_base_damage",
+                "baseFraction": 1,
+                "excludeFlatSources": []
+              }
             }
           ],
           "unmodeled": [
-            "battacor-radial-hit-arcane-dispatch-unverified",
-            "battacor-radial-condition-overload-routing-unverified",
-            "battacor-first-charge-dynamic-buff-snapshot-timing-unverified",
-            "battacor-primary-dot-charge-during-alt-windup-unmodeled"
+            "battacor-ray-hit-avatar-radial-CO-miss-bystanders-excluded"
           ],
           "nativeSources": [
             {
@@ -9625,7 +9819,8 @@
                     "baseFraction": 1.0,
                     "excludeFlatSources": []
                   },
-                  "native_event_delay_seconds": 0.0
+                  "native_event_delay_seconds": 0.0,
+                  "takes_victim_stack_damage": true
                 },
                 {
                   "damage": {
@@ -9680,7 +9875,8 @@
                     "baseFraction": 1.0,
                     "excludeFlatSources": []
                   },
-                  "native_event_delay_seconds": 0.0
+                  "native_event_delay_seconds": 0.0,
+                  "takes_victim_stack_damage": true
                 },
                 {
                   "damage": {
@@ -9922,7 +10118,8 @@
                     "baseFraction": 1.0,
                     "excludeFlatSources": []
                   },
-                  "native_event_delay_seconds": 0.0
+                  "native_event_delay_seconds": 0.0,
+                  "takes_victim_stack_damage": true
                 },
                 {
                   "damage": {
@@ -9977,7 +10174,8 @@
                     "baseFraction": 1.0,
                     "excludeFlatSources": []
                   },
-                  "native_event_delay_seconds": 0.0
+                  "native_event_delay_seconds": 0.0,
+                  "takes_victim_stack_damage": true
                 },
                 {
                   "damage": {
@@ -10181,7 +10379,18 @@
               "forcedProcs": [],
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
-              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj"
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+              "takes_victim_crit": true,
+              "takes_condition_overload": true,
+              "takes_victim_stack_damage": true,
+              "coProfile": {
+                "behavior": "independent",
+                "baseFraction": 1,
+                "excludeFlatSources": []
+              },
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0
             },
             "radial": {
               "damage": {
@@ -10198,7 +10407,9 @@
               "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedBlastProj",
               "nativeField": "ExplosiveAttack",
               "impact_delay_seconds": 0.0,
-              "forcedProcs": []
+              "forcedProcs": [],
+              "takes_victim_crit": true,
+              "takes_victim_stack_damage": false
             }
           },
           {
@@ -10212,7 +10423,18 @@
               "forcedProcs": [],
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
-              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj"
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+              "takes_victim_crit": true,
+              "takes_condition_overload": true,
+              "takes_victim_stack_damage": true,
+              "coProfile": {
+                "behavior": "independent",
+                "baseFraction": 1,
+                "excludeFlatSources": []
+              },
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0
             },
             "radial": {
               "damage": {
@@ -10229,7 +10451,9 @@
               "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedCorrosiveProj",
               "nativeField": "ExplosiveAttack",
               "impact_delay_seconds": 0.0,
-              "forcedProcs": []
+              "forcedProcs": [],
+              "takes_victim_crit": true,
+              "takes_victim_stack_damage": false
             }
           },
           {
@@ -10243,7 +10467,18 @@
               "forcedProcs": [],
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
-              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj"
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+              "takes_victim_crit": true,
+              "takes_condition_overload": true,
+              "takes_victim_stack_damage": true,
+              "coProfile": {
+                "behavior": "independent",
+                "baseFraction": 1,
+                "excludeFlatSources": []
+              },
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0
             },
             "radial": {
               "damage": {
@@ -10260,7 +10495,9 @@
               "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedGasProj",
               "nativeField": "ExplosiveAttack",
               "impact_delay_seconds": 0.0,
-              "forcedProcs": []
+              "forcedProcs": [],
+              "takes_victim_crit": true,
+              "takes_victim_stack_damage": false
             }
           },
           {
@@ -10274,7 +10511,18 @@
               "forcedProcs": [],
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
-              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj"
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+              "takes_victim_crit": true,
+              "takes_condition_overload": true,
+              "takes_victim_stack_damage": true,
+              "coProfile": {
+                "behavior": "independent",
+                "baseFraction": 1,
+                "excludeFlatSources": []
+              },
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0
             },
             "radial": {
               "damage": {
@@ -10291,7 +10539,9 @@
               "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedMagneticProj",
               "nativeField": "ExplosiveAttack",
               "impact_delay_seconds": 0.0,
-              "forcedProcs": []
+              "forcedProcs": [],
+              "takes_victim_crit": true,
+              "takes_victim_stack_damage": false
             }
           },
           {
@@ -10305,7 +10555,18 @@
               "forcedProcs": [],
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
-              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj"
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+              "takes_victim_crit": true,
+              "takes_condition_overload": true,
+              "takes_victim_stack_damage": true,
+              "coProfile": {
+                "behavior": "independent",
+                "baseFraction": 1,
+                "excludeFlatSources": []
+              },
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0
             },
             "radial": {
               "damage": {
@@ -10322,7 +10583,9 @@
               "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedRadiationProj",
               "nativeField": "ExplosiveAttack",
               "impact_delay_seconds": 0.0,
-              "forcedProcs": []
+              "forcedProcs": [],
+              "takes_victim_crit": true,
+              "takes_victim_stack_damage": false
             }
           },
           {
@@ -10336,7 +10599,18 @@
               "forcedProcs": [],
               "critChance": 0.1,
               "critMultiplier": 2.9000001,
-              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj"
+              "projectile": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
+              "takes_victim_crit": true,
+              "takes_condition_overload": true,
+              "takes_victim_stack_damage": true,
+              "coProfile": {
+                "behavior": "independent",
+                "baseFraction": 1,
+                "excludeFlatSources": []
+              },
+              "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
+              "nativeField": "AttackData",
+              "impact_delay_seconds": 0.0
             },
             "radial": {
               "damage": {
@@ -10353,16 +10627,17 @@
               "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/NokkoArchGun/NokkoArchGunGuidedViralProj",
               "nativeField": "ExplosiveAttack",
               "impact_delay_seconds": 0.0,
-              "forcedProcs": []
+              "forcedProcs": [],
+              "takes_victim_crit": true,
+              "takes_victim_stack_damage": false
             }
           }
         ]
       },
       "unmodeled": [
         "arbucep-projectile-contact-and-radial-centre-coverage-idealized",
-        "arbucep-packet-condition-overload-neutral-pending-routing",
-        "arbucep-packet-weakpoint-events-neutral-pending-routing",
-        "arbucep-innate-mushroom-and-ammo-deco-script-unmodeled"
+        "arbucep-innate-mushroom-and-ammo-deco-script-unmodeled",
+        "arbucep-body-contact-explicit-target-packets-no-head-events"
       ],
       "nativeSources": [
         {

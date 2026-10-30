@@ -476,6 +476,10 @@ impl HeatChains {
     }
 
     pub fn add(&mut self, t: f64, absence: f64, n: f64, seed: f64, duration: f64, scale: f64) {
+        self.add_source(t, absence, n, seed, duration, scale, false);
+    }
+
+    pub fn add_source(&mut self, t: f64, absence: f64, n: f64, seed: f64, duration: f64, scale: f64, refresh_only: bool) {
         self.expire(t);
         let a = pmin(1.0, pmax(0.0, absence));
         let p = 1.0 - a;
@@ -513,8 +517,8 @@ impl HeatChains {
         let mut young: FMap = self.young.iter().map(|(k, v)| (*k, p * *v * g)).collect();
         let kt = fkey(t);
         let prev = *young.get(&kt).unwrap_or(&0.0);
-        young.insert(kt, prev + p * pmax(0.0, 1.0 - alive));
-        let v0 = p;
+        if !refresh_only { young.insert(kt, prev + p * pmax(0.0, 1.0 - alive)); }
+        let v0 = if refresh_only { p * alive } else { p };
         let v1 = p * self.stacks * g + n;
         let v2 = p * self.seeds * g + seed;
         let v4 = p * self.mature * g;

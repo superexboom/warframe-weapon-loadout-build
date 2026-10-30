@@ -33,7 +33,7 @@ _UNSUPPORTED_COMBAT = (
 
 
 def supported(stats, options) -> bool:
-    if not ENABLED or options.get("collect_timeline", True):
+    if not ENABLED or not getattr(wfcore,"NATIVE_TYPE_QUANTIZATION",0) or options.get("collect_timeline", True):
         return False
     draw = options.get("weak_draw")
     if draw is not None and not callable(getattr(draw, "native_spec", None)):
@@ -58,11 +58,19 @@ def supported(stats, options) -> bool:
         return False
     if combat.get('cycle') and not getattr(wfcore, 'RELOAD_SCALED_TRANSFORMS', 0):
         return False
+    if (combat.get('cycle') or {}).get('sourceModeKillChargeTrue') and not getattr(wfcore,'SOURCE_MODE_KILL_CHARGE',0):
+        return False
     if (combat.get('cycle') or {}).get('chargeBeforeFire') and not getattr(wfcore, 'KILL_CHARGED_WINDUP', 0):
         return False
     if (combat.get('delayedRadialEvents') or getattr(stats, 'delayed_radial_hit_event', False)) and getattr(wfcore, 'DELAYED_RADIAL_EVENTS', 0) < 3:
         return False
     if (combat.get('radialCritStatus') or stats.radial_victim_crit) and not getattr(wfcore, 'RADIAL_VICTIM_CRIT', 0):
+        return False
+    if combat.get('victimStackParts') and not getattr(wfcore,'RADIAL_VICTIM_STACKS',0):
+        return False
+    if combat.get('ownedEmbed') and not getattr(wfcore,'SOURCE_OWNED_EMBED',0):
+        return False
+    if combat.get('grimoireStrategy') and not getattr(wfcore,'GRIMOIRE_SELECTED_COVERAGE',0):
         return False
     if combat.get('zymosChildren') and not getattr(wfcore,'ZYMOS_ORDERED_CHILDREN',0):
         return False
@@ -432,7 +440,7 @@ def _projectile_state(state):
 def _cycle_spec(cycle):
     if not cycle:
         return None
-    return {key: cycle.get(key) for key in ('hits', 'enterSeconds', 'exitSeconds', 'pool', 'chargeOn', 'killCharged', 'chargeBeforeFire', 'damageScale')}
+    return {key: cycle.get(key) for key in ('hits', 'enterSeconds', 'exitSeconds', 'pool', 'chargeOn', 'killCharged', 'chargeBeforeFire', 'damageScale', 'sourceModeKillChargeTrue')}
 
 
 def trajectory(
@@ -720,6 +728,7 @@ def trajectory(
         'fullClipCharge': combat.get('fullClipCharge'),
         'quantaStrategy': combat.get('quantaStrategy'),
         'zymosChildren': combat.get('zymosChildren'),
+        'grimoireStrategy':combat.get('grimoireStrategy'),
         'chargeVolley': {'policy':'full-magazine','events':[]} if combat.get('chargeVolley') else None,
         'projectileLifecycle': (dict(zip(('deployed', 'merged', 'explosions', 'singularities', 'childProjectiles'),
                                          core['projectiles'])) if 'projectiles' in core else {}),

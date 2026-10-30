@@ -237,7 +237,10 @@ struct Stats {
     quanta: Option<(f64, f64, f64)>, // primary ammo, primary action time, complete cycle
     zymos: Option<(f64, f64)>, // embed delay, next-frame carrier consumption
     snapshot_enervate: bool,
+    no_enemy_contact: bool,
     contact_shiver: bool,
+    contact_shiver_scale: f64,
+    contact_shiver_fixed: Option<f64>,
     bow_draw: Option<f64>,
     charge_time: f64,
     charge_before_fire: bool,
@@ -260,6 +263,7 @@ struct Stats {
     impact_delay: f64,
     persist_after_kill: bool,
     lingering: Option<(usize, f64, f64)>,
+    owned_embed: Option<(usize,f64,f64)>,
     live_co_unit: Option<usize>,
     source_fields: Vec<(usize,f64,f64,usize)>,
     finite_fields: Vec<(usize,f64,f64,usize)>,
@@ -296,6 +300,7 @@ impl Stats {
         self.full_clip_charge = false;
         self.primary_delay = 0.0;
         self.lingering = None;
+        self.owned_embed=None;
         self.source_fields.clear();
         self.finite_fields.clear();
         self.embedded = None;
@@ -304,7 +309,10 @@ impl Stats {
         self.quanta = None;
         self.zymos = None;
         self.snapshot_enervate = false;
+        self.no_enemy_contact=false;
         self.contact_shiver = false;
+        self.contact_shiver_scale=1.0;
+        self.contact_shiver_fixed=None;
         self.head_only = false;
         self.body_only = false;
         self.impact_delay = 0.0;
@@ -355,7 +363,10 @@ impl Stats {
             quanta: self.quanta,
             zymos: self.zymos,
             snapshot_enervate: self.snapshot_enervate,
+            no_enemy_contact:self.no_enemy_contact,
             contact_shiver: self.contact_shiver,
+            contact_shiver_scale:self.contact_shiver_scale,
+            contact_shiver_fixed:self.contact_shiver_fixed,
             bow_draw: self.bow_draw,
             charge_time: self.charge_time,
             charge_before_fire: self.charge_before_fire,
@@ -377,6 +388,7 @@ impl Stats {
             impact_delay: self.impact_delay,
             persist_after_kill: self.persist_after_kill,
             lingering: self.lingering,
+            owned_embed:self.owned_embed,
             live_co_unit: self.live_co_unit,
             source_fields:self.source_fields.clone(),
             finite_fields:self.finite_fields.clone(),
@@ -440,7 +452,7 @@ enum Kind {
     Blast(usize),
     BlastAll,
     IndependentDot(usize),
-    Dot(D, f64, f64),
+    Dot(D, f64, f64, u8),
     Actor(String),
     Energy(usize),
     Syndicate,
@@ -453,6 +465,7 @@ enum Kind {
     ZymosHit(usize, usize),
     DelayedAttack(usize, f64),
     Lingering(usize),
+    OwnedEmbed(u64,usize),
     SourceField(u64,usize,usize),
     FiniteField(usize,usize),
     EmbeddedTick(usize),
@@ -592,6 +605,7 @@ struct Blast {
     per: f64,
     end: f64,
     hit_probability: f64,
+    origin_mode: u8,
 }
 
 #[derive(Clone)]
@@ -691,11 +705,15 @@ pub struct Replay<'py> {
     presence: FxIndexMap<D, StatusPresence>,
     gas_procs: Vec<usize>,
     dots: Vec<DotInstance>,
+    dot_modes: Vec<u8>,
+    damage_origin: Option<u8>,
     blasts: Vec<Blast>,
     blast_procs: VecDeque<usize>,
     heat_acc: f64,
     heat_token: i64,
     heat_chains: HeatChains,
+    heat_sources: [HeatChains; 2],
+    heat_source_acc: [f64; 2],
     attribution: KillAttribution,
     puncture_strip: f64,
     frozen_until: f64,
@@ -871,8 +889,8 @@ impl<'py> Replay<'py> {
             delayed_attacks, reload_shell_events, derived, selected_incarnon, projectile_sequence_length, projectile_sequence_index, source_field_token, source_field_packets, source_field_activations, finite_field_packets, finite_field_activations, physical_lane_length, physical_lane_phase, physical_lane_selected, lane_stratum, volley_rounds, volley_shot_resume, melee_count, melee_heavy_multiplier,
             melee_last_hit, melee_combo_at, melee_recovery_token, melee_recovery_initial, melee_buff_boundary, melee_pending, melee_index, heavy_flag, no_co_flag, melee_heavy_now,
             affinity_per_kill, affinity, syndicate_ready, syndicate_events, pools, states,
-            pooled, presence, gas_procs, dots, blasts, blast_procs,
-            heat_acc, heat_token, heat_chains, attribution, puncture_strip, frozen_until,
+            pooled, presence, gas_procs, dots, dot_modes, damage_origin, blasts, blast_procs,
+            heat_acc, heat_token, heat_chains, heat_sources, heat_source_acc, attribution, puncture_strip, frozen_until,
             frozen_scale, heap, seq, gen, kills, weak_kill_events,
             weak_draw, weak_index, weak_uncertainty, attacks, stale, first_kill,
             last_kill, min_interval, totals, fortifier, fortifier_damage, fortifier_stolen,
@@ -914,6 +932,7 @@ struct CycleSpec {
     kill_charged: bool,
     charge_before_fire: bool,
     damage_scale: f64,
+    source_mode_charge: bool,
 }
 
 type BurstSpec = (bool, i64, f64, bool);
@@ -1175,6 +1194,9 @@ impl<'py> Replay<'py> {
             frozen_damage_multiplier: f(obj, "frozen_damage_multiplier")?,
             requires_full_ammo,
             quanta,
+            contact_shiver_scale: match opt_attr(obj, "_contact_shiver_scale")? {Some(v)=>v.extract()?,None=>1.0},
+            contact_shiver_fixed: opt_attr(obj,"_contact_shiver_fixed")?.filter(|v|!v.is_none()).map(|v|v.extract::<f64>()).transpose()?,
+            no_enemy_contact:match opt_attr(obj,"_no_enemy_contact")? {Some(v)=>v.is_truthy()?,None=>false},
             contact_shiver: match opt_attr(obj, "_contact_shiver")? { Some(v) => v.is_truthy()?, None => false },
             snapshot_enervate: match opt_attr(obj, "_snapshot_enervate")? { Some(v) => v.is_truthy()?, None => false },
             zymos: match opt_attr(obj, "_zymos_policy")? {
@@ -1216,7 +1238,7 @@ impl<'py> Replay<'py> {
             body_only: match opt_attr(obj, "_body_only")? { Some(v) => v.is_truthy()?, None => false },
             impact_delay: match opt_attr(obj, "_impact_delay")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
             persist_after_kill: match opt_attr(obj, "_persist_after_kill")? { Some(v) => v.is_truthy()?, None => false },
-            lingering: None,live_co_unit:None,source_fields:Vec::new(),finite_fields:Vec::new(),
+            lingering: None,owned_embed:None,live_co_unit:None,source_fields:Vec::new(),finite_fields:Vec::new(),
             embedded: None,
             primary_delay: match opt_attr(obj, "_primary_delay_seconds")? {
                 Some(v) if v.is_truthy()? => v.extract::<f64>()?,
@@ -1307,6 +1329,11 @@ impl<'py> Replay<'py> {
                 let part=self.view(&row.get_item(0)?)?;
                 self.stats[i].source_fields.push((part,row.get_item(1)?.extract()?,row.get_item(2)?.extract()?,row.get_item(3)?.extract()?));
             }
+        }
+        if let Some(field)=opt_attr(obj,"_owned_embed")? {
+            let tuple=field.cast::<PyTuple>()?;
+            let part=self.view(&tuple.get_item(0)?)?;
+            self.stats[i].owned_embed=Some((part,tuple.get_item(1)?.extract()?,tuple.get_item(2)?.extract()?));
         }
         if let Some(field) = opt_attr(obj, "_lingering")? {
             if field.is_truthy()? {
@@ -1793,13 +1820,15 @@ impl<'py> Replay<'py> {
             puncture = 0.0;
             cold = 0.0;
         }
-        let contact_cold = if self.stats[st].contact_shiver { self.count(FREEZE) } else { 0.0 };
+        let contact_shiver=self.stats[st].contact_shiver;
+        let contact_scale=self.stats[st].contact_shiver_scale;
+        let contact_cold = if contact_shiver {self.stats[st].contact_shiver_fixed.unwrap_or_else(||self.count(FREEZE))} else { 0.0 };
         let mut shiver = 1.0;
         let mut frozen = 1.0;
         if ((cold != 0.0 && !radial_only) || contact_cold != 0.0) && (csd != 0.0 || frozen_mult != 1.0) {
-            let stacks_cold = self.count(FREEZE);
+            let stacks_cold = if contact_shiver {contact_cold} else {self.count(FREEZE)};
             if csd != 0.0 && bracket > 0.0 {
-                shiver = (bracket + csd * pmin(stacks_cold, 10.0)) / bracket;
+                shiver = (bracket + csd * pmin(stacks_cold, 10.0) * contact_scale) / bracket;
             }
             if !radial_only && (self.frozen_until > self.current_time || stacks_cold >= 10.0 - 1e-9) {
                 frozen = frozen_mult;
@@ -2355,7 +2384,7 @@ impl<'py> Replay<'py> {
             None => 0.0 + probability,
         });
         for tick in 0..6 {
-            self.push(t + tick as f64, Kind::Dot(ELECTRICITY, per_tick, t + 6.0), Some(self.gen));
+            self.push(t + tick as f64, Kind::Dot(ELECTRICITY, per_tick, t + 6.0, self.damage_origin.unwrap_or(self.form)), Some(self.gen));
         }
         Ok(())
     }
@@ -2519,7 +2548,7 @@ impl<'py> Replay<'py> {
 
     fn die(&mut self, t: f64, weak_kill: f64, weapon_kill: bool, allow_kill_triggers: bool) -> PyResult<()> {
         if let Some(c) = self.cycle {
-            if c.charge_on == 2 && self.form == BASE && weapon_kill {
+            if c.charge_on == 2 && (if c.source_mode_charge { self.damage_origin.unwrap_or(self.form) } else { self.form }) == BASE && weapon_kill {
                 self.gauge = pmin(c.hits, self.gauge + 1.0); // native AddChargeConditions PRIMARY_KILL
             }
         }
@@ -2558,6 +2587,7 @@ impl<'py> Replay<'py> {
         self.blast_procs.clear();
         self.heat_token += 1;
         self.heat_chains.reset();
+        for chain in self.heat_sources.iter_mut() { chain.reset(); }
         self.puncture_strip = 0.0;
         if !allow_kill_triggers { return Ok(()); }
         self.signal("on-kill", t, 1.0);
@@ -2973,6 +3003,13 @@ impl<'py> Replay<'py> {
                 }
                 { let _t = crate::counters::Timer::start(crate::counters::HEAT); self.heat_chains.add(t, absence, n, n * r.seed, duration, scale); }
                 self.heat_acc = r.accumulator;
+                if self.cycle.map(|c|c.source_mode_charge).unwrap_or(false) {
+                    let own=if self.form==BASE {0} else {1};
+                    for i in 0..2 {
+                        self.heat_sources[i].add_source(t,absence,if i==own {n} else {0.0},if i==own {n*r.seed} else {0.0},duration,scale,i!=own);
+                    }
+                    self.heat_source_acc[own]=r.accumulator;
+                }
             } else if let Some(p) = pooled_index(d) {
                 { let _t = crate::counters::Timer::start(crate::counters::POOLED); self.pooled[p].add(t + duration, absence, n); }
             } else {
@@ -3008,6 +3045,7 @@ impl<'py> Replay<'py> {
                         per += r.coefficient;
                     }
                     self.dots.push(DotInstance { dtype: d, per, count: n, end: t + duration, dist: None });
+                    self.dot_modes.push(self.form);
                     let instance = self.dots.len() - 1;
                     if d == GAS {
                         self.states.get_mut(&d).unwrap().pop_back();
@@ -3045,7 +3083,7 @@ impl<'py> Replay<'py> {
                     let kept = pmin(n, room);
                     if kept > 0.0 {
                         let hit_probability = pmin(kept, 1.0 - self.no_status_probability(st, d, aim)?);
-                        self.blasts.push(Blast { count: kept, per, end: t + 1.5 * scale, hit_probability });
+                        self.blasts.push(Blast { count: kept, per, end: t + 1.5 * scale, hit_probability, origin_mode:self.form });
                         let blast = self.blasts.len() - 1;
                         self.blast_procs.push_back(blast);
                         let end = self.blasts[blast].end;
@@ -3512,7 +3550,21 @@ impl<'py> Replay<'py> {
                         let generation = self.gen;
                         let value = self.heat_chains.seed() + self.heat_acc * self.heat_chains.alive();
                         let cv2 = 1.0 / pmax(self.heat_chains.count(), 1e-9);
-                        self.take(&vec![(FIRE, value)], t, DOT, WeakKill::Flag(false), cv2, false)?;
+                        if self.cycle.map(|c|c.source_mode_charge).unwrap_or(false) {
+                            for i in 0..2 {
+                                self.heat_sources[i].expire(t);
+                                let amount=self.heat_sources[i].seed()+self.heat_source_acc[i]*self.heat_sources[i].alive();
+                                if amount>0.0 {
+                                    self.damage_origin=Some(if i==0 {BASE} else {INCARNON});
+                                    let variance=1.0/pmax(self.heat_sources[i].count(),1e-9);
+                                    self.take(&vec![(FIRE,amount)],t,DOT,WeakKill::Flag(false),variance,false)?;
+                                    self.damage_origin=None;
+                                }
+                                if self.gen!=generation {break;}
+                            }
+                        } else {
+                            self.take(&vec![(FIRE, value)], t, DOT, WeakKill::Flag(false), cv2, false)?;
+                        }
                         if self.gen == generation {
                             self.push(t + 1.0, Kind::Heat(token), Some(self.gen));
                         }
@@ -3526,6 +3578,9 @@ impl<'py> Replay<'py> {
                     };
                     let value = psum(affected.iter().map(|&i| self.blasts[i].count * self.blasts[i].per));
                     let procs = psum(affected.iter().map(|&i| self.blasts[i].count));
+                    let origin=if self.cycle.map(|c|c.source_mode_charge).unwrap_or(false) {
+                        affected.last().map(|&i|self.blasts[i].origin_mode)
+                    } else {None};
                     for &i in &affected {
                         self.blasts[i].count = 0.0;
                     }
@@ -3537,7 +3592,9 @@ impl<'py> Replay<'py> {
                         }
                     }
                     if value != 0.0 {
+                        self.damage_origin=origin;
                         self.take(&vec![(EXPLOSION, value)], t, NONDOT, WeakKill::Flag(false), 1.0 / procs, false)?;
+                        self.damage_origin=None;
                         // Only natural expiration is an Enervate hit, not the 10-stack detonation.
                         if let Kind::Blast(i) = event.kind {
                             if let Some(en) = self.enervate.as_mut() {
@@ -3551,13 +3608,17 @@ impl<'py> Replay<'py> {
                     let (count, per, end, d) = (self.dots[i].count, self.dots[i].per, self.dots[i].end, self.dots[i].dtype);
                     if count * alive > 0.0 && t <= end + 1e-9 {
                         let dtype = if d == SLASH { CINEMATIC } else { d };
+                        self.damage_origin=Some(self.dot_modes[i]);
                         self.take(&vec![(dtype, count * alive * per)], t, DOT, WeakKill::Flag(false), 1.0 / count, false)?;
+                        self.damage_origin=None;
                     }
                 }
-                Kind::Dot(d, value, end) => {
+                Kind::Dot(d, value, end, origin) => {
                     if t <= end + 1e-9 {
                         let dtype = if d == SLASH { CINEMATIC } else { d };
+                        self.damage_origin=Some(origin);
                         self.take(&vec![(dtype, value)], t, DOT, WeakKill::Flag(false), 0.0, false)?;
+                        self.damage_origin=None;
                     }
                 }
                 Kind::Actor(ref kind) => {
@@ -3592,10 +3653,14 @@ impl<'py> Replay<'py> {
                         if name == "DT_GAS" || name == "DT_POISON" {
                             let ticks: Vec<i64> = if name == "DT_GAS" { (0..6).collect() } else { (1..7).collect() };
                             for j in ticks {
-                                self.push(t + j as f64, Kind::Dot(d, 500.5, t + 6.0), Some(self.gen));
+                                self.push(t + j as f64, Kind::Dot(d, 500.5, t + 6.0, INCARNON), Some(self.gen));
                             }
                         }
                     }
+                }
+                Kind::OwnedEmbed(token,part)=> {
+                    if token!=self.source_field_token {self.stale+=1;continue;}
+                    self.radial_hit(part,1.0,t,true)?;
                 }
                 Kind::ZymosCarrier(active, parent_weight) => {
                     // The already-queued 953 head packet precedes this event.
@@ -4207,7 +4272,8 @@ impl<'py> Replay<'py> {
                     let generation = self.gen;
                     let finite_fields=self.stats[active].finite_fields.clone();
                     let source_owned_fields=self.stats[active].source_fields.clone();
-                    if !source_owned_fields.is_empty() {self.source_field_token+=1;}
+                    let owned_embed=self.stats[active].owned_embed;
+                    if !source_owned_fields.is_empty() || owned_embed.is_some() {self.source_field_token+=1;}
                     if self.last_burst && self.form == BASE && self.ammo <= 3.0 {
                         active = self.derive(active, 10, 0.0, |v| {
                             v.multishot *= 6.0;
@@ -4278,8 +4344,9 @@ impl<'py> Replay<'py> {
                     self.field_duration_ready = false;
                     let s = &self.stats[active];
                     let quanta = s.quanta;
+                    let no_contact=quanta.is_some() || s.no_enemy_contact;
                     let mut quanta_last_impact = 0.0;
-                    let mut hit_count = if quanta.is_some() { 0.0 } else if s.continuous { 1.0 } else { pmax(s.multishot, 0.0) };
+                    let mut hit_count = if no_contact { 0.0 } else if s.continuous { 1.0 } else { pmax(s.multishot, 0.0) };
                     let radial_only = s.radial_only;
                     let continuous = s.continuous;
                     let mut sniper_factor = 1.0;
@@ -4294,7 +4361,7 @@ impl<'py> Replay<'py> {
                     };
                     self.victim_before = victim;
                     let shot_puncture = if radial_only { 0.0 } else { self.live_crit().0 };
-                    let aim = if radial_only || quanta.is_some() { 0.0 } else { self.head };
+                    let aim = if radial_only || no_contact { 0.0 } else { self.head };
                     let primary_delay = self.stats[active].primary_delay;
                     let stack = self.stats[active].stackable.clone();
                     let mut projectile_wait = 0.0;
@@ -4320,20 +4387,26 @@ impl<'py> Replay<'py> {
                                     v.core.dot_base_damage=v.core.dot_base_damage.map(|x|x*factor);
                                 });
                             }
-                            let key=self.packet(part,0.0)?;
-                            let vector:Vector=self.packets[&key].vector.iter().map(|(d,v)|(*d,v*self.damage_rate_multiplier)).collect();
-                            let cv2=self.spread(part,0.0);
-                            let died=self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)?;
-                            self.noncrit_no_proc_hit(part,0.0,t);
-                            if !died {self.add_procs_scaled(part,0.0,t,key,1.0)?;}
+                            if self.stats[part].delayed_radial_hit_event {
+                                self.radial_hit(part,self.damage_rate_multiplier,t,true)?;
+                            } else {
+                                let key=self.packet(part,0.0)?;
+                                let vector:Vector=self.packets[&key].vector.iter().map(|(d,v)|(*d,v*self.damage_rate_multiplier)).collect();
+                                let cv2=self.spread(part,0.0);
+                                let died=self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)?;
+                                self.noncrit_no_proc_hit(part,0.0,t);
+                                if !died {self.add_procs_scaled(part,0.0,t,key,1.0)?;}
+                                self.signal("on-hit",t,1.0);
+                                let crit=pmin(pmax(self.stats[part].crit_chance*self.stats[part].bodyshot_crit_multiplier,0.0),1.0);
+                                self.signal("on-crit",t,crit);
+                            }
                             self.enervate_hit(part,t,shot_puncture,0.0);
-                            self.signal("on-hit",t,1.0);self.signal("on-body-hit",t,1.0);
-                            let crit=pmin(pmax(self.stats[part].crit_chance*self.stats[part].bodyshot_crit_multiplier,0.0),1.0);
-                            self.signal("on-crit",t,crit);
+                            self.signal("on-body-hit",t,1.0);
                             if self.gen==generation {if let Some(blast)=blast {
                                 let keys:Vec<D>=self.presence.keys().copied().collect();
                                 self.victim_before=keys.into_iter().map(|d|(d,self.presence.get_mut(&d).unwrap().probability(t))).collect();
-                                self.radial_hit(blast,self.damage_rate_multiplier,t,false)?;
+                                let notify=self.stats[blast].delayed_radial_hit_event;
+                                self.radial_hit(blast,self.damage_rate_multiplier,t,notify)?;
                             }}
                         }
                         self.physical_lane_selected=None;
@@ -4372,6 +4445,8 @@ impl<'py> Replay<'py> {
                         self.pending_throws += 1;
                     } else if quanta.is_some() {
                         // The paid primary pulse hits the cube; enemy packets are its delayed radial parts.
+                    } else if no_contact {
+                        // The class contact hook is empty; only issued chain/expiry packets can hit.
                     } else if primary_delay != 0.0 {
                         self.push(t + primary_delay, Kind::DelayedAttack(active, aim), Some(generation));
                     } else {
@@ -4487,6 +4562,13 @@ impl<'py> Replay<'py> {
                             self.radial_hit(part, sniper_factor, t, true)?;
                         }
                     }
+                    if let Some((part,rate,duration))=owned_embed {
+                        if self.gen==generation {
+                            for tick in 0..ceil_i(duration*rate-1e-9).max(0) {
+                                self.push(t+tick as f64/rate,Kind::OwnedEmbed(self.source_field_token,part),Some(generation));
+                            }
+                        }
+                    }
                     if let Some((embed_delay, _)) = self.stats[active].zymos {
                         let parent_weight = self.head * self.stats[active].multishot;
                         if parent_weight > 0.0 {
@@ -4503,7 +4585,7 @@ impl<'py> Replay<'py> {
                             burst_head_probability = 1.0;
                         }
                     }
-                    if quanta.is_none() && self.physical_lane_length==0 && primary_delay == 0.0 && (self.mines.is_none() || self.impact_embed) && stack.is_none() {
+                    if !no_contact && self.physical_lane_length==0 && primary_delay == 0.0 && (self.mines.is_none() || self.impact_embed) && stack.is_none() {
                         self.enervate_hit(active, t, shot_puncture, aim);
                     }
                     if let Some((cost, fire_seconds, _)) = quanta {
@@ -4511,7 +4593,7 @@ impl<'py> Replay<'py> {
                     }
                     self.signal("on-fire", t, 1.0);
                     let delayed = primary_delay != 0.0 || (self.mines.is_some() && !self.impact_embed) || stack.is_some();
-                    let through = if quanta.is_some() { 0.0 } else { self.punchthrough };
+                    let through = if no_contact { 0.0 } else { self.punchthrough };
                     if through != 0.0 {
                         self.signal("on-punchthrough", t, through);
                         if self.form == BASE || !self.selected_incarnon {
@@ -4531,7 +4613,7 @@ impl<'py> Replay<'py> {
                             }
                         }
                     }
-                    if quanta.is_none() && !delayed && self.physical_lane_length==0 {
+                    if !no_contact && !delayed && self.physical_lane_length==0 {
                     self.signal("on-hit", t, hit_count);
                     if aim < 1.0 {
                         self.signal("on-body-hit", t, (1.0 - aim) * hit_count);
@@ -4575,7 +4657,7 @@ impl<'py> Replay<'py> {
                     }
                     let magazine_now = self.stats[active].magazine;
                     if let Some(restore) = self.restore.clone() {
-                        if quanta.is_none() && (restore.kind == "on-headshot" || restore.kind == "on-hit") && magazine_form {
+                        if !no_contact && (restore.kind == "on-headshot" || restore.kind == "on-hit") && magazine_form {
                             let eligible = match restore.victim_proc_type {
                                 None => 1.0,
                                 Some(d) => self.victim_before.iter().find(|x| x.0 == d).map(|x| x.1).unwrap_or(0.0),
@@ -4900,6 +4982,7 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
             kill_charged: truthy(&d, "killCharged")?,
             charge_before_fire: truthy(&d, "chargeBeforeFire")?,
             damage_scale: get_f(&d, "damageScale", 1.0)?,
+            source_mode_charge: truthy(&d,"sourceModeKillChargeTrue")?,
         }),
         None => None,
     };
@@ -5241,11 +5324,15 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         presence: FxIndexMap::default(),
         gas_procs: Vec::new(),
         dots: Vec::new(),
+        dot_modes: Vec::new(),
+        damage_origin: None,
         blasts: Vec::new(),
         blast_procs: VecDeque::new(),
         heat_acc: 0.0,
         heat_token: 0,
         heat_chains: HeatChains::new(),
+        heat_sources: [HeatChains::new(),HeatChains::new()],
+        heat_source_acc: [0.0;2],
         attribution: KillAttribution::new(
             pmax(1.0, if rate > 0.0 { 1.0 / rate } else { 0.0 }),
             if rate > 0.0 { Some(1.0 / rate) } else { None },
