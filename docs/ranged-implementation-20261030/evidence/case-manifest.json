@@ -108,5 +108,25 @@
     "sourceCase": "root/zymos-target-filter-20261030/creator-order-original-bytes.json",
     "sha256": "bd12f75ec2341ea8733a30847b336332bd7e8fa7dbcab5da2adfbcbcf4388b41",
     "scope": "case snapshot at checkpoint; source defaults, candidate filter, assignment, creator callback; not complete spawn/arrival proof"
+  },
+  "tenet-plinx-hot-cycle-native-results.json": {
+    "sourceCase": "native-payloads/tenet-plinx/hot-cycle-original-byte-results.json",
+    "sha256": "e4374c5c5ef2af9d8ea3476e51e4f3e310a723bbc664369256b964a049b06820",
+    "scope": "native method boundary execution; main tick and concrete flat ADD_BASE consumer still open"
+  },
+  "tenet-plinx-hot-cycle-review.md": {
+    "sourceCase": "native-payloads/tenet-plinx/cadence-provider/READONLY-PROGRESS.md",
+    "sha256": "cab252d69e9d3220d3690cf7a714eaab0e09949a15fce2f93a47b0ccbaaecbb7",
+    "scope": "native method boundary execution; main tick and concrete flat ADD_BASE consumer still open"
+  },
+  "zymos-fresh-create-order.md": {
+    "sourceCase": "root/zymos-target-filter-20261030/CREATE-ORDER-CLOSED.md",
+    "sha256": "5581a6f6f3d0fed51970ae0d37718ff91040b1b8d63eb966914b6197049ff77f",
+    "scope": "fresh allocation order statically traced; ten original-code role/registration/callback cases; pool and actual role admission remain open"
+  },
+  "zymos-create-role-native-results.json": {
+    "sourceCase": "root/zymos-target-filter-20261030/create-order-branches-original-bytes.json",
+    "sha256": "1bd647dcb1d23385802d50e9addd06e09d39d1c56b9d16bbc0c15e64742b708b",
+    "scope": "fresh allocation order statically traced; ten original-code role/registration/callback cases; pool and actual role admission remain open"
   }
 }

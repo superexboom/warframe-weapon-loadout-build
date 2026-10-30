@@ -31,7 +31,9 @@ Tenet Plinx 的弹匣倍乘最初与 CO 快速计算对象不一致：N=10、半
 
 Tenet Plinx 使用静态配装后的整数容量；当前已有的全局弹匣取整与原生 `floor(float32(value)+0.5)` 一致，不把既有取整误报为本批新增。当前策略在射击恢复后等待已配置空电延迟并回满，再开始下一次蓄力。无射速升级、N=10 的控制场景首发约 0.8 秒、次发约 6.1 秒；这是选定策略的时点，不是游戏最大频率结论。
 
-原生空电延迟配置与活动倒计时是两个字段，Lua setter 只改变前者。已确认 reset 发生在 attachment 通知之前，但完整后续 READY／重置顺序仍需继续追踪。固定数值基础伤害 ADD_BASE／SET_BASE 的提供方顺序、蓄力途中变化的临时弹匣容量暂明确拒绝；正常可选 Plinx 武器 MOD 池未发现被该固定基础伤害边界误拒绝的卡。
+原生空电延迟配置与活动倒计时是两个字段，Lua setter 只改变前者。新增原字节验证已执行实际射后分支、状态时长、完整电池 reset handler 和暂停谓词：源 SkipRefireOnEmpty=0 会进入 REFIRE_WAIT7；FIRE1、REFIRE_WAIT7、CHARGE13、FULLY_CHARGED14 均暂停电池计时。重复副射击已配置 3 秒时，射后离开 REFIRE_WAIT 到 READY 保留 3 秒，到 EMPTY 重新置为 3 秒。热态连续时间预算因此为 `0.8/rate + 1/rate + 3/reload + N/regen`，默认 N=10 为 5.3 秒，与当前策略一致。
+
+仍未完整执行 weapon main tick 的调用调度，原生计时又不携带超出的帧时间，所以该验证不把当前策略升级为“已恢复游戏最大频率”。固定数值基础伤害 ADD_BASE／SET_BASE 的具体 consumer、蓄力途中变化的临时弹匣容量暂明确拒绝；正常可选 Plinx 武器 MOD 池未发现被该固定基础伤害边界误拒绝的卡。详见 [Plinx hot-cycle review](evidence/tenet-plinx-hot-cycle-review.md)。
 
 Scourge 的普通 2.2 秒换弹与 1 秒发射间隔在当前策略内保留。原生发射前会请求移除旧矛并继续发射，旧对象的延迟移除通知通过对象身份比较保护复用的槽位。`ScriptsPreventDestruction` 实际位于 +0x1589，+0x8e1 是嵌入状态；这两者已分开验证。空间命中、拾取捷径及远端队列接收时序不在该证明范围内。
 
@@ -41,13 +43,15 @@ Grimoire 新增 30 组原字节／来源验证已闭合两种副伤害的生产�
 
 因此金额和时钟已有证据，默认命中仍需要明确位置／覆盖策略；不能把每次新生成的计分目标都视作仍在所有旧弹体旁边。这是模型缺少场景输入，不能谎称只差实测伤害数。详细原生路径和三个反例见 [Grimoire admission review](evidence/grimoire-admission-review.md)。
 
-Zymos 的原字节过滤器也已确认：符合生命、敌对和 LOS 等条件的原宿主不会仅因为宿主身份被排除；默认不使用向上发射角限制候选。唯一候选可以在五次目标分配调用中反复复用，但这不证明五次实际命中。真实 carrier 的来源回调在来源变化时各查询一次 CC／CD；同来源重复赋值和注册本身不再查询。完整 CreateEntity 内注册与首次赋值的顺序尚未闭合，因此未据此给默认伤害添加五倍子弹。详见 [Zymos source review](evidence/zymos-target-filter-review.md)。
+Zymos 的原字节过滤器也已确认：符合生命、敌对和 LOS 等条件的原宿主不会仅因为宿主身份被排除；默认不使用向上发射角限制候选。唯一候选可以在五次目标分配调用中反复复用，但这不证明五次实际命中。真实 carrier 的来源回调在来源变化时各查询一次普通 CC／CD；同来源重复赋值和注册本身不再查询。详见 [Zymos source review](evidence/zymos-target-filter-review.md)。
+
+随后按 Lua 的五个实际参数完成 fresh CreateEntity 分支追踪：构造时 creator 为空，注册发生在 OnCreated 与 Lua 返回之前，返回后先设置父弹体再设置 creator。10 个具体 role／replication 原字节分支验证了：回调启用的 fresh 分支产生一对普通 CC／CD 查询，禁用控制为零。完整分配／反序列化顺序是静态追踪，角色注册与 setter 是原字节执行，没有将两类证明混写。池化复用、实际启动角色组合、父弹体继承的另行加成与后续命中消费者仍需继续检查，因此未据此自动添加五倍子弹伤害。详见 [Zymos fresh creation order](evidence/zymos-fresh-create-order.md)。
 
 以下仍优先做静态调查，不能笼统归为只能实测：
 
-- Zymos：完整创建时来源注册／赋值先后、存活暴击查询总次数与最终赋能消费者；候选身份排除和可重复分配已缩小，实际命中仍需轨迹／场景。
+- Zymos：池化复用、实际启动角色组合、父弹体继承加成及最终赋能消费者；fresh 创建顺序和普通查询次数已闭合，实际命中仍需轨迹／场景。
 - Grimoire：每轮连锁的目标重选、同一次 attack 的去重、到期爆炸受害者，以及主副混合循环的实际事件调度。
-- Tenet Plinx：attachment 事件后续的冷却重置；实际伤害 provider 与固定基础伤害升级顺序。
+- Tenet Plinx：完整 weapon main tick／帧调度；实际伤害 provider 与固定基础伤害升级顺序。热态各状态的暂停、重置和循环预算已完成方法级验证。
 - Nox 玩家原型：私有类型分支、重叠触发提前终止、嵌入跳伤与死亡伤害的实际时钟和来源。
 - Quanta、幻离子子弹体及其他现有诊断中的来源／赋能消费者：原始参数存在不等于实际可叠加伤害。
 

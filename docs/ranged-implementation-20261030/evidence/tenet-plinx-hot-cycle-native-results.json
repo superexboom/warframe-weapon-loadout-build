@@ -1,0 +1,148 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "postFire": [
+    {
+      "skipRefireOnEmpty": 0,
+      "inputFlag": 0,
+      "requestedState": 7
+    },
+    {
+      "skipRefireOnEmpty": 0,
+      "inputFlag": 1,
+      "requestedState": 7
+    },
+    {
+      "skipRefireOnEmpty": 1,
+      "inputFlag": 0,
+      "requestedState": 11
+    },
+    {
+      "skipRefireOnEmpty": 1,
+      "inputFlag": 1,
+      "requestedState": 7
+    }
+  ],
+  "stateDurations": [
+    {
+      "state": 0,
+      "fireRateScale": 0.5,
+      "seconds": 0.0
+    },
+    {
+      "state": 1,
+      "fireRateScale": 0.5,
+      "seconds": 0.0
+    },
+    {
+      "state": 3,
+      "fireRateScale": 0.5,
+      "seconds": 4.0
+    },
+    {
+      "state": 7,
+      "fireRateScale": 0.5,
+      "seconds": 2.0
+    },
+    {
+      "state": 0,
+      "fireRateScale": 1.0,
+      "seconds": 0.0
+    },
+    {
+      "state": 1,
+      "fireRateScale": 1.0,
+      "seconds": 0.0
+    },
+    {
+      "state": 3,
+      "fireRateScale": 1.0,
+      "seconds": 4.0
+    },
+    {
+      "state": 7,
+      "fireRateScale": 1.0,
+      "seconds": 1.0
+    },
+    {
+      "state": 0,
+      "fireRateScale": 2.0,
+      "seconds": 0.0
+    },
+    {
+      "state": 1,
+      "fireRateScale": 2.0,
+      "seconds": 0.0
+    },
+    {
+      "state": 3,
+      "fireRateScale": 2.0,
+      "seconds": 4.0
+    },
+    {
+      "state": 7,
+      "fireRateScale": 2.0,
+      "seconds": 0.5
+    }
+  ],
+  "hotFireReset": 3.0,
+  "afterOriginalScriptSetters": 3.0,
+  "pauseRows": [
+    {
+      "state": 1,
+      "dt": 0.25,
+      "countdownAfter": 3.0
+    },
+    {
+      "state": 7,
+      "dt": 0.25,
+      "countdownAfter": 3.0
+    },
+    {
+      "state": 13,
+      "dt": 0.25,
+      "countdownAfter": 3.0
+    },
+    {
+      "state": 14,
+      "dt": 0.25,
+      "countdownAfter": 3.0
+    },
+    {
+      "state": 0,
+      "dt": 0.25,
+      "countdownAfter": 2.75
+    },
+    {
+      "state": 11,
+      "dt": 0.25,
+      "countdownAfter": 2.75
+    },
+    {
+      "state": 3,
+      "dt": 0.25,
+      "countdownAfter": 2.75
+    }
+  ],
+  "leaveRefireResets": [
+    {
+      "newState": 7,
+      "previousState": 7,
+      "countdownBefore": 2.5,
+      "countdownAfter": 2.5
+    },
+    {
+      "newState": 11,
+      "previousState": 7,
+      "countdownBefore": 2.5,
+      "countdownAfter": 3.0
+    },
+    {
+      "newState": 0,
+      "previousState": 7,
+      "countdownBefore": 2.5,
+      "countdownAfter": 2.5
+    }
+  ],
+  "sourceStateTable": "142188d48 charged state;160141386060;2281418abd10;33814126b520;3c814174c920",
+  "boundary": "original postfire decision, duration, complete battery reset handler, actual ammo setter/wrappers, countdown update and real state predicates; property engine/scene storage explicit stubs; transitions are driven at verified API boundaries, no full main weapon tick or native Lua VM execution"
+}

@@ -2332,7 +2332,8 @@
         ]
       },
       "status20261030": "implemented-bounded-player-strategy",
-      "change20261030": "Full static modified clip scales damage N; .8 precharge; embedded100N packet; explicit configured-delay+full-refill wait. True max native cadence, dynamic capacity and flat base remain excluded."
+      "change20261030": "Full static modified clip scales damage N; .8 precharge; embedded100N packet; explicit configured-delay+full-refill wait. True max native cadence, dynamic capacity and flat base remain excluded.",
+      "additionalEvidence20261030": "Native hot-cycle postfire/refire durations, actual battery pause states and complete reset-handler paths corroborate5.3s continuous-time default budget; full main tick/dt schedule and concrete ADD_BASE consumer remain open. No production value change."
     },
     {
       "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta",
@@ -2464,8 +2465,9 @@
           "zymos-child-spawn-and-targeting-unmodeled"
         ]
       },
-      "status20261030": "static-target-and-creator-progress-no-default-payload",
-      "change20261030": "Exact carrier defaults/filter permit a surviving eligible original host; one candidate can be reused by five assignment calls. Exact creator callback queries each CC/CD once per changed source, not per repeated setter/registration. Full CreateEntity registration/source ordering and arrival/event routing remain open."
+      "status20261030": "static-fresh-creation-order-and-targeting-proved-no-default-payload",
+      "change20261030": "Exact carrier defaults/filter permit a surviving eligible original host; one candidate can be reused by five assignment calls. Exact creator callback queries each CC/CD once per changed source, not per repeated setter/registration. Full CreateEntity registration/source ordering and arrival/event routing remain open.",
+      "additionalEvidence20261030": "Exact self+five-argument Lua CreateEntity fresh path registers source callback before OnCreated and return. Later parent738 then creator708 setters: enabled fresh path queries ordinary f4/f8 once each; disabled role control zero. Ten original-code role cases. Pool reuse, actual role/global combination, parent-derived additions and final recipient consumers still pending; no5x333 default admission."
     }
   ],
   "nativeEmissionLocks": {

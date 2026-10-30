@@ -1,0 +1,170 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "lua": {
+    "proto": 3,
+    "createPC": 106,
+    "callPC": 108,
+    "callB": 7,
+    "userArguments": 5,
+    "entityArg5": "r5",
+    "entityArg6": "r5",
+    "optionalReplicationArg7": "omitted native0 => class virtual80 getter14117a9e0; enum1/2 controls below",
+    "nextParentSetterPC": 110,
+    "nextCreatorSetterPC": 114
+  },
+  "order": [
+    "factory ctor141babfb0 ->Projectile ctor default708empty730disabled",
+    "PrivateCreate140cb68f0 calls1413e1280at140cb70f7 while fresh21zero",
+    "role setter dispatches carrier virtual10=140e4e1e0",
+    "PrivateCreate calls OnCreated1400f6730at140cb72ae after registration",
+    "CreateEntity returns",
+    "Lua pc110 parent setter virtual580=140f84b40 updates738",
+    "Lua pc114 SetCreator1405efa30 updates708; enabled callback1412ffd10 queriesf4/f8",
+    "later same-source setter is no-op"
+  ],
+  "branches": [
+    {
+      "replication": 1,
+      "regionMode": 0,
+      "globalFlag": 0,
+      "relayFlag": 0,
+      "regionFlag": 2,
+      "region780": 0,
+      "resolvedObjectRole": "0x20",
+      "registrationEnabled": 1,
+      "creatorQueryIDs": [
+        244,
+        248
+      ]
+    },
+    {
+      "replication": 1,
+      "regionMode": 0,
+      "globalFlag": 1,
+      "relayFlag": 0,
+      "regionFlag": 2,
+      "region780": 0,
+      "resolvedObjectRole": "0x10",
+      "registrationEnabled": 1,
+      "creatorQueryIDs": [
+        244,
+        248
+      ]
+    },
+    {
+      "replication": 1,
+      "regionMode": 2,
+      "globalFlag": 0,
+      "relayFlag": 0,
+      "regionFlag": 2,
+      "region780": 0,
+      "resolvedObjectRole": "0x1",
+      "registrationEnabled": 0,
+      "creatorQueryIDs": []
+    },
+    {
+      "replication": 1,
+      "regionMode": 2,
+      "globalFlag": 1,
+      "relayFlag": 0,
+      "regionFlag": 2,
+      "region780": 0,
+      "resolvedObjectRole": "0x1",
+      "registrationEnabled": 1,
+      "creatorQueryIDs": [
+        244,
+        248
+      ]
+    },
+    {
+      "replication": 1,
+      "regionMode": 2,
+      "globalFlag": 1,
+      "relayFlag": 1,
+      "regionFlag": 2,
+      "region780": 1,
+      "resolvedObjectRole": "0x2",
+      "registrationEnabled": 1,
+      "creatorQueryIDs": [
+        244,
+        248
+      ]
+    },
+    {
+      "replication": 2,
+      "regionMode": 0,
+      "globalFlag": 0,
+      "relayFlag": 0,
+      "regionFlag": 2,
+      "region780": 0,
+      "resolvedObjectRole": "0x20",
+      "registrationEnabled": 1,
+      "creatorQueryIDs": [
+        244,
+        248
+      ]
+    },
+    {
+      "replication": 2,
+      "regionMode": 0,
+      "globalFlag": 1,
+      "relayFlag": 0,
+      "regionFlag": 2,
+      "region780": 0,
+      "resolvedObjectRole": "0x10",
+      "registrationEnabled": 1,
+      "creatorQueryIDs": [
+        244,
+        248
+      ]
+    },
+    {
+      "replication": 2,
+      "regionMode": 2,
+      "globalFlag": 0,
+      "relayFlag": 0,
+      "regionFlag": 2,
+      "region780": 0,
+      "resolvedObjectRole": "0x4",
+      "registrationEnabled": 1,
+      "creatorQueryIDs": [
+        244,
+        248
+      ]
+    },
+    {
+      "replication": 2,
+      "regionMode": 2,
+      "globalFlag": 1,
+      "relayFlag": 0,
+      "regionFlag": 2,
+      "region780": 0,
+      "resolvedObjectRole": "0x4",
+      "registrationEnabled": 1,
+      "creatorQueryIDs": [
+        244,
+        248
+      ]
+    },
+    {
+      "replication": 2,
+      "regionMode": 2,
+      "globalFlag": 1,
+      "relayFlag": 1,
+      "regionFlag": 2,
+      "region780": 1,
+      "resolvedObjectRole": "0x4",
+      "registrationEnabled": 1,
+      "creatorQueryIDs": [
+        244,
+        248
+      ]
+    }
+  ],
+  "limits": [
+    "Role/global inputs are explicit controlled numeric branches, not claims all combinations arise in live game",
+    "Full Region allocation/serialization not emulated; original register-role dispatch + real callback and setters execute",
+    "Fresh construction path; generic pooled-object retrieval branch in140181260 is separate and requires reuse-state evidence",
+    "Parent setter may dispatch additional upgrade context141548510; no additional f4/f8 calls in that function, but flat CC and other buckets need their own qualification"
+  ]
+}

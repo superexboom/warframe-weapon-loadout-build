@@ -1,0 +1,43 @@
+# Frozen-core read-only continuation
+
+No production core/data/tools/tests writes during this continuation. All new work remains under this case directory or parent Tenet Plinx case.
+
+## New executable source evidence
+
+`../reproduce_onenter_dispatch.py` executes 12 original-byte cases through the real OnEnter vector walker1408ec520, attachment predicate140ebffe0/140869270, event610 handler140cf5a50, generic response14036dcd0, event608140f1f840 and140aff680. Actual responseScript call suffix14036e050..e0b9 is executed unchanged. WS_FIRE1 paired with active mode0 admits ChangeRegenDelayToNormal and excludes alt; paired with active mode1 admits alt and excludes normal. WS_READY0 and WS_CHARGE13 admit neither source WS_FIRE event. The source activeBehaviorIndexIgnoreList native comparison is exercised unchanged. 12/12 passed.
+
+VM launch observes object arg=attachment; numeric args=(old state, current WS_FIRE1); the controlled script descriptor token is passed unchanged to the launcher (token is a fixture value, not a recovered VM function ID). Scene/avatar helpers explicitly returnnull, PT_ANY predicate is supplied true, empty source sound/effect arrays are no-op stubs, VM script validity supplied true. Script VM body is not executed by this harness; its two source Lua bodies and native setters have independent existing fixtures. This fixture closes native OnEnter state/mode filtering and dispatch-to-VM, not the complete weapon clock.
+
+A previous interpretation can now be narrowed:141610c40 processes OnExit-like vector+ca0 before the commit at14161181b. After storing new state into attachment+b00, it calls1408ec520 with vector+c90 at141611822. That walker uses current+b00 to match event+a8 and then calls610. It also receives old state and tests optional transition+a9/aa. Source matchTransitionState0 means no old-state restriction.
+
+Exact source state getter141509bf0 is leaf movzx[weapon+cea],ret. Exact source clock getter140f8c000 is leaf movss[weapon+cec],ret. These make a next combined state+notify fixture straightforward without guessed getters. Remaining maximum-cadence work is to execute the actual charged-state/weapon transition sequence with the native ammo predicate and VM setter calls, including subsequent postfire/empty/ready transitions. The task is still statically approachable; it is not labeled live-test-only.
+
+## Provider route narrowed; concrete class not yet admitted
+
+Projectile helper1411b8b80 is exact leaf `[entity+1e0] -> [context+90] -> [ref]`; the object's Region table1421a0a28 is confirmed by constructor141016de0 storing it at141016e1f. Its +300 maps leaf1416717f0, which returns `*[region+240]`. Both projectile amount paths fetch their source provider this way before14116ac70.
+
+14217db58 is a constructor-confirmed SinglePlayerGameRules table (ctor141a1a880 ->base14077a530). Its +370140926d30 delegates through source actor+10c8 if present, otherwise rules+6e8 (140ad74f0 ->[rules+3a0]), then backend virtual+b8. +360140a8c150 delegates rules+6f0 ->backend+b0. This is a candidate backend route; concrete current mission rule object/backend class and its construction have not yet been positively linked to region+240.
+
+Important rejection: do not infer the concrete LotusGameRules table simply as the first pointer array following the ASCII string. Candidate1422d63c8 is constructed by141bbba90 into a tiny0x50-ish object and its +370 returnsbool; it is not admitted as this damage provider. Several nearby arrays are GameMigrationData/other types. Prior broad class-name scans included suffix matches and are discovery hints only.
+
+Minimal next native tasks: resolve the constructor/setter of Region+240 and its runtime rules backend3a0, or follow backend actual+b0/b8 in a linked concrete class; then classify source flat-add relative to14116ac70 and N. Existing conservative policy/ADD_BASE fail-closed stays unchanged throughout.
+
+## Hot-cycle continuation after final source freeze
+
+New script `../reproduce_hot_cycle.py` and result `../hot-cycle-original-byte-results.json` couple original postfire branch4 cases, original state durations12 cases, actual Lua setter wrappers plus actual owner ammo setter, complete battery-reset handler, actual native pause predicates7 cases, and leave-refire reset3 cases. All passed. Storage write140f7d500 is the only ammo backend stub (owner before/after ammo getters and complete1407ba140 control flow execute unchanged). Scene helpers and neutral property gateway remain explicit stubs. State transitions are driven at verified native method boundaries; main weapon tick/actual VM body are not simulated.
+
+Concrete charged-state vtable142188d48 is confirmed by constructor stores (LEA141a1c08e in constructor141a1c080; alternate constructor14025a5e0). Slots: +160141386060 duration, +2281418abd10 transition, +33814126b520 refire interval, +3c814174c920 postfire branch. Source SkipRefireOnEmpty maps state+b3 via serializer1406559e7. For source b3=0 and expired owner clock, original postfire branch14174c977..985 requests WS_REFIRE_WAIT7 regardless supplied input flag; alternative b3=1/input0 requests WS_EMPTY11, proving the field gate rather than assuming it.
+
+Original duration(WS_FIRE1)=0 and duration(WS_READY0)=0. duration(REFIRE_WAIT7) uses14126b520 ->charged+2781401b2c30. That helper reads source fireRate60/min, applies weapon fire query then original1/60 scale; neutral rate gives1/s and interval1sec. Original duration rows at scale.5/1/2 return2/1/.5sec.
+
+Crucially, weapon+208140dbc1e0 returns true for FIRE1 and REFIRE_WAIT7. weapon+3e0140ba78f0 returns true for CHARGE13/FULLY_CHARGED14. Original battery countdown chunk1402bb5f3..656 therefore pauses across ALL four states. This rules out the model that spends the configured empty delay during refire wait.
+
+For repeated alt, configured empty delay is already3 from the previous verified script. Complete1408969b0 reset on FIRE1 gives countdown3. Original Lua clip0 wrapper14197f780 ->actual owner setter1407ba140 sees oldammo0/newammo0 and takes unchanged-ammo early exit at1407ba18c; it does not reset timer. Original delay setter141b0f270 writes configured3 only. countdown remains3. While REFIRE_WAIT7 is active, the native update leaves3 unchanged. On subsequent Ready0 reset handler preserves it. On subsequent Empty11 from7, the actual reset handler RESETS to configured3; both reachable hot outcomes therefore start recovery at3.
+
+Correction to the earlier open-branch note: Empty11 from7 DOES reset. Native140896f98 compares previous state12, and `jne140896fb4` means it resets when previous!=12. The new original-byte fixture caught and corrected that interpretation. With incoming2.5, Empty11 produces3 while Ready0 preserves2.5. Since the preceding refire gate pauses the reachable hot countdown at3, this distinction does not change hot recovery delay; it remains material for first-alt/cold or interrupted sequences and is not discarded.
+
+Under source ordinary hot alt/no extra interruptions, this supports the decomposition charge .8/rate + refire1/rate + emptyDelay3/reload + capacity/regen, i.e. continuous-time baseline5.3sec forN10. This matches the declared conservative strategy's ideal hot budget; do NOT relabel the published policy as fully recovered native maximum cadence. Still missing: observing the ordinary full weapon tick actually invokes this postfire method and completes the driven transitions with the exact event/update order. Native timer expiry has no overshoot carry, so frame-exact timing also requires a declared dt schedule. These are concrete dispatcher/tick issues, not a generic demand for live combat measurement.
+
+No immediately safe production numerical correction follows: published strategy already retains the refire wait and refuses flat ADD_BASE. No core/data/tools/tests changes were made. The new cases narrow the justification for its wait budget and identify a precise next main-tick boundary instead of adding a speculative faster cycle.
+
+Provider ordering statement independent of concrete backend: outer direct14163779c ->helper14116ac70 ->N at1416377a4 and radial141234a75 ->helper ->N at141234a7a always multiply the provider's returned scalar after it returns. Thus any ADD_BASE implemented INSIDE backend+360/+370 would necessarily precede N. This does not prove where the game's WEAPON_DAMAGE_AMOUNT ADD_BASE is implemented; later/earlier distinct consumers remain possible. Exact enum initializer pairs WEAPON_DAMAGE_AMOUNT with0xfd (names offsetrbp+728). Two direct `mov r8d,0xfd` sites were preserved in damage-amount-fd-sites.json, but this limited encoding scan is not an exhaustive enumeration of generic/deferred-query paths, so it cannot justify enabling flat ADD_BASE.
