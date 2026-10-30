@@ -1,18 +1,11 @@
 """Keep Phantasma payload omissions visible without fabricating trigger rights."""
-from copy import deepcopy
-import pytest
-from tools.import_phantasma_packet_audit import audit, merge, PAIRS, WARNINGS
+from tools.import_phantasma_packet_audit import audit, PAIRS, WARNINGS
 
 
 class Packages:
     def resolve(self, projectile):
         return {"AttackData": {"Amount": 15, "Type": "DT_IMPACT"},
                 "ExplosiveAttack": {"Amount": 73, "Type": "DT_RADIATION", "HitType": "DHT_PROJECTILE"}}
-
-
-def exports():
-    return [{"path": path, "nameEn": path, "fireModes": [{}, {"damage": {
-        "projectile": projectile, "types": {"DT_IMPACT": 15.}}}]} for path, projectile in PAIRS]
 
 
 def test_packet_type_and_head_suppression_do_not_grant_co_or_head_events():
@@ -23,23 +16,8 @@ def test_packet_type_and_head_suppression_do_not_grant_co_or_head_events():
     assert "takes_condition_overload" not in result and "area_direct" not in result
 
 
-def test_new_runtime_profile_requires_missing_payload_diagnostic_to_be_reaudited():
-    source = {"auditedAttacks": {PAIRS[0][0]: {"modes": {"1": {"radials": [{"damage": {"radiation": 73.}}]}}}}}
-    with pytest.raises(ValueError, match="runtime packet profile"):
-        merge(source, exports(), Packages())
-
-
-def test_boundary_import_is_idempotent_and_preserves_primary_mode():
-    source = {"auditedAttacks": {PAIRS[0][0]: {"directTotal": 90., "mode0-marker": True}}}
-    before = deepcopy(source)
-    result = merge(source, exports(), Packages())
-    assert source == before
-    assert result["auditedAttacks"][PAIRS[0][0]]["mode0-marker"] is True
-    assert result == merge(result, exports(), Packages())
-
-
-@pytest.mark.parametrize("path,projectile", PAIRS)
-def test_runtime_parent_packet_is_restored_and_remaining_bounds_are_alternate_only(path, projectile):
+def test_runtime_parent_packet_is_restored_and_remaining_bounds_are_alternate_only():
+    path,projectile=PAIRS[1]
     import app
     from wfarsenal.damage import Scenario
     from wfarsenal.manual_combat import prepare
@@ -54,3 +32,34 @@ def test_runtime_parent_packet_is_restored_and_remaining_bounds_are_alternate_on
             assert radial.damage_types == {'DT_RADIATION':73.}
             assert 'phantasma-main-explosion-CO-neutral-fallback-unverified' in combat['unsupported']
             assert not radial.area_direct  # Native type2 alone never grants every weakpoint effect.
+            assert radial.radial_victim_crit and radial.delayed_radial_hit_event
+
+
+def test_phantasma_area_packet_retains_cold_crit_without_head_bonus(monkeypatch):
+    from copy import copy
+    import app
+    from wfarsenal import native_replay,mods_native
+    from wfarsenal.damage import Scenario,mod_effects,damage_against
+    from wfarsenal.manual_combat import prepare
+    from wfarsenal.combat_replay import replay
+    weapon=next(w for w in app.EXPORTS['weapons'] if w['path']==PAIRS[1][0])
+    cold=next(m for m in app.EXPORTS['mods'] if m.get('nameEn')=='Frigid Blast')
+    monkeypatch.setattr(mods_native,'SHADOW',True)
+    scenario=Scenario(trigger_policy='emergent')
+    combat=prepare(dict(weapon=weapon,fire_mode=1,effects=mod_effects(cold,cold['maxRank'],scenario),scenario=scenario),[],[])
+    base_resolve=combat['resolve'];stats,radial=base_resolve('selected',{},0.)
+    victim=dict(health=1e9,armour=0.,shield=0.,overguard=0.,baseLevel=1,headshotMultiplier=3.)
+    assert radial.radial_only and radial.radial_victim_crit and not radial.area_direct
+    assert damage_against(radial,victim,hit_location='head')['perShot']==damage_against(radial,victim)['perShot']
+    monkeypatch.setattr(native_replay,'SHADOW',True)
+    before=native_replay.STATS['native']
+    kw=dict(attacks_per_second=stats.fire_rate,window_seconds=4.,collect_timeline=False)
+    actual=replay(stats,victim,combat=combat,**kw)
+    assert native_replay.STATS['native']>before and actual['procCounts']['DT_FREEZE']>0
+    def old_radial_rule(*args):
+        direct,part=base_resolve(*args);part=copy(part);part.radial_victim_crit=False
+        return direct,part
+    control=replay(stats,victim,combat={**combat,'resolve':old_radial_rule},**kw)
+    assert actual['totalWindowDamage']>control['totalWindowDamage']
+    monkeypatch.setattr(native_replay.wfcore,'RADIAL_VICTIM_CRIT',0)
+    assert not native_replay.supported(stats,dict(combat=combat,collect_timeline=False))

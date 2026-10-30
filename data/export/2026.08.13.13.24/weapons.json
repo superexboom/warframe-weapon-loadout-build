@@ -55255,6 +55255,7 @@
     {
      "ammoCost": 0,
      "ammoType": "",
+     "behaviorKind": "auxiliary-melee",
      "chargeTime": null,
      "damage": {
       "critChance": 0.0,
@@ -99784,6 +99785,7 @@
       "forcedProcs": [
        "PT_KNOCKBACK"
       ],
+      "impactIgnoreHeadshotBonus": true,
       "procChance": 0.5,
       "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaAltProj",
       "radial": {
@@ -236327,6 +236329,7 @@
       "forcedProcs": [
        "PT_KNOCKBACK"
       ],
+      "impactIgnoreHeadshotBonus": true,
       "procChance": 0.5,
       "projectile": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanoRifleAltProj",
       "radial": {

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "ed2319c00c6208b6aaf9daed244d090d3c65a23e",
+  "inputs": "4178a14118b19241",
+  "nativeSha256": "50a6ca44eda6654ebc1c9dea55edb5d2376cebc2e73d966aa3f16e5ed091ffba",
+  "focused": {
+    "tests": 100,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "collectionBefore": 2443,
+  "collectionAfter": 2247,
+  "testModulesAdded": 0,
+  "testModulesRemoved": 4,
+  "selectedModeParity": {
+    "weapons": 3,
+    "cases": 20,
+    "failed": 0,
+    "workerErrors": 0,
+    "nativeFallback": 0,
+    "nativeCoverageComplete": true,
+    "changedInputs": false,
+    "coverageComplete": true,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "passed": true
+  },
+  "selectedWeapons": [
+    "Phantasma Prime",
+    "Trumna Prime",
+    "Pox"
+  ],
+  "scope": "focused regression and selected-mode search/native parity; not full-suite or gameplay validation",
+  "nativeCapabilities": {
+    "DELAYED_RADIAL_EVENTS": 2,
+    "RADIAL_VICTIM_CRIT": 1
+  }
+}

@@ -60,7 +60,9 @@ def supported(stats, options) -> bool:
         return False
     if (combat.get('cycle') or {}).get('chargeBeforeFire') and not getattr(wfcore, 'KILL_CHARGED_WINDUP', 0):
         return False
-    if (combat.get('delayedRadialEvents') or getattr(stats, 'delayed_radial_hit_event', False)) and not getattr(wfcore, 'DELAYED_RADIAL_EVENTS', 0):
+    if (combat.get('delayedRadialEvents') or getattr(stats, 'delayed_radial_hit_event', False)) and getattr(wfcore, 'DELAYED_RADIAL_EVENTS', 0) < 2:
+        return False
+    if (combat.get('radialCritStatus') or stats.radial_victim_crit) and not getattr(wfcore, 'RADIAL_VICTIM_CRIT', 0):
         return False
     if combat.get('nativeFireGate') and not getattr(wfcore, 'NATIVE_FIRE_COOLDOWN', 0):
         return False

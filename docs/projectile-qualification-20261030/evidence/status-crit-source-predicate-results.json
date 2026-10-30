@@ -1,0 +1,25 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "rows": [
+    {
+      "isAbilityWeapon": 0,
+      "parentClass": null,
+      "helperAccepted": [
+        0
+      ],
+      "coCalls": [],
+      "predicateArgument": 1
+    },
+    {
+      "isAbilityWeapon": 0,
+      "parentClass": "PowerSuit",
+      "helperAccepted": [
+        1
+      ],
+      "coCalls": [],
+      "predicateArgument": 1
+    }
+  ],
+  "executed": "complete original141baa200 with dl1; actual +4c0/+970 getters",
+  "limits": "Synthetic class ancestry and original getter storage. No victim upgrades/damage or live weapon-parent acquisition."
+}

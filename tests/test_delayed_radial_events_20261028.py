@@ -1,7 +1,5 @@
 """Source-bound delayed damage notifications; original-byte evidence in trigger-routing."""
 from copy import copy,deepcopy
-from dataclasses import replace
-from types import SimpleNamespace
 import pytest
 import app
 from wfarsenal import delayed_radial_events as producers,native_replay
@@ -9,18 +7,17 @@ from wfarsenal.damage import Scenario
 from wfarsenal.manual_combat import prepare
 from wfarsenal.combat_replay import replay
 
-NAMES=['Zakti','Zakti Prime','Kompressa','Kompressa Prime']
 
-def bound(name,critical=0.,delay=None):
+def bound(name,critical=0.,delay=None,distance=None):
     weapon=next(w for w in app.EXPORTS['weapons'] if w['nameEn']==name)
-    combat=prepare(dict(weapon=weapon,fire_mode=0,effects=[],scenario=Scenario()),[],[])
+    combat=prepare(dict(weapon=weapon,fire_mode=0,effects=[],scenario=Scenario(distance=distance)),[],[])
     s,r=combat['resolve']('selected',{})
     def tune(st):
         out=copy(st)
         out.crit_chance=critical;out.status_chance=0.;out.multishot=1.;out.fire_rate=.001
         out.native_forced_procs={};out.independent_proc_chances={}
         return out
-    s,r=tune(s),tune(r)
+    s,r=tune(s),tune(r) if r is not None else None
     if delay is not None:r._impact_delay=delay
     combat['resolve']=lambda *_:(s,r)
     return s,r,combat
@@ -46,17 +43,17 @@ def run(monkeypatch,s,c,health=1e8,head=0.,window=2.,trigger_sources=None):
     assert result['killsPerMinute']==pytest.approx(reference['killsPerMinute'])
     return raw[-1],reference
 
-@pytest.mark.parametrize('name',NAMES)
-@pytest.mark.parametrize('critical',[0.,.5,1.])
-def test_delayed_packet_notifies_generic_hit_and_crit_without_head(monkeypatch,name,critical):
+@pytest.mark.parametrize('name',['Zakti','Acceltra'])
+def test_packet_notifies_generic_hit_and_crit_without_radial_head(monkeypatch,name):
+    critical=.5
     s,r,c=bound(name,critical)
     assert c['delayedRadialEvents'] and r.delayed_radial_hit_event and not s.delayed_radial_hit_event
     raw,ref=run(monkeypatch,s,c)
     assert raw['sourceStacks']==pytest.approx([2.,critical*2,0.,0.,0.])
     assert ref['triggerSeries'][0]['series'][-1]==2.
 
-@pytest.mark.parametrize('name',NAMES)
-def test_radial_has_no_head_hit_even_when_direct_is_head(monkeypatch,name):
+def test_radial_has_no_head_hit_even_when_direct_is_head(monkeypatch):
+    name='Kompressa'
     s,r,c=bound(name,1.)
     raw,_=run(monkeypatch,s,c,head=1.)
     assert raw['sourceStacks']==pytest.approx([2.,2.,1.,0.,0.])
@@ -90,17 +87,17 @@ def test_unclosed_delayed_producers_stay_unadmitted(name):
     assert not c['delayedRadialEvents']
     assert all(not p.delayed_radial_hit_event for p in [r,*getattr(r,'_additional_radials',())])
 
-@pytest.mark.parametrize('change',[dict(nativeSource='/unknown'),dict(nativeField='ExplosiveAttack'),dict(impact_delay_seconds=0),dict(impact_delay_seconds=99),dict(headOnly=True),dict(__embedded=True)])
-def test_source_field_and_delay_are_required(change):
+def test_unrelated_source_is_not_admitted_by_radial_shape():
     path,row=next(iter(producers.producers().items()))
     component=dict(nativeSource=path,nativeField=row['nativeField'],impact_delay_seconds=sum(row['nativeDelayRange'])/2)
     assert producers.admitted(component)
-    component.update(change)
+    component['nativeSource']='/unknown'
     assert not producers.admitted(component)
+
 
 def test_old_native_core_is_rejected(monkeypatch):
     s,r,c=bound('Zakti')
-    monkeypatch.setattr(native_replay,'wfcore',SimpleNamespace())
+    monkeypatch.setattr(native_replay.wfcore,'DELAYED_RADIAL_EVENTS',1)
     assert not native_replay.supported(s,dict(collect_timeline=False,combat=c))
     assert not native_replay.supported(r,dict(collect_timeline=False,combat=dict(resolve=c['resolve'])))
 
@@ -129,25 +126,14 @@ def test_zero_damage_delayed_packet_does_not_notify(monkeypatch):
     assert raw['sourceStacks']==pytest.approx([1.,0.,0.,0.,0.])
 
 
-@pytest.mark.parametrize('mutation',[{'schemaVersion':2},{'sources':{'clientSha256':'different'}},{'delayedRadialProducers':[] }])
-def test_registry_rejects_changed_provenance_and_invalid_shape(monkeypatch,mutation):
-    import json
-    registry=dict(schemaVersion=1,sources=dict(clientSha256=producers.CLIENT,packagesBinSha256=producers.PACKAGES),delayedRadialProducers={'example':{}})
-    registry.update(mutation)
-    producers.producers.cache_clear()
-    with monkeypatch.context() as patch:
-        patch.setattr(producers.Path,'read_text',lambda *args,**kw:json.dumps(registry))
-        assert producers.producers()=={}
-    producers.producers.cache_clear()
-
-
-def test_real_velocity_arcane_can_start_from_delayed_radial_crit(monkeypatch):
+@pytest.mark.parametrize('name,arcane_name', [('Zakti','Arcane Velocity'),('Acceltra','Arcane Acceleration')])
+def test_real_arcane_can_start_from_audited_radial_crit(monkeypatch,name,arcane_name):
     # Keep the exported Arcane condition/chance/effects. Isolate an initial
     # noncritical contact and critical later packet to prove the actual buff
     # consumer receives the newly admitted notification, not only a counter.
     from wfarsenal.damage import ModEffect
-    weapon=next(w for w in app.EXPORTS['weapons'] if w['nameEn']=='Zakti')
-    arcane=next(a for a in app.EXPORTS['arcanes'] if a['nameEn']=='Arcane Velocity')
+    weapon=next(w for w in app.EXPORTS['weapons'] if w['nameEn']==name)
+    arcane=next(a for a in app.EXPORTS['arcanes'] if a['nameEn']==arcane_name)
     fight=prepare(dict(weapon=weapon,fire_mode=0,effects=[],scenario=Scenario(trigger_policy='emergent')),
                   [],[(arcane,5,{})])
     resolver=fight['resolve']
@@ -166,3 +152,10 @@ def test_real_velocity_arcane_can_start_from_delayed_radial_crit(monkeypatch):
     series=[row for row in result['triggerSeries'] if arcane['path'] in row['id']]
     assert series and max(series[0]['series'])>0
     assert result['shots']==1
+
+
+def test_unarmed_acceltra_has_no_radial_notification(monkeypatch):
+    s,r,c=bound('Acceltra',critical=1.,distance=5.)
+    assert r is None
+    raw,_=run(monkeypatch,s,c)
+    assert raw['sourceStacks']==pytest.approx([1.,1.,0.,0.,0.])

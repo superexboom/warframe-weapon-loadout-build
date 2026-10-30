@@ -1,0 +1,46 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "cases": [
+    {
+      "case": "explicit-native-child-hit-types",
+      "sourceHitTypes": [
+        2,
+        4
+      ],
+      "runtimeFlag15b1": 0,
+      "actualHitTypes": [
+        2,
+        4
+      ]
+    },
+    {
+      "case": "omitted-hit-type-defaults",
+      "sourceHitTypes": [
+        0,
+        0
+      ],
+      "runtimeFlag15b1": 0,
+      "actualHitTypes": [
+        2,
+        4
+      ]
+    },
+    {
+      "case": "runtime-script-override",
+      "sourceHitTypes": [
+        2,
+        4
+      ],
+      "runtimeFlag15b1": 1,
+      "actualHitTypes": [
+        5,
+        5
+      ]
+    }
+  ],
+  "executed": [
+    "1416376a7..1416376cf",
+    "141234988..1412349aa"
+  ],
+  "limits": "Original selector slices only. Source amount conversion, runtime child creation, collision/scene delivery and effect scripts excluded."
+}

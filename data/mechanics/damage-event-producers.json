@@ -63,6 +63,90 @@
       "headHit": false,
       "enervate": false,
       "semantics": "per-damage-packet-after-damage-before-victim-retirement"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameHeavyArchgunProjectile": {
+      "nativeField": "ExplosiveAttack",
+      "nativeDelayRange": [
+        0,
+        0
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+      "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
+      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
+    },
+    "/Lotus/Weapons/Tenno/Archwing/Primary/PrimeLarkspur/PrimeLarkspurHeavyProjectile": {
+      "nativeField": "ExplosiveAttack",
+      "nativeDelayRange": [
+        0,
+        0
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+      "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
+      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/SapientPrimary/SapientPrimaryProjectile": {
+      "nativeField": "ExplosiveAttack",
+      "nativeDelayRange": [
+        0,
+        0
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+      "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
+      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile": {
+      "nativeField": "ExplosiveAttack",
+      "nativeDelayRange": [
+        0,
+        0
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+      "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
+      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj": {
+      "nativeField": "ExplosiveAttack",
+      "nativeDelayRange": [
+        0,
+        0
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+      "nativeDelivery": "ClusterBomb ordinary contact +7b8 actual victim; preservedPROJECTILE2 -> common Avatar+340/348 -> authority AGC",
+      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
+    },
+    "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj": {
+      "nativeField": "ExplosiveAttack",
+      "nativeDelayRange": [
+        0,
+        0
+      ],
+      "genericHit": true,
+      "genericCriticalHit": true,
+      "headHit": false,
+      "enervate": false,
+      "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+      "nativeDelivery": "ClusterBomb ordinary contact +7b8 actual victim; preservedPROJECTILE2 -> common Avatar+340/348 -> authority AGC",
+      "evidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
     }
   }
 }

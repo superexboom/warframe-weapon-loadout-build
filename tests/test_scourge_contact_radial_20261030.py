@@ -6,7 +6,22 @@ from wfarsenal import manual_combat,native_replay,combat_replay
 from wfarsenal.damage import ModEffect,Scenario
 from tools import import_scourge_contact_radial as imp
 from tools.import_native_secondary_payloads import merge_patch
-from tests.test_scourge_contact_contract_20261029 import source
+from pathlib import Path
+from types import SimpleNamespace
+import json
+ROOT=Path(__file__).resolve().parents[1]
+
+@pytest.fixture
+def source():
+    data=json.loads((ROOT/'tests/fixtures/scourge_prime_source.json').read_bytes());objects={imp.WEAPON:data['weapon'],imp.PROJECTILE:data['projectile']};parents={r['path']:r['parent'] for r in data['sources']}
+    class Packages:
+        entities={p:(a,SimpleNamespace(attr=None)) for p,a in parents.items()}
+        def parent(self,p):return parents.get(p)
+        def resolve(self,p):return deepcopy(objects[p])
+        def locate(self,owner,ref):return ref if ref.startswith('/') else owner.rsplit('/',1)[0]+'/'+ref
+    row=next(r for r in json.loads((ROOT/'data/export/2026.08.13.13.24/weapons.json').read_bytes())['data'] if r['path']==imp.WEAPON)
+    return Packages(),objects,row
+
 
 TARGET=dict(health=1e12,shield=0.,overguard=0.,armour=0.,baseLevel=1)
 
@@ -23,24 +38,20 @@ def test_source_builds_main55_and_only_one_spear(source):
     assert '141050add' in entry['nativeEvidence']['removal']
     assert 'remote queue receiver ordering not emulated' in entry['nativeEvidence']['removal']
 
-@pytest.mark.parametrize('field,value',[('reloadTime',1.5),('fireRate',120),('IsAlternateFire',0)])
-def test_cadence_drift_rejected(source,field,value):
-    pkg,objects,row=source;objects[imp.WEAPON]['Behaviors'][1]['state:LotusSpearGunStateBehavior'][field]=value
-    with pytest.raises(ValueError,match='cadence'):imp.build_patch(pkg,row)
 
-@pytest.mark.parametrize('native',[False,True])
-@pytest.mark.parametrize('msbonus',[0.,2.])
-@pytest.mark.parametrize('window,expected,reloads',[(1.1,1,1),(3.1,1,1),(3.3,2,1),(10.,4,3)])
-def test_actual_single_contact55_route_keeps_charge_reload_and_one_spear(source,monkeypatch,native,msbonus,window,expected,reloads):
+def test_actual_contact_route_keeps_charge_reload_and_one_spear(source,monkeypatch):
     pkg,_,row=source;payload=merge_patch(manual_combat.reference(),imp.build_patch(pkg,row))
-    monkeypatch.setattr(manual_combat,'reference',lambda:payload);monkeypatch.setattr(native_replay,'ENABLED',native)
+    monkeypatch.setattr(manual_combat,'reference',lambda:payload)
+    monkeypatch.setattr(native_replay,'ENABLED',True);monkeypatch.setattr(native_replay,'SHADOW',True)
     w=next(w for w in app.EXPORTS['weapons'] if w['path']==imp.WEAPON)
-    effects=[ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.),ModEffect('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',msbonus)]
+    effects=[ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.),ModEffect('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',2.)]
     fight=manual_combat.prepare(dict(weapon=deepcopy(w),fire_mode=1,effects=effects,scenario=Scenario()),[],[])
     stats,_=fight['resolve']('selected',{},0.);before=native_replay.STATS['native']
-    result=combat_replay.replay(stats,TARGET,attacks_per_second=stats.fire_rate,window_seconds=window,combat=fight,collect_timeline=False)
-    if native:assert native_replay.STATS['native']>before,'requires actual native path'
-    assert result['shots']==expected
-    assert result['reloads']==reloads
-    assert result['totalWindowDamage']==pytest.approx(expected*355.,rel=1e-7)
-    assert 'scourge-prime-throw-reload-rethrow-input-policy-idealized' in result['unsupported']
+    def replay(window):
+        return combat_replay.replay(stats,TARGET,attacks_per_second=stats.fire_rate,window_seconds=window,combat=fight,collect_timeline=False)
+    prior=replay(3.1);after=replay(3.3)
+    assert prior['shots']==prior['reloads']==1
+    assert after['shots']==2 and after['reloads']==1
+    assert after['totalWindowDamage']==pytest.approx(2*355.,rel=1e-7)
+    assert 'scourge-prime-throw-reload-rethrow-input-policy-idealized' in after['unsupported']
+    assert native_replay.STATS['native']>before

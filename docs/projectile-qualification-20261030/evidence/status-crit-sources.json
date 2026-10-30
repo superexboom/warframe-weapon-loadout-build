@@ -1,0 +1,196 @@
+{
+  "/Lotus/Types/Enemies/BaseInjuryHandlers/BasePunctureDamageProc": {
+    "EvaluatorTypes": [
+      "DefaultPunctureProcEvaluator"
+    ],
+    "CanBlockInjury": 1,
+    "ProcEffects": [
+      {
+        "LocalPosition": [
+          0,
+          0,
+          0
+        ],
+        "LocalRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "BoneName": "",
+        "Type": "/Lotus/Fx/Weapons/Procs/Puncture",
+        "Chance": 255,
+        "RelativeToBounds": 0,
+        "Attach": 1,
+        "DestroyWithOwner": 1,
+        "DestroyParentOnDeath": 0,
+        "FadeOutOnDestruction": 0,
+        "Scale": 1,
+        "AttachEffectAtHitPoint": 1,
+        "AttachToHeadBone": 0
+      },
+      {
+        "LocalPosition": [
+          0,
+          0,
+          0
+        ],
+        "LocalRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "BoneName": "",
+        "Type": "/Lotus/Fx/Gameplay/StatusEffects/Weakened",
+        "Chance": 255,
+        "RelativeToBounds": 0,
+        "Attach": 1,
+        "DestroyWithOwner": 1,
+        "DestroyParentOnDeath": 0,
+        "FadeOutOnDestruction": 0,
+        "Scale": 1,
+        "AttachEffectAtHitPoint": 0,
+        "AttachToHeadBone": 0
+      }
+    ],
+    "StackStyle": "OneInstancePerHit",
+    "MaxStacks": 5,
+    "MaxStacksWithOverguard": 5,
+    "StackedUpgrades": [
+      {
+        "BaseValue": 0.60000002,
+        "RepeatValue": -0.1,
+        "UpgradeType": "GAMEPLAY_FACTION_DAMAGE",
+        "OperationType": "MULTIPLY",
+        "Value": 0,
+        "ValidType": "",
+        "DamageType": "DT_ANY",
+        "SymbolFilter": "",
+        "UpgradeObject": "",
+        "ValidPostures": [],
+        "ValidModifiers": [],
+        "InvalidModifiers": [],
+        "IsAutonomous": 0,
+        "ValidProcTypes": []
+      },
+      {
+        "BaseValue": 0.050000001,
+        "RepeatValue": 0.050000001,
+        "UpgradeType": "AVATAR_CRIT_CHANCE_VULNERABILITY",
+        "OperationType": "ADD",
+        "Value": 0,
+        "ValidType": "",
+        "DamageType": "DT_ANY",
+        "SymbolFilter": "",
+        "UpgradeObject": "",
+        "ValidPostures": [],
+        "ValidModifiers": [],
+        "InvalidModifiers": [],
+        "IsAutonomous": 0,
+        "ValidProcTypes": []
+      }
+    ],
+    "InstigatorSound": "/Lotus/Sounds/Mods/Proc/Impact/ProcImpact",
+    "Duration": 10
+  },
+  "/Lotus/Types/Enemies/BaseInjuryHandlers/BaseFreezeDamageProc": {
+    "EvaluatorTypes": [
+      "DefaultFreezeProcEvaluator"
+    ],
+    "CanBlockInjury": 1,
+    "ProcEffects": [
+      {
+        "LocalPosition": [
+          0,
+          0,
+          0
+        ],
+        "LocalRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "BoneName": "",
+        "Type": "/Lotus/Fx/Gameplay/StatusEffects/Chilled",
+        "Chance": 255,
+        "RelativeToBounds": 0,
+        "Attach": 1,
+        "DestroyWithOwner": 1,
+        "DestroyParentOnDeath": 0,
+        "FadeOutOnDestruction": 0,
+        "Scale": 1,
+        "AttachEffectAtHitPoint": 0,
+        "AttachToHeadBone": 0
+      },
+      {
+        "LocalPosition": [
+          0,
+          0,
+          0
+        ],
+        "LocalRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "BoneName": "",
+        "Type": "/Lotus/Fx/Weapons/Procs/Cold",
+        "Chance": 255,
+        "RelativeToBounds": 0,
+        "Attach": 1,
+        "DestroyWithOwner": 1,
+        "DestroyParentOnDeath": 0,
+        "FadeOutOnDestruction": 0,
+        "Scale": 1,
+        "AttachEffectAtHitPoint": 1,
+        "AttachToHeadBone": 0
+      }
+    ],
+    "StackStyle": "OneInstancePerHit",
+    "MaxStacks": 9,
+    "MaxStacksWithOverguard": 4,
+    "StackedUpgrades": [
+      {
+        "BaseValue": 0.1,
+        "RepeatValue": 0.050000001,
+        "UpgradeType": "AVATAR_CRIT_DAMAGE_VULNERABILITY",
+        "OperationType": "ADD",
+        "Value": 0,
+        "ValidType": "",
+        "DamageType": "DT_ANY",
+        "SymbolFilter": "",
+        "UpgradeObject": "",
+        "ValidPostures": [],
+        "ValidModifiers": [],
+        "InvalidModifiers": [],
+        "IsAutonomous": 0,
+        "ValidProcTypes": []
+      }
+    ],
+    "InstigatorSound": "/Lotus/Sounds/Mods/Proc/Cold/ProcCold",
+    "Duration": 6,
+    "DurationUpgradeSymbol": "Chilled",
+    "RepeatFreezeModifier": 0.050000001,
+    "FrozenDebuffs": [
+      {
+        "BaseValue": 1,
+        "RepeatValue": 0,
+        "UpgradeType": "AVATAR_CRIT_DAMAGE_VULNERABILITY",
+        "OperationType": "ADD",
+        "Value": 1,
+        "ValidType": "",
+        "DamageType": "DT_ANY",
+        "SymbolFilter": "",
+        "UpgradeObject": "",
+        "ValidPostures": [],
+        "ValidModifiers": [],
+        "InvalidModifiers": [],
+        "IsAutonomous": 0,
+        "ValidProcTypes": []
+      }
+    ]
+  }
+}

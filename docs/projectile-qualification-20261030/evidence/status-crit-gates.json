@@ -1,0 +1,38 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "consumer": "0x1408ea3d0",
+  "victimControllerVtable": "0x1422588d8",
+  "virtualSlot": "0x760",
+  "sharedGate": "1408ea868..886: victim+28 non-null; bitmask(1<<packet+1bf) & byte[142832360] != 0",
+  "maskImageInitial": 14,
+  "admittedHitTypes": [
+    1,
+    2,
+    3
+  ],
+  "excludedHitTypes": [
+    0,
+    4,
+    5,
+    6,
+    7
+  ],
+  "chanceVulnerability": {
+    "enum": 34,
+    "name": "AVATAR_CRIT_CHANCE_VULNERABILITY",
+    "consumer": "1408ea91d..962",
+    "packetDestination": "+0x98"
+  },
+  "damageVulnerability": {
+    "enum": 37,
+    "name": "AVATAR_CRIT_DAMAGE_VULNERABILITY",
+    "consumer": "1408ea9b3..9f8",
+    "packetDestination": "+0xd0"
+  },
+  "otherGate": "1408ea88c..8a0 resolves source via140447aa0 and skips if141baa200(source,1) returns true",
+  "limits": [
+    "Static exact original code/data proof; no live runtime upgrade installation or child delivery executed.",
+    "HitType2 passes this local mask only; impact-behavior routing may still consume/change a source packet.",
+    "Source/owner predicates, active victim upgrades, packet lifetime and source force-SCRIPT override remain independent."
+  ]
+}

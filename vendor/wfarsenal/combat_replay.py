@@ -848,6 +848,23 @@ def _reference_trajectory(
         head_part = float(locations['head']['hit_multiplier'] or 1.0)
         extra_scale *= ((1 - head) + head * head_part * head_part) / ((1 - head) + head * head_part)
 
+    def radial_hit(part, sniper_factor, t):
+        if part.delayed_radial_hit_event:
+            combat['victimProcTypesBeforeHit'] = {dtype:p.probability(t) for dtype,p in presence.items()}
+        radial_packet = packet(part, 0.0)
+        radial_vector = radial_packet[0] if sniper_factor == 1. else {k: v*sniper_factor for k, v in radial_packet[0].items()}
+        damage_event = None
+        if part.delayed_radial_hit_event:
+            full_victim = abs(pools[1]-full[1])<1e-7 and abs(pools[2]-full[2])<1e-7
+            cc = part.crit_chance + (part.victim_full_crit_chance if full_victim else 0.) + (live_crit()[0] if part.radial_victim_crit else 0.)
+            weights = enervate.damage_marginal() if enervate else {0: 1.}
+            critical = sum(weight*min(max((cc+stacks*.1)*part.bodyshot_crit_multiplier,0.),1.)
+                           for stacks,weight in weights.items())
+            damage_event = (part.multishot, critical*part.multishot)
+        if not take(radial_vector, t, 'direct', cv2=spread(part,0.), damage_event=damage_event):
+            add_procs(part, 0.0, t, radial_packet, damage_scale=sniper_factor)
+        noncrit_no_proc_hit(part, 0.0, t)
+
     def take(vector, t, source, weak_kill=False, cv2=0.0, extra=False, damage_event=None, weapon_source=True):
         # Spend one attack fraction across pools. Shield bypass acts in parallel.
         # Residual damage never leaks to the next target.
@@ -1117,9 +1134,9 @@ def _reference_trajectory(
         if getattr(st,'_fixed_radial',False):
             return attack_data(st,0.)
         puncture,cold=live_crit()
-        # Puncture's crit chance and Cold's crit damage (frozen +1.0 included)
-        # do not apply to Area of Effect damage (wiki Puncture / Cold).
-        if st.radial_only:puncture=cold=0.0
+        # Native victim vulnerability uses actual HitType, independently of
+        # head suppression. Audited projectile-typed area packets retain it.
+        if st.radial_only and not st.radial_victim_crit:puncture=cold=0.0
         undamaged = abs(pools[1]-full[1])<1e-7 and abs(pools[2]-full[2])<1e-7
         if undamaged and (st.victim_full_crit_chance or st.victim_full_crit_damage):
             st = replace(st,crit_chance=st.crit_chance+st.victim_full_crit_chance,
@@ -1131,7 +1148,7 @@ def _reference_trajectory(
         # Secondary Shiver adds each live Cold stack to the base-damage
         # bracket; Melee Careen multiplies hits on a frozen target.
         shiver = frozen = 1.0
-        if cold and (st.cold_stack_damage or st.frozen_damage_multiplier != 1.0):
+        if cold and not st.radial_only and (st.cold_stack_damage or st.frozen_damage_multiplier != 1.0):
             stacks_cold = count('DT_FREEZE')
             if st.cold_stack_damage and st.base_damage_bracket > 0:
                 shiver = (st.base_damage_bracket + st.cold_stack_damage*min(stacks_cold, 10.))/st.base_damage_bracket
@@ -1187,7 +1204,7 @@ def _reference_trajectory(
         # independently to direct and radial parts. It never arms from DoT ticks.
         if not any(q.get('kind') == 'on-noncrit-no-proc' for q in sources):
             return
-        puncture = 0.0 if st.radial_only else live_crit()[0]
+        puncture = 0.0 if st.radial_only and not st.radial_victim_crit else live_crit()[0]
         weak = st.weakpoint_crit_chance_bonus + st.base_crit_chance * st.weakpoint_crit_chance_relative
         marginal = enervate.damage_marginal() if enervate else {0: 1.0}
         noncrit = 0.0
@@ -1470,21 +1487,7 @@ def _reference_trajectory(
         elif kind == 'delayed-radial':
             part, sniper_factor = payload if isinstance(payload, tuple) else (payload, 1.)
             delayed_attack_count += 1
-            if part.delayed_radial_hit_event:
-                combat['victimProcTypesBeforeHit'] = {dtype:p.probability(t) for dtype,p in presence.items()}
-            radial_packet = packet(part, 0.0)
-            radial_vector = radial_packet[0] if sniper_factor == 1. else {k: v*sniper_factor for k, v in radial_packet[0].items()}
-            damage_event = None
-            if part.delayed_radial_hit_event:
-                full_victim = abs(pools[1]-full[1])<1e-7 and abs(pools[2]-full[2])<1e-7
-                cc = part.crit_chance + (part.victim_full_crit_chance if full_victim else 0.)
-                weights = enervate.damage_marginal() if enervate else {0: 1.}
-                critical = sum(weight*min(max((cc+stacks*.1)*part.bodyshot_crit_multiplier,0.),1.)
-                               for stacks,weight in weights.items())
-                damage_event = (part.multishot, critical*part.multishot)
-            if not take(radial_vector, t, 'direct', cv2=spread(part,0.), damage_event=damage_event):
-                add_procs(part, 0.0, t, radial_packet, damage_scale=sniper_factor)
-            noncrit_no_proc_hit(part, 0.0, t)
+            radial_hit(part, sniper_factor, t)
         elif kind == 'delayed-attack':
             part, aim = payload
             delayed_attack_count += 1
@@ -2141,11 +2144,7 @@ def _reference_trajectory(
                     push(t + delay, 'delayed-radial', (part, sniper_factor),
                          None if getattr(part,'_persist_after_kill',False) else generation)
                 else:
-                    radial_packet = packet(part, 0.0)
-                    radial_vector = radial_packet[0] if sniper_factor == 1. else {k: v*sniper_factor for k, v in radial_packet[0].items()}
-                    if not take(radial_vector, t, "direct", cv2=spread(part,0.)):
-                        add_procs(part, 0.0, t, radial_packet, damage_scale=sniper_factor)
-                    noncrit_no_proc_hit(part, 0.0, t)
+                    radial_hit(part, sniper_factor, t)
             if hit_count > 0 and burst and burst_round==burst_size-1:
                 signal("on-burst-hit", t)
             if burst:

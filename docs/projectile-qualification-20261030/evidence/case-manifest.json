@@ -1,0 +1,22 @@
+{
+  "event-type-builder-results.json": {
+    "sourceCase": "native-routes/event-type-builder-results.json",
+    "sha256": "4deab90dc97bbf9286281c020e78f9d0eead96786233ed1a5806de864aceb953"
+  },
+  "status-crit-source-predicate-results.json": {
+    "sourceCase": "native-routes/status-crit-source-predicate-results.json",
+    "sha256": "2effb9b882d4702d55bf851b923636bd182b75df13787a1157ecc46f3cf20dff"
+  },
+  "status-crit-gates.json": {
+    "sourceCase": "native-routes/status-crit-gates.json",
+    "sha256": "fb1becfab3fa018cb3ff96d36c015d017648b9ec2720fda7de304843530b0711"
+  },
+  "status-crit-sources.json": {
+    "sourceCase": "native-routes/status-crit-sources.json",
+    "sha256": "5c260876e4bd499a92f055816caf519b219d187a3ee75236187a41b3488daab8"
+  },
+  "export-corrections.json": {
+    "sourceCase": "export-corrections.json",
+    "sha256": "dacf6aef063a1eae1f2314ada75164091e271bd5db0bbe0268d4f82ec06324fa"
+  }
+}

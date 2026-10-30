@@ -212,6 +212,9 @@ def profile(pkg,row,spec):
         if attack.get('HitType')!='DHT_PROJECTILE':raise ValueError('Phantasma explicit hit type changed')
         component['hitTypeSource']='native-explicit-preserved-by-0x141234988..0x1412349aa'
         component['headSuppressionSource']='0x140bc29fc victimPacket+0x25c=1; independent of hitType'
+        component['takes_victim_crit']=True
+        component['victimCritEvidence']='ordinary weapon source; victim1408ea3d0 HitType mask0x0e and source predicate141baa200(arg1)'
+
     profile=dict(name=row.get('nameEn'),directTotal=spec['direct'],fireMode=ordinal,projectile=projectile,
         scope='bounded single-target parent explosion; declared per spawned projectile; unresolved gates approximated explicitly',
         radials=[component],unmodeled=list(spec['bounds']),behaviourSource=f'{bank}[{native_index}]',

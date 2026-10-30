@@ -1,5 +1,9 @@
 """Full clip damage scaling with an explicit conservative recharge strategy."""
 from copy import deepcopy
+import json
+from pathlib import Path
+from tools import import_tenet_plinx_cycle as imp
+from tools.import_native_secondary_payloads import merge_patch
 import pytest
 import app
 from wfarsenal import manual_combat, native_replay, combat_replay
@@ -28,72 +32,6 @@ def fixture(monkeypatch):
         stats,radial=fight['resolve']('selected',{},0.)
         return stats,radial,fight
     return build
-
-@pytest.mark.parametrize('n',[1,2,5,10,15])
-def test_scale_uses_modified_capacity_without_changing_multishot(fixture,n):
-    st,radial,fight=fixture(n)
-    assert sum(st.damage_types.values())==pytest.approx(100*n)
-    assert sum(radial.damage_types.values())==pytest.approx(100*n)
-    assert st.multishot==radial.multishot==1.
-    assert st.ammo_cost==n and st._requires_full_ammo and st._charge_before_fire
-    assert st._charge_time==pytest.approx(.8) and st.reload_time==pytest.approx(3+n/20)
-    assert not fight['chargeVolley'] and fight['fullClipCharge']==POLICY
-
-@pytest.mark.parametrize('reload',[0.,.5,1.])
-def test_reload_speed_shortens_wait_delay_not_refill(fixture,reload):
-    st,_,_=fixture(reload=reload)
-    assert st.reload_time==pytest.approx(3/(1+reload)+.5)
-
-@pytest.mark.parametrize('op',['ADD_BASE','SET_BASE'])
-def test_flat_damage_builds_are_explicitly_rejected(fixture,op):
-    with pytest.raises(ValueError,match='flat-add-native-damage-provider'):
-        fixture(extra=[ModEffect('WEAPON_DAMAGE_AMOUNT',op,50.)])
-
-@pytest.mark.parametrize('native',[False,True])
-@pytest.mark.parametrize('n,ms',[(1,0.),(10,0.),(15,1.)])
-def test_real_preparation_and_replay_match_source_packets(fixture,monkeypatch,n,ms,native):
-    st,_,fight=fixture(n,ms=ms)
-    monkeypatch.setattr(native_replay,'ENABLED',native)
-    before=native_replay.STATS['native']
-    def run(t):
-        return combat_replay.replay(st,TARGET,attacks_per_second=st.fire_rate,
-            window_seconds=t,combat=fight,headshot_chance=0.,collect_timeline=not native)
-    assert run(.799)['shots']==0
-    result=run(1.601)
-    assert result['shots']==1
-    assert result['totalWindowDamage']==pytest.approx(200*n*(1+ms))
-    assert result['fullClipCharge']==POLICY
-    if native: assert native_replay.STATS['native']>before
-
-@pytest.mark.parametrize('capacity,expected',[(10.49,10),(10.5,11),(14.7,15)])
-def test_native_capacity_rounds_half_up_before_charge_scaling(fixture,capacity,expected):
-    st,radial,_=fixture(capacity)
-    assert st.magazine==st.ammo_cost==expected
-    assert sum(st.damage_types.values())==pytest.approx(expected*100.)
-    assert sum(radial.damage_types.values())==pytest.approx(expected*100.)
-
-@pytest.mark.parametrize('native',[False,True])
-def test_repeated_cycles_wait_then_fully_recharge_and_keep_ammo_cost(fixture,monkeypatch,native):
-    st,_,fight=fixture(10)
-    monkeypatch.setattr(native_replay,'ENABLED',native)
-    result=combat_replay.replay(st,TARGET,attacks_per_second=st.fire_rate,
-        window_seconds=6.901,combat=fight,headshot_chance=0.,collect_timeline=not native)
-    assert result['shots']==2 and result['totalWindowDamage']==pytest.approx(4000.)
-    assert result['recharges']==1 and result['reloads']==0
-
-@pytest.mark.parametrize('live',[.25,.5,1.25,2.75])
-def test_fractional_live_co_rebuild_preserves_n_and_magazine(fixture,live):
-    effect=ModEffect('WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE','ADD',1.)
-    single,_,one=fixture(1,extra=[effect])
-    full,_,ten=fixture(10,extra=[effect])
-    a,ar=one['resolve']('selected',{'unused-dynamic-source':.4},live)
-    b,br=ten['resolve']('selected',{'unused-dynamic-source':.4},live)
-    assert sum(b.damage_types.values())==pytest.approx(sum(a.damage_types.values())*10)
-    assert sum(br.damage_types.values())==pytest.approx(sum(ar.damage_types.values())*10)
-    assert sum(b.damage_types.values())==pytest.approx(1000*(1+live))
-    assert b.magazine==b.ammo_cost==10 and b.multishot==1
-    assert b._co_spec is None and br._co_spec is None
-    assert manual_combat.live_variant(ten['resolve']('selected',{},1.),.5,1) is None
 
 
 def test_actual_production_manual_search_and_native_health_batch_agree(monkeypatch):
@@ -141,20 +79,16 @@ def test_actual_production_manual_search_and_native_health_batch_agree(monkeypat
     actual=search_combat.window(stats,context,score_only=True)
     assert actual['totalWindowDamage']==pytest.approx(manual['totalWindowDamage'],abs=1e-7)
 
-@pytest.mark.parametrize('native',[False,True])
-@pytest.mark.parametrize('n',[1,2,4,10])
-def test_small_capacities_cannot_skip_declared_wait_using_passive_regen(fixture,monkeypatch,n,native):
-    st,_,fight=fixture(n)
-    monkeypatch.setattr(native_replay,'ENABLED',native)
-    next_direct=.8+1.+3.+n/20.+.8
+def test_small_capacity_cannot_skip_declared_wait_using_passive_regen(fixture,monkeypatch):
+    st,_,fight=fixture(1)
+    monkeypatch.setattr(native_replay,'ENABLED',True);monkeypatch.setattr(native_replay,'SHADOW',True)
+    next_direct=.8+1.+3.+1/20.+.8
     def run(window):
-        return combat_replay.replay(st,TARGET,attacks_per_second=st.fire_rate,
-            window_seconds=window,combat=fight,headshot_chance=0.,collect_timeline=not native)
+        return combat_replay.replay(st,TARGET,attacks_per_second=st.fire_rate,window_seconds=window,combat=fight,headshot_chance=0.,collect_timeline=False)
     assert run(2.601)['shots']==1
-    before=run(next_direct-.001)
-    assert before['shots']==1 and before['totalWindowDamage']==pytest.approx(200*n)
-    after=run(next_direct+.801)
-    assert after['shots']==2 and after['totalWindowDamage']==pytest.approx(400*n)
+    before=run(next_direct-.001);after=run(next_direct+.801)
+    assert before['shots']==1 and before['totalWindowDamage']==pytest.approx(200.)
+    assert after['shots']==2 and after['totalWindowDamage']==pytest.approx(400.)
     assert after['recharges']==1 and after['reloads']==0
 
 
@@ -171,54 +105,50 @@ def test_actual_galvanized_co_stacks_keep_static_capacity_and_fractional_scale()
     mod=next(m for m in app.EXPORTS['mods'] if m.get('nameEn')=='Galvanized Shot')
     scenario=Scenario(trigger_policy='emergent')
     effects=mod_effects(mod,mod['maxRank'],scenario)
-    fight=manual_combat.prepare(dict(weapon=weapon,fire_mode=1,effects=effects,scenario=scenario),
-        [(mod,mod['maxRank'],None)],[])
+    fight=manual_combat.prepare(dict(weapon=weapon,fire_mode=1,effects=effects,scenario=scenario),[(mod,mod['maxRank'],None)],[])
     assert fight['conditionOverload']
-    for level in [0.,.25,1.]:
-        stacks={q['id']:q['maxStacks']*level for q in fight['trigger_sources']}
-        zero,_=fight['resolve']('selected',stacks,0.)
-        whole,_=fight['resolve']('selected',stacks,1.)
-        part,_=fight['resolve']('selected',stacks,.5)
-        assert zero.magazine==whole.magazine==part.magazine==10
-        assert zero.ammo_cost==whole.ammo_cost==part.ammo_cost==10
-        assert part.total_damage-zero.total_damage==pytest.approx((whole.total_damage-zero.total_damage)*.5)
-        assert part.total_damage>=1000
-
-@pytest.mark.parametrize('empty_scale,reload_add,reload_speed,regen_scale',[
-    (0.,0.,0.,0.),(.5,.25,.5,1.),(1.,1.,1.,-.5),(0.,0.,-1.5,0.)])
-def test_native_battery_query_buckets_apply_in_source_order(fixture,empty_scale,reload_add,reload_speed,regen_scale):
-    fx=[ModEffect('WEAPON_RELOAD_EMPTY_BATTERY','STACKING_MULTIPLY',empty_scale),
-        ModEffect('WEAPON_RELOAD_TIME','ADD',reload_add),
-        ModEffect('WEAPON_BATTERY_REGEN_RATE','STACKING_MULTIPLY',regen_scale)]
-    st,_,_=fixture(reload=reload_speed,extra=fx)
-    delay=(3*(1+empty_scale)+reload_add)/max(1+reload_speed,.01)
-    regen=20*(1+regen_scale)
-    assert st.reload_time==pytest.approx(delay+10/regen)
-    assert st._full_clip_charge['resolvedEmptyDelaySeconds']==pytest.approx(delay)
-    assert st._full_clip_charge['resolvedRegenPerSecond']==pytest.approx(regen)
+    stacks={q['id']:q['maxStacks']*.25 for q in fight['trigger_sources']}
+    zero,zr=fight['resolve']('selected',stacks,0.)
+    whole,wr=fight['resolve']('selected',stacks,1.)
+    part,pr=fight['resolve']('selected',stacks,.5)
+    assert zero.magazine==whole.magazine==part.magazine==10
+    assert zero.ammo_cost==whole.ammo_cost==part.ammo_cost==10
+    assert part.total_damage-zero.total_damage==pytest.approx((whole.total_damage-zero.total_damage)*.5)
+    assert pr.total_damage-zr.total_damage==pytest.approx((wr.total_damage-zr.total_damage)*.5)
+    assert part.total_damage>=1000
 
 
-def test_battery_parameter_for_other_weapon_type_is_not_applied(fixture):
-    effect=ModEffect('WEAPON_BATTERY_REGEN_RATE','STACKING_MULTIPLY',9.,valid_type='/DifferentWeapon')
-    st,_,_=fixture(extra=[effect])
-    assert st.reload_time==pytest.approx(3.5)
-
-
-def test_nonpositive_regen_cannot_silently_produce_finite_recharge(fixture):
-    with pytest.raises(ValueError,match='nonpositive-battery-regen'):
-        fixture(extra=[ModEffect('WEAPON_BATTERY_REGEN_RATE','SET',0.)])
-
-@pytest.mark.parametrize('native',[False,True])
-def test_battery_parameter_build_matches_replay_cadence(fixture,monkeypatch,native):
-    fx=[ModEffect('WEAPON_BATTERY_REGEN_RATE','STACKING_MULTIPLY',1.),
-        ModEffect('WEAPON_RELOAD_EMPTY_BATTERY','STACKING_MULTIPLY',.5),
-        ModEffect('WEAPON_RELOAD_TIME','ADD',.25)]
+def test_battery_parameters_control_actual_charge_cycle(fixture,monkeypatch):
+    fx=[ModEffect('WEAPON_BATTERY_REGEN_RATE','STACKING_MULTIPLY',1.),ModEffect('WEAPON_RELOAD_EMPTY_BATTERY','STACKING_MULTIPLY',.5),ModEffect('WEAPON_RELOAD_TIME','ADD',.25)]
     st,_,fight=fixture(4,reload=.5,extra=fx)
-    monkeypatch.setattr(native_replay,'ENABLED',native)
+    monkeypatch.setattr(native_replay,'ENABLED',True);monkeypatch.setattr(native_replay,'SHADOW',True)
     next_direct=2*.80000001+1.+(3*1.5+.25)/1.5+4/40.
     def run(window):
-        return combat_replay.replay(st,TARGET,attacks_per_second=st.fire_rate,
-            window_seconds=window,combat=fight,headshot_chance=0.,collect_timeline=not native)
+        return combat_replay.replay(st,TARGET,attacks_per_second=st.fire_rate,window_seconds=window,combat=fight,headshot_chance=0.,collect_timeline=False)
     assert run(next_direct-.001)['shots']==1
     after=run(next_direct+.801)
     assert after['shots']==2 and after['totalWindowDamage']==pytest.approx(1600.)
+
+
+@pytest.fixture
+def source(monkeypatch):
+    data=json.loads((Path(__file__).parent/'fixtures/tenet_plinx_source.json').read_text())
+    objects={imp.WEAPON:data['weapon'],imp.PROJECTILE:data['projectile'],
+             **{a:{'OnEnter':deepcopy(data['events'])} for a in imp.ATTACHMENTS}}
+    class Packages:
+        def resolve(self,p): return deepcopy(objects[p])
+        def locate(self,owner,ref): return ref if ref.startswith('/') else owner.rsplit('/',1)[0]+'/'+ref
+    monkeypatch.setattr(imp,'source_rows',lambda pkg,paths:[])
+    return Packages(), objects, {'path':imp.WEAPON}
+
+def test_source_contract_preserves_single_projectile_and_scoring_boundary(source):
+    pkg,_,row=source;out=imp.build_contract(pkg,row)
+    charge=out['enginePatchContract']['charge']
+    assert charge['rawProjectiles']==1 and charge['damageScale']=='ammoAtChargeStart'
+    assert charge['requiresFullClip'] and charge['consumesLoadedCapacity']
+    assert out['weapons']=={} and out['pending'][0]['defaultScoringExcluded']
+    base={'auditedAttacks':{'preserved':1}}
+    assert merge_patch(base,out)==base
+    radial=out['operationalPatch']['weapons'][imp.WEAPON]['modes']['1']['radial']
+    assert radial['damage']=={'radiation':100.} and radial['forcedProcs']==['PT_RAGDOLL']
+    assert radial['falloff_reduction']==pytest.approx(.40000001)

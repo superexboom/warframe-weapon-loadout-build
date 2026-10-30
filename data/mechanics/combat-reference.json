@@ -1518,7 +1518,10 @@
         "radius": 3.0,
         "takesRadiusMods": true
       },
-      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719"
+      "compressionSourceCommit": "bb1dcb69b7045b62b8a858dad7550d4458624719",
+      "unmodeled": [
+        "embedded-field-CO-and-hit-consumers-unverified"
+      ]
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/ThanoTechArchLongGun/ThanoTechLongGun": {
       "name": "Mausolon",
@@ -1961,8 +1964,19 @@
           "referenceSha256": "144f3e54127ed26d38c6611f9fda860659ee6e4ed2459b1e48a57e29e912f27b",
           "referenceDifferences": [
             "no CO catalog row: bomblets take no Condition Overload"
-          ]
+          ],
+          "nativeHitTypeContract": {
+            "direct": "DHT_PROJECTILE",
+            "radial": "DHT_RADIAL",
+            "nativeDefaultWhenAbsent": false,
+            "runtimeScriptOverride": true,
+            "consumer": "contact1416376a7..6cf/radial141234988..9aa; runtime+15b1 overrides both toSCRIPT5",
+            "sourceEvidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
+          }
         }
+      ],
+      "unmodeled": [
+        "cluster-contact-and-radial-qualification-body-approximation"
       ]
     },
     "/Lotus/Weapons/Corpus/LongGuns/GrenadeLauncher/GrenadeLauncher": {
@@ -2125,8 +2139,19 @@
           "referenceSha256": "5fb2b7301a974f8626969af3cb13f8d0b48bf2f2e1b0d496cffd4ed7948c432c",
           "referenceDifferences": [
             "ExplosiveAttack: native status omitted; reference 0.1 used"
-          ]
+          ],
+          "nativeHitTypeContract": {
+            "direct": "DHT_PROJECTILE",
+            "radial": "DHT_RADIAL",
+            "nativeDefaultWhenAbsent": false,
+            "runtimeScriptOverride": true,
+            "consumer": "contact1416376a7..6cf/radial141234988..9aa; runtime+15b1 overrides both toSCRIPT5",
+            "sourceEvidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
+          }
         }
+      ],
+      "unmodeled": [
+        "cluster-contact-and-radial-qualification-body-approximation"
       ]
     },
     "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon": {
@@ -5130,7 +5155,7 @@
             "larkspur-projectile-speed-mods-obstacles-and-out-of-range-contact-unmodeled",
             "larkspur-flight-time-dynamic-buff-snapshot-unverified",
             "larkspur-main-explosion-CO-neutral-fallback-unverified",
-            "larkspur-main-explosion-weakpoint-and-hit-events-neutral-fallback-unverified"
+            "larkspur-main-explosion-weakpoint-events-neutral-fallback-unverified"
           ],
           "behaviourSource": "HeavyBehaviors[1]",
           "nativeSources": [
@@ -5369,7 +5394,7 @@
             "larkspur-projectile-speed-mods-obstacles-and-out-of-range-contact-unmodeled",
             "larkspur-flight-time-dynamic-buff-snapshot-unverified",
             "larkspur-main-explosion-CO-neutral-fallback-unverified",
-            "larkspur-main-explosion-weakpoint-and-hit-events-neutral-fallback-unverified"
+            "larkspur-main-explosion-weakpoint-events-neutral-fallback-unverified"
           ],
           "behaviourSource": "HeavyBehaviors[1]",
           "nativeSources": [
@@ -7019,8 +7044,19 @@
             "AttackData: native status omitted; reference 0.19 used",
             "ExplosiveAttack: crit native 0.1/2 vs reference 0.17/2.3",
             "ExplosiveAttack: native status omitted; reference 0.19 used"
-          ]
+          ],
+          "nativeHitTypeContract": {
+            "direct": "DHT_PROJECTILE",
+            "radial": "DHT_RADIAL",
+            "nativeDefaultWhenAbsent": true,
+            "runtimeScriptOverride": true,
+            "consumer": "contact1416376a7..6cf/radial141234988..9aa; runtime+15b1 overrides both toSCRIPT5",
+            "sourceEvidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
+          }
         }
+      ],
+      "unmodeled": [
+        "cluster-contact-and-radial-qualification-body-approximation"
       ]
     },
     "/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Seer/KuvaSeer": {
@@ -7150,7 +7186,10 @@
               "sha256": "687f89ca0842d93195dfcb9f8fbe00e47f3ba639c0c27303926c50150de820cd"
             }
           ],
-          "generatedBy": "tools/import_projectile_components.py"
+          "generatedBy": "tools/import_projectile_components.py",
+          "unmodeled": [
+            "sepulcrum-lock-target-emission-and-hit-selection-unmodeled"
+          ]
         }
       }
     },
@@ -8078,8 +8117,19 @@
             }
           ],
           "reference": "data/weapons/primary/kuva_zarr.yaml",
-          "referenceSha256": "86dfa715d11490630ad6f0980b09762bc92bd54d748deda1df07b2b954ce8153"
+          "referenceSha256": "86dfa715d11490630ad6f0980b09762bc92bd54d748deda1df07b2b954ce8153",
+          "nativeHitTypeContract": {
+            "direct": "DHT_PROJECTILE",
+            "radial": "DHT_RADIAL",
+            "nativeDefaultWhenAbsent": false,
+            "runtimeScriptOverride": true,
+            "consumer": "contact1416376a7..6cf/radial141234988..9aa; runtime+15b1 overrides both toSCRIPT5",
+            "sourceEvidence": "docs/projectile-qualification-20261030/NATIVE-ROUTES.md"
+          }
         }
+      ],
+      "unmodeled": [
+        "cluster-contact-and-radial-qualification-body-approximation"
       ]
     },
     "/Lotus/Weapons/Infested/LongGuns/InfSniperRifle/InfSniperRifle": {
@@ -8212,7 +8262,10 @@
               "sha256": "68f5a0470ea243ce9e7050c0f56372d000b38b5b39804f9441f05eeec25a6749"
             }
           ],
-          "generatedBy": "tools/import_projectile_components.py"
+          "generatedBy": "tools/import_projectile_components.py",
+          "unmodeled": [
+            "trumna-alt-bounce-and-expiry-recipients-unmodeled"
+          ]
         }
       },
       "name": "Trumna",
@@ -8294,7 +8347,10 @@
               "sha256": "87f279a01a20d0c4e854522312603b9afc330d21c9b058c517987dc4df6d5190"
             }
           ],
-          "generatedBy": "tools/import_projectile_components.py"
+          "generatedBy": "tools/import_projectile_components.py",
+          "unmodeled": [
+            "trumna-alt-bounce-and-expiry-recipients-unmodeled"
+          ]
         }
       },
       "name": "Trumna Prime",
@@ -8415,7 +8471,10 @@
       },
       "name": "Coda Pox",
       "directTotal": 55.0,
-      "projectile": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile"
+      "projectile": "/Lotus/Weapons/Infested/InfestedLich/Pistols/CodaPoxProjectile",
+      "unmodeled": [
+        "embedded-field-CO-and-hit-consumers-unverified"
+      ]
     },
     "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars": {
       "lingering": {
@@ -8457,7 +8516,10 @@
       },
       "name": "Pox",
       "directTotal": 50.0,
-      "projectile": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile"
+      "projectile": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProxomityStarsProjectile",
+      "unmodeled": [
+        "embedded-field-CO-and-hit-consumers-unverified"
+      ]
     },
     "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon": {
       "modes": {
@@ -9244,7 +9306,8 @@
             "phantasma-main-explosion-CO-neutral-fallback-unverified",
             "phantasma-main-explosion-weakpoint-events-neutral-fallback-unverified",
             "phantasma-cluster-child-payload-unmodeled",
-            "phantasma-charge-ammo-scale-and-contact-routing-approximated"
+            "phantasma-charge-ammo-scale-and-contact-routing-approximated",
+            "phantasma-nonstandard-ability-parent-source-crit-routing-unverified"
           ],
           "scope": "bounded single-target parent explosion; declared per spawned projectile; unresolved gates approximated explicitly",
           "radials": [
@@ -9288,7 +9351,9 @@
                 "recipient": "target at explosion centre assumed",
                 "flightAndCollisionTiming": "impact-immediate"
               },
-              "headSuppressionSource": "0x140bc29fc victimPacket+0x25c=1; independent of hitType"
+              "headSuppressionSource": "0x140bc29fc victimPacket+0x25c=1; independent of hitType",
+              "takes_victim_crit": true,
+              "victimCritEvidence": "ordinary weapon source;1408ea872 mask0x0e acceptsPROJECTILE2;1408ea950/9d8 queriesAVATAR_CRIT_CHANCE/DAMAGE_VULNERABILITY; independent of head suppression25c"
             }
           ],
           "behaviourSource": "Behaviors[1]",
@@ -9402,7 +9467,8 @@
             "phantasma-main-explosion-CO-neutral-fallback-unverified",
             "phantasma-main-explosion-weakpoint-events-neutral-fallback-unverified",
             "phantasma-cluster-child-payload-unmodeled",
-            "phantasma-charge-ammo-scale-and-contact-routing-approximated"
+            "phantasma-charge-ammo-scale-and-contact-routing-approximated",
+            "phantasma-nonstandard-ability-parent-source-crit-routing-unverified"
           ],
           "scope": "bounded single-target parent explosion; declared per spawned projectile; unresolved gates approximated explicitly",
           "radials": [
@@ -9446,7 +9512,9 @@
                 "recipient": "target at explosion centre assumed",
                 "flightAndCollisionTiming": "impact-immediate"
               },
-              "headSuppressionSource": "0x140bc29fc victimPacket+0x25c=1; independent of hitType"
+              "headSuppressionSource": "0x140bc29fc victimPacket+0x25c=1; independent of hitType",
+              "takes_victim_crit": true,
+              "victimCritEvidence": "ordinary weapon source;1408ea872 mask0x0e acceptsPROJECTILE2;1408ea950/9d8 queriesAVATAR_CRIT_CHANCE/DAMAGE_VULNERABILITY; independent of head suppression25c"
             }
           ],
           "behaviourSource": "Behaviors[1]",

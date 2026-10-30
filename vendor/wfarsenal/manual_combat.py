@@ -987,7 +987,7 @@ def prepare(
                     scale = st.headshot_bonus_multiplier
                     part = replace(part,damage_types={k:v*scale for k,v in part.damage_types.items()},
                                    dot_base_damage=part.dot_base_damage*scale if part.dot_base_damage is not None else None)
-                part = replace(part, radial_only=True, weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
+                part = replace(part, radial_only=True, radial_victim_crit=bool(component.get("takes_victim_crit")), weakpoint_damage_bonus=0.0, weakpoint_crit_chance_bonus=0.0, weakpoint_crit_chance_relative=0.0, headshot_bonus_multiplier=1.0)
                 if component.get('takes_multishot') is False:
                     part = replace(part, multishot=1.0)
                 if component.get('count'):
@@ -1291,6 +1291,8 @@ def prepare(
         chargeBeforeFire=bool(selected_attack.get('fullClipCharge') or (selected_attack.get('charge') or {}).get('beforeFire')),
         nativeFireGate=bool(selected_attack.get('nativeFireCooldownSeconds')),
         delayedRadialEvents=any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
+        radialCritStatus=any(part.get('takes_victim_crit') for attack in (base_attack,selected_attack)
+                             for part in (attack.get('radial') or {}, *(attack.get('radials') or ()))),
         melee=melee,
         comboTierKeys=combo_tier_keys,
         beamRampFloors={

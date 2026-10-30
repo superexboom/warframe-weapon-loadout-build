@@ -1191,6 +1191,9 @@ class ModdedStats:
     continuous: bool = False
     # An exported explosion has no direct weakpoint impact.
     radial_only: bool = False
+    # A proven projectile-typed area packet can retain victim Puncture/Cold
+    # bonuses while its geometry still suppresses head damage.
+    radial_victim_crit: bool = False
     ignore_headshot_bonus: bool = False
     explosion_radius_multiplier: float = 1.0
     # Native forced statuses per projectile; explicit caller forced_procs remain
@@ -1229,7 +1232,7 @@ class ModdedStats:
     # throw-only weapon-damage bonus (it joins base_damage_bracket).
     reflection_explosion_chance: float = 0.0
     throw_damage_bonus: float = 0.0
-    # Audited authoritative delayed radial damage-event producer.
+    # Audited authoritative contact/delayed radial damage-event producer.
     delayed_radial_hit_event: bool = False
 
 

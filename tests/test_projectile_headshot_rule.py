@@ -46,3 +46,13 @@ def test_real_nataruk_native_python_panel_and_status_paths_agree(monkeypatch):
     monkeypatch.setattr(status_native,'SHADOW',True)
     status_native.score(s,target,dict(level=170,steel_path=True,hit_location='head'),
                         status_rate_multiplier=1.,damage_rate_multiplier=1.,total=True)
+
+
+def test_trumna_alt_impact_flag_suppresses_damage_bonus_without_becoming_radial():
+    weapon=next(w for w in app.EXPORTS['weapons'] if w.get('nameEn')=='Trumna Prime')
+    s=damage.apply_mods(weapon,[],fire_mode=1,scenario=Scenario())
+    assert s.ignore_headshot_bonus and not s.radial_only
+    victim=dict(health=1e9,armour=0,shield=0,baseLevel=1,headshotMultiplier=3.)
+    body=damage.damage_against(s,victim)['perShot']
+    assert damage.damage_against(replace(s,weakpoint_damage_bonus=3.5),victim,hit_location='head')['perShot']==body
+    assert damage.damage_against(replace(s,headshot_bonus_multiplier=1.3),victim,hit_location='head')['perShot']==pytest.approx(body*1.3)

@@ -1,4 +1,4 @@
-"""Source-bound admission for audited delayed radial damage-event producers."""
+"""Source-bound admission for audited contact and delayed radial damage-event producers."""
 from __future__ import annotations
 
 from functools import lru_cache
@@ -29,7 +29,7 @@ def producers():
 
 
 def admitted(component):
-    """Identity, raw field and positive native delay must all match the audit."""
+    """Identity, raw field and native contact/delay must all match the audit."""
     row = producers().get(component.get('nativeSource'))
     if (not isinstance(row, dict) or component.get('nativeField') != row.get('nativeField')
             or not row.get('genericHit') or not row.get('genericCriticalHit')):
@@ -37,7 +37,7 @@ def admitted(component):
     delay = component.get('impact_delay_seconds')
     bounds = row.get('nativeDelayRange') or []
     return (isinstance(delay, (int, float)) and not isinstance(delay, bool)
-            and len(bounds) == 2 and 0 < bounds[0] <= delay <= bounds[1]
+            and len(bounds) == 2 and 0 <= bounds[0] <= delay <= bounds[1]
             and not component.get('headOnly') and not component.get('__embedded')
             and not component.get('bodyOnly'))
 

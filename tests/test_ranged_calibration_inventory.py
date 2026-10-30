@@ -2,7 +2,11 @@ from tools.audit_ranged_calibration import mode_status,source_kinds,summarize
 import pytest
 
 def test_empty_and_auxiliary_modes_remain_in_denominator():
-    assert mode_status({'behaviorKind':'auxiliary-melee'})=='auxiliary-melee-excluded'
+    import json
+    from pathlib import Path
+    data=json.loads((Path(__file__).resolve().parents[1]/'data/export/2026.08.13.13.24/weapons.json').read_bytes())['data']
+    pox=next(w for w in data if w.get('nameEn')=='Pox')
+    assert mode_status(pox['fireModes'][1])=='auxiliary-melee-excluded'
     assert mode_status({})=='missing-damage-data'
     assert mode_status({'damage':{'types':{}}})=='no-positive-direct-payload'
 

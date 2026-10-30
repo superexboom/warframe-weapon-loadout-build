@@ -215,6 +215,7 @@ struct Stats {
     multishot: f64,
     continuous: bool,
     radial_only: bool,
+    radial_victim_crit: bool,
     crit_chance: f64,
     crit_multiplier: f64,
     bodyshot_crit_multiplier: f64,
@@ -323,6 +324,7 @@ impl Stats {
             multishot: self.multishot,
             continuous: self.continuous,
             radial_only: self.radial_only,
+            radial_victim_crit: self.radial_victim_crit,
             crit_chance: self.crit_chance,
             crit_multiplier: self.crit_multiplier,
             bodyshot_crit_multiplier: self.bodyshot_crit_multiplier,
@@ -1127,6 +1129,7 @@ impl<'py> Replay<'py> {
             multishot: f(obj, "multishot")?,
             continuous: b(obj, "continuous")?,
             radial_only: b(obj, "radial_only")?,
+            radial_victim_crit: b(obj, "radial_victim_crit")?,
             crit_chance: f(obj, "crit_chance")?,
             crit_multiplier: f(obj, "crit_multiplier")?,
             bodyshot_crit_multiplier: f(obj, "bodyshot_crit_multiplier")?,
@@ -1744,16 +1747,16 @@ impl<'py> Replay<'py> {
             });
         }
         let s = &self.stats[st];
-        let (radial_only, csd, bracket, frozen_mult) =
-            (s.radial_only, s.cold_stack_damage, s.base_damage_bracket, s.frozen_damage_multiplier);
+        let (radial_only, radial_victim_crit, csd, bracket, frozen_mult) =
+            (s.radial_only, s.radial_victim_crit, s.cold_stack_damage, s.base_damage_bracket, s.frozen_damage_multiplier);
         let (mut puncture, mut cold) = self.live_crit();
-        if radial_only {
+        if radial_only && !radial_victim_crit {
             puncture = 0.0;
             cold = 0.0;
         }
         let mut shiver = 1.0;
         let mut frozen = 1.0;
-        if cold != 0.0 && (csd != 0.0 || frozen_mult != 1.0) {
+        if cold != 0.0 && !radial_only && (csd != 0.0 || frozen_mult != 1.0) {
             let stacks_cold = self.count(FREEZE);
             if csd != 0.0 && bracket > 0.0 {
                 shiver = (bracket + csd * pmin(stacks_cold, 10.0)) / bracket;
@@ -3032,9 +3035,10 @@ impl<'py> Replay<'py> {
         };
         let cv2 = self.spread(part, 0.0);
         let damage_event = if notify && self.stats[part].delayed_radial_hit_event {
+            let puncture = if self.stats[part].radial_victim_crit { self.live_crit().0 } else { 0.0 };
             let s = &self.stats[part];
             let full = (self.pools[1]-self.full[1]).abs()<1e-7 && (self.pools[2]-self.full[2]).abs()<1e-7;
-            let cc = s.crit_chance + if full { s.victim_full_crit_chance } else { 0.0 };
+            let cc = s.crit_chance + puncture + if full { s.victim_full_crit_chance } else { 0.0 };
             let weights = self.enervate.as_ref().map(|en| en.damage_marginal()).unwrap_or_else(|| vec![(0,1.0)]);
             let critical = psum(weights.iter().map(|(stacks,weight)| weight*pmin(pmax((cc+*stacks as f64*0.1)*s.bodyshot_crit_multiplier,0.0),1.0)));
             Some((s.multishot, critical*s.multishot))
@@ -3050,7 +3054,7 @@ impl<'py> Replay<'py> {
         if !self.sources.iter().any(|q| q.kind.as_deref() == Some("on-noncrit-no-proc")) {
             return;
         }
-        let puncture = if self.stats[st].radial_only { 0.0 } else { self.live_crit().0 };
+        let puncture = if self.stats[st].radial_only && !self.stats[st].radial_victim_crit { 0.0 } else { self.live_crit().0 };
         let s = &self.stats[st];
         let weak = s.weakpoint_crit_chance_bonus + s.base_crit_chance * s.weakpoint_crit_chance_relative;
         let marginal = match &self.enervate {
@@ -4336,7 +4340,7 @@ impl<'py> Replay<'py> {
                             let generation = if self.stats[part].persist_after_kill { None } else { Some(generation) };
                             self.push(t + delay, Kind::DelayedRadial(part, sniper_factor), generation);
                         } else {
-                            self.radial_hit(part, sniper_factor, t, false)?;
+                            self.radial_hit(part, sniper_factor, t, true)?;
                         }
                     }
                     if self.form_burst().0.is_some() {

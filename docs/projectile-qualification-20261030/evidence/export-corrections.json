@@ -1,0 +1,17 @@
+[
+  {
+    "path": "/Lotus/Weapons/Infested/Pistols/InfProximityStars/InfProximityStars",
+    "nativeSourceSha256": "66b372471f417d5ba42b746fc07bbf8d0f705b0432ed6dbb4238ad2706bc7a05",
+    "change": "auxiliary-melee"
+  },
+  {
+    "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeTrumna/PrimeTrumnaWeapon",
+    "nativeSourceSha256": "04ed97c7418cae10868b1df4bcbb1884a8d50951d717a2c08070a0b5794ad8bf",
+    "change": "impactIgnoreHeadshotBonus=true"
+  },
+  {
+    "path": "/Lotus/Weapons/Thanotech/ThanoRifle/ThanotechRifle",
+    "nativeSourceSha256": "24fe532cf5dc6e6b25311f56420fc2f5cfe138892ebfa17f73d2eee175bed50e",
+    "change": "impactIgnoreHeadshotBonus=true"
+  }
+]

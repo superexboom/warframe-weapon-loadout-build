@@ -196,7 +196,8 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("FULL_CLIP_CHARGE_WAIT_POLICY", 1)?;
     m.add("NEUTRAL_FINITE_FIELD_SOURCE", 2)?;
     m.add("NATIVE_FIRE_COOLDOWN", 1)?;
-    m.add("DELAYED_RADIAL_EVENTS", 1)?;
+    m.add("DELAYED_RADIAL_EVENTS", 2)?;
+    m.add("RADIAL_VICTIM_CRIT", 1)?;
     m.add("ENERVATE_PROBABILISTIC_HITS", 1)?;
     m.add("IGNORE_HEADSHOT_BONUS", 1)?;
     m.add("STUG_IDEAL_DETONATION", 1)?;

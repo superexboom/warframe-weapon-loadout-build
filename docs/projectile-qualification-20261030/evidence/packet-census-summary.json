@@ -1,0 +1,63 @@
+{
+  "scope": "positive native declarations only, not runtime eligibility",
+  "source": "saved Packages 00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "projectiles": 264,
+  "positivePackets": 433,
+  "nonRadialTaggedAreaDeclarations": [
+    {
+      "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxProjectilePvE",
+      "field": "EmbedDeathAttack",
+      "amount": 30,
+      "declaredHitType": "DHT_PROJECTILE",
+      "weaponModes": [
+        {
+          "weapon": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
+          "name": "Grakata",
+          "mode": 0
+        }
+      ],
+      "sendEvents": null,
+      "damageUpgradeTypes": null,
+      "damageViaImpact": 1
+    },
+    {
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PrimeAltFireClusterProj",
+      "field": "ExplosiveAttack",
+      "amount": 73,
+      "declaredHitType": "DHT_PROJECTILE",
+      "weaponModes": [
+        {
+          "weapon": "/Lotus/Weapons/Tenno/LongGuns/PrimePhantasma/PhantasmaPrimeShotgun",
+          "name": "Phantasma Prime",
+          "mode": 1
+        }
+      ],
+      "sendEvents": null,
+      "damageUpgradeTypes": null,
+      "damageViaImpact": 1
+    },
+    {
+      "projectile": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/AltFireClusterProj",
+      "field": "ExplosiveAttack",
+      "amount": 73,
+      "declaredHitType": "DHT_PROJECTILE",
+      "weaponModes": [
+        {
+          "weapon": "/Lotus/Weapons/Tenno/LongGuns/RevenantShotgun/RevenantShotgun",
+          "name": "Phantasma",
+          "mode": 1
+        }
+      ],
+      "sendEvents": null,
+      "damageUpgradeTypes": null,
+      "damageViaImpact": 1
+    }
+  ],
+  "hitTypeCounts": {
+    "None": 351,
+    "DHT_DOT": 1,
+    "DHT_PROJECTILE": 67,
+    "DHT_RADIAL": 13,
+    "DHT_TRACE": 1
+  }
+}

@@ -17,7 +17,7 @@ BOUNDS=[
  'larkspur-projectile-speed-mods-obstacles-and-out-of-range-contact-unmodeled',
  'larkspur-flight-time-dynamic-buff-snapshot-unverified',
  'larkspur-main-explosion-CO-neutral-fallback-unverified',
- 'larkspur-main-explosion-weakpoint-and-hit-events-neutral-fallback-unverified',
+ 'larkspur-main-explosion-weakpoint-events-neutral-fallback-unverified',
 ]
 PROOF=dict(
  waveVtable='0x1423ebeb0',
