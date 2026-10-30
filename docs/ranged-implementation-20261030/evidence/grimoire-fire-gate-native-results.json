@@ -1,0 +1,80 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "cases": [
+    {
+      "case": "first-shot-arms-full45",
+      "remaining": 45.0,
+      "ready": false
+    },
+    {
+      "case": "native-dt-countdown",
+      "elapsed": 0.0,
+      "remaining": 45.0,
+      "ready": false
+    },
+    {
+      "case": "native-dt-countdown",
+      "elapsed": 1.0,
+      "remaining": 44.0,
+      "ready": false
+    },
+    {
+      "case": "native-dt-countdown",
+      "elapsed": 4.0,
+      "remaining": 41.0,
+      "ready": false
+    },
+    {
+      "case": "native-dt-countdown",
+      "elapsed": 44.0,
+      "remaining": 1.0,
+      "ready": false
+    },
+    {
+      "case": "native-dt-countdown",
+      "elapsed": 45.0,
+      "remaining": 0.0,
+      "ready": true
+    },
+    {
+      "case": "native-dt-countdown",
+      "elapsed": 46.0,
+      "remaining": 0.0,
+      "ready": true
+    },
+    {
+      "case": "native-single-charge-event-reduction",
+      "initial": 45.0,
+      "remaining": 44.0
+    },
+    {
+      "case": "native-single-charge-event-reduction",
+      "initial": 1.0,
+      "remaining": 0.0
+    },
+    {
+      "case": "native-single-charge-event-reduction",
+      "initial": 0.5,
+      "remaining": 0.0
+    },
+    {
+      "case": "native-single-charge-event-reduction",
+      "initial": 0.0,
+      "remaining": 0.0
+    },
+    {
+      "case": "passive-plus-two-events",
+      "elapsed": 4.0,
+      "remaining": 39.0
+    },
+    {
+      "case": "disabled-cooldown-rate-blocks-reduction",
+      "remaining": 45.0
+    }
+  ],
+  "limits": [
+    "Original-byte slices arm/countdown/gate; scene/controller reports accepted firing state1 and sound owner absent.",
+    "Charge callback runs full native14022a920. AddCharges event dispatcher and accepted primary-hit event count remain separate from damage/tick counts.",
+    "No live gameplay. No projectile chain or expiry geometry admitted."
+  ]
+}

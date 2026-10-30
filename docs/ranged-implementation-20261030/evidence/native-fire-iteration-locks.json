@@ -1,0 +1,689 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "packagesSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "applied": false,
+  "sourceConsumer": "0x140f75d20: fire+0x148 true returns raw fireIterations+0x28; weapon multishot query skipped",
+  "count": 13,
+  "modes": 13,
+  "deferred": [
+    {
+      "path": "/Lotus/Weapons/Infested/InfestedLich/LongGuns/1999InfShotgun/1999InfShotgunWeapon",
+      "mode": 1,
+      "reason": "no evaluable projectile identity; keep source declaration separate"
+    }
+  ],
+  "rows": [
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox",
+      "name": "Tenet Ferrox",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerroxChargedProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFerrox/CrpBEFerrox",
+          "parent": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun",
+          "rawAttributesSha256": "188c7a1fe9aa04d6c67d5eec52a7963563ec76ef1c6b7514488e68c61fda5477",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "rawAttributesSha256": "c69cdeccfc4023f07b1588c0886539b4953791c6cf18c253b6becae86964c62d",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "rawAttributesSha256": "a6b6ceeb4fe3512b22441c4c56ced0876f3daf86a6796e6edaa185320d15687d",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun",
+      "name": "Ferrox",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgunChargedProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Corpus/LongGuns/Spears/Railgun/CorpusRailgun",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "rawAttributesSha256": "c69cdeccfc4023f07b1588c0886539b4953791c6cf18c253b6becae86964c62d",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "rawAttributesSha256": "a6b6ceeb4fe3512b22441c4c56ced0876f3daf86a6796e6edaa185320d15687d",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpear",
+      "name": "Javlok",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpearChargedProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/LongGuns/GrnFlameSpear/GrnFlameSpear",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "rawAttributesSha256": "427a4d5163d3690a10b27d96805c15e5656ea7363d12430377eaa6d666f6ef1a",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "rawAttributesSha256": "a6b6ceeb4fe3512b22441c4c56ced0876f3daf86a6796e6edaa185320d15687d",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifle",
+      "name": "Buzlok",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifleProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultStandardRifle",
+          "rawAttributesSha256": "1db253bd48b8b8c2f51f81ac2f49fd73e3a6911039327b74eb198dcd80b6d6b3",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultStandardRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "attributeRecord": false
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/LongGuns/QuantaFullyInfested/InfQuantaRifle",
+      "name": "Paracyst",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Infested/LongGuns/QuantaFullyInfested/QuantaFullyInfestedHarpoonProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Infested/LongGuns/QuantaFullyInfested/InfQuantaRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultStandardRifle",
+          "rawAttributesSha256": "99442030e4c9b245117a94a81763619e30b0403795e3b890dd31545e193617e4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultStandardRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "attributeRecord": false
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Infested/Pistols/InfestedPistol",
+      "name": "Embolist",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Infested/Pistols/InfestedPistolAltFireProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Infested/Pistols/InfestedPistol",
+          "parent": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistolBeam",
+          "rawAttributesSha256": "553ad50978eb2e305a09855929db8e6d8da1ade0be9706f1ca5bc7304335b4bf",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistolBeam",
+          "parent": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistol",
+          "rawAttributesSha256": "35e80d8221b28c12db956547f175a1b820fdd0f884b789ff4daed447c01e9710",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistol",
+          "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "rawAttributesSha256": "411b62316f5f598f161d3c5c31f175ad4c69d16ac1477264e1cd16a4825e0c49",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "parent": "",
+          "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+      "name": "Grimoire",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoireAltProj",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+          "parent": "/Lotus/Weapons/Tenno/Pistol/LotusGrimoire",
+          "rawAttributesSha256": "1e95522336887a989dfe376263e394f5d4e4713658e6a37c485b7d498ea0fd2c",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusGrimoire",
+          "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "rawAttributesSha256": "f64b74e200709cd9c855552a9f547f366c50a1f0fe94e13449e067a930ab7e35",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "parent": "",
+          "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisWeapon",
+      "name": "Afentis Prime",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisSpearProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAfentis/PrimeAfentisWeapon",
+          "parent": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearGunWeapon",
+          "rawAttributesSha256": "2ca7a85c54929273bc3f05a353ab251fba52b9b394579b85947473a053c8f4c8",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearGunWeapon",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "rawAttributesSha256": "d6db8d3896765a111b389842d928dd4ab94f4e8721d98eedc9f5a63d695116e4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "rawAttributesSha256": "a6b6ceeb4fe3512b22441c4c56ced0876f3daf86a6796e6edaa185320d15687d",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+      "name": "Scourge Prime",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+          "parent": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+          "rawAttributesSha256": "f23c44dc3c58603f203627ff8e7295f21570c67a753245b4dba32eef59dad7a3",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "rawAttributesSha256": "dc8428404c34b733a1aaf4d77a26aa7a0e82e53c05f87e60373742dcf86984be",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "rawAttributesSha256": "a6b6ceeb4fe3512b22441c4c56ced0876f3daf86a6796e6edaa185320d15687d",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearGunWeapon",
+      "name": "Afentis",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnHopliteSpear/TnHopliteSpearGunWeapon",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "rawAttributesSha256": "d6db8d3896765a111b389842d928dd4ab94f4e8721d98eedc9f5a63d695116e4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "rawAttributesSha256": "a6b6ceeb4fe3512b22441c4c56ced0876f3daf86a6796e6edaa185320d15687d",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkRifleWeapon",
+      "name": "Enkaus",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnInkRifle/TnInkRifleWeapon",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "e264b0c98e1881b692c3db915d2eb063c3423c14c726758a7e76e79a7e9605a5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+      "name": "Scourge",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "rawAttributesSha256": "dc8428404c34b733a1aaf4d77a26aa7a0e82e53c05f87e60373742dcf86984be",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+          "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "rawAttributesSha256": "a6b6ceeb4fe3512b22441c4c56ced0876f3daf86a6796e6edaa185320d15687d",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+          "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+          "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+          "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+          "parent": "",
+          "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+          "attributeRecord": true
+        }
+      ]
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnOraxiaFlechette/TnOraxiaFlechette",
+      "name": "Scyotid",
+      "modes": [
+        {
+          "mode": 1,
+          "nativeIndex": 1,
+          "bank": "Behaviors",
+          "projectile": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnOraxiaFlechette/TnOraxiaFlechetteAltProjectile",
+          "rawCount": 1
+        }
+      ],
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/ThrowingWeapons/TnOraxiaFlechette/TnOraxiaFlechette",
+          "parent": "/Lotus/Weapons/Tenno/Akimbo/LotusAkimboOther",
+          "rawAttributesSha256": "2f777d31dbceeb50690db36e04816ba0aa6ede1a66dd81081b8926131dbdc7bc",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Akimbo/LotusAkimboOther",
+          "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "rawAttributesSha256": "9ed7faf787671012a8966bbfb67a22d57ccdd3b0efbf3951b98dcfa4518ca3b8",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+          "parent": "",
+          "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614",
+          "attributeRecord": true
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Emission count only; chain budgets, charge damage, repeated contacts, geometry, and other child sources are separate consumers."
+  ]
+}

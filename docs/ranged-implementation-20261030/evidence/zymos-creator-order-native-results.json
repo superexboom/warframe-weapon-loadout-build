@@ -1,0 +1,93 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "cases": [
+    {
+      "order": "registration-before-source",
+      "steps": [
+        {
+          "step": "register",
+          "queryIDs": [],
+          "source": "0x0",
+          "notificationEnabled": 1
+        },
+        {
+          "step": "W",
+          "queryIDs": [
+            244,
+            248
+          ],
+          "source": "0x30020000",
+          "notificationEnabled": 1
+        },
+        {
+          "step": "W",
+          "queryIDs": [
+            244,
+            248
+          ],
+          "source": "0x30020000",
+          "notificationEnabled": 1
+        },
+        {
+          "step": "W2",
+          "queryIDs": [
+            244,
+            248,
+            244,
+            248
+          ],
+          "source": "0x30024000",
+          "notificationEnabled": 1
+        }
+      ]
+    },
+    {
+      "order": "source-before-registration",
+      "steps": [
+        {
+          "step": "W",
+          "queryIDs": [],
+          "source": "0x30020000",
+          "notificationEnabled": 0
+        },
+        {
+          "step": "register",
+          "queryIDs": [],
+          "source": "0x30020000",
+          "notificationEnabled": 1
+        },
+        {
+          "step": "W",
+          "queryIDs": [],
+          "source": "0x30020000",
+          "notificationEnabled": 1
+        },
+        {
+          "step": "W2",
+          "queryIDs": [
+            244,
+            248
+          ],
+          "source": "0x30024000",
+          "notificationEnabled": 1
+        }
+      ]
+    }
+  ],
+  "actualFunctions": [
+    "140e4e1e0 registration",
+    "1405efa30 setter",
+    "real callback functor methods and leaf14045add8",
+    "carrier14226ff00+778 ->1412ffd10 ->1405699b0"
+  ],
+  "stubs": [
+    "base registration no-op1400bb680",
+    "query1401413d0 counted, not evaluated (bucket math independently verified by existing24case script)",
+    "ordinary ref destructor/security-cookie stubs shared by target fixture"
+  ],
+  "limits": [
+    "Proves order-sensitive callback event counts, not actual CreateEntity startup order",
+    "Two queries per genuine enabled source transition are CCf4 and CDf8, not two applications to each field",
+    "Does not admit damage or a fixed total surviving modifier count"
+  ]
+}

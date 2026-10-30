@@ -16,7 +16,7 @@ from typing import Any
 
 SECONDARY_RUNTIME_FLAGS = (
     "hasRadial", "hasLingering", "hasEmbedded", "hasStackable", "hasSequence",
-    "hasPhysicalProjectileLanes", "hasSourceOwnedFields",
+    "hasPhysicalProjectileLanes", "hasSourceOwnedFields", "hasFiniteFields",
 )
 SECONDARY_MAIN_SOURCES = frozenset((
     "ExplosiveAttack", "EmbedDeathAttack", "RadialDamage", "StackingAttack",

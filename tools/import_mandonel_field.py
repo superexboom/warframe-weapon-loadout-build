@@ -29,7 +29,7 @@ def profile(packages,row):
    raise ValueError("Mandonel field contract changed")
  return dict(name="Mandonel",fireMode=1,directTotal=1800.,periodicTriggers=[dict(
   id="mandonel-radiation-field",damage={"radiation":50.},nativeSource=TRIGGER,nativeField="AttackData",
-  sourceHitType="DHT_DOT",status_chance=.34999999,forcedProcs=[],crit_chance=0.,crit_multiplier=1.,
+  sourceHitType="DHT_DOT",status_chance=.34999999,statusConsumerVerified=True,forcedProcs=[],crit_chance=0.,crit_multiplier=1.,
   interval_seconds=.2,tick_rate=5.,damageOnEnter=True,damageOnEnterSeparateFromFirstPeriodic=True,
   first_periodic_delay_seconds=0.,firstPeriodicDelayModel="first-authoritative-update-collapsed-to-activation-time",
   duration_seconds=7.,lifetimePolicy="trigger-own-Destroy-script-lifetime7-not-OnHit-caller10",
@@ -47,6 +47,8 @@ def profile(packages,row):
   emptySource="Entity ctor0x1405299a0 initializes+0x400 empty; trigger ctor does not override; P0 has no source setter; damage0x140e5fd6b..7f falls back to trigger itself",
   sourceClassGate="0x140e5fde3..0x140e5fe36 requires LotusWeapon; self DamageTrigger fails; r14zero skips source weapon base+0xfd and ordinary elements+0x166",
   originalBytes="reproduce_mandonel_source.py preserves25/50with injected weapon multipliers1/2/3, zero weapon callbacks; downstream avatar/faction/target modifiers outside scope",
+  statusConsumer="AttackData HitType7 copied to packet+0x1bf, SC.34999999 copied+0x23c; actual neutral victim resolver141482900 retains both; submit1402c3940+0x780->14102d2f0->14123da10 rollsSC,140af1880 increments radiationcounter and dispatches eligible rule+0xe8;32original-bytecasesDHT0/7match,241suppressedcontrolblocksall",
+  statusLimits="neutral eligible radiation rule leaves; target immunity, special avatar/controller upgrades and specific radiation effect internals excluded",
   clock="actual DamageTrigger vtable0x1421635e0 update141463ae0; initial+0x6c0=0; interval.2 dispatch once/reset/no catchup; DamageOnEnter separate",
   destroy="trigger ScriptInstance Destroy P3 pc6..10 sleeps its lifetime then pc17..22 Region DestroyEntity wrapper141a26380 ->1402201a0 ->140185a50; resolved trigger lifetime7, OnHit caller override10 belongs different script instance",
   coalescing="OnHit P5 pc44..98 records actor-keyed cncrtHitPt and starts ProcessLastHit; P4 yields twice pc0..7, invokes shared P0 once pc35..39, then nils actor keypc51..54; no previous-field destroy",

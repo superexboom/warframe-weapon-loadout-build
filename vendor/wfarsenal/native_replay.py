@@ -62,7 +62,17 @@ def supported(stats, options) -> bool:
         return False
     if (combat.get('delayedRadialEvents') or getattr(stats, 'delayed_radial_hit_event', False)) and not getattr(wfcore, 'DELAYED_RADIAL_EVENTS', 0):
         return False
+    if combat.get('nativeFireGate') and not getattr(wfcore, 'NATIVE_FIRE_COOLDOWN', 0):
+        return False
+    if combat.get('chargeBeforeFire') and not getattr(wfcore, 'ORDINARY_CHARGED_WINDUP', 0):
+        return False
+    if combat.get('fullClipCharge') and not getattr(wfcore, 'FULL_CLIP_CHARGE_WAIT_POLICY', 0):
+        return False
     if combat.get('chargeVolley') and not getattr(wfcore, 'MAGAZINE_CHARGE_VOLLEY', 0):
+        return False
+    if combat.get('finiteFields') and getattr(wfcore,'NEUTRAL_FINITE_FIELD_SOURCE',0)<2:
+        return False
+    if combat.get('finiteFields') and not getattr(wfcore,'INDEPENDENT_FINITE_FIELDS',0):
         return False
     if combat.get('sourceOwnedFields') and not getattr(wfcore,'SOURCE_OWNED_FIELDS',0):
         return False
@@ -697,6 +707,7 @@ def trajectory(
                              if manual_detonation else None),
         'delayedAttackEvents': core['delayedAttackEvents'],
         'projectileEvents': [],
+        'fullClipCharge': combat.get('fullClipCharge'),
         'chargeVolley': {'policy':'full-magazine','events':[]} if combat.get('chargeVolley') else None,
         'projectileLifecycle': (dict(zip(('deployed', 'merged', 'explosions', 'singularities', 'childProjectiles'),
                                          core['projectiles'])) if 'projectiles' in core else {}),
@@ -757,6 +768,7 @@ def trajectory(
         "continuousKillEvents": True,
         "activePool": "overguard" if full[0] else ("shield" if full[1] else "health"),
         "unsupported": unsupported,
+        **({"finiteFieldPackets":core["finiteFieldPackets"],"finiteFieldActivations":core["finiteFieldActivations"],"finiteFieldTrace":[]} if combat.get("finiteFields") else {}),
         **({"sourceOwnedFieldPackets":core["sourceOwnedFieldPackets"],"sourceOwnedFieldActivations":core["sourceOwnedFieldActivations"],"sourceOwnedFieldTrace":[]} if combat.get("sourceOwnedFields") else {}),
         **({"physicalProjectileTrace":[],"physicalProjectilePhase":core["physicalProjectilePhase"]} if combat.get("physicalProjectileLanes") else {}),
         "limitations": [

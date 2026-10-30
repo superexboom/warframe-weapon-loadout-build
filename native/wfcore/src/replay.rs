@@ -235,6 +235,9 @@ struct Stats {
     requires_full_ammo: bool,
     bow_draw: Option<f64>,
     charge_time: f64,
+    charge_before_fire: bool,
+    full_clip_charge: bool,
+    native_fire_cooldown: f64,
     charge_volley: bool,
     initial_combo: f64,
     heavy_charge_speed: f64,
@@ -253,6 +256,7 @@ struct Stats {
     persist_after_kill: bool,
     lingering: Option<(usize, f64, f64)>,
     source_fields: Vec<(usize,f64,f64,usize)>,
+    finite_fields: Vec<(usize,f64,f64,usize)>,
     embedded: Option<(usize, f64, f64)>,
     primary_delay: f64,
     fixed_radial: bool,
@@ -283,9 +287,11 @@ impl Stats {
         self.bow_draw = None;
         self.charge_time = 0.0;
         self.charge_volley = false;
+        self.full_clip_charge = false;
         self.primary_delay = 0.0;
         self.lingering = None;
         self.source_fields.clear();
+        self.finite_fields.clear();
         self.embedded = None;
         self.charge_pool_cost = 1.0;
         self.requires_full_ammo = false;
@@ -337,6 +343,9 @@ impl Stats {
             requires_full_ammo: self.requires_full_ammo,
             bow_draw: self.bow_draw,
             charge_time: self.charge_time,
+            charge_before_fire: self.charge_before_fire,
+            full_clip_charge: self.full_clip_charge,
+            native_fire_cooldown: self.native_fire_cooldown,
             charge_volley: self.charge_volley,
             initial_combo: self.initial_combo,
             heavy_charge_speed: self.heavy_charge_speed,
@@ -354,6 +363,7 @@ impl Stats {
             persist_after_kill: self.persist_after_kill,
             lingering: self.lingering,
             source_fields:self.source_fields.clone(),
+            finite_fields:self.finite_fields.clone(),
             embedded: self.embedded,
             primary_delay: self.primary_delay,
             fixed_radial: self.fixed_radial,
@@ -408,6 +418,7 @@ pub(crate) fn opt_attr<'py>(o: &Bound<'py, PyAny>, name: &str) -> PyResult<Optio
 #[derive(Clone)]
 enum Kind {
     Fire,
+    ChargedFire,
     ReloadComplete(bool),
     Heat(i64),
     Blast(usize),
@@ -423,6 +434,7 @@ enum Kind {
     DelayedAttack(usize, f64),
     Lingering(usize),
     SourceField(u64,usize,usize),
+    FiniteField(usize,usize),
     EmbeddedTick(usize),
     EmbeddedDeath(usize),
     MeleeRecovery(u64, f64),
@@ -624,6 +636,8 @@ pub struct Replay<'py> {
     source_field_token:u64,
     source_field_packets:Vec<u64>,
     source_field_activations:u64,
+    finite_field_packets:Vec<u64>,
+    finite_field_activations:u64,
     physical_lane_length: usize,
     physical_lane_phase: usize,
     physical_lane_selected: Option<usize>,
@@ -834,7 +848,7 @@ impl<'py> Replay<'py> {
             burst, burst_rate, infinite_ammo, victim_before, syndicate, target_faction,
             faction_bracket, tables, battery, spool, rate_spool, shell,
             shot_combo, reload_after_every_shot, refill_growth, restore, pending_restore, recharges,
-            delayed_attacks, reload_shell_events, derived, selected_incarnon, projectile_sequence_length, projectile_sequence_index, source_field_token, source_field_packets, source_field_activations, physical_lane_length, physical_lane_phase, physical_lane_selected, lane_stratum, volley_rounds, volley_shot_resume, melee_count, melee_heavy_multiplier,
+            delayed_attacks, reload_shell_events, derived, selected_incarnon, projectile_sequence_length, projectile_sequence_index, source_field_token, source_field_packets, source_field_activations, finite_field_packets, finite_field_activations, physical_lane_length, physical_lane_phase, physical_lane_selected, lane_stratum, volley_rounds, volley_shot_resume, melee_count, melee_heavy_multiplier,
             melee_last_hit, melee_combo_at, melee_recovery_token, melee_recovery_initial, melee_buff_boundary, melee_pending, melee_index, heavy_flag, no_co_flag, melee_heavy_now,
             affinity_per_kill, affinity, syndicate_ready, syndicate_events, pools, states,
             pooled, presence, gas_procs, dots, blasts, blast_procs,
@@ -1023,6 +1037,14 @@ impl<'py> Replay<'py> {
                 self.stats[out].lingering = Some((varied, rate, duration));
             }
         }
+        let finite_fields=self.stats[st].finite_fields.clone();
+        if !finite_fields.is_empty() {
+            let mut fields=Vec::with_capacity(finite_fields.len());
+            for &(part,rate,duration,initial) in &finite_fields {
+                fields.push((self.vary(part,live,ceil)?,rate,duration,initial));
+            }
+            if fields!=finite_fields {out=self.own(st,out);self.stats[out].finite_fields=fields;}
+        }
         let source_fields=self.stats[st].source_fields.clone();
         if !source_fields.is_empty() {
             let mut fields=Vec::with_capacity(source_fields.len());
@@ -1125,6 +1147,9 @@ impl<'py> Replay<'py> {
             requires_full_ammo,
             bow_draw,
             charge_time,
+            charge_before_fire: match opt_attr(obj,"_charge_before_fire")? { Some(v) => v.is_truthy()?, None => false },
+            full_clip_charge: match opt_attr(obj,"_full_clip_charge")? { Some(v) => v.is_truthy()?, None => false },
+            native_fire_cooldown: match opt_attr(obj,"_native_fire_cooldown_seconds")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
             charge_volley: match opt_attr(obj,"_charge_volley")? { Some(v) => v.is_truthy()?, None => false },
             initial_combo: {
                 let v = obj.getattr("initial_combo")?;
@@ -1152,7 +1177,7 @@ impl<'py> Replay<'py> {
             body_only: match opt_attr(obj, "_body_only")? { Some(v) => v.is_truthy()?, None => false },
             impact_delay: match opt_attr(obj, "_impact_delay")? { Some(v) => v.extract::<f64>()?, None => 0.0 },
             persist_after_kill: match opt_attr(obj, "_persist_after_kill")? { Some(v) => v.is_truthy()?, None => false },
-            lingering: None,source_fields:Vec::new(),
+            lingering: None,source_fields:Vec::new(),finite_fields:Vec::new(),
             embedded: None,
             primary_delay: match opt_attr(obj, "_primary_delay_seconds")? {
                 Some(v) if v.is_truthy()? => v.extract::<f64>()?,
@@ -1225,6 +1250,13 @@ impl<'py> Replay<'py> {
                     }
                 }
                 self.stats[i].stackable = Some((profile, parts));
+            }
+        }
+        if let Some(fields)=opt_attr(obj,"_finite_fields")? {
+            for field in fields.try_iter()? {
+                let field=field?;let row=field.cast::<PyTuple>()?;
+                let part=self.view(&row.get_item(0)?)?;
+                self.stats[i].finite_fields.push((part,row.get_item(1)?.extract()?,row.get_item(2)?.extract()?,row.get_item(3)?.extract()?));
             }
         }
         if let Some(fields)=opt_attr(obj,"_source_owned_fields")? {
@@ -2249,7 +2281,7 @@ impl<'py> Replay<'py> {
         }
         let mut best: Option<f64> = None;
         for e in self.heap.iter() {
-            if matches!(e.kind, Kind::Fire | Kind::ReloadComplete(_)) {
+            if matches!(e.kind, Kind::Fire | Kind::ChargedFire | Kind::ReloadComplete(_)) {
                 best = Some(match best {
                     None => e.t,
                     Some(b) => pmin(b, e.t),
@@ -2291,6 +2323,10 @@ impl<'py> Replay<'py> {
     }
 
     fn take_with_event(&mut self, vector: &Vector, t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64, f64)>) -> PyResult<bool> {
+        self.take_with_source_credit(vector,t,source,weak_kill,cv2,extra,damage_event,true)
+    }
+
+    fn take_with_source_credit(&mut self, vector: &Vector, t: f64, source: usize, weak_kill: WeakKill, cv2: f64, extra: bool, damage_event: Option<(f64,f64)>, weapon_source: bool) -> PyResult<bool> {
         let _timer = crate::counters::Timer::start(crate::counters::TAKE);
         if let Some((alignment, _, _)) = self.onos {
             if self.onos_crits && self.form != BASE && (self.onos_ticks as f64) < alignment
@@ -2308,7 +2344,7 @@ impl<'py> Replay<'py> {
         if self.pools[0] > 0.0 {
             let mut value = psum(vector.iter().map(|(k, raw)| raw * if *k == VOID || *k == RADIANT { 1.5 } else { 1.0 }))
                 * self.vulnerability(MAGNETIC);
-            let fortifier = if source != SYNDICATE { self.fortifier } else { None };
+            let fortifier = if weapon_source && source != SYNDICATE { self.fortifier } else { None };
             if let Some((multiplier, _, _, uptime)) = fortifier {
                 value *= 1.0 + (multiplier - 1.0) * uptime;
             }
@@ -2420,10 +2456,10 @@ impl<'py> Replay<'py> {
                 .attribution
                 .crossing(t, remaining, resume)
                 .map_err(|_| PyIndexError::new_err("list index out of range"))?;
-            self.die(t, crossing.0, source != SYNDICATE)?;
+            self.die(t, crossing.0, weapon_source && source != SYNDICATE, weapon_source)?;
             return Ok(true);
         }
-        if !self.extra_hits.is_empty() && source == DIRECT && !extra {
+        if weapon_source && !self.extra_hits.is_empty() && source == DIRECT && !extra {
             let trigger = psum(vector.iter().map(|x| x.1));
             for i in 0..self.extra_hits.len() {
                 let (d, share) = self.extra_hits[i];
@@ -2438,7 +2474,7 @@ impl<'py> Replay<'py> {
         Ok(false)
     }
 
-    fn die(&mut self, t: f64, weak_kill: f64, weapon_kill: bool) -> PyResult<()> {
+    fn die(&mut self, t: f64, weak_kill: f64, weapon_kill: bool, allow_kill_triggers: bool) -> PyResult<()> {
         if let Some(c) = self.cycle {
             if c.charge_on == 2 && self.form == BASE && weapon_kill {
                 self.gauge = pmin(c.hits, self.gauge + 1.0); // native AddChargeConditions PRIMARY_KILL
@@ -2480,6 +2516,7 @@ impl<'py> Replay<'py> {
         self.heat_token += 1;
         self.heat_chains.reset();
         self.puncture_strip = 0.0;
+        if !allow_kill_triggers { return Ok(()); }
         self.signal("on-kill", t, 1.0);
         let slot = self.weapon_slot.to_lowercase();
         if slot.contains("longgun") || slot == "primary" || slot == "rifle" {
@@ -3534,6 +3571,18 @@ impl<'py> Replay<'py> {
                         self.signal("on-crit",t,pmin(self.stats[part].crit_chance,1.0)*ms);
                     }
                 }
+                Kind::FiniteField(slot,part)=> {
+                    self.finite_field_packets[slot]+=1;
+                    let keys:Vec<D>=self.presence.keys().copied().collect();
+                    self.victim_before=keys.into_iter().map(|d|(d,self.presence.get_mut(&d).unwrap().probability(t))).collect();
+                    let raw=self.raw_packet(part,0.0);
+                    let vector:Vector=self.packets[&raw].vector.iter().map(|(d,v)|(*d,v*self.damage_rate_multiplier)).collect();
+                    let cv2=self.spread(part,0.0);
+                    if !self.take_with_source_credit(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false,None,false)? {
+                        let statuses=self.packets[&raw].clone();
+                        self.add_procs_data(part,0.0,t,&statuses,false)?;
+                    }
+                }
                 Kind::SourceField(token,slot,part)=> {
                     if token!=self.source_field_token {self.stale+=1;continue;}
                     self.source_field_packets[slot]+=1;
@@ -3658,7 +3707,8 @@ impl<'py> Replay<'py> {
                     }
                     self.push(t, Kind::Fire, None);
                 }
-                Kind::Fire => {
+                Kind::Fire | Kind::ChargedFire => {
+                    let charged = matches!(event.kind, Kind::ChargedFire);
                     let _timer = crate::counters::Timer::start(crate::counters::FIRE);
                     if t >= self.window - 1e-9 || self.rate <= 0.0 {
                         continue;
@@ -3768,7 +3818,7 @@ impl<'py> Replay<'py> {
                     }
                     let (magazine, ammo_cost) = (self.stats[active].magazine, self.stats[active].ammo_cost);
                     if let Some((empty_delay, partial_delay, regen)) = self.battery {
-                        if last_fire_time.is_finite() {
+                        if !self.stats[active].full_clip_charge && last_fire_time.is_finite() {
                             let delay = if self.ammo <= 1e-9 { empty_delay } else { partial_delay };
                             self.ammo = pmin(magazine, self.ammo + pmax(0.0, t - last_fire_time - delay) * regen);
                         }
@@ -3884,6 +3934,10 @@ impl<'py> Replay<'py> {
                             }
                         }
                         self.push(t + reload_time, Kind::ReloadComplete(was_empty), None);
+                        continue;
+                    }
+                    if self.stats[active].charge_before_fire && !charged {
+                        self.push(t + self.stats[active].charge_time, Kind::ChargedFire, None);
                         continue;
                     }
                     if self.stats[active].charge_volley {
@@ -4008,6 +4062,7 @@ impl<'py> Replay<'py> {
                     }
                     last_fire_time = t;
                     let generation = self.gen;
+                    let finite_fields=self.stats[active].finite_fields.clone();
                     let source_owned_fields=self.stats[active].source_fields.clone();
                     if !source_owned_fields.is_empty() {self.source_field_token+=1;}
                     if self.last_burst && self.form == BASE && self.ammo <= 3.0 {
@@ -4187,6 +4242,17 @@ impl<'py> Replay<'py> {
                         let cv2 = self.spread(active, aim);
                         let died = self.take(&vector, t, DIRECT, WeakKill::Flag(!radial_only), cv2, false)?;
                         self.noncrit_no_proc_hit(active, aim, t);
+                        if !finite_fields.is_empty() && self.stats[active].multishot>0.0 {
+                            self.finite_field_activations+=1;
+                            if self.finite_field_packets.is_empty() {self.finite_field_packets=vec![0;finite_fields.len()];}
+                            for (slot,(part,rate,duration,initial)) in finite_fields.iter().copied().enumerate() {
+                                for _ in 0..initial {self.push(t,Kind::FiniteField(slot,part),Some(generation));}
+                                let mut tick=1;
+                                while tick as f64/rate<duration-1e-9 {
+                                    self.push(t+tick as f64/rate,Kind::FiniteField(slot,part),Some(generation));tick+=1;
+                                }
+                            }
+                        }
                         if !died {
                             self.add_procs_scaled(active, aim, t, key, sniper_factor)?;
                             if !source_owned_fields.is_empty() && self.gen==generation && self.stats[active].multishot>0.0 {
@@ -4374,8 +4440,8 @@ impl<'py> Replay<'py> {
                     let s = &self.stats[active];
                     let mut delay = match s.bow_draw {
                         Some(v) => v,
-                        None => 1.0 / speed + if self.form == INCARNON
-                            && self.cycle.map(|c| c.charge_before_fire).unwrap_or(false) {
+                        None => 1.0 / speed + if s.charge_before_fire || (self.form == INCARNON
+                            && self.cycle.map(|c| c.charge_before_fire).unwrap_or(false)) {
                                 0.0
                             } else { s.charge_time },
                     };
@@ -4475,6 +4541,7 @@ impl<'py> Replay<'py> {
                         self.projectile_sequence_index = (self.projectile_sequence_index+1)%self.projectile_sequence_length;
                     }
                     self.volley_shot_resume=None;
+                    delay = pmax(delay, self.stats[active].native_fire_cooldown);
                     rate_spool_due = t + delay;
                     self.push(t + delay, Kind::Fire, None);
                 }
@@ -4984,7 +5051,7 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
             None => 0,
         },
         projectile_sequence_index: 0,
-        source_field_token:0,source_field_packets:Vec::new(),source_field_activations:0,
+        source_field_token:0,source_field_packets:Vec::new(),source_field_activations:0,finite_field_packets:Vec::new(),finite_field_activations:0,
         physical_lane_length: match opt_dict("physicalProjectileLanes")? {Some(d)=>get_f(&d,"length",0.)? as usize,None=>0},
         physical_lane_phase:match opt_dict("physicalProjectileLanes")? {Some(d)=>get_f(&d,"initialPhase",0.)? as usize,None=>0},
         physical_lane_selected:None,lane_stratum:get_f(&config,"laneStratum",0.5)?,
@@ -5213,6 +5280,8 @@ fn trajectory_inner<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &
     out.set_item("weakUncertainty", replay.weak_uncertainty)?;
     out.set_item("weakIndex", replay.weak_index)?;
     out.set_item("attacks", replay.attacks)?;
+    out.set_item("finiteFieldPackets",replay.finite_field_packets.clone())?;
+    out.set_item("finiteFieldActivations",replay.finite_field_activations)?;
     out.set_item("sourceOwnedFieldPackets",replay.source_field_packets.clone())?;
     out.set_item("sourceOwnedFieldActivations",replay.source_field_activations)?;
     if replay.physical_lane_length>0 {out.set_item("physicalProjectilePhase",replay.physical_lane_phase)?;}

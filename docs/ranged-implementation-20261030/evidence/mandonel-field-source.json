@@ -1,0 +1,75 @@
+{
+  "name": "Mandonel",
+  "fireMode": 1,
+  "directTotal": 1800.0,
+  "periodicTriggers": [
+    {
+      "id": "mandonel-radiation-field",
+      "damage": {
+        "radiation": 50.0
+      },
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunAltFireDamageHeavyTrigger",
+      "nativeField": "AttackData",
+      "sourceHitType": "DHT_DOT",
+      "status_chance": 0.34999999,
+      "statusConsumerVerified": true,
+      "forcedProcs": [],
+      "crit_chance": 0.0,
+      "crit_multiplier": 1.0,
+      "interval_seconds": 0.2,
+      "tick_rate": 5.0,
+      "damageOnEnter": true,
+      "damageOnEnterSeparateFromFirstPeriodic": true,
+      "first_periodic_delay_seconds": 0.0,
+      "firstPeriodicDelayModel": "first-authoritative-update-collapsed-to-activation-time",
+      "duration_seconds": 7.0,
+      "lifetimePolicy": "trigger-own-Destroy-script-lifetime7-not-OnHit-caller10",
+      "activation_event": "charged-OnHit-ProcessLastHit-coalesced-segment",
+      "activationDelayModel": "two-Lua-zero-yields-collapsed-to-hit-time",
+      "countPolicy": "one-field-per-coalesced-OnHit-segment",
+      "refreshPolicy": "independent-finite-fields-no-source-replacement",
+      "admission": "charged-mode-centered-capsule-target-coverage",
+      "defaultEnabled": true,
+      "coverageModel": "inherit-enclosing-centered-target-assumption",
+      "damageSource": "PLAYER_AVATAR",
+      "sourceUpgradeRouting": "empty-creator-falls-back-to-self-trigger",
+      "sourceModifierAllowlist": [],
+      "takes_weapon_base_damage": false,
+      "takes_weapon_elements": false,
+      "takes_parent_crit": false,
+      "takes_parent_status_chance": false,
+      "payloadMultishotMultiplier": false,
+      "multiplicityPolicy": "no-parent-multishot-factor-OnHit-coalescing-controls-field-count",
+      "radius_m": 1.1,
+      "expiryBoundary": "own-script-region-remove-before-further-field-damage"
+    }
+  ],
+  "unmodeled": [
+    "mandonel-field-first-enter-update-frame-phase-approximated",
+    "mandonel-on-hit-two-yield-coalescing-simultaneous-shots-unmodeled",
+    "mandonel-field-avatar-special-upgrades-and-event-routing-unverified"
+  ],
+  "source": {
+    "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "script": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgun.lua",
+    "scriptSha256": "40beef56fe6efe97c4cd8cd43534b712613383a6161a6a46308e185f7a3ca6f0",
+    "spawn": "P0 pc84..93 creates damage trigger with fifth creator/progenitor argument only; sixth owner absent; no setter for trigger+0x400 or+0x3f8 in P0",
+    "progenitor": "CreateEntity Lua0x141a2415d fifth argument ->CreateParams+0x18 ->0x141261710 context+8 ->actual trigger slot1f0=0x1403106d0 writes+0x378, not source+0x400",
+    "emptySource": "Entity ctor0x1405299a0 initializes+0x400 empty; trigger ctor does not override; P0 has no source setter; damage0x140e5fd6b..7f falls back to trigger itself",
+    "sourceClassGate": "0x140e5fde3..0x140e5fe36 requires LotusWeapon; self DamageTrigger fails; r14zero skips source weapon base+0xfd and ordinary elements+0x166",
+    "originalBytes": "reproduce_mandonel_source.py preserves25/50with injected weapon multipliers1/2/3, zero weapon callbacks; downstream avatar/faction/target modifiers outside scope",
+    "statusConsumer": "AttackData HitType7 copied to packet+0x1bf, SC.34999999 copied+0x23c; actual neutral victim resolver141482900 retains both; submit1402c3940+0x780->14102d2f0->14123da10 rollsSC,140af1880 increments radiationcounter and dispatches eligible rule+0xe8;32original-bytecasesDHT0/7match,241suppressedcontrolblocksall",
+    "statusLimits": "neutral eligible radiation rule leaves; target immunity, special avatar/controller upgrades and specific radiation effect internals excluded",
+    "clock": "actual DamageTrigger vtable0x1421635e0 update141463ae0; initial+0x6c0=0; interval.2 dispatch once/reset/no catchup; DamageOnEnter separate",
+    "destroy": "trigger ScriptInstance Destroy P3 pc6..10 sleeps its lifetime then pc17..22 Region DestroyEntity wrapper141a26380 ->1402201a0 ->140185a50; resolved trigger lifetime7, OnHit caller override10 belongs different script instance",
+    "coalescing": "OnHit P5 pc44..98 records actor-keyed cncrtHitPt and starts ProcessLastHit; P4 yields twice pc0..7, invokes shared P0 once pc35..39, then nils actor keypc51..54; no previous-field destroy",
+    "archwingVariant": {
+      "nativeSource": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunAltFireDamageTrigger",
+      "rawRadiation": 25.0,
+      "radius_m": 3.0,
+      "interval_seconds": 0.2,
+      "duration_seconds": 7.0
+    }
+  }
+}

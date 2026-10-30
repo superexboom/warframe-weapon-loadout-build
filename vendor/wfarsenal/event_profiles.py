@@ -201,6 +201,7 @@ def charge_profiles():
         return {}
     return {path: {int(index): ({"seconds": float(mode["seconds"]), "source": "native-ChargeTime",
                                  "scalesWithFireRate": mode.get("chargeModifier") == "WEAPON_FIRE_RATE",
+                                 **({"beforeFire": bool(mode["beforeFire"])} if "beforeFire" in mode else {}),
                                  **({"perfect": {key: mode["perfect"][key] for key in ("ratio", "projectile", "damage", "fullProjectile", "fullTotal")}}
                                     if (mode.get("perfect") or {}).get("paysOff") else {})},
                                 (mode.get("trigger"), mode.get("fireRate"), mode.get("behaviour")))

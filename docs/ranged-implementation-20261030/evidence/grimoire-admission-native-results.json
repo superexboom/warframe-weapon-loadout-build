@@ -1,0 +1,274 @@
+{
+  "sourcePayloadVerified": {
+    "contact": {
+      "damage": {
+        "electricity": 350.0
+      },
+      "forcedProcs": [
+        "PT_ELECTROCUTION"
+      ]
+    },
+    "chain": {
+      "sourceAmount": 350.0,
+      "sourceMultiplier": 0.80000001,
+      "nominalAmount": 280.0,
+      "attackIntervalSeconds": 1.0,
+      "directLength": 8.0,
+      "arcLength": 8.0,
+      "maxTargets": 3,
+      "maxDepth": 2,
+      "maxArcs": 2,
+      "dedupScope": "one target-selection attack, reset next attack",
+      "spawnedOrbs": 1
+    },
+    "expiry": {
+      "damage": {
+        "electricity": 250.0
+      },
+      "radius_m": 6.0,
+      "falloff": 0.80000001,
+      "lifetimeSecondsFromLaunch": 6.0,
+      "delaySecondsFromImpact": null,
+      "recipient": "unresolved final projectile location overlap"
+    },
+    "critChance": 0.2,
+    "critMultiplier": 2.0,
+    "statusChance": 0.25999999
+  },
+  "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "reusedOriginalByteCases": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "cases": [
+      {
+        "case": "native-cooldown",
+        "elapsed": 0.0,
+        "remaining": 1.0,
+        "canBeginNewAttack": false
+      },
+      {
+        "case": "native-cooldown",
+        "elapsed": 0.25,
+        "remaining": 0.75,
+        "canBeginNewAttack": false
+      },
+      {
+        "case": "native-cooldown",
+        "elapsed": 0.999,
+        "remaining": 0.0009999871253967285,
+        "canBeginNewAttack": false
+      },
+      {
+        "case": "native-cooldown",
+        "elapsed": 1.0,
+        "remaining": 0.0,
+        "canBeginNewAttack": true
+      },
+      {
+        "case": "native-cooldown",
+        "elapsed": 1.25,
+        "remaining": -0.25,
+        "canBeginNewAttack": true
+      },
+      {
+        "case": "arm-cooldown-after-selection",
+        "initial": 0.0,
+        "remaining": 1.0
+      },
+      {
+        "case": "arm-cooldown-after-selection",
+        "initial": 0.2,
+        "remaining": 0.20000000298023224
+      },
+      {
+        "case": "arm-cooldown-after-selection",
+        "initial": -0.2,
+        "remaining": 0.800000011920929
+      },
+      {
+        "case": "same-attack-dedup",
+        "previouslySeen": false,
+        "retained": true
+      },
+      {
+        "case": "same-attack-dedup",
+        "previouslySeen": true,
+        "retained": false
+      },
+      {
+        "case": "new-attack-clears-dedup",
+        "listSize": 0
+      },
+      {
+        "case": "chain-payload-scalar",
+        "sourcePacket": 350.0,
+        "chainPacket": 280.0,
+        "multiplier": 0.80000001
+      },
+      {
+        "case": "chain-payload-scalar",
+        "sourcePacket": 700.0,
+        "chainPacket": 560.0,
+        "multiplier": 0.80000001
+      },
+      {
+        "case": "IgnoreFireIterations-actual-count",
+        "spawnedOrbs": 1
+      },
+      {
+        "case": "launch-expiry-schedule-once",
+        "scheduled": [
+          {
+            "callback": "0x1409a8700",
+            "delay": 6.0
+          }
+        ],
+        "timerAlreadySet": true
+      },
+      {
+        "case": "expiry-emits250-callback",
+        "radialCalls": 1,
+        "deathCallbackCalls": 1
+      },
+      {
+        "case": "counterfactual-duplicate-expiry-callback",
+        "radialCalls": 2,
+        "deathCallbackCalls": 1,
+        "meaning": "Die guard skips second death callback but expiry callback independently emits again; once depends on scheduler flag/lifecycle, not radial callback dedup"
+      }
+    ],
+    "limits": [
+      "Upgrade query/scene recipients not emulated. Countdown/dedup/chain amount execute exact slices with supplied states.",
+      "Expiry callback executes real class Die override, real duplicate guard/property delegate and original16d6 branch; radial callback counted before world delivery.",
+      "Native chain packet350*.8=280 is a route-specific scalar, not a claim every shot adds280 or250 to the current target.",
+      "No empty-space expiry recipient or contact-to-launch clock conversion is inferred."
+    ]
+  },
+  "newCases": [
+    {
+      "case": "full-native-candidate-filter",
+      "alreadySelectedThisAttack": false,
+      "sameFaction": false,
+      "nativeCandidateInvalid": false,
+      "retained": true,
+      "supplied": "one candidate from world query; class IDs/owner/weakrefs supplied; full filter executes"
+    },
+    {
+      "case": "full-native-candidate-filter",
+      "alreadySelectedThisAttack": true,
+      "sameFaction": false,
+      "nativeCandidateInvalid": false,
+      "retained": false,
+      "supplied": "one candidate from world query; class IDs/owner/weakrefs supplied; full filter executes"
+    },
+    {
+      "case": "full-native-candidate-filter",
+      "alreadySelectedThisAttack": false,
+      "sameFaction": true,
+      "nativeCandidateInvalid": false,
+      "retained": false,
+      "supplied": "one candidate from world query; class IDs/owner/weakrefs supplied; full filter executes"
+    },
+    {
+      "case": "full-native-candidate-filter",
+      "alreadySelectedThisAttack": false,
+      "sameFaction": false,
+      "nativeCandidateInvalid": true,
+      "retained": false,
+      "supplied": "one candidate from world query; class IDs/owner/weakrefs supplied; full filter executes"
+    },
+    {
+      "case": "native-root-vs-recursive-radius-selection",
+      "depth": 0,
+      "query": {
+        "upgrade": 384,
+        "base": 8.0
+      },
+      "meaning": "source has8m for both; counterfactual4m arc demonstrates role distinction"
+    },
+    {
+      "case": "native-root-vs-recursive-radius-selection",
+      "depth": 1,
+      "query": {
+        "upgrade": 384,
+        "base": 4.0
+      },
+      "meaning": "source has8m for both; counterfactual4m arc demonstrates role distinction"
+    },
+    {
+      "case": "native-copy-then-chain-scale-preserves-other-source-fields",
+      "sourceAmount": 350.0,
+      "copiedChainAmount": 280.0,
+      "first80BytesCopied": true,
+      "sourceHandle108Copied": true,
+      "metadata25c25dPreserved": [
+        1,
+        123
+      ],
+      "limits": "payload struct contents supplied; confirms transfer and scalar location, not live buff/event semantics"
+    },
+    {
+      "case": "native-constructor-first-attack-no-1s-initial-wait",
+      "initialRemaining": 0.0,
+      "meaning": "first eligible world update may select a target; cooldown arms only after the selection stage"
+    },
+    {
+      "case": "replacement-victim-identity-is-distinct-from-old-dedup-handle",
+      "oldVictim": "0x20014000",
+      "newVictim": "0x20012000",
+      "retained": true,
+      "meaning": "distinct target can pass dedup; current world overlap and selection are still required for the new target"
+    },
+    {
+      "case": "native-shared-per-attack-budget-decrement",
+      "initial": 3,
+      "remaining": 2,
+      "canBuildRecipient": true
+    },
+    {
+      "case": "native-shared-per-attack-budget-decrement",
+      "initial": 1,
+      "remaining": 0,
+      "canBuildRecipient": true
+    },
+    {
+      "case": "native-shared-per-attack-budget-decrement",
+      "initial": 0,
+      "remaining": 0,
+      "canBuildRecipient": false
+    },
+    {
+      "case": "source-and-native-root-selection-cap",
+      "property": "mMaxDirectHits",
+      "offset": "1728",
+      "constructorDefault": 1,
+      "sourceOverrideAbsent": true,
+      "meaning": "root attack selects at most1 candidate; recursive MaxArcs2 and total budget3 are independent"
+    }
+  ],
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "geometryCounterexamples": {
+    "kind": "analytical-supplied-scene-not-native-world-replay",
+    "assumptions": "straight uncollided flight6m/s,6s; fixed point targets; no obstacles or target extent",
+    "cases": [
+      {
+        "targetPosition": 0.0,
+        "orbExpiryPosition": 36.0,
+        "distance": 36.0,
+        "withinDeclaredRadius6": false
+      },
+      {
+        "targetPosition": 12.0,
+        "orbExpiryPosition": 36.0,
+        "distance": 24.0,
+        "withinDeclaredRadius6": false
+      },
+      {
+        "targetPosition": 35.0,
+        "orbExpiryPosition": 36.0,
+        "distance": 1.0,
+        "withinDeclaredRadius6": true
+      }
+    ],
+    "conclusion": "same native damage/lifetime source does not determine expiry overlap; geometry is a model input, not a live-only fact"
+  }
+}

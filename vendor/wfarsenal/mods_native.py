@@ -83,6 +83,8 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
     if fire_mode >= len(modes):
         raise Unsupported("fire mode out of range")  # the reference raises its own error
     mode = modes[fire_mode]
+    if mode.get('nativeIgnoreFireIterations') and not getattr(wfcore,'NATIVE_FIRE_ITERATION_LOCK',0):
+        raise Unsupported('native projectile count lock needs updated core')
     if (mode.get('behaviorKind') == 'auxiliary-melee'
             and weapon.get('slot') in ('primary', 'secondary', 'arch_gun')):
         raise Unsupported("auxiliary melee")
@@ -206,6 +208,7 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
         falloff=falloff,
         distance=scenario.distance,
         innateMultishot=innate_multishot,
+        nativeIgnoreFireIterations=bool(mode.get("nativeIgnoreFireIterations")),
         perPelletProc=per_pellet_proc,
         incarnonForm=incarnon_form,
         incarnonPool=float(incarnon['pool']) if incarnon and incarnon.get('pool') else None,

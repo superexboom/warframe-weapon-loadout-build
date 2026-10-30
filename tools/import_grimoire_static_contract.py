@@ -38,7 +38,7 @@ def build_contract(pkg,row):
     if fire.get('IgnoreFireIterations')!=1 or fire.get('fireIterations')!=1:raise ValueError('Grimoire orb-count contract changed')
     evidence=dict(clientSha256=CLIENT_SHA256,packageSha256=PACKAGE_SHA256,nativeSources=source_rows(pkg,[WEAPON,PROJECTILE]),
       classTable='PlayerChainingProjectile0x1423910d0; update+220140239ff0/+230140c02280 ->140d7fc60; Die+5601413556f0 ->1405ac4a0',
-      singleOrb='fire IgnoreFireIterations+1481 causes full native140f75d20 to return raw+281 without weapon multishot query',
+      singleOrb='fire IgnoreFireIterations at +0x148 = 1 causes full native 0x140f75d20 to return raw count at +0x28 = 1 without weapon multishot query',
       chainBudgets='140d7fd38..da0 queries weapon+6e0 for MaxTargetsPerAttack3;140d7ff87..d80086 queries same modifier for MaxChainDepth2 and rounds; multishot is not additional orbs',
       cooldown='TimeBetweenAttacks->Projectile+1770; native140d7fcb7..fd06 decrements+1774 then gates new attack;141693034..305c arms+1774 when target-selection phase proceeds',
       perAttackDedup='140d7fd14..33 calls1401bc7d0 to clear+1798 list at each new attack;140ccd260..d32d excludes candidates in that list;1416932a8..2db appends selected target before recursive14169333a',

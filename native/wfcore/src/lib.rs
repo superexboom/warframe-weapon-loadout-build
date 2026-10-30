@@ -188,8 +188,14 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("COMPANION_PROJECTILE_SEQUENCE", 1)?;
     m.add("PHYSICAL_PROJECTILE_LANES", 1)?;
     m.add("SOURCE_OWNED_FIELDS", 1)?;
+    m.add("INDEPENDENT_FINITE_FIELDS", 1)?;
+    m.add("NATIVE_FIRE_ITERATION_LOCK", 1)?;
     m.add("MAGAZINE_CHARGE_VOLLEY", 1)?;
     m.add("KILL_CHARGED_WINDUP", 1)?;
+    m.add("ORDINARY_CHARGED_WINDUP", 1)?;
+    m.add("FULL_CLIP_CHARGE_WAIT_POLICY", 1)?;
+    m.add("NEUTRAL_FINITE_FIELD_SOURCE", 2)?;
+    m.add("NATIVE_FIRE_COOLDOWN", 1)?;
     m.add("DELAYED_RADIAL_EVENTS", 1)?;
     m.add("ENERVATE_PROBABILISTIC_HITS", 1)?;
     m.add("IGNORE_HEADSHOT_BONUS", 1)?;

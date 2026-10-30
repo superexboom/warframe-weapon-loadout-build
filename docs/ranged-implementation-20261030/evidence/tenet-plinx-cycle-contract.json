@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-tenet-plinx-cycle-contract",
+  "weapons": {},
+  "operationalPatch": {
+    "weapons": {
+      "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon": {
+        "modes": {
+          "1": {
+            "directTotal": 100.0,
+            "projectile": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAltFireProj",
+            "charge": {
+              "seconds": 0.80000001,
+              "beforeFire": true,
+              "scalesWithFireRate": true
+            },
+            "fullClipCharge": {
+              "cadencePolicy": "wait-configured-empty-delay-then-full-recharge",
+              "chargeSeconds": 0.80000001,
+              "emptyDelaySeconds": 3.0,
+              "regenPerSecond": 20.0,
+              "capacityPolicy": "static-modified-capacity"
+            },
+            "battery": {
+              "delayEmptySeconds": 3.0,
+              "delayPartialSeconds": 0.80000001,
+              "regenPerSecond": 20.0
+            },
+            "radial": {
+              "damage": {
+                "radiation": 100.0
+              },
+              "crit_chance": 0.40000001,
+              "crit_multiplier": 3.0,
+              "status_chance": 0.5,
+              "radius_m": 6.0,
+              "falloff_reduction": 0.40000001,
+              "forcedProcs": [
+                "PT_RAGDOLL"
+              ],
+              "impact_delay_seconds": 0.80000001,
+              "takes_condition_overload": false
+            },
+            "unmodeled": [
+              "tenet-plinx-static-magazine-policy-charge-entry-capacity-snapshot-unmodeled",
+              "tenet-plinx-cadence-player-wait-policy-not-native-max-rate",
+              "tenet-plinx-flat-add-native-damage-provider-order-fail-closed",
+              "tenet-plinx-ideal-accepted-embed-contact-geometry",
+              "tenet-plinx-unembedded500-alternative-excluded",
+              "tenet-plinx-CO-weakpoint-arcane-event-qualification-unverified"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "pending": [
+    {
+      "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
+      "mode": 1,
+      "candidateOnly": true,
+      "defaultScoringExcluded": true,
+      "sourcePayload": {
+        "charge": {
+          "policy": "full-clip-damage-scale",
+          "seconds": 0.80000001,
+          "chargeRateModifier": "WEAPON_FIRE_RATE",
+          "requiresFullClip": true,
+          "consumesLoadedCapacity": true,
+          "consumptionPhase": "charge-progress",
+          "usesNormalFireAmmo": false,
+          "rawProjectiles": 1,
+          "damageScale": "ammoAtChargeStart",
+          "clipSizeScalesDuration": false
+        },
+        "payload": {
+          "direct": {
+            "damage": {
+              "impact": 100.0
+            },
+            "statusChance": 0.2
+          },
+          "embeddedDeath": {
+            "damage": {
+              "radiation": 100.0
+            },
+            "statusChance": 0.5,
+            "delayAfterAcceptedEmbed": 0.80000001
+          },
+          "unembeddedDeathAlternative": {
+            "damage": {
+              "radiation": 500.0
+            },
+            "statusChance": 0.2
+          },
+          "deathPacketSelection": "exclusive-embedded-flag",
+          "critChance": 0.40000001,
+          "critMultiplier": 3.0,
+          "radius_m": 6.0,
+          "falloff": 0.40000001,
+          "scaleAllPackets": "ammoAtChargeStart",
+          "ordinaryMultishot": "physical-projectiles",
+          "nativeModifierOrder": [
+            "source-provider14116ac70",
+            "N",
+            "140b42420"
+          ],
+          "flatAddOrderVerified": false
+        },
+        "battery": {
+          "capacity": 10,
+          "regenPerSecond": 20.0,
+          "partialDelaySeconds": 0.80000001,
+          "normalConfiguredEmptyDelay": 1.0,
+          "altConfiguredEmptyDelay": 3.0,
+          "luaAltOrder": [
+            "setAmmo0",
+            "setConfiguredEmptyDelay3"
+          ],
+          "reloadDelayFormula": "(emptyDelay*query0x184 + query0x186)/max(query0x185,0.01)",
+          "regenRateQuery": "0xe2",
+          "configuredDelaySetterResetsCountdown": false,
+          "stateResetBeforeAttachmentNotification": true,
+          "activeCountdownMustBeSeparateState": true,
+          "attachmentEvents": [
+            {
+              "attachment": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAttachment",
+              "function": "ChangeRegenDelayToNormal",
+              "activeMode": 0,
+              "state": "WS_FIRE"
+            },
+            {
+              "attachment": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAttachment",
+              "function": "ChangeRegenDelayToAltFire",
+              "activeMode": 1,
+              "state": "WS_FIRE"
+            },
+            {
+              "attachment": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxDSAttachment",
+              "function": "ChangeRegenDelayToNormal",
+              "activeMode": 0,
+              "state": "WS_FIRE"
+            },
+            {
+              "attachment": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxDSAttachment",
+              "function": "ChangeRegenDelayToAltFire",
+              "activeMode": 1,
+              "state": "WS_FIRE"
+            }
+          ]
+        }
+      },
+      "unmodeled": [
+        "tenet-plinx-attachment-tick-and-countdown-reset-order-unmodeled",
+        "tenet-plinx-ideal-accepted-embed-contact-geometry",
+        "tenet-plinx-CO-weakpoint-arcane-event-qualification-unverified",
+        "tenet-plinx-flat-add-native-damage-provider-order-unverified"
+      ]
+    }
+  ],
+  "enginePatchContract": {
+    "charge": {
+      "policy": "full-clip-damage-scale",
+      "seconds": 0.80000001,
+      "chargeRateModifier": "WEAPON_FIRE_RATE",
+      "requiresFullClip": true,
+      "consumesLoadedCapacity": true,
+      "consumptionPhase": "charge-progress",
+      "usesNormalFireAmmo": false,
+      "rawProjectiles": 1,
+      "damageScale": "ammoAtChargeStart",
+      "clipSizeScalesDuration": false
+    },
+    "payload": {
+      "direct": {
+        "damage": {
+          "impact": 100.0
+        },
+        "statusChance": 0.2
+      },
+      "embeddedDeath": {
+        "damage": {
+          "radiation": 100.0
+        },
+        "statusChance": 0.5,
+        "delayAfterAcceptedEmbed": 0.80000001
+      },
+      "unembeddedDeathAlternative": {
+        "damage": {
+          "radiation": 500.0
+        },
+        "statusChance": 0.2
+      },
+      "deathPacketSelection": "exclusive-embedded-flag",
+      "critChance": 0.40000001,
+      "critMultiplier": 3.0,
+      "radius_m": 6.0,
+      "falloff": 0.40000001,
+      "scaleAllPackets": "ammoAtChargeStart",
+      "ordinaryMultishot": "physical-projectiles",
+      "nativeModifierOrder": [
+        "source-provider14116ac70",
+        "N",
+        "140b42420"
+      ],
+      "flatAddOrderVerified": false
+    },
+    "battery": {
+      "capacity": 10,
+      "regenPerSecond": 20.0,
+      "partialDelaySeconds": 0.80000001,
+      "normalConfiguredEmptyDelay": 1.0,
+      "altConfiguredEmptyDelay": 3.0,
+      "luaAltOrder": [
+        "setAmmo0",
+        "setConfiguredEmptyDelay3"
+      ],
+      "reloadDelayFormula": "(emptyDelay*query0x184 + query0x186)/max(query0x185,0.01)",
+      "regenRateQuery": "0xe2",
+      "configuredDelaySetterResetsCountdown": false,
+      "stateResetBeforeAttachmentNotification": true,
+      "activeCountdownMustBeSeparateState": true,
+      "attachmentEvents": [
+        {
+          "attachment": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAttachment",
+          "function": "ChangeRegenDelayToNormal",
+          "activeMode": 0,
+          "state": "WS_FIRE"
+        },
+        {
+          "attachment": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAttachment",
+          "function": "ChangeRegenDelayToAltFire",
+          "activeMode": 1,
+          "state": "WS_FIRE"
+        },
+        {
+          "attachment": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxDSAttachment",
+          "function": "ChangeRegenDelayToNormal",
+          "activeMode": 0,
+          "state": "WS_FIRE"
+        },
+        {
+          "attachment": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxDSAttachment",
+          "function": "ChangeRegenDelayToAltFire",
+          "activeMode": 1,
+          "state": "WS_FIRE"
+        }
+      ]
+    },
+    "reuseBattery": true,
+    "reuseChargeVolley": false,
+    "required": [
+      "capture-full-clip-on-charge-entry",
+      "scale-damage-not-pellet-count",
+      "exclusive-death-packet",
+      "embed-relative-timer",
+      "script-configured-delay-separate-from-active-countdown"
+    ]
+  },
+  "evidence": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+    "nativeSources": [
+      {
+        "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
+        "parent": "/Lotus/Weapons/Corpus/Pistols/CrpSonificBlastor/CrpBlastorWeapon",
+        "rawAttributesSha256": "8c1889e320a73201e9ab7a0714e38e2eff5b03757dcb9aaee26a8a582a505d69",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Corpus/Pistols/CrpSonificBlastor/CrpBlastorWeapon",
+        "parent": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistolGun",
+        "rawAttributesSha256": "e2a265be454260ffba33f7baca85a5bdf162cdd47adb0f768438f84904306c35",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistolGun",
+        "parent": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistol",
+        "rawAttributesSha256": "73e0eab4999729eda5678d251ed6e3fa02f7671393a952008e018fc81723ab5a",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/Pistol/LotusSinglePistol",
+        "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+        "rawAttributesSha256": "411b62316f5f598f161d3c5c31f175ad4c69d16ac1477264e1cd16a4825e0c49",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+        "parent": "",
+        "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAltFireProj",
+        "parent": "/Lotus/Types/Weapons/GunProjectile",
+        "rawAttributesSha256": "0e6812777abb062208bb1dd2e666141df36e97921dd3e1a666830884bd698aab",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Types/Weapons/GunProjectile",
+        "parent": "/EE/Types/Engine/Projectile",
+        "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "attributeRecord": false
+      },
+      {
+        "path": "/EE/Types/Engine/Projectile",
+        "parent": "",
+        "rawAttributesSha256": "8b5fe36bc4e7e28d621d2b59a52648b98d1ca7738ca0fb4d85436ecd03548d2e",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAttachment",
+        "parent": "/Lotus/Types/Game/LotusWeaponAttachment",
+        "rawAttributesSha256": "91bfa71de4b7bede5f2e18a201e695ac3129c5ff5d05f4a8c6bb60bcb5c61ff4",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Types/Game/LotusWeaponAttachment",
+        "parent": "",
+        "rawAttributesSha256": "89c32f7de412c272c3d9df4a431abc2762f8f4dff8cf9d7ecaaf6df388794e48",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxDSAttachment",
+        "parent": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAttachment",
+        "rawAttributesSha256": "4cbeca8e223921081f046e9464f7c6ca461f08522842daeb3a65b96503d560e7",
+        "attributeRecord": true
+      }
+    ],
+    "nativeCharge": "140b7eae0;1405774f0;1418abeb0;1405cb0b1;1403c4a1d",
+    "nativeFullClipGate": "1403ceb41..1403cebdb",
+    "nativeBattery": "141b0f270;140f07250;1402bb5f3..1402bb734",
+    "nativeStateOrder": "140f67bc6 store;140f67bcd owner+c18;140f6823c owner+bd8",
+    "nativeAttachment": "14073f0f0 -> attachment+5c8, +568;141610c40 attachment transition update; vector classification pending",
+    "validation": "original-byte arithmetic with explicit owner/VM/property stubs; no live-game validation"
+  }
+}

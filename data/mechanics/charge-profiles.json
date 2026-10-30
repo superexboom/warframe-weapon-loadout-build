@@ -588,17 +588,58 @@
       "name": "Mandonel",
       "modes": {
         "0": {
-          "seconds": 1.5,
+          "seconds": 0.0,
           "chargeModifier": "WEAPON_CHARGE_RATE",
           "minChargeRatio": 0,
           "autoFire": false,
           "behaviour": 0,
           "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
           "fireRate": 3.0,
-          "exportChargeTime": 1.5
+          "exportChargeTime": 0.0,
+          "beforeFire": false,
+          "nativeLocalChargeTime": 1.5,
+          "chargeSourceBehavior": 0,
+          "sourceBehaviorBank": "HeavyBehaviors"
+        },
+        "1": {
+          "seconds": 1.5,
+          "chargeModifier": "WEAPON_CHARGE_RATE",
+          "minChargeRatio": 0,
+          "autoFire": false,
+          "behaviour": 1,
+          "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge",
+          "fireRate": 2.0,
+          "exportChargeTime": 1.5,
+          "beforeFire": true,
+          "nativeLocalChargeTime": 0.0,
+          "chargeSourceBehavior": 0,
+          "sourceBehaviorBank": "HeavyBehaviors"
         }
       },
-      "nativeSha256": "936db4b6f0c6f9f1070c0d161499b35b20663cb0eb2994fd8d9cd8ea0702efa8"
+      "nativeSha256": "936db4b6f0c6f9f1070c0d161499b35b20663cb0eb2994fd8d9cd8ea0702efa8",
+      "nativeSources": [
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/TnConcreteArchgun/TnConcreteArchgunWeapon",
+          "parent": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+          "rawAttributesSha256": "25845e047a7ca285c9494d6da21b81d5a869ebd9d4ba410d54965a62dd95d1c0",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun",
+          "parent": "/Lotus/Types/Game/LotusWeapon",
+          "rawAttributesSha256": "cc06e93ed07418ffeb897430531ce364815d2088a237b3486319eca4d0f4e356",
+          "attributeRecord": true
+        },
+        {
+          "path": "/Lotus/Types/Game/LotusWeapon",
+          "parent": "",
+          "rawAttributesSha256": "4e4ff3b358962ff188c9bf130961eb1814eec7c47858234dd6f8b746f4dd9881",
+          "attributeRecord": true
+        }
+      ],
+      "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+      "packagesSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+      "chargeRouteEvidence": "SwapOnFire1/SwapAfterFire0/ChargedBehavior1/MinChargeRatio0/CacheFullCharge0; native1412f0500..1412f066d swaps full-charge toHeavy1 beforefire, tap remainsHeavy0"
     },
     "/Lotus/Weapons/Tenno/Archwing/Primary/TnShieldframeArchGun/TnShieldFrameArchGun": {
       "name": "Larkspur",

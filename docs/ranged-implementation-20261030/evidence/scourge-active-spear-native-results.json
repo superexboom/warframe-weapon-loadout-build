@@ -1,0 +1,131 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "cases": [
+    {
+      "case": "actual-prefire-removal-embedded-vs-nonembedded",
+      "oldLiveProjectile": false,
+      "embedded8e1": false,
+      "scriptsPreventDestruction1589": true,
+      "destroyRequests": 0,
+      "launchContinuation": true,
+      "scheduledDeath": [],
+      "pendingDestroy": false,
+      "nativeDieFlag": false,
+      "consumer": "141498140 ->+318140fbc360 ->14124eac0 ->oldprojectile+418140414330;8e1 selects embedded deferred path or direct+560"
+    },
+    {
+      "case": "actual-prefire-removal-embedded-vs-nonembedded",
+      "oldLiveProjectile": true,
+      "embedded8e1": false,
+      "scriptsPreventDestruction1589": true,
+      "destroyRequests": 1,
+      "launchContinuation": true,
+      "scheduledDeath": [],
+      "pendingDestroy": false,
+      "nativeDieFlag": true,
+      "consumer": "141498140 ->+318140fbc360 ->14124eac0 ->oldprojectile+418140414330;8e1 selects embedded deferred path or direct+560"
+    },
+    {
+      "case": "actual-prefire-removal-embedded-vs-nonembedded",
+      "oldLiveProjectile": true,
+      "embedded8e1": false,
+      "scriptsPreventDestruction1589": false,
+      "destroyRequests": 1,
+      "launchContinuation": true,
+      "scheduledDeath": [],
+      "pendingDestroy": false,
+      "nativeDieFlag": true,
+      "consumer": "141498140 ->+318140fbc360 ->14124eac0 ->oldprojectile+418140414330;8e1 selects embedded deferred path or direct+560"
+    },
+    {
+      "case": "actual-prefire-removal-embedded-vs-nonembedded",
+      "oldLiveProjectile": true,
+      "embedded8e1": true,
+      "scriptsPreventDestruction1589": true,
+      "destroyRequests": 1,
+      "launchContinuation": true,
+      "scheduledDeath": [
+        {
+          "callback": "0x140273d98",
+          "delay": 0.09846259653568268
+        }
+      ],
+      "pendingDestroy": true,
+      "nativeDieFlag": false,
+      "consumer": "141498140 ->+318140fbc360 ->14124eac0 ->oldprojectile+418140414330;8e1 selects embedded deferred path or direct+560"
+    },
+    {
+      "case": "actual-prefire-removal-embedded-vs-nonembedded",
+      "oldLiveProjectile": true,
+      "embedded8e1": true,
+      "scriptsPreventDestruction1589": false,
+      "destroyRequests": 1,
+      "launchContinuation": true,
+      "scheduledDeath": [
+        {
+          "callback": "0x140273d98",
+          "delay": 0.10550963133573532
+        }
+      ],
+      "pendingDestroy": true,
+      "nativeDieFlag": false,
+      "consumer": "141498140 ->+318140fbc360 ->14124eac0 ->oldprojectile+418140414330;8e1 selects embedded deferred path or direct+560"
+    },
+    {
+      "case": "actual-projectile-removal-notification",
+      "indexedHandleNull": true,
+      "activeCount": 0,
+      "consumer": "virtual300141050a70 ->140154520;141050ae9 decrements108"
+    },
+    {
+      "case": "late-old-removal-preserves-reused-local-slot",
+      "oldProjectile": "0x20000000",
+      "newProjectile": "0x20016000",
+      "index": 0,
+      "localSlotUnchanged": true,
+      "activeCount": 1,
+      "removalQueue": [
+        0
+      ],
+      "consumer": "141050add compares current handle target with callback projectile; jne141050af5 skips140154520+dec108; original suffix runs"
+    },
+    {
+      "case": "new-removal-then-old-duplicate-cannot-double-decrement",
+      "activeCount": 0,
+      "indexedHandleNull": true,
+      "removalQueue": [
+        0,
+        0,
+        0
+      ],
+      "limit": "local slot identity guard verified; queued network removal indexes are captured, remote receiver ordering/reuse not emulated"
+    },
+    {
+      "case": "actual-spear-animation-hide-restore-dispatch",
+      "hiddenState": true,
+      "consumer": "selected+1f814026b2c0 ->140612180/140afd1d0; original1a8 check and1a4 store; attachment rendering excluded"
+    },
+    {
+      "case": "actual-spear-animation-hide-restore-dispatch",
+      "hiddenState": false,
+      "consumer": "selected+1f814026b2c0 ->140612180/140afd1d0; original1a8 check and1a4 store; attachment rendering excluded"
+    },
+    {
+      "case": "actual-hidden-spear-reload-state-and-duration",
+      "firingState": 7,
+      "hidden": true,
+      "stateRequests": [
+        8
+      ],
+      "reloadEvent": {
+        "code": 121,
+        "seconds": 2.200000047683716
+      },
+      "consumer": "selected1681402d4e10 ->1414f3d40 ->1416b7d30, controller event79 gets weapon2d0 duration"
+    }
+  ],
+  "limits": [
+    "Corrected field identity: embedded state is8e1. ScriptsPreventDestruction serializer140da2aec..140da2b09 binds1589. The nonembedded8e10/ScriptsPrevent15891 control executes direct nativeDie+560. Embedded8e11 with active script1e0 supplied executes1402e1be0->14050b8c0 and schedules Die/pendingc34. Toggling1589 does not select this branch. External timer queue/scene destruction remain unexecuted. Late-old notification tests execute full local removal including index queue suffix while skipping only mismatch diagnostic logging; remote queue consumption is not emulated.",
+    "Confirms cap enforcement is prefire eviction, not simply a mandatory20s wait. Controller/animation event IDs and active firing state7 supplied. Native reload request uses source2.2, hide/restore flag dispatch and old-spear eviction proven; animation scheduler and live input pacing remain idealized."
+  ]
+}

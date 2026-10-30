@@ -1,0 +1,61 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "function": "0x140f75d20",
+  "rawCountOffset": "0x28",
+  "ignoreFlagOffset": "0x148",
+  "cases": [
+    {
+      "ignoreFireIterations": false,
+      "rawCount": 1,
+      "returnedCount": null,
+      "weaponMultishotQueried": true
+    },
+    {
+      "ignoreFireIterations": false,
+      "rawCount": 2,
+      "returnedCount": null,
+      "weaponMultishotQueried": true
+    },
+    {
+      "ignoreFireIterations": false,
+      "rawCount": 6,
+      "returnedCount": null,
+      "weaponMultishotQueried": true
+    },
+    {
+      "ignoreFireIterations": false,
+      "rawCount": 13,
+      "returnedCount": null,
+      "weaponMultishotQueried": true
+    },
+    {
+      "ignoreFireIterations": true,
+      "rawCount": 1,
+      "returnedCount": 1,
+      "weaponMultishotQueried": false
+    },
+    {
+      "ignoreFireIterations": true,
+      "rawCount": 2,
+      "returnedCount": 2,
+      "weaponMultishotQueried": false
+    },
+    {
+      "ignoreFireIterations": true,
+      "rawCount": 6,
+      "returnedCount": 6,
+      "weaponMultishotQueried": false
+    },
+    {
+      "ignoreFireIterations": true,
+      "rawCount": 13,
+      "returnedCount": 13,
+      "weaponMultishotQueried": false
+    }
+  ],
+  "codeSha256": "342508731264113b8dd0c585ed457a4049c4f27260a131d62a016ee567bd4c28",
+  "limits": [
+    "Actual true branch runs whole function; false control stops at the external weapon-modified-count query.",
+    "Does not infer chain budgets or child count from this emitted-projectile count. Scene/aim/source damage and downstream spawn are not emulated."
+  ]
+}

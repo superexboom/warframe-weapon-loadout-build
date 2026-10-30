@@ -1,0 +1,112 @@
+{
+  "native-fire-iteration-locks.json": {
+    "sourceCase": "root/native-fire-iteration-locks-revalidated-20261030.json",
+    "sha256": "0fcc686ec57c6d806fea880ce4afd6808151e6d9832381ddea8a0c5ea29b49f9",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "native-fire-iteration-original-bytes.json": {
+    "sourceCase": "root/native-fire-iteration-original-bytes.json",
+    "sha256": "e9a459f0a27330ec9f5b10a39bdf59a239aede34777d0f63498e557313bc6353",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "mandonel-field-source.json": {
+    "sourceCase": "script-mechanics/mandonel-native-periodic-field-v2.json",
+    "sha256": "ea8341f63198eb240fbb41a9d359a5cb8eac44687614f6c78bef67a76cba7da2",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "grimoire-fire-gate.json": {
+    "sourceCase": "native-payloads/grimoire-fire-gate-v2.json",
+    "sha256": "38df0b885ebaa4992cfc4c94ca023236990b8d558a623aae0745e9a927756b41",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "grimoire-fire-gate-native-results.json": {
+    "sourceCase": "native-payloads/grimoire-fire-gate-native-results.json",
+    "sha256": "75a817411d1aae5a4e3cf6af8a34ec4c022d42da737528b975108613b785d702",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "scourge-contact-and-cycle.json": {
+    "sourceCase": "native-payloads/scourge-contact-radial-v5.json",
+    "sha256": "29fd66bb5b54630f82f8d07996a3b07f2adca8a21825e06ab0c8b9b8e40e57b9",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "scourge-contact-native-results.json": {
+    "sourceCase": "native-payloads/scourge-contact-original-byte-results.json",
+    "sha256": "c87033c5ed23849e0210c92a130186f4ad741364852a709d45ff40b4f5633c32",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "scourge-active-spear-native-results.json": {
+    "sourceCase": "native-payloads/scourge-active-spear-native-results.json",
+    "sha256": "77161164ac31e19a12f716964e6f5ef1754cd61e05f8fed25d07f407ade85e64",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "tenet-plinx-cycle-contract.json": {
+    "sourceCase": "native-payloads/tenet-plinx/cycle-operational-contract-reviewed.json",
+    "sha256": "9a0851d7ab37aca294656ebb2089376ce8399440c9807a811f5dc77a799e4ba6",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "tenet-plinx-charge-native-results.json": {
+    "sourceCase": "native-payloads/tenet-plinx/charge-launch-original-byte-results.json",
+    "sha256": "b63094a0c7c8320dd789f1e17dc457150d52503739b78caf7e1b7f7cad174e7d",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "tenet-plinx-battery-native-results.json": {
+    "sourceCase": "native-payloads/tenet-plinx/battery-fullclip-original-byte-results.json",
+    "sha256": "144537adda60d3f1c8cd1fbb4bd5e1c2c46c4f26498c4b170e934af1b13a102a",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "tenet-plinx-countdown-native-results.json": {
+    "sourceCase": "native-payloads/tenet-plinx/battery-order-original-byte-results.json",
+    "sha256": "630183fc58dada94c1c79dc143b481a0e6fdb1ddf039cf02b033b02480527426",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "nox-script-audit.json": {
+    "sourceCase": "root/nox-audit-20261030.json",
+    "sha256": "21f976f3fce1e05d4525f43cf50681773b48f87bbde6d0cad590028d874b623a",
+    "snapshot": "original case evidence; earlier prose may be superseded by REPORT.md and current importer"
+  },
+  "mandonel-neutral-source-native-results.json": {
+    "sourceCase": "script-mechanics/mandonel-source-reproduction.json",
+    "sha256": "61ba0ea78362809eb05c70d586eeb950730bbd922fb9fd0fee6cd987735b9ddb",
+    "scope": "original-byte controlled-callback test; see result-specific limits"
+  },
+  "mandonel-status-roll-native-results.json": {
+    "sourceCase": "script-mechanics/mandonel-status-roll-reproduction.json",
+    "sha256": "2096cbaf2fca2e98e19245901ece9caceec4725b69f6e77095e20577a426a043",
+    "scope": "original-byte controlled-callback test; see result-specific limits"
+  },
+  "mandonel-victim-native-results.json": {
+    "sourceCase": "script-mechanics/mandonel-victim-reproduction.json",
+    "sha256": "68c4a222e0b7e2dd3f0b6faa4f75fe7b1e6b848dcfed2bbc1671bf6fc3a71044",
+    "scope": "original-byte controlled-callback test; see result-specific limits"
+  },
+  "tenet-plinx-onenter-native-results.json": {
+    "sourceCase": "native-payloads/tenet-plinx/onenter-original-byte-results.json",
+    "sha256": "acb2da52e3a6bfcd83e20cb9c10aa2c5e3200ace500d4892f226e0080feb881b",
+    "scope": "original-byte controlled-callback test; see result-specific limits"
+  },
+  "grimoire-admission-review.md": {
+    "sourceCase": "native-payloads/GRIMOIRE-ADMISSION-REVIEW.md",
+    "sha256": "8567ecf266b71f0c74c383dac595a13197fa8ebca5780028b19bee22646719f7",
+    "scope": "source/native producers plus explicitly separate supplied geometry examples; no automatic default recipient"
+  },
+  "grimoire-admission-native-results.json": {
+    "sourceCase": "native-payloads/grimoire-admission-review-native-results.json",
+    "sha256": "58f7d0deb942791a34341b81e44a93433f1c837b55e51b0743554c4fa08305d8",
+    "scope": "source/native producers plus explicitly separate supplied geometry examples; no automatic default recipient"
+  },
+  "zymos-target-filter-review.md": {
+    "sourceCase": "root/zymos-target-filter-20261030/FINDINGS.md",
+    "sha256": "d6d564b5c72c8b5f385844b82f1189662b4d389977276e6cafc48e3d55f8fe00",
+    "scope": "case snapshot at checkpoint; source defaults, candidate filter, assignment, creator callback; not complete spawn/arrival proof"
+  },
+  "zymos-target-filter-native-results.json": {
+    "sourceCase": "root/zymos-target-filter-20261030/target-filter-original-bytes.json",
+    "sha256": "f15b647a52ff89a340ba3426f76b7fe4887ef0fe539dc68d2da9fcb997ee4a8d",
+    "scope": "case snapshot at checkpoint; source defaults, candidate filter, assignment, creator callback; not complete spawn/arrival proof"
+  },
+  "zymos-creator-order-native-results.json": {
+    "sourceCase": "root/zymos-target-filter-20261030/creator-order-original-bytes.json",
+    "sha256": "bd12f75ec2341ea8733a30847b336332bd7e8fa7dbcab5da2adfbcbcf4388b41",
+    "scope": "case snapshot at checkpoint; source defaults, candidate filter, assignment, creator callback; not complete spawn/arrival proof"
+  }
+}

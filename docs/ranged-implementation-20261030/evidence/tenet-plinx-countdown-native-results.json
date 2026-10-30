@@ -1,0 +1,80 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "capacityRounding": [
+    {
+      "effectiveClipFloat": 1.0,
+      "actualIntegerCapacity": 1.0
+    },
+    {
+      "effectiveClipFloat": 10.1,
+      "actualIntegerCapacity": 10.0
+    },
+    {
+      "effectiveClipFloat": 10.49,
+      "actualIntegerCapacity": 10.0
+    },
+    {
+      "effectiveClipFloat": 10.5,
+      "actualIntegerCapacity": 11.0
+    },
+    {
+      "effectiveClipFloat": 10.9,
+      "actualIntegerCapacity": 11.0
+    },
+    {
+      "effectiveClipFloat": 14.7,
+      "actualIntegerCapacity": 15.0
+    },
+    {
+      "effectiveClipFloat": 15.6,
+      "actualIntegerCapacity": 16.0
+    }
+  ],
+  "luaSetterDoesNotResetCountdown": [
+    {
+      "countdownBefore": 0.25,
+      "setConfiguredDelay": 1.0,
+      "countdownAfter": 0.25
+    },
+    {
+      "countdownBefore": 0.25,
+      "setConfiguredDelay": 3.0,
+      "countdownAfter": 0.25
+    },
+    {
+      "countdownBefore": 1.0,
+      "setConfiguredDelay": 1.0,
+      "countdownAfter": 1.0
+    },
+    {
+      "countdownBefore": 1.0,
+      "setConfiguredDelay": 3.0,
+      "countdownAfter": 1.0
+    },
+    {
+      "countdownBefore": 3.0,
+      "setConfiguredDelay": 1.0,
+      "countdownAfter": 3.0
+    },
+    {
+      "countdownBefore": 3.0,
+      "setConfiguredDelay": 3.0,
+      "countdownAfter": 3.0
+    }
+  ],
+  "resetThenScriptSetter": [
+    {
+      "configuredBefore": 1.0,
+      "resetCountdown": 1.0,
+      "configuredAfterScript": 3.0,
+      "countdownAfterScript": 1.0
+    },
+    {
+      "configuredBefore": 3.0,
+      "resetCountdown": 3.0,
+      "configuredAfterScript": 1.0,
+      "countdownAfterScript": 3.0
+    }
+  ],
+  "boundary": "original timer reset chunk and Lua setter, property predicate neutral; this witness disproves immediate configured-delay-to-countdown identity; attachment tick scheduling and next state transitions remain required for complete cycle"
+}

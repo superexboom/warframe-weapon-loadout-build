@@ -324,6 +324,30 @@ def _extract_archgun_ground_modes(
     return None
 
 
+def _swapping_charge_routes(behaviours):
+    """Effective release routes for the audited swap-before-fire state shape.
+
+    A zero-local-charge output state still pays the source state's full charge.
+    Other swapping/cancel/cached shapes retain their original local semantics.
+    """
+    routes={}
+    for position,entry in enumerate(behaviours):
+        if not isinstance(entry,dict) or entry.get('state:Type')!='/Lotus/Types/Game/LotusSwappingChargedStateBehavior':
+            continue
+        state=_sub_behaviour(entry,'state:') or {}
+        target=state.get('ChargedBehavior')
+        if (not isinstance(target,int) or isinstance(target,bool) or not 0<=target<len(behaviours) or target==position
+                or state.get('SwapOnFire')!=1 or state.get('SwapAfterFire')!=0
+                or state.get('CacheFullCharge')!=0 or state.get('MinChargeRatio')!=0
+                or not isinstance(state.get('ChargeTime'),(int,float)) or state['ChargeTime']<=0):
+            continue
+        target_state=_sub_behaviour(behaviours[target],'state:') or {}
+        if target_state.get('ChargeTime')!=0:continue
+        routes[position]=dict(seconds=0.,sourceBehavior=position,beforeFire=False,tapRelease=True)
+        routes[target]=dict(seconds=float(state['ChargeTime']),sourceBehavior=position,beforeFire=True,tapRelease=False)
+    return routes
+
+
 def _flatten_behaviours(
     index: PackageIndex, weapon_path: str, behaviours: list[Any]
 ) -> list[dict[str, Any]]:
@@ -363,6 +387,9 @@ def _flatten_behaviours(
                 fire = {**fire,'projectileType':charged}
                 mode['chargedProjectile'] = True
             mode["multishot"] = fire.get("fireIterations", 1)
+            if (entry.get('fire:Type') == '/Lotus/Types/Game/LotusWeaponProjectileFireBehavior'
+                    and fire.get('IgnoreFireIterations') == 1):
+                mode['nativeIgnoreFireIterations'] = True
             mode["ammoCost"] = fire.get("ammoRequirement")
             mode["ammoType"] = fire.get("ammoType")
         projectile_name=(fire or {}).get('projectileType')
@@ -402,6 +429,13 @@ def _flatten_behaviours(
                 mode["puncture"] = impact.get("tracePunctureDepth")
 
         modes.append(mode)
+    charge_routes=_swapping_charge_routes(behaviours)
+    for mode in modes:
+        route=charge_routes.get(mode['index'])
+        if route:
+            mode['nativeLocalChargeTime']=mode.get('chargeTime')
+            mode['nativeChargeSourceBehavior']=route['sourceBehavior']
+            mode['chargeTime']=route['seconds']
     return modes
 
 

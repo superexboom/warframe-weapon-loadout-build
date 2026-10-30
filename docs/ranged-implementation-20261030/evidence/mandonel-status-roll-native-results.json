@@ -1,0 +1,324 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "entry": "0x14102d2f0 actual victim status stage+0x780 ->0x14123da10 RNG ->0x140af1880 proc counter",
+  "cases": [
+    {
+      "seed": 0,
+      "packetHitType": 0,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 1,
+      "ruleWeights": [
+        1.0
+      ],
+      "appliedStatusCallbacks": [
+        1
+      ]
+    },
+    {
+      "seed": 1,
+      "packetHitType": 0,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 2,
+      "packetHitType": 0,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 1,
+      "ruleWeights": [
+        1.0
+      ],
+      "appliedStatusCallbacks": [
+        1
+      ]
+    },
+    {
+      "seed": 3,
+      "packetHitType": 0,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 4,
+      "packetHitType": 0,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 5,
+      "packetHitType": 0,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 1,
+      "ruleWeights": [
+        1.0
+      ],
+      "appliedStatusCallbacks": [
+        1
+      ]
+    },
+    {
+      "seed": 6,
+      "packetHitType": 0,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 7,
+      "packetHitType": 0,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 0,
+      "packetHitType": 0,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 1,
+      "packetHitType": 0,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 2,
+      "packetHitType": 0,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 3,
+      "packetHitType": 0,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 4,
+      "packetHitType": 0,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 5,
+      "packetHitType": 0,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 6,
+      "packetHitType": 0,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 7,
+      "packetHitType": 0,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 0,
+      "packetHitType": 7,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 1,
+      "ruleWeights": [
+        1.0
+      ],
+      "appliedStatusCallbacks": [
+        1
+      ]
+    },
+    {
+      "seed": 1,
+      "packetHitType": 7,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 2,
+      "packetHitType": 7,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 1,
+      "ruleWeights": [
+        1.0
+      ],
+      "appliedStatusCallbacks": [
+        1
+      ]
+    },
+    {
+      "seed": 3,
+      "packetHitType": 7,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 4,
+      "packetHitType": 7,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 5,
+      "packetHitType": 7,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 1,
+      "ruleWeights": [
+        1.0
+      ],
+      "appliedStatusCallbacks": [
+        1
+      ]
+    },
+    {
+      "seed": 6,
+      "packetHitType": 7,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 7,
+      "packetHitType": 7,
+      "suppressed": false,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 0,
+      "packetHitType": 7,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 1,
+      "packetHitType": 7,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 2,
+      "packetHitType": 7,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 3,
+      "packetHitType": 7,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 4,
+      "packetHitType": 7,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 5,
+      "packetHitType": 7,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 6,
+      "packetHitType": 7,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    },
+    {
+      "seed": 7,
+      "packetHitType": 7,
+      "suppressed": true,
+      "chance": 0.3499999940395355,
+      "radiationProcCounter": 0,
+      "ruleWeights": [],
+      "appliedStatusCallbacks": []
+    }
+  ],
+  "stubs": [
+    "neutral actor/controller getters and modifier0x75 no-op",
+    "packet already immunity-filtered flag254",
+    "one radiation-weight rule leaf returns actual packet radiation fraction",
+    "eligible generic status rule preserves existing proc counter; effect implementation is counted at original dispatch+0xe8"
+  ]
+}

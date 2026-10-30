@@ -2019,7 +2019,7 @@ def _apply_mods_spec_py(
     low_threshold = _combine(0.,buckets['WEAPON_LOW_CRIT_VALUE']) if buckets['WEAPON_LOW_CRIT_VALUE'] else None
     low_bonus = (_combine(quantize_base_crit_damage(_combine(crit_base,buckets['WEAPON_LOW_CRIT_DAMAGE'])),crit_relative)
                  -_combine(quantize_base_crit_damage(crit_base),crit_relative)) if low_threshold is not None else 0.
-    multishot = innate_multishot if buckets['RUNTIME_LOCK_MULTISHOT'] else max(0.0, _combine(innate_multishot,buckets['WEAPON_FIRE_ITERATIONS']))
+    multishot = innate_multishot if mode.get('nativeIgnoreFireIterations') or buckets['RUNTIME_LOCK_MULTISHOT'] else max(0.0, _combine(innate_multishot,buckets['WEAPON_FIRE_ITERATIONS']))
     from .beam_ramp import is_furis_beam
     continuous = mode.get('trigger')=='/Lotus/Language/Menu/Loadout_TriggerContinous' or is_furis_beam(weapon,mode,fire_mode)
     pool_cost = 0.

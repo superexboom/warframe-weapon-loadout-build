@@ -1,0 +1,1187 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "boundary": "original constructor MaxCharges store, charge-time/factor, generic physical count, launch gate/scale, independent packet multiplication bytes; no-upgrade owner ammo/capacity/state scaffolding; no collision/world/fullDPS",
+  "rows": [
+    {
+      "ammoAtStart": 1,
+      "chargeRate": 1.0,
+      "rho": 0.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 1,
+      "chargeRate": 1.0,
+      "rho": 0.25,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 1,
+      "chargeRate": 1.0,
+      "rho": 0.5,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 1,
+      "chargeRate": 1.0,
+      "rho": 1.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 1,
+      "chargeRate": 2.0,
+      "rho": 0.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 1,
+      "chargeRate": 2.0,
+      "rho": 0.25,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 1,
+      "chargeRate": 2.0,
+      "rho": 0.5,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 1,
+      "chargeRate": 2.0,
+      "rho": 1.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 2,
+      "chargeRate": 1.0,
+      "rho": 0.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 2,
+      "chargeRate": 1.0,
+      "rho": 0.25,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.25,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.25,
+      "directImpact": 125.0,
+      "embedDeathAlternative": 125.0,
+      "airborneAlternative": 625.0
+    },
+    {
+      "ammoAtStart": 2,
+      "chargeRate": 1.0,
+      "rho": 0.5,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.5,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.5,
+      "directImpact": 150.0,
+      "embedDeathAlternative": 150.0,
+      "airborneAlternative": 750.0
+    },
+    {
+      "ammoAtStart": 2,
+      "chargeRate": 1.0,
+      "rho": 1.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 2.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 2.0,
+      "directImpact": 200.0,
+      "embedDeathAlternative": 200.0,
+      "airborneAlternative": 1000.0
+    },
+    {
+      "ammoAtStart": 2,
+      "chargeRate": 2.0,
+      "rho": 0.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 2,
+      "chargeRate": 2.0,
+      "rho": 0.25,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.25,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.25,
+      "directImpact": 125.0,
+      "embedDeathAlternative": 125.0,
+      "airborneAlternative": 625.0
+    },
+    {
+      "ammoAtStart": 2,
+      "chargeRate": 2.0,
+      "rho": 0.5,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.5,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.5,
+      "directImpact": 150.0,
+      "embedDeathAlternative": 150.0,
+      "airborneAlternative": 750.0
+    },
+    {
+      "ammoAtStart": 2,
+      "chargeRate": 2.0,
+      "rho": 1.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 2.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 2.0,
+      "directImpact": 200.0,
+      "embedDeathAlternative": 200.0,
+      "airborneAlternative": 1000.0
+    },
+    {
+      "ammoAtStart": 3,
+      "chargeRate": 1.0,
+      "rho": 0.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 3,
+      "chargeRate": 1.0,
+      "rho": 0.25,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.5,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.5,
+      "directImpact": 150.0,
+      "embedDeathAlternative": 150.0,
+      "airborneAlternative": 750.0
+    },
+    {
+      "ammoAtStart": 3,
+      "chargeRate": 1.0,
+      "rho": 0.5,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 2.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 2.0,
+      "directImpact": 200.0,
+      "embedDeathAlternative": 200.0,
+      "airborneAlternative": 1000.0
+    },
+    {
+      "ammoAtStart": 3,
+      "chargeRate": 1.0,
+      "rho": 1.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 3.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 3.0,
+      "directImpact": 300.0,
+      "embedDeathAlternative": 300.0,
+      "airborneAlternative": 1500.0
+    },
+    {
+      "ammoAtStart": 3,
+      "chargeRate": 2.0,
+      "rho": 0.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 3,
+      "chargeRate": 2.0,
+      "rho": 0.25,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.5,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.5,
+      "directImpact": 150.0,
+      "embedDeathAlternative": 150.0,
+      "airborneAlternative": 750.0
+    },
+    {
+      "ammoAtStart": 3,
+      "chargeRate": 2.0,
+      "rho": 0.5,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 2.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 2.0,
+      "directImpact": 200.0,
+      "embedDeathAlternative": 200.0,
+      "airborneAlternative": 1000.0
+    },
+    {
+      "ammoAtStart": 3,
+      "chargeRate": 2.0,
+      "rho": 1.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 3.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 3.0,
+      "directImpact": 300.0,
+      "embedDeathAlternative": 300.0,
+      "airborneAlternative": 1500.0
+    },
+    {
+      "ammoAtStart": 5,
+      "chargeRate": 1.0,
+      "rho": 0.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 5,
+      "chargeRate": 1.0,
+      "rho": 0.25,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 2.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 2.0,
+      "directImpact": 200.0,
+      "embedDeathAlternative": 200.0,
+      "airborneAlternative": 1000.0
+    },
+    {
+      "ammoAtStart": 5,
+      "chargeRate": 1.0,
+      "rho": 0.5,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 3.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 3.0,
+      "directImpact": 300.0,
+      "embedDeathAlternative": 300.0,
+      "airborneAlternative": 1500.0
+    },
+    {
+      "ammoAtStart": 5,
+      "chargeRate": 1.0,
+      "rho": 1.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 5.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 5.0,
+      "directImpact": 500.0,
+      "embedDeathAlternative": 500.0,
+      "airborneAlternative": 2500.0
+    },
+    {
+      "ammoAtStart": 5,
+      "chargeRate": 2.0,
+      "rho": 0.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 5,
+      "chargeRate": 2.0,
+      "rho": 0.25,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 2.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 2.0,
+      "directImpact": 200.0,
+      "embedDeathAlternative": 200.0,
+      "airborneAlternative": 1000.0
+    },
+    {
+      "ammoAtStart": 5,
+      "chargeRate": 2.0,
+      "rho": 0.5,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 3.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 3.0,
+      "directImpact": 300.0,
+      "embedDeathAlternative": 300.0,
+      "airborneAlternative": 1500.0
+    },
+    {
+      "ammoAtStart": 5,
+      "chargeRate": 2.0,
+      "rho": 1.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 5.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 5.0,
+      "directImpact": 500.0,
+      "embedDeathAlternative": 500.0,
+      "airborneAlternative": 2500.0
+    },
+    {
+      "ammoAtStart": 10,
+      "chargeRate": 1.0,
+      "rho": 0.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 10,
+      "chargeRate": 1.0,
+      "rho": 0.25,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 3.25,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 3.25,
+      "directImpact": 325.0,
+      "embedDeathAlternative": 325.0,
+      "airborneAlternative": 1625.0
+    },
+    {
+      "ammoAtStart": 10,
+      "chargeRate": 1.0,
+      "rho": 0.5,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 5.5,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 5.5,
+      "directImpact": 550.0,
+      "embedDeathAlternative": 550.0,
+      "airborneAlternative": 2750.0
+    },
+    {
+      "ammoAtStart": 10,
+      "chargeRate": 1.0,
+      "rho": 1.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 10.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 10.0,
+      "directImpact": 1000.0,
+      "embedDeathAlternative": 1000.0,
+      "airborneAlternative": 5000.0
+    },
+    {
+      "ammoAtStart": 10,
+      "chargeRate": 2.0,
+      "rho": 0.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 10,
+      "chargeRate": 2.0,
+      "rho": 0.25,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 3.25,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 3.25,
+      "directImpact": 325.0,
+      "embedDeathAlternative": 325.0,
+      "airborneAlternative": 1625.0
+    },
+    {
+      "ammoAtStart": 10,
+      "chargeRate": 2.0,
+      "rho": 0.5,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 5.5,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 5.5,
+      "directImpact": 550.0,
+      "embedDeathAlternative": 550.0,
+      "airborneAlternative": 2750.0
+    },
+    {
+      "ammoAtStart": 10,
+      "chargeRate": 2.0,
+      "rho": 1.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 10.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 10.0,
+      "directImpact": 1000.0,
+      "embedDeathAlternative": 1000.0,
+      "airborneAlternative": 5000.0
+    },
+    {
+      "ammoAtStart": 15,
+      "chargeRate": 1.0,
+      "rho": 0.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 15,
+      "chargeRate": 1.0,
+      "rho": 0.25,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 4.5,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 4.5,
+      "directImpact": 450.0,
+      "embedDeathAlternative": 450.0,
+      "airborneAlternative": 2250.0
+    },
+    {
+      "ammoAtStart": 15,
+      "chargeRate": 1.0,
+      "rho": 0.5,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 8.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 8.0,
+      "directImpact": 800.0,
+      "embedDeathAlternative": 800.0,
+      "airborneAlternative": 4000.0
+    },
+    {
+      "ammoAtStart": 15,
+      "chargeRate": 1.0,
+      "rho": 1.0,
+      "duration": 0.800000011920929,
+      "defaultMaxCharges": 5,
+      "factor": 15.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 15.0,
+      "directImpact": 1500.0,
+      "embedDeathAlternative": 1500.0,
+      "airborneAlternative": 7500.0
+    },
+    {
+      "ammoAtStart": 15,
+      "chargeRate": 2.0,
+      "rho": 0.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 1.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 1.0,
+      "directImpact": 100.0,
+      "embedDeathAlternative": 100.0,
+      "airborneAlternative": 500.0
+    },
+    {
+      "ammoAtStart": 15,
+      "chargeRate": 2.0,
+      "rho": 0.25,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 4.5,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 4.5,
+      "directImpact": 450.0,
+      "embedDeathAlternative": 450.0,
+      "airborneAlternative": 2250.0
+    },
+    {
+      "ammoAtStart": 15,
+      "chargeRate": 2.0,
+      "rho": 0.5,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 8.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 8.0,
+      "directImpact": 800.0,
+      "embedDeathAlternative": 800.0,
+      "airborneAlternative": 4000.0
+    },
+    {
+      "ammoAtStart": 15,
+      "chargeRate": 2.0,
+      "rho": 1.0,
+      "duration": 0.4000000059604645,
+      "defaultMaxCharges": 5,
+      "factor": 15.0,
+      "actualProjectileCount": 1,
+      "perProjectileScale": 15.0,
+      "directImpact": 1500.0,
+      "embedDeathAlternative": 1500.0,
+      "airborneAlternative": 7500.0
+    }
+  ],
+  "chargeConsumption": [
+    {
+      "capacity": 1,
+      "firstRoundOnChargeEntry": true,
+      "steps": [
+        {
+          "elapsed": 0.0400000005,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.080000001,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.12000000150000001,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.160000002,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.2000000025,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.24000000300000002,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.2800000035,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.320000004,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.36000000449999997,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.400000005,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.44000000549999996,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.48000000600000003,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.5200000065,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.560000007,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.6000000075,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.640000008,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.6800000085,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.7200000089999999,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.7600000094999999,
+          "ammoRemaining": 0,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.80000001,
+          "ammoRemaining": 0,
+          "consumed": 1
+        }
+      ],
+      "finalAmmo": 0,
+      "totalConsumed": 1
+    },
+    {
+      "capacity": 2,
+      "firstRoundOnChargeEntry": true,
+      "steps": [
+        {
+          "elapsed": 0.0400000005,
+          "ammoRemaining": 1,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.080000001,
+          "ammoRemaining": 1,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.12000000150000001,
+          "ammoRemaining": 1,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.160000002,
+          "ammoRemaining": 1,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.2000000025,
+          "ammoRemaining": 1,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.24000000300000002,
+          "ammoRemaining": 1,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.2800000035,
+          "ammoRemaining": 1,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.320000004,
+          "ammoRemaining": 1,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.36000000449999997,
+          "ammoRemaining": 1,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.400000005,
+          "ammoRemaining": 1,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.44000000549999996,
+          "ammoRemaining": 0,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.48000000600000003,
+          "ammoRemaining": 0,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.5200000065,
+          "ammoRemaining": 0,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.560000007,
+          "ammoRemaining": 0,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.6000000075,
+          "ammoRemaining": 0,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.640000008,
+          "ammoRemaining": 0,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.6800000085,
+          "ammoRemaining": 0,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.7200000089999999,
+          "ammoRemaining": 0,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.7600000094999999,
+          "ammoRemaining": 0,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.80000001,
+          "ammoRemaining": 0,
+          "consumed": 2
+        }
+      ],
+      "finalAmmo": 0,
+      "totalConsumed": 2
+    },
+    {
+      "capacity": 5,
+      "firstRoundOnChargeEntry": true,
+      "steps": [
+        {
+          "elapsed": 0.0400000005,
+          "ammoRemaining": 4,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.080000001,
+          "ammoRemaining": 4,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.12000000150000001,
+          "ammoRemaining": 4,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.160000002,
+          "ammoRemaining": 4,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.2000000025,
+          "ammoRemaining": 3,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.24000000300000002,
+          "ammoRemaining": 3,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.2800000035,
+          "ammoRemaining": 3,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.320000004,
+          "ammoRemaining": 3,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.36000000449999997,
+          "ammoRemaining": 2,
+          "consumed": 3
+        },
+        {
+          "elapsed": 0.400000005,
+          "ammoRemaining": 2,
+          "consumed": 3
+        },
+        {
+          "elapsed": 0.44000000549999996,
+          "ammoRemaining": 2,
+          "consumed": 3
+        },
+        {
+          "elapsed": 0.48000000600000003,
+          "ammoRemaining": 2,
+          "consumed": 3
+        },
+        {
+          "elapsed": 0.5200000065,
+          "ammoRemaining": 1,
+          "consumed": 4
+        },
+        {
+          "elapsed": 0.560000007,
+          "ammoRemaining": 1,
+          "consumed": 4
+        },
+        {
+          "elapsed": 0.6000000075,
+          "ammoRemaining": 1,
+          "consumed": 4
+        },
+        {
+          "elapsed": 0.640000008,
+          "ammoRemaining": 1,
+          "consumed": 4
+        },
+        {
+          "elapsed": 0.6800000085,
+          "ammoRemaining": 0,
+          "consumed": 5
+        },
+        {
+          "elapsed": 0.7200000089999999,
+          "ammoRemaining": 0,
+          "consumed": 5
+        },
+        {
+          "elapsed": 0.7600000094999999,
+          "ammoRemaining": 0,
+          "consumed": 5
+        },
+        {
+          "elapsed": 0.80000001,
+          "ammoRemaining": 0,
+          "consumed": 5
+        }
+      ],
+      "finalAmmo": 0,
+      "totalConsumed": 5
+    },
+    {
+      "capacity": 10,
+      "firstRoundOnChargeEntry": true,
+      "steps": [
+        {
+          "elapsed": 0.0400000005,
+          "ammoRemaining": 9,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.080000001,
+          "ammoRemaining": 9,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.12000000150000001,
+          "ammoRemaining": 8,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.160000002,
+          "ammoRemaining": 8,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.2000000025,
+          "ammoRemaining": 7,
+          "consumed": 3
+        },
+        {
+          "elapsed": 0.24000000300000002,
+          "ammoRemaining": 7,
+          "consumed": 3
+        },
+        {
+          "elapsed": 0.2800000035,
+          "ammoRemaining": 6,
+          "consumed": 4
+        },
+        {
+          "elapsed": 0.320000004,
+          "ammoRemaining": 6,
+          "consumed": 4
+        },
+        {
+          "elapsed": 0.36000000449999997,
+          "ammoRemaining": 5,
+          "consumed": 5
+        },
+        {
+          "elapsed": 0.400000005,
+          "ammoRemaining": 5,
+          "consumed": 5
+        },
+        {
+          "elapsed": 0.44000000549999996,
+          "ammoRemaining": 4,
+          "consumed": 6
+        },
+        {
+          "elapsed": 0.48000000600000003,
+          "ammoRemaining": 4,
+          "consumed": 6
+        },
+        {
+          "elapsed": 0.5200000065,
+          "ammoRemaining": 3,
+          "consumed": 7
+        },
+        {
+          "elapsed": 0.560000007,
+          "ammoRemaining": 3,
+          "consumed": 7
+        },
+        {
+          "elapsed": 0.6000000075,
+          "ammoRemaining": 2,
+          "consumed": 8
+        },
+        {
+          "elapsed": 0.640000008,
+          "ammoRemaining": 2,
+          "consumed": 8
+        },
+        {
+          "elapsed": 0.6800000085,
+          "ammoRemaining": 1,
+          "consumed": 9
+        },
+        {
+          "elapsed": 0.7200000089999999,
+          "ammoRemaining": 1,
+          "consumed": 9
+        },
+        {
+          "elapsed": 0.7600000094999999,
+          "ammoRemaining": 0,
+          "consumed": 10
+        },
+        {
+          "elapsed": 0.80000001,
+          "ammoRemaining": 0,
+          "consumed": 10
+        }
+      ],
+      "finalAmmo": 0,
+      "totalConsumed": 10
+    },
+    {
+      "capacity": 15,
+      "firstRoundOnChargeEntry": true,
+      "steps": [
+        {
+          "elapsed": 0.0400000005,
+          "ammoRemaining": 14,
+          "consumed": 1
+        },
+        {
+          "elapsed": 0.080000001,
+          "ammoRemaining": 13,
+          "consumed": 2
+        },
+        {
+          "elapsed": 0.12000000150000001,
+          "ammoRemaining": 12,
+          "consumed": 3
+        },
+        {
+          "elapsed": 0.160000002,
+          "ammoRemaining": 12,
+          "consumed": 3
+        },
+        {
+          "elapsed": 0.2000000025,
+          "ammoRemaining": 11,
+          "consumed": 4
+        },
+        {
+          "elapsed": 0.24000000300000002,
+          "ammoRemaining": 10,
+          "consumed": 5
+        },
+        {
+          "elapsed": 0.2800000035,
+          "ammoRemaining": 9,
+          "consumed": 6
+        },
+        {
+          "elapsed": 0.320000004,
+          "ammoRemaining": 9,
+          "consumed": 6
+        },
+        {
+          "elapsed": 0.36000000449999997,
+          "ammoRemaining": 8,
+          "consumed": 7
+        },
+        {
+          "elapsed": 0.400000005,
+          "ammoRemaining": 7,
+          "consumed": 8
+        },
+        {
+          "elapsed": 0.44000000549999996,
+          "ammoRemaining": 6,
+          "consumed": 9
+        },
+        {
+          "elapsed": 0.48000000600000003,
+          "ammoRemaining": 6,
+          "consumed": 9
+        },
+        {
+          "elapsed": 0.5200000065,
+          "ammoRemaining": 5,
+          "consumed": 10
+        },
+        {
+          "elapsed": 0.560000007,
+          "ammoRemaining": 4,
+          "consumed": 11
+        },
+        {
+          "elapsed": 0.6000000075,
+          "ammoRemaining": 3,
+          "consumed": 12
+        },
+        {
+          "elapsed": 0.640000008,
+          "ammoRemaining": 3,
+          "consumed": 12
+        },
+        {
+          "elapsed": 0.6800000085,
+          "ammoRemaining": 2,
+          "consumed": 13
+        },
+        {
+          "elapsed": 0.7200000089999999,
+          "ammoRemaining": 1,
+          "consumed": 14
+        },
+        {
+          "elapsed": 0.7600000094999999,
+          "ammoRemaining": 0,
+          "consumed": 15
+        },
+        {
+          "elapsed": 0.80000001,
+          "ammoRemaining": 0,
+          "consumed": 15
+        }
+      ],
+      "finalAmmo": 0,
+      "totalConsumed": 15
+    }
+  ],
+  "exclusiveSelectors": [
+    {
+      "embedded": 0,
+      "selectedOffset": "0x5b4",
+      "source": "ExplosiveAttack",
+      "amount": 500
+    },
+    {
+      "embedded": 1,
+      "selectedOffset": "0x9c8",
+      "source": "EmbedDeathAttack",
+      "amount": 100
+    }
+  ],
+  "embeddedDeathDelay": 0.80000001
+}

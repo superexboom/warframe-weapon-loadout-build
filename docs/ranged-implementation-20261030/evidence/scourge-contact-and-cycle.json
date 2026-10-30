@@ -1,0 +1,384 @@
+{
+  "schemaVersion": 1,
+  "kind": "auditedAttacks-mode-merge",
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "weapons": {
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon": {
+      "1": {
+        "name": "Scourge Prime",
+        "directTotal": 300.0,
+        "fireMode": 1,
+        "projectile": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
+        "scope": "one physical spear; single main55 at accepted contact; explicit throw-reload-rethrow policy",
+        "radials": [
+          {
+            "damage": {
+              "corrosive": 55.0
+            },
+            "radius_m": 7.0,
+            "falloff_start_m": 0.0,
+            "falloff_reduction": 0.60000002,
+            "crit_chance": 0.1,
+            "crit_multiplier": 2.0,
+            "status_chance": 0.30000001,
+            "forcedProcs": [
+              "PT_KNOCKBACK"
+            ],
+            "takes_multishot": true,
+            "takes_blast_radius_mods": true,
+            "takes_condition_overload": false,
+            "impact_delay_seconds": 0.0,
+            "nativeSource": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
+            "nativeField": "ExplosiveAttack",
+            "sourceHitType": "DHT_RADIAL",
+            "declaredHitType": null,
+            "hitTypeSource": "native-none-filled-radial-by-0x14123499a",
+            "damageTypeSource": "native-explicit",
+            "emissionContract": {
+              "baseFireIterations": 1,
+              "baseExportMultishot": 1,
+              "packetsPerSpawnedProjectile": 1,
+              "amountAlreadyIncludesProjectileCount": false,
+              "multishotCopyProjectiles": [],
+              "consumer": "Bolto+5781409397f0 ordinary accepted avatar14093a12c..a66b ->one+7b8at14093a64d ->common+630normalExplosiveAttack55",
+              "physicalThrowsPerFire": 1,
+              "packetsPerPhysicalThrow": 1,
+              "nativeIgnoreFireIterations": true
+            },
+            "approximation": {
+              "conditionOverload": "neutral-pending-specific-routing",
+              "headDamageBonus": "suppressed",
+              "weakpointCriticalAndKillEvents": "neutral-pending-proof",
+              "recipient": "target at explosion centre assumed",
+              "flightAndCollisionTiming": "immediate at idealized accepted contact; no expiry or embed55 added",
+              "cadence": "explicit repeated throw then ordinary reload then next charge; prefire MaxNumProjectiles evicts previous spear"
+            },
+            "activationEvidence": {
+              "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+              "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+              "nativeSources": [
+                {
+                  "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+                  "parent": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+                  "rawAttributesSha256": "f23c44dc3c58603f203627ff8e7295f21570c67a753245b4dba32eef59dad7a3",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+                  "parent": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+                  "rawAttributesSha256": "dc8428404c34b733a1aaf4d77a26aa7a0e82e53c05f87e60373742dcf86984be",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+                  "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+                  "rawAttributesSha256": "a6b6ceeb4fe3512b22441c4c56ced0876f3daf86a6796e6edaa185320d15687d",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+                  "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+                  "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+                  "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+                  "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+                  "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+                  "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+                  "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+                  "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+                  "parent": "",
+                  "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
+                  "parent": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
+                  "rawAttributesSha256": "6b3c454e59977ee7df0df32abd8eeddf8ad46a04f3dd445ff131797b71029f24",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
+                  "parent": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearProjectile",
+                  "rawAttributesSha256": "6a47058f6bf7515ba365f0779167a9de66c9087cf54a857846ec87c8d93eeb8c",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearProjectile",
+                  "parent": "/Lotus/Types/Weapons/BoltoProjectile",
+                  "rawAttributesSha256": "efa90b28947f17609fea961bb97b7379e4b6b96044539e6d51b8d0624207bd05",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Types/Weapons/BoltoProjectile",
+                  "parent": "/Lotus/Types/Weapon/BoltoProjectile",
+                  "rawAttributesSha256": "d329d792d64ba673cbfb09954ddfd2529e6c128ff9c44d8f037e0f2238618808",
+                  "attributeRecord": true
+                },
+                {
+                  "path": "/Lotus/Types/Weapon/BoltoProjectile",
+                  "parent": "",
+                  "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "attributeRecord": false
+                }
+              ],
+              "classTable": "BoltoProjectile0x14226a010; contact+5781409397f0,embed+738140f25fa0,death+768140163a60,launch+780140f874b0",
+              "contact": "ordinary accepted avatar path14093a12c..a66b reaches14093a64d radial+7b8 exactlyonce with16d0 ExplodeOnImpact1,7f0StopOnAvatars1,c250",
+              "specialContact": "CanExplodeOnContact mapsBolto+1930;1407d5cd9false returnsfalse without special source; not a veto of normal16d0 branch",
+              "alternatives": "five+7b8sites are mutually selected collision/alias/static branches, not five packets on one contact; verified ordinary path usesa64d only",
+              "payload": "normalc250 ->common+63014160c5a0 selectsExplosiveAttack+5b4=55; explicit laterc251 would selectEmbedDeathAttack+9c8,not55",
+              "death": "normalc250 andExplodeOnImpact1 causes140163b01..b22 to skipdeathradial; contactthenplaindeath remainsone",
+              "count": "IgnoreFireIterations+1481 makesfull140f75d20 returnraw+281; no weapon multishot query;1physical spear per throw",
+              "stateFields": "state serializer140655d47TrackProjectiles+60;140655d6aMaxNumProjectiles+68;14182c531ReloadAfterEveryShot+1a5;14182c557DestroyActiveProjectiles+1a6;14182c57dDetonateOnSwap+1a7;14182c5a3HideDisable+1a8",
+              "reloadConsumer": "LotusSpearGunStateBehavior142362460+3f0 ->1411e83c0 reads1a5 and dispatches+1681402d4e10; flagtrue has explicit8/0/11state requests depending caller/weapon conditions; not just panel fireRate",
+              "limits": [
+                "scourge-prime-active-spear-throw-recall-rethrow-cadence-unmodeled",
+                "scourge-prime-stopped-embedded-script-payload-unmodeled",
+                "scourge-prime-contact-geometry-and-source-snapshot-unverified",
+                "scourge-prime-main55-CO-weakpoint-events-unverified"
+              ]
+            }
+          }
+        ],
+        "unmodeled": [
+          "scourge-prime-throw-reload-rethrow-input-policy-idealized",
+          "scourge-prime-accepted-contact-flight-geometry-idealized",
+          "scourge-prime-stopped-embedded-script-payload-unmodeled",
+          "scourge-prime-main55-CO-weakpoint-events-neutral-fallback-unverified",
+          "scourge-prime-pickup-recall-shortcuts-and-animation-interruption-unmodeled",
+          "scourge-prime-old-spear-deferred-die-and-embedded-damage-excluded"
+        ],
+        "behaviourSource": "Behaviors[1]",
+        "nativeSources": [
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+            "parent": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+            "rawAttributesSha256": "f23c44dc3c58603f203627ff8e7295f21570c67a753245b4dba32eef59dad7a3",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+            "parent": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+            "rawAttributesSha256": "dc8428404c34b733a1aaf4d77a26aa7a0e82e53c05f87e60373742dcf86984be",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+            "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+            "rawAttributesSha256": "a6b6ceeb4fe3512b22441c4c56ced0876f3daf86a6796e6edaa185320d15687d",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+            "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+            "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+            "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+            "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+            "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+            "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+            "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+            "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+            "parent": "",
+            "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
+            "parent": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
+            "rawAttributesSha256": "6b3c454e59977ee7df0df32abd8eeddf8ad46a04f3dd445ff131797b71029f24",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
+            "parent": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearProjectile",
+            "rawAttributesSha256": "6a47058f6bf7515ba365f0779167a9de66c9087cf54a857846ec87c8d93eeb8c",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearProjectile",
+            "parent": "/Lotus/Types/Weapons/BoltoProjectile",
+            "rawAttributesSha256": "efa90b28947f17609fea961bb97b7379e4b6b96044539e6d51b8d0624207bd05",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Types/Weapons/BoltoProjectile",
+            "parent": "/Lotus/Types/Weapon/BoltoProjectile",
+            "rawAttributesSha256": "d329d792d64ba673cbfb09954ddfd2529e6c128ff9c44d8f037e0f2238618808",
+            "attributeRecord": true
+          },
+          {
+            "path": "/Lotus/Types/Weapon/BoltoProjectile",
+            "parent": "",
+            "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "attributeRecord": false
+          }
+        ],
+        "packageBuild": "2026.10.22.13.12",
+        "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+        "generatedBy": "tools/import_scourge_contact_radial.py",
+        "nativeEvidence": {
+          "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+          "packetCopy": "0x140508e9e..0x140508eea",
+          "radiusPlan": "0x14160c618..0x14160c680",
+          "parentAmountScale": "0x141234a7a",
+          "statusNormalization": "0x1412353ef raw fireIterations / 0x141586f50",
+          "critFields": "Projectile.CriticalChance/CriticalMultiplier +0x538/+0x570; death path0x140f36198 ->0x140ede780 copies modifier buckets into radial plan, adding existing plan CC and multiplying existing plan CD",
+          "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeWeapon",
+              "parent": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+              "rawAttributesSha256": "f23c44dc3c58603f203627ff8e7295f21570c67a753245b4dba32eef59dad7a3",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearGun",
+              "parent": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+              "rawAttributesSha256": "dc8428404c34b733a1aaf4d77a26aa7a0e82e53c05f87e60373742dcf86984be",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/ClanTech/LotusSpeargunRifle",
+              "parent": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+              "rawAttributesSha256": "a6b6ceeb4fe3512b22441c4c56ced0876f3daf86a6796e6edaa185320d15687d",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/ClanTech/LotusSpecialRifle",
+              "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+              "rawAttributesSha256": "3db6e5de699b734a774a44fd3ab122725933c98347117b2d17e9e6abd60fcc5e",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+              "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+              "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+              "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+              "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+              "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+              "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+              "parent": "",
+              "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeScourge/PrimeScourgeChargedProjectile",
+              "parent": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
+              "rawAttributesSha256": "6b3c454e59977ee7df0df32abd8eeddf8ad46a04f3dd445ff131797b71029f24",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile",
+              "parent": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearProjectile",
+              "rawAttributesSha256": "6a47058f6bf7515ba365f0779167a9de66c9087cf54a857846ec87c8d93eeb8c",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearProjectile",
+              "parent": "/Lotus/Types/Weapons/BoltoProjectile",
+              "rawAttributesSha256": "efa90b28947f17609fea961bb97b7379e4b6b96044539e6d51b8d0624207bd05",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Types/Weapons/BoltoProjectile",
+              "parent": "/Lotus/Types/Weapon/BoltoProjectile",
+              "rawAttributesSha256": "d329d792d64ba673cbfb09954ddfd2529e6c128ff9c44d8f037e0f2238618808",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Types/Weapon/BoltoProjectile",
+              "parent": "",
+              "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "attributeRecord": false
+            }
+          ],
+          "classTable": "BoltoProjectile0x14226a010; contact+5781409397f0,embed+738140f25fa0,death+768140163a60,launch+780140f874b0",
+          "contact": "ordinary accepted avatar path14093a12c..a66b reaches14093a64d radial+7b8 exactlyonce with16d0 ExplodeOnImpact1,7f0StopOnAvatars1,c250",
+          "specialContact": "CanExplodeOnContact mapsBolto+1930;1407d5cd9false returnsfalse without special source; not a veto of normal16d0 branch",
+          "alternatives": "five+7b8sites are mutually selected collision/alias/static branches, not five packets on one contact; verified ordinary path usesa64d only",
+          "payload": "normalc250 ->common+63014160c5a0 selectsExplosiveAttack+5b4=55; explicit laterc251 would selectEmbedDeathAttack+9c8,not55",
+          "death": "normalc250 andExplodeOnImpact1 causes140163b01..b22 to skipdeathradial; contactthenplaindeath remainsone",
+          "count": "IgnoreFireIterations+1481 makesfull140f75d20 returnraw+281; no weapon multishot query;1physical spear per throw",
+          "stateFields": "state serializer140655d47TrackProjectiles+60;140655d6aMaxNumProjectiles+68;14182c531ReloadAfterEveryShot+1a5;14182c557DestroyActiveProjectiles+1a6;14182c57dDetonateOnSwap+1a7;14182c5a3HideDisable+1a8",
+          "reloadConsumer": "LotusSpearGunStateBehavior142362460+3f0 ->1411e83c0 reads1a5 and dispatches+1681402d4e10; flagtrue has explicit8/0/11state requests depending caller/weapon conditions; not just panel fireRate",
+          "limits": [
+            "scourge-prime-throw-reload-rethrow-input-policy-idealized",
+            "scourge-prime-accepted-contact-flight-geometry-idealized",
+            "scourge-prime-stopped-embedded-script-payload-unmodeled",
+            "scourge-prime-main55-CO-weakpoint-events-neutral-fallback-unverified",
+            "scourge-prime-pickup-recall-shortcuts-and-animation-interruption-unmodeled",
+            "scourge-prime-old-spear-deferred-die-and-embedded-damage-excluded"
+          ],
+          "prefire": "actual SpearState+d0141498140 calls selected+318140fbc360 when r8b1, then continues141330f10",
+          "maxEnforcement": "140fbc428..445 counts local+58/8 plus replica+1b8/8 against+68; when occupied,140fbc490..49e dispatchesold14124eac0 ->+418;140fbc4aa..4b0 updates tracking. Actual Bolto418140414330 checks embedded8e1, not ScriptsPreventDestruction1589. Nonembedded8e10/15891 executes direct+560 Die; embedded8e11 with active script1e0 uses1402e1be0->14050b8c0 to schedule plainDie140273d98/pendingc34. Both continue original prefire141330f10. The two-field control matrix executes both1589 values",
+          "destructionFieldBinding": "ScriptsPreventDestruction:serializer140da2aec..140da2b09 bindsProjectile+1589; embedded marker+8e1 is a separate runtime state",
+          "removal": "actual+300141050a70 indexesprojectilef88 and compares current handle target to callback projectile at141050add; mismatchjne141050af5 skipsnull+dec. Match calls140154520 and141050ae9 decrementsactive108. Original full suffix1415e7d70 appendsindex to118 removalqueue; local-slot reuse/duplicate safety verified, remote queue receiver ordering not emulated",
+          "hideRestore": "SpearState+1f814026b2c0 dispatches140612180/140afd1d0; those readHideAttach+1a8, set/clearhidden1a4 and hide/showattachments",
+          "reload": "hidden1a4 andReloadAfterEveryShot1a5 interceptstate1681402d4e10 ->state8; emitscontroller0x79 withweapon+2d0 reload duration. Normal reload completion remains existing animation-duration abstraction"
+        },
+        "nativeCharge": null,
+        "nativeSpearThrowCycle": {
+          "policy": "throw-reload-rethrow",
+          "reloadAfterEveryShot": true,
+          "reloadBaseSeconds": 2.2,
+          "refireBaseSeconds": 1.0,
+          "firstShot": "existing-initially-ready-selected-mode",
+          "activeProjectileLimit": 1,
+          "oldSpearRemoval": "automatic-prefire-destruction-request",
+          "oldSpearLifetimeWaitRequired": false,
+          "completion": "existing idealized ordinary reload duration; accepts next explicit trigger",
+          "alternativePoliciesExcluded": [
+            "keep-spear-embedded-and-use-secondary",
+            "pickup-shortcut",
+            "manual-recall-shortcut"
+          ]
+        }
+      }
+    }
+  },
+  "pending": [],
+  "interpretation": "Explicit throw-reload-rethrow single-target policy; prefire enforces one active spear. Not a claim that lifetime/embedded aura damage or arbitrary manual pickup is simulated."
+}

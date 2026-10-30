@@ -1,0 +1,53 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "cases": [
+    {
+      "explodeOnImpact": 0,
+      "CanExplodeOnContact": 0,
+      "StopOnAvatars": 1,
+      "radialCalls": 0,
+      "callSites": [],
+      "embedded": false
+    },
+    {
+      "explodeOnImpact": 1,
+      "CanExplodeOnContact": 0,
+      "StopOnAvatars": 1,
+      "radialCalls": 1,
+      "callSites": [
+        "0x14093a64d"
+      ],
+      "embedded": false
+    },
+    {
+      "case": "contact-then-plain-death",
+      "radialCalls": 1,
+      "deathCallbacks": 1,
+      "embedded": false
+    },
+    {
+      "case": "IgnoreFireIterations-Count1",
+      "physicalSpawns": 1
+    },
+    {
+      "case": "ReloadAfterEveryShot-source-consumer",
+      "weaponQuery": 0.0,
+      "stateRequests": [
+        11
+      ],
+      "meaning": "exact request code11 observed; world/reload completion and recall timing not emulated"
+    },
+    {
+      "case": "ReloadAfterEveryShot-source-consumer",
+      "weaponQuery": 1.0,
+      "stateRequests": [],
+      "meaning": "exact request code11 observed; world/reload completion and recall timing not emulated"
+    }
+  ],
+  "limits": [
+    "Accepted ordinary live avatar and source context supplied; execution starts14093a12c after input/direct packet construction.",
+    "Original contact branch, CanExplodeOnContact1930false helper,StopOnAvatars7f0true and ExplodeOnImpact16d0 branch execute. Ordinary recipient deflection/alias queries suppliedfalse;7a0/7a8 unrelated special-contact virtuals returnfalse.",
+    "Stops after the one main radial callback before embed/attractor scripts and target ownership side effects; no full thrown-spear cadence or lifetime/recall assertion.",
+    "Later plain death case uses c250 normal state; embedded source chooses a different native payload whose damage must not be conflated with55."
+  ]
+}

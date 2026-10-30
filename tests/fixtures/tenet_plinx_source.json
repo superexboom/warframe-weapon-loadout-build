@@ -1,0 +1,98 @@
+{
+  "weapon": {
+    "AmmoClipSize": 10,
+    "ClipIsBattery": 1,
+    "BatteryRegenDelay": 0.80000001,
+    "BatteryRegenRate": 20,
+    "NotifyAttachmentState": 1,
+    "Behaviors": [
+      {},
+      {
+        "fire:LotusWeaponProjectileFireBehavior": {
+          "fireIterations": 1,
+          "UseAmmo": 0,
+          "chargedProjectileType": "CrpBEPlinxAltFireProj",
+          "playerDamageMultiplier": 1,
+          "AttenuateForCharge": 0,
+          "AttenuateFireIterationsForCharge": 0
+        },
+        "impact:LotusWeaponImpactBehavior": {},
+        "state:WeaponChargedStateBehavior": {
+          "ClipSizeAffectsChargeTime": 0,
+          "ChargeTime": 0.80000001,
+          "MinChargeRatio": 1,
+          "UseClipSizeAsDamageMultiplier": 1,
+          "UseClipWhileCharging": 1,
+          "MinDamageMultiplier": 1,
+          "MaxDamageMultiplier": 0,
+          "ChargeRequireFullClip": 1
+        }
+      }
+    ]
+  },
+  "projectile": {
+    "Embed": 1,
+    "EmbedTime": [
+      0.80000001,
+      0.80000001
+    ],
+    "DamageRadius": 6,
+    "ExplosionFallOff": 0.40000001,
+    "CriticalChance": 0.40000001,
+    "CriticalMultiplier": 3,
+    "AttackData": {
+      "DT_IMPACT": 1,
+      "DT_PUNCTURE": 0,
+      "DT_SLASH": 0,
+      "Amount": 100,
+      "ProcChance": 0.2,
+      "ForcedProcs": [
+        "PT_KNOCKBACK"
+      ]
+    },
+    "EmbedDeathAttack": {
+      "Type": "DT_RADIATION",
+      "Amount": 100,
+      "ProcChance": 0.5,
+      "ForcedProcs": [
+        "PT_RAGDOLL"
+      ]
+    },
+    "ExplosiveAttack": {
+      "Type": "DT_RADIATION",
+      "Amount": 500,
+      "ProcChance": 0.2
+    },
+    "EmbedAttack": {
+      "Amount": 0
+    }
+  },
+  "events": [
+    {
+      "state": "WS_FIRE",
+      "matchTransitionState": 0,
+      "activeBehaviorIndexIgnoreList": [
+        1
+      ],
+      "responseScript": {
+        "Script": "CrpBEPlinx.lua",
+        "Function": "ChangeRegenDelayToNormal",
+        "_crpBEPlinxVortexType": "",
+        "_crpBEPlinxVortexFx": ""
+      }
+    },
+    {
+      "state": "WS_FIRE",
+      "matchTransitionState": 0,
+      "activeBehaviorIndexIgnoreList": [
+        0
+      ],
+      "responseScript": {
+        "Script": "CrpBEPlinx.lua",
+        "Function": "ChangeRegenDelayToAltFire",
+        "_crpBEPlinxVortexType": "",
+        "_crpBEPlinxVortexFx": ""
+      }
+    }
+  ]
+}

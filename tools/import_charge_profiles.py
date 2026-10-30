@@ -29,7 +29,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'vendor'))
 from wfarsenal.packages import load
-from wfarsenal.extract import _resolve_damage, _sub_behaviour
+from wfarsenal.extract import _resolve_damage, _sub_behaviour, _swapping_charge_routes
 
 
 def main():
@@ -48,13 +48,20 @@ def main():
         native = pkg.resolve(row['path']) or {}
         modes = row.get('fireModes') or []
         entry = {}
-        for position, behaviour in enumerate(native.get('Behaviors') or []):
+        bank=row.get('fireModeSource') or ('HeavyBehaviors' if row.get('slot')=='arch_gun' and native.get('HeavyBehaviors') else 'Behaviors')
+        behaviours=native.get(bank) or []
+        routes=_swapping_charge_routes(behaviours)
+        for position, behaviour in enumerate(behaviours):
             if not isinstance(behaviour, dict):
                 continue
             state = next((v for k, v in behaviour.items() if k.startswith('state:') and isinstance(v, dict)
                           and v.get('ChargeTime') is not None), None)
+            route=routes.get(position)
+            local_state=state
+            if route:state=_sub_behaviour(behaviours[route['sourceBehavior']],'state:')
+            seconds=route['seconds'] if route else float((state or {}).get('ChargeTime') or 0.)
             matches = [i for i, mode in enumerate(modes) if mode.get('index', i) == position]
-            if not state or len(matches) != 1 or float(state['ChargeTime']) <= 0:
+            if not state or len(matches) != 1 or (seconds <= 0 and not route):
                 continue
             index = matches[0]
             mode = modes[index]
@@ -77,14 +84,14 @@ def main():
                                    projectile=damage.get('projectile') or fire['PerfectChargedProjectileType'], damage=damage,
                                    paysOff=fast >= full, unmoddedRate=dict(full=round(full, 3), perfect=round(fast, 3)),
                                    fullProjectile=mode['damage'].get('projectile'), fullTotal=sum(mode['damage']['types'].values()))
-            entry[str(index)] = dict(seconds=float(state['ChargeTime']), chargeModifier=state.get('ChargeModifier'),
+            entry[str(index)] = dict(seconds=seconds, chargeModifier=state.get('ChargeModifier'),
                                      minChargeRatio=state.get('MinChargeRatio'), autoFire=bool(state.get('AutoFireWhenChargeCompleted')),
                                      behaviour=position, trigger=mode.get('trigger'), fireRate=mode.get('fireRate'),
-                                     exportChargeTime=mode.get('chargeTime'), **({'perfect': perfect} if perfect else {}))
+                                     exportChargeTime=mode.get('chargeTime'), **({'beforeFire':route['beforeFire'],'chargeSourceBehavior':route['sourceBehavior'], 'nativeLocalChargeTime':(local_state or {}).get('ChargeTime'),'sourceBehaviorBank':bank} if route else {}), **({'perfect': perfect} if perfect else {}))
             current = audited.get(row['path'], {})
             current = current.get('modes', {}).get(str(index), {}) if index else current
-            if current.get('charge') and abs(float(current['charge']['seconds']) - float(state['ChargeTime'])) > 1e-6:
-                disagreements.append(dict(name=row.get('nameEn'), mode=index, audited=current['charge'], native=state['ChargeTime']))
+            if current.get('charge') and abs(float(current['charge']['seconds']) - seconds) > 1e-6:
+                disagreements.append(dict(name=row.get('nameEn'), mode=index, audited=current['charge'], native=seconds))
         if entry:
             record = dict(name=row.get('nameEn'), modes=entry)
             own = pkg._path_to_file(row['path'])

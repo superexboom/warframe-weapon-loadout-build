@@ -1,0 +1,35 @@
+{
+  "inputs": "13546df7351f47ab",
+  "nativeSha256": "0c846cc61ed651b520a060e6b38ce277dd759a50e98bd3acb50ff58e6e023b72",
+  "expectedTests": 2443,
+  "actualUniqueTests": 2443,
+  "missing": [],
+  "extra": [],
+  "counters": {
+    "tests": 2450,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "shard": 0,
+      "exitCode": 0
+    },
+    {
+      "shard": 1,
+      "exitCode": 0
+    },
+    {
+      "shard": 2,
+      "exitCode": 0
+    },
+    {
+      "shard": 3,
+      "exitCode": 0
+    }
+  ],
+  "inputsStable": true,
+  "elapsedSeconds": 639.2670161999995,
+  "passed": true
+}

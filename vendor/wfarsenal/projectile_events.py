@@ -215,7 +215,7 @@ def _event_weapon(
 ) -> dict[str, Any]:
     event_mode = {
         key: mode.get(key)
-        for key in ("fireRate", "reloadTime", "falloffRange", "falloffMinDamage")
+        for key in ("fireRate", "reloadTime", "falloffRange", "falloffMinDamage", "nativeIgnoreFireIterations")
         if mode.get(key) is not None
     }
     event_mode["multishot"] = 1

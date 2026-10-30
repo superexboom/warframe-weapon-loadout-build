@@ -1,0 +1,223 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "constructorDefaults": {
+    "seekDistance": 0,
+    "seekUseClusterArc": 0,
+    "seekRandom": 0,
+    "seekThroughWalls": 0
+  },
+  "nativeClusterTable": "0x14226ff00",
+  "nativeClusterCreatorCallback": "0x1412ffd10",
+  "packageSeekDistance": 20.0,
+  "packageMissingSeekFlagsInheritConstructor": true,
+  "filters": [
+    {
+      "label": "host-alive-visible",
+      "kept": 1,
+      "erased": 0,
+      "losCalls": 1,
+      "conditions": {}
+    },
+    {
+      "label": "host-alive-ignore-los",
+      "kept": 1,
+      "erased": 0,
+      "losCalls": 0,
+      "conditions": {
+        "ignoreLOS": 1
+      }
+    },
+    {
+      "label": "host-dead-hp",
+      "kept": 0,
+      "erased": 0,
+      "losCalls": 0,
+      "conditions": {
+        "hp": 0
+      }
+    },
+    {
+      "label": "host-dead-flag",
+      "kept": 0,
+      "erased": 0,
+      "losCalls": 0,
+      "conditions": {
+        "deadFlag": 1
+      }
+    },
+    {
+      "label": "same-faction",
+      "kept": 0,
+      "erased": 1,
+      "losCalls": 0,
+      "conditions": {
+        "faction": 1
+      }
+    },
+    {
+      "label": "occluded",
+      "kept": 0,
+      "erased": 1,
+      "losCalls": 1,
+      "conditions": {
+        "occluded": 1
+      }
+    },
+    {
+      "label": "occluded-ignored",
+      "kept": 1,
+      "erased": 0,
+      "losCalls": 0,
+      "conditions": {
+        "occluded": 1,
+        "ignoreLOS": 1
+      }
+    },
+    {
+      "label": "angle-rejected",
+      "kept": 0,
+      "erased": 1,
+      "losCalls": 0,
+      "conditions": {
+        "angleGate": 1,
+        "angle": 2.0,
+        "maxAngle": 1.0
+      }
+    },
+    {
+      "label": "angle-disabled",
+      "kept": 1,
+      "erased": 0,
+      "losCalls": 1,
+      "conditions": {
+        "angleGate": 0,
+        "angle": 2.0,
+        "maxAngle": 1.0
+      }
+    },
+    {
+      "label": "host-pointer-different",
+      "kept": 1,
+      "erased": 0,
+      "losCalls": 1,
+      "conditions": {
+        "hostPointer": 0
+      }
+    },
+    {
+      "label": "both-helper-flags",
+      "kept": 1,
+      "erased": 0,
+      "losCalls": 1,
+      "conditions": {
+        "sourceFlag": 1,
+        "candidateFlag": 1
+      }
+    }
+  ],
+  "selections": [
+    {
+      "random": false,
+      "candidates": 0,
+      "assigned": []
+    },
+    {
+      "random": false,
+      "candidates": 1,
+      "assigned": [
+        "0x3001a000",
+        "0x3001a000",
+        "0x3001a000",
+        "0x3001a000",
+        "0x3001a000"
+      ]
+    },
+    {
+      "random": false,
+      "candidates": 2,
+      "assigned": [
+        "0x3001a000",
+        "0x3001a100",
+        "0x3001a000",
+        "0x3001a100",
+        "0x3001a000"
+      ]
+    },
+    {
+      "random": false,
+      "candidates": 3,
+      "assigned": [
+        "0x3001a000",
+        "0x3001a100",
+        "0x3001a200",
+        "0x3001a000",
+        "0x3001a100"
+      ]
+    },
+    {
+      "random": true,
+      "candidates": 0,
+      "assigned": []
+    },
+    {
+      "random": true,
+      "candidates": 1,
+      "assigned": [
+        "0x3001a000",
+        "0x3001a000",
+        "0x3001a000",
+        "0x3001a000",
+        "0x3001a000"
+      ]
+    },
+    {
+      "random": true,
+      "candidates": 2,
+      "assigned": [
+        "0x3001a100",
+        "0x3001a000",
+        "0x3001a100",
+        "0x3001a000",
+        "0x3001a000"
+      ]
+    },
+    {
+      "random": true,
+      "candidates": 3,
+      "assigned": [
+        "0x3001a000",
+        "0x3001a100",
+        "0x3001a000",
+        "0x3001a200",
+        "0x3001a100"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "start": "0x1412d9b60",
+      "end": "0x1412da196",
+      "sha256": "81a5b8686d9ea30e8b07879e50fa530cfd603b964e54ac4b17093edb2bbd7ebf"
+    },
+    {
+      "start": "0x14121a5af",
+      "end": "0x14121a652",
+      "sha256": "86f1ea8709061ca9a5262eff8abf966bf3f11de95e57af7beef0065474ced241"
+    }
+  ],
+  "stubs": [
+    "region enumeration supplies one controlled Avatar handle",
+    "avatar virtualFA0 flag controlled",
+    "angle getter result controlled; actual angle rejection comparison executes",
+    "raycast constructors/allocator/reference deletion scaffolding",
+    "LOS query returns controlled occlusion; actual decision executes",
+    "security-cookie check",
+    "target virtual5d0 records selected actor"
+  ],
+  "limits": [
+    "Class ordinal fallback supplied exact native Avatar descriptor; no initialized live-game RTTI registration",
+    "Tests candidate predicates and target assignment, not region enumeration internals or geometry",
+    "hostPointer fixture aliases carrier738 raycast-ignore handle; identity matching itself does not appear in this filter",
+    "No child impact/arrival/explosion overlap or damage admitted"
+  ]
+}

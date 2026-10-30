@@ -252,6 +252,9 @@ def _reference_trajectory(
     source_field_packets=[]
     source_field_activations=0
     source_field_trace=[]
+    finite_field_packets=[]
+    finite_field_activations=0
+    finite_field_trace=[]
     volley_pending = None
     volley_rounds = 1.0
     volley_shot_resume = None
@@ -727,7 +730,7 @@ def _reference_trajectory(
             q['stacks'] = sum(max(run-minimum+1,0)*weight for run,weight in after.items())
             q['expires'] = math.inf
 
-    def die(t, weak_kill=False, weapon_kill=True):
+    def die(t, weak_kill=False, weapon_kill=True, allow_kill_triggers=True):
         nonlocal kills, gen, first_kill, last_kill, min_interval, affinity, frozen_until, puncture_strip, ammo, pending_magazine_restore,weak_kill_events,gauge
         nonlocal waiting_mines, stale
         kills += 1
@@ -762,6 +765,8 @@ def _reference_trajectory(
         heat["token"] += 1
         heat_chains.reset()
         puncture_strip = 0.
+        if not allow_kill_triggers:
+            return  # Neutral field kill credit is unproven; keep damage/KPM only.
         signal("on-kill", t)
         slot = str(combat.get("weaponSlot") or "").lower()
         if "longgun" in slot or slot in ("primary", "rifle"):
@@ -843,7 +848,7 @@ def _reference_trajectory(
         head_part = float(locations['head']['hit_multiplier'] or 1.0)
         extra_scale *= ((1 - head) + head * head_part * head_part) / ((1 - head) + head * head_part)
 
-    def take(vector, t, source, weak_kill=False, cv2=0.0, extra=False, damage_event=None):
+    def take(vector, t, source, weak_kill=False, cv2=0.0, extra=False, damage_event=None, weapon_source=True):
         # Spend one attack fraction across pools. Shield bypass acts in parallel.
         # Residual damage never leaks to the next target.
         nonlocal fortifier_damage, fortifier_stolen, self_overguard, onos_hits
@@ -868,7 +873,7 @@ def _reference_trajectory(
                 raw * (1.5 if k in ("DT_VOID", "DT_RADIANT") else 1.0)
                 for k, raw in vector.items()
             ) * vulnerability("DT_MAGNETIC")
-            if fortifier and source != 'syndicate':
+            if weapon_source and fortifier and source != 'syndicate':
                 value *= 1.0 + (fortifier['multiplier'] - 1.0) * fortifier.get('uptime', 1.0)
             if value <= 0.0:
                 return False
@@ -876,7 +881,7 @@ def _reference_trajectory(
             drain = value * fraction
             pools[0] = max(0.0, pools[0] - drain)
             earlier_hit += drain
-            if fortifier and source != 'syndicate':
+            if weapon_source and fortifier and source != 'syndicate':
                 fortifier_damage += drain
                 stolen = drain * fortifier['steal'] * fortifier.get('uptime', 1.0)
                 fortifier_stolen += stolen
@@ -945,9 +950,9 @@ def _reference_trajectory(
             signal('on-hit', t, damage_event[0])
             signal('on-crit', t, damage_event[1])
         if ehp > 0.0 and pools[0] <= 1e-7 and pools[2] <= 1e-7:
-            die(t, attribution.crossing(t, remaining, resume_time(t))[0], source != "syndicate")
+            die(t, attribution.crossing(t, remaining, resume_time(t))[0], weapon_source and source != "syndicate", weapon_source)
             return True
-        if extra_hits and source == 'direct' and not extra:
+        if weapon_source and extra_hits and source == 'direct' and not extra:
             trigger = sum(vector.values())
             for dtype, share, _forced in extra_hits:
                 if trigger > 0.0 and take({dtype: trigger * share * extra_scale}, t, source, weak_kill, cv2, extra=True):
@@ -1543,6 +1548,14 @@ def _reference_trajectory(
                 projectile_events.append(dict(time=t,kind=kind,entity=payload,damage=totals['direct']-before))
                 if kind == 'embedded-death':
                     detonation_events.append(dict(time=t,expectedMines=part.multishot,staleMines=0.,damage=totals['direct']-before))
+        elif kind == 'finite-field':
+            slot,part=payload
+            finite_field_packets[slot]+=1
+            if collect_timeline:finite_field_trace.append(dict(time=t,slot=slot,generation=gen))
+            combat['victimProcTypesBeforeHit']={dtype:p.probability(t) for dtype,p in presence.items()}
+            vec,_,_,_=attack_data(part,0.)
+            if not take({k:v*damage_rate_multiplier for k,v in vec.items()},t,'direct',cv2=spread(part,0.),weapon_source=False):
+                add_procs(part,0.,t,allow_encumber=False)
         elif kind == 'source-owned-field':
             token,slot,part=payload
             if token!=source_field_token:
@@ -1736,7 +1749,7 @@ def _reference_trajectory(
                 push(t + cycle["enterSeconds"] * (1.0 if cycle.get("killCharged") else active.transform_time_scale), "transform", "incarnon")
                 continue
             battery = combat.get('battery')
-            if battery and math.isfinite(last_fire_time):
+            if battery and not getattr(active, '_full_clip_charge', None) and math.isfinite(last_fire_time):
                 delay = battery['delayEmptySeconds'] if ammo <= 1e-9 else battery['delayPartialSeconds']
                 ammo = min(active.magazine, ammo + max(0, t - last_fire_time - delay) * battery['regenPerSecond'])
             if combat.get('infiniteAmmo') and active.magazine > 0.0 and not (cycle and form == "incarnon"):
@@ -1817,6 +1830,11 @@ def _reference_trajectory(
                     if combat.get('spool') and reload_time >= combat['spool']['spindown']:
                         spool_shots=0
                     push(t + reload_time, "reload-complete", was_empty)
+                continue
+            # Completion is a weapon event, independent of target generation.
+            # Resolve buffs anew at completion; charge duration snapshots start.
+            if getattr(active, '_charge_before_fire', False) and payload != 'charged':
+                push(t + getattr(active, '_charge_time', 0.), 'fire', 'charged')
                 continue
             volley = getattr(active, '_charge_volley', None)
             if volley:
@@ -1911,6 +1929,7 @@ def _reference_trajectory(
                     tap_events.append(dict(time=t,hits=tap.hits,multiplier=factor,form=form,radialOnly=bool(incarnon_form)))
             last_fire_time = t
             generation = gen
+            finite_fields=getattr(active,'_finite_fields',())
             source_owned_fields=getattr(active,'_source_owned_fields',())
             if source_owned_fields:
                 # New arrow replaces the previous arrow even if its direct hit
@@ -2038,6 +2057,17 @@ def _reference_trajectory(
                 spread(active,aim),
                 )
                 noncrit_no_proc_hit(active, aim, t)
+            if finite_fields and active.multishot>0 and not physical_lanes and not manual_detonation and not primary_delay and not stackable:
+                # The spatial field survives death; modeled coverage remains
+                # bound to the original victim generation, never the next target.
+                finite_field_activations+=1
+                if not finite_field_packets:finite_field_packets=[0]*len(finite_fields)
+                for slot,(part,tick_rate,duration,initial_packets) in enumerate(finite_fields):
+                    for _ in range(initial_packets):push(t,'finite-field',(slot,part),generation)
+                    tick=1
+                    while tick/tick_rate<duration-1e-9:
+                        push(t+tick/tick_rate,'finite-field',(slot,part),generation)
+                        tick+=1
             if impact_embed:
                 field_part, tick_rate, duration = active._embedded
                 part = replace(field_part, multishot=active.multishot)
@@ -2184,7 +2214,7 @@ def _reference_trajectory(
                     ammo+=max(0.,active.magazine-ammo)*pending_magazine_restore
                     pending_magazine_restore=0.
                 shot_in_progress=False
-            charge_after = (0. if cycle and form == 'incarnon' and cycle.get('chargeBeforeFire')
+            charge_after = (0. if getattr(active, '_charge_before_fire', False) or (cycle and form == 'incarnon' and cycle.get('chargeBeforeFire'))
                             else getattr(active, '_charge_time', 0.))
             delay = getattr(active, '_bow_draw', 1.0 / speed + charge_after)
             if onos and form!='base':
@@ -2260,6 +2290,7 @@ def _reference_trajectory(
                     unsupported.append('companion-projectile-sequence-multishot-unmodeled')
                 projectile_sequence_index = (projectile_sequence_index+1) % projectile_sequence['length']
             volley_shot_resume = None
+            delay = max(delay, getattr(active, '_native_fire_cooldown_seconds', 0.))
             rate_spool_due = t + delay
             push(t + delay, "fire")
         elif kind == "sample":
@@ -2378,6 +2409,7 @@ def _reference_trajectory(
                               'events':detonation_events} if manual_detonation else None),
         'delayedAttackEvents': delayed_attack_count,
         'projectileEvents': projectile_events or [],
+        'fullClipCharge': combat.get('fullClipCharge'),
         'chargeVolley': {'policy':'full-magazine', 'events':volley_events} if combat.get('chargeVolley') else None,
         'projectileLifecycle': projectiles.stats if projectiles else {},
         'onosSequence': {'events':onos_events,'alignmentShots':onos['alignmentShots'],'powerCost':onos['powerCost']} if onos else None,
@@ -2434,6 +2466,7 @@ def _reference_trajectory(
         "continuousKillEvents": True,
         "activePool": "overguard" if full[0] else ("shield" if full[1] else "health"),
         "unsupported": unsupported,
+        **({"finiteFieldPackets":finite_field_packets,"finiteFieldActivations":finite_field_activations,"finiteFieldTrace":finite_field_trace} if combat.get("finiteFields") else {}),
         **({"sourceOwnedFieldPackets":source_field_packets,"sourceOwnedFieldActivations":source_field_activations,"sourceOwnedFieldTrace":source_field_trace} if combat.get("sourceOwnedFields") else {}),
         **({"physicalProjectileTrace":physical_trace,"physicalProjectilePhase":physical_phase} if physical_lanes else {}),
         "limitations": [

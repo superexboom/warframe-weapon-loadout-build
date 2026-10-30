@@ -8917,6 +8917,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 1.8,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -13333,6 +13334,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 1.8,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -30860,6 +30862,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 1.9,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -31070,6 +31073,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 3,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -51867,6 +51871,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
     }
@@ -57009,6 +57014,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -82070,7 +82076,7 @@
     {
      "ammoCost": 1,
      "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
-     "chargeTime": 1.5,
+     "chargeTime": 0.0,
      "damage": {
       "critChance": 0.25,
       "critMultiplier": 2.0,
@@ -82101,13 +82107,15 @@
      "index": 0,
      "isAlternateFire": false,
      "multishot": 8,
+     "nativeChargeSourceBehavior": 0,
+     "nativeLocalChargeTime": 1.5,
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
     },
     {
      "ammoCost": 1,
      "ammoType": "/Lotus/Weapons/Ammo/HeavyAmmoEx",
-     "chargeTime": 0,
+     "chargeTime": 1.5,
      "damage": {
       "critChance": 0.30000001,
       "critMultiplier": 2.5,
@@ -82137,6 +82145,8 @@
      "index": 1,
      "isAlternateFire": false,
      "multishot": 1,
+     "nativeChargeSourceBehavior": 0,
+     "nativeLocalChargeTime": 0,
      "reloadTime": 2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerCharge"
     }
@@ -87978,6 +87988,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 0.0099999998,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -90823,6 +90834,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 1.8,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -95016,6 +95028,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 2.2,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -102566,6 +102579,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 1.8,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -102706,6 +102720,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 3,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -102960,6 +102975,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 2.5,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }
@@ -220637,6 +220653,7 @@
      "index": 1,
      "isAlternateFire": true,
      "multishot": 1,
+     "nativeIgnoreFireIterations": true,
      "reloadTime": 0.0099999998,
      "trigger": "/Lotus/Language/Menu/Loadout_TriggerSemiAuto"
     }

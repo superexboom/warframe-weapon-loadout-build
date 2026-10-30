@@ -1,0 +1,110 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "entry": "actual generic victim resolver0x141482900",
+  "inputFixture": "radiation1.0 DHT_DOT7 SC.34999999 packet; original packet converter fixture then typed fields supplied",
+  "cases": [
+    {
+      "inputAmount": 25,
+      "neutralVictimGlobalMultiplier": 1.0,
+      "outputAmount": 25.0,
+      "damageTypes": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "procChance": 0.3499999940395355,
+      "calls": [
+        {
+          "function": "0x141482900",
+          "amount": 25.0
+        },
+        {
+          "function": "0x14111fa60",
+          "amount": 25.0
+        },
+        {
+          "function": "0x140563c60",
+          "amount": 25.0
+        }
+      ],
+      "upgradeCallbacks": [
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xb4",
+          "beforeBase": 25.0
+        }
+      ]
+    },
+    {
+      "inputAmount": 50,
+      "neutralVictimGlobalMultiplier": 1.0,
+      "outputAmount": 50.0,
+      "damageTypes": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "procChance": 0.3499999940395355,
+      "calls": [
+        {
+          "function": "0x141482900",
+          "amount": 50.0
+        },
+        {
+          "function": "0x14111fa60",
+          "amount": 50.0
+        },
+        {
+          "function": "0x140563c60",
+          "amount": 50.0
+        }
+      ],
+      "upgradeCallbacks": [
+        {
+          "callback": "packet-upgrade",
+          "upgrade": "0xb4",
+          "beforeBase": 50.0
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "neutral avatar/controller and upgrade services scaffolding",
+    "this is pre-mitigation resolver, followed separately by actual proc stage reproduction",
+    "target immunity/resistance/power-specific rule behaviors excluded"
+  ]
+}

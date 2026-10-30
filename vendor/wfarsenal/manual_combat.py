@@ -208,6 +208,12 @@ def live_variant(template, live_types, count_ceiling):
             if any(a[0] is not b[0] for a,b in zip(parts,owned)):
                 out=out if out is not obj else copy(obj)
                 out._source_owned_fields=parts
+        finite=getattr(obj,'_finite_fields',None)
+        if finite:
+            parts=tuple((vary(part),rate,duration,initial) for part,rate,duration,initial in finite)
+            if any(a[0] is not b[0] for a,b in zip(parts,finite)):
+                out=out if out is not obj else copy(obj)
+                out._finite_fields=parts
         lingering = getattr(obj, '_lingering', None)
         if lingering:
             part = vary(lingering[0])
@@ -358,9 +364,13 @@ def prepare(
     from .projectile_lanes import profile as physical_lane_profile, lane_mode as physical_lane_mode
     from .event_profiles import base_profile
     physical_lanes = physical_lane_profile(base_profile(weapon, mode_index))
-    if base_profile(weapon,mode_index).get('periodicTriggers'):
+    periodic=base_profile(weapon,mode_index).get('periodicTriggers') or []
+    if any(field.get('expiresWithSourceOwner') for field in periodic):
         notes.extend(['source-owned-field-upgrades-snapshot-at-embed',
             'source-owned-field-same-frame-enter-update-and-replacement-order-approximated'])
+    if any(field.get('defaultEnabled') and field.get('refreshPolicy')=='independent-finite-fields-no-source-replacement' for field in periodic):
+        notes.extend(['finite-field-target-generation-bound-centered-coverage-approximated',
+            'finite-field-two-yield-coalescing-and-enter-update-frame-phase-approximated'])
     notes.extend(unresolved_weapon_mechanics(weapon))
     from .event_profiles import execute_below, innate_conditionals
     innate = innate_conditionals(weapon, mode_index)
@@ -659,6 +669,11 @@ def prepare(
         # release speed or extra shots are granted by treating them as a pair.
         base_attack={**base_attack,'burst':{'count':2,'delay_seconds':1./float(modes[0]['fireRate'])}}
     selected_attack = base_profile(weapon, mode_index)
+    if selected_attack.get('fullClipCharge'):
+        notes.append('tenet-plinx-cadence-player-wait-policy-not-native-max-rate')
+        notes.append('tenet-plinx-static-magazine-policy-charge-entry-capacity-snapshot-unmodeled')
+        if any(e.upgrade_type == 'WEAPON_CLIP_MAX' for _, terms in dynamic for e in terms):
+            raise ValueError('tenet-plinx-mid-charge-capacity-snapshot-unverified')
     onos_sequence = selected_attack.get('onosCharge')
     from .runtime_adapters import onos_crits_for_hits
     onos_crit = next((q for b in branches if (q:=onos_crits_for_hits(b))),None)
@@ -814,6 +829,11 @@ def prepare(
             scenario, incarnon_cycle=False, victim_status_count=count_ceiling,
             heavy_attack=bool(stacks.get('__heavy')) or scenario.heavy_attack,
         )
+        battery_parameter_fx = []
+        if base_profile(wp, idx).get('fullClipCharge'):
+            scoped = {'WEAPON_BATTERY_REGEN_RATE', 'WEAPON_RELOAD_EMPTY_BATTERY'}
+            battery_parameter_fx = [e for e in fx if e.upgrade_type in scoped]
+            fx = ModEffectList([e for e in fx if e.upgrade_type not in scoped], skipped=fx.skipped)
         st, spec = apply_mods_spec(wp, fx, fire_mode=idx, scenario=form_scenario)
         for e, n in partial_sets.values():
             field_name = SET_BLEND_FIELDS[e.upgrade_type]
@@ -1010,10 +1030,65 @@ def prepare(
             if radial is not None:
                 radial.multishot = pellets
             st._charge_volley = dict(extra['chargeVolley'])
+        if extra.get('nativeFireCooldownSeconds'):
+            st._native_fire_cooldown_seconds = float(extra['nativeFireCooldownSeconds'])
         if extra.get('charge'):
             scales = extra['charge'].get('scalesWithFireRate', wp.get('slot') != 'arch_gun')
             fire_scaling = max(st.fire_rate / float(modes[idx]['fireRate']),1e-9) if scales else 1.
             st._charge_time = extra['charge']['seconds'] / (fire_scaling*st.charge_rate_multiplier)
+            st._charge_before_fire = bool(extra['charge'].get('beforeFire'))
+        if extra.get('fullClipCharge'):
+            policy = extra['fullClipCharge']
+            if policy.get('cadencePolicy') != 'wait-configured-empty-delay-then-full-recharge':
+                raise ValueError('full-clip-charge-native-countdown-order-unverified')
+            # The source packet/N ordering is admitted only for homogeneous
+            # percentage damage modifiers. Do not silently scale flat base.
+            if any(e.operation in ('ADD_BASE', 'SET_BASE') and e.value
+                   and e.upgrade_type in ('WEAPON_DAMAGE_AMOUNT', 'WEAPON_MELEE_DAMAGE')
+                   for e in fx):
+                raise ValueError('tenet-plinx-flat-add-native-damage-provider-order-unverified')
+            # 141665174 adds .5, then native floor, then integer conversion.
+            rounds = max(1., math.floor(st.magazine + .5))
+            st.magazine = float(rounds)
+            def full_clip_part(part):
+                # CoSpec describes pre-N damage. Fractional live CO must use
+                # the complete resolver, in both Python and native vary.
+                part._co_spec = None
+                part.damage_types = {k:v*rounds for k,v in part.damage_types.items()}
+                if part.dot_base_damage is not None:
+                    part.dot_base_damage *= rounds
+            full_clip_part(st)
+            if radial is not None:
+                full_clip_part(radial)
+                for part in getattr(radial, '_additional_radials', ()):
+                    full_clip_part(part)
+            # Charge owns consumption; generic UseAmmo0 does not make this
+            # shot free. Ammo efficiency must not reduce the captured clip.
+            st.ammo_cost = rounds
+            st._requires_full_ammo = True
+            st._full_clip_charge = dict(policy)
+            st._charge_time = float(policy['chargeSeconds']) / max(
+                st.fire_rate / float(modes[idx]['fireRate']) * st.charge_rate_multiplier, 1e-9)
+            st._charge_before_fire = True
+            from .damage import _combine, _qualifier_rejection
+            weapon_types = {str(path).rstrip('/') for path in
+                            (*tuple(wp.get('ancestry') or ()), wp.get('path')) if path}
+            def battery_terms(kind):
+                return [e for e in [*fx, *battery_parameter_fx] if e.upgrade_type == kind
+                        and (not e.valid_type or e.valid_type.rstrip('/') in weapon_types)
+                        and not _qualifier_rejection(e, wp, form_scenario)]
+            # Exact native query ordering: 184(empty delay), 186(reload time),
+            # divide by max(185(reload speed),.01). e2 modifies refill rate.
+            configured_delay = _combine(float(policy['emptyDelaySeconds']),
+                battery_terms('WEAPON_RELOAD_EMPTY_BATTERY'))
+            configured_delay = _combine(configured_delay, battery_terms('WEAPON_RELOAD_TIME'))
+            delay = configured_delay / max(_combine(1., battery_terms('WEAPON_RELOAD_SPEED')), .01)
+            regen = _combine(float(policy['regenPerSecond']), battery_terms('WEAPON_BATTERY_REGEN_RATE'))
+            if regen <= 0.:
+                raise ValueError('tenet-plinx-nonpositive-battery-regen-cannot-complete-full-clip-policy')
+            st.reload_time = max(0., delay) + rounds / regen
+            st._full_clip_charge = {**policy, 'resolvedEmptyDelaySeconds': max(0., delay),
+                                   'resolvedRegenPerSecond': regen}
         if extra.get('bow'):
             st._bow_draw = extra['drawSeconds'] / (max(st.fire_rate / float(modes[idx]['fireRate']), 1e-9)*st.charge_rate_multiplier)
         if miter_aoe and idx==0 and not wp.get('isIncarnonForm'):
@@ -1065,6 +1140,28 @@ def prepare(
                 source_fields.append((part,float(field['tick_rate']),float(field['sourceOwnerLifetimeAfterEmbed_seconds']),
                     1+int(bool(field.get('damageOnEnter')))))
             st._source_owned_fields=tuple(source_fields)
+        finite=[field for field in extra.get('periodicTriggers') or []
+                if field.get('defaultEnabled') and field.get('refreshPolicy')=='independent-finite-fields-no-source-replacement']
+        if finite:
+            finite_fields=[]
+            for field in finite:
+                def finite_field_record(field=field):
+                    rm=deepcopy(modes[idx]);rm.pop('multishotCopy',None)
+                    rm.update(multishot=1.,falloffRange=[0,0],falloffMinDamage=1.)
+                    rm['damage']={**rm['damage'],'types':{mapped.get(k,k):v for k,v in field['damage'].items()},
+                        'forcedProcs':list(field.get('forcedProcs') or []),'critChance':0.,'critMultiplier':1.,
+                        'procChance':float(field['status_chance'])}
+                    return {**wp,'fireModes':[rm],'__innateResolved__':True,'__coProfile__':{'behavior':'none'}}
+                # Empty creator falls back to DamageTrigger itself and fails
+                # LotusWeapon gating. No parent weapon MOD bucket is inherited.
+                part,_=apply_mods_spec(_part_record(wp,('finite-field',idx,repr(field)),finite_field_record),
+                    ModEffectList(),scenario=replace(scenario,incarnon_cycle=False,victim_status_count=0))
+                part=replace(part,multishot=1.,radial_only=True,crit_chance=0.,crit_multiplier=1.,
+                    weakpoint_damage_bonus=0.,weakpoint_crit_chance_bonus=0.,weakpoint_crit_chance_relative=0.,
+                    headshot_bonus_multiplier=1.,status_chance=float(field['status_chance']))
+                finite_fields.append((part,float(field['tick_rate']),float(field['duration_seconds']),
+                    1+int(bool(field.get('damageOnEnter')))))
+            st._finite_fields=tuple(finite_fields)
         if physical_index is not None:
             st=replace(st,multishot=1.,weakpoint_damage_bonus=0.,weakpoint_crit_chance_bonus=0.,
                 weakpoint_crit_chance_relative=0.,headshot_bonus_multiplier=1.,ignore_headshot_bonus=True)
@@ -1185,10 +1282,14 @@ def prepare(
     return dict(
         resolve=entry,
         projectileSequence=companion_sequence,
-        sourceOwnedFields=bool((base_profile(weapon,mode_index).get('periodicTriggers') or [])),
+        sourceOwnedFields=any(field.get('defaultEnabled') and field.get('expiresWithSourceOwner') for field in periodic),
+        finiteFields=any(field.get('defaultEnabled') and field.get('refreshPolicy')=='independent-finite-fields-no-source-replacement' for field in periodic),
         physicalProjectileLanes=physical_lanes,
         fractionalProjectileLanes=bool(physical_lanes and any(e.upgrade_type=='WEAPON_FIRE_ITERATIONS' for _,terms in dynamic for e in terms)),
+        fullClipCharge=selected_attack.get('fullClipCharge'),
         chargeVolley=any(attack.get('chargeVolley') for attack in (base_attack, selected_attack)),
+        chargeBeforeFire=bool(selected_attack.get('fullClipCharge') or (selected_attack.get('charge') or {}).get('beforeFire')),
+        nativeFireGate=bool(selected_attack.get('nativeFireCooldownSeconds')),
         delayedRadialEvents=any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
         melee=melee,
         comboTierKeys=combo_tier_keys,

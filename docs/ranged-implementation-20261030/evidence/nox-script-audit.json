@@ -1,0 +1,114 @@
+{
+  "status": "script-declaration-and-partial-consumer-no-added-damage",
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "packagesSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+  "script": "/Lotus/Scripts/WeaponAttachments/NoxWeapon.lua",
+  "scriptSha256": "3129454e35dcde6980d5773201f0f0cd3ce65f21dff1eaa2d22e5becf77a6129",
+  "nativeSources": [
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
+      "parent": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/Rifle",
+      "rawAttributesSha256": "2c65c1f070f228360d49ea4dd6dd6f01b014a45d9ffcb41d36d0cad25568dad8",
+      "attributeRecord": true
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerAssaultRifle/Rifle",
+      "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+      "rawAttributesSha256": "b95c7046b410388e2b614a6a22a8beede867a9445e2da2d2e4887b602abec770",
+      "attributeRecord": true
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+      "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+      "attributeRecord": true
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+      "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+      "attributeRecord": true
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+      "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+      "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+      "attributeRecord": true
+    },
+    {
+      "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+      "parent": "",
+      "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+      "attributeRecord": true
+    },
+    {
+      "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxProjectilePvE",
+      "parent": "/EE/Types/Engine/Projectile",
+      "rawAttributesSha256": "78bb9fb58e8aeaac79bbadc14bc360931145352686e8135c3934019b03f3f6f8",
+      "attributeRecord": true
+    },
+    {
+      "path": "/EE/Types/Engine/Projectile",
+      "parent": "",
+      "rawAttributesSha256": "8b5fe36bc4e7e28d621d2b59a52648b98d1ca7738ca0fb4d85436ecd03548d2e",
+      "attributeRecord": true
+    },
+    {
+      "path": "/Lotus/Types/Enemies/Grineer/ChemStrike/NoxGooTrigger",
+      "parent": "/EE/Types/Engine/ScriptTrigger",
+      "rawAttributesSha256": "b627ad02d3753d165d32c010a3bbb19403384067748a7366cdfd46ad3aaea383",
+      "attributeRecord": true
+    },
+    {
+      "path": "/EE/Types/Engine/ScriptTrigger",
+      "parent": "",
+      "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "attributeRecord": false
+    }
+  ],
+  "displayIdentity": {
+    "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
+    "localizeTag": "/Lotus/Language/Items/GrineerAssaultRifleName",
+    "marketMode": "MM_HIDDEN",
+    "availability": "not-established-from-MarketMode"
+  },
+  "nonDamageTrigger": {
+    "path": "/Lotus/Types/Enemies/Grineer/ChemStrike/NoxGooTrigger",
+    "hasAttackData": false,
+    "behavior": "OnOverlap obtains parent and requests parent death; not another damage field"
+  },
+  "declaredPayloads": {
+    "contact": {
+      "Type": "DT_IMPACT",
+      "Amount": 30,
+      "ProcChance": 0
+    },
+    "embeddedTick": {
+      "Type": "DT_POISON",
+      "Amount": 3,
+      "ProcChance": 0
+    },
+    "embeddedDeath": {
+      "Type": "DT_POISON",
+      "Amount": 30,
+      "ProcChance": 0.25,
+      "HitType": "DHT_PROJECTILE"
+    },
+    "embedTimeRange": [
+      2,
+      4
+    ]
+  },
+  "consumers": {
+    "radius": "OnStop P0pc131..135 Lua atomf6e051dd ->0x141981f90 writesProjectile+63c using script1.5; subsequent visualScale setter is independent",
+    "overlap": "OnOverlap P2pc0..11 atom557c9672 ->0x14196cbb0 readsEntity+3a0;atom9c6a9ac9 ->0x14196e520 callsparent+418 death",
+    "branch": "OnStop first branch tests private class atom0xae46e6de, alive and slow tracking; resolved class identity not yet established"
+  },
+  "unresolved": [
+    "same-victim-overlap-and-host-class-branch",
+    "embed-tick-and-early-death-versus-uniform-expiry",
+    "weapon-context-and-final-event-consumers",
+    "script-raw0-loop-backedge-not-independently-decoded"
+  ],
+  "interpretation": "No mean3s explosion or independent3toxin field admitted; overlap may end the owner before its native expiry"
+}

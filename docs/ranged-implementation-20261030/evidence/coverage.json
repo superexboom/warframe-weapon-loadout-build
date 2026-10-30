@@ -1,0 +1,865 @@
+{
+  "identity": {
+    "sourceCommit": "420d24942cdbda2f9c9d1ecf759f14c7197a9cd4",
+    "inputs": "13546df7351f47ab",
+    "toolSha256": "49b5a27fa40ce95c962f2c495a07d03ccb738bb788d5431f96b6cd5d6923c963"
+  },
+  "includesCompanions": {
+    "weaponRecords": 423,
+    "weaponRecordsWithNoModes": 6,
+    "explicitModes": 631,
+    "evaluableModes": 624,
+    "excludedOrMissing": {
+      "auxiliary-melee-excluded": 6,
+      "missing-damage-data": 1
+    },
+    "weaponsWithExplicitGaps": 31,
+    "evaluableModesWithExplicitGaps": 32,
+    "modesWithNoReportedGap": 592,
+    "nativeStaticSpecialEvidenceModes": 111,
+    "referenceOnlySpecialEvidenceModes": 87,
+    "modesWithCOReference": 518,
+    "contextRequiredModes": 17,
+    "prepareErrors": 0,
+    "fullGameplayCalibration": "not-established-by-this-inventory",
+    "reasons": [
+      {
+        "reason": "quanta-cube-chain-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "quanta-idle-detonation-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "quanta-player-shot-detonation-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "alternox-host-death-lifecycle-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-instant-detonation-order-idealized",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-multishot-active-cap-unresolved",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-same-time-expiry-order-fixed-explosion-first",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-ammo-efficiency-integer-accounting-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-charge-completion-buff-snapshot-boundary-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-charge-release-and-flight-timing-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-full-charge-ideal-projectile-coverage",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "companion-active-projectile-refire-limit-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "companion-projectile-bounce-return-timing-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "companion-projectile-sequence-multishot-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "larkspur-contact-flight-and-scene-geometry-idealized",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "larkspur-flight-time-dynamic-buff-snapshot-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "larkspur-main-explosion-CO-neutral-fallback-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "larkspur-main-explosion-weakpoint-and-hit-events-neutral-fallback-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "larkspur-projectile-speed-mods-obstacles-and-out-of-range-contact-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-charge-ammo-scale-and-contact-routing-approximated",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-cluster-child-payload-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-main-explosion-CO-neutral-fallback-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-main-explosion-weakpoint-events-neutral-fallback-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "spatial-projectile-hit-loss-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "acceltra-contact-death-timing-and-target-centre-coverage-idealized",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "acceltra-main-explosion-CO-neutral-fallback-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "acceltra-main-explosion-weakpoint-events-neutral-fallback-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "arbucep-innate-mushroom-and-ammo-deco-script-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "arbucep-projectile-contact-and-radial-centre-coverage-idealized",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-first-charge-dynamic-buff-snapshot-timing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-primary-dot-charge-during-alt-windup-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-radial-condition-overload-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-radial-hit-arcane-dispatch-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-clock-boundary-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-mod-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-spatial-overlap-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cryotra-embed-expiry-boundary-order-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cryotra-field-condition-overload-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cryotra-field-host-death-and-spatial-persistence-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cryotra-field-overlap-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "efv8-main-explosion-CO-neutral-fallback-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "efv8-release-flight-and-recipient-coverage-idealized",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "embed-delay-uniform-approximated-by-mean",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "finite-field-target-generation-bound-centered-coverage-approximated",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "finite-field-two-yield-coalescing-and-enter-update-frame-phase-approximated",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "grimoire-alt-chain-source-buffs-CO-and-events-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "grimoire-alt-chain-target-reselection-and-recursive-geometry-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "grimoire-alt-direct-contact-repeat-lifecycle-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "grimoire-alt-launch-expiry-recipient-position-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "grimoire-alt-single-orb-ms-to-chain-budget-routing-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "hema-player-health-cost-not-modeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mandonel-field-avatar-special-upgrades-and-event-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mandonel-field-first-enter-update-frame-phase-approximated",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mandonel-on-hit-two-yield-coalescing-simultaneous-shots-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mausolon-radial-multishot-routing-unverified",
+        "weapons": 1,
+        "modes": 2
+      },
+      {
+        "reason": "mutalist-cernos-swarm-first-update-versus-enter-phase-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mutalist-cernos-swarm-shared-weapon-replacement-ms-order-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mutalist-cernos-swarm-special-source-upgrades-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mutalist-cernos-swarm-status-kill-arcane-dispatch-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "nox-player-embed-tick-and-death-clock-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "nox-player-overlap-script-can-terminate-owner-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "nox-player-source-and-event-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "projectile-homing-and-bounce-target-selection-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-accepted-contact-flight-geometry-idealized",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-contact-geometry-and-source-snapshot-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-main55-CO-weakpoint-events-neutral-fallback-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-pickup-recall-shortcuts-and-animation-interruption-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-stopped-embedded-script-payload-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-throw-reload-rethrow-input-policy-idealized",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "source-owned-field-same-frame-enter-update-and-replacement-order-approximated",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "talons-multishot-spatial-hit-loss-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "tenet-plinx-CO-weakpoint-arcane-event-qualification-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "tenet-plinx-static-magazine-policy-charge-entry-capacity-snapshot-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "zymos-child-damage-inheritance-and-event-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "zymos-child-spawn-and-targeting-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      }
+    ]
+  },
+  "rangedOnly": {
+    "weaponRecords": 399,
+    "weaponRecordsWithNoModes": 6,
+    "explicitModes": 607,
+    "evaluableModes": 600,
+    "excludedOrMissing": {
+      "auxiliary-melee-excluded": 6,
+      "missing-damage-data": 1
+    },
+    "weaponsWithExplicitGaps": 28,
+    "evaluableModesWithExplicitGaps": 29,
+    "modesWithNoReportedGap": 571,
+    "nativeStaticSpecialEvidenceModes": 107,
+    "referenceOnlySpecialEvidenceModes": 87,
+    "modesWithCOReference": 518,
+    "contextRequiredModes": 17,
+    "prepareErrors": 0,
+    "fullGameplayCalibration": "not-established-by-this-inventory",
+    "reasons": [
+      {
+        "reason": "quanta-cube-chain-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "quanta-idle-detonation-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "quanta-player-shot-detonation-unmodeled",
+        "weapons": 3,
+        "modes": 3
+      },
+      {
+        "reason": "alternox-host-death-lifecycle-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-instant-detonation-order-idealized",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-multishot-active-cap-unresolved",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "alternox-same-time-expiry-order-fixed-explosion-first",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-ammo-efficiency-integer-accounting-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-charge-completion-buff-snapshot-boundary-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-charge-release-and-flight-timing-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "angstrum-full-charge-ideal-projectile-coverage",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "larkspur-contact-flight-and-scene-geometry-idealized",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "larkspur-flight-time-dynamic-buff-snapshot-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "larkspur-main-explosion-CO-neutral-fallback-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "larkspur-main-explosion-weakpoint-and-hit-events-neutral-fallback-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "larkspur-projectile-speed-mods-obstacles-and-out-of-range-contact-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-charge-ammo-scale-and-contact-routing-approximated",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-cluster-child-payload-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-main-explosion-CO-neutral-fallback-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "phantasma-main-explosion-weakpoint-events-neutral-fallback-unverified",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "spatial-projectile-hit-loss-unmodeled",
+        "weapons": 2,
+        "modes": 2
+      },
+      {
+        "reason": "acceltra-contact-death-timing-and-target-centre-coverage-idealized",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "acceltra-main-explosion-CO-neutral-fallback-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "acceltra-main-explosion-weakpoint-events-neutral-fallback-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "arbucep-innate-mushroom-and-ammo-deco-script-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "arbucep-projectile-contact-and-radial-centre-coverage-idealized",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-first-charge-dynamic-buff-snapshot-timing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-primary-dot-charge-during-alt-windup-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-radial-condition-overload-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "battacor-radial-hit-arcane-dispatch-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-clock-boundary-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-mod-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "cortege-firefield-spatial-overlap-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "efv8-main-explosion-CO-neutral-fallback-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "efv8-release-flight-and-recipient-coverage-idealized",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "embed-delay-uniform-approximated-by-mean",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "finite-field-target-generation-bound-centered-coverage-approximated",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "finite-field-two-yield-coalescing-and-enter-update-frame-phase-approximated",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "grimoire-alt-chain-source-buffs-CO-and-events-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "grimoire-alt-chain-target-reselection-and-recursive-geometry-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "grimoire-alt-direct-contact-repeat-lifecycle-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "grimoire-alt-launch-expiry-recipient-position-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "grimoire-alt-single-orb-ms-to-chain-budget-routing-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "hema-player-health-cost-not-modeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mandonel-field-avatar-special-upgrades-and-event-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mandonel-field-first-enter-update-frame-phase-approximated",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mandonel-on-hit-two-yield-coalescing-simultaneous-shots-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mausolon-radial-multishot-routing-unverified",
+        "weapons": 1,
+        "modes": 2
+      },
+      {
+        "reason": "mutalist-cernos-swarm-first-update-versus-enter-phase-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mutalist-cernos-swarm-shared-weapon-replacement-ms-order-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mutalist-cernos-swarm-special-source-upgrades-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "mutalist-cernos-swarm-status-kill-arcane-dispatch-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "nox-player-embed-tick-and-death-clock-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "nox-player-overlap-script-can-terminate-owner-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "nox-player-source-and-event-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "projectile-homing-and-bounce-target-selection-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-accepted-contact-flight-geometry-idealized",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-contact-geometry-and-source-snapshot-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-main55-CO-weakpoint-events-neutral-fallback-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-pickup-recall-shortcuts-and-animation-interruption-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-stopped-embedded-script-payload-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "scourge-prime-throw-reload-rethrow-input-policy-idealized",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "source-owned-field-same-frame-enter-update-and-replacement-order-approximated",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "talons-multishot-spatial-hit-loss-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "tenet-plinx-CO-weakpoint-arcane-event-qualification-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "tenet-plinx-static-magazine-policy-charge-entry-capacity-snapshot-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "zymos-child-damage-inheritance-and-event-routing-unverified",
+        "weapons": 1,
+        "modes": 1
+      },
+      {
+        "reason": "zymos-child-spawn-and-targeting-unmodeled",
+        "weapons": 1,
+        "modes": 1
+      }
+    ]
+  },
+  "inputsStable": true,
+  "secondaryPresence": {
+    "summary": {
+      "weaponRecords": 423,
+      "explicitModes": 631,
+      "positiveSecondaryDeclarationModes": 123,
+      "candidateModes": 5,
+      "candidateWeaponRecords": 5,
+      "candidateModesWithoutBaselineWarning": 3,
+      "secondaryRuntimePresentModes": 113,
+      "mainPayloadAlreadySecondaryModes": 5,
+      "preparationErrorModes": 0,
+      "missingExportJoins": 0,
+      "runtimeUnobservedModes": 0,
+      "noPositiveSecondaryDeclarationModes": 501,
+      "nonEvaluableModes": 7
+    },
+    "identity": {
+      "coverage": {
+        "path": "C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\.local\\delivery\\ranged-implementation-20261029\\current-ranged-coverage-publish-20261030.json",
+        "sha256": "02ca48744692a12fdfe72b461c7d5fc2a3e27aaf1733852ae0c7e5c4dbfa267d"
+      },
+      "exports": {
+        "path": "C:\\Users\\SuperExboom\\Documents\\WF-Riven-Portable\\.local\\delivery\\ranged-implementation-20261029\\runtime-export-join-20261030.json",
+        "sha256": "e240c4ec90005423a1e4f315410839fd2fd56a5fa8f2892c430f28fdd71e4d3b"
+      }
+    },
+    "caseFile": "secondary-presence-publish-20261030.json",
+    "candidates": [
+      {
+        "path": "/Lotus/Weapons/Grineer/LongGuns/GrineerSawbladeGun/SawBladeGun",
+        "mode": 0,
+        "name": "Miter",
+        "positiveComponents": [
+          {
+            "kind": null,
+            "source": "ExplosiveAttack",
+            "amount": 700.0,
+            "types": {}
+          }
+        ]
+      },
+      {
+        "path": "/Lotus/Weapons/Grineer/LongGuns/GrnChemstrikeNox/GrnChemstrikeNoxRiflePlayer",
+        "mode": 0,
+        "name": "Grakata",
+        "positiveComponents": [
+          {
+            "kind": null,
+            "source": "EmbedDeathAttack",
+            "amount": 30.0,
+            "types": {
+              "DT_POISON": 30.0
+            }
+          }
+        ]
+      },
+      {
+        "path": "/Lotus/Weapons/Grineer/LongGuns/GrnGorgSniperRifle/GrnGorgSniperRifle",
+        "mode": 0,
+        "name": "Buzlok",
+        "positiveComponents": [
+          {
+            "kind": null,
+            "source": "ExplosiveAttack",
+            "amount": 40.0,
+            "types": {}
+          }
+        ]
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+        "mode": 1,
+        "name": "Grimoire",
+        "positiveComponents": [
+          {
+            "kind": null,
+            "source": "ExplosiveAttack",
+            "amount": 250.0,
+            "types": {
+              "DT_ELECTRICITY": 250.0
+            }
+          }
+        ]
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/LongGuns/TnRifleErsatz/TnRifleErsatzWeapon",
+        "mode": 0,
+        "name": "Aeolak",
+        "positiveComponents": [
+          {
+            "kind": null,
+            "source": "ExplosiveAttack",
+            "amount": 25.0,
+            "types": {}
+          }
+        ]
+      }
+    ]
+  },
+  "notACompletionClaim": "Counts establish representation and explicit diagnostics, not gameplay accuracy."
+}

@@ -107,7 +107,8 @@ def inventory(include_companions=False):
                         hasEmbedded=bool(getattr(stats,'_embedded',None)),hasStackable=bool(getattr(stats,'_stackable',None)),
                         hasSequence=bool(fight.get('projectileSequence')),
                         hasPhysicalProjectileLanes=bool(fight.get('physicalProjectileLanes')),
-                        hasSourceOwnedFields=bool(getattr(stats,'_source_owned_fields',())),triggerKinds=sorted({s['kind'] for s in fight.get('trigger_sources',[]) if s.get('kind')})))
+                        hasSourceOwnedFields=bool(getattr(stats,'_source_owned_fields',())),
+                        hasFiniteFields=bool(getattr(stats,'_finite_fields',())),triggerKinds=sorted({s['kind'] for s in fight.get('trigger_sources',[]) if s.get('kind')})))
                 gaps={n for n in notes if GAP.search(n) and n not in CONTEXT_GAPS}
                 item.update(contextRequirements=sorted(notes & CONTEXT_GAPS),gaps=sorted(gaps),notes=sorted(notes),runtime=details)
             except Exception as exc:item.update(error=type(exc).__name__+': '+str(exc),gaps=['audit-preparation-error'])

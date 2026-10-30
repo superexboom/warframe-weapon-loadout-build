@@ -1,0 +1,131 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "rows": [
+    {
+      "activeMode": 0,
+      "script": "ChangeRegenDelayToNormal",
+      "currentState": 0,
+      "launched": false,
+      "trace": []
+    },
+    {
+      "activeMode": 0,
+      "script": "ChangeRegenDelayToNormal",
+      "currentState": 1,
+      "launched": true,
+      "trace": [
+        {
+          "kind": "objectArg",
+          "value": "0x20000000"
+        },
+        {
+          "kind": "numberArg",
+          "value": 0.0
+        },
+        {
+          "kind": "numberArg",
+          "value": 1.0
+        },
+        {
+          "kind": "launchScript",
+          "token": "0x12345678"
+        }
+      ]
+    },
+    {
+      "activeMode": 0,
+      "script": "ChangeRegenDelayToNormal",
+      "currentState": 13,
+      "launched": false,
+      "trace": []
+    },
+    {
+      "activeMode": 0,
+      "script": "ChangeRegenDelayToAltFire",
+      "currentState": 0,
+      "launched": false,
+      "trace": []
+    },
+    {
+      "activeMode": 0,
+      "script": "ChangeRegenDelayToAltFire",
+      "currentState": 1,
+      "launched": false,
+      "trace": []
+    },
+    {
+      "activeMode": 0,
+      "script": "ChangeRegenDelayToAltFire",
+      "currentState": 13,
+      "launched": false,
+      "trace": []
+    },
+    {
+      "activeMode": 1,
+      "script": "ChangeRegenDelayToNormal",
+      "currentState": 0,
+      "launched": false,
+      "trace": []
+    },
+    {
+      "activeMode": 1,
+      "script": "ChangeRegenDelayToNormal",
+      "currentState": 1,
+      "launched": false,
+      "trace": []
+    },
+    {
+      "activeMode": 1,
+      "script": "ChangeRegenDelayToNormal",
+      "currentState": 13,
+      "launched": false,
+      "trace": []
+    },
+    {
+      "activeMode": 1,
+      "script": "ChangeRegenDelayToAltFire",
+      "currentState": 0,
+      "launched": false,
+      "trace": []
+    },
+    {
+      "activeMode": 1,
+      "script": "ChangeRegenDelayToAltFire",
+      "currentState": 1,
+      "launched": true,
+      "trace": [
+        {
+          "kind": "objectArg",
+          "value": "0x20000000"
+        },
+        {
+          "kind": "numberArg",
+          "value": 0.0
+        },
+        {
+          "kind": "numberArg",
+          "value": 1.0
+        },
+        {
+          "kind": "launchScript",
+          "token": "0x12345678"
+        }
+      ]
+    },
+    {
+      "activeMode": 1,
+      "script": "ChangeRegenDelayToAltFire",
+      "currentState": 13,
+      "launched": false,
+      "trace": []
+    }
+  ],
+  "original": "1408ec520 ->+5f8 140ebffe0 ->140869270 ->+610 140cf5a50 ->14036dcd0 ->+608 140f1f840 ->140aff680; response script suffix14036e050..e0b9",
+  "stubs": [
+    "nullable scene/avatar helpers returnnull",
+    "PT_ANY admission true",
+    "empty source sound/effect arrays no-op",
+    "source script validitytrue; argument stack and VM launcher observed only"
+  ],
+  "boundary": "exact native state and active-mode ignore filters and script launch order; native Lua VM body not executed here, separate original wrappers evidence; no maximum cadence claim"
+}

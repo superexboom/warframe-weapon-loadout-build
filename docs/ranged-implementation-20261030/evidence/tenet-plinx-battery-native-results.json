@@ -1,0 +1,277 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "fullClipGate": [
+    {
+      "capacity": 1,
+      "ammo": 0,
+      "accepted": false
+    },
+    {
+      "capacity": 1,
+      "ammo": 1,
+      "accepted": true
+    },
+    {
+      "capacity": 2,
+      "ammo": 0,
+      "accepted": false
+    },
+    {
+      "capacity": 2,
+      "ammo": 1,
+      "accepted": false
+    },
+    {
+      "capacity": 2,
+      "ammo": 2,
+      "accepted": true
+    },
+    {
+      "capacity": 5,
+      "ammo": 0,
+      "accepted": false
+    },
+    {
+      "capacity": 5,
+      "ammo": 4,
+      "accepted": false
+    },
+    {
+      "capacity": 5,
+      "ammo": 5,
+      "accepted": true
+    },
+    {
+      "capacity": 10,
+      "ammo": 0,
+      "accepted": false
+    },
+    {
+      "capacity": 10,
+      "ammo": 9,
+      "accepted": false
+    },
+    {
+      "capacity": 10,
+      "ammo": 10,
+      "accepted": true
+    },
+    {
+      "capacity": 15,
+      "ammo": 0,
+      "accepted": false
+    },
+    {
+      "capacity": 15,
+      "ammo": 14,
+      "accepted": false
+    },
+    {
+      "capacity": 15,
+      "ammo": 15,
+      "accepted": true
+    }
+  ],
+  "luaSetter": [
+    {
+      "native": "0x141b0f270",
+      "luaValue": 1.0,
+      "resultEmptyDelay": 1.0
+    },
+    {
+      "native": "0x141b0f270",
+      "luaValue": 3.0,
+      "resultEmptyDelay": 3.0
+    }
+  ],
+  "altScriptClipSetToZero": true,
+  "delayGetter": [
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 0.5,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 1.0,
+      "result": 2.0
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 0.5,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 2.0,
+      "result": 4.0
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 0.5,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 1.0,
+      "result": 2.5
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 0.5,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 2.0,
+      "result": 4.5
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 1.0,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 1.0,
+      "result": 1.0
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 1.0,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 2.0,
+      "result": 2.0
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 1.0,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 1.0,
+      "result": 1.25
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 1.0,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 2.0,
+      "result": 2.25
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 2.0,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 1.0,
+      "result": 0.5
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 2.0,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 2.0,
+      "result": 1.0
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 2.0,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 1.0,
+      "result": 0.625
+    },
+    {
+      "emptyDelay": 1.0,
+      "reloadSpeed": 2.0,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 2.0,
+      "result": 1.125
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 0.5,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 1.0,
+      "result": 6.0
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 0.5,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 2.0,
+      "result": 12.0
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 0.5,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 1.0,
+      "result": 6.5
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 0.5,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 2.0,
+      "result": 12.5
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 1.0,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 1.0,
+      "result": 3.0
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 1.0,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 2.0,
+      "result": 6.0
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 1.0,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 1.0,
+      "result": 3.25
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 1.0,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 2.0,
+      "result": 6.25
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 2.0,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 1.0,
+      "result": 1.5
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 2.0,
+      "reloadTimeAdd": 0.0,
+      "emptyBucketScale": 2.0,
+      "result": 3.0
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 2.0,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 1.0,
+      "result": 1.625
+    },
+    {
+      "emptyDelay": 3.0,
+      "reloadSpeed": 2.0,
+      "reloadTimeAdd": 0.25,
+      "emptyBucketScale": 2.0,
+      "result": 3.125
+    }
+  ],
+  "rateAccumulator": [
+    {
+      "dt": 0.01,
+      "nativeAccruedAmmo": 0.19999998807907104
+    },
+    {
+      "dt": 0.05,
+      "nativeAccruedAmmo": 1.0
+    },
+    {
+      "dt": 0.1,
+      "nativeAccruedAmmo": 2.0
+    },
+    {
+      "dt": 0.5,
+      "nativeAccruedAmmo": 10.0
+    }
+  ],
+  "boundary": "original fullclip comparison, actual Lua wrapper/setter, empty battery delay getter and rate arithmetic; VM/owner property engine stubs explicit; native event dispatch/scene not emulated"
+}

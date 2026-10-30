@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "scope": "native-Python-parity-not-gameplay-validation",
+  "identity": {
+    "inputs": "13546df7351f47ab",
+    "sourceCommit": "420d24942cdbda2f9c9d1ecf759f14c7197a9cd4",
+    "nativeSha256": "0c846cc61ed651b520a060e6b38ce277dd759a50e98bd3acb50ff58e6e023b72",
+    "toolSha256": "c545e88ae49e6c2cc691373e0f51bbcf235e035e612115242d5fc5f11bf6de55"
+  },
+  "expectedWeapons": 412,
+  "expectedCases": 2476,
+  "elapsedSeconds": 11.597789900028147,
+  "summary": {
+    "weapons": 412,
+    "cases": 2476,
+    "failed": 0,
+    "workerErrors": 0,
+    "nativeFallback": 0,
+    "nativeCoverageComplete": true,
+    "changedInputs": false,
+    "coverageComplete": true,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "passed": true
+  },
+  "rawEvidenceSha256": "58af0a537c4c6b3786cabed65f41eb7986dbaf833438edd3500a647af5bc8d8b"
+}

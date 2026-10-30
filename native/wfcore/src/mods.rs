@@ -313,6 +313,7 @@ pub struct ModsPrep {
     falloff: Option<(f64, f64, f64)>,
     distance: Option<f64>,
     innate_multishot: f64,
+    native_ignore_fire_iterations: bool,
     per_pellet_proc: f64,
     incarnon_form: bool,
     incarnon_pool: Option<f64>,
@@ -431,6 +432,7 @@ impl ModsPrep {
             falloff: get(config, "falloff")?.extract()?,
             distance: get_opt_f(config, "distance")?,
             innate_multishot: get(config, "innateMultishot")?.extract()?,
+            native_ignore_fire_iterations: get(config, "nativeIgnoreFireIterations")?.extract()?,
             per_pellet_proc: get(config, "perPelletProc")?.extract()?,
             incarnon_form: get(config, "incarnonForm")?.extract()?,
             incarnon_pool: get_opt_f(config, "incarnonPool")?,
@@ -845,7 +847,7 @@ pub fn apply_mods<'py>(
     } else {
         0.0
     };
-    let mut multishot = if !ap.empty(b!("RUNTIME_LOCK_MULTISHOT")) {
+    let mut multishot = if prep.native_ignore_fire_iterations || !ap.empty(b!("RUNTIME_LOCK_MULTISHOT")) {
         prep.innate_multishot
     } else {
         pmax(0.0, combine(prep.innate_multishot, &[&ap.ops(b!("WEAPON_FIRE_ITERATIONS"))]))

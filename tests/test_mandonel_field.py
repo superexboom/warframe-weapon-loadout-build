@@ -15,6 +15,7 @@ def test_field_has_own_lifetime_and_no_parent_weapon_scaling():
  assert f["damage"]=={"radiation":50.} and f["duration_seconds"]==7.
  assert f["interval_seconds"]==.2 and f["status_chance"]==.34999999
  assert f["crit_chance"]==0. and f["forcedProcs"]==[]
+ assert f["statusConsumerVerified"] is True
  assert f["takes_weapon_base_damage"] is False and f["takes_weapon_elements"] is False
  assert f["takes_parent_crit"] is False and f["takes_parent_status_chance"] is False
  assert f["sourceModifierAllowlist"]==[] and f["payloadMultishotMultiplier"] is False

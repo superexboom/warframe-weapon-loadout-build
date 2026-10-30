@@ -1,0 +1,62 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "start": "0x140e5fd6b",
+  "stop": "0x140e600ca",
+  "scope": "Original default-empty-source -> self-trigger source packet; LotusWeapon class gate fails, no weapon base/innate/ordinary-element modifiers. Neutral avatar/controller environment; downstream target and faction modifiers outside scope.",
+  "cases": [
+    {
+      "inputAmount": 25,
+      "weaponBaseMultiplier": 1.0,
+      "packetBaseAmount": 25.0,
+      "resolvedWeapon": "0x0",
+      "procChance": 0.3499999940395355,
+      "elementVector": null,
+      "callbacks": []
+    },
+    {
+      "inputAmount": 25,
+      "weaponBaseMultiplier": 2.0,
+      "packetBaseAmount": 25.0,
+      "resolvedWeapon": "0x0",
+      "procChance": 0.3499999940395355,
+      "elementVector": null,
+      "callbacks": []
+    },
+    {
+      "inputAmount": 25,
+      "weaponBaseMultiplier": 3.0,
+      "packetBaseAmount": 25.0,
+      "resolvedWeapon": "0x0",
+      "procChance": 0.3499999940395355,
+      "elementVector": null,
+      "callbacks": []
+    },
+    {
+      "inputAmount": 50,
+      "weaponBaseMultiplier": 1.0,
+      "packetBaseAmount": 50.0,
+      "resolvedWeapon": "0x0",
+      "procChance": 0.3499999940395355,
+      "elementVector": null,
+      "callbacks": []
+    },
+    {
+      "inputAmount": 50,
+      "weaponBaseMultiplier": 2.0,
+      "packetBaseAmount": 50.0,
+      "resolvedWeapon": "0x0",
+      "procChance": 0.3499999940395355,
+      "elementVector": null,
+      "callbacks": []
+    },
+    {
+      "inputAmount": 50,
+      "weaponBaseMultiplier": 3.0,
+      "packetBaseAmount": 50.0,
+      "resolvedWeapon": "0x0",
+      "procChance": 0.3499999940395355,
+      "elementVector": null,
+      "callbacks": []
+    }
+  ]
+}

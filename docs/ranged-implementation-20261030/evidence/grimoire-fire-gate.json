@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-grimoire-fire-gate",
+  "weapons": {
+    "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire": {
+      "1": {
+        "nativeFireCooldownSeconds": 45.0,
+        "nativeFireGate": {
+          "kind": "instant-overheat",
+          "initiallyReady": true,
+          "cooldownSeconds": 45.0,
+          "naturalRecoveryPerSecond": 1.0,
+          "affectedByFireRate": false,
+          "primaryHitRecoverySeconds": 1.0,
+          "primaryRecoveryEvent": "PRIMARY_DIRECT_HIT",
+          "primaryRecoveryEnabledInSingleMode": false
+        },
+        "evidence": {
+          "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+          "packageSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+          "nativeSources": [
+            {
+              "path": "/Lotus/Weapons/Tenno/Grimoire/TnGrimoire",
+              "parent": "/Lotus/Weapons/Tenno/Pistol/LotusGrimoire",
+              "rawAttributesSha256": "1e95522336887a989dfe376263e394f5d4e4713658e6a37c485b7d498ea0fd2c",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Pistol/LotusGrimoire",
+              "parent": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+              "rawAttributesSha256": "f64b74e200709cd9c855552a9f547f366c50a1f0fe94e13449e067a930ab7e35",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+              "parent": "",
+              "rawAttributesSha256": "8a33fca13412feda28b5ff02479f2ec445edbf76da6faf73f2d3f0eeea3bf614",
+              "attributeRecord": true
+            },
+            {
+              "path": "/Lotus/Types/Weapon/LotusFireAndToggleStateBehavior",
+              "parent": "",
+              "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "attributeRecord": false
+            }
+          ],
+          "selectedClass": "LotusFireAndToggleStateBehavior table142317618;serializer+50->14013ac50->140655790;update+c0->140aa3a60->140b22dc0;availability+118->140f96270->140a10c10",
+          "fieldBinding": "140655e0e..e77: InstantOverheat+105,OverheatTime+d4,ReduceOverheatAmount+d8;140655e80..:OverheatCooldownModifier+dc;14102c625..642:AddingChargesReducesOverheat+323a",
+          "arm": "140b22e23..e3c accepted firing state + InstantOverheat sets remaining+d0=OverheatTime+d4",
+          "passive": "140b22e9a..f21 subtracts dt*OverheatCooldownModifier+dc from remaining+d0, clamps0 (OS_PLATEAU)",
+          "ready": "actual leaf140a10c10..c29 returns abs(remaining+d0)<=native epsilon; no unwind-boundary inference",
+          "charge": "140fbc71f..77c AddingChargesReducesOverheat loops weapon behaviors via1401f7de0 ->full14022a920;14022a9af..9ba subtracts ReduceOverheatAmount+d8 and clamps0;MaxCharges0 does not bypass this loop",
+          "eventBoundary": "Exact AddCharges PRIMARY_DIRECT_HIT NumCharges1 source; accepted event dispatch count, misses, chain/tick recipients are not assumed to be primary events"
+        }
+      }
+    }
+  },
+  "engineContract": {
+    "singleAlt": "first legal shot at0; next launch no earlier than previous launch+45s; obey existing trigger/animation limits as well; do not scale45 by fire-rate",
+    "primaryAlt": "remaining=max(0,remaining-dt); accepted PRIMARY_DIRECT_HIT event reduces remaining by1; launch only at remaining0 then set45; explicit accepted-event scheduling required",
+    "excluded": [
+      "chain280 recipient geometry",
+      "expiry250 launch-endpoint overlap",
+      "unconditional chain/tick to primary-hit event conversion",
+      "primary-alt cycle without accepted primary-hit event interface"
+    ]
+  }
+}
