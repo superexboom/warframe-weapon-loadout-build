@@ -20,6 +20,16 @@ def identifier(name):
     return re.sub(r'[^a-z0-9]+','_',name.casefold()).strip('_')
 
 
+def merge_profiles(existing, imported):
+    """Reference refreshes cannot overwrite independently audited native modes."""
+    result={path:dict(modes) for path,modes in imported.items()}
+    for path,modes in existing.items():
+        for mode,profile in modes.items():
+            if profile.get('sourceKind')=='native-audited':
+                result.setdefault(path,{})[mode]=dict(profile)
+    return result
+
+
 def import_reference(source, export, reference):
     revision = subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip()
     rows = []
@@ -82,6 +92,7 @@ def import_reference(source, export, reference):
             profiles[weapon['path']] = by_mode
     before = reference.read_bytes()
     payload = json.loads(before)
+    profiles=merge_profiles(payload.get('coProfiles',{}),profiles)
     payload['coProfiles'] = profiles
     reference.write_bytes(preserve_lines(before,(json.dumps(payload,ensure_ascii=False,indent=2)+'\n').encode('utf-8')))
     return dict(revision=revision,weapons=len(profiles),modes=sum(len(v) for v in profiles.values()),profiles=profiles)

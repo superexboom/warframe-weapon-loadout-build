@@ -366,8 +366,7 @@ def prepare(
     physical_lanes = physical_lane_profile(base_profile(weapon, mode_index))
     periodic=base_profile(weapon,mode_index).get('periodicTriggers') or []
     if any(field.get('expiresWithSourceOwner') for field in periodic):
-        notes.extend(['source-owned-field-upgrades-snapshot-at-embed',
-            'source-owned-field-same-frame-enter-update-and-replacement-order-approximated'])
+        notes.append('source-owned-field-same-frame-enter-update-and-replacement-order-approximated')
     if any(field.get('defaultEnabled') and field.get('refreshPolicy')=='independent-finite-fields-no-source-replacement' for field in periodic):
         notes.extend(['finite-field-target-generation-bound-centered-coverage-approximated',
             'finite-field-two-yield-coalescing-and-enter-update-frame-phase-approximated'])
@@ -677,9 +676,8 @@ def prepare(
         notes.extend(paid_cube['unsupported'])
     if (selected_attack.get('fullClipCharge') or {}).get('cadencePolicy') == 'wait-configured-empty-delay-then-full-recharge':
         notes.append('tenet-plinx-cadence-player-wait-policy-not-native-max-rate')
-        notes.append('tenet-plinx-static-magazine-policy-charge-entry-capacity-snapshot-unmodeled')
         if any(e.upgrade_type == 'WEAPON_CLIP_MAX' for _, terms in dynamic for e in terms):
-            raise ValueError('tenet-plinx-mid-charge-capacity-snapshot-unverified')
+            raise ValueError('tenet-plinx-dynamic-magazine-capacity-not-supported')
     if selected_attack.get('phantasmaChildren'):
         notes.append('phantasma-child-ideal-contact-and-arrival-time-assumed' if
                      scenario.combat_state.get('phantasmaChildOverlap') == 'ideal-contact' else
@@ -880,6 +878,13 @@ def prepare(
             scoped = {'WEAPON_BATTERY_REGEN_RATE', 'WEAPON_RELOAD_EMPTY_BATTERY'}
             battery_parameter_fx = [e for e in fx if e.upgrade_type in scoped]
             fx = ModEffectList([e for e in fx if e.upgrade_type not in scoped], skipped=fx.skipped)
+        direct_shiver=bool(base_profile(wp,idx).get('directTakesVictimStackDamage'))
+        direct_shiver_fixed=None
+        if direct_shiver:
+            direct_shiver_fixed=max((float(e.runtime_chance or 0.) for e in fx
+                if e.upgrade_type=='RUNTIME_COLD_STACK_DAMAGE'),default=0.) or None
+            fx=ModEffectList(replace(e,runtime_chance=0.) if e.upgrade_type=='RUNTIME_COLD_STACK_DAMAGE'
+                else e for e in fx)
         st, spec = apply_mods_spec(wp, fx, fire_mode=idx, scenario=form_scenario)
         for e, n in partial_sets.values():
             field_name = SET_BLEND_FIELDS[e.upgrade_type]
@@ -887,6 +892,10 @@ def prepare(
                                       scenario=form_scenario)
             setattr(st, field_name, n * getattr(held, field_name) + (1.0 - n) * getattr(st, field_name))
         st._co_spec = spec
+        if direct_shiver:
+            st._contact_shiver=True
+            st._contact_shiver_scale=spec.ordinary_scale
+            st._contact_shiver_fixed=direct_shiver_fixed
         if onos_sequence and form!='base':
             st._charge_pool_cost = onos_sequence['powerCost'] if onos_power else 1.
             st.continuous = not onos_power
@@ -1007,6 +1016,10 @@ def prepare(
         if extra.get('embedded'):
             components = [*components, dict(extra['embedded'], __embedded=True)]
         for component in components:
+            if component and component.get('currentSourceCoFraction'):
+                fractions=component['currentSourceCoFraction']
+                fraction=fractions['charged' if stacks.get('__sourceOwnedCharged',True) else 'normal']
+                component={**component,'coProfile':{**component['coProfile'],'baseFraction':fraction}}
             if component and component.get('requiresOnosRadialHit') and not scenario.combat_state.get('onosRadialHit'):
                 component = None
             if (component and component.get('armingDistance') is not None
@@ -1157,11 +1170,11 @@ def prepare(
                     # every tick, but copies the projectile's retained CC/CD.
                     launch=copy(part);refreshed={}
                     def refresh_field(stacks,live,launch=launch,source_form=form,
-                                      source_last=last_round,cache=refreshed):
+                                      source_last=last_round,attribute=('_embedded' if component.get('__embedded') else '_lingering'),cache=refreshed):
                         key=(tuple(sorted(stacks.items())),live)
                         if key not in cache:
                             current,_=entry(source_form,stacks,live,source_last)
-                            out=copy(current._lingering[0])
+                            out=copy(getattr(current,attribute)[0])
                             for field in ('multishot','crit_chance','crit_multiplier','base_crit_chance',
                                           'low_crit_threshold','low_crit_damage_base','low_crit_damage_bonus'):
                                 setattr(out,field,getattr(launch,field))
@@ -1348,6 +1361,24 @@ def prepare(
                 part._co_spec=part_spec
                 source_fields.append((part,float(field['tick_rate']),float(field['sourceOwnerLifetimeAfterEmbed_seconds']),
                     1+int(bool(field.get('damageOnEnter')))))
+            for slot,(part,_,_,_) in enumerate(source_fields):
+                # Both native EmbedAttack and DamageTrigger rebuild ordinary
+                # source damage on every tick. Embed keeps launch CC/CD; the
+                # independent trigger still uses its own crit/status contract.
+                launch=copy(part);refreshed={}
+                def refresh_owned(stacks,live,source_charged=True,launch=launch,slot=slot,source_form=form,
+                                  source_last=last_round,cache=refreshed):
+                    key=(tuple(sorted(stacks.items())),live,source_charged)
+                    if key not in cache:
+                        current,_=entry(source_form,{**stacks,'__sourceOwnedCharged':source_charged},live,source_last)
+                        out=copy(current._source_owned_fields[slot][0])
+                        for field in ('multishot','crit_chance','crit_multiplier','base_crit_chance',
+                                      'low_crit_threshold','low_crit_damage_base','low_crit_damage_bonus'):
+                            setattr(out,field,getattr(launch,field))
+                        out.__dict__.pop('_live_hit_refresh',None)
+                        cache[key]=out
+                    return cache[key]
+                part._live_hit_refresh=refresh_owned
             st._source_owned_fields=tuple(source_fields)
         finite=[field for field in extra.get('periodicTriggers') or []
                 if field.get('defaultEnabled') and field.get('refreshPolicy')=='independent-finite-fields-no-source-replacement']
@@ -1456,6 +1487,13 @@ def prepare(
                 return tuple(packets)
             st._zymos_carrier=carrier
             st._zymos_children=children
+        if (extra.get('manualDetonation') or {}).get('impactThenEmbed') and st._co_spec is not None:
+            # Same-shot entities retain launch damage/crit, but +818 queries
+            # current CO upgrades and victim statuses at EACH contact.
+            unit=copy(st);unit._co_spec=copy(st._co_spec)
+            unit._co_spec.victim_status_count=1.;unit._co_spec.native=None
+            st._live_co_unit=unit
+            st._live_hit_refresh=live_co_callback(unit,wp,form)
         return st, radial
 
     syndrome = None
@@ -1585,7 +1623,7 @@ def prepare(
         chargeBeforeFire=bool(selected_attack.get('fullClipCharge') or (selected_attack.get('charge') or {}).get('beforeFire')),
         nativeFireGate=bool(selected_attack.get('nativeFireCooldownSeconds')),
         delayedRadialEvents=bool(paid_cube or zymos_policy or chain_orb or selected_attack.get('attachedTicks')) or any(profile_admitted(attack) for attack in (base_attack, selected_attack)),
-        victimStackParts=bool(zymos_policy) or any(part.get('takes_victim_stack_damage') for attack in (base_attack,selected_attack) for part in event_components(attack)),
+        victimStackParts=bool(zymos_policy) or bool(selected_attack.get('directTakesVictimStackDamage')) or any(part.get('takes_victim_stack_damage') for attack in (base_attack,selected_attack) for part in event_components(attack)),
         radialCritStatus=bool(zymos_policy or chain_orb) or any(part.get('takes_victim_crit') for attack in (base_attack,selected_attack)
                              for part in event_components(attack)),
         melee=melee,

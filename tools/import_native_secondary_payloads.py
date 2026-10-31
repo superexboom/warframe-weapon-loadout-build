@@ -83,6 +83,13 @@ SPECS=(
       bounds=['acceltra-arming-distance-default-assumed-armed',
               'acceltra-main-explosion-CO-neutral-fallback-unverified','acceltra-main-explosion-weakpoint-events-neutral-fallback-unverified',
               'acceltra-contact-death-timing-and-target-centre-coverage-idealized','acceltra-embedded-alternative-payload-excluded']),
+ dict(path=BASE+'Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon',mode=0,
+      projectile=BASE+'Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraProjectile',amount=53,
+      damage={'puncture':42.40000053,'slash':10.59999947},direct=44.,direct_status=.18000001,
+      export_direct_totals=(44.,),family='acceltra',delay=0.,
+      required={'DamageRadius':5,'ExplosionFallOff':.5,'ArmingDistance':6,'SkipHitEffectWhenArmed':1},
+      bounds=['acceltra-arming-distance-default-assumed-armed',
+              'acceltra-contact-death-timing-and-target-centre-coverage-idealized','acceltra-embedded-alternative-payload-excluded']),
  dict(path=BASE+'Tenno/Grimoire/TnGrimoire',mode=1,
       projectile=BASE+'Tenno/Grimoire/TnGrimoireAltProj',amount=250,
       damage={'electricity':250.},direct=350.,family='grimoire',delay=6.,
@@ -191,7 +198,7 @@ def profile(pkg,row,spec):
             flightAndCollisionTiming='impact-immediate' if spec['delay']==0 else 'native-MaxLife-as-fixed-delay'))
     if spec['family']=='acceltra':
         direct=p.get('AttackData') or {}
-        if direct.get('Amount')!=26 or direct.get('Type')!='DT_IMPACT' or direct.get('ProcChance')!=.059999999:
+        if direct.get('Amount')!=spec['direct'] or direct.get('Type')!='DT_IMPACT' or direct.get('ProcChance')!=spec.get('direct_status',.059999999):
             raise ValueError('Acceltra native direct packet changed')
         if p.get('ExplodeOnImpact',0)!=0 or p.get('ExplodeOnLifeExpired',0)!=0 or p.get('Embed',0)!=0:
             raise ValueError('Acceltra constructor death/embedded route changed')
@@ -225,6 +232,16 @@ def profile(pkg,row,spec):
             packetCopy='0x140508e9e..0x140508eea',radiusPlan='0x14160c618..0x14160c680',
             parentAmountScale='0x141234a7a',statusNormalization='0x1412353ef raw fireIterations / 0x141586f50',
             critFields='Projectile.CriticalChance/CriticalMultiplier +0x538/+0x570; death path0x140f36198 ->0x140ede780 copies modifier buckets into radial plan, adding existing plan CC and multiplying existing plan CD'))
+    if spec['family'] in ('phantasma','efv8','larkspur','acceltra'):
+        if p.get('DamageUpgradeTypes',['WEAPON_DAMAGE_AMOUNT'])!=['WEAPON_DAMAGE_AMOUNT']:
+            raise ValueError('main explosion damage upgrade route changed')
+        component['approximation']['conditionOverload']='native-excluded for ordinary weapon source without Powersuit/ability parent'
+        component['approximation']['weakpointCriticalAndKillEvents']='selected body geometry; native head/weakpoint events depend on independently rebuilt hit proxy'
+        component['conditionOverloadEvidence']='common +7b8 bypasses contact +818/+820; victim +758/14111fa60 requires 141baa200(arg0), false for ordinary unparented gun'
+        profile['unmodeled']=[note for note in profile['unmodeled'] if note not in (
+            spec['family']+'-main-explosion-CO-neutral-fallback-unverified',
+            spec['family']+'-main-explosion-weakpoint-events-neutral-fallback-unverified')]
+        profile['unmodeled'].append(spec['family']+'-main-explosion-proxy-geometry-body-policy')
     if spec['family']=='acceltra':
         sequence=[_resolve_ref(pkg,path,ref) for ref in fire.get('projectileSequenceList') or []]
         for copy_path in sequence:
@@ -233,8 +250,8 @@ def profile(pkg,row,spec):
             for key in ['AttackData','ExplosiveAttack','CriticalChance','CriticalMultiplier','DamageRadius','ExplosionFallOff','ArmingDistance','SkipHitEffectWhenArmed']:
                 if copy.get(key)!=p.get(key):raise ValueError('Acceltra cosmetic payload differs: '+copy_path)
         profile['nativeSources']=source_rows(pkg,[path,projectile,*copies,*sequence])
-        profile['nativeDirectCorrection']=dict(damageTypes={'DT_IMPACT':26.},procChance=.059999999,
-            reason='current native AttackData26 replaces wiki_weapon_overrides Rocket Impact35; remove stale wiki damage/proc override before merging',
+        profile['nativeDirectCorrection']=dict(damageTypes={'DT_IMPACT':spec['direct']},procChance=spec.get('direct_status',.059999999),
+            reason='exact current native AttackData; base Acceltra historical wiki35 override must remain removed',
             source=projectile,nativeField='AttackData',acceptedPriorExportTotals=list(spec['export_direct_totals']))
     if state.get('ChargeTime') is not None:
         profile['charge']=dict(seconds=float(state['ChargeTime']),modifier=state.get('ChargeModifier'),
@@ -331,6 +348,12 @@ def merge_patch(payload,patch):
             if 'unmodeled' in incoming:
                 retired={'phantasma-parent-explosion-and-children-unmodeled',
                          'phantasma-explosion-co-and-head-event-routing-unverified'} if 'Phantasma' in path or 'RevenantShotgun' in path else set()
+                for spec in SPECS:
+                    if spec['path']==path and spec['family'] in ('phantasma','efv8','larkspur','acceltra') and any(
+                            part.get('conditionOverloadEvidence') and part.get('nativeSource')==spec['projectile']
+                            for part in incoming.get('radials',())):
+                        retired.update({spec['family']+'-main-explosion-CO-neutral-fallback-unverified',
+                                        spec['family']+'-main-explosion-weakpoint-events-neutral-fallback-unverified'})
                 if incoming.get('attachedTicks') and incoming.get('nativeSpearThrowCycle'):
                     retired.update({'scourge-prime-main55-CO-weakpoint-events-neutral-fallback-unverified',
                                     'scourge-prime-stopped-embedded-script-payload-unmodeled',

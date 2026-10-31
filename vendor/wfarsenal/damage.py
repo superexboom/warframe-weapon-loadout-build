@@ -1842,11 +1842,17 @@ def _apply_mods_spec_py(
     # Secondary Shiver forced to N Cold stacks: N steps in the base bucket.
     cold_stack_rate = sum(e.value for e in buckets['RUNTIME_COLD_STACK_DAMAGE'])
     cold_stack_forced = max((float(e.runtime_chance or 0.0) for e in buckets['RUNTIME_COLD_STACK_DAMAGE']), default=0.0)
-    if cold_stack_rate and cold_stack_forced:
+    direct_stack_source = bool(event_profile.get('directTakesVictimStackDamage') and not mode.get('__radialPart__'))
+    if cold_stack_rate and cold_stack_forced and not direct_stack_source:
         damage_scale_effects.append(ModEffect('WEAPON_DAMAGE_AMOUNT', 'STACKING_MULTIPLY',
                                               cold_stack_rate * min(cold_stack_forced, 10.0),
                                               source_path='runtime:cold-stack-damage'))
     compression_mult = 1.0 + sum(e.value for e in buckets['RUNTIME_NEXT_SHOT_DAMAGE'])
+    if direct_stack_source and cold_stack_rate and cold_stack_forced:
+        # This exact contact source passes the fully modified packet to261.
+        # The CO tail's ordinary-scale additive lane keeps Shiver and CO
+        # against the same callerBase without multiplying them together.
+        compression_mult += cold_stack_rate * min(cold_stack_forced, 10.0)
     compression_ammo = 0.0
     compression_profile = weapon.get('__compressionProfile__') or event_profile.get('compression')
     if buckets['RUNTIME_PRIMARY_COMPRESSION'] and scenario.aiming:

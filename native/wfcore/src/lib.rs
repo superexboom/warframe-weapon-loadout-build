@@ -183,11 +183,11 @@ fn c_math(name: &str, x: f64, y: f64) -> f64 {
 #[pymodule]
 fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ABI", 1)?;
-    m.add("ALT_EMBEDDED_LIFECYCLE", 1)?;
+    m.add("ALT_EMBEDDED_LIFECYCLE", 2)?;
     m.add("MELEE_INITIAL_COMBO_RECOVERY", 1)?;
     m.add("COMPANION_PROJECTILE_SEQUENCE", 1)?;
     m.add("PHYSICAL_PROJECTILE_LANES", 1)?;
-    m.add("SOURCE_OWNED_FIELDS", 1)?;
+    m.add("SOURCE_OWNED_FIELDS", 3)?;
     m.add("INDEPENDENT_FINITE_FIELDS", 1)?;
     m.add("NATIVE_FIRE_ITERATION_LOCK", 1)?;
     m.add("MAGAZINE_CHARGE_VOLLEY", 1)?;
@@ -203,6 +203,7 @@ fn wfcore(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("STACKABLE_CRITICAL_EVENTS", 1)?;
     m.add("RADIAL_LIVE_CO", 1)?;
     m.add("RADIAL_VICTIM_STACKS", 1)?;
+    m.add("DIRECT_SOURCE_STACK_DAMAGE", 1)?;
     m.add("ADMITTED_PHYSICAL_PACKETS", 1)?;
     m.add("GRIMOIRE_SELECTED_COVERAGE", 1)?;
     m.add("SOURCE_OWNED_EMBED", 1)?;

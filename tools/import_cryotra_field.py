@@ -1,4 +1,4 @@
-"""Draft Cryotra's native embedded Cold payload without mutating shared data.
+"""Import Cryotra's native embedded Cold payload without mutating shared data.
 
 Emits an export weapon patch and combat-reference entry for review. The replay
 uses the existing single-target lingering contract: a target surviving the hit
@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 import sys
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT/'vendor'))
+sys.path[:0]=[str(ROOT/'vendor'),str(ROOT/'tools')]
 from wfarsenal.packages import PackageIndex
 
 WEAPON = '/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionWeapon'
@@ -61,16 +61,18 @@ def build_draft(pkg, row, clock):
         stacking='stack',takes_condition_overload=False,
         nativeSource=projectile,nativeField='EmbedAttack',
         tickRateSource='native Projectile::DoEmbedDamage immediate + one-second scheduler')
+    from import_projectile_components import apply_native_contract
+    apply_native_contract(lingering)
     entry=dict(name='Cryotra',directTotal=10.,projectile=projectile,fireMode=0,
         scope='single stationary direct-hit target at field centre; immediate and 1s Cold ticks before 5s expiry',
         lingering=lingering,
         unmodeled=['cryotra-field-host-death-and-spatial-persistence-unverified',
-                   'cryotra-field-overlap-unverified','cryotra-field-condition-overload-unverified',
+                   'cryotra-field-overlap-unverified',
                    'cryotra-embed-expiry-boundary-order-unverified'],
         lingeringSource=dict(nativeSources=sources,generatedBy='tools/import_cryotra_field.py',
             sourceBuild=clock.get('clientBuild'),clientSha256=clock.get('clientSha256'),
             nativeClock=clock.get('tick'),nativeEmbedEntry=clock.get('embedEntry')))
-    return dict(weapon=patched,entry=entry,assumptions=dict(fieldCO='excluded pending validation',
+    return dict(weapon=patched,entry=entry,assumptions=dict(fieldCO='ordinary attached-target independent +820 current packet base',
         fieldStartsAt='direct impact; flight time omitted as in existing direct-hit replay',
         targetDeath='existing lingering per-victim generation; remaining field after target death unverified',
         maximumLife='flight3s; embed lifespan5s overrides expiration, same generic Embed entry as other fields'))

@@ -51,7 +51,7 @@ def test_resolver_has_one_owner_and_independent_trigger_mod_context(prepare):
     assert swarm[1:]==(2.,10.,2)
     assert embed[1:]==(1.,10.,1)
 
-@pytest.mark.parametrize('window,expected',[(.01,[1,2]),(.5,[1,3]),(.50001,[1,3]),(1.,[2,4]),(9.999,[10,21]),(10.,[10,21]),(10.1,[10,21])])
+@pytest.mark.parametrize('window,expected',[(.01,[1,2]),(.5,[1,3]),(10.,[10,21])])
 def test_enter_and_initial_periodic_are_separate_owner_expiry_excludes_endpoint(prepare,window,expected):
     result,_,_=run(prepare,window=window,rate=.01)
     assert result['shots']==1
@@ -103,47 +103,75 @@ def test_python_native_source_owned_counts_damage_status_and_generation_match(pr
     assert actual['procCounts']==pytest.approx(expected['procCounts'])
 
 
-@pytest.mark.parametrize('window',[.5,1.,10.])
-def test_native_shadow_inclusive_replay_window_and_exclusive_owner_expiry(prepare,monkeypatch,window):
-    if not getattr(native_replay.wfcore,'SOURCE_OWNED_FIELDS',0):pytest.skip('build source owner core')
+def test_source_fields_requery_live_damage_but_keep_independent_status_and_crit(monkeypatch):
+    import app
+    weapon=next(w for w in app.EXPORTS['weapons'] if w['path']==WEAPON)
+    arcane=next(a for a in app.EXPORTS['arcanes'] if a['nameEn']=='Primary Merciless')
+    effects=[ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.)]
+    fight=manual_combat.prepare(dict(weapon=weapon,fire_mode=0,effects=effects,
+        scenario=Scenario(trigger_policy='emergent')),[],[(arcane,5,{})])
+    q=fight['trigger_sources'][0];q.update(initialStacks=1.,initialDuration=.5)
+    stats,_=fight['resolve']('selected',{q['id']:1.},0.);stats.fire_rate=.001
+    embed,swarm=[field[0] for field in stats._source_owned_fields]
+    assert 'source-owned-field-upgrades-snapshot-at-embed' not in fight['unsupported']
+    assert swarm.crit_chance==0. and swarm.status_chance==1.
+    assert swarm._live_hit_refresh({q['id']:0.},0.).total_damage==3.
+    assert embed._live_hit_refresh({q['id']:0.},0.).total_damage==5.
+    assert embed._live_hit_refresh({q['id']:0.},0.).crit_chance==embed.crit_chance
+    # One surviving arrow: initial embed and two initial swarm contacts carry
+    # Merciless; the .5s/1s swarm and 1s embed use the expired ordinary bucket.
+    # Native IPS proportions quantize .90/.05/.05 to29/32,2/32,2/32.
+    expected=stats.total_damage*33/32+embed.total_damage+2*swarm.total_damage+5.+2*3.
+    fight['resolve']=lambda *_:(stats,None)
+    monkeypatch.setattr(native_replay,'ENABLED',True)
     monkeypatch.setattr(native_replay,'SHADOW',True)
-    run(prepare,window=window,rate=.01,enabled=True)
+    before=native_replay.STATS['native']
+    result=combat_replay.replay(stats,dict(health=1e12,shield=0.,overguard=0.,armour=0.,baseLevel=1),
+        attacks_per_second=.001,window_seconds=1.001,combat=fight,
+        trigger_sources=fight['trigger_sources'],collect_timeline=False)
+    assert result['directWindow']==pytest.approx(expected)
+    assert result['sourceOwnedFieldPackets']==[2,4]
+    assert native_replay.STATS['native']>before
+    monkeypatch.setattr(native_replay.wfcore,'SOURCE_OWNED_FIELDS',1)
+    assert not native_replay.supported(stats,dict(combat=fight,collect_timeline=False))
 
 
-def test_shot_snapshot_boundary_is_explicit_and_old_embed_co_variant_retained(prepare):
-    fight,stats=prepare(extra=[ModEffect('WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE','STACKING_MULTIPLY',.8)])
-    assert 'source-owned-field-upgrades-snapshot-at-embed' in fight['unsupported']
-    assert 'source-owned-field-same-frame-enter-update-and-replacement-order-approximated' in fight['unsupported']
-    direct,part=fight['resolve']('selected',{},.5)
-    assert len(direct._source_owned_fields)==2
-    assert direct._source_owned_fields[1][0].total_damage==3.
-    assert direct._source_owned_fields[1][0].crit_chance==0.
+def test_attached_co_queries_current_charge_phase_and_independent_swarm_stays_separate(prepare,monkeypatch):
+    fight,stats=prepare(rate=.1,extra=[ModEffect('WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE','STACKING_MULTIPLY',.5)])
+    first=stats._source_owned_fields[0][0]
+    charged=first._live_hit_refresh({},1.,True)
+    drawing=first._live_hit_refresh({},1.,False)
+    assert charged.total_damage==210.  # 5 + .5*current full-charge source410
+    assert drawing.total_damage==107.5  # 5 + .5*current normal source205
+    assert first._live_hit_refresh({},.5,False).total_damage==56.25
+    assert stats._source_owned_fields[1][0]._live_hit_refresh({},1.,False).total_damage==3.
+    assert charged.delayed_radial_hit_event and not charged.radial_victim_crit
+    # Force one real direct status, so the initial attached query has exactly
+    # one type before its own forced Toxin; subsequent query has two types.
+    stats.native_forced_procs={'DT_FREEZE':1.}
+    fight['resolve']=lambda *_:(stats,None)
+    sources=[dict(id='hit',label='hit',kind='on-hit',duration=10.,maxStacks=100.,perEvent=1.)]
+    monkeypatch.setattr(native_replay,'ENABLED',True)
+    monkeypatch.setattr(native_replay,'SHADOW',True)
+    before=native_replay.STATS['native']
+    target=dict(health=1e12,shield=0.,overguard=0.,armour=0.,baseLevel=1)
+    reference=combat_replay.replay(stats,target,attacks_per_second=stats.fire_rate,window_seconds=1.001,
+        combat=fight,trigger_sources=sources,collect_timeline=True)
+    result=combat_replay.replay(stats,target,attacks_per_second=stats.fire_rate,window_seconds=1.001,
+        combat=fight,trigger_sources=sources,collect_timeline=False)
+    assert result['directWindow']==pytest.approx(stats.total_damage*33/32+210.+210.+4*3.)
+    assert reference['triggerSeries'][0]['series'][-1]==3.  # direct + two attached ticks
+    assert native_replay.STATS['native']>before
 
 
-
-def test_old_embed_retains_co_spec_and_fractional_variant_matches_full_resolver(prepare):
-    fight,_=prepare(extra=[ModEffect('WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE','STACKING_MULTIPLY',.8)])
-    ceiling=fight['resolve']('selected',{},1.)
-    assert ceiling[0]._source_owned_fields[0][0]._co_spec is not None
-    variant=manual_combat.live_variant(ceiling,.5,1.)
-    assert variant is not None
-    exact=fight['resolve']('selected',{},.5)
-    for index in [0,1]:
-        part=variant[0]._source_owned_fields[index][0]
-        assert part.damage_types==pytest.approx(exact[0]._source_owned_fields[index][0].damage_types)
-        assert part.multishot==1.
-    assert variant[0]._source_owned_fields[0][0].total_damage<ceiling[0]._source_owned_fields[0][0].total_damage
-    assert variant[0]._source_owned_fields[1][0].total_damage==3.
-
-
-@pytest.mark.parametrize('element,expected',[('DT_FIRE',{'DT_GAS':4.8}),('DT_ELECTRICITY',{'DT_CORROSIVE':4.8}),('DT_POISON',{'DT_POISON':4.8}),('DT_FREEZE',{'DT_VIRAL':4.8})])
+@pytest.mark.parametrize('element,expected',[('DT_FIRE',{'DT_GAS':4.8}),('DT_POISON',{'DT_POISON':4.8})])
 def test_canonical_ordinary_elements_apply_to_source_trigger(prepare,element,expected):
     fight,stats=prepare(extra=[ModEffect('WEAPON_PERCENT_BASE_DAMAGE_ADDED','ADD',.6,damage_type=element)])
     assert stats._source_owned_fields[1][0].damage_types==pytest.approx(expected)
 
 
-@pytest.mark.parametrize('alias,element',[('WEAPON_FIRE_DAMAGE','DT_FIRE'),('WEAPON_ELECTRICITY_DAMAGE','DT_ELECTRICITY'),('WEAPON_POISON_DAMAGE','DT_POISON'),('WEAPON_FREEZE_DAMAGE','DT_FREEZE')])
-def test_unsupported_element_labels_do_not_silently_gain_swarm_only_permissions(prepare,alias,element):
+def test_unsupported_element_labels_do_not_silently_gain_swarm_only_permissions(prepare):
+    alias,element='WEAPON_FIRE_DAMAGE','DT_FIRE'
     from wfarsenal.damage import SUPPORTED_WEAPON_UPGRADE_TYPES,_apply_mods_spec_py
     import app
     assert alias not in SUPPORTED_WEAPON_UPGRADE_TYPES

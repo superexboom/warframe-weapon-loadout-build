@@ -1,4 +1,4 @@
-from tools.audit_ranged_calibration import mode_status,source_kinds,summarize
+from tools.audit_ranged_calibration import mode_status,source_kinds,summarize,GAP
 import pytest
 
 def test_empty_and_auxiliary_modes_remain_in_denominator():
@@ -16,6 +16,7 @@ def test_native_and_reference_sources_are_independent_not_full_correctness():
     assert source_kinds({'packageBuild':'some-build'})==[]
 
 def test_count_weapon_gaps_once_and_modes_and_reasons_separately():
+    assert GAP.search('external-context-not-supported')
     rows=[dict(path='/w',modes=[dict(mode=0,status='evaluable',gaps=['unmodeled-A','unverified-B']),dict(mode=1,status='evaluable',gaps=['unmodeled-A'])]),dict(path='/x',modes=[dict(mode=0,status='evaluable',gaps=[])])]
     result=summarize(rows)
     assert result['weaponRecords']==2 and result['evaluableModes']==3

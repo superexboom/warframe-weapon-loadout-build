@@ -470,8 +470,9 @@ def _reference_trajectory(
     syndicate_events = []
     unsupported = list(combat.get("unsupported") or [])
     if impact_embed:
-        unsupported.extend(['alternox-host-death-lifecycle-unverified',
-                            'alternox-instant-detonation-order-idealized'])
+        unsupported.extend(['alternox-host-object-retirement-spatial-policy',
+                            'alternox-frame-clock-mean-death-delay-representative',
+                            'alternox-fractional-batch-marginal-weights'])
     if syndrome and not combat.get("affinityPerKill"):
         unsupported.append("syndicate-affinity-unavailable")
 
@@ -861,7 +862,7 @@ def _reference_trajectory(
         head_part = float(locations['head']['hit_multiplier'] or 1.0)
         extra_scale *= ((1 - head) + head * head_part * head_part) / ((1 - head) + head * head_part)
 
-    def radial_hit(part, sniper_factor, t):
+    def radial_hit(part, sniper_factor, t, weight=None, aim=0., contact=False):
         unit=getattr(part,'_live_co_unit',None)
         refresh=getattr(part,'_live_hit_refresh',None)
         if refresh is not None:
@@ -870,21 +871,24 @@ def _reference_trajectory(
             from .damage import co_variant,with_value
             live=sum(p.probability(t) for p in presence.values())
             part=co_variant(unit,unit._co_spec,[with_value(e,e.value*live) for e in unit.co_bucket])
-        if part.delayed_radial_hit_event:
+        if weight is not None:
+            part=copy(part);part.multishot=weight
+        if part.delayed_radial_hit_event or contact:
             combat['victimProcTypesBeforeHit'] = {dtype:p.probability(t) for dtype,p in presence.items()}
-        radial_packet = packet(part, 0.0)
+        radial_packet = packet(part, aim)
         radial_vector = radial_packet[0] if sniper_factor == 1. else {k: v*sniper_factor for k, v in radial_packet[0].items()}
         damage_event = None
-        if part.delayed_radial_hit_event:
+        if part.delayed_radial_hit_event or contact:
             full_victim = abs(pools[1]-full[1])<1e-7 and abs(pools[2]-full[2])<1e-7
-            cc = part.crit_chance + (part.victim_full_crit_chance if full_victim else 0.) + (live_crit()[0] if part.radial_victim_crit else 0.)
+            cc = part.crit_chance + (part.victim_full_crit_chance if full_victim else 0.) + (live_crit()[0] if not part.radial_only or part.radial_victim_crit else 0.)
             weights = enervate.damage_marginal() if enervate and not getattr(part,'_snapshot_enervate',False) else {0: 1.}
-            critical = sum(weight*min(max((cc+stacks*.1)*(1. if part.radial_only else part.bodyshot_crit_multiplier),0.),1.)
-                           for stacks,weight in weights.items())
+            weak=part.weakpoint_crit_chance_bonus+part.base_crit_chance*part.weakpoint_crit_chance_relative
+            critical = sum(w*((1.-aim)*min(max((cc+stacks*.1)*(1. if part.radial_only else part.bodyshot_crit_multiplier),0.),1.)
+                           +aim*min(max(cc+stacks*.1+weak,0.),1.)) for stacks,w in weights.items())
             damage_event = (part.multishot, critical*part.multishot)
-        if not take(radial_vector, t, 'direct', cv2=spread(part,0.), damage_event=damage_event):
-            add_procs(part, 0.0, t, radial_packet, damage_scale=sniper_factor)
-        noncrit_no_proc_hit(part, 0.0, t)
+        if not take(radial_vector, t, 'direct', cv2=spread(part,aim), weak_kill=aim, damage_event=damage_event):
+            add_procs(part, aim, t, radial_packet, damage_scale=sniper_factor)
+        noncrit_no_proc_hit(part, aim, t)
 
     def take(vector, t, source, weak_kill=False, cv2=0.0, extra=False, damage_event=None, weapon_source=True, origin_mode=None):
         # Spend one attack fraction across pools. Shield bypass acts in parallel.
@@ -1567,37 +1571,28 @@ def _reference_trajectory(
                 detonation_events.append(dict(time=t, expectedMines=mines,
                                               staleMines=discarded, damage=totals['direct']-before))
         elif kind in {'embedded-tick', 'embedded-death'}:
-            entity = embedded_entities.get(payload)
+            entity=embedded_entities.get(payload)
             if entity is None or not entity['alive']:
                 continue
-            if entity['generation'] != gen:
-                entity['alive'] = False
-                waiting_mines = max(0., waiting_mines-entity['part'].multishot)
-                stale += 1
+            if entity['generation']!=gen:
+                entity['alive']=False
+                waiting_mines=max(0.,waiting_mines-entity['weight'])
+                stale+=1
                 continue
-            if kind == 'embedded-tick' and t >= entity['expires']-1e-9:
+            if kind=='embedded-tick' and t>entity['expires']+1e-9:
                 continue
-            part = entity['blast'] if kind == 'embedded-death' else entity['part']
-            if kind == 'embedded-death':
-                entity['alive'] = False
-                waiting_mines = max(0., waiting_mines-part.multishot)
-                detonation_count += 1
-            before = totals['direct']
-            if kind == 'embedded-death':
-                hit = packet(part, 0.)
-                if not take(hit[0],t,'direct',cv2=spread(part,0.)):
-                    add_procs(part,0.,t,hit)
-                enervate_hit(part,t,0.,0.)
-                signal('on-hit',t,part.multishot)
-                signal('on-crit',t,min(part.crit_chance,1.)*part.multishot)
-            else:
-                vec, _, _, _ = attack_data(part,0.)
-                if not take(vec,t,'direct',cv2=spread(part,0.)):
-                    add_procs(part,0.,t)
+            death=kind=='embedded-death'
+            part=entity['blast'] if death else entity['part']
+            if death:
+                entity['alive']=False
+                waiting_mines=max(0.,waiting_mines-entity['weight'])
+                detonation_count+=1
+            before=totals['direct']
+            radial_hit(part,1.,t,weight=entity['weight'])
             if collect_timeline:
                 projectile_events.append(dict(time=t,kind=kind,entity=payload,damage=totals['direct']-before))
-                if kind == 'embedded-death':
-                    detonation_events.append(dict(time=t,expectedMines=part.multishot,staleMines=0.,damage=totals['direct']-before))
+                if death:
+                    detonation_events.append(dict(time=t,expectedMines=entity['weight'],staleMines=0.,damage=totals['direct']-before))
         elif kind == 'finite-field':
             slot,part=payload
             finite_field_packets[slot]+=1
@@ -1607,16 +1602,21 @@ def _reference_trajectory(
             if not take({k:v*damage_rate_multiplier for k,v in vec.items()},t,'direct',cv2=spread(part,0.),weapon_source=False):
                 add_procs(part,0.,t,allow_encumber=False)
         elif kind == 'source-owned-field':
-            token,slot,part=payload
+            token,slot,part,initial=payload
             if token!=source_field_token:
                 stale+=1
                 continue
             source_field_packets[slot]+=1
             if collect_timeline:source_field_trace.append(dict(time=t,slot=slot,token=token,generation=gen))
             combat['victimProcTypesBeforeHit']={dtype:p.probability(t) for dtype,p in presence.items()}
-            vec,_,_,_=attack_data(part,0.)
-            if not take({k:v*damage_rate_multiplier for k,v in vec.items()},t,'direct',cv2=spread(part,0.)):
-                add_procs(part,0.,t)
+            part=part._live_hit_refresh({q['id']:q['stacks'] for q in sources},
+                sum(combat['victimProcTypesBeforeHit'].values()),initial)
+            if part.delayed_radial_hit_event:
+                radial_hit(part,damage_rate_multiplier,t)
+            else:
+                vec,_,_,_=attack_data(part,0.)
+                if not take({k:v*damage_rate_multiplier for k,v in vec.items()},t,'direct',cv2=spread(part,0.)):
+                    add_procs(part,0.,t)
         elif kind == 'owned-embed':
             token,part=payload
             if token!=source_field_token:
@@ -2051,15 +2051,8 @@ def _reference_trajectory(
                     active = replace(active,multishot=1.+afforded,ammo_pool_multishot_cost=afforded,
                                      damage_types={k:v*adjustment for k,v in active.damage_types.items()},
                                      dot_base_damage=active.dot_base_damage*adjustment if active.dot_base_damage is not None else None)
-            if impact_embed:
-                field = getattr(active, '_embedded', None)
-                if not field or radial is None:
-                    raise ValueError('embedded detonation lacks native field/blast parts')
-                if active.multishot > manual_detonation['maxProjectiles']:
-                    unsupported.append('alternox-multishot-active-cap-unresolved')
-                    clipped = copy(active)
-                    clipped.multishot = float(manual_detonation['maxProjectiles'])
-                    active = clipped
+            if impact_embed and (not getattr(active,'_embedded',None) or radial is None):
+                raise ValueError('embedded detonation lacks native field/blast parts')
             field_duration_boost = field_duration_ready
             field_duration_ready = False  # A shot consumes it, even when that shot kills.
             hit_count = 0. if no_contact else (1.0 if active.continuous else max(active.multishot,0.0))
@@ -2136,6 +2129,8 @@ def _reference_trajectory(
                     pending_mines.append((extra_part, generation))
                 pending_throws += 1
                 died = False
+            elif impact_embed:
+                died=False  # Ordered contacts and immediate fields follow.
             elif paid_cube:
                 push(t+paid_cube['primaryFireSeconds'],'quanta-primary',paid_cube['primaryAmmoCost'])
                 died=False
@@ -2169,30 +2164,40 @@ def _reference_trajectory(
                         push(t+tick/tick_rate,'finite-field',(slot,part),generation)
                         tick+=1
             if impact_embed:
-                field_part, tick_rate, duration = active._embedded
-                part = replace(field_part, multishot=active.multishot)
-                blast = replace(radial, multishot=active.multishot)
-                lifetime = min(duration, manual_detonation['delaySeconds'])
-                embedded_sequence += 1
-                identity = embedded_sequence
-                if not died:
-                    add_procs(active, aim, t, direct_packet, damage_scale=sniper_factor)
-                alive = gen == generation
-                waiting_mines += active.multishot if alive else 0.
-                embedded_entities[identity] = dict(part=part, blast=blast, expires=t+lifetime,
-                                                    generation=generation, alive=alive)
-                # The native attachment callback damages immediately before
-                # arranging the periodic timer. Expiry wins at later equal times.
-                if alive:
-                    vec, _, _, _ = attack_data(part, 0.)
-                    if not take(vec, t, 'direct', cv2=spread(part, 0.)):
-                        add_procs(part, 0., t)
-                push(t+lifetime, 'embedded-death', identity)
-                tick = 1
-                while tick/tick_rate < lifetime-1e-9:
-                    push(t+tick/tick_rate, 'embedded-tick', identity)
-                    tick += 1
-                projectile_wait = max(0., lifetime-1./speed)
+                field_part,tick_rate,duration=active._embedded
+                ms=max(0.,active.multishot)
+                whole=math.floor(ms)
+                interval=manual_detonation.get('destroyIntervalSeconds',.050000001)
+                death_delay=manual_detonation.get('terminalDelaySeconds',.1125)
+                last_death=0.
+                for slot in range(whole+int(ms>whole)):
+                    weight=1. if slot<whole else ms-whole
+                    if gen!=generation:
+                        stale+=1
+                        break
+                    radial_hit(active,damage_rate_multiplier*sniper_factor,t,weight=weight,aim=aim,contact=True)
+                    signal('on-body-hit',t,(1.-aim)*weight)
+                    signal('on-headshot',t,aim*weight)
+                    contact=copy(active);contact.multishot=weight
+                    enervate_hit(contact,t,shot_puncture,aim)
+                    if gen!=generation:
+                        break
+                    lifetime=min(duration,manual_detonation['delaySeconds']+slot*interval)
+                    embedded_sequence+=1
+                    identity=embedded_sequence
+                    waiting_mines+=weight
+                    embedded_entities[identity]=dict(part=field_part,blast=radial,weight=weight,
+                        expires=t+lifetime,generation=gen,alive=True)
+                    radial_hit(field_part,1.,t,weight=weight)
+                    push(t+lifetime+death_delay,'embedded-death',identity)
+                    tick=1
+                    inclusive=manual_detonation.get('naturalExpiryIncludesCoincidentTick',True)
+                    while tick/tick_rate < lifetime-1e-9 or (inclusive and abs(tick/tick_rate-lifetime)<1e-9):
+                        push(t+tick/tick_rate,'embedded-tick',identity)
+                        tick+=1
+                    last_death=max(last_death,lifetime+death_delay)
+                died=gen!=generation
+                projectile_wait=max(0.,last_death-1./speed)
             if not physical_lanes and not died and not manual_detonation and not primary_delay and not stackable and not no_contact:
                 add_procs(active, aim, t, direct_packet, damage_scale=sniper_factor)
                 if source_owned_fields and gen==generation and active.multishot>0:
@@ -2200,10 +2205,10 @@ def _reference_trajectory(
                     if not source_field_packets:source_field_packets=[0]*len(source_owned_fields)
                     for slot,(part,tick_rate,duration,initial_packets) in enumerate(source_owned_fields):
                         for _ in range(initial_packets):
-                            push(t,'source-owned-field',(source_field_token,slot,part),generation)
+                            push(t,'source-owned-field',(source_field_token,slot,part,True),generation)
                         tick=1
                         while tick/tick_rate<duration-1e-9:
-                            push(t+tick/tick_rate,'source-owned-field',(source_field_token,slot,part),generation)
+                            push(t+tick/tick_rate,'source-owned-field',(source_field_token,slot,part,False),generation)
                             tick+=1
                 field = getattr(active, '_lingering', None)
                 if field and gen == generation:
@@ -2256,7 +2261,7 @@ def _reference_trajectory(
                 if burst_round==burst_size-1:
                     signal('on-burst-headshot',t,burst_head_probability)
                     burst_head_probability=1.
-            if not physical_lanes and (not manual_detonation or impact_embed) and not primary_delay and not stackable and not no_contact:
+            if not physical_lanes and not manual_detonation and not primary_delay and not stackable and not no_contact:
                 enervate_hit(active,t,shot_puncture,aim)
             signal('on-fire', t)
             through=(combat.get('projectileState') or {}).get('punchthroughTargets',0)
@@ -2272,7 +2277,7 @@ def _reference_trajectory(
                 onos_condition_hits-=completed*2.
                 if completed:
                     signal('on-onos-damage-condition',t,completed)
-            if not physical_lanes and (not manual_detonation or impact_embed) and not primary_delay and not stackable and not no_contact:
+            if not physical_lanes and not manual_detonation and not primary_delay and not stackable and not no_contact:
                 signal("on-hit", t, hit_count)
                 if aim<1.:
                     signal('on-body-hit',t,(1.-aim)*hit_count)
@@ -2585,7 +2590,7 @@ def _reference_trajectory(
             'spread-hit-loss-not-modeled',
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
           + (['fire-rate-spool-reference-transcribed','fire-rate-spool-resets-on-any-pause'] if combat.get('fireRateSpool') else [])
-          + ([('alternox-active-cap-conservative-lower-bound' if manual_detonation.get('impactThenEmbed') else 'talons-expected-projectile-capacity'),'manual-detonation-explicit-player-cadence'] if manual_detonation else [])
+          + ([('alternox-full-batch-ordered-expected-slots' if manual_detonation.get('impactThenEmbed') else 'talons-expected-projectile-capacity'),'manual-detonation-explicit-player-cadence'] if manual_detonation else [])
           + (['onos-native-alignment-shots-held-rate-and-postfire-cadence','onos-radial-target-coverage-explicit'] if onos else [])
           + (ASSUMPTIONS if enervate else [])
           + (['encumber-poisson-status-presence','encumber-single-target-expected-procs'] if encumber else [])

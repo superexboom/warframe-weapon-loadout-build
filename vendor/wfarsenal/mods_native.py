@@ -90,6 +90,9 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
         raise Unsupported("auxiliary melee")
     event_profile = base_profile(weapon, fire_mode)
     event_profile, mode = perfect_release(event_profile, mode, getattr(scenario, 'combat_state', None))
+    direct_stack_source = bool(event_profile.get('directTakesVictimStackDamage') and not mode.get('__radialPart__'))
+    if direct_stack_source and not getattr(wfcore,'DIRECT_SOURCE_STACK_DAMAGE',0):
+        raise Unsupported('source-qualified forced stack damage requires updated core')
     gunco = weapon.get('__coProfile__') or co_profile(weapon, fire_mode)
     spool = event_profile.get('spool')
     if spool:
@@ -209,6 +212,7 @@ def _build(weapon: Mapping[str, Any], fire_mode: int, scenario) -> Prep:
         distance=scenario.distance,
         innateMultishot=innate_multishot,
         nativeIgnoreFireIterations=bool(mode.get("nativeIgnoreFireIterations")),
+        directSourceStackDamage=direct_stack_source,
         perPelletProc=per_pellet_proc,
         incarnonForm=incarnon_form,
         incarnonPool=float(incarnon['pool']) if incarnon and incarnon.get('pool') else None,

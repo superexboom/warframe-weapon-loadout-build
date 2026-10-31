@@ -10,8 +10,8 @@ from wfarsenal.combat_replay import replay
 def test_alternox_remaining_lifecycle_assumptions_are_reported_by_both_score_paths(name):
     weapon=next(w for w in app.EXPORTS['weapons'] if w['nameEn']==name)
     combat=prepare(dict(weapon=weapon,fire_mode=1,effects=[],scenario=Scenario()),[],[])
-    expected={'alternox-host-death-lifecycle-unverified','alternox-same-time-expiry-order-fixed-explosion-first'}
-    assert 'alternox-same-time-expiry-order-fixed-explosion-first' in combat['unsupported']
+    expected={'alternox-host-object-retirement-spatial-policy','alternox-frame-clock-mean-death-delay-representative'}
+    assert 'alternox-same-time-expiry-order-fixed-explosion-first' not in combat['unsupported']
     stats,_=combat['resolve']('selected',{},0)
     enemy=dict(health=1e8,shield=0.,overguard=0.,armour=0.,baseLevel=1)
     for details in (False,True):
@@ -45,7 +45,8 @@ def test_unverified_damage_contract_marks_real_riven_analysis_partial(monkeypatc
         stats=[dict(code=c,value=bases[c]*1.2,negative=False) for c in ('D','S')]))
     assert result['modelStatus']=='partial'
     assert 'analysis-model-partial' in result['unsupported']
-    assert 'cryotra-field-condition-overload-unverified' in result['unsupported']
+    assert 'cryotra-field-overlap-unverified' in result['unsupported']
+    assert 'cryotra-field-condition-overload-unverified' not in result['unsupported']
 
 
 @pytest.mark.parametrize('name',['Angstrum','Prisma Angstrum'])

@@ -1,0 +1,154 @@
+{
+  "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon": {
+    "manualDetonation": {
+      "maxProjectiles": 1,
+      "impactThenEmbed": true,
+      "fullEmissionBatch": true,
+      "destroyIntervalSeconds": 0.050000001,
+      "terminalDelaySeconds": 0.1125,
+      "naturalExpiryIncludesCoincidentTick": true
+    },
+    "nativeSources": [
+      {
+        "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+        "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+        "rawAttributesSha256": "a07c204ae953eea4a0a3e28b69c9232c765037efb1127862bba707647eb92cd7",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+        "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+        "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+        "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+        "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+        "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+        "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+        "parent": "",
+        "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
+        "parent": "/Lotus/Types/Weapons/BoltoProjectile",
+        "rawAttributesSha256": "0bd8331a5f2cb367146fabdba507074f2f236359487743e5637f7b801eb3f182",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Types/Weapons/BoltoProjectile",
+        "parent": "/Lotus/Types/Weapon/BoltoProjectile",
+        "rawAttributesSha256": "d329d792d64ba673cbfb09954ddfd2529e6c128ff9c44d8f037e0f2238618808",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Types/Weapon/BoltoProjectile",
+        "parent": "",
+        "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "attributeRecord": false
+      }
+    ],
+    "nativeEvidence": {
+      "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+      "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+      "source": "docs/projectile-qualification-20261030/FIELD-LIFECYCLES.md",
+      "registration": "actual RemoteMine1423a3960+328140bad3b0 ->141561250 per physical emission;AutoDetonateCapacity168=0",
+      "cap": "state168140592870 gates later requested0/1, no within-shot clamp",
+      "manual": "3181406d76f0 ->140d87360 ->1412d2510 one request;update140bef530 interval194",
+      "terminal": "418140414330 ->1402e1be0 cancels queued ticks ->14050b8c0 deferred Die[.075,.15)",
+      "attached": "790 da8=1 ->818 ->141300a00 reads packet1bb mode1, rawtemplate50/70; no ordinary source multiplier in callerBase"
+    }
+  },
+  "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon": {
+    "manualDetonation": {
+      "maxProjectiles": 1,
+      "impactThenEmbed": true,
+      "fullEmissionBatch": true,
+      "destroyIntervalSeconds": 0.050000001,
+      "terminalDelaySeconds": 0.1125,
+      "naturalExpiryIncludesCoincidentTick": true
+    },
+    "nativeSources": [
+      {
+        "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon",
+        "parent": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+        "rawAttributesSha256": "97a644dcdace54e4371f333bb62b8574d337ae36eb35fb744f187c2884b20183",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon",
+        "parent": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+        "rawAttributesSha256": "a07c204ae953eea4a0a3e28b69c9232c765037efb1127862bba707647eb92cd7",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/Rifle/LotusAssaultRifle",
+        "parent": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+        "rawAttributesSha256": "6cef9d6a035df8cfb6eac8167a0ed7549ef5cca84b704fe31159ae0f927053e5",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+        "parent": "/Lotus/Weapons/Tenno/LotusLongGun",
+        "rawAttributesSha256": "14e1c1245d79a8d0cd9a9f5dc201c8f2532bd5d348e4664346b5cff2059640c4",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/LotusLongGun",
+        "parent": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+        "rawAttributesSha256": "2f8b75d2003df2a86e5376d9a417a3c7741f79fa8dc68d6fe989b8bb244e9cdc",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/LotusBulletWeapon",
+        "parent": "",
+        "rawAttributesSha256": "dbf1c582b143471cf05fef13fc0dd775f3bf29c583a126747db3b966238087f9",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj",
+        "parent": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
+        "rawAttributesSha256": "e9736a1c069586b2c3ba513664408005db7ebb2dfe9b16094e4fc6d8bf8383af",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj",
+        "parent": "/Lotus/Types/Weapons/BoltoProjectile",
+        "rawAttributesSha256": "0bd8331a5f2cb367146fabdba507074f2f236359487743e5637f7b801eb3f182",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Types/Weapons/BoltoProjectile",
+        "parent": "/Lotus/Types/Weapon/BoltoProjectile",
+        "rawAttributesSha256": "d329d792d64ba673cbfb09954ddfd2529e6c128ff9c44d8f037e0f2238618808",
+        "attributeRecord": true
+      },
+      {
+        "path": "/Lotus/Types/Weapon/BoltoProjectile",
+        "parent": "",
+        "rawAttributesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "attributeRecord": false
+      }
+    ],
+    "nativeEvidence": {
+      "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+      "packagesBinSha256": "00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06",
+      "source": "docs/projectile-qualification-20261030/FIELD-LIFECYCLES.md",
+      "registration": "actual RemoteMine1423a3960+328140bad3b0 ->141561250 per physical emission;AutoDetonateCapacity168=0",
+      "cap": "state168140592870 gates later requested0/1, no within-shot clamp",
+      "manual": "3181406d76f0 ->140d87360 ->1412d2510 one request;update140bef530 interval194",
+      "terminal": "418140414330 ->1402e1be0 cancels queued ticks ->14050b8c0 deferred Die[.075,.15)",
+      "attached": "790 da8=1 ->818 ->141300a00 reads packet1bb mode1, rawtemplate50/70; no ordinary source multiplier in callerBase"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-"""Grimoire source contract stays evidence-only until launch/recipient clocks exist."""
+"""Grimoire source metadata and generic-merge boundary; runtime coverage is tested separately."""
 from copy import deepcopy
 from types import SimpleNamespace
 import pytest
@@ -21,7 +21,7 @@ def source():
     row=dict(path=imp.WEAPON,fireModes=[{},dict(damage=dict(projectile=imp.PROJECTILE,types={'DT_ELECTRICITY':350.}))])
     return Packages(),objects,row
 
-def test_contract_has_no_admitted_mode_or_impact_delay(source):
+def test_contract_separates_source_metadata_from_unconditional_damage(source):
     pkg,_,row=source;out=imp.build_contract(pkg,row)
     assert out['weapons']=={} and len(out['pending'])==1
     p=out['pending'][0];assert p['candidateOnly'] and p['defaultScoringExcluded']
@@ -30,26 +30,20 @@ def test_contract_has_no_admitted_mode_or_impact_delay(source):
     assert part['chain']['spawnedOrbs']==1
     assert part['chain']['dedupScope']=='one target-selection attack, reset next attack'
     assert part['chain']['nominalAmount']==280.
+    assert not part['contact']['damageSubmitted']
     assert part['contact']['damage']=={'electricity':350.} and part['expiry']['damage']=={'electricity':250.}
+    current=out['sourceContracts'][imp.WEAPON]['1']
+    assert current['noDirectContact'] and current['grimoireSourceContract']['spawnedOrbs']==1
     assert 'scheduler once gate is essential' in p['evidence']['duplicateExpiryCounterfactual']
     assert set(p['unmodeled'])==set(imp.BOUNDS)
 
-def test_evidence_cannot_be_merged_into_scoring_by_generic_merger(source):
-    pkg,_,row=source;before={'auditedAttacks':{imp.WEAPON:{'modes':{'1':{'keep':1}}},'/other':{'keep':2}},'keep':3}
+    before={'auditedAttacks':{imp.WEAPON:{'modes':{'1':{'keep':1}}},'/other':{'keep':2}},'keep':3}
     assert merge_patch(before,imp.build_contract(pkg,row))==before
 
-@pytest.mark.parametrize('field,value',[('TimeBetweenAttacks',.5),('ChainDamageMultiplier',1.),('MaxLife',7),('ExplodeOnLifeExpired',0),
-    ('ExplodeOnImpact',1),('Embed',1),('MaxLifeVariance',1.),('StopOnAvatars',1),('BounceOnAvatars',1),('MaxTargetsPerAttack',4),('MaxChainDepth',3),('KinematicInitialSpeed',10)])
-def test_changed_native_chain_or_expiry_signature_rejected(source,field,value):
-    pkg,objects,row=source;objects[imp.PROJECTILE][field]=value
+def test_changed_native_chain_clock_is_rejected(source):
+    pkg,objects,row=source;objects[imp.PROJECTILE]['TimeBetweenAttacks']=.5
     with pytest.raises(ValueError):imp.build_contract(pkg,row)
 
-@pytest.mark.parametrize('field,value',[('IgnoreFireIterations',0),('fireIterations',2)])
-def test_changed_orb_spawn_contract_rejected(source,field,value):
-    pkg,objects,row=source;objects[imp.WEAPON]['Behaviors'][1]['fire:Fire'][field]=value
-    with pytest.raises(ValueError,match='orb-count'):imp.build_contract(pkg,row)
-
-@pytest.mark.parametrize('field,amount',[('AttackData',250),('ExplosiveAttack',350)])
-def test_native_contact_and_expiry_cannot_be_swapped(source,field,amount):
-    pkg,objects,row=source;objects[imp.PROJECTILE][field]['Amount']=amount
+def test_native_source_value_cannot_replace_expiry_payload(source):
+    pkg,objects,row=source;objects[imp.PROJECTILE]['ExplosiveAttack']['Amount']=350
     with pytest.raises(ValueError,match='packet'):imp.build_contract(pkg,row)

@@ -28,3 +28,12 @@ SpearWeapons OnPriestSpearEmbed/UpdateAttractor脚本处理拾取和HEAD吸弹�
 CD必须保留原生升级桶阶段。早先“最终CD量化”的概括不准确：140dc93d9..93f3解码base+ADD并量化，1411817a0保留STACKING/MULT等桶。原始base2 +VitalSense120%控制：manager查询4.400000095，140ede780复制后仍4.400000095，140dc9010后4.401074886；若把final4.4整体量化会得到4.399511814，明确不符。故只修现有base helper的half-up，**不**把32 clamp加到全局最终CD或量化外部AVATAR_CRIT_DAMAGE。ADD_BASE保留桶的完整特殊来源阶段不从该普通ADD控制泛化。
 
 可交付证据：[fraction/CD tie](evidence/quantizer-tie-control.json)、[base2/VitalSense控制](evidence/quantizer-base-CD-control.json)。一项已有文件内的量化回归同时核原始分数与当前native实际回放；旧核心缺NATIVE_TYPE_QUANTIZATION时回到Python，native mods/replay/sustained三入口一致。
+
+
+## 普通祸根覆盖补全（2026-10-31）
+
+此前导入和实际模型仅Prime接入attached50，普通版仍沿用旧reference的55爆炸，遗漏附着包和对应事件。完整源diff确认普通charged弹体就是Prime的父模板，实际类同为Bolto；相关差异只有AttackData150/300、CC.039999999/.1以及外观Mesh。EmbedAttack50、主爆炸55、stop/embed脚本、半径、嵌入/销毁条件均继承同值。两版state都TrackProjectiles1/MaxNumProjectiles1/DestroyActiveProjectiles1、PrefireTime0/PRESSED；普通reload2.5而Prime2.2，因此原串行策略分别3.5/3.2秒再投，不误用同一装填时间。
+
+已有contact/attached importer改为两条精确路径规格；普通版独立registry来源，保留自身暴击率与直击150，沿用已证实且相同的native消费者。1个原runtime用例增加普通版分支，验证0/1/2/3跳、下一次投掷取消4.0旧跳、主55致死不跨目标投递50和实际native SHADOW；没有新测试文件。原source fixture裁去不消费的外观/AI字段，保留这两个来源的真实最小字段和完整source哈希。
+
+源证据 `.local/delivery/projectile-continuation-20261031/scourge/native-source-pair.json`，导入输出`variant-patch.json`。仍采用直接命中原宿主的显式几何和throw/reload/rethrow操作策略；不是自动证明任意拾取、取消或多目标吸弹动作。

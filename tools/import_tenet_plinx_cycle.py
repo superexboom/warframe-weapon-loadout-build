@@ -14,7 +14,7 @@ PROJECTILE = DIR + 'CrpBEPlinxAltFireProj'
 ATTACHMENTS = [DIR + 'CrpBEPlinxAttachment', DIR + 'CrpBEPlinxDSAttachment']
 LIMITS = ['tenet-plinx-attachment-tick-and-countdown-reset-order-unmodeled',
           'tenet-plinx-ideal-accepted-embed-contact-geometry',
-          'tenet-plinx-CO-weakpoint-arcane-event-qualification-unverified',
+          'tenet-plinx-embedded-host-body-geometry-policy',
           'tenet-plinx-flat-add-native-damage-provider-order-unverified']
 
 def require(obj, fields, label):
@@ -46,6 +46,10 @@ def build_contract(pkg, row):
     require(p['EmbedDeathAttack'], dict(Type='DT_RADIATION', Amount=100, ProcChance=.5, ForcedProcs=['PT_RAGDOLL']), 'embedded')
     require(p['ExplosiveAttack'], dict(Type='DT_RADIATION', Amount=500, ProcChance=.2), 'unembedded')
     require(p['EmbedAttack'], dict(Amount=0), 'embed contact')
+    if any(p.get(k,0) for k in ('DealDamageThroughImpactBehavior','IgnoreHeadshotBonus')):
+        raise ValueError('Tenet Plinx direct consumer changed')
+    if p.get('ExplosionDirectHitDamageHitType','DHT_PROJECTILE') != 'DHT_PROJECTILE':
+        raise ValueError('Tenet Plinx explicit-host HitType changed')
     events = []
     for path in ATTACHMENTS:
         matches = [e for e in pkg.resolve(path)['OnEnter'] if
@@ -66,7 +70,8 @@ def build_contract(pkg, row):
                   damageScale='ammoAtChargeStart', clipSizeScalesDuration=False)
     payload = dict(direct=dict(damage={'impact':100.}, statusChance=.2),
                    embeddedDeath=dict(damage={'radiation':100.}, statusChance=.5,
-                                      delayAfterAcceptedEmbed=.80000001),
+                                      delayAfterAcceptedEmbed=.91250001,
+                                      nativeDelayRange=[.87500001,.95000001]),
                    unembeddedDeathAlternative=dict(damage={'radiation':500.}, statusChance=.2),
                    deathPacketSelection='exclusive-embedded-flag', critChance=.40000001,
                    critMultiplier=3., radius_m=6., falloff=.40000001,
@@ -82,20 +87,28 @@ def build_contract(pkg, row):
                    activeCountdownMustBeSeparateState=True, attachmentEvents=events)
     operational = dict(directTotal=100., projectile=PROJECTILE,
         charge=dict(seconds=.80000001,beforeFire=True,scalesWithFireRate=True),
+        directTakesVictimStackDamage=True,
         fullClipCharge=dict(cadencePolicy='wait-configured-empty-delay-then-full-recharge',
             chargeSeconds=.80000001,emptyDelaySeconds=3.,regenPerSecond=20.,capacityPolicy='static-modified-capacity'),
         battery=dict(delayEmptySeconds=3.,delayPartialSeconds=.80000001,regenPerSecond=20.),
         radial=dict(damage={'radiation':100.},crit_chance=.40000001,crit_multiplier=3.,
-            status_chance=.5,radius_m=6.,falloff_reduction=.40000001,forcedProcs=['PT_RAGDOLL'],impact_delay_seconds=.80000001,
-            takes_condition_overload=False),
-        unmodeled=['tenet-plinx-static-magazine-policy-charge-entry-capacity-snapshot-unmodeled',
-                   'tenet-plinx-cadence-player-wait-policy-not-native-max-rate',
-                   'tenet-plinx-flat-add-native-damage-provider-order-fail-closed',
+            status_chance=.5,radius_m=6.,falloff_reduction=.40000001,forcedProcs=['PT_RAGDOLL'],
+            impact_delay_seconds=.91250001,native_event_delay_seconds=.91250001,
+            nativeSource=PROJECTILE,nativeField='EmbedDeathAttack',nativeRoute='embedded-expiry-explicit-host',
+            takes_condition_overload=False,takes_victim_stack_damage=False,takes_victim_crit=True,
+            liveSourceDamageAtImpact=True),
+        unmodeled=['tenet-plinx-cadence-player-wait-policy-not-native-max-rate',
                    'tenet-plinx-ideal-accepted-embed-contact-geometry',
                    'tenet-plinx-unembedded500-alternative-excluded',
-                   'tenet-plinx-CO-weakpoint-arcane-event-qualification-unverified'])
+                   'tenet-plinx-embedded-host-body-geometry-policy',
+                   'tenet-plinx-terminal-death-delay075-150ms-approximated-by1125ms'])
     return dict(schemaVersion=1, kind='native-tenet-plinx-cycle-contract', weapons={},
                 operationalPatch=dict(weapons={WEAPON:dict(modes={'1':operational})}),
+                operationalCoProfiles={WEAPON:{'1':dict(behavior='independent',baseFraction=1.,
+                    excludeFlatSources=[],projectile=PROJECTILE,directTotal=100.,sourceKind='native-audited',
+                    nativeEvidence=dict(clientSha256=CLIENT_SHA256,packagesBinSha256=PACKAGE_SHA256,
+                        consumer='14101fdb0 ->14113e250 current packet base'),
+                    source='native1400dc970 fallback+820 current packet1700;14101fdb0 ->14113e250')}},
                 pending=[dict(path=WEAPON, mode=1, candidateOnly=True, defaultScoringExcluded=True,
                     sourcePayload=dict(charge=charge, payload=payload, battery=battery),
                     unmodeled=list(LIMITS))],
@@ -106,7 +119,9 @@ def build_contract(pkg, row):
                               'script-configured-delay-separate-from-active-countdown']),
                 evidence=dict(clientSha256=CLIENT_SHA256, packageSha256=PACKAGE_SHA256,
                     nativeSources=source_rows(pkg,[WEAPON,PROJECTILE,*ATTACHMENTS]),
-                    nativeCharge='140b7eae0;1405774f0;1418abeb0;1405cb0b1;1403c4a1d',
+                    nativeCharge='140b7eae0;1405774f0;1418abdb3..1418abe3d capture ammo198;1405cb0b1 current capacity consumption;1403c4a1d',
+                    nativePacketConsumers='base790=1400dc970 da8=0 -> weapon820=14101fdb0 ->14113e250 current1700; death140163a60 ->common140f360f0 explicit c24=2 ->victim340/348',
+                    nativeEmbeddedClock='140c3f111..1a4 queues1402e1be0 after.8; tail14050b8c0 queues Die140273d98 after[.075,.15)',
                     nativeFullClipGate='1403ceb41..1403cebdb',
                     nativeBattery='141b0f270;140f07250;1402bb5f3..1402bb734',
                     nativeStateOrder='140f67bc6 store;140f67bcd owner+c18;140f6823c owner+bd8',

@@ -44,7 +44,9 @@ def admitted(component):
     bounds = row.get('nativeDelayRange') or []
     return (isinstance(delay, (int, float)) and not isinstance(delay, bool)
             and len(bounds) == 2 and 0 <= bounds[0] <= delay <= bounds[1]
-            and not component.get('headOnly') and not component.get('__embedded')
+            and not component.get('headOnly')
+            and (not component.get('__embedded') or (component.get('nativeRoute') == 'attached-target'
+                 and component.get('nativeField') == 'EmbedAttack' and row.get('nativeRoute') == 'attached-target'))
             and not component.get('bodyOnly'))
 
 

@@ -1148,6 +1148,279 @@
           "liveSourceDamageAtImpact": true
         }
       }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/TnPriestSpear/TnPriestSpearChargedProjectile": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "nativeDelivery": "140f360f0 supplied contact victim -> Avatar+340/348 -> authority AGC; direct kill forbids notification on next victim",
+        "evidence": "docs/projectile-qualification-20261030/SCOURGE-EMBED.md; normal variant exact source/ancestry closure 2026-10-31",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "takes_condition_overload": false
+        }
+      },
+      {
+        "nativeField": "EmbedAttack",
+        "nativeRoute": "zero-radius-embed",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "componentOverrides": {
+          "takes_condition_overload": false,
+          "takes_victim_crit": false,
+          "takes_victim_stack_damage": false
+        },
+        "evidence": "docs/projectile-qualification-20261030/SCOURGE-EMBED.md; normal variant exact source/ancestry closure 2026-10-31"
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraProjectile": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "nativeDelivery": "ordinary accepted contact target -> common140f360f0 explicit recipient c24 PROJECTILE2 -> Avatar+340/348 -> authority AGC; body geometry policy",
+        "evidence": "docs/projectile-qualification-20261030/MAIN-CONSUMERS.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "takes_condition_overload": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Lasria/LasGooPistol/LasGooPistolAltFire/LasrianGooPistolPlayerAltFireProjectileFullcharge": [
+      {
+        "nativeField": "ExplosiveAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "per-damage-packet-after-damage-before-victim-retirement",
+        "nativeDelivery": "ordinary accepted contact target -> common140f360f0 explicit recipient c24 PROJECTILE2 -> Avatar+340/348 -> authority AGC; body geometry policy",
+        "evidence": "docs/projectile-qualification-20261030/MAIN-CONSUMERS.md",
+        "componentOverrides": {
+          "takes_victim_crit": true,
+          "directRecipientHitType": "DHT_PROJECTILE",
+          "takes_condition_overload": false
+        }
+      }
+    ],
+    "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAltFireProj": [
+      {
+        "nativeRoute": "embedded-expiry-explicit-host",
+        "nativeDelayRange": [
+          0.87500001,
+          0.95000001
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "componentOverrides": {
+          "nativeSource": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxAltFireProj",
+          "nativeField": "EmbedDeathAttack",
+          "nativeRoute": "embedded-expiry-explicit-host",
+          "takes_condition_overload": false,
+          "takes_victim_crit": true,
+          "impact_delay_seconds": 0.91250001,
+          "native_event_delay_seconds": 0.91250001,
+          "liveSourceDamageAtImpact": true,
+          "takes_victim_stack_damage": false
+        },
+        "nativeField": "EmbedDeathAttack",
+        "evidence": "docs/projectile-qualification-20261030/PLINX-CONSUMERS.md",
+        "headHit": false,
+        "enervate": false
+      }
+    ],
+    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetComponents/CryoxionProjectile": [
+      {
+        "nativeField": "EmbedAttack",
+        "nativeDelayRange": [
+          0,
+          0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "semantics": "one attached-target tick; same recipient excluded from area plan",
+        "nativeDelivery": "DoEmbedDamage +628 defaultRADIAL4 ->+790 ->weapon818 or820 ->victim340/348",
+        "componentOverrides": {
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "independent",
+            "baseFraction": 1.0,
+            "excludeFlatSources": [],
+            "source": "native attached target weapon+820",
+            "callerBase": "fully-source-built-current-EmbedAttack-base-before-victim"
+          },
+          "liveVictimCO": true,
+          "recipientPolicy": "projectile-physically-attached-to-current-selected-victim",
+          "tick_rate": 1.0,
+          "tickRateSource": "native embed initial call140c3f312; fixed1s DoEmbedDamage callback140297d78",
+          "duration_seconds": 5.0,
+          "takes_victim_stack_damage": true,
+          "takes_victim_crit": false,
+          "impact_delay_seconds": 0.0
+        },
+        "evidence": "docs/projectile-qualification-20261030/FIELD-LIFECYCLES.md; exact Cryoxion Grenade/Projectile da8=0 attached+820"
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj": [
+      {
+        "nativeField": "EmbedAttack",
+        "nativeRoute": "attached-target",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "componentOverrides": {
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "additive",
+            "baseFraction": 1.0,
+            "excludeFlatSources": [],
+            "source": "native818 source-mode raw50/70;141300a00 ->14113e250"
+          },
+          "takes_victim_stack_damage": true,
+          "takes_victim_crit": false,
+          "liveVictimCO": true,
+          "nativeRoute": "attached-target",
+          "native_event_delay_seconds": 0.0
+        },
+        "evidence": "docs/projectile-qualification-20261030/FIELD-LIFECYCLES.md"
+      },
+      {
+        "nativeField": "EmbedDeathAttack",
+        "nativeRoute": "embedded-expiry-explicit-host",
+        "nativeDelayRange": [
+          0.075,
+          0.15
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "componentOverrides": {
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "takes_victim_crit": true,
+          "liveSourceDamageAtImpact": true,
+          "nativeRoute": "embedded-expiry-explicit-host",
+          "native_event_delay_seconds": 0.1125
+        },
+        "evidence": "docs/projectile-qualification-20261030/FIELD-LIFECYCLES.md"
+      }
+    ],
+    "/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj": [
+      {
+        "nativeField": "EmbedAttack",
+        "nativeRoute": "attached-target",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "componentOverrides": {
+          "takes_condition_overload": true,
+          "coProfile": {
+            "behavior": "additive",
+            "baseFraction": 1.0,
+            "excludeFlatSources": [],
+            "source": "native818 source-mode raw50/70;141300a00 ->14113e250"
+          },
+          "takes_victim_stack_damage": true,
+          "takes_victim_crit": false,
+          "liveVictimCO": true,
+          "nativeRoute": "attached-target",
+          "native_event_delay_seconds": 0.0
+        },
+        "evidence": "docs/projectile-qualification-20261030/FIELD-LIFECYCLES.md"
+      },
+      {
+        "nativeField": "EmbedDeathAttack",
+        "nativeRoute": "embedded-expiry-explicit-host",
+        "nativeDelayRange": [
+          0.075,
+          0.15
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "componentOverrides": {
+          "takes_condition_overload": false,
+          "takes_victim_stack_damage": false,
+          "takes_victim_crit": true,
+          "liveSourceDamageAtImpact": true,
+          "nativeRoute": "embedded-expiry-explicit-host",
+          "native_event_delay_seconds": 0.1125
+        },
+        "evidence": "docs/projectile-qualification-20261030/FIELD-LIFECYCLES.md"
+      }
+    ],
+    "/Lotus/Weapons/Infested/Bow/InfCernosBow/ChargeInfCernosArrowProjectile": [
+      {
+        "nativeField": "EmbedAttack",
+        "nativeDelayRange": [
+          0.0,
+          0.0
+        ],
+        "genericHit": true,
+        "genericCriticalHit": true,
+        "headHit": false,
+        "enervate": false,
+        "componentOverrides": {
+          "takes_condition_overload": true,
+          "takes_victim_stack_damage": true,
+          "takes_victim_crit": false,
+          "coProfile": {
+            "behavior": "additive",
+            "baseFraction": 82.0,
+            "excludeFlatSources": [],
+            "source": "native818 current source template410/205 under explicit continuous-action policy"
+          },
+          "currentSourceCoFraction": {
+            "charged": 82.0,
+            "normal": 41.0
+          },
+          "impact_delay_seconds": 0.0,
+          "native_event_delay_seconds": 0.0,
+          "tickRateSource": "native initial embed and1s; current weapon source query per packet",
+          "sourceActionPolicy": "full-charge-contact-before-next-action; later ticks use incomplete-next-draw/reload/idle source",
+          "recipientPolicy": "original-surviving-physically-attached-victim"
+        },
+        "evidence": "docs/projectile-qualification-20261030/MUTALIST-LIVE-SOURCE.md; current-template-controls7, charge-transition-controls4"
+      }
     ]
   }
 }

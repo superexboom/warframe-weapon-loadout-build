@@ -1,0 +1,111 @@
+{
+  "headProxy": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "entry": "0x140d9d930",
+    "cases": [
+      {
+        "initialPart": 7,
+        "proxyPart": 1,
+        "headSuppression": 1,
+        "finalPart": 1
+      },
+      {
+        "initialPart": 7,
+        "proxyPart": 0,
+        "headSuppression": 1,
+        "finalPart": 0
+      },
+      {
+        "initialPart": 7,
+        "proxyPart": null,
+        "headSuppression": 1,
+        "finalPart": 0
+      }
+    ],
+    "limits": [
+      "Unchanged full leaf executed; synthetic packet/proxy records. Proxy geometry selection not simulated.",
+      "No proxy plus invalid subentity yields body0. Head proxy yields HEAD1 despite suppression25c1."
+    ]
+  },
+  "ordinaryCO": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "rows": [
+      {
+        "isAbilityWeapon": 0,
+        "parentClass": null,
+        "helperAccepted": [
+          0
+        ],
+        "coCalls": [],
+        "exit": "0x14111fd98"
+      },
+      {
+        "isAbilityWeapon": 1,
+        "parentClass": null,
+        "helperAccepted": [
+          1
+        ],
+        "coCalls": [],
+        "exit": "0x14111fd98"
+      },
+      {
+        "isAbilityWeapon": 0,
+        "parentClass": "PowerSuit",
+        "helperAccepted": [
+          1
+        ],
+        "coCalls": [
+          {
+            "context": "0x20008000",
+            "packet": "0x20004000",
+            "victim": "0x20008000",
+            "callerBase": 73.0
+          }
+        ],
+        "exit": "0x14111fd8b"
+      },
+      {
+        "isAbilityWeapon": 0,
+        "parentClass": "PowerSuitAbility",
+        "helperAccepted": [
+          1
+        ],
+        "coCalls": [
+          {
+            "context": "0x20008000",
+            "packet": "0x20004000",
+            "victim": "0x20008000",
+            "callerBase": 73.0
+          }
+        ],
+        "exit": "0x14111fd8b"
+      },
+      {
+        "isAbilityWeapon": 1,
+        "parentClass": "PowerSuit",
+        "helperAccepted": [
+          1
+        ],
+        "coCalls": [],
+        "exit": "0x14111fd98"
+      }
+    ],
+    "fragment": {
+      "start": "0x14111fd11",
+      "end": "0x14111fd98",
+      "uses": [
+        "0x141baa200 complete",
+        "0x140ea3ee0 actual getter",
+        "0x140e879d0 actual parent getter"
+      ]
+    },
+    "stubs": [
+      "weapon+980 returns a synthetic active context only if reached",
+      "CO consumer entry is counted and returned from; positive parented controls reach it but its arithmetic is not executed"
+    ],
+    "limits": [
+      "Not an assertion that no different weapon/ability class reaches CO here. Ordinary LotusBulletWeapon ancestry with no parent Powersuit/ability is the selected Phantasma baseline.",
+      "Native descriptor range IDs are uninitialized on disk. Negative tags select original linked descriptor comparisons; this is controlled class ancestry, not runtime-object acquisition."
+    ]
+  }
+}

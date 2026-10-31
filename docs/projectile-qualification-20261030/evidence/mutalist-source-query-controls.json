@@ -1,0 +1,107 @@
+{
+  "selector": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "cases": [
+      {
+        "weaponState": 13,
+        "elapsed": 0.0,
+        "fullDuration": 0.5,
+        "selected": "normal205"
+      },
+      {
+        "weaponState": 13,
+        "elapsed": 0.25,
+        "fullDuration": 0.5,
+        "selected": "normal205"
+      },
+      {
+        "weaponState": 13,
+        "elapsed": 0.5,
+        "fullDuration": 0.5,
+        "selected": "charged410"
+      },
+      {
+        "weaponState": 14,
+        "elapsed": 0.0,
+        "fullDuration": 0.5,
+        "selected": "charged410"
+      },
+      {
+        "weaponState": 1,
+        "elapsed": 0.0,
+        "fullDuration": 0.5,
+        "selected": "normal205"
+      },
+      {
+        "weaponState": 1,
+        "elapsed": 0.5,
+        "fullDuration": 0.5,
+        "selected": "charged410"
+      },
+      {
+        "weaponState": 0,
+        "elapsed": 0.0,
+        "fullDuration": 0.5,
+        "selected": "normal205"
+      }
+    ],
+    "executed": [
+      "140e496d0 full actual selection",
+      "141809340 full selector",
+      "141509bf0 actual state getter",
+      "1407e2c90 actual active-state forwarding",
+      "14084e120 actual elapsed/duration ratio"
+    ],
+    "stubs": [
+      "state+2c0 duration returns .5 matching unmodded source",
+      "synthetic fire/source/current-state arrays; avatar/C0 cosmetic override absent"
+    ],
+    "limits": [
+      "Not game time evolution or acquired live object; controlled elapsed/state selects actual unchanged native branches.",
+      "First attempt omitted initialized empty fire840 weak handle and faulted; corrected scaffolding shown here."
+    ]
+  },
+  "transitions": {
+    "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+    "cases": [
+      {
+        "oldState": 14,
+        "newState": 1,
+        "initialElapsed": 0.5,
+        "finalElapsed": 0.5
+      },
+      {
+        "oldState": 1,
+        "newState": 13,
+        "initialElapsed": 0.5,
+        "finalElapsed": 0.0
+      },
+      {
+        "oldState": 14,
+        "newState": 0,
+        "initialElapsed": 0.5,
+        "finalElapsed": 0.0
+      },
+      {
+        "oldState": 1,
+        "newState": 7,
+        "initialElapsed": 0.5,
+        "finalElapsed": 0.0
+      }
+    ],
+    "executed": [
+      "full charged state transition1418abd10",
+      "full base140243710 where reached"
+    ],
+    "stubs": [
+      "owner798 transition external effect no-op",
+      "owner2f0 returns0 ammo snapshot",
+      "owner9f8 absent authority actor uses ordinary null branch",
+      "owner408 final empty-state check returns0"
+    ],
+    "limits": [
+      "State elapsed transitions, not entire weapon fire/network/collision loop",
+      "First attempt lacked final owner408 initialized slot and faulted; corrected scaffold shown here"
+    ]
+  }
+}

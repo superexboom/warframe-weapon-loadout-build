@@ -12,14 +12,15 @@ import json
 ROOT=Path(__file__).resolve().parents[1]
 
 @pytest.fixture
-def source():
-    data=json.loads((ROOT/'tests/fixtures/scourge_prime_source.json').read_bytes());objects={imp.WEAPON:data['weapon'],imp.PROJECTILE:data['projectile']};parents={r['path']:r['parent'] for r in data['sources']}
+def source(request):
+    path=getattr(request,'param',imp.WEAPON);spec=imp.VARIANTS[path]
+    data=json.loads((ROOT/'tests/fixtures/scourge_prime_source.json').read_bytes())[path];objects={path:data['weapon'],spec['projectile']:data['projectile']};parents={r['path']:r['parent'] for r in data['sources']}
     class Packages:
         entities={p:(a,SimpleNamespace(attr=None)) for p,a in parents.items()}
         def parent(self,p):return parents.get(p)
         def resolve(self,p):return deepcopy(objects[p])
         def locate(self,owner,ref):return ref if ref.startswith('/') else owner.rsplit('/',1)[0]+'/'+ref
-    row=next(r for r in json.loads((ROOT/'data/export/2026.08.13.13.24/weapons.json').read_bytes())['data'] if r['path']==imp.WEAPON)
+    row=next(r for r in json.loads((ROOT/'data/export/2026.08.13.13.24/weapons.json').read_bytes())['data'] if r['path']==path)
     return Packages(),objects,row
 
 
@@ -48,38 +49,42 @@ def test_source_builds_main55_and_only_one_spear(source):
     assert 'remote queue receiver ordering not emulated' in entry['nativeEvidence']['removal']
 
 
+@pytest.mark.parametrize('source',list(imp.VARIANTS),indirect=True)
 def test_actual_contact_route_keeps_charge_reload_and_one_spear(source,monkeypatch):
-    pkg,_,row=source;payload=merge_patch(manual_combat.reference(),imp.build_patch(pkg,row))
+    pkg,_,row=source;variant=imp.VARIANTS[row['path']]
+    payload=merge_patch(manual_combat.reference(),imp.build_patch(pkg,row))
+    cycle=1.+variant['reload'];direct=variant['direct'];packet_total=direct+55.
+    assert payload['auditedAttacks'][row['path']]['modes']['1']['attachedTicks']['crit_chance']==variant['crit']
     monkeypatch.setattr(manual_combat,'reference',lambda:payload)
     monkeypatch.setattr(native_replay,'ENABLED',True);monkeypatch.setattr(native_replay,'SHADOW',True)
-    w=next(w for w in app.EXPORTS['weapons'] if w['path']==imp.WEAPON)
+    w=next(w for w in app.EXPORTS['weapons'] if w['path']==row['path'])
     effects=[ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.),ModEffect('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',2.)]
     fight=manual_combat.prepare(dict(weapon=deepcopy(w),fire_mode=1,effects=effects,scenario=Scenario()),[],[])
     stats,_=fight['resolve']('selected',{},0.);before=native_replay.STATS['native']
     def replay(window,curve=None):
         return combat_replay.replay(stats,TARGET,attacks_per_second=stats.fire_rate,window_seconds=window,combat=fight,collect_timeline=False,life_curve=curve)
     curve=[]
-    prior=replay(3.1,curve);after=replay(3.3)
+    prior=replay(cycle-.1,curve);after=replay(cycle+.1)
     assert prior['shots']==prior['reloads']==1
     assert after['shots']==2 and after['reloads']==1
     # Existing damage quantization puts independent50's70/10/20 shares
     # at22/32,3/32,6/32:48.4375 effective before target modifiers.
     tick_damage=48.4375
     assert [event[0] for event in curve]==pytest.approx([0.,0.,0.,1.,2.,3.])
-    assert [event[1] for event in curve]==pytest.approx([300.,55.,tick_damage,tick_damage,tick_damage,tick_damage],rel=1e-7)
-    # Native source is unique: first throw hits300,55,50 then ticks1/2/3;
-    # next explicit throw at3.2 cancels the old delegate before its4.0 tick.
-    assert prior['totalWindowDamage']==pytest.approx(355.+4*tick_damage,rel=1e-7)
-    assert after['totalWindowDamage']==pytest.approx(2*355.+5*tick_damage,rel=1e-7)
+    assert [event[1] for event in curve]==pytest.approx([direct,55.,tick_damage,tick_damage,tick_damage,tick_damage],rel=1e-7)
+    # Source is unique: first throw gives direct,55,50 then ticks1/2/3;
+    # next throw (Prime3.2/base3.5) cancels old source before its4.0 tick.
+    assert prior['totalWindowDamage']==pytest.approx(packet_total+4*tick_damage,rel=1e-7)
+    assert after['totalWindowDamage']==pytest.approx(2*packet_total+5*tick_damage,rel=1e-7)
     assert replay(4.1)['totalWindowDamage']==pytest.approx(after['totalWindowDamage'],rel=1e-7)
-    assert replay(4.3)['totalWindowDamage']==pytest.approx(after['totalWindowDamage']+tick_damage,rel=1e-7)
-    # A host surviving300 but killed by55 cannot receive the immediate50,
+    assert replay(cycle+1.1)['totalWindowDamage']==pytest.approx(after['totalWindowDamage']+tick_damage,rel=1e-7)
+    # A host surviving contact but killed by55 cannot receive immediate50,
     # nor may that packet migrate to the next scoring generation.
-    short=combat_replay.replay(stats,{**TARGET,'health':320.},attacks_per_second=stats.fire_rate,
+    short=combat_replay.replay(stats,{**TARGET,'health':direct+20.},attacks_per_second=stats.fire_rate,
         window_seconds=.1,combat=fight,collect_timeline=False)
-    assert short['totalWindowDamage']==pytest.approx(320.,rel=1e-7)
+    assert short['totalWindowDamage']==pytest.approx(direct+20.,rel=1e-7)
     assert short['killEvents']==1
-    assert 'scourge-prime-throw-reload-rethrow-input-policy-idealized' in after['unsupported']
+    assert variant['family']+'-throw-reload-rethrow-input-policy-idealized' in after['unsupported']
     assert native_replay.STATS['native']>before
 
 

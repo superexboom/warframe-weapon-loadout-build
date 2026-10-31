@@ -50,6 +50,73 @@ def apply_native_contract(component):
     return component
 
 
+
+_ALTERNOX = {
+    '/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleWeapon':
+        ('/Lotus/Weapons/Tenno/LongGuns/GyreRifle/GyreRifleBoltoAltProj',50.),
+    '/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxWeapon':
+        ('/Lotus/Weapons/Tenno/LongGuns/PrimeAlternox/PrimeAlternoxBoltoAltProj',70.),
+}
+
+
+def alternox_profile(pkg, row):
+    """Exact ordinary RemoteMine same-emission batch, not a max1 pellet clamp."""
+    path=row['path'];projectile,amount=_ALTERNOX[path]
+    mode=row['fireModes'][1];native=pkg.resolve(path);p=pkg.resolve(projectile)
+    selected=native['Behaviors'][1]
+    fire=selected['fire:LotusWeaponProjectileFireBehavior']
+    state=selected['state:RemoteMineStateBehavior']
+    if (mode['damage'].get('projectile')!=projectile or
+            abs(sum(mode['damage']['types'].values())-amount)>.001 or
+            pkg.locate(path,fire['projectileType'])!=projectile or
+            fire['fireIterations']!=1 or fire['IgnoreFireIterations']!=0 or
+            any(state.get(k)!=v for k,v in dict(TrackProjectiles=1,MaxNumProjectiles=1,
+                DetonateManually=1,FireDetonatesActiveProjectiles=1,AutoDetonateCapacity=0,
+                DestroyDelay=.050000001).items())):
+        raise ValueError('Alternox native RemoteMine batch source changed')
+    if (p['AttackData']['Amount']!=amount or p['EmbedAttack']['Amount']!=amount or
+            p['EmbedDeathAttack']['Amount']!=2*amount or
+            p['EmbedAttack']['Type']!='DT_ELECTRICITY' or
+            p['EmbedDeathAttack']['Type']!='DT_ELECTRICITY' or
+            p.get('DealDamageThroughImpactBehavior')!=1 or p.get('EmbedTime')!=[10,10] or
+            p.get('EmbedDamageRadius')!=6):
+        raise ValueError('Alternox attached/terminal source changed')
+    common=dict(takes_multishot=True,crit_chance=float(p['CriticalChance']),
+        crit_multiplier=float(p['CriticalMultiplier']),nativeSource=projectile)
+    embedded=dict(**common,damage={'electricity':amount},nativeField='EmbedAttack',
+        nativeRoute='attached-target',native_event_delay_seconds=0.,
+        status_chance=float(p['EmbedAttack']['ProcChance']),forcedProcs=[],
+        tick_rate=1.,duration_seconds=10.,radius_m=6.,takes_condition_overload=True,
+        coProfile=dict(behavior='additive',baseFraction=1.,excludeFlatSources=[],
+            source='native818 source-mode raw50/70;141300a00 ->14113e250'),
+        takes_victim_stack_damage=True,takes_victim_crit=False,liveVictimCO=True)
+    terminal=dict(**common,damage={'electricity':2*amount},nativeField='EmbedDeathAttack',
+        nativeRoute='embedded-expiry-explicit-host',native_event_delay_seconds=.1125,
+        impact_delay_seconds=10.1125,status_chance=float(p['EmbedDeathAttack']['ProcChance']),
+        forcedProcs=list(p['EmbedDeathAttack'].get('ForcedProcs') or []),
+        radius_m=float(p['DamageRadius']),falloff_start_m=0.,
+        falloff_reduction=float(p['ExplosionFallOff']),takes_blast_radius_mods=True,
+        takes_condition_overload=False,takes_victim_stack_damage=False,takes_victim_crit=True,
+        liveSourceDamageAtImpact=True)
+    return dict(name=row['nameEn'],directTotal=sum(mode['damage']['types'].values()),fireMode=1,
+        projectile=projectile,embedded=embedded,radials=[terminal],
+        manualDetonation=dict(maxProjectiles=1,impactThenEmbed=True,fullEmissionBatch=True,
+            destroyIntervalSeconds=float(state['DestroyDelay']),terminalDelaySeconds=.1125,
+            naturalExpiryIncludesCoincidentTick=True),
+        scope='same-emission MS batch on original recipient; each manual request cancels its own ticks; actual terminal damage follows mean native Die delay',
+        unmodeled=['alternox-original-recipient-retirement-and-spatial-coverage-policy',
+            'alternox-native-frame-boundary-approximated-by-ideal-phase',
+            'alternox-terminal-random-delay-approximated-by-mean',
+            'alternox-fractional-multishot-expected-packet-weight-policy'],
+        nativeEvidence=dict(clientSha256='eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d',
+            packagesBinSha256='00ca82217ae21bafb31133165b8e3ea098c048783c14958fdfe23f76288bfa06',
+            source='docs/projectile-qualification-20261030/FIELD-LIFECYCLES.md',
+            registration='actual RemoteMine1423a3960+328140bad3b0 ->141561250 per physical emission;AutoDetonateCapacity168=0',
+            cap='state168140592870 gates later requested0/1, no within-shot clamp',
+            manual='3181406d76f0 ->140d87360 ->1412d2510 one request;update140bef530 interval194',
+            terminal='418140414330 ->1402e1be0 cancels queued ticks ->14050b8c0 deferred Die[.075,.15)',
+            attached='790 da8=1 ->818 ->141300a00 reads packet1bb mode1, rawtemplate50/70; no ordinary source multiplier in callerBase'))
+
 def close(a, b, rel=.01):
     return abs(float(a) - float(b)) <= rel * max(abs(float(a)), abs(float(b)), 1e-9)
 
@@ -230,6 +297,8 @@ def build_entry(file, spec, attack, radial, row, mode_index, pkg, reference):
         entry['scope'] = 'single-target embedded remote mines; explicit throw batches and manual detonation delay'
     if differences:
         entry['referenceDifferences'] = differences
+    if row['path'] in _ALTERNOX and mode_index==1:
+        entry.update(alternox_profile(pkg,row))
     return entry
 
 

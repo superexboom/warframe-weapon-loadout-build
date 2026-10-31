@@ -42,7 +42,7 @@ def supported(stats, options) -> bool:
     if not combat or not combat.get("resolve"):
         return False
     if ((combat.get('manualDetonation') or {}).get('impactThenEmbed')
-            and not getattr(wfcore,'ALT_EMBEDDED_LIFECYCLE',0)):
+            and getattr(wfcore,'ALT_EMBEDDED_LIFECYCLE',0)<2):
         return False
     if combat.get('enervate') and not getattr(wfcore, 'ENERVATE_PROBABILISTIC_HITS', 0):
         return False  # Older cores treat every expected Blast proc as a real hit.
@@ -92,7 +92,7 @@ def supported(stats, options) -> bool:
         return False
     if combat.get('finiteFields') and not getattr(wfcore,'INDEPENDENT_FINITE_FIELDS',0):
         return False
-    if combat.get('sourceOwnedFields') and not getattr(wfcore,'SOURCE_OWNED_FIELDS',0):
+    if combat.get('sourceOwnedFields') and getattr(wfcore,'SOURCE_OWNED_FIELDS',0)<3:
         return False
     if combat.get('physicalProjectileLanes') and '_laneStratum' not in combat:
         if abs(stats.multishot-round(stats.multishot))>1e-9 or combat.get('fractionalProjectileLanes'):
@@ -530,8 +530,9 @@ def trajectory(
         extra_scale *= ((1 - head) + head * head_part * head_part) / ((1 - head) + head * head_part)
     unsupported = list(combat.get("unsupported") or [])
     if (combat.get('manualDetonation') or {}).get('impactThenEmbed'):
-        unsupported.extend(['alternox-host-death-lifecycle-unverified',
-                            'alternox-instant-detonation-order-idealized'])
+        unsupported.extend(['alternox-host-object-retirement-spatial-policy',
+                            'alternox-frame-clock-mean-death-delay-representative',
+                            'alternox-fractional-batch-marginal-weights'])
     syndrome = combat.get("syndicate")
     if syndrome and not combat.get("affinityPerKill"):
         unsupported.append("syndicate-affinity-unavailable")
@@ -619,7 +620,7 @@ def trajectory(
             HEALTH_BATCH_STATS["batches"] += 1
             HEALTH_BATCH_STATS["runs"] += len(rows)
             return [dict(killsPerMinute=kpm, windowDps=dps, totalWindowDamage=damage,
-                         unsupported=[*unsupported, *([('alternox-multishot-active-cap-unresolved' if (combat.get('manualDetonation') or {}).get('impactThenEmbed') else 'talons-single-throw-deployment-overflow-unmodeled')] * overflows)],
+                         unsupported=[*unsupported, *(['talons-single-throw-deployment-overflow-unmodeled'] * overflows)],
                          limitations=[]) for kpm, dps, damage, overflows in rows]
         core = wfcore.trajectory(config, helper)
     except wfcore.NativeUnsupported:
@@ -645,7 +646,7 @@ def trajectory(
     averaged = {k: 0.0 for k in names.values()}
     score = kills + (1 - sum(pools) / ehp if ehp else 0.0)
     if score_only and life_curve is None and not collect_timeline:
-        unsupported.extend([('alternox-multishot-active-cap-unresolved' if (combat.get('manualDetonation') or {}).get('impactThenEmbed') else 'talons-single-throw-deployment-overflow-unmodeled')] * core["mines"][3])
+        unsupported.extend(['talons-single-throw-deployment-overflow-unmodeled'] * core["mines"][3])
         return dict(killsPerMinute=score * 60 / window if window else 0.0,
                     windowDps=sum(totals.values()) / window if window else 0.0,
                     totalWindowDamage=sum(totals.values()), unsupported=unsupported, limitations=[])
@@ -677,7 +678,7 @@ def trajectory(
         life_curve.extend((t, hit, variance, sources_named[source]) for t, hit, variance, source in core["lifeCurve"])
     manual_detonation = combat.get('manualDetonation')
     detonations, pending_mines, waiting_mines, overflows = core["mines"]
-    unsupported.extend([('alternox-multishot-active-cap-unresolved' if (combat.get('manualDetonation') or {}).get('impactThenEmbed') else 'talons-single-throw-deployment-overflow-unmodeled')] * overflows)
+    unsupported.extend(['talons-single-throw-deployment-overflow-unmodeled'] * overflows)
     enervate = None
     if combat.get('enervate'):
         from .enervate import EnervateState, ASSUMPTIONS
@@ -801,7 +802,7 @@ def trajectory(
             'spread-hit-loss-not-modeled',
         ] + (['spool-linear-rate-from-raw-max-shots','spool-idle-threshold-reset-no-partial-decay'] if combat.get('spool') else [])
           + (['fire-rate-spool-reference-transcribed','fire-rate-spool-resets-on-any-pause'] if combat.get('fireRateSpool') else [])
-          + ([('alternox-active-cap-conservative-lower-bound' if manual_detonation.get('impactThenEmbed') else 'talons-expected-projectile-capacity'),'manual-detonation-explicit-player-cadence'] if manual_detonation else [])
+          + ([('alternox-full-batch-ordered-expected-slots' if manual_detonation.get('impactThenEmbed') else 'talons-expected-projectile-capacity'),'manual-detonation-explicit-player-cadence'] if manual_detonation else [])
           + (['onos-native-alignment-shots-held-rate-and-postfire-cadence','onos-radial-target-coverage-explicit']
              if combat.get('onosCharge') else [])
           + (ASSUMPTIONS if enervate else [])

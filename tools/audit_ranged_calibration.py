@@ -10,7 +10,7 @@ from collections import Counter
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 RANGED_SLOTS={'primary','secondary','arch_gun'}
-GAP=re.compile(r'unmodeled|unverified|unresolved|unavailable|not-modeled|not-implemented|unapplied|unknown|approximate|idealized|ideal-projectile|boundary|order-fixed',re.I)
+GAP=re.compile(r'unmodeled|unverified|unresolved|unavailable|not-modeled|not-implemented|not-supported|unapplied|unknown|approximate|idealized|ideal-projectile|boundary|order-fixed',re.I)
 CONTEXT_GAPS={'syndicate-affinity-unavailable'}
 NATIVE_KEYS={'nativeSources','nativeSha256','nativeField','packageSha256','packagesSha256','packagesBinSha256','nativeSource','clientSha256','rawSources','rawSha256'}
 

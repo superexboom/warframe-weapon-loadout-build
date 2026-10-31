@@ -89,3 +89,18 @@ Final counts and execution evidence will be recorded after the active native/sou
 
 
 Final S1–S5 verification: **260passed**, no failures/errors/skips. The selected search audit covers9 distinct catalog records /56 scenarios, exact Python/native equality, zero fallback and stable inputs. Existing Grimoire feature tests separately exercise its optional strategy and static/API/mod-gains paths. Whole repository collection is **2239**, versus2248 at f47ef0b (net-9);0new modules,1obsolete module removed. Banked-charge cases keep1/2/3 withSHADOW rather than doublingPython/native parameters. A single additional original-byte-derived fraction/CD tie regression lives in the existing Scourge file. Exact source/native fingerprint is in`evidence/validation-s1-s5.json`; no entire2239 execution or live-game claim.
+
+
+## T1–T5续轮（2026-10-31，起点f6024c6）
+
+- 普通祸根：已有Scourge运行用例增1个普通版展开分支，保留Prime及独立来源；原source fixture仅留实际消费字段与原件哈希，删掉无关AI/外观细节。
+- 异融西诺斯：原冻结快照用例替换为真实Merciless过期、source-owned逐跳刷新和native SHADOW；删除相邻十进制时间重复点、重复SHADOW窗长网格与普通元素别名笛卡尔。
+- 魔典：旧source-contract文件18例压到3例，保留来源/实际无contact、独立sourceContracts不能被generic merger变成免费伤害、clock drift与source/expiry不混淆；新runtime主模块既有3例保持不变。
+- Cryotra：原Python/native重复参数改一个SHADOW+实际hit计数回归；验证20*普通2*CO1.5=60，每跳当前来源且不借victim crit。真实分析仍明确未闭合空间边界。
+- Plinx：现有Galvanized用例补独立乘区和真实Merciless到期的晚包解析；新增1例真实Shiver，复用同例验证静态单packet/主模式不变和native全夹运行时。没有新测试文件。
+- 主爆炸：EFV-8在原事件用例增1个分支；AcceltraPrime在原distance门3代表点内代替重复距离，验证exact-source通知/victimcrit资格；原数据量保留。
+
+最终执行数量在源码冻结后记录，以上中间检查不可相加冒充独立用例。完整collect仅用于数量控制，不称全部执行。
+
+
+本轮最终：**215passed**，0失败/错误/跳过；15实际记录/100场景搜索对照一致且0回退。全项目collect2164，起点2239净-75，新增模块0。Alternox旧52+参数矩阵收敛为3个核心合同，实际native计数强制增长，覆盖同帧代表、两变体、MS2.2按次序触发、真实Arcane、逐contact CO365控制、原目标退场和旧能力门。通用WFSim CO导入覆盖native规则的真实回归补在Plinx原source用例内。13个全auto-build search用例本轮明确未选，未把中途较广范围试跑输出计入最终通过数。

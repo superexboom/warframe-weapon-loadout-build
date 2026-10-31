@@ -167,3 +167,49 @@ S5补原生量化half-up修正，明确binary64与float32边界，并保留baseC
 ### 不夸大交付范围
 
 保留的近似包括真实飞行/LOS/目标覆盖、分数多重与状态概率的期望模型、部分随机延迟取均值、binary64与原生float32边界。外部能力/脚本对source缓存的任意更新、特殊ADD_BASE暴击桶的全组合等未在本轮普通来源合同内承诺；这类后续工作是具体静态支持范围，未一概归类为只能实测。原生金额、触发路线、时钟和已实现的来源规则已按上述合同接入，不停留在研究报告。
+
+
+## 后续静态闭环（2026-10-31，起点 f6024c6）
+
+当前扫描423条远程/同伴记录、631显式模式，623可求解；37武器/38模式带明确缺口，0准备错误。此数仅是现有诊断覆盖，585个无提示模式不等于全游戏校准。证据 `.local/delivery/projectile-continuation-20261031/inventory-before.json`。
+
+| ID | 当前目标 | 负责人 | 状态 |
+|---|---|---|---|
+| T1 | Larkspur/Phantasma/Acceltra/EFV8主爆炸独立CO、头部、普通通知消费者 | main_packet_consumers | 已闭合普通source；7模式刷新、EFV8/AcceltraPrime缺漏已修 |
+| T2 | Alternox与Cryotra源生命周期、数量/时钟和独立资格 | field_lifecycles | 完成：同发MS全批、逐枚request/晚爆、live CO/事件、自然同帧代表策略 |
+| T3 | Tenet Plinx接触/到期消费者与完整蓄力容量时点 | plinx_consumers | 完成：独立CO/Shiver、晚包时钟与资格、静态/窗口一致、伪普通配装警告退休 |
+| T4 | 普通/Prime变体覆盖、剩余导入遗漏和模型可达路径 | root | 完成：普通祸根、异融西诺斯当前源刷新与charge-dependent CO策略、重导保持 |
+| T5 | 合并可靠修复，最小回归、精简重复用例、文档和Portable推送 | root | 215定向测试/100搜索场景通过，文档收束；本批提交推送 |
+
+继续仅推进源码与精简证据；不烘焙、不移植Bot、不构建发行。真实飞行/覆盖/输入节奏可后置，原生尚能追踪的字段和消费者不归入“只能实测”。
+
+
+T3后续确认：正常Plinx可选90张MOD不含动态容量或flat-base伤害，完整当前MOD/Arcane与Packages扫描也无自身普通配装来源。Combo Fury属于Glaive→Pistol跨配装上下文，保留显式注入拒绝即可；不在每个普通Plinx结果上发无关动态容量/flat-add警告。新增真实Shiver乘区错误：独立direct应与CO共用pre-CO callerBase，原forced加进普通加伤。已源绑定修正live/forced解析，原有原生字段复用，无通用新框架。
+
+
+### T1–T5集成交付
+
+- Alternox/Prime：去掉错误的一枚MS裁剪；真实同发batch逐枚contact→initialfield；每枚request间隔.050000001，自身futureticks到request为止，实际terminal均值再加.1125。自然到期理想同帧末跳保留；每contact重新查询live CO，实际状态先后不能沿用批次开头快照。分数MS和frame/随机时间均保留明示近似。
+- Cryotra：attached20独立CO、普通通知和当前源刷新；Puncture/Cold暴击易伤仍不授予RADIAL4。
+- Tenet Plinx：direct独立CO与261同基数加项；晚爆.91250001、explicit-host type2与generic通知、源buff到期重读。静态source/shot排名和native reducer同步修复。普通合法配装中不存在的动态容量/flat-base警告退休，手工注入依然明确拒绝。通用WFSim CO重导通过`sourceKind=native-audited`保留本机明确来源合同，不再擦掉mode1。
+- 普通祸根补齐Prime已有的attached50与取消序列，保留自身150direct/.04CC/2.5reload；AcceltraPrime和EFV8缺失的exact-source事件/victimcrit接入。
+- 异融西诺斯：5附着/3独立场普通属性逐跳重查；源查询已证明为当前charge205/410。当前显式连续操作策略首包full410、后续nextdraw/reload/idle205，独立3毒不借附着CO。没有固定82套所有跳伤或把真实flight忽略说成原生保证。
+- 主爆炸CO排除既查source路径也查victim侧旁路；头部倍率抑制25c不等于头部事件全禁，实际proxy与body策略分别记录。
+
+冻结验证：**215 passed，0失败/错误/跳过**，13个昂贵auto-build搜索用例有意未选，相关Plinx实际reducer SHADOW已覆盖；已有audit选**15条武器记录/100搜索场景**，Python/Rust评分完全一致、0native回退、输入稳定。整个项目collect **2164**，起点2239，净**-75**；无新测试模块。native release核心本机编译安装成功（非发行包），仅两条既有unused警告。
+
+引擎输入`103255b6b95aa25e`，native SHA256`4f664e8c60cab5a5b6b5235b24afb1bbc300632b80679b06ea069fee22b8d561`。精简证据：[validation-t1-t5.json](evidence/validation-t1-t5.json)、[MAIN-CONSUMERS](MAIN-CONSUMERS.md)、[FIELD-LIFECYCLES](FIELD-LIFECYCLES.md)、[PLINX-CONSUMERS](PLINX-CONSUMERS.md)、[MUTALIST-LIVE-SOURCE](MUTALIST-LIVE-SOURCE.md)。
+
+最新inventory仍是423条/623可求解模式，0准备异常；39条武器/40模式带明确缺口或近似提示。比旧37/38增加的恰是此次补齐来源并显式标覆盖边界的普通Scourge/AcceltraPrime，不是新增两个求解失败。无提示的583模式同样不代表已校准。
+
+### 后续独立调查清单（未宣称全游戏完成）
+
+| 优先级 | 可静态继续项 | 与需场景部分的区别 |
+|---|---|---|
+| 1 | Mausolon主/副RadialDamage的实际MS消费者；Arbucep mushroom/ammo脚本；Nox玩家原型tick/death/source | 先查真实producer和作用目标，再决定单体可接入合同；不是靠类名补伤害 |
+| 2 | Mutalist独立trigger3的特殊源升级/最终event；Mandonel/Cortege独立field的actor/controller消费者 | 不从attached包或父弹的CO/crit资格推导独立脚本包 |
+| 3 | Deconstructor在场上限与refire/回收调度、Fired Up全局table生命周期、Angstrum弹药效率整数消费 | 原生状态/脚本身份仍可继续追，不一概要求实测 |
+| 外部支持 | 非普通ability/sourceparent、跨装备Combo Fury、特殊ADD_BASE/crit桶 | 只在真实可输入上下文内扩展，避免不可能配装生成伪问题 |
+| 场景/实测后置 | 实际LOS/轨迹、碰撞部位、尸体对象退场后的空间覆盖、玩家中断/hold/拾取节奏 | 现有明确策略与输入已记录；当前没有自动假设这些空间结果 |
+
+本批只提交/推送Portable源码与精简审计记录。未烘焙、未Bot移植、未构建或发布新版发行包；旧release/cache不冒充本轮引擎数据。

@@ -33,7 +33,7 @@ def synthetic_sources():
         if spec['family']=='phantasma':attack['HitType']='DHT_PROJECTILE'
         objects[p]=dict(CriticalChance=.03,CriticalMultiplier=1.5,**spec['required'])
         objects[p][spec.get('field','ExplosiveAttack')]=attack
-        if spec['family']=='acceltra':objects[p]['AttackData']=dict(Type='DT_IMPACT',Amount=26,ProcChance=.059999999)
+        if spec['family']=='acceltra':objects[p]['AttackData']=dict(Type='DT_IMPACT',Amount=spec['direct'],ProcChance=spec.get('direct_status',.059999999))
         if spec['family']=='phantasma':
             behavior['fire:LotusWeaponProjectileFireBehavior']=behavior.pop('fire:ProjectileFireBehavior')
             fire.update(AttenuateForCharge=1, AttenuateFireIterationsForCharge=0, MultiShotProjectileType=p+'MS')
@@ -128,14 +128,14 @@ def test_actual_prepare_retains_independent_radial_packet_for_all_admitted_modes
     assert part.multishot==direct.multishot==1.
     assert getattr(part,'_impact_delay')==pytest.approx(spec['delay'])
     assert part.radial_only and not part.area_direct
-    assert set(spec['bounds'])<=set(fight['unsupported'])
+    assert {note for note in spec['bounds'] if '-main-explosion-CO-' not in note and '-main-explosion-weakpoint-' not in note}<=set(fight['unsupported'])
 
 
 def test_unclosed_branch_clock_profiles_are_evidence_only_and_not_merged():
     pkg,rows=synthetic_sources()
     patch=importer.build_patch(pkg,rows)
     assert sum(len(m) for m in patch['weapons'].values())==3
-    assert len(patch['pending'])==7
+    assert len(patch['pending'])==8
     joined=importer.merge_patch({'auditedAttacks':{}},patch)
     for row in patch['pending']:
         assert row['defaultScoringExcluded'] and row['candidateOnly']
@@ -145,7 +145,7 @@ def test_unclosed_branch_clock_profiles_are_evidence_only_and_not_merged():
 def test_acceltra_incremental_admission_preserves_previous_three_and_rejects_unknown_families():
     pkg,rows=synthetic_sources();patch=importer.build_patch(pkg,rows,families=['acceltra'])
     spec=next(s for s in importer.SPECS if s['family']=='acceltra')
-    assert set(patch['weapons'])=={spec['path']}
+    assert set(patch['weapons'])=={s['path'] for s in importer.SPECS if s['family']=='acceltra'}
     previous={'auditedAttacks':{'/previous-three':{'keep':'exact'}}}
     assert importer.merge_patch(previous,patch)['auditedAttacks']['/previous-three']=={'keep':'exact'}
     entry=patch['weapons'][spec['path']]['0']
@@ -175,27 +175,28 @@ def test_acceltra_native_direct_or_cosmetic_copy_drift_rejected():
     with pytest.raises(ValueError,match='cosmetic payload'):importer.profile(pkg,row,spec)
 
 
-@pytest.mark.parametrize('distance,armed',[(0.,False),(5.999,False),(6.,True),(6.001,True),(30.,True)])
-def test_actual_acceltra_distance_gate_and_once_per_projectile(runtime,monkeypatch,distance,armed):
+@pytest.mark.parametrize('variant,distance,armed',[('SapientPrimary',5.999,False),('SapientPrimary',6.,True),('PrimeAcceltra',6.,True)])
+def test_actual_acceltra_distance_gate_and_once_per_projectile(runtime,monkeypatch,variant,distance,armed):
     app,manual,_=runtime
     from wfarsenal.damage import Scenario,ModEffect
     pkg,rows=synthetic_sources();patch=importer.build_patch(pkg,rows,families=['acceltra'])
     joined=importer.merge_patch(manual.reference(),patch);monkeypatch.setattr(manual,'reference',lambda:joined)
-    spec=next(s for s in importer.SPECS if s['family']=='acceltra')
+    spec=next(s for s in importer.SPECS if s['family']=='acceltra' and '/'+variant+'/' in s['path'])
     row=deepcopy(next(w for w in app.EXPORTS['weapons'] if w['path']==spec['path']))
     # Exactly the native source after root removes the historical wiki35 override.
-    row['fireModes'][0]['damage'].update(types={'DT_IMPACT':26.},total=26.,shares={'DT_IMPACT':1.},procChance=.059999999)
+    row['fireModes'][0]['damage'].update(types={'DT_IMPACT':spec['direct']},total=spec['direct'],shares={'DT_IMPACT':1.},procChance=spec.get('direct_status',.059999999))
     effect=[ModEffect('WEAPON_FIRE_ITERATIONS','STACKING_MULTIPLY',1.)]
     fight=manual.prepare(dict(weapon=row,fire_mode=0,effects=effect,scenario=Scenario(distance=distance)),[],[])
     direct,part=fight['resolve']('selected',{},0.)
-    assert direct.total_damage==26.
+    assert direct.total_damage==spec['direct']
     assert (part is not None)==armed
     if part is not None:
-        assert part.total_damage==pytest.approx(44.)
+        assert part.total_damage==pytest.approx(spec['amount'])
         assert part.multishot==direct.multishot==2.
         assert part.radial_only and not part.area_direct
         assert part.headshot_bonus_multiplier==1.
         assert part.status_chance==.37  # synthetic packet's own SC, not direct SC
+        assert part.delayed_radial_hit_event and part.radial_victim_crit
 
 
 @pytest.mark.parametrize('family',['phantasma','acceltra'])
@@ -213,5 +214,6 @@ def test_merge_preserves_unrelated_warnings_and_retires_only_superseded_phantasm
     assert prior['auditedAttacks'][path]==(entry if mode=='0' else {'modes':{mode:entry}})
     assert ('phantasma-parent-explosion-and-children-unmodeled' in merged['unmodeled'])==(family!='phantasma')
     assert ('phantasma-explosion-co-and-head-event-routing-unverified' in merged['unmodeled'])==(family!='phantasma')
-    retired={'phantasma-cluster-child-payload-unmodeled','phantasma-charge-ammo-scale-and-contact-routing-approximated'} if family=='phantasma' else set()
+    retired={family+'-main-explosion-CO-neutral-fallback-unverified',family+'-main-explosion-weakpoint-events-neutral-fallback-unverified'}
+    if family=='phantasma':retired.update({'phantasma-cluster-child-payload-unmodeled','phantasma-charge-ammo-scale-and-contact-routing-approximated'})
     assert set(spec['bounds'])-retired<=set(merged['unmodeled'])

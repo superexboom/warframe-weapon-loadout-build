@@ -1,0 +1,67 @@
+{
+  "clientSha256": "eec0dbd7078cd6e1f2402fc953ec2741e87a6fb2658ec288be195aac75a1e76d",
+  "capacityEntryReplay": [
+    {
+      "ammoAtChargeEntry": 10,
+      "laterAmmoAndCapacity": 5,
+      "captured198": 10.0,
+      "fullCharge184": 10.0
+    },
+    {
+      "ammoAtChargeEntry": 5,
+      "laterAmmoAndCapacity": 10,
+      "captured198": 5.0,
+      "fullCharge184": 5.0
+    },
+    {
+      "ammoAtChargeEntry": 10,
+      "laterAmmoAndCapacity": 10,
+      "captured198": 10.0,
+      "fullCharge184": 10.0
+    }
+  ],
+  "defaultC24": 2,
+  "explicitRecipientFinalType": 2,
+  "contactFallback": {
+    "callerBase": 1000.0,
+    "source": 536875008,
+    "packet": 536915968,
+    "victim": 536911872
+  },
+  "actualWeapon820Leaf": [
+    "14101fdb0 mov r9d, dword ptr [rcx + 0x7d8]",
+    "14101fdb7 xor r10d, r10d",
+    "14101fdba cmp qword ptr [rsp + 0x28], -1",
+    "14101fdc0 mov r11, rdx",
+    "14101fdc3 movabs rax, 0xaaaaaaaaaaaaaaab",
+    "14101fdcd cmovne r10, qword ptr [rsp + 0x28]",
+    "14101fdd3 mul r9",
+    "14101fdd6 shr rdx, 6",
+    "14101fdda cmp r10, rdx",
+    "14101fddd jae 0x14101fe08",
+    "14101fddf mov rax, qword ptr [rcx + 0xf8]",
+    "14101fde6 cmp qword ptr [rax], 0",
+    "14101fdea je 0x14101fe08",
+    "14101fdec mov rcx, qword ptr [rcx + 0x7d0]",
+    "14101fdf3 lea rax, [r10 + r10*2]",
+    "14101fdf7 shl rax, 5",
+    "14101fdfb mov rdx, r11",
+    "14101fdfe mov rcx, qword ptr [rax + rcx + 0x38]",
+    "14101fe03 jmp 0x14113e250"
+  ],
+  "scope": "Unchanged original instructions; owner ammo/capacity getters and source/victim objects controlled; no scene or live combat claim",
+  "actualEmbeddedDie": {
+    "scheduled": [
+      {
+        "callback": "0x140273d98",
+        "delay": 0.09846259653568268
+      }
+    ],
+    "deathPending": true,
+    "totalSourceDelayRange": [
+      0.87500001,
+      0.95000001
+    ],
+    "selectedMean": 0.91250001
+  }
+}

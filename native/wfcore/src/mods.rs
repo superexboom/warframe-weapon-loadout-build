@@ -306,6 +306,7 @@ pub struct ModsPrep {
     gunco_base_fraction: Option<f64>,
     gunco_exclude: Vec<String>,
     gunco_independent: bool,
+    direct_source_stack_damage: bool,
     co_base_fraction: f64,
     innate: Vec<(String, f64)>,
     notes: Vec<(String, String)>,
@@ -425,6 +426,7 @@ impl ModsPrep {
             gunco_base_fraction: get_opt_f(config, "guncoBaseFraction")?,
             gunco_exclude: get(config, "guncoExclude")?.extract()?,
             gunco_independent: get(config, "guncoIndependent")?.extract()?,
+            direct_source_stack_damage: get(config, "directSourceStackDamage")?.extract()?,
             co_base_fraction: get(config, "coBaseFraction")?.extract()?,
             innate: get(config, "innate")?.extract()?,
             notes: get(config, "notes")?.extract()?,
@@ -665,11 +667,14 @@ pub fn apply_mods<'py>(
     let cold_forced = ap.idx(b!("RUNTIME_COLD_STACK_DAMAGE")).iter()
         .map(|&i| rows[i].runtime_chance.unwrap_or(0.0)).fold(None, |acc: Option<f64>, x| Some(match acc { None => x, Some(a) => pmax(a, x) }))
         .unwrap_or(0.0);
-    if cold_rate.truthy() && cold_forced != 0.0 {
+    if cold_rate.truthy() && cold_forced != 0.0 && !prep.direct_source_stack_damage {
         scale_effects.push(Scale::Synthetic("WEAPON_DAMAGE_AMOUNT", "STACKING_MULTIPLY",
                                             cold_rate.f() * pmin(cold_forced, 10.0), Some("runtime:cold-stack-damage")));
     }
     let mut compression_mult = 1.0 + pysum(ap.values(b!("RUNTIME_NEXT_SHOT_DAMAGE"))).f();
+    if prep.direct_source_stack_damage && cold_rate.truthy() && cold_forced != 0.0 {
+        compression_mult += cold_rate.f() * pmin(cold_forced, 10.0);
+    }
     let mut compression_ammo = 0.0;
     if !ap.empty(b!("RUNTIME_PRIMARY_COMPRESSION")) && prep.aiming {
         match prep.compression {

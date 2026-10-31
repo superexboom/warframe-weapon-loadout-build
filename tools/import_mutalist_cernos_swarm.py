@@ -24,7 +24,8 @@ SCRIPT_SHA256='869c8fe4e1acba195c9703e63fa5aa8d0314e770ba04589f125240f825249666'
 UNMODELED=['mutalist-cernos-swarm-first-update-versus-enter-phase-unmodeled',
  'mutalist-cernos-swarm-shared-weapon-replacement-ms-order-unverified',
  'mutalist-cernos-swarm-special-source-upgrades-unmodeled',
- 'mutalist-cernos-swarm-status-kill-arcane-dispatch-unverified']
+ 'mutalist-cernos-swarm-status-kill-arcane-dispatch-unverified',
+ 'mutalist-cernos-current-charge-source-query-ideal-action-phase-policy']
 
 
 def profile(packages,row):
@@ -55,6 +56,7 @@ def profile(packages,row):
             admission='source-projectile-embed-with-centered-target-coverage',defaultEnabled=True,
             coverageModel='inherit-enclosing-centered-target-assumption',maxConcurrentFieldsPerSource=1,
             sourceModifierAllowlist=['weapon-base-damage','ordinary-weapon-elements'],
+            sourceQueryPolicy='current-damage-and-elements-per-tick',
             firstPeriodicPhase='next-authoritative-update-if-constructor-clock-zero',
             clockPolicy='decrement-dt-single-dispatch-reset-interval-no-catch-up',
             activation_event='source-projectile-embed',first_periodic_delay_seconds=0.,

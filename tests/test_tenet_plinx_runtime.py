@@ -20,7 +20,7 @@ def fixture(monkeypatch):
     mode=ref['auditedAttacks'][PATH]['modes']['1']
     mode.update(fullClipCharge=POLICY,radial=dict(damage={'radiation':100.},
         crit_chance=.40000001,crit_multiplier=3.,status_chance=.5,
-        impact_delay_seconds=.80000001,takes_condition_overload=False),
+        impact_delay_seconds=.91250001,takes_condition_overload=False),
         battery=dict(delayEmptySeconds=3.,delayPartialSeconds=.80000001,regenPerSecond=20.))
     monkeypatch.setattr(manual_combat,'reference',lambda:ref)
     weapon=deepcopy(next(w for w in app.EXPORTS['weapons'] if w['path']==PATH))
@@ -86,7 +86,7 @@ def test_small_capacity_cannot_skip_declared_wait_using_passive_regen(fixture,mo
     def run(window):
         return combat_replay.replay(st,TARGET,attacks_per_second=st.fire_rate,window_seconds=window,combat=fight,headshot_chance=0.,collect_timeline=False)
     assert run(2.601)['shots']==1
-    before=run(next_direct-.001);after=run(next_direct+.801)
+    before=run(next_direct-.001);after=run(next_direct+.914)
     assert before['shots']==1 and before['totalWindowDamage']==pytest.approx(200.)
     assert after['shots']==2 and after['totalWindowDamage']==pytest.approx(400.)
     assert after['recharges']==1 and after['reloads']==0
@@ -99,7 +99,7 @@ def test_old_native_core_falls_back_for_full_clip_wait_policy(fixture,monkeypatc
     assert not native_replay.supported(st,dict(combat=fight,collect_timeline=False))
 
 
-def test_actual_galvanized_co_stacks_keep_static_capacity_and_fractional_scale():
+def test_actual_galvanized_co_stacks_keep_static_capacity_and_fractional_scale(monkeypatch):
     from wfarsenal.damage import mod_effects
     weapon=next(w for w in app.EXPORTS['weapons'] if w['path']==PATH)
     mod=next(m for m in app.EXPORTS['mods'] if m.get('nameEn')=='Galvanized Shot')
@@ -116,6 +116,33 @@ def test_actual_galvanized_co_stacks_keep_static_capacity_and_fractional_scale()
     assert part.total_damage-zero.total_damage==pytest.approx((whole.total_damage-zero.total_damage)*.5)
     assert pr.total_damage-zr.total_damage==pytest.approx((wr.total_damage-zr.total_damage)*.5)
     assert part.total_damage>=1000
+    boosted=manual_combat.prepare(dict(weapon=weapon,fire_mode=1,
+        effects=[*effects,ModEffect('WEAPON_DAMAGE_AMOUNT','ADD',1.)],scenario=scenario),
+        [(mod,mod['maxRank'],None)],[])
+    boosted_zero,_=boosted['resolve']('selected',stacks,0.)
+    boosted_whole,_=boosted['resolve']('selected',stacks,1.)
+    # Actual direct fallback passes fully built 100N to CO: its increment
+    # scales with ordinary damage, while the independent death packet has no CO.
+    assert boosted_whole.total_damage-boosted_zero.total_damage==pytest.approx(
+        2.*(whole.total_damage-zero.total_damage))
+    arcane=next(a for a in app.EXPORTS['arcanes'] if a['nameEn']=='Secondary Merciless')
+    delayed=manual_combat.prepare(dict(weapon=weapon,fire_mode=1,
+        effects=[ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.)],
+        scenario=scenario),[],[(arcane,5,{})])
+    q=delayed['trigger_sources'][0];q.update(initialStacks=1.,initialDuration=1.2)
+    direct,radial=delayed['resolve']('selected',{q['id']:1.},0.)
+    assert radial.delayed_radial_hit_event and radial.radial_victim_crit
+    assert radial._live_hit_refresh({q['id']:0.},0.).total_damage==1000.
+    # The full clip is captured at charge entry. Its .8s contact keeps the
+    # initial source buff; the ~1.7125s explosion re-queries the expired buff.
+    monkeypatch.setattr(native_replay,'SHADOW',True)
+    monkeypatch.setattr(native_replay,'ENABLED',True)
+    before=native_replay.STATS['native']
+    actual=combat_replay.replay(direct,TARGET,attacks_per_second=direct.fire_rate,combat=delayed,
+        trigger_sources=delayed['trigger_sources'],window_seconds=1.72,collect_timeline=False)
+    assert actual['directWindow']==pytest.approx(direct.total_damage+1000.)
+    assert native_replay.STATS['native']>before
+
 
 
 def test_battery_parameters_control_actual_charge_cycle(fixture,monkeypatch):
@@ -126,7 +153,7 @@ def test_battery_parameters_control_actual_charge_cycle(fixture,monkeypatch):
     def run(window):
         return combat_replay.replay(st,TARGET,attacks_per_second=st.fire_rate,window_seconds=window,combat=fight,headshot_chance=0.,collect_timeline=False)
     assert run(next_direct-.001)['shots']==1
-    after=run(next_direct+.801)
+    after=run(next_direct+.914)
     assert after['shots']==2 and after['totalWindowDamage']==pytest.approx(1600.)
 
 
@@ -152,3 +179,49 @@ def test_source_contract_preserves_single_projectile_and_scoring_boundary(source
     radial=out['operationalPatch']['weapons'][imp.WEAPON]['modes']['1']['radial']
     assert radial['damage']=={'radiation':100.} and radial['forcedProcs']==['PT_RAGDOLL']
     assert radial['falloff_reduction']==pytest.approx(.40000001)
+    assert radial['impact_delay_seconds']==pytest.approx(.91250001)
+    assert radial['takes_victim_crit'] and not radial['takes_condition_overload']
+    assert radial['nativeRoute']=='embedded-expiry-explicit-host'
+    assert out['operationalCoProfiles'][imp.WEAPON]['1']['behavior']=='independent'
+    from tools.import_co_reference import merge_profiles
+    old=out['operationalCoProfiles']
+    refreshed=merge_profiles(old,{imp.WEAPON:{'0':{'behavior':'additive'},'1':{'behavior':'additive'}}})
+    assert refreshed[imp.WEAPON]['1']==old[imp.WEAPON]['1']
+    assert refreshed[imp.WEAPON]['0']=={'behavior':'additive'}
+
+
+def test_real_shiver_uses_same_independent_full_clip_base_as_co(monkeypatch):
+    from wfarsenal.damage import arcane_effects
+    weapon=next(w for w in app.EXPORTS['weapons'] if w['path']==PATH)
+    arcane=next(a for a in app.EXPORTS['arcanes'] if a['nameEn']=='Secondary Shiver')
+    override={'stacks':1,'uptime':1.}
+    effects=[ModEffect('WEAPON_CRIT_CHANCE','SET',0.),ModEffect('WEAPON_PROC_CHANCE','SET',0.),
+        ModEffect('WEAPON_DAMAGE_AMOUNT','STACKING_MULTIPLY',1.),
+        ModEffect('WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE','STACKING_MULTIPLY',.5),
+        *arcane_effects(arcane,5,**override)]
+    from wfarsenal.damage import apply_mods
+    from wfarsenal import mods_native, optimizer
+    monkeypatch.setattr(mods_native,'SHADOW',True)
+    source=apply_mods(weapon,effects,fire_mode=1,scenario=Scenario(victim_status_count=1))
+    assert source.total_damage==pytest.approx(390.)
+    assert optimizer._score(source,'shotDamage')==pytest.approx(390.)
+    no_co=apply_mods(weapon,[e for e in effects if e.upgrade_type!='WEAPON_DAMAGE_IF_VICTIM_PROC_ACTIVE'],
+        fire_mode=1,scenario=Scenario())
+    assert no_co.total_damage==pytest.approx(290.)
+    primary=apply_mods(weapon,effects,fire_mode=0,scenario=Scenario(victim_status_count=1))
+    assert primary.total_damage==pytest.approx(70.*(2.+.5+.45))
+    fight=manual_combat.prepare(dict(weapon=weapon,fire_mode=1,effects=effects,scenario=Scenario()),
+        [],[(arcane,5,override)])
+    direct,radial=fight['resolve']('selected',{},1.)
+    assert direct._contact_shiver and direct._contact_shiver_scale==2.
+    assert direct._contact_shiver_fixed==1. and not getattr(radial,'_contact_shiver',False)
+    assert direct.total_damage==pytest.approx(3000.)
+    fight['resolve']=lambda *_:(direct,radial)
+    monkeypatch.setattr(native_replay,'ENABLED',True)
+    monkeypatch.setattr(native_replay,'SHADOW',True)
+    before=native_replay.STATS['native']
+    result=combat_replay.replay(direct,TARGET,attacks_per_second=direct.fire_rate,
+        window_seconds=.801,combat=fight,collect_timeline=False)
+    # Native259 and261 share the pre-CO amount; neither multiplies the other.
+    assert result['directWindow']==pytest.approx(1000.*2.*(1.+.5+.45))
+    assert native_replay.STATS['native']>before

@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-31",
+  "baseCommit": "f6024c68d40f00642c618a57177825d1e1aae3b5",
+  "scope": "T1-T5 ordinary source packet qualifications and selected single-target lifecycles; not full gameplay validation",
+  "identity": {
+    "inputs": "103255b6b95aa25e",
+    "sourceCommit": "f6024c68d40f00642c618a57177825d1e1aae3b5",
+    "nativeSha256": "4f664e8c60cab5a5b6b5235b24afb1bbc300632b80679b06ea069fee22b8d561",
+    "toolSha256": "c545e88ae49e6c2cc691373e0f51bbcf235e035e612115242d5fc5f11bf6de55"
+  },
+  "focused": {
+    "tests": "215",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "7.230"
+  },
+  "intentionallyDeselected": "13 auto-build search scenarios from test_mods_native_20261013; exact changed Plinx reducer covered in retained real-source SHADOW case",
+  "matrix": {
+    "weapons": 15,
+    "cases": 100,
+    "failed": 0,
+    "workerErrors": 0,
+    "nativeFallback": 0,
+    "nativeCoverageComplete": true,
+    "changedInputs": false,
+    "coverageComplete": true,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "passed": true
+  },
+  "collection": {
+    "before": 2239,
+    "after": 2164,
+    "delta": -75,
+    "newModules": 0
+  },
+  "inventoryBefore": {
+    "weaponRecords": 423,
+    "weaponRecordsWithNoModes": 6,
+    "explicitModes": 631,
+    "evaluableModes": 623,
+    "excludedOrMissing": {
+      "auxiliary-melee-excluded": 7,
+      "missing-damage-data": 1
+    },
+    "weaponsWithExplicitGaps": 37,
+    "evaluableModesWithExplicitGaps": 38,
+    "modesWithNoReportedGap": 585,
+    "nativeStaticSpecialEvidenceModes": 112,
+    "referenceOnlySpecialEvidenceModes": 86,
+    "modesWithCOReference": 518,
+    "contextRequiredModes": 17,
+    "prepareErrors": 0,
+    "fullGameplayCalibration": "not-established-by-this-inventory"
+  },
+  "inventoryAfter": {
+    "weaponRecords": 423,
+    "weaponRecordsWithNoModes": 6,
+    "explicitModes": 631,
+    "evaluableModes": 623,
+    "excludedOrMissing": {
+      "auxiliary-melee-excluded": 7,
+      "missing-damage-data": 1
+    },
+    "weaponsWithExplicitGaps": 39,
+    "evaluableModesWithExplicitGaps": 40,
+    "modesWithNoReportedGap": 583,
+    "nativeStaticSpecialEvidenceModes": 112,
+    "referenceOnlySpecialEvidenceModes": 86,
+    "modesWithCOReference": 518,
+    "contextRequiredModes": 17,
+    "prepareErrors": 0,
+    "fullGameplayCalibration": "not-established-by-this-inventory"
+  },
+  "files": {
+    "focused-final.xml": "ea59fed9a97719eb71acba4e02e3555629f01523c6c14a8a2f0af76a0149b902",
+    "selected-modes-final.json": "58c1144cf35a1047b56a6ce89a29bce00329a3267fb17bda5211a95c145e7525",
+    "inventory-after.json": "cf5fd1bcc941a0137bc72b36c55633cebeee6f2d09d99afd365725e204a8f8a1",
+    "collection-final.txt": "38163344f8d292a7789c19dba85cda1bf6cd0698748d70e0ecd5a3fa10697ab6"
+  },
+  "publication": {
+    "portableSourceOnly": true,
+    "bake": false,
+    "botMigration": false,
+    "releaseBuild": false
+  },
+  "diagnosticChanges": {
+    "retired": [
+      "acceltra-main-explosion-CO-neutral-fallback-unverified",
+      "acceltra-main-explosion-weakpoint-events-neutral-fallback-unverified",
+      "alternox-host-death-lifecycle-unverified",
+      "alternox-instant-detonation-order-idealized",
+      "alternox-multishot-active-cap-unresolved",
+      "alternox-same-time-expiry-order-fixed-explosion-first",
+      "cryotra-field-condition-overload-unverified",
+      "efv8-main-explosion-CO-neutral-fallback-unverified",
+      "larkspur-main-explosion-CO-neutral-fallback-unverified",
+      "larkspur-main-explosion-weakpoint-events-neutral-fallback-unverified",
+      "phantasma-main-explosion-CO-neutral-fallback-unverified",
+      "phantasma-main-explosion-weakpoint-events-neutral-fallback-unverified",
+      "tenet-plinx-CO-weakpoint-arcane-event-qualification-unverified",
+      "tenet-plinx-static-magazine-policy-charge-entry-capacity-snapshot-unmodeled"
+    ],
+    "newlyExplicit": [
+      "alternox-native-frame-boundary-approximated-by-ideal-phase",
+      "alternox-terminal-random-delay-approximated-by-mean",
+      "scourge-accepted-contact-flight-geometry-idealized",
+      "scourge-pickup-recall-shortcuts-and-animation-interruption-unmodeled",
+      "scourge-throw-reload-rethrow-input-policy-idealized",
+      "tenet-plinx-terminal-death-delay075-150ms-approximated-by1125ms"
+    ],
+    "note": "Full per-weapon/mode inventories retained locally with hashes above; new bounds include corrected base/Prime variants, not new preparation failures"
+  }
+}

@@ -8,9 +8,9 @@ from wfarsenal.manual_combat import prepare
 from wfarsenal.combat_replay import replay
 
 
-def bound(name,critical=0.,delay=None,distance=None):
+def bound(name,critical=0.,delay=None,distance=None,mode=0):
     weapon=next(w for w in app.EXPORTS['weapons'] if w['nameEn']==name)
-    combat=prepare(dict(weapon=weapon,fire_mode=0,effects=[],scenario=Scenario(distance=distance)),[],[])
+    combat=prepare(dict(weapon=weapon,fire_mode=mode,effects=[],scenario=Scenario(distance=distance)),[],[])
     s,r=combat['resolve']('selected',{})
     def tune(st):
         out=copy(st)
@@ -43,10 +43,10 @@ def run(monkeypatch,s,c,health=1e8,head=0.,window=2.,trigger_sources=None):
     assert result['killsPerMinute']==pytest.approx(reference['killsPerMinute'])
     return raw[-1],reference
 
-@pytest.mark.parametrize('name',['Zakti','Acceltra'])
-def test_packet_notifies_generic_hit_and_crit_without_radial_head(monkeypatch,name):
+@pytest.mark.parametrize('name,mode',[('Zakti',0),('Acceltra',0),('EFV-8 Mars',1)])
+def test_packet_notifies_generic_hit_and_crit_without_radial_head(monkeypatch,name,mode):
     critical=.5
-    s,r,c=bound(name,critical)
+    s,r,c=bound(name,critical,mode=mode)
     assert c['delayedRadialEvents'] and r.delayed_radial_hit_event and not s.delayed_radial_hit_event
     raw,ref=run(monkeypatch,s,c)
     assert raw['sourceStacks']==pytest.approx([2.,critical*2,0.,0.,0.])

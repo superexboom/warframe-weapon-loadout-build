@@ -466,7 +466,7 @@ enum Kind {
     DelayedAttack(usize, f64),
     Lingering(usize),
     OwnedEmbed(u64,usize),
-    SourceField(u64,usize,usize),
+    SourceField(u64,usize,usize,bool),
     FiniteField(usize,usize),
     EmbeddedTick(usize),
     EmbeddedDeath(usize),
@@ -613,6 +613,7 @@ struct EmbeddedEntity {
     part: usize,
     blast: usize,
     expires: f64,
+    weight: f64,
     generation: i64,
     alive: bool,
 }
@@ -772,6 +773,7 @@ pub struct Replay<'py> {
     /// Manual detonation (Talons-style mines): (delay, max projectiles, batch size).
     mines: Option<(f64, f64, f64)>,
     impact_embed: bool,
+    embedded_timing: (f64,f64,bool),
     embedded_entities: Vec<EmbeddedEntity>,
     pending_mines: Vec<(usize, i64, bool)>,
     pending_throws: i64,
@@ -897,7 +899,7 @@ impl<'py> Replay<'py> {
             self_overguard, empowered, status_pool, empowered_count, empowered_by_type, cryogenic,
             cryogenic_expected, puncture_armor_strip, encumber, encumber_time, encumber_remaining, encumber_expected,
             enervate, life_curve, onos, onos_crits, onos_ticks, onos_hits,
-            onos_start, onos_condition_hits, projectiles, projectile_state, stack_profiles, mines, impact_embed, embedded_entities,
+            onos_start, onos_condition_hits, projectiles, projectile_state, stack_profiles, mines, impact_embed, embedded_timing, embedded_entities,
             pending_mines, pending_throws, waiting_mines, detonations, mine_overflows, form,
             cycle, gauge, base_ammo_saved, transforms, shells_owed, shell_mode_switch,
             burst_base, burst_rate_base, burst_incarnon, burst_rate_incarnon, beam_floor_base, last_burst,
@@ -3114,7 +3116,10 @@ impl<'py> Replay<'py> {
         Ok(())
     }
 
-    fn radial_hit(&mut self, part: usize, sniper_factor: f64, t: f64, notify: bool) -> PyResult<()> {
+    fn radial_hit(&mut self,part:usize,sniper_factor:f64,t:f64,notify:bool)->PyResult<()> {
+        self.radial_hit_at(part,sniper_factor,t,notify,None,0.0)
+    }
+    fn radial_hit_at(&mut self,part:usize,sniper_factor:f64,t:f64,notify:bool,weight:Option<f64>,aim:f64)->PyResult<()> {
         let stored=self.stats[part].obj.clone_ref(self.py);
         let refresh=opt_attr(stored.bind(self.py), "_live_hit_refresh")?;
         let part = if let Some(refresh)=refresh {
@@ -3132,32 +3137,36 @@ impl<'py> Replay<'py> {
             self.vary(unit, live.value(), 1.0)
                 .ok_or_else(|| PyValueError::new_err("live radial CO template missing"))?
         } else { part };
-        if notify && self.stats[part].delayed_radial_hit_event {
+        let part=if let Some(ms)=weight {self.derive(part,34,ms,|v| {v.multishot=ms;v.core.multishot=ms;})}else{part};
+        let admitted=self.stats[part].delayed_radial_hit_event || (weight.is_some() && !self.stats[part].radial_only);
+        if notify && admitted {
             let keys: Vec<D> = self.presence.keys().copied().collect();
             self.victim_before = keys.into_iter().map(|d| (d, self.presence.get_mut(&d).unwrap().probability(t))).collect();
         }
-        let rkey = self.packet(part, 0.0)?;
+        let rkey = self.packet(part, aim)?;
         let rvector: Vector = if sniper_factor == 1.0 {
             self.packets[&rkey].vector.clone()
         } else {
             self.packets[&rkey].vector.iter().map(|(k, v)| (*k, v * sniper_factor)).collect()
         };
-        let cv2 = self.spread(part, 0.0);
-        let damage_event = if notify && self.stats[part].delayed_radial_hit_event {
-            let puncture = if self.stats[part].radial_victim_crit { self.live_crit().0 } else { 0.0 };
+        let cv2 = self.spread(part, aim);
+        let damage_event = if notify && admitted {
+            let puncture = if !self.stats[part].radial_only || self.stats[part].radial_victim_crit { self.live_crit().0 } else { 0.0 };
             let s = &self.stats[part];
             let full = (self.pools[1]-self.full[1]).abs()<1e-7 && (self.pools[2]-self.full[2]).abs()<1e-7;
             let cc = s.crit_chance + puncture + if full { s.victim_full_crit_chance } else { 0.0 };
             let weights = if s.snapshot_enervate { vec![(0,1.0)] } else {
                 self.enervate.as_ref().map(|en| en.damage_marginal()).unwrap_or_else(|| vec![(0,1.0)])
             };
-            let critical = psum(weights.iter().map(|(stacks,weight)| weight*pmin(pmax((cc+*stacks as f64*0.1)*if s.radial_only {1.0} else {s.bodyshot_crit_multiplier},0.0),1.0)));
+            let weak=s.weakpoint_crit_chance_bonus+s.base_crit_chance*s.weakpoint_crit_chance_relative;
+            let critical=psum(weights.iter().map(|(stacks,w)| w*((1.0-aim)*pmin(pmax((cc+*stacks as f64*0.1)*if s.radial_only {1.0}else{s.bodyshot_crit_multiplier},0.0),1.0)
+                +aim*pmin(pmax(cc+*stacks as f64*0.1+weak,0.0),1.0))));
             Some((s.multishot, critical*s.multishot))
         } else { None };
-        if !self.take_with_event(&rvector, t, DIRECT, WeakKill::Flag(false), cv2, false, damage_event)? {
-            self.add_procs_scaled(part, 0.0, t, rkey, sniper_factor)?;
+        if !self.take_with_event(&rvector, t, DIRECT, WeakKill::Value(aim), cv2, false, damage_event)? {
+            self.add_procs_scaled(part, aim, t, rkey, sniper_factor)?;
         }
-        self.noncrit_no_proc_hit(part, 0.0, t);
+        self.noncrit_no_proc_hit(part, aim, t);
         Ok(())
     }
 
@@ -3730,31 +3739,19 @@ impl<'py> Replay<'py> {
                 Kind::EmbeddedTick(id) | Kind::EmbeddedDeath(id) => {
                     let death=matches!(event.kind,Kind::EmbeddedDeath(_));
                     let entity=self.embedded_entities[id].clone();
-                    if !entity.alive { continue; }
-                    if entity.generation != self.gen {
+                    if !entity.alive {continue;}
+                    if entity.generation!=self.gen {
                         self.embedded_entities[id].alive=false;
-                        self.waiting_mines=pmax(0.0,self.waiting_mines-self.stats[entity.part].multishot);
+                        self.waiting_mines=pmax(0.0,self.waiting_mines-entity.weight);
                         self.stale+=1;continue;
                     }
-                    if !death && t>=entity.expires-1e-9 { continue; }
+                    if !death && t>entity.expires+1e-9 {continue;}
                     let part=if death {entity.blast}else{entity.part};
                     if death {
                         self.embedded_entities[id].alive=false;self.detonations+=1;
-                        self.waiting_mines=pmax(0.0,self.waiting_mines-self.stats[part].multishot);
+                        self.waiting_mines=pmax(0.0,self.waiting_mines-entity.weight);
                     }
-                    let key=if death {self.packet(part,0.0)?}else{self.raw_packet(part,0.0)};
-                    let vector=self.packets[&key].vector.clone();
-                    let cv2=self.spread(part,0.0);
-                    if !self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)? {
-                        let procs=if death {key}else{self.packet(part,0.0)?};
-                        self.add_procs(part,0.0,t,procs)?;
-                    }
-                    if death {
-                        self.enervate_hit(part,t,0.0,0.0);
-                        let ms=self.stats[part].multishot;
-                        self.signal("on-hit",t,ms);
-                        self.signal("on-crit",t,pmin(self.stats[part].crit_chance,1.0)*ms);
-                    }
+                    self.radial_hit_at(part,1.0,t,true,Some(entity.weight),0.0)?;
                 }
                 Kind::FiniteField(slot,part)=> {
                     self.finite_field_packets[slot]+=1;
@@ -3768,16 +3765,26 @@ impl<'py> Replay<'py> {
                         self.add_procs_data(part,0.0,t,&statuses,false)?;
                     }
                 }
-                Kind::SourceField(token,slot,part)=> {
+                Kind::SourceField(token,slot,part,initial)=> {
                     if token!=self.source_field_token {self.stale+=1;continue;}
                     self.source_field_packets[slot]+=1;
                     let keys:Vec<D>=self.presence.keys().copied().collect();
                     self.victim_before=keys.into_iter().map(|d|(d,self.presence.get_mut(&d).unwrap().probability(t))).collect();
-                    let raw=self.raw_packet(part,0.0);
-                    let vector:Vector=self.packets[&raw].vector.iter().map(|(d,v)|(*d,v*self.damage_rate_multiplier)).collect();
-                    let cv2=self.spread(part,0.0);
-                    if !self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)? {
-                        self.add_procs(part,0.0,t,raw)?;
+                    let stored=self.stats[part].obj.clone_ref(self.py);
+                    let stacks=PyDict::new(self.py);
+                    for q in &self.sources {stacks.set_item(q.id.bind(self.py),q.stacks)?;}
+                    let live=psum(self.victim_before.iter().map(|(_,p)|*p));
+                    let out=stored.bind(self.py).getattr("_live_hit_refresh")?.call1((stacks,live,initial))?;
+                    let part=self.view(&out)?;
+                    if self.stats[part].delayed_radial_hit_event {
+                        self.radial_hit(part,self.damage_rate_multiplier,t,true)?;
+                    } else {
+                        let raw=self.raw_packet(part,0.0);
+                        let vector:Vector=self.packets[&raw].vector.iter().map(|(d,v)|(*d,v*self.damage_rate_multiplier)).collect();
+                        let cv2=self.spread(part,0.0);
+                        if !self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)? {
+                            self.add_procs(part,0.0,t,raw)?;
+                        }
                     }
                 }
                 Kind::Lingering(part) => {
@@ -4326,18 +4333,8 @@ impl<'py> Replay<'py> {
                             });
                         }
                     }
-                    if self.impact_embed {
-                        if self.stats[active].embedded.is_none() || radial.is_none() {
-                            return Err(PyValueError::new_err("embedded detonation lacks native field/blast parts"));
-                        }
-                        let max_projectiles = self.mines.unwrap().1;
-                        if self.stats[active].multishot > max_projectiles {
-                            self.mine_overflows += 1;
-                            active = self.derive(active, 31, max_projectiles, |v| {
-                                v.multishot = max_projectiles;
-                                v.core.multishot = max_projectiles;
-                            });
-                        }
+                    if self.impact_embed && (self.stats[active].embedded.is_none() || radial.is_none()) {
+                        return Err(PyValueError::new_err("embedded detonation lacks native field/blast parts"));
                     }
                     // A shot consumes an armed field boost, even when that shot kills.
                     let field_duration_boost = self.field_duration_ready;
@@ -4443,6 +4440,8 @@ impl<'py> Replay<'py> {
                             }
                         }
                         self.pending_throws += 1;
+                    } else if self.impact_embed {
+                        // Ordered contacts and immediate attached packets follow below.
                     } else if quanta.is_some() {
                         // The paid primary pulse hits the cube; enemy packets are its delayed radial parts.
                     } else if no_contact {
@@ -4481,10 +4480,10 @@ impl<'py> Replay<'py> {
                                 self.source_field_activations+=1;
                                 if self.source_field_packets.is_empty() {self.source_field_packets=vec![0;source_owned_fields.len()];}
                                 for (slot,(part,rate,duration,initial)) in source_owned_fields.iter().copied().enumerate() {
-                                    for _ in 0..initial {self.push(t,Kind::SourceField(self.source_field_token,slot,part),Some(generation));}
+                                    for _ in 0..initial {self.push(t,Kind::SourceField(self.source_field_token,slot,part,true),Some(generation));}
                                     let mut tick=1;
                                     while tick as f64/rate<duration-1e-9 {
-                                        self.push(t+tick as f64/rate,Kind::SourceField(self.source_field_token,slot,part),Some(generation));tick+=1;
+                                        self.push(t+tick as f64/rate,Kind::SourceField(self.source_field_token,slot,part,false),Some(generation));tick+=1;
                                     }
                                 }
                             }
@@ -4506,31 +4505,34 @@ impl<'py> Replay<'py> {
                         }
                     }
                     if self.impact_embed {
-                        let (field, tick_rate, duration) = self.stats[active].embedded.unwrap();
-                        let ms = self.stats[active].multishot;
-                        let part = self.derive(field, 32, ms, |v| { v.multishot=ms; v.core.multishot=ms; });
-                        let blast = self.derive(radial.unwrap(), 33, ms, |v| { v.multishot=ms; v.core.multishot=ms; });
-                        let lifetime = pmin(duration, self.mines.unwrap().0);
-                        let id = self.embedded_entities.len();
-                        let alive = self.gen == generation;
-                        if alive { self.waiting_mines += ms; }
-                        self.embedded_entities.push(EmbeddedEntity {part,blast,expires:t+lifetime,generation,alive});
-                        if alive {
-                            let key=self.raw_packet(part, 0.0);
-                            let vector=self.packets[&key].vector.clone();
-                            let cv2=self.spread(part,0.0);
-                            if !self.take(&vector,t,DIRECT,WeakKill::Flag(false),cv2,false)? {
-                                let key=self.packet(part,0.0)?;
-                                self.add_procs(part,0.0,t,key)?;
+                        let (field,tick_rate,duration)=self.stats[active].embedded.unwrap();
+                        let ms=pmax(0.0,self.stats[active].multishot);
+                        let whole=ms.floor() as usize;
+                        let count=whole+if ms>whole as f64 {1}else{0};
+                        let (interval,death_delay,inclusive)=self.embedded_timing;
+                        let mut last_death:f64=0.0;
+                        for slot in 0..count {
+                            let weight=if slot<whole {1.0}else{ms-whole as f64};
+                            if self.gen!=generation {self.stale+=1;break;}
+                            self.radial_hit_at(active,self.damage_rate_multiplier*sniper_factor,t,true,Some(weight),aim)?;
+                            self.signal("on-body-hit",t,(1.0-aim)*weight);
+                            self.signal("on-headshot",t,aim*weight);
+                            let contact=self.derive(active,34,weight,|v| {v.multishot=weight;v.core.multishot=weight;});
+                            self.enervate_hit(contact,t,shot_puncture,aim);
+                            if self.gen!=generation {break;}
+                            let lifetime=pmin(duration,self.mines.unwrap().0+slot as f64*interval);
+                            let id=self.embedded_entities.len();
+                            self.waiting_mines+=weight;
+                            self.embedded_entities.push(EmbeddedEntity {part:field,blast:radial.unwrap(),expires:t+lifetime,weight,generation,alive:true});
+                            self.radial_hit_at(field,1.0,t,true,Some(weight),0.0)?;
+                            self.push(t+lifetime+death_delay,Kind::EmbeddedDeath(id),None);
+                            let mut tick=1;
+                            while (tick as f64/tick_rate)<lifetime-1e-9 || (inclusive && (tick as f64/tick_rate-lifetime).abs()<1e-9) {
+                                self.push(t+tick as f64/tick_rate,Kind::EmbeddedTick(id),None);tick+=1;
                             }
+                            last_death=pmax(last_death,lifetime+death_delay);
                         }
-                        self.push(t+lifetime,Kind::EmbeddedDeath(id),None);
-                        let mut tick=1;
-                        while tick as f64 / tick_rate < lifetime-1e-9 {
-                            self.push(t+tick as f64/tick_rate,Kind::EmbeddedTick(id),None);
-                            tick+=1;
-                        }
-                        projectile_wait=pmax(0.0,lifetime-1.0/speed);
+                        projectile_wait=pmax(0.0,last_death-1.0/speed);
                     }
                     let mut parts: Vec<usize> = Vec::new();
                     if let (Some(r), None, true) = (radial, self.mines, stack.is_none() && self.physical_lane_length==0) {
@@ -4585,14 +4587,14 @@ impl<'py> Replay<'py> {
                             burst_head_probability = 1.0;
                         }
                     }
-                    if !no_contact && self.physical_lane_length==0 && primary_delay == 0.0 && (self.mines.is_none() || self.impact_embed) && stack.is_none() {
+                    if !no_contact && self.physical_lane_length==0 && primary_delay == 0.0 && self.mines.is_none() && stack.is_none() {
                         self.enervate_hit(active, t, shot_puncture, aim);
                     }
                     if let Some((cost, fire_seconds, _)) = quanta {
                         self.push(t + fire_seconds, Kind::QuantaPrimary(cost), None);
                     }
                     self.signal("on-fire", t, 1.0);
-                    let delayed = primary_delay != 0.0 || (self.mines.is_some() && !self.impact_embed) || stack.is_some();
+                    let delayed = primary_delay != 0.0 || self.mines.is_some() || stack.is_some();
                     let through = if no_contact { 0.0 } else { self.punchthrough };
                     if through != 0.0 {
                         self.signal("on-punchthrough", t, through);
@@ -5392,6 +5394,11 @@ fn prepare_replay<'py>(py: Python<'py>, config: &Bound<'py, PyDict>, helper: &Bo
         impact_embed: match opt_dict("manualDetonation")? {
             Some(d) => match d.get_item("impactThenEmbed")? { Some(v) => v.is_truthy()?, None => false },
             None => false,
+        },
+        embedded_timing: match opt_dict("manualDetonation")? {
+            Some(d)=>(get_f(&d,"destroyIntervalSeconds",0.050000001)?,get_f(&d,"terminalDelaySeconds",0.1125)?,
+                match d.get_item("naturalExpiryIncludesCoincidentTick")? {Some(v)=>v.is_truthy()?,None=>true}),
+            None=>(0.050000001,0.1125,true),
         },
         embedded_entities: Vec::new(),
         pending_mines: Vec::new(),
